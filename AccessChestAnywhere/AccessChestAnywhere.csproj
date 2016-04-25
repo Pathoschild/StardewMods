@@ -69,7 +69,6 @@
     <Compile Include="ACATab.cs" />
     <Compile Include="AccessChestAnywhere.cs" />
     <Compile Include="DropList.cs" />
-    <Compile Include="Tab.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
