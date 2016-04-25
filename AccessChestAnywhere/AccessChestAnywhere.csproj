@@ -66,10 +66,8 @@
     <Compile Include="ACA.cs" />
     <Compile Include="ACABlueprintMenu.cs" />
     <Compile Include="ACAConfig.cs" />
-    <Compile Include="ACAMenu.cs" />
     <Compile Include="ACATab.cs" />
     <Compile Include="AccessChestAnywhere.cs" />
-    <Compile Include="ChestWithInventory.cs" />
     <Compile Include="DropList.cs" />
     <Compile Include="Tab.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
