@@ -1,8 +1,10 @@
-﻿using System;
+﻿// Decompiled with JetBrains decompiler
+// Type: AccessChestAnywhere.DropList
+// Assembly: AccessChestAnywhere, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: A5EF4C5A-AE47-40FE-981A-E2469D9B9502
+// Assembly location: C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\Mods\AccessChestAnywhere\AccessChestAnywhere.dll
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
@@ -10,44 +12,62 @@ using StardewValley.Menus;
 
 namespace AccessChestAnywhere
 {
-    class DropList : ClickableComponent
+    internal class DropList : ClickableComponent
     {
         private int index;
         private List<string> list;
         private SpriteFont font;
         private bool toRight;
-
-        private Rectangle bgSel = new Rectangle(258,258,4,4);
-        private Rectangle bg = new Rectangle(269,258,4,4);
-        private Rectangle bgHover = new Rectangle(161,340,4,4);
-
-        private List<ClickableComponent> listComponents = new List<ClickableComponent>();
+        private Rectangle bgSel;
+        private Rectangle bg;
+        private Rectangle bgHover;
+        private List<ClickableComponent> listComponents;
 
         public DropList(int index, List<string> list, int x, int y, bool toRight, SpriteFont font)
-            : base(new Rectangle(), index.ToString())
         {
+            this.\u002Ector(new Rectangle(), index.ToString());
             this.index = index;
             this.list = list;
             this.font = font;
             this.toRight = toRight;
-
-            this.bounds.Width = Game1.tileSize*7;
-            this.bounds.Height = (int) font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y*10 + Game1.tileSize/16*9;
-            if (toRight) this.bounds.X = x;
-            else this.bounds.X = x - this.bounds.Width;
-            this.bounds.Y = y;
-
-            initComponents();
-            if (index > 9)
+            // ISSUE: explicit reference operation
+            // ISSUE: cast to a reference type
+            // ISSUE: explicit reference operation
+            (^(Rectangle&) @this.bounds).Width = Game1.tileSize * 7;
+            // ISSUE: explicit reference operation
+            // ISSUE: cast to a reference type
+            // ISSUE: explicit reference operation
+            (^(Rectangle&) @this.bounds).Height = (int)font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y * 10 + Game1.tileSize / 16 * 9;
+            if (toRight)
             {
-                int i = 9;
-                int ind = index;
-                while (i>=0)
-                {
-                    listComponents[i].name = ind.ToString();
-                    ind--;
-                    i--;
-                }
+                // ISSUE: explicit reference operation
+                // ISSUE: cast to a reference type
+                // ISSUE: explicit reference operation
+                (^(Rectangle&) @this.bounds).X = x;
+            }
+            else
+            {
+                // ISSUE: explicit reference operation
+                // ISSUE: cast to a reference type
+                // ISSUE: explicit reference operation
+                // ISSUE: explicit reference operation
+                // ISSUE: cast to a reference type
+                // ISSUE: explicit reference operation
+                (^(Rectangle&) @this.bounds).X = x - (^(Rectangle&) @this.bounds).Width;
+            }
+          // ISSUE: explicit reference operation
+          // ISSUE: cast to a reference type
+          // ISSUE: explicit reference operation
+          (^(Rectangle&) @this.bounds).Y = y;
+            this.initComponents();
+            if (index <= 9)
+                return;
+            int index1 = 9;
+            int num = index;
+            for (; index1 >= 0; --index1)
+            {
+                this.listComponents[index1].name = (__Null)num.ToString();
+                --num;
             }
         }
 
@@ -55,38 +75,42 @@ namespace AccessChestAnywhere
         {
             if (direction > 0)
             {
-                if (listComponents.Count == 10)
+                if (this.listComponents.Count != 10 || int.Parse((string)this.listComponents[9].name) <= 9)
+                    return;
+                using (List<ClickableComponent>.Enumerator enumerator = this.listComponents.GetEnumerator())
                 {
-                    int ind = int.Parse(listComponents[9].name);
-                    if(ind>9)
-                        foreach (ClickableComponent component in listComponents)
-                        {
-                            component.name = (int.Parse(component.name)-1).ToString();
-                        }
+                    while (enumerator.MoveNext())
+                    {
+                        ClickableComponent current = enumerator.Current;
+                        current.name = (__Null)(int.Parse((string)current.name) - 1).ToString();
+                    }
                 }
             }
-            else
+            else if (this.listComponents.Count == 10 && int.Parse((string)this.listComponents[9].name) + 1 < this.list.Count)
             {
-                if (listComponents.Count == 10)
+                using (List<ClickableComponent>.Enumerator enumerator = this.listComponents.GetEnumerator())
                 {
-                    int ind = int.Parse(listComponents[9].name);
-                    if ((ind+1)<list.Count)
-                        foreach (ClickableComponent component in listComponents)
-                        {
-                            component.name = (int.Parse(component.name) + 1).ToString();
-                        }
+                    while (enumerator.MoveNext())
+                    {
+                        ClickableComponent current = enumerator.Current;
+                        current.name = (__Null)(int.Parse((string)current.name) + 1).ToString();
+                    }
                 }
             }
         }
 
         public int select(int x, int y)
         {
-            foreach (ClickableComponent component in listComponents)
+            using (List<ClickableComponent>.Enumerator enumerator = this.listComponents.GetEnumerator())
             {
-                if (component.containsPoint(x, y))
+                while (enumerator.MoveNext())
                 {
-                    index = int.Parse(component.name);
-                    return index;
+                    ClickableComponent current = enumerator.Current;
+                    if (current.containsPoint(x, y))
+                    {
+                        this.index = int.Parse((string)current.name);
+                        return this.index;
+                    }
                 }
             }
             return -1;
@@ -94,32 +118,64 @@ namespace AccessChestAnywhere
 
         private void initComponents()
         {
-            int count = 0;
-            int x = this.bounds.X;
-            int y = this.bounds.Y;
-            int width = this.bounds.Width;
-            int height = (int) font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y;
-            while (count<list.Count&&count<10)
+            int num = 0;
+            // ISSUE: explicit reference operation
+            // ISSUE: cast to a reference type
+            // ISSUE: explicit reference operation
+            int x = (^(Rectangle&) @this.bounds).X;
+            // ISSUE: explicit reference operation
+            // ISSUE: cast to a reference type
+            // ISSUE: explicit reference operation
+            int y = (^(Rectangle&) @this.bounds).Y;
+            // ISSUE: explicit reference operation
+            // ISSUE: cast to a reference type
+            // ISSUE: explicit reference operation
+            int width = (^(Rectangle&) @this.bounds).Width;
+            int height = (int)this.font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y;
+            for (; num < this.list.Count && num < 10; ++num)
             {
-                Rectangle rect = new Rectangle(x,y,width,height);
-                listComponents.Add(new ClickableComponent(rect,count.ToString()));
-                y += (int) font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y + Game1.tileSize/16;
-                count++;
+                this.listComponents.Add(new ClickableComponent(new Rectangle(x, y, width, height), num.ToString()));
+                y += (int)this.font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y + Game1.tileSize / 16;
             }
         }
 
         public void draw(SpriteBatch b)
         {
-            foreach (ClickableComponent component in listComponents)
+            using (List<ClickableComponent>.Enumerator enumerator = this.listComponents.GetEnumerator())
             {
-                if (component.containsPoint(Game1.getMouseX(), Game1.getMouseY())) b.Draw(Game1.mouseCursors,component.bounds,new Rectangle?(bgHover),Color.White );
-                else if (component.name.Equals(index.ToString())) b.Draw(Game1.mouseCursors, component.bounds, new Rectangle?(bgSel), Color.White);
-                else b.Draw(Game1.mouseCursors, component.bounds, new Rectangle?(bg), Color.White);
-
-                if(toRight)
-                    b.DrawString(font,list[int.Parse(component.name)],new Vector2(component.bounds.X,component.bounds.Y+Game1.tileSize/16),Color.Black);
-                else
-                    b.DrawString(font, list[int.Parse(component.name)], new Vector2(component.bounds.X+component.bounds.Width-font.MeasureString(list[int.Parse(component.name)]).X, component.bounds.Y + Game1.tileSize / 16), Color.Black);
+                while (enumerator.MoveNext())
+                {
+                    ClickableComponent current = enumerator.Current;
+                    if (current.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
+                        b.Draw((Texture2D)Game1.mouseCursors, (Rectangle)current.bounds, new Rectangle?(this.bgHover), Color.White);
+                    else if (((string)current.name).Equals(this.index.ToString()))
+                        b.Draw((Texture2D)Game1.mouseCursors, (Rectangle)current.bounds, new Rectangle?(this.bgSel), Color.White);
+                    else
+                        b.Draw((Texture2D)Game1.mouseCursors, (Rectangle)current.bounds, new Rectangle?(this.bg), Color.White);
+                    if (this.toRight)
+                    {
+                        // ISSUE: explicit reference operation
+                        // ISSUE: cast to a reference type
+                        // ISSUE: explicit reference operation
+                        // ISSUE: explicit reference operation
+                        // ISSUE: cast to a reference type
+                        // ISSUE: explicit reference operation
+                        b.DrawString(this.font, this.list[int.Parse((string)current.name)], new Vector2((float)(^(Rectangle&) @current.bounds).X, (float)((^(Rectangle&) @current.bounds).Y + Game1.tileSize / 16)), Color.Black);
+                    }
+                    else
+                    {
+                        // ISSUE: explicit reference operation
+                        // ISSUE: cast to a reference type
+                        // ISSUE: explicit reference operation
+                        // ISSUE: explicit reference operation
+                        // ISSUE: cast to a reference type
+                        // ISSUE: explicit reference operation
+                        // ISSUE: explicit reference operation
+                        // ISSUE: cast to a reference type
+                        // ISSUE: explicit reference operation
+                        b.DrawString(this.font, this.list[int.Parse((string)current.name)], new Vector2((float)((^(Rectangle&) @current.bounds).X + (^(Rectangle&) @current.bounds).Width) -this.font.MeasureString(this.list[int.Parse((string)current.name)]).X, (float)((^(Rectangle&) @current.bounds).Y + Game1.tileSize / 16)), Color.Black);
+                    }
+                }
             }
         }
     }
