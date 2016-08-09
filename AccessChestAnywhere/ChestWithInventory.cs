@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -26,6 +27,7 @@ namespace AccessChestAnywhere
         private readonly Rectangle edgeRight = new Rectangle(212, 40, 32, 32);
         private readonly Rectangle edgeBottom = new Rectangle(36, 208, 32, 32);
         private readonly List<ClickableComponent> slots = new List<ClickableComponent>();
+        private Item hoveredItem;
 
         public ChestWithInventory(int capacity = 36)
         {
@@ -36,6 +38,53 @@ namespace AccessChestAnywhere
             this.playerItems = Game1.player.Items;
             this.capacity = capacity;
             this.initializeComponents();
+        }
+
+        public override void performHoverAction(int x, int y)
+        {
+            if (disable)
+                return;
+
+            // find hovered item
+            Item item = null;
+            try
+            {
+                for (int i = this.slots.Count - 1; i >= 0; i--)
+                {
+                    // chest
+                    if (i < 36)
+                    {
+                        if (this.slots[i].containsPoint(x, y))
+                        {
+                            if (i < chestItems.Count && chestItems[i] != null)
+                            {
+                                item = this.chestItems[i];
+                                break;
+                            }
+                        }
+                    }
+
+                    // player
+                    else
+                    {
+                        if (this.slots[i].containsPoint(x, y))
+                        {
+                            if (this.playerItems[i - 36] != null)
+                            {
+                                item = this.playerItems[i - 36];
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                item = null; // happens when hovering over an unavailable slot (e.g. player doesn't have bigger backpack)
+            }
+
+            // set
+            this.hoveredItem = item;
         }
 
         public override void receiveLeftClick(int x, int y, bool playSound = true)
@@ -234,6 +283,21 @@ namespace AccessChestAnywhere
             // items
             this.drawChestItems(b);
             this.drawPlayerItems(b);
+
+            // tooltips
+            if (this.hoveredItem != null)
+            {
+                string hoverText = this.hoveredItem.getHoverBoxText(this.hoveredItem);
+                string hoverTitle = null;
+                if (hoverText == null)
+                {
+                    hoverText = this.hoveredItem.getDescription();
+                    hoverTitle = this.hoveredItem.Name;
+                }
+
+                IClickableMenu.drawToolTip(b, hoverText, hoverTitle, this.hoveredItem);
+            }
+
         }
 
         private void drawPlayerItems(SpriteBatch b)
