@@ -31,8 +31,8 @@ namespace AccessChestAnywhere
         {
             this.width = Game1.tileSize * 13;
             this.height = Game1.tileSize * 7 + Game1.tileSize / 2;
-            this.xPositionOnScreen = @Game1.viewport.Width / 2 - this.width / 2;
-            this.yPositionOnScreen = @Game1.viewport.Height / 2 - this.height / 2 + Game1.tileSize;
+            this.xPositionOnScreen = Game1.viewport.Width / 2 - this.width / 2;
+            this.yPositionOnScreen = Game1.viewport.Height / 2 - this.height / 2 + Game1.tileSize;
             this.playerItems = Game1.player.Items;
             this.capacity = capacity;
             this.initializeComponents();
@@ -42,24 +42,36 @@ namespace AccessChestAnywhere
         {
             if (this.disable)
                 return;
-            for (int i = this.slots.Count - 1; i >= 0; --i)
+            for (int i = this.slots.Count - 1; i >= 0; i--)
             {
+                // chest to player
                 if (i < 36)
                 {
-                    if (this.slots[i].containsPoint(x, y) && i < this.chestItems.Count && this.chestItems[i] != null)
+                    if (this.slots[i].containsPoint(x, y))
                     {
-                        this.chestItems[i] = this.tryToAddItem(this.chestItems[i], true);
-                        if (this.chestItems[i] == null)
-                            this.chestItems.RemoveAt(i);
-                        if (playSound)
-                            Game1.playSound("coin");
+                        if (i < chestItems.Count && chestItems[i] != null)
+                        {
+                            this.chestItems[i] = this.tryToAddItem(this.chestItems[i], true);
+                            if (this.chestItems[i] == null)
+                                this.chestItems.RemoveAt(i);
+                            if (playSound)
+                                Game1.playSound("coin");
+                        }
                     }
                 }
-                else if (this.slots[i].containsPoint(x, y) && this.playerItems[i - 36] != null)
+
+                // player to chest
+                else
                 {
-                    this.playerItems[i - 36] = this.tryToAddItem(this.playerItems[i - 36], false);
-                    if (playSound)
-                        Game1.playSound("coin");
+                    if (this.slots[i].containsPoint(x, y))
+                    {
+                        if (this.playerItems[i - 36] != null)
+                        {
+                            this.playerItems[i - 36] = this.tryToAddItem(this.playerItems[i - 36], false);
+                            if (playSound)
+                                Game1.playSound("coin");
+                        }
+                    }
                 }
             }
         }
@@ -68,66 +80,74 @@ namespace AccessChestAnywhere
         {
             if (this.disable)
                 return;
-            for (int index = this.slots.Count - 1; index >= 0; --index)
+            for (int i = this.slots.Count - 1; i >= 0; i--)
             {
-                if (index < 36)
+                // chest to player
+                if (i < 36)
                 {
-                    if (!this.slots[index].containsPoint(x, y) || (index >= this.chestItems.Count || this.chestItems[index] == null))
-                        continue;
-
-                    Item one = this.chestItems[index].getOne();
-                    if (Game1.oldKBState.IsKeyDown(Keys.LeftShift) && this.chestItems[index].Stack > 1)
+                    if (this.slots[i].containsPoint(x, y))
                     {
-                        one.Stack = this.chestItems[index].Stack / 2;
-                        if (this.tryToAddItem(one, true) == null)
+                        if (i < this.chestItems.Count && this.chestItems[i] != null)
                         {
-                            Item obj = this.chestItems[index];
-                            int num = obj.Stack - this.chestItems[index].Stack / 2;
-                            obj.Stack = num;
+                            Item itemToPlace = this.chestItems[i].getOne();
+                            if (Game1.oldKBState.IsKeyDown(Keys.LeftShift) && this.chestItems[i].Stack > 1)
+                            {
+                                itemToPlace.Stack = this.chestItems[i].Stack / 2;
+                                itemToPlace = this.tryToAddItem(itemToPlace, true);
+                                if (itemToPlace == null)
+                                    this.chestItems[i].Stack -= this.chestItems[i].Stack / 2;
+                                if (this.chestItems[i].Stack <= 0)
+                                    this.chestItems.RemoveAt(i);
+                            }
+                            else
+                            {
+                                itemToPlace = this.tryToAddItem(itemToPlace, true);
+                                if (itemToPlace == null && this.chestItems[i].Stack == 1)
+                                    this.chestItems.RemoveAt(i);
+                                else
+                                    this.chestItems[i].Stack--;
+                            }
+                            if (playSound)
+                                Game1.playSound("coin");
                         }
-                        if (this.chestItems[index].Stack <= 0)
-                            this.chestItems.RemoveAt(index);
                     }
-                    else if (this.tryToAddItem(one, true) == null && this.chestItems[index].Stack == 1)
-                        this.chestItems.RemoveAt(index);
-                    else
-                    {
-                        Item obj = this.chestItems[index];
-                        int num = obj.Stack - 1;
-                        obj.Stack = num;
-                    }
-                    if (playSound)
-                        Game1.playSound("coin");
                 }
-                else if (this.slots[index].containsPoint(x, y) && this.playerItems[index - 36] != null)
+
+                // player to chest
+                else
                 {
-                    Item one = this.playerItems[index - 36].getOne();
-                    if (Game1.oldKBState.IsKeyDown(Keys.LeftShift) && this.playerItems[index - 36].Stack > 1)
+                    if (this.slots[i].containsPoint(x, y))
                     {
-                        one.Stack = this.playerItems[index - 36].Stack / 2;
-                        if (this.tryToAddItem(one, false) == null)
+                        if (playerItems[i - 36] != null)
                         {
-                            Item obj = this.playerItems[index - 36];
-                            int num = obj.Stack - this.playerItems[index - 36].Stack / 2;
-                            obj.Stack = num;
+                            Item itemToPlace = this.playerItems[i - 36].getOne();
+                            if (Game1.oldKBState.IsKeyDown(Keys.LeftShift) && this.playerItems[i - 36].Stack > 1)
+                            {
+                                itemToPlace.Stack = this.playerItems[i - 36].Stack / 2;
+                                itemToPlace = this.tryToAddItem(itemToPlace, false);
+                                if (itemToPlace == null)
+                                    this.playerItems[i - 36].Stack -= this.playerItems[i - 36].Stack / 2;
+                            }
+                            else
+                            {
+                                itemToPlace = this.tryToAddItem(itemToPlace, false);
+                                if (itemToPlace == null && this.playerItems[i - 36].Stack == 1)
+                                    this.playerItems[i - 36] = null;
+                                else
+                                    this.playerItems[i - 36].Stack--;
+                            }
+
+                            if (playSound)
+                                Game1.playSound("coin");
                         }
                     }
-                    else if (this.tryToAddItem(one, false) == null && this.playerItems[index - 36].Stack == 1)
-                        this.playerItems[index - 36] = null;
-                    else
-                    {
-                        Item obj = this.playerItems[index - 36];
-                        int num = obj.Stack - 1;
-                        obj.Stack = num;
-                    }
-                    if (playSound)
-                        Game1.playSound("coin");
                 }
             }
         }
 
         private Item tryToAddItem(Item itemToPlace, bool toPlayer)
         {
+            // to player
             if (toPlayer)
             {
                 foreach (Item item in this.playerItems)
@@ -141,7 +161,7 @@ namespace AccessChestAnywhere
                 }
                 if (this.playerItems.Contains(null))
                 {
-                    for (int i = 0; i < this.playerItems.Count; ++i)
+                    for (int i = 0; i < this.playerItems.Count; i++)
                     {
                         if (this.playerItems[i] == null)
                         {
@@ -152,6 +172,8 @@ namespace AccessChestAnywhere
                 }
                 return itemToPlace;
             }
+
+            // to chest
             foreach (Item item in this.chestItems)
             {
                 if (item == null || !item.canStackWith(itemToPlace))
@@ -161,131 +183,143 @@ namespace AccessChestAnywhere
                 if (itemToPlace.Stack <= 0)
                     return null;
             }
-            if (this.chestItems.Count >= this.capacity)
-                return itemToPlace;
-            this.chestItems.Add(itemToPlace);
-            return null;
+            if (this.chestItems.Count < this.capacity)
+            {
+                this.chestItems.Add(itemToPlace);
+                return null;
+            }
+            return itemToPlace;
         }
 
         private void initializeComponents()
         {
-            int num1 = 1;
-            int num2 = 0;
+            // slots
+            int wCount = 1;
+            int count = 0;
             int y = this.yPositionOnScreen + Game1.tileSize / 2;
-            for (; num1 < 3; ++num1)
+            while (wCount < 3)
             {
-                for (int index = 0; index < 3; ++index)
+                int yCount = 0;
+                while (yCount < 3)
                 {
-                    int num3 = 1;
+                    int xCount = 1;
                     int x = this.xPositionOnScreen + Game1.tileSize / 2;
-                    while (num3 < 13)
+                    while (xCount < 13)
                     {
                         this.slots.Add(
-                            new ClickableComponent(new Rectangle(x, y, Game1.tileSize, Game1.tileSize), num1 == 1 ? $"Chest Slot {index * 12 + num3}" : $"Player Slot {index * 12 + num3}")
+                            new ClickableComponent(new Rectangle(x, y, Game1.tileSize, Game1.tileSize), wCount == 1 ? $"Chest Slot {yCount * 12 + xCount}" : $"Player Slot {yCount * 12 + xCount}")
                         );
                         x += Game1.tileSize;
-                        ++num3;
-                        ++num2;
+                        xCount++;
+                        count++;
                     }
                     y += Game1.tileSize;
+                    yCount++;
                 }
                 y = this.yPositionOnScreen + this.height / 2 + Game1.tileSize / 4;
+                wCount++;
             }
         }
 
         public override void draw(SpriteBatch b)
         {
+            // bg menu
             b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + Game1.tileSize / 16, this.yPositionOnScreen + Game1.tileSize / 16, this.width - Game1.tileSize / 8, this.height - Game1.tileSize / 8), new Rectangle(64, 128, 64, 64), Color.White);
             this.drawBorder(b);
+
+            // slots
             this.drawChestSlots(b);
             this.drawPlayerSlots(b);
+
+            // items
             this.drawChestItems(b);
             this.drawPlayerItems(b);
         }
 
         private void drawPlayerItems(SpriteBatch b)
         {
-            for (int index = 36; index < 72 && index - 36 < this.playerItems.Count; ++index)
+            int slotCount = 36;
+
+            while (slotCount < 72)
             {
-                Item obj = this.playerItems[index - 36];
-                if (obj != null)
-                {
-                    SpriteBatch spriteBatch = b;
-                    Vector2 vector2 = new Vector2(this.slots[index].bounds.X, this.slots[index].bounds.Y);
-                    double num = this.slots[index].containsPoint(Game1.getMouseX(), Game1.getMouseY()) ? 1.0 : 0.800000011920929;
-                    obj.drawInMenu(spriteBatch, vector2, (float)num);
-                }
+                if (slotCount - 36 >= this.playerItems.Count)
+                    break;
+
+                this.playerItems[slotCount - 36]?.drawInMenu(b, new Vector2(this.slots[slotCount].bounds.X, this.slots[slotCount].bounds.Y), this.slots[slotCount].containsPoint(Game1.getMouseX(), Game1.getMouseY()) ? 1f : 0.8f);
+                slotCount++;
             }
         }
 
         private void drawChestItems(SpriteBatch b)
         {
-            for (int index = 0; index < 72 && index < this.chestItems.Count; ++index)
+            int slotCount = 0;
+            while (slotCount < 72)
             {
-                Item obj = this.chestItems[index];
-                if (obj != null)
-                {
-                    SpriteBatch spriteBatch = b;
-                    Vector2 vector2 = new Vector2(this.slots[index].bounds.X, this.slots[index].bounds.Y);
-                    double num = this.slots[index].containsPoint(Game1.getMouseX(), Game1.getMouseY()) ? 1.0 : 0.800000011920929;
-                    obj.drawInMenu(spriteBatch, vector2, (float)num);
-                }
+                if (slotCount >= this.chestItems.Count)
+                    break;
+
+                this.chestItems[slotCount]?.drawInMenu(b, new Vector2(this.slots[slotCount].bounds.X, this.slots[slotCount].bounds.Y), this.slots[slotCount].containsPoint(Game1.getMouseX(), Game1.getMouseY()) ? 1f : 0.8f);
+                slotCount++;
             }
         }
 
         private void drawPlayerSlots(SpriteBatch b)
         {
-            int num1 = 0;
-            int y = this.yPositionOnScreen + this.height / 2 + Game1.tileSize / 4;
-            for (; num1 < 3; ++num1)
+            int yCount = 0;
+            int y = yPositionOnScreen + height / 2 + Game1.tileSize / 4;
+            while (yCount < 3)
             {
-                int num2 = 1;
-                int x = this.xPositionOnScreen + Game1.tileSize / 2;
-                for (; num2 < 13; ++num2)
+                int xCount = 1;
+                int x = xPositionOnScreen + Game1.tileSize / 2;
+                while (xCount < 13)
                 {
-                    if (num1 * 12 + num2 <= Game1.player.maxItems)
-                        b.Draw(Game1.menuTexture, new Rectangle(x, y, Game1.tileSize, Game1.tileSize), new Rectangle(128, 128, 64, 64), Color.White);
-                    else
-                        b.Draw(Game1.menuTexture, new Rectangle(x, y, Game1.tileSize, Game1.tileSize), new Rectangle(64, 896, 64, 64), Color.White);
+                    Rectangle sourceRectangle = yCount * 12 + xCount <= Game1.player.maxItems
+                        ? new Rectangle(128, 128, 64, 64)
+                        : new Rectangle(64, 896, 64, 64);
+                    b.Draw(Game1.menuTexture, new Rectangle(x, y, Game1.tileSize, Game1.tileSize), sourceRectangle, Color.White);
                     x += Game1.tileSize;
+                    xCount++;
                 }
                 y += Game1.tileSize;
+                yCount++;
             }
         }
 
         private void drawChestSlots(SpriteBatch b)
         {
-            int num1 = 0;
-            int y = this.yPositionOnScreen + Game1.tileSize / 2;
-            for (; num1 < 3; ++num1)
+            int yCount = 0;
+            int y = yPositionOnScreen + Game1.tileSize / 2;
+            while (yCount < 3)
             {
-                int num2 = 0;
-                int x = this.xPositionOnScreen + Game1.tileSize / 2;
-                for (; num2 < 12; ++num2)
+                int xCount = 0;
+                int x = xPositionOnScreen + Game1.tileSize / 2;
+                while (xCount < 12)
                 {
-                    b.Draw(Game1.menuTexture, new Rectangle(x, y, Game1.tileSize, Game1.tileSize), new Rectangle(128, 128, 64, 64), Color.White);
+                    b.Draw(Game1.menuTexture, new Rectangle(x, y, Game1.tileSize, Game1.tileSize),
+                        new Rectangle?(new Rectangle(128, 128, 64, 64)), Color.White);
                     x += Game1.tileSize;
+                    xCount++;
                 }
                 y += Game1.tileSize;
+                yCount++;
             }
         }
 
         private void drawBorder(SpriteBatch b)
         {
-            int num1 = Game1.tileSize;
-            int num2 = Game1.tileSize / 2;
-            int num3 = Game1.tileSize / 16;
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen, num2, num2), this.cornerTopLeft, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + num2, this.yPositionOnScreen, this.width - num1, num2), this.edgeTop, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - num2, this.yPositionOnScreen, num2, num2), this.cornerTopRight, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen + num2, num2, this.height - num1), this.edgeLeft, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - num2, this.yPositionOnScreen + num2, num2, this.height - num1), this.edgeRight, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + num2, this.yPositionOnScreen + this.height / 2 - num1 / 4, this.width - num1, num2), this.middlemiddle, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen + this.height / 2 - num1 / 4, num2, num2), this.middleLeft, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - num2, this.yPositionOnScreen + this.height / 2 - num1 / 4, num2, num2), this.middleRight, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen + this.height - num2, num2, num2), this.cornerBottomLeft, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + num2, this.yPositionOnScreen + this.height - num2, this.width - num1, num2), this.edgeBottom, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - num2, this.yPositionOnScreen + this.height - num2, num2, num2), this.cornerBottomRight, Color.White);
+            int ts = Game1.tileSize;
+            int ts2 = Game1.tileSize / 2;
+            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen, ts2, ts2), this.cornerTopLeft, Color.White);
+            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + ts2, this.yPositionOnScreen, this.width - ts, ts2), this.edgeTop, Color.White);
+            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - ts2, this.yPositionOnScreen, ts2, ts2), this.cornerTopRight, Color.White);
+            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen + ts2, ts2, this.height - ts), this.edgeLeft, Color.White);
+            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - ts2, this.yPositionOnScreen + ts2, ts2, this.height - ts), this.edgeRight, Color.White);
+            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + ts2, this.yPositionOnScreen + this.height / 2 - ts / 4, this.width - ts, ts2), this.middlemiddle, Color.White);
+            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen + this.height / 2 - ts / 4, ts2, ts2), this.middleLeft, Color.White);
+            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - ts2, this.yPositionOnScreen + this.height / 2 - ts / 4, ts2, ts2), this.middleRight, Color.White);
+            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen + this.height - ts2, ts2, ts2), this.cornerBottomLeft, Color.White);
+            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + ts2, this.yPositionOnScreen + this.height - ts2, this.width - ts, ts2), this.edgeBottom, Color.White);
+            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - ts2, this.yPositionOnScreen + this.height - ts2, ts2, ts2), this.cornerBottomRight, Color.White);
         }
     }
 }
