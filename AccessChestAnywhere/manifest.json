@@ -3,11 +3,11 @@
   "Authour": "VIspReaderUS",
   "Version": {
     "MajorVersion": 1,
-    "MinorVersion": 1,
+    "MinorVersion": 2,
     "PatchVersion": 0,
-    "Build": "1078"
+    "Build": "1"
   },
-  "Description": "Access chest located at your farm from anywhere!",
+  "Description": "Access chest located on your farm from anywhere!",
   "UniqueID": "AccessChestAnywhere",
   "PerSaveConfigs": false,
   "EntryDll": "AccessChestAnywhere.dll"
