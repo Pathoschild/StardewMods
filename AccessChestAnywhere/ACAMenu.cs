@@ -118,7 +118,7 @@ namespace AccessChestAnywhere
                 this.LocationListOpen = false;
                 this.IsDisabled = false;
                 GameLocation location = this.LocationSelector.Select(x, y);
-                if (location != null)
+                if (location != null && location != this.SelectedLocation)
                 {
                     this.SelectedChest = this.Chests.First(p => p.Location == location);
                     this.OnChestSelected?.Invoke(this.SelectedChest);
