@@ -23,6 +23,9 @@ namespace AccessChestAnywhere
         /// <summary>The known chests.</summary>
         private readonly ManagedChest[] Chests;
 
+        /// <summary>The known chest locations.</summary>
+        private readonly GameLocation[] Locations;
+
         /// <summary>The selected location.</summary>
         private GameLocation SelectedLocation => this.SelectedChest.Location;
 
@@ -58,6 +61,7 @@ namespace AccessChestAnywhere
         public ACAMenu(ManagedChest[] chests, ManagedChest selectedChest)
         {
             this.Chests = chests;
+            this.Locations = this.Chests.Select(p => p.Location).Distinct().ToArray();
             this.SelectedChest = selectedChest;
             this.InitialiseTabs();
             this.InitialiseSelectors();
@@ -131,7 +135,7 @@ namespace AccessChestAnywhere
                 this.ChestListOpen = true;
                 this.IsDisabled = true;
             }
-            else if (this.LocationTab.containsPoint(x, y))
+            else if (this.LocationTab?.containsPoint(x, y) == true)
             {
                 this.LocationListOpen = true;
                 this.IsDisabled = true;
@@ -149,7 +153,10 @@ namespace AccessChestAnywhere
 
             // tabs
             this.ChestTab.Draw(sprites);
-            this.LocationTab.Draw(sprites);
+            if (this.Locations.Length > 1)
+                this.LocationTab.Draw(sprites);
+
+            // tab dropdowns
             if (this.ChestListOpen)
                 this.ChestSelector.Draw(sprites);
             if (this.LocationListOpen)
@@ -197,6 +204,7 @@ namespace AccessChestAnywhere
             }
 
             // location
+            if (this.Locations.Length > 1)
             {
                 int x = this.xPositionOnScreen + this.width - Game1.tileSize / 4;
                 int y = this.yPositionOnScreen - Game1.tileSize - Game1.tileSize / 16;

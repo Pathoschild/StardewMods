@@ -20,9 +20,10 @@ You can click the top-right menu to change location, and the top-left menu to ch
 ![](documentation/usage2.png)
 
 ## Changelog
-* 1.2.0 (not released)
+* 1.2.0 (not released yet)
   * Added item tooltips
   * Sort chests by name
+  * Don't show location tab if there's only one option
 * 1.1.0
   * Reworked UI
   * Added tabs for chest and locations
