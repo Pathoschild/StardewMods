@@ -5,54 +5,68 @@ using StardewValley.Menus;
 
 namespace AccessChestAnywhere
 {
+    /// <summary>A tab UI component which lets the player trigger a dropdown list.</summary>
     internal class Tab : ClickableComponent
     {
-        private readonly Rectangle tabTopLeft = new Rectangle(16, 384, 4, 4);
-        private readonly Rectangle tabTopRight = new Rectangle(28, 384, 4, 4);
-        private readonly Rectangle tabBottomLeft = new Rectangle(16, 396, 4, 4);
-        private readonly Rectangle tabBottomRight = new Rectangle(28, 396, 4, 4);
-        private readonly Rectangle tabEdgeTop = new Rectangle(21, 384, 4, 4);
-        private readonly Rectangle tabEdgeLeft = new Rectangle(16, 389, 4, 4);
-        private readonly Rectangle tabEdgeRight = new Rectangle(28, 389, 4, 4);
-        private readonly Rectangle tabEdgeBottom = new Rectangle(21, 396, 4, 4);
-        private readonly Rectangle tabBG = new Rectangle(21, 373, 4, 4);
-        private readonly SpriteFont font;
+        /*********
+        ** Properties
+        *********/
+        /// <summary>The font with which to render text.</summary>
+        private readonly SpriteFont Font;
 
+        private readonly Rectangle TabTopLeft = new Rectangle(16, 384, 4, 4);
+        private readonly Rectangle TabTopRight = new Rectangle(28, 384, 4, 4);
+        private readonly Rectangle TabBottomLeft = new Rectangle(16, 396, 4, 4);
+        private readonly Rectangle TabBottomRight = new Rectangle(28, 396, 4, 4);
+        private readonly Rectangle TabEdgeTop = new Rectangle(21, 384, 4, 4);
+        private readonly Rectangle TabEdgeLeft = new Rectangle(16, 389, 4, 4);
+        private readonly Rectangle TabEdgeRight = new Rectangle(28, 389, 4, 4);
+        private readonly Rectangle TabEdgeBottom = new Rectangle(21, 396, 4, 4);
+        private readonly Rectangle TabBackground = new Rectangle(21, 373, 4, 4);
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="name">The displayed tab text.</param>
+        /// <param name="x">The X-position from which to render the list.</param>
+        /// <param name="y">The Y-position from which to render the list.</param>
+        /// <param name="toRight">Whether the tab should be aligned right of the origin.</param>
+        /// <param name="font">The font with which to render text.</param>
         public Tab(string name, int x, int y, bool toRight, SpriteFont font)
             : base(new Rectangle(), name)
         {
-            this.font = font;
-            Vector2 vector2 = font.MeasureString(name);
-            this.bounds.Width = (int)vector2.X + Game1.tileSize / 2;
-            this.bounds.Height = (int)vector2.Y + Game1.tileSize / 2;
+            this.Font = font;
+            Vector2 fontSize = font.MeasureString(name);
+            this.bounds.Width = (int)fontSize.X + Game1.tileSize / 2;
+            this.bounds.Height = (int)fontSize.Y + Game1.tileSize / 2;
             this.bounds.X = toRight
                 ? x
                 : x - this.bounds.Width;
             this.bounds.Y = y;
         }
 
-        public void draw(SpriteBatch b)
-        {
-            this.drawTab(b);
-        }
-
-        private void drawTab(SpriteBatch b)
+        /// <summary>Render the tab UI.</summary>
+        /// <param name="sprites">The sprites to render.</param>
+        public void Draw(SpriteBatch sprites)
         {
             int x = this.bounds.X;
             int y = this.bounds.Y;
-            int num1 = this.bounds.Width;
-            int num2 = this.bounds.Height;
-            int num3 = Game1.tileSize;
-            b.Draw(Game1.mouseCursors, new Rectangle(x, y, num3 / 4, num3 / 4), this.tabTopLeft, Color.White);
-            b.Draw(Game1.mouseCursors, new Rectangle(x + num3 / 4, y, num1 - num3 / 2, num3 / 4), this.tabEdgeTop, Color.White);
-            b.Draw(Game1.mouseCursors, new Rectangle(x + num1 - num3 / 4, y, num3 / 4, num3 / 4), this.tabTopRight, Color.White);
-            b.Draw(Game1.mouseCursors, new Rectangle(x, y + num3 / 4, num3 / 4, num2 - num3 / 2), this.tabEdgeLeft, Color.White);
-            b.Draw(Game1.mouseCursors, new Rectangle(x + num1 - num3 / 4, y + num3 / 4, num3 / 4, num2 - num3 / 2), this.tabEdgeRight, Color.White);
-            b.Draw(Game1.mouseCursors, new Rectangle(x, y + num2 - num3 / 4, num3 / 4, num3 / 4), this.tabBottomLeft, Color.White);
-            b.Draw(Game1.mouseCursors, new Rectangle(x + num3 / 4, y + num2 - num3 / 4, num1 - num3 / 2, num3 / 4), this.tabEdgeBottom, Color.White);
-            b.Draw(Game1.mouseCursors, new Rectangle(x + num1 - num3 / 4, y + num2 - num3 / 4, num3 / 4, num3 / 4), this.tabBottomRight, Color.White);
-            b.Draw(Game1.mouseCursors, new Rectangle(x + num3 / 4, y + num3 / 4, num1 - num3 / 2, num2 - num3 / 2), this.tabBG, Color.White);
-            b.DrawString(this.font, this.name, new Vector2(x + num3 / 4, y + num3 / 4 + num3 / 16), Color.Black);
+            int width = this.bounds.Width;
+            int height = this.bounds.Height;
+            int tileSize = Game1.tileSize;
+
+            sprites.Draw(Game1.mouseCursors, new Rectangle(x, y, tileSize / 4, tileSize / 4), this.TabTopLeft, Color.White);
+            sprites.Draw(Game1.mouseCursors, new Rectangle(x + tileSize / 4, y, width - tileSize / 2, tileSize / 4), this.TabEdgeTop, Color.White);
+            sprites.Draw(Game1.mouseCursors, new Rectangle(x + width - tileSize / 4, y, tileSize / 4, tileSize / 4), this.TabTopRight, Color.White);
+            sprites.Draw(Game1.mouseCursors, new Rectangle(x, y + tileSize / 4, tileSize / 4, height - tileSize / 2), this.TabEdgeLeft, Color.White);
+            sprites.Draw(Game1.mouseCursors, new Rectangle(x + width - tileSize / 4, y + tileSize / 4, tileSize / 4, height - tileSize / 2), this.TabEdgeRight, Color.White);
+            sprites.Draw(Game1.mouseCursors, new Rectangle(x, y + height - tileSize / 4, tileSize / 4, tileSize / 4), this.TabBottomLeft, Color.White);
+            sprites.Draw(Game1.mouseCursors, new Rectangle(x + tileSize / 4, y + height - tileSize / 4, width - tileSize / 2, tileSize / 4), this.TabEdgeBottom, Color.White);
+            sprites.Draw(Game1.mouseCursors, new Rectangle(x + width - tileSize / 4, y + height - tileSize / 4, tileSize / 4, tileSize / 4), this.TabBottomRight, Color.White);
+            sprites.Draw(Game1.mouseCursors, new Rectangle(x + tileSize / 4, y + tileSize / 4, width - tileSize / 2, height - tileSize / 2), this.TabBackground, Color.White);
+            sprites.DrawString(this.Font, this.name, new Vector2(x + tileSize / 4, y + tileSize / 4 + tileSize / 16), Color.Black);
         }
     }
 }

@@ -9,56 +9,76 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace AccessChestAnywhere
 {
+    /// <summary>A UI which lets the player transfer items between a chest and their inventory.</summary>
     public class ChestWithInventory : IClickableMenu
     {
-        public bool disable;
-        public List<Item> chestItems = new List<Item>();
-        public readonly int capacity;
-        private readonly List<Item> playerItems;
-        private readonly Rectangle cornerTopLeft = new Rectangle(12, 16, 32, 32);
-        private readonly Rectangle cornerTopRight = new Rectangle(212, 16, 32, 32);
-        private readonly Rectangle cornerBottomLeft = new Rectangle(12, 208, 32, 32);
-        private readonly Rectangle cornerBottomRight = new Rectangle(212, 208, 32, 32);
-        private readonly Rectangle middleLeft = new Rectangle(12, 80, 32, 32);
-        private readonly Rectangle middlemiddle = new Rectangle(132, 80, 32, 32);
-        private readonly Rectangle middleRight = new Rectangle(212, 80, 32, 32);
-        private readonly Rectangle edgeTop = new Rectangle(40, 16, 32, 32);
-        private readonly Rectangle edgeLeft = new Rectangle(12, 36, 32, 32);
-        private readonly Rectangle edgeRight = new Rectangle(212, 40, 32, 32);
-        private readonly Rectangle edgeBottom = new Rectangle(36, 208, 32, 32);
-        private readonly List<ClickableComponent> slots = new List<ClickableComponent>();
-        private Item hoveredItem;
+        /*********
+        ** Properties
+        *********/
+        /// <summary>The inventory of the selected chest.</summary>
+        protected List<Item> ChestItems = new List<Item>();
 
-        public ChestWithInventory(int capacity = 36)
+        /// <summary>The player inventory.</summary>
+        private readonly List<Item> PlayerItems;
+
+        /// <summary>The clickable components representing item slots.</summary>
+        private readonly List<ClickableComponent> Slots = new List<ClickableComponent>();
+
+        /// <summary>The item under the player's cursor.</summary>
+        private Item HoveredItem;
+
+        /// <summary>Whether the UI control is disabled, in which case it will no longer try to handle player interaction.</summary>
+        protected bool IsDisabled { get; set; }
+
+        private readonly Rectangle CornerTopLeft = new Rectangle(12, 16, 32, 32);
+        private readonly Rectangle CornerTopRight = new Rectangle(212, 16, 32, 32);
+        private readonly Rectangle CornerBottomLeft = new Rectangle(12, 208, 32, 32);
+        private readonly Rectangle CornerBottomRight = new Rectangle(212, 208, 32, 32);
+        private readonly Rectangle MiddleLeft = new Rectangle(12, 80, 32, 32);
+        private readonly Rectangle MiddleMiddle = new Rectangle(132, 80, 32, 32);
+        private readonly Rectangle MiddleRight = new Rectangle(212, 80, 32, 32);
+        private readonly Rectangle EdgeTop = new Rectangle(40, 16, 32, 32);
+        private readonly Rectangle EdgeLeft = new Rectangle(12, 36, 32, 32);
+        private readonly Rectangle EdgeRight = new Rectangle(212, 40, 32, 32);
+        private readonly Rectangle EdgeBottom = new Rectangle(36, 208, 32, 32);
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        public ChestWithInventory()
         {
             this.width = Game1.tileSize * 13;
             this.height = Game1.tileSize * 7 + Game1.tileSize / 2;
             this.xPositionOnScreen = Game1.viewport.Width / 2 - this.width / 2;
             this.yPositionOnScreen = Game1.viewport.Height / 2 - this.height / 2 + Game1.tileSize;
-            this.playerItems = Game1.player.Items;
-            this.capacity = capacity;
-            this.initializeComponents();
+            this.PlayerItems = Game1.player.Items;
+            this.InitializeComponents();
         }
 
+        /// <summary>The method invoked when the player's cursor on the inventory.</summary>
+        /// <param name="x">The X-position of the cursor.</param>
+        /// <param name="y">The Y-position of the cursor.</param>
         public override void performHoverAction(int x, int y)
         {
-            if (disable)
+            if (this.IsDisabled)
                 return;
 
             // find hovered item
             Item item = null;
             try
             {
-                for (int i = this.slots.Count - 1; i >= 0; i--)
+                for (int i = this.Slots.Count - 1; i >= 0; i--)
                 {
                     // chest
                     if (i < 36)
                     {
-                        if (this.slots[i].containsPoint(x, y))
+                        if (this.Slots[i].containsPoint(x, y))
                         {
-                            if (i < chestItems.Count && chestItems[i] != null)
+                            if (i < this.ChestItems.Count && this.ChestItems[i] != null)
                             {
-                                item = this.chestItems[i];
+                                item = this.ChestItems[i];
                                 break;
                             }
                         }
@@ -67,11 +87,11 @@ namespace AccessChestAnywhere
                     // player
                     else
                     {
-                        if (this.slots[i].containsPoint(x, y))
+                        if (this.Slots[i].containsPoint(x, y))
                         {
-                            if (this.playerItems[i - 36] != null)
+                            if (this.PlayerItems[i - 36] != null)
                             {
-                                item = this.playerItems[i - 36];
+                                item = this.PlayerItems[i - 36];
                                 break;
                             }
                         }
@@ -84,25 +104,30 @@ namespace AccessChestAnywhere
             }
 
             // set
-            this.hoveredItem = item;
+            this.HoveredItem = item;
         }
 
+        /// <summary>The method invoked when the player left-clicks on the inventory.</summary>
+        /// <param name="x">The X-position of the cursor.</param>
+        /// <param name="y">The Y-position of the cursor.</param>
+        /// <param name="playSound">Whether to enable sound.</param>
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            if (this.disable)
+            if (this.IsDisabled)
                 return;
-            for (int i = this.slots.Count - 1; i >= 0; i--)
+
+            for (int i = this.Slots.Count - 1; i >= 0; i--)
             {
                 // chest to player
                 if (i < 36)
                 {
-                    if (this.slots[i].containsPoint(x, y))
+                    if (this.Slots[i].containsPoint(x, y))
                     {
-                        if (i < chestItems.Count && chestItems[i] != null)
+                        if (i < this.ChestItems.Count && this.ChestItems[i] != null)
                         {
-                            this.chestItems[i] = this.tryToAddItem(this.chestItems[i], true);
-                            if (this.chestItems[i] == null)
-                                this.chestItems.RemoveAt(i);
+                            this.ChestItems[i] = this.TryAddItem(this.ChestItems[i], true);
+                            if (this.ChestItems[i] == null)
+                                this.ChestItems.RemoveAt(i);
                             if (playSound)
                                 Game1.playSound("coin");
                         }
@@ -112,11 +137,11 @@ namespace AccessChestAnywhere
                 // player to chest
                 else
                 {
-                    if (this.slots[i].containsPoint(x, y))
+                    if (this.Slots[i].containsPoint(x, y))
                     {
-                        if (this.playerItems[i - 36] != null)
+                        if (this.PlayerItems[i - 36] != null)
                         {
-                            this.playerItems[i - 36] = this.tryToAddItem(this.playerItems[i - 36], false);
+                            this.PlayerItems[i - 36] = this.TryAddItem(this.PlayerItems[i - 36], false);
                             if (playSound)
                                 Game1.playSound("coin");
                         }
@@ -125,36 +150,41 @@ namespace AccessChestAnywhere
             }
         }
 
+        /// <summary>The method invoked when the player right-clicks on the inventory.</summary>
+        /// <param name="x">The X-position of the cursor.</param>
+        /// <param name="y">The Y-position of the cursor.</param>
+        /// <param name="playSound">Whether to enable sound.</param>
         public override void receiveRightClick(int x, int y, bool playSound = true)
         {
-            if (this.disable)
+            if (this.IsDisabled)
                 return;
-            for (int i = this.slots.Count - 1; i >= 0; i--)
+
+            for (int i = this.Slots.Count - 1; i >= 0; i--)
             {
                 // chest to player
                 if (i < 36)
                 {
-                    if (this.slots[i].containsPoint(x, y))
+                    if (this.Slots[i].containsPoint(x, y))
                     {
-                        if (i < this.chestItems.Count && this.chestItems[i] != null)
+                        if (i < this.ChestItems.Count && this.ChestItems[i] != null)
                         {
-                            Item itemToPlace = this.chestItems[i].getOne();
-                            if (Game1.oldKBState.IsKeyDown(Keys.LeftShift) && this.chestItems[i].Stack > 1)
+                            Item itemToPlace = this.ChestItems[i].getOne();
+                            if (Game1.oldKBState.IsKeyDown(Keys.LeftShift) && this.ChestItems[i].Stack > 1)
                             {
-                                itemToPlace.Stack = this.chestItems[i].Stack / 2;
-                                itemToPlace = this.tryToAddItem(itemToPlace, true);
+                                itemToPlace.Stack = this.ChestItems[i].Stack / 2;
+                                itemToPlace = this.TryAddItem(itemToPlace, true);
                                 if (itemToPlace == null)
-                                    this.chestItems[i].Stack -= this.chestItems[i].Stack / 2;
-                                if (this.chestItems[i].Stack <= 0)
-                                    this.chestItems.RemoveAt(i);
+                                    this.ChestItems[i].Stack -= this.ChestItems[i].Stack / 2;
+                                if (this.ChestItems[i].Stack <= 0)
+                                    this.ChestItems.RemoveAt(i);
                             }
                             else
                             {
-                                itemToPlace = this.tryToAddItem(itemToPlace, true);
-                                if (itemToPlace == null && this.chestItems[i].Stack == 1)
-                                    this.chestItems.RemoveAt(i);
+                                itemToPlace = this.TryAddItem(itemToPlace, true);
+                                if (itemToPlace == null && this.ChestItems[i].Stack == 1)
+                                    this.ChestItems.RemoveAt(i);
                                 else
-                                    this.chestItems[i].Stack--;
+                                    this.ChestItems[i].Stack--;
                             }
                             if (playSound)
                                 Game1.playSound("coin");
@@ -165,25 +195,25 @@ namespace AccessChestAnywhere
                 // player to chest
                 else
                 {
-                    if (this.slots[i].containsPoint(x, y))
+                    if (this.Slots[i].containsPoint(x, y))
                     {
-                        if (playerItems[i - 36] != null)
+                        if (this.PlayerItems[i - 36] != null)
                         {
-                            Item itemToPlace = this.playerItems[i - 36].getOne();
-                            if (Game1.oldKBState.IsKeyDown(Keys.LeftShift) && this.playerItems[i - 36].Stack > 1)
+                            Item itemToPlace = this.PlayerItems[i - 36].getOne();
+                            if (Game1.oldKBState.IsKeyDown(Keys.LeftShift) && this.PlayerItems[i - 36].Stack > 1)
                             {
-                                itemToPlace.Stack = this.playerItems[i - 36].Stack / 2;
-                                itemToPlace = this.tryToAddItem(itemToPlace, false);
+                                itemToPlace.Stack = this.PlayerItems[i - 36].Stack / 2;
+                                itemToPlace = this.TryAddItem(itemToPlace, false);
                                 if (itemToPlace == null)
-                                    this.playerItems[i - 36].Stack -= this.playerItems[i - 36].Stack / 2;
+                                    this.PlayerItems[i - 36].Stack -= this.PlayerItems[i - 36].Stack / 2;
                             }
                             else
                             {
-                                itemToPlace = this.tryToAddItem(itemToPlace, false);
-                                if (itemToPlace == null && this.playerItems[i - 36].Stack == 1)
-                                    this.playerItems[i - 36] = null;
+                                itemToPlace = this.TryAddItem(itemToPlace, false);
+                                if (itemToPlace == null && this.PlayerItems[i - 36].Stack == 1)
+                                    this.PlayerItems[i - 36] = null;
                                 else
-                                    this.playerItems[i - 36].Stack--;
+                                    this.PlayerItems[i - 36].Stack--;
                             }
 
                             if (playSound)
@@ -194,12 +224,50 @@ namespace AccessChestAnywhere
             }
         }
 
-        private Item tryToAddItem(Item itemToPlace, bool toPlayer)
+        /// <summary>Render the inventory UI.</summary>
+        /// <param name="sprites">The sprites to render.</param>
+        public override void draw(SpriteBatch sprites)
+        {
+            // background
+            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + Game1.tileSize / 16, this.yPositionOnScreen + Game1.tileSize / 16, this.width - Game1.tileSize / 8, this.height - Game1.tileSize / 8), new Rectangle(64, 128, 64, 64), Color.White);
+            this.DrawBorder(sprites);
+
+            // slots
+            this.DrawChestSlots(sprites);
+            this.DrawPlayerSlots(sprites);
+
+            // items
+            this.DrawChestItems(sprites);
+            this.DrawPlayerItems(sprites);
+
+            // tooltips
+            if (this.HoveredItem != null)
+            {
+                string hoverText = this.HoveredItem.getHoverBoxText(this.HoveredItem);
+                string hoverTitle = null;
+                if (hoverText == null)
+                {
+                    hoverText = this.HoveredItem.getDescription();
+                    hoverTitle = this.HoveredItem.Name;
+                }
+
+                IClickableMenu.drawToolTip(sprites, hoverText, hoverTitle, this.HoveredItem);
+            }
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Try to add an item to the player or chest inventory, and return the remaining stack.</summary>
+        /// <param name="itemToPlace">The item to add.</param>
+        /// <param name="toPlayer">Whether to add the item to the player inventory (otherwise, to the chest).</param>
+        private Item TryAddItem(Item itemToPlace, bool toPlayer)
         {
             // to player
             if (toPlayer)
             {
-                foreach (Item item in this.playerItems)
+                foreach (Item item in this.PlayerItems)
                 {
                     if (item == null || !item.canStackWith(itemToPlace))
                         continue;
@@ -208,13 +276,13 @@ namespace AccessChestAnywhere
                     if (itemToPlace.Stack <= 0)
                         return null;
                 }
-                if (this.playerItems.Contains(null))
+                if (this.PlayerItems.Contains(null))
                 {
-                    for (int i = 0; i < this.playerItems.Count; i++)
+                    for (int i = 0; i < this.PlayerItems.Count; i++)
                     {
-                        if (this.playerItems[i] == null)
+                        if (this.PlayerItems[i] == null)
                         {
-                            this.playerItems[i] = itemToPlace;
+                            this.PlayerItems[i] = itemToPlace;
                             return null;
                         }
                     }
@@ -223,7 +291,7 @@ namespace AccessChestAnywhere
             }
 
             // to chest
-            foreach (Item item in this.chestItems)
+            foreach (Item item in this.ChestItems)
             {
                 if (item == null || !item.canStackWith(itemToPlace))
                     continue;
@@ -232,19 +300,19 @@ namespace AccessChestAnywhere
                 if (itemToPlace.Stack <= 0)
                     return null;
             }
-            if (this.chestItems.Count < this.capacity)
+            if (this.ChestItems.Count < 36)
             {
-                this.chestItems.Add(itemToPlace);
+                this.ChestItems.Add(itemToPlace);
                 return null;
             }
             return itemToPlace;
         }
 
-        private void initializeComponents()
+        /// <summary>Initialise the inventory for rendering.</summary>
+        private void InitializeComponents()
         {
             // slots
             int wCount = 1;
-            int count = 0;
             int y = this.yPositionOnScreen + Game1.tileSize / 2;
             while (wCount < 3)
             {
@@ -255,12 +323,11 @@ namespace AccessChestAnywhere
                     int x = this.xPositionOnScreen + Game1.tileSize / 2;
                     while (xCount < 13)
                     {
-                        this.slots.Add(
+                        this.Slots.Add(
                             new ClickableComponent(new Rectangle(x, y, Game1.tileSize, Game1.tileSize), wCount == 1 ? $"Chest Slot {yCount * 12 + xCount}" : $"Player Slot {yCount * 12 + xCount}")
                         );
                         x += Game1.tileSize;
                         xCount++;
-                        count++;
                     }
                     y += Game1.tileSize;
                     yCount++;
@@ -270,64 +337,40 @@ namespace AccessChestAnywhere
             }
         }
 
-        public override void draw(SpriteBatch b)
-        {
-            // bg menu
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + Game1.tileSize / 16, this.yPositionOnScreen + Game1.tileSize / 16, this.width - Game1.tileSize / 8, this.height - Game1.tileSize / 8), new Rectangle(64, 128, 64, 64), Color.White);
-            this.drawBorder(b);
-
-            // slots
-            this.drawChestSlots(b);
-            this.drawPlayerSlots(b);
-
-            // items
-            this.drawChestItems(b);
-            this.drawPlayerItems(b);
-
-            // tooltips
-            if (this.hoveredItem != null)
-            {
-                string hoverText = this.hoveredItem.getHoverBoxText(this.hoveredItem);
-                string hoverTitle = null;
-                if (hoverText == null)
-                {
-                    hoverText = this.hoveredItem.getDescription();
-                    hoverTitle = this.hoveredItem.Name;
-                }
-
-                IClickableMenu.drawToolTip(b, hoverText, hoverTitle, this.hoveredItem);
-            }
-
-        }
-
-        private void drawPlayerItems(SpriteBatch b)
+        /// <summary>Render the player items.</summary>
+        /// <param name="sprites">The sprites to render.</param>
+        private void DrawPlayerItems(SpriteBatch sprites)
         {
             int slotCount = 36;
 
             while (slotCount < 72)
             {
-                if (slotCount - 36 >= this.playerItems.Count)
+                if (slotCount - 36 >= this.PlayerItems.Count)
                     break;
 
-                this.playerItems[slotCount - 36]?.drawInMenu(b, new Vector2(this.slots[slotCount].bounds.X, this.slots[slotCount].bounds.Y), this.slots[slotCount].containsPoint(Game1.getMouseX(), Game1.getMouseY()) ? 1f : 0.8f);
+                this.PlayerItems[slotCount - 36]?.drawInMenu(sprites, new Vector2(this.Slots[slotCount].bounds.X, this.Slots[slotCount].bounds.Y), this.Slots[slotCount].containsPoint(Game1.getMouseX(), Game1.getMouseY()) ? 1f : 0.8f);
                 slotCount++;
             }
         }
 
-        private void drawChestItems(SpriteBatch b)
+        /// <summary>Render the chest items.</summary>
+        /// <param name="sprites">The sprites to render.</param>
+        private void DrawChestItems(SpriteBatch sprites)
         {
             int slotCount = 0;
             while (slotCount < 72)
             {
-                if (slotCount >= this.chestItems.Count)
+                if (slotCount >= this.ChestItems.Count)
                     break;
 
-                this.chestItems[slotCount]?.drawInMenu(b, new Vector2(this.slots[slotCount].bounds.X, this.slots[slotCount].bounds.Y), this.slots[slotCount].containsPoint(Game1.getMouseX(), Game1.getMouseY()) ? 1f : 0.8f);
+                this.ChestItems[slotCount]?.drawInMenu(sprites, new Vector2(this.Slots[slotCount].bounds.X, this.Slots[slotCount].bounds.Y), this.Slots[slotCount].containsPoint(Game1.getMouseX(), Game1.getMouseY()) ? 1f : 0.8f);
                 slotCount++;
             }
         }
 
-        private void drawPlayerSlots(SpriteBatch b)
+        /// <summary>Render the player slots.</summary>
+        /// <param name="sprites">The sprites to render.</param>
+        private void DrawPlayerSlots(SpriteBatch sprites)
         {
             int yCount = 0;
             int y = yPositionOnScreen + height / 2 + Game1.tileSize / 4;
@@ -340,7 +383,7 @@ namespace AccessChestAnywhere
                     Rectangle sourceRectangle = yCount * 12 + xCount <= Game1.player.maxItems
                         ? new Rectangle(128, 128, 64, 64)
                         : new Rectangle(64, 896, 64, 64);
-                    b.Draw(Game1.menuTexture, new Rectangle(x, y, Game1.tileSize, Game1.tileSize), sourceRectangle, Color.White);
+                    sprites.Draw(Game1.menuTexture, new Rectangle(x, y, Game1.tileSize, Game1.tileSize), sourceRectangle, Color.White);
                     x += Game1.tileSize;
                     xCount++;
                 }
@@ -349,7 +392,9 @@ namespace AccessChestAnywhere
             }
         }
 
-        private void drawChestSlots(SpriteBatch b)
+        /// <summary>Render the chest slots.</summary>
+        /// <param name="sprites">The sprites to render.</param>
+        private void DrawChestSlots(SpriteBatch sprites)
         {
             int yCount = 0;
             int y = yPositionOnScreen + Game1.tileSize / 2;
@@ -359,8 +404,7 @@ namespace AccessChestAnywhere
                 int x = xPositionOnScreen + Game1.tileSize / 2;
                 while (xCount < 12)
                 {
-                    b.Draw(Game1.menuTexture, new Rectangle(x, y, Game1.tileSize, Game1.tileSize),
-                        new Rectangle?(new Rectangle(128, 128, 64, 64)), Color.White);
+                    sprites.Draw(Game1.menuTexture, new Rectangle(x, y, Game1.tileSize, Game1.tileSize), new Rectangle(128, 128, 64, 64), Color.White);
                     x += Game1.tileSize;
                     xCount++;
                 }
@@ -369,21 +413,23 @@ namespace AccessChestAnywhere
             }
         }
 
-        private void drawBorder(SpriteBatch b)
+        /// <summary>Render the inventory border.</summary>
+        /// <param name="sprites">The sprites to render.</param>
+        private void DrawBorder(SpriteBatch sprites)
         {
-            int ts = Game1.tileSize;
-            int ts2 = Game1.tileSize / 2;
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen, ts2, ts2), this.cornerTopLeft, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + ts2, this.yPositionOnScreen, this.width - ts, ts2), this.edgeTop, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - ts2, this.yPositionOnScreen, ts2, ts2), this.cornerTopRight, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen + ts2, ts2, this.height - ts), this.edgeLeft, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - ts2, this.yPositionOnScreen + ts2, ts2, this.height - ts), this.edgeRight, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + ts2, this.yPositionOnScreen + this.height / 2 - ts / 4, this.width - ts, ts2), this.middlemiddle, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen + this.height / 2 - ts / 4, ts2, ts2), this.middleLeft, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - ts2, this.yPositionOnScreen + this.height / 2 - ts / 4, ts2, ts2), this.middleRight, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen + this.height - ts2, ts2, ts2), this.cornerBottomLeft, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + ts2, this.yPositionOnScreen + this.height - ts2, this.width - ts, ts2), this.edgeBottom, Color.White);
-            b.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - ts2, this.yPositionOnScreen + this.height - ts2, ts2, ts2), this.cornerBottomRight, Color.White);
+            int tileSize = Game1.tileSize;
+            int halfTileSize = Game1.tileSize / 2;
+            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen, halfTileSize, halfTileSize), this.CornerTopLeft, Color.White);
+            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + halfTileSize, this.yPositionOnScreen, this.width - tileSize, halfTileSize), this.EdgeTop, Color.White);
+            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - halfTileSize, this.yPositionOnScreen, halfTileSize, halfTileSize), this.CornerTopRight, Color.White);
+            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen + halfTileSize, halfTileSize, this.height - tileSize), this.EdgeLeft, Color.White);
+            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - halfTileSize, this.yPositionOnScreen + halfTileSize, halfTileSize, this.height - tileSize), this.EdgeRight, Color.White);
+            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + halfTileSize, this.yPositionOnScreen + this.height / 2 - tileSize / 4, this.width - tileSize, halfTileSize), this.MiddleMiddle, Color.White);
+            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen + this.height / 2 - tileSize / 4, halfTileSize, halfTileSize), this.MiddleLeft, Color.White);
+            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - halfTileSize, this.yPositionOnScreen + this.height / 2 - tileSize / 4, halfTileSize, halfTileSize), this.MiddleRight, Color.White);
+            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen + this.height - halfTileSize, halfTileSize, halfTileSize), this.CornerBottomLeft, Color.White);
+            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + halfTileSize, this.yPositionOnScreen + this.height - halfTileSize, this.width - tileSize, halfTileSize), this.EdgeBottom, Color.White);
+            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - halfTileSize, this.yPositionOnScreen + this.height - halfTileSize, halfTileSize, halfTileSize), this.CornerBottomRight, Color.White);
         }
     }
 }
