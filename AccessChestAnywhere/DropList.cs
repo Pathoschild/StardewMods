@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AccessChestAnywhere.Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
@@ -7,7 +10,9 @@ using StardewValley.Menus;
 namespace AccessChestAnywhere
 {
     /// <summary>A dropdown UI component which lets the player choose from a list of values.</summary>
-    internal class DropList : ClickableComponent
+    /// <typeparam name="TItem">The item type.</typeparam>
+    internal class DropList<TItem> : ClickableComponent
+        where TItem : class
     {
         /*********
         ** Properties
@@ -15,8 +20,11 @@ namespace AccessChestAnywhere
         /// <summary>The index of the selected item.</summary>
         private int SelectedIndex;
 
+        /// <summary>The selected item.</summary>
+        private TItem SelectedItem => this.Items.First(p => p.Index == this.SelectedIndex).Value;
+
         /// <summary>The items in the list.</summary>
-        private readonly string[] Items;
+        private readonly DropListItem<TItem>[] Items;
 
         /// <summary>Whether the dropdown should be aligned right of the origin.</summary>
         private readonly bool ToRight;
@@ -41,19 +49,25 @@ namespace AccessChestAnywhere
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="selectedIndex">The index of the selected item.</param>
+        /// <param name="selectedItem">The selected item.</param>
         /// <param name="items">The items in the list.</param>
+        /// <param name="nameSelector">A lambda which returns the display name for an item.</param>
         /// <param name="x">The X-position from which to render the list.</param>
         /// <param name="y">The Y-position from which to render the list.</param>
         /// <param name="toRight">Whether the dropdown should be aligned right of the origin.</param>
         /// <param name="font">The font with which to render text.</param>
-        public DropList(int selectedIndex, string[] items, int x, int y, bool toRight, SpriteFont font)
-            : base(new Rectangle(), selectedIndex.ToString())
+        public DropList(TItem selectedItem, TItem[] items, Func<TItem, string> nameSelector, int x, int y, bool toRight, SpriteFont font)
+            : base(new Rectangle(), nameof(DropList<TItem>))
         {
-            this.SelectedIndex = selectedIndex;
-            this.Items = items;
+            // save values
+            this.SelectedIndex = Array.IndexOf(items, selectedItem);
+            this.Items = items
+                .Select((item, index) => new DropListItem<TItem>(index, nameSelector(item), item))
+                .ToArray();
             this.Font = font;
             this.ToRight = toRight;
+
+            // set dimensions
             this.bounds.Width = Game1.tileSize * 7;
             this.bounds.Height = (int)font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y * 10 + Game1.tileSize / 16 * 9;
             this.bounds.X = toRight
@@ -61,15 +75,16 @@ namespace AccessChestAnywhere
                 : x - this.bounds.Width;
             this.bounds.Y = y;
 
+            // initialise UI
             this.InitialiseComponents();
-            if (selectedIndex <= 9)
-                return;
-
-            int num = selectedIndex;
-            for (int i = 9; i >= 0; i--)
+            if (this.SelectedIndex > 9)
             {
-                this.ItemComponents[i].name = num.ToString();
-                num--;
+                int num = this.SelectedIndex;
+                for (int i = 9; i >= 0; i--)
+                {
+                    this.ItemComponents[i].name = num.ToString();
+                    num--;
+                }
             }
         }
 
@@ -94,18 +109,18 @@ namespace AccessChestAnywhere
         /// <summary>Select an item in the list.</summary>
         /// <param name="x">The X-position of the item in the UI.</param>
         /// <param name="y">The Y-position of the item in the UI.</param>
-        /// <returns>Returns the selected index, or -1 if the coordinate wasn't found.</returns>
-        public int Select(int x, int y)
+        /// <returns>Returns the selected item, or <c>null</c> if the coordinate wasn't found.</returns>
+        public TItem Select(int x, int y)
         {
             foreach (ClickableComponent component in this.ItemComponents)
             {
                 if (component.containsPoint(x, y))
                 {
                     this.SelectedIndex = int.Parse(component.name);
-                    return this.SelectedIndex;
+                    return this.SelectedItem;
                 }
             }
-            return -1;
+            return null;
         }
 
         /// <summary>Prepare the components for rendering.</summary>
@@ -128,6 +143,7 @@ namespace AccessChestAnywhere
         {
             foreach (ClickableComponent component in this.ItemComponents)
             {
+                // draw background
                 if (component.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
                     sprites.Draw(Game1.mouseCursors, component.bounds, this.HoverBackground, Color.White);
                 else if (component.name.Equals(this.SelectedIndex.ToString()))
@@ -135,10 +151,12 @@ namespace AccessChestAnywhere
                 else
                     sprites.Draw(Game1.mouseCursors, component.bounds, this.InactiveBackground, Color.White);
 
+                // draw text
+                DropListItem<TItem> item = this.Items.First(p => p.Index == int.Parse(component.name));
                 Vector2 position = this.ToRight
                         ? new Vector2(component.bounds.X, component.bounds.Y + Game1.tileSize / 16)
-                        : new Vector2(component.bounds.X + component.bounds.Width - this.Font.MeasureString(this.Items[int.Parse(component.name)]).X, component.bounds.Y + Game1.tileSize / 16);
-                sprites.DrawString(this.Font, this.Items[int.Parse(component.name)], position, Color.Black);
+                        : new Vector2(component.bounds.X + component.bounds.Width - this.Font.MeasureString(item.Name).X, component.bounds.Y + Game1.tileSize / 16);
+                sprites.DrawString(this.Font, item.Name, position, Color.Black);
             }
         }
     }

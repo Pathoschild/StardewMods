@@ -15,8 +15,11 @@ namespace AccessChestAnywhere
         /*********
         ** Properties
         *********/
-        /// <summary>The inventory of the selected chest.</summary>
-        protected List<Item> ChestItems = new List<Item>();
+        /// <summary>The selected chest.</summary>
+        protected ManagedChest SelectedChest;
+
+        /// <summary>The selected chest's inventory.</summary>
+        private List<Item> ChestItems => this.SelectedChest.Chest.items;
 
         /// <summary>The player inventory.</summary>
         private readonly List<Item> PlayerItems;

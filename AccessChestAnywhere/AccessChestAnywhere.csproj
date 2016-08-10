@@ -58,6 +58,8 @@
     <Compile Include="AccessChestAnywhere.cs" />
     <Compile Include="ChestWithInventory.cs" />
     <Compile Include="DropList.cs" />
+    <Compile Include="Framework\DropListItem.cs" />
+    <Compile Include="ManagedChest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tab.cs" />
   </ItemGroup>

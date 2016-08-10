@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using System.Linq;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -12,6 +10,13 @@ namespace AccessChestAnywhere
     /// <summary>The mod entry point.</summary>
     public class AccessChestAnywhere : Mod
     {
+        /*********
+        ** Properties
+        *********/
+        /// <summary>The selected chest.</summary>
+        private Chest SelectedChest;
+
+
         /*********
         ** Public methods
         *********/
@@ -33,26 +38,24 @@ namespace AccessChestAnywhere
             if (e.KeyPressed != Keys.B || Game1.activeClickableMenu != null)
                 return;
 
-            IDictionary<string, Vector2[]> chestsByLocation = new Dictionary<string, Vector2[]>();
-            foreach (GameLocation location in Game1.locations)
-            {
-                List<Vector2> chestPositions = new List<Vector2>();
-                foreach (var pair in location.objects)
-                {
-                    Chest chest = pair.Value as Chest;
-                    if (chest == null)
-                        continue;
+            // get chests
+            ManagedChest[] chests = (
+                from location in Game1.locations
+                from obj in location.Objects.Where(p => p.Value is Chest)
+                let chest = new ManagedChest((Chest)obj.Value, location, obj.Key)
+                where !chest.IsIgnored
+                orderby chest.Location.Name ascending, chest.Name ascending
+                select chest
+            ).ToArray();
+            ManagedChest selectedChest = chests.FirstOrDefault(p => p.Chest == this.SelectedChest) ?? chests.First();
 
-                    if (chest.Name == "Chest")
-                        chest.Name = $"Chest({pair.Key.X},{pair.Key.Y})";
-                    if (!chest.Name.Contains("ignore"))
-                        chestPositions.Add(pair.Key);
-                }
-                if (chestPositions.Any())
-                    chestsByLocation.Add(location.Name, chestPositions.ToArray());
+            // render menu
+            if (chests.Any())
+            {
+                ACAMenu menu = new ACAMenu(chests, selectedChest);
+                menu.OnChestSelected += chest => this.SelectedChest = chest.Chest; // remember selected chest on next load
+                Game1.activeClickableMenu = menu;
             }
-            if (chestsByLocation.Any())
-                Game1.activeClickableMenu = new ACAMenu(chestsByLocation);
         }
     }
 }

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StardewValley;
-using StardewValley.Objects;
 
 namespace AccessChestAnywhere
 {
@@ -23,17 +20,14 @@ namespace AccessChestAnywhere
         /// <summary>Whether the location dropdown is open.</summary>
         private bool LocationListOpen;
 
-        /// <summary>The chests by their location name.</summary>
-        private readonly IDictionary<string, Vector2[]> ChestsByLocation;
+        /// <summary>The known chests.</summary>
+        private readonly ManagedChest[] Chests;
 
-        /// <summary>The player's current location.</summary>
-        private GameLocation Location;
+        /// <summary>The selected location.</summary>
+        private GameLocation SelectedLocation => this.SelectedChest.Location;
 
         /// <summary>The font with which to render text.</summary>
         private readonly SpriteFont Font = Game1.smallFont;
-
-        /// <summary>The coordinates of the current chest.</summary>
-        private Vector2 ChestCoordinate;
 
         /// <summary>The chest selector tab.</summary>
         private Tab ChestTab;
@@ -42,21 +36,29 @@ namespace AccessChestAnywhere
         private Tab LocationTab;
 
         /// <summary>The chest selector dropdown.</summary>
-        private DropList ChestSelector;
+        private DropList<ManagedChest> ChestSelector;
 
         /// <summary>The location selector dropdown.</summary>
-        private DropList LocationSelector;
+        private DropList<GameLocation> LocationSelector;
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>An event raised when the player selects a chest.</summary>
+        public event Action<ManagedChest> OnChestSelected;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="chestsByLocation">The chests by their location name.</param>
-        public ACAMenu(IDictionary<string, Vector2[]> chestsByLocation)
+        /// <param name="chests">The known chests.</param>
+        /// <param name="selectedChest">The selected chest.</param>
+        public ACAMenu(ManagedChest[] chests, ManagedChest selectedChest)
         {
-            this.ChestsByLocation = chestsByLocation;
-            this.Initialise();
+            this.Chests = chests;
+            this.SelectedChest = selectedChest;
             this.InitialiseTabs();
             this.InitialiseSelectors();
         }
@@ -100,11 +102,12 @@ namespace AccessChestAnywhere
                     return;
                 this.ChestListOpen = false;
                 this.IsDisabled = false;
-                int selectedIndex = this.ChestSelector.Select(x, y);
-                if (selectedIndex >= 0)
+
+                ManagedChest chest = this.ChestSelector.Select(x, y);
+                if (chest != null)
                 {
-                    this.ChestCoordinate = this.ChestsByLocation[this.Location.Name][selectedIndex];
-                    this.ChestItems = ((Chest)this.Location.objects[this.ChestCoordinate]).items;
+                    this.SelectedChest = chest;
+                    this.OnChestSelected?.Invoke(this.SelectedChest);
                     this.InitialiseTabs();
                 }
             }
@@ -114,11 +117,11 @@ namespace AccessChestAnywhere
                     return;
                 this.LocationListOpen = false;
                 this.IsDisabled = false;
-                int selectedIndex = this.LocationSelector.Select(x, y);
-                if (selectedIndex >= 0)
+                GameLocation location = this.LocationSelector.Select(x, y);
+                if (location != null)
                 {
-                    this.Location = Game1.getLocationFromName(this.ChestsByLocation.ElementAt(selectedIndex).Key);
-                    this.Initialise();
+                    this.SelectedChest = this.Chests.First(p => p.Location == location);
+                    this.OnChestSelected?.Invoke(this.SelectedChest);
                     this.InitialiseTabs();
                     this.InitialiseSelectors();
                 }
@@ -160,38 +163,26 @@ namespace AccessChestAnywhere
         /*********
         ** Private methods
         *********/
-        /// <summary>Initialise the control.</summary>
-        private void Initialise()
-        {
-            if (this.Location == null)
-                this.Location = Game1.getLocationFromName(this.ChestsByLocation.ElementAt(0).Key);
-            if (this.ChestCoordinate.Equals(Vector2.Zero))
-                this.ChestCoordinate = this.ChestsByLocation[this.Location.Name][0];
-            else if (!this.ChestsByLocation[this.Location.Name].Contains(this.ChestCoordinate))
-                this.ChestCoordinate = this.ChestsByLocation[this.Location.Name][0];
-            this.ChestItems = ((Chest)this.Location.objects[this.ChestCoordinate]).items;
-        }
-
         /// <summary>Initialise the chest and location selectors.</summary>
         private void InitialiseSelectors()
         {
             // chest selector
             {
-                string[] chestNames = this.ChestsByLocation[this.Location.name]
-                    .Select(v => this.Location.objects[v].Name)
-                    .OrderBy(p => p)
-                    .ToArray();
+                ManagedChest[] chests = this.Chests.Where(chest => chest.Location == this.SelectedLocation).ToArray();
                 int x = this.xPositionOnScreen + Game1.tileSize / 4;
                 int y = this.yPositionOnScreen;
-                this.ChestSelector = new DropList(Array.IndexOf(this.ChestsByLocation[this.Location.name], this.ChestCoordinate), chestNames, x, y, true, this.Font);
+                this.ChestSelector = new DropList<ManagedChest>(this.SelectedChest, chests, chest => chest.Name, x, y, true, this.Font);
             }
 
             // location selector
             {
-                string[] locationNames = this.ChestsByLocation.Keys.ToArray();
+                GameLocation[] locations = this.Chests
+                    .Select(p => p.Location)
+                    .Distinct()
+                    .ToArray();
                 int x = this.xPositionOnScreen + this.width - Game1.tileSize / 4;
                 int y = this.yPositionOnScreen;
-                this.LocationSelector = new DropList(Array.IndexOf(locationNames, this.Location.Name), locationNames, x, y, false, this.Font);
+                this.LocationSelector = new DropList<GameLocation>(this.SelectedLocation, locations, location => location.Name, x, y, false, this.Font);
             }
         }
 
@@ -202,14 +193,14 @@ namespace AccessChestAnywhere
             {
                 int x = this.xPositionOnScreen + Game1.tileSize / 4;
                 int y = this.yPositionOnScreen - Game1.tileSize - Game1.tileSize / 16;
-                this.ChestTab = new Tab(this.Location.objects[this.ChestCoordinate].Name, x, y, true, this.Font);
+                this.ChestTab = new Tab(this.SelectedChest.Name, x, y, true, this.Font);
             }
 
             // location
             {
                 int x = this.xPositionOnScreen + this.width - Game1.tileSize / 4;
                 int y = this.yPositionOnScreen - Game1.tileSize - Game1.tileSize / 16;
-                this.LocationTab = new Tab(this.Location.Name, x, y, false, this.Font);
+                this.LocationTab = new Tab(this.SelectedLocation.Name, x, y, false, this.Font);
             }
         }
     }
