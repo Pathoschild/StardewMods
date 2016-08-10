@@ -22,6 +22,7 @@ You can click the top-right menu to change location, and the top-left menu to ch
 ## Changelog
 * 1.2.0 (not released)
   * Added item tooltips
+  * Sort chests by name
 * 1.1.0
   * Reworked UI
   * Added tabs for chest and locations

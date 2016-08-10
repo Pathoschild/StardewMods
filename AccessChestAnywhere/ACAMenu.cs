@@ -179,6 +179,7 @@ namespace AccessChestAnywhere
             {
                 string[] chestNames = this.ChestsByLocation[this.Location.name]
                     .Select(v => this.Location.objects[v].Name)
+                    .OrderBy(p => p)
                     .ToArray();
                 int x = this.xPositionOnScreen + Game1.tileSize / 4;
                 int y = this.yPositionOnScreen;
