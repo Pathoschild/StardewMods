@@ -44,6 +44,9 @@ namespace AccessChestAnywhere
         /// <summary>The location selector dropdown.</summary>
         private DropList<GameLocation> LocationSelector;
 
+        /// <summary>The key which toggles the chest UI.</summary>
+        private Keys ToggleKey;
+
 
         /*********
         ** Accessors
@@ -58,11 +61,13 @@ namespace AccessChestAnywhere
         /// <summary>Construct an instance.</summary>
         /// <param name="chests">The known chests.</param>
         /// <param name="selectedChest">The selected chest.</param>
-        public ACAMenu(ManagedChest[] chests, ManagedChest selectedChest)
+        /// <param name="toggleKey">The key which toggles the chest UI.</param>
+        public ACAMenu(ManagedChest[] chests, ManagedChest selectedChest, Keys toggleKey)
         {
             this.Chests = chests;
-            this.Locations = this.Chests.Select(p => p.Location).Distinct().ToArray();
             this.SelectedChest = selectedChest;
+            this.ToggleKey = toggleKey;
+            this.Locations = this.Chests.Select(p => p.Location).Distinct().ToArray();
             this.InitialiseTabs();
             this.InitialiseSelectors();
         }
@@ -73,14 +78,9 @@ namespace AccessChestAnywhere
         {
             if (this.Count <= 10)
                 return;
-            switch (key)
-            {
-                case Keys.Escape:
-                case Keys.B:
-                case Keys.E:
-                    this.exitThisMenuNoSound();
-                    break;
-            }
+
+            if (key == this.ToggleKey || key == Keys.Escape)
+                this.exitThisMenuNoSound();
         }
 
         /// <summary>The method invoked when the player scrolls the dropdown using the mouse wheel.</summary>

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using AccessChestAnywhere.Framework;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -16,6 +17,9 @@ namespace AccessChestAnywhere
         /// <summary>The selected chest.</summary>
         private Chest SelectedChest;
 
+        /// <summary>The key which toggles the chest UI.</summary>
+        private Keys ToggleKey;
+
 
         /*********
         ** Public methods
@@ -23,6 +27,11 @@ namespace AccessChestAnywhere
         /// <summary>Initialise the mod.</summary>
         public override void Entry(params object[] objects)
         {
+            // read config
+            var config = new Configuration().InitializeConfig(this.BaseConfigPath);
+            this.ToggleKey = config.GetToggleKey();
+
+            // hook UI
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
         }
 
@@ -35,7 +44,7 @@ namespace AccessChestAnywhere
         /// <param name="e">The event data.</param>
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            if (e.KeyPressed != Keys.B || Game1.activeClickableMenu != null)
+            if (e.KeyPressed != this.ToggleKey || Game1.activeClickableMenu != null)
                 return;
 
             // get chests
@@ -52,7 +61,7 @@ namespace AccessChestAnywhere
             // render menu
             if (chests.Any())
             {
-                ACAMenu menu = new ACAMenu(chests, selectedChest);
+                ACAMenu menu = new ACAMenu(chests, selectedChest, this.ToggleKey);
                 menu.OnChestSelected += chest => this.SelectedChest = chest.Chest; // remember selected chest on next load
                 Game1.activeClickableMenu = menu;
             }

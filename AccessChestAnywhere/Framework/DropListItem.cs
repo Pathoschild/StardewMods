@@ -2,7 +2,7 @@ namespace AccessChestAnywhere.Framework
 {
     /// <summary>An item in a drop list.</summary>
     /// <typeparam name="TItem">The item type.</typeparam>
-    public class DropListItem<TItem>
+    internal class DropListItem<TItem>
     {
         /*********
         ** Accessors
