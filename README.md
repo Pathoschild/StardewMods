@@ -13,11 +13,22 @@ to the deepest mine level.
 ## Usage
 ### Accessing your chests
 Press `B` to open the menu:
+
 ![](screenshots/menu.png)
 
 This will show the chests on your farm and in your buildings.
 You can click the top-right menu to change location, and the top-left menu to change chest:
+
 ![](screenshots/menu-chest-list.png)
+
+### Sorting
+Your chests are sorted alphabetically by default. Want a different order? Just add a number between pipes (like `|1|`) somewhere in the chest name:
+
+![](screenshots/tags-order-name.png)
+
+The chests will be sorted by that number, _then_ alphabetically. Chests with a specific order will appear before those without.
+
+![](screenshots/tags-order-list.png)
 
 ### Hidden chests
 Don't want a chest to appear in the list? Add `|ignore|` to its name.
@@ -25,6 +36,7 @@ Don't want a chest to appear in the list? Add `|ignore|` to its name.
 ## Changelog
 * 1.2.0 (not released yet)
   * Chests are now sorted alphabetically
+  * Chests can now be sorted manually
   * Item tooltips now work
   * Location tab is now hidden if all your chests are in one place
 * 1.1.0

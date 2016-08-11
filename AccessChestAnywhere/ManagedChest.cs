@@ -33,6 +33,9 @@ namespace AccessChestAnywhere
         /// <summary>Whether the chest should be ignored.</summary>
         public bool IsIgnored { get; }
 
+        /// <summary>The player's preferred chest order (if any).</summary>
+        public int? Order { get; }
+
 
         /*********
         ** Public methods
@@ -64,6 +67,11 @@ namespace AccessChestAnywhere
                         this.IsIgnored = true;
                         continue;
                     }
+
+                    // order
+                    int order;
+                    if (int.TryParse(tag, out order))
+                        this.Order = order;
                 }
             }
         }

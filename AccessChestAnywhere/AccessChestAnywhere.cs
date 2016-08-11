@@ -44,7 +44,7 @@ namespace AccessChestAnywhere
                 from obj in location.Objects.Where(p => p.Value is Chest)
                 let chest = new ManagedChest((Chest)obj.Value, location, obj.Key)
                 where !chest.IsIgnored
-                orderby chest.Location.Name ascending, chest.Name ascending
+                orderby chest.Location.Name ascending, (chest.Order ?? int.MaxValue) ascending, chest.Name ascending
                 select chest
             ).ToArray();
             ManagedChest selectedChest = chests.FirstOrDefault(p => p.Chest == this.SelectedChest) ?? chests.First();
