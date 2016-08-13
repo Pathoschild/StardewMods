@@ -31,8 +31,6 @@ pipes (like `|1|`) somewhere in the chest name:
 The chests will be sorted by that number, _then_ alphabetically. Chests with a specific order will
 appear before those without.
 
-![](screenshots/tags-order-list.png)
-
 ### Hidden chests
 Hide a chest by adding `|ignore|` to its name.
 

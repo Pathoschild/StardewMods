@@ -32,6 +32,9 @@ namespace AccessChestAnywhere
         /// <summary>The font with which to render text.</summary>
         private readonly SpriteFont Font;
 
+        /// <summary>The height of text rendered in the <see cref="Font"/>.</summary>
+        private readonly int FontHeight;
+
         /// <summary>The background for the selected item.</summary>
         private readonly Rectangle ActiveBackground = new Rectangle(258, 258, 4, 4);
 
@@ -65,11 +68,12 @@ namespace AccessChestAnywhere
                 .Select((item, index) => new DropListItem<TItem>(index, nameSelector(item), item))
                 .ToArray();
             this.Font = font;
+            this.FontHeight = (int)font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y;
             this.ToRight = toRight;
 
             // set dimensions
             this.bounds.Width = Game1.tileSize * 7;
-            this.bounds.Height = (int)font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y * 10 + Game1.tileSize / 16 * 9;
+            this.bounds.Height = this.FontHeight * 10 + Game1.tileSize / 16 * 9;
             this.bounds.X = toRight
                 ? x
                 : x - this.bounds.Width;
@@ -129,11 +133,11 @@ namespace AccessChestAnywhere
             int x = this.bounds.X;
             int y = this.bounds.Y;
             int width = this.bounds.Width;
-            int height = (int)this.Font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y;
+            int height = this.FontHeight;
             for (int i = 0; i < this.Items.Length && i < 10; i++)
             {
                 this.ItemComponents.Add(new ClickableComponent(new Rectangle(x, y, width, height), i.ToString()));
-                y += (int)this.Font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y + Game1.tileSize / 16;
+                y += this.FontHeight;
             }
         }
 
