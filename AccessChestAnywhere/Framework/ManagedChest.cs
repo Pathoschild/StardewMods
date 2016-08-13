@@ -3,10 +3,10 @@ using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Objects;
 
-namespace AccessChestAnywhere
+namespace AccessChestAnywhere.Framework
 {
     /// <summary>A chest with metadata.</summary>
-    public class ManagedChest
+    internal class ManagedChest
     {
         /*********
         ** Properties

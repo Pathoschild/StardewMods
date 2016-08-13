@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AccessChestAnywhere.Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -10,7 +11,7 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 namespace AccessChestAnywhere
 {
     /// <summary>A UI which lets the player transfer items between a chest and their inventory.</summary>
-    public class ChestWithInventory : IClickableMenu
+    internal class ChestWithInventory : IClickableMenu
     {
         /*********
         ** Properties

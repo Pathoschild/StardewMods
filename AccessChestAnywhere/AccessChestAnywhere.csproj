@@ -60,7 +60,7 @@
     <Compile Include="DropList.cs" />
     <Compile Include="Framework\Configuration.cs" />
     <Compile Include="Framework\DropListItem.cs" />
-    <Compile Include="ManagedChest.cs" />
+    <Compile Include="Framework\ManagedChest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tab.cs" />
   </ItemGroup>
