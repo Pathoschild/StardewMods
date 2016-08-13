@@ -17,8 +17,11 @@ namespace AccessChestAnywhere
         /// <summary>The selected chest.</summary>
         private Chest SelectedChest;
 
-        /// <summary>The input map.</summary>
-        private InputMapConfiguration<Keys> Keys;
+        /// <summary>The keyboard input map.</summary>
+        private InputMapConfiguration<Keys> Keyboard;
+
+        /// <summary>The controller input map.</summary>
+        private InputMapConfiguration<Buttons?> Controller;
 
 
         /*********
@@ -29,24 +32,32 @@ namespace AccessChestAnywhere
         {
             // read config
             var config = new Configuration().InitializeConfig(this.BaseConfigPath);
-            this.Keys = config.GetKeys();
+            this.Keyboard = config.GetKeyboard();
+            this.Controller = config.GetController();
 
             // hook UI
-            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
+            ControlEvents.KeyPressed += (sender, e) => this.TryOpenMenu(e.KeyPressed, this.Keyboard.Toggle);
+            ControlEvents.ControllerButtonPressed += (sender, e) => this.TryOpenMenu(e.ButtonPressed, this.Controller.Toggle);
+            ControlEvents.ControllerTriggerPressed += (sender, e) => this.TryOpenMenu(e.ButtonPressed, this.Controller.Toggle);
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked when the player presses a key.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        /// <summary>Open the menu if the input matches the configured toggle, and another menu isn't already open.</summary>
+        /// <typeparam name="T">The input type.</typeparam>
+        /// <param name="expected">The configured toggle input.</param>
+        /// <param name="received">The received toggle input.</param>
+        private void TryOpenMenu<T>(T expected, T received)
         {
-            if (e.KeyPressed != this.Keys.Toggle || Game1.activeClickableMenu != null)
-                return;
+            if (received.Equals(expected) && Game1.activeClickableMenu == null)
+                this.OpenMenu();
+        }
 
+        /// <summary>Open the menu UI.</summary>
+        private void OpenMenu()
+        {
             // get chests
             ManagedChest[] chests = (
                 from location in Game1.locations
@@ -61,7 +72,7 @@ namespace AccessChestAnywhere
             // render menu
             if (chests.Any())
             {
-                ACAMenu menu = new ACAMenu(chests, selectedChest, this.Keys);
+                ACAMenu menu = new ACAMenu(chests, selectedChest, this.Keyboard, this.Controller);
                 menu.OnChestSelected += chest => this.SelectedChest = chest.Chest; // remember selected chest on next load
                 Game1.activeClickableMenu = menu;
             }

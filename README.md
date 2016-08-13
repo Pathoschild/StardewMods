@@ -37,14 +37,19 @@ appear before those without.
 Hide a chest by adding `|ignore|` to its name.
 
 ## Configuration
-### Change hot keys
-Don't want to summon your chests with `B`? You can change all of the key bindings in the `config.json` (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
+### Change input
+Don't want to summon your chests with `B`? You can change all of the key bindings in the
+`config.json` (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)),
+and add controller bindings if you have one (see [valid buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.buttons.aspx)).
+
 
 ## Changelog
 * 1.2.0 (not released yet)
   * Chests are now sorted alphabetically
   * Chests can now be sorted manually
-  * Hot key is now configurable
+  * Can now navigate between chests using the keyboard or controller
+  * Keyboard mapping is now configurable
+  * Controller buttons are now supported
   * Item tooltips now work
   * Location tab is now hidden if all your chests are in one place
 * 1.1.0

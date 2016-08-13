@@ -4,7 +4,6 @@ using AccessChestAnywhere.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StardewValley;
-using Key = Microsoft.Xna.Framework.Input.Keys;
 
 namespace AccessChestAnywhere
 {
@@ -47,7 +46,10 @@ namespace AccessChestAnywhere
         private DropList<GameLocation> LocationSelector;
 
         /// <summary>The keyboard input map.</summary>
-        private readonly InputMapConfiguration<Key> Keys;
+        private readonly InputMapConfiguration<Keys> Keyboard;
+
+        /// <summary>The controller input map.</summary>
+        private readonly InputMapConfiguration<Buttons?> Controller;
 
 
         /*********
@@ -63,40 +65,47 @@ namespace AccessChestAnywhere
         /// <summary>Construct an instance.</summary>
         /// <param name="chests">The known chests.</param>
         /// <param name="selectedChest">The selected chest.</param>
-        /// <param name="keys">The keyboard input map.</param>
-        public ACAMenu(ManagedChest[] chests, ManagedChest selectedChest, InputMapConfiguration<Keys> keys)
+        /// <param name="keyboard">The keyboard input map.</param>
+        /// <param name="controller">The controller input map.</param>
+        public ACAMenu(ManagedChest[] chests, ManagedChest selectedChest, InputMapConfiguration<Keys> keyboard, InputMapConfiguration<Buttons?> controller)
         {
             this.Chests = chests;
             this.SelectedChest = selectedChest;
-            this.Keys = keys;
+            this.Keyboard = keyboard;
+            this.Controller = controller;
             this.Locations = this.Chests.Select(p => p.Location).Distinct().ToArray();
             this.InitialiseTabs();
             this.InitialiseSelectors();
         }
 
         /// <summary>The method invoked when the player presses a key.</summary>
-        /// <param name="key">The key that was pressed.</param>
-        public override void receiveKeyPress(Keys key)
+        /// <param name="input">The key that was pressed.</param>
+        public override void receiveKeyPress(Keys input)
         {
             if (this.Count <= 10)
                 return;
 
-            // exit menu
-            if (key == this.Keys.Toggle || key == Key.Escape)
-            {
+            if (input == this.Keyboard.Toggle || input == Keys.Escape)
                 this.exitThisMenuNoSound();
-                return;
-            }
+            else if (input == this.Keyboard.PrevChest)
+                this.SelectPreviousChest();
+            else if (input == this.Keyboard.NextChest)
+                this.SelectNextChest();
+        }
 
-            // navigate chests
-            if (key == this.Keys.PrevChest || key == this.Keys.NextChest)
-            {
-                int cur = Array.IndexOf(this.Chests, this.SelectedChest);
-                this.SelectChest(key == this.Keys.PrevChest
-                    ? this.Chests[cur != 0 ? cur - 1 : this.Chests.Length - 1]
-                    : this.Chests[(cur + 1) % this.Chests.Length]
-                );
-            }
+        /// <summary>The method invoked when the player presses a controller button.</summary>
+        /// <param name="input">The button that was pressed.</param>
+        public override void receiveGamePadButton(Buttons input)
+        {
+            if (this.Count <= 10)
+                return;
+
+            if(input == this.Controller.Toggle)
+                this.exitThisMenuNoSound();
+            else if (input == this.Controller.PrevChest)
+                this.SelectPreviousChest();
+            else if(input == this.Controller.NextChest)
+                this.SelectNextChest();
         }
 
         /// <summary>The method invoked when the player scrolls the dropdown using the mouse wheel.</summary>
@@ -229,6 +238,20 @@ namespace AccessChestAnywhere
             this.SelectedChest = chest;
             this.OnChestSelected?.Invoke(this.SelectedChest);
             this.InitialiseTabs();
+        }
+
+        /// <summary>Switch to the previous chest in the list.</summary>
+        private void SelectPreviousChest()
+        {
+            int cur = Array.IndexOf(this.Chests, this.SelectedChest);
+            this.SelectChest(this.Chests[cur != 0 ? cur - 1 : this.Chests.Length - 1]);
+        }
+
+        /// <summary>Switch to the next chest in the list.</summary>
+        private void SelectNextChest()
+        {
+            int cur = Array.IndexOf(this.Chests, this.SelectedChest);
+            this.SelectChest(this.Chests[(cur + 1) % this.Chests.Length]);
         }
     }
 }
