@@ -2,8 +2,6 @@
 your chests from anywhere. Transfer items without having to run around, from the comfort of your
 bed to the deepest mine level.
 
-**This is an experimental build. Use at your own risk.**
-
 ## Installation
 1. Install [SMAPI](https://github.com/ClxS/SMAPI) (0.39.5+).
 2. Install [Chest Label System](http://www.nexusmods.com/stardewvalley/mods/242/) to name your
@@ -41,7 +39,6 @@ Hide a chest by adding `|ignore|` to its name.
 Don't want to summon your chests with `B`? You can change all of the key bindings in the
 `config.json` (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)),
 and add controller bindings if you have one (see [valid buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.buttons.aspx)).
-
 
 ## Changelog
 * 1.2.0 (not released yet)
