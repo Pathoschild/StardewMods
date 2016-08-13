@@ -22,6 +22,8 @@ You can click the top-right menu to change location, and the top-left menu to ch
 
 ![](screenshots/menu-chest-list.png)
 
+You can also navigate between chests using the `LEFT` and `RIGHT` arrow keys.
+
 ### Sorting
 Your chests are sorted alphabetically by default. Want a different order? Just add a number between
 pipes (like `|1|`) somewhere in the chest name:
@@ -35,8 +37,8 @@ appear before those without.
 Hide a chest by adding `|ignore|` to its name.
 
 ## Configuration
-### Change hot key
-Don't want to summon your chests with `B`? Change the hot key in the `config.json` to [any valid key](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx).
+### Change hot keys
+Don't want to summon your chests with `B`? You can change all of the key bindings in the `config.json` (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
 
 ## Changelog
 * 1.2.0 (not released yet)

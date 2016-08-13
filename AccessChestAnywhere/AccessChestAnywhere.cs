@@ -17,8 +17,8 @@ namespace AccessChestAnywhere
         /// <summary>The selected chest.</summary>
         private Chest SelectedChest;
 
-        /// <summary>The key which toggles the chest UI.</summary>
-        private Keys ToggleKey;
+        /// <summary>The input map.</summary>
+        private InputMapConfiguration<Keys> Keys;
 
 
         /*********
@@ -29,7 +29,7 @@ namespace AccessChestAnywhere
         {
             // read config
             var config = new Configuration().InitializeConfig(this.BaseConfigPath);
-            this.ToggleKey = config.GetToggleKey();
+            this.Keys = config.GetKeys();
 
             // hook UI
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
@@ -44,7 +44,7 @@ namespace AccessChestAnywhere
         /// <param name="e">The event data.</param>
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            if (e.KeyPressed != this.ToggleKey || Game1.activeClickableMenu != null)
+            if (e.KeyPressed != this.Keys.Toggle || Game1.activeClickableMenu != null)
                 return;
 
             // get chests
@@ -61,7 +61,7 @@ namespace AccessChestAnywhere
             // render menu
             if (chests.Any())
             {
-                ACAMenu menu = new ACAMenu(chests, selectedChest, this.ToggleKey);
+                ACAMenu menu = new ACAMenu(chests, selectedChest, this.Keys);
                 menu.OnChestSelected += chest => this.SelectedChest = chest.Chest; // remember selected chest on next load
                 Game1.activeClickableMenu = menu;
             }

@@ -4,6 +4,7 @@ using AccessChestAnywhere.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StardewValley;
+using Key = Microsoft.Xna.Framework.Input.Keys;
 
 namespace AccessChestAnywhere
 {
@@ -45,8 +46,8 @@ namespace AccessChestAnywhere
         /// <summary>The location selector dropdown.</summary>
         private DropList<GameLocation> LocationSelector;
 
-        /// <summary>The key which toggles the chest UI.</summary>
-        private Keys ToggleKey;
+        /// <summary>The keyboard input map.</summary>
+        private readonly InputMapConfiguration<Key> Keys;
 
 
         /*********
@@ -62,12 +63,12 @@ namespace AccessChestAnywhere
         /// <summary>Construct an instance.</summary>
         /// <param name="chests">The known chests.</param>
         /// <param name="selectedChest">The selected chest.</param>
-        /// <param name="toggleKey">The key which toggles the chest UI.</param>
-        public ACAMenu(ManagedChest[] chests, ManagedChest selectedChest, Keys toggleKey)
+        /// <param name="keys">The keyboard input map.</param>
+        public ACAMenu(ManagedChest[] chests, ManagedChest selectedChest, InputMapConfiguration<Keys> keys)
         {
             this.Chests = chests;
             this.SelectedChest = selectedChest;
-            this.ToggleKey = toggleKey;
+            this.Keys = keys;
             this.Locations = this.Chests.Select(p => p.Location).Distinct().ToArray();
             this.InitialiseTabs();
             this.InitialiseSelectors();
@@ -80,8 +81,22 @@ namespace AccessChestAnywhere
             if (this.Count <= 10)
                 return;
 
-            if (key == this.ToggleKey || key == Keys.Escape)
+            // exit menu
+            if (key == this.Keys.Toggle || key == Key.Escape)
+            {
                 this.exitThisMenuNoSound();
+                return;
+            }
+
+            // navigate chests
+            if (key == this.Keys.PrevChest || key == this.Keys.NextChest)
+            {
+                int cur = Array.IndexOf(this.Chests, this.SelectedChest);
+                this.SelectChest(key == this.Keys.PrevChest
+                    ? this.Chests[cur != 0 ? cur - 1 : this.Chests.Length - 1]
+                    : this.Chests[(cur + 1) % this.Chests.Length]
+                );
+            }
         }
 
         /// <summary>The method invoked when the player scrolls the dropdown using the mouse wheel.</summary>
@@ -110,11 +125,7 @@ namespace AccessChestAnywhere
 
                 ManagedChest chest = this.ChestSelector.Select(x, y);
                 if (chest != null)
-                {
-                    this.SelectedChest = chest;
-                    this.OnChestSelected?.Invoke(this.SelectedChest);
-                    this.InitialiseTabs();
-                }
+                    this.SelectChest(chest);
             }
             else if (this.LocationListOpen)
             {
@@ -125,9 +136,7 @@ namespace AccessChestAnywhere
                 GameLocation location = this.LocationSelector.Select(x, y);
                 if (location != null && location != this.SelectedLocation)
                 {
-                    this.SelectedChest = this.Chests.First(p => p.Location == location);
-                    this.OnChestSelected?.Invoke(this.SelectedChest);
-                    this.InitialiseTabs();
+                    this.SelectChest(this.Chests.First(p => p.Location == location));
                     this.InitialiseSelectors();
                 }
             }
@@ -211,6 +220,15 @@ namespace AccessChestAnywhere
                 int y = this.yPositionOnScreen - Game1.tileSize - Game1.tileSize / 16;
                 this.LocationTab = new Tab(this.SelectedLocation.Name, x, y, false, this.Font);
             }
+        }
+
+        /// <summary>Switch to the specified chest.</summary>
+        /// <param name="chest">The chest to select.</param>
+        private void SelectChest(ManagedChest chest)
+        {
+            this.SelectedChest = chest;
+            this.OnChestSelected?.Invoke(this.SelectedChest);
+            this.InitialiseTabs();
         }
     }
 }

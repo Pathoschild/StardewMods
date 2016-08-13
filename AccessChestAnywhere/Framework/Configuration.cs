@@ -10,20 +10,34 @@ namespace AccessChestAnywhere.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The human-readable key which toggles the chest UI.</summary>
-        public string ToggleKey = Keys.B.ToString();
+        /// <summary>The keyboard input map.</summary>
+        public InputMapConfiguration<string> Keyboard { get; set; }
 
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Get the key which toggles the chest UI.</summary>
-        public Keys GetToggleKey()
+        /// <summary>Construct a default instance.</summary>
+        public Configuration()
+        {
+            this.Keyboard = new InputMapConfiguration<string>
+            {
+                Toggle = Keys.B.ToString(),
+                PrevChest = Keys.Left.ToString(),
+                NextChest = Keys.Right.ToString()
+            };
+        }
+
+        /// <summary>Get the keyboard mapping.</summary>
+        public InputMapConfiguration<Keys> GetKeys()
         {
             Keys parsed;
-            return Enum.TryParse(this.ToggleKey, out parsed)
-                ? parsed
-                : Keys.B;
+            return new InputMapConfiguration<Keys>
+            {
+                Toggle = Enum.TryParse(this.Keyboard.Toggle, out parsed) ? parsed : Keys.B,
+                PrevChest = Enum.TryParse(this.Keyboard.PrevChest, out parsed) ? parsed : Keys.Left,
+                NextChest = Enum.TryParse(this.Keyboard.NextChest, out parsed) ? parsed : Keys.Right
+            };
         }
     }
 }
