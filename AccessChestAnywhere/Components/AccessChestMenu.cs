@@ -5,10 +5,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StardewValley;
 
-namespace AccessChestAnywhere
+namespace AccessChestAnywhere.Components
 {
     /// <summary>A UI which lets the player choose a chest and location, and transfer transfer items between a chest and their inventory.</summary>
-    internal class ACAMenu : ChestWithInventory
+    internal class AccessChestMenu : ChestWithInventory
     {
         /*********
         ** Properties
@@ -67,7 +67,7 @@ namespace AccessChestAnywhere
         /// <param name="selectedChest">The selected chest.</param>
         /// <param name="keyboard">The keyboard input map.</param>
         /// <param name="controller">The controller input map.</param>
-        public ACAMenu(ManagedChest[] chests, ManagedChest selectedChest, InputMapConfiguration<Keys> keyboard, InputMapConfiguration<Buttons?> controller)
+        public AccessChestMenu(ManagedChest[] chests, ManagedChest selectedChest, InputMapConfiguration<Keys> keyboard, InputMapConfiguration<Buttons?> controller)
         {
             this.Chests = chests;
             this.SelectedChest = selectedChest;

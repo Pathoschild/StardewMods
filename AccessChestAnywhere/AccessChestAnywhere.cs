@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using AccessChestAnywhere.Components;
 using AccessChestAnywhere.Framework;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
@@ -72,7 +73,7 @@ namespace AccessChestAnywhere
             // render menu
             if (chests.Any())
             {
-                ACAMenu menu = new ACAMenu(chests, selectedChest, this.Keyboard, this.Controller);
+                AccessChestMenu menu = new AccessChestMenu(chests, selectedChest, this.Keyboard, this.Controller);
                 menu.OnChestSelected += chest => this.SelectedChest = chest.Chest; // remember selected chest on next load
                 Game1.activeClickableMenu = menu;
             }

@@ -8,7 +8,7 @@ using StardewValley;
 using StardewValley.Menus;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
-namespace AccessChestAnywhere
+namespace AccessChestAnywhere.Components
 {
     /// <summary>A UI which lets the player transfer items between a chest and their inventory.</summary>
     internal class ChestWithInventory : IClickableMenu
@@ -377,11 +377,11 @@ namespace AccessChestAnywhere
         private void DrawPlayerSlots(SpriteBatch sprites)
         {
             int yCount = 0;
-            int y = yPositionOnScreen + height / 2 + Game1.tileSize / 4;
+            int y = this.yPositionOnScreen + this.height / 2 + Game1.tileSize / 4;
             while (yCount < 3)
             {
                 int xCount = 1;
-                int x = xPositionOnScreen + Game1.tileSize / 2;
+                int x = this.xPositionOnScreen + Game1.tileSize / 2;
                 while (xCount < 13)
                 {
                     Rectangle sourceRectangle = yCount * 12 + xCount <= Game1.player.maxItems
@@ -401,11 +401,11 @@ namespace AccessChestAnywhere
         private void DrawChestSlots(SpriteBatch sprites)
         {
             int yCount = 0;
-            int y = yPositionOnScreen + Game1.tileSize / 2;
+            int y = this.yPositionOnScreen + Game1.tileSize / 2;
             while (yCount < 3)
             {
                 int xCount = 0;
-                int x = xPositionOnScreen + Game1.tileSize / 2;
+                int x = this.xPositionOnScreen + Game1.tileSize / 2;
                 while (xCount < 12)
                 {
                     sprites.Draw(Game1.menuTexture, new Rectangle(x, y, Game1.tileSize, Game1.tileSize), new Rectangle(128, 128, 64, 64), Color.White);

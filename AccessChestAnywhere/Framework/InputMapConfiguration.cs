@@ -2,7 +2,7 @@ namespace AccessChestAnywhere.Framework
 {
     /// <summary>The input mapping configuration.</summary>
     /// <typeparam name="T">The control type.</typeparam>
-    public class InputMapConfiguration<T>
+    internal class InputMapConfiguration<T>
     {
         /// <summary>The control which toggles the chest UI.</summary>
         public T Toggle { get; set; }

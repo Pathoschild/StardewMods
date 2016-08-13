@@ -54,16 +54,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ACAMenu.cs" />
+    <Compile Include="Components\AccessChestMenu.cs" />
     <Compile Include="AccessChestAnywhere.cs" />
-    <Compile Include="ChestWithInventory.cs" />
-    <Compile Include="DropList.cs" />
+    <Compile Include="Components\ChestWithInventory.cs" />
+    <Compile Include="Components\DropList.cs" />
     <Compile Include="Framework\Configuration.cs" />
     <Compile Include="Framework\DropListItem.cs" />
     <Compile Include="Framework\InputMapConfiguration.cs" />
     <Compile Include="Framework\ManagedChest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tab.cs" />
+    <Compile Include="Components\Tab.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />
