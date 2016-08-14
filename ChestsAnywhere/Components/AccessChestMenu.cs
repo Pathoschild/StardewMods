@@ -195,6 +195,9 @@ namespace ChestsAnywhere.Components
         {
             this.DrawCount++;
 
+            // sort button
+            this.OrganizeButton.draw(sprites);
+
             // chest with inventory menu
             base.draw(sprites);
 
@@ -208,9 +211,6 @@ namespace ChestsAnywhere.Components
                 this.ChestSelector.Draw(sprites);
             if (this.LocationListOpen)
                 this.LocationSelector.Draw(sprites);
-
-            // sort button
-            this.OrganizeButton.draw(sprites);
 
             // mouse
             this.drawMouse(sprites);
