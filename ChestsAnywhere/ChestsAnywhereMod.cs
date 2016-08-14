@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ChestsAnywhere.Components;
 using ChestsAnywhere.Framework;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Objects;
 
 namespace ChestsAnywhere
@@ -61,11 +63,9 @@ namespace ChestsAnywhere
         {
             // get chests
             ManagedChest[] chests = (
-                from location in Game1.locations
-                from obj in location.Objects.Where(p => p.Value is Chest)
-                let chest = new ManagedChest((Chest)obj.Value, location, obj.Key)
+                from chest in this.GetChests()
                 where !chest.IsIgnored
-                orderby chest.Location.Name ascending, (chest.Order ?? int.MaxValue) ascending, chest.Name ascending
+                orderby chest.Location ascending, (chest.Order ?? int.MaxValue) ascending, chest.Name ascending
                 select chest
             ).ToArray();
             ManagedChest selectedChest = chests.FirstOrDefault(p => p.Chest == this.SelectedChest) ?? chests.First();
@@ -76,6 +76,27 @@ namespace ChestsAnywhere
                 AccessChestMenu menu = new AccessChestMenu(chests, selectedChest, this.Keyboard, this.Controller);
                 menu.OnChestSelected += chest => this.SelectedChest = chest.Chest; // remember selected chest on next load
                 Game1.activeClickableMenu = menu;
+            }
+        }
+
+        /// <summary>Get all player chests.</summary>
+        private IEnumerable<ManagedChest> GetChests()
+        {
+            foreach (GameLocation location in Game1.locations)
+            {
+                // chests in location
+                foreach (var obj in location.Objects.Where(p => p.Value is Chest))
+                    yield return new ManagedChest((Chest)obj.Value, location.Name, obj.Key);
+
+                // chests in constructed buildings
+                if (location is Farm)
+                {
+                    foreach (Building building in ((Farm)location).buildings.Where(p => p.indoors != null))
+                    {
+                        foreach (var obj in building.indoors.Objects.Where(p => p.Value is Chest))
+                            yield return new ManagedChest((Chest)obj.Value, building.nameOfIndoorsWithoutUnique, obj.Key);
+                    }
+                }
             }
         }
     }

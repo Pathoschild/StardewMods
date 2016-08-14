@@ -49,8 +49,9 @@ and add controller bindings if you have one (see [valid buttons](https://msdn.mi
   * Added item tooltips
   * Added organize button
   * Added controller support
-  * Can now navigate between chests using the keyboard/controller
-  * Keyboard mapping is now configurable
+  * Added support for rebinding keyboard/controller keys in `config.json`
+  * Added hotkeys to navigate between chests
+  * Fixed chests in constructed buildings (like barns) not showing up
   * Location tab is now hidden if all your chests are in one place
 * 1.1.0
   * Reworked UI

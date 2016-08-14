@@ -1,6 +1,5 @@
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
-using StardewValley;
 using StardewValley.Objects;
 
 namespace ChestsAnywhere.Framework
@@ -21,10 +20,10 @@ namespace ChestsAnywhere.Framework
         /// <summary>The chest instance.</summary>
         public Chest Chest { get; }
 
-        /// <summary>The location which contains the chest.</summary>
-        public GameLocation Location { get; }
+        /// <summary>The name of the location or building which contains the chest.</summary>
+        public string Location { get; }
 
-        /// <summary>The chest's coordinates within the <see cref="Location"/>.</summary>
+        /// <summary>The chest's coordinates within its location or building.</summary>
         public Vector2 Position { get; }
 
         /// <summary>The chest's display name.</summary>
@@ -42,9 +41,9 @@ namespace ChestsAnywhere.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="chest">The chest instance.</param>
-        /// <param name="location">The location which contains the chest.</param>
-        /// <param name="position">The chest's coordinates within the <see cref="Location"/>.</param>
-        public ManagedChest(Chest chest, GameLocation location, Vector2 position)
+        /// <param name="location">The name of the location or building which contains the chest.</param>
+        /// <param name="position">The chest's coordinates within its location or building.</param>
+        public ManagedChest(Chest chest, string location, Vector2 position)
         {
             // save values
             this.Chest = chest;

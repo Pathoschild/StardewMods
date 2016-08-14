@@ -30,11 +30,11 @@ namespace ChestsAnywhere.Components
         /// <summary>The known chests.</summary>
         private readonly ManagedChest[] Chests;
 
-        /// <summary>The known chest locations.</summary>
-        private readonly GameLocation[] Locations;
+        /// <summary>The known chest location names.</summary>
+        private readonly string[] Locations;
 
-        /// <summary>The selected location.</summary>
-        private GameLocation SelectedLocation => this.SelectedChest.Location;
+        /// <summary>The name of the selected location.</summary>
+        private string SelectedLocation => this.SelectedChest.Location;
 
         /// <summary>The keyboard input map.</summary>
         private readonly InputMapConfiguration<Keys> Keyboard;
@@ -58,7 +58,7 @@ namespace ChestsAnywhere.Components
         private DropList<ManagedChest> ChestSelector;
 
         /// <summary>The location selector dropdown.</summary>
-        private DropList<GameLocation> LocationSelector;
+        private DropList<string> LocationSelector;
 
         /// <summary>The button which sorts the chest items.</summary>
         private ClickableTextureComponent OrganizeButton;
@@ -162,7 +162,7 @@ namespace ChestsAnywhere.Components
                     return;
                 this.LocationListOpen = false;
                 this.IsDisabled = false;
-                GameLocation location = this.LocationSelector.Select(x, y);
+                string location = this.LocationSelector.Select(x, y);
                 if (location != null && location != this.SelectedLocation)
                 {
                     this.SelectChest(this.Chests.First(p => p.Location == location));
@@ -240,13 +240,13 @@ namespace ChestsAnywhere.Components
 
             // location selector
             {
-                GameLocation[] locations = this.Chests
+                string[] locations = this.Chests
                     .Select(p => p.Location)
                     .Distinct()
                     .ToArray();
                 int x = this.xPositionOnScreen + this.width - Game1.tileSize / 4;
                 int y = this.yPositionOnScreen;
-                this.LocationSelector = new DropList<GameLocation>(this.SelectedLocation, locations, location => location.Name, x, y, false, this.Font);
+                this.LocationSelector = new DropList<string>(this.SelectedLocation, locations, location => location, x, y, false, this.Font);
             }
         }
 
@@ -265,7 +265,7 @@ namespace ChestsAnywhere.Components
             {
                 int x = this.xPositionOnScreen + this.width - Game1.tileSize / 4;
                 int y = this.yPositionOnScreen - Game1.tileSize - Game1.tileSize / 16;
-                this.LocationTab = new Tab(this.SelectedLocation.Name, x, y, false, this.Font);
+                this.LocationTab = new Tab(this.SelectedLocation, x, y, false, this.Font);
             }
         }
 
