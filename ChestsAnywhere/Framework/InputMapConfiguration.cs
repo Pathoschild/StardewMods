@@ -12,5 +12,8 @@ namespace ChestsAnywhere.Framework
 
         /// <summary>The control which navigates to the next chest.</summary>
         public T NextChest { get; set; }
+
+        /// <summary>The control which sorts items in the chest.</summary>
+        public T SortItems { get; set; }
     }
 }

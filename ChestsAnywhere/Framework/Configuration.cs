@@ -27,13 +27,15 @@ namespace ChestsAnywhere.Framework
             {
                 Toggle = Keys.B.ToString(),
                 PrevChest = Keys.Left.ToString(),
-                NextChest = Keys.Right.ToString()
+                NextChest = Keys.Right.ToString(),
+                SortItems = ""
             };
             this.Controller = new InputMapConfiguration<string>
             {
                 Toggle = "",
                 PrevChest = "",
-                NextChest = ""
+                NextChest = "",
+                SortItems = ""
             };
         }
 
@@ -52,7 +54,8 @@ namespace ChestsAnywhere.Framework
             {
                 Toggle = Enum.TryParse(this.Keyboard.Toggle, out parsed) ? parsed : Keys.B,
                 PrevChest = Enum.TryParse(this.Keyboard.PrevChest, out parsed) ? parsed : Keys.Left,
-                NextChest = Enum.TryParse(this.Keyboard.NextChest, out parsed) ? parsed : Keys.Right
+                NextChest = Enum.TryParse(this.Keyboard.NextChest, out parsed) ? parsed : Keys.Right,
+                SortItems = Enum.TryParse(this.Keyboard.SortItems, out parsed) ? parsed : Keys.None
             };
         }
 
@@ -64,7 +67,8 @@ namespace ChestsAnywhere.Framework
             {
                 Toggle = Enum.TryParse(this.Controller.Toggle, out parsed) ? parsed : null as Buttons?,
                 PrevChest = Enum.TryParse(this.Controller.PrevChest, out parsed) ? parsed : null as Buttons?,
-                NextChest = Enum.TryParse(this.Controller.NextChest, out parsed) ? parsed : null as Buttons?
+                NextChest = Enum.TryParse(this.Controller.NextChest, out parsed) ? parsed : null as Buttons?,
+                SortItems = Enum.TryParse(this.Controller.SortItems, out parsed) ? parsed : null as Buttons?
             };
         }
     }

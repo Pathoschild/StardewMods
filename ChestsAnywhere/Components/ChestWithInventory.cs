@@ -263,6 +263,13 @@ namespace ChestsAnywhere.Components
         /*********
         ** Private methods
         *********/
+        /// <summary>Trigger the chest item sort behaviour.</summary>
+        public void SortChestItems()
+        {
+            ItemGrabMenu.organizeItemsInList(this.ChestItems);
+            Game1.playSound("Ship");
+        }
+
         /// <summary>Try to add an item to the player or chest inventory, and return the remaining stack.</summary>
         /// <param name="itemToPlace">The item to add.</param>
         /// <param name="toPlayer">Whether to add the item to the player inventory (otherwise, to the chest).</param>

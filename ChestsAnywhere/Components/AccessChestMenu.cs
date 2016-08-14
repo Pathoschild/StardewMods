@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using ChestsAnywhere.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace ChestsAnywhere.Components
 {
@@ -13,7 +15,11 @@ namespace ChestsAnywhere.Components
         /*********
         ** Properties
         *********/
-        private int Count;
+        /****
+        ** Data
+        ****/
+        /// <summary>The number of draw cycles since the menu was initialise.</summary>
+        private int DrawCount;
 
         /// <summary>Whether the chest dropdown is open.</summary>
         private bool ChestListOpen;
@@ -30,6 +36,15 @@ namespace ChestsAnywhere.Components
         /// <summary>The selected location.</summary>
         private GameLocation SelectedLocation => this.SelectedChest.Location;
 
+        /// <summary>The keyboard input map.</summary>
+        private readonly InputMapConfiguration<Keys> Keyboard;
+
+        /// <summary>The controller input map.</summary>
+        private readonly InputMapConfiguration<Buttons?> Controller;
+
+        /****
+        ** UI
+        ****/
         /// <summary>The font with which to render text.</summary>
         private readonly SpriteFont Font = Game1.smallFont;
 
@@ -45,12 +60,8 @@ namespace ChestsAnywhere.Components
         /// <summary>The location selector dropdown.</summary>
         private DropList<GameLocation> LocationSelector;
 
-        /// <summary>The keyboard input map.</summary>
-        private readonly InputMapConfiguration<Keys> Keyboard;
-
-        /// <summary>The controller input map.</summary>
-        private readonly InputMapConfiguration<Buttons?> Controller;
-
+        /// <summary>The button which sorts the chest items.</summary>
+        private ClickableTextureComponent OrganizeButton;
 
         /*********
         ** Accessors
@@ -76,13 +87,14 @@ namespace ChestsAnywhere.Components
             this.Locations = this.Chests.Select(p => p.Location).Distinct().ToArray();
             this.InitialiseTabs();
             this.InitialiseSelectors();
+            this.InitialiseTools();
         }
 
         /// <summary>The method invoked when the player presses a key.</summary>
         /// <param name="input">The key that was pressed.</param>
         public override void receiveKeyPress(Keys input)
         {
-            if (this.Count <= 10)
+            if (this.DrawCount <= 10)
                 return;
 
             if (input == this.Keyboard.Toggle || input == Keys.Escape)
@@ -91,21 +103,25 @@ namespace ChestsAnywhere.Components
                 this.SelectPreviousChest();
             else if (input == this.Keyboard.NextChest)
                 this.SelectNextChest();
+            else if (input == this.Keyboard.SortItems)
+                this.SortChestItems();
         }
 
         /// <summary>The method invoked when the player presses a controller button.</summary>
         /// <param name="input">The button that was pressed.</param>
         public override void receiveGamePadButton(Buttons input)
         {
-            if (this.Count <= 10)
+            if (this.DrawCount <= 10)
                 return;
 
-            if(input == this.Controller.Toggle)
+            if (input == this.Controller.Toggle)
                 this.exitThisMenuNoSound();
             else if (input == this.Controller.PrevChest)
                 this.SelectPreviousChest();
-            else if(input == this.Controller.NextChest)
+            else if (input == this.Controller.NextChest)
                 this.SelectNextChest();
+            else if (input == this.Controller.SortItems)
+                this.SortChestItems();
         }
 
         /// <summary>The method invoked when the player scrolls the dropdown using the mouse wheel.</summary>
@@ -125,6 +141,8 @@ namespace ChestsAnywhere.Components
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
             base.receiveLeftClick(x, y, playSound);
+
+            // chest dropdown
             if (this.ChestListOpen)
             {
                 if (!this.ChestSelector.containsPoint(x, y))
@@ -136,6 +154,8 @@ namespace ChestsAnywhere.Components
                 if (chest != null)
                     this.SelectChest(chest);
             }
+
+            // location dropdown
             else if (this.LocationListOpen)
             {
                 if (!this.LocationSelector.containsPoint(x, y))
@@ -149,23 +169,31 @@ namespace ChestsAnywhere.Components
                     this.InitialiseSelectors();
                 }
             }
+
+            // chest tab
             else if (this.ChestTab.containsPoint(x, y))
             {
                 this.ChestListOpen = true;
                 this.IsDisabled = true;
             }
+
+            // location tab
             else if (this.LocationTab?.containsPoint(x, y) == true)
             {
                 this.LocationListOpen = true;
                 this.IsDisabled = true;
             }
+
+            // organize button
+            else if (this.OrganizeButton.containsPoint(x, y))
+                this.SortChestItems();
         }
 
         /// <summary>Render the UI.</summary>
         /// <param name="sprites">The sprites to render.</param>
         public override void draw(SpriteBatch sprites)
         {
-            this.Count++;
+            this.DrawCount++;
 
             // chest with inventory menu
             base.draw(sprites);
@@ -181,6 +209,9 @@ namespace ChestsAnywhere.Components
             if (this.LocationListOpen)
                 this.LocationSelector.Draw(sprites);
 
+            // sort button
+            this.OrganizeButton.draw(sprites);
+
             // mouse
             this.drawMouse(sprites);
         }
@@ -189,6 +220,13 @@ namespace ChestsAnywhere.Components
         /*********
         ** Private methods
         *********/
+        /// <summary>Initialise the inventory tools.</summary>
+        private void InitialiseTools()
+        {
+            // organize button
+            this.OrganizeButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + width, this.yPositionOnScreen + height / 3 + Game1.pixelZoom * 2, Game1.tileSize, Game1.tileSize), "", "Organize", Game1.mouseCursors, new Rectangle(162, 440, 16, 16), Game1.pixelZoom);
+        }
+
         /// <summary>Initialise the chest and location selectors.</summary>
         private void InitialiseSelectors()
         {

@@ -46,10 +46,11 @@ and add controller bindings if you have one (see [valid buttons](https://msdn.mi
 * 1.2.0
   * Chests are now sorted alphabetically
   * Chests can now be sorted manually
-  * Can now navigate between chests using the keyboard or controller
+  * Added item tooltips
+  * Added organize button
+  * Added controller support
+  * Can now navigate between chests using the keyboard/controller
   * Keyboard mapping is now configurable
-  * Controller buttons are now supported
-  * Item tooltips now work
   * Location tab is now hidden if all your chests are in one place
 * 1.1.0
   * Reworked UI
