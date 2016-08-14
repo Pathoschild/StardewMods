@@ -37,6 +37,13 @@ namespace ChestsAnywhere.Framework
             };
         }
 
+        /// <summary>Construct the default configuration.</summary>
+        /// <typeparam name="T">The expected configuration type.</typeparam>
+        public override T GenerateDefaultConfig<T>()
+        {
+            return new Configuration() as T;
+        }
+
         /// <summary>Get the keyboard mapping.</summary>
         public InputMapConfiguration<Keys> GetKeyboard()
         {
