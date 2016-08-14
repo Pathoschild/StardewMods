@@ -7,6 +7,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Locations;
 using StardewValley.Objects;
 
 namespace ChestsAnywhere
@@ -89,13 +90,23 @@ namespace ChestsAnywhere
                     yield return new ManagedChest((Chest)obj.Value, location.Name, obj.Key);
 
                 // chests in constructed buildings
-                if (location is Farm)
+                if (location is BuildableGameLocation)
                 {
-                    foreach (Building building in ((Farm)location).buildings.Where(p => p.indoors != null))
+                    foreach (Building building in (location as BuildableGameLocation).buildings)
                     {
+                        if (building.indoors == null)
+                            continue;
                         foreach (var obj in building.indoors.Objects.Where(p => p.Value is Chest))
                             yield return new ManagedChest((Chest)obj.Value, building.nameOfIndoorsWithoutUnique, obj.Key);
                     }
+                }
+
+                // farmhouse containers
+                if (location is FarmHouse)
+                {
+                    Chest fridge = (location as FarmHouse).fridge;
+                    if (fridge != null)
+                        yield return new ManagedChest(fridge, location.Name, fridge.TileLocation, defaultName: "Fridge");
                 }
             }
         }

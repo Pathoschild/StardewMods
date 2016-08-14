@@ -52,6 +52,7 @@ and add controller bindings if you have one (see [valid buttons](https://msdn.mi
   * Added support for rebinding keyboard/controller keys in `config.json`
   * Added hotkeys to navigate between chests
   * Fixed chests in constructed buildings (like barns) not showing up
+  * Fixed farmhouse fridge not showing up
   * Location tab is now hidden if all your chests are in one place
 * 1.1.0
   * Reworked UI
