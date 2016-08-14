@@ -35,7 +35,7 @@ namespace ChestsAnywhere.Components
         /// <param name="toRight">Whether the tab should be aligned right of the origin.</param>
         /// <param name="font">The font with which to render text.</param>
         public Tab(string name, int x, int y, bool toRight, SpriteFont font)
-            : base(new Rectangle(), name)
+            : base(Rectangle.Empty, name)
         {
             this.Font = font;
             Vector2 fontSize = font.MeasureString(name);

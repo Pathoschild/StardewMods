@@ -54,6 +54,7 @@ and add controller bindings if you have one (see [valid buttons](https://msdn.mi
   * Fixed chests in constructed buildings (like barns) not showing up
   * Fixed farmhouse fridge not showing up
   * Location tab is now hidden if all your chests are in one place
+  * Simplified default chest names (like "Chest #1" instead of "Chest(77,12)")
 * 1.1.0
   * Reworked UI
   * Added tabs for chests and locations

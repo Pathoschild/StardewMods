@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using Microsoft.Xna.Framework;
 using StardewValley.Objects;
 
 namespace ChestsAnywhere.Framework
@@ -23,9 +22,6 @@ namespace ChestsAnywhere.Framework
         /// <summary>The name of the location or building which contains the chest.</summary>
         public string Location { get; }
 
-        /// <summary>The chest's coordinates within its location or building.</summary>
-        public Vector2 Position { get; }
-
         /// <summary>The chest's display name.</summary>
         public string Name { get; }
 
@@ -42,17 +38,15 @@ namespace ChestsAnywhere.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="chest">The chest instance.</param>
         /// <param name="location">The name of the location or building which contains the chest.</param>
-        /// <param name="position">The chest's coordinates within its location or building.</param>
         /// <param name="defaultName">The default name if it hasn't been customised.</param>
-        public ManagedChest(Chest chest, string location, Vector2 position, string defaultName = null)
+        public ManagedChest(Chest chest, string location, string defaultName)
         {
             // save values
             this.Chest = chest;
             this.Location = location;
-            this.Position = position;
-            this.Name = this.Chest.Name == "Chest"
-                ? (defaultName ?? $"Chest({this.Position.X},{this.Position.Y})")
-                : this.Chest.Name;
+            this.Name = chest.Name != "Chest"
+                ? chest.Name
+                : defaultName;
 
             // extract tags
             this.Name = Regex.Replace(this.Name, ManagedChest.TagGroupPattern, "").Trim();

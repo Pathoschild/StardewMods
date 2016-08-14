@@ -86,18 +86,22 @@ namespace ChestsAnywhere
             foreach (GameLocation location in Game1.locations)
             {
                 // chests in location
-                foreach (var obj in location.Objects.Where(p => p.Value is Chest))
-                    yield return new ManagedChest((Chest)obj.Value, location.Name, obj.Key);
+                {
+                    int namelessCount = 0;
+                    foreach (Chest chest in location.Objects.Values.OfType<Chest>())
+                        yield return new ManagedChest(chest, location.Name, $"Chest #{++namelessCount}");
+                }
 
                 // chests in constructed buildings
                 if (location is BuildableGameLocation)
                 {
                     foreach (Building building in (location as BuildableGameLocation).buildings)
                     {
+                        int namelessCount = 0;
                         if (building.indoors == null)
                             continue;
-                        foreach (var obj in building.indoors.Objects.Where(p => p.Value is Chest))
-                            yield return new ManagedChest((Chest)obj.Value, building.nameOfIndoorsWithoutUnique, obj.Key);
+                        foreach (Chest chest in building.indoors.Objects.Values.OfType<Chest>())
+                            yield return new ManagedChest(chest, building.nameOfIndoorsWithoutUnique, $"Chest #{++namelessCount}");
                     }
                 }
 
@@ -106,7 +110,7 @@ namespace ChestsAnywhere
                 {
                     Chest fridge = (location as FarmHouse).fridge;
                     if (fridge != null)
-                        yield return new ManagedChest(fridge, location.Name, fridge.TileLocation, defaultName: "Fridge");
+                        yield return new ManagedChest(fridge, location.Name, "Fridge");
                 }
             }
         }
