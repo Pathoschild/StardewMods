@@ -7,8 +7,8 @@
     <ProjectGuid>{866D7B9E-531E-4F83-95EE-B3D7F2642876}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AccessChestAnywhere</RootNamespace>
-    <AssemblyName>AccessChestAnywhere</AssemblyName>
+    <RootNamespace>ChestsAnywhere</RootNamespace>
+    <AssemblyName>ChestsAnywhere</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -55,7 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\AccessChestMenu.cs" />
-    <Compile Include="AccessChestAnywhere.cs" />
+    <Compile Include="ChestsAnywhereMod.cs" />
     <Compile Include="Components\ChestWithInventory.cs" />
     <Compile Include="Components\DropList.cs" />
     <Compile Include="Framework\Configuration.cs" />
@@ -71,8 +71,10 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-      copy "$(TargetPath)" "C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\Mods\AccessChestAnywhere\$(TargetFileName)"
-      copy "$(ProjectDir)manifest.json" "C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\Mods\AccessChestAnywhere\manifest.json"
+      set modDir=C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\Mods\ChestsAnywhere
+      if not exist "%modDir%" (mkdir "%modDir%")
+      copy "$(TargetPath)" "%modDir%\$(TargetFileName)"
+      copy "$(ProjectDir)manifest.json" "%modDir%\manifest.json"
     </PostBuildEvent>
   </PropertyGroup>
 </Project>

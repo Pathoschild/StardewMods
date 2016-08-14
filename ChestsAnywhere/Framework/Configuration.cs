@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 
-namespace AccessChestAnywhere.Framework
+namespace ChestsAnywhere.Framework
 {
     /// <summary>The mod configuration.</summary>
     internal class Configuration : Config

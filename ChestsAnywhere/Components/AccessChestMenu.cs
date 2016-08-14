@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using AccessChestAnywhere.Framework;
+using ChestsAnywhere.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StardewValley;
 
-namespace AccessChestAnywhere.Components
+namespace ChestsAnywhere.Components
 {
     /// <summary>A UI which lets the player choose a chest and location, and transfer transfer items between a chest and their inventory.</summary>
     internal class AccessChestMenu : ChestWithInventory

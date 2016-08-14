@@ -1,16 +1,16 @@
 ﻿using System.Linq;
-using AccessChestAnywhere.Components;
-using AccessChestAnywhere.Framework;
+using ChestsAnywhere.Components;
+using ChestsAnywhere.Framework;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Objects;
 
-namespace AccessChestAnywhere
+namespace ChestsAnywhere
 {
     /// <summary>The mod entry point.</summary>
-    public class AccessChestAnywhere : Mod
+    public class ChestsAnywhereMod : Mod
     {
         /*********
         ** Properties

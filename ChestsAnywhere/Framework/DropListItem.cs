@@ -1,4 +1,4 @@
-namespace AccessChestAnywhere.Framework
+namespace ChestsAnywhere.Framework
 {
     /// <summary>An item in a drop list.</summary>
     /// <typeparam name="TItem">The item type.</typeparam>

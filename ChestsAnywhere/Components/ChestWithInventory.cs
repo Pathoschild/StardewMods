@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using AccessChestAnywhere.Framework;
+using ChestsAnywhere.Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -8,7 +8,7 @@ using StardewValley;
 using StardewValley.Menus;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
-namespace AccessChestAnywhere.Components
+namespace ChestsAnywhere.Components
 {
     /// <summary>A UI which lets the player transfer items between a chest and their inventory.</summary>
     internal class ChestWithInventory : IClickableMenu

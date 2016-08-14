@@ -1,4 +1,4 @@
-namespace AccessChestAnywhere.Framework
+namespace ChestsAnywhere.Framework
 {
     /// <summary>The input mapping configuration.</summary>
     /// <typeparam name="T">The control type.</typeparam>
