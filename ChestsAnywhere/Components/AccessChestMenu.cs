@@ -224,7 +224,7 @@ namespace ChestsAnywhere.Components
         private void InitialiseTools()
         {
             // organize button
-            this.OrganizeButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + width, this.yPositionOnScreen + height / 3 + Game1.pixelZoom * 2, Game1.tileSize, Game1.tileSize), "", "Organize", Game1.mouseCursors, new Rectangle(162, 440, 16, 16), Game1.pixelZoom);
+            this.OrganizeButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + width, this.yPositionOnScreen + height / 3 + Game1.pixelZoom * 2, Game1.tileSize, Game1.tileSize), "", "Organize", Sprites.Buttons.Sheet, Sprites.Buttons.Organize, Game1.pixelZoom);
         }
 
         /// <summary>Initialise the chest and location selectors.</summary>

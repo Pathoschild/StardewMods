@@ -58,6 +58,7 @@
     <Compile Include="ChestsAnywhereMod.cs" />
     <Compile Include="Components\ChestWithInventory.cs" />
     <Compile Include="Components\DropList.cs" />
+    <Compile Include="Components\Sprites.cs" />
     <Compile Include="Framework\Configuration.cs" />
     <Compile Include="Framework\DropListItem.cs" />
     <Compile Include="Framework\InputMapConfiguration.cs" />

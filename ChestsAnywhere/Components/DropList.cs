@@ -35,15 +35,6 @@ namespace ChestsAnywhere.Components
         /// <summary>The height of text rendered in the <see cref="Font"/>.</summary>
         private readonly int FontHeight;
 
-        /// <summary>The background for the selected item.</summary>
-        private readonly Rectangle ActiveBackground = new Rectangle(258, 258, 4, 4);
-
-        /// <summary>The background for a non-selected, non-hovered item.</summary>
-        private readonly Rectangle InactiveBackground = new Rectangle(269, 258, 4, 4);
-
-        /// <summary>The background for an item under the cursor.</summary>
-        private readonly Rectangle HoverBackground = new Rectangle(161, 340, 4, 4);
-
         /// <summary>The clickable components representing the list items.</summary>
         private readonly List<ClickableComponent> ItemComponents = new List<ClickableComponent>();
 
@@ -149,11 +140,11 @@ namespace ChestsAnywhere.Components
             {
                 // draw background
                 if (component.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
-                    sprites.Draw(Game1.mouseCursors, component.bounds, this.HoverBackground, Color.White);
+                    sprites.Draw(Sprites.DropDown.Sheet, component.bounds, Sprites.DropDown.HoverBackground, Color.White);
                 else if (component.name.Equals(this.SelectedIndex.ToString()))
-                    sprites.Draw(Game1.mouseCursors, component.bounds, this.ActiveBackground, Color.White);
+                    sprites.Draw(Sprites.DropDown.Sheet, component.bounds, Sprites.DropDown.ActiveBackground, Color.White);
                 else
-                    sprites.Draw(Game1.mouseCursors, component.bounds, this.InactiveBackground, Color.White);
+                    sprites.Draw(Sprites.DropDown.Sheet, component.bounds, Sprites.DropDown.InactiveBackground, Color.White);
 
                 // draw text
                 DropListItem<TItem> item = this.Items.First(p => p.Index == int.Parse(component.name));

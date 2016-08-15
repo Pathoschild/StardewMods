@@ -34,18 +34,6 @@ namespace ChestsAnywhere.Components
         /// <summary>Whether the UI control is disabled, in which case it will no longer try to handle player interaction.</summary>
         protected bool IsDisabled { get; set; }
 
-        private readonly Rectangle CornerTopLeft = new Rectangle(12, 16, 32, 32);
-        private readonly Rectangle CornerTopRight = new Rectangle(212, 16, 32, 32);
-        private readonly Rectangle CornerBottomLeft = new Rectangle(12, 208, 32, 32);
-        private readonly Rectangle CornerBottomRight = new Rectangle(212, 208, 32, 32);
-        private readonly Rectangle MiddleLeft = new Rectangle(12, 80, 32, 32);
-        private readonly Rectangle MiddleMiddle = new Rectangle(132, 80, 32, 32);
-        private readonly Rectangle MiddleRight = new Rectangle(212, 80, 32, 32);
-        private readonly Rectangle EdgeTop = new Rectangle(40, 16, 32, 32);
-        private readonly Rectangle EdgeLeft = new Rectangle(12, 36, 32, 32);
-        private readonly Rectangle EdgeRight = new Rectangle(212, 40, 32, 32);
-        private readonly Rectangle EdgeBottom = new Rectangle(36, 208, 32, 32);
-
 
         /*********
         ** Public methods
@@ -233,7 +221,7 @@ namespace ChestsAnywhere.Components
         public override void draw(SpriteBatch sprites)
         {
             // background
-            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + Game1.tileSize / 16, this.yPositionOnScreen + Game1.tileSize / 16, this.width - Game1.tileSize / 8, this.height - Game1.tileSize / 8), new Rectangle(64, 128, 64, 64), Color.White);
+            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.Background, this.xPositionOnScreen + Game1.tileSize / 16, this.yPositionOnScreen + Game1.tileSize / 16, this.width - Game1.tileSize / 8, this.height - Game1.tileSize / 8);
             this.DrawBorder(sprites);
 
             // slots
@@ -391,10 +379,10 @@ namespace ChestsAnywhere.Components
                 int x = this.xPositionOnScreen + Game1.tileSize / 2;
                 while (xCount < 13)
                 {
-                    Rectangle sourceRectangle = yCount * 12 + xCount <= Game1.player.maxItems
-                        ? new Rectangle(128, 128, 64, 64)
-                        : new Rectangle(64, 896, 64, 64);
-                    sprites.Draw(Game1.menuTexture, new Rectangle(x, y, Game1.tileSize, Game1.tileSize), sourceRectangle, Color.White);
+                    Rectangle slot = yCount * 12 + xCount <= Game1.player.maxItems
+                        ? Sprites.Menu.Slot
+                        : Sprites.Menu.SlotDisabled;
+                    sprites.Draw(Sprites.Menu.Sheet, slot, x, y, Game1.tileSize, Game1.tileSize);
                     x += Game1.tileSize;
                     xCount++;
                 }
@@ -415,7 +403,7 @@ namespace ChestsAnywhere.Components
                 int x = this.xPositionOnScreen + Game1.tileSize / 2;
                 while (xCount < 12)
                 {
-                    sprites.Draw(Game1.menuTexture, new Rectangle(x, y, Game1.tileSize, Game1.tileSize), new Rectangle(128, 128, 64, 64), Color.White);
+                    sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.Slot, x, y, Game1.tileSize, Game1.tileSize);
                     x += Game1.tileSize;
                     xCount++;
                 }
@@ -429,18 +417,18 @@ namespace ChestsAnywhere.Components
         private void DrawBorder(SpriteBatch sprites)
         {
             int tileSize = Game1.tileSize;
-            int halfTileSize = Game1.tileSize / 2;
-            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen, halfTileSize, halfTileSize), this.CornerTopLeft, Color.White);
-            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + halfTileSize, this.yPositionOnScreen, this.width - tileSize, halfTileSize), this.EdgeTop, Color.White);
-            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - halfTileSize, this.yPositionOnScreen, halfTileSize, halfTileSize), this.CornerTopRight, Color.White);
-            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen + halfTileSize, halfTileSize, this.height - tileSize), this.EdgeLeft, Color.White);
-            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - halfTileSize, this.yPositionOnScreen + halfTileSize, halfTileSize, this.height - tileSize), this.EdgeRight, Color.White);
-            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + halfTileSize, this.yPositionOnScreen + this.height / 2 - tileSize / 4, this.width - tileSize, halfTileSize), this.MiddleMiddle, Color.White);
-            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen + this.height / 2 - tileSize / 4, halfTileSize, halfTileSize), this.MiddleLeft, Color.White);
-            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - halfTileSize, this.yPositionOnScreen + this.height / 2 - tileSize / 4, halfTileSize, halfTileSize), this.MiddleRight, Color.White);
-            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen, this.yPositionOnScreen + this.height - halfTileSize, halfTileSize, halfTileSize), this.CornerBottomLeft, Color.White);
-            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + halfTileSize, this.yPositionOnScreen + this.height - halfTileSize, this.width - tileSize, halfTileSize), this.EdgeBottom, Color.White);
-            sprites.Draw(Game1.menuTexture, new Rectangle(this.xPositionOnScreen + this.width - halfTileSize, this.yPositionOnScreen + this.height - halfTileSize, halfTileSize, halfTileSize), this.CornerBottomRight, Color.White);
+            int edgeWidth = Game1.tileSize / 2;
+            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.TopLeft, this.xPositionOnScreen, this.yPositionOnScreen, edgeWidth, edgeWidth);
+            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.Top, this.xPositionOnScreen + edgeWidth, this.yPositionOnScreen, this.width - tileSize, edgeWidth);
+            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.TopRight, this.xPositionOnScreen + this.width - edgeWidth, this.yPositionOnScreen, edgeWidth, edgeWidth);
+            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.Left, this.xPositionOnScreen, this.yPositionOnScreen + edgeWidth, edgeWidth, this.height - tileSize);
+            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.Right, this.xPositionOnScreen + this.width - edgeWidth, this.yPositionOnScreen + edgeWidth, edgeWidth, this.height - tileSize);
+            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.MiddleMiddle, this.xPositionOnScreen + edgeWidth, this.yPositionOnScreen + this.height / 2 - tileSize / 4, this.width - tileSize, edgeWidth);
+            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.MiddleLeft, this.xPositionOnScreen, this.yPositionOnScreen + this.height / 2 - tileSize / 4, edgeWidth, edgeWidth);
+            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.MiddleRight, this.xPositionOnScreen + this.width - edgeWidth, this.yPositionOnScreen + this.height / 2 - tileSize / 4, edgeWidth, edgeWidth);
+            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.BottomLeft, this.xPositionOnScreen, this.yPositionOnScreen + this.height - edgeWidth, edgeWidth, edgeWidth);
+            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.Bottom, this.xPositionOnScreen + edgeWidth, this.yPositionOnScreen + this.height - edgeWidth, this.width - tileSize, edgeWidth);
+            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.BottomRight, this.xPositionOnScreen + this.width - edgeWidth, this.yPositionOnScreen + this.height - edgeWidth, edgeWidth, edgeWidth);
         }
     }
 }

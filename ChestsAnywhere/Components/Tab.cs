@@ -14,30 +14,22 @@ namespace ChestsAnywhere.Components
         /// <summary>The font with which to render text.</summary>
         private readonly SpriteFont Font;
 
-        private readonly Rectangle TabTopLeft = new Rectangle(16, 384, 4, 4);
-        private readonly Rectangle TabTopRight = new Rectangle(28, 384, 4, 4);
-        private readonly Rectangle TabBottomLeft = new Rectangle(16, 396, 4, 4);
-        private readonly Rectangle TabBottomRight = new Rectangle(28, 396, 4, 4);
-        private readonly Rectangle TabEdgeTop = new Rectangle(21, 384, 4, 4);
-        private readonly Rectangle TabEdgeLeft = new Rectangle(16, 389, 4, 4);
-        private readonly Rectangle TabEdgeRight = new Rectangle(28, 389, 4, 4);
-        private readonly Rectangle TabEdgeBottom = new Rectangle(21, 396, 4, 4);
-        private readonly Rectangle TabBackground = new Rectangle(21, 373, 4, 4);
-
-
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The displayed tab text.</param>
-        /// <param name="x">The X-position from which to render the list.</param>
-        /// <param name="y">The Y-position from which to render the list.</param>
+        /// <param name="x">The X-position at which to draw the tab.</param>
+        /// <param name="y">The Y-position at which to draw the tab.</param>
         /// <param name="toRight">Whether the tab should be aligned right of the origin.</param>
         /// <param name="font">The font with which to render text.</param>
         public Tab(string name, int x, int y, bool toRight, SpriteFont font)
             : base(Rectangle.Empty, name)
         {
+            // save values
             this.Font = font;
+
+            // set bounds
             Vector2 fontSize = font.MeasureString(name);
             this.bounds.Width = (int)fontSize.X + Game1.tileSize / 2;
             this.bounds.Height = (int)fontSize.Y + Game1.tileSize / 2;
@@ -51,22 +43,28 @@ namespace ChestsAnywhere.Components
         /// <param name="sprites">The sprites to render.</param>
         public void Draw(SpriteBatch sprites)
         {
+            // calculate sprite dimensions
+            int tileSize = Game1.tileSize;
+            int edgeSize = tileSize / 4; // the pixel width of an edge
+            int padding = tileSize / 2; // the pixel width of the edge padding
+
+            // get bounds
             int x = this.bounds.X;
             int y = this.bounds.Y;
             int width = this.bounds.Width;
             int height = this.bounds.Height;
-            int tileSize = Game1.tileSize;
 
-            sprites.Draw(Game1.mouseCursors, new Rectangle(x, y, tileSize / 4, tileSize / 4), this.TabTopLeft, Color.White);
-            sprites.Draw(Game1.mouseCursors, new Rectangle(x + tileSize / 4, y, width - tileSize / 2, tileSize / 4), this.TabEdgeTop, Color.White);
-            sprites.Draw(Game1.mouseCursors, new Rectangle(x + width - tileSize / 4, y, tileSize / 4, tileSize / 4), this.TabTopRight, Color.White);
-            sprites.Draw(Game1.mouseCursors, new Rectangle(x, y + tileSize / 4, tileSize / 4, height - tileSize / 2), this.TabEdgeLeft, Color.White);
-            sprites.Draw(Game1.mouseCursors, new Rectangle(x + width - tileSize / 4, y + tileSize / 4, tileSize / 4, height - tileSize / 2), this.TabEdgeRight, Color.White);
-            sprites.Draw(Game1.mouseCursors, new Rectangle(x, y + height - tileSize / 4, tileSize / 4, tileSize / 4), this.TabBottomLeft, Color.White);
-            sprites.Draw(Game1.mouseCursors, new Rectangle(x + tileSize / 4, y + height - tileSize / 4, width - tileSize / 2, tileSize / 4), this.TabEdgeBottom, Color.White);
-            sprites.Draw(Game1.mouseCursors, new Rectangle(x + width - tileSize / 4, y + height - tileSize / 4, tileSize / 4, tileSize / 4), this.TabBottomRight, Color.White);
-            sprites.Draw(Game1.mouseCursors, new Rectangle(x + tileSize / 4, y + tileSize / 4, width - tileSize / 2, height - tileSize / 2), this.TabBackground, Color.White);
-            sprites.DrawString(this.Font, this.name, new Vector2(x + tileSize / 4, y + tileSize / 4 + tileSize / 16), Color.Black);
+            // draw sprites
+            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.TopLeft, x, y, edgeSize, edgeSize);
+            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.Top, x + edgeSize, y, width - padding, edgeSize);
+            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.TopRight, x + width - edgeSize, y, edgeSize, edgeSize);
+            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.Left, x, y + edgeSize, edgeSize, height - padding);
+            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.Right, x + width - edgeSize, y + edgeSize, edgeSize, height - padding);
+            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.BottomLeft, x, y + height - edgeSize, edgeSize, edgeSize);
+            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.Bottom, x + edgeSize, y + height - edgeSize, width - padding, edgeSize);
+            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.BottomRight, x + width - edgeSize, y + height - edgeSize, edgeSize, edgeSize);
+            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.Background, x + edgeSize, y + edgeSize, width - padding, height - padding);
+            sprites.DrawString(this.Font, this.name, new Vector2(x + edgeSize, y + edgeSize + tileSize / 16), Color.Black);
         }
     }
 }
