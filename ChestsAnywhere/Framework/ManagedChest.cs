@@ -49,7 +49,6 @@ namespace ChestsAnywhere.Framework
                 : defaultName;
 
             // extract tags
-            this.Name = Regex.Replace(this.Name, ManagedChest.TagGroupPattern, "").Trim();
             foreach (Match match in Regex.Matches(this.Name, ManagedChest.TagGroupPattern))
             {
                 string[] tags = match.Groups[1].Value.Split(' ');
@@ -68,6 +67,7 @@ namespace ChestsAnywhere.Framework
                         this.Order = order;
                 }
             }
+            this.Name = Regex.Replace(this.Name, ManagedChest.TagGroupPattern, "").Trim();
         }
     }
 }
