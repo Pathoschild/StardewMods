@@ -1,0 +1,14 @@
+﻿{
+  "Name": "NotesAnywhere",
+  "Authour": "Pathoschild",
+  "Version": {
+    "MajorVersion": 0,
+    "MinorVersion": 1,
+    "PatchVersion": 0,
+    "Build": "1"
+  },
+  "Description": "Writes notes anywhere.",
+  "UniqueID": "NotesAnywhere",
+  "PerSaveConfigs": true,
+  "EntryDll": "NotesAnywhere.dll"
+}
