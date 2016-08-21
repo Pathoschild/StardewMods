@@ -53,6 +53,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\EncyclopediaMenu.cs" />
+    <Compile Include="Components\Sprites.cs" />
+    <Compile Include="Framework\GiftTaste.cs" />
+    <Compile Include="Framework\SubjectFactory.cs" />
+    <Compile Include="Framework\Subjects\BaseSubject.cs" />
+    <Compile Include="Framework\Subjects\CharacterSubject.cs" />
+    <Compile Include="Framework\Subjects\CropSubject.cs" />
+    <Compile Include="Framework\Subjects\ISubject.cs" />
+    <Compile Include="Framework\Subjects\ObjectSubject.cs" />
     <Compile Include="NotesAnywhereMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
