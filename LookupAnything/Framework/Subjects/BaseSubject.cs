@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 
-namespace Pathoschild.NotesAnywhere.Framework.Subjects
+namespace Pathoschild.LookupAnything.Framework.Subjects
 {
     /// <summary>The base class for object metadata.</summary>
     public abstract class BaseSubject : ISubject

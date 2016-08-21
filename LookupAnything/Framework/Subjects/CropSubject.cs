@@ -1,6 +1,6 @@
 using StardewValley;
 
-namespace Pathoschild.NotesAnywhere.Framework.Subjects
+namespace Pathoschild.LookupAnything.Framework.Subjects
 {
     /// <summary>Describes a growing crop.</summary>
     public class CropSubject : ObjectSubject

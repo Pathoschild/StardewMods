@@ -1,8 +1,8 @@
-using Pathoschild.NotesAnywhere.Framework.Subjects;
+using Pathoschild.LookupAnything.Framework.Subjects;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
-namespace Pathoschild.NotesAnywhere.Framework
+namespace Pathoschild.LookupAnything.Framework
 {
     /// <summary>A factory which extracts metadata from arbitrary objects.</summary>
     public class SubjectFactory

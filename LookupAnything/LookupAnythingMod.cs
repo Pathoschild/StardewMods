@@ -1,17 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Pathoschild.NotesAnywhere.Components;
-using Pathoschild.NotesAnywhere.Framework;
-using Pathoschild.NotesAnywhere.Framework.Subjects;
+using Pathoschild.LookupAnything.Components;
+using Pathoschild.LookupAnything.Framework;
+using Pathoschild.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Pathoschild.NotesAnywhere
+namespace Pathoschild.LookupAnything
 {
     /// <summary>The mod entry point.</summary>
-    class NotesAnywhereMod : Mod
+    class LookupAnythingMod : Mod
     {
         /*********
         ** Properties

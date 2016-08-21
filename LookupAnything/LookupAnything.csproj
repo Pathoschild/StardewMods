@@ -7,8 +7,8 @@
     <ProjectGuid>{2A9C0811-B2D2-474A-A84C-DDEB16206A62}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pathoschild.NotesAnywhere</RootNamespace>
-    <AssemblyName>NotesAnywhere</AssemblyName>
+    <RootNamespace>Pathoschild.LookupAnything</RootNamespace>
+    <AssemblyName>LookupAnything</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -62,7 +62,7 @@
     <Compile Include="Framework\Subjects\CropSubject.cs" />
     <Compile Include="Framework\Subjects\ISubject.cs" />
     <Compile Include="Framework\Subjects\ObjectSubject.cs" />
-    <Compile Include="NotesAnywhereMod.cs" />
+    <Compile Include="LookupAnythingMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -70,7 +70,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>set modDir=C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\Mods\NotesAnywhere
+    <PostBuildEvent>set modDir=C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\Mods\LookupAnything
 if not exist "%25modDir%25" (mkdir "%25modDir%25")
 copy "$(TargetPath)" "%25modDir%25\$(TargetFileName)"
 copy "$(ProjectDir)manifest.json" "%25modDir%25\manifest.json"</PostBuildEvent>

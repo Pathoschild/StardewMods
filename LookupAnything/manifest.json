@@ -1,0 +1,13 @@
+﻿{
+  "Name": "LookupAnything",
+  "Authour": "Pathoschild",
+  "Version": {
+    "MajorVersion": 0,
+    "MinorVersion": 1,
+    "PatchVersion": 0,
+    "Build": "1"
+  },
+  "Description": "View metadata about anything by pressing a button.",
+  "UniqueID": "LookupAnything",
+  "EntryDll": "LookupAnything.dll"
+}

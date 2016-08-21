@@ -1,6 +1,6 @@
 using StardewValley;
 
-namespace Pathoschild.NotesAnywhere.Framework
+namespace Pathoschild.LookupAnything.Framework
 {
     /// <summary>Indicates how much an NPC likes a particular gift.</summary>
     public enum GiftTaste

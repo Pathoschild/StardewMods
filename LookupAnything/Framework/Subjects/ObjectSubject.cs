@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using Object = StardewValley.Object;
 
-namespace Pathoschild.NotesAnywhere.Framework.Subjects
+namespace Pathoschild.LookupAnything.Framework.Subjects
 {
     /// <summary>Describes a Stardew Valley object.</summary>
     public class ObjectSubject : BaseSubject

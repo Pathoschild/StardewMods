@@ -2,12 +2,12 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.NotesAnywhere.Framework;
-using Pathoschild.NotesAnywhere.Framework.Subjects;
+using Pathoschild.LookupAnything.Framework;
+using Pathoschild.LookupAnything.Framework.Subjects;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Pathoschild.NotesAnywhere.Components
+namespace Pathoschild.LookupAnything.Components
 {
     /// <summary>A UI which shows information about an item.</summary>
     internal class EncyclopediaMenu : IClickableMenu

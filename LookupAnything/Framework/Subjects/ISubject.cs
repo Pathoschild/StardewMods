@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 
-namespace Pathoschild.NotesAnywhere.Framework.Subjects
+namespace Pathoschild.LookupAnything.Framework.Subjects
 {
     /// <summary>Provides metadata about something in the game.</summary>
     public interface ISubject

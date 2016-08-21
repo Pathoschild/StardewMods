@@ -1,9 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.NotesAnywhere.Components;
+using Pathoschild.LookupAnything.Components;
 using StardewValley;
 
-namespace Pathoschild.NotesAnywhere.Framework.Subjects
+namespace Pathoschild.LookupAnything.Framework.Subjects
 {
     /// <summary>Describes an NPC.</summary>
     public class CharacterSubject : BaseSubject
