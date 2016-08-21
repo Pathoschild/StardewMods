@@ -64,11 +64,11 @@ namespace Pathoschild.LookupAnything.Components
             int spaceSize = (int)font.MeasureString(" ").X;
 
             // draw background
-            sprites.Draw(Sprites.Letter.Sheet, Sprites.Letter.Sprite, x, y, this.width, this.height, scale: this.width / (float)Sprites.Letter.Sprite.Width);
+            sprites.DrawBlock(Sprites.Letter.Sheet, Sprites.Letter.Sprite, x, y, scale: this.width / (float)Sprites.Letter.Sprite.Width);
 
             // draw portrait
-            if (subject.DrawPortrait(sprites, new Vector2(x + leftOffset, y + topOffset), new Vector2(50, 50)))
-                leftOffset += 70;
+            if (subject.DrawPortrait(sprites, new Vector2(x + leftOffset, y + topOffset), new Vector2(70, 70)))
+                leftOffset += 72;
 
             // draw text
             int wrapWidth = this.width - leftOffset - rightOffset;
@@ -139,7 +139,7 @@ namespace Pathoschild.LookupAnything.Components
         private void DrawCoin(SpriteBatch sprites, int x, int y)
         {
             const int coinSize = 6;
-            sprites.Draw(Game1.debrisSpriteSheet, new Vector2(x, y), new Rectangle(5, 69, coinSize, coinSize), Color.White, 0, Vector2.Zero, Game1.pixelZoom, SpriteEffects.None, 1);
+            sprites.DrawBlock(Game1.debrisSpriteSheet, new Rectangle(5, 69, coinSize, coinSize), x, y, scale: Game1.pixelZoom);
         }
     }
 }

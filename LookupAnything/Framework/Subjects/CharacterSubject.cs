@@ -38,7 +38,15 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
         public override bool DrawPortrait(SpriteBatch sprites, Vector2 position, Vector2 size)
         {
-            Sprites.Draw(sprites, this.Character.Portrait, new Rectangle(0, 0, NPC.portrait_width, NPC.portrait_height), (int)position.X, (int)position.Y, (int)size.X, (int)size.Y, Color.White, size.X / NPC.portrait_width);
+            // use character portrait (most NPCs)
+            if (this.Character.Portrait != null)
+            {
+                sprites.DrawBlock(this.Character.Portrait, new Rectangle(0, 0, NPC.portrait_width, NPC.portrait_height), position.X, position.Y, Color.White, size.X / NPC.portrait_width);
+                return true;
+            }
+
+            // else draw sprite (e.g. for pets)
+            this.Character.Sprite.draw(sprites, position, 1, 0, 0, Color.White, scale: size.X / this.Character.Sprite.getWidth());
             return true;
         }
     }

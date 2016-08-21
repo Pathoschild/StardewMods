@@ -32,10 +32,9 @@ namespace Pathoschild.LookupAnything.Components
         /// <param name="sprite">The sprite coordinates and dimensions in the sprite sheet.</param>
         /// <param name="x">The X-position at which to draw the sprite.</param>
         /// <param name="y">The X-position at which to draw the sprite.</param>
-        /// <param name="width">The width to draw.</param>
-        /// <param name="height">The height to draw.</param>
         /// <param name="color">The color to tint the sprite.</param>
-        public static void Draw(this SpriteBatch batch, Texture2D sheet, Rectangle sprite, int x, int y, int width, int height, Color? color = null, float scale = 1)
+        /// <param name="scale">The scale to draw.</param>
+        public static void DrawBlock(this SpriteBatch batch, Texture2D sheet, Rectangle sprite, float x, float y, Color? color = null, float scale = 1)
         {
             batch.Draw(sheet, new Vector2(x, y), sprite, color ?? Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
         }
