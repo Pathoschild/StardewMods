@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework;
+using Pathoschild.LookupAnything.Framework.Fields;
 using Pathoschild.LookupAnything.Framework.Subjects;
 using StardewValley;
 using StardewValley.Menus;
@@ -16,7 +16,7 @@ namespace Pathoschild.LookupAnything.Components
         ** Properties
         *********/
         /// <summary>The encyclopedia subject.</summary>
-        private ISubject Subject { get; set; }
+        private ISubject Subject { get; }
 
         /// <summary>The aspect ratio of the page background.</summary>
         private readonly Vector2 AspectRatio = new Vector2(Sprites.Letter.Sprite.Width, Sprites.Letter.Sprite.Height);
@@ -55,13 +55,13 @@ namespace Pathoschild.LookupAnything.Components
             int x = this.xPositionOnScreen;
             int y = this.yPositionOnScreen;
             const int rightOffset = 15;
-            int leftOffset = 15;
-            int topOffset = 15;
+            float leftOffset = 15;
+            float topOffset = 15;
 
             // get font
             SpriteFont font = Game1.smallFont;
-            int blankLineHeight = (int)font.MeasureString("ABC").Y;
-            int spaceSize = (int)font.MeasureString(" ").X;
+            float blankLineHeight = font.MeasureString("ABC").Y;
+            float spaceWidth = font.MeasureString(" ").X;
 
             // draw background
             sprites.DrawBlock(Sprites.Letter.Sheet, Sprites.Letter.Sprite, x, y, scale: this.width / (float)Sprites.Letter.Sprite.Width);
@@ -71,48 +71,55 @@ namespace Pathoschild.LookupAnything.Components
                 leftOffset += 72;
 
             // draw text
-            int wrapWidth = this.width - leftOffset - rightOffset;
+            float wrapWidth = this.width - leftOffset - rightOffset;
             {
                 // draw name & item type
                 {
-                    var nameSize = sprites.DrawStringBlock(font, $"{subject.Name}.", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: true);
-                    var typeSize = sprites.DrawStringBlock(font, $"{subject.Type}.", new Vector2(x + leftOffset + nameSize.Width + spaceSize, y + topOffset), wrapWidth);
-                    topOffset += Math.Max(nameSize.Height, typeSize.Height);
+                    Vector2 nameSize = sprites.DrawStringBlock(font, $"{subject.Name}.", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: true);
+                    Vector2 typeSize = sprites.DrawStringBlock(font, $"{subject.Type}.", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
+                    topOffset += Math.Max(nameSize.Y, typeSize.Y);
                 }
 
                 // draw description
                 if (subject.Description != null)
                 {
-                    var size = sprites.DrawStringBlock(font, subject.Description, new Vector2(x + leftOffset, y + topOffset), wrapWidth);
-                    topOffset += size.Height;
+                    Vector2 size = sprites.DrawStringBlock(font, subject.Description, new Vector2(x + leftOffset, y + topOffset), wrapWidth);
+                    topOffset += size.Y;
                 }
 
                 // draw spacer
                 topOffset += blankLineHeight;
 
-                // draw price
-                if (subject.SalePrice != null)
+                // draw custom fields
+                ICustomField[] fields = this.Subject.CustomFields;
+                if (fields != null && fields.Any())
                 {
-                    var size = sprites.DrawStringBlock(font, $"Sells for {subject.SalePrice}", new Vector2(x + leftOffset, y + topOffset), wrapWidth);
-                    this.DrawCoin(sprites, x + leftOffset + size.Width + 1, y + topOffset);
-                    topOffset += size.Height;
-                }
-                topOffset += blankLineHeight;
-
-                // NPCs who like this item
-                if (subject.GiftTastes?.Any() == true)
-                {
-                    var size = sprites.DrawStringBlock(font, "can be gifted:", new Vector2(x + leftOffset, y + topOffset), wrapWidth);
-                    topOffset += size.Height;
-                    foreach (GiftTaste taste in new [] { GiftTaste.Love, GiftTaste.Like, GiftTaste.Neutral, GiftTaste.Dislike, GiftTaste.Hate })
+                    float cellPadding = 3;
+                    float labelWidth = fields.Max(p => font.MeasureString(p.Label).X);
+                    float valueWidth = wrapWidth - labelWidth - cellPadding * 4;
+                    foreach (ICustomField field in fields)
                     {
-                        if (!subject.GiftTastes.ContainsKey(taste))
+                        if (!field.HasValue)
                             continue;
 
-                        string[] names = subject.GiftTastes[taste].Select(p => p.getName()).OrderBy(p => p).ToArray();
-                        var labelSize = sprites.DrawStringBlock(Game1.tinyFont, $"{taste}:", new Vector2(x + leftOffset + spaceSize, y + topOffset), wrapWidth - spaceSize, scale: 0.5f);
-                        var listSize = sprites.DrawStringBlock(Game1.tinyFont, $"{string.Join(", ", names)}.", new Vector2(labelSize.X + labelSize.Width + spaceSize, y + topOffset), wrapWidth - labelSize.Width - spaceSize, scale: 0.5f);
-                        topOffset += Math.Max(labelSize.Height, listSize.Height);
+                        // draw label & value
+                        Vector2 labelSize = sprites.DrawStringBlock(font, field.Label, new Vector2(x + leftOffset + cellPadding, y + topOffset + cellPadding), wrapWidth);
+                        Vector2 valuePosition = new Vector2(x + leftOffset + labelWidth + cellPadding * 3, y + topOffset + cellPadding);
+                        Vector2 valueSize =
+                            field.DrawValue(sprites, font, valuePosition, valueWidth)
+                            ?? sprites.DrawStringBlock(font, field.Value, valuePosition, valueWidth);
+                        Vector2 rowSize = new Vector2(labelWidth + valueWidth + cellPadding * 4, Math.Max(labelSize.Y, valueSize.Y));
+
+                        // draw table row
+                        Color lineColor = Color.Gray;
+                        sprites.DrawLine(x + leftOffset, y + topOffset, new Vector2(rowSize.X, 1), lineColor); // top
+                        sprites.DrawLine(x + leftOffset, y + topOffset + rowSize.Y, new Vector2(rowSize.X, 1), lineColor); // bottom
+                        sprites.DrawLine(x + leftOffset, y + topOffset, new Vector2(1, rowSize.Y), lineColor); // left
+                        sprites.DrawLine(x + leftOffset + labelWidth + cellPadding * 2, y + topOffset, new Vector2(1, rowSize.Y), lineColor); // middle
+                        sprites.DrawLine(x + leftOffset + rowSize.X, y + topOffset, new Vector2(1, rowSize.Y), lineColor); // right
+
+                        // update offset
+                        topOffset += valueSize.Y;
                     }
                 }
             }
@@ -130,16 +137,6 @@ namespace Pathoschild.LookupAnything.Components
             Vector2 origin = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height);
             this.xPositionOnScreen = (int)origin.X;
             this.yPositionOnScreen = (int)origin.Y;
-        }
-
-        /// <summary>Draw a coin icon at the specified position.</summary>
-        /// <param name="sprites">The sprites to render.</param>
-        /// <param name="x">The top-left X-position at which to draw the coin.</param>
-        /// <param name="y">The top-left Y-position at which to draw the coin.</param>
-        private void DrawCoin(SpriteBatch sprites, int x, int y)
-        {
-            const int coinSize = 6;
-            sprites.DrawBlock(Game1.debrisSpriteSheet, new Rectangle(5, 69, coinSize, coinSize), x, y, scale: Game1.pixelZoom);
         }
     }
 }

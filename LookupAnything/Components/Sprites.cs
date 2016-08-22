@@ -22,6 +22,16 @@ namespace Pathoschild.LookupAnything.Components
             public static readonly Rectangle Sprite = new Rectangle(0, 0, 320, 180);
         }
 
+        /// <summary>Sprites used to draw a line.</summary>
+        public static class Line
+        {
+            /// <summary>The sprite sheet containing the form sprites.</summary>
+            public static Texture2D Sheet => Game1.mouseCursors;
+
+            /// <summary>A single pixel that can be colorised and stretched to draw a line.</summary>
+            public static readonly Rectangle Pixel = new Rectangle(123, 1889, 1, 1);
+        }
+
 
         /*********
         ** Extensions
@@ -39,6 +49,17 @@ namespace Pathoschild.LookupAnything.Components
             batch.Draw(sheet, new Vector2(x, y), sprite, color ?? Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
         }
 
+        /// <summary>Draw a sprite to the screen.</summary>
+        /// <param name="batch">The sprite batch.</param>
+        /// <param name="x">The X-position at which to start the line.</param>
+        /// <param name="y">The X-position at which to start the line.</param>
+        /// <param name="size">The line dimensions.</param>
+        /// <param name="color">The color to tint the sprite.</param>
+        public static void DrawLine(this SpriteBatch batch, float x, float y, Vector2 size, Color? color = null)
+        {
+            batch.Draw(Sprites.Line.Sheet, new Rectangle((int)x, (int)y, (int)size.X, (int)size.Y), Sprites.Line.Pixel, color ?? Color.White);
+        }
+
         /// <summary>Draw a block of text to the screen with the specified wrap width.</summary>
         /// <param name="batch">The sprite batch.</param>
         /// <param name="font">The sprite font.</param>
@@ -48,9 +69,12 @@ namespace Pathoschild.LookupAnything.Components
         /// <param name="color">The text color.</param>
         /// <param name="bold">Whether to draw bold text.</param>
         /// <param name="scale">The font scale.</param>
-        /// <returns>Returns the text position and dimensions.</returns>
-        public static Rectangle DrawStringBlock(this SpriteBatch batch, SpriteFont font, string text, Vector2 position, int wrapWidth, Color? color = null, bool bold = false, float scale = 1)
+        /// <returns>Returns the text dimensions.</returns>
+        public static Vector2 DrawStringBlock(this SpriteBatch batch, SpriteFont font, string text, Vector2 position, float wrapWidth, Color? color = null, bool bold = false, float scale = 1)
         {
+            if (text == null)
+                return new Vector2(0, 0);
+
             // strip newlines
             text = text.Replace(Environment.NewLine, " ");
 
@@ -58,7 +82,7 @@ namespace Pathoschild.LookupAnything.Components
             float xOffset = 0;
             float yOffset = 0;
             float lineHeight = font.MeasureString("ABC").Y * scale;
-            float spaceWidth = font.MeasureString(" ").X * scale;
+            float spaceWidth = (font.MeasureString("A B").X - font.MeasureString("AB").X) * scale;
             float blockWidth = 0;
             float blockHeight = lineHeight;
             foreach (string word in text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
@@ -86,7 +110,7 @@ namespace Pathoschild.LookupAnything.Components
             }
 
             // return text position & dimensions
-            return new Rectangle((int)position.X, (int)position.Y, (int)blockWidth, (int)blockHeight);
+            return new Vector2(blockWidth, blockHeight);
         }
     }
 }

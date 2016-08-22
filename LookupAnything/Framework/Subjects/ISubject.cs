@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewValley;
+using Pathoschild.LookupAnything.Framework.Fields;
 
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
@@ -20,11 +19,8 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <summary>The item type (if applicable).</summary>
         string Type { get; }
 
-        /// <summary>The item price when sold or shipped (if applicable).</summary>
-        int? SalePrice { get; }
-
-        /// <summary>How much each NPC likes receiving this item as a gift (if applicable).</summary>
-        IDictionary<GiftTaste, NPC[]> GiftTastes { get; }
+        /// <summary>The custom fields to display for this subject (if any).</summary>
+        ICustomField[] CustomFields { get; }
 
 
         /*********

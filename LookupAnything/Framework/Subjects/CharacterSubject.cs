@@ -21,9 +21,9 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="character">The underlying character.</param>
         public CharacterSubject(NPC character)
+            : base(character.getName(), null, "NPC")
         {
             this.Character = character;
-            this.Initialise(character.getName(), null, "NPC");
 
             // Birthday: npc.birthday_Season npc.birthday_Day
             // Romance option: npc.datable

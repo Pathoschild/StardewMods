@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewValley;
+using Pathoschild.LookupAnything.Framework.Fields;
 
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
@@ -20,11 +19,8 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <summary>The object type.</summary>
         public string Type { get; protected set; }
 
-        /// <summary>The item price when sold or shipped (if applicable).</summary>
-        public int? SalePrice { get; protected set; }
-
-        /// <summary>How much each NPC likes receiving this item as a gift (if applicable).</summary>
-        public IDictionary<GiftTaste, NPC[]> GiftTastes { get; protected set; }
+        /// <summary>The custom fields to display for this subject (if any).</summary>
+        public ICustomField[] CustomFields { get; protected set; }
 
 
         /*********
@@ -41,19 +37,18 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /*********
         ** Protected methods
         *********/
-        /// <summary>Initialise the metadata. This method is provided for convenience; the properties can also be set directly.</summary>
+        /// <summary>Construct an instance.</summary>
+        protected BaseSubject() { }
+
+        /// <summary>Construct an instance.</summary>
         /// <param name="name">The display name.</param>
         /// <param name="description">The object description (if applicable).</param>
         /// <param name="type">The object type.</param>
-        /// <param name="salePrice">The item price when sold or shipped (if applicable).</param>
-        /// <param name="giftTastes">How much each NPC likes receiving this item as a gift (if applicable).</param>
-        protected void Initialise(string name, string description, string type, int? salePrice = null, IDictionary<GiftTaste, NPC[]> giftTastes = null)
+        protected BaseSubject(string name, string description, string type)
         {
             this.Name = name;
             this.Description = description;
             this.Type = type;
-            this.SalePrice = salePrice;
-            this.GiftTastes = giftTastes;
         }
     }
 }

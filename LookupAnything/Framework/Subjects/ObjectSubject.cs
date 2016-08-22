@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.LookupAnything.Framework.Fields;
 using StardewValley;
 using Object = StardewValley.Object;
 
@@ -24,14 +25,14 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="obj">The Stardew Valley object.</param>
         public ObjectSubject(Object obj)
+            : base(obj.Name, obj.getDescription(), ObjectSubject.GetTypeValue(obj))
         {
             this.Obj = obj;
-
-            string type = obj.getCategoryName();
-            if (string.IsNullOrWhiteSpace(type))
-                type = obj.type;
-
-            this.Initialise(obj.Name, obj.getDescription(), type, obj.sellToStorePrice(), this.GetGiftTastes(obj));
+            this.CustomFields = new ICustomField[]
+            {
+                new GenericField("Sells for", obj.sellToStorePrice().ToString()),
+                new GiftTastesForItemField("Gift tastes", this.GetGiftTastes(obj))
+            };
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>
@@ -49,6 +50,16 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /*********
         ** Private methods
         *********/
+        /// <summary>Get the object type.</summary>
+        /// <param name="obj">The object instance.</param>
+        private static string GetTypeValue(Object obj)
+        {
+            string type = obj.getCategoryName();
+            if (string.IsNullOrWhiteSpace(type))
+                type = obj.type;
+            return type;
+        }
+
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
         /// <param name="item">The potential gift item.</param>
         private IDictionary<GiftTaste, NPC[]> GetGiftTastes(Object item)
