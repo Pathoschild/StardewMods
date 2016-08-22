@@ -31,7 +31,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             this.Obj = obj;
             this.AddCustomFields(
                 new GenericField("Sells for", obj.sellToStorePrice().ToString()),
-                new GiftTastesForItemField("Gift tastes", this.GetGiftTastes(obj))
+                new GiftTastesForItemField("Gift tastes", this.GetGiftTastes(obj), GiftTaste.Love, GiftTaste.Like)
             );
         }
 

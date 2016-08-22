@@ -36,8 +36,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     new GenericField("Birthday", $"{character.birthday_Season} {character.birthday_Day}"),
                     new GenericField("Can romance", character.datable.ToString().ToLower()),
                     new GenericField("Love interest", character.loveInterest != "null" ? character.loveInterest : "none"),
-                    new GenericField("Favourite item", character.getFavoriteItem()?.Name),
-                    new GiftTastesForCharacterField("Gift tastes", this.GetGiftTastes(character))
+                    new GiftTastesForCharacterField("Best gifts", this.GetGiftTastes(character), GiftTaste.Love)
                 );
             }
 
