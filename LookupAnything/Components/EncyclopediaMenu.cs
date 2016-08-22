@@ -112,11 +112,12 @@ namespace Pathoschild.LookupAnything.Components
 
                         // draw table row
                         Color lineColor = Color.Gray;
-                        sprites.DrawLine(x + leftOffset, y + topOffset, new Vector2(rowSize.X, 1), lineColor); // top
-                        sprites.DrawLine(x + leftOffset, y + topOffset + rowSize.Y, new Vector2(rowSize.X, 1), lineColor); // bottom
-                        sprites.DrawLine(x + leftOffset, y + topOffset, new Vector2(1, rowSize.Y), lineColor); // left
-                        sprites.DrawLine(x + leftOffset + labelWidth + cellPadding * 2, y + topOffset, new Vector2(1, rowSize.Y), lineColor); // middle
-                        sprites.DrawLine(x + leftOffset + rowSize.X, y + topOffset, new Vector2(1, rowSize.Y), lineColor); // right
+                        int borderWidth = 1;
+                        sprites.DrawLine(x + leftOffset, y + topOffset, new Vector2(rowSize.X, borderWidth), lineColor); // top
+                        sprites.DrawLine(x + leftOffset, y + topOffset + rowSize.Y, new Vector2(rowSize.X, borderWidth), lineColor); // bottom
+                        sprites.DrawLine(x + leftOffset, y + topOffset, new Vector2(borderWidth, rowSize.Y), lineColor); // left
+                        sprites.DrawLine(x + leftOffset + labelWidth + cellPadding * 2, y + topOffset, new Vector2(borderWidth, rowSize.Y), lineColor); // middle
+                        sprites.DrawLine(x + leftOffset + rowSize.X, y + topOffset, new Vector2(borderWidth, rowSize.Y), lineColor); // right
 
                         // update offset
                         topOffset += valueSize.Y;

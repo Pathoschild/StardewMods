@@ -37,13 +37,13 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             // add fields
             this.AddCustomFields(
                 new GenericField("Crop status", crop.dead ? "dead" : "healthy"),
-                new GenericField("Crop seasons", string.Join(", ", crop.seasonsToGrowIn)),
                 new GenericField("Crop drops", crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops > 0
-                    ? $"{crop.minHarvest} to {crop.maxHarvest} ({crop.chanceForExtraCrops:P} chance of extra crops)"
-                    : crop.minHarvest.ToString()
+                    ? $"{crop.minHarvest} to {crop.maxHarvest} ({Math.Round(crop.chanceForExtraCrops * 100, 2)}% chance of extra crops)"
+                    : Math.Max(crop.minHarvest, 1).ToString()
                 ),
                 new GenericField("Crop schedule", $"harvest after {daysToFirstHarvest} days" + (crop.regrowAfterHarvest != -1 ? $", then every {crop.regrowAfterHarvest} days" : "")),
-                new GenericField("Crop harvest", canHarvestNow ? "now" : $"in {daysToNextHarvest} days", hasValue: !crop.dead)
+                new GenericField("Next harvest", canHarvestNow ? "now" : $"in {daysToNextHarvest} days", hasValue: !crop.dead),
+                new GenericField("Crop seasons", string.Join(", ", crop.seasonsToGrowIn))
             );
         }
     }
