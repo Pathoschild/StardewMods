@@ -30,7 +30,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         {
             this.Obj = obj;
             this.AddCustomFields(
-                new GenericField("Sells for", obj.sellToStorePrice().ToString()),
+                new SaleValueField("Sells for", this.GetSaleValue(obj)),
                 new GiftTastesForItemField("Gift tastes", this.GetGiftTastes(obj), GiftTaste.Love, GiftTaste.Like)
             );
         }
@@ -58,6 +58,18 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             if (string.IsNullOrWhiteSpace(type))
                 type = obj.type;
             return type;
+        }
+
+        /// <summary>Get the possible sale values for an item.</summary>
+        /// <param name="item">The item.</param>
+        private IDictionary<ItemQuality, int> GetSaleValue(Object item)
+        {
+            return new Dictionary<ItemQuality, int>
+            {
+                [ItemQuality.Low] = new Object(item.parentSheetIndex, 1).sellToStorePrice(),
+                [ItemQuality.Medium] = new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Medium).sellToStorePrice(),
+                [ItemQuality.High] = new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.High).sellToStorePrice()
+            };
         }
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
