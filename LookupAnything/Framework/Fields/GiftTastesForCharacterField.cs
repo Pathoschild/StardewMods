@@ -9,14 +9,14 @@ using StardewValley;
 
 namespace Pathoschild.LookupAnything.Framework.Fields
 {
-    /// <summary>A metadata field which shows how much each NPC likes receiving this item.</summary>
-    public class GiftTastesForItemField : GenericField
+    /// <summary>A metadata field which shows which items an NPC likes receiving.</summary>
+    public class GiftTastesForCharacterField : GenericField
     {
         /*********
         ** Properties
         *********/
-        /// <summary>NPCs by how much they like receiving this item.</summary>
-        private readonly IDictionary<GiftTaste, NPC[]> GiftTastes;
+        /// <summary>The items by how much this NPC likes receiving them.</summary>
+        private readonly IDictionary<GiftTaste, Item[]> GiftTastes;
 
 
         /*********
@@ -31,8 +31,8 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
-        /// <param name="giftTastes">NPCs by how much they like receiving this item.</param>
-        public GiftTastesForItemField(string label, IDictionary<GiftTaste, NPC[]> giftTastes)
+        /// <param name="giftTastes">The items by how much this NPC likes receiving them.</param>
+        public GiftTastesForCharacterField(string label, IDictionary<GiftTaste, Item[]> giftTastes)
             : base(label, null)
         {
             this.GiftTastes = giftTastes;
@@ -52,7 +52,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
                 if (!this.GiftTastes.ContainsKey(taste))
                     continue;
 
-                string[] names = this.GiftTastes[taste].Select(p => p.getName()).OrderBy(p => p).ToArray();
+                string[] names = this.GiftTastes[taste].Select(p => p.Name).OrderBy(p => p).ToArray();
                 const int gutterSize = 3; // space between label and list
                 Vector2 labelSize = sprites.DrawStringBlock(Game1.smoothFont, $"{taste}:", new Vector2(position.X, position.Y + topOffset), wrapWidth);
                 Vector2 listSize = sprites.DrawStringBlock(Game1.smoothFont, $"{string.Join(", ", names)}.", new Vector2(position.X + labelSize.X + gutterSize, position.Y + topOffset), wrapWidth - labelSize.X - gutterSize);

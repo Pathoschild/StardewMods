@@ -56,8 +56,9 @@
     <Compile Include="Components\EncyclopediaMenu.cs" />
     <Compile Include="Components\Sprites.cs" />
     <Compile Include="Framework\Fields\GenericField.cs" />
+    <Compile Include="Framework\Fields\GiftTastesForCharacterField.cs" />
     <Compile Include="Framework\Fields\GiftTastesForItemField.cs" />
-    <Compile Include="Framework\GiftTaste.cs" />
+    <Compile Include="Framework\Constants\GiftTaste.cs" />
     <Compile Include="Framework\SubjectFactory.cs" />
     <Compile Include="Framework\Subjects\BaseSubject.cs" />
     <Compile Include="Framework\Subjects\CharacterSubject.cs" />

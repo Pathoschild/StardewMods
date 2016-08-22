@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Fields;
 using StardewValley;
 using Object = StardewValley.Object;
@@ -28,11 +29,10 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             : base(obj.Name, obj.getDescription(), ObjectSubject.GetTypeValue(obj))
         {
             this.Obj = obj;
-            this.CustomFields = new ICustomField[]
-            {
+            this.AddCustomFields(
                 new GenericField("Sells for", obj.sellToStorePrice().ToString()),
                 new GiftTastesForItemField("Gift tastes", this.GetGiftTastes(obj))
-            };
+            );
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>

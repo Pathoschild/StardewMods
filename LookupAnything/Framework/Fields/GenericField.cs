@@ -16,8 +16,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         public virtual string Value { get; }
 
         /// <summary>Whether the field should be displayed.</summary>
-        public virtual bool HasValue => !string.IsNullOrWhiteSpace(this.Value);
-
+        public virtual bool HasValue { get; }
 
         /*********
         ** Public methods
@@ -25,10 +24,12 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
         /// <param name="value">The field value.</param>
-        public GenericField(string label, string value)
+        /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
+        public GenericField(string label, string value, bool? hasValue = null)
         {
             this.Label = label;
             this.Value = value;
+            this.HasValue = hasValue ?? !string.IsNullOrWhiteSpace(value);
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="Value"/> using the default format).</summary>

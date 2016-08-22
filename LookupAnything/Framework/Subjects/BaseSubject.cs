@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Framework.Fields;
@@ -49,6 +50,13 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             this.Name = name;
             this.Description = description;
             this.Type = type;
+        }
+
+        /// <summary>Add custom fields to the list.</summary>
+        /// <param name="fields">The fields to add.</param>
+        protected void AddCustomFields(params ICustomField[] fields)
+        {
+            this.CustomFields = this.CustomFields?.Concat(fields).ToArray() ?? fields;
         }
     }
 }
