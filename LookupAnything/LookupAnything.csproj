@@ -57,7 +57,8 @@
     <Compile Include="Components\Sprites.cs" />
     <Compile Include="Framework\Constants\ItemQuality.cs" />
     <Compile Include="Framework\Fields\GenericField.cs" />
-    <Compile Include="Framework\Fields\GiftTastesForCharacterField.cs" />
+    <Compile Include="Framework\Fields\CharacterFriendshipField.cs" />
+    <Compile Include="Framework\Fields\CharacterGiftTastesField.cs" />
     <Compile Include="Framework\Fields\GiftTastesForItemField.cs" />
     <Compile Include="Framework\Fields\SaleValueField.cs" />
     <Compile Include="Framework\Constants\GiftTaste.cs" />

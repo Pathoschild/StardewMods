@@ -25,11 +25,19 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <param name="label">A short field label.</param>
         /// <param name="value">The field value.</param>
         /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-        public GenericField(string label, string value, bool? hasValue = null)
+        public GenericField(string label, object value, bool? hasValue = null)
         {
+            // set label
             this.Label = label;
-            this.Value = value;
-            this.HasValue = hasValue ?? !string.IsNullOrWhiteSpace(value);
+
+            // set value
+            if (value is bool)
+                this.Value = (bool)value ? "yes" : "no";
+            else
+                this.Value = value?.ToString();
+
+            // toggle
+            this.HasValue = hasValue ?? !string.IsNullOrWhiteSpace(this.Value);
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="Value"/> using the default format).</summary>

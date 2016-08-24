@@ -61,7 +61,7 @@ namespace Pathoschild.LookupAnything.Components
             // get font
             SpriteFont font = Game1.smallFont;
             float blankLineHeight = font.MeasureString("ABC").Y;
-            float spaceWidth = font.MeasureString(" ").X;
+            float spaceWidth = Sprites.GetSpaceWidth(font);
 
             // draw background
             sprites.DrawBlock(Sprites.Letter.Sheet, Sprites.Letter.Sprite, x, y, scale: this.width / (float)Sprites.Letter.Sprite.Width);

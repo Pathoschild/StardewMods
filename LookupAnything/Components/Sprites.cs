@@ -32,6 +32,19 @@ namespace Pathoschild.LookupAnything.Components
             public static readonly Rectangle Pixel = new Rectangle(123, 1889, 1, 1);
         }
 
+        /// <summary>Sprites used to draw icons.</summary>
+        public static class Icons
+        {
+            /// <summary>The sprite sheet containing the form sprites.</summary>
+            public static Texture2D Sheet => Game1.mouseCursors;
+
+            /// <summary>A filled heart indicating a friendship level.</summary>
+            public static readonly Rectangle FilledHeart = new Rectangle(211, 428, 7, 6);
+
+            /// <summary>An empty heart indicating a missing friendship level.</summary>
+            public static readonly Rectangle EmptyHeart = new Rectangle(218, 428, 7, 6);
+        }
+
 
         /*********
         ** Extensions
@@ -82,7 +95,7 @@ namespace Pathoschild.LookupAnything.Components
             float xOffset = 0;
             float yOffset = 0;
             float lineHeight = font.MeasureString("ABC").Y * scale;
-            float spaceWidth = (font.MeasureString("A B").X - font.MeasureString("AB").X) * scale;
+            float spaceWidth = Sprites.GetSpaceWidth(font) * scale;
             float blockWidth = 0;
             float blockHeight = lineHeight;
             foreach (string word in text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
@@ -111,6 +124,13 @@ namespace Pathoschild.LookupAnything.Components
 
             // return text position & dimensions
             return new Vector2(blockWidth, blockHeight);
+        }
+
+        /// <summary>Get the dimensions of a space character.</summary>
+        /// <param name="font">The fontto measure.</param>
+        public static float GetSpaceWidth(SpriteFont font)
+        {
+            return font.MeasureString("A B").X - font.MeasureString("AB").X;
         }
     }
 }

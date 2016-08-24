@@ -10,16 +10,13 @@ using StardewValley;
 namespace Pathoschild.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows which items an NPC likes receiving.</summary>
-    public class GiftTastesForCharacterField : GenericField
+    public class CharacterGiftTastesField : GenericField
     {
         /*********
         ** Properties
         *********/
         /// <summary>The items by how much this NPC likes receiving them.</summary>
         private readonly IDictionary<GiftTaste, Item[]> GiftTastes;
-
-        /// <summary>The tastes to display.</summary>
-        private readonly GiftTaste[] ShowTastes;
 
 
         /*********
@@ -35,12 +32,10 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
         /// <param name="giftTastes">The items by how much this NPC likes receiving them.</param>
-        /// <param name="showTastes">The tastes to display.</param>
-        public GiftTastesForCharacterField(string label, IDictionary<GiftTaste, Item[]> giftTastes, params GiftTaste[] showTastes)
+        public CharacterGiftTastesField(string label, IDictionary<GiftTaste, Item[]> giftTastes)
             : base(label, null)
         {
             this.GiftTastes = giftTastes;
-            this.ShowTastes = showTastes;
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
@@ -52,17 +47,15 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         public override Vector2? DrawValue(SpriteBatch sprites, SpriteFont font, Vector2 position, float wrapWidth)
         {
             float topOffset = 0;
-            foreach (GiftTaste taste in this.ShowTastes)
-            {
-                if (!this.GiftTastes.ContainsKey(taste))
-                    continue;
 
-                string[] names = this.GiftTastes[taste].Select(p => p.Name).OrderBy(p => p).ToArray();
-                const int gutterSize = 3; // space between label and list
-                Vector2 labelSize = sprites.DrawStringBlock(Game1.smoothFont, $"{taste}s:", new Vector2(position.X, position.Y + topOffset), wrapWidth);
-                Vector2 listSize = sprites.DrawStringBlock(Game1.smoothFont, $"{string.Join(", ", names)}.", new Vector2(position.X + labelSize.X + gutterSize, position.Y + topOffset), wrapWidth - labelSize.X - gutterSize);
-                topOffset += Math.Max(labelSize.Y, listSize.Y);
+            // loved gifts
+            if (this.GiftTastes.ContainsKey(GiftTaste.Love))
+            {
+                string[] names = this.GiftTastes[GiftTaste.Love].Select(p => p.Name).OrderBy(p => p).ToArray();
+                Vector2 labelSize = sprites.DrawStringBlock(font, string.Join(", ", names), new Vector2(position.X, position.Y + topOffset), wrapWidth);
+                topOffset += labelSize.Y;
             }
+
             return new Vector2(wrapWidth, topOffset);
         }
     }

@@ -33,10 +33,14 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             if (character.isVillager())
             {
                 this.AddCustomFields(
-                    new GenericField("Birthday", $"{character.birthday_Season} {character.birthday_Day}"),
-                    new GenericField("Can romance", character.datable.ToString().ToLower()),
+                    new GenericField("Birthday", $"{Utility.capitalizeFirstLetter(character.birthday_Season)} {character.birthday_Day}"),
+                    new GenericField("Can romance", character.datable),
                     new GenericField("Love interest", character.loveInterest != "null" ? character.loveInterest : "none"),
-                    new GiftTastesForCharacterField("Best gifts", this.GetGiftTastes(character), GiftTaste.Love)
+                    new CharacterGiftTastesField("Best gifts", this.GetGiftTastes(character)),
+                    new CharacterFriendshipField("Friendship", Game1.player.friendships[character.name][0]),
+                    new GenericField("Talked today", Game1.player.friendships[character.name][2] == 1),
+                    new GenericField("Gifted today", Game1.player.friendships[character.name][1] > 0),
+                    new GenericField("Gifted this week", $"{Game1.player.friendships[character.name][3]} of {NPC.maxGiftsPerWeek}")
                 );
             }
 
