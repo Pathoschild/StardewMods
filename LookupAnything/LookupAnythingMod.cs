@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework;
 using Pathoschild.LookupAnything.Framework.Subjects;
@@ -45,50 +44,8 @@ namespace Pathoschild.LookupAnything
             if (!received.Equals(expected))
                 return;
 
-            // get subject
-            ISubject subject = null;
-            {
-                GameLocation location = Game1.currentLocation;
-                Vector2 cursorPos = Game1.currentCursorTile;
-                SubjectFactory factory = new SubjectFactory();
-
-                // map object
-                if (location.objects.ContainsKey(cursorPos))
-                    subject = factory.GetSubject(location.objects[cursorPos]);
-
-                // terrain feature
-                else if (location.terrainFeatures.ContainsKey(cursorPos))
-                    subject = factory.GetSubject(location.terrainFeatures[cursorPos]);
-
-                // NPC
-                else if (location.isCharacterAtTile(cursorPos) != null)
-                {
-                    NPC character = Game1.currentLocation.isCharacterAtTile(cursorPos);
-                    subject = factory.GetSubject(character);
-                }
-
-                //    //// inventory
-                //    //if (activeMenu is GameMenu)
-                //    //{
-                //    //    // get current tab
-                //    //    GameMenu gameMenu = (GameMenu)activeMenu;
-                //    //    List<IClickableMenu> tabs = (List<IClickableMenu>)typeof(GameMenu).GetField("pages", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(gameMenu);
-                //    //    IClickableMenu curTab = tabs[gameMenu.currentTab];
-                //    //    if (curTab is InventoryPage)
-                //    //    {
-                //    //        Item item = (Item)typeof(InventoryPage).GetField("hoveredItem", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(curTab);
-                //    //        if(item != null)
-                //    //            IClickableMenu.drawTextureBox(Game1.spriteBatch, "teeeest text", "teeeest title", item);
-                //    //            //this.DrawHoverNote(Game1.smallFont, "teeeeest");
-                //    //    }
-                //    //    //if (curTab is CraftingPage)
-                //    //    //{
-                //    //    //    Item item = (Item)typeof(CraftingPage).GetField("hoverItem", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(curTab);
-                //    //    //}
-                //    //}
-            }
-
             // show encyclopedia
+            ISubject subject = new SubjectFactory().GetSubject(Game1.currentLocation, Game1.currentCursorTile);
             if (subject != null)
             {
                 this.PreviousMenu = Game1.activeClickableMenu;
