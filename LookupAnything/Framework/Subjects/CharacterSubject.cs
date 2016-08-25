@@ -26,6 +26,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="character">The underlying character.</param>
+        /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
         public CharacterSubject(NPC character)
             : base(character.getName(), null, "NPC")
         {
@@ -39,8 +40,8 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     new CharacterGiftTastesField("Best gifts", this.GetGiftTastes(character)),
                     new CharacterFriendshipField("Friendship", Game1.player.friendships[character.name][0]),
                     new GenericField("Talked today", Game1.player.friendships[character.name][2] == 1),
-                    new GenericField("Gifted today", Game1.player.friendships[character.name][1] > 0),
-                    new GenericField("Gifted this week", $"{Game1.player.friendships[character.name][3]} of {NPC.maxGiftsPerWeek}")
+                    new GenericField("Gifted today", Game1.player.friendships[character.name][3] > 0),
+                    new GenericField("Gifted this week", $"{Game1.player.friendships[character.name][1]} of {NPC.maxGiftsPerWeek}")
                 );
             }
 
