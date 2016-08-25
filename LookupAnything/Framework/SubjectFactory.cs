@@ -22,7 +22,7 @@ namespace Pathoschild.LookupAnything.Framework
 
             // terrain feature
             if (location.terrainFeatures.ContainsKey(position))
-                return this.GetSubject(location.terrainFeatures[position]);
+                return this.GetSubject(location.terrainFeatures[position], position);
 
             // NPC
             if (location.isCharacterAtTile(position) != null)
@@ -60,7 +60,8 @@ namespace Pathoschild.LookupAnything.Framework
 
         /// <summary>Get metadata for a Stardew object.</summary>
         /// <param name="terrainFeature">The underlying object.</param>
-        public ISubject GetSubject(TerrainFeature terrainFeature)
+        /// <param name="position">The underlying object's tile position within the current location.</param>
+        public ISubject GetSubject(TerrainFeature terrainFeature, Vector2 position)
         {
             // crop
             if (terrainFeature is HoeDirt)
@@ -70,6 +71,10 @@ namespace Pathoschild.LookupAnything.Framework
                     ? new CropSubject(crop, new Object(crop.indexOfHarvest, 1))
                     : null;
             }
+
+            // tree
+            if (terrainFeature is Tree)
+                return new TreeSubject(terrainFeature as Tree, position);
 
             return null;
         }
