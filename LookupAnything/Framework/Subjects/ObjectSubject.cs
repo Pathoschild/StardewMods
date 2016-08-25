@@ -64,6 +64,11 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <param name="item">The item.</param>
         private IDictionary<ItemQuality, int> GetSaleValue(Object item)
         {
+            // no quality
+            if (!Assumptions.CanHaveQuality(item))
+                return new Dictionary<ItemQuality, int> { [ItemQuality.Low] = item.sellToStorePrice() };
+
+            // with qualities
             return new Dictionary<ItemQuality, int>
             {
                 [ItemQuality.Low] = new Object(item.parentSheetIndex, 1).sellToStorePrice(),
