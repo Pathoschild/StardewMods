@@ -13,8 +13,9 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
         /// <param name="saleValues">The sale values by quality.</param>
-        public SaleValueField(string label, IDictionary<ItemQuality, int> saleValues)
-            : base(label, SaleValueField.GetValue(saleValues)) { }
+        /// <param name="stackSize">The number of items in the stack.</param>
+        public SaleValueField(string label, IDictionary<ItemQuality, int> saleValues, int stackSize)
+            : base(label, SaleValueField.GetValue(saleValues, stackSize)) { }
 
 
         /*********
@@ -22,16 +23,24 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         *********/
         /// <summary>Get the display value for sale price data.</summary>
         /// <param name="saleValues">The sale price data.</param>
-        private static string GetValue(IDictionary<ItemQuality, int> saleValues)
+        /// <param name="stackSize">The number of items in the stack.</param>
+        private static string GetValue(IDictionary<ItemQuality, int> saleValues, int stackSize)
         {
             // can't be sold
             if (saleValues == null || !saleValues.Any() || saleValues.Values.All(p => p == 0))
                 return null;
 
-            // else show price by quality
-            return saleValues.Count == 1
-                ? $"{saleValues.First().Value}g"
-                : $"{saleValues[ItemQuality.Low]}g (low quality), {saleValues[ItemQuality.Medium]}g (medium), {saleValues[ItemQuality.High]}g (high)";
+            // one quality
+            if (saleValues.Count == 1)
+            {
+                string result = $"{saleValues.First().Value}g";
+                if (stackSize > 1)
+                    result += $" (stack: {saleValues.First().Value * stackSize}g)";
+                return result;
+            }
+
+            // prices by quality
+            return $"{saleValues[ItemQuality.Low]}g (low quality), {saleValues[ItemQuality.Medium]}g (medium), {saleValues[ItemQuality.High]}g (high)";
         }
     }
 }

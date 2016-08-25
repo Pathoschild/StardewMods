@@ -45,7 +45,9 @@ namespace Pathoschild.LookupAnything
                 return;
 
             // show encyclopedia
-            ISubject subject = new SubjectFactory().GetSubject(Game1.currentLocation, Game1.currentCursorTile);
+            ISubject subject = Game1.activeClickableMenu != null
+                ? new SubjectFactory().GetSubjectFrom(Game1.activeClickableMenu)
+                : new SubjectFactory().GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile);
             if (subject != null)
             {
                 this.PreviousMenu = Game1.activeClickableMenu;

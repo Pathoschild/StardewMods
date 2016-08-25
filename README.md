@@ -17,6 +17,7 @@ Here are some representative screenshots (layout and values will change dynamica
 | subject    | screenshots |
 | ---------- | ----------- |
 | crop       | ![](screenshots/crop.png) |
+| inventory  | ![](screenshots/item.png) |
 | NPC        | ![](screenshots/npc.png) |
 | wild tree  | ![](screenshots/wild-tree.png) |
 | map object | ![](screenshots/map-object.png) |
@@ -25,4 +26,4 @@ Here are some representative screenshots (layout and values will change dynamica
 ## Changelog
 * 1.0 (not yet released)
   * Initial version
-  * Added support for NPCs, crops, non-fruit trees, and some map objects.
+  * Added support for inventory, NPCs, crops, non-fruit trees, and some map objects.

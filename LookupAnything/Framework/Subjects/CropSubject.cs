@@ -7,7 +7,7 @@ using Object = StardewValley.Object;
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
     /// <summary>Describes a growing crop.</summary>
-    public class CropSubject : ObjectSubject
+    public class CropSubject : ItemSubject
     {
         /*********
         ** Public methods
@@ -16,7 +16,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <param name="crop">The underlying crop.</param>
         /// <param name="obj">The underlying object.</param>
         public CropSubject(Crop crop, Object obj)
-            : base(obj)
+            : base(obj, knownQuality: false)
         {
             // get harvest schedule
             bool canRegrow = crop.regrowAfterHarvest != -1;

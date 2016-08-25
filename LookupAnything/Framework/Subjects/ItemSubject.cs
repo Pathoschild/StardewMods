@@ -10,28 +10,29 @@ using Object = StardewValley.Object;
 
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
-    /// <summary>Describes a Stardew Valley object.</summary>
-    public class ObjectSubject : BaseSubject
+    /// <summary>Describes a Stardew Valley item.</summary>
+    public class ItemSubject : BaseSubject
     {
         /*********
         ** Properties
         *********/
-        /// <summary>The underlying object.</summary>
-        private readonly Object Obj;
+        /// <summary>The underlying item.</summary>
+        private readonly Item Item;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="obj">The Stardew Valley object.</param>
-        public ObjectSubject(Object obj)
-            : base(obj.Name, obj.getDescription(), ObjectSubject.GetTypeValue(obj))
+        /// <param name="item">The underlying item.</param>
+        /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
+        public ItemSubject(Item item, bool knownQuality)
+            : base(item.Name, item.getDescription(), ItemSubject.GetTypeValue(item))
         {
-            this.Obj = obj;
+            this.Item = item;
             this.AddCustomFields(
-                new SaleValueField("Sells for", this.GetSaleValue(obj)),
-                new GiftTastesForItemField("Gift tastes", this.GetGiftTastes(obj), GiftTaste.Love, GiftTaste.Like)
+                new SaleValueField("Sells for", this.GetSaleValue(item, knownQuality), item.Stack),
+                new GiftTastesForItemField("Gift tastes", this.GetGiftTastes(item), GiftTaste.Love, GiftTaste.Like)
             );
         }
 
@@ -42,7 +43,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
         public override bool DrawPortrait(SpriteBatch sprites, Vector2 position, Vector2 size)
         {
-            this.Obj.drawInMenu(sprites, position, 1);
+            this.Item.drawInMenu(sprites, position, 1);
             return true;
         }
 
@@ -50,36 +51,49 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /*********
         ** Private methods
         *********/
-        /// <summary>Get the object type.</summary>
-        /// <param name="obj">The object instance.</param>
-        private static string GetTypeValue(Object obj)
+        /// <summary>Get the item type.</summary>
+        /// <param name="item">The item.</param>
+        private static string GetTypeValue(Item item)
         {
-            string type = obj.getCategoryName();
-            if (string.IsNullOrWhiteSpace(type))
-                type = obj.type;
+            string type = item.getCategoryName();
+            if (string.IsNullOrWhiteSpace(type) && item is Object)
+                type = ((Object)item).type;
             return type;
         }
 
         /// <summary>Get the possible sale values for an item.</summary>
         /// <param name="item">The item.</param>
-        private IDictionary<ItemQuality, int> GetSaleValue(Object item)
+        /// <param name="qualityIsKnown">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
+        private IDictionary<ItemQuality, int> GetSaleValue(Item item, bool qualityIsKnown)
         {
-            // no quality
-            if (!Assumptions.CanHaveQuality(item))
-                return new Dictionary<ItemQuality, int> { [ItemQuality.Low] = item.sellToStorePrice() };
+            Func<Item, int> getPrice = i =>
+            {
+                int price = (i as Object)?.sellToStorePrice() ?? i.salePrice();
+                return price > 0 ? price : 0;
+            };
 
-            // with qualities
+            // single quality
+            if (!GameHelper.CanHaveQuality(item) || qualityIsKnown)
+            {
+                ItemQuality quality = qualityIsKnown && item is Object
+                    ? (ItemQuality)((Object)item).quality
+                    : ItemQuality.Low;
+
+                return new Dictionary<ItemQuality, int> { [quality] = getPrice(item) };
+            }
+
+            // multiple qualities
             return new Dictionary<ItemQuality, int>
             {
-                [ItemQuality.Low] = new Object(item.parentSheetIndex, 1).sellToStorePrice(),
-                [ItemQuality.Medium] = new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Medium).sellToStorePrice(),
-                [ItemQuality.High] = new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.High).sellToStorePrice()
+                [ItemQuality.Low] = getPrice(new Object(item.parentSheetIndex, 1)),
+                [ItemQuality.Medium] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Medium)),
+                [ItemQuality.High] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.High))
             };
         }
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
         /// <param name="item">The potential gift item.</param>
-        private IDictionary<GiftTaste, NPC[]> GetGiftTastes(Object item)
+        private IDictionary<GiftTaste, NPC[]> GetGiftTastes(Item item)
         {
             IDictionary<GiftTaste, List<NPC>> tastes = new Dictionary<GiftTaste, List<NPC>>();
             foreach (NPC npc in Game1.locations.SelectMany(l => l.characters))

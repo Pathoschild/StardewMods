@@ -53,7 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assumptions.cs" />
+    <Compile Include="GameHelper.cs" />
     <Compile Include="Components\EncyclopediaMenu.cs" />
     <Compile Include="Components\Sprites.cs" />
     <Compile Include="Framework\Constants\ItemQuality.cs" />
@@ -73,7 +73,7 @@
     <Compile Include="Framework\Subjects\CropSubject.cs" />
     <Compile Include="Framework\Fields\ICustomField.cs" />
     <Compile Include="Framework\Subjects\ISubject.cs" />
-    <Compile Include="Framework\Subjects\ObjectSubject.cs" />
+    <Compile Include="Framework\Subjects\ItemSubject.cs" />
     <Compile Include="LookupAnythingMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

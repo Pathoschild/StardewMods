@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.LookupAnything.Framework.Subjects;
 using StardewValley;
+using StardewValley.Menus;
 using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.LookupAnything.Framework
@@ -11,10 +13,13 @@ namespace Pathoschild.LookupAnything.Framework
         /*********
         ** Public methods
         *********/
-        /// <summary>Get metadata for a Stardew object at a specified position.</summary>
+        /****
+        ** From context
+        ****/
+        /// <summary>Get metadata for a Stardew object at the specified position.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="position">The object's tile position within the <paramref name="location"/>.</param>
-        public ISubject GetSubject(GameLocation location, Vector2 position)
+        public ISubject GetSubjectFrom(GameLocation location, Vector2 position)
         {
             // map object
             if (location.objects.ContainsKey(position))
@@ -29,33 +34,43 @@ namespace Pathoschild.LookupAnything.Framework
                 return this.GetSubject(location.isCharacterAtTile(position));
 
             return null;
-
-            //    //// inventory
-            //    //if (activeMenu is GameMenu)
-            //    //{
-            //    //    // get current tab
-            //    //    GameMenu gameMenu = (GameMenu)activeMenu;
-            //    //    List<IClickableMenu> tabs = (List<IClickableMenu>)typeof(GameMenu).GetField("pages", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(gameMenu);
-            //    //    IClickableMenu curTab = tabs[gameMenu.currentTab];
-            //    //    if (curTab is InventoryPage)
-            //    //    {
-            //    //        Item item = (Item)typeof(InventoryPage).GetField("hoveredItem", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(curTab);
-            //    //        if(item != null)
-            //    //            IClickableMenu.drawTextureBox(Game1.spriteBatch, "teeeest text", "teeeest title", item);
-            //    //            //this.DrawHoverNote(Game1.smallFont, "teeeeest");
-            //    //    }
-            //    //    //if (curTab is CraftingPage)
-            //    //    //{
-            //    //    //    Item item = (Item)typeof(CraftingPage).GetField("hoverItem", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(curTab);
-            //    //    //}
-            //    //}
         }
 
+        /// <summary>Get metadata for a menu element at the specified position.</summary>
+        /// <param name="activeMenu">The active menu.</param>
+        public ISubject GetSubjectFrom(IClickableMenu activeMenu)
+        {
+            // inventory
+            if (activeMenu is GameMenu)
+            {
+                // get current tab
+                List<IClickableMenu> tabs = GameHelper.GetPrivateField<List<IClickableMenu>>(activeMenu, "pages");
+                IClickableMenu curTab = tabs[((GameMenu)activeMenu).currentTab];
+                if (curTab is InventoryPage)
+                {
+                    Item item = GameHelper.GetPrivateField<Item>(curTab, "hoveredItem");
+                    if (item != null)
+                        return new ItemSubject(item, knownQuality: true);
+                }
+                else if (curTab is CraftingPage)
+                {
+                    Item item = GameHelper.GetPrivateField<Item>(curTab, "hoverItem");
+                    if (item != null)
+                        return new ItemSubject(item, knownQuality: true);
+                }
+            }
+
+            return null;
+        }
+
+        /****
+        ** For object
+        ****/
         /// <summary>Get metadata for a Stardew object.</summary>
         /// <param name="obj">The underlying object.</param>
         public ISubject GetSubject(Object obj)
         {
-            return new ObjectSubject(obj);
+            return new ItemSubject(obj, knownQuality: false);
         }
 
         /// <summary>Get metadata for a Stardew object.</summary>
