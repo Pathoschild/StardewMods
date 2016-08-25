@@ -10,13 +10,13 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         ** Accessors
         *********/
         /// <summary>A short field label.</summary>
-        public virtual string Label { get; }
+        public string Label { get; protected set; }
 
         /// <summary>The field value.</summary>
-        public virtual string Value { get; }
+        public string Value { get; protected set; }
 
         /// <summary>Whether the field should be displayed.</summary>
-        public virtual bool HasValue { get; }
+        public bool HasValue { get; protected set; }
 
         /*********
         ** Public methods

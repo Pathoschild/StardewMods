@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -20,20 +19,13 @@ namespace Pathoschild.LookupAnything.Framework.Fields
 
 
         /*********
-        ** Accessors
-        *********/
-        /// <summary>Whether the field should be displayed.</summary>
-        public override bool HasValue => this.GiftTastes.ContainsKey(GiftTaste.Love) || this.GiftTastes.ContainsKey(GiftTaste.Like);
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
         /// <param name="giftTastes">The items by how much this NPC likes receiving them.</param>
         public CharacterGiftTastesField(string label, IDictionary<GiftTaste, Item[]> giftTastes)
-            : base(label, null)
+            : base(label, null, hasValue: giftTastes.ContainsKey(GiftTaste.Love) || giftTastes.ContainsKey(GiftTaste.Like))
         {
             this.GiftTastes = giftTastes;
         }

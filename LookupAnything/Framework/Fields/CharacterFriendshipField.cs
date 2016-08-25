@@ -23,20 +23,13 @@ namespace Pathoschild.LookupAnything.Framework.Fields
 
 
         /*********
-        ** Accessors
-        *********/
-        /// <summary>Whether the field should be displayed.</summary>
-        public override bool HasValue => true;
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
         /// <param name="friendshipPoints">The player's current friendship points with the NPC.</param>
         public CharacterFriendshipField(string label, int friendshipPoints)
-            : base(label, null)
+            : base(label, null, hasValue: true)
         {
             this.FriendshipPoints = friendshipPoints;
         }

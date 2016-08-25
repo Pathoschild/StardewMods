@@ -23,13 +23,6 @@ namespace Pathoschild.LookupAnything.Framework.Fields
 
 
         /*********
-        ** Accessors
-        *********/
-        /// <summary>Whether the field should be displayed.</summary>
-        public override bool HasValue => this.GiftTastes.ContainsKey(GiftTaste.Love) || this.GiftTastes.ContainsKey(GiftTaste.Like);
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
@@ -37,7 +30,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <param name="giftTastes">NPCs by how much they like receiving this item.</param>
         /// <param name="showTastes">The tastes to display.</param>
         public GiftTastesForItemField(string label, IDictionary<GiftTaste, NPC[]> giftTastes, params GiftTaste[] showTastes)
-            : base(label, null)
+            : base(label, null, hasValue: showTastes.Any(giftTastes.ContainsKey))
         {
             this.GiftTastes = giftTastes;
             this.ShowTastes = showTastes;
