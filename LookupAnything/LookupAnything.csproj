@@ -53,6 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\Constants\Constant.cs" />
+    <Compile Include="Framework\Subjects\FarmAnimalSubject.cs" />
     <Compile Include="GameHelper.cs" />
     <Compile Include="Components\EncyclopediaMenu.cs" />
     <Compile Include="Components\Sprites.cs" />

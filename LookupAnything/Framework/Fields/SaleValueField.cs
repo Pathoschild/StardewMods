@@ -17,6 +17,13 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         public SaleValueField(string label, IDictionary<ItemQuality, int> saleValues, int stackSize)
             : base(label, SaleValueField.GetValue(saleValues, stackSize)) { }
 
+        /// <summary>Construct an instance.</summary>
+        /// <param name="label">A short field label.</param>
+        /// <param name="saleValue">The flat sale value.</param>
+        /// <param name="stackSize">The number of items in the stack.</param>
+        public SaleValueField(string label, int saleValue, int stackSize)
+            : base(label, SaleValueField.GetValue(new Dictionary<ItemQuality, int> { [ItemQuality.Low] = saleValue }, stackSize)) { }
+
 
         /*********
         ** Private methods

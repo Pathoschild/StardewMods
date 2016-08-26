@@ -14,16 +14,17 @@ Just point your cursor at something and press `F1`. The mod will show live info 
 
 Here are some representative screenshots (layout and values will change dynamically as needed):
 
-| subject    | screenshots |
-| ---------- | ----------- |
-| crop       | ![](screenshots/crop.png) |
-| inventory  | ![](screenshots/item.png) |
-| NPC        | ![](screenshots/npc.png) |
-| wild tree  | ![](screenshots/wild-tree.png) |
-| map object | ![](screenshots/map-object.png) |
-| ...        | ![](screenshots/artifact-spot.png) |
+| subject     | screenshots |
+| ----------- | ----------- |
+| crop        | ![](screenshots/crop.png) |
+| inventory   | ![](screenshots/item.png) |
+| NPC         | ![](screenshots/npc.png) |
+| farm animal | ![](screenshots/farm-animal.png) |
+| wild tree   | ![](screenshots/wild-tree.png) |
+| map object  | ![](screenshots/map-object.png) |
+| ...         | ![](screenshots/artifact-spot.png) |
 
 ## Changelog
 * 1.0 (not yet released)
   * Initial version
-  * Added support for inventory, NPCs, crops, non-fruit trees, and some map objects.
+  * Added support for crops, farm animals, inventory, NPCs, non-fruit trees, and some map objects.

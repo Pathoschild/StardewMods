@@ -16,10 +16,10 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         private readonly int FriendshipPoints;
 
         /// <summary>The number of friendship points per heart level.</summary>
-        private int PointsPerLevel => NPC.friendshipPointsPerHeartLevel;
+        private readonly int PointsPerLevel;
 
         /// <summary>The maximum number of friendship points.</summary>
-        private int MaxPoints => NPC.maxFriendshipPoints;
+        private readonly int MaxPoints;
 
 
         /*********
@@ -28,10 +28,14 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
         /// <param name="friendshipPoints">The player's current friendship points with the NPC.</param>
-        public CharacterFriendshipField(string label, int friendshipPoints)
+        /// <param name="pointsPerLevel">The number of points per heart level.</param>
+        /// <param name="maxPoints">The maximum number of points.</param>
+        public CharacterFriendshipField(string label, int friendshipPoints, int pointsPerLevel, int maxPoints)
             : base(label, null, hasValue: true)
         {
             this.FriendshipPoints = friendshipPoints;
+            this.PointsPerLevel = pointsPerLevel;
+            this.MaxPoints = maxPoints;
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>

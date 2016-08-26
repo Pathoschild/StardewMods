@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.LookupAnything.Framework.Subjects;
 using StardewValley;
@@ -32,6 +33,13 @@ namespace Pathoschild.LookupAnything.Framework
             // NPC
             if (location.isCharacterAtTile(position) != null)
                 return this.GetSubject(location.isCharacterAtTile(position));
+
+            // animals
+            foreach (FarmAnimal animal in (location as Farm)?.animals.Values ?? (location as AnimalHouse)?.animals.Values ?? Enumerable.Empty<FarmAnimal>())
+            {
+                if (animal.getTileLocation() == position)
+                    return this.GetSubject(animal);
+            }
 
             return null;
         }
@@ -92,6 +100,13 @@ namespace Pathoschild.LookupAnything.Framework
                 return new TreeSubject(terrainFeature as Tree, position);
 
             return null;
+        }
+
+        /// <summary>Get metadata for a Stardew object.</summary>
+        /// <param name="animal">The underlying animal.</param>
+        public ISubject GetSubject(FarmAnimal animal)
+        {
+            return new FarmAnimalSubject(animal);
         }
 
         /// <summary>Get metadata for a Stardew object.</summary>
