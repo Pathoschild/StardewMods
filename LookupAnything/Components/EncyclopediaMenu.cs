@@ -95,7 +95,7 @@ namespace Pathoschild.LookupAnything.Components
                 if (fields != null && fields.Any())
                 {
                     float cellPadding = 3;
-                    float labelWidth = fields.Max(p => font.MeasureString(p.Label).X);
+                    float labelWidth = fields.Where(p => p.HasValue).Max(p => font.MeasureString(p.Label).X);
                     float valueWidth = wrapWidth - labelWidth - cellPadding * 4;
                     foreach (ICustomField field in fields)
                     {
@@ -120,7 +120,7 @@ namespace Pathoschild.LookupAnything.Components
                         sprites.DrawLine(x + leftOffset + rowSize.X, y + topOffset, new Vector2(borderWidth, rowSize.Y), lineColor); // right
 
                         // update offset
-                        topOffset += valueSize.Y;
+                        topOffset += Math.Max(labelSize.Y, valueSize.Y);
                     }
                 }
             }

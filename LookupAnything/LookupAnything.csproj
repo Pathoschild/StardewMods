@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Framework\Constants\Constant.cs" />
     <Compile Include="Framework\Constants\StandardItem.cs" />
+    <Compile Include="Framework\Fields\RecipeIngredientsField.cs" />
     <Compile Include="Framework\Subjects\FarmAnimalSubject.cs" />
     <Compile Include="GameHelper.cs" />
     <Compile Include="Components\EncyclopediaMenu.cs" />

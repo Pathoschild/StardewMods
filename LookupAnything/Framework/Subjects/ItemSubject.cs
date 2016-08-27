@@ -34,6 +34,11 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 new SaleValueField("Sells for", this.GetSaleValue(item, knownQuality), item.Stack),
                 new GiftTastesForItemField("Gift tastes", this.GetGiftTastes(item), GiftTaste.Love, GiftTaste.Like)
             );
+            if (CraftingRecipe.cookingRecipes.ContainsKey(item.Name) || CraftingRecipe.craftingRecipes.ContainsKey(item.Name))
+            {
+                CraftingRecipe recipe = new CraftingRecipe(item.Name, CraftingRecipe.cookingRecipes.ContainsKey(item.Name));
+                this.AddCustomFields(new RecipeIngredientsField("Recipe", recipe));
+            }
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>
