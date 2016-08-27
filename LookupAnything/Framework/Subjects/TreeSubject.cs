@@ -41,7 +41,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             if (!isFullyGrown)
             {
                 if (Game1.IsWinter && Game1.currentLocation.Name != StandardLocation.Greenhouse)
-                    this.AddCustomFields(new GenericField("Next growth", "can't grow in Winter outside greenhouse"));
+                    this.AddCustomFields(new GenericField("Next growth", "can't grow in winter outside greenhouse"));
                 else if (stage == TreeGrowthStage.SmallTree && this.HasAdjacentTrees(tree, position))
                     this.AddCustomFields(new GenericField("Next growth", "can't grow because other trees are too close"));
                 else

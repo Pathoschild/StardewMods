@@ -92,7 +92,7 @@ namespace Pathoschild.LookupAnything.Components
 
                 // draw custom fields
                 ICustomField[] fields = this.Subject.CustomFields;
-                if (fields != null && fields.Any())
+                if (fields != null && fields.Any(p => p.HasValue))
                 {
                     float cellPadding = 3;
                     float labelWidth = fields.Where(p => p.HasValue).Max(p => font.MeasureString(p.Label).X);

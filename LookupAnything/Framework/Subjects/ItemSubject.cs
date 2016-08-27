@@ -110,7 +110,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         private IDictionary<GiftTaste, NPC[]> GetGiftTastes(Item item)
         {
             IDictionary<GiftTaste, List<NPC>> tastes = new Dictionary<GiftTaste, List<NPC>>();
-            foreach (NPC npc in Game1.locations.SelectMany(l => l.characters))
+            foreach (NPC npc in Utility.getAllCharacters())
             {
                 if (!npc.canReceiveThisItemAsGift(item))
                     continue;
