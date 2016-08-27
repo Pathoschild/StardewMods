@@ -10,12 +10,12 @@ using StardewValley.Menus;
 namespace Pathoschild.LookupAnything.Components
 {
     /// <summary>A UI which shows information about an item.</summary>
-    internal class EncyclopediaMenu : IClickableMenu
+    internal class LookupMenu : IClickableMenu
     {
         /*********
         ** Properties
         *********/
-        /// <summary>The encyclopedia subject.</summary>
+        /// <summary>The subject metadata.</summary>
         private ISubject Subject { get; }
 
         /// <summary>The aspect ratio of the page background.</summary>
@@ -26,7 +26,7 @@ namespace Pathoschild.LookupAnything.Components
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public EncyclopediaMenu(ISubject subject)
+        public LookupMenu(ISubject subject)
         {
             this.Subject = subject;
             this.CalculateDimensions();

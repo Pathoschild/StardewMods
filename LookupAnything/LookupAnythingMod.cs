@@ -16,7 +16,7 @@ namespace Pathoschild.LookupAnything
         /*********
         ** Properties
         *********/
-        /// <summary>The previous menu shown before the encyclopedia UI was opened.</summary>
+        /// <summary>The previous menu shown before the lookup UI was opened.</summary>
         private IClickableMenu PreviousMenu;
 
 
@@ -35,7 +35,7 @@ namespace Pathoschild.LookupAnything
         /*********
         ** Private methods
         *********/
-        /// <summary>Show the encyclopedia article for the hovered target if the control matches the configured control.</summary>
+        /// <summary>Show the lookup UI for the current target if the control matches the configured control.</summary>
         /// <typeparam name="T">The input type.</typeparam>
         /// <param name="expected">The configured toggle input.</param>
         /// <param name="received">The received toggle input.</param>
@@ -47,14 +47,14 @@ namespace Pathoschild.LookupAnything
                 if (!received.Equals(expected))
                     return;
 
-                // show encyclopedia
+                // show lookup UI
                 ISubject subject = Game1.activeClickableMenu != null
                     ? new SubjectFactory().GetSubjectFrom(Game1.activeClickableMenu)
                     : new SubjectFactory().GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile);
                 if (subject != null)
                 {
                     this.PreviousMenu = Game1.activeClickableMenu;
-                    Game1.activeClickableMenu = new EncyclopediaMenu(subject);
+                    Game1.activeClickableMenu = new LookupMenu(subject);
                 }
             }
             catch (Exception ex)
@@ -64,11 +64,11 @@ namespace Pathoschild.LookupAnything
             }
         }
 
-        /// <summary>Restore the previous menu if it was hidden to display the encyclopedia menu.</summary>
+        /// <summary>Restore the previous menu if it was hidden to display the lookup UI.</summary>
         /// <param name="closedMenu">The menu which the player just closed.</param>
         private void TryRestorePreviousMenu(IClickableMenu closedMenu)
         {
-            if (closedMenu is EncyclopediaMenu && this.PreviousMenu != null)
+            if (closedMenu is LookupMenu && this.PreviousMenu != null)
             {
                 Game1.activeClickableMenu = this.PreviousMenu;
                 this.PreviousMenu = null;

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Pathoschild.LookupAnything.Framework.Fields
 {
-    /// <summary>A generic metadata field shown as an extended property in the encyclopedia.</summary>
+    /// <summary>A generic metadata field shown as an extended property in the lookup UI.</summary>
     public class GenericField : ICustomField
     {
         /*********
