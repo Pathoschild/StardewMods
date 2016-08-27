@@ -12,17 +12,28 @@ This is a very early prototype and isn't ready for general use.
 ## Usage
 Just point your cursor at something and press `F1`. The mod will show live info about that object.
 
-Here are some representative screenshots (layout and values will change dynamically as needed):
+## Examples
+Here are some representative screenshots (layout and values will change dynamically as needed).
 
-| subject     | screenshots |
+### Characters
+| character   | screenshots |
+| ----------- | ----------- |
+| villager    | ![](screenshots/villager.png) |
+| pet         | ![](screenshots/pet.png) |
+| farm animal | ![](screenshots/farm-animal.png) |
+
+### Items
+| item        | screenshots |
 | ----------- | ----------- |
 | crop        | ![](screenshots/crop.png) |
 | inventory   | ![](screenshots/item.png) |
-| NPC         | ![](screenshots/npc.png) |
-| farm animal | ![](screenshots/farm-animal.png) |
-| wild tree   | ![](screenshots/wild-tree.png) |
-| map object  | ![](screenshots/map-object.png) ![](screenshots/map-object-crafting.png) |
-| ...         | ![](screenshots/artifact-spot.png) |
+
+### Map objects
+| object          | screenshots |
+| --------------- | ----------- |
+| crafting object | ![](screenshots/crafting.png) |
+| wild tree       | ![](screenshots/wild-tree.png) |
+| ...             | ![](screenshots/artifact-spot.png) |
 
 ## Changelog
 * 1.0 (not yet released)

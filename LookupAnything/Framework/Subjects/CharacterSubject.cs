@@ -7,6 +7,7 @@ using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Fields;
 using StardewValley;
+using StardewValley.Characters;
 using Object = StardewValley.Object;
 
 namespace Pathoschild.LookupAnything.Framework.Subjects
@@ -33,6 +34,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             this.Character = character;
             if (character.isVillager())
             {
+                this.Type = "Villager";
                 this.AddCustomFields(
                     new GenericField("Birthday", $"{Utility.capitalizeFirstLetter(character.birthday_Season)} {character.birthday_Day}"),
                     new GenericField("Can romance", character.datable),
@@ -44,7 +46,15 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     new GenericField("Gifted this week", $"{Game1.player.friendships[character.name][1]} of {NPC.maxGiftsPerWeek}")
                 );
             }
-
+            else if (character is Pet)
+            {
+                this.Type = character.GetType().Name;
+                Pet pet = (Pet)character;
+                this.AddCustomFields(
+                    new CharacterFriendshipField("Love", pet.friendshipTowardFarmer, Pet.maxFriendship / 10, Pet.maxFriendship),
+                    new GenericField("Petted today", GameHelper.GetPrivateField<bool>(pet, "wasPetToday"))
+                );
+            }
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>

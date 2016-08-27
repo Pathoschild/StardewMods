@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 using StardewValley;
+using InvalidOperationException = System.InvalidOperationException;
 
 namespace Pathoschild.LookupAnything
 {
@@ -31,10 +32,17 @@ namespace Pathoschild.LookupAnything
             if (parent == null)
                 return default(T);
 
-            return (T)parent
-                .GetType()
-                .GetField(name, BindingFlags.Instance | BindingFlags.NonPublic)
-                ?.GetValue(parent);
+            // get field from hierarchy
+            FieldInfo field = null;
+            for (System.Type type = parent.GetType(); type != null && field == null; type = type.BaseType)
+                field = type.GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
+
+            // validate
+            if (field == null)
+                throw new InvalidOperationException($"The {parent.GetType().Name} object doesn't have a private '{name}' field.");
+
+            // get value
+            return (T)field.GetValue(parent);
         }
 
         /// <summary>Select the correct plural form for a word.</summary>
