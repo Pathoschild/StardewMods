@@ -8,6 +8,7 @@ using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Fields;
 using StardewValley;
 using StardewValley.Characters;
+using StardewValley.Monsters;
 using Object = StardewValley.Object;
 
 namespace Pathoschild.LookupAnything.Framework.Subjects
@@ -53,6 +54,21 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 this.AddCustomFields(
                     new CharacterFriendshipField("Love", pet.friendshipTowardFarmer, Pet.maxFriendship / 10, Pet.maxFriendship),
                     new GenericField("Petted today", GameHelper.GetPrivateField<bool>(pet, "wasPetToday"))
+                );
+            }
+            else if (character is Monster)
+            {
+                this.Type = "Monster";
+                Monster monster = (Monster)character;
+
+                string[] drops = (from id in monster.objectsToDrop let item = new Object(id, 1) orderby item.Name select item.Name).ToArray();
+                this.AddCustomFields(
+                    new GenericField("Invincible", $"For {GameHelper.GetPrivateField<int>(monster, "invincibleCountdown")} seconds", hasValue: monster.isInvincible()),
+                    new PercentageBarField("Health", monster.health, monster.maxHealth, Color.Green, Color.Gray, $"{Math.Round((monster.health / (monster.maxHealth * 1f) * 100))}% ({monster.health} on {monster.maxHealth})"),
+                    new GenericField("Will drop", drops.Any() ? string.Join(", ", drops) : "nothing"),
+                    new GenericField("XP", monster.experienceGained),
+                    new GenericField("Defence", monster.resilience),
+                    new GenericField("Attack", monster.damageToFarmer)
                 );
             }
         }

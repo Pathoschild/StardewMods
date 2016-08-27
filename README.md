@@ -21,6 +21,7 @@ Here are some representative screenshots (layout and values will change dynamica
 | villager    | ![](screenshots/villager.png) |
 | pet         | ![](screenshots/pet.png) |
 | farm animal | ![](screenshots/farm-animal.png) |
+| monster     | ![](screenshots/monster.png) |
 
 ### Items
 | item        | screenshots |
