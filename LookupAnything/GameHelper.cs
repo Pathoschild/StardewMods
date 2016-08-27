@@ -11,16 +11,15 @@ namespace Pathoschild.LookupAnything
         /// <param name="item">The item.</param>
         public static bool CanHaveQuality(Item item)
         {
-            return !new[] { "Artifact", "Trash", "Crafting", "Seed", "Decor", "Resource", "Fertilizer", "Bait", "Fishing Tackle" }.Contains(item.getCategoryName());
-        }
+            // check category
+            if (new[] { "Artifact", "Trash", "Crafting", "Seed", "Decor", "Resource", "Fertilizer", "Bait", "Fishing Tackle" }.Contains(item.getCategoryName()))
+                return false;
 
-        /// <summary>Get whether an item can have a quality (which increases its sale price).</summary>
-        /// <param name="item">The item.</param>
-        public static bool CanHaveQuality(Object item)
-        {
-            return
-                GameHelper.CanHaveQuality(item as Item)
-                && !new[] { "Crafting", "asdf" /*dig spots*/, "Quest" }.Contains(item.Type);
+            // check type
+            if (new[] { "Crafting", "asdf" /*dig spots*/, "Quest" }.Contains((item as Object)?.Type))
+                return false;
+
+            return true;
         }
 
         /// <summary>Get a private field value.</summary>
