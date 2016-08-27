@@ -30,10 +30,19 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             : base(item.Name, item.getDescription(), ItemSubject.GetTypeValue(item))
         {
             this.Item = item;
+            Object obj = item as Object;
+
+            // crafting
+            if (obj != null && obj.isOn && obj.heldObject != null)
+                this.AddCustomFields(new GenericField("Crafting", $"{obj.heldObject.Name} in {GenericField.GetString(TimeSpan.FromMinutes(obj.minutesUntilReady))}."));
+
+            // item
             this.AddCustomFields(
                 new SaleValueField("Sells for", this.GetSaleValue(item, knownQuality), item.Stack),
                 new GiftTastesForItemField("Gift tastes", this.GetGiftTastes(item), GiftTaste.Love, GiftTaste.Like)
             );
+
+            // recipe
             if (CraftingRecipe.cookingRecipes.ContainsKey(item.Name) || CraftingRecipe.craftingRecipes.ContainsKey(item.Name))
             {
                 CraftingRecipe recipe = new CraftingRecipe(item.Name, CraftingRecipe.cookingRecipes.ContainsKey(item.Name));

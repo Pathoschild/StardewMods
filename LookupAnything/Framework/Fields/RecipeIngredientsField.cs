@@ -40,6 +40,11 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <returns>Returns the drawn dimensions, or <c>null</c> to draw the <see cref="GenericField.Value"/> using the default format.</returns>
         public override Vector2? DrawValue(SpriteBatch sprites, SpriteFont font, Vector2 position, float wrapWidth)
         {
+            // unknown recipe
+            if (!this.KnowsRecipe)
+                return sprites.DrawStringBlock(font, "You haven't learned this recipe.", new Vector2(position.X, position.Y), wrapWidth, Color.Gray);
+
+            // get basic info
             CraftingRecipe recipe = this.Recipe;
             bool isCookingRecipe = recipe.isCookingRecipe;
             float height = 0;
@@ -53,7 +58,6 @@ namespace Pathoschild.LookupAnything.Framework.Fields
             }
 
             // ingredients
-            if (this.KnowsRecipe)
             {
                 Dictionary<int, int> ingredients = GameHelper.GetPrivateField<Dictionary<int, int>>(recipe, "recipeList");
                 foreach (var ingredient in ingredients)
@@ -69,8 +73,6 @@ namespace Pathoschild.LookupAnything.Framework.Fields
                     height += sprites.DrawStringBlock(font, $"{item.name} ({stack})", new Vector2(position.X + textHeight + 3, position.Y + height), wrapWidth).Y;
                 }
             }
-            else
-                height += sprites.DrawStringBlock(font, "(You haven't learned this recipe.)", new Vector2(position.X, position.Y + height), wrapWidth, Color.Gray).Y;
 
             return new Vector2(wrapWidth, height);
         }

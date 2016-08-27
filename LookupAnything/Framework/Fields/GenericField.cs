@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -18,6 +20,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <summary>Whether the field should be displayed.</summary>
         public bool HasValue { get; protected set; }
 
+
         /*********
         ** Public methods
         *********/
@@ -27,16 +30,8 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
         public GenericField(string label, object value, bool? hasValue = null)
         {
-            // set label
             this.Label = label;
-
-            // set value
-            if (value is bool)
-                this.Value = (bool)value ? "yes" : "no";
-            else
-                this.Value = value?.ToString();
-
-            // toggle
+            this.Value = GenericField.GetString(value);
             this.HasValue = hasValue ?? !string.IsNullOrWhiteSpace(this.Value);
         }
 
@@ -49,6 +44,36 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         public virtual Vector2? DrawValue(SpriteBatch sprites, SpriteFont font, Vector2 position, float wrapWidth)
         {
             return null;
+        }
+
+
+        /*********
+        ** Protected methods
+        *********/
+        /// <summary>Get a human-readable representation of a value.</summary>
+        /// <param name="value">The underlying value.</param>
+        public static string GetString(object value)
+        {
+            // boolean
+            if (value is bool)
+                return (bool) value ? "yes" : "no";
+
+            // time span
+            if (value is TimeSpan)
+            {
+                TimeSpan span = (TimeSpan)value;
+                List<string> parts = new List<string>();
+                if (span.Days > 0)
+                    parts.Add($"{span.Days} {GameHelper.Pluralise(span.Days, "day", "days")}");
+                if (span.Hours > 0)
+                    parts.Add($"{span.Hours} {GameHelper.Pluralise(span.Hours, "hour", "hours")}");
+                if (span.Minutes > 0)
+                    parts.Add($"{span.Minutes} {GameHelper.Pluralise(span.Minutes, "minute", "minutes")}");
+                return string.Join(", ", parts);
+            }
+
+            // else
+            return value?.ToString();
         }
     }
 }

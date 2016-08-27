@@ -21,7 +21,7 @@ Here are some representative screenshots (layout and values will change dynamica
 | NPC         | ![](screenshots/npc.png) |
 | farm animal | ![](screenshots/farm-animal.png) |
 | wild tree   | ![](screenshots/wild-tree.png) |
-| map object  | ![](screenshots/map-object.png) |
+| map object  | ![](screenshots/map-object.png) ![](screenshots/map-object-crafting.png) |
 | ...         | ![](screenshots/artifact-spot.png) |
 
 ## Changelog
