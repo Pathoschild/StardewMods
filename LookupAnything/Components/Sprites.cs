@@ -22,16 +22,6 @@ namespace Pathoschild.LookupAnything.Components
             public static readonly Rectangle Sprite = new Rectangle(0, 0, 320, 180);
         }
 
-        /// <summary>Sprites used to draw a line.</summary>
-        public static class Line
-        {
-            /// <summary>The sprite sheet containing the form sprites.</summary>
-            public static Texture2D Sheet => Game1.mouseCursors;
-
-            /// <summary>A single pixel that can be colorised and stretched to draw a line.</summary>
-            public static readonly Rectangle Pixel = new Rectangle(123, 1889, 1, 1);
-        }
-
         /// <summary>Sprites used to draw icons.</summary>
         public static class Icons
         {
@@ -47,8 +37,29 @@ namespace Pathoschild.LookupAnything.Components
 
 
         /*********
-        ** Extensions
+        ** Public methods
         *********/
+        /****
+        ** Helpers
+        ****/
+        /// <summary>Get the dimensions of a space character.</summary>
+        /// <param name="font">The fontto measure.</param>
+        public static float GetSpaceWidth(SpriteFont font)
+        {
+            return font.MeasureString("A B").X - font.MeasureString("AB").X;
+        }
+
+        /// <summary>Get a blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
+        public static Texture2D GetPixel()
+        {
+            Texture2D pixel = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
+            pixel.SetData(new[] { Color.White });
+            return pixel;
+        }
+
+        /****
+        ** Extensions
+        ****/
         /// <summary>Draw a sprite to the screen.</summary>
         /// <param name="batch">The sprite batch.</param>
         /// <param name="sheet">The sprite sheet containing the sprite.</param>
@@ -70,7 +81,7 @@ namespace Pathoschild.LookupAnything.Components
         /// <param name="color">The color to tint the sprite.</param>
         public static void DrawLine(this SpriteBatch batch, float x, float y, Vector2 size, Color? color = null)
         {
-            batch.Draw(Sprites.Line.Sheet, new Rectangle((int)x, (int)y, (int)size.X, (int)size.Y), Sprites.Line.Pixel, color ?? Color.White);
+            batch.Draw(Sprites.GetPixel(), new Rectangle((int)x, (int)y, (int)size.X, (int)size.Y), color ?? Color.White);
         }
 
         /// <summary>Draw a block of text to the screen with the specified wrap width.</summary>
@@ -124,13 +135,6 @@ namespace Pathoschild.LookupAnything.Components
 
             // return text position & dimensions
             return new Vector2(blockWidth, blockHeight);
-        }
-
-        /// <summary>Get the dimensions of a space character.</summary>
-        /// <param name="font">The fontto measure.</param>
-        public static float GetSpaceWidth(SpriteFont font)
-        {
-            return font.MeasureString("A B").X - font.MeasureString("AB").X;
         }
     }
 }
