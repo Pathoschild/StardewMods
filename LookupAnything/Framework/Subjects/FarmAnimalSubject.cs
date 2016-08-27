@@ -31,7 +31,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             bool isFullyGrown = animal.age >= animal.ageWhenMature;
             this.AddCustomFields(
                 new CharacterFriendshipField("Friendship", animal.friendshipTowardFarmer, Constant.AnimalFriendshipPointsPerLevel, Constant.AnimalFriendshipMaxPoints),
-                new GenericField("Happiness", $"{Math.Round(animal.happiness / (byte.MaxValue * 1f) * 100)}%"),
+                new PercentageBarField("Happiness", animal.happiness, byte.MaxValue, Color.Green, Color.Gray, $"{Math.Round(animal.happiness / (byte.MaxValue * 1f) * 100)}%"),
                 new GenericField("Mood today", animal.getMoodMessage()),
                 new GenericField("Complaints", this.GetMoodReason(animal)),
                 new GenericField("Produce ready", animal.currentProduce > 0 ? new StardewValley.Object(animal.currentProduce, 1).name : null),
