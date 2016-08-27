@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using System;
+using Microsoft.Xna.Framework.Input;
 using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework;
 using Pathoschild.LookupAnything.Framework.Subjects;
@@ -40,19 +41,26 @@ namespace Pathoschild.LookupAnything
         /// <param name="received">The received toggle input.</param>
         private void TryOpenMenu<T>(T expected, T received)
         {
-            // check input
-            if (!received.Equals(expected))
-                return;
-
-            // show encyclopedia
-            ISubject subject = Game1.activeClickableMenu != null
-                ? new SubjectFactory().GetSubjectFrom(Game1.activeClickableMenu)
-                : new SubjectFactory().GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile);
-            if (subject != null)
+            try
             {
-                this.PreviousMenu = Game1.activeClickableMenu;
-                Game1.activeClickableMenu = new EncyclopediaMenu(subject);
+                // check input
+                if (!received.Equals(expected))
+                    return;
 
+                // show encyclopedia
+                ISubject subject = Game1.activeClickableMenu != null
+                    ? new SubjectFactory().GetSubjectFrom(Game1.activeClickableMenu)
+                    : new SubjectFactory().GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile);
+                if (subject != null)
+                {
+                    this.PreviousMenu = Game1.activeClickableMenu;
+                    Game1.activeClickableMenu = new EncyclopediaMenu(subject);
+                }
+            }
+            catch (Exception ex)
+            {
+                Game1.showRedMessage("Huh. Something went wrong looking that up. The game error log has the technical details.");
+                Log.Error(ex.ToString());
             }
         }
 
