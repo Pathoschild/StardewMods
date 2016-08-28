@@ -107,26 +107,11 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
         /// <param name="item">The potential gift item.</param>
-        private IDictionary<GiftTaste, NPC[]> GetGiftTastes(Item item)
+        private IDictionary<GiftTaste, string[]> GetGiftTastes(Item item)
         {
-            IDictionary<GiftTaste, List<NPC>> tastes = new Dictionary<GiftTaste, List<NPC>>();
-            foreach (NPC npc in Utility.getAllCharacters())
-            {
-                if (!npc.canReceiveThisItemAsGift(item))
-                    continue;
-                try
-                {
-                    GiftTaste taste = (GiftTaste)npc.getGiftTasteForThisItem(item);
-                    if (!tastes.ContainsKey(taste))
-                        tastes[taste] = new List<NPC>();
-                    tastes[taste].Add(npc);
-                }
-                catch (Exception)
-                {
-                    // some NPCs (e.g. dog) claim to allow gifts, but crash if you check their preference
-                }
-            }
-            return tastes.ToDictionary(p => p.Key, p => p.Value.ToArray());
+            return GameHelper.GetGiftTastes(item)
+                .GroupBy(p => p.Value, p => p.Key.getName())
+                .ToDictionary(p => p.Key, p => p.ToArray());
         }
     }
 }

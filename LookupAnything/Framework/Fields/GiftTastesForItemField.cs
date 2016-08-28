@@ -16,7 +16,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         ** Properties
         *********/
         /// <summary>NPCs by how much they like receiving this item.</summary>
-        private readonly IDictionary<GiftTaste, NPC[]> GiftTastes;
+        private readonly IDictionary<GiftTaste, string[]> GiftTastes;
 
         /// <summary>The tastes to display.</summary>
         private readonly GiftTaste[] ShowTastes;
@@ -29,7 +29,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <param name="label">A short field label.</param>
         /// <param name="giftTastes">NPCs by how much they like receiving this item.</param>
         /// <param name="showTastes">The tastes to display.</param>
-        public GiftTastesForItemField(string label, IDictionary<GiftTaste, NPC[]> giftTastes, params GiftTaste[] showTastes)
+        public GiftTastesForItemField(string label, IDictionary<GiftTaste, string[]> giftTastes, params GiftTaste[] showTastes)
             : base(label, null, hasValue: showTastes.Any(giftTastes.ContainsKey))
         {
             this.GiftTastes = giftTastes;
@@ -50,7 +50,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
                 if (!this.GiftTastes.ContainsKey(taste))
                     continue;
 
-                string[] names = this.GiftTastes[taste].Select(p => p.getName()).OrderBy(p => p).ToArray();
+                string[] names = this.GiftTastes[taste].OrderBy(p => p).ToArray();
                 const int gutterSize = 3; // space between label and list
                 Vector2 labelSize = sprites.DrawStringBlock(Game1.smoothFont, $"{taste}s:", new Vector2(position.X, position.Y + topOffset), wrapWidth);
                 Vector2 listSize = sprites.DrawStringBlock(Game1.smoothFont, $"{string.Join(", ", names)}.", new Vector2(position.X + labelSize.X + gutterSize, position.Y + topOffset), wrapWidth - labelSize.X - gutterSize);

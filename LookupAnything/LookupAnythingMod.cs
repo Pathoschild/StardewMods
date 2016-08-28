@@ -26,10 +26,14 @@ namespace Pathoschild.LookupAnything
         /// <summary>Initialise the mod.</summary>
         public override void Entry(params object[] objects)
         {
+            // reset low-level cache once per day (used to store expensive query results that don't change within a day)
+            PlayerEvents.LoadedGame += (sender, e) => this.ResetCache();
+            TimeEvents.OnNewDay += (sender, e) => this.ResetCache();
+
+            // hook up UI
             ControlEvents.KeyPressed += (sender, e) => this.TryOpenMenu(Keys.F1, e.KeyPressed);
             MenuEvents.MenuClosed += (sender, e) => this.TryRestorePreviousMenu(e.PriorMenu);
         }
-
 
 
         /*********
@@ -73,6 +77,12 @@ namespace Pathoschild.LookupAnything
                 Game1.activeClickableMenu = this.PreviousMenu;
                 this.PreviousMenu = null;
             }
+        }
+
+        /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
+        private void ResetCache()
+        {
+            GameHelper.ResetCache();
         }
     }
 }
