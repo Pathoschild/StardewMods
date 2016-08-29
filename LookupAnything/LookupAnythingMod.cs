@@ -1,7 +1,11 @@
 ﻿using System;
+using System;
+using System.IO;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
 using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework;
+using Pathoschild.LookupAnything.Framework.Metadata;
 using Pathoschild.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -19,6 +23,17 @@ namespace Pathoschild.LookupAnything
         /// <summary>The previous menu shown before the lookup UI was opened.</summary>
         private IClickableMenu PreviousMenu;
 
+        /// <summary>The name of the file containing data for the <see cref="Overrides"/> field.</summary>
+        private readonly string DatabaseFileName = "overrides.json";
+
+        /// <summary>Provides metadata that's not available from the game data directly.</summary>
+        private OverrideData Overrides;
+
+#if TEST_BUILD
+        /// <summary>Watches the database file and reloads it when it's changed.</summary>
+        private FileSystemWatcher OverrideFileWatcher;
+#endif
+
 
         /*********
         ** Public methods
@@ -26,6 +41,13 @@ namespace Pathoschild.LookupAnything
         /// <summary>Initialise the mod.</summary>
         public override void Entry(params object[] objects)
         {
+            // load database
+            this.LoadDatabase();
+#if TEST_BUILD
+            this.OverrideFileWatcher = new FileSystemWatcher(this.PathOnDisk, this.DatabaseFileName) { EnableRaisingEvents = true };
+            this.OverrideFileWatcher.Changed += (sender, e) => this.LoadDatabase();
+#endif
+
             // reset low-level cache once per day (used to store expensive query results that don't change within a day)
             PlayerEvents.LoadedGame += (sender, e) => this.ResetCache();
             TimeEvents.OnNewDay += (sender, e) => this.ResetCache();
@@ -53,8 +75,8 @@ namespace Pathoschild.LookupAnything
 
                 // show lookup UI
                 ISubject subject = Game1.activeClickableMenu != null
-                    ? new SubjectFactory().GetSubjectFrom(Game1.activeClickableMenu)
-                    : new SubjectFactory().GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile);
+                    ? new SubjectFactory(this.Overrides).GetSubjectFrom(Game1.activeClickableMenu)
+                    : new SubjectFactory(this.Overrides).GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile);
                 if (subject != null)
                 {
                     this.PreviousMenu = Game1.activeClickableMenu;
@@ -76,6 +98,20 @@ namespace Pathoschild.LookupAnything
             {
                 Game1.activeClickableMenu = this.PreviousMenu;
                 this.PreviousMenu = null;
+            }
+        }
+
+        /// <summary>Load the database containing metadata that's not available from the game data directly.</summary>
+        private void LoadDatabase()
+        {
+            try
+            {
+                string content = File.ReadAllText(Path.Combine(this.PathOnDisk, this.DatabaseFileName));
+                this.Overrides = JsonConvert.DeserializeObject<OverrideData>(content);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Couldn't read {this.DatabaseFileName} file for {this.Manifest.Name} mod; some data may be missing. Error details:\n{ex}");
             }
         }
 

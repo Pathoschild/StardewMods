@@ -26,6 +26,7 @@ namespace Pathoschild.LookupAnything.Components
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="subject">The metadata to display.</param>
         public LookupMenu(ISubject subject)
         {
             this.Subject = subject;

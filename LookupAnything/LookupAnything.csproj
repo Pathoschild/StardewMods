@@ -33,6 +33,10 @@
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Stardew Valley">
       <HintPath>C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\Stardew Valley.exe</HintPath>
     </Reference>
@@ -55,8 +59,10 @@
   <ItemGroup>
     <Compile Include="Framework\Constants\Constant.cs" />
     <Compile Include="Framework\Constants\StandardItem.cs" />
+    <Compile Include="Framework\Metadata\OverrideData.cs" />
     <Compile Include="Framework\Fields\PercentageBarField.cs" />
     <Compile Include="Framework\Fields\RecipeIngredientsField.cs" />
+    <Compile Include="Framework\Metadata\ObjectOverride.cs" />
     <Compile Include="Framework\Subjects\FarmAnimalSubject.cs" />
     <Compile Include="Framework\Subjects\FruitTreeSubject.cs" />
     <Compile Include="GameHelper.cs" />
@@ -84,20 +90,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="overrides.json" />
     <None Include="manifest.json" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>set modDir=C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\Mods\LookupAnything
-if not exist "%25modDir%25" (mkdir "%25modDir%25")
-copy "$(TargetPath)" "%25modDir%25\$(TargetFileName)"
-copy "$(ProjectDir)manifest.json" "%25modDir%25\manifest.json"</PostBuildEvent>
+    <PostBuildEvent>
+      set modDir=C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\Mods\LookupAnything
+      if not exist "%25modDir%25" (mkdir "%25modDir%25")
+      copy "$(TargetPath)" "%25modDir%25\$(TargetFileName)"
+      copy "$(ProjectDir)manifest.json" "%25modDir%25\manifest.json"
+      copy "$(ProjectDir)overrides.json" "%25modDir%25\overrides.json"
+    </PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

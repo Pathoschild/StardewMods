@@ -1,0 +1,12 @@
+/*
+
+
+This file provides metadata to the mod that isn't available from the game data.
+You shouldn't change this file unless you know what you're doing.
+
+
+*/
+{
+  /* game objects (including items, terrain features, trees, etc) by their parent sprite index */
+  "Objects": { }
+}

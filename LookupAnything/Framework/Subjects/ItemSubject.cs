@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Fields;
+using Pathoschild.LookupAnything.Framework.Metadata;
 using StardewValley;
 using Object = StardewValley.Object;
 
@@ -26,21 +27,39 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="item">The underlying item.</param>
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
-        public ItemSubject(Item item, bool knownQuality)
+        /// <param name="overrides">Provides metadata that's not available from the game data directly.</param>
+        public ItemSubject(Item item, bool knownQuality, OverrideData overrides)
             : base(item.Name, item.getDescription(), ItemSubject.GetTypeValue(item))
         {
             this.Item = item;
             Object obj = item as Object;
+
+            // basic info
+            this.Name = item.Name;
+            bool showInventoryFields = true;
+            {
+                ObjectOverride @override = overrides.GetObject(item.parentSheetIndex);
+                if (@override != null)
+                {
+                    this.Name = @override.Name ?? this.Name;
+                    this.Description = @override?.Description ?? this.Description;
+                    this.Type = @override.Type ?? this.Type;
+                    showInventoryFields = @override.ShowInventoryFields ?? showInventoryFields;
+                }
+            }
 
             // crafting
             if (obj?.heldObject != null)
                 this.AddCustomFields(new GenericField("Crafting", $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + GenericField.GetString(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready") + "."));
 
             // item
-            this.AddCustomFields(
-                new SaleValueField("Sells for", this.GetSaleValue(item, knownQuality), item.Stack),
-                new GiftTastesForItemField("Gift tastes", this.GetGiftTastes(item), GiftTaste.Love, GiftTaste.Like)
-            );
+            if (showInventoryFields)
+            {
+                this.AddCustomFields(
+                    new SaleValueField("Sells for", this.GetSaleValue(item, knownQuality), item.Stack),
+                    new GiftTastesForItemField("Gift tastes", this.GetGiftTastes(item), GiftTaste.Love, GiftTaste.Like)
+                );
+            }
 
             // recipe
             if (CraftingRecipe.cookingRecipes.ContainsKey(item.Name) || CraftingRecipe.craftingRecipes.ContainsKey(item.Name))
