@@ -33,8 +33,8 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             Object obj = item as Object;
 
             // crafting
-            if (obj != null && obj.isOn && obj.heldObject != null)
-                this.AddCustomFields(new GenericField("Crafting", $"{obj.heldObject.Name} in {GenericField.GetString(TimeSpan.FromMinutes(obj.minutesUntilReady))}."));
+            if (obj?.heldObject != null)
+                this.AddCustomFields(new GenericField("Crafting", $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + GenericField.GetString(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready") + "."));
 
             // item
             this.AddCustomFields(

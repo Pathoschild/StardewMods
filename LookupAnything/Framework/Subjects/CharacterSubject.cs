@@ -61,7 +61,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 this.Type = "Monster";
                 Monster monster = (Monster)character;
 
-                string[] drops = (from id in monster.objectsToDrop let item = new Object(id, 1) orderby item.Name select item.Name).ToArray();
+                string[] drops = (from id in monster.objectsToDrop let item = GameHelper.GetObjectBySpriteIndex(id) orderby item.Name select item.Name).ToArray();
                 this.AddCustomFields(
                     new GenericField("Invincible", $"For {GameHelper.GetPrivateField<int>(monster, "invincibleCountdown")} seconds", hasValue: monster.isInvincible()),
                     new PercentageBarField("Health", monster.health, monster.maxHealth, Color.Green, Color.Gray, $"{Math.Round((monster.health / (monster.maxHealth * 1f) * 100))}% ({monster.health} on {monster.maxHealth})"),
@@ -103,7 +103,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             IDictionary<GiftTaste, List<Item>> tastes = new Dictionary<GiftTaste, List<Item>>();
             foreach (var objectInfo in Game1.objectInformation)
             {
-                Object item = new Object(objectInfo.Key, 1);
+                Object item = GameHelper.GetObjectBySpriteIndex(objectInfo.Key);
                 if (!npc.canReceiveThisItemAsGift(item))
                     continue;
                 try

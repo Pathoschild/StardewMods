@@ -65,7 +65,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
                     // get item
                     int itemID = ingredient.Key;
                     int stack = ingredient.Value;
-                    Object item = new Object(itemID, stack);
+                    Object item = GameHelper.GetObjectBySpriteIndex(itemID, stack);
 
                     // draw item
                     float textHeight = font.MeasureString(item.Name).Y;

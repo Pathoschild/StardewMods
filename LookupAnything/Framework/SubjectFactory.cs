@@ -91,7 +91,7 @@ namespace Pathoschild.LookupAnything.Framework
             {
                 Crop crop = ((HoeDirt)terrainFeature).crop;
                 return crop != null
-                    ? new CropSubject(crop, new Object(crop.indexOfHarvest, 1))
+                    ? new CropSubject(crop, GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest))
                     : null;
             }
 

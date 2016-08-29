@@ -85,8 +85,16 @@ namespace Pathoschild.LookupAnything
             return tastes;
         }
 
+        /// <summary>Get an object by its parent sprite index.</summary>
+        /// <param name="index">The parent sprite index.</param>
+        /// <param name="stack">The number of items in the stack.</param>
+        public static Object GetObjectBySpriteIndex(int index, int stack = 1)
+        {
+            return new Object(index, stack);
+        }
+
         /// <summary>Get all objects matching the reference ID.</summary>
-        /// <param name="refID">The reference ID. This can be a category (negative value) or parent sprite index (positive value)</param>
+        /// <param name="refID">The reference ID. This can be a category (negative value) or parent sprite index (positive value).</param>
         public static IEnumerable<Object> GetObjectsByReferenceID(int refID)
         {
             // category
@@ -95,12 +103,12 @@ namespace Pathoschild.LookupAnything
                 return (
                     from pair in Game1.objectInformation
                     where Regex.IsMatch(pair.Value, $"\b{refID}\b")
-                    select new Object(pair.Key, 1)
+                    select GameHelper.GetObjectBySpriteIndex(pair.Key)
                 );
             }
 
             // parent sprite index
-            return new[] { new Object(refID, 1) };
+            return new[] { GameHelper.GetObjectBySpriteIndex(refID) };
         }
 
         /// <summary>Get whether an item can have a quality (which increases its sale price).</summary>
