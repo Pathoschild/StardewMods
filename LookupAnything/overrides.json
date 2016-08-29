@@ -9,6 +9,18 @@ You shouldn't change this file unless you know what you're doing.
 {
   /* game objects (including items, terrain features, trees, etc) by their parent sprite index */
   "Objects": {
+    /*********
+    ** Farm objects
+    *********/
+    /* incubator has no description */
+    "103": {
+      "Description": "Place an egg in this incubator to hatch it."
+    },
+
+
+    /*********
+    ** Mine objects
+    *********/
     /* mine stones are all identified as "Stone" in the game data, with no meaningful metadata */
     "32": {
       "Name": "Grey Stone",

@@ -29,7 +29,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
         /// <param name="overrides">Provides metadata that's not available from the game data directly.</param>
         public ItemSubject(Item item, bool knownQuality, OverrideData overrides)
-            : base(item.Name, item.getDescription(), ItemSubject.GetTypeValue(item))
+            : base(item.Name, ItemSubject.GetDescription(item), ItemSubject.GetTypeValue(item))
         {
             this.Item = item;
             Object obj = item as Object;
@@ -42,7 +42,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 if (@override != null)
                 {
                     this.Name = @override.Name ?? this.Name;
-                    this.Description = @override?.Description ?? this.Description;
+                    this.Description = @override.Description ?? this.Description;
                     this.Type = @override.Type ?? this.Type;
                     showInventoryFields = @override.ShowInventoryFields ?? showInventoryFields;
                 }
@@ -84,6 +84,20 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /*********
         ** Private methods
         *********/
+        /// <summary>Get the item description.</summary>
+        /// <param name="item">The item.</param>
+        private static string GetDescription(Item item)
+        {
+            try
+            {
+                return item.getDescription();
+            }
+            catch (KeyNotFoundException)
+            {
+                return null; // e.g. incubator
+            }
+        }
+
         /// <summary>Get the item type.</summary>
         /// <param name="item">The item.</param>
         private static string GetTypeValue(Item item)
