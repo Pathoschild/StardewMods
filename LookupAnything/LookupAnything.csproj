@@ -58,6 +58,7 @@
     <Compile Include="Framework\Fields\PercentageBarField.cs" />
     <Compile Include="Framework\Fields\RecipeIngredientsField.cs" />
     <Compile Include="Framework\Subjects\FarmAnimalSubject.cs" />
+    <Compile Include="Framework\Subjects\FruitTreeSubject.cs" />
     <Compile Include="GameHelper.cs" />
     <Compile Include="Components\LookupMenu.cs" />
     <Compile Include="Components\Sprites.cs" />

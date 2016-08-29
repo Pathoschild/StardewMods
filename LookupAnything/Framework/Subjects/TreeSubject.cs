@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Framework.Constants;
@@ -8,7 +9,7 @@ using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
-    /// <summary>Describes a (non-fruit) tree.</summary>
+    /// <summary>Describes a non-fruit tree.</summary>
     public class TreeSubject : BaseSubject
     {
         /*********
@@ -42,7 +43,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             {
                 if (Game1.IsWinter && Game1.currentLocation.Name != StandardLocation.Greenhouse)
                     this.AddCustomFields(new GenericField("Next growth", "can't grow in winter outside greenhouse"));
-                else if (stage == TreeGrowthStage.SmallTree && this.HasAdjacentTrees(tree, position))
+                else if (stage == TreeGrowthStage.SmallTree && this.HasAdjacentTrees(position))
                     this.AddCustomFields(new GenericField("Next growth", "can't grow because other trees are too close"));
                 else
                     this.AddCustomFields(new GenericField("Next growth", $"20% chance to grow into {stage + 1} tomorrow"));
@@ -97,20 +98,17 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Whether there are adjacent trees that prevent growth.</summary>
-        /// <param name="tree">The tree to check.</param>
         /// <param name="position">The tree's position in the current location.</param>
-        private bool HasAdjacentTrees(Tree tree, Vector2 position)
+        private bool HasAdjacentTrees(Vector2 position)
         {
-            var reservedArea = new Rectangle((int)((position.X - 1.0) * Game1.tileSize), (int)((position.Y - 1.0) * Game1.tileSize), Game1.tileSize * 3, Game1.tileSize * 3);
-            foreach (var pair in Game1.currentLocation.terrainFeatures)
-            {
-                Vector2 otherPosition = pair.Key;
-                Tree otherTree = pair.Value as Tree;
-                if (otherTree != null && otherTree != tree && otherTree.growthStage >= 5 && otherTree.getBoundingBox(otherPosition).Intersects(reservedArea))
-                    return true;
-            }
-
-            return false;
+            GameLocation location = Game1.currentLocation;
+            return (
+                from adjacentTile in Utility.getSurroundingTileLocationsArray(position)
+                let otherTree = location.terrainFeatures.ContainsKey(adjacentTile)
+                    ? location.terrainFeatures[adjacentTile] as Tree
+                    : null
+                select otherTree != null && otherTree.growthStage >= (int)TreeGrowthStage.SmallTree
+            ).Any(p => p);
         }
     }
 }

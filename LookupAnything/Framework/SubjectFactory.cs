@@ -96,6 +96,8 @@ namespace Pathoschild.LookupAnything.Framework
             }
 
             // tree
+            if(terrainFeature is FruitTree)
+                return new FruitTreeSubject(terrainFeature as FruitTree, position);
             if (terrainFeature is Tree)
                 return new TreeSubject(terrainFeature as Tree, position);
 
