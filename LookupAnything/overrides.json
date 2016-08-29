@@ -8,5 +8,147 @@ You shouldn't change this file unless you know what you're doing.
 */
 {
   /* game objects (including items, terrain features, trees, etc) by their parent sprite index */
-  "Objects": { }
+  "Objects": {
+    /* mine stones are all identified as "Stone" in the game data, with no meaningful metadata */
+    "32": {
+      "Name": "Grey Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+    "34": {
+      "Name": "Blue Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+    "36": {
+      "Name": "Blue Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+    "38": {
+      "Name": "Blue Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+    "40": {
+      "Name": "Brown Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+    "42": {
+      "Name": "Brown Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+    "44": {
+      "Name": "Gem Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain emeralds, aquamarines, rubies, amethysts, topaz, jade, or diamonds."
+    },
+    "46": {
+      "Name": "Mystic Stone",
+      "Type": "Stone",
+      "Description": "Break apart to obtain rare gems and ores, including prismatic shards."
+    },
+    "48": {
+      "Name": "Snowy Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+    "50": {
+      "Name": "Snowy Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+    "52": {
+      "Name": "Snowy Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+    "54": {
+      "Name": "Snowy Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+    "56": {
+      "Name": "Snowy Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+    "58": {
+      "Name": "Snowy Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+    "60": {
+      "Name": "Emerald Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain emeralds."
+    },
+    "62": {
+      "Name": "Aquamarine Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain aquamarines."
+    },
+    "64": {
+      "Name": "Ruby Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain rubies."
+    },
+    "66": {
+      "Name": "Amethyst Cluster",
+      "Type": "Stone",
+      "Description": "Break apart to obtain amethysts."
+    },
+    "68": {
+      "Name": "Topaz Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain topaz gems."
+    },
+    "70": {
+      "Name": "Sapphire Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain sapphires."
+    },
+    "72": {
+      "Name": "Diamond Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain diamonds."
+    },
+    "74": {
+      "Name": "Prismatic Share Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain prismatic shards."
+    },
+    "670": {
+      "Name": "Stone",
+      "Type": "Stone",
+      "Description": "Break apart to obtain stone."
+    },
+    "751": {
+      "Name": "Copper Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain copper."
+    },
+
+    /* mine weeds and crystals are all called "Weeds", have a sale price despite being unsellable, and have no meaningful description */
+    "313": {
+      "Name": "Weed",
+      "Type": "Weed",
+      "Description": "A non-descript weed. Might contain fibers or mixed seeds.",
+      "ShowInventoryFields": false
+    },
+    "314": {
+      "Name": "Weed",
+      "Type": "Weed",
+      "Description": "A non-descript weed. Might contain fibers or mixed seeds.",
+      "ShowInventoryFields": false
+    },
+    "315": {
+      "Name": "Weed",
+      "Type": "Weed",
+      "Description": "A non-descript weed. Might contain fibers or mixed seeds.",
+      "ShowInventoryFields": false
+    }
+  }
 }
