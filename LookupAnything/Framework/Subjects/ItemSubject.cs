@@ -38,7 +38,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             this.Name = item.Name;
             bool showInventoryFields = true;
             {
-                ObjectOverride @override = overrides.GetObject(item.parentSheetIndex);
+                ObjectOverride @override = overrides.GetOverrides(item);
                 if (@override != null)
                 {
                     this.Name = @override.Name ?? this.Name;

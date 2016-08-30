@@ -7,21 +7,23 @@ You shouldn't change this file unless you know what you're doing.
 
 */
 {
-  /* game objects (including items, terrain features, trees, etc) by their parent sprite index */
+  "BigCraftables": {
+    /*********
+    ** Egg incubator
+    ** (has no description when it contains an egg)
+    *********/
+    "102": { // duck egg or white egg
+      "Description": "Hatches eggs into baby chickens and ducks."
+    },
+    "103": { // brown egg
+      "Description": "Hatches eggs into baby chickens and ducks."
+    }
+  },
   "Objects": {
     /*********
-    ** Farm objects
+    ** Mine stones
+    ** (these are all identified as "Stone" in the game data, with no meaningful metadata)
     *********/
-    /* incubator has no description */
-    "103": {
-      "Description": "Place an egg in this incubator to hatch it."
-    },
-
-
-    /*********
-    ** Mine objects
-    *********/
-    /* mine stones are all identified as "Stone" in the game data, with no meaningful metadata */
     "8": {
       "Name": "Amethyst Cluster",
       "Type": "Stone",
@@ -153,7 +155,10 @@ You shouldn't change this file unless you know what you're doing.
       "Description": "Break apart to obtain copper."
     },
 
-    /* mine weeds and crystals are all called "Weeds", have a sale price despite being unsellable, and have no meaningful description */
+    /*********
+    ** Mine weeds & crystals
+    ** (these are all identified as "Weeds", have a sale price despite being unsellable, and have no meaningful description)
+    *********/
     "313": {
       "Name": "Weed",
       "Type": "Weed",
@@ -221,13 +226,17 @@ You shouldn't change this file unless you know what you're doing.
       "ShowInventoryFields": false
     },
 
+    /*********
+    ** Mine containers
+    ** (these are all identified as "Barrel" with no meaningful metadata)
+    *********/
     /* mine containers */
     "118": {
       "Name": "Barrel",
       "Type": "Container",
       "Description": "Break apart to obtain sundry goods."
     },
-    "118": {
+    "119": {
       "Name": "Box",
       "Type": "Container",
       "Description": "Break apart to obtain sundry goods."

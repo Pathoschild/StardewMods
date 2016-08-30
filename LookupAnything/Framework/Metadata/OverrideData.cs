@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using StardewValley;
 
 namespace Pathoschild.LookupAnything.Framework.Metadata
 {
@@ -8,6 +9,9 @@ namespace Pathoschild.LookupAnything.Framework.Metadata
         /*********
         ** Accessors
         *********/
+        /// <summary>Additional metadata about 'big craftable' objects (including furniture, crafting stations, scarecrows, etc).</summary>
+        public IDictionary<int, ObjectOverride> BigCraftables { get; set; }
+
         /// <summary>Additional metadata about game items (including inventory items, terrain features, crops, trees, and other map objects).</summary>
         public IDictionary<int, ObjectOverride> Objects { get; set; }
 
@@ -16,11 +20,20 @@ namespace Pathoschild.LookupAnything.Framework.Metadata
         ** Public methods
         *********/
         /// <summary>Get overrides for an object.</summary>
-        /// <param name="spriteIndex">The object's sprite index.</param>
-        public ObjectOverride GetObject(int spriteIndex)
+        /// <param name="item">The item for which to get overrides.</param>
+        public ObjectOverride GetOverrides(Item item)
         {
-            return this.Objects.ContainsKey(spriteIndex)
-                ? this.Objects[spriteIndex]
+            // big craftable
+            if ((item as Object)?.bigCraftable == true)
+            {
+                return this.Objects.ContainsKey(item.parentSheetIndex)
+                    ? this.Objects[item.parentSheetIndex]
+                    : null;
+            }
+
+            // object
+            return this.Objects.ContainsKey(item.parentSheetIndex)
+                ? this.Objects[item.parentSheetIndex]
                 : null;
         }
     }
