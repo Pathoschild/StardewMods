@@ -87,6 +87,14 @@ namespace Pathoschild.LookupAnything.Framework
                 }
             }
 
+            // by convention (for mod support)
+            else
+            {
+                Item item = GameHelper.GetPrivateField<Item>(activeMenu, "HoveredItem", required: false); // ChestsAnywhere
+                if(item != null)
+                    return new ItemSubject(item, knownQuality: true, overrides: this.Overrides);
+            }
+
             return null;
         }
 

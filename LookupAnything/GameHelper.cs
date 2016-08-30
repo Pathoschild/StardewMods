@@ -130,7 +130,8 @@ namespace Pathoschild.LookupAnything
         /// <typeparam name="T">The field type.</typeparam>
         /// <param name="parent">The parent object.</param>
         /// <param name="name">The field name.</param>
-        public static T GetPrivateField<T>(object parent, string name)
+        /// <param name="required">Whether to throw an exception if the private field is not found.</param>
+        public static T GetPrivateField<T>(object parent, string name, bool required = true)
         {
             if (parent == null)
                 return default(T);
@@ -142,7 +143,11 @@ namespace Pathoschild.LookupAnything
 
             // validate
             if (field == null)
-                throw new InvalidOperationException($"The {parent.GetType().Name} object doesn't have a private '{name}' field.");
+            {
+                if(required)
+                    throw new InvalidOperationException($"The {parent.GetType().Name} object doesn't have a private '{name}' field.");
+                return default(T);
+            }
 
             // get value
             return (T)field.GetValue(parent);
