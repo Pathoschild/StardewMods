@@ -4,8 +4,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Framework.Constants;
+using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Fields;
-using Pathoschild.LookupAnything.Framework.Metadata;
 using StardewValley;
 using Object = StardewValley.Object;
 
@@ -27,8 +27,8 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="item">The underlying item.</param>
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
-        /// <param name="overrides">Provides metadata that's not available from the game data directly.</param>
-        public ItemSubject(Item item, bool knownQuality, OverrideData overrides)
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public ItemSubject(Item item, bool knownQuality, Metadata metadata)
             : base(item.Name, ItemSubject.GetDescription(item), ItemSubject.GetTypeValue(item))
         {
             this.Item = item;
@@ -38,13 +38,13 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             this.Name = item.Name;
             bool showInventoryFields = true;
             {
-                ObjectOverride @override = overrides.GetOverrides(item);
-                if (@override != null)
+                ObjectData objData = metadata.GetOverrides(item);
+                if (objData != null)
                 {
-                    this.Name = @override.Name ?? this.Name;
-                    this.Description = @override.Description ?? this.Description;
-                    this.Type = @override.Type ?? this.Type;
-                    showInventoryFields = @override.ShowInventoryFields ?? showInventoryFields;
+                    this.Name = objData.Name ?? this.Name;
+                    this.Description = objData.Description ?? this.Description;
+                    this.Type = objData.Type ?? this.Type;
+                    showInventoryFields = objData.ShowInventoryFields ?? showInventoryFields;
                 }
             }
 

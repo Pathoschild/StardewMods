@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json;
 using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework;
-using Pathoschild.LookupAnything.Framework.Metadata;
 using Pathoschild.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -23,14 +22,14 @@ namespace Pathoschild.LookupAnything
         /// <summary>The previous menu shown before the lookup UI was opened.</summary>
         private IClickableMenu PreviousMenu;
 
-        /// <summary>The name of the file containing data for the <see cref="Overrides"/> field.</summary>
-        private readonly string DatabaseFileName = "overrides.json";
+        /// <summary>The name of the file containing data for the <see cref="Metadata"/> field.</summary>
+        private readonly string DatabaseFileName = "data.json";
 
         /// <summary>Provides metadata that's not available from the game data directly.</summary>
-        private OverrideData Overrides;
+        private Metadata Metadata;
 
 #if TEST_BUILD
-        /// <summary>Watches the database file and reloads it when it's changed.</summary>
+        /// <summary>Reloads the <see cref="Metadata"/> when the underlying file changes.</summary>
         private FileSystemWatcher OverrideFileWatcher;
 #endif
 
@@ -42,10 +41,10 @@ namespace Pathoschild.LookupAnything
         public override void Entry(params object[] objects)
         {
             // load database
-            this.LoadDatabase();
+            this.LoadMetadata();
 #if TEST_BUILD
             this.OverrideFileWatcher = new FileSystemWatcher(this.PathOnDisk, this.DatabaseFileName) { EnableRaisingEvents = true };
-            this.OverrideFileWatcher.Changed += (sender, e) => this.LoadDatabase();
+            this.OverrideFileWatcher.Changed += (sender, e) => this.LoadMetadata();
 #endif
 
             // reset low-level cache once per day (used to store expensive query results that don't change within a day)
@@ -75,8 +74,8 @@ namespace Pathoschild.LookupAnything
 
                 // show lookup UI
                 ISubject subject = Game1.activeClickableMenu != null
-                    ? new SubjectFactory(this.Overrides).GetSubjectFrom(Game1.activeClickableMenu)
-                    : new SubjectFactory(this.Overrides).GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile);
+                    ? new SubjectFactory(this.Metadata).GetSubjectFrom(Game1.activeClickableMenu)
+                    : new SubjectFactory(this.Metadata).GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile);
                 if (subject != null)
                 {
                     this.PreviousMenu = Game1.activeClickableMenu;
@@ -101,13 +100,13 @@ namespace Pathoschild.LookupAnything
             }
         }
 
-        /// <summary>Load the database containing metadata that's not available from the game data directly.</summary>
-        private void LoadDatabase()
+        /// <summary>Load the file containing metadata that's not available from the game directly.</summary>
+        private void LoadMetadata()
         {
             try
             {
                 string content = File.ReadAllText(Path.Combine(this.PathOnDisk, this.DatabaseFileName));
-                this.Overrides = JsonConvert.DeserializeObject<OverrideData>(content);
+                this.Metadata = JsonConvert.DeserializeObject<Metadata>(content);
             }
             catch (Exception ex)
             {

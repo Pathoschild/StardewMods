@@ -1,7 +1,7 @@
-namespace Pathoschild.LookupAnything.Framework.Metadata
+namespace Pathoschild.LookupAnything.Framework.Data
 {
     /// <summary>Provides override metadata about a game item.</summary>
-    public class ObjectOverride
+    public class ObjectData
     {
         /// <summary>The item name (if overridden).</summary>
         public string Name { get; set; }

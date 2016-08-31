@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Pathoschild.LookupAnything.Framework.Metadata;
 using Pathoschild.LookupAnything.Framework.Subjects;
 using StardewValley;
 using StardewValley.Menus;
@@ -16,7 +15,7 @@ namespace Pathoschild.LookupAnything.Framework
         ** Properties
         *********/
         /// <summary>Provides metadata that's not available from the game data directly.</summary>
-        private readonly OverrideData Overrides;
+        private readonly Metadata Metadata;
 
 
         /*********
@@ -26,10 +25,10 @@ namespace Pathoschild.LookupAnything.Framework
         ** Constructors
         ****/
         /// <summary>Construct an instance.</summary>
-        /// <param name="overrides">Provides metadata that's not available from the game data directly.</param>
-        public SubjectFactory(OverrideData overrides)
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public SubjectFactory(Metadata metadata)
         {
-            this.Overrides = overrides;
+            this.Metadata = metadata;
         }
 
 
@@ -77,13 +76,13 @@ namespace Pathoschild.LookupAnything.Framework
                 {
                     Item item = GameHelper.GetPrivateField<Item>(curTab, "hoveredItem");
                     if (item != null)
-                        return new ItemSubject(item, knownQuality: true, overrides: this.Overrides);
+                        return new ItemSubject(item, knownQuality: true, metadata: this.Metadata);
                 }
                 else if (curTab is CraftingPage)
                 {
                     Item item = GameHelper.GetPrivateField<Item>(curTab, "hoverItem");
                     if (item != null)
-                        return new ItemSubject(item, knownQuality: true, overrides: this.Overrides);
+                        return new ItemSubject(item, knownQuality: true, metadata: this.Metadata);
                 }
             }
 
@@ -91,8 +90,8 @@ namespace Pathoschild.LookupAnything.Framework
             else
             {
                 Item item = GameHelper.GetPrivateField<Item>(activeMenu, "HoveredItem", required: false); // ChestsAnywhere
-                if(item != null)
-                    return new ItemSubject(item, knownQuality: true, overrides: this.Overrides);
+                if (item != null)
+                    return new ItemSubject(item, knownQuality: true, metadata: this.Metadata);
             }
 
             return null;
@@ -105,7 +104,7 @@ namespace Pathoschild.LookupAnything.Framework
         /// <param name="obj">The underlying object.</param>
         public ISubject GetSubject(Object obj)
         {
-            return new ItemSubject(obj, knownQuality: false, overrides: this.Overrides);
+            return new ItemSubject(obj, knownQuality: false, metadata: this.Metadata);
         }
 
         /// <summary>Get metadata for a Stardew object.</summary>
@@ -118,7 +117,7 @@ namespace Pathoschild.LookupAnything.Framework
             {
                 Crop crop = ((HoeDirt)terrainFeature).crop;
                 return crop != null
-                    ? new CropSubject(crop, GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest), this.Overrides)
+                    ? new CropSubject(crop, GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest), this.Metadata)
                     : null;
             }
 

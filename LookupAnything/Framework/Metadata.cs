@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
+using Pathoschild.LookupAnything.Framework.Data;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework.Metadata
+namespace Pathoschild.LookupAnything.Framework
 {
-    /// <summary>Provides override metadata that's not available from the game data directly.</summary>
-    public class OverrideData
+    /// <summary>Provides metadata that's not available from the game data directly (e.g. because it's buried in the logic).</summary>
+    public class Metadata
     {
         /*********
         ** Accessors
         *********/
         /// <summary>Additional metadata about 'big craftable' objects (including furniture, crafting stations, scarecrows, etc).</summary>
-        public IDictionary<int, ObjectOverride> BigCraftables { get; set; }
+        public IDictionary<int, ObjectData> BigCraftables { get; set; }
 
         /// <summary>Additional metadata about game items (including inventory items, terrain features, crops, trees, and other map objects).</summary>
-        public IDictionary<int, ObjectOverride> Objects { get; set; }
+        public IDictionary<int, ObjectData> Objects { get; set; }
 
 
         /*********
@@ -21,7 +22,7 @@ namespace Pathoschild.LookupAnything.Framework.Metadata
         *********/
         /// <summary>Get overrides for an object.</summary>
         /// <param name="item">The item for which to get overrides.</param>
-        public ObjectOverride GetOverrides(Item item)
+        public ObjectData GetOverrides(Item item)
         {
             // big craftable
             if ((item as Object)?.bigCraftable == true)

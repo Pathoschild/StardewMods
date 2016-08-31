@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Pathoschild.LookupAnything.Framework.Fields;
-using Pathoschild.LookupAnything.Framework.Metadata;
 using StardewValley;
 using Object = StardewValley.Object;
 
@@ -16,9 +15,9 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="crop">The underlying crop.</param>
         /// <param name="obj">The underlying object.</param>
-        /// <param name="database">Provides metadata that's not available from the game data directly.</param>
-        public CropSubject(Crop crop, Object obj, OverrideData database)
-            : base(obj, knownQuality: false, overrides: database)
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public CropSubject(Crop crop, Object obj, Metadata metadata)
+            : base(obj, knownQuality: false, metadata: metadata)
         {
             // get harvest schedule
             bool canRegrow = crop.regrowAfterHarvest != -1;
