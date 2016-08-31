@@ -40,14 +40,6 @@ namespace Pathoschild.LookupAnything.Framework
         /// <param name="position">The object's tile position within the <paramref name="location"/>.</param>
         public ISubject GetSubjectFrom(GameLocation location, Vector2 position)
         {
-            // map object
-            if (location.objects.ContainsKey(position))
-                return this.GetSubject(location.objects[position]);
-
-            // terrain feature
-            if (location.terrainFeatures.ContainsKey(position))
-                return this.GetSubject(location.terrainFeatures[position], position);
-
             // NPC
             if (location.isCharacterAtTile(position) != null)
                 return this.GetSubject(location.isCharacterAtTile(position));
@@ -58,6 +50,14 @@ namespace Pathoschild.LookupAnything.Framework
                 if (animal.getTileLocation() == position)
                     return this.GetSubject(animal);
             }
+
+            // map object
+            if (location.objects.ContainsKey(position))
+                return this.GetSubject(location.objects[position]);
+
+            // terrain feature
+            if (location.terrainFeatures.ContainsKey(position))
+                return this.GetSubject(location.terrainFeatures[position], position);
 
             return null;
         }
