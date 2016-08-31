@@ -59,10 +59,11 @@
   <ItemGroup>
     <Compile Include="Framework\Constants\Constant.cs" />
     <Compile Include="Framework\Constants\StandardItem.cs" />
-    <Compile Include="Framework\Metadata.cs" />
+    <Compile Include="Framework\Data\AdventureGuildQuestData.cs" />
+    <Compile Include="Framework\Data\ObjectData.cs" />
     <Compile Include="Framework\Fields\PercentageBarField.cs" />
     <Compile Include="Framework\Fields\RecipeIngredientsField.cs" />
-    <Compile Include="Framework\Data\ObjectData.cs" />
+    <Compile Include="Framework\Metadata.cs" />
     <Compile Include="Framework\Subjects\FarmAnimalSubject.cs" />
     <Compile Include="Framework\Subjects\FruitTreeSubject.cs" />
     <Compile Include="GameHelper.cs" />

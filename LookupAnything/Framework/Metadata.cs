@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Pathoschild.LookupAnything.Framework.Data;
 using StardewValley;
 
@@ -10,11 +11,14 @@ namespace Pathoschild.LookupAnything.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>Additional metadata about 'big craftable' objects (including furniture, crafting stations, scarecrows, etc).</summary>
+        /// <summary>Corrects metadata for 'big craftable' objects (including furniture, crafting stations, scarecrows, etc).</summary>
         public IDictionary<int, ObjectData> BigCraftables { get; set; }
 
-        /// <summary>Additional metadata about game items (including inventory items, terrain features, crops, trees, and other map objects).</summary>
+        /// <summary>Corrects metadata for most game objects except <see cref="BigCraftables"/> (including inventory items, terrain features, crops, trees, and other map objects).</summary>
         public IDictionary<int, ObjectData> Objects { get; set; }
+
+        /// <summary>Information about Adventure Guild monster-slaying quests.</summary>
+        public AdventureGuildQuestData[] AdventureGuildQuests { get; set; }
 
 
         /*********
@@ -36,6 +40,13 @@ namespace Pathoschild.LookupAnything.Framework
             return this.Objects.ContainsKey(item.parentSheetIndex)
                 ? this.Objects[item.parentSheetIndex]
                 : null;
+        }
+
+        /// <summary>Get the adventurer guild quest for the specified monster (if any).</summary>
+        /// <param name="monster">The monster name.</param>
+        public AdventureGuildQuestData GetAdventurerGuildQuest(string monster)
+        {
+            return this.AdventureGuildQuests.FirstOrDefault(p => p.Targets.Contains(monster));
         }
     }
 }

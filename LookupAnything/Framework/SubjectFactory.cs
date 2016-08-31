@@ -137,11 +137,11 @@ namespace Pathoschild.LookupAnything.Framework
             return new FarmAnimalSubject(animal);
         }
 
-        /// <summary>Get metadata for a Stardew object.</summary>
+        /// <summary>Get metadata for an NPC (including villagers, monsters, and pets).</summary>
         /// <param name="npc">The underlying object.</param>
         public ISubject GetSubject(NPC npc)
         {
-            return new CharacterSubject(npc);
+            return new CharacterSubject(npc, this.Metadata);
         }
     }
 }

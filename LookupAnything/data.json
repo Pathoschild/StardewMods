@@ -1,17 +1,19 @@
 /*
 
 
-This file provides metadata to the mod that isn't available from the game data.
+This file provides metadata to the mod that isn't available from the game (e.g. because it's buried in the logic).
 You shouldn't change this file unless you know what you're doing.
 
 
 */
 {
+  /*********
+  ** Corrects metadata for 'big craftable' objects (including furniture, crafting stations, scarecrows, etc).
+  *********/
   "BigCraftables": {
-    /*********
-    ** Egg incubator
-    ** (has no description when it contains an egg)
-    *********/
+    /****
+    ** Egg incubator (no description when it contains an egg)
+    ****/
     "102": { // duck egg or white egg
       "Description": "Hatches eggs into baby chickens and ducks."
     },
@@ -19,11 +21,14 @@ You shouldn't change this file unless you know what you're doing.
       "Description": "Hatches eggs into baby chickens and ducks."
     }
   },
+
+  /*********
+  ** Corrects metadata for most game objects except big craftables (including inventory items, terrain features, crops, trees, and other map objects).
+  *********/
   "Objects": {
-    /*********
-    ** Mine stones
-    ** (these are all identified as "Stone" in the game data, with no meaningful metadata)
-    *********/
+    /****
+    ** Mine stones (all identified as "Stone" with no meaningful description)
+    ****/
     "8": {
       "Name": "Amethyst Cluster",
       "Type": "Stone",
@@ -33,6 +38,11 @@ You shouldn't change this file unless you know what you're doing.
       "Name": "Topaz Node",
       "Type": "Stone",
       "Description": "Break apart to obtain topaz gems."
+    },
+    "14": {
+      "Name": "Aquamarine Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain aquamarines."
     },
     "32": {
       "Name": "Grey Stone",
@@ -155,10 +165,9 @@ You shouldn't change this file unless you know what you're doing.
       "Description": "Break apart to obtain copper."
     },
 
-    /*********
-    ** Mine weeds & crystals
-    ** (these are all identified as "Weeds", have a sale price despite being unsellable, and have no meaningful description)
-    *********/
+    /****
+    ** Mine weeds & crystals (all identified as "Weeds" with no meaningful description, with a sale price despite being unsellable)
+    ****/
     "313": {
       "Name": "Weed",
       "Type": "Weed",
@@ -226,11 +235,9 @@ You shouldn't change this file unless you know what you're doing.
       "ShowInventoryFields": false
     },
 
-    /*********
-    ** Mine containers
-    ** (these are all identified as "Barrel" with no meaningful metadata)
-    *********/
-    /* mine containers */
+    /****
+    ** Mine containers (all identified as "Barrel" with no meaningful description)
+    ****/
     "118": {
       "Name": "Barrel",
       "Type": "Container",
@@ -271,5 +278,47 @@ You shouldn't change this file unless you know what you're doing.
       "Type": "Container",
       "Description": "Break apart to obtain sundry goods."
     }
-  }
+  },
+
+  /*********
+  ** Information about Adventure Guild monster-slaying quests.
+  ** Extracted from AdventureGuild::showMonsterKillList().
+  *********/
+  "AdventureGuildQuests": [
+    {
+      "Category": "Slimes",
+      "Targets": [ "Green Slime", "Frost Jelly", "Sludge" ],
+      "RequiredKills": 1000
+    },
+    {
+      "Category": "Void Spirits",
+      "Targets": [ "Shadow Guy", "Shadow Shaman", "Shadow Brute" ],
+      "RequiredKills": 150
+    },
+    {
+      "Category": "Bats",
+      "Targets": [ "Frost Bat", "Lava Bat" ],
+      "RequiredKills": 200
+    },
+    {
+      "Category": "Skeletons",
+      "Targets": [ "Skeleton", "Skeleton Mage" ],
+      "RequiredKills": 50
+    },
+    {
+      "Category": "Cave Insects",
+      "Targets": [ "Grub", "Fly", "Bug" ],
+      "RequiredKills": 125
+    },
+    {
+      "Category": "Duggies",
+      "Targets": [ "Duggy" ],
+      "RequiredKills": 30
+    },
+    {
+      "Category": "Dust Sprites",
+      "Targets": [ "Dust Spirit" ],
+      "RequiredKills":  500
+    }
+  ]
 }

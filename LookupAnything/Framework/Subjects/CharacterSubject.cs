@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework.Constants;
+using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Fields;
 using StardewValley;
 using StardewValley.Characters;
@@ -13,7 +14,7 @@ using Object = StardewValley.Object;
 
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
-    /// <summary>Describes an NPC.</summary>
+    /// <summary>Describes an NPC (including villagers, monsters, and pets).</summary>
     public class CharacterSubject : BaseSubject
     {
         /*********
@@ -28,8 +29,9 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="character">The underlying character.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-        public CharacterSubject(NPC character)
+        public CharacterSubject(NPC character, Metadata metadata)
             : base(character.getName(), null, "NPC")
         {
             this.Character = character;
@@ -59,17 +61,26 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             else if (character is Monster)
             {
                 this.Type = "Monster";
-                Monster monster = (Monster)character;
 
+                // basic info
+                Monster monster = (Monster)character;
                 string[] drops = (from id in monster.objectsToDrop let item = GameHelper.GetObjectBySpriteIndex(id) orderby item.Name select item.Name).ToArray();
                 this.AddCustomFields(
                     new GenericField("Invincible", $"For {GameHelper.GetPrivateField<int>(monster, "invincibleCountdown")} seconds", hasValue: monster.isInvincible()),
-                    new PercentageBarField("Health", monster.health, monster.maxHealth, Color.Green, Color.Gray, $"{Math.Round((monster.health / (monster.maxHealth * 1f) * 100))}% ({monster.health} on {monster.maxHealth})"),
+                    new PercentageBarField("Health", monster.health, monster.maxHealth, Color.Green, Color.Gray, $"{Math.Round((monster.health / (monster.maxHealth * 1f) * 100))}% ({monster.health} of {monster.maxHealth})"),
                     new GenericField("Will drop", drops.Any() ? string.Join(", ", drops) : "nothing"),
                     new GenericField("XP", monster.experienceGained),
                     new GenericField("Defence", monster.resilience),
                     new GenericField("Attack", monster.damageToFarmer)
                 );
+
+                // Adventure Guild quest
+                AdventureGuildQuestData adventureGuildQuest = metadata.GetAdventurerGuildQuest(monster.name);
+                if (adventureGuildQuest != null)
+                {
+                    int kills = adventureGuildQuest.Targets.Select(p => Game1.stats.getMonstersKilled(p)).Sum();
+                    this.AddCustomFields(new GenericField("Adventure Guild", $"{(kills >= adventureGuildQuest.RequiredKills ? "complete" : "in progress")} (killed {kills} of {adventureGuildQuest.RequiredKills})"));
+                }
             }
         }
 
