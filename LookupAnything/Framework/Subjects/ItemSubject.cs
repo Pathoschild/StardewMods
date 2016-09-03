@@ -17,21 +17,22 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /*********
         ** Properties
         *********/
-        /// <summary>The underlying item.</summary>
-        private readonly Item Item;
+        /// <summary>The underlying target.</summary>
+        private readonly Target<Item> Target;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="item">The underlying item.</param>
+        /// <param name="target">The underlying target.</param>
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public ItemSubject(Item item, bool knownQuality, Metadata metadata)
-            : base(item.Name, ItemSubject.GetDescription(item), ItemSubject.GetTypeValue(item))
+        public ItemSubject(Target<Item> target, bool knownQuality, Metadata metadata)
+            : base(target.Value.Name, ItemSubject.GetDescription(target.Value), ItemSubject.GetTypeValue(target.Value))
         {
-            this.Item = item;
+            this.Target = target;
+            Item item = target.Value;
             Object obj = item as Object;
 
             // basic info
@@ -44,7 +45,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     this.Name = objData.Name ?? this.Name;
                     this.Description = objData.Description ?? this.Description;
                     this.Type = objData.Type ?? this.Type;
-                    showInventoryFields = objData.ShowInventoryFields ?? showInventoryFields;
+                    showInventoryFields = objData.ShowInventoryFields ?? true;
                 }
             }
 
@@ -76,7 +77,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
         public override bool DrawPortrait(SpriteBatch sprites, Vector2 position, Vector2 size)
         {
-            this.Item.drawInMenu(sprites, position, 1);
+            this.Target.Value.drawInMenu(sprites, position, 1);
             return true;
         }
 

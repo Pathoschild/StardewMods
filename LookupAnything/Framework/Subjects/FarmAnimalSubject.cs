@@ -14,20 +14,22 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /*********
         ** Properties
         *********/
-        /// <summary>The underlying farm animal.</summary>
-        private readonly FarmAnimal Animal;
+        /// <summary>The lookup target.</summary>
+        private readonly Target<FarmAnimal> Target;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="animal">The underlying farm animal.</param>
+        /// <param name="target">The lookup target.</param>
         /// <remarks>Reverse engineered from <see cref="FarmAnimal"/>.</remarks>
-        public FarmAnimalSubject(FarmAnimal animal)
-            : base(animal.name, null, animal.type)
+        public FarmAnimalSubject(Target<FarmAnimal> target)
+            : base(target.Value.name, null, target.Value.type)
         {
-            this.Animal = animal;
+            this.Target = target;
+            FarmAnimal animal = target.Value;
+
             bool isFullyGrown = animal.age >= animal.ageWhenMature;
             this.AddCustomFields(
                 new CharacterFriendshipField("Friendship", animal.friendshipTowardFarmer, Constant.AnimalFriendshipPointsPerLevel, Constant.AnimalFriendshipMaxPoints),
@@ -48,7 +50,8 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
         public override bool DrawPortrait(SpriteBatch sprites, Vector2 position, Vector2 size)
         {
-            this.Animal.Sprite.draw(sprites, position, 1, 0, 0, Color.White, scale: size.X / this.Animal.Sprite.getWidth());
+            FarmAnimal animal = this.Target.Value;
+            animal.Sprite.draw(sprites, position, 1, 0, 0, Color.White, scale: size.X / animal.Sprite.getWidth());
             return true;
         }
 

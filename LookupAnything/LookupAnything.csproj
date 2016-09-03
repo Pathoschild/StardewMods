@@ -68,6 +68,7 @@
     <Compile Include="Framework\Metadata.cs" />
     <Compile Include="Framework\Subjects\FarmAnimalSubject.cs" />
     <Compile Include="Framework\Subjects\FruitTreeSubject.cs" />
+    <Compile Include="Framework\TargetType.cs" />
     <Compile Include="GameHelper.cs" />
     <Compile Include="Components\LookupMenu.cs" />
     <Compile Include="Components\Sprites.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Framework\Subjects\ItemSubject.cs" />
     <Compile Include="LookupAnythingMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Framework\Target.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data.json" />

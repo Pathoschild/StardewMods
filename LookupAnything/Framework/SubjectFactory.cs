@@ -3,7 +3,9 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.LookupAnything.Framework.Subjects;
 using StardewValley;
+using StardewValley.Characters;
 using StardewValley.Menus;
+using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.LookupAnything.Framework
@@ -35,29 +37,91 @@ namespace Pathoschild.LookupAnything.Framework
         /****
         ** From context
         ****/
-        /// <summary>Get metadata for a Stardew object at the specified position.</summary>
+        /// <summary>Get all potential lookup targets in the current location.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="position">The object's tile position within the <paramref name="location"/>.</param>
-        public ISubject GetSubjectFrom(GameLocation location, Vector2 position)
+        public IEnumerable<Target> GetAllTargets(GameLocation location)
         {
-            // NPC
-            if (location.isCharacterAtTile(position) != null)
-                return this.GetSubject(location.isCharacterAtTile(position));
+            // NPCs
+            foreach (NPC npc in location.characters)
+            {
+                TargetType type = TargetType.Unknown;
+                if (npc.isVillager())
+                    type = TargetType.Villager;
+                else if (npc is Pet)
+                    type = TargetType.Pet;
+                else if (npc is Monster)
+                    type = TargetType.Monster;
+
+                yield return new Target(type, npc, npc.getTileLocation());
+            }
 
             // animals
             foreach (FarmAnimal animal in (location as Farm)?.animals.Values ?? (location as AnimalHouse)?.animals.Values ?? Enumerable.Empty<FarmAnimal>())
+                yield return new Target(TargetType.FarmAnimal, animal, animal.getTileLocation());
+
+            // map objects
+            foreach (var pair in location.objects)
             {
-                if (animal.getTileLocation() == position)
-                    return this.GetSubject(animal);
+                Vector2 position = pair.Key;
+                Object obj = pair.Value;
+                yield return new Target(TargetType.Object, obj, position);
             }
 
-            // map object
-            if (location.objects.ContainsKey(position))
-                return this.GetSubject(location.objects[position]);
+            // terrain features
+            foreach (var pair in location.terrainFeatures)
+            {
+                Vector2 position = pair.Key;
+                TerrainFeature feature = pair.Value;
 
-            // terrain feature
-            if (location.terrainFeatures.ContainsKey(position))
-                return this.GetSubject(location.terrainFeatures[position], position);
+                TargetType type = TargetType.Unknown;
+                if ((feature as HoeDirt)?.crop != null)
+                    type = TargetType.Crop;
+                else if (feature is FruitTree)
+                    type = TargetType.FruitTree;
+                else if (feature is Tree)
+                    type = TargetType.WildTree;
+
+                yield return new Target(type, feature, position);
+            }
+        }
+
+        /// <summary>Get metadata for a Stardew object at the specified position.</summary>
+        /// <param name="location">The current location.</param>
+        /// <param name="tile">The object's tile position within the <paramref name="location"/>.</param>
+        public ISubject GetSubjectFrom(GameLocation location, Vector2 tile)
+        {
+            IEnumerable<Target> targets = this.GetAllTargets(location).Where(p => p.IsAtTile(tile));
+            foreach (Target target in targets)
+            {
+                switch (target.Type)
+                {
+                    // NPC
+                    case TargetType.Pet:
+                    case TargetType.Monster:
+                    case TargetType.Villager:
+                        return new CharacterSubject(target.ForType<NPC>(), this.Metadata);
+
+                    // animal
+                    case TargetType.FarmAnimal:
+                        return new FarmAnimalSubject(target.ForType<FarmAnimal>());
+
+                    // crop
+                    case TargetType.Crop:
+                        Crop crop = ((HoeDirt)target.Value).crop;
+                        return new CropSubject(crop, GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest), this.Metadata);
+
+                    // tree
+                    case TargetType.FruitTree:
+                        return new FruitTreeSubject(target.ForType<FruitTree>());
+                    case TargetType.WildTree:
+                        return new TreeSubject(target.ForType<Tree>());
+
+                    // object
+                    case TargetType.InventoryItem:
+                    case TargetType.Object:
+                        return new ItemSubject(target.ForType<Item>(), knownQuality: false, metadata: this.Metadata);
+                }
+            }
 
             return null;
         }
@@ -76,13 +140,13 @@ namespace Pathoschild.LookupAnything.Framework
                 {
                     Item item = GameHelper.GetPrivateField<Item>(curTab, "hoveredItem");
                     if (item != null)
-                        return new ItemSubject(item, knownQuality: true, metadata: this.Metadata);
+                        return new ItemSubject(new Target<Item>(TargetType.InventoryItem, item, null), knownQuality: true, metadata: this.Metadata);
                 }
                 else if (curTab is CraftingPage)
                 {
                     Item item = GameHelper.GetPrivateField<Item>(curTab, "hoverItem");
                     if (item != null)
-                        return new ItemSubject(item, knownQuality: true, metadata: this.Metadata);
+                        return new ItemSubject(new Target<Item>(TargetType.InventoryItem, item, null), knownQuality: true, metadata: this.Metadata);
                 }
             }
 
@@ -91,57 +155,10 @@ namespace Pathoschild.LookupAnything.Framework
             {
                 Item item = GameHelper.GetPrivateField<Item>(activeMenu, "HoveredItem", required: false); // ChestsAnywhere
                 if (item != null)
-                    return new ItemSubject(item, knownQuality: true, metadata: this.Metadata);
+                    return new ItemSubject(new Target<Item>(TargetType.InventoryItem, item, null), knownQuality: true, metadata: this.Metadata);
             }
 
             return null;
-        }
-
-        /****
-        ** For object
-        ****/
-        /// <summary>Get metadata for a Stardew object.</summary>
-        /// <param name="obj">The underlying object.</param>
-        public ISubject GetSubject(Object obj)
-        {
-            return new ItemSubject(obj, knownQuality: false, metadata: this.Metadata);
-        }
-
-        /// <summary>Get metadata for a Stardew object.</summary>
-        /// <param name="terrainFeature">The underlying object.</param>
-        /// <param name="position">The underlying object's tile position within the current location.</param>
-        public ISubject GetSubject(TerrainFeature terrainFeature, Vector2 position)
-        {
-            // crop
-            if (terrainFeature is HoeDirt)
-            {
-                Crop crop = ((HoeDirt)terrainFeature).crop;
-                return crop != null
-                    ? new CropSubject(crop, GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest), this.Metadata)
-                    : null;
-            }
-
-            // tree
-            if (terrainFeature is FruitTree)
-                return new FruitTreeSubject(terrainFeature as FruitTree, position);
-            if (terrainFeature is Tree)
-                return new TreeSubject(terrainFeature as Tree, position);
-
-            return null;
-        }
-
-        /// <summary>Get metadata for a Stardew object.</summary>
-        /// <param name="animal">The underlying animal.</param>
-        public ISubject GetSubject(FarmAnimal animal)
-        {
-            return new FarmAnimalSubject(animal);
-        }
-
-        /// <summary>Get metadata for an NPC (including villagers, monsters, and pets).</summary>
-        /// <param name="npc">The underlying object.</param>
-        public ISubject GetSubject(NPC npc)
-        {
-            return new CharacterSubject(npc, this.Metadata);
         }
     }
 }

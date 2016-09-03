@@ -17,7 +17,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <param name="obj">The underlying object.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public CropSubject(Crop crop, Object obj, Metadata metadata)
-            : base(obj, knownQuality: false, metadata: metadata)
+            : base(new Target<Item>(TargetType.InventoryItem, obj), knownQuality: false, metadata: metadata)
         {
             // get harvest schedule
             bool canRegrow = crop.regrowAfterHarvest != -1;

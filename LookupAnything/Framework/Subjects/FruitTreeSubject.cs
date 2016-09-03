@@ -14,21 +14,21 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /*********
         ** Properties
         *********/
-        /// <summary>The underlying tree.</summary>
-        private readonly FruitTree Tree;
+        /// <summary>The underlying target.</summary>
+        private readonly Target<FruitTree> Target;
 
         /*********
         ** Public methods
         *********/
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="tree">The underlying tree.</param>
-        /// <param name="position">The tree's tile position within the current location.</param>
+        /// <param name="target">The underlying target.</param>
         /// <remarks>Tree growth algorithm reverse engineered from <see cref="StardewValley.TerrainFeatures.FruitTree.dayUpdate"/>.</remarks>
-        public FruitTreeSubject(FruitTree tree, Vector2 position)
+        public FruitTreeSubject(Target<FruitTree> target)
             : base(null, null, "Fruit Tree")
         {
-            this.Tree = tree;
+            this.Target = target;
+            FruitTree tree = target.Value;
 
             // get basic info
             Object fruit = GameHelper.GetObjectBySpriteIndex(tree.indexOfFruit);
@@ -41,7 +41,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             if (!isMature)
             {
                 string growthText = $"mature in {tree.daysUntilMature} days";
-                if (this.HasAdjacentObjects(position))
+                if (this.HasAdjacentObjects(target.GetTile()))
                     growthText += " (can't grow because there are adjacent objects)";
                 this.AddCustomFields(new GenericField("Growth", growthText));
             }
@@ -70,7 +70,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
         public override bool DrawPortrait(SpriteBatch sprites, Vector2 position, Vector2 size)
         {
-            this.Tree.drawInMenu(sprites, position, Vector2.Zero, 1, 1);
+            this.Target.Value.drawInMenu(sprites, position, Vector2.Zero, 1, 1);
             return true;
         }
 

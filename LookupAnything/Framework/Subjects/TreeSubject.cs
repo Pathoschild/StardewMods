@@ -15,20 +15,20 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /*********
         ** Properties
         *********/
-        /// <summary>The underlying tree.</summary>
-        private readonly Tree Tree;
+        /// <summary>The underlying target.</summary>
+        private readonly Target<Tree> Target;
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="tree">The underlying tree.</param>
-        /// <param name="position">The tree's tile position within the current location.</param>
+        /// <param name="target">The underlying target.</param>
         /// <remarks>Tree growth algorithm reverse engineered from <see cref="StardewValley.TerrainFeatures.Tree.dayUpdate"/>.</remarks>
-        public TreeSubject(Tree tree, Vector2 position)
-            : base(TreeSubject.GetName(tree), null, "Tree")
+        public TreeSubject(Target<Tree> target)
+            : base(TreeSubject.GetName(target.Value), null, "Tree")
         {
-            this.Tree = tree;
+            this.Target = target;
+            Tree tree = target.Value;
 
             // get growth stage
             TreeGrowthStage stage = (TreeGrowthStage)Math.Min(tree.growthStage, (int)TreeGrowthStage.Tree);
@@ -43,7 +43,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             {
                 if (Game1.IsWinter && Game1.currentLocation.Name != StandardLocation.Greenhouse)
                     this.AddCustomFields(new GenericField("Next growth", "can't grow in winter outside greenhouse"));
-                else if (stage == TreeGrowthStage.SmallTree && this.HasAdjacentTrees(position))
+                else if (stage == TreeGrowthStage.SmallTree && this.HasAdjacentTrees(target.GetTile()))
                     this.AddCustomFields(new GenericField("Next growth", "can't grow because other trees are too close"));
                 else
                     this.AddCustomFields(new GenericField("Next growth", $"20% chance to grow into {stage + 1} tomorrow"));
@@ -66,7 +66,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
         public override bool DrawPortrait(SpriteBatch sprites, Vector2 position, Vector2 size)
         {
-            this.Tree.drawInMenu(sprites, position, Vector2.Zero, 1, 1);
+            this.Target.Value.drawInMenu(sprites, position, Vector2.Zero, 1, 1);
             return true;
         }
 
