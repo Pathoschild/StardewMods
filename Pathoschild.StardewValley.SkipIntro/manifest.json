@@ -1,0 +1,13 @@
+﻿{
+  "Name": "SkipIntro",
+  "Authour": "Pathoschild",
+  "Version": {
+    "MajorVersion": 0,
+    "MinorVersion": 1,
+    "PatchVersion": 0,
+    "Build": "1"
+  },
+  "Description": "Skips the game's loading intro.",
+  "UniqueID": "SkipIntro",
+  "EntryDll": "Pathoschild.StardewValley.SkipIntro.dll"
+}

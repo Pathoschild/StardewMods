@@ -1,0 +1,1 @@
+**Skip Intro** is a minimal [Stardew Valley](http://stardewvalley.net/) mod that skips the game's loading intro.
