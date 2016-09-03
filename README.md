@@ -38,7 +38,14 @@ Here are some representative screenshots (layout and values will change dynamica
 | mine objects    | ![](screenshots/mine-gem.png) ![](screenshots/mine-ore.png) ![](screenshots/mine-stone.png) ![](screenshots/mine-ice.png) |
 | ...             | ![](screenshots/artifact-spot.png) |
 
+## Configuration
+### Change input
+Don't want to lookup things with `F1`? You can change all of the key bindings in the
+`config.json` (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)),
+and add controller bindings if you have one (see [valid buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.buttons.aspx)).
+
 ## Changelog
 * 1.0 (not yet released)
-  * Initial version
-  * Added support for crops, farm animals, inventory, NPCs, non-fruit trees, and some map objects.
+  * Initial version.
+  * Added support for NPCs (villagers, pets, farm animals, and monsters), items (crops and inventory), and map objects (crafting objects, fruit trees, wild trees, and mine objects).
+  * Added controller support and configurable bindings.

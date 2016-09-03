@@ -19,14 +19,20 @@ namespace Pathoschild.LookupAnything
         /*********
         ** Properties
         *********/
+        /// <summary>The keyboard input map.</summary>
+        private InputMapConfiguration<Keys> Keyboard;
+
+        /// <summary>The controller input map.</summary>
+        private InputMapConfiguration<Buttons?> Controller;
+
+        /// <summary>Provides metadata that's not available from the game data directly.</summary>
+        private Metadata Metadata;
+
         /// <summary>The previous menu shown before the lookup UI was opened.</summary>
         private IClickableMenu PreviousMenu;
 
         /// <summary>The name of the file containing data for the <see cref="Metadata"/> field.</summary>
         private readonly string DatabaseFileName = "data.json";
-
-        /// <summary>Provides metadata that's not available from the game data directly.</summary>
-        private Metadata Metadata;
 
 #if TEST_BUILD
         /// <summary>Reloads the <see cref="Metadata"/> when the underlying file changes.</summary>
@@ -40,6 +46,11 @@ namespace Pathoschild.LookupAnything
         /// <summary>Initialise the mod.</summary>
         public override void Entry(params object[] objects)
         {
+            // load config
+            var config = new ModConfig().InitializeConfig(this.BaseConfigPath);
+            this.Keyboard = config.GetKeyboard();
+            this.Controller = config.GetController();
+
             // load database
             this.LoadMetadata();
 #if TEST_BUILD
@@ -52,7 +63,9 @@ namespace Pathoschild.LookupAnything
             TimeEvents.OnNewDay += (sender, e) => this.ResetCache();
 
             // hook up UI
-            ControlEvents.KeyPressed += (sender, e) => this.TryOpenMenu(Keys.F1, e.KeyPressed);
+            ControlEvents.KeyPressed += (sender, e) => this.TryOpenMenu(this.Keyboard.Toggle, e.KeyPressed);
+            ControlEvents.ControllerButtonPressed += (sender, e) => this.TryOpenMenu(this.Controller.Toggle, e.ButtonPressed);
+            ControlEvents.ControllerTriggerPressed += (sender, e) => this.TryOpenMenu(this.Controller.Toggle, e.ButtonPressed);
             MenuEvents.MenuClosed += (sender, e) => this.TryRestorePreviousMenu(e.PriorMenu);
         }
 

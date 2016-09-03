@@ -57,6 +57,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\InputMapConfiguration.cs" />
+    <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\Constants\Constant.cs" />
     <Compile Include="Framework\Constants\StandardItem.cs" />
     <Compile Include="Framework\Data\AdventureGuildQuestData.cs" />
