@@ -154,6 +154,12 @@ You shouldn't change this file unless you know what you're doing.
       "Type": "Stone",
       "Description": "Break apart to obtain prismatic shards."
     },
+    "290": {
+      "Name": "Iron Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain iron ore.",
+      "ShowInventoryFields": false
+    },
     "670": {
       "Name": "Stone",
       "Type": "Stone",
