@@ -36,16 +36,19 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 daysToNextHarvest = crop.regrowAfterHarvest; // after harvesting a regrowable crop, day of current phase is set to 0 until the next day
 
             // add fields
-            this.AddCustomFields(
-                new GenericField("Crop status", crop.dead ? "dead" : "healthy"),
-                new GenericField("Crop drops", crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops > 0
-                    ? $"{crop.minHarvest} to {crop.maxHarvest} ({Math.Round(crop.chanceForExtraCrops * 100, 2)}% chance of extra crops)"
-                    : Math.Max(crop.minHarvest, 1).ToString()
-                ),
-                new GenericField("Crop schedule", $"harvest after {daysToFirstHarvest} days" + (crop.regrowAfterHarvest != -1 ? $", then every {crop.regrowAfterHarvest} days" : "")),
-                new GenericField("Next harvest", canHarvestNow ? "now" : $"in {daysToNextHarvest} days", hasValue: !crop.dead),
-                new GenericField("Crop seasons", string.Join(", ", crop.seasonsToGrowIn))
-            );
+            if (crop.dead)
+                this.AddCustomFields(new GenericField("Crop status", "This crop is dead."));
+            else
+            {
+                this.AddCustomFields(
+                    new GenericField("Crop schedule", $"grows in {string.Join(", ", crop.seasonsToGrowIn)}; harvest after {daysToFirstHarvest} days" + (crop.regrowAfterHarvest != -1 ? $", then every {crop.regrowAfterHarvest} days" : "")),
+                    new GenericField("Next harvest", canHarvestNow ? "now" : $"in {daysToNextHarvest} days", hasValue: !crop.dead),
+                    new GenericField("Crop drops", crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops > 0
+                        ? $"{crop.minHarvest} to {crop.maxHarvest} ({Math.Round(crop.chanceForExtraCrops * 100, 2)}% chance of extra crops)"
+                        : Math.Max(crop.minHarvest, 1).ToString()
+                    )
+                );
+            }
         }
     }
 }
