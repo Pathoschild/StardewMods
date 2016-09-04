@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.Menus;
@@ -16,14 +17,26 @@ namespace Pathoschild.StardewValley.SkipIntro
         {
             MenuEvents.MenuChanged += (sender, e) =>
             {
-                // get menu
-                TitleMenu menu = e.NewMenu as TitleMenu;
-                if (menu == null)
-                    return;
+                try
+                {
+                    // get menu
+                    TitleMenu menu = e.NewMenu as TitleMenu;
+                    if (menu == null)
+                        return;
 
-                // skip intro
-                menu.skipToTitleButtons(); // skips everything except the Chucklefish logo
-                menu.GetType().GetField("chuckleFishTimer", BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(menu, 0);
+                    // skip intro (except the Chucklefish logo)
+                    menu.skipToTitleButtons();
+
+                    // skip Chucklefish logo
+                    FieldInfo logoTimer = menu.GetType().GetField("chuckleFishTimer", BindingFlags.Instance | BindingFlags.NonPublic);
+                    if (logoTimer == null)
+                        throw new InvalidOperationException("The 'chuckleFishTimer' field doesn't exist.");
+                    logoTimer.SetValue(menu, 0);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"'Skip Intro' mod couldn't skip the menu: {ex}");
+                }
             };
         }
     }
