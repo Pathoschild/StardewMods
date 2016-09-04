@@ -10,7 +10,7 @@ using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.LookupAnything.Framework
 {
-    /// <summary>A factory which extracts metadata from arbitrary objects.</summary>
+    /// <summary>Extracts metadata from arbitrary objects.</summary>
     public class SubjectFactory
     {
         /*********
