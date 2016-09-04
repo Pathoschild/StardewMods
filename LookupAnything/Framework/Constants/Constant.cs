@@ -8,5 +8,8 @@
 
         /// <summary>The maximum number of friendship points for a farm animal.</summary>
         public static int AnimalFriendshipMaxPoints = 5 * Constant.AnimalFriendshipPointsPerLevel;
+
+        /// <summary>The number of days in each season.</summary>
+        public static int DaysInSeason = 28;
     }
 }

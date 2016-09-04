@@ -30,6 +30,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
 
             // calculate next harvest
             int daysToNextHarvest = 0;
+            Tuple<string, int> dayOfNextHarvest = null;
             if (!canHarvestNow)
             {
                 int daysUntilLastPhase = daysToFirstHarvest - crop.phaseDays
@@ -38,14 +39,17 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 daysToNextHarvest = daysUntilLastPhase;
                 if (daysToNextHarvest == 0 && crop.fullyGrown && canRegrow)
                     daysToNextHarvest = crop.regrowAfterHarvest; // after harvesting a regrowable crop, day of current phase is set to 0 until the next day
+                dayOfNextHarvest = GameHelper.GetDayOffset(daysToNextHarvest);
             }
             
             // generate next-harvest summary
             string nextHarvestSummary;
             if (canHarvestNow)
                 nextHarvestSummary = "now";
+            else if(!crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Item1))
+                nextHarvestSummary = $"too late in the season for the next harvest (would be on {dayOfNextHarvest.Item1} {dayOfNextHarvest.Item2})";
             else
-                nextHarvestSummary = $"in {daysToNextHarvest} days";
+                nextHarvestSummary = $"in {daysToNextHarvest} {GameHelper.Pluralise(daysToNextHarvest, "day")} ({dayOfNextHarvest.Item1} {dayOfNextHarvest.Item2})";
 
             // add fields
             if (crop.dead)
@@ -53,7 +57,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             else
             {
                 this.AddCustomFields(
-                    new GenericField("Crop schedule", $"grows in {string.Join(", ", crop.seasonsToGrowIn)}; harvest after {daysToFirstHarvest} days" + (crop.regrowAfterHarvest != -1 ? $", then every {crop.regrowAfterHarvest} days" : "")),
+                    new GenericField("Crop schedule", $"grows in {string.Join(", ", crop.seasonsToGrowIn)}; harvest after {daysToFirstHarvest} {GameHelper.Pluralise(daysToFirstHarvest, "day")}" + (crop.regrowAfterHarvest != -1 ? $", then every {crop.regrowAfterHarvest} {GameHelper.Pluralise(crop.regrowAfterHarvest, "day")}" : "")),
                     new GenericField("Next harvest", nextHarvestSummary, hasValue: !crop.dead),
                     new GenericField("Crop drops", crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops > 0
                         ? $"{crop.minHarvest} to {crop.maxHarvest} ({Math.Round(crop.chanceForExtraCrops * 100, 2)}% chance of extra crops)"

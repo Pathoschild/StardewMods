@@ -40,7 +40,8 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             // show growth countdown
             if (!isMature)
             {
-                string growthText = $"mature in {tree.daysUntilMature} days";
+                System.Tuple<string, int> dayOfMaturity = GameHelper.GetDayOffset(tree.daysUntilMature);
+                string growthText = $"mature in {tree.daysUntilMature} {GameHelper.Pluralise(tree.daysUntilMature, "day")} ({dayOfMaturity.Item1} {dayOfMaturity.Item2})";
                 if (this.HasAdjacentObjects(target.GetTile()))
                     growthText += " (can't grow because there are adjacent objects)";
                 this.AddCustomFields(new GenericField("Growth", growthText));

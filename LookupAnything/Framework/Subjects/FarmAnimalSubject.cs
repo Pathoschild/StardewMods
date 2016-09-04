@@ -30,17 +30,28 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             this.Target = target;
             FarmAnimal animal = target.Value;
 
+            // calculate maturity
             bool isFullyGrown = animal.age >= animal.ageWhenMature;
+            int daysUntilGrown = 0;
+            Tuple<string, int> dayOfMaturity = null;
+            if (!isFullyGrown)
+            {
+                daysUntilGrown = animal.ageWhenMature - animal.age;
+                dayOfMaturity = GameHelper.GetDayOffset(daysUntilGrown);
+            }
+
+            // add fields
             this.AddCustomFields(
-                new CharacterFriendshipField("Friendship", animal.friendshipTowardFarmer, Constant.AnimalFriendshipPointsPerLevel, Constant.AnimalFriendshipMaxPoints),
+                new CharacterFriendshipField("Love", animal.friendshipTowardFarmer, Constant.AnimalFriendshipPointsPerLevel, Constant.AnimalFriendshipMaxPoints),
                 new PercentageBarField("Happiness", animal.happiness, byte.MaxValue, Color.Green, Color.Gray, $"{Math.Round(animal.happiness / (byte.MaxValue * 1f) * 100)}%"),
                 new GenericField("Mood today", animal.getMoodMessage()),
                 new GenericField("Complaints", this.GetMoodReason(animal)),
                 new GenericField("Produce ready", animal.currentProduce > 0 ? new StardewValley.Object(animal.currentProduce, 1).name : null),
-                new GenericField("Petted today", animal.wasPet),
-                new GenericField("Adult in", $"{animal.ageWhenMature - animal.age} days", hasValue: !isFullyGrown),
-                new SaleValueField("Sells for", animal.getSellPrice(), 1)
+                new GenericField("Petted today", animal.wasPet)
             );
+            if (!isFullyGrown)
+                this.AddCustomFields(new GenericField("Adult in", $"{daysUntilGrown} {GameHelper.Pluralise(daysUntilGrown, "day")} (on {dayOfMaturity.Item1} {dayOfMaturity.Item2})"));
+            this.AddCustomFields(new SaleValueField("Sells for", animal.getSellPrice(), 1));
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>
