@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Subjects;
 using StardewValley;
 using StardewValley.Characters;
@@ -118,8 +119,9 @@ namespace Pathoschild.LookupAnything.Framework
 
                     // object
                     case TargetType.InventoryItem:
+                        return new ItemSubject(target.ForType<Item>(), ObjectContext.Inventory, knownQuality: false, metadata: this.Metadata);
                     case TargetType.Object:
-                        return new ItemSubject(target.ForType<Item>(), knownQuality: false, metadata: this.Metadata);
+                        return new ItemSubject(target.ForType<Item>(), ObjectContext.World, knownQuality: false, metadata: this.Metadata);
                 }
             }
 
@@ -140,13 +142,13 @@ namespace Pathoschild.LookupAnything.Framework
                 {
                     Item item = GameHelper.GetPrivateField<Item>(curTab, "hoveredItem");
                     if (item != null)
-                        return new ItemSubject(new Target<Item>(TargetType.InventoryItem, item, null), knownQuality: true, metadata: this.Metadata);
+                        return new ItemSubject(new Target<Item>(TargetType.InventoryItem, item, null), ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
                 }
                 else if (curTab is CraftingPage)
                 {
                     Item item = GameHelper.GetPrivateField<Item>(curTab, "hoverItem");
                     if (item != null)
-                        return new ItemSubject(new Target<Item>(TargetType.InventoryItem, item, null), knownQuality: true, metadata: this.Metadata);
+                        return new ItemSubject(new Target<Item>(TargetType.InventoryItem, item, null), ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
                 }
             }
 
@@ -155,7 +157,7 @@ namespace Pathoschild.LookupAnything.Framework
             {
                 Item item = GameHelper.GetPrivateField<Item>(activeMenu, "HoveredItem", required: false); // ChestsAnywhere
                 if (item != null)
-                    return new ItemSubject(new Target<Item>(TargetType.InventoryItem, item, null), knownQuality: true, metadata: this.Metadata);
+                    return new ItemSubject(new Target<Item>(TargetType.InventoryItem, item, null), ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
             }
 
             return null;

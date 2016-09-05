@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Pathoschild.LookupAnything.Framework.Data;
 using StardewValley;
 
@@ -11,11 +10,8 @@ namespace Pathoschild.LookupAnything.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>Corrects metadata for 'big craftable' objects (including furniture, crafting stations, scarecrows, etc).</summary>
-        public IDictionary<int, ObjectData> BigCraftables { get; set; }
-
-        /// <summary>Corrects metadata for most game objects except <see cref="BigCraftables"/> (including inventory items, terrain features, crops, trees, and other map objects).</summary>
-        public IDictionary<int, ObjectData> Objects { get; set; }
+        /// <summary>Metadata for game objects (including inventory items, terrain features, crops, trees, and other map objects).</summary>
+        public ObjectData[] Objects { get; set; }
 
         /// <summary>Information about Adventure Guild monster-slaying quests.</summary>
         public AdventureGuildQuestData[] AdventureGuildQuests { get; set; }
@@ -24,22 +20,14 @@ namespace Pathoschild.LookupAnything.Framework
         /*********
         ** Public methods
         *********/
-        /// <summary>Get overrides for an object.</summary>
+        /// <summary>Get overrides for a game object.</summary>
         /// <param name="item">The item for which to get overrides.</param>
-        public ObjectData GetOverrides(Item item)
+        /// <param name="context">The context for which to get an override.</param>
+        public ObjectData GetObject(Item item, ObjectContext context)
         {
-            // big craftable
-            if ((item as Object)?.bigCraftable == true)
-            {
-                return this.Objects.ContainsKey(item.parentSheetIndex)
-                    ? this.Objects[item.parentSheetIndex]
-                    : null;
-            }
-
-            // object
-            return this.Objects.ContainsKey(item.parentSheetIndex)
-                ? this.Objects[item.parentSheetIndex]
-                : null;
+            ObjectSpriteSheet sheet = (item as Object)?.bigCraftable == true ? ObjectSpriteSheet.BigCraftable : ObjectSpriteSheet.Object;
+            return this?.Objects
+                .FirstOrDefault(obj => obj.SpriteSheet == sheet && obj.SpriteID.Contains(item.parentSheetIndex) && obj.Context.HasFlag(context));
         }
 
         /// <summary>Get the adventurer guild quest for the specified monster (if any).</summary>

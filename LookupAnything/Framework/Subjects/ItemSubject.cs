@@ -26,9 +26,10 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="target">The underlying target.</param>
+        /// <param name="context">The context of the object being looked up.</param>
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public ItemSubject(Target<Item> target, bool knownQuality, Metadata metadata)
+        public ItemSubject(Target<Item> target, ObjectContext context, bool knownQuality, Metadata metadata)
             : base(target.Value.Name, ItemSubject.GetDescription(target.Value), ItemSubject.GetTypeValue(target.Value))
         {
             this.Target = target;
@@ -39,7 +40,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             this.Name = item.Name;
             bool showInventoryFields = true;
             {
-                ObjectData objData = metadata.GetOverrides(item);
+                ObjectData objData = metadata.GetObject(item, context);
                 if (objData != null)
                 {
                     this.Name = objData.Name ?? this.Name;

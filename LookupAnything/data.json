@@ -8,283 +8,229 @@ You shouldn't change this file unless you know what you're doing.
 */
 {
   /*********
-  ** Corrects metadata for 'big craftable' objects (including furniture, crafting stations, scarecrows, etc).
+  ** Corrects metadata for game objects (including inventory items, terrain features, crops, trees, and other map objects).
   *********/
-  "BigCraftables": {
+  "Objects": [
     /****
     ** Egg incubator (no description when it contains an egg)
     ****/
-    "102": { // duck egg or white egg
+    {
+      "SpriteSheet": "BigCraftable",
+      "SpriteID": [ 102 /*duck or white egg*/, 103 /*brown or void egg*/ ],
+      "Context": "World",
       "Description": "Hatches eggs into baby chickens and ducks."
     },
-    "103": { // brown egg
-      "Description": "Hatches eggs into baby chickens and ducks."
-    }
-  },
 
-  /*********
-  ** Corrects metadata for most game objects except big craftables (including inventory items, terrain features, crops, trees, and other map objects).
-  *********/
-  "Objects": {
     /****
     ** Mine stones (all identified as "Stone" with no meaningful description)
     ****/
-    "8": {
+    /* gems */
+    {
+      "SpriteID": [ 8, 66 ],
+      "Context": "World",
       "Name": "Amethyst Cluster",
       "Type": "Stone",
       "Description": "Break apart to obtain amethysts."
     },
-    "10": {
-      "Name": "Topaz Node",
-      "Type": "Stone",
-      "Description": "Break apart to obtain topaz gems."
-    },
-    "14": {
+    {
+      "SpriteID": [ 14, 62 ],
+      "Context": "World",
       "Name": "Aquamarine Node",
       "Type": "Stone",
       "Description": "Break apart to obtain aquamarines."
     },
-    "32": {
-      "Name": "Grey Stone",
-      "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
-    },
-    "34": {
-      "Name": "Blue Stone",
-      "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
-    },
-    "36": {
-      "Name": "Blue Stone",
-      "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
-    },
-    "38": {
-      "Name": "Blue Stone",
-      "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
-    },
-    "40": {
-      "Name": "Brown Stone",
-      "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
-    },
-    "42": {
-      "Name": "Brown Stone",
-      "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
-    },
-    "44": {
-      "Name": "Gem Node",
-      "Type": "Stone",
-      "Description": "Break apart to obtain emeralds, aquamarines, rubies, amethysts, topaz, jade, or diamonds."
-    },
-    "46": {
-      "Name": "Mystic Stone",
-      "Type": "Stone",
-      "Description": "Break apart to obtain rare gems and ores, including prismatic shards."
-    },
-    "48": {
-      "Name": "Snowy Stone",
-      "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
-    },
-    "50": {
-      "Name": "Snowy Stone",
-      "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
-    },
-    "52": {
-      "Name": "Snowy Stone",
-      "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
-    },
-    "54": {
-      "Name": "Snowy Stone",
-      "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
-    },
-    "56": {
-      "Name": "Snowy Stone",
-      "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
-    },
-    "58": {
-      "Name": "Snowy Stone",
-      "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
-    },
-    "60": {
-      "Name": "Emerald Node",
-      "Type": "Stone",
-      "Description": "Break apart to obtain emeralds."
-    },
-    "62": {
-      "Name": "Aquamarine Node",
-      "Type": "Stone",
-      "Description": "Break apart to obtain aquamarines."
-    },
-    "64": {
-      "Name": "Ruby Node",
-      "Type": "Stone",
-      "Description": "Break apart to obtain rubies."
-    },
-    "66": {
-      "Name": "Amethyst Cluster",
-      "Type": "Stone",
-      "Description": "Break apart to obtain amethysts."
-    },
-    "68": {
-      "Name": "Topaz Node",
-      "Type": "Stone",
-      "Description": "Break apart to obtain topaz gems."
-    },
-    "70": {
-      "Name": "Sapphire Node",
-      "Type": "Stone",
-      "Description": "Break apart to obtain sapphires."
-    },
-    "72": {
+    {
+      "SpriteID": [ 2 /*skull cavern*/, 72 ],
+      "Context": "World",
       "Name": "Diamond Node",
       "Type": "Stone",
       "Description": "Break apart to obtain diamonds."
     },
-    "74": {
+    {
+      "SpriteID": [ 60 ],
+      "Context": "World",
+      "Name": "Emerald Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain emeralds."
+    },
+    {
+      "SpriteID": [ 44 ],
+      "Context": "World",
+      "Name": "Gem Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain emeralds, aquamarines, rubies, amethysts, topaz, jade, or diamonds."
+    },
+    {
+      "SpriteID": [ 46 ],
+      "Context": "World",
+      "Name": "Mystic Stone",
+      "Type": "Stone",
+      "Description": "Break apart to obtain rare gems and ores, including prismatic shards."
+    },
+    {
+      "SpriteID": [ 74 ],
+      "Context": "World",
       "Name": "Prismatic Share Node",
       "Type": "Stone",
       "Description": "Break apart to obtain prismatic shards."
     },
-    "290": {
-      "Name": "Iron Node",
+    {
+      "SpriteID": [ 4 /*skull cavern*/, 64 ],
+      "Context": "World",
+      "Name": "Ruby Node",
       "Type": "Stone",
-      "Description": "Break apart to obtain iron ore.",
-      "ShowInventoryFields": false
+      "Description": "Break apart to obtain rubies."
     },
-    "670": {
-      "Name": "Stone",
+    {
+      "SpriteID": [ 10, 68 ],
+      "Context": "World",
+      "Name": "Topaz Node",
       "Type": "Stone",
-      "Description": "Break apart to obtain stone."
+      "Description": "Break apart to obtain topaz gems."
     },
-    "751": {
+    {
+      "SpriteID": [ 70 ],
+      "Context": "World",
+      "Name": "Sapphire Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain sapphires."
+    },
+
+    /* ores */
+    {
+      "SpriteID": [ 751 ],
+      "Context": "World",
       "Name": "Copper Node",
       "Type": "Stone",
       "Description": "Break apart to obtain copper."
     },
+    {
+      "SpriteID": [ 290 ],
+      "Context": "World",
+      "Name": "Iron Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain iron ore."
+    },
+
+    /* stones */
+    {
+      "SpriteID": [ 32 ],
+      "Context": "World",
+      "Name": "Grey Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+    {
+      "SpriteID": [ 34, 36, 38 ],
+      "Context": "World",
+      "Name": "Blue Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+    {
+      "SpriteID": [ 40, 42 ],
+      "Context": "World",
+      "Name": "Brown Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+
+    {
+      "SpriteID": [ 48, 50, 52, 54, 56, 58 ],
+      "Context": "World",
+      "Name": "Snowy Stone",
+      "Type": "Stone",
+      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+    },
+    {
+      "SpriteID": [ 670 ],
+      "Context": "World",
+      "Name": "Stone",
+      "Type": "Stone",
+      "Description": "Break apart to obtain stone."
+    },
+
 
     /****
     ** Mine weeds & crystals (all identified as "Weeds" with no meaningful description, with a sale price despite being unsellable)
     ****/
-    "313": {
+    {
+      "SpriteID": [ 313, 314, 315, 316, 317, 318, 678, 679 ],
+      "Context": "World",
       "Name": "Weed",
       "Type": "Weed",
       "Description": "A non-descript weed. Might contain fibers or mixed seeds.",
       "ShowInventoryFields": false
     },
-    "314": {
-      "Name": "Weed",
-      "Type": "Weed",
-      "Description": "A non-descript weed. Might contain fibers or mixed seeds.",
-      "ShowInventoryFields": false
-    },
-    "315": {
-      "Name": "Weed",
-      "Type": "Weed",
-      "Description": "A non-descript weed. Might contain fibers or mixed seeds.",
-      "ShowInventoryFields": false
-    },
-    "316": {
-      "Name": "Weed",
-      "Type": "Weed",
-      "Description": "A non-descript weed. Might contain fibers or mixed seeds.",
-      "ShowInventoryFields": false
-    },
-    "317": {
-      "Name": "Weed",
-      "Type": "Weed",
-      "Description": "A non-descript weed. Might contain fibers or mixed seeds.",
-      "ShowInventoryFields": false
-    },
-    "318": {
-      "Name": "Weed",
-      "Type": "Weed",
-      "Description": "A non-descript weed. Might contain fibers or mixed seeds.",
-      "ShowInventoryFields": false
-    },
-    "319": {
+    {
+      "SpriteID": [ 319, 320, 321 ],
+      "Context": "World",
       "Name": "Ice Crystal",
       "Type": "Weed",
       "Description": "A non-descript ice crystal. Very small chance of containing refined quartz.",
-      "ShowInventoryFields": false
-    },
-    "320": {
-      "Name": "Ice Crystal",
-      "Type": "Weed",
-      "Description": "A non-descript ice crystal. Very small chance of containing refined quartz.",
-      "ShowInventoryFields": false
-    },
-    "321": {
-      "Name": "Ice Crystal",
-      "Type": "Weed",
-      "Description": "A non-descript ice crystal. Very small chance of containing refined quartz.",
-      "ShowInventoryFields": false
-    },
-    "678": {
-      "Name": "Weed",
-      "Type": "Weed",
-      "Description": "A non-descript weed. Might contain fibers or mixed seeds.",
-      "ShowInventoryFields": false
-    },
-    "679": {
-      "Name": "Weed",
-      "Type": "Weed",
-      "Description": "A non-descript weed. Might contain fibers or mixed seeds.",
       "ShowInventoryFields": false
     },
 
     /****
     ** Mine containers (all identified as "Barrel" with no meaningful description)
     ****/
-    "118": {
+    {
+      "SpriteID": [ 118 ],
+      "Context": "World",
       "Name": "Barrel",
       "Type": "Container",
       "Description": "Break apart to obtain sundry goods."
     },
-    "119": {
+    {
+      "SpriteID": [ 119 ],
+      "Context": "World",
       "Name": "Box",
       "Type": "Container",
       "Description": "Break apart to obtain sundry goods."
     },
-    "120": {
+    {
+      "SpriteID": [ 120 ],
+      "Context": "World",
       "Name": "Frost Barrel",
       "Type": "Container",
       "Description": "Break apart to obtain sundry goods."
     },
-    "121": {
+    {
+      "SpriteID": [ 121 ],
+      "Context": "World",
       "Name": "Frost Box",
       "Type": "Container",
       "Description": "Break apart to obtain sundry goods."
     },
-    "122": {
+    {
+      "SpriteID": [ 122 ],
+      "Context": "World",
       "Name": "Dark Barrel",
       "Type": "Container",
       "Description": "Break apart to obtain sundry goods."
     },
-    "123": {
+    {
+      "SpriteID": [ 123 ],
+      "Context": "World",
       "Name": "Dark Box",
       "Type": "Container",
       "Description": "Break apart to obtain sundry goods."
     },
-    "124": {
+    {
+      "SpriteID": [ 124 ],
+      "Context": "World",
       "Name": "Desert Barrel",
       "Type": "Container",
       "Description": "Break apart to obtain sundry goods."
     },
-    "125": {
+    {
+      "SpriteID": [ 125 ],
+      "Context": "World",
       "Name": "Desert Box",
       "Type": "Container",
       "Description": "Break apart to obtain sundry goods."
     }
-  },
+  ],
 
   /*********
   ** Information about Adventure Guild monster-slaying quests.
@@ -324,7 +270,7 @@ You shouldn't change this file unless you know what you're doing.
     {
       "Category": "Dust Sprites",
       "Targets": [ "Dust Spirit" ],
-      "RequiredKills":  500
+      "RequiredKills": 500
     }
   ]
 }
