@@ -33,7 +33,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             Tuple<string, int> dayOfNextHarvest = null;
             if (!canHarvestNow)
             {
-                int daysUntilLastPhase = daysToFirstHarvest - crop.phaseDays
+                int daysUntilLastPhase = daysToFirstHarvest - crop.dayOfCurrentPhase - crop.phaseDays
                     .Take(crop.currentPhase)
                     .Sum();
                 daysToNextHarvest = daysUntilLastPhase;
