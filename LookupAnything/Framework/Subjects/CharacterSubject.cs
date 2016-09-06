@@ -44,7 +44,6 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     this.AddCustomFields(
                         new GenericField("Birthday", $"{Utility.capitalizeFirstLetter(npc.birthday_Season)} {npc.birthday_Day}"),
                         new GenericField("Can romance", npc.datable),
-                        new GenericField("Love interest", npc.loveInterest != "null" ? npc.loveInterest : "none"),
                         new CharacterGiftTastesField("Best gifts", this.GetGiftTastes(npc)),
                         new CharacterFriendshipField("Friendship", Game1.player.friendships[npc.name][0], NPC.friendshipPointsPerHeartLevel, NPC.maxFriendshipPoints),
                         new GenericField("Talked today", Game1.player.friendships[npc.name][2] == 1),
