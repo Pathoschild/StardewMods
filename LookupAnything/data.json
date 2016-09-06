@@ -47,7 +47,7 @@ You shouldn't change this file unless you know what you're doing.
       "Description": "Break apart to obtain diamonds."
     },
     {
-      "SpriteID": [ 60 ],
+      "SpriteID": [ 12 /*skull cavern*/, 60 ],
       "Context": "World",
       "Name": "Emerald Node",
       "Type": "Stone",
@@ -59,6 +59,13 @@ You shouldn't change this file unless you know what you're doing.
       "Name": "Gem Node",
       "Type": "Stone",
       "Description": "Break apart to obtain emeralds, aquamarines, rubies, amethysts, topaz, jade, or diamonds."
+    },
+    {
+      "SpriteID": [ 6 ],
+      "Context": "World",
+      "Name": "Jade Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain jade."
     },
     {
       "SpriteID": [ 46 ],
@@ -105,11 +112,19 @@ You shouldn't change this file unless you know what you're doing.
       "Description": "Break apart to obtain copper."
     },
     {
+      "SpriteID": [ 764 ],
+      "Context": "World",
+      "Name": "Gold Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain gold ore."
+    },
+    {
       "SpriteID": [ 290 ],
       "Context": "World",
       "Name": "Iron Node",
       "Type": "Stone",
-      "Description": "Break apart to obtain iron ore."
+      "Description": "Break apart to obtain iron ore.",
+      "ShowInventoryFields": false
     },
 
     /* stones */
