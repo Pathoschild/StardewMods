@@ -33,6 +33,7 @@ Here are some representative screenshots (layout and values will change dynamica
 | object          | screenshots |
 | --------------- | ----------- |
 | crafting object | ![](screenshots/crafting.png) |
+| fence           | ![](screenshots/fence.png) |
 | fruit tree      | ![](screenshots/fruit-tree.png) |
 | wild tree       | ![](screenshots/wild-tree.png) |
 | mine objects    | ![](screenshots/mine-gem.png) ![](screenshots/mine-ore.png) ![](screenshots/mine-stone.png) ![](screenshots/mine-ice.png) |

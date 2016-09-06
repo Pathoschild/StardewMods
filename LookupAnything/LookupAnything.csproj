@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\Constants\FenceType.cs" />
     <Compile Include="Framework\Constants\SeasonName.cs" />
     <Compile Include="Framework\Data\ObjectContext.cs" />
     <Compile Include="Framework\Data\ObjectSpriteSheet.cs" />

@@ -20,6 +20,9 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <summary>The underlying target.</summary>
         private readonly Target<Item> Target;
 
+        /// <summary>The equivalent menu item for the specified target. (For example, the inventory item matching a fence object.)</summary>
+        private readonly Item MenuItem;
+
 
         /*********
         ** Public methods
@@ -30,14 +33,19 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public ItemSubject(Target<Item> target, ObjectContext context, bool knownQuality, Metadata metadata)
-            : base(target.Value.Name, ItemSubject.GetDescription(target.Value), ItemSubject.GetTypeValue(target.Value))
         {
+            // get item
             this.Target = target;
             Item item = target.Value;
             Object obj = item as Object;
 
             // basic info
-            this.Name = item.Name;
+            this.MenuItem = this.GetMenuItem(target.Value);
+            this.Name = this.MenuItem.Name;
+            this.Description = this.GetDescription(this.MenuItem);
+            this.Type = this.GetTypeValue(this.MenuItem);
+
+            // get overrides
             bool showInventoryFields = true;
             {
                 ObjectData objData = metadata.GetObject(item, context);
@@ -65,6 +73,16 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 );
             }
 
+            // fence
+            if (item is Fence)
+            {
+                Fence fence = (Fence)item;
+                float maxHealth = fence.isGate ? fence.maxHealth * 2 : fence.maxHealth;
+                float health = fence.health / maxHealth;
+                float daysLeft = fence.health * Constant.FenceDecayRate / 60 / 24;
+                this.AddCustomFields(new PercentageBarField("Health", (int)fence.health, (int)maxHealth, Color.Green, Color.Red, $"{Math.Round(health * 100)}% (roughly {Math.Round(daysLeft)} days left)"));
+            }
+
             // recipe
             if (CraftingRecipe.cookingRecipes.ContainsKey(item.Name) || CraftingRecipe.craftingRecipes.ContainsKey(item.Name))
             {
@@ -80,16 +98,18 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
         public override bool DrawPortrait(SpriteBatch sprites, Vector2 position, Vector2 size)
         {
-            // get item
-            Item item = this.Target.Value;
+            Item item = this.MenuItem;
 
-            // remove stack number (doesn't play well with clipped content)
-            if (item is Object)
+            // draw stackable object
+            if ((item as Object)?.stack > 1)
             {
                 Object obj = (Object)item;
-                item = new Object(obj.parentSheetIndex, 1, obj.isRecipe, obj.price, obj.quality) { bigCraftable = obj.bigCraftable };
+                obj = new Object(obj.parentSheetIndex, 1, obj.isRecipe, obj.price, obj.quality) { bigCraftable = obj.bigCraftable }; // remove stack number (doesn't play well with clipped content)
+                obj.drawInMenu(sprites, position, 1);
+                return true;
             }
 
+            // draw generic item
             item.drawInMenu(sprites, position, 1);
             return true;
         }
@@ -100,7 +120,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         *********/
         /// <summary>Get the item description.</summary>
         /// <param name="item">The item.</param>
-        private static string GetDescription(Item item)
+        private string GetDescription(Item item)
         {
             try
             {
@@ -112,9 +132,40 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             }
         }
 
+        /// <summary>Get the equivalent menu item for the specified target. (For example, the inventory item matching a fence object.)<</summary>
+        /// <param name="item">The target item.</param>
+        private Item GetMenuItem(Item item)
+        {
+            // fence
+            if (item is Fence)
+            {
+                Fence fence = (Fence)item;
+
+                // get equivalent object's sprite ID
+                FenceType fenceType = (FenceType)fence.whichType;
+                int? spriteID = null;
+                if (fence.isGate)
+                    spriteID = 325;
+                else if (fenceType == FenceType.Wood)
+                    spriteID = 322;
+                else if (fenceType == FenceType.Stone)
+                    spriteID = 323;
+                else if (fenceType == FenceType.Iron)
+                    spriteID = 324;
+                else if (fenceType == FenceType.Hardwood)
+                    spriteID = 298;
+
+                // get object
+                if (spriteID.HasValue)
+                    return new Object(spriteID.Value, 1);
+            }
+
+            return item;
+        }
+
         /// <summary>Get the item type.</summary>
         /// <param name="item">The item.</param>
-        private static string GetTypeValue(Item item)
+        private string GetTypeValue(Item item)
         {
             string type = item.getCategoryName();
             if (string.IsNullOrWhiteSpace(type) && item is Object)
