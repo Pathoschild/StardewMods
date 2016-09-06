@@ -22,8 +22,9 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         {
             // get harvest schedule
             bool canRegrow = crop.regrowAfterHarvest != -1;
+            int lastPhaseID = crop.phaseDays.Count - 1;
             bool canHarvestNow =
-                (crop.currentPhase >= crop.phaseDays.Count - 1) // last phase is harvestable
+                (crop.currentPhase >= lastPhaseID) // last phase is harvestable
                 && (!crop.fullyGrown || crop.dayOfCurrentPhase <= 0);
             int daysToFirstHarvest = crop.phaseDays
                 .Take(crop.phaseDays.Count - 1) // last phase is harvestable
@@ -38,8 +39,8 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     .Take(crop.currentPhase)
                     .Sum();
                 daysToNextHarvest = daysUntilLastPhase;
-                if (daysToNextHarvest == 0 && crop.fullyGrown && canRegrow)
-                    daysToNextHarvest = crop.regrowAfterHarvest; // after harvesting a regrowable crop, day of current phase is set to 0 until the next day
+                if (crop.fullyGrown && canRegrow && crop.currentPhase >= lastPhaseID)
+                    daysToNextHarvest = crop.regrowAfterHarvest; // after harvesting a regrowable crop, current phase isn't reset until the next day
                 dayOfNextHarvest = GameHelper.GetDayOffset(daysToNextHarvest);
             }
             
