@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define TEST_BUILD
+using System;
 using System.IO;
 using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json;
@@ -18,17 +19,11 @@ namespace Pathoschild.LookupAnything
         /*********
         ** Properties
         *********/
-        /// <summary>The keyboard input map.</summary>
-        private InputMapConfiguration<Keys> Keyboard;
-
-        /// <summary>The controller input map.</summary>
-        private InputMapConfiguration<Buttons?> Controller;
+        /// <summary>The mod configuration.</summary>
+        private ModConfig Config;
 
         /// <summary>Provides metadata that's not available from the game data directly.</summary>
         private Metadata Metadata;
-
-        /// <summary>The previous menu shown before the lookup UI was opened.</summary>
-        private IClickableMenu PreviousMenu;
 
         /// <summary>The name of the file containing data for the <see cref="Metadata"/> field.</summary>
         private readonly string DatabaseFileName = "data.json";
@@ -38,6 +33,9 @@ namespace Pathoschild.LookupAnything
         private FileSystemWatcher OverrideFileWatcher;
 #endif
 
+        /// <summary>The previous menu shown before the lookup UI was opened.</summary>
+        private IClickableMenu PreviousMenu;
+
 
         /*********
         ** Public methods
@@ -46,9 +44,7 @@ namespace Pathoschild.LookupAnything
         public override void Entry(params object[] objects)
         {
             // load config
-            var config = new ModConfig().InitializeConfig(this.BaseConfigPath);
-            this.Keyboard = config.GetKeyboard();
-            this.Controller = config.GetController();
+            this.Config = new RawModConfig().InitializeConfig(this.BaseConfigPath).GetParsed();
 
             // load database
             this.LoadMetadata();
@@ -62,9 +58,9 @@ namespace Pathoschild.LookupAnything
             TimeEvents.OnNewDay += (sender, e) => this.ResetCache();
 
             // hook up UI
-            ControlEvents.KeyPressed += (sender, e) => this.TryOpenMenu(this.Keyboard.Toggle, e.KeyPressed);
-            ControlEvents.ControllerButtonPressed += (sender, e) => this.TryOpenMenu(this.Controller.Toggle, e.ButtonPressed);
-            ControlEvents.ControllerTriggerPressed += (sender, e) => this.TryOpenMenu(this.Controller.Toggle, e.ButtonPressed);
+            ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed);
+            ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveControllerButton(e.ButtonPressed);
+            ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveControllerButton(e.ButtonPressed);
             MenuEvents.MenuClosed += (sender, e) => this.TryRestorePreviousMenu(e.PriorMenu);
         }
 
@@ -72,18 +68,38 @@ namespace Pathoschild.LookupAnything
         /*********
         ** Private methods
         *********/
-        /// <summary>Show the lookup UI for the current target if the control matches the configured control.</summary>
-        /// <typeparam name="T">The input type.</typeparam>
-        /// <param name="expected">The configured toggle input.</param>
-        /// <param name="received">The received toggle input.</param>
-        private void TryOpenMenu<T>(T expected, T received)
+        /// <summary>The method invoked when the player presses a keyboard button.</summary>
+        /// <param name="key">The pressed key.</param>
+        private void ReceiveKeyPress(Keys key)
+        {
+            var keyboard = this.Config.Keyboard;
+            if (key == keyboard.Toggle)
+                this.ShowLookup();
+            if (key == keyboard.ScrollUp)
+                (Game1.activeClickableMenu as LookupMenu)?.ScrollUp(this.Config.ScrollAmount);
+            else if (key == keyboard.ScrollDown)
+                (Game1.activeClickableMenu as LookupMenu)?.ScrollDown(this.Config.ScrollAmount);
+        }
+
+        /// <summary>The method invoked when the player presses a controller button.</summary>
+        /// <param name="button">The pressed key.</param>
+        private void ReceiveControllerButton(Buttons button)
+        {
+            var controller = this.Config.Controller;
+            if (button == controller.Toggle)
+                this.ShowLookup();
+            if (button == controller.ScrollUp)
+                (Game1.activeClickableMenu as LookupMenu)?.ScrollUp(this.Config.ScrollAmount);
+            else if (button == controller.ScrollDown)
+                (Game1.activeClickableMenu as LookupMenu)?.ScrollDown(this.Config.ScrollAmount);
+        }
+
+
+        /// <summary>Show the lookup UI for the current target.</summary>
+        private void ShowLookup()
         {
             try
             {
-                // check input
-                if (!received.Equals(expected))
-                    return;
-
                 // show lookup UI
                 ISubject subject = Game1.activeClickableMenu != null
                     ? new SubjectFactory(this.Metadata).GetSubjectFrom(Game1.activeClickableMenu)

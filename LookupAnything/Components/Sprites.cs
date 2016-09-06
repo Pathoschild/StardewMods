@@ -33,6 +33,12 @@ namespace Pathoschild.LookupAnything.Components
 
             /// <summary>An empty heart indicating a missing friendship level.</summary>
             public static readonly Rectangle EmptyHeart = new Rectangle(218, 428, 7, 6);
+
+            /// <summary>A down arrow for scrolling content.</summary>
+            public static readonly Rectangle DownArrow = new Rectangle(12, 76, 40, 44);
+
+            /// <summary>An up arrow for scrolling content.</summary>
+            public static readonly Rectangle UpArrow = new Rectangle(76, 72, 40, 44);
         }
 
 

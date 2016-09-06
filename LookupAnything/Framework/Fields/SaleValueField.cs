@@ -42,7 +42,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
             {
                 string result = $"{saleValues.First().Value}g";
                 if (stackSize > 1)
-                    result += $" (stack: {saleValues.First().Value * stackSize}g)";
+                    result += $" ({saleValues.First().Value * stackSize}g for stack of {stackSize})";
                 return result;
             }
 

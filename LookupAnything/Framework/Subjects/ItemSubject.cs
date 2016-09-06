@@ -78,7 +78,17 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
         public override bool DrawPortrait(SpriteBatch sprites, Vector2 position, Vector2 size)
         {
-            this.Target.Value.drawInMenu(sprites, position, 1);
+            // get item
+            Item item = this.Target.Value;
+
+            // remove stack number (doesn't play well with clipped content)
+            if (item is Object)
+            {
+                Object obj = (Object)item;
+                item = new Object(obj.parentSheetIndex, 1, obj.isRecipe, obj.price, obj.quality) { bigCraftable = obj.bigCraftable };
+            }
+
+            item.drawInMenu(sprites, position, 1);
             return true;
         }
 
