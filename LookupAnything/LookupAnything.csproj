@@ -83,7 +83,7 @@
     <Compile Include="Framework\Fields\GenericField.cs" />
     <Compile Include="Framework\Fields\CharacterFriendshipField.cs" />
     <Compile Include="Framework\Fields\CharacterGiftTastesField.cs" />
-    <Compile Include="Framework\Fields\GiftTastesForItemField.cs" />
+    <Compile Include="Framework\Fields\ItemGiftTastesField.cs" />
     <Compile Include="Framework\Fields\SaleValueField.cs" />
     <Compile Include="Framework\Constants\GiftTaste.cs" />
     <Compile Include="Framework\SubjectFactory.cs" />

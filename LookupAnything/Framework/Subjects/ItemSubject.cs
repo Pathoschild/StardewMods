@@ -57,9 +57,11 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             // item
             if (showInventoryFields)
             {
+                var giftTastes = this.GetGiftTastes(item);
                 this.AddCustomFields(
                     new SaleValueField("Sells for", this.GetSaleValue(item, knownQuality), item.Stack),
-                    new GiftTastesForItemField("Gift tastes", this.GetGiftTastes(item), GiftTaste.Love, GiftTaste.Like)
+                    new ItemGiftTastesField("Loves this", giftTastes, GiftTaste.Love),
+                    new ItemGiftTastesField("Likes this", giftTastes, GiftTaste.Like)
                 );
             }
 
