@@ -1,11 +1,10 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace Pathoschild.LookupAnything.Framework
+namespace Pathoschild.LookupAnything.Framework.Targets
 {
-    /// <summary>An in-game element that can be looked up, including position metadata.</summary>
-    /// <typeparam name="T">The target type.</typeparam>
-    public class Target<T>
+    /// <summary>Positional metadata about an object in the world.</summary>
+    public class GenericTarget : ITarget
     {
         /*********
         ** Accessors
@@ -14,7 +13,7 @@ namespace Pathoschild.LookupAnything.Framework
         public TargetType Type { get; set; }
 
         /// <summary>The underlying in-game object.</summary>
-        public T Value { get; set; }
+        public object Value { get; set; }
 
         /// <summary>The object's tile position in the current location (if applicable).</summary>
         public Vector2? Tile { get; set; }
@@ -27,7 +26,7 @@ namespace Pathoschild.LookupAnything.Framework
         /// <param name="type">The target type.</param>
         /// <param name="obj">The underlying in-game object.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        public Target(TargetType type, T obj, Vector2? tilePosition = null)
+        public GenericTarget(TargetType type, object obj, Vector2? tilePosition = null)
         {
             this.Type = type;
             this.Value = obj;
@@ -43,7 +42,7 @@ namespace Pathoschild.LookupAnything.Framework
             return this.Tile.Value;
         }
 
-        /// <summary>Get whether the object is at a specified map tile position.</summary>
+        /// <summary>Get whether the object is at the specified map tile position.</summary>
         /// <param name="position">The map tile position.</param>
         public bool IsAtTile(Vector2 position)
         {
@@ -51,24 +50,10 @@ namespace Pathoschild.LookupAnything.Framework
         }
 
         /// <summary>Get a strongly-typed instance.</summary>
-        /// <typeparam name="TNew">The expected object type.</typeparam>
-        public Target<TNew> ForType<TNew>()
+        /// <typeparam name="T">The expected value type.</typeparam>
+        public T GetValue<T>()
         {
-            return new Target<TNew>(this.Type, (TNew)(object)this.Value, this.Tile);
+            return (T)this.Value;
         }
-    }
-
-    /// <summary>An in-game element that can be looked up, including position metadata.</summary>
-    public class Target : Target<object>
-    {
-        /*********
-        ** Public methods
-        *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="type">The target type.</param>
-        /// <param name="obj">The underlying in-game object.</param>
-        /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        public Target(TargetType type, object obj, Vector2? tilePosition = null)
-            : base(type, obj, tilePosition) { }
     }
 }

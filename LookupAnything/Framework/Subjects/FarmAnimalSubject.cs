@@ -15,43 +15,46 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         ** Properties
         *********/
         /// <summary>The lookup target.</summary>
-        private readonly Target<FarmAnimal> Target;
+        private readonly FarmAnimal Target;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="target">The lookup target.</param>
+        /// <param name="animal">The lookup target.</param>
         /// <remarks>Reverse engineered from <see cref="FarmAnimal"/>.</remarks>
-        public FarmAnimalSubject(Target<FarmAnimal> target)
-            : base(target.Value.name, null, target.Value.type)
+        public FarmAnimalSubject(FarmAnimal animal)
         {
-            this.Target = target;
-            FarmAnimal animal = target.Value;
+            // initialise
+            this.Target = animal;
+            this.Initialise(animal.name, null, animal.type);
 
-            // calculate maturity
-            bool isFullyGrown = animal.age >= animal.ageWhenMature;
-            int daysUntilGrown = 0;
-            Tuple<string, int> dayOfMaturity = null;
-            if (!isFullyGrown)
+            // add custom fields
             {
-                daysUntilGrown = animal.ageWhenMature - animal.age;
-                dayOfMaturity = GameHelper.GetDayOffset(daysUntilGrown);
-            }
+                // calculate maturity
+                bool isFullyGrown = animal.age >= animal.ageWhenMature;
+                int daysUntilGrown = 0;
+                Tuple<string, int> dayOfMaturity = null;
+                if (!isFullyGrown)
+                {
+                    daysUntilGrown = animal.ageWhenMature - animal.age;
+                    dayOfMaturity = GameHelper.GetDayOffset(daysUntilGrown);
+                }
 
-            // add fields
-            this.AddCustomFields(
-                new CharacterFriendshipField("Love", animal.friendshipTowardFarmer, Constant.AnimalFriendshipPointsPerLevel, Constant.AnimalFriendshipMaxPoints),
-                new PercentageBarField("Happiness", animal.happiness, byte.MaxValue, Color.Green, Color.Gray, $"{Math.Round(animal.happiness / (byte.MaxValue * 1f) * 100)}%"),
-                new GenericField("Mood today", animal.getMoodMessage()),
-                new GenericField("Complaints", this.GetMoodReason(animal)),
-                new GenericField("Produce ready", animal.currentProduce > 0 ? new StardewValley.Object(animal.currentProduce, 1).name : null),
-                new GenericField("Petted today", animal.wasPet)
-            );
-            if (!isFullyGrown)
-                this.AddCustomFields(new GenericField("Adult in", $"{daysUntilGrown} {GameHelper.Pluralise(daysUntilGrown, "day")} (on {dayOfMaturity.Item1} {dayOfMaturity.Item2})"));
-            this.AddCustomFields(new SaleValueField("Sells for", animal.getSellPrice(), 1));
+                // add fields
+                this.AddCustomFields(
+                    new CharacterFriendshipField("Love", animal.friendshipTowardFarmer, Constant.AnimalFriendshipPointsPerLevel, Constant.AnimalFriendshipMaxPoints),
+                    new PercentageBarField("Happiness", animal.happiness, byte.MaxValue, Color.Green, Color.Gray, $"{Math.Round(animal.happiness / (byte.MaxValue * 1f) * 100)}%"),
+                    new GenericField("Mood today", animal.getMoodMessage()),
+                    new GenericField("Complaints", this.GetMoodReason(animal)),
+                    new GenericField("Produce ready", animal.currentProduce > 0 ? new StardewValley.Object(animal.currentProduce, 1).name : null),
+                    new GenericField("Petted today", animal.wasPet)
+                );
+                if (!isFullyGrown)
+                    this.AddCustomFields(new GenericField("Adult in", $"{daysUntilGrown} {GameHelper.Pluralise(daysUntilGrown, "day")} (on {dayOfMaturity.Item1} {dayOfMaturity.Item2})"));
+                this.AddCustomFields(new SaleValueField("Sells for", animal.getSellPrice(), 1));
+            }
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>
@@ -61,7 +64,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
         public override bool DrawPortrait(SpriteBatch sprites, Vector2 position, Vector2 size)
         {
-            FarmAnimal animal = this.Target.Value;
+            FarmAnimal animal = this.Target;
             animal.Sprite.draw(sprites, position, 1, 0, 0, Color.White, scale: size.X / animal.Sprite.getWidth());
             return true;
         }

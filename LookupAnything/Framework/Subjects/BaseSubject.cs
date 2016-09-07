@@ -38,14 +38,11 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /*********
         ** Protected methods
         *********/
-        /// <summary>Construct an instance.</summary>
-        protected BaseSubject() { }
-
-        /// <summary>Construct an instance.</summary>
+        /// <summary>Initialise the base values.</summary>
         /// <param name="name">The display name.</param>
         /// <param name="description">The object description (if applicable).</param>
         /// <param name="type">The object type.</param>
-        protected BaseSubject(string name, string description, string type)
+        protected void Initialise(string name, string description, string type)
         {
             this.Name = name;
             this.Description = description;

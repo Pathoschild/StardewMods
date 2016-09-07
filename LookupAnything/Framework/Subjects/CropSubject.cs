@@ -14,11 +14,11 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="crop">The underlying crop.</param>
-        /// <param name="obj">The underlying object.</param>
+        /// <param name="crop">The lookup target.</param>
+        /// <param name="obj">The item that can be harvested from the crop.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public CropSubject(Crop crop, Object obj, Metadata metadata)
-            : base(new Target<Item>(TargetType.InventoryItem, obj), ObjectContext.World, knownQuality: false, metadata: metadata)
+            : base(obj, ObjectContext.World, knownQuality: false, metadata: metadata)
         {
             // get harvest schedule
             bool canRegrow = crop.regrowAfterHarvest != -1;
@@ -43,12 +43,12 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     daysToNextHarvest = crop.regrowAfterHarvest; // after harvesting a regrowable crop, current phase isn't reset until the next day
                 dayOfNextHarvest = GameHelper.GetDayOffset(daysToNextHarvest);
             }
-            
+
             // generate next-harvest summary
             string nextHarvestSummary;
             if (canHarvestNow)
                 nextHarvestSummary = "now";
-            else if(!crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Item1))
+            else if (!crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Item1))
                 nextHarvestSummary = $"too late in the season for the next harvest (would be on {dayOfNextHarvest.Item1} {dayOfNextHarvest.Item2})";
             else
                 nextHarvestSummary = $"in {daysToNextHarvest} {GameHelper.Pluralise(daysToNextHarvest, "day")} ({dayOfNextHarvest.Item1} {dayOfNextHarvest.Item2})";

@@ -21,23 +21,25 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         ** Properties
         *********/
         /// <summary>The lookup target.</summary>
-        private readonly Target<NPC> Target;
+        private readonly NPC Target;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="target">The lookup target.</param>
+        /// <param name="npc">The lookup target.</param>
+        /// <param name="type">The NPC type.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-        public CharacterSubject(Target<NPC> target, Metadata metadata)
-            : base(target.Value.getName(), null, "NPC")
+        public CharacterSubject(NPC npc, TargetType type, Metadata metadata)
         {
-            this.Target = target;
-            NPC npc = target.Value;
+            // initialise
+            this.Target = npc;
+            this.Initialise(npc.getName(), null, "NPC");
 
-            switch (target.Type)
+            // add custom fields
+            switch (type)
             {
                 case TargetType.Villager:
                     this.Type = "Villager";
@@ -55,8 +57,8 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     break;
 
                 case TargetType.Pet:
-                    this.Type = target.Value.GetType().Name;
-                    Pet pet = (Pet)target.Value;
+                    this.Type = npc.GetType().Name;
+                    Pet pet = (Pet)npc;
                     this.AddCustomFields(
                         new CharacterFriendshipField("Love", pet.friendshipTowardFarmer, Pet.maxFriendship / 10, Pet.maxFriendship),
                         new GenericField("Petted today", GameHelper.GetPrivateField<bool>(pet, "wasPetToday"))
@@ -67,7 +69,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     this.Type = "Monster";
 
                     // basic info
-                    Monster monster = (Monster)target.Value;
+                    Monster monster = (Monster)npc;
                     string[] drops = (from id in monster.objectsToDrop let item = GameHelper.GetObjectBySpriteIndex(id) orderby item.Name select item.Name).ToArray();
                     this.AddCustomFields(
                         new GenericField("Invincible", $"For {GameHelper.GetPrivateField<int>(monster, "invincibleCountdown")} seconds", hasValue: monster.isInvincible()),
@@ -88,7 +90,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     break;
 
                 default:
-                    throw new InvalidOperationException($"Unknown NPC type '{target.Type}'");
+                    throw new InvalidOperationException($"Unknown NPC type '{type}'");
             }
         }
 
@@ -99,7 +101,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
         public override bool DrawPortrait(SpriteBatch sprites, Vector2 position, Vector2 size)
         {
-            NPC npc = this.Target.Value;
+            NPC npc = this.Target;
 
             // use character portrait (most NPCs)
             if (npc.Portrait != null)

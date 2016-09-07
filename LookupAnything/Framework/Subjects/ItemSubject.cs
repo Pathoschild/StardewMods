@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Fields;
+using Pathoschild.LookupAnything.Framework.Targets;
 using StardewValley;
 using Object = StardewValley.Object;
 
@@ -17,11 +18,8 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /*********
         ** Properties
         *********/
-        /// <summary>The underlying target.</summary>
-        private readonly Target<Item> Target;
-
-        /// <summary>The equivalent menu item for the specified target. (For example, the inventory item matching a fence object.)</summary>
-        private readonly Item MenuItem;
+        /// <summary>The menu item to render, which may be different from the item that was looked up (e.g. for fences).</summary>
+        private readonly Item DisplayItem;
 
 
         /*********
@@ -32,62 +30,68 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <param name="context">The context of the object being looked up.</param>
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public ItemSubject(Target<Item> target, ObjectContext context, bool knownQuality, Metadata metadata)
+        public ItemSubject(ITarget target, ObjectContext context, bool knownQuality, Metadata metadata)
+            : this(target.GetValue<Item>(), context, knownQuality, metadata) { }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="item">The underlying target.</param>
+        /// <param name="context">The context of the object being looked up.</param>
+        /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public ItemSubject(Item item, ObjectContext context, bool knownQuality, Metadata metadata)
         {
-            // get item
-            this.Target = target;
-            Item item = target.Value;
-            Object obj = item as Object;
+            // initialise
+            this.DisplayItem = this.GetMenuItem(item);
+            this.Initialise(this.DisplayItem.Name, this.GetDescription(this.DisplayItem), this.GetTypeValue(this.DisplayItem));
 
-            // basic info
-            this.MenuItem = this.GetMenuItem(target.Value);
-            this.Name = this.MenuItem.Name;
-            this.Description = this.GetDescription(this.MenuItem);
-            this.Type = this.GetTypeValue(this.MenuItem);
-
-            // get overrides
-            bool showInventoryFields = true;
+            // add custom fields
             {
-                ObjectData objData = metadata.GetObject(item, context);
-                if (objData != null)
+                Object obj = item as Object;
+
+                // get overrides
+                bool showInventoryFields = true;
                 {
-                    this.Name = objData.Name ?? this.Name;
-                    this.Description = objData.Description ?? this.Description;
-                    this.Type = objData.Type ?? this.Type;
-                    showInventoryFields = objData.ShowInventoryFields ?? true;
+                    ObjectData objData = metadata.GetObject(item, context);
+                    if (objData != null)
+                    {
+                        this.Name = objData.Name ?? this.Name;
+                        this.Description = objData.Description ?? this.Description;
+                        this.Type = objData.Type ?? this.Type;
+                        showInventoryFields = objData.ShowInventoryFields ?? true;
+                    }
                 }
-            }
 
-            // crafting
-            if (obj?.heldObject != null)
-                this.AddCustomFields(new GenericField("Crafting", $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + GenericField.GetString(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready") + "."));
+                // crafting
+                if (obj?.heldObject != null)
+                    this.AddCustomFields(new GenericField("Crafting", $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + GenericField.GetString(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready") + "."));
 
-            // item
-            if (showInventoryFields)
-            {
-                var giftTastes = this.GetGiftTastes(item);
-                this.AddCustomFields(
-                    new SaleValueField("Sells for", this.GetSaleValue(item, knownQuality), item.Stack),
-                    new ItemGiftTastesField("Loves this", giftTastes, GiftTaste.Love),
-                    new ItemGiftTastesField("Likes this", giftTastes, GiftTaste.Like)
-                );
-            }
+                // item
+                if (showInventoryFields)
+                {
+                    var giftTastes = this.GetGiftTastes(item);
+                    this.AddCustomFields(
+                        new SaleValueField("Sells for", this.GetSaleValue(item, knownQuality), item.Stack),
+                        new ItemGiftTastesField("Loves this", giftTastes, GiftTaste.Love),
+                        new ItemGiftTastesField("Likes this", giftTastes, GiftTaste.Like)
+                    );
+                }
 
-            // fence
-            if (item is Fence)
-            {
-                Fence fence = (Fence)item;
-                float maxHealth = fence.isGate ? fence.maxHealth * 2 : fence.maxHealth;
-                float health = fence.health / maxHealth;
-                float daysLeft = fence.health * Constant.FenceDecayRate / 60 / 24;
-                this.AddCustomFields(new PercentageBarField("Health", (int)fence.health, (int)maxHealth, Color.Green, Color.Red, $"{Math.Round(health * 100)}% (roughly {Math.Round(daysLeft)} days left)"));
-            }
+                // fence
+                if (item is Fence)
+                {
+                    Fence fence = (Fence)item;
+                    float maxHealth = fence.isGate ? fence.maxHealth * 2 : fence.maxHealth;
+                    float health = fence.health / maxHealth;
+                    float daysLeft = fence.health * Constant.FenceDecayRate / 60 / 24;
+                    this.AddCustomFields(new PercentageBarField("Health", (int)fence.health, (int)maxHealth, Color.Green, Color.Red, $"{Math.Round(health * 100)}% (roughly {Math.Round(daysLeft)} days left)"));
+                }
 
-            // recipe
-            if (CraftingRecipe.cookingRecipes.ContainsKey(item.Name) || CraftingRecipe.craftingRecipes.ContainsKey(item.Name))
-            {
-                CraftingRecipe recipe = new CraftingRecipe(item.Name, CraftingRecipe.cookingRecipes.ContainsKey(item.Name));
-                this.AddCustomFields(new RecipeIngredientsField("Recipe", recipe));
+                // recipe
+                if (CraftingRecipe.cookingRecipes.ContainsKey(item.Name) || CraftingRecipe.craftingRecipes.ContainsKey(item.Name))
+                {
+                    CraftingRecipe recipe = new CraftingRecipe(item.Name, CraftingRecipe.cookingRecipes.ContainsKey(item.Name));
+                    this.AddCustomFields(new RecipeIngredientsField("Recipe", recipe));
+                }
             }
         }
 
@@ -98,7 +102,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
         public override bool DrawPortrait(SpriteBatch sprites, Vector2 position, Vector2 size)
         {
-            Item item = this.MenuItem;
+            Item item = this.DisplayItem;
 
             // draw stackable object
             if ((item as Object)?.stack > 1)
@@ -118,20 +122,6 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /*********
         ** Private methods
         *********/
-        /// <summary>Get the item description.</summary>
-        /// <param name="item">The item.</param>
-        private string GetDescription(Item item)
-        {
-            try
-            {
-                return item.getDescription();
-            }
-            catch (KeyNotFoundException)
-            {
-                return null; // e.g. incubator
-            }
-        }
-
         /// <summary>Get the equivalent menu item for the specified target. (For example, the inventory item matching a fence object.)<</summary>
         /// <param name="item">The target item.</param>
         private Item GetMenuItem(Item item)
@@ -161,6 +151,20 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             }
 
             return item;
+        }
+
+        /// <summary>Get the item description.</summary>
+        /// <param name="item">The item.</param>
+        private string GetDescription(Item item)
+        {
+            try
+            {
+                return item.getDescription();
+            }
+            catch (KeyNotFoundException)
+            {
+                return null; // e.g. incubator
+            }
         }
 
         /// <summary>Get the item type.</summary>

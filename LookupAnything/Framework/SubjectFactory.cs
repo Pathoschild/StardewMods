@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Subjects;
+using Pathoschild.LookupAnything.Framework.Targets;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Menus;
@@ -40,7 +41,7 @@ namespace Pathoschild.LookupAnything.Framework
         ****/
         /// <summary>Get all potential lookup targets in the current location.</summary>
         /// <param name="location">The current location.</param>
-        public IEnumerable<Target> GetAllTargets(GameLocation location)
+        public IEnumerable<ITarget> GetAllTargets(GameLocation location)
         {
             // NPCs
             foreach (NPC npc in location.characters)
@@ -53,19 +54,19 @@ namespace Pathoschild.LookupAnything.Framework
                 else if (npc is Monster)
                     type = TargetType.Monster;
 
-                yield return new Target(type, npc, npc.getTileLocation());
+                yield return new GenericTarget(type, npc, npc.getTileLocation());
             }
 
             // animals
             foreach (FarmAnimal animal in (location as Farm)?.animals.Values ?? (location as AnimalHouse)?.animals.Values ?? Enumerable.Empty<FarmAnimal>())
-                yield return new Target(TargetType.FarmAnimal, animal, animal.getTileLocation());
+                yield return new GenericTarget(TargetType.FarmAnimal, animal, animal.getTileLocation());
 
             // map objects
             foreach (var pair in location.objects)
             {
                 Vector2 position = pair.Key;
                 Object obj = pair.Value;
-                yield return new Target(TargetType.Object, obj, position);
+                yield return new GenericTarget(TargetType.Object, obj, position);
             }
 
             // terrain features
@@ -82,7 +83,7 @@ namespace Pathoschild.LookupAnything.Framework
                 else if (feature is Tree)
                     type = TargetType.WildTree;
 
-                yield return new Target(type, feature, position);
+                yield return new GenericTarget(type, feature, position);
             }
         }
 
@@ -91,8 +92,8 @@ namespace Pathoschild.LookupAnything.Framework
         /// <param name="tile">The object's tile position within the <paramref name="location"/>.</param>
         public ISubject GetSubjectFrom(GameLocation location, Vector2 tile)
         {
-            IEnumerable<Target> targets = this.GetAllTargets(location).Where(p => p.IsAtTile(tile));
-            foreach (Target target in targets)
+            IEnumerable<ITarget> targets = this.GetAllTargets(location).Where(p => p.IsAtTile(tile));
+            foreach (ITarget target in targets)
             {
                 switch (target.Type)
                 {
@@ -100,28 +101,28 @@ namespace Pathoschild.LookupAnything.Framework
                     case TargetType.Pet:
                     case TargetType.Monster:
                     case TargetType.Villager:
-                        return new CharacterSubject(target.ForType<NPC>(), this.Metadata);
+                        return new CharacterSubject(target.GetValue<NPC>(), target.Type, this.Metadata);
 
                     // animal
                     case TargetType.FarmAnimal:
-                        return new FarmAnimalSubject(target.ForType<FarmAnimal>());
+                        return new FarmAnimalSubject(target.GetValue<FarmAnimal>());
 
                     // crop
                     case TargetType.Crop:
-                        Crop crop = ((HoeDirt)target.Value).crop;
+                        Crop crop = target.GetValue<HoeDirt>().crop;
                         return new CropSubject(crop, GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest), this.Metadata);
 
                     // tree
                     case TargetType.FruitTree:
-                        return new FruitTreeSubject(target.ForType<FruitTree>());
+                        return new FruitTreeSubject(target.GetValue<FruitTree>(), target.GetTile());
                     case TargetType.WildTree:
-                        return new TreeSubject(target.ForType<Tree>());
+                        return new TreeSubject(target.GetValue<Tree>(), target.GetTile());
 
                     // object
                     case TargetType.InventoryItem:
-                        return new ItemSubject(target.ForType<Item>(), ObjectContext.Inventory, knownQuality: false, metadata: this.Metadata);
+                        return new ItemSubject(target, ObjectContext.Inventory, knownQuality: false, metadata: this.Metadata);
                     case TargetType.Object:
-                        return new ItemSubject(target.ForType<Item>(), ObjectContext.World, knownQuality: false, metadata: this.Metadata);
+                        return new ItemSubject(target, ObjectContext.World, knownQuality: false, metadata: this.Metadata);
                 }
             }
 
@@ -142,13 +143,13 @@ namespace Pathoschild.LookupAnything.Framework
                 {
                     Item item = GameHelper.GetPrivateField<Item>(curTab, "hoveredItem");
                     if (item != null)
-                        return new ItemSubject(new Target<Item>(TargetType.InventoryItem, item, null), ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
+                        return new ItemSubject(new GenericTarget(TargetType.InventoryItem, item, null), ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
                 }
                 else if (curTab is CraftingPage)
                 {
                     Item item = GameHelper.GetPrivateField<Item>(curTab, "hoverItem");
                     if (item != null)
-                        return new ItemSubject(new Target<Item>(TargetType.InventoryItem, item, null), ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
+                        return new ItemSubject(new GenericTarget(TargetType.InventoryItem, item, null), ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
                 }
             }
 
@@ -157,7 +158,7 @@ namespace Pathoschild.LookupAnything.Framework
             {
                 Item item = GameHelper.GetPrivateField<Item>(activeMenu, "HoveredItem", required: false); // ChestsAnywhere
                 if (item != null)
-                    return new ItemSubject(new Target<Item>(TargetType.InventoryItem, item, null), ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
+                    return new ItemSubject(new GenericTarget(TargetType.InventoryItem, item, null), ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
             }
 
             return null;
