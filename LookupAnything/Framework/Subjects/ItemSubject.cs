@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Fields;
-using Pathoschild.LookupAnything.Framework.Targets;
 using StardewValley;
 using Object = StardewValley.Object;
 
@@ -25,14 +24,6 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /*********
         ** Public methods
         *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="target">The underlying target.</param>
-        /// <param name="context">The context of the object being looked up.</param>
-        /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public ItemSubject(ITarget target, ObjectContext context, bool knownQuality, Metadata metadata)
-            : this(target.GetValue<Item>(), context, knownQuality, metadata) { }
-
         /// <summary>Construct an instance.</summary>
         /// <param name="item">The underlying target.</param>
         /// <param name="context">The context of the object being looked up.</param>

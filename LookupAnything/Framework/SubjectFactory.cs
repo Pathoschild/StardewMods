@@ -54,19 +54,19 @@ namespace Pathoschild.LookupAnything.Framework
                 else if (npc is Monster)
                     type = TargetType.Monster;
 
-                yield return new GenericTarget(type, npc, npc.getTileLocation());
+                yield return new CharacterTarget(type, npc, npc.getTileLocation());
             }
 
             // animals
             foreach (FarmAnimal animal in (location as Farm)?.animals.Values ?? (location as AnimalHouse)?.animals.Values ?? Enumerable.Empty<FarmAnimal>())
-                yield return new GenericTarget(TargetType.FarmAnimal, animal, animal.getTileLocation());
+                yield return new FarmAnimalTarget(animal, animal.getTileLocation());
 
             // map objects
             foreach (var pair in location.objects)
             {
                 Vector2 position = pair.Key;
                 Object obj = pair.Value;
-                yield return new GenericTarget(TargetType.Object, obj, position);
+                yield return new ObjectTarget(obj, position);
             }
 
             // terrain features
@@ -75,15 +75,14 @@ namespace Pathoschild.LookupAnything.Framework
                 Vector2 position = pair.Key;
                 TerrainFeature feature = pair.Value;
 
-                TargetType type = TargetType.Unknown;
                 if ((feature as HoeDirt)?.crop != null)
-                    type = TargetType.Crop;
+                    yield return new CropTarget(feature, position);
                 else if (feature is FruitTree)
-                    type = TargetType.FruitTree;
+                    yield return new FruitTreeTarget((FruitTree)feature, position);
                 else if (feature is Tree)
-                    type = TargetType.WildTree;
-
-                yield return new GenericTarget(type, feature, position);
+                    yield return new TreeTarget((Tree)feature, position);
+                else
+                    yield return new UnknownTarget(feature, position);
             }
         }
 
@@ -120,9 +119,9 @@ namespace Pathoschild.LookupAnything.Framework
 
                     // object
                     case TargetType.InventoryItem:
-                        return new ItemSubject(target, ObjectContext.Inventory, knownQuality: false, metadata: this.Metadata);
+                        return new ItemSubject(target.GetValue<Item>(), ObjectContext.Inventory, knownQuality: false, metadata: this.Metadata);
                     case TargetType.Object:
-                        return new ItemSubject(target, ObjectContext.World, knownQuality: false, metadata: this.Metadata);
+                        return new ItemSubject(target.GetValue<Item>(), ObjectContext.World, knownQuality: false, metadata: this.Metadata);
                 }
             }
 
@@ -143,13 +142,13 @@ namespace Pathoschild.LookupAnything.Framework
                 {
                     Item item = GameHelper.GetPrivateField<Item>(curTab, "hoveredItem");
                     if (item != null)
-                        return new ItemSubject(new GenericTarget(TargetType.InventoryItem, item, null), ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
+                        return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
                 }
                 else if (curTab is CraftingPage)
                 {
                     Item item = GameHelper.GetPrivateField<Item>(curTab, "hoverItem");
                     if (item != null)
-                        return new ItemSubject(new GenericTarget(TargetType.InventoryItem, item, null), ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
+                        return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
                 }
             }
 
@@ -158,7 +157,7 @@ namespace Pathoschild.LookupAnything.Framework
             {
                 Item item = GameHelper.GetPrivateField<Item>(activeMenu, "HoveredItem", required: false); // ChestsAnywhere
                 if (item != null)
-                    return new ItemSubject(new GenericTarget(TargetType.InventoryItem, item, null), ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
+                    return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
             }
 
             return null;

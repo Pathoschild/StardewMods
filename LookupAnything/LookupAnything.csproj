@@ -62,6 +62,10 @@
     <Compile Include="Framework\Data\ObjectContext.cs" />
     <Compile Include="Framework\Data\ObjectSpriteSheet.cs" />
     <Compile Include="Framework\InputMapConfiguration.cs" />
+    <Compile Include="Framework\Targets\CharacterTarget.cs" />
+    <Compile Include="Framework\Targets\CropTarget.cs" />
+    <Compile Include="Framework\Targets\FarmAnimalTarget.cs" />
+    <Compile Include="Framework\Targets\FruitTreeTarget.cs" />
     <Compile Include="Framework\Targets\ITarget.cs" />
     <Compile Include="Framework\RawModConfig.cs" />
     <Compile Include="Framework\Constants\Constant.cs" />
@@ -74,6 +78,9 @@
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\Subjects\FarmAnimalSubject.cs" />
     <Compile Include="Framework\Subjects\FruitTreeSubject.cs" />
+    <Compile Include="Framework\Targets\ObjectTarget.cs" />
+    <Compile Include="Framework\Targets\TreeTarget.cs" />
+    <Compile Include="Framework\Targets\UnknownTarget.cs" />
     <Compile Include="Framework\TargetType.cs" />
     <Compile Include="GameHelper.cs" />
     <Compile Include="Components\LookupMenu.cs" />
