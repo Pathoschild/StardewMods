@@ -201,6 +201,29 @@ namespace Pathoschild.LookupAnything
         }
 
         /****
+        ** Coordinates
+        ****/
+        /// <summary>Get the viewport coordinates represented by a tile position.</summary>
+        /// <param name="tile">The tile position.</param>
+        public static Rectangle GetTileCoordinates(Vector2 tile)
+        {
+            Vector2 position = tile * new Vector2(Game1.tileSize) - new Vector2(Game1.viewport.X, Game1.viewport.Y);
+            return new Rectangle((int)position.X, (int)position.Y, Game1.tileSize, Game1.tileSize);
+        }
+
+        /// <summary>Get whether a sprite on a given tile could occlude a specified tile position.</summary>
+        /// <param name="spriteTile">The tile of the possible sprite.</param>
+        /// <param name="occludeTile">The tile to check for possible occlusion.</param>
+        public static bool CouldSpriteOccludeTile(Vector2 spriteTile, Vector2 occludeTile)
+        {
+            Vector2 spriteSize = Constant.MaxTargetSpriteSize;
+            return
+                spriteTile.Y >= occludeTile.Y // sprites never extend downard from their tile
+                && Math.Abs(spriteTile.X - occludeTile.X) <= spriteSize.X
+                && Math.Abs(spriteTile.Y - occludeTile.Y) <= spriteSize.Y;
+        }
+
+        /****
         ** UI
         ****/
         /// <summary>Draw a pretty hover box for the given text.</summary>

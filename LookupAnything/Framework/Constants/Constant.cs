@@ -1,4 +1,5 @@
-﻿using StardewValley;
+﻿using Microsoft.Xna.Framework;
+using StardewValley;
 
 namespace Pathoschild.LookupAnything.Framework.Constants
 {
@@ -8,6 +9,13 @@ namespace Pathoschild.LookupAnything.Framework.Constants
         /*********
         ** Accessors
         *********/
+        /****
+        ** Targeting
+        ****/
+        /// <summary>The largest expected sprite size (measured in tiles).</summary>
+        /// <remarks>This is used to account for sprites that extend beyond their tile when searching for targets. These values should be large enough to cover the largest target sprites, but small enough to minimise expensive cursor collision checks.</remarks>
+        public static readonly Vector2 MaxTargetSpriteSize = new Vector2(3, 5);
+
         /****
         ** Animals
         ****/
@@ -23,8 +31,8 @@ namespace Pathoschild.LookupAnything.Framework.Constants
         ** NPCs
         ****/
         /// <summary>The villagers which have no social data (e.g. birthdays or gift tastes).</summary>
-        public static readonly string[] DisableVillagerFields = {  "Bouncer", "Gunther" };
-        
+        public static readonly string[] DisableVillagerFields = { "Bouncer", "Gunther" };
+
         /****
         ** Time
         ****/

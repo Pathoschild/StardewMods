@@ -41,11 +41,15 @@ namespace Pathoschild.LookupAnything.Framework
         ****/
         /// <summary>Get all potential lookup targets in the current location.</summary>
         /// <param name="location">The current location.</param>
-        public IEnumerable<ITarget> GetAllTargets(GameLocation location)
+        /// <param name="originTile">The tile from which to search for targets.</param>
+        public IEnumerable<ITarget> GetNearbyTargets(GameLocation location, Vector2 originTile)
         {
             // NPCs
             foreach (NPC npc in location.characters)
             {
+                if (!GameHelper.CouldSpriteOccludeTile(npc.getTileLocation(), originTile))
+                    continue;
+
                 TargetType type = TargetType.Unknown;
                 if (npc.isVillager())
                     type = TargetType.Villager;
@@ -59,13 +63,22 @@ namespace Pathoschild.LookupAnything.Framework
 
             // animals
             foreach (FarmAnimal animal in (location as Farm)?.animals.Values ?? (location as AnimalHouse)?.animals.Values ?? Enumerable.Empty<FarmAnimal>())
+            {
+                if (!GameHelper.CouldSpriteOccludeTile(animal.getTileLocation(), originTile))
+                    continue;
+
                 yield return new FarmAnimalTarget(animal, animal.getTileLocation());
+            }
 
             // map objects
             foreach (var pair in location.objects)
             {
                 Vector2 position = pair.Key;
                 Object obj = pair.Value;
+
+                if (!GameHelper.CouldSpriteOccludeTile(position, originTile))
+                    continue;
+
                 yield return new ObjectTarget(obj, position);
             }
 
@@ -74,6 +87,9 @@ namespace Pathoschild.LookupAnything.Framework
             {
                 Vector2 position = pair.Key;
                 TerrainFeature feature = pair.Value;
+
+                if (!GameHelper.CouldSpriteOccludeTile(position, originTile))
+                    continue;
 
                 if ((feature as HoeDirt)?.crop != null)
                     yield return new CropTarget(feature, position);
@@ -91,7 +107,7 @@ namespace Pathoschild.LookupAnything.Framework
         /// <param name="tile">The object's tile position within the <paramref name="location"/>.</param>
         public ISubject GetSubjectFrom(GameLocation location, Vector2 tile)
         {
-            return this.GetAllTargets(location)
+            return this.GetNearbyTargets(location, tile)
                 .Where(p => p.IsAtTile(tile))
                 .Select(this.GetSubjectFrom)
                 .FirstOrDefault(subject => subject != null);

@@ -130,9 +130,9 @@ namespace Pathoschild.LookupAnything
         /// <summary>Show debug metadata if enabled.</summary>
         private void TryShowDebug()
         {
-            // not enabled
             if (!this.ShowDebugInfo)
                 return;
+            SubjectFactory subjectFactory = new SubjectFactory(this.Metadata);
 
             // show 'debug enabled' warning
             {
@@ -142,18 +142,18 @@ namespace Pathoschild.LookupAnything
                 GameHelper.DrawHoverBox($"Debug info enabled; press {string.Join(" or ", keys)} to disable.", Vector2.Zero, Game1.viewport.Width);
             }
 
-            // show object under cursor
-            SubjectFactory subjectFactory = new SubjectFactory(this.Metadata);
-            ITarget target = subjectFactory.GetAllTargets(Game1.currentLocation).FirstOrDefault(p => p.IsAtTile(Game1.currentCursorTile));
-            if (target != null)
+            // show target data within detection radius
+            foreach (ITarget target in subjectFactory.GetNearbyTargets(Game1.currentLocation, Game1.currentCursorTile))
             {
+                // get metadata
+                bool isCurrentTile = target.IsAtTile(Game1.currentCursorTile);
                 ISubject subject = subjectFactory.GetSubjectFrom(target);
 
                 // draw tile
                 {
-                    Vector2 tileCoordinates = target.GetTile() * new Vector2(Game1.tileSize) - new Vector2(Game1.viewport.X, Game1.viewport.Y);
-                    Color color = (subject != null ? Color.Green : Color.Red) * .25f;
-                    Game1.spriteBatch.DrawLine(tileCoordinates.X, tileCoordinates.Y, new Vector2(Game1.tileSize), color);
+                    Rectangle tile = GameHelper.GetTileCoordinates(target.GetTile());
+                    Color color = (subject != null ? Color.Green : Color.Red) * .5f;
+                    Game1.spriteBatch.DrawLine(tile.X, tile.Y, new Vector2(tile.Width, tile.Height), color);
                 }
 
                 // draw sprite box
@@ -167,11 +167,12 @@ namespace Pathoschild.LookupAnything
                     Game1.spriteBatch.DrawLine(spriteBox.X, spriteBox.Y + spriteBox.Height, new Vector2(spriteBox.Width, borderSize), borderColor); // bottom
                 }
 
-                // show subject info
+                // show subject info (if current target)
+                if (isCurrentTile)
                 {
                     string summary = subject != null
-                        ? $"{target.Type}: {subject.Name}"
-                        : $"{target.Type}: (no lookup data)";
+                            ? $"{target.Type}: {subject.Name}"
+                            : $"{target.Type}: (no lookup data)";
                     GameHelper.DrawHoverBox(summary, new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f), Game1.viewport.Width / 4f);
                 }
             }
