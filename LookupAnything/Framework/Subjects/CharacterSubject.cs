@@ -43,17 +43,20 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             {
                 case TargetType.Villager:
                     this.Type = "Villager";
-                    var giftTastes = this.GetGiftTastes(npc);
-                    this.AddCustomFields(
-                        new GenericField("Birthday", $"{Utility.capitalizeFirstLetter(npc.birthday_Season)} {npc.birthday_Day}"),
-                        new GenericField("Can romance", npc.datable),
-                        new CharacterFriendshipField("Friendship", Game1.player.friendships[npc.name][0], NPC.friendshipPointsPerHeartLevel, NPC.maxFriendshipPoints),
-                        new GenericField("Talked today", Game1.player.friendships[npc.name][2] == 1),
-                        new GenericField("Gifted today", Game1.player.friendships[npc.name][3] > 0),
-                        new GenericField("Gifted this week", $"{Game1.player.friendships[npc.name][1]} of {NPC.maxGiftsPerWeek}"),
-                        new CharacterGiftTastesField("Loves gifts", giftTastes, GiftTaste.Love),
-                        new CharacterGiftTastesField("Likes gifts", giftTastes, GiftTaste.Like)
-                    );
+                    if (!Constant.DisableVillagerFields.Contains(npc.getName()))
+                    {
+                        var giftTastes = this.GetGiftTastes(npc);
+                        this.AddCustomFields(
+                            new GenericField("Birthday", $"{Utility.capitalizeFirstLetter(npc.birthday_Season)} {npc.birthday_Day}"),
+                            new GenericField("Can romance", npc.datable),
+                            new CharacterFriendshipField("Friendship", Game1.player.friendships[npc.name][0], NPC.friendshipPointsPerHeartLevel, NPC.maxFriendshipPoints),
+                            new GenericField("Talked today", Game1.player.friendships[npc.name][2] == 1),
+                            new GenericField("Gifted today", Game1.player.friendships[npc.name][3] > 0),
+                            new GenericField("Gifted this week", $"{Game1.player.friendships[npc.name][1]} of {NPC.maxGiftsPerWeek}"),
+                            new CharacterGiftTastesField("Loves gifts", giftTastes, GiftTaste.Love),
+                            new CharacterGiftTastesField("Likes gifts", giftTastes, GiftTaste.Like)
+                        );
+                    }
                     break;
 
                 case TargetType.Pet:
