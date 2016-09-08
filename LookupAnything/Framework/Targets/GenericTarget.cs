@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using StardewValley;
 
 namespace Pathoschild.LookupAnything.Framework.Targets
 {
@@ -43,6 +44,13 @@ namespace Pathoschild.LookupAnything.Framework.Targets
         public T GetValue<T>()
         {
             return (T)this.Value;
+        }
+
+        /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>
+        public Rectangle GetSpriteArea()
+        {
+            Vector2 tile = this.GetTile();
+            return new Rectangle((int)(tile.X * Game1.tileSize) - Game1.viewport.X, (int)(tile.Y * Game1.tileSize) - Game1.viewport.Y, Game1.tileSize, Game1.tileSize);
         }
 
 

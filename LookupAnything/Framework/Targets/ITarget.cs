@@ -33,5 +33,8 @@ namespace Pathoschild.LookupAnything.Framework.Targets
         /// <summary>Get a strongly-typed value.</summary>
         /// <typeparam name="T">The expected value type.</typeparam>
         T GetValue<T>();
+
+        /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>
+        Rectangle GetSpriteArea();
     }
 }

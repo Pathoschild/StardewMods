@@ -148,10 +148,25 @@ namespace Pathoschild.LookupAnything
             if (target != null)
             {
                 ISubject subject = subjectFactory.GetSubjectFrom(target);
-                string summary = subject != null
-                    ? $"{target.Type}: {subject.Name}"
-                    : $"{target.Type}: (no lookup data)";
-                GameHelper.DrawHoverBox(summary, new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f), Game1.viewport.Width / 4f);
+
+                // draw sprite box
+                {
+                    const int borderSize = 2;
+                    Color borderColor = subject != null ? Color.Green : Color.Red;
+                    Rectangle spriteBox = target.GetSpriteArea();
+                    Game1.spriteBatch.DrawLine(spriteBox.X, spriteBox.Y, new Vector2(spriteBox.Width, borderSize), borderColor); // top
+                    Game1.spriteBatch.DrawLine(spriteBox.X, spriteBox.Y, new Vector2(borderSize, spriteBox.Height), borderColor); // left
+                    Game1.spriteBatch.DrawLine(spriteBox.X + spriteBox.Width, spriteBox.Y, new Vector2(borderSize, spriteBox.Height), borderColor); // right
+                    Game1.spriteBatch.DrawLine(spriteBox.X, spriteBox.Y + spriteBox.Height, new Vector2(spriteBox.Width, borderSize), borderColor); // bottom
+                }
+
+                // show subject info
+                {
+                    string summary = subject != null
+                        ? $"{target.Type}: {subject.Name}"
+                        : $"{target.Type}: (no lookup data)";
+                    GameHelper.DrawHoverBox(summary, new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f), Game1.viewport.Width / 4f);
+                }
             }
         }
 
