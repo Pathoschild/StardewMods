@@ -149,6 +149,13 @@ namespace Pathoschild.LookupAnything
             {
                 ISubject subject = subjectFactory.GetSubjectFrom(target);
 
+                // draw tile
+                {
+                    Vector2 tileCoordinates = target.GetTile() * new Vector2(Game1.tileSize) - new Vector2(Game1.viewport.X, Game1.viewport.Y);
+                    Color color = (subject != null ? Color.Green : Color.Red) * .25f;
+                    Game1.spriteBatch.DrawLine(tileCoordinates.X, tileCoordinates.Y, new Vector2(Game1.tileSize), color);
+                }
+
                 // draw sprite box
                 {
                     const int borderSize = 2;

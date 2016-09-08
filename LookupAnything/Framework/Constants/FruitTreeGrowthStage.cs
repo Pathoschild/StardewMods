@@ -1,0 +1,14 @@
+using StardewValley.TerrainFeatures;
+
+namespace Pathoschild.LookupAnything.Framework.Constants
+{
+    /// <summary>Indicates a tree's growth stage.</summary>
+    public enum FruitTreeGrowthStage
+    {
+        Seed = FruitTree.seedStage,
+        Sprout = FruitTree.sproutStage,
+        Sapling = FruitTree.saplingStage,
+        Bush = FruitTree.bushStage,
+        Tree = FruitTree.treeStage
+    }
+}

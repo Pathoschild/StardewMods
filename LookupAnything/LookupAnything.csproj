@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Framework\Constants\FenceType.cs" />
+    <Compile Include="Framework\Constants\FruitTreeGrowthStage.cs" />
     <Compile Include="Framework\Constants\SeasonName.cs" />
     <Compile Include="Framework\Data\ObjectContext.cs" />
     <Compile Include="Framework\Data\ObjectSpriteSheet.cs" />
@@ -87,7 +88,7 @@
     <Compile Include="Components\Sprites.cs" />
     <Compile Include="Framework\Constants\ItemQuality.cs" />
     <Compile Include="Framework\Constants\StandardLocation.cs" />
-    <Compile Include="Framework\Constants\TreeGrowthStage.cs" />
+    <Compile Include="Framework\Constants\WildTreeGrowthStage.cs" />
     <Compile Include="Framework\Constants\TreeType.cs" />
     <Compile Include="Framework\Fields\GenericField.cs" />
     <Compile Include="Framework\Fields\CharacterFriendshipField.cs" />

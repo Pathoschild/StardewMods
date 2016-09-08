@@ -35,11 +35,11 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             // get custom fields
             {
                 // get growth stage
-                TreeGrowthStage stage = (TreeGrowthStage)Math.Min(tree.growthStage, (int)TreeGrowthStage.Tree);
-                bool isFullyGrown = stage == TreeGrowthStage.Tree;
+                WildTreeGrowthStage stage = (WildTreeGrowthStage)Math.Min(tree.growthStage, (int)WildTreeGrowthStage.Tree);
+                bool isFullyGrown = stage == WildTreeGrowthStage.Tree;
                 this.AddCustomFields(isFullyGrown
                     ? new GenericField("Growth stage", "fully grown")
-                    : new GenericField("Growth stage", $"{stage} ({(int)stage} of {(int)TreeGrowthStage.Tree})")
+                    : new GenericField("Growth stage", $"{stage} ({(int)stage} of {(int)WildTreeGrowthStage.Tree})")
                 );
 
                 // get growth scheduler
@@ -47,7 +47,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 {
                     if (Game1.IsWinter && Game1.currentLocation.Name != StandardLocation.Greenhouse)
                         this.AddCustomFields(new GenericField("Next growth", "can't grow in winter outside greenhouse"));
-                    else if (stage == TreeGrowthStage.SmallTree && this.HasAdjacentTrees(tile))
+                    else if (stage == WildTreeGrowthStage.SmallTree && this.HasAdjacentTrees(tile))
                         this.AddCustomFields(new GenericField("Next growth", "can't grow because other trees are too close"));
                     else
                         this.AddCustomFields(new GenericField("Next growth", $"20% chance to grow into {stage + 1} tomorrow"));
@@ -107,7 +107,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 let otherTree = location.terrainFeatures.ContainsKey(adjacentTile)
                     ? location.terrainFeatures[adjacentTile] as Tree
                     : null
-                select otherTree != null && otherTree.growthStage >= (int)TreeGrowthStage.SmallTree
+                select otherTree != null && otherTree.growthStage >= (int)WildTreeGrowthStage.SmallTree
             ).Any(p => p);
         }
     }
