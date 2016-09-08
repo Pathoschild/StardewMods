@@ -41,6 +41,9 @@ namespace Pathoschild.LookupAnything.Components
             public static readonly Rectangle UpArrow = new Rectangle(76, 72, 40, 44);
         }
 
+        /// <summary>A blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
+        public static Texture2D Pixel { get; } = Sprites.GetPixel();
+
 
         /*********
         ** Public methods
@@ -53,14 +56,6 @@ namespace Pathoschild.LookupAnything.Components
         public static float GetSpaceWidth(SpriteFont font)
         {
             return font.MeasureString("A B").X - font.MeasureString("AB").X;
-        }
-
-        /// <summary>Get a blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
-        public static Texture2D GetPixel()
-        {
-            Texture2D pixel = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
-            pixel.SetData(new[] { Color.White });
-            return pixel;
         }
 
         /****
@@ -87,7 +82,7 @@ namespace Pathoschild.LookupAnything.Components
         /// <param name="color">The color to tint the sprite.</param>
         public static void DrawLine(this SpriteBatch batch, float x, float y, Vector2 size, Color? color = null)
         {
-            batch.Draw(Sprites.GetPixel(), new Rectangle((int)x, (int)y, (int)size.X, (int)size.Y), color ?? Color.White);
+            batch.Draw(Sprites.Pixel, new Rectangle((int)x, (int)y, (int)size.X, (int)size.Y), color ?? Color.White);
         }
 
         /// <summary>Draw a block of text to the screen with the specified wrap width.</summary>
@@ -141,6 +136,18 @@ namespace Pathoschild.LookupAnything.Components
 
             // return text position & dimensions
             return new Vector2(blockWidth, blockHeight);
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get a blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
+        private static Texture2D GetPixel()
+        {
+            Texture2D pixel = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
+            pixel.SetData(new[] { Color.White });
+            return pixel;
         }
     }
 }

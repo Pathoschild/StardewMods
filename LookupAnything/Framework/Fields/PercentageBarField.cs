@@ -63,9 +63,9 @@ namespace Pathoschild.LookupAnything.Framework.Fields
 
             // draw
             if (filledWidth > 0)
-                sprites.Draw(Sprites.GetPixel(), new Rectangle((int)position.X, (int)position.Y, (int)filledWidth, barHeight), this.FilledColor);
+                sprites.Draw(Sprites.Pixel, new Rectangle((int)position.X, (int)position.Y, (int)filledWidth, barHeight), this.FilledColor);
             if (emptyWidth > 0)
-                sprites.Draw(Sprites.GetPixel(), new Rectangle((int)(position.X + filledWidth), (int)position.Y, (int)emptyWidth, barHeight), this.EmptyColor);
+                sprites.Draw(Sprites.Pixel, new Rectangle((int)(position.X + filledWidth), (int)position.Y, (int)emptyWidth, barHeight), this.EmptyColor);
             Vector2 textSize = !string.IsNullOrWhiteSpace(this.Text)
                 ? sprites.DrawStringBlock(font, this.Text, new Vector2(position.X + maxWidth + 3, position.Y), wrapWidth)
                 : Vector2.Zero;
