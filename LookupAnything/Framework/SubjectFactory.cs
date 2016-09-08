@@ -91,38 +91,44 @@ namespace Pathoschild.LookupAnything.Framework
         /// <param name="tile">The object's tile position within the <paramref name="location"/>.</param>
         public ISubject GetSubjectFrom(GameLocation location, Vector2 tile)
         {
-            IEnumerable<ITarget> targets = this.GetAllTargets(location).Where(p => p.IsAtTile(tile));
-            foreach (ITarget target in targets)
+            return this.GetAllTargets(location)
+                .Where(p => p.IsAtTile(tile))
+                .Select(this.GetSubjectFrom)
+                .FirstOrDefault(subject => subject != null);
+        }
+
+        /// <summary>Get metadata for a Stardew object represented by a target.</summary>
+        /// <param name="target">The target.</param>
+        public ISubject GetSubjectFrom(ITarget target)
+        {
+            switch (target.Type)
             {
-                switch (target.Type)
-                {
-                    // NPC
-                    case TargetType.Pet:
-                    case TargetType.Monster:
-                    case TargetType.Villager:
-                        return new CharacterSubject(target.GetValue<NPC>(), target.Type, this.Metadata);
+                // NPC
+                case TargetType.Pet:
+                case TargetType.Monster:
+                case TargetType.Villager:
+                    return new CharacterSubject(target.GetValue<NPC>(), target.Type, this.Metadata);
 
-                    // animal
-                    case TargetType.FarmAnimal:
-                        return new FarmAnimalSubject(target.GetValue<FarmAnimal>());
+                // animal
+                case TargetType.FarmAnimal:
+                    return new FarmAnimalSubject(target.GetValue<FarmAnimal>());
 
-                    // crop
-                    case TargetType.Crop:
-                        Crop crop = target.GetValue<HoeDirt>().crop;
-                        return new CropSubject(crop, GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest), this.Metadata);
+                // crop
+                case TargetType.Crop:
+                    Crop crop = target.GetValue<HoeDirt>().crop;
+                    return new CropSubject(crop, GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest), this.Metadata);
 
-                    // tree
-                    case TargetType.FruitTree:
-                        return new FruitTreeSubject(target.GetValue<FruitTree>(), target.GetTile());
-                    case TargetType.WildTree:
-                        return new TreeSubject(target.GetValue<Tree>(), target.GetTile());
+                // tree
+                case TargetType.FruitTree:
+                    return new FruitTreeSubject(target.GetValue<FruitTree>(), target.GetTile());
+                case TargetType.WildTree:
+                    return new TreeSubject(target.GetValue<Tree>(), target.GetTile());
 
-                    // object
-                    case TargetType.InventoryItem:
-                        return new ItemSubject(target.GetValue<Item>(), ObjectContext.Inventory, knownQuality: false, metadata: this.Metadata);
-                    case TargetType.Object:
-                        return new ItemSubject(target.GetValue<Item>(), ObjectContext.World, knownQuality: false, metadata: this.Metadata);
-                }
+                // object
+                case TargetType.InventoryItem:
+                    return new ItemSubject(target.GetValue<Item>(), ObjectContext.Inventory, knownQuality: false, metadata: this.Metadata);
+                case TargetType.Object:
+                    return new ItemSubject(target.GetValue<Item>(), ObjectContext.World, knownQuality: false, metadata: this.Metadata);
             }
 
             return null;

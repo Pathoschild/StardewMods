@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Microsoft.Xna.Framework;
+using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework.Constants;
 using StardewValley;
+using StardewValley.Menus;
 using Object = StardewValley.Object;
 
 namespace Pathoschild.LookupAnything
@@ -25,6 +28,9 @@ namespace Pathoschild.LookupAnything
         /*********
         ** Public methods
         *********/
+        /****
+        ** State
+        ****/
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
         public static void ResetCache()
         {
@@ -32,6 +38,9 @@ namespace Pathoschild.LookupAnything
             GameHelper.GiftableVillagers = new Lazy<NPC[]>(GameHelper.FetchGiftableVillagers);
         }
 
+        /****
+        ** Data helpers
+        ****/
         /// <summary>Add a day offset to the current date.</summary>
         /// <param name="offset">The offset to add in days.</param>
         /// <returns>Returns the resulting season and day.</returns>
@@ -149,6 +158,9 @@ namespace Pathoschild.LookupAnything
             return true;
         }
 
+        /****
+        ** Reflection
+        ****/
         /// <summary>Get a private field value.</summary>
         /// <typeparam name="T">The field type.</typeparam>
         /// <param name="parent">The parent object.</param>
@@ -176,6 +188,9 @@ namespace Pathoschild.LookupAnything
             return (T)field.GetValue(parent);
         }
 
+        /****
+        ** Formatting
+        ****/
         /// <summary>Select the correct plural form for a word.</summary>
         /// <param name="count">The number.</param>
         /// <param name="single">The singular form.</param>
@@ -183,6 +198,25 @@ namespace Pathoschild.LookupAnything
         public static string Pluralise(int count, string single, string plural = null)
         {
             return count == 1 ? single : (plural ?? single + "s");
+        }
+
+        /****
+        ** UI
+        ****/
+        /// <summary>Draw a pretty hover box for the given text.</summary>
+        /// <param name="label">The text to display.</param>
+        /// <param name="position">The position at which to draw the text.</param>
+        /// <param name="wrapWidth">The maximum width to display.</param>
+        public static Vector2 DrawHoverBox(string label, Vector2 position, float wrapWidth)
+        {
+            const int paddingSize = 27;
+            const int gutterSize = 20;
+
+            Vector2 labelSize = Game1.spriteBatch.DrawStringBlock(Game1.smallFont, label, position + new Vector2(gutterSize), wrapWidth); // draw text to get wrapped text dimensions
+            IClickableMenu.drawTextureBox(Game1.spriteBatch, Game1.menuTexture, new Rectangle(0, 256, 60, 60), (int)position.X, (int)position.Y, (int)labelSize.X + paddingSize + gutterSize, (int)labelSize.Y + paddingSize, Color.White);
+            Game1.spriteBatch.DrawStringBlock(Game1.smallFont, label, position + new Vector2(gutterSize), wrapWidth); // draw again over texture box
+
+            return labelSize + new Vector2(paddingSize);
         }
 
 

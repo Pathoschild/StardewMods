@@ -1,11 +1,14 @@
 ﻿#define TEST_BUILD
 using System;
 using System.IO;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json;
 using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework;
 using Pathoschild.LookupAnything.Framework.Subjects;
+using Pathoschild.LookupAnything.Framework.Targets;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -36,6 +39,9 @@ namespace Pathoschild.LookupAnything
         /// <summary>The previous menu shown before the lookup UI was opened.</summary>
         private IClickableMenu PreviousMenu;
 
+        /// <summary>Whether to show the debug info UI.</summary>
+        private bool ShowDebugInfo;
+
 
         /*********
         ** Public methods
@@ -62,6 +68,7 @@ namespace Pathoschild.LookupAnything
             ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveControllerButton(e.ButtonPressed);
             ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveControllerButton(e.ButtonPressed);
             MenuEvents.MenuClosed += (sender, e) => this.TryRestorePreviousMenu(e.PriorMenu);
+            GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.TryShowDebug();
         }
 
 
@@ -73,12 +80,14 @@ namespace Pathoschild.LookupAnything
         private void ReceiveKeyPress(Keys key)
         {
             var keyboard = this.Config.Keyboard;
-            if (key == keyboard.Toggle)
+            if (key == keyboard.Lookup)
                 this.ShowLookup();
             if (key == keyboard.ScrollUp)
                 (Game1.activeClickableMenu as LookupMenu)?.ScrollUp(this.Config.ScrollAmount);
             else if (key == keyboard.ScrollDown)
                 (Game1.activeClickableMenu as LookupMenu)?.ScrollDown(this.Config.ScrollAmount);
+            else if (key == keyboard.ToggleDebugInfo)
+                this.ShowDebugInfo = !this.ShowDebugInfo;
         }
 
         /// <summary>The method invoked when the player presses a controller button.</summary>
@@ -86,14 +95,15 @@ namespace Pathoschild.LookupAnything
         private void ReceiveControllerButton(Buttons button)
         {
             var controller = this.Config.Controller;
-            if (button == controller.Toggle)
+            if (button == controller.Lookup)
                 this.ShowLookup();
             if (button == controller.ScrollUp)
                 (Game1.activeClickableMenu as LookupMenu)?.ScrollUp(this.Config.ScrollAmount);
             else if (button == controller.ScrollDown)
                 (Game1.activeClickableMenu as LookupMenu)?.ScrollDown(this.Config.ScrollAmount);
+            else if (button == controller.ToggleDebugInfo)
+                this.ShowDebugInfo = !this.ShowDebugInfo;
         }
-
 
         /// <summary>Show the lookup UI for the current target.</summary>
         private void ShowLookup()
@@ -114,6 +124,34 @@ namespace Pathoschild.LookupAnything
             {
                 Game1.showRedMessage("Huh. Something went wrong looking that up. The game error log has the technical details.");
                 Log.Error(ex.ToString());
+            }
+        }
+
+        /// <summary>Show debug metadata if enabled.</summary>
+        private void TryShowDebug()
+        {
+            // not enabled
+            if (!this.ShowDebugInfo)
+                return;
+
+            // show 'debug enabled' warning
+            {
+                string[] keys = new[] { this.Config.Keyboard.ToggleDebugInfo != Keys.None ? this.Config.Keyboard.ToggleDebugInfo.ToString() : null, this.Config.Controller.ToggleDebugInfo?.ToString() }
+                    .Where(p => p != null)
+                    .ToArray();
+                GameHelper.DrawHoverBox($"Debug info enabled; press {string.Join(" or ", keys)} to disable.", Vector2.Zero, Game1.viewport.Width);
+            }
+
+            // show object under cursor
+            SubjectFactory subjectFactory = new SubjectFactory(this.Metadata);
+            ITarget target = subjectFactory.GetAllTargets(Game1.currentLocation).FirstOrDefault(p => p.IsAtTile(Game1.currentCursorTile));
+            if (target != null)
+            {
+                ISubject subject = subjectFactory.GetSubjectFrom(target);
+                string summary = subject != null
+                    ? $"{target.Type}: {subject.Name}"
+                    : $"{target.Type}: (no lookup data)";
+                GameHelper.DrawHoverBox(summary, new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f), Game1.viewport.Width / 4f);
             }
         }
 
