@@ -18,15 +18,18 @@ namespace Pathoschild.LookupAnything.Framework.Targets
         /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>
         public override Rectangle GetSpriteArea()
         {
-            // get sprite source rectangle
             Object obj = (Object)this.Value;
-            Rectangle sourceRectangle = obj.bigCraftable
-                ? Object.getSourceRectForBigCraftable(obj.parentSheetIndex)
-                : Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.parentSheetIndex);
-
-            // translate into game coordinates
             Rectangle tileRectangle = base.GetSpriteArea();
-            return new Rectangle(tileRectangle.X, tileRectangle.Y - (sourceRectangle.Height * Game1.pixelZoom) + tileRectangle.Height, sourceRectangle.Width * Game1.pixelZoom, sourceRectangle.Height * Game1.pixelZoom);
+            if (obj.bigCraftable)
+            {
+                Rectangle sourceRectangle = Object.getSourceRectForBigCraftable(obj.parentSheetIndex);
+                return new Rectangle(tileRectangle.X, tileRectangle.Y - (sourceRectangle.Height * Game1.pixelZoom) + tileRectangle.Height, sourceRectangle.Width * Game1.pixelZoom, sourceRectangle.Height * Game1.pixelZoom);
+            }
+            else
+            {
+                Rectangle sourceRectangle = Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.parentSheetIndex);
+                return new Rectangle(tileRectangle.X, tileRectangle.Y - sourceRectangle.Height + tileRectangle.Height, sourceRectangle.Width, sourceRectangle.Height);
+            }
         }
     }
 }

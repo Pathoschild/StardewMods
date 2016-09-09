@@ -26,7 +26,7 @@ namespace Pathoschild.LookupAnything.Framework.Targets
             WildTreeGrowthStage growth = (WildTreeGrowthStage)tree.growthStage;
 
             // tile
-            if (tree.stump || growth == WildTreeGrowthStage.Seed || growth == WildTreeGrowthStage.Sapling)
+            if (tree.stump || growth == WildTreeGrowthStage.Seed)
                 return tile;
 
             // tree

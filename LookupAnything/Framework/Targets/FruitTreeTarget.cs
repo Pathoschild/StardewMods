@@ -25,7 +25,7 @@ namespace Pathoschild.LookupAnything.Framework.Targets
             FruitTreeGrowthStage growth = (FruitTreeGrowthStage)tree.growthStage;
 
             // tile
-            if (tree.stump || growth == FruitTreeGrowthStage.Seed || growth == FruitTreeGrowthStage.Sapling)
+            if (tree.stump || growth == FruitTreeGrowthStage.Seed)
                 return base.GetSpriteArea();
 
             // tree
