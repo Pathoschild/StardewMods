@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework.Constants;
 using StardewValley;
@@ -203,11 +204,24 @@ namespace Pathoschild.LookupAnything
         /****
         ** Coordinates
         ****/
+        /// <summary>Get the viewport coordinates from the current cursor position.</summary>
+        public static Vector2 GetScreenCoordinatesFromCursor()
+        {
+            return new Vector2(Game1.getOldMouseX(), Game1.getOldMouseY());
+        }
+
+        /// <summary>Get the viewport coordinates represented by a tile position.</summary>
+        /// <param name="coordinates">The absolute coordinates.</param>
+        public static Vector2 GetScreenCoordinatesFromAbsolute(Vector2 coordinates)
+        {
+            return coordinates - new Vector2(Game1.viewport.X, Game1.viewport.Y);
+        }
+
         /// <summary>Get the viewport coordinates represented by a tile position.</summary>
         /// <param name="tile">The tile position.</param>
-        public static Rectangle GetTileCoordinates(Vector2 tile)
+        public static Rectangle GetScreenCoordinatesFromTile(Vector2 tile)
         {
-            Vector2 position = tile * new Vector2(Game1.tileSize) - new Vector2(Game1.viewport.X, Game1.viewport.Y);
+            Vector2 position = GameHelper.GetScreenCoordinatesFromAbsolute(tile * new Vector2(Game1.tileSize));
             return new Rectangle((int)position.X, (int)position.Y, Game1.tileSize, Game1.tileSize);
         }
 
@@ -222,6 +236,35 @@ namespace Pathoschild.LookupAnything
                 && Math.Abs(spriteTile.X - occludeTile.X) <= spriteSize.X
                 && Math.Abs(spriteTile.Y - occludeTile.Y) <= spriteSize.Y;
         }
+
+        /// <summary>Get the pixel coordinates within a sprite sheet corresponding to a sprite displayed in the world.</summary>
+        /// <param name="worldPosition">The pixel position in the world.</param>
+        /// <param name="worldRectangle">The sprite rectangle in the world.</param>
+        /// <param name="spriteRectangle">The sprite rectangle in the sprite sheet.</param>
+        public static Vector2 GetSpriteSheetCoordinates(Vector2 worldPosition, Rectangle worldRectangle, Rectangle spriteRectangle)
+        {
+            int x = (int)((worldPosition.X - worldRectangle.X) / Game1.pixelZoom + spriteRectangle.X);
+            int y = (int)((worldPosition.Y - worldRectangle.Y) / Game1.pixelZoom + spriteRectangle.Y);
+            return new Vector2(x, y);
+        }
+
+        /// <summary>Get a pixel from a sprite sheet.</summary>
+        /// <typeparam name="TPixel">The pixel value type.</typeparam>
+        /// <param name="spriteSheet">The sprite sheet.</param>
+        /// <param name="position">The position of the pixel within the sprite sheet.</param>
+        public static TPixel GetSpriteSheetPixel<TPixel>(Texture2D spriteSheet, Vector2 position) where TPixel : struct
+        {
+            // get pixel index
+            int x = (int)position.X;
+            int y = (int)position.Y;
+            int spriteIndex = y * spriteSheet.Width + x; // (pixels in preceding rows) + (preceding pixels in current row)
+
+            // get pixel
+            TPixel[] pixels = new TPixel[spriteSheet.Width * spriteSheet.Height];
+            spriteSheet.GetData<TPixel>(pixels);
+            return pixels[spriteIndex];
+        }
+
 
         /****
         ** UI

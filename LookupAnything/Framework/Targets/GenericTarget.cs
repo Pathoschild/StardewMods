@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Pathoschild.LookupAnything.Framework.Targets
 {
@@ -48,7 +49,16 @@ namespace Pathoschild.LookupAnything.Framework.Targets
         /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>
         public virtual Rectangle GetSpriteArea()
         {
-            return GameHelper.GetTileCoordinates(this.GetTile());
+            return GameHelper.GetScreenCoordinatesFromTile(this.GetTile());
+        }
+
+        /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>
+        /// <param name="tile">The tile to search.</param>
+        /// <param name="position">The viewport-relative coordinates to search.</param>
+        /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GetSpriteArea"/>.</param>
+        public virtual bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea)
+        {
+            return this.IsAtTile(tile);
         }
 
 
@@ -64,6 +74,19 @@ namespace Pathoschild.LookupAnything.Framework.Targets
             this.Type = type;
             this.Value = obj;
             this.Tile = tilePosition;
+        }
+
+        /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>
+        /// <param name="tile">The tile to search.</param>
+        /// <param name="position">The viewport-relative coordinates to search.</param>
+        /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GetSpriteArea"/>.</param>
+        /// <param name="spriteSheet">The sprite sheet containing the displayed sprite.</param>
+        /// <param name="spriteSourceRectangle">The coordinates and dimensions of the sprite within the sprite sheet.</param>
+        protected bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea, Texture2D spriteSheet, Rectangle spriteSourceRectangle)
+        {
+            Vector2 spriteSheetPosition = GameHelper.GetSpriteSheetCoordinates(position, spriteArea, spriteSourceRectangle);
+            Color pixel = GameHelper.GetSpriteSheetPixel<Color>(spriteSheet, spriteSheetPosition);
+            return pixel.A != 0; // pixel not transparent
         }
     }
 }

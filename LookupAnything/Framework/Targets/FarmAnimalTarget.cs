@@ -27,5 +27,15 @@ namespace Pathoschild.LookupAnything.Framework.Targets
             int y = boundingBox.Y + boundingBox.Height - height;
             return new Rectangle(x - Game1.viewport.X, y - Game1.viewport.Y, width, height);
         }
+
+        /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>
+        /// <param name="tile">The tile to search.</param>
+        /// <param name="position">The viewport-relative coordinates to search.</param>
+        /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GenericTarget.GetSpriteArea"/>.</param>
+        public override bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea)
+        {
+            FarmAnimal animal = (FarmAnimal)this.Value;
+            return this.SpriteIntersectsPixel(tile, position, spriteArea, animal.sprite.Texture, animal.sprite.sourceRect);
+        }
     }
 }

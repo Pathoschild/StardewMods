@@ -35,9 +35,8 @@ namespace Pathoschild.LookupAnything.Framework
             this.Metadata = metadata;
         }
 
-
         /****
-        ** From context
+        ** Targets
         ****/
         /// <summary>Get all potential lookup targets in the current location.</summary>
         /// <param name="location">The current location.</param>
@@ -102,15 +101,46 @@ namespace Pathoschild.LookupAnything.Framework
             }
         }
 
+        /// <summary>Get the target at the specified coordinate.</summary>
+        /// <param name="location">The current location.</param>
+        /// <param name="tile">The tile to search.</param>
+        /// <param name="position">The viewport-relative coordinates to search.</param>
+        public ITarget GetTargetFrom(GameLocation location, Vector2 tile, Vector2 position)
+        {
+            // get target sprites overlapping cursor position
+            Rectangle tileArea = GameHelper.GetScreenCoordinatesFromTile(tile);
+            return (
+                // select targets whose sprites may overlap the cursor position
+                from target in this.GetNearbyTargets(location, tile)
+                let spriteArea = target.GetSpriteArea()
+                where target.Type != TargetType.Unknown
+                where target.IsAtTile(tile) || spriteArea.Intersects(tileArea)
+
+                // sort targets by layer
+                // (A higher Y value is closer to the foreground, and will occlude any sprites
+                // behind it. If two sprites at the same Y coordinate overlap, assume the left
+                // sprite occludes the right.)
+                orderby spriteArea.Y descending, spriteArea.X ascending
+
+                where target.SpriteIntersectsPixel(tile, position, spriteArea)
+
+                select target
+            ).FirstOrDefault();
+        }
+
+        /****
+        ** Subjects
+        ****/
         /// <summary>Get metadata for a Stardew object at the specified position.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="tile">The object's tile position within the <paramref name="location"/>.</param>
-        public ISubject GetSubjectFrom(GameLocation location, Vector2 tile)
+        /// <param name="tile">The tile to search.</param>
+        /// <param name="position">The viewport-relative coordinates to search.</param>
+        public ISubject GetSubjectFrom(GameLocation location, Vector2 tile, Vector2 position)
         {
-            return this.GetNearbyTargets(location, tile)
-                .Where(p => p.IsAtTile(tile))
-                .Select(this.GetSubjectFrom)
-                .FirstOrDefault(subject => subject != null);
+            ITarget target = this.GetTargetFrom(location, tile, position);
+            return target != null
+                ? this.GetSubjectFrom(target)
+                : null;
         }
 
         /// <summary>Get metadata for a Stardew object represented by a target.</summary>

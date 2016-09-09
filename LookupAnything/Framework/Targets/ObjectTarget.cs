@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 
 namespace Pathoschild.LookupAnything.Framework.Targets
@@ -30,6 +31,26 @@ namespace Pathoschild.LookupAnything.Framework.Targets
                 Rectangle sourceRectangle = Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.parentSheetIndex);
                 return new Rectangle(tileRectangle.X, tileRectangle.Y - sourceRectangle.Height + tileRectangle.Height, sourceRectangle.Width, sourceRectangle.Height);
             }
+        }
+
+        /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>
+        /// <param name="tile">The tile to search.</param>
+        /// <param name="position">The viewport-relative coordinates to search.</param>
+        /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GetSpriteArea"/>.</param>
+        public override bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea)
+        {
+            Object obj = (Object)this.Value;
+
+            // get sprite sheet
+            Texture2D spriteSheet = obj.bigCraftable
+                ? Game1.bigCraftableSpriteSheet
+                : Game1.objectSpriteSheet;
+            Rectangle sourceRectangle = obj.bigCraftable
+                ? Object.getSourceRectForBigCraftable(obj.parentSheetIndex)
+                : Game1.currentLocation.getSourceRectForObject(obj.parentSheetIndex);
+
+            // check pixel from sprite sheet
+            return this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, sourceRectangle);
         }
     }
 }

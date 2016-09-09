@@ -36,5 +36,11 @@ namespace Pathoschild.LookupAnything.Framework.Targets
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>
         Rectangle GetSpriteArea();
+
+        /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>
+        /// <param name="tile">The tile to search.</param>
+        /// <param name="position">The viewport-relative coordinates to search.</param>
+        /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GetSpriteArea"/>.</param>
+        bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea);
     }
 }
