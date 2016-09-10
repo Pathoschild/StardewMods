@@ -1,6 +1,6 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework.Constants;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
@@ -25,12 +25,25 @@ namespace Pathoschild.LookupAnything.Framework.Targets
             FruitTree tree = (FruitTree)this.Value;
             Rectangle sprite = this.GetSourceRectangle(tree);
 
-            // tree
-            Rectangle tile = base.GetSpriteArea();
             int width = sprite.Width * Game1.pixelZoom;
             int height = sprite.Height * Game1.pixelZoom;
-            int x = tile.X + (tile.Width / 2) - width / 2;
-            int y = tile.Y + tile.Height - height;
+            int x, y;
+            if (tree.growthStage < 4)
+            {
+                // apply crazy offset logic for growing fruit trees
+                Vector2 tile = this.GetTile();
+                Vector2 offset = new Vector2((float)Math.Max(-8.0, Math.Min(Game1.tileSize, Math.Sin(tile.X * 200.0 / (2.0 * Math.PI)) * -16.0)), (float)Math.Max(-8.0, Math.Min(Game1.tileSize, Math.Sin(tile.X * 200.0 / (2.0 * Math.PI)) * -16.0)));
+                Vector2 centerBottom = new Vector2(tile.X * Game1.tileSize + Game1.tileSize / 2 + offset.X, tile.Y * Game1.tileSize - sprite.Height + Game1.tileSize * 2 + offset.Y) - new Vector2(Game1.viewport.X, Game1.viewport.Y);
+                x = (int)centerBottom.X - width / 2;
+                y = (int)centerBottom.Y - height;
+            }
+            else
+            {
+                // grown trees are centered on tile
+                Rectangle tileArea = base.GetSpriteArea();
+                x = tileArea.Center.X - width / 2;
+                y = tileArea.Bottom - height;
+            }
 
             return new Rectangle(x, y, width, height);
         }
@@ -57,26 +70,31 @@ namespace Pathoschild.LookupAnything.Framework.Targets
         ** Private methods
         *********/
         /// <summary>Get the sprite sheet's source rectangle for the displayed sprite.</summary>
+        /// <remarks>Reverse-engineered from <see cref="FruitTree.draw"/>.</remarks>
         private Rectangle GetSourceRectangle(FruitTree tree)
         {
-            FruitTreeGrowthStage growth = (FruitTreeGrowthStage)tree.growthStage;
-
-            int row = tree.treeType * 5 * 16;
-            int width = 48;
-            int height = 80;
-
+            // stump
             if (tree.stump)
-                return new Rectangle(384, row, width, 32);
-            else if (growth == FruitTreeGrowthStage.Seed)
-                return new Rectangle(0, row, width, 32);
-            else if (growth == FruitTreeGrowthStage.Sprout)
-                return new Rectangle(48, row, width, height);
-            else if (growth == FruitTreeGrowthStage.Sapling)
-                return new Rectangle(96, row, width, height);
-            else if (growth == FruitTreeGrowthStage.Bush)
-                return new Rectangle(144, row, width, height);
-            else
-                return new Rectangle((12 + (tree.greenHouseTree ? 1 : Utility.getSeasonNumber(Game1.currentSeason)) * 3) * 16, row, width, height);
+                return new Rectangle(384, tree.treeType * 5 * 16 + 48, 48, 32);
+
+            // growing tree
+            if (tree.growthStage < 4)
+            {
+                switch (tree.growthStage)
+                {
+                    case 0:
+                        return new Rectangle(0, tree.treeType * 5 * 16, 48, 80);
+                    case 1:
+                        return new Rectangle(48, tree.treeType * 5 * 16, 48, 80);
+                    case 2:
+                        return new Rectangle(96, tree.treeType * 5 * 16, 48, 80);
+                    default:
+                        return new Rectangle(144, tree.treeType * 5 * 16, 48, 80);
+                }
+            }
+
+            // grown tree
+            return new Rectangle((12 + (tree.greenHouseTree ? 1 : Utility.getSeasonNumber(Game1.currentSeason)) * 3) * 16, tree.treeType * 5 * 16, 48, 16 + 64);
         }
     }
 }

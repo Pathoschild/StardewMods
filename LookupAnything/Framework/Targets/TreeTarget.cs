@@ -28,8 +28,8 @@ namespace Pathoschild.LookupAnything.Framework.Targets
 
             int width = sprite.Width * Game1.pixelZoom;
             int height = sprite.Height * Game1.pixelZoom;
-            int x = tile.X + (tile.Width / 2) - width / 2;
-            int y = tile.Y + tile.Height - height;
+            int x = tile.Center.X - width / 2;
+            int y = tile.Bottom - height;
 
             return new Rectangle(x, y, width, height);
         }
