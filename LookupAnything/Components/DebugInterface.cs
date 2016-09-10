@@ -61,21 +61,18 @@ namespace Pathoschild.LookupAnything.Components
 
             // show 'debug enabled' warning + cursor position
             {
-                Vector2 warningSize = GameHelper.DrawHoverBox(spriteBatch, this.WarningText, Vector2.Zero, Game1.viewport.Width);
-
-                // cursor position
-                GameHelper.DrawHoverBox(spriteBatch, $"Cursor is at tile ({cursorTile.X}, {cursorTile.Y}), position ({cursorPosition.X}, {cursorPosition.Y})", new Vector2(0, warningSize.Y), Game1.viewport.Width);
+                string metadata = $"{this.WarningText} Cursor tile ({cursorTile.X}, {cursorTile.Y}), position ({cursorPosition.X}, {cursorPosition.Y}).";
+                GameHelper.DrawHoverBox(spriteBatch, metadata, Vector2.Zero, Game1.viewport.Width);
             }
 
-            // show cursor position
+            // show cursor pixel
             spriteBatch.DrawLine(cursorPosition.X - 1, cursorPosition.Y - 1, new Vector2(Game1.pixelZoom, Game1.pixelZoom), Color.DarkRed);
 
-            // show target data within detection radius
+            // show targets within detection radius
             Rectangle tileArea = GameHelper.GetScreenCoordinatesFromTile(Game1.currentCursorTile);
             IEnumerable<ITarget> targets = this.TargetFactory
                 .GetNearbyTargets(currentLocation, cursorTile)
                 .OrderBy(p => p.Type == TargetType.Unknown ? 0 : 1); // if targets overlap, prioritise info on known targets
-
             foreach (ITarget target in targets)
             {
                 // get metadata
@@ -90,10 +87,10 @@ namespace Pathoschild.LookupAnything.Components
                 }
 
                 // draw sprite box
-                if(subject != null)
+                if (subject != null)
                 {
                     int borderSize = 3;
-                    Color borderColor = subject != null ? Color.Green : Color.Red;
+                    Color borderColor = Color.Green;
                     if (!spriteAreaIntersects)
                     {
                         borderSize = 1;
@@ -108,11 +105,11 @@ namespace Pathoschild.LookupAnything.Components
                 }
             }
 
-            // show current subject info (if any)
+            // show current target name (if any)
             {
                 ISubject subject = this.TargetFactory.GetSubjectFrom(currentLocation, cursorTile, cursorPosition);
                 if (subject != null)
-                    GameHelper.DrawHoverBox(spriteBatch, $"{subject.Name} ({subject.Type ?? "no type"})", new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f), Game1.viewport.Width / 4f);
+                    GameHelper.DrawHoverBox(spriteBatch, subject.Name, new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f), Game1.viewport.Width / 4f);
             }
         }
     }
