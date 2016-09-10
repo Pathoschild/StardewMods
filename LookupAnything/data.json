@@ -190,58 +190,18 @@ You shouldn't change this file unless you know what you're doing.
     ** Mine containers (all identified as "Barrel" with no meaningful description)
     ****/
     {
-      "SpriteID": [ 118 ],
+      "SpriteSheet": "BigCraftable",
+      "SpriteID": [ 118/*barrel*/, 120/*frost barrel*/, 122/*dark barrel*/, 124/*desert barrel*/ ],
       "Context": "World",
       "Name": "Barrel",
       "Type": "Container",
       "Description": "Break apart to obtain sundry goods."
     },
     {
-      "SpriteID": [ 119 ],
+      "SpriteSheet": "BigCraftable",
+      "SpriteID": [ 119/*box*/, 121/*frost box*/, 123/*dark box*/, 125/*desert box*/ ],
       "Context": "World",
       "Name": "Box",
-      "Type": "Container",
-      "Description": "Break apart to obtain sundry goods."
-    },
-    {
-      "SpriteID": [ 120 ],
-      "Context": "World",
-      "Name": "Frost Barrel",
-      "Type": "Container",
-      "Description": "Break apart to obtain sundry goods."
-    },
-    {
-      "SpriteID": [ 121 ],
-      "Context": "World",
-      "Name": "Frost Box",
-      "Type": "Container",
-      "Description": "Break apart to obtain sundry goods."
-    },
-    {
-      "SpriteID": [ 122 ],
-      "Context": "World",
-      "Name": "Dark Barrel",
-      "Type": "Container",
-      "Description": "Break apart to obtain sundry goods."
-    },
-    {
-      "SpriteID": [ 123 ],
-      "Context": "World",
-      "Name": "Dark Box",
-      "Type": "Container",
-      "Description": "Break apart to obtain sundry goods."
-    },
-    {
-      "SpriteID": [ 124 ],
-      "Context": "World",
-      "Name": "Desert Barrel",
-      "Type": "Container",
-      "Description": "Break apart to obtain sundry goods."
-    },
-    {
-      "SpriteID": [ 125 ],
-      "Context": "World",
-      "Name": "Desert Box",
       "Type": "Container",
       "Description": "Break apart to obtain sundry goods."
     }
