@@ -85,7 +85,12 @@ namespace Pathoschild.LookupAnything.Framework.Targets
         /// <param name="spriteEffects">The transformation to apply on the sprite.</param>
         protected bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea, Texture2D spriteSheet, Rectangle spriteSourceRectangle, SpriteEffects spriteEffects = SpriteEffects.None)
         {
+            // get sprite sheet coordinate
             Vector2 spriteSheetPosition = GameHelper.GetSpriteSheetCoordinates(position, spriteArea, spriteSourceRectangle, spriteEffects);
+            if (!spriteSourceRectangle.Contains((int)spriteSheetPosition.X, (int)spriteSheetPosition.Y))
+                return false;
+
+            // check pixel
             Color pixel = GameHelper.GetSpriteSheetPixel<Color>(spriteSheet, spriteSheetPosition);
             return pixel.A != 0; // pixel not transparent
         }
