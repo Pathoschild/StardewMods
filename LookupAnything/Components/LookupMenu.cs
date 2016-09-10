@@ -207,7 +207,7 @@ namespace Pathoschild.LookupAnything.Components
         /// <summary>Calculate the rendered dimensions based on the current game scale.</summary>
         private void CalculateDimensions()
         {
-            this.width = Game1.tileSize * 13;
+            this.width = Game1.tileSize * 14;
             this.height = (int)(this.AspectRatio.Y / this.AspectRatio.X * this.width);
             Vector2 origin = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height);
             this.xPositionOnScreen = (int)origin.X;
