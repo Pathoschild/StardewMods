@@ -120,7 +120,18 @@ namespace Pathoschild.LookupAnything
         /// <param name="sprites">The sprite batch being rendered.</param>
         private void OnInterfaceRendering(SpriteBatch sprites)
         {
-            this.DebugInterface.Draw(sprites);
+            if (!this.DebugInterface.Enabled)
+                return;
+
+            try
+            {
+                this.DebugInterface.Draw(sprites);
+            }
+            catch (Exception ex)
+            {
+                Game1.showRedMessage("Huh. Something went wrong drawing the debug info. The game error log has the technical details.");
+                Log.Error(ex.ToString());
+            }
         }
 
         /// <summary>Show the lookup UI for the current target.</summary>
