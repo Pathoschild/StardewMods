@@ -1,15 +1,12 @@
 ﻿#define TEST_BUILD
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json;
 using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework;
 using Pathoschild.LookupAnything.Framework.Subjects;
-using Pathoschild.LookupAnything.Framework.Targets;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -23,6 +20,9 @@ namespace Pathoschild.LookupAnything
         /*********
         ** Properties
         *********/
+        /****
+        ** Configuration
+        ****/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
@@ -37,11 +37,17 @@ namespace Pathoschild.LookupAnything
         private FileSystemWatcher OverrideFileWatcher;
 #endif
 
+        /****
+        ** State
+        ****/
         /// <summary>The previous menu shown before the lookup UI was opened.</summary>
         private IClickableMenu PreviousMenu;
 
-        /// <summary>Whether to show the debug info UI.</summary>
-        private bool ShowDebugInfo;
+        /// <summary>Finds and analyses lookup targets in the world.</summary>
+        private TargetFactory TargetFactory;
+
+        /// <summary>Draws debug information to the screen.</summary>
+        private DebugInterface DebugInterface;
 
 
         /*********
@@ -64,12 +70,16 @@ namespace Pathoschild.LookupAnything
             PlayerEvents.LoadedGame += (sender, e) => this.ResetCache();
             TimeEvents.OnNewDay += (sender, e) => this.ResetCache();
 
+            // initialise functionality
+            this.TargetFactory = new TargetFactory(this.Metadata);
+            this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config);
+
             // hook up UI
             ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed);
             ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveControllerButton(e.ButtonPressed);
             ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveControllerButton(e.ButtonPressed);
             MenuEvents.MenuClosed += (sender, e) => this.TryRestorePreviousMenu(e.PriorMenu);
-            GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.TryShowDebug();
+            GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.OnInterfaceRendering(Game1.spriteBatch);
         }
 
 
@@ -88,7 +98,7 @@ namespace Pathoschild.LookupAnything
             else if (key == keyboard.ScrollDown)
                 (Game1.activeClickableMenu as LookupMenu)?.ScrollDown(this.Config.ScrollAmount);
             else if (key == keyboard.ToggleDebugInfo)
-                this.ShowDebugInfo = !this.ShowDebugInfo;
+                this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
         }
 
         /// <summary>The method invoked when the player presses a controller button.</summary>
@@ -103,7 +113,14 @@ namespace Pathoschild.LookupAnything
             else if (button == controller.ScrollDown)
                 (Game1.activeClickableMenu as LookupMenu)?.ScrollDown(this.Config.ScrollAmount);
             else if (button == controller.ToggleDebugInfo)
-                this.ShowDebugInfo = !this.ShowDebugInfo;
+                this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
+        }
+
+        /// <summary>The method invoked when the interface is rendering.</summary>
+        /// <param name="sprites">The sprite batch being rendered.</param>
+        private void OnInterfaceRendering(SpriteBatch sprites)
+        {
+            this.DebugInterface.Draw(sprites);
         }
 
         /// <summary>Show the lookup UI for the current target.</summary>
@@ -113,8 +130,8 @@ namespace Pathoschild.LookupAnything
             {
                 // show lookup UI
                 ISubject subject = Game1.activeClickableMenu != null
-                    ? new SubjectFactory(this.Metadata).GetSubjectFrom(Game1.activeClickableMenu)
-                    : new SubjectFactory(this.Metadata).GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile, GameHelper.GetScreenCoordinatesFromCursor());
+                    ? this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu)
+                    : this.TargetFactory.GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile, GameHelper.GetScreenCoordinatesFromCursor());
                 if (subject != null)
                 {
                     this.PreviousMenu = Game1.activeClickableMenu;
@@ -125,75 +142,6 @@ namespace Pathoschild.LookupAnything
             {
                 Game1.showRedMessage("Huh. Something went wrong looking that up. The game error log has the technical details.");
                 Log.Error(ex.ToString());
-            }
-        }
-
-        /// <summary>Show debug metadata if enabled.</summary>
-        private void TryShowDebug()
-        {
-            if (!this.ShowDebugInfo)
-                return;
-            SubjectFactory subjectFactory = new SubjectFactory(this.Metadata);
-
-            // show 'debug enabled' warning + cursor position
-            {
-                // warning
-                string[] keys = new[] { this.Config.Keyboard.ToggleDebugInfo != Keys.None ? this.Config.Keyboard.ToggleDebugInfo.ToString() : null, this.Config.Controller.ToggleDebugInfo?.ToString() }
-                    .Where(p => p != null)
-                    .ToArray();
-                Vector2 warningSize = GameHelper.DrawHoverBox($"Debug info enabled; press {string.Join(" or ", keys)} to disable.", Vector2.Zero, Game1.viewport.Width);
-
-                // cursor position
-                Vector2 cursorTile = Game1.currentCursorTile;
-                Vector2 cursorPosition = GameHelper.GetScreenCoordinatesFromCursor();
-                GameHelper.DrawHoverBox($"Cursor is at tile ({cursorTile.X}, {cursorTile.Y}), position ({cursorPosition.X}, {cursorPosition.Y})", new Vector2(0, warningSize.Y), Game1.viewport.Width);
-            }
-
-            // show target data within detection radius
-            Rectangle tileArea = GameHelper.GetScreenCoordinatesFromTile(Game1.currentCursorTile);
-            IEnumerable<ITarget> targets = subjectFactory
-                .GetNearbyTargets(Game1.currentLocation, Game1.currentCursorTile)
-                .OrderBy(p => p.Type == TargetType.Unknown ? 0 : 1); // if targets overlap, prioritise info on known targets
-
-            foreach (ITarget target in targets)
-            {
-                // get metadata
-                bool isCurrentTile = target.IsAtTile(Game1.currentCursorTile);
-                bool spriteAreaIntersects = target.GetSpriteArea().Intersects(tileArea);
-                ISubject subject = subjectFactory.GetSubjectFrom(target);
-
-                // draw tile
-                {
-                    Rectangle tile = GameHelper.GetScreenCoordinatesFromTile(target.GetTile());
-                    Color color = (subject != null ? Color.Green : Color.Red) * .5f;
-                    Game1.spriteBatch.DrawLine(tile.X, tile.Y, new Vector2(tile.Width, tile.Height), color);
-                }
-
-                // draw sprite box
-                {
-                    int borderSize = 3;
-                    Color borderColor = subject != null ? Color.Green : Color.Red;
-                    if (!spriteAreaIntersects)
-                    {
-                        borderSize = 1;
-                        borderColor *= 0.5f;
-                    }
-
-                    Rectangle spriteBox = target.GetSpriteArea();
-                    Game1.spriteBatch.DrawLine(spriteBox.X, spriteBox.Y, new Vector2(spriteBox.Width, borderSize), borderColor); // top
-                    Game1.spriteBatch.DrawLine(spriteBox.X, spriteBox.Y, new Vector2(borderSize, spriteBox.Height), borderColor); // left
-                    Game1.spriteBatch.DrawLine(spriteBox.X + spriteBox.Width, spriteBox.Y, new Vector2(borderSize, spriteBox.Height), borderColor); // right
-                    Game1.spriteBatch.DrawLine(spriteBox.X, spriteBox.Y + spriteBox.Height, new Vector2(spriteBox.Width, borderSize), borderColor); // bottom
-                }
-
-                // show subject info (if current target)
-                if (isCurrentTile)
-                {
-                    string summary = subject != null
-                            ? $"{target.Type}: {subject.Name}"
-                            : $"{target.Type}: (no lookup data)";
-                    GameHelper.DrawHoverBox(summary, new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f), Game1.viewport.Width / 4f);
-                }
             }
         }
 

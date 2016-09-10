@@ -270,17 +270,18 @@ namespace Pathoschild.LookupAnything
         ** UI
         ****/
         /// <summary>Draw a pretty hover box for the given text.</summary>
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
         /// <param name="label">The text to display.</param>
         /// <param name="position">The position at which to draw the text.</param>
         /// <param name="wrapWidth">The maximum width to display.</param>
-        public static Vector2 DrawHoverBox(string label, Vector2 position, float wrapWidth)
+        public static Vector2 DrawHoverBox(SpriteBatch spriteBatch, string label, Vector2 position, float wrapWidth)
         {
             const int paddingSize = 27;
             const int gutterSize = 20;
 
-            Vector2 labelSize = Game1.spriteBatch.DrawStringBlock(Game1.smallFont, label, position + new Vector2(gutterSize), wrapWidth); // draw text to get wrapped text dimensions
-            IClickableMenu.drawTextureBox(Game1.spriteBatch, Game1.menuTexture, new Rectangle(0, 256, 60, 60), (int)position.X, (int)position.Y, (int)labelSize.X + paddingSize + gutterSize, (int)labelSize.Y + paddingSize, Color.White);
-            Game1.spriteBatch.DrawStringBlock(Game1.smallFont, label, position + new Vector2(gutterSize), wrapWidth); // draw again over texture box
+            Vector2 labelSize = spriteBatch.DrawStringBlock(Game1.smallFont, label, position + new Vector2(gutterSize), wrapWidth); // draw text to get wrapped text dimensions
+            IClickableMenu.drawTextureBox(spriteBatch, Game1.menuTexture, new Rectangle(0, 256, 60, 60), (int)position.X, (int)position.Y, (int)labelSize.X + paddingSize + gutterSize, (int)labelSize.Y + paddingSize, Color.White);
+            spriteBatch.DrawStringBlock(Game1.smallFont, label, position + new Vector2(gutterSize), wrapWidth); // draw again over texture box
 
             return labelSize + new Vector2(paddingSize);
         }

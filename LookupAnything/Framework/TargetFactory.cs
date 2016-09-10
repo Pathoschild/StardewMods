@@ -12,8 +12,8 @@ using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.LookupAnything.Framework
 {
-    /// <summary>Extracts metadata from arbitrary objects.</summary>
-    public class SubjectFactory
+    /// <summary>Finds and analyses lookup targets in the world.</summary>
+    public class TargetFactory
     {
         /*********
         ** Properties
@@ -30,7 +30,7 @@ namespace Pathoschild.LookupAnything.Framework
         ****/
         /// <summary>Construct an instance.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public SubjectFactory(Metadata metadata)
+        public TargetFactory(Metadata metadata)
         {
             this.Metadata = metadata;
         }

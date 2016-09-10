@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\DebugInterface.cs" />
     <Compile Include="Framework\Constants\FenceType.cs" />
     <Compile Include="Framework\Constants\FruitTreeGrowthStage.cs" />
     <Compile Include="Framework\Constants\SeasonName.cs" />
@@ -96,7 +97,7 @@
     <Compile Include="Framework\Fields\ItemGiftTastesField.cs" />
     <Compile Include="Framework\Fields\SaleValueField.cs" />
     <Compile Include="Framework\Constants\GiftTaste.cs" />
-    <Compile Include="Framework\SubjectFactory.cs" />
+    <Compile Include="Framework\TargetFactory.cs" />
     <Compile Include="Framework\Subjects\BaseSubject.cs" />
     <Compile Include="Framework\Subjects\CharacterSubject.cs" />
     <Compile Include="Framework\Subjects\TreeSubject.cs" />
