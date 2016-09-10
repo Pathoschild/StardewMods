@@ -52,6 +52,10 @@ namespace Pathoschild.LookupAnything.Framework
                 TargetType type = TargetType.Unknown;
                 if (npc.isVillager())
                     type = TargetType.Villager;
+                else if (npc is Horse)
+                    type = TargetType.Horse;
+                else if (npc is Junimo)
+                    type = TargetType.Junimo;
                 else if (npc is Pet)
                     type = TargetType.Pet;
                 else if (npc is Monster)
@@ -150,6 +154,8 @@ namespace Pathoschild.LookupAnything.Framework
             switch (target.Type)
             {
                 // NPC
+                case TargetType.Horse:
+                case TargetType.Junimo:
                 case TargetType.Pet:
                 case TargetType.Monster:
                 case TargetType.Villager:

@@ -36,7 +36,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         {
             // initialise
             this.Target = npc;
-            this.Initialise(npc.getName(), null, "NPC");
+            this.Initialise(npc.getName(), null, npc.GetType().Name);
 
             // add custom fields
             switch (type)
@@ -59,8 +59,11 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     }
                     break;
 
+                case TargetType.Junimo:
+                case TargetType.Horse:
+                    break; // no metadata
+
                 case TargetType.Pet:
-                    this.Type = npc.GetType().Name;
                     Pet pet = (Pet)npc;
                     this.AddCustomFields(
                         new CharacterFriendshipField("Love", pet.friendshipTowardFarmer, Pet.maxFriendship / 10, Pet.maxFriendship),

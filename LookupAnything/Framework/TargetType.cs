@@ -12,6 +12,12 @@ namespace Pathoschild.LookupAnything.Framework
         /// <summary>A farm animal.</summary>
         FarmAnimal,
 
+        /// <summary>The player's horse.</summary>
+        Horse,
+        
+        /// <summary>A forest spirit.</summary>
+        Junimo,
+
         /// <summary>A hostile monster NPC.</summary>
         Monster,
 
