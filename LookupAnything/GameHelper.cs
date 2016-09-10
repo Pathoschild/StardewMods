@@ -241,10 +241,24 @@ namespace Pathoschild.LookupAnything
         /// <param name="worldPosition">The pixel position in the world.</param>
         /// <param name="worldRectangle">The sprite rectangle in the world.</param>
         /// <param name="spriteRectangle">The sprite rectangle in the sprite sheet.</param>
-        public static Vector2 GetSpriteSheetCoordinates(Vector2 worldPosition, Rectangle worldRectangle, Rectangle spriteRectangle)
+        /// <param name="spriteEffects">The transformation to apply on the sprite.</param>
+        public static Vector2 GetSpriteSheetCoordinates(Vector2 worldPosition, Rectangle worldRectangle, Rectangle spriteRectangle, SpriteEffects spriteEffects = SpriteEffects.None)
         {
-            int x = (int)((worldPosition.X - worldRectangle.X) / Game1.pixelZoom + spriteRectangle.X);
-            int y = (int)((worldPosition.Y - worldRectangle.Y) / Game1.pixelZoom + spriteRectangle.Y);
+            // get position within sprite rectangle
+            float x = (worldPosition.X - worldRectangle.X) / Game1.pixelZoom;
+            float y = (worldPosition.Y - worldRectangle.Y) / Game1.pixelZoom;
+
+            // flip values
+            if (spriteEffects.HasFlag(SpriteEffects.FlipHorizontally))
+                x = spriteRectangle.Width - x;
+            if (spriteEffects.HasFlag(SpriteEffects.FlipVertically))
+                y = spriteRectangle.Height - y;
+
+            // get position within sprite sheet
+            x += spriteRectangle.X;
+            y += spriteRectangle.Y;
+
+            // return coordinates
             return new Vector2(x, y);
         }
 

@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 
 namespace Pathoschild.LookupAnything.Framework.Targets
@@ -36,7 +37,8 @@ namespace Pathoschild.LookupAnything.Framework.Targets
         public override bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea)
         {
             NPC npc = (NPC)this.Value;
-            return this.SpriteIntersectsPixel(tile, position, spriteArea, npc.sprite.Texture, npc.sprite.sourceRect);
+            SpriteEffects spriteEffects = npc.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            return this.SpriteIntersectsPixel(tile, position, spriteArea, npc.sprite.Texture, npc.sprite.sourceRect, spriteEffects);
         }
     }
 }

@@ -50,7 +50,8 @@ namespace Pathoschild.LookupAnything.Framework.Targets
                 : Game1.currentLocation.getSourceRectForObject(obj.ParentSheetIndex);
 
             // check pixel from sprite sheet
-            return this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, sourceRectangle);
+            SpriteEffects spriteEffects = obj.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            return this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, sourceRectangle, spriteEffects);
         }
     }
 }

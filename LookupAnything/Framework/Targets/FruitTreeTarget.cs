@@ -48,7 +48,8 @@ namespace Pathoschild.LookupAnything.Framework.Targets
             Rectangle sourceRectangle = this.GetSourceRectangle(tree);
 
             // check sprite
-            return this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, sourceRectangle);
+            SpriteEffects spriteEffects = tree.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            return this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, sourceRectangle, spriteEffects);
         }
 
 

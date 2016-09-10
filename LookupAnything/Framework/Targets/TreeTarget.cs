@@ -50,15 +50,16 @@ namespace Pathoschild.LookupAnything.Framework.Targets
             Tree tree = (Tree)this.Value;
             Texture2D spriteSheet = GameHelper.GetPrivateField<Texture2D>(tree, "texture");
             WildTreeGrowthStage growth = (WildTreeGrowthStage)tree.growthStage;
+            SpriteEffects spriteEffects = tree.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             // check stump sprite
             Rectangle stumpSpriteArea = new Rectangle(spriteArea.Center.X - (Tree.stumpSourceRect.Width / 2 * Game1.pixelZoom), spriteArea.Y + spriteArea.Height - Tree.stumpSourceRect.Height * Game1.pixelZoom, Tree.stumpSourceRect.Width * Game1.pixelZoom, Tree.stumpSourceRect.Height * Game1.pixelZoom);
-            if (stumpSpriteArea.Contains((int)position.X, (int)position.Y) && this.SpriteIntersectsPixel(tile, position, stumpSpriteArea, spriteSheet, Tree.stumpSourceRect))
+            if (stumpSpriteArea.Contains((int)position.X, (int)position.Y) && this.SpriteIntersectsPixel(tile, position, stumpSpriteArea, spriteSheet, Tree.stumpSourceRect, spriteEffects))
                 return true;
 
             // check treetop sprite
             if (!tree.stump && growth != WildTreeGrowthStage.Seed)
-                return this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, Tree.treeTopSourceRect);
+                return this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, Tree.treeTopSourceRect, spriteEffects);
 
             return false;
         }
