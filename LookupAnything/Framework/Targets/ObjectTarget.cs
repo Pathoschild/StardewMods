@@ -47,7 +47,7 @@ namespace Pathoschild.LookupAnything.Framework.Targets
                 : Game1.objectSpriteSheet;
             Rectangle sourceRectangle = obj.bigCraftable
                 ? Object.getSourceRectForBigCraftable(obj.parentSheetIndex)
-                : Game1.currentLocation.getSourceRectForObject(obj.parentSheetIndex);
+                : Game1.currentLocation.getSourceRectForObject(obj.ParentSheetIndex);
 
             // check pixel from sprite sheet
             return this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, sourceRectangle);

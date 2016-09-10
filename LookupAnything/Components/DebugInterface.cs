@@ -87,6 +87,7 @@ namespace Pathoschild.LookupAnything.Components
                 }
 
                 // draw sprite box
+                if(subject != null)
                 {
                     int borderSize = 3;
                     Color borderColor = subject != null ? Color.Green : Color.Red;

@@ -72,32 +72,32 @@ namespace Pathoschild.LookupAnything.Framework
             // map objects
             foreach (var pair in location.objects)
             {
-                Vector2 position = pair.Key;
+                Vector2 spriteTile = pair.Key;
                 Object obj = pair.Value;
 
-                if (!GameHelper.CouldSpriteOccludeTile(position, originTile))
+                if (!GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
                     continue;
 
-                yield return new ObjectTarget(obj, position);
+                yield return new ObjectTarget(obj, spriteTile);
             }
 
             // terrain features
             foreach (var pair in location.terrainFeatures)
             {
-                Vector2 position = pair.Key;
+                Vector2 spriteTile = pair.Key;
                 TerrainFeature feature = pair.Value;
 
-                if (!GameHelper.CouldSpriteOccludeTile(position, originTile))
+                if (!GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
                     continue;
 
                 if ((feature as HoeDirt)?.crop != null)
-                    yield return new CropTarget(feature, position);
+                    yield return new CropTarget(feature, spriteTile);
                 else if (feature is FruitTree)
-                    yield return new FruitTreeTarget((FruitTree)feature, position);
+                    yield return new FruitTreeTarget((FruitTree)feature, spriteTile);
                 else if (feature is Tree)
-                    yield return new TreeTarget((Tree)feature, position);
+                    yield return new TreeTarget((Tree)feature, spriteTile);
                 else
-                    yield return new UnknownTarget(feature, position);
+                    yield return new UnknownTarget(feature, spriteTile);
             }
         }
 
