@@ -67,6 +67,9 @@ namespace Pathoschild.LookupAnything.Components
                 GameHelper.DrawHoverBox(spriteBatch, $"Cursor is at tile ({cursorTile.X}, {cursorTile.Y}), position ({cursorPosition.X}, {cursorPosition.Y})", new Vector2(0, warningSize.Y), Game1.viewport.Width);
             }
 
+            // show cursor position
+            spriteBatch.DrawLine(cursorPosition.X - 1, cursorPosition.Y - 1, new Vector2(Game1.pixelZoom, Game1.pixelZoom), Color.DarkRed);
+
             // show target data within detection radius
             Rectangle tileArea = GameHelper.GetScreenCoordinatesFromTile(Game1.currentCursorTile);
             IEnumerable<ITarget> targets = this.TargetFactory
