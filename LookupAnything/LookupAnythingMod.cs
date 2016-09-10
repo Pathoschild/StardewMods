@@ -63,7 +63,12 @@ namespace Pathoschild.LookupAnything
             this.LoadMetadata();
 #if TEST_BUILD
             this.OverrideFileWatcher = new FileSystemWatcher(this.PathOnDisk, this.DatabaseFileName) { EnableRaisingEvents = true };
-            this.OverrideFileWatcher.Changed += (sender, e) => this.LoadMetadata();
+            this.OverrideFileWatcher.Changed += (sender, e) =>
+            {
+                this.LoadMetadata();
+                this.TargetFactory = new TargetFactory(this.Metadata);
+                this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config) { Enabled = this.DebugInterface.Enabled };
+            };
 #endif
 
             // reset low-level cache once per day (used to store expensive query results that don't change within a day)
