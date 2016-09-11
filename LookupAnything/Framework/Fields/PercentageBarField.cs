@@ -50,7 +50,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <param name="spriteBatch">The sprite batch being drawn.</param>
         /// <param name="font">The recommended font.</param>
         /// <param name="position">The position at which to draw.</param>
-        /// <param name="wrapWidth">The maximum width before which content should be wrapped..</param>
+        /// <param name="wrapWidth">The maximum width before which content should be wrapped.</param>
         /// <returns>Returns the drawn dimensions, or <c>null</c> to draw the <see cref="GenericField.Value"/> using the default format.</returns>
         public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
         {
