@@ -12,6 +12,22 @@ You shouldn't change this file unless you know what you're doing.
   *********/
   "Characters": [
     {
+      "ID": "Cat",
+      "Description": "Your loyal pet."
+    },
+    {
+      "ID": "Dog",
+      "Description": "Your loyal pet."
+    },
+    {
+      "ID": "Horse",
+      "Description": "Your loyal steed."
+    },
+    {
+      "ID": "Junimo",
+      "Description": "A forest spirit from the spirit world. Very little is known about them."
+    },
+    {
       "ID": "Monster::Dust Spirit",
       "Name": "Dust Sprite" // name was changed during development
     }
