@@ -13,6 +13,9 @@ namespace Pathoschild.LookupAnything.Framework
         /// <summary>Metadata for game objects (including inventory items, terrain features, crops, trees, and other map objects).</summary>
         public ObjectData[] Objects { get; set; }
 
+        /// <summary>Metadata for NPCs in the game.</summary>
+        public CharacterData[] Characters { get; set; }
+
         /// <summary>Information about Adventure Guild monster-slaying quests.</summary>
         public AdventureGuildQuestData[] AdventureGuildQuests { get; set; }
 
@@ -28,6 +31,18 @@ namespace Pathoschild.LookupAnything.Framework
             ObjectSpriteSheet sheet = (item as Object)?.bigCraftable == true ? ObjectSpriteSheet.BigCraftable : ObjectSpriteSheet.Object;
             return this?.Objects
                 .FirstOrDefault(obj => obj.SpriteSheet == sheet && obj.SpriteID.Contains(item.parentSheetIndex) && obj.Context.HasFlag(context));
+        }
+
+        /// <summary>Get overrides for a game object.</summary>
+        /// <param name="character">The character for which to get overrides.</param>
+        /// <param name="type">The character type.</param>
+        public CharacterData GetCharacter(NPC character, TargetType type)
+        {
+            string name = character.getName();
+
+            return
+                this.Characters?.FirstOrDefault(p => p.ID == $"{type}::{name}") // override by type + name
+                ?? this.Characters?.FirstOrDefault(p => p.ID == type.ToString()); // override by type
         }
 
         /// <summary>Get the adventurer guild quest for the specified monster (if any).</summary>

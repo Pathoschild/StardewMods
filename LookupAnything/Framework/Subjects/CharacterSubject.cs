@@ -36,8 +36,9 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         {
             // initialise
             this.Target = npc;
-            this.Initialise(npc.getName(), null, npc.GetType().Name);
-
+            CharacterData overrides = metadata.GetCharacter(npc, type);
+            this.Initialise(overrides?.Name ?? npc.getName(), overrides?.Description, npc.GetType().Name);
+            
             // add custom fields
             switch (type)
             {

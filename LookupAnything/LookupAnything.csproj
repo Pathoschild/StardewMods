@@ -62,6 +62,7 @@
     <Compile Include="Framework\Constants\FruitTreeGrowthStage.cs" />
     <Compile Include="Framework\Constants\SeasonName.cs" />
     <Compile Include="Framework\Data\ObjectContext.cs" />
+    <Compile Include="Framework\Data\ObjectData.cs" />
     <Compile Include="Framework\Data\ObjectSpriteSheet.cs" />
     <Compile Include="Framework\InputMapConfiguration.cs" />
     <Compile Include="Framework\Targets\CharacterTarget.cs" />
@@ -73,7 +74,7 @@
     <Compile Include="Framework\Constants\Constant.cs" />
     <Compile Include="Framework\Constants\StandardItem.cs" />
     <Compile Include="Framework\Data\AdventureGuildQuestData.cs" />
-    <Compile Include="Framework\Data\ObjectData.cs" />
+    <Compile Include="Framework\Data\CharacterData.cs" />
     <Compile Include="Framework\Fields\PercentageBarField.cs" />
     <Compile Include="Framework\Fields\RecipeIngredientsField.cs" />
     <Compile Include="Framework\Metadata.cs" />
