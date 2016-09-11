@@ -103,6 +103,15 @@ namespace Pathoschild.LookupAnything.Framework
                 else
                     yield return new UnknownTarget(feature, spriteTile);
             }
+
+            // players
+            foreach (var farmer in new[] { Game1.player }.Union(location.farmers))
+            {
+                if (!GameHelper.CouldSpriteOccludeTile(farmer.getTileLocation(), originTile))
+                    continue;
+
+                yield return new FarmerTarget(farmer);
+            }
         }
 
         /// <summary>Get the target at the specified coordinate.</summary>
@@ -160,6 +169,10 @@ namespace Pathoschild.LookupAnything.Framework
                 case TargetType.Monster:
                 case TargetType.Villager:
                     return new CharacterSubject(target.GetValue<NPC>(), target.Type, this.Metadata);
+
+                // player
+                case TargetType.Farmer:
+                    return new FarmerSubject(target.GetValue<Farmer>());
 
                 // animal
                 case TargetType.FarmAnimal:

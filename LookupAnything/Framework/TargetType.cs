@@ -12,7 +12,7 @@ namespace Pathoschild.LookupAnything.Framework
         /// <summary>A farm animal.</summary>
         FarmAnimal,
 
-        /// <summary>The player's horse.</summary>
+        /// <summary>A player's horse.</summary>
         Horse,
         
         /// <summary>A forest spirit.</summary>
@@ -21,8 +21,11 @@ namespace Pathoschild.LookupAnything.Framework
         /// <summary>A hostile monster NPC.</summary>
         Monster,
 
-        /// <summary>The player's cat or dog.</summary>
+        /// <summary>A player's cat or dog.</summary>
         Pet,
+
+        /// <summary>A player character.</summary>
+        Farmer,
 
         /// <summary>A passive character NPC (including the dwarf and Krobus).</summary>
         Villager,

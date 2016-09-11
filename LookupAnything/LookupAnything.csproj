@@ -64,7 +64,9 @@
     <Compile Include="Framework\Data\ObjectContext.cs" />
     <Compile Include="Framework\Data\ObjectData.cs" />
     <Compile Include="Framework\Data\ObjectSpriteSheet.cs" />
+    <Compile Include="Framework\Fields\SkillBarField.cs" />
     <Compile Include="Framework\InputMapConfiguration.cs" />
+    <Compile Include="Framework\Subjects\FarmerSubject.cs" />
     <Compile Include="Framework\Targets\CharacterTarget.cs" />
     <Compile Include="Framework\Targets\CropTarget.cs" />
     <Compile Include="Framework\Targets\FarmAnimalTarget.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="Framework\Subjects\FarmAnimalSubject.cs" />
     <Compile Include="Framework\Subjects\FruitTreeSubject.cs" />
     <Compile Include="Framework\Targets\ObjectTarget.cs" />
+    <Compile Include="Framework\Targets\FarmerTarget.cs" />
     <Compile Include="Framework\Targets\TreeTarget.cs" />
     <Compile Include="Framework\Targets\UnknownTarget.cs" />
     <Compile Include="Framework\TargetType.cs" />

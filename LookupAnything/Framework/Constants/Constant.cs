@@ -34,6 +34,15 @@ namespace Pathoschild.LookupAnything.Framework.Constants
         public static readonly string[] DisableVillagerFields = { "Bouncer", "Gunther" };
 
         /****
+        ** Players
+        ****/
+        /// <summary>The maximum experience points for a skill.</summary>
+        public const int MaxSkillPoints = 15000;
+
+        /// <summary>The experience points needed for each skill level.</summary>
+        public static readonly int[] SkillPointsPerLevel = { 100, 380, 770, 1300, 2150, 3300, 4800, 6900, 10000, 15000 };
+
+        /****
         ** Time
         ****/
         /// <summary>The number of days in each season.</summary>

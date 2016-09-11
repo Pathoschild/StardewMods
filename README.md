@@ -22,6 +22,7 @@ Here are some representative screenshots (layout and values will change dynamica
 | pet         | ![](screenshots/pet.png) |
 | farm animal | ![](screenshots/farm-animal.png) |
 | monster     | ![](screenshots/monster.png) |
+| player      | ![](screenshots/player.png) |
 
 ### Items
 | item        | screenshots |
@@ -48,5 +49,7 @@ and add controller bindings if you have one (see [valid buttons](https://msdn.mi
 ## Changelog
 * 1.0 (not yet released)
   * Initial version.
-  * Added support for NPCs (villagers, pets, farm animals, and monsters), items (crops and inventory), and map objects (crafting objects, fruit trees, wild trees, and mine objects).
+  * Added support for NPCs (villagers, pets, farm animals, monsters, and players), items (crops and inventory), and map objects (crafting objects, fences, trees, and mine objects).
   * Added controller support and configurable bindings.
+  * Added hidden debug mode.
+  * Let players lookup a target from any visible part of its sprite.
