@@ -47,12 +47,12 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
-        /// <param name="sprites">The sprite batch in which to draw.</param>
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
         /// <param name="font">The recommended font.</param>
         /// <param name="position">The position at which to draw.</param>
         /// <param name="wrapWidth">The maximum width before which content should be wrapped..</param>
         /// <returns>Returns the drawn dimensions, or <c>null</c> to draw the <see cref="GenericField.Value"/> using the default format.</returns>
-        public override Vector2? DrawValue(SpriteBatch sprites, SpriteFont font, Vector2 position, float wrapWidth)
+        public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
         {
             // calculate bars
             int barHeight = 22;
@@ -63,11 +63,11 @@ namespace Pathoschild.LookupAnything.Framework.Fields
 
             // draw
             if (filledWidth > 0)
-                sprites.Draw(Sprites.Pixel, new Rectangle((int)position.X, (int)position.Y, (int)filledWidth, barHeight), this.FilledColor);
+                spriteBatch.Draw(Sprites.Pixel, new Rectangle((int)position.X, (int)position.Y, (int)filledWidth, barHeight), this.FilledColor);
             if (emptyWidth > 0)
-                sprites.Draw(Sprites.Pixel, new Rectangle((int)(position.X + filledWidth), (int)position.Y, (int)emptyWidth, barHeight), this.EmptyColor);
+                spriteBatch.Draw(Sprites.Pixel, new Rectangle((int)(position.X + filledWidth), (int)position.Y, (int)emptyWidth, barHeight), this.EmptyColor);
             Vector2 textSize = !string.IsNullOrWhiteSpace(this.Text)
-                ? sprites.DrawStringBlock(font, this.Text, new Vector2(position.X + maxWidth + 3, position.Y), wrapWidth)
+                ? spriteBatch.DrawStringBlock(font, this.Text, new Vector2(position.X + maxWidth + 3, position.Y), wrapWidth)
                 : Vector2.Zero;
 
             return new Vector2(maxWidth + 3 + textSize.X, Math.Max(barHeight, textSize.Y));

@@ -27,10 +27,10 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Draw the subject portrait (if available).</summary>
-        /// <param name="sprites">The sprite batch in which to draw.</param>
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
         /// <param name="position">The position at which to draw.</param>
         /// <param name="size">The size of the portrait to draw.</param>
         /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
-        bool DrawPortrait(SpriteBatch sprites, Vector2 position, Vector2 size);
+        bool DrawPortrait(SpriteBatch spriteBatch, Vector2 position, Vector2 size);
     }
 }

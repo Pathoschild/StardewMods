@@ -82,8 +82,8 @@ namespace Pathoschild.LookupAnything.Components
         }
 
         /// <summary>Render the UI.</summary>
-        /// <param name="sprites">The sprites to render.</param>
-        public override void draw(SpriteBatch sprites)
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
+        public override void draw(SpriteBatch spriteBatch)
         {
             ISubject subject = this.Subject;
 

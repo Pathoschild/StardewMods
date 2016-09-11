@@ -122,15 +122,15 @@ namespace Pathoschild.LookupAnything
         }
 
         /// <summary>The method invoked when the interface is rendering.</summary>
-        /// <param name="sprites">The sprite batch being rendered.</param>
-        private void OnInterfaceRendering(SpriteBatch sprites)
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
+        private void OnInterfaceRendering(SpriteBatch spriteBatch)
         {
             if (!this.DebugInterface.Enabled)
                 return;
 
             try
             {
-                this.DebugInterface.Draw(sprites);
+                this.DebugInterface.Draw(spriteBatch);
             }
             catch (Exception ex)
             {

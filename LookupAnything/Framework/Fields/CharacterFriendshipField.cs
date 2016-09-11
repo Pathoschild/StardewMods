@@ -39,12 +39,12 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
-        /// <param name="sprites">The sprite batch in which to draw.</param>
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
         /// <param name="font">The recommended font.</param>
         /// <param name="position">The position at which to draw.</param>
         /// <param name="wrapWidth">The maximum width before which content should be wrapped..</param>
         /// <returns>Returns the drawn dimensions, or <c>null</c> to draw the <see cref="GenericField.Value"/> using the default format.</returns>
-        public override Vector2? DrawValue(SpriteBatch sprites, SpriteFont font, Vector2 position, float wrapWidth)
+        public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
         {
             // get points
             int filledHearts = this.FriendshipPoints / this.PointsPerLevel;
@@ -54,19 +54,19 @@ namespace Pathoschild.LookupAnything.Framework.Fields
             float leftOffset = 0;
             for (int i = 0; i < filledHearts; i++)
             {
-                sprites.DrawBlock(Sprites.Icons.Sheet, Sprites.Icons.FilledHeart, position.X + leftOffset, position.Y, scale: Game1.pixelZoom);
+                spriteBatch.DrawBlock(Sprites.Icons.Sheet, Sprites.Icons.FilledHeart, position.X + leftOffset, position.Y, scale: Game1.pixelZoom);
                 leftOffset += Sprites.Icons.FilledHeart.Width * Game1.pixelZoom;
             }
             for (int i = 0; i < emptyHearts; i++)
             {
-                sprites.DrawBlock(Sprites.Icons.Sheet, Sprites.Icons.EmptyHeart, position.X + leftOffset, position.Y, scale: Game1.pixelZoom);
+                spriteBatch.DrawBlock(Sprites.Icons.Sheet, Sprites.Icons.EmptyHeart, position.X + leftOffset, position.Y, scale: Game1.pixelZoom);
                 leftOffset += Sprites.Icons.FilledHeart.Width * Game1.pixelZoom;
             }
 
             // draw caption
             float spaceSize = Sprites.GetSpaceWidth(font);
             Vector2 textSize = this.FriendshipPoints < this.MaxPoints
-                ? sprites.DrawStringBlock(font, $"(next in {this.PointsPerLevel - (this.FriendshipPoints % this.PointsPerLevel)} pts)", new Vector2(position.X + leftOffset + spaceSize, position.Y), wrapWidth - leftOffset)
+                ? spriteBatch.DrawStringBlock(font, $"(next in {this.PointsPerLevel - (this.FriendshipPoints % this.PointsPerLevel)} pts)", new Vector2(position.X + leftOffset + spaceSize, position.Y), wrapWidth - leftOffset)
                 : Vector2.Zero;
 
             return new Vector2(Math.Max(Sprites.Icons.FilledHeart.Height, textSize.X + spaceSize), Math.Max(Sprites.Icons.FilledHeart.Height * Game1.pixelZoom, textSize.Y));

@@ -23,11 +23,11 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="Value"/> using the default format).</summary>
-        /// <param name="sprites">The sprite batch in which to draw.</param>
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
         /// <param name="font">The recommended font.</param>
         /// <param name="position">The position at which to draw.</param>
         /// <param name="wrapWidth">The maximum width before which content should be wrapped..</param>
         /// <returns>Returns the drawn dimensions, or <c>null</c> to draw the <see cref="Value"/> using the default format.</returns>
-        Vector2? DrawValue(SpriteBatch sprites, SpriteFont font, Vector2 position, float wrapWidth);
+        Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth);
     }
 }

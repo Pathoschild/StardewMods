@@ -58,14 +58,14 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>
-        /// <param name="sprites">The sprite batch in which to draw.</param>
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
         /// <param name="position">The position at which to draw.</param>
         /// <param name="size">The size of the portrait to draw.</param>
         /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
-        public override bool DrawPortrait(SpriteBatch sprites, Vector2 position, Vector2 size)
+        public override bool DrawPortrait(SpriteBatch spriteBatch, Vector2 position, Vector2 size)
         {
             FarmAnimal animal = this.Target;
-            animal.Sprite.draw(sprites, position, 1, 0, 0, Color.White, scale: size.X / animal.Sprite.getWidth());
+            animal.Sprite.draw(spriteBatch, position, 1, 0, 0, Color.White, scale: size.X / animal.Sprite.getWidth());
             return true;
         }
 

@@ -48,7 +48,7 @@ namespace Pathoschild.LookupAnything.Components
         }
 
         /// <summary>Draw debug metadata to the screen.</summary>
-        /// <param name="spriteBatch">The sprite batch being rendered.</param>
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
         public void Draw(SpriteBatch spriteBatch)
         {
             if (!this.Enabled)
