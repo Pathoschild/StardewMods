@@ -11,6 +11,10 @@ You shouldn't change this file unless you know what you're doing.
   ** Added metadata for NPCs (including villagers, pets, farm animals, monsters, etc).
   *********/
   "Characters": [
+    {
+      "ID": "Monster::Dust Spirit",
+      "Name": "Dust Sprite" // name was changed during development
+    }
   ],
 
   /*********
