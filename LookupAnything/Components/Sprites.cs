@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
@@ -100,8 +101,32 @@ namespace Pathoschild.LookupAnything.Components
             if (text == null)
                 return new Vector2(0, 0);
 
-            // strip newlines
-            text = text.Replace(Environment.NewLine, " ");
+            // get word list
+            List<string> words = new List<string>();
+            foreach (string word in text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                // split on newlines
+                string wordPart = word;
+                int newlineIndex;
+                while((newlineIndex = wordPart.IndexOf(Environment.NewLine, StringComparison.InvariantCulture)) >= 0)
+                {
+                    if (newlineIndex == 0)
+                    {
+                        words.Add(Environment.NewLine);
+                        wordPart = wordPart.Substring(Environment.NewLine.Length);
+                    }
+                    else if (newlineIndex > 0)
+                    {
+                        words.Add(wordPart.Substring(0, newlineIndex));
+                        words.Add(Environment.NewLine);
+                        wordPart = wordPart.Substring(newlineIndex + Environment.NewLine.Length);
+                    }
+                }
+
+                // add remaining word (after newline split)
+                if (wordPart.Length > 0)
+                    words.Add(wordPart);
+            }
 
             // track draw values
             float xOffset = 0;
@@ -110,16 +135,18 @@ namespace Pathoschild.LookupAnything.Components
             float spaceWidth = Sprites.GetSpaceWidth(font) * scale;
             float blockWidth = 0;
             float blockHeight = lineHeight;
-            foreach (string word in text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string word in words)
             {
                 // check wrap width
                 float wordWidth = font.MeasureString(word).X * scale;
-                if ((wordWidth + xOffset) > wrapWidth && (int)xOffset != 0)
+                if (word == Environment.NewLine || ((wordWidth + xOffset) > wrapWidth && (int)xOffset != 0))
                 {
                     xOffset = 0;
                     yOffset += lineHeight;
                     blockHeight += lineHeight;
                 }
+                if (word == Environment.NewLine)
+                    continue;
 
                 // draw text
                 Vector2 wordPosition = new Vector2(position.X + xOffset, position.Y + yOffset);

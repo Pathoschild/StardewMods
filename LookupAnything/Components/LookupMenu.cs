@@ -145,7 +145,7 @@ namespace Pathoschild.LookupAnything.Components
                     // draw description
                     if (subject.Description != null)
                     {
-                        Vector2 size = contentBatch.DrawStringBlock(font, subject.Description, new Vector2(x + leftOffset, y + topOffset), wrapWidth);
+                        Vector2 size = contentBatch.DrawStringBlock(font, subject.Description?.Replace(Environment.NewLine, " "), new Vector2(x + leftOffset, y + topOffset), wrapWidth);
                         topOffset += size.Y;
                     }
 
