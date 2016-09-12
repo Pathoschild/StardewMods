@@ -1,5 +1,4 @@
-﻿#define TEST_BUILD
-using System;
+﻿using System;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
