@@ -1,12 +1,11 @@
 **Lookup Anything** is a [Stardew Valley](http://stardewvalley.net/) mod that shows live info about
 whatever's under your cursor when you press `F1`.
 
-This is a very early prototype and isn't ready for general use.
+This is a prerelease beta version; use at your own risk.
 
 ## Installation
 1. Install [SMAPI](https://github.com/ClxS/SMAPI) (0.39.5+).
-2. <s>Install this mod from Nexus mods.</s> This mod isn't released yet. If you know what you're
-   doing, you can compile the mod yourself to use it.
+2. <s>Install this mod from Nexus mods.</s> See the [thread on the Stardew Valley forums for instructions](http://community.playstarbound.com/threads/smapi-lookup-anything.122929/#post-3019451).
 3. Run the game using SMAPI.
 
 ## Usage
@@ -14,6 +13,12 @@ Just point your cursor at something and press `F1`. The mod will show live info 
 
 ## Examples
 Here are some representative screenshots (layout and values will change dynamically as needed).
+
+### Items
+| item        | screenshots |
+| ----------- | ----------- |
+| crop        | ![](screenshots/crop.png) |
+| inventory   | ![](screenshots/item.png) |
 
 ### Characters
 | character   | screenshots |
@@ -23,12 +28,6 @@ Here are some representative screenshots (layout and values will change dynamica
 | farm animal | ![](screenshots/farm-animal.png) |
 | monster     | ![](screenshots/monster.png) |
 | player      | ![](screenshots/player.png) |
-
-### Items
-| item        | screenshots |
-| ----------- | ----------- |
-| crop        | ![](screenshots/crop.png) |
-| inventory   | ![](screenshots/item.png) |
 
 ### Map objects
 | object          | screenshots |
@@ -49,7 +48,8 @@ and add controller bindings if you have one (see [valid buttons](https://msdn.mi
 ## Changelog
 * 1.0 (not yet released)
   * Initial version.
-  * Added support for NPCs (villagers, pets, farm animals, monsters, and players), items (crops and inventory), and map objects (crafting objects, fences, trees, and mine objects).
+  * Added support for NPCs (villagers, pets, farm animals, monsters, and players), items (crops and
+    inventory), and map objects (crafting objects, fences, trees, and mine objects).
   * Added controller support and configurable bindings.
   * Added hidden debug mode.
   * Let players lookup a target from any visible part of its sprite.
