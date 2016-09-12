@@ -7,7 +7,7 @@
     "PatchVersion": 0,
     "Build": "1"
   },
-  "Description": "View metadata about anything by pressing a button.",
+  "Description": "View metadata about anything by pressing a button. [prerelease version 0.1]",
   "UniqueID": "LookupAnything",
   "EntryDll": "LookupAnything.dll"
 }
