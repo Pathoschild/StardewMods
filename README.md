@@ -1,5 +1,6 @@
 **Lookup Anything** is a [Stardew Valley](http://stardewvalley.net/) mod that shows live info about
-whatever's under your cursor when you press `F1`.
+whatever's under your cursor when you press `F1`:
+![](screenshots/animated.gif)
 
 This is a prerelease beta version; use at your own risk.
 
