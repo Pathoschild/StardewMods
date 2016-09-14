@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define TEST_BUILD
+using System;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -78,66 +79,86 @@ namespace Pathoschild.LookupAnything
             this.TargetFactory = new TargetFactory(this.Metadata);
             this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config);
 
-            // hook up UI
-            ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed);
-            ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveControllerButton(e.ButtonPressed);
-            ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveControllerButton(e.ButtonPressed);
-            MenuEvents.MenuClosed += (sender, e) => this.TryRestorePreviousMenu(e.PriorMenu);
-            GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.OnInterfaceRendering(Game1.spriteBatch);
+            // hook up events
+            ControlEvents.KeyPressed += (sender, e) => this.ReceiveInput(e.KeyPressed, this.Config.Keyboard);
+            ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveInput(e.ButtonPressed, this.Config.Controller);
+            ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveInput(e.ButtonPressed, this.Config.Controller);
+            MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
+            GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked when the player presses a keyboard button.</summary>
-        /// <param name="key">The pressed key.</param>
-        private void ReceiveKeyPress(Keys key)
+        /****
+        ** Event handlers
+        ****/
+        /// <summary>The method invoked when the player presses an input button.</summary>
+        /// <typeparam name="TKey">The input type.</typeparam>
+        /// <param name="key">The pressed input.</param>
+        /// <param name="map">The configured input mapping.</param>
+        private void ReceiveInput<TKey>(TKey key, InputMapConfiguration<TKey> map)
         {
-            var keyboard = this.Config.Keyboard;
-            if (key == keyboard.Lookup)
-                this.ShowLookup();
-            if (key == keyboard.ScrollUp)
-                (Game1.activeClickableMenu as LookupMenu)?.ScrollUp(this.Config.ScrollAmount);
-            else if (key == keyboard.ScrollDown)
-                (Game1.activeClickableMenu as LookupMenu)?.ScrollDown(this.Config.ScrollAmount);
-            else if (key == keyboard.ToggleDebugInfo)
-                this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
+            try
+            {
+                // perform bound action
+                if (key.Equals(map.Lookup))
+                    this.ShowLookup();
+                if (key.Equals(map.ScrollUp))
+                    (Game1.activeClickableMenu as LookupMenu)?.ScrollUp(this.Config.ScrollAmount);
+                else if (key.Equals(map.ScrollDown))
+                    (Game1.activeClickableMenu as LookupMenu)?.ScrollDown(this.Config.ScrollAmount);
+                else if (key.Equals(map.ToggleDebugInfo))
+                    this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, $"handling input '{key}'.");
+            }
         }
 
-        /// <summary>The method invoked when the player presses a controller button.</summary>
-        /// <param name="button">The pressed key.</param>
-        private void ReceiveControllerButton(Buttons button)
+        /// <summary>The method invoked when the player closes a displayed menu.</summary>
+        /// <param name="closedMenu">The menu which the player just closed.</param>
+        private void ReceiveMenuClosed(IClickableMenu closedMenu)
         {
-            var controller = this.Config.Controller;
-            if (button == controller.Lookup)
-                this.ShowLookup();
-            if (button == controller.ScrollUp)
-                (Game1.activeClickableMenu as LookupMenu)?.ScrollUp(this.Config.ScrollAmount);
-            else if (button == controller.ScrollDown)
-                (Game1.activeClickableMenu as LookupMenu)?.ScrollDown(this.Config.ScrollAmount);
-            else if (button == controller.ToggleDebugInfo)
-                this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
+            try
+            {
+                // restore the previous menu if it was hidden to display the lookup UI.
+                if (closedMenu is LookupMenu && this.PreviousMenu != null)
+                {
+                    Game1.activeClickableMenu = this.PreviousMenu;
+                    this.PreviousMenu = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, "restoring the previous menu");
+            }
         }
 
         /// <summary>The method invoked when the interface is rendering.</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>
-        private void OnInterfaceRendering(SpriteBatch spriteBatch)
+        private void ReceiveInterfaceRendering(SpriteBatch spriteBatch)
         {
-            if (!this.DebugInterface.Enabled)
-                return;
-
-            try
+            // render debug interface
+            if (this.DebugInterface.Enabled)
             {
-                this.DebugInterface.Draw(spriteBatch);
-            }
-            catch (Exception ex)
-            {
-                GameHelper.ShowErrorMessage("Huh. Something went wrong drawing the debug info. The game error log has the technical details.");
-                Log.Error(ex.ToString());
+                try
+                {
+                    this.DebugInterface.Draw(spriteBatch);
+                }
+                catch (Exception ex)
+                {
+                    GameHelper.ShowErrorMessage("Huh. Something went wrong drawing the debug info. The game error log has the technical details.");
+                    Log.Error(ex.ToString());
+                }
             }
         }
 
+        /****
+        ** Helpers
+        ****/
         /// <summary>Show the lookup UI for the current target.</summary>
         private void ShowLookup()
         {
@@ -155,19 +176,7 @@ namespace Pathoschild.LookupAnything
             }
             catch (Exception ex)
             {
-                GameHelper.ShowErrorMessage("Huh. Something went wrong looking that up. The game error log has the technical details.");
-                Log.Error(ex.ToString());
-            }
-        }
-
-        /// <summary>Restore the previous menu if it was hidden to display the lookup UI.</summary>
-        /// <param name="closedMenu">The menu which the player just closed.</param>
-        private void TryRestorePreviousMenu(IClickableMenu closedMenu)
-        {
-            if (closedMenu is LookupMenu && this.PreviousMenu != null)
-            {
-                Game1.activeClickableMenu = this.PreviousMenu;
-                this.PreviousMenu = null;
+                this.HandleError(ex, "looking that up");
             }
         }
 
@@ -181,7 +190,7 @@ namespace Pathoschild.LookupAnything
             }
             catch (Exception ex)
             {
-                Log.Error($"Couldn't read {this.DatabaseFileName} file for {this.Manifest.Name} mod; some data may be missing. Error details:\n{ex}");
+                this.HandleError(ex, "loading metadata");
             }
         }
 
@@ -189,6 +198,15 @@ namespace Pathoschild.LookupAnything
         private void ResetCache()
         {
             GameHelper.ResetCache();
+        }
+
+        /// <summary>Log an error and warn the user.</summary>
+        /// <param name="ex">The exception to handle.</param>
+        /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up").</param>
+        private void HandleError(Exception ex, string verb)
+        {
+            GameHelper.ShowErrorMessage($"Huh. Something went wrong {verb}. The game error log has the technical details.");
+            Log.Error(ex.ToString());
         }
     }
 }
