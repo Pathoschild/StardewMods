@@ -133,7 +133,7 @@ namespace Pathoschild.LookupAnything
             }
             catch (Exception ex)
             {
-                Game1.showRedMessage("Huh. Something went wrong drawing the debug info. The game error log has the technical details.");
+                GameHelper.ShowErrorMessage("Huh. Something went wrong drawing the debug info. The game error log has the technical details.");
                 Log.Error(ex.ToString());
             }
         }
@@ -155,7 +155,7 @@ namespace Pathoschild.LookupAnything
             }
             catch (Exception ex)
             {
-                Game1.showRedMessage("Huh. Something went wrong looking that up. The game error log has the technical details.");
+                GameHelper.ShowErrorMessage("Huh. Something went wrong looking that up. The game error log has the technical details.");
                 Log.Error(ex.ToString());
             }
         }
