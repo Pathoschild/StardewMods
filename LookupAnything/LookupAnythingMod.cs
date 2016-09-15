@@ -92,7 +92,7 @@ namespace Pathoschild.LookupAnything
             this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config);
 
             // hook up events
-            PlayerEvents.LoadedGame += (sender, e) => this.ReceiveGameLoaded();
+            GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
             ControlEvents.KeyPressed += (sender, e) => this.ReceiveInput(e.KeyPressed, this.Config.Keyboard);
             ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveInput(e.ButtonPressed, this.Config.Controller);
             ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveInput(e.ButtonPressed, this.Config.Controller);
