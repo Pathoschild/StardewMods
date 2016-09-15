@@ -19,6 +19,9 @@ namespace Pathoschild.LookupAnything.Framework
         /// <summary>The amount to scroll long content when pressing a 'scroll up' or 'scroll down' control.</summary>
         public int ScrollAmount { get; set; }
 
+        /// <summary>Whether to check for updates to the mod.</summary>
+        public bool CheckForUpdates { get; set; }
+
 
         /*********
         ** Public methods
@@ -41,6 +44,7 @@ namespace Pathoschild.LookupAnything.Framework
                 ScrollDown = "",
                 ToggleDebugInfo = ""
             };
+            this.CheckForUpdates = true;
         }
 
         /// <summary>Construct the default configuration.</summary>
@@ -70,7 +74,8 @@ namespace Pathoschild.LookupAnything.Framework
                     Lookup = Enum.TryParse(this.Controller.Lookup, out parsedButton) ? parsedButton : null as Buttons?,
                     ScrollUp = Enum.TryParse(this.Controller.ScrollUp, out parsedButton) ? parsedButton : null as Buttons?,
                     ScrollDown = Enum.TryParse(this.Controller.ScrollDown, out parsedButton) ? parsedButton : null as Buttons?
-                }
+                },
+                CheckForUpdates = this.CheckForUpdates
             };
         }
     }

@@ -300,6 +300,13 @@ namespace Pathoschild.LookupAnything
             return labelSize + new Vector2(paddingSize);
         }
 
+        /// <summary>Show an informational message to the player.</summary>
+        /// <param name="message">The message to show.</param>
+        public static void ShowInfoMessage(string message)
+        {
+            Game1.addHUDMessage(new HUDMessage(message, 3) { noIcon = true });
+        }
+
         /// <summary>Show an error message to the player.</summary>
         /// <param name="message">The message to show.</param>
         public static void ShowErrorMessage(string message)

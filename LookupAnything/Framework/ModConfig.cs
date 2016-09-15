@@ -16,5 +16,8 @@ namespace Pathoschild.LookupAnything.Framework
 
         /// <summary>The amount to scroll long content when pressing a 'scroll up' or 'scroll down' control.</summary>
         public int ScrollAmount { get; set; }
+
+        /// <summary>Whether to check for updates to the mod.</summary>
+        public bool CheckForUpdates { get; set; }
     }
 }

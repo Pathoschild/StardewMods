@@ -65,6 +65,7 @@
     <Compile Include="Framework\Data\ObjectData.cs" />
     <Compile Include="Framework\Data\ObjectSpriteSheet.cs" />
     <Compile Include="Framework\Fields\SkillBarField.cs" />
+    <Compile Include="Framework\GitVersion.cs" />
     <Compile Include="Framework\InputMapConfiguration.cs" />
     <Compile Include="Framework\Subjects\FarmerSubject.cs" />
     <Compile Include="Framework\Targets\CharacterTarget.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Framework\Targets\TreeTarget.cs" />
     <Compile Include="Framework\Targets\UnknownTarget.cs" />
     <Compile Include="Framework\TargetType.cs" />
+    <Compile Include="Framework\UpdateHelper.cs" />
     <Compile Include="GameHelper.cs" />
     <Compile Include="Components\LookupMenu.cs" />
     <Compile Include="Components\Sprites.cs" />

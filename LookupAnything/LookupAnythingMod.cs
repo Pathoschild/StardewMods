@@ -1,8 +1,8 @@
 ﻿#define TEST_BUILD
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json;
 using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework;
@@ -36,6 +36,18 @@ namespace Pathoschild.LookupAnything
         /// <summary>Reloads the <see cref="Metadata"/> when the underlying file changes.</summary>
         private FileSystemWatcher OverrideFileWatcher;
 #endif
+
+        /****
+        ** Version check
+        ****/
+        /// <summary>The current semantic version.</summary>
+        private string CurrentVersion;
+
+        /// <summary>The newer release to notify the user about.</summary>
+        private GitRelease NewRelease;
+
+        /// <summary>Whether to check for a newer version of the mod.</summary>
+        private bool HasSeenUpdateWarning;
 
         /****
         ** State
@@ -76,10 +88,12 @@ namespace Pathoschild.LookupAnything
             TimeEvents.OnNewDay += (sender, e) => this.ResetCache();
 
             // initialise functionality
+            this.CurrentVersion = UpdateHelper.GetSemanticVersion(this.Manifest.Version);
             this.TargetFactory = new TargetFactory(this.Metadata);
             this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config);
 
             // hook up events
+            PlayerEvents.LoadedGame += (sender, e) => this.ReceiveGameLoaded();
             ControlEvents.KeyPressed += (sender, e) => this.ReceiveInput(e.KeyPressed, this.Config.Keyboard);
             ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveInput(e.ButtonPressed, this.Config.Controller);
             ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveInput(e.ButtonPressed, this.Config.Controller);
@@ -94,6 +108,28 @@ namespace Pathoschild.LookupAnything
         /****
         ** Event handlers
         ****/
+        /// <summary>The method invoked when the player loads the game.</summary>
+        private void ReceiveGameLoaded()
+        {
+            // check for an updated version
+            if (this.Config.CheckForUpdates)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    try
+                    {
+                        GitRelease release = UpdateHelper.GetLatestReleaseAsync("Pathoschild/LookupAnything").Result;
+                        if (release.IsNewerThan(this.CurrentVersion))
+                            this.NewRelease = release;
+                    }
+                    catch (Exception ex)
+                    {
+                        this.HandleError(ex, "checking for a newer version");
+                    }
+                });
+            }
+        }
+
         /// <summary>The method invoked when the player presses an input button.</summary>
         /// <typeparam name="TKey">The input type.</typeparam>
         /// <param name="key">The pressed input.</param>
@@ -153,6 +189,13 @@ namespace Pathoschild.LookupAnything
                     GameHelper.ShowErrorMessage("Huh. Something went wrong drawing the debug info. The game error log has the technical details.");
                     Log.Error(ex.ToString());
                 }
+            }
+
+            // render update warning
+            if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning && this.NewRelease != null)
+            {
+                this.HasSeenUpdateWarning = true;
+                GameHelper.ShowInfoMessage($"You can update LookupAnything from {this.CurrentVersion} to {this.NewRelease.Version}.");
             }
         }
 
