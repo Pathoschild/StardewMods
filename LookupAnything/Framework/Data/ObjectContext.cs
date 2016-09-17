@@ -4,7 +4,7 @@ namespace Pathoschild.LookupAnything.Framework.Data
 {
     /// <summary>The context in which to override an object.</summary>
     [Flags]
-    public enum ObjectContext
+    internal enum ObjectContext
     {
         /// <summary>Objects in the world.</summary>
         World = 1,

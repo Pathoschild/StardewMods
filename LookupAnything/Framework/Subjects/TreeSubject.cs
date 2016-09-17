@@ -10,7 +10,7 @@ using StardewValley.TerrainFeatures;
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
     /// <summary>Describes a non-fruit tree.</summary>
-    public class TreeSubject : BaseSubject
+    internal class TreeSubject : BaseSubject
     {
         /*********
         ** Properties

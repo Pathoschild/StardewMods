@@ -14,7 +14,7 @@ using StardewValley.Menus;
 namespace Pathoschild.LookupAnything
 {
     /// <summary>The mod entry point.</summary>
-    class LookupAnythingMod : Mod
+    public class LookupAnythingMod : Mod
     {
         /*********
         ** Properties
@@ -45,7 +45,7 @@ namespace Pathoschild.LookupAnything
         /// <summary>The newer release to notify the user about.</summary>
         private GitRelease NewRelease;
 
-        /// <summary>Whether to check for a newer version of the mod.</summary>
+        /// <summary>Whether the update-available message has been shown since the game started.</summary>
         private bool HasSeenUpdateWarning;
 
         /****
@@ -82,9 +82,9 @@ namespace Pathoschild.LookupAnything
             };
 #endif
 
-            // reset low-level cache once per day (used to store expensive query results that don't change within a day)
-            PlayerEvents.LoadedGame += (sender, e) => this.ResetCache();
-            TimeEvents.OnNewDay += (sender, e) => this.ResetCache();
+            // reset low-level cache once per game day (used for expensive queries that don't change within a day)
+            PlayerEvents.LoadedGame += (sender, e) => GameHelper.ResetCache();
+            TimeEvents.OnNewDay += (sender, e) => GameHelper.ResetCache();
 
             // initialise functionality
             this.CurrentVersion = UpdateHelper.GetSemanticVersion(this.Manifest.Version);
@@ -206,15 +206,16 @@ namespace Pathoschild.LookupAnything
         {
             try
             {
-                // show lookup UI
+                // get target
                 ISubject subject = Game1.activeClickableMenu != null
                     ? this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu)
                     : this.TargetFactory.GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile, GameHelper.GetScreenCoordinatesFromCursor());
-                if (subject != null)
-                {
-                    this.PreviousMenu = Game1.activeClickableMenu;
-                    Game1.activeClickableMenu = new LookupMenu(subject);
-                }
+                if (subject == null)
+                    return;
+
+                // show lookup UI
+                this.PreviousMenu = Game1.activeClickableMenu;
+                Game1.activeClickableMenu = new LookupMenu(subject);
             }
             catch (Exception ex)
             {
@@ -235,13 +236,7 @@ namespace Pathoschild.LookupAnything
                 this.HandleError(ex, "loading metadata");
             }
         }
-
-        /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
-        private void ResetCache()
-        {
-            GameHelper.ResetCache();
-        }
-
+        
         /// <summary>Log an error and warn the user.</summary>
         /// <param name="ex">The exception to handle.</param>
         /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up").</param>

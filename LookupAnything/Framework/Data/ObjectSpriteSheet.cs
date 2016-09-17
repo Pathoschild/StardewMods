@@ -1,7 +1,7 @@
 namespace Pathoschild.LookupAnything.Framework.Data
 {
     /// <summary>Indicates the sprite sheet used to draw an object. A given sprite ID can be duplicated between two sprite sheets.</summary>
-    public enum ObjectSpriteSheet
+    internal enum ObjectSpriteSheet
     {
         /// <summary>The object sprite sheet, used to draw most game objects.</summary>
         Object,

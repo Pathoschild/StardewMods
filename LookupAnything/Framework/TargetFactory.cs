@@ -13,7 +13,7 @@ using StardewValley.TerrainFeatures;
 namespace Pathoschild.LookupAnything.Framework
 {
     /// <summary>Finds and analyses lookup targets in the world.</summary>
-    public class TargetFactory
+    internal class TargetFactory
     {
         /*********
         ** Properties

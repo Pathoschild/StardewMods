@@ -6,7 +6,7 @@ using StardewValley;
 namespace Pathoschild.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows which items an NPC likes receiving.</summary>
-    public class CharacterGiftTastesField : GenericField
+    internal class CharacterGiftTastesField : GenericField
     {
         /*********
         ** Public methods

@@ -5,7 +5,7 @@ using Pathoschild.LookupAnything.Framework.Constants;
 namespace Pathoschild.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows how much each NPC likes receiving this item.</summary>
-    public class ItemGiftTastesField : GenericField
+    internal class ItemGiftTastesField : GenericField
     {
         /*********
         ** Public methods

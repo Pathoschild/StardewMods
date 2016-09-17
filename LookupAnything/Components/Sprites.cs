@@ -8,7 +8,7 @@ namespace Pathoschild.LookupAnything.Components
 {
     /// <summary>Simplifies access to the game's sprite sheets.</summary>
     /// <remarks>Each sprite is represented by a rectangle, which specifies the coordinates and dimensions of the image in the sprite sheet.</remarks>
-    public static class Sprites
+    internal static class Sprites
     {
         /*********
         ** Accessors
@@ -26,7 +26,7 @@ namespace Pathoschild.LookupAnything.Components
         /// <summary>Sprites used to draw icons.</summary>
         public static class Icons
         {
-            /// <summary>The sprite sheet containing the form sprites.</summary>
+            /// <summary>The sprite sheet containing the icon sprites.</summary>
             public static Texture2D Sheet => Game1.mouseCursors;
 
             /// <summary>A filled heart indicating a friendship level.</summary>
@@ -43,7 +43,7 @@ namespace Pathoschild.LookupAnything.Components
         }
 
         /// <summary>A blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
-        public static Texture2D Pixel { get; } = Sprites.GetPixel();
+        public static readonly Texture2D Pixel = Sprites.GetPixel();
 
 
         /*********
@@ -53,7 +53,7 @@ namespace Pathoschild.LookupAnything.Components
         ** Helpers
         ****/
         /// <summary>Get the dimensions of a space character.</summary>
-        /// <param name="font">The fontto measure.</param>
+        /// <param name="font">The font to measure.</param>
         public static float GetSpaceWidth(SpriteFont font)
         {
             return font.MeasureString("A B").X - font.MeasureString("AB").X;

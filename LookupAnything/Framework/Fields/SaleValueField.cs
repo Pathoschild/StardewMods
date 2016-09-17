@@ -5,7 +5,7 @@ using Pathoschild.LookupAnything.Framework.Constants;
 namespace Pathoschild.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which indicates an item's price based on its quality.</summary>
-    public class SaleValueField : GenericField
+    internal class SaleValueField : GenericField
     {
         /*********
         ** Public methods

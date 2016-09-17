@@ -12,7 +12,7 @@ using Object = StardewValley.Object;
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
     /// <summary>Describes a Stardew Valley item.</summary>
-    public class ItemSubject : BaseSubject
+    internal class ItemSubject : BaseSubject
     {
         /*********
         ** Properties

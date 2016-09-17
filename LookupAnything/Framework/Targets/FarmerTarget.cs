@@ -4,7 +4,7 @@ using StardewValley;
 namespace Pathoschild.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about a farmer (i.e. player).</summary>
-    public class FarmerTarget : GenericTarget
+    internal class FarmerTarget : GenericTarget
     {
         /*********
         ** Public methods

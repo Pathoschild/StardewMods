@@ -6,7 +6,7 @@ using Pathoschild.LookupAnything.Framework.Fields;
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
     /// <summary>The base class for object metadata.</summary>
-    public abstract class BaseSubject : ISubject
+    internal abstract class BaseSubject : ISubject
     {
         /*********
         ** Accessors

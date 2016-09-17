@@ -7,7 +7,7 @@ using StardewValley;
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
     /// <summary>Describes a farmer (i.e. player).</summary>
-    public class FarmerSubject : BaseSubject
+    internal class FarmerSubject : BaseSubject
     {
         /*********
         ** Properties

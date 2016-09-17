@@ -1,7 +1,7 @@
 namespace Pathoschild.LookupAnything.Framework.Data
 {
     /// <summary>Provides override metadata about a game NPC.</summary>
-    public class CharacterData
+    internal class CharacterData
     {
         /*********
         ** Accessors

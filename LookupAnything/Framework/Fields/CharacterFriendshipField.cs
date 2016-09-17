@@ -7,7 +7,7 @@ using StardewValley;
 namespace Pathoschild.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows friendship points.</summary>
-    public class CharacterFriendshipField : GenericField
+    internal class CharacterFriendshipField : GenericField
     {
         /*********
         ** Properties

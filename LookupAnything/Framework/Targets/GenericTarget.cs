@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Pathoschild.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about an object in the world.</summary>
-    public abstract class GenericTarget : ITarget
+    internal abstract class GenericTarget : ITarget
     {
         /*********
         ** Accessors

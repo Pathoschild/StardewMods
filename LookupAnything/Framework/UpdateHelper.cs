@@ -23,6 +23,7 @@ namespace Pathoschild.LookupAnything.Framework
         }
 
         /// <summary>Get the latest release in a GitHub repository.</summary>
+        /// <param name="repository">The name of the repository from which to fetch releases (like "pathoschild/LookupAnything").</param>
         public static async Task<GitRelease> GetLatestReleaseAsync(string repository)
         {
             using (HttpClient client = new HttpClient())

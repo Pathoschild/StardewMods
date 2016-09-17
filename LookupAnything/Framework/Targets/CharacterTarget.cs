@@ -6,7 +6,7 @@ using StardewValley.Monsters;
 namespace Pathoschild.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about an NPC.</summary>
-    public class CharacterTarget : GenericTarget
+    internal class CharacterTarget : GenericTarget
     {
         /*********
         ** Public methods

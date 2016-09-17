@@ -5,7 +5,7 @@ using Pathoschild.LookupAnything.Framework.Fields;
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
     /// <summary>Provides metadata about something in the game.</summary>
-    public interface ISubject
+    internal interface ISubject
     {
         /*********
         ** Accessors

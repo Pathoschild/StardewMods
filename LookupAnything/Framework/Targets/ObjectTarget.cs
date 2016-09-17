@@ -5,7 +5,7 @@ using StardewValley;
 namespace Pathoschild.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about a world object.</summary>
-    public class ObjectTarget : GenericTarget
+    internal class ObjectTarget : GenericTarget
     {
         /*********
         ** Public methods

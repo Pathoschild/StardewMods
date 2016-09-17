@@ -4,7 +4,7 @@ using StardewValley.TerrainFeatures;
 namespace Pathoschild.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about a crop.</summary>
-    public class CropTarget : GenericTarget
+    internal class CropTarget : GenericTarget
     {
         /*********
         ** Public methods

@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 namespace Pathoschild.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about an object in the world.</summary>
-    public interface ITarget
+    internal interface ITarget
     {
         /*********
         ** Accessors

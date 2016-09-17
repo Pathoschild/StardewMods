@@ -7,7 +7,7 @@ using StardewValley;
 namespace Pathoschild.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows recipe ingredients (if the player learned them).</summary>
-    public class RecipeIngredientsField : GenericField
+    internal class RecipeIngredientsField : GenericField
     {
         /*********
         ** Properties

@@ -15,7 +15,7 @@ using Object = StardewValley.Object;
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
     /// <summary>Describes an NPC (including villagers, monsters, and pets).</summary>
-    public class CharacterSubject : BaseSubject
+    internal class CharacterSubject : BaseSubject
     {
         /*********
         ** Properties

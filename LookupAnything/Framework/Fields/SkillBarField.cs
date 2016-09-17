@@ -10,7 +10,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows experience points for a skill.</summary>
     /// <remarks>Skill calculations reverse-engineered from <see cref="Farmer.checkForLevelGain"/>.</remarks>
-    public class SkillBarField : PercentageBarField
+    internal class SkillBarField : PercentageBarField
     {
         /*********
         ** Public methods

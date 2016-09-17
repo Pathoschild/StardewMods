@@ -8,7 +8,7 @@ using Object = StardewValley.Object;
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
     /// <summary>Describes a growing crop.</summary>
-    public class CropSubject : ItemSubject
+    internal class CropSubject : ItemSubject
     {
         /*********
         ** Public methods

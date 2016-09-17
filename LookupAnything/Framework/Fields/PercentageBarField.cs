@@ -6,7 +6,7 @@ using Pathoschild.LookupAnything.Components;
 namespace Pathoschild.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows a progress bar UI.</summary>
-    public class PercentageBarField : GenericField
+    internal class PercentageBarField : GenericField
     {
         /*********
         ** Properties

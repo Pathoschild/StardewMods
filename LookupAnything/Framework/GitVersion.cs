@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Pathoschild.LookupAnything.Framework
 {
     /// <summary>Metadata about a GitHub release tag.</summary>
-    public class GitRelease
+    internal class GitRelease
     {
         /*********
         ** Accessors

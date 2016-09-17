@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 namespace Pathoschild.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about an unknown object.</summary>
-    public class UnknownTarget : GenericTarget
+    internal class UnknownTarget : GenericTarget
     {
         /*********
         ** Public methods

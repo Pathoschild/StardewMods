@@ -1,7 +1,7 @@
 namespace Pathoschild.LookupAnything.Framework.Data
 {
     /// <summary>Information about an Adventure Guild monster-slaying quest.</summary>
-    public class AdventureGuildQuestData
+    internal class AdventureGuildQuestData
     {
         /// <summary>The name of the monster category.</summary>
         public string Category { get; set; }

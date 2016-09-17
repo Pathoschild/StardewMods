@@ -5,7 +5,7 @@ using StardewValley;
 namespace Pathoschild.LookupAnything.Framework
 {
     /// <summary>Provides metadata that's not available from the game data directly (e.g. because it's buried in the logic).</summary>
-    public class Metadata
+    internal class Metadata
     {
         /*********
         ** Accessors

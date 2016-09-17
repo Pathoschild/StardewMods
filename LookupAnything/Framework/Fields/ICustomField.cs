@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Pathoschild.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field shown as an extended property in the lookup UI.</summary>
-    public interface ICustomField
+    internal interface ICustomField
     {
         /*********
         ** Accessors

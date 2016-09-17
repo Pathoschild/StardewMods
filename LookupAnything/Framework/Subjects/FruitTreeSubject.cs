@@ -8,7 +8,7 @@ using StardewValley.TerrainFeatures;
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
     /// <summary>Describes a non-fruit tree.</summary>
-    public class FruitTreeSubject : BaseSubject
+    internal class FruitTreeSubject : BaseSubject
     {
         /*********
         ** Properties

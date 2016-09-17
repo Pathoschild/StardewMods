@@ -7,7 +7,7 @@ using StardewValley.TerrainFeatures;
 namespace Pathoschild.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about a wild tree.</summary>
-    public class TreeTarget : GenericTarget
+    internal class TreeTarget : GenericTarget
     {
         /*********
         ** Public methods
