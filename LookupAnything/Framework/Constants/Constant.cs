@@ -40,7 +40,7 @@ namespace Pathoschild.LookupAnything.Framework.Constants
         public static class LocationNames
         {
             /// <summary>The internal name for the greenhouse.</summary>
-            public static string Greenhouse = "FarmGreenHouse";
+            public static string Greenhouse = "Greenhouse";
         }
     }
 }

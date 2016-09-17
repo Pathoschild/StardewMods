@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Fields;
 using StardewValley;
@@ -48,7 +49,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             string nextHarvestSummary;
             if (canHarvestNow)
                 nextHarvestSummary = "now";
-            else if (!crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Item1))
+            else if (Game1.currentLocation.Name != Constant.LocationNames.Greenhouse && !crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Item1))
                 nextHarvestSummary = $"too late in the season for the next harvest (would be on {dayOfNextHarvest.Item1} {dayOfNextHarvest.Item2})";
             else
                 nextHarvestSummary = $"in {daysToNextHarvest} {GameHelper.Pluralise(daysToNextHarvest, "day")} ({dayOfNextHarvest.Item1} {dayOfNextHarvest.Item2})";
