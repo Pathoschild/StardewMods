@@ -50,10 +50,12 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             if (!isMature)
             {
                 System.Tuple<string, int> dayOfMaturity = GameHelper.GetDayOffset(tree.daysUntilMature, metadata.Constants.DaysInSeason);
-                string growthText = $"mature in {tree.daysUntilMature} {GameHelper.Pluralise(tree.daysUntilMature, "day")} ({dayOfMaturity.Item1} {dayOfMaturity.Item2})";
-                if (this.HasAdjacentObjects(this.Tile))
-                    growthText += " (can't grow because there are adjacent objects)";
+                string growthText = $"mature on {dayOfMaturity.Item1} {dayOfMaturity.Item2} ({GameHelper.Pluralise(tree.daysUntilMature, "tomorrow", $"in {tree.daysUntilMature} days")})";
+
+                yield return new GenericField("Next fruit", "too young to bear fruit");
                 yield return new GenericField("Growth", growthText);
+                if (this.HasAdjacentObjects(this.Tile))
+                    yield return new GenericField("Complaints", "can't grow because there are adjacent objects");
             }
 
             // show next fruit
@@ -62,7 +64,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 if (isStruckByLightning)
                     yield return new GenericField("Next fruit", $"struck by lightning! Will recover in {tree.struckByLightningCountdown} days.");
                 else if (Game1.currentSeason != tree.fruitSeason && !tree.greenHouseTree)
-                    yield return new GenericField("Next fruit", $"only grows in {tree.fruitSeason} (unless it's in the greenhouse)");
+                    yield return new GenericField("Next fruit", "out of season");
                 else if (tree.fruitsOnTree == FruitTree.maxFruitsOnTrees)
                     yield return new GenericField("Next fruit", "won't grow any more fruit until you harvest those it has");
                 else

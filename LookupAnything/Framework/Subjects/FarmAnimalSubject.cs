@@ -52,9 +52,8 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             yield return new GenericField("Mood today", animal.getMoodMessage());
             yield return new GenericField("Complaints", this.GetMoodReason(animal));
             yield return new GenericField("Produce ready", animal.currentProduce > 0 ? new StardewValley.Object(animal.currentProduce, 1).name : null);
-            yield return new GenericField("Petted today", animal.wasPet);
             if (!isFullyGrown)
-                yield return new GenericField("Adult in", $"{daysUntilGrown} {GameHelper.Pluralise(daysUntilGrown, "day")} (on {dayOfMaturity.Item1} {dayOfMaturity.Item2})");
+                yield return new GenericField("Growth", $"{daysUntilGrown} {GameHelper.Pluralise(daysUntilGrown, "day")} (on {dayOfMaturity.Item1} {dayOfMaturity.Item2})");
             yield return new SaleValueField("Sells for", animal.getSellPrice(), 1);
         }
 
