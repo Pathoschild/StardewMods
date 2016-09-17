@@ -190,6 +190,32 @@ namespace Pathoschild.LookupAnything
             return (T)field.GetValue(parent);
         }
 
+        /// <summary>Get a private method.</summary>
+        /// <param name="parent">The parent object.</param>
+        /// <param name="name">The field name.</param>
+        /// <param name="required">Whether to throw an exception if the private field is not found.</param>
+        public static MethodInfo GetPrivateMethod(object parent, string name, bool required = true)
+        {
+            if (parent == null)
+                throw new InvalidOperationException($"Can't get private method '{name}' on null instance.");
+
+            // get method from hierarchy
+            MethodInfo method = null;
+            for (Type type = parent.GetType(); type != null && method == null; type = type.BaseType)
+                method = type.GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic);
+
+            // validate
+            if (method == null)
+            {
+                if (required)
+                    throw new InvalidOperationException($"The {parent.GetType().Name} object doesn't have a private '{name}' method.");
+                return null;
+            }
+
+            // get value
+            return method;
+        }
+
         /****
         ** Formatting
         ****/
