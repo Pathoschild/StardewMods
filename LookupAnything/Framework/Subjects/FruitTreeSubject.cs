@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,6 +17,9 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <summary>The underlying target.</summary>
         private readonly FruitTree Target;
 
+        /// <summary>The tree's tile position.</summary>
+        private readonly Vector2 Tile;
+
 
         /*********
         ** Public methods
@@ -23,47 +27,50 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
+        public FruitTreeSubject(FruitTree tree, Vector2 tile)
+            : base($"{GameHelper.GetObjectBySpriteIndex(tree.indexOfFruit).Name} Tree", null, "Fruit Tree")
+        {
+            this.Target = tree;
+            this.Tile = tile;
+        }
+
+        /// <summary>Get the data to display for this subject.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <remarks>Tree growth algorithm reverse engineered from <see cref="FruitTree.dayUpdate"/>.</remarks>
-        public FruitTreeSubject(FruitTree tree, Vector2 tile, Metadata metadata)
+        public override IEnumerable<ICustomField> GetData(Metadata metadata)
         {
-            // initialise
-            this.Target = tree;
-            this.Initialise($"{GameHelper.GetObjectBySpriteIndex(tree.indexOfFruit).Name} Tree", null, "Fruit Tree");
+            FruitTree tree = this.Target;
 
-            // add custom fields
+            // get basic info
+            bool isMature = tree.daysUntilMature <= 0;
+            bool isDead = tree.stump;
+            bool isStruckByLightning = tree.struckByLightningCountdown > 0;
+
+            // show growth countdown
+            if (!isMature)
             {
-                // get basic info
-                bool isMature = tree.daysUntilMature <= 0;
-                bool isDead = tree.stump;
-                bool isStruckByLightning = tree.struckByLightningCountdown > 0;
-
-                // show growth countdown
-                if (!isMature)
-                {
-                    System.Tuple<string, int> dayOfMaturity = GameHelper.GetDayOffset(tree.daysUntilMature, metadata.Constants.DaysInSeason);
-                    string growthText = $"mature in {tree.daysUntilMature} {GameHelper.Pluralise(tree.daysUntilMature, "day")} ({dayOfMaturity.Item1} {dayOfMaturity.Item2})";
-                    if (this.HasAdjacentObjects(tile))
-                        growthText += " (can't grow because there are adjacent objects)";
-                    this.AddCustomFields(new GenericField("Growth", growthText));
-                }
-
-                // show next fruit
-                if (isMature && !isDead)
-                {
-                    if (isStruckByLightning)
-                        this.AddCustomFields(new GenericField("Next fruit", $"struck by lightning! Will recover in {tree.struckByLightningCountdown} days."));
-                    if (Game1.currentSeason != tree.fruitSeason && !tree.greenHouseTree)
-                        this.AddCustomFields(new GenericField("Next fruit", $"only grows in {tree.fruitSeason} (unless it's in the greenhouse)"));
-                    else if (tree.fruitsOnTree == FruitTree.maxFruitsOnTrees)
-                        this.AddCustomFields(new GenericField("Next fruit", "won't grow any more fruit until you harvest those it has"));
-                    else
-                        this.AddCustomFields(new GenericField("Next fruit", "tomorrow"));
-                }
-
-                // show seasons
-                this.AddCustomFields(new GenericField("Season", $"{tree.fruitSeason} (or any season in greenhouse)"));
+                System.Tuple<string, int> dayOfMaturity = GameHelper.GetDayOffset(tree.daysUntilMature, metadata.Constants.DaysInSeason);
+                string growthText = $"mature in {tree.daysUntilMature} {GameHelper.Pluralise(tree.daysUntilMature, "day")} ({dayOfMaturity.Item1} {dayOfMaturity.Item2})";
+                if (this.HasAdjacentObjects(this.Tile))
+                    growthText += " (can't grow because there are adjacent objects)";
+                yield return new GenericField("Growth", growthText);
             }
+
+            // show next fruit
+            if (isMature && !isDead)
+            {
+                if (isStruckByLightning)
+                    yield return new GenericField("Next fruit", $"struck by lightning! Will recover in {tree.struckByLightningCountdown} days.");
+                else if (Game1.currentSeason != tree.fruitSeason && !tree.greenHouseTree)
+                    yield return new GenericField("Next fruit", $"only grows in {tree.fruitSeason} (unless it's in the greenhouse)");
+                else if (tree.fruitsOnTree == FruitTree.maxFruitsOnTrees)
+                    yield return new GenericField("Next fruit", "won't grow any more fruit until you harvest those it has");
+                else
+                    yield return new GenericField("Next fruit", "tomorrow");
+            }
+
+            // show seasons
+            yield return new GenericField("Season", $"{tree.fruitSeason} (or any season in greenhouse)");
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>

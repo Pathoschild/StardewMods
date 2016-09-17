@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Framework.Fields;
 
@@ -19,13 +20,14 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <summary>The item type (if applicable).</summary>
         string Type { get; }
 
-        /// <summary>The custom fields to display for this subject (if any).</summary>
-        ICustomField[] CustomFields { get; }
-
 
         /*********
         ** Public methods
         *********/
+        /// <summary>Get the data to display for this subject.</summary>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        IEnumerable<ICustomField> GetData(Metadata metadata);
+
         /// <summary>Draw the subject portrait (if available).</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>
         /// <param name="position">The position at which to draw.</param>

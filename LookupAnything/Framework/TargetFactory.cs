@@ -172,28 +172,28 @@ namespace Pathoschild.LookupAnything.Framework
 
                 // player
                 case TargetType.Farmer:
-                    return new FarmerSubject(target.GetValue<Farmer>(), this.Metadata);
+                    return new FarmerSubject(target.GetValue<Farmer>());
 
                 // animal
                 case TargetType.FarmAnimal:
-                    return new FarmAnimalSubject(target.GetValue<FarmAnimal>(), this.Metadata);
+                    return new FarmAnimalSubject(target.GetValue<FarmAnimal>());
 
                 // crop
                 case TargetType.Crop:
                     Crop crop = target.GetValue<HoeDirt>().crop;
-                    return new CropSubject(crop, GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest), this.Metadata);
+                    return new CropSubject(crop, GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest));
 
                 // tree
                 case TargetType.FruitTree:
-                    return new FruitTreeSubject(target.GetValue<FruitTree>(), target.GetTile(), this.Metadata);
+                    return new FruitTreeSubject(target.GetValue<FruitTree>(), target.GetTile());
                 case TargetType.WildTree:
                     return new TreeSubject(target.GetValue<Tree>(), target.GetTile());
 
                 // object
                 case TargetType.InventoryItem:
-                    return new ItemSubject(target.GetValue<Item>(), ObjectContext.Inventory, knownQuality: false, metadata: this.Metadata);
+                    return new ItemSubject(target.GetValue<Item>(), ObjectContext.Inventory, knownQuality: false);
                 case TargetType.Object:
-                    return new ItemSubject(target.GetValue<Item>(), ObjectContext.World, knownQuality: false, metadata: this.Metadata);
+                    return new ItemSubject(target.GetValue<Item>(), ObjectContext.World, knownQuality: false);
             }
 
             return null;
@@ -213,13 +213,13 @@ namespace Pathoschild.LookupAnything.Framework
                 {
                     Item item = GameHelper.GetPrivateField<Item>(curTab, "hoveredItem");
                     if (item != null)
-                        return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
+                        return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
                 }
                 else if (curTab is CraftingPage)
                 {
                     Item item = GameHelper.GetPrivateField<Item>(curTab, "hoverItem");
                     if (item != null)
-                        return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
+                        return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
                 }
             }
 
@@ -228,7 +228,7 @@ namespace Pathoschild.LookupAnything.Framework
             {
                 Item item = GameHelper.GetPrivateField<Item>(activeMenu, "HoveredItem", required: false); // ChestsAnywhere
                 if (item != null)
-                    return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true, metadata: this.Metadata);
+                    return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
             }
 
             return null;

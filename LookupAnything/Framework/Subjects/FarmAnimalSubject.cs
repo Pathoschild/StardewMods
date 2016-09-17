@@ -23,39 +23,39 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="animal">The lookup target.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <remarks>Reverse engineered from <see cref="FarmAnimal"/>.</remarks>
-        public FarmAnimalSubject(FarmAnimal animal, Metadata metadata)
+        public FarmAnimalSubject(FarmAnimal animal)
+            : base(animal.name, null, animal.type)
         {
-            // initialise
             this.Target = animal;
-            this.Initialise(animal.name, null, animal.type);
+        }
 
-            // add custom fields
+        /// <summary>Get the data to display for this subject.</summary>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        {
+            FarmAnimal animal = this.Target;
+
+            // calculate maturity
+            bool isFullyGrown = animal.age >= animal.ageWhenMature;
+            int daysUntilGrown = 0;
+            Tuple<string, int> dayOfMaturity = null;
+            if (!isFullyGrown)
             {
-                // calculate maturity
-                bool isFullyGrown = animal.age >= animal.ageWhenMature;
-                int daysUntilGrown = 0;
-                Tuple<string, int> dayOfMaturity = null;
-                if (!isFullyGrown)
-                {
-                    daysUntilGrown = animal.ageWhenMature - animal.age;
-                    dayOfMaturity = GameHelper.GetDayOffset(daysUntilGrown, metadata.Constants.DaysInSeason);
-                }
-
-                // add fields
-                this.AddCustomFields(
-                    new CharacterFriendshipField("Love", animal.friendshipTowardFarmer, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints),
-                    new PercentageBarField("Happiness", animal.happiness, byte.MaxValue, Color.Green, Color.Gray, $"{Math.Round(animal.happiness / (metadata.Constants.AnimalMaxHappiness * 1f) * 100)}%"),
-                    new GenericField("Mood today", animal.getMoodMessage()),
-                    new GenericField("Complaints", this.GetMoodReason(animal)),
-                    new GenericField("Produce ready", animal.currentProduce > 0 ? new StardewValley.Object(animal.currentProduce, 1).name : null),
-                    new GenericField("Petted today", animal.wasPet)
-                );
-                if (!isFullyGrown)
-                    this.AddCustomFields(new GenericField("Adult in", $"{daysUntilGrown} {GameHelper.Pluralise(daysUntilGrown, "day")} (on {dayOfMaturity.Item1} {dayOfMaturity.Item2})"));
-                this.AddCustomFields(new SaleValueField("Sells for", animal.getSellPrice(), 1));
+                daysUntilGrown = animal.ageWhenMature - animal.age;
+                dayOfMaturity = GameHelper.GetDayOffset(daysUntilGrown, metadata.Constants.DaysInSeason);
             }
+
+            // yield fields
+            yield return new CharacterFriendshipField("Love", animal.friendshipTowardFarmer, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints);
+            yield return new PercentageBarField("Happiness", animal.happiness, byte.MaxValue, Color.Green, Color.Gray, $"{Math.Round(animal.happiness / (metadata.Constants.AnimalMaxHappiness * 1f) * 100)}%");
+            yield return new GenericField("Mood today", animal.getMoodMessage());
+            yield return new GenericField("Complaints", this.GetMoodReason(animal));
+            yield return new GenericField("Produce ready", animal.currentProduce > 0 ? new StardewValley.Object(animal.currentProduce, 1).name : null);
+            yield return new GenericField("Petted today", animal.wasPet);
+            if (!isFullyGrown)
+                yield return new GenericField("Adult in", $"{daysUntilGrown} {GameHelper.Pluralise(daysUntilGrown, "day")} (on {dayOfMaturity.Item1} {dayOfMaturity.Item2})");
+            yield return new SaleValueField("Sells for", animal.getSellPrice(), 1);
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>

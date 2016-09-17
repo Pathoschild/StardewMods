@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,6 +19,9 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <summary>The underlying target.</summary>
         private readonly Tree Target;
 
+        /// <summary>The tree's tile position.</summary>
+        private readonly Vector2 Tile;
+
 
         /*********
         ** Public methods
@@ -25,38 +29,41 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
-        /// <remarks>Tree growth algorithm reverse engineered from <see cref="StardewValley.TerrainFeatures.Tree.dayUpdate"/>.</remarks>
         public TreeSubject(Tree tree, Vector2 tile)
+            : base(TreeSubject.GetName(tree), null, "Tree")
         {
-            // initialise
             this.Target = tree;
-            this.Initialise(this.GetName(tree), null, "Tree");
+            this.Tile = tile;
+        }
 
-            // get custom fields
+        /// <summary>Get the data to display for this subject.</summary>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        /// <remarks>Tree growth algorithm reverse engineered from <see cref="StardewValley.TerrainFeatures.Tree.dayUpdate"/>.</remarks>
+        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        {
+            Tree tree = this.Target;
+
+            // get growth stage
+            WildTreeGrowthStage stage = (WildTreeGrowthStage)Math.Min(tree.growthStage, (int)WildTreeGrowthStage.Tree);
+            bool isFullyGrown = stage == WildTreeGrowthStage.Tree;
+            yield return isFullyGrown
+                ? new GenericField("Growth stage", "fully grown")
+                : new GenericField("Growth stage", $"{stage} ({(int)stage} of {(int)WildTreeGrowthStage.Tree})");
+
+            // get growth scheduler
+            if (!isFullyGrown)
             {
-                // get growth stage
-                WildTreeGrowthStage stage = (WildTreeGrowthStage)Math.Min(tree.growthStage, (int)WildTreeGrowthStage.Tree);
-                bool isFullyGrown = stage == WildTreeGrowthStage.Tree;
-                this.AddCustomFields(isFullyGrown
-                    ? new GenericField("Growth stage", "fully grown")
-                    : new GenericField("Growth stage", $"{stage} ({(int)stage} of {(int)WildTreeGrowthStage.Tree})")
-                );
-
-                // get growth scheduler
-                if (!isFullyGrown)
-                {
-                    if (Game1.IsWinter && Game1.currentLocation.Name != Constant.LocationNames.Greenhouse)
-                        this.AddCustomFields(new GenericField("Next growth", "can't grow in winter outside greenhouse"));
-                    else if (stage == WildTreeGrowthStage.SmallTree && this.HasAdjacentTrees(tile))
-                        this.AddCustomFields(new GenericField("Next growth", "can't grow because other trees are too close"));
-                    else
-                        this.AddCustomFields(new GenericField("Next growth", $"20% chance to grow into {stage + 1} tomorrow"));
-                }
-
-                // get seed
-                if (isFullyGrown)
-                    this.AddCustomFields(new GenericField("Has seed", tree.hasSeed));
+                if (Game1.IsWinter && Game1.currentLocation.Name != Constant.LocationNames.Greenhouse)
+                    yield return new GenericField("Next growth", "can't grow in winter outside greenhouse");
+                else if (stage == WildTreeGrowthStage.SmallTree && this.HasAdjacentTrees(this.Tile))
+                    yield return new GenericField("Next growth", "can't grow because other trees are too close");
+                else
+                    yield return new GenericField("Next growth", $"20% chance to grow into {stage + 1} tomorrow");
             }
+
+            // get seed
+            if (isFullyGrown)
+                yield return new GenericField("Has seed", tree.hasSeed);
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>
@@ -76,7 +83,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         *********/
         /// <summary>Get a display name for the tree.</summary>
         /// <param name="tree">The tree object.</param>
-        private string GetName(Tree tree)
+        private static string GetName(Tree tree)
         {
             TreeType type = (TreeType)tree.treeType;
 

@@ -17,8 +17,17 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /*********
         ** Properties
         *********/
+        /// <summary>The lookup target.</summary>
+        private readonly Item Target;
+
         /// <summary>The menu item to render, which may be different from the item that was looked up (e.g. for fences).</summary>
         private readonly Item DisplayItem;
+
+        /// <summary>The context of the object being looked up.</summary>
+        private readonly ObjectContext Context;
+
+        /// <summary>Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</summary>
+        private readonly bool KnownQuality;
 
 
         /*********
@@ -28,61 +37,63 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <param name="item">The underlying target.</param>
         /// <param name="context">The context of the object being looked up.</param>
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public ItemSubject(Item item, ObjectContext context, bool knownQuality, Metadata metadata)
+        public ItemSubject(Item item, ObjectContext context, bool knownQuality)
         {
-            // initialise
+            this.Target = item;
             this.DisplayItem = this.GetMenuItem(item);
+            this.Context = context;
+            this.KnownQuality = knownQuality;
             this.Initialise(this.DisplayItem.Name, this.GetDescription(this.DisplayItem), this.GetTypeValue(this.DisplayItem));
+        }
 
-            // add custom fields
+        /// <summary>Get the data to display for this subject.</summary>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        {
+            Item item = this.Target;
+            Object obj = item as Object;
+
+            // get overrides
+            bool showInventoryFields = true;
             {
-                Object obj = item as Object;
-
-                // get overrides
-                bool showInventoryFields = true;
+                ObjectData objData = metadata.GetObject(item, this.Context);
+                if (objData != null)
                 {
-                    ObjectData objData = metadata.GetObject(item, context);
-                    if (objData != null)
-                    {
-                        this.Name = objData.Name ?? this.Name;
-                        this.Description = objData.Description ?? this.Description;
-                        this.Type = objData.Type ?? this.Type;
-                        showInventoryFields = objData.ShowInventoryFields ?? true;
-                    }
+                    this.Name = objData.Name ?? this.Name;
+                    this.Description = objData.Description ?? this.Description;
+                    this.Type = objData.Type ?? this.Type;
+                    showInventoryFields = objData.ShowInventoryFields ?? true;
                 }
+            }
 
-                // crafting
-                if (obj?.heldObject != null)
-                    this.AddCustomFields(new GenericField("Crafting", $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + GenericField.GetString(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready") + "."));
+            // crafting
+            if (obj?.heldObject != null)
+                yield return new GenericField("Crafting", $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + GenericField.GetString(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready") + ".");
 
-                // item
-                if (showInventoryFields)
-                {
-                    var giftTastes = this.GetGiftTastes(item);
-                    this.AddCustomFields(
-                        new SaleValueField("Sells for", this.GetSaleValue(item, knownQuality), item.Stack),
-                        new ItemGiftTastesField("Loves this", giftTastes, GiftTaste.Love),
-                        new ItemGiftTastesField("Likes this", giftTastes, GiftTaste.Like)
-                    );
-                }
+            // item
+            if (showInventoryFields)
+            {
+                var giftTastes = this.GetGiftTastes(item);
+                yield return new SaleValueField("Sells for", this.GetSaleValue(item, this.KnownQuality), item.Stack);
+                yield return new ItemGiftTastesField("Loves this", giftTastes, GiftTaste.Love);
+                yield return new ItemGiftTastesField("Likes this", giftTastes, GiftTaste.Like);
+            }
 
-                // fence
-                if (item is Fence)
-                {
-                    Fence fence = (Fence)item;
-                    float maxHealth = fence.isGate ? fence.maxHealth * 2 : fence.maxHealth;
-                    float health = fence.health / maxHealth;
-                    float daysLeft = fence.health * metadata.Constants.FenceDecayRate / 60 / 24;
-                    this.AddCustomFields(new PercentageBarField("Health", (int)fence.health, (int)maxHealth, Color.Green, Color.Red, $"{Math.Round(health * 100)}% (roughly {Math.Round(daysLeft)} days left)"));
-                }
+            // fence
+            if (item is Fence)
+            {
+                Fence fence = (Fence)item;
+                float maxHealth = fence.isGate ? fence.maxHealth * 2 : fence.maxHealth;
+                float health = fence.health / maxHealth;
+                float daysLeft = fence.health * metadata.Constants.FenceDecayRate / 60 / 24;
+                yield return new PercentageBarField("Health", (int)fence.health, (int)maxHealth, Color.Green, Color.Red, $"{Math.Round(health * 100)}% (roughly {Math.Round(daysLeft)} days left)");
+            }
 
-                // recipe
-                if (CraftingRecipe.cookingRecipes.ContainsKey(item.Name) || CraftingRecipe.craftingRecipes.ContainsKey(item.Name))
-                {
-                    CraftingRecipe recipe = new CraftingRecipe(item.Name, CraftingRecipe.cookingRecipes.ContainsKey(item.Name));
-                    this.AddCustomFields(new RecipeIngredientsField("Recipe", recipe));
-                }
+            // recipe
+            if (CraftingRecipe.cookingRecipes.ContainsKey(item.Name) || CraftingRecipe.craftingRecipes.ContainsKey(item.Name))
+            {
+                CraftingRecipe recipe = new CraftingRecipe(item.Name, CraftingRecipe.cookingRecipes.ContainsKey(item.Name));
+                yield return new RecipeIngredientsField("Recipe", recipe);
             }
         }
 

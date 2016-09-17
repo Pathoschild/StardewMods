@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.LookupAnything.Framework;
 using Pathoschild.LookupAnything.Framework.Fields;
 using Pathoschild.LookupAnything.Framework.Subjects;
 using StardewValley;
@@ -17,6 +18,9 @@ namespace Pathoschild.LookupAnything.Components
         *********/
         /// <summary>The subject metadata.</summary>
         private readonly ISubject Subject;
+
+        /// <summary>Provides metadata that's not available from the game data directly.</summary>
+        private readonly Metadata Metadata;
 
         /// <summary>The aspect ratio of the page background.</summary>
         private readonly Vector2 AspectRatio = new Vector2(Sprites.Letter.Sprite.Width, Sprites.Letter.Sprite.Height);
@@ -36,9 +40,11 @@ namespace Pathoschild.LookupAnything.Components
         ****/
         /// <summary>Construct an instance.</summary>
         /// <param name="subject">The metadata to display.</param>
-        public LookupMenu(ISubject subject)
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public LookupMenu(ISubject subject, Metadata metadata)
         {
             this.Subject = subject;
+            this.Metadata = metadata;
             this.CalculateDimensions();
         }
 
@@ -153,8 +159,8 @@ namespace Pathoschild.LookupAnything.Components
                     topOffset += lineHeight;
 
                     // draw custom fields
-                    ICustomField[] fields = this.Subject.CustomFields;
-                    if (fields != null && fields.Any(p => p.HasValue))
+                    ICustomField[] fields = this.Subject.GetData(this.Metadata).ToArray();
+                    if (fields.Any(p => p.HasValue))
                     {
                         float cellPadding = 3;
                         float labelWidth = fields.Where(p => p.HasValue).Max(p => font.MeasureString(p.Label).X);

@@ -215,7 +215,7 @@ namespace Pathoschild.LookupAnything
 
                 // show lookup UI
                 this.PreviousMenu = Game1.activeClickableMenu;
-                Game1.activeClickableMenu = new LookupMenu(subject);
+                Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata);
             }
             catch (Exception ex)
             {
