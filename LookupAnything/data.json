@@ -55,13 +55,26 @@ You shouldn't change this file unless you know what you're doing.
   *********/
   "Objects": [
     /****
-    ** Egg incubator (no description when it contains an egg)
+    ** Farm
     ****/
     {
       "SpriteSheet": "BigCraftable",
       "SpriteID": [ 102 /*duck or white egg*/, 103 /*brown or void egg*/ ],
       "Context": "World",
-      "Description": "Hatches eggs into baby chickens and ducks."
+      "Description": "Hatches eggs into baby chickens and ducks." // no description when it contains an egg
+    },
+    {
+      "SpriteID": [ 295 ],
+      "Context": "World",
+      "Name": "Broken Branch",
+      "Description": "A broken branch. Chop with an axe to obtain wood." // no meaningful default
+    },
+    {
+      "SpriteID": [ 450 ],
+      "Context": "World",
+      "Name": "Stone",
+      "Type": "Crafting", // default is 'asdf'
+      "Description": "A nondescript gray stone. Break apart to obtain stone." // no meaningful default
     },
 
     /****
@@ -176,21 +189,21 @@ You shouldn't change this file unless you know what you're doing.
       "Context": "World",
       "Name": "Grey Stone",
       "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+      "Description": "A nondescript stone. It might contain stone, ores, or geodes."
     },
     {
       "SpriteID": [ 34, 36, 38 ],
       "Context": "World",
       "Name": "Blue Stone",
       "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+      "Description": "A nondescript stone. It might contain stone, ores, or geodes."
     },
     {
       "SpriteID": [ 40, 42 ],
       "Context": "World",
       "Name": "Brown Stone",
       "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+      "Description": "A nondescript stone. It might contain stone, ores, or geodes."
     },
 
     {
@@ -198,7 +211,7 @@ You shouldn't change this file unless you know what you're doing.
       "Context": "World",
       "Name": "Snowy Stone",
       "Type": "Stone",
-      "Description": "A non-descript stone. It might contain stone, ores, or geodes."
+      "Description": "A nondescript stone. It might contain stone, ores, or geodes."
     },
     {
       "SpriteID": [ 670 ],
@@ -217,7 +230,7 @@ You shouldn't change this file unless you know what you're doing.
       "Context": "World",
       "Name": "Weed",
       "Type": "Weed",
-      "Description": "A non-descript weed. Might contain fibers or mixed seeds.",
+      "Description": "A nondescript weed. Might contain fibers or mixed seeds.",
       "ShowInventoryFields": false
     },
     {
@@ -225,7 +238,7 @@ You shouldn't change this file unless you know what you're doing.
       "Context": "World",
       "Name": "Ice Crystal",
       "Type": "Weed",
-      "Description": "A non-descript ice crystal. Very small chance of containing refined quartz.",
+      "Description": "A nondescript ice crystal. Very small chance of containing refined quartz.",
       "ShowInventoryFields": false
     },
 
