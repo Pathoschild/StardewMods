@@ -73,7 +73,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     Fence fence = (Fence)item;
                     float maxHealth = fence.isGate ? fence.maxHealth * 2 : fence.maxHealth;
                     float health = fence.health / maxHealth;
-                    float daysLeft = fence.health * Constant.FenceDecayRate / 60 / 24;
+                    float daysLeft = fence.health * metadata.Constants.FenceDecayRate / 60 / 24;
                     this.AddCustomFields(new PercentageBarField("Health", (int)fence.health, (int)maxHealth, Color.Green, Color.Red, $"{Math.Round(health * 100)}% (roughly {Math.Round(daysLeft)} days left)"));
                 }
 

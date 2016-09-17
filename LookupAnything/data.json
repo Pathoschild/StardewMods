@@ -8,6 +8,27 @@ You shouldn't change this file unless you know what you're doing.
 */
 {
   /*********
+  ** Constants
+  *********/
+  "Constants": {
+    /* animals */
+    "AnimalFriendshipPointsPerLevel": 200,
+    "AnimalFriendshipMaxPoints": 1000,
+    "AnimalMaxHappiness": 255,
+
+    /* NPCs */
+    "AsocialVillagers": [ "Bouncer", "Gunther" ],
+
+    /* players */
+    "PlayerMaxSkillPoints": 15000,
+    "PlayerSkillPointsPerLevel": [ 100, 380, 770, 1300, 2150, 3300, 4800, 6900, 10000, 15000 ],
+
+    /* time */
+    "DaysInSeason": 28,
+    "FenceDecayRate": 1440
+  },
+
+  /*********
   ** Added metadata for NPCs (including villagers, pets, farm animals, monsters, etc).
   *********/
   "Characters": [

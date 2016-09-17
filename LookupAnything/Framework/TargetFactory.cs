@@ -172,11 +172,11 @@ namespace Pathoschild.LookupAnything.Framework
 
                 // player
                 case TargetType.Farmer:
-                    return new FarmerSubject(target.GetValue<Farmer>());
+                    return new FarmerSubject(target.GetValue<Farmer>(), this.Metadata);
 
                 // animal
                 case TargetType.FarmAnimal:
-                    return new FarmAnimalSubject(target.GetValue<FarmAnimal>());
+                    return new FarmAnimalSubject(target.GetValue<FarmAnimal>(), this.Metadata);
 
                 // crop
                 case TargetType.Crop:
@@ -185,7 +185,7 @@ namespace Pathoschild.LookupAnything.Framework
 
                 // tree
                 case TargetType.FruitTree:
-                    return new FruitTreeSubject(target.GetValue<FruitTree>(), target.GetTile());
+                    return new FruitTreeSubject(target.GetValue<FruitTree>(), target.GetTile(), this.Metadata);
                 case TargetType.WildTree:
                     return new TreeSubject(target.GetValue<Tree>(), target.GetTile());
 

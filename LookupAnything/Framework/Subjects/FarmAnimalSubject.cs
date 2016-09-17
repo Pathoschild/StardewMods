@@ -23,8 +23,9 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="animal">The lookup target.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <remarks>Reverse engineered from <see cref="FarmAnimal"/>.</remarks>
-        public FarmAnimalSubject(FarmAnimal animal)
+        public FarmAnimalSubject(FarmAnimal animal, Metadata metadata)
         {
             // initialise
             this.Target = animal;
@@ -39,13 +40,13 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 if (!isFullyGrown)
                 {
                     daysUntilGrown = animal.ageWhenMature - animal.age;
-                    dayOfMaturity = GameHelper.GetDayOffset(daysUntilGrown);
+                    dayOfMaturity = GameHelper.GetDayOffset(daysUntilGrown, metadata.Constants.DaysInSeason);
                 }
 
                 // add fields
                 this.AddCustomFields(
-                    new CharacterFriendshipField("Love", animal.friendshipTowardFarmer, Constant.AnimalFriendshipPointsPerLevel, Constant.AnimalFriendshipMaxPoints),
-                    new PercentageBarField("Happiness", animal.happiness, byte.MaxValue, Color.Green, Color.Gray, $"{Math.Round(animal.happiness / (byte.MaxValue * 1f) * 100)}%"),
+                    new CharacterFriendshipField("Love", animal.friendshipTowardFarmer, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints),
+                    new PercentageBarField("Happiness", animal.happiness, byte.MaxValue, Color.Green, Color.Gray, $"{Math.Round(animal.happiness / (metadata.Constants.AnimalMaxHappiness * 1f) * 100)}%"),
                     new GenericField("Mood today", animal.getMoodMessage()),
                     new GenericField("Complaints", this.GetMoodReason(animal)),
                     new GenericField("Produce ready", animal.currentProduce > 0 ? new StardewValley.Object(animal.currentProduce, 1).name : null),
@@ -80,7 +81,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             List<string> factors = new List<string>();
 
             // winter without heat
-            if (Game1.IsWinter && Game1.currentLocation.numberOfObjectsWithName(StandardItem.Heater) <= 0)
+            if (Game1.IsWinter && Game1.currentLocation.numberOfObjectsWithName(Constant.ItemNames.Heater) <= 0)
                 factors.Add("no heater in winter");
 
             // mood

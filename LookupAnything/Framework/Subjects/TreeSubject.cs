@@ -45,7 +45,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 // get growth scheduler
                 if (!isFullyGrown)
                 {
-                    if (Game1.IsWinter && Game1.currentLocation.Name != StandardLocation.Greenhouse)
+                    if (Game1.IsWinter && Game1.currentLocation.Name != Constant.LocationNames.Greenhouse)
                         this.AddCustomFields(new GenericField("Next growth", "can't grow in winter outside greenhouse"));
                     else if (stage == WildTreeGrowthStage.SmallTree && this.HasAdjacentTrees(tile))
                         this.AddCustomFields(new GenericField("Next growth", "can't grow because other trees are too close"));

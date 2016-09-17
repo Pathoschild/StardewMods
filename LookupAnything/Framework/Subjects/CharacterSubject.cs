@@ -44,7 +44,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             {
                 case TargetType.Villager:
                     this.Type = "Villager";
-                    if (!Constant.DisableVillagerFields.Contains(npc.getName()))
+                    if (!metadata.Constants.AsocialVillagers.Contains(npc.getName()))
                     {
                         var giftTastes = this.GetGiftTastes(npc);
                         this.AddCustomFields(

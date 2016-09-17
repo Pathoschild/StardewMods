@@ -21,23 +21,26 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="farmer">The lookup target.</param>
-        public FarmerSubject(Farmer farmer)
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public FarmerSubject(Farmer farmer, Metadata metadata)
         {
             // initialise
             this.Target = farmer;
             this.Initialise(farmer.Name, null, "Player");
 
-            // add gender
+            // add fields
+            int maxSkillPoints = metadata.Constants.PlayerMaxSkillPoints;
+            int[] skillPointsPerLevel = metadata.Constants.PlayerSkillPointsPerLevel;
             this.AddCustomFields(
                 new GenericField("Gender", farmer.IsMale ? "male" : "female"),
                 new GenericField("Farm name", farmer.farmName),
                 new GenericField("Favourite thing", farmer.favoriteThing),
                 new GenericField("Spouse", farmer.spouse, hasValue: farmer.isMarried()),
-                new SkillBarField("Farming skill", farmer.experiencePoints[Farmer.farmingSkill], Color.Green, Color.Gray),
-                new SkillBarField("Mining skill", farmer.experiencePoints[Farmer.miningSkill], Color.Green, Color.Gray),
-                new SkillBarField("Foraging skill", farmer.experiencePoints[Farmer.foragingSkill], Color.Green, Color.Gray),
-                new SkillBarField("Fishing skill", farmer.experiencePoints[Farmer.fishingSkill], Color.Green, Color.Gray),
-                new SkillBarField("Combat skill", farmer.experiencePoints[Farmer.combatSkill], Color.Green, Color.Gray),
+                new SkillBarField("Farming skill", farmer.experiencePoints[Farmer.farmingSkill], maxSkillPoints, skillPointsPerLevel),
+                new SkillBarField("Mining skill", farmer.experiencePoints[Farmer.miningSkill], maxSkillPoints, skillPointsPerLevel),
+                new SkillBarField("Foraging skill", farmer.experiencePoints[Farmer.foragingSkill], maxSkillPoints, skillPointsPerLevel),
+                new SkillBarField("Fishing skill", farmer.experiencePoints[Farmer.fishingSkill], maxSkillPoints, skillPointsPerLevel),
+                new SkillBarField("Combat skill", farmer.experiencePoints[Farmer.combatSkill], maxSkillPoints, skillPointsPerLevel),
                 new GenericField("Luck", $"{this.GetSpiritLuckMessage()}{Environment.NewLine}({(Game1.dailyLuck >= 0 ? "+" : "")}{Game1.dailyLuck * 100}% to many random checks)")
             );
         }

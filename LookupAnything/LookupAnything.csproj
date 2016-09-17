@@ -60,7 +60,7 @@
     <Compile Include="Components\DebugInterface.cs" />
     <Compile Include="Framework\Constants\FenceType.cs" />
     <Compile Include="Framework\Constants\FruitTreeGrowthStage.cs" />
-    <Compile Include="Framework\Constants\SeasonName.cs" />
+    <Compile Include="Framework\Data\ConstantData.cs" />
     <Compile Include="Framework\Data\ObjectContext.cs" />
     <Compile Include="Framework\Data\ObjectData.cs" />
     <Compile Include="Framework\Data\ObjectSpriteSheet.cs" />
@@ -75,7 +75,6 @@
     <Compile Include="Framework\Targets\ITarget.cs" />
     <Compile Include="Framework\RawModConfig.cs" />
     <Compile Include="Framework\Constants\Constant.cs" />
-    <Compile Include="Framework\Constants\StandardItem.cs" />
     <Compile Include="Framework\Data\AdventureGuildQuestData.cs" />
     <Compile Include="Framework\Data\CharacterData.cs" />
     <Compile Include="Framework\Fields\PercentageBarField.cs" />
@@ -94,7 +93,6 @@
     <Compile Include="Components\LookupMenu.cs" />
     <Compile Include="Components\Sprites.cs" />
     <Compile Include="Framework\Constants\ItemQuality.cs" />
-    <Compile Include="Framework\Constants\StandardLocation.cs" />
     <Compile Include="Framework\Constants\WildTreeGrowthStage.cs" />
     <Compile Include="Framework\Constants\TreeType.cs" />
     <Compile Include="Framework\Fields\GenericField.cs" />

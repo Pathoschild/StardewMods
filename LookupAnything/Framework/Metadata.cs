@@ -10,6 +10,9 @@ namespace Pathoschild.LookupAnything.Framework
         /*********
         ** Accessors
         *********/
+        /// <summary>Constant values hardcoded by the game.</summary>
+        public ConstantData Constants { get; set; }
+
         /// <summary>Metadata for game objects (including inventory items, terrain features, crops, trees, and other map objects).</summary>
         public ObjectData[] Objects { get; set; }
 

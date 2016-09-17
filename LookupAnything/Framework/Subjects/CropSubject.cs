@@ -41,7 +41,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 daysToNextHarvest = daysUntilLastPhase;
                 if (crop.fullyGrown && canRegrow && crop.currentPhase >= lastPhaseID)
                     daysToNextHarvest = crop.regrowAfterHarvest; // after harvesting a regrowable crop, current phase isn't reset until the next day
-                dayOfNextHarvest = GameHelper.GetDayOffset(daysToNextHarvest);
+                dayOfNextHarvest = GameHelper.GetDayOffset(daysToNextHarvest, metadata.Constants.DaysInSeason);
             }
 
             // generate next-harvest summary

@@ -44,22 +44,23 @@ namespace Pathoschild.LookupAnything
         ****/
         /// <summary>Add a day offset to the current date.</summary>
         /// <param name="offset">The offset to add in days.</param>
+        /// <param name="daysInSeason">The number of days in a season.</param>
         /// <returns>Returns the resulting season and day.</returns>
-        public static Tuple<string, int> GetDayOffset(int offset)
+        public static Tuple<string, int> GetDayOffset(int offset, int daysInSeason)
         {
             // simple case
             string season = Game1.currentSeason;
             int day = Game1.dayOfMonth + offset;
 
             // handle season transition
-            if (day > Constant.DaysInSeason)
+            if (day > daysInSeason)
             {
-                string[] seasons = { SeasonName.Spring, SeasonName.Summer, SeasonName.Fall, SeasonName.Winter };
+                string[] seasons = { Constant.SeasonNames.Spring, Constant.SeasonNames.Summer, Constant.SeasonNames.Fall, Constant.SeasonNames.Winter };
                 int curSeasonIndex = Array.IndexOf(seasons, Game1.currentSeason);
                 if (curSeasonIndex == -1)
                     throw new InvalidOperationException($"The current season '{Game1.currentSeason}' wasn't recognised.");
-                season = seasons[curSeasonIndex + (day / Constant.DaysInSeason) % seasons.Length];
-                day = day % Constant.DaysInSeason;
+                season = seasons[curSeasonIndex + (day / daysInSeason) % seasons.Length];
+                day = day % daysInSeason;
             }
 
             return Tuple.Create(season, day);

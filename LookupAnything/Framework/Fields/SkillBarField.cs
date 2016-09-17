@@ -3,25 +3,33 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Components;
-using Pathoschild.LookupAnything.Framework.Constants;
-using StardewValley;
 
 namespace Pathoschild.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows experience points for a skill.</summary>
-    /// <remarks>Skill calculations reverse-engineered from <see cref="Farmer.checkForLevelGain"/>.</remarks>
+    /// <remarks>Skill calculations reverse-engineered from <see cref="StardewValley.Farmer.checkForLevelGain"/>.</remarks>
     internal class SkillBarField : PercentageBarField
     {
+        /*********
+        ** Properties
+        *********/
+        /// <summary>The experience points needed for each skill level.</summary>
+        private readonly int[] SkillPointsPerLevel;
+
+
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
         /// <param name="experience">The current progress value.</param>
-        /// <param name="filledColor">The color of the filled bar.</param>
-        /// <param name="emptyColor">The color of the empty bar.</param>
-        public SkillBarField(string label, int experience, Color filledColor, Color emptyColor)
-            : base(label, experience, Constant.MaxSkillPoints, filledColor, emptyColor, null) { }
+        /// <param name="maxSkillPoints">The maximum experience points for a skill.</param>
+        /// <param name="skillPointsPerLevel">The experience points needed for each skill level.</param>
+        public SkillBarField(string label, int experience, int maxSkillPoints, int[] skillPointsPerLevel)
+            : base(label, experience, maxSkillPoints, Color.Green, Color.Gray, null)
+        {
+            this.SkillPointsPerLevel = skillPointsPerLevel;
+        }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>
@@ -31,7 +39,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <returns>Returns the drawn dimensions, or <c>null</c> to draw the <see cref="GenericField.Value"/> using the default format.</returns>
         public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
         {
-            int[] pointsPerLevel = Constant.SkillPointsPerLevel;
+            int[] pointsPerLevel = this.SkillPointsPerLevel;
 
             // generate text
             int nextLevelExp = pointsPerLevel.FirstOrDefault(p => p - this.CurrentValue > 0);

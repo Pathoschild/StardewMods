@@ -23,8 +23,9 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <remarks>Tree growth algorithm reverse engineered from <see cref="FruitTree.dayUpdate"/>.</remarks>
-        public FruitTreeSubject(FruitTree tree, Vector2 tile)
+        public FruitTreeSubject(FruitTree tree, Vector2 tile, Metadata metadata)
         {
             // initialise
             this.Target = tree;
@@ -40,7 +41,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 // show growth countdown
                 if (!isMature)
                 {
-                    System.Tuple<string, int> dayOfMaturity = GameHelper.GetDayOffset(tree.daysUntilMature);
+                    System.Tuple<string, int> dayOfMaturity = GameHelper.GetDayOffset(tree.daysUntilMature, metadata.Constants.DaysInSeason);
                     string growthText = $"mature in {tree.daysUntilMature} {GameHelper.Pluralise(tree.daysUntilMature, "day")} ({dayOfMaturity.Item1} {dayOfMaturity.Item2})";
                     if (this.HasAdjacentObjects(tile))
                         growthText += " (can't grow because there are adjacent objects)";

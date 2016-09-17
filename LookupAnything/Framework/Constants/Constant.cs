@@ -3,53 +3,44 @@ using StardewValley;
 
 namespace Pathoschild.LookupAnything.Framework.Constants
 {
-    /// <summary>Constant values hardcoded by the game.</summary>
+    /// <summary>Constant mod values.</summary>
     public static class Constant
     {
         /*********
         ** Accessors
         *********/
-        /****
-        ** Targeting
-        ****/
         /// <summary>The largest expected sprite size (measured in tiles).</summary>
         /// <remarks>This is used to account for sprites that extend beyond their tile when searching for targets. These values should be large enough to cover the largest target sprites, but small enough to minimise expensive cursor collision checks.</remarks>
         public static readonly Vector2 MaxTargetSpriteSize = new Vector2(3, 5);
 
-        /****
-        ** Animals
-        ****/
-        /// <summary>The number of friendship points per level for a farm animal.</summary>
-        /// <remarks>Derived from <see cref="FarmAnimal.dayUpdate"/>.</remarks>
-        public const int AnimalFriendshipPointsPerLevel = 200;
+        /// <summary>The season names.</summary>
+        public static class SeasonNames
+        {
+            /// <summary>The internal name for Spring.</summary>
+            public const string Spring = "spring";
 
-        /// <summary>The maximum number of friendship points for a farm animal.</summary>
-        /// <remarks>Derived from <see cref="FarmAnimal.dayUpdate"/>.</remarks>
-        public const int AnimalFriendshipMaxPoints = 5 * Constant.AnimalFriendshipPointsPerLevel;
+            /// <summary>The internal name for Summer.</summary>
+            public const string Summer = "summer";
 
-        /****
-        ** NPCs
-        ****/
-        /// <summary>The villagers which have no social data (e.g. birthdays or gift tastes).</summary>
-        public static readonly string[] DisableVillagerFields = { "Bouncer", "Gunther" };
+            /// <summary>The internal name for Fall.</summary>
+            public const string Fall = "fall";
 
-        /****
-        ** Players
-        ****/
-        /// <summary>The maximum experience points for a skill.</summary>
-        public const int MaxSkillPoints = 15000;
+            /// <summary>The internal name for Winter.</summary>
+            public const string Winter = "winter";
+        }
 
-        /// <summary>The experience points needed for each skill level.</summary>
-        public static readonly int[] SkillPointsPerLevel = { 100, 380, 770, 1300, 2150, 3300, 4800, 6900, 10000, 15000 };
+        /// <summary>The names of items referenced by the mod.</summary>
+        public static class ItemNames
+        {
+            /// <summary>The internal name for the heater object.</summary>
+            public static string Heater = "Heater";
+        }
 
-        /****
-        ** Time
-        ****/
-        /// <summary>The number of days in each season.</summary>
-        public const int DaysInSeason = 28;
-
-        /// <summary>The fractional rate at which fences decay (calculated as minutes divided by this value).</summary>
-        /// <remarks>Derived from <see cref="Fence.minutesElapsed"/>.</remarks>
-        public const float FenceDecayRate = 1440f;
+        /// <summary>The names of locations referenced by the mod.</summary>
+        public static class LocationNames
+        {
+            /// <summary>The internal name for the greenhouse.</summary>
+            public static string Greenhouse = "FarmGreenHouse";
+        }
     }
 }
