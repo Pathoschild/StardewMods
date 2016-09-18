@@ -19,8 +19,8 @@ namespace Pathoschild.LookupAnything.Components
         /// <summary>The subject metadata.</summary>
         private readonly ISubject Subject;
 
-        /// <summary>Provides metadata that's not available from the game data directly.</summary>
-        private readonly Metadata Metadata;
+        /// <summary>The data to display for this subject.</summary>
+        private readonly ICustomField[] Fields;
 
         /// <summary>The aspect ratio of the page background.</summary>
         private readonly Vector2 AspectRatio = new Vector2(Sprites.Letter.Sprite.Width, Sprites.Letter.Sprite.Height);
@@ -44,7 +44,7 @@ namespace Pathoschild.LookupAnything.Components
         public LookupMenu(ISubject subject, Metadata metadata)
         {
             this.Subject = subject;
-            this.Metadata = metadata;
+            this.Fields = subject.GetData(metadata).Where(p => p.HasValue).ToArray();
             this.CalculateDimensions();
         }
 
@@ -68,6 +68,14 @@ namespace Pathoschild.LookupAnything.Components
         public override void receiveScrollWheelAction(int direction)
         {
             this.CurrentScroll -= direction; // down direction == increased scroll
+        }
+
+        /// <summary>The method called when the game window changes size.</summary>
+        /// <param name="oldBounds">The former viewport.</param>
+        /// <param name="newBounds">The new viewport.</param>
+        public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
+        {
+            this.CalculateDimensions();
         }
 
         /****
@@ -94,7 +102,6 @@ namespace Pathoschild.LookupAnything.Components
             ISubject subject = this.Subject;
 
             // calculate dimensions
-            this.CalculateDimensions();
             int x = this.xPositionOnScreen;
             int y = this.yPositionOnScreen;
             const int gutter = 15;
@@ -159,9 +166,9 @@ namespace Pathoschild.LookupAnything.Components
                     topOffset += lineHeight;
 
                     // draw custom fields
-                    ICustomField[] fields = this.Subject.GetData(this.Metadata).ToArray();
-                    if (fields.Any(p => p.HasValue))
+                    if (this.Fields.Any())
                     {
+                        ICustomField[] fields = this.Fields;
                         float cellPadding = 3;
                         float labelWidth = fields.Where(p => p.HasValue).Max(p => font.MeasureString(p.Label).X);
                         float valueWidth = wrapWidth - labelWidth - cellPadding * 4 - tableBorderWidth;
