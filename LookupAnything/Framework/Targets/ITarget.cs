@@ -34,7 +34,7 @@ namespace Pathoschild.LookupAnything.Framework.Targets
         /// <typeparam name="T">The expected value type.</typeparam>
         T GetValue<T>();
 
-        /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>
+        /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         Rectangle GetSpriteArea();
 
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>

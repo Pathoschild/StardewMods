@@ -16,26 +16,17 @@ namespace Pathoschild.LookupAnything.Framework.Targets
         public ObjectTarget(Object obj, Vector2? tilePosition = null)
             : base(TargetType.Object, obj, tilePosition) { }
 
-        /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>
+        /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         public override Rectangle GetSpriteArea()
         {
             Object obj = (Object)this.Value;
-            Rectangle tileRectangle = base.GetSpriteArea();
+            Rectangle boundingBox = obj.getBoundingBox(this.GetTile());
             if (obj.bigCraftable)
-            {
-                Rectangle sourceRectangle = Object.getSourceRectForBigCraftable(obj.parentSheetIndex);
-                return new Rectangle(tileRectangle.X, tileRectangle.Y - (sourceRectangle.Height * Game1.pixelZoom) + tileRectangle.Height, sourceRectangle.Width * Game1.pixelZoom, sourceRectangle.Height * Game1.pixelZoom);
-            }
-            else if (obj is Fence)
-            {
-                Rectangle sourceRectangle = this.GetSourceRectangle((Fence)obj, Game1.currentLocation);
-                return new Rectangle(tileRectangle.X, tileRectangle.Y - (sourceRectangle.Height * Game1.pixelZoom) + tileRectangle.Height, sourceRectangle.Width * Game1.pixelZoom, sourceRectangle.Height * Game1.pixelZoom);
-            }
+                return this.GetSpriteArea(boundingBox, Object.getSourceRectForBigCraftable(obj.parentSheetIndex));
+            if (obj is Fence)
+                return this.GetSpriteArea(boundingBox, this.GetSourceRectangle((Fence) obj, Game1.currentLocation));
             else
-            {
-                Rectangle sourceRectangle = Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.parentSheetIndex);
-                return new Rectangle(tileRectangle.X, tileRectangle.Y - sourceRectangle.Height + tileRectangle.Height, sourceRectangle.Width, sourceRectangle.Height);
-            }
+                return this.GetSpriteArea(boundingBox, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.parentSheetIndex, Object.spriteSheetTileSize, Object.spriteSheetTileSize));
         }
 
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>

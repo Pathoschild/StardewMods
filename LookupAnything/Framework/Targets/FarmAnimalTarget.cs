@@ -16,17 +16,11 @@ namespace Pathoschild.LookupAnything.Framework.Targets
         public FarmAnimalTarget(FarmAnimal obj, Vector2? tilePosition = null)
             : base(TargetType.FarmAnimal, obj, tilePosition) { }
 
-        /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>
+        /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         public override Rectangle GetSpriteArea()
         {
             FarmAnimal animal = (FarmAnimal)this.Value;
-            var boundingBox = animal.GetBoundingBox(); // the 'occupied' area at the animal's feet
-
-            int height = animal.sprite.spriteHeight * Game1.pixelZoom;
-            int width = animal.sprite.spriteWidth * Game1.pixelZoom;
-            int x = boundingBox.Center.X - (width / 2);
-            int y = boundingBox.Y + boundingBox.Height - height;
-            return new Rectangle(x - Game1.viewport.X, y - Game1.viewport.Y, width, height);
+            return this.GetSpriteArea(animal.GetBoundingBox(), animal.Sprite.SourceRect);
         }
 
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>

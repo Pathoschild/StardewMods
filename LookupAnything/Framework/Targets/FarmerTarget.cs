@@ -14,19 +14,11 @@ namespace Pathoschild.LookupAnything.Framework.Targets
         public FarmerTarget(Farmer farmer)
             : base(TargetType.Farmer, farmer, farmer.getTileLocation()) { }
 
-        /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>
+        /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         public override Rectangle GetSpriteArea()
         {
-            Farmer npc = (Farmer)this.Value;
-            var boundingBox = npc.GetBoundingBox(); // the 'occupied' area at the NPC's feet
-
-            // get bounding box
-            int height = npc.FarmerSprite.spriteHeight * Game1.pixelZoom;
-            int width = npc.FarmerSprite.spriteWidth * Game1.pixelZoom;
-            float x = boundingBox.Center.X - (width / 2);
-            float y = boundingBox.Top + boundingBox.Height - height + npc.yJumpOffset * 2;
-
-            return new Rectangle((int)(x - Game1.viewport.X), (int)(y - Game1.viewport.Y), width, height);
+            Farmer farmer = (Farmer)this.Value;
+            return this.GetSpriteArea(farmer.GetBoundingBox(), farmer.FarmerSprite.SourceRect);
         }
 
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>

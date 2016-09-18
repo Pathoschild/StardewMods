@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewValley;
 
 namespace Pathoschild.LookupAnything.Framework.Targets
 {
@@ -46,7 +47,7 @@ namespace Pathoschild.LookupAnything.Framework.Targets
             return (T)this.Value;
         }
 
-        /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>
+        /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         public virtual Rectangle GetSpriteArea()
         {
             return GameHelper.GetScreenCoordinatesFromTile(this.GetTile());
@@ -74,6 +75,18 @@ namespace Pathoschild.LookupAnything.Framework.Targets
             this.Type = type;
             this.Value = obj;
             this.Tile = tilePosition;
+        }
+
+        /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>
+        /// <param name="boundingBox">The occupied 'floor space' at the bottom of the sprite in the world.</param>
+        /// <param name="sourceRectangle">The sprite's source rectangle in the sprite sheet.</param>
+        protected Rectangle GetSpriteArea(Rectangle boundingBox, Rectangle sourceRectangle)
+        {
+            int height = sourceRectangle.Height * Game1.pixelZoom;
+            int width = sourceRectangle.Width * Game1.pixelZoom;
+            int x = boundingBox.Center.X - (width / 2);
+            int y = boundingBox.Y + boundingBox.Height - height;
+            return new Rectangle(x - Game1.viewport.X, y - Game1.viewport.Y, width, height);
         }
 
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>

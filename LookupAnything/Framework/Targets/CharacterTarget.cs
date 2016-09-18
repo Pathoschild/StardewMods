@@ -18,7 +18,7 @@ namespace Pathoschild.LookupAnything.Framework.Targets
         public CharacterTarget(TargetType type, NPC obj, Vector2? tilePosition = null)
             : base(type, obj, tilePosition) { }
 
-        /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>
+        /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         public override Rectangle GetSpriteArea()
         {
             NPC npc = (NPC)this.Value;

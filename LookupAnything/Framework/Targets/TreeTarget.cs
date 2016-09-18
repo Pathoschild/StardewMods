@@ -18,20 +18,12 @@ namespace Pathoschild.LookupAnything.Framework.Targets
         public TreeTarget(Tree obj, Vector2? tilePosition = null)
             : base(TargetType.WildTree, obj, tilePosition) { }
 
-        /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>
+        /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         /// <remarks>Reverse-engineered from <see cref="Tree.draw"/>.</remarks>
         public override Rectangle GetSpriteArea()
         {
-            Rectangle tile = base.GetSpriteArea();
             Tree tree = (Tree)this.Value;
-            Rectangle sprite = this.GetSourceRectangle(tree);
-
-            int width = sprite.Width * Game1.pixelZoom;
-            int height = sprite.Height * Game1.pixelZoom;
-            int x = tile.Center.X - width / 2;
-            int y = tile.Bottom - height;
-
-            return new Rectangle(x, y, width, height);
+            return this.GetSpriteArea(tree.getBoundingBox(this.GetTile()), this.GetSourceRectangle(tree));
         }
 
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>

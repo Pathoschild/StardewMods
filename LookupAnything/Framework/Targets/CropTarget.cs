@@ -28,21 +28,11 @@ namespace Pathoschild.LookupAnything.Framework.Targets
             this.Crop = ((HoeDirt)obj).crop;
         }
 
-        /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>
+        /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         public override Rectangle GetSpriteArea()
         {
-            Crop crop = this.Crop;
-
-            // get source rectangle
-            Rectangle sourceRectangle = this.GetSourceRectangle(crop);
-
-            // derive sprite area
-            Rectangle tile = base.GetSpriteArea();
-            int height = sourceRectangle.Height * Game1.pixelZoom;
-            int width = sourceRectangle.Width * Game1.pixelZoom;
-            int x = tile.X; // crops don't extend horizontally
-            int y = tile.Y + tile.Height - height;
-            return new Rectangle(x, y, width, height);
+            HoeDirt tile = (HoeDirt)this.Value;
+            return this.GetSpriteArea(tile.getBoundingBox(this.GetTile()), this.GetSourceRectangle(this.Crop));
         }
 
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>

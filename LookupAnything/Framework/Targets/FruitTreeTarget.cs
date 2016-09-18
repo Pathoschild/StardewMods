@@ -18,7 +18,7 @@ namespace Pathoschild.LookupAnything.Framework.Targets
         public FruitTreeTarget(FruitTree obj, Vector2? tilePosition = null)
             : base(TargetType.FruitTree, obj, tilePosition) { }
 
-        /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>
+        /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         /// <remarks>Reverse-engineered from <see cref="FruitTree.draw"/>.</remarks>
         public override Rectangle GetSpriteArea()
         {
