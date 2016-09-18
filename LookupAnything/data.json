@@ -175,6 +175,13 @@ You shouldn't change this file unless you know what you're doing.
       "Description": "Break apart to obtain gold ore."
     },
     {
+      "SpriteID": [ 765 ],
+      "Context": "World",
+      "Name": "Iridium Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain iridium ore."
+    },
+    {
       "SpriteID": [ 290 ],
       "Context": "World",
       "Name": "Iron Node",
