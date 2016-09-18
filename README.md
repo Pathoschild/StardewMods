@@ -1,11 +1,11 @@
 **Lookup Anything** is a [Stardew Valley](http://stardewvalley.net/) mod that shows live info about
-whatever's under your cursor when you press `F1`:
+whatever's under your cursor when you press `F1`. Learn a villager's favourite gifts, when a crop
+will be ready to harvest, how long a fence will last, why your farm animals are unhappy, and more.
+
 ![](screenshots/animated.gif)
 
-This is a prerelease beta version; use at your own risk.
-
 ## Installation
-1. Install [SMAPI](https://github.com/ClxS/SMAPI) (0.39.5+).
+1. Install [SMAPI](https://github.com/ClxS/SMAPI) (0.40+).
 2. <s>Install this mod from Nexus mods.</s> See the [thread on the Stardew Valley forums for instructions](http://community.playstarbound.com/threads/smapi-lookup-anything.122929/#post-3019451).
 3. Run the game using SMAPI.
 
