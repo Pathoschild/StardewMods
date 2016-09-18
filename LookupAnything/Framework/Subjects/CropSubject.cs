@@ -37,26 +37,30 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             Crop crop = this.Crop;
 
             // get harvest schedule
-            bool canRegrow = crop.regrowAfterHarvest != -1;
-            int lastPhaseID = crop.phaseDays.Count - 1;
-            bool canHarvestNow =
-                (crop.currentPhase >= lastPhaseID) // last phase is harvestable
-                && (!crop.fullyGrown || crop.dayOfCurrentPhase <= 0);
-            int daysToFirstHarvest = crop.phaseDays
-                .Take(crop.phaseDays.Count - 1) // last phase is harvestable
-                .Sum();
+            int harvestablePhase = crop.phaseDays.Count - 1;
+            bool canHarvestNow = (crop.currentPhase >= harvestablePhase) && (!crop.fullyGrown || crop.dayOfCurrentPhase <= 0);
+            int daysToFirstHarvest = crop.phaseDays.Take(crop.phaseDays.Count - 1).Sum(); // ignore harvestable phase
 
             // calculate next harvest
             int daysToNextHarvest = 0;
             Tuple<string, int> dayOfNextHarvest = null;
             if (!canHarvestNow)
             {
-                int daysUntilLastPhase = daysToFirstHarvest - crop.dayOfCurrentPhase - crop.phaseDays
-                    .Take(crop.currentPhase)
-                    .Sum();
-                daysToNextHarvest = daysUntilLastPhase;
-                if (crop.fullyGrown && canRegrow && crop.currentPhase >= lastPhaseID)
-                    daysToNextHarvest = crop.regrowAfterHarvest; // after harvesting a regrowable crop, current phase isn't reset until the next day
+                // calculate days until next harvest
+                int daysUntilLastPhase = daysToFirstHarvest - crop.dayOfCurrentPhase - crop.phaseDays.Take(crop.currentPhase).Sum();
+                {
+                    // growing: days until next harvest
+                    if(!crop.fullyGrown)
+                        daysToNextHarvest = daysUntilLastPhase;
+
+                    // regrowable crop harvested today
+                    else if (crop.dayOfCurrentPhase >= crop.regrowAfterHarvest)
+                        daysToNextHarvest = crop.regrowAfterHarvest;
+
+                    // regrowable crop
+                    else
+                        daysToNextHarvest = crop.regrowAfterHarvest - crop.dayOfCurrentPhase;
+                }
                 dayOfNextHarvest = GameHelper.GetDayOffset(daysToNextHarvest, metadata.Constants.DaysInSeason);
             }
 
