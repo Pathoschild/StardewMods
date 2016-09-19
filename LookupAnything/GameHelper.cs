@@ -114,10 +114,10 @@ namespace Pathoschild.LookupAnything
         }
 
         /// <summary>Get the recipes for which an item is needed.</summary>
-        /// <param name="itemID">The item ID.</param>
-        public static IEnumerable<RecipeData> GetRecipesForIngredient(int itemID)
+        /// <param name="item">The item.</param>
+        public static IEnumerable<RecipeData> GetRecipesForIngredient(Item item)
         {
-            return GameHelper.GetRecipes().Where(p => p.Ingredients.ContainsKey(itemID));
+            return GameHelper.GetRecipes().Where(p => p.Ingredients.ContainsKey(item.parentSheetIndex) || p.Ingredients.ContainsKey(item.category));
         }
 
         /// <summary>Get the items a specified NPC can receive.</summary>

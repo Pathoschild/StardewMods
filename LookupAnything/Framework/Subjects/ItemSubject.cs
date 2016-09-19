@@ -91,9 +91,12 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             }
 
             // recipes
-            Dictionary<RecipeType, RecipeData[]> recipes = GameHelper.GetRecipesForIngredient(item.parentSheetIndex).GroupBy(p => p.Type).ToDictionary(p => p.Key, p => p.ToArray());
-            foreach (RecipeType type in recipes.Keys.OrderBy(p => p))
-                yield return new RecipesForIngredientField(type.ToString(), item.parentSheetIndex, recipes[type]);
+            if (obj != null && obj.bigCraftable != true)
+            {
+                Dictionary<RecipeType, RecipeData[]> recipes = GameHelper.GetRecipesForIngredient(this.DisplayItem).GroupBy(p => p.Type).ToDictionary(p => p.Key, p => p.ToArray());
+                foreach (RecipeType type in recipes.Keys.OrderBy(p => p))
+                    yield return new RecipesForIngredientField(type.ToString(), item.parentSheetIndex, recipes[type]);
+            }
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>
