@@ -64,7 +64,7 @@ You shouldn't change this file unless you know what you're doing.
       "Description": "Hatches eggs into baby chickens and ducks." // no description when it contains an egg
     },
     {
-      "SpriteID": [ 295 ],
+      "SpriteID": [ 294, 295 ],
       "Context": "World",
       "Name": "Broken Branch",
       "Description": "A broken branch. Chop with an axe to obtain wood." // no meaningful default
