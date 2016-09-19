@@ -7,9 +7,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework.Constants;
+using Pathoschild.LookupAnything.Framework.Models;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
+using StardewValley.Objects;
 using Object = StardewValley.Object;
 
 namespace Pathoschild.LookupAnything
@@ -26,6 +28,9 @@ namespace Pathoschild.LookupAnything
         /// <summary>The cached list of characters who can receive gifts.</summary>
         private static Lazy<NPC[]> GiftableVillagers;
 
+        /// <summary>The cached recipes.</summary>
+        private static Lazy<RecipeData[]> Recipes;
+
 
         /*********
         ** Public methods
@@ -38,6 +43,7 @@ namespace Pathoschild.LookupAnything
         {
             GameHelper.GiftTastes = new Lazy<IDictionary<GiftTaste, IDictionary<string, int[]>>>(GameHelper.FetchGiftTastes);
             GameHelper.GiftableVillagers = new Lazy<NPC[]>(GameHelper.FetchGiftableVillagers);
+            GameHelper.Recipes = new Lazy<RecipeData[]>(GameHelper.FetchRecipes);
         }
 
         /****
@@ -98,6 +104,19 @@ namespace Pathoschild.LookupAnything
                     tastes[npc] = GiftTaste.Neutral;
             }
             return tastes;
+        }
+
+        /// <summary>Get the recipes for which an item is needed.</summary>
+        public static IEnumerable<RecipeData> GetRecipes()
+        {
+            return GameHelper.Recipes.Value;
+        }
+
+        /// <summary>Get the recipes for which an item is needed.</summary>
+        /// <param name="itemID">The item ID.</param>
+        public static IEnumerable<RecipeData> GetRecipesForIngredient(int itemID)
+        {
+            return GameHelper.GetRecipes().Where(p => p.Ingredients.ContainsKey(itemID));
         }
 
         /// <summary>Get the items a specified NPC can receive.</summary>
@@ -321,6 +340,31 @@ namespace Pathoschild.LookupAnything
             return pixels[spriteIndex];
         }
 
+        /// <summary>Get the sprite for an item.</summary>
+        /// <param name="item">The item.</param>
+        /// <returns>Returns a tuple containing the sprite sheet and the sprite's position and dimensions within the sheet.</returns>
+        public static Tuple<Texture2D, Rectangle> GetSprite(Item item)
+        {
+            // stardard object
+            if (item is Object)
+            {
+                Object obj = (Object)item;
+                return obj.bigCraftable
+                    ? Tuple.Create(Game1.bigCraftableSpriteSheet, Object.getSourceRectForBigCraftable(obj.ParentSheetIndex))
+                    : Tuple.Create(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, Object.spriteSheetTileSize, Object.spriteSheetTileSize));
+            }
+
+            // boots or ring
+            if (item is Boots || item is Ring)
+            {
+                int indexInTileSheet = (item as Boots)?.indexInTileSheet ?? ((Ring)item).indexInTileSheet;
+                return Tuple.Create(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, indexInTileSheet, Object.spriteSheetTileSize, Object.spriteSheetTileSize));
+            }
+
+            // unknown item
+            return null;
+        }
+
 
         /****
         ** UI
@@ -355,6 +399,7 @@ namespace Pathoschild.LookupAnything
         {
             Game1.addHUDMessage(new HUDMessage(message, 3));
         }
+
 
         /*********
         ** Private methods
@@ -453,6 +498,19 @@ namespace Pathoschild.LookupAnything
             }
 
             return giftTastes;
+        }
+
+        /// <summary>Get the recipe ingredients.</summary>
+        private static RecipeData[] FetchRecipes()
+        {
+            return
+                (
+                    from entry in CraftingRecipe.cookingRecipes.Concat(CraftingRecipe.craftingRecipes)
+                    let recipe = new CraftingRecipe(entry.Key, CraftingRecipe.cookingRecipes.ContainsKey(entry.Key))
+                    select new RecipeData(recipe)
+                )
+                .OrderBy(p => p.Name)
+                .ToArray();
         }
     }
 }

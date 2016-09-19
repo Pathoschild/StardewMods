@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Fields;
+using Pathoschild.LookupAnything.Framework.Models;
 using StardewValley;
 using Object = StardewValley.Object;
 
@@ -88,6 +89,11 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 float daysLeft = fence.health * metadata.Constants.FenceDecayRate / 60 / 24;
                 yield return new PercentageBarField("Health", (int)fence.health, (int)maxHealth, Color.Green, Color.Red, $"{Math.Round(health * 100)}% (roughly {Math.Round(daysLeft)} days left)");
             }
+
+            // recipes
+            Dictionary<RecipeType, RecipeData[]> recipes = GameHelper.GetRecipesForIngredient(item.parentSheetIndex).GroupBy(p => p.Type).ToDictionary(p => p.Key, p => p.ToArray());
+            foreach (RecipeType type in recipes.Keys)
+                yield return new RecipesForIngredientField(type.ToString(), item.parentSheetIndex, recipes[type]);
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>
