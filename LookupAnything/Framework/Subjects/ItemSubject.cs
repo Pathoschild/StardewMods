@@ -88,13 +88,6 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 float daysLeft = fence.health * metadata.Constants.FenceDecayRate / 60 / 24;
                 yield return new PercentageBarField("Health", (int)fence.health, (int)maxHealth, Color.Green, Color.Red, $"{Math.Round(health * 100)}% (roughly {Math.Round(daysLeft)} days left)");
             }
-
-            // recipe
-            if (CraftingRecipe.cookingRecipes.ContainsKey(item.Name) || CraftingRecipe.craftingRecipes.ContainsKey(item.Name))
-            {
-                CraftingRecipe recipe = new CraftingRecipe(item.Name, CraftingRecipe.cookingRecipes.ContainsKey(item.Name));
-                yield return new RecipeIngredientsField("Recipe", recipe);
-            }
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>

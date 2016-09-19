@@ -78,7 +78,6 @@
     <Compile Include="Framework\Data\AdventureGuildQuestData.cs" />
     <Compile Include="Framework\Data\CharacterData.cs" />
     <Compile Include="Framework\Fields\PercentageBarField.cs" />
-    <Compile Include="Framework\Fields\RecipeIngredientsField.cs" />
     <Compile Include="Framework\Metadata.cs" />
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\Subjects\FarmAnimalSubject.cs" />
