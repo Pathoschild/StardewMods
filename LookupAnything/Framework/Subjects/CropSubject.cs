@@ -32,6 +32,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
 
         /// <summary>Get the data to display for this subject.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        /// <remarks>Derived from <see cref="StardewValley.Crop.harvest"/> and <see cref="StardewValley.Crop.newDay"/>.</remarks>
         public override IEnumerable<ICustomField> GetData(Metadata metadata)
         {
             Crop crop = this.Crop;
@@ -59,7 +60,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
 
                     // regrowable crop
                     else
-                        daysToNextHarvest = crop.regrowAfterHarvest - crop.dayOfCurrentPhase;
+                        daysToNextHarvest = crop.dayOfCurrentPhase; // dayOfCurrentPhase decreases to 0 when fully grown, where <=0 is harvestable
                 }
                 dayOfNextHarvest = GameHelper.GetDayOffset(daysToNextHarvest, metadata.Constants.DaysInSeason);
             }
