@@ -135,6 +135,9 @@ namespace Pathoschild.LookupAnything
         /// <param name="map">The configured input mapping.</param>
         private void ReceiveInput<TKey>(TKey key, InputMapConfiguration<TKey> map)
         {
+            if (key == null || key.Equals(default(TKey)))
+                return;
+
             try
             {
                 // perform bound action
@@ -236,7 +239,7 @@ namespace Pathoschild.LookupAnything
                 this.HandleError(ex, "loading metadata");
             }
         }
-        
+
         /// <summary>Log an error and warn the user.</summary>
         /// <param name="ex">The exception to handle.</param>
         /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up").</param>
