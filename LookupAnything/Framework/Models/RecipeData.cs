@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using StardewValley;
 
@@ -7,11 +8,15 @@ namespace Pathoschild.LookupAnything.Framework.Models
     internal class RecipeData
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>The item that be created by this recipe.</summary>
+        private readonly Func<Item> Item;
+
+
+        /*********
         ** Accessors
         *********/
-        /// <summary>The underlying recipe.</summary>
-        public CraftingRecipe Recipe { get; }
-
         /// <summary>The name of the recipe.</summary>
         public string Name { get; }
 
@@ -21,6 +26,9 @@ namespace Pathoschild.LookupAnything.Framework.Models
         /// <summary>The items needed to craft the recipe (item ID => number needed).</summary>
         public IDictionary<int, int> Ingredients { get; }
 
+        /// <summary>Whether the recipe must be learned before it can be used.</summary>
+        public bool MustBeLearned { get; }
+
 
         /*********
         ** Public methods
@@ -28,11 +36,34 @@ namespace Pathoschild.LookupAnything.Framework.Models
         /// <summary>Construct an instance.</summary>
         /// <param name="recipe">The recipe to parse.</param>
         public RecipeData(CraftingRecipe recipe)
+            : this(
+                name: recipe.name,
+                type: recipe.isCookingRecipe ? RecipeType.Cooking : RecipeType.Crafting,
+                ingredients: GameHelper.GetPrivateField<Dictionary<int, int>>(recipe, "recipeList"),
+                item: recipe.createItem,
+                mustBeLearned: true
+            )
+        { }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="name">The name of the recipe.</param>
+        /// <param name="type">How the recipe is used to create an object.</param>
+        /// <param name="ingredients">The items needed to craft the recipe (item ID => number needed).</param>
+        /// <param name="item">The item that be created by this recipe.</param>
+        /// <param name="mustBeLearned">Whether the recipe must be learned before it can be used.</param>
+        public RecipeData(string name, RecipeType type, IDictionary<int, int> ingredients, Func<Item> item, bool mustBeLearned)
         {
-            this.Recipe = recipe;
-            this.Name = recipe.name;
-            this.Type = recipe.isCookingRecipe ? RecipeType.Cooking : RecipeType.Crafting;
-            this.Ingredients = GameHelper.GetPrivateField<Dictionary<int, int>>(recipe, "recipeList");
+            this.Name = name;
+            this.Type = type;
+            this.Ingredients = ingredients;
+            this.Item = item;
+            this.MustBeLearned = mustBeLearned;
+        }
+
+        /// <summary>Create the item crafted by this recipe.</summary>
+        public Item CreateItem()
+        {
+            return this.Item();
         }
 
         /// <summary>Get whether a player knows this recipe.</summary>

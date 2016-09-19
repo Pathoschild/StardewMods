@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Components;
+using Pathoschild.LookupAnything.Framework;
 using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Models;
 using StardewModdingAPI;
@@ -503,14 +504,44 @@ namespace Pathoschild.LookupAnything
         /// <summary>Get the recipe ingredients.</summary>
         private static RecipeData[] FetchRecipes()
         {
-            return
-                (
-                    from entry in CraftingRecipe.cookingRecipes.Concat(CraftingRecipe.craftingRecipes)
-                    let recipe = new CraftingRecipe(entry.Key, CraftingRecipe.cookingRecipes.ContainsKey(entry.Key))
-                    select new RecipeData(recipe)
-                )
-                .OrderBy(p => p.Name)
-                .ToArray();
+            List<RecipeData> recipes = new List<RecipeData>();
+
+            // cooking recipes
+            recipes.AddRange(
+                from entry in CraftingRecipe.cookingRecipes
+                let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: true)
+                select new RecipeData(recipe)
+            );
+
+            // crafting recipes
+            recipes.AddRange(
+                from entry in CraftingRecipe.craftingRecipes
+                let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: false)
+                select new RecipeData(recipe)
+            );
+
+            // furnace recipes
+            {
+                var ores = new Dictionary<int, Tuple<int, int>>
+                {
+                    [Object.quartzIndex] = Tuple.Create(338, 1),
+                    [Object.copper] = Tuple.Create(Object.copperBar, 5),
+                    [Object.iron] = Tuple.Create(Object.ironBar, 5),
+                    [Object.gold] = Tuple.Create(Object.goldBar, 5),
+                    [Object.iridium] = Tuple.Create(Object.iridiumBar, 5)
+                };
+                recipes.AddRange(
+                    from data in ores
+                    let oreIndex = data.Key
+                    let barIndex = data.Value.Item1
+                    let orePerBar = data.Value.Item2
+                    let name = new Object(barIndex, 1).Name
+                    let ingredients = new Dictionary<int, int> { [Object.coal] = 1, [oreIndex] = orePerBar }
+                    select new RecipeData(name, RecipeType.Furnace, ingredients, () => new Object(barIndex, 1), mustBeLearned: false)
+                );
+            }
+
+            return recipes.OrderBy(p => p.Name).ToArray();
         }
     }
 }

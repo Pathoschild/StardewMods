@@ -32,7 +32,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
             this.Recipes = recipes
                 .ToDictionary(
                     recipe => recipe,
-                    recipe => Tuple.Create(recipe.KnowsRecipe(Game1.player), recipe.Ingredients[itemID])
+                    recipe => Tuple.Create(!recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player), recipe.Ingredients[itemID])
                 );
         }
 
@@ -57,7 +57,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
                 RecipeData recipe = entry.Key;
                 bool isKnown = entry.Value.Item1;
                 int numberRequired = entry.Value.Item2;
-                Item item = recipe.Recipe.createItem();
+                Item item = recipe.CreateItem();
 
                 // draw icon
                 {
