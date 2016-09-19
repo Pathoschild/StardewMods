@@ -5,7 +5,7 @@ namespace Pathoschild.LookupAnything.Framework
     internal class InputMapConfiguration<T>
     {
         /// <summary>The control which toggles the lookup UI.</summary>
-        public T Lookup { get; set; }
+        public T ToggleLookup { get; set; }
 
         /// <summary>The control which scrolls up long content.</summary>
         public T ScrollUp { get; set; }
@@ -14,6 +14,6 @@ namespace Pathoschild.LookupAnything.Framework
         public T ScrollDown { get; set; }
 
         /// <summary>Toggle the display of debug information.</summary>
-        public T ToggleDebugInfo { get; set; }
+        public T ToggleDebug { get; set; }
     }
 }

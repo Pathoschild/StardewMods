@@ -57,6 +57,8 @@ the background. This is purely for convenience; you can disable the update check
 `CheckForUpdates: false` in the `config.json` file.
 
 ## Changelog
+* 1.2 (upcoming release)
+  * `F1` now toggles the lookup UI (i.e. will close the lookup if it's already open).
 * 1.1
   * On item lookup, replaced crafting recipe with recipes using this item as an ingredient.
   * Added error if game or SMAPI are out of date.

@@ -146,13 +146,13 @@ namespace Pathoschild.LookupAnything
             try
             {
                 // perform bound action
-                if (key.Equals(map.Lookup))
-                    this.ShowLookup();
+                if (key.Equals(map.ToggleLookup))
+                    this.ToggleLookup();
                 if (key.Equals(map.ScrollUp))
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollUp(this.Config.ScrollAmount);
                 else if (key.Equals(map.ScrollDown))
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollDown(this.Config.ScrollAmount);
-                else if (key.Equals(map.ToggleDebugInfo))
+                else if (key.Equals(map.ToggleDebug))
                     this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
             }
             catch (Exception ex)
@@ -210,7 +210,7 @@ namespace Pathoschild.LookupAnything
         ** Helpers
         ****/
         /// <summary>Show the lookup UI for the current target.</summary>
-        private void ShowLookup()
+        private void ToggleLookup()
         {
             try
             {
@@ -223,16 +223,22 @@ namespace Pathoschild.LookupAnything
                     return;
                 }
 
-                // get target
-                ISubject subject = Game1.activeClickableMenu != null
-                    ? this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu)
-                    : this.TargetFactory.GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile, GameHelper.GetScreenCoordinatesFromCursor());
-                if (subject == null)
-                    return;
+                // toggle
+                if (Game1.activeClickableMenu is LookupMenu)
+                    Game1.activeClickableMenu = null;
+                else
+                {
+                    // get target
+                    ISubject subject = Game1.activeClickableMenu != null
+                        ? this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu)
+                        : this.TargetFactory.GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile, GameHelper.GetScreenCoordinatesFromCursor());
+                    if (subject == null)
+                        return;
 
-                // show lookup UI
-                this.PreviousMenu = Game1.activeClickableMenu;
-                Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata);
+                    // show lookup UI
+                    this.PreviousMenu = Game1.activeClickableMenu;
+                    Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata);
+                }
             }
             catch (Exception ex)
             {

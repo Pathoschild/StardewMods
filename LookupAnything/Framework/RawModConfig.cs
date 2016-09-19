@@ -32,17 +32,17 @@ namespace Pathoschild.LookupAnything.Framework
             this.ScrollAmount = 160;
             this.Keyboard = new InputMapConfiguration<string>
             {
-                Lookup = Keys.F1.ToString(),
+                ToggleLookup = Keys.F1.ToString(),
                 ScrollUp = Keys.Up.ToString(),
                 ScrollDown = Keys.Down.ToString(),
-                ToggleDebugInfo = ""
+                ToggleDebug = ""
             };
             this.Controller = new InputMapConfiguration<string>
             {
-                Lookup = "",
+                ToggleLookup = "",
                 ScrollUp = "",
                 ScrollDown = "",
-                ToggleDebugInfo = ""
+                ToggleDebug = ""
             };
             this.CheckForUpdates = true;
         }
@@ -64,14 +64,14 @@ namespace Pathoschild.LookupAnything.Framework
                 ScrollAmount = this.ScrollAmount,
                 Keyboard = new InputMapConfiguration<Keys>
                 {
-                    Lookup = Enum.TryParse(this.Keyboard.Lookup, out parsedKey) ? parsedKey : Keys.F1,
+                    ToggleLookup = Enum.TryParse(this.Keyboard.ToggleLookup, out parsedKey) ? parsedKey : Keys.F1,
                     ScrollUp = Enum.TryParse(this.Keyboard.ScrollUp, out parsedKey) ? parsedKey : Keys.Up,
                     ScrollDown = Enum.TryParse(this.Keyboard.ScrollDown, out parsedKey) ? parsedKey : Keys.Down,
-                    ToggleDebugInfo = Enum.TryParse(this.Keyboard.ToggleDebugInfo, out parsedKey) ? parsedKey : Keys.None
+                    ToggleDebug = Enum.TryParse(this.Keyboard.ToggleDebug, out parsedKey) ? parsedKey : Keys.None
                 },
                 Controller = new InputMapConfiguration<Buttons?>
                 {
-                    Lookup = Enum.TryParse(this.Controller.Lookup, out parsedButton) ? parsedButton : null as Buttons?,
+                    ToggleLookup = Enum.TryParse(this.Controller.ToggleLookup, out parsedButton) ? parsedButton : null as Buttons?,
                     ScrollUp = Enum.TryParse(this.Controller.ScrollUp, out parsedButton) ? parsedButton : null as Buttons?,
                     ScrollDown = Enum.TryParse(this.Controller.ScrollDown, out parsedButton) ? parsedButton : null as Buttons?
                 },
