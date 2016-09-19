@@ -6,7 +6,7 @@ will be ready to harvest, how long a fence will last, why your farm animals are 
 
 ## Installation
 1. Install [SMAPI](https://github.com/ClxS/SMAPI) (0.40+).
-2. <s>Install this mod from Nexus mods.</s> See the [thread on the Stardew Valley forums for instructions](http://community.playstarbound.com/threads/smapi-lookup-anything.122929/#post-3019451).
+2. [Install this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/541/).
 3. Run the game using SMAPI.
 
 ## Usage
@@ -57,7 +57,10 @@ the background. This is purely for convenience; you can disable the update check
 `CheckForUpdates: false` in the `config.json` file.
 
 ## Changelog
-* 1.0 (not yet released)
+* 1.1
+  * On item lookup, replaced crafting recipe with recipes using this item as an ingredient.
+  * Added error if game or SMAPI are out of date.
+* 1.0
   * Initial version.
   * Added support for NPCs (villagers, pets, farm animals, monsters, and players), items (crops and
     inventory), and map objects (crafting objects, fences, trees, and mine objects).
