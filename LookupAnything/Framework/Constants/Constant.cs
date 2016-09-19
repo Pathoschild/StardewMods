@@ -4,11 +4,17 @@ using StardewValley;
 namespace Pathoschild.LookupAnything.Framework.Constants
 {
     /// <summary>Constant mod values.</summary>
-    public static class Constant
+    internal static class Constant
     {
         /*********
         ** Accessors
         *********/
+        /// <summary>The minimum supported version of Stardew Valley.</summary>
+        public static string MinimumGameVersion = "1.07";
+
+        /// <summary>The minimum supported version of SMAPI.</summary>
+        public static string MinimumApiVersion = "0.40";
+
         /// <summary>The largest expected sprite size (measured in tiles).</summary>
         /// <remarks>This is used to account for sprites that extend beyond their tile when searching for targets. These values should be large enough to cover the largest target sprites, but small enough to minimise expensive cursor collision checks.</remarks>
         public static readonly Vector2 MaxTargetSpriteSize = new Vector2(3, 5);

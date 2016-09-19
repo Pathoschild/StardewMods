@@ -67,6 +67,11 @@ namespace Pathoschild.LookupAnything
         /// <summary>Initialise the mod.</summary>
         public override void Entry(params object[] objects)
         {
+            // validate version
+            string versionError = GameHelper.ValidateGameVersion();
+            if (versionError != null)
+                Log.Error(versionError);
+
             // load config
             this.Config = new RawModConfig().InitializeConfig(this.BaseConfigPath).GetParsed();
 
@@ -209,6 +214,15 @@ namespace Pathoschild.LookupAnything
         {
             try
             {
+                // validate version
+                string versionError = GameHelper.ValidateGameVersion();
+                if (versionError != null)
+                {
+                    GameHelper.ShowErrorMessage(versionError);
+                    Log.Error(versionError);
+                    return;
+                }
+
                 // get target
                 ISubject subject = Game1.activeClickableMenu != null
                     ? this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu)

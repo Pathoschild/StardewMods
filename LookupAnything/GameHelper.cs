@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework.Constants;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using Object = StardewValley.Object;
@@ -214,6 +215,20 @@ namespace Pathoschild.LookupAnything
 
             // get value
             return method;
+        }
+
+        /// <summary>Validate that the game versions match the minimum requirements, and return an appropriate error message if not.</summary>
+        public static string ValidateGameVersion()
+        {
+            string gameVersion = Regex.Replace(Game1.version, "^([0-9.]+).*", "$1");
+            string apiVersion = Constants.Version.VersionString;
+
+            if (string.Compare(gameVersion, Constant.MinimumGameVersion, StringComparison.InvariantCultureIgnoreCase) == -1)
+                return $"The LookupAnything mod requires the latest version of the game. Please update Stardew Valley from {gameVersion} to {Constant.MinimumGameVersion}.";
+            if (string.Compare(apiVersion, Constant.MinimumApiVersion, StringComparison.InvariantCultureIgnoreCase) == -1)
+                return $"The LookupAnything mod requires the latest version of SMAPI. Please update SMAPI from {apiVersion} to {Constant.MinimumApiVersion}.";
+
+            return null;
         }
 
         /****
