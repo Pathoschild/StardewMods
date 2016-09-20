@@ -96,13 +96,21 @@ namespace Pathoschild.LookupAnything
             this.TargetFactory = new TargetFactory(this.Metadata);
             this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config);
 
-            // hook up events
+            // hook up game events
             GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
-            ControlEvents.KeyPressed += (sender, e) => this.ReceiveInput(e.KeyPressed, this.Config.Keyboard);
-            ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveInput(e.ButtonPressed, this.Config.Controller);
-            ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveInput(e.ButtonPressed, this.Config.Controller);
-            MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
             GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
+            MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
+
+            // hook up keyboard
+            if (this.Config.Keyboard.HasAny())
+                ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
+
+            // hook up controller
+            if (this.Config.Controller.HasAny())
+            {
+                ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+                ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+            }
         }
 
 
@@ -138,9 +146,9 @@ namespace Pathoschild.LookupAnything
         /// <typeparam name="TKey">The input type.</typeparam>
         /// <param name="key">The pressed input.</param>
         /// <param name="map">The configured input mapping.</param>
-        private void ReceiveInput<TKey>(TKey key, InputMapConfiguration<TKey> map)
+        private void ReceiveKeyPress<TKey>(TKey key, InputMapConfiguration<TKey> map)
         {
-            if (key == null || key.Equals(default(TKey)))
+            if (!map.IsValidKey(key))
                 return;
 
             try
