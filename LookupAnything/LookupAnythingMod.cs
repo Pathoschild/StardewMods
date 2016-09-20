@@ -103,13 +103,22 @@ namespace Pathoschild.LookupAnything
 
             // hook up keyboard
             if (this.Config.Keyboard.HasAny())
+            {
                 ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
+                if (this.Config.HideOnKeyUp)
+                    ControlEvents.KeyReleased += (sender, e) => this.ReceiveKeyRelease(e.KeyPressed, this.Config.Keyboard);
+            }
 
             // hook up controller
             if (this.Config.Controller.HasAny())
             {
                 ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
                 ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+                if (this.Config.HideOnKeyUp)
+                {
+                    ControlEvents.ControllerButtonReleased += (sender, e) => this.ReceiveKeyRelease(e.ButtonReleased, this.Config.Controller);
+                    ControlEvents.ControllerTriggerReleased += (sender, e) => this.ReceiveKeyRelease(e.ButtonReleased, this.Config.Controller);
+                }
             }
         }
 
@@ -169,6 +178,26 @@ namespace Pathoschild.LookupAnything
             }
         }
 
+        /// <summary>The method invoked when the player presses an input button.</summary>
+        /// <typeparam name="TKey">The input type.</typeparam>
+        /// <param name="key">The pressed input.</param>
+        /// <param name="map">The configured input mapping.</param>
+        private void ReceiveKeyRelease<TKey>(TKey key, InputMapConfiguration<TKey> map)
+        {
+            if (!map.IsValidKey(key))
+                return;
+
+            try
+            {
+                if (key.Equals(map.ToggleLookup))
+                    this.HideLookup();
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, $"handling input '{key}'.");
+            }
+        }
+
         /// <summary>The method invoked when the player closes a displayed menu.</summary>
         /// <param name="closedMenu">The menu which the player just closed.</param>
         private void ReceiveMenuClosed(IClickableMenu closedMenu)
@@ -220,6 +249,15 @@ namespace Pathoschild.LookupAnything
         /// <summary>Show the lookup UI for the current target.</summary>
         private void ToggleLookup()
         {
+            if (Game1.activeClickableMenu is LookupMenu)
+                this.HideLookup();
+            else
+                this.ShowLookup();
+        }
+
+        /// <summary>Show the lookup UI for the current target.</summary>
+        private void ShowLookup()
+        {
             try
             {
                 // validate version
@@ -252,6 +290,13 @@ namespace Pathoschild.LookupAnything
             {
                 this.HandleError(ex, "looking that up");
             }
+        }
+
+        /// <summary>Show the lookup UI for the current target.</summary>
+        private void HideLookup()
+        {
+            if (Game1.activeClickableMenu is LookupMenu)
+                Game1.activeClickableMenu = null;
         }
 
         /// <summary>Load the file containing metadata that's not available from the game directly.</summary>

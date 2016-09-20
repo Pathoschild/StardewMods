@@ -19,6 +19,9 @@ namespace Pathoschild.LookupAnything.Framework
         /// <summary>The amount to scroll long content when pressing a 'scroll up' or 'scroll down' control.</summary>
         public int ScrollAmount { get; set; }
 
+        /// <summary>Whether the lookup UI should only be visible as long as the key is pressed.</summary>
+        public bool HideOnKeyUp { get; set; }
+
         /// <summary>Whether to check for updates to the mod.</summary>
         public bool CheckForUpdates { get; set; }
 
@@ -44,6 +47,7 @@ namespace Pathoschild.LookupAnything.Framework
                 ScrollDown = "",
                 ToggleDebug = ""
             };
+            this.HideOnKeyUp = false;
             this.CheckForUpdates = true;
         }
 
@@ -75,6 +79,7 @@ namespace Pathoschild.LookupAnything.Framework
                     ScrollUp = Enum.TryParse(this.Controller.ScrollUp, out parsedButton) ? parsedButton : null as Buttons?,
                     ScrollDown = Enum.TryParse(this.Controller.ScrollDown, out parsedButton) ? parsedButton : null as Buttons?
                 },
+                HideOnKeyUp = this.HideOnKeyUp,
                 CheckForUpdates = this.CheckForUpdates
             };
         }

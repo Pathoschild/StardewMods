@@ -41,23 +41,18 @@ Here are some representative screenshots (layout and values will change dynamica
 | ...             | ![](screenshots/artifact-spot.png) |
 
 ## Configuration
-### Change input
-Don't want to lookup things with `F1`? You can change all of the key bindings in the
-`config.json` (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)),
-and add controller bindings if you have one (see [valid buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.buttons.aspx)).
+The mod will work fine out of the box, but you can tweak its settings by editing the `config.json` file if you want. These are the available settings:
 
-### Mod update check
-The mod checks for a newer version when you load the game. If a new version is available, you'll
-see a small message at the bottom of the screen for a few seconds:
-
-![](screenshots/new-version-message.png)
-
-This doesn't affect the load time even if your connection is offline or slow, because it happens in
-the background. This is purely for convenience; you can disable the update check by setting
-`CheckForUpdates: false` in the `config.json` file.
+| setting           | what it affects
+| ----------------- | -------------------
+| `Keyboard`        | Set keyboard bindings. The default values are `F1` to lookup, and `Up`/`Down` to scroll. See [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx).
+| `Controller`      | Set controller bindings. No buttons configured by default. See [valid buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.buttons.aspx).
+| `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll [see a small message at the bottom of the screen for a few seconds](screenshots/new-version-message.png). This doesn't affect the load time even if your connection is offline or slow, because it happens in the background. |
+| `HideOnKeyUp`     | Default `false`. If enabled, the lookup window will be shown while you hold `F1` and disappear when you release it.
 
 ## Changelog
 * 1.2 (upcoming release)
+  * Added optional mode which hides the lookup UI when you release the button.
   * `F1` now toggles the lookup UI (i.e. will close the lookup if it's already open).
 * 1.1
   * On item lookup, replaced crafting recipe with recipes using this item as an ingredient.
