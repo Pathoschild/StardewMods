@@ -78,6 +78,40 @@ You shouldn't change this file unless you know what you're doing.
         "80": 1 // quartz
       },
       "Output": 338
+    },
+
+    /* oil maker */
+    {
+      "Name": "Truffle Oil",
+      "Type": "OilMaker",
+      "Ingredients": {
+        "430": 1 // truffle
+      },
+      "Output": 432
+    },
+    {
+      "Name": "Oil",
+      "Type": "OilMaker",
+      "Ingredients": {
+        "270": 1 // corn
+      },
+      "Output": 247
+    },
+    {
+      "Name": "Oil",
+      "Type": "OilMaker",
+      "Ingredients": {
+        "421": 1 // sunflower
+      },
+      "Output": 247
+    },
+    {
+      "Name": "Oil",
+      "Type": "OilMaker",
+      "Ingredients": {
+        "431": 1 // sunflower seeds
+      },
+      "Output": 247
     }
   ],
 

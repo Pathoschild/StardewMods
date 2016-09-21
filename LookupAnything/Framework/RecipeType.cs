@@ -10,6 +10,9 @@ namespace Pathoschild.LookupAnything.Framework
         Cooking,
 
         /// <summary>The recipe is crafted using a furnace.</summary>
-        Furnace
+        Furnace,
+
+        /// <summary>The recipe is crafted using an oil maker.</summary>
+        OilMaker
     }
 }

@@ -53,7 +53,8 @@ The mod will work fine out of the box, but you can tweak its settings by editing
 
 ## Changelog
 * 1.2 (upcoming release)
-  * Added support for seeds.
+  * On item lookup, added support for seeds.
+  * On item lookup, added oil maker recipes.
   * Added optional mode which hides the lookup UI when you release the button.
   * `F1` now toggles the lookup UI (i.e. will close the lookup if it's already open).
 * 1.1
