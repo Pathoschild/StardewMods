@@ -31,6 +31,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <GamePath>C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley</GamePath>
+    <StartAction>Program</StartAction>
+    <StartProgram>$(GamePath)\StardewModdingAPI.exe</StartProgram>
+    <StartWorkingDirectory>$(GamePath)</StartWorkingDirectory>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />

@@ -52,7 +52,7 @@ file if you want. These are the available settings:
 | `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll [see a small message at the bottom of the screen for a few seconds](screenshots/new-version-message.png). This doesn't affect the load time even if your connection is offline or slow, because it happens in the background. |
 | `HideOnKeyUp`     | Default `false`. If enabled, the lookup window will be shown while you hold `F1` and disappear when you release it.
 
-## Changelog
+## Versions
 * 1.2 (upcoming release)
   * On item lookup:
     * added support for seeds;
@@ -78,18 +78,6 @@ file if you want. These are the available settings:
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
-recommended. If you really want to compile the mod yourself (e.g. to change the code), here's the
-first-time setup for Visual Studio:
-
-1. In `LookupAnything.csproj`, make sure the `<GamePath>` setting has the correct Stardew Valley
-   directory path.
-2. Right-click `LookupAnything` in Visual Studio » Properties » Debug, and enter these values
-   (correcting the game path as needed):
-
-  ```
-  Start external program: C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\StardewModdingAPI.exe
-  Working directory: C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley
-  ```
-
-That's it. Launching the project in Visual Studio will compile the code, package it into the mod
-directory, and start the game.
+recommended. If you really want to compile the mod yourself, just edit `LookupAnything.csproj` and
+set the `<GamePath>` setting to your Stardew Valley directory path. Launching the project in Visual
+Studio will compile the code, package it into the mod directory, and start the game.
