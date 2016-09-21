@@ -3,11 +3,11 @@
   "Authour": "Pathoschild",
   "Version": {
     "MajorVersion": 1,
-    "MinorVersion": 1,
+    "MinorVersion": 2,
     "PatchVersion": 0,
     "Build": "1"
   },
-  "Description": "View metadata about anything by pressing a button. [version 1.1]",
+  "Description": "View metadata about anything by pressing a button. [version 1.2]",
   "UniqueID": "LookupAnything",
   "EntryDll": "LookupAnything.dll"
 }
