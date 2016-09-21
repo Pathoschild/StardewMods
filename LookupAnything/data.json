@@ -146,6 +146,16 @@ You shouldn't change this file unless you know what you're doing.
       "Output": 350
     },
 
+    /* loom */
+    {
+      "Name": "Cloth",
+      "Type": "Loom",
+      "Ingredients": {
+        "440": 1 // wool
+      },
+      "Output": 428
+    },
+
     /* mayonnaise machine */
     {
       "Name": "Mayonnaise",
