@@ -15,23 +15,19 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <param name="saleValues">The sale values by quality.</param>
         /// <param name="stackSize">The number of items in the stack.</param>
         public SaleValueField(string label, IDictionary<ItemQuality, int> saleValues, int stackSize)
-            : base(label, SaleValueField.GetValue(saleValues, stackSize)) { }
+            : base(label, SaleValueField.GetSummary(saleValues, stackSize)) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
         /// <param name="saleValue">The flat sale value.</param>
         /// <param name="stackSize">The number of items in the stack.</param>
         public SaleValueField(string label, int saleValue, int stackSize)
-            : base(label, SaleValueField.GetValue(new Dictionary<ItemQuality, int> { [ItemQuality.Low] = saleValue }, stackSize)) { }
+            : base(label, SaleValueField.GetSummary(new Dictionary<ItemQuality, int> { [ItemQuality.Low] = saleValue }, stackSize)) { }
 
-
-        /*********
-        ** Private methods
-        *********/
         /// <summary>Get the display value for sale price data.</summary>
         /// <param name="saleValues">The sale price data.</param>
         /// <param name="stackSize">The number of items in the stack.</param>
-        private static string GetValue(IDictionary<ItemQuality, int> saleValues, int stackSize)
+        public static string GetSummary(IDictionary<ItemQuality, int> saleValues, int stackSize)
         {
             // can't be sold
             if (saleValues == null || !saleValues.Any() || saleValues.Values.All(p => p == 0))

@@ -19,6 +19,7 @@ Here are some representative screenshots (layout and values will change dynamica
 | item        | screenshots |
 | ----------- | ----------- |
 | crop        | ![](screenshots/crop.png) |
+| seeds       | ![](screenshots/seeds.png) |
 | inventory   | ![](screenshots/item.png) |
 
 ### Characters
@@ -52,6 +53,7 @@ The mod will work fine out of the box, but you can tweak its settings by editing
 
 ## Changelog
 * 1.2 (upcoming release)
+  * Added support for seeds.
   * Added optional mode which hides the lookup UI when you release the button.
   * `F1` now toggles the lookup UI (i.e. will close the lookup if it's already open).
 * 1.1

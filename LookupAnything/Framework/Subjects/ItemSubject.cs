@@ -27,6 +27,9 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <summary>The crop which will drop the item (if applicable).</summary>
         private readonly Crop FromCrop;
 
+        /// <summary>The crop grown by this seed item (if applicable).</summary>
+        private readonly Crop SeedForCrop;
+
         /// <summary>The context of the object being looked up.</summary>
         private readonly ObjectContext Context;
 
@@ -47,6 +50,8 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             this.Target = item;
             this.DisplayItem = this.GetMenuItem(item);
             this.FromCrop = fromCrop;
+            if ((item as Object)?.Type == "Seeds")
+                this.SeedForCrop = new Crop(item.parentSheetIndex, 0, 0);
             this.Context = context;
             this.KnownQuality = knownQuality;
             this.Initialise(this.DisplayItem.Name, this.GetDescription(this.DisplayItem), this.GetTypeValue(this.DisplayItem));
@@ -56,8 +61,11 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public override IEnumerable<ICustomField> GetData(Metadata metadata)
         {
+            // get data
             Item item = this.Target;
             Object obj = item as Object;
+            bool isCrop = this.FromCrop != null;
+            bool isSeed = this.SeedForCrop != null;
 
             // get overrides
             bool showInventoryFields = true;
@@ -73,9 +81,12 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             }
 
             // crop fields
-            if (this.FromCrop != null)
+            if (isCrop || isSeed)
             {
-                Crop crop = this.FromCrop;
+                // get crop
+                Crop crop = this.FromCrop ?? this.SeedForCrop;
+
+                // yield crop fields
                 if (crop.dead)
                     yield return new GenericField("Crop status", "This crop is dead.");
                 else
@@ -85,45 +96,67 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     bool canHarvestNow = (crop.currentPhase >= harvestablePhase) && (!crop.fullyGrown || crop.dayOfCurrentPhase <= 0);
                     int daysToFirstHarvest = crop.phaseDays.Take(crop.phaseDays.Count - 1).Sum(); // ignore harvestable phase
 
-                    // calculate next harvest
-                    int daysToNextHarvest = 0;
-                    Tuple<string, int> dayOfNextHarvest = null;
-                    if (!canHarvestNow)
+                    // add next-harvest field
+                    if (isCrop)
                     {
-                        // calculate days until next harvest
-                        int daysUntilLastPhase = daysToFirstHarvest - crop.dayOfCurrentPhase - crop.phaseDays.Take(crop.currentPhase).Sum();
+                        // calculate next harvest
+                        int daysToNextHarvest = 0;
+                        Tuple<string, int> dayOfNextHarvest = null;
+                        if (!canHarvestNow)
                         {
-                            // growing: days until next harvest
-                            if (!crop.fullyGrown)
-                                daysToNextHarvest = daysUntilLastPhase;
+                            // calculate days until next harvest
+                            int daysUntilLastPhase = daysToFirstHarvest - crop.dayOfCurrentPhase - crop.phaseDays.Take(crop.currentPhase).Sum();
+                            {
+                                // growing: days until next harvest
+                                if (!crop.fullyGrown)
+                                    daysToNextHarvest = daysUntilLastPhase;
 
-                            // regrowable crop harvested today
-                            else if (crop.dayOfCurrentPhase >= crop.regrowAfterHarvest)
-                                daysToNextHarvest = crop.regrowAfterHarvest;
+                                // regrowable crop harvested today
+                                else if (crop.dayOfCurrentPhase >= crop.regrowAfterHarvest)
+                                    daysToNextHarvest = crop.regrowAfterHarvest;
 
-                            // regrowable crop
-                            else
-                                daysToNextHarvest = crop.dayOfCurrentPhase; // dayOfCurrentPhase decreases to 0 when fully grown, where <=0 is harvestable
+                                // regrowable crop
+                                else
+                                    daysToNextHarvest = crop.dayOfCurrentPhase; // dayOfCurrentPhase decreases to 0 when fully grown, where <=0 is harvestable
+                            }
+                            dayOfNextHarvest = GameHelper.GetDayOffset(daysToNextHarvest, metadata.Constants.DaysInSeason);
                         }
-                        dayOfNextHarvest = GameHelper.GetDayOffset(daysToNextHarvest, metadata.Constants.DaysInSeason);
+
+                        // generate field
+                        string summary;
+                        if (canHarvestNow)
+                            summary = "now";
+                        else if (Game1.currentLocation.Name != Constant.LocationNames.Greenhouse && !crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Item1))
+                            summary = $"too late in the season for the next harvest (would be on {dayOfNextHarvest.Item1} {dayOfNextHarvest.Item2})";
+                        else
+                            summary = $"{dayOfNextHarvest.Item1} {dayOfNextHarvest.Item2} ({GameHelper.Pluralise(daysToNextHarvest, "tomorrow", $"in {daysToNextHarvest} days")})";
+
+                        yield return new GenericField("Harvest", summary);
                     }
 
-                    // generate next-harvest summary
-                    string nextHarvestSummary;
-                    if (canHarvestNow)
-                        nextHarvestSummary = "now";
-                    else if (Game1.currentLocation.Name != Constant.LocationNames.Greenhouse && !crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Item1))
-                        nextHarvestSummary = $"too late in the season for the next harvest (would be on {dayOfNextHarvest.Item1} {dayOfNextHarvest.Item2})";
-                    else
-                        nextHarvestSummary = $"{dayOfNextHarvest.Item1} {dayOfNextHarvest.Item2} ({GameHelper.Pluralise(daysToNextHarvest, "tomorrow", $"in {daysToNextHarvest} days")})";
+                    // crop summary
+                    {
+                        List<string> summary = new List<string>();
 
-                    // yield crop fields
-                    yield return new GenericField("Next harvest", nextHarvestSummary, hasValue: !crop.dead);
-                    yield return new GenericField("Schedule", $"after {daysToFirstHarvest} {GameHelper.Pluralise(daysToFirstHarvest, "day")}" + (crop.regrowAfterHarvest != -1 ? $", then every {GameHelper.Pluralise(crop.regrowAfterHarvest, "day", $"{crop.regrowAfterHarvest} days")}" : "") + $" (in {string.Join(", ", crop.seasonsToGrowIn)})");
-                    yield return new GenericField("Crop drops", crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops > 0
-                        ? $"{crop.minHarvest} to {crop.maxHarvest} ({Math.Round(crop.chanceForExtraCrops * 100, 2)}% chance of extra crops)"
-                        : Math.Max(crop.minHarvest, 1).ToString()
-                    );
+                        // harvest
+                        summary.Add($"harvest after {daysToFirstHarvest} {GameHelper.Pluralise(daysToFirstHarvest, "day")}" + (crop.regrowAfterHarvest != -1 ? $", then every {GameHelper.Pluralise(crop.regrowAfterHarvest, "day", $"{crop.regrowAfterHarvest} days")}" : ""));
+
+                        // seasons
+                        summary.Add($"grows in {string.Join(", ", crop.seasonsToGrowIn)}");
+
+                        // drops
+                        if (crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops > 0)
+                            summary.Add($"drops {crop.minHarvest} to {crop.maxHarvest} ({Math.Round(crop.chanceForExtraCrops * 100, 2)}% chance of extra crops)");
+                        else if (crop.minHarvest > 1)
+                            summary.Add($"drops {crop.minHarvest}");
+
+                        // crop sale price
+                        Item drop = GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest);
+                        summary.Add($"sells for {SaleValueField.GetSummary(this.GetSaleValue(drop, false), 1)}");
+
+                        // generate field
+                        yield return new GenericField("Crop", string.Join(Environment.NewLine, summary));
+                    }
                 }
             }
 
@@ -135,7 +168,8 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             if (showInventoryFields)
             {
                 var giftTastes = this.GetGiftTastes(item);
-                yield return new SaleValueField("Sells for", this.GetSaleValue(item, this.KnownQuality), item.Stack);
+                if(!isCrop)
+                    yield return new SaleValueField("Sells for", this.GetSaleValue(item, this.KnownQuality), item.Stack);
                 yield return new ItemGiftTastesField("Loves this", giftTastes, GiftTaste.Love);
                 yield return new ItemGiftTastesField("Likes this", giftTastes, GiftTaste.Like);
             }
@@ -154,7 +188,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             if (obj != null && obj.bigCraftable != true)
             {
                 Dictionary<RecipeType, RecipeData[]> recipes = GameHelper.GetRecipesForIngredient(this.DisplayItem).GroupBy(p => p.Type).ToDictionary(p => p.Key, p => p.ToArray());
-                foreach (RecipeType type in recipes.Keys.OrderBy(p => p))
+                foreach (RecipeType type in recipes.Keys.OrderBy(p => p.ToString()))
                     yield return new RecipesForIngredientField(type.ToString(), item.parentSheetIndex, recipes[type]);
             }
         }

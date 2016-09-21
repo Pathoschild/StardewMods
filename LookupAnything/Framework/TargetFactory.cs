@@ -181,7 +181,7 @@ namespace Pathoschild.LookupAnything.Framework
                 // crop
                 case TargetType.Crop:
                     Crop crop = target.GetValue<HoeDirt>().crop;
-                    return new ItemSubject(GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest), ObjectContext.World, knownQuality: false, crop: crop);
+                    return new ItemSubject(GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest), ObjectContext.World, knownQuality: false, fromCrop: crop);
 
                 // tree
                 case TargetType.FruitTree:
