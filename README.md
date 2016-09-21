@@ -81,3 +81,10 @@ file if you want. These are the available settings:
 recommended. If you really want to compile the mod yourself, just edit `LookupAnything.csproj` and
 set the `<GamePath>` setting to your Stardew Valley directory path. Launching the project in Visual
 Studio will compile the code, package it into the mod directory, and start the game.
+
+Useful tools when working on this mod:
+* [dotPeek](https://www.jetbrains.com/decompiler/) to decompile the game into a Visual Studio
+  project.
+* [ReSharper](https://www.jetbrains.com/resharper/) to analyse the game code (e.g. find usages).
+* [XNB Extract](http://community.playstarbound.com/threads/modding-guides-and-general-modding-discussion-redux.109131/)
+  to extract the game's assets and data.
