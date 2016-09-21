@@ -57,8 +57,8 @@ file if you want. These are the available settings:
   * On item lookup:
     * added support for seeds;
     * merged recipe fields;
-    * added recipes for the charcoal kiln, keg, mayonnaise machine, oil maker, recycling machine,
-	  and slime egg-press;
+    * added recipes for the charcoal kiln, keg, mayonnaise machine, oil maker, preserves jar, 
+      recycling machine, and slime egg-press;
     * fixed an error when displaying certain recipes.
   * Added optional mode which hides the lookup UI when you release the button.
   * `F1` now toggles the lookup UI (i.e. will close the lookup if it's already open).

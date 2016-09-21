@@ -168,6 +168,24 @@ You shouldn't change this file unless you know what you're doing.
       "Output": 247
     },
 
+    /* preserves jar */
+    {
+      "Name": "$ingredient Jelly",
+      "Type": "PreservesJar",
+      "Ingredients": {
+        "-79": 1 // any fruit
+      },
+      "Output": 344
+    },
+    {
+      "Name": "Pickled $ingredient",
+      "Type": "PreservesJar",
+      "Ingredients": {
+        "-75": 1 // any vegetable
+      },
+      "Output": 342
+    },
+
     /* recycling machine */
     {
       "Name": "Coal",
