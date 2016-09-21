@@ -43,9 +43,9 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
-        /// <param name="itemID">The ingredient's item ID.</param>
+        /// <param name="item">The ingredient item.</param>
         /// <param name="recipes">The recipe to list.</param>
-        public RecipesForIngredientField(string label, int itemID, RecipeModel[] recipes)
+        public RecipesForIngredientField(string label, Item item, RecipeModel[] recipes)
             : base(label, null, hasValue: true)
         {
             this.Recipes =
@@ -57,7 +57,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
                         Name = recipe.Name,
                         Type = Regex.Replace(recipe.Type.ToString(), @"(\B[A-Z])", " $1"), // e.g. "OilMaker" => "Oil Maker"
                         IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
-                        NumberRequired = recipe.Ingredients[itemID],
+                        NumberRequired = recipe.Ingredients.ContainsKey(item.parentSheetIndex) ? recipe.Ingredients[item.parentSheetIndex] : recipe.Ingredients[item.category],
                         Item = recipe.CreateItem()
                     }
                 )

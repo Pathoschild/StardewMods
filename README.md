@@ -53,14 +53,17 @@ The mod will work fine out of the box, but you can tweak its settings by editing
 
 ## Changelog
 * 1.2 (upcoming release)
-  * On item lookup, added support for seeds.
-  * On item lookup, merged recipe fields.
-  * On item lookup, added recipes for the charcoal kiln, mayonnaise machine, oil maker, recycling machine, and slime egg-press.
+  * On item lookup:
+    * added support for seeds;
+    * merged recipe fields;
+    * added recipes for the charcoal kiln, mayonnaise machine, oil maker, recycling machine, and slime egg-press;
+    * fixed an error when displaying certain recipes.
   * Added optional mode which hides the lookup UI when you release the button.
   * `F1` now toggles the lookup UI (i.e. will close the lookup if it's already open).
 * 1.1
-  * On item lookup, removed crafting recipe.
-  * On item lookup, added crafting/cooking/furnace recipes using this item as an ingredient.
+  * On item lookup:
+    * removed crafting recipe;
+    * added crafting, cooking, and furnace recipes which use this item as an ingredient.
   * Added error if game or SMAPI are out of date.
 * 1.0
   * Initial version.

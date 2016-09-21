@@ -189,7 +189,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             {
                 RecipeModel[] recipes = GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
                 if(recipes.Any())
-                    yield return new RecipesForIngredientField("Recipes", item.parentSheetIndex, recipes);
+                    yield return new RecipesForIngredientField("Recipes", item, recipes);
             }
         }
 
