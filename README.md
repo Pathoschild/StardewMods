@@ -1,4 +1,4 @@
-**Lookup Anything** is a [Stardew Valley](http://stardewvalley.net/) mod that shows live info about
+﻿**Lookup Anything** is a [Stardew Valley](http://stardewvalley.net/) mod that shows live info about
 whatever's under your cursor when you press `F1`. Learn a villager's favourite gifts, when a crop
 will be ready to harvest, how long a fence will last, why your farm animals are unhappy, and more.
 
@@ -42,7 +42,8 @@ Here are some representative screenshots (layout and values will change dynamica
 | ...             | ![](screenshots/artifact-spot.png) |
 
 ## Configuration
-The mod will work fine out of the box, but you can tweak its settings by editing the `config.json` file if you want. These are the available settings:
+The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
+file if you want. These are the available settings:
 
 | setting           | what it affects
 | ----------------- | -------------------
@@ -56,7 +57,8 @@ The mod will work fine out of the box, but you can tweak its settings by editing
   * On item lookup:
     * added support for seeds;
     * merged recipe fields;
-    * added recipes for the charcoal kiln, mayonnaise machine, oil maker, recycling machine, and slime egg-press;
+    * added recipes for the charcoal kiln, mayonnaise machine, oil maker, recycling machine, and
+      slime egg-press;
     * fixed an error when displaying certain recipes.
   * Added optional mode which hides the lookup UI when you release the button.
   * `F1` now toggles the lookup UI (i.e. will close the lookup if it's already open).
@@ -73,3 +75,21 @@ The mod will work fine out of the box, but you can tweak its settings by editing
   * Added hidden debug mode.
   * Added version check on load.
   * Let players lookup a target from any visible part of its sprite.
+
+## Compiling the mod
+[Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
+recommended. If you really want to compile the mod yourself (e.g. to change the code), here's the
+first-time setup for Visual Studio:
+
+1. In `LookupAnything.csproj`, make sure the `<GamePath>` setting has the correct Stardew Valley
+   directory path.
+2. Right-click `LookupAnything` in Visual Studio » Properties » Debug, and enter these values
+   (correcting the game path as needed):
+
+  ```
+  Start external program: C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\StardewModdingAPI.exe
+  Working directory: C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley
+  ```
+
+That's it. Launching the project in Visual Studio will compile the code, package it into the mod
+directory, and start the game.
