@@ -20,9 +20,11 @@ namespace Pathoschild.LookupAnything.Framework
         public CharacterData[] Characters { get; set; }
 
         /// <summary>Information about Adventure Guild monster-slaying quests.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.Locations.AdventureGuild.showMonsterKillList"/>.</remarks>
         public AdventureGuildQuestData[] AdventureGuildQuests { get; set; }
 
         /// <summary>The recipes not available from the game data directly.</summary>
+        /// <remarks>Derived from <see cref="Object.performObjectDropInAction"/>.</remarks>
         public RecipeData[] Recipes { get; set; }
 
 

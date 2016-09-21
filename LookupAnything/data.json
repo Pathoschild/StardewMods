@@ -33,6 +33,16 @@ You shouldn't change this file unless you know what you're doing.
   ** Recipes not available from game data
   *********/
   "Recipes": [
+    /* charcoal kiln */
+    {
+      "Name": "Coal",
+      "Type": "CharcoalKiln",
+      "Ingredients": {
+        "388": 10 // wood
+      },
+      "Output": 382
+    },
+
     /* furnace */
     {
       "Name": "Copper Bar",
@@ -175,7 +185,7 @@ You shouldn't change this file unless you know what you're doing.
       "Name": "Refined Quartz",
       "Type": "RecyclingMachine",
       "Ingredients": {
-        "172":  1 // soggy newspaper
+        "172": 1 // soggy newspaper
       },
       "Output": 338
     }
