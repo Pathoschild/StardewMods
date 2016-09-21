@@ -28,6 +28,59 @@ You shouldn't change this file unless you know what you're doing.
     "FenceDecayRate": 1440
   },
 
+
+  /*********
+  ** Recipes not available from game data
+  *********/
+  "Recipes": [
+    /* furnace */
+    {
+      "Name": "Copper Bar",
+      "Type": "Furnace",
+      "Ingredients": {
+        "382": 1, // coal
+        "378": 5 // copper ore
+      },
+      "Output": 334
+    },
+    {
+      "Name": "Iron Bar",
+      "Type": "Furnace",
+      "Ingredients": {
+        "382": 1, // coal
+        "380": 5 // iron ore
+      },
+      "Output": 335
+    },
+    {
+      "Name": "Gold Bar",
+      "Type": "Furnace",
+      "Ingredients": {
+        "382": 1, // coal
+        "384": 5 // gold ore
+      },
+      "Output": 336
+    },
+    {
+      "Name": "Iridium Bar",
+      "Type": "Furnace",
+      "Ingredients": {
+        "382": 1, // coal
+        "386": 5 // gold ore
+      },
+      "Output": 337
+    },
+    {
+      "Name": "Refined Quartz",
+      "Type": "Furnace",
+      "Ingredients": {
+        "382": 1, // coal
+        "80": 1 // quartz
+      },
+      "Output": 338
+    }
+  ],
+
   /*********
   ** Added metadata for NPCs (including villagers, pets, farm animals, monsters, etc).
   *********/

@@ -88,8 +88,8 @@ namespace Pathoschild.LookupAnything
 #endif
 
             // reset low-level cache once per game day (used for expensive queries that don't change within a day)
-            PlayerEvents.LoadedGame += (sender, e) => GameHelper.ResetCache();
-            TimeEvents.OnNewDay += (sender, e) => GameHelper.ResetCache();
+            PlayerEvents.LoadedGame += (sender, e) => GameHelper.ResetCache(this.Metadata);
+            TimeEvents.OnNewDay += (sender, e) => GameHelper.ResetCache(this.Metadata);
 
             // initialise functionality
             this.CurrentVersion = UpdateHelper.GetSemanticVersion(this.Manifest.Version);

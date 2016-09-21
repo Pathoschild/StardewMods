@@ -64,6 +64,7 @@
     <Compile Include="Framework\Data\ObjectContext.cs" />
     <Compile Include="Framework\Data\ObjectData.cs" />
     <Compile Include="Framework\Data\ObjectSpriteSheet.cs" />
+    <Compile Include="Framework\Data\RecipeData.cs" />
     <Compile Include="Framework\Fields\SkillBarField.cs" />
     <Compile Include="Framework\GitVersion.cs" />
     <Compile Include="Framework\InputMapConfiguration.cs" />
@@ -111,7 +112,7 @@
     <Compile Include="LookupAnythingMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Framework\Targets\GenericTarget.cs" />
-    <Compile Include="Framework\Models\RecipeData.cs" />
+    <Compile Include="Framework\Models\RecipeModel.cs" />
     <Compile Include="Framework\RecipeType.cs" />
   </ItemGroup>
   <ItemGroup>

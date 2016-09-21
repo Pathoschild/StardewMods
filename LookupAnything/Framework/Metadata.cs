@@ -22,6 +22,9 @@ namespace Pathoschild.LookupAnything.Framework
         /// <summary>Information about Adventure Guild monster-slaying quests.</summary>
         public AdventureGuildQuestData[] AdventureGuildQuests { get; set; }
 
+        /// <summary>The recipes not available from the game data directly.</summary>
+        public RecipeData[] Recipes { get; set; }
+
 
         /*********
         ** Public methods

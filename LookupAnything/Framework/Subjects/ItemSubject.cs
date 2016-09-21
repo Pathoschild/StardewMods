@@ -187,7 +187,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             // recipes
             if (obj != null && obj.bigCraftable != true)
             {
-                Dictionary<RecipeType, RecipeData[]> recipes = GameHelper.GetRecipesForIngredient(this.DisplayItem).GroupBy(p => p.Type).ToDictionary(p => p.Key, p => p.ToArray());
+                Dictionary<RecipeType, RecipeModel[]> recipes = GameHelper.GetRecipesForIngredient(this.DisplayItem).GroupBy(p => p.Type).ToDictionary(p => p.Key, p => p.ToArray());
                 foreach (RecipeType type in recipes.Keys.OrderBy(p => p.ToString()))
                     yield return new RecipesForIngredientField(type.ToString(), item.parentSheetIndex, recipes[type]);
             }

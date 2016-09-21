@@ -5,7 +5,7 @@ using StardewValley;
 namespace Pathoschild.LookupAnything.Framework.Models
 {
     /// <summary>Represents metadata about a recipe.</summary>
-    internal class RecipeData
+    internal class RecipeModel
     {
         /*********
         ** Properties
@@ -35,7 +35,7 @@ namespace Pathoschild.LookupAnything.Framework.Models
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="recipe">The recipe to parse.</param>
-        public RecipeData(CraftingRecipe recipe)
+        public RecipeModel(CraftingRecipe recipe)
             : this(
                 name: recipe.name,
                 type: recipe.isCookingRecipe ? RecipeType.Cooking : RecipeType.Crafting,
@@ -51,7 +51,7 @@ namespace Pathoschild.LookupAnything.Framework.Models
         /// <param name="ingredients">The items needed to craft the recipe (item ID => number needed).</param>
         /// <param name="item">The item that be created by this recipe.</param>
         /// <param name="mustBeLearned">Whether the recipe must be learned before it can be used.</param>
-        public RecipeData(string name, RecipeType type, IDictionary<int, int> ingredients, Func<Item> item, bool mustBeLearned)
+        public RecipeModel(string name, RecipeType type, IDictionary<int, int> ingredients, Func<Item> item, bool mustBeLearned)
         {
             this.Name = name;
             this.Type = type;

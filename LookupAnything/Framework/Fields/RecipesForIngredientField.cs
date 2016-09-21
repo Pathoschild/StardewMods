@@ -16,7 +16,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         ** Properties
         *********/
         /// <summary>The recipe data to list (recipe => {player knows recipe, number required for recipe}).</summary>
-        private readonly IDictionary<RecipeData, Tuple<bool, int>> Recipes;
+        private readonly IDictionary<RecipeModel, Tuple<bool, int>> Recipes;
 
 
         /*********
@@ -26,7 +26,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <param name="label">A short field label.</param>
         /// <param name="itemID">The ingredient's item ID.</param>
         /// <param name="recipes">The recipe to list.</param>
-        public RecipesForIngredientField(string label, int itemID, RecipeData[] recipes)
+        public RecipesForIngredientField(string label, int itemID, RecipeModel[] recipes)
             : base(label, null, hasValue: true)
         {
             this.Recipes = recipes
@@ -54,7 +54,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
             foreach (var entry in this.Recipes)
             {
                 // get data
-                RecipeData recipe = entry.Key;
+                RecipeModel recipe = entry.Key;
                 bool isKnown = entry.Value.Item1;
                 int numberRequired = entry.Value.Item2;
                 Item item = recipe.CreateItem();

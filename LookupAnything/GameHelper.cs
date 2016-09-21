@@ -30,7 +30,7 @@ namespace Pathoschild.LookupAnything
         private static Lazy<NPC[]> GiftableVillagers;
 
         /// <summary>The cached recipes.</summary>
-        private static Lazy<RecipeData[]> Recipes;
+        private static Lazy<RecipeModel[]> Recipes;
 
 
         /*********
@@ -40,11 +40,12 @@ namespace Pathoschild.LookupAnything
         ** State
         ****/
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
-        public static void ResetCache()
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public static void ResetCache(Metadata metadata)
         {
             GameHelper.GiftTastes = new Lazy<IDictionary<GiftTaste, IDictionary<string, int[]>>>(GameHelper.FetchGiftTastes);
             GameHelper.GiftableVillagers = new Lazy<NPC[]>(GameHelper.FetchGiftableVillagers);
-            GameHelper.Recipes = new Lazy<RecipeData[]>(GameHelper.FetchRecipes);
+            GameHelper.Recipes = new Lazy<RecipeModel[]>(() => GameHelper.FetchRecipes(metadata));
         }
 
         /****
@@ -108,14 +109,14 @@ namespace Pathoschild.LookupAnything
         }
 
         /// <summary>Get the recipes for which an item is needed.</summary>
-        public static IEnumerable<RecipeData> GetRecipes()
+        public static IEnumerable<RecipeModel> GetRecipes()
         {
             return GameHelper.Recipes.Value;
         }
 
         /// <summary>Get the recipes for which an item is needed.</summary>
         /// <param name="item">The item.</param>
-        public static IEnumerable<RecipeData> GetRecipesForIngredient(Item item)
+        public static IEnumerable<RecipeModel> GetRecipesForIngredient(Item item)
         {
             return GameHelper.GetRecipes().Where(p => p.Ingredients.ContainsKey(item.parentSheetIndex) || p.Ingredients.ContainsKey(item.category));
         }
@@ -337,7 +338,7 @@ namespace Pathoschild.LookupAnything
 
             // get pixel
             TPixel[] pixels = new TPixel[spriteSheet.Width * spriteSheet.Height];
-            spriteSheet.GetData<TPixel>(pixels);
+            spriteSheet.GetData(pixels);
             return pixels[spriteIndex];
         }
 
@@ -502,44 +503,30 @@ namespace Pathoschild.LookupAnything
         }
 
         /// <summary>Get the recipe ingredients.</summary>
-        private static RecipeData[] FetchRecipes()
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        private static RecipeModel[] FetchRecipes(Metadata metadata)
         {
-            List<RecipeData> recipes = new List<RecipeData>();
+            List<RecipeModel> recipes = new List<RecipeModel>();
 
             // cooking recipes
             recipes.AddRange(
                 from entry in CraftingRecipe.cookingRecipes
                 let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: true)
-                select new RecipeData(recipe)
+                select new RecipeModel(recipe)
             );
 
             // crafting recipes
             recipes.AddRange(
                 from entry in CraftingRecipe.craftingRecipes
                 let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: false)
-                select new RecipeData(recipe)
+                select new RecipeModel(recipe)
             );
 
-            // furnace recipes
-            {
-                var ores = new Dictionary<int, Tuple<int, int>>
-                {
-                    [Object.quartzIndex] = Tuple.Create(338, 1),
-                    [Object.copper] = Tuple.Create(Object.copperBar, 5),
-                    [Object.iron] = Tuple.Create(Object.ironBar, 5),
-                    [Object.gold] = Tuple.Create(Object.goldBar, 5),
-                    [Object.iridium] = Tuple.Create(Object.iridiumBar, 5)
-                };
-                recipes.AddRange(
-                    from data in ores
-                    let oreIndex = data.Key
-                    let barIndex = data.Value.Item1
-                    let orePerBar = data.Value.Item2
-                    let name = new Object(barIndex, 1).Name
-                    let ingredients = new Dictionary<int, int> { [Object.coal] = 1, [oreIndex] = orePerBar }
-                    select new RecipeData(name, RecipeType.Furnace, ingredients, () => new Object(barIndex, 1), mustBeLearned: false)
-                );
-            }
+            // recipes not available from game data
+            recipes.AddRange(
+                from entry in metadata.Recipes
+                select new RecipeModel(entry.Name, entry.Type, entry.Ingredients, () => GameHelper.GetObjectBySpriteIndex(entry.Output), false)
+            );
 
             return recipes.OrderBy(p => p.Name).ToArray();
         }
