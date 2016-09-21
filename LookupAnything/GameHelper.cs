@@ -118,7 +118,13 @@ namespace Pathoschild.LookupAnything
         /// <param name="item">The item.</param>
         public static IEnumerable<RecipeModel> GetRecipesForIngredient(Item item)
         {
-            return GameHelper.GetRecipes().Where(p => p.Ingredients.ContainsKey(item.parentSheetIndex) || p.Ingredients.ContainsKey(item.category));
+            return (
+                from recipe in GameHelper.GetRecipes()
+                where
+                    (recipe.Ingredients.ContainsKey(item.parentSheetIndex) || recipe.Ingredients.ContainsKey(item.category))
+                    && recipe.ExceptIngredients?.Contains(item.parentSheetIndex) != true
+                select recipe
+            );
         }
 
         /// <summary>Get the items a specified NPC can receive.</summary>
@@ -525,7 +531,7 @@ namespace Pathoschild.LookupAnything
             // recipes not available from game data
             recipes.AddRange(
                 from entry in metadata.Recipes
-                select new RecipeModel(entry.Name, entry.Type, entry.Ingredients, () => GameHelper.GetObjectBySpriteIndex(entry.Output), false)
+                select new RecipeModel(entry.Name, entry.Type, entry.Ingredients, () => GameHelper.GetObjectBySpriteIndex(entry.Output), false, entry.ExceptIngredients)
             );
 
             return recipes.OrderBy(p => p.Name).ToArray();

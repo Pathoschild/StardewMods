@@ -54,7 +54,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
                     orderby recipe.Type.ToString(), recipe.Name
                     select new Entry
                     {
-                        Name = recipe.Name,
+                        Name = recipe.Name.Replace("$ingredient", item.Name),
                         Type = Regex.Replace(recipe.Type.ToString(), @"(\B[A-Z])", " $1"), // e.g. "OilMaker" => "Oil Maker"
                         IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
                         NumberRequired = recipe.Ingredients.ContainsKey(item.parentSheetIndex) ? recipe.Ingredients[item.parentSheetIndex] : recipe.Ingredients[item.category],

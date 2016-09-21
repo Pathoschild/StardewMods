@@ -15,6 +15,9 @@ namespace Pathoschild.LookupAnything.Framework
         /// <summary>The recipe is crafted using a furnace.</summary>
         Furnace,
 
+        /// <summary>The recipe is crafted using a keg.</summary>
+        Keg,
+
         /// <summary>The recipe is crafted using a mayonnaise machine.</summary>
         MayonnaiseMachine,
 

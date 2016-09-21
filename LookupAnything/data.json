@@ -90,6 +90,42 @@ You shouldn't change this file unless you know what you're doing.
       "Output": 338
     },
 
+    /* keg */
+    {
+      "Name": "Beer",
+      "Type": "Keg",
+      "Ingredients": {
+        "262": 1 // wheat
+      },
+      "Output": 346
+    },
+    {
+      "Name": "Pale Ale",
+      "Type": "Keg",
+      "Ingredients": {
+        "304": 1 // hops
+      },
+      "Output": 303
+    },
+    {
+      "Name": "$ingredient Wine",
+      "Type": "Keg",
+      "Ingredients": {
+        "-79": 1 // any fruit
+      },
+      "ExceptIngredients": [ 262, 304 ],
+      "Output": 348
+    },
+    {
+      "Name": "$ingredient Juice",
+      "Type": "Keg",
+      "Ingredients": {
+        "-75": 1 // any vegetable
+      },
+      "ExceptIngredients": [ 262, 304 ],
+      "Output": 350
+    },
+
     /* mayonnaise machine */
     {
       "Name": "Mayonnaise",

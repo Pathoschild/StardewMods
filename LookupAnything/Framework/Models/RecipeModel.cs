@@ -26,6 +26,9 @@ namespace Pathoschild.LookupAnything.Framework.Models
         /// <summary>The items needed to craft the recipe (item ID => number needed).</summary>
         public IDictionary<int, int> Ingredients { get; }
 
+        /// <summary>The ingredients which can't be used in this recipe (typically exceptions for a category ingredient).</summary>
+        public int[] ExceptIngredients { get; }
+
         /// <summary>Whether the recipe must be learned before it can be used.</summary>
         public bool MustBeLearned { get; }
 
@@ -51,11 +54,13 @@ namespace Pathoschild.LookupAnything.Framework.Models
         /// <param name="ingredients">The items needed to craft the recipe (item ID => number needed).</param>
         /// <param name="item">The item that be created by this recipe.</param>
         /// <param name="mustBeLearned">Whether the recipe must be learned before it can be used.</param>
-        public RecipeModel(string name, RecipeType type, IDictionary<int, int> ingredients, Func<Item> item, bool mustBeLearned)
+        /// <param name="exceptIngredients">The ingredients which can't be used in this recipe (typically exceptions for a category ingredient).</param>
+        public RecipeModel(string name, RecipeType type, IDictionary<int, int> ingredients, Func<Item> item, bool mustBeLearned, int[] exceptIngredients = null)
         {
             this.Name = name;
             this.Type = type;
             this.Ingredients = ingredients;
+            this.ExceptIngredients = exceptIngredients ?? new int[0];
             this.Item = item;
             this.MustBeLearned = mustBeLearned;
         }
