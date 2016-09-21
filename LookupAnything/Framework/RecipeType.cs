@@ -7,7 +7,7 @@ namespace Pathoschild.LookupAnything.Framework
         CharcoalKiln,
 
         /// <summary>The recipe is used through the crafting menu.</summary>
-        Crafting,
+        CraftingMenu,
 
         /// <summary>The recipe is cooked in the farmhouse kitchen.</summary>
         Cooking,

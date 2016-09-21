@@ -38,7 +38,7 @@ namespace Pathoschild.LookupAnything.Framework.Models
         public RecipeModel(CraftingRecipe recipe)
             : this(
                 name: recipe.name,
-                type: recipe.isCookingRecipe ? RecipeType.Cooking : RecipeType.Crafting,
+                type: recipe.isCookingRecipe ? RecipeType.Cooking : RecipeType.CraftingMenu,
                 ingredients: GameHelper.GetPrivateField<Dictionary<int, int>>(recipe, "recipeList"),
                 item: recipe.createItem,
                 mustBeLearned: true

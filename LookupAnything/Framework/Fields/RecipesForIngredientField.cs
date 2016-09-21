@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Components;
@@ -15,8 +15,27 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /*********
         ** Properties
         *********/
-        /// <summary>The recipe data to list (recipe => {player knows recipe, number required for recipe}).</summary>
-        private readonly IDictionary<RecipeModel, Tuple<bool, int>> Recipes;
+        /// <summary>Metadata needed to draw a recipe.</summary>
+        private struct Entry
+        {
+            /// <summary>The recipe name.</summary>
+            public string Name;
+
+            /// <summary>The recipe type.</summary>
+            public string Type;
+
+            /// <summary>Whether the player knows the recipe.</summary>
+            public bool IsKnown;
+
+            /// <summary>The number of the item required for the recipe.</summary>
+            public int NumberRequired;
+
+            /// <summary>The resulting item.</summary>
+            public Item Item;
+        }
+
+        /// <summary>The recipe data to list (type => recipe => {player knows recipe, number required for recipe}).</summary>
+        private readonly Entry[] Recipes;
 
 
         /*********
@@ -29,11 +48,20 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         public RecipesForIngredientField(string label, int itemID, RecipeModel[] recipes)
             : base(label, null, hasValue: true)
         {
-            this.Recipes = recipes
-                .ToDictionary(
-                    recipe => recipe,
-                    recipe => Tuple.Create(!recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player), recipe.Ingredients[itemID])
-                );
+            this.Recipes =
+                (
+                    from recipe in recipes
+                    orderby recipe.Type.ToString(), recipe.Name
+                    select new Entry
+                    {
+                        Name = recipe.Name,
+                        Type = Regex.Replace(recipe.Type.ToString(), @"(\B[A-Z])", " $1"), // e.g. "OilMaker" => "Oil Maker"
+                        IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
+                        NumberRequired = recipe.Ingredients[itemID],
+                        Item = recipe.CreateItem()
+                    }
+                )
+                .ToArray();
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
@@ -44,6 +72,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <returns>Returns the drawn dimensions, or <c>null</c> to draw the <see cref="GenericField.Value"/> using the default format.</returns>
         public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
         {
+            const float leftIndent = 16;
             float height = 0;
 
             // get icon size
@@ -51,18 +80,20 @@ namespace Pathoschild.LookupAnything.Framework.Fields
             Vector2 iconSize = new Vector2(textHeight);
 
             // draw recipes
-            foreach (var entry in this.Recipes)
+            string lastType = null;
+            foreach (Entry entry in this.Recipes)
             {
-                // get data
-                RecipeModel recipe = entry.Key;
-                bool isKnown = entry.Value.Item1;
-                int numberRequired = entry.Value.Item2;
-                Item item = recipe.CreateItem();
+                // draw type
+                if (entry.Type != lastType)
+                {
+                    height += spriteBatch.DrawStringBlock(font, $"{entry.Type}:", position + new Vector2(0, height), wrapWidth).Y;
+                    lastType = entry.Type;
+                }
 
                 // draw icon
                 {
                     // get sprite data
-                    Tuple<Texture2D, Rectangle> spriteData = GameHelper.GetSprite(item);
+                    Tuple<Texture2D, Rectangle> spriteData = GameHelper.GetSprite(entry.Item);
                     if (spriteData != null)
                     {
                         Texture2D spriteSheet = spriteData.Item1;
@@ -75,14 +106,14 @@ namespace Pathoschild.LookupAnything.Framework.Fields
                         float topOffset = Math.Max((iconSize.Y - (spriteRectangle.Height * scale)) / 2, 0);
 
                         // draw
-                        Color iconTint = isKnown ? Color.White : Color.White * .5f;
-                        spriteBatch.DrawBlock(spriteSheet, spriteRectangle, position.X + leftOffset, position.Y + height + topOffset, iconTint, scale);
+                        Color iconTint = entry.IsKnown ? Color.White : Color.White * .5f;
+                        spriteBatch.DrawBlock(spriteSheet, spriteRectangle, position.X + leftIndent + leftOffset, position.Y + height + topOffset, iconTint, scale);
                     }
                 }
 
                 // draw text
-                Color color = isKnown ? Color.Black : Color.Gray;
-                Vector2 textSize = spriteBatch.DrawStringBlock(font, $"{recipe.Name} (needs {numberRequired})", position + new Vector2(iconSize.X + 3, height + 5), wrapWidth - iconSize.X, color);
+                Color color = entry.IsKnown ? Color.Black : Color.Gray;
+                Vector2 textSize = spriteBatch.DrawStringBlock(font, $"{entry.Name} (needs {entry.NumberRequired})", position + new Vector2(leftIndent + iconSize.X + 3, height + 5), wrapWidth - iconSize.X, color);
 
                 height += Math.Max(iconSize.Y, textSize.Y) + 5;
             }

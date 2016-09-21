@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Framework.Constants;
@@ -169,7 +168,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             if (showInventoryFields)
             {
                 var giftTastes = this.GetGiftTastes(item);
-                if(!isCrop)
+                if (!isCrop)
                     yield return new SaleValueField("Sells for", this.GetSaleValue(item, this.KnownQuality), item.Stack);
                 yield return new ItemGiftTastesField("Loves this", giftTastes, GiftTaste.Love);
                 yield return new ItemGiftTastesField("Likes this", giftTastes, GiftTaste.Like);
@@ -188,12 +187,9 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             // recipes
             if (obj != null && obj.bigCraftable != true)
             {
-                Dictionary<RecipeType, RecipeModel[]> recipes = GameHelper.GetRecipesForIngredient(this.DisplayItem).GroupBy(p => p.Type).ToDictionary(p => p.Key, p => p.ToArray());
-                foreach (RecipeType type in recipes.Keys.OrderBy(p => p.ToString()))
-                {
-                    string label = Regex.Replace(type.ToString(), @"(\B[A-Z])", " $1"); // e.g. "OilMaker" => "Oil Maker"
-                    yield return new RecipesForIngredientField(label, item.parentSheetIndex, recipes[type]);
-                }
+                RecipeModel[] recipes = GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
+                if(recipes.Any())
+                    yield return new RecipesForIngredientField("Recipes", item.parentSheetIndex, recipes);
             }
         }
 
