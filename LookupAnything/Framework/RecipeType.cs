@@ -13,6 +13,9 @@ namespace Pathoschild.LookupAnything.Framework
         Furnace,
 
         /// <summary>The recipe is crafted using an oil maker.</summary>
-        OilMaker
+        OilMaker,
+
+        /// <summary>The recipe is crafted using a recycling machine.</summary>
+        RecyclingMachine
     }
 }

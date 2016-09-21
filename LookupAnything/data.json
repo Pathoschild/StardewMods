@@ -112,6 +112,72 @@ You shouldn't change this file unless you know what you're doing.
         "431": 1 // sunflower seeds
       },
       "Output": 247
+    },
+
+    /* recycling machine */
+    {
+      "Name": "Coal",
+      "Type": "RecyclingMachine",
+      "Ingredients": {
+        "168": 1 // trash
+      },
+      "Output": 382
+    },
+    {
+      "Name": "Iron Ore",
+      "Type": "RecyclingMachine",
+      "Ingredients": {
+        "168": 1 // trash
+      },
+      "Output": 380
+    },
+    {
+      "Name": "Stone",
+      "Type": "RecyclingMachine",
+      "Ingredients": {
+        "168": 1 // trash
+      },
+      "Output": 390
+    },
+    {
+      "Name": "Coal",
+      "Type": "RecyclingMachine",
+      "Ingredients": {
+        "169": 1 // driftwood
+      },
+      "Output": 382
+    },
+    {
+      "Name": "Wood",
+      "Type": "RecyclingMachine",
+      "Ingredients": {
+        "169": 1 // driftwood
+      },
+      "Output": 388
+    },
+    {
+      "Name": "Refined Quartz",
+      "Type": "RecyclingMachine",
+      "Ingredients": {
+        "170": 1 // broken glasses
+      },
+      "Output": 338
+    },
+    {
+      "Name": "Refined Quartz",
+      "Type": "RecyclingMachine",
+      "Ingredients": {
+        "171": 1 // broken CD
+      },
+      "Output": 338
+    },
+    {
+      "Name": "Refined Quartz",
+      "Type": "RecyclingMachine",
+      "Ingredients": {
+        "172":  1 // soggy newspaper
+      },
+      "Output": 338
     }
   ],
 
