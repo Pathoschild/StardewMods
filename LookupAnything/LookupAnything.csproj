@@ -105,7 +105,6 @@
     <Compile Include="Framework\Subjects\BaseSubject.cs" />
     <Compile Include="Framework\Subjects\CharacterSubject.cs" />
     <Compile Include="Framework\Subjects\TreeSubject.cs" />
-    <Compile Include="Framework\Subjects\CropSubject.cs" />
     <Compile Include="Framework\Fields\ICustomField.cs" />
     <Compile Include="Framework\Subjects\ISubject.cs" />
     <Compile Include="Framework\Subjects\ItemSubject.cs" />
