@@ -269,22 +269,16 @@ namespace Pathoschild.LookupAnything
                     return;
                 }
 
-                // toggle
-                if (Game1.activeClickableMenu is LookupMenu)
-                    Game1.activeClickableMenu = null;
-                else
-                {
-                    // get target
-                    ISubject subject = Game1.activeClickableMenu != null
-                        ? this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu)
-                        : this.TargetFactory.GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile, GameHelper.GetScreenCoordinatesFromCursor());
-                    if (subject == null)
-                        return;
+                // get target
+                ISubject subject = Game1.activeClickableMenu != null
+                    ? this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu)
+                    : this.TargetFactory.GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile, GameHelper.GetScreenCoordinatesFromCursor());
+                if (subject == null)
+                    return;
 
-                    // show lookup UI
-                    this.PreviousMenu = Game1.activeClickableMenu;
-                    Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata);
-                }
+                // show lookup UI
+                this.PreviousMenu = Game1.activeClickableMenu;
+                Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata);
             }
             catch (Exception ex)
             {
