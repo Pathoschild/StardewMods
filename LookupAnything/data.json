@@ -90,6 +90,28 @@ You shouldn't change this file unless you know what you're doing.
       "Output": 338
     },
 
+    /* mayonnaise machine */
+    {
+      "Name": "Mayonnaise",
+      "Type": "MayonnaiseMachine",
+      "Ingredients": {
+        "107": 1, // dinosaur egg
+        "174": 1, // or large white egg
+        "176": 1, // or white egg
+        "180": 1, // or brown egg
+        "182": 1 // or large brown egg
+      },
+      "Output": 306
+    },
+    {
+      "Name": "Duck Mayonnaise",
+      "Type": "MayonnaiseMachine",
+      "Ingredients": {
+        "442": 1 // duck egg
+      },
+      "Output": 307
+    },
+
     /* oil maker */
     {
       "Name": "Truffle Oil",
@@ -103,23 +125,9 @@ You shouldn't change this file unless you know what you're doing.
       "Name": "Oil",
       "Type": "OilMaker",
       "Ingredients": {
-        "270": 1 // corn
-      },
-      "Output": 247
-    },
-    {
-      "Name": "Oil",
-      "Type": "OilMaker",
-      "Ingredients": {
-        "421": 1 // sunflower
-      },
-      "Output": 247
-    },
-    {
-      "Name": "Oil",
-      "Type": "OilMaker",
-      "Ingredients": {
-        "431": 1 // sunflower seeds
+        "270": 1, // corn
+        "421": 1, // or sunflower
+        "431": 1 // or sunflower seeds
       },
       "Output": 247
     },
@@ -129,7 +137,8 @@ You shouldn't change this file unless you know what you're doing.
       "Name": "Coal",
       "Type": "RecyclingMachine",
       "Ingredients": {
-        "168": 1 // trash
+        "168": 1, // trash
+        "169": 1 // or driftwood
       },
       "Output": 382
     },
@@ -142,6 +151,16 @@ You shouldn't change this file unless you know what you're doing.
       "Output": 380
     },
     {
+      "Name": "Refined Quartz",
+      "Type": "RecyclingMachine",
+      "Ingredients": {
+        "170": 1, // broken glasses
+        "171": 1, // or broken CD
+        "172": 1 // or soggy newspaper
+      },
+      "Output": 338
+    },
+    {
       "Name": "Stone",
       "Type": "RecyclingMachine",
       "Ingredients": {
@@ -150,44 +169,12 @@ You shouldn't change this file unless you know what you're doing.
       "Output": 390
     },
     {
-      "Name": "Coal",
-      "Type": "RecyclingMachine",
-      "Ingredients": {
-        "169": 1 // driftwood
-      },
-      "Output": 382
-    },
-    {
       "Name": "Wood",
       "Type": "RecyclingMachine",
       "Ingredients": {
         "169": 1 // driftwood
       },
       "Output": 388
-    },
-    {
-      "Name": "Refined Quartz",
-      "Type": "RecyclingMachine",
-      "Ingredients": {
-        "170": 1 // broken glasses
-      },
-      "Output": 338
-    },
-    {
-      "Name": "Refined Quartz",
-      "Type": "RecyclingMachine",
-      "Ingredients": {
-        "171": 1 // broken CD
-      },
-      "Output": 338
-    },
-    {
-      "Name": "Refined Quartz",
-      "Type": "RecyclingMachine",
-      "Ingredients": {
-        "172": 1 // soggy newspaper
-      },
-      "Output": 338
     },
 
     /* slime egg-press */
