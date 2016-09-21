@@ -19,6 +19,9 @@ namespace Pathoschild.LookupAnything.Framework
         OilMaker,
 
         /// <summary>The recipe is crafted using a recycling machine.</summary>
-        RecyclingMachine
+        RecyclingMachine,
+
+        /// <summary>The recipe is crafted using a slime egg-press.</summary>
+        SlimeEggPress
     }
 }

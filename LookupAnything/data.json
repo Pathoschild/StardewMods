@@ -188,6 +188,40 @@ You shouldn't change this file unless you know what you're doing.
         "172": 1 // soggy newspaper
       },
       "Output": 338
+    },
+
+    /* slime egg-press */
+    {
+      "Name": "Green Slime Egg",
+      "Type": "SlimeEggPress",
+      "Ingredients": {
+        "766": 100 // slime
+      },
+      "Output": 680
+    },
+    {
+      "Name": "Purple Slime Egg",
+      "Type": "SlimeEggPress",
+      "Ingredients": {
+        "766": 100 // slime
+      },
+      "Output": 439
+    },
+    {
+      "Name": "Red Slime Egg",
+      "Type": "SlimeEggPress",
+      "Ingredients": {
+        "766": 100 // slime
+      },
+      "Output": 437
+    },
+    {
+      "Name": "Blue Slime Egg",
+      "Type": "SlimeEggPress",
+      "Ingredients": {
+        "766": 100 // slime
+      },
+      "Output": 413
     }
   ],
 
