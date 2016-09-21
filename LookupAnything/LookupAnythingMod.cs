@@ -289,8 +289,18 @@ namespace Pathoschild.LookupAnything
         /// <summary>Show the lookup UI for the current target.</summary>
         private void HideLookup()
         {
-            if (Game1.activeClickableMenu is LookupMenu)
-                Game1.activeClickableMenu = null;
+            try
+            {
+                if (Game1.activeClickableMenu is LookupMenu)
+                {
+                    Game1.playSound("bigDeSelect"); // match default behaviour when closing a menu
+                    Game1.activeClickableMenu = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, "closing the menu");
+            }
         }
 
         /// <summary>Load the file containing metadata that's not available from the game directly.</summary>
