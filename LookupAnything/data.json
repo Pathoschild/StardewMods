@@ -43,6 +43,26 @@ You shouldn't change this file unless you know what you're doing.
       "Output": 382
     },
 
+    /* cheese press */
+    {
+      "Name": "Cheese",
+      "Type": "CheesePress",
+      "Ingredients": {
+        "184": 1, // milk
+        "186": 1 // or large milk
+      },
+      "Output": 424
+    },
+    {
+      "Name": "Goat Cheese",
+      "Type": "CheesePress",
+      "Ingredients": {
+        "436": 1, // goat milk
+        "438": 1 // or goat milk
+      },
+      "Output": 426
+    },
+
     /* furnace */
     {
       "Name": "Copper Bar",

@@ -6,6 +6,9 @@ namespace Pathoschild.LookupAnything.Framework
         /// <summary>The recipe is crafted using a charcoal kiln.</summary>
         CharcoalKiln,
 
+        /// <summary>The recipe is crafted using a cheese press.</summary>
+        CheesePress,
+
         /// <summary>The recipe is used through the crafting menu.</summary>
         CraftingMenu,
 
