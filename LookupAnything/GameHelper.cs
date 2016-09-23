@@ -432,9 +432,10 @@ namespace Pathoschild.LookupAnything
         /// <remarks>Reverse engineered from <c>Data\NPCGiftTastes</c> and <see cref="NPC.getGiftTasteForThisItem"/>.</remarks>
         private static IDictionary<GiftTaste, IDictionary<string, int[]>> FetchGiftTastes()
         {
-            // parse game data
-            var universalTastes = new Dictionary<GiftTaste, int[]>();
-            var personalTastes = new Dictionary<string, Dictionary<GiftTaste, int[]>>();
+            // extract game data
+            HashSet<string> villagerKeys = new HashSet<string>();
+            HashSet<int> itemIDs = new HashSet<int>();
+            HashSet<int> categoryIDs = new HashSet<int>();
             {
                 // define keys
                 var universalKeys = new Dictionary<string, GiftTaste>
@@ -455,37 +456,62 @@ namespace Pathoschild.LookupAnything
                     [9] = GiftTaste.Neutral
                 };
 
-                // read data
+                // extract data
+                Action<string> add = value =>
+                {
+                    int refID = int.Parse(value);
+                    if (refID < 0)
+                        categoryIDs.Add(refID);
+                    else
+                        itemIDs.Add(refID);
+                };
                 foreach (string key in Game1.NPCGiftTastes.Keys)
                 {
+                    string data = Game1.NPCGiftTastes[key];
+
                     // universal tastes
                     if (universalKeys.ContainsKey(key))
                     {
-                        GiftTaste taste = universalKeys[key];
-                        universalTastes[taste] = Game1.NPCGiftTastes[key]
-                            .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                            .Select(int.Parse)
-                            .ToArray();
+                        foreach (string value in data.Split(' '))
+                            add(value);
+                        continue;
                     }
 
                     // personal tastes
-                    else
+                    villagerKeys.Add(key);
+                    string[] personalData = data.Split('/');
+                    foreach (int tasteKey in personalMetadataKeys.Keys)
                     {
-                        personalTastes[key] = new Dictionary<GiftTaste, int[]>();
-                        string[] metadata = Game1.NPCGiftTastes[key].Split('/');
-                        foreach (int i in personalMetadataKeys.Keys)
-                        {
-                            GiftTaste taste = personalMetadataKeys[i];
-                            personalTastes[key][taste] = metadata[i]
-                                .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                                .Select(int.Parse)
-                                .ToArray();
-                        }
+                        foreach (string value in personalData[tasteKey].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+                            add(value);
                     }
                 }
             }
 
-            // merge data structures
+            // get items
+            List<Object> items = new List<Object>();
+            {
+                foreach (var itemData in Game1.objectInformation)
+                {
+                    // check item ID
+                    if (itemIDs.Contains(itemData.Key))
+                        items.Add(new Object(itemData.Key, 1));
+
+                    // check category
+                    else
+                    {
+                        string[] parts = itemData.Value.Split('/')[Object.objectTypeIndex].Split(' ');
+                        if (parts.Length <= 1)
+                            continue;
+
+                        int categoryID = int.Parse(parts[1]);
+                        if (categoryIDs.Contains(categoryID))
+                            items.Add(new Object(itemData.Key, 1));
+                    }
+                }
+            }
+
+            // get gift tastes
             var giftTastes = new Dictionary<GiftTaste, IDictionary<string, int[]>>
             {
                 [GiftTaste.Love] = new Dictionary<string, int[]>(),
@@ -494,15 +520,21 @@ namespace Pathoschild.LookupAnything
                 [GiftTaste.Dislike] = new Dictionary<string, int[]>(),
                 [GiftTaste.Hate] = new Dictionary<string, int[]>()
             };
-            foreach (string villagerName in personalTastes.Keys)
+            foreach (NPC villager in Utility.getAllCharacters())
             {
-                foreach (GiftTaste taste in personalTastes[villagerName].Keys)
-                    giftTastes[taste][villagerName] = personalTastes[villagerName][taste];
-            }
-            foreach (GiftTaste taste in universalTastes.Keys)
-            {
-                foreach (string villagerName in giftTastes[taste].Keys.ToArray())
-                    giftTastes[taste][villagerName] = giftTastes[taste][villagerName].Concat(universalTastes[taste]).ToArray();
+                string name = villager.getName();
+
+                // skip ungiftable NPCs
+                if (!villagerKeys.Contains(name))
+                    continue;
+
+                // save gift tastes
+                IDictionary<GiftTaste, int[]> tastes = items
+                    .Select(item => new { ID = item.parentSheetIndex, Taste = (GiftTaste)villager.getGiftTasteForThisItem(item) })
+                    .GroupBy(item => item.Taste)
+                    .ToDictionary(group => group.Key, group => group.Select(item => item.ID).ToArray());
+                foreach (GiftTaste taste in tastes.Keys)
+                    giftTastes[taste][name] = tastes[taste].ToArray();
             }
 
             return giftTastes;
