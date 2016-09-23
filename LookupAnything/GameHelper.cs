@@ -429,87 +429,25 @@ namespace Pathoschild.LookupAnything
         }
 
         /// <summary>Get the villagers' gift tastes.</summary>
-        /// <remarks>Reverse engineered from <c>Data\NPCGiftTastes</c> and <see cref="NPC.getGiftTasteForThisItem"/>.</remarks>
         private static IDictionary<GiftTaste, IDictionary<string, int[]>> FetchGiftTastes()
         {
-            // extract game data
+            // get gift taste data
+            GiftTasteModel[] tasteData = DataParser.GetGiftTastes(Game1.NPCGiftTastes).ToArray();
             HashSet<string> villagerKeys = new HashSet<string>();
-            HashSet<int> itemIDs = new HashSet<int>();
-            HashSet<int> categoryIDs = new HashSet<int>();
+            HashSet<int> refIDs = new HashSet<int>();
+            foreach (GiftTasteModel entry in tasteData)
             {
-                // define keys
-                var universalKeys = new Dictionary<string, GiftTaste>
-                {
-                    ["Universal_Love"] = GiftTaste.Love,
-                    ["Universal_Like"] = GiftTaste.Like,
-                    ["Universal_Neutral"] = GiftTaste.Neutral,
-                    ["Universal_Dislike"] = GiftTaste.Dislike,
-                    ["Universal_Hate"] = GiftTaste.Hate
-                };
-                var personalMetadataKeys = new Dictionary<int, GiftTaste>
-                {
-                    // metadata is paired: odd values contain a list of item references, even values contain the reaction dialogue
-                    [1] = GiftTaste.Love,
-                    [3] = GiftTaste.Like,
-                    [5] = GiftTaste.Dislike,
-                    [7] = GiftTaste.Hate,
-                    [9] = GiftTaste.Neutral
-                };
-
-                // extract data
-                Action<string> add = value =>
-                {
-                    int refID = int.Parse(value);
-                    if (refID < 0)
-                        categoryIDs.Add(refID);
-                    else
-                        itemIDs.Add(refID);
-                };
-                foreach (string key in Game1.NPCGiftTastes.Keys)
-                {
-                    string data = Game1.NPCGiftTastes[key];
-
-                    // universal tastes
-                    if (universalKeys.ContainsKey(key))
-                    {
-                        foreach (string value in data.Split(' '))
-                            add(value);
-                        continue;
-                    }
-
-                    // personal tastes
-                    villagerKeys.Add(key);
-                    string[] personalData = data.Split('/');
-                    foreach (int tasteKey in personalMetadataKeys.Keys)
-                    {
-                        foreach (string value in personalData[tasteKey].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
-                            add(value);
-                    }
-                }
+                if (!entry.IsUniversal)
+                    villagerKeys.Add(entry.Villager);
+                refIDs.Add(entry.RefID);
             }
 
-            // get items
-            List<Object> items = new List<Object>();
-            {
-                foreach (var itemData in Game1.objectInformation)
-                {
-                    // check item ID
-                    if (itemIDs.Contains(itemData.Key))
-                        items.Add(new Object(itemData.Key, 1));
-
-                    // check category
-                    else
-                    {
-                        string[] parts = itemData.Value.Split('/')[Object.objectTypeIndex].Split(' ');
-                        if (parts.Length <= 1)
-                            continue;
-
-                        int categoryID = int.Parse(parts[1]);
-                        if (categoryIDs.Contains(categoryID))
-                            items.Add(new Object(itemData.Key, 1));
-                    }
-                }
-            }
+            // get item data
+            Object[] items = DataParser
+                .GetObjects(Game1.objectInformation)
+                .Where(p => refIDs.Contains(p.ParentSpriteIndex) || refIDs.Contains(p.Category))
+                .Select(p => GameHelper.GetObjectBySpriteIndex(p.ParentSpriteIndex))
+                .ToArray();
 
             // get gift tastes
             var giftTastes = new Dictionary<GiftTaste, IDictionary<string, int[]>>
@@ -523,12 +461,9 @@ namespace Pathoschild.LookupAnything
             foreach (NPC villager in Utility.getAllCharacters())
             {
                 string name = villager.getName();
-
-                // skip ungiftable NPCs
                 if (!villagerKeys.Contains(name))
                     continue;
 
-                // save gift tastes
                 IDictionary<GiftTaste, int[]> tastes = items
                     .Select(item => new { ID = item.parentSheetIndex, Taste = (GiftTaste)villager.getGiftTasteForThisItem(item) })
                     .GroupBy(item => item.Taste)
@@ -544,29 +479,7 @@ namespace Pathoschild.LookupAnything
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         private static RecipeModel[] FetchRecipes(Metadata metadata)
         {
-            List<RecipeModel> recipes = new List<RecipeModel>();
-
-            // cooking recipes
-            recipes.AddRange(
-                from entry in CraftingRecipe.cookingRecipes
-                let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: true)
-                select new RecipeModel(recipe)
-            );
-
-            // crafting recipes
-            recipes.AddRange(
-                from entry in CraftingRecipe.craftingRecipes
-                let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: false)
-                select new RecipeModel(recipe)
-            );
-
-            // recipes not available from game data
-            recipes.AddRange(
-                from entry in metadata.Recipes
-                select new RecipeModel(entry.Name, entry.Type, entry.Ingredients, () => GameHelper.GetObjectBySpriteIndex(entry.Output), false, entry.ExceptIngredients)
-            );
-
-            return recipes.OrderBy(p => p.Name).ToArray();
+            return DataParser.GetRecipes(metadata).ToArray();
         }
     }
 }
