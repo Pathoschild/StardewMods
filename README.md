@@ -53,7 +53,7 @@ file if you want. These are the available settings:
 | `HideOnKeyUp`     | Default `false`. If enabled, the lookup window will be shown while you hold `F1` and disappear when you release it.
 
 ## Versions
-1.0
+1.0:
 * Initial version.
 * Added support for NPCs (villagers, pets, farm animals, monsters, and players), items (crops and
    inventory), and map objects (crafting objects, fences, trees, and mine objects).
@@ -62,7 +62,7 @@ file if you want. These are the available settings:
 * Added version check on load.
 * Let players lookup a target from any visible part of its sprite.
 
-1.1
+1.1:
 * On item lookup:
   * removed crafting recipe;
   * added crafting, cooking, and furnace recipes which use this item as an ingredient.
@@ -77,6 +77,11 @@ file if you want. These are the available settings:
   * fixed an error when displaying certain recipes.
 * Added optional mode which hides the lookup UI when you release the button.
 * `F1` now toggles the lookup UI (i.e. will close the lookup if it's already open).
+
+1.3:
+* Added item icon to crafting result and farm animal produce fields.
+* Fixed wrong gift taste shown if there's a conflict between universal tastes (e.g. everyone likes Kale) and personal tastes (e.g. Abigail dislikes Kale).
+* Internal refactoring.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
