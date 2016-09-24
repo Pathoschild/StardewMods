@@ -23,7 +23,7 @@ namespace Pathoschild.LookupAnything
         ** Properties
         *********/
         /// <summary>The cached villagers' gift tastes, indexed by taste and then villager name. Each item reference is a category (negative value) or parent sprite index (positive value).</summary>
-        private static Lazy<IDictionary<GiftTaste, IDictionary<string, int[]>>> GiftTastes;
+        private static Lazy<IDictionary<GiftTaste, IDictionary<string, HashSet<int>>>> GiftTastes;
 
         /// <summary>The cached list of characters who can receive gifts.</summary>
         private static Lazy<NPC[]> GiftableVillagers;
@@ -42,7 +42,7 @@ namespace Pathoschild.LookupAnything
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public static void ResetCache(Metadata metadata)
         {
-            GameHelper.GiftTastes = new Lazy<IDictionary<GiftTaste, IDictionary<string, int[]>>>(GameHelper.FetchGiftTastes);
+            GameHelper.GiftTastes = new Lazy<IDictionary<GiftTaste, IDictionary<string, HashSet<int>>>>(GameHelper.FetchGiftTastes);
             GameHelper.GiftableVillagers = new Lazy<NPC[]>(GameHelper.FetchGiftableVillagers);
             GameHelper.Recipes = new Lazy<RecipeModel[]>(() => GameHelper.FetchRecipes(metadata));
         }
@@ -428,9 +428,9 @@ namespace Pathoschild.LookupAnything
         }
 
         /// <summary>Get the villagers' gift tastes.</summary>
-        private static IDictionary<GiftTaste, IDictionary<string, int[]>> FetchGiftTastes()
+        private static IDictionary<GiftTaste, IDictionary<string, HashSet<int>>> FetchGiftTastes()
         {
-            // get gift taste data
+            // get gift tastes
             GiftTasteModel[] tasteData = DataParser.GetGiftTastes(Game1.NPCGiftTastes).ToArray();
             HashSet<string> villagerKeys = new HashSet<string>();
             HashSet<int> refIDs = new HashSet<int>();
@@ -441,37 +441,60 @@ namespace Pathoschild.LookupAnything
                 refIDs.Add(entry.RefID);
             }
 
-            // get item data
-            Object[] items = DataParser
+            // get item ID=>category lookup
+            IDictionary<int, int> itemCategoryLookup = DataParser
                 .GetObjects(Game1.objectInformation)
                 .Where(p => refIDs.Contains(p.ParentSpriteIndex) || refIDs.Contains(p.Category))
-                .Select(p => GameHelper.GetObjectBySpriteIndex(p.ParentSpriteIndex))
-                .ToArray();
+                .ToDictionary(p => p.ParentSpriteIndex, p => p.Category);
 
-            // get gift tastes
-            var giftTastes = new Dictionary<GiftTaste, IDictionary<string, int[]>>
+            // resolve gift tastes
+            IDictionary<GiftTaste, IDictionary<string, HashSet<int>>> tastes;
             {
-                [GiftTaste.Love] = new Dictionary<string, int[]>(),
-                [GiftTaste.Like] = new Dictionary<string, int[]>(),
-                [GiftTaste.Neutral] = new Dictionary<string, int[]>(),
-                [GiftTaste.Dislike] = new Dictionary<string, int[]>(),
-                [GiftTaste.Hate] = new Dictionary<string, int[]>()
-            };
-            foreach (NPC villager in Utility.getAllCharacters())
-            {
-                string name = villager.getName();
-                if (!villagerKeys.Contains(name))
-                    continue;
+                // build data structure
+                tastes = new Dictionary<GiftTaste, IDictionary<string, HashSet<int>>>
+                {
+                    [GiftTaste.Love] = villagerKeys.ToDictionary(p => p, p => new HashSet<int>()),
+                    [GiftTaste.Like] = villagerKeys.ToDictionary(p => p, p => new HashSet<int>()),
+                    [GiftTaste.Neutral] = villagerKeys.ToDictionary(p => p, p => new HashSet<int>()),
+                    [GiftTaste.Dislike] = villagerKeys.ToDictionary(p => p, p => new HashSet<int>()),
+                    [GiftTaste.Hate] = villagerKeys.ToDictionary(p => p, p => new HashSet<int>())
+                };
 
-                IDictionary<GiftTaste, int[]> tastes = items
-                    .Select(item => new { ID = item.parentSheetIndex, Taste = (GiftTaste)villager.getGiftTasteForThisItem(item) })
-                    .GroupBy(item => item.Taste)
-                    .ToDictionary(group => group.Key, group => group.Select(item => item.ID).ToArray());
-                foreach (GiftTaste taste in tastes.Keys)
-                    giftTastes[taste][name] = tastes[taste].ToArray();
+                // resolve personal tastes
+                var itemsWithPersonalTastes = villagerKeys.ToDictionary(p => p, p => new HashSet<int>());
+                foreach (GiftTasteModel entry in tasteData.Where(p => !p.IsUniversal))
+                {
+                    // get item IDs
+                    IEnumerable<int> itemIDs = entry.IsCategory
+                        ? itemCategoryLookup.Where(p => p.Value == entry.RefID).Select(p => p.Key)
+                        : new[] { entry.RefID };
+
+                    // add tastes
+                    foreach (int itemID in itemIDs)
+                    {
+                        tastes[entry.Taste][entry.Villager].Add(itemID);
+                        itemsWithPersonalTastes[entry.Villager].Add(itemID);
+                    }
+                }
+
+                // resolve universal tastes (where they don't contradict personal tastes)
+                foreach (GiftTasteModel entry in tasteData.Where(p => p.IsUniversal))
+                {
+                    // get item IDs
+                    int[] itemIDs = entry.IsCategory
+                        ? itemCategoryLookup.Where(p => p.Value == entry.RefID).Select(p => p.Key).ToArray()
+                        : new[] { entry.RefID };
+
+                    // add tastes
+                    foreach (string villager in villagerKeys)
+                    {
+                        foreach (int itemID in itemIDs.Except(itemsWithPersonalTastes[villager]))
+                            tastes[entry.Taste][villager].Add(itemID);
+                    }
+                }
             }
 
-            return giftTastes;
+            return tastes;
         }
 
         /// <summary>Get the recipe ingredients.</summary>
