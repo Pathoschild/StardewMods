@@ -90,25 +90,8 @@ namespace Pathoschild.LookupAnything.Framework.Fields
                 }
 
                 // draw icon
-                {
-                    // get sprite data
-                    Tuple<Texture2D, Rectangle> spriteData = GameHelper.GetSprite(entry.Item);
-                    if (spriteData != null)
-                    {
-                        Texture2D spriteSheet = spriteData.Item1;
-                        Rectangle spriteRectangle = spriteData.Item2;
-
-                        // calculate dimensions
-                        float largestDimension = Math.Max(spriteRectangle.Width, spriteRectangle.Height);
-                        float scale = iconSize.X / largestDimension;
-                        float leftOffset = Math.Max((iconSize.X - (spriteRectangle.Width * scale)) / 2, 0);
-                        float topOffset = Math.Max((iconSize.Y - (spriteRectangle.Height * scale)) / 2, 0);
-
-                        // draw
-                        Color iconTint = entry.IsKnown ? Color.White : Color.White * .5f;
-                        spriteBatch.DrawSprite(spriteSheet, spriteRectangle, position.X + leftIndent + leftOffset, position.Y + height + topOffset, iconTint, scale);
-                    }
-                }
+                Color iconColor = entry.IsKnown ? Color.White : Color.White * .5f;
+                spriteBatch.DrawIcon(entry.Item, position.X + leftIndent, position.Y + height, iconSize, iconColor);
 
                 // draw text
                 Color color = entry.IsKnown ? Color.Black : Color.Gray;

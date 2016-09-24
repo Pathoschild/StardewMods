@@ -164,7 +164,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
 
             // crafting
             if (obj?.heldObject != null)
-                yield return new GenericField("Crafting", $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + GenericField.GetString(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready") + ".");
+                yield return new ItemIconField("Crafting", obj.heldObject, $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + GenericField.GetString(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready"));
 
             // item
             if (showInventoryFields)

@@ -51,7 +51,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             yield return new PercentageBarField("Happiness", animal.happiness, byte.MaxValue, Color.Green, Color.Gray, $"{Math.Round(animal.happiness / (metadata.Constants.AnimalMaxHappiness * 1f) * 100)}%");
             yield return new GenericField("Mood today", animal.getMoodMessage());
             yield return new GenericField("Complaints", this.GetMoodReason(animal));
-            yield return new GenericField("Produce ready", animal.currentProduce > 0 ? new StardewValley.Object(animal.currentProduce, 1).name : null);
+            yield return new ItemIconField("Produce ready", animal.currentProduce > 0 ? new StardewValley.Object(animal.currentProduce, 1) : null);
             if (!isFullyGrown)
                 yield return new GenericField("Growth", $"{daysUntilGrown} {GameHelper.Pluralise(daysUntilGrown, "day")} (on {dayOfMaturity.Item1} {dayOfMaturity.Item2})");
             yield return new SaleValueField("Sells for", animal.getSellPrice(), 1);
