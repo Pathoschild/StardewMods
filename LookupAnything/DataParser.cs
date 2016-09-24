@@ -49,7 +49,7 @@ namespace Pathoschild.LookupAnything
                 {
                     GiftTaste taste = universal[villager];
                     foreach (string value in tasteStr.Split(' '))
-                        yield return new GiftTasteModel(taste, "*", int.Parse(value), true);
+                        yield return new GiftTasteModel(taste, "*", int.Parse(value), isUniversal: true);
                 }
                 else
                 {
@@ -57,7 +57,7 @@ namespace Pathoschild.LookupAnything
                     foreach (KeyValuePair<int, GiftTaste> taste in personalMetadataKeys)
                     {
                         foreach (string value in personalData[taste.Key].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
-                            yield return new GiftTasteModel(taste.Value, villager, int.Parse(value), false);
+                            yield return new GiftTasteModel(taste.Value, villager, int.Parse(value));
                     }
                 }
             }

@@ -32,7 +32,7 @@ namespace Pathoschild.LookupAnything.Framework.Models
         /// <param name="villager">The name of the target villager.</param>
         /// <param name="refID">The item parent sprite index (if positive) or category (if negative).</param>
         /// <param name="isUniversal">Whether this gift taste applies to all villagers unless otherwise excepted.</param>
-        public GiftTasteModel(GiftTaste taste, string villager, int refID, bool isUniversal)
+        public GiftTasteModel(GiftTaste taste, string villager, int refID, bool isUniversal = false)
         {
             this.Taste = taste;
             this.Villager = villager;

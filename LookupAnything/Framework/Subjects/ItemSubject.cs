@@ -312,7 +312,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         private IDictionary<GiftTaste, string[]> GetGiftTastes(Item item)
         {
             return GameHelper.GetGiftTastes(item)
-                .GroupBy(p => p.Value, p => p.Key.getName())
+                .GroupBy(p => p.Value, p => p.Key)
                 .ToDictionary(p => p.Key, p => p.ToArray());
         }
     }
