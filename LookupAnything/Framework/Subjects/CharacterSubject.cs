@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Fields;
@@ -116,7 +115,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             // use character portrait (most NPCs)
             if (npc.Portrait != null)
             {
-                spriteBatch.DrawBlock(npc.Portrait, new Rectangle(0, 0, NPC.portrait_width, NPC.portrait_height), position.X, position.Y, Color.White, size.X / NPC.portrait_width);
+                spriteBatch.DrawSprite(npc.Portrait, new Rectangle(0, 0, NPC.portrait_width, NPC.portrait_height), position.X, position.Y, Color.White, size.X / NPC.portrait_width);
                 return true;
             }
 

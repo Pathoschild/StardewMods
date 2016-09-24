@@ -123,6 +123,7 @@
     <Compile Include="Framework\Targets\GenericTarget.cs" />
     <Compile Include="Framework\Models\RecipeModel.cs" />
     <Compile Include="Framework\RecipeType.cs" />
+    <Compile Include="DrawHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data.json" />

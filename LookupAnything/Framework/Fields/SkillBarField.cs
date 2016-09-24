@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Components;
 
 namespace Pathoschild.LookupAnything.Framework.Fields
 {
@@ -62,7 +61,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
             }
 
             // draw text
-            Vector2 textSize = spriteBatch.DrawStringBlock(font, text, position + new Vector2(leftOffset, 0), wrapWidth - leftOffset);
+            Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(leftOffset, 0), wrapWidth - leftOffset);
             return new Vector2(leftOffset + textSize.X, Math.Max(barHeight, textSize.Y));
         }
     }

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework.Models;
 using StardewValley;
 
@@ -86,7 +85,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
                 // draw type
                 if (entry.Type != lastType)
                 {
-                    height += spriteBatch.DrawStringBlock(font, $"{entry.Type}:", position + new Vector2(0, height), wrapWidth).Y;
+                    height += spriteBatch.DrawTextBlock(font, $"{entry.Type}:", position + new Vector2(0, height), wrapWidth).Y;
                     lastType = entry.Type;
                 }
 
@@ -107,13 +106,13 @@ namespace Pathoschild.LookupAnything.Framework.Fields
 
                         // draw
                         Color iconTint = entry.IsKnown ? Color.White : Color.White * .5f;
-                        spriteBatch.DrawBlock(spriteSheet, spriteRectangle, position.X + leftIndent + leftOffset, position.Y + height + topOffset, iconTint, scale);
+                        spriteBatch.DrawSprite(spriteSheet, spriteRectangle, position.X + leftIndent + leftOffset, position.Y + height + topOffset, iconTint, scale);
                     }
                 }
 
                 // draw text
                 Color color = entry.IsKnown ? Color.Black : Color.Gray;
-                Vector2 textSize = spriteBatch.DrawStringBlock(font, $"{entry.Name} (needs {entry.NumberRequired})", position + new Vector2(leftIndent + iconSize.X + 3, height + 5), wrapWidth - iconSize.X, color);
+                Vector2 textSize = spriteBatch.DrawTextBlock(font, $"{entry.Name} (needs {entry.NumberRequired})", position + new Vector2(leftIndent + iconSize.X + 3, height + 5), wrapWidth - iconSize.X, color);
 
                 height += Math.Max(iconSize.Y, textSize.Y) + 5;
             }

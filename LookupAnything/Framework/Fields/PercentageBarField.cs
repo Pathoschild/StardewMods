@@ -57,7 +57,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         {
             Vector2 barSize = this.DrawBar(spriteBatch, position, this.CurrentValue / (this.MaxValue * 1f), this.FilledColor, this.EmptyColor, wrapWidth);
             Vector2 textSize = !string.IsNullOrWhiteSpace(this.Text)
-                ? spriteBatch.DrawStringBlock(font, this.Text, new Vector2(position.X + barSize.X + 3, position.Y), wrapWidth)
+                ? spriteBatch.DrawTextBlock(font, this.Text, new Vector2(position.X + barSize.X + 3, position.Y), wrapWidth)
                 : Vector2.Zero;
             return new Vector2(barSize.X + 3 + textSize.X, Math.Max(barSize.Y, textSize.Y));
         }

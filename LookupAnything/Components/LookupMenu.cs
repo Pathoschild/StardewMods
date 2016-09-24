@@ -114,7 +114,7 @@ namespace Pathoschild.LookupAnything.Components
             // get font
             SpriteFont font = Game1.smallFont;
             float lineHeight = font.MeasureString("ABC").Y;
-            float spaceWidth = Sprites.GetSpaceWidth(font);
+            float spaceWidth = DrawHelper.GetSpaceWidth(font);
 
             // draw background
             // (This uses a separate sprite batch because it needs to be drawn before the
@@ -123,7 +123,7 @@ namespace Pathoschild.LookupAnything.Components
             using (SpriteBatch backgroundBatch = new SpriteBatch(Game1.graphics.GraphicsDevice))
             {
                 backgroundBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null);
-                backgroundBatch.DrawBlock(Sprites.Letter.Sheet, Sprites.Letter.Sprite, x, y, scale: this.width / (float)Sprites.Letter.Sprite.Width);
+                backgroundBatch.DrawSprite(Sprites.Letter.Sheet, Sprites.Letter.Sprite, x, y, scale: this.width / (float)Sprites.Letter.Sprite.Width);
                 backgroundBatch.End();
             }
 
@@ -150,15 +150,15 @@ namespace Pathoschild.LookupAnything.Components
                 {
                     // draw name & item type
                     {
-                        Vector2 nameSize = contentBatch.DrawStringBlock(font, $"{subject.Name}.", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: true);
-                        Vector2 typeSize = contentBatch.DrawStringBlock(font, $"{subject.Type}.", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
+                        Vector2 nameSize = contentBatch.DrawTextBlock(font, $"{subject.Name}.", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: true);
+                        Vector2 typeSize = contentBatch.DrawTextBlock(font, $"{subject.Type}.", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
                         topOffset += Math.Max(nameSize.Y, typeSize.Y);
                     }
 
                     // draw description
                     if (subject.Description != null)
                     {
-                        Vector2 size = contentBatch.DrawStringBlock(font, subject.Description?.Replace(Environment.NewLine, " "), new Vector2(x + leftOffset, y + topOffset), wrapWidth);
+                        Vector2 size = contentBatch.DrawTextBlock(font, subject.Description?.Replace(Environment.NewLine, " "), new Vector2(x + leftOffset, y + topOffset), wrapWidth);
                         topOffset += size.Y;
                     }
 
@@ -178,11 +178,11 @@ namespace Pathoschild.LookupAnything.Components
                                 continue;
 
                             // draw label & value
-                            Vector2 labelSize = contentBatch.DrawStringBlock(font, field.Label, new Vector2(x + leftOffset + cellPadding, y + topOffset + cellPadding), wrapWidth);
+                            Vector2 labelSize = contentBatch.DrawTextBlock(font, field.Label, new Vector2(x + leftOffset + cellPadding, y + topOffset + cellPadding), wrapWidth);
                             Vector2 valuePosition = new Vector2(x + leftOffset + labelWidth + cellPadding * 3, y + topOffset + cellPadding);
                             Vector2 valueSize =
                                 field.DrawValue(contentBatch, font, valuePosition, valueWidth)
-                                ?? contentBatch.DrawStringBlock(font, field.Value, valuePosition, valueWidth);
+                                ?? contentBatch.DrawTextBlock(font, field.Value, valuePosition, valueWidth);
                             Vector2 rowSize = new Vector2(labelWidth + valueWidth + cellPadding * 4, Math.Max(labelSize.Y, valueSize.Y));
 
                             // draw table row
@@ -204,9 +204,9 @@ namespace Pathoschild.LookupAnything.Components
 
                 // draw scroll icons
                 if (this.MaxScroll > 0 && this.CurrentScroll > 0)
-                    contentBatch.DrawBlock(Sprites.Icons.Sheet, Sprites.Icons.UpArrow, x + gutter, y + contentHeight - Sprites.Icons.DownArrow.Height - gutter - Sprites.Icons.UpArrow.Height);
+                    contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.UpArrow, x + gutter, y + contentHeight - Sprites.Icons.DownArrow.Height - gutter - Sprites.Icons.UpArrow.Height);
                 if (this.MaxScroll > 0 && this.CurrentScroll < this.MaxScroll)
-                    contentBatch.DrawBlock(Sprites.Icons.Sheet, Sprites.Icons.DownArrow, x + gutter, y + contentHeight - Sprites.Icons.DownArrow.Height);
+                    contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.DownArrow, x + gutter, y + contentHeight - Sprites.Icons.DownArrow.Height);
 
                 // end draw
                 contentBatch.End();

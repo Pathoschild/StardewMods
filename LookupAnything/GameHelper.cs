@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework;
 using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Models;
@@ -387,9 +386,9 @@ namespace Pathoschild.LookupAnything
             const int paddingSize = 27;
             const int gutterSize = 20;
 
-            Vector2 labelSize = spriteBatch.DrawStringBlock(Game1.smallFont, label, position + new Vector2(gutterSize), wrapWidth); // draw text to get wrapped text dimensions
+            Vector2 labelSize = spriteBatch.DrawTextBlock(Game1.smallFont, label, position + new Vector2(gutterSize), wrapWidth); // draw text to get wrapped text dimensions
             IClickableMenu.drawTextureBox(spriteBatch, Game1.menuTexture, new Rectangle(0, 256, 60, 60), (int)position.X, (int)position.Y, (int)labelSize.X + paddingSize + gutterSize, (int)labelSize.Y + paddingSize, Color.White);
-            spriteBatch.DrawStringBlock(Game1.smallFont, label, position + new Vector2(gutterSize), wrapWidth); // draw again over texture box
+            spriteBatch.DrawTextBlock(Game1.smallFont, label, position + new Vector2(gutterSize), wrapWidth); // draw again over texture box
 
             return labelSize + new Vector2(paddingSize);
         }

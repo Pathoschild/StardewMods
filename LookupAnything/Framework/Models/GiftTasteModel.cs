@@ -3,7 +3,7 @@ using Pathoschild.LookupAnything.Framework.Constants;
 namespace Pathoschild.LookupAnything.Framework.Models
 {
     /// <summary>A gift taste entry parsed from the game's data files.</summary>
-    public class GiftTasteModel
+    internal class GiftTasteModel
     {
         /*********
         ** Accessors

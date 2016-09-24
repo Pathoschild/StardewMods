@@ -1,7 +1,7 @@
 namespace Pathoschild.LookupAnything.Framework.Models
 {
     /// <summary>An object entry parsed from the game's data files.</summary>
-    public class ObjectModel
+    internal class ObjectModel
     {
         /*********
         ** Accessors

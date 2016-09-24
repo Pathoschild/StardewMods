@@ -54,19 +54,19 @@ namespace Pathoschild.LookupAnything.Framework.Fields
             float leftOffset = 0;
             for (int i = 0; i < filledHearts; i++)
             {
-                spriteBatch.DrawBlock(Sprites.Icons.Sheet, Sprites.Icons.FilledHeart, position.X + leftOffset, position.Y, scale: Game1.pixelZoom);
+                spriteBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.FilledHeart, position.X + leftOffset, position.Y, scale: Game1.pixelZoom);
                 leftOffset += Sprites.Icons.FilledHeart.Width * Game1.pixelZoom;
             }
             for (int i = 0; i < emptyHearts; i++)
             {
-                spriteBatch.DrawBlock(Sprites.Icons.Sheet, Sprites.Icons.EmptyHeart, position.X + leftOffset, position.Y, scale: Game1.pixelZoom);
+                spriteBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.EmptyHeart, position.X + leftOffset, position.Y, scale: Game1.pixelZoom);
                 leftOffset += Sprites.Icons.FilledHeart.Width * Game1.pixelZoom;
             }
 
             // draw caption
-            float spaceSize = Sprites.GetSpaceWidth(font);
+            float spaceSize = DrawHelper.GetSpaceWidth(font);
             Vector2 textSize = this.FriendshipPoints < this.MaxPoints
-                ? spriteBatch.DrawStringBlock(font, $"(next in {this.PointsPerLevel - (this.FriendshipPoints % this.PointsPerLevel)} pts)", new Vector2(position.X + leftOffset + spaceSize, position.Y), wrapWidth - leftOffset)
+                ? spriteBatch.DrawTextBlock(font, $"(next in {this.PointsPerLevel - (this.FriendshipPoints % this.PointsPerLevel)} pts)", new Vector2(position.X + leftOffset + spaceSize, position.Y), wrapWidth - leftOffset)
                 : Vector2.Zero;
 
             return new Vector2(Math.Max(Sprites.Icons.FilledHeart.Height, textSize.X + spaceSize), Math.Max(Sprites.Icons.FilledHeart.Height * Game1.pixelZoom, textSize.Y));
