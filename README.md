@@ -53,28 +53,30 @@ file if you want. These are the available settings:
 | `HideOnKeyUp`     | Default `false`. If enabled, the lookup window will be shown while you hold `F1` and disappear when you release it.
 
 ## Versions
-* 1.2
-  * On item lookup:
-    * added crop info for seeds;
-    * added recipes for the charcoal kiln, cheese press, keg, loom, mayonnaise machine, oil maker,
-      preserves jar, recycling machine, and slime egg-press;
-    * merged recipe fields;
-    * fixed an error when displaying certain recipes.
-  * Added optional mode which hides the lookup UI when you release the button.
-  * `F1` now toggles the lookup UI (i.e. will close the lookup if it's already open).
-* 1.1
-  * On item lookup:
-    * removed crafting recipe;
-    * added crafting, cooking, and furnace recipes which use this item as an ingredient.
-  * Added error if game or SMAPI are out of date.
-* 1.0
-  * Initial version.
-  * Added support for NPCs (villagers, pets, farm animals, monsters, and players), items (crops and
-    inventory), and map objects (crafting objects, fences, trees, and mine objects).
-  * Added controller support and configurable bindings.
-  * Added hidden debug mode.
-  * Added version check on load.
-  * Let players lookup a target from any visible part of its sprite.
+1.0
+* Initial version.
+* Added support for NPCs (villagers, pets, farm animals, monsters, and players), items (crops and
+   inventory), and map objects (crafting objects, fences, trees, and mine objects).
+* Added controller support and configurable bindings.
+* Added hidden debug mode.
+* Added version check on load.
+* Let players lookup a target from any visible part of its sprite.
+
+1.1
+* On item lookup:
+  * removed crafting recipe;
+  * added crafting, cooking, and furnace recipes which use this item as an ingredient.
+* Added error if game or SMAPI are out of date.
+
+1.2:
+* On item lookup:
+  * added crop info for seeds;
+  * added recipes for the charcoal kiln, cheese press, keg, loom, mayonnaise machine, oil maker,
+    preserves jar, recycling machine, and slime egg-press;
+  * merged recipe fields;
+  * fixed an error when displaying certain recipes.
+* Added optional mode which hides the lookup UI when you release the button.
+* `F1` now toggles the lookup UI (i.e. will close the lookup if it's already open).
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
