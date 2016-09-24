@@ -79,8 +79,9 @@ file if you want. These are the available settings:
 * `F1` now toggles the lookup UI (i.e. will close the lookup if it's already open).
 
 1.3:
-* Added item icon to crafting result and farm animal produce fields.
-* Fixed wrong gift taste shown if there's a conflict between universal tastes (e.g. everyone likes Kale) and personal tastes (e.g. Abigail dislikes Kale).
+* Added item icons to crafting output, farm animal produce, and monster drops.
+* Fixed wrong gift taste shown if there's a conflict between universal tastes (e.g. everyone likes
+  Kale) and personal tastes (e.g. Abigail dislikes Kale).
 * Internal refactoring.
 
 ## Compiling the mod

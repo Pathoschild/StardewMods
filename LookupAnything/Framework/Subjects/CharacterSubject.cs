@@ -84,10 +84,10 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 case TargetType.Monster:
                     // basic info
                     Monster monster = (Monster)npc;
-                    string[] drops = (from id in monster.objectsToDrop let item = GameHelper.GetObjectBySpriteIndex(id) orderby item.Name select item.Name).ToArray();
+                    Item[] drops = (from id in monster.objectsToDrop let item = GameHelper.GetObjectBySpriteIndex(id) orderby item.Name select (Item)item).ToArray();
                     yield return new GenericField("Invincible", $"For {GameHelper.GetPrivateField<int>(monster, "invincibleCountdown")} seconds", hasValue: monster.isInvincible());
                     yield return new PercentageBarField("Health", monster.health, monster.maxHealth, Color.Green, Color.Gray, $"{Math.Round((monster.health / (monster.maxHealth * 1f) * 100))}% ({monster.health} of {monster.maxHealth})");
-                    yield return new GenericField("Will drop", drops.Any() ? string.Join(", ", drops) : "nothing");
+                    yield return new ItemDropListField("Will drop", drops, defaultText: "nothing");
                     yield return new GenericField("XP", monster.experienceGained);
                     yield return new GenericField("Defence", monster.resilience);
                     yield return new GenericField("Attack", monster.damageToFarmer);

@@ -73,6 +73,7 @@
     <Compile Include="Framework\Data\ObjectSpriteSheet.cs" />
     <Compile Include="Framework\Data\RecipeData.cs" />
     <Compile Include="Framework\Fields\ItemIconField.cs" />
+    <Compile Include="Framework\Fields\ItemDropListField.cs" />
     <Compile Include="Framework\Fields\SkillBarField.cs" />
     <Compile Include="Framework\GitVersion.cs" />
     <Compile Include="Framework\InputMapConfiguration.cs" />
