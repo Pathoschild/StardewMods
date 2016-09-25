@@ -9,7 +9,6 @@ using Pathoschild.LookupAnything.Framework.Fields;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Monsters;
-using StardewValley.Objects;
 using Object = StardewValley.Object;
 
 namespace Pathoschild.LookupAnything.Framework.Subjects
@@ -110,11 +109,10 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             int[] drops = monster.objectsToDrop.ToArray();
             ItemDropData[] possibleDrops = DataParser.GetMonsters().First(p => p.Name == monster.getName()).Drops;
 
-            float chanceMultiplier = Game1.player.isWearingRing(Ring.burglarsRing) ? 2 : 1;
             return (
                 from possibleDrop in possibleDrops
                 let isGuaranteed = drops.Contains(possibleDrop.ItemID)
-                select new ItemDropData(possibleDrop.ItemID, possibleDrop.MaxDrop, isGuaranteed ? 1 : possibleDrop.Probability * chanceMultiplier)
+                select new ItemDropData(possibleDrop.ItemID, possibleDrop.MaxDrop, isGuaranteed ? 1 : possibleDrop.Probability)
             );
         }
 
