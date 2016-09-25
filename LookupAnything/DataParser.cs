@@ -10,55 +10,156 @@ using Object = StardewValley.Object;
 
 namespace Pathoschild.LookupAnything
 {
-    /// <summary>Parses the raw game data into usable models.</summary>
+    /// <summary>Parses the raw game data into usable models. These may be expensive operations and should be cached.</summary>
     internal class DataParser
     {
         /*********
-        ** Accessors
+        ** Public methods
         *********/
         /// <summary>Parse gift tastes.</summary>
-        /// <remarks>Reverse engineered from <c>Data\NPCGiftTastes</c> and <see cref="StardewValley.NPC.getGiftTasteForThisItem"/>.</remarks>
-        public static IEnumerable<GiftTasteModel> GetGiftTastes()
+        /// <param name="objects">The game's object data.</param>
+        /// <remarks>
+        /// Reverse engineered from <c>Data\NPCGiftTastes</c> and <see cref="StardewValley.NPC.getGiftTasteForThisItem"/>.
+        /// The game decides a villager's gift taste using a complicated algorithm which boils down to the first match out of:
+        ///   1. A villager's personal taste by item ID.
+        ///   2. A universal taste by item ID.
+        ///   3. A villager's personal taste by category.
+        ///   4. A universal taste by category (if not neutral).
+        ///   5. If the item's edibility is less than 0 (but not -300), hate.
+        ///   6. If the item's price is less than 20, dislike.
+        ///   7. If the item is an artifact...
+        ///      7a. and the NPC is Penny, like.
+        ///      7b. else neutral.
+        /// 
+        /// For each rule, their tastes are checked in this order: love, hate, like, dislike, or
+        /// neutral. (That is, if an NPC both loves and hates an item, love wins.)
+        /// </remarks>
+        public static IEnumerable<GiftTasteModel> GetGiftTastes(ObjectModel[] objects)
         {
-            IDictionary<string, string> data = Game1.NPCGiftTastes;
-
-            // define schema
-            var universal = new Dictionary<string, GiftTaste>
+            // extract raw values
+            string[] giftableVillagers;
+            var tastes = new List<RawGiftTasteModel>();
             {
-                ["Universal_Love"] = GiftTaste.Love,
-                ["Universal_Like"] = GiftTaste.Like,
-                ["Universal_Neutral"] = GiftTaste.Neutral,
-                ["Universal_Dislike"] = GiftTaste.Dislike,
-                ["Universal_Hate"] = GiftTaste.Hate
-            };
-            var personalMetadataKeys = new Dictionary<int, GiftTaste>
-            {
-                // metadata is paired: odd values contain a list of item references, even values contain the reaction dialogue
-                [1] = GiftTaste.Love,
-                [3] = GiftTaste.Like,
-                [5] = GiftTaste.Dislike,
-                [7] = GiftTaste.Hate,
-                [9] = GiftTaste.Neutral
-            };
-
-            // parse
-            foreach (string villager in data.Keys)
-            {
-                string tasteStr = data[villager];
-
-                if (universal.ContainsKey(villager))
+                // define data schema
+                var universal = new Dictionary<string, GiftTaste>
                 {
-                    GiftTaste taste = universal[villager];
-                    foreach (string value in tasteStr.Split(' '))
-                        yield return new GiftTasteModel(taste, "*", int.Parse(value), isUniversal: true);
-                }
-                else
+                    ["Universal_Love"] = GiftTaste.Love,
+                    ["Universal_Like"] = GiftTaste.Like,
+                    ["Universal_Neutral"] = GiftTaste.Neutral,
+                    ["Universal_Dislike"] = GiftTaste.Dislike,
+                    ["Universal_Hate"] = GiftTaste.Hate
+                };
+                var personalMetadataKeys = new Dictionary<int, GiftTaste>
                 {
-                    string[] personalData = tasteStr.Split('/');
-                    foreach (KeyValuePair<int, GiftTaste> taste in personalMetadataKeys)
+                    // metadata is paired: odd values contain a list of item references, even values contain the reaction dialogue
+                    [1] = GiftTaste.Love,
+                    [3] = GiftTaste.Like,
+                    [5] = GiftTaste.Dislike,
+                    [7] = GiftTaste.Hate,
+                    [9] = GiftTaste.Neutral
+                };
+
+                // get data
+                IDictionary<string, string> data = Game1.NPCGiftTastes;
+                giftableVillagers = data.Keys.Except(universal.Keys).ToArray();
+
+                // extract raw tastes
+                foreach (string villager in data.Keys)
+                {
+                    string tasteStr = data[villager];
+
+                    if (universal.ContainsKey(villager))
                     {
-                        foreach (string value in personalData[taste.Key].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
-                            yield return new GiftTasteModel(taste.Value, villager, int.Parse(value));
+                        GiftTaste taste = universal[villager];
+                        tastes.AddRange(
+                            from refID in tasteStr.Split(' ')
+                            select new RawGiftTasteModel(taste, "*", int.Parse(refID), isUniversal: true)
+                        );
+                    }
+                    else
+                    {
+                        string[] personalData = tasteStr.Split('/');
+                        foreach (KeyValuePair<int, GiftTaste> taste in personalMetadataKeys)
+                        {
+                            tastes.AddRange(
+                                from refID in
+                                    personalData[taste.Key].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                                select new RawGiftTasteModel(taste.Value, villager, int.Parse(refID))
+                            );
+                        }
+                    }
+                }
+            }
+
+            // order by precedence
+            tastes = tastes
+                .OrderBy(entry =>
+                {
+                    bool isPersonal = !entry.IsUniversal;
+                    bool isSpecific = !entry.IsCategory;
+
+                    // personal taste by item ID
+                    if (isPersonal && isSpecific)
+                        return 1;
+
+                    // else universal taste by item ID
+                    if (entry.IsUniversal && isSpecific)
+                        return 2;
+
+                    // else personal taste by category
+                    if (isPersonal)
+                        return 3;
+
+                    // else universal taste by category (if not neutral)
+                    if (entry.IsUniversal && entry.Taste != GiftTaste.Neutral)
+                        return 4;
+
+                    // else
+                    return 5;
+                })
+                .ToList();
+
+            // get effective tastes
+            {
+                // get category => item ID lookup
+                IDictionary<int, int[]> categoryItems =
+                    (
+                        from entry in objects
+                        where entry.Category < 0
+                        group entry by entry.Category into items
+                        select new { Category = items.Key, Items = items.Select(item => item.ParentSpriteIndex).ToArray() }
+                    )
+                    .ToDictionary(p => p.Category, p => p.Items);
+
+                // get tastes by precedence
+                IDictionary<string, HashSet<int>> seenItemIDs = giftableVillagers.ToDictionary(name => name, name => new HashSet<int>());
+                foreach (RawGiftTasteModel entry in tastes)
+                {
+                    // get item IDs
+                    if (entry.IsCategory && !categoryItems.ContainsKey(entry.RefID))
+                        continue; // game lists some invalid categories in NPC gift tastes
+                    int[] itemIDs = entry.IsCategory
+                        ? categoryItems[entry.RefID]
+                        : new[] { entry.RefID };
+
+                    // get affected villagers
+                    string[] villagers = entry.IsUniversal
+                        ? giftableVillagers
+                        : new[] { entry.Villager };
+
+                    // yield if no conflict
+                    foreach (string villager in villagers)
+                    {
+                        foreach (int itemID in itemIDs)
+                        {
+                            // ignore if conflicts with a preceding taste
+                            if (seenItemIDs[villager].Contains(itemID))
+                                continue;
+                            seenItemIDs[villager].Add(itemID);
+
+                            // yield taste
+                            yield return new GiftTasteModel(entry.Taste, villager, itemID);
+                        }
                     }
                 }
             }

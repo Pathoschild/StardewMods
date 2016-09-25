@@ -81,7 +81,7 @@ file if you want. These are the available settings:
 1.3:
 * Added possible drops and probability to monster lookup.
 * Added item icons to crafting output, farm animal produce, and monster drops.
-* Fixed item gift taste being wrong in some cases.
+* Fixed item gift tastes being wrong in some cases.
 * Fixed monster drops showing 'error item' in rare cases.
 * Internal refactoring.
 

@@ -15,13 +15,7 @@ namespace Pathoschild.LookupAnything.Framework.Models
         public string Villager { get; }
 
         /// <summary>The item parent sprite index (if positive) or category (if negative).</summary>
-        public int RefID { get; set; }
-
-        /// <summary>Whether this gift taste applies to all villagers unless otherwise excepted.</summary>
-        public bool IsUniversal { get; }
-
-        /// <summary>Whether the <see cref="RefID"/> refers to a category of items, instead of a specific item ID.</summary>
-        public bool IsCategory => this.RefID < 0;
+        public int ItemID { get; set; }
 
 
         /*********
@@ -30,14 +24,12 @@ namespace Pathoschild.LookupAnything.Framework.Models
         /// <summary>Construct an instance.</summary>
         /// <param name="taste">How much the target villager likes this item.</param>
         /// <param name="villager">The name of the target villager.</param>
-        /// <param name="refID">The item parent sprite index (if positive) or category (if negative).</param>
-        /// <param name="isUniversal">Whether this gift taste applies to all villagers unless otherwise excepted.</param>
-        public GiftTasteModel(GiftTaste taste, string villager, int refID, bool isUniversal = false)
+        /// <param name="refID">The item parent sprite index.</param>
+        public GiftTasteModel(GiftTaste taste, string villager, int itemID)
         {
             this.Taste = taste;
             this.Villager = villager;
-            this.RefID = refID;
-            this.IsUniversal = isUniversal;
+            this.ItemID = itemID;
         }
     }
 }

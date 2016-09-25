@@ -22,6 +22,9 @@ namespace Pathoschild.LookupAnything
         /*********
         ** Properties
         *********/
+        /// <summary>The cached object data.</summary>
+        private static readonly Lazy<ObjectModel[]> Objects = new Lazy<ObjectModel[]>(() => DataParser.GetObjects().ToArray());
+
         /// <summary>The cached villagers' gift tastes.</summary>
         private static Lazy<GiftTasteModel[]> GiftTastes;
 
@@ -39,8 +42,8 @@ namespace Pathoschild.LookupAnything
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public static void ResetCache(Metadata metadata)
         {
-            GameHelper.GiftTastes = new Lazy<GiftTasteModel[]>(GameHelper.FetchGiftTastes);
-            GameHelper.Recipes = new Lazy<RecipeModel[]>(() => GameHelper.FetchRecipes(metadata));
+            GameHelper.GiftTastes = new Lazy<GiftTasteModel[]>(() => DataParser.GetGiftTastes(GameHelper.Objects.Value).ToArray());
+            GameHelper.Recipes = new Lazy<RecipeModel[]>(() => DataParser.GetRecipes(metadata).ToArray());
         }
 
         /****
@@ -78,7 +81,7 @@ namespace Pathoschild.LookupAnything
                 return new Dictionary<string, GiftTaste>();
 
             return GameHelper.GiftTastes.Value
-                .Where(p => p.RefID == item.parentSheetIndex)
+                .Where(p => p.ItemID == item.parentSheetIndex)
                 .ToDictionary(p => p.Villager, p => p.Taste);
         }
 
@@ -92,7 +95,7 @@ namespace Pathoschild.LookupAnything
             string name = npc.getName();
             return GameHelper.GiftTastes.Value
                 .Where(p => p.Villager == name)
-                .ToDictionary(p => GameHelper.GetObjectBySpriteIndex(p.RefID), p => p.Taste);
+                .ToDictionary(p => GameHelper.GetObjectBySpriteIndex(p.ItemID), p => p.Taste);
         }
 
         /// <summary>Get the recipes for which an item is needed.</summary>
@@ -373,81 +376,6 @@ namespace Pathoschild.LookupAnything
         public static void ShowErrorMessage(string message)
         {
             Game1.addHUDMessage(new HUDMessage(message, 3));
-        }
-
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Get the villagers' gift tastes.</summary>
-        private static GiftTasteModel[] FetchGiftTastes()
-        {
-            // get gift data
-            GiftTasteModel[] tasteData = DataParser.GetGiftTastes().ToArray();
-            HashSet<string> villagerKeys = new HashSet<string>();
-            HashSet<int> refIDs = new HashSet<int>();
-            foreach (GiftTasteModel entry in tasteData)
-            {
-                if (!entry.IsUniversal)
-                    villagerKeys.Add(entry.Villager);
-                refIDs.Add(entry.RefID);
-            }
-
-            // get item ID=>category lookup
-            IDictionary<int, int> itemCategoryLookup = DataParser
-                .GetObjects()
-                .Where(p => refIDs.Contains(p.ParentSpriteIndex) || refIDs.Contains(p.Category))
-                .ToDictionary(p => p.ParentSpriteIndex, p => p.Category);
-
-            // resolve gift tastes
-            var tastes = new List<GiftTasteModel>();
-            {
-                // add personal tastes
-                var itemsWithPersonalTastes = villagerKeys.ToDictionary(p => p, p => new HashSet<int>());
-                foreach (GiftTasteModel entry in tasteData.Where(p => !p.IsUniversal))
-                {
-                    // item ID
-                    if (!entry.IsCategory)
-                    {
-                        tastes.Add(entry);
-                        continue;
-                    }
-
-                    // category ID
-                    foreach (int itemID in itemCategoryLookup.Where(p => p.Value == entry.RefID).Select(p => p.Key))
-                    {
-                        tastes.Add(new GiftTasteModel(entry.Taste, entry.Villager, itemID));
-                        itemsWithPersonalTastes[entry.Villager].Add(itemID);
-                    }
-                }
-
-                // add universal tastes
-                foreach (GiftTasteModel entry in tasteData.Where(p => p.IsUniversal))
-                {
-                    // get item IDs
-                    int[] itemIDs = entry.IsCategory
-                        ? itemCategoryLookup.Where(p => p.Value == entry.RefID).Select(p => p.Key).ToArray()
-                        : new[] { entry.RefID };
-
-                    // add tastes
-                    foreach (string villager in villagerKeys)
-                    {
-                        tastes.AddRange(
-                            from itemID in itemIDs.Except(itemsWithPersonalTastes[villager]) // personal tastes take precedence if there's a conflict
-                            select new GiftTasteModel(entry.Taste, villager, itemID)
-                        );
-                    }
-                }
-            }
-
-            return tastes.ToArray();
-        }
-
-        /// <summary>Get the recipe ingredients.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        private static RecipeModel[] FetchRecipes(Metadata metadata)
-        {
-            return DataParser.GetRecipes(metadata).ToArray();
         }
     }
 }
