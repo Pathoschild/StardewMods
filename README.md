@@ -79,10 +79,11 @@ file if you want. These are the available settings:
 * `F1` now toggles the lookup UI (i.e. will close the lookup if it's already open).
 
 1.3:
-* Added possible drops and probability to monster lookup.
+* Added possible drops and their probability to monster lookup.
 * Added item icons to crafting output, farm animal produce, and monster drops.
 * Fixed item gift tastes being wrong in some cases.
 * Fixed monster drops showing 'error item' in rare cases.
+* Fixed fields being shown for dead crops.
 * Internal refactoring.
 
 ## Compiling the mod
