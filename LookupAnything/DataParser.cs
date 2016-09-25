@@ -64,6 +64,70 @@ namespace Pathoschild.LookupAnything
             }
         }
 
+        /// <summary>Parse monster data.</summary>
+        /// <remarks>Reverse engineered from <see cref="StardewValley.Monsters.Monster.parseMonsterInfo"/> and <see cref="GameLocation.monsterDrop"/>.</remarks>
+        public static IEnumerable<MonsterData> GetMonsters()
+        {
+            Dictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\Monsters");
+
+            foreach (var entry in data)
+            {
+                // monster fields
+                string[] fields = entry.Value.Split('/');
+                string name = entry.Key;
+                int health = int.Parse(fields[0]);
+                int damageToFarmer = int.Parse(fields[1]);
+                //int minCoins = int.Parse(fields[2]);
+                //int maxCoins = int.Parse(fields[3]) + 1;
+                bool isGlider = bool.Parse(fields[4]);
+                int durationOfRandomMovements = int.Parse(fields[5]);
+                int resilience = int.Parse(fields[7]);
+                double jitteriness = double.Parse(fields[8]);
+                int moveTowardsPlayerThreshold = int.Parse(fields[9]);
+                int speed = int.Parse(fields[10]);
+                double missChance = double.Parse(fields[11]);
+                bool isMineMonster = bool.Parse(fields[12]);
+
+                // drops
+                var drops = new List<ItemDropData>();
+                string[] dropFields = fields[6].Split(' ');
+                for (int i = 0; i < dropFields.Length; i += 2)
+                {
+                    int itemID = int.Parse(dropFields[i]);
+                    float chance = float.Parse(dropFields[i + 1]);
+                    int maxDrops = 1;
+                    if (itemID < 0)
+                    {
+                        itemID = -itemID;
+                        maxDrops = 3; // if item ID is negative, game randomly drops 1-3
+                    }
+
+                    drops.Add(new ItemDropData(itemID, maxDrops, chance));
+                }
+                if (isMineMonster && Game1.player.timesReachedMineBottom >= 1)
+                {
+                    drops.Add(new ItemDropData(72, 1, 0.008f));
+                    drops.Add(new ItemDropData(74, 1, 0.008f));
+                }
+
+                // yield data
+                yield return new MonsterData(
+                    name: name,
+                    health: health,
+                    damageToFarmer: damageToFarmer,
+                    isGlider: isGlider,
+                    durationOfRandomMovements: durationOfRandomMovements,
+                    resilience: resilience,
+                    jitteriness: jitteriness,
+                    moveTowardsPlayerThreshold: moveTowardsPlayerThreshold,
+                    speed: speed,
+                    missChance: missChance,
+                    isMineMonster: isMineMonster,
+                    drops: drops
+                );
+            }
+        }
+
         /// <summary>Parse gift tastes.</summary>
         /// <remarks>Derived from the <see cref="StardewValley.CraftingRecipe.createItem"/>.</remarks>
         public static IEnumerable<ObjectModel> GetObjects()

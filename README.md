@@ -79,9 +79,10 @@ file if you want. These are the available settings:
 * `F1` now toggles the lookup UI (i.e. will close the lookup if it's already open).
 
 1.3:
+* Added possible drops and probability to monster lookup.
 * Added item icons to crafting output, farm animal produce, and monster drops.
-* Fixed wrong gift taste shown if there's a conflict between universal tastes (e.g. everyone likes
-  Kale) and personal tastes (e.g. Abigail dislikes Kale).
+* Fixed item gift taste being wrong in some cases.
+* Fixed monster drops showing 'error item' in rare cases.
 * Internal refactoring.
 
 ## Compiling the mod

@@ -121,6 +121,8 @@
     <Compile Include="Framework\Subjects\ISubject.cs" />
     <Compile Include="Framework\Subjects\ItemSubject.cs" />
     <Compile Include="LookupAnythingMod.cs" />
+    <Compile Include="MonsterData.cs" />
+    <Compile Include="ItemDropData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Framework\Targets\GenericTarget.cs" />
     <Compile Include="Framework\Models\RecipeModel.cs" />

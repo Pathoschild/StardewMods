@@ -9,6 +9,7 @@ using Pathoschild.LookupAnything.Framework.Fields;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Monsters;
+using StardewValley.Objects;
 using Object = StardewValley.Object;
 
 namespace Pathoschild.LookupAnything.Framework.Subjects
@@ -84,10 +85,9 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 case TargetType.Monster:
                     // basic info
                     Monster monster = (Monster)npc;
-                    Item[] drops = (from id in monster.objectsToDrop let item = GameHelper.GetObjectBySpriteIndex(id) orderby item.Name select (Item)item).ToArray();
                     yield return new GenericField("Invincible", $"For {GameHelper.GetPrivateField<int>(monster, "invincibleCountdown")} seconds", hasValue: monster.isInvincible());
                     yield return new PercentageBarField("Health", monster.health, monster.maxHealth, Color.Green, Color.Gray, $"{Math.Round((monster.health / (monster.maxHealth * 1f) * 100))}% ({monster.health} of {monster.maxHealth})");
-                    yield return new ItemDropListField("Will drop", drops, defaultText: "nothing");
+                    yield return new ItemDropListField("Drops", this.GetMonsterDrops(monster), defaultText: "nothing");
                     yield return new GenericField("XP", monster.experienceGained);
                     yield return new GenericField("Defence", monster.resilience);
                     yield return new GenericField("Attack", monster.damageToFarmer);
@@ -101,6 +101,21 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     }
                     break;
             }
+        }
+
+        /// <summary>Get a monster's possible drops.</summary>
+        /// <param name="monster">The monster whose drops to get.</param>
+        private IEnumerable<ItemDropData> GetMonsterDrops(Monster monster)
+        {
+            int[] drops = monster.objectsToDrop.ToArray();
+            ItemDropData[] possibleDrops = DataParser.GetMonsters().First(p => p.Name == monster.getName()).Drops;
+
+            float chanceMultiplier = Game1.player.isWearingRing(Ring.burglarsRing) ? 2 : 1;
+            return (
+                from possibleDrop in possibleDrops
+                let isGuaranteed = drops.Contains(possibleDrop.ItemID)
+                select new ItemDropData(possibleDrop.ItemID, possibleDrop.MaxDrop, isGuaranteed ? 1 : possibleDrop.Probability * chanceMultiplier)
+            );
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>
