@@ -72,7 +72,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
                 spriteBatch.DrawIcon(item, position.X, position.Y + height, iconSize, isGuaranteed ? Color.White : Color.White * 0.5f);
 
                 // draw text
-                string text = isGuaranteed ? item.Name : $"{Math.Round(drop.Probability, 3) * 100}% chance of {item.Name}";
+                string text = isGuaranteed ? item.Name : $"{Math.Round(drop.Probability, 4) * 100}% chance of {item.Name}";
                 if (drop.MaxDrop > 1)
                     text += $" (1 to {drop.MaxDrop})";
                 Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(iconSize.X + 5, height + 5), wrapWidth, isGuaranteed ? Color.Black : Color.Gray);

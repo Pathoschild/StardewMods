@@ -166,7 +166,7 @@ namespace Pathoschild.LookupAnything
         }
 
         /// <summary>Parse monster data.</summary>
-        /// <remarks>Reverse engineered from <see cref="StardewValley.Monsters.Monster.parseMonsterInfo"/> and <see cref="GameLocation.monsterDrop"/>.</remarks>
+        /// <remarks>Reverse engineered from <see cref="StardewValley.Monsters.Monster.parseMonsterInfo"/>, <see cref="GameLocation.monsterDrop"/>, and the <see cref="Debris"/> constructor.</remarks>
         public static IEnumerable<MonsterData> GetMonsters()
         {
             Dictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\Monsters");
@@ -194,21 +194,43 @@ namespace Pathoschild.LookupAnything
                 string[] dropFields = fields[6].Split(' ');
                 for (int i = 0; i < dropFields.Length; i += 2)
                 {
+                    // get drop info
                     int itemID = int.Parse(dropFields[i]);
                     float chance = float.Parse(dropFields[i + 1]);
                     int maxDrops = 1;
+
+                    // if itemID is negative, game randomly drops 1-3
                     if (itemID < 0)
                     {
                         itemID = -itemID;
-                        maxDrops = 3; // if item ID is negative, game randomly drops 1-3
+                        maxDrops = 3;
                     }
 
+                    // some item IDs have special meaning
+                    if (itemID == Debris.copperDebris)
+                        itemID = Object.copper;
+                    else if (itemID == Debris.ironDebris)
+                        itemID = Object.iron;
+                    else if (itemID == Debris.coalDebris)
+                        itemID = Object.coal;
+                    else if (itemID == Debris.goldDebris)
+                        itemID = Object.gold;
+                    else if (itemID == Debris.coinsDebris)
+                        continue; // no drop
+                    else if (itemID == Debris.iridiumDebris)
+                        itemID = Object.iridium;
+                    else if (itemID == Debris.woodDebris)
+                        itemID = Object.wood;
+                    else if (itemID == Debris.stoneDebris)
+                        itemID = Object.stone;
+
+                    // add drop
                     drops.Add(new ItemDropData(itemID, maxDrops, chance));
                 }
                 if (isMineMonster && Game1.player.timesReachedMineBottom >= 1)
                 {
-                    drops.Add(new ItemDropData(72, 1, 0.008f));
-                    drops.Add(new ItemDropData(74, 1, 0.008f));
+                    drops.Add(new ItemDropData(Object.diamondIndex, 1, 0.008f));
+                    drops.Add(new ItemDropData(Object.prismaticShardIndex, 1, 0.008f));
                 }
 
                 // yield data
