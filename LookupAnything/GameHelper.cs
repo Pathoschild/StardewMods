@@ -383,7 +383,7 @@ namespace Pathoschild.LookupAnything
         private static GiftTasteModel[] FetchGiftTastes()
         {
             // get gift data
-            GiftTasteModel[] tasteData = DataParser.GetGiftTastes(Game1.NPCGiftTastes).ToArray();
+            GiftTasteModel[] tasteData = DataParser.GetGiftTastes().ToArray();
             HashSet<string> villagerKeys = new HashSet<string>();
             HashSet<int> refIDs = new HashSet<int>();
             foreach (GiftTasteModel entry in tasteData)
@@ -395,7 +395,7 @@ namespace Pathoschild.LookupAnything
 
             // get item ID=>category lookup
             IDictionary<int, int> itemCategoryLookup = DataParser
-                .GetObjects(Game1.objectInformation)
+                .GetObjects()
                 .Where(p => refIDs.Contains(p.ParentSpriteIndex) || refIDs.Contains(p.Category))
                 .ToDictionary(p => p.ParentSpriteIndex, p => p.Category);
 

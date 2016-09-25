@@ -17,10 +17,11 @@ namespace Pathoschild.LookupAnything
         ** Accessors
         *********/
         /// <summary>Parse gift tastes.</summary>
-        /// <param name="data">The raw game data.</param>
         /// <remarks>Reverse engineered from <c>Data\NPCGiftTastes</c> and <see cref="StardewValley.NPC.getGiftTasteForThisItem"/>.</remarks>
-        public static IEnumerable<GiftTasteModel> GetGiftTastes(IDictionary<string, string> data)
+        public static IEnumerable<GiftTasteModel> GetGiftTastes()
         {
+            IDictionary<string, string> data = Game1.NPCGiftTastes;
+
             // define schema
             var universal = new Dictionary<string, GiftTaste>
             {
@@ -64,10 +65,11 @@ namespace Pathoschild.LookupAnything
         }
 
         /// <summary>Parse gift tastes.</summary>
-        /// <param name="data">The raw game data.</param>
         /// <remarks>Derived from the <see cref="StardewValley.CraftingRecipe.createItem"/>.</remarks>
-        public static IEnumerable<ObjectModel> GetObjects(IDictionary<int, string> data)
+        public static IEnumerable<ObjectModel> GetObjects()
         {
+            Dictionary<int, string> data = Game1.objectInformation;
+
             foreach (var pair in data)
             {
                 int parentSpriteIndex = pair.Key;
