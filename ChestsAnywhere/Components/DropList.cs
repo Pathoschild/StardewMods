@@ -17,9 +17,15 @@ namespace ChestsAnywhere.Components
         /*********
         ** Properties
         *********/
+        /****
+        ** Constants
+        ****/
         /// <summary>The padding applied to dropdown lists.</summary>
         private const int DROPDOWN_PADDING = 5;
 
+        /****
+        ** Items
+        ****/
         /// <summary>The index of the selected item.</summary>
         private int SelectedIndex;
 
@@ -28,6 +34,21 @@ namespace ChestsAnywhere.Components
 
         /// <summary>The items in the list.</summary>
         private readonly DropListItem<TItem>[] Items;
+
+        /// <summary>The item index shown at the top of the list.</summary>
+        private int FirstVisibleIndex;
+
+        /// <summary>The maximum items to display.</summary>
+        private int MaxItems;
+
+        /// <summary>The maximum index for the first item.</summary>
+        private int MaxFirstVisibleIndex;
+
+        /****
+        ** Rendering
+        ****/
+        /// <summary>The dropdown's origin position.</summary>
+        private readonly Vector2 Origin;
 
         /// <summary>Whether the dropdown should be aligned right of the origin.</summary>
         private readonly bool ToRight;
@@ -65,43 +86,22 @@ namespace ChestsAnywhere.Components
             this.FontHeight = (int)font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y;
             this.ToRight = toRight;
 
-            // set dimensions
-            this.bounds.Width = Math.Max((int)this.Items.Max(p => font.MeasureString(p.Name).X), Game1.tileSize * 2) + DROPDOWN_PADDING * 2;
-            this.bounds.Height = this.FontHeight * 10 + Game1.tileSize / 16 * 9;
-            this.bounds.X = toRight
-                ? x
-                : x - this.bounds.Width;
-            this.bounds.Y = y;
-
             // initialise UI
-            this.InitialiseComponents();
-            if (this.SelectedIndex > 9)
-            {
-                int num = this.SelectedIndex;
-                for (int i = 9; i >= 0; i--)
-                {
-                    this.ItemComponents[i].name = num.ToString();
-                    num--;
-                }
-            }
+            this.Origin = new Vector2(x, y);
+            this.ReinitialiseComponents();
         }
 
         /// <summary>A method invoked when the player scrolls the dropdown using the mouse wheel.</summary>
         /// <param name="direction">The scroll direction.</param>
         public void ReceiveScrollWheelAction(int direction)
         {
-            if (direction > 0)
-            {
-                if (this.ItemComponents.Count != 10 || int.Parse(this.ItemComponents[9].name) <= 9)
-                    return;
-                foreach (var current in this.ItemComponents)
-                    current.name = (int.Parse(current.name) - 1).ToString();
-            }
-            else if (this.ItemComponents.Count == 10 && int.Parse(this.ItemComponents[9].name) + 1 < this.Items.Length)
-            {
-                foreach (var current in this.ItemComponents)
-                    current.name = (int.Parse(current.name) + 1).ToString();
-            }
+            this.Scroll(direction > 0 ? -1 : 1); // scrolling down moves first item up
+        }
+
+        /// <summary>The method invoked when the game window is resized.</summary>
+        public void ReceiveGameWindowResized()
+        {
+            this.ReinitialiseComponents();
         }
 
         /// <summary>Select an item in the list.</summary>
@@ -121,24 +121,11 @@ namespace ChestsAnywhere.Components
             return null;
         }
 
-        /// <summary>Prepare the components for rendering.</summary>
-        private void InitialiseComponents()
-        {
-            int x = this.bounds.X;
-            int y = this.bounds.Y;
-            int width = this.bounds.Width;
-            int height = this.FontHeight;
-            for (int i = 0; i < this.Items.Length && i < 10; i++)
-            {
-                this.ItemComponents.Add(new ClickableComponent(new Rectangle(x + DROPDOWN_PADDING * 2, y, width, height), i.ToString()));
-                y += this.FontHeight;
-            }
-        }
-
         /// <summary>Render the UI.</summary>
         /// <param name="sprites">The sprites to render.</param>
         public void Draw(SpriteBatch sprites)
         {
+            // draw dropdown items
             foreach (ClickableComponent component in this.ItemComponents)
             {
                 // draw background
@@ -156,6 +143,74 @@ namespace ChestsAnywhere.Components
                         : new Vector2(component.bounds.X + component.bounds.Width - this.Font.MeasureString(item.Name).X - DROPDOWN_PADDING, component.bounds.Y + Game1.tileSize / 16);
                 sprites.DrawString(this.Font, item.Name, position, Color.Black);
             }
+
+            // draw up/down arrows
+            if (this.FirstVisibleIndex > 0)
+                sprites.Draw(Sprites.Icons.Sheet, new Vector2(this.bounds.X - Sprites.Icons.UpArrow.Width, this.bounds.Y), Sprites.Icons.UpArrow, Color.White);
+            if (this.FirstVisibleIndex < this.MaxFirstVisibleIndex)
+                sprites.Draw(Sprites.Icons.Sheet, new Vector2(this.bounds.X - Sprites.Icons.UpArrow.Width, this.bounds.Y + this.bounds.Height - Sprites.Icons.DownArrow.Height), Sprites.Icons.DownArrow, Color.White);
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Recalculate dimensions and components for rendering.</summary>
+        private void ReinitialiseComponents()
+        {
+            // get item size
+            int minItemWidth = Game1.tileSize * 2;
+            int itemWidth = Math.Max((int)this.Items.Max(p => this.Font.MeasureString(p.Name).X), minItemWidth) + DROPDOWN_PADDING * 2;
+            int itemHeight = this.FontHeight;
+
+            // get pagination
+            int itemCount = this.Items.Length;
+            this.MaxItems = Math.Min((Game1.viewport.Height - (int)this.Origin.Y) / itemHeight, itemCount);
+            this.MaxFirstVisibleIndex = this.Items.Length - this.MaxItems;
+            this.FirstVisibleIndex = this.GetValidFirstItem(this.FirstVisibleIndex, this.MaxFirstVisibleIndex);
+
+            // get dropdown size
+            this.bounds.Width = itemWidth;
+            this.bounds.Height = itemHeight * this.MaxItems;
+            this.bounds.X = (int)this.Origin.X - (this.ToRight ? 0 : this.bounds.Width);
+            this.bounds.Y = (int)this.Origin.Y;
+
+            // generate components
+            this.ItemComponents.Clear();
+            int x = this.bounds.X;
+            int y = this.bounds.Y;
+            for (int i = this.FirstVisibleIndex; i < this.MaxItems; i++)
+            {
+                this.ItemComponents.Add(new ClickableComponent(new Rectangle(x + DROPDOWN_PADDING * 2, y, itemWidth, itemHeight), i.ToString()));
+                y += this.FontHeight;
+            }
+        }
+
+        /// <summary>Scroll the dropdown by the specified amount.</summary>
+        /// <param name="amount">The number of items to scroll.</param>
+        private void Scroll(int amount)
+        {
+            // recalculate first item
+            int firstItem = this.GetValidFirstItem(this.FirstVisibleIndex + amount, this.MaxFirstVisibleIndex);
+            if (firstItem == this.FirstVisibleIndex)
+                return;
+            this.FirstVisibleIndex = firstItem;
+
+            // update displayed items
+            int itemIndex = firstItem;
+            foreach (ClickableComponent current in this.ItemComponents)
+            {
+                current.name = itemIndex.ToString();
+                itemIndex++;
+            }
+        }
+
+        /// <summary>Calculate a valid index for the first displayed item in the list.</summary>
+        /// <param name="value">The initial value, which may not be valid.</param>
+        /// <param name="maxIndex">The maximum first index.</param>
+        private int GetValidFirstItem(int value, int maxIndex)
+        {
+            return Math.Max(Math.Min(value, maxIndex), 0);
         }
     }
 }

@@ -132,6 +132,17 @@ namespace ChestsAnywhere.Components
                 this.LocationSelector.ReceiveScrollWheelAction(direction);
         }
 
+        /// <summary>The method invoked when the game window is resized.</summary>
+        /// <param name="oldBounds">The previous window dimensions.</param>
+        /// <param name="newBounds">The new window dimensions.</param>
+        public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
+        {
+            this.ChestSelector.ReceiveGameWindowResized();
+            this.LocationSelector?.ReceiveGameWindowResized();
+            this.InitialiseTabs();
+            this.InitialiseTools();
+        }
+
         /// <summary>The method invoked when the player left-clicks on the control.</summary>
         /// <param name="x">The X-position of the cursor.</param>
         /// <param name="y">The Y-position of the cursor.</param>

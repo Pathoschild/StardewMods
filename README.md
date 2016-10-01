@@ -70,9 +70,11 @@ file if you want. These are the available settings:
 
 1.3 (upcoming):
 * Added version check on load.
-* Location tab is no longer enabled by default (can be enabled via `config.json`).
-* Can now close dropdown lists by clicking away.
-* Improved dropdown list rendering.
+* Improved chest/location dropdowns:
+  * They can now be closed by clicking away.
+  * They now show as many items as possible (instead of 10).
+  * They now show up/down arrows when there are too many items to display at once.
+* Location tab is no longer enabled by default, and may be removed in a future version. [Comment now if you want to keep it!](http://community.playstarbound.com/threads/smapi-chests-anywhere.122603/)
 
 ## See also
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/518)

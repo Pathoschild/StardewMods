@@ -120,6 +120,19 @@ namespace ChestsAnywhere.Components
             public static readonly Rectangle Organize = new Rectangle(162, 440, 16, 16);
         }
 
+        /// <summary>Sprites used to draw icons.</summary>
+        public static class Icons
+        {
+            /// <summary>The sprite sheet containing the icon sprites.</summary>
+            public static Texture2D Sheet => Game1.mouseCursors;
+
+            /// <summary>A down arrow for scrolling content.</summary>
+            public static readonly Rectangle DownArrow = new Rectangle(12, 76, 40, 44);
+
+            /// <summary>An up arrow for scrolling content.</summary>
+            public static readonly Rectangle UpArrow = new Rectangle(76, 72, 40, 44);
+        }
+
 
         /*********
         ** Extensions
