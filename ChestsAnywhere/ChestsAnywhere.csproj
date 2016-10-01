@@ -34,6 +34,10 @@
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Stardew Valley">
       <HintPath>C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\Stardew Valley.exe</HintPath>
     </Reference>
@@ -54,6 +58,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\CommonHelper.cs" />
+    <Compile Include="Common\GitVersion.cs" />
+    <Compile Include="Common\UpdateHelper.cs" />
     <Compile Include="Components\AccessChestMenu.cs" />
     <Compile Include="ChestsAnywhereMod.cs" />
     <Compile Include="Components\ChestWithInventory.cs" />
@@ -69,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

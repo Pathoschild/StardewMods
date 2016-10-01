@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using ChestsAnywhere.Common;
 using ChestsAnywhere.Components;
 using ChestsAnywhere.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -23,6 +26,18 @@ namespace ChestsAnywhere
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
+        /****
+        ** Version check
+        ****/
+        /// <summary>The current semantic version.</summary>
+        private string CurrentVersion;
+
+        /// <summary>The newer release to notify the user about.</summary>
+        private GitRelease NewRelease;
+
+        /// <summary>Whether the update-available message has been shown since the game started.</summary>
+        private bool HasSeenUpdateWarning;
+
 
         /*********
         ** Public methods
@@ -32,24 +47,55 @@ namespace ChestsAnywhere
         {
             // read config
             this.Config = new RawModConfig().InitializeConfig(this.BaseConfigPath).GetParsed();
+            this.CurrentVersion = UpdateHelper.GetSemanticVersion(this.Manifest.Version);
 
             // hook UI
-            ControlEvents.KeyPressed += (sender, e) => this.TryOpenMenu(e.KeyPressed, this.Config.Keyboard.Toggle);
-            ControlEvents.ControllerButtonPressed += (sender, e) => this.TryOpenMenu(e.ButtonPressed, this.Config.Controller.Toggle);
-            ControlEvents.ControllerTriggerPressed += (sender, e) => this.TryOpenMenu(e.ButtonPressed, this.Config.Controller.Toggle);
+            GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
+            GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
+            ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
+            ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+            ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>Open the menu if the input matches the configured toggle, and another menu isn't already open.</summary>
-        /// <typeparam name="T">The input type.</typeparam>
-        /// <param name="expected">The configured toggle input.</param>
-        /// <param name="received">The received toggle input.</param>
-        private void TryOpenMenu<T>(T expected, T received)
+        /// <summary>The method invoked when the player loads the game.</summary>
+        private void ReceiveGameLoaded()
         {
-            if (received.Equals(expected) && Game1.activeClickableMenu == null)
+            // check for an updated version
+            if (this.Config.CheckForUpdates)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    GitRelease release = UpdateHelper.GetLatestReleaseAsync("Pathoschild/ChestsAnywhere").Result;
+                    if (release.IsNewerThan(this.CurrentVersion))
+                        this.NewRelease = release;
+                });
+            }
+        }
+
+        /// <summary>The method invoked when the interface is rendering.</summary>
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
+        private void ReceiveInterfaceRendering(SpriteBatch spriteBatch)
+        {
+            // render update warning
+            if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning && this.NewRelease != null)
+            {
+                this.HasSeenUpdateWarning = true;
+                CommonHelper.ShowInfoMessage($"You can update Chests Anywhere from {this.CurrentVersion} to {this.NewRelease.Version}.");
+            }
+        }
+
+        /// <summary>The method invoked when the player presses an input button.</summary>
+        /// <typeparam name="TKey">The input type.</typeparam>
+        /// <param name="key">The pressed input.</param>
+        /// <param name="map">The configured input mapping.</param>
+        private void ReceiveKeyPress<TKey>(TKey key, InputMapConfiguration<TKey> map)
+        {
+            // perform bound action
+            if (key.Equals(map.Toggle) && Game1.activeClickableMenu == null)
                 this.OpenMenu();
         }
 

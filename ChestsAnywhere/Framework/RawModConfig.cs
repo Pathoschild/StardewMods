@@ -19,6 +19,9 @@ namespace ChestsAnywhere.Framework
         /// <summary>Whether to group tabs with a separate location dropdown.</summary>
         public bool GroupByLocation { get; set; }
 
+        /// <summary>Whether to check for updates to the mod.</summary>
+        public bool CheckForUpdates { get; set; }
+
 
         /*********
         ** Public methods
@@ -40,6 +43,8 @@ namespace ChestsAnywhere.Framework
                 NextChest = "",
                 SortItems = ""
             };
+            this.CheckForUpdates = true;
+            this.GroupByLocation = false;
         }
 
         /// <summary>Construct the default configuration.</summary>
@@ -70,6 +75,7 @@ namespace ChestsAnywhere.Framework
                     NextChest = Enum.TryParse(this.Controller.NextChest, out parsedButton) ? parsedButton : null as Buttons?,
                     SortItems = Enum.TryParse(this.Controller.SortItems, out parsedButton) ? parsedButton : null as Buttons?,
                 },
+                CheckForUpdates = this.CheckForUpdates,
                 GroupByLocation = this.GroupByLocation
             };
         }

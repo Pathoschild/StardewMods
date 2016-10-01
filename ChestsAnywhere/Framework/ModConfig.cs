@@ -16,5 +16,8 @@ namespace ChestsAnywhere.Framework
 
         /// <summary>Whether to group tabs with a separate location dropdown.</summary>
         public bool GroupByLocation { get; set; }
+
+        /// <summary>Whether to check for updates to the mod.</summary>
+        public bool CheckForUpdates { get; set; }
     }
 }
