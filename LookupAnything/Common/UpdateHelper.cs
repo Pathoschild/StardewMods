@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Version = StardewModdingAPI.Version;
 
-namespace Pathoschild.LookupAnything.Framework
+namespace Pathoschild.LookupAnything.Common
 {
     /// <summary>Provides utility methods for mod updates.</summary>
     internal class UpdateHelper

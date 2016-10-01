@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.LookupAnything.Common;
 using StardewValley;
 
 namespace Pathoschild.LookupAnything.Components
@@ -41,18 +42,6 @@ namespace Pathoschild.LookupAnything.Components
         }
 
         /// <summary>A blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
-        public static readonly Texture2D Pixel = Sprites.GetPixel();
-
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Get a blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
-        private static Texture2D GetPixel()
-        {
-            Texture2D pixel = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
-            pixel.SetData(new[] { Color.White });
-            return pixel;
-        }
+        public static readonly Texture2D Pixel = CommonHelper.Pixel;
     }
 }

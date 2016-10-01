@@ -2,15 +2,33 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Common;
-using Pathoschild.LookupAnything.Components;
 using StardewValley;
+using StardewValley.Menus;
 
-namespace Pathoschild.LookupAnything
+namespace Pathoschild.LookupAnything.Common
 {
-    /// <summary>Provides utility methods for drawing to the screen.</summary>
-    internal static class DrawHelper
+    /// <summary>Provides common utility methods for interacting with the game code shared by my various mods.</summary>
+    internal static class CommonHelper
     {
+        /*********
+        ** Properties
+        *********/
+        /// <summary>A blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
+        private static readonly Lazy<Texture2D> LazyPixel = new Lazy<Texture2D>(() =>
+        {
+            Texture2D pixel = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
+            pixel.SetData(new[] { Color.White });
+            return pixel;
+        });
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>A blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
+        public static Texture2D Pixel => CommonHelper.LazyPixel.Value;
+
+
         /*********
         ** Public methods
         *********/
@@ -21,59 +39,46 @@ namespace Pathoschild.LookupAnything
         /// <param name="font">The font to measure.</param>
         public static float GetSpaceWidth(SpriteFont font)
         {
-            return CommonHelper.GetSpaceWidth(font);
+            return font.MeasureString("A B").X - font.MeasureString("AB").X;
+        }
+
+        /****
+        ** UI
+        ****/
+        /// <summary>Draw a pretty hover box for the given text.</summary>
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
+        /// <param name="label">The text to display.</param>
+        /// <param name="position">The position at which to draw the text.</param>
+        /// <param name="wrapWidth">The maximum width to display.</param>
+        public static Vector2 DrawHoverBox(SpriteBatch spriteBatch, string label, Vector2 position, float wrapWidth)
+        {
+            const int paddingSize = 27;
+            const int gutterSize = 20;
+
+            Vector2 labelSize = spriteBatch.DrawTextBlock(Game1.smallFont, label, position + new Vector2(gutterSize), wrapWidth); // draw text to get wrapped text dimensions
+            IClickableMenu.drawTextureBox(spriteBatch, Game1.menuTexture, new Rectangle(0, 256, 60, 60), (int)position.X, (int)position.Y, (int)labelSize.X + paddingSize + gutterSize, (int)labelSize.Y + paddingSize, Color.White);
+            spriteBatch.DrawTextBlock(Game1.smallFont, label, position + new Vector2(gutterSize), wrapWidth); // draw again over texture box
+
+            return labelSize + new Vector2(paddingSize);
+        }
+
+        /// <summary>Show an informational message to the player.</summary>
+        /// <param name="message">The message to show.</param>
+        public static void ShowInfoMessage(string message)
+        {
+            Game1.addHUDMessage(new HUDMessage(message, 3) { noIcon = true });
+        }
+
+        /// <summary>Show an error message to the player.</summary>
+        /// <param name="message">The message to show.</param>
+        public static void ShowErrorMessage(string message)
+        {
+            Game1.addHUDMessage(new HUDMessage(message, 3));
         }
 
         /****
         ** Drawing
         ****/
-        /// <summary>Draw a sprite to the screen.</summary>
-        /// <param name="spriteBatch">The sprite batch being drawn.</param>
-        /// <param name="sheet">The sprite sheet containing the sprite.</param>
-        /// <param name="sprite">The sprite coordinates and dimensions in the sprite sheet.</param>
-        /// <param name="x">The X-position at which to draw the sprite.</param>
-        /// <param name="y">The X-position at which to draw the sprite.</param>
-        /// <param name="color">The color to tint the sprite.</param>
-        /// <param name="scale">The scale to draw.</param>
-        public static void DrawSprite(this SpriteBatch spriteBatch, Texture2D sheet, Rectangle sprite, float x, float y, Color? color = null, float scale = 1)
-        {
-            spriteBatch.Draw(sheet, new Vector2(x, y), sprite, color ?? Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
-        }
-
-        /// <summary>Draw a sprite to the screen scaled and centered to fit the given dimensions.</summary>
-        /// <param name="spriteBatch">The sprite batch being drawn.</param>
-        /// <param name="sheet">The sprite sheet containing the sprite.</param>
-        /// <param name="sprite">The sprite coordinates and dimensions in the sprite sheet.</param>
-        /// <param name="x">The X-position at which to draw the sprite.</param>
-        /// <param name="y">The X-position at which to draw the sprite.</param>
-        /// <param name="size">The size to draw.</param>
-        /// <param name="color">The color to tint the sprite.</param>
-        public static void DrawSpriteWithin(this SpriteBatch spriteBatch, Texture2D sheet, Rectangle sprite, float x, float y, Vector2 size, Color? color = null)
-        {
-            // calculate dimensions
-            float largestDimension = Math.Max(sprite.Width, sprite.Height);
-            float scale = size.X / largestDimension;
-            float leftOffset = Math.Max((size.X - (sprite.Width * scale)) / 2, 0);
-            float topOffset = Math.Max((size.Y - (sprite.Height * scale)) / 2, 0);
-
-            // draw
-            spriteBatch.DrawSprite(sheet, sprite, x + leftOffset, y + topOffset, color ?? Color.White, scale);
-        }
-
-        /// <summary>Draw an item icon to the screen scaled and centered to fit the given dimensions.</summary>
-        /// <param name="spriteBatch">The sprite batch being drawn.</param>
-        /// <param name="item">The item for which to draw an icon.</param>
-        /// <param name="x">The X-position at which to draw the sprite.</param>
-        /// <param name="y">The X-position at which to draw the sprite.</param>
-        /// <param name="size">The size to draw.</param>
-        /// <param name="color">The color to tint the sprite.</param>
-        public static void DrawIcon(this SpriteBatch spriteBatch, Item item, float x, float y, Vector2 size, Color? color = null)
-        {
-            Tuple<Texture2D, Rectangle> spriteData = GameHelper.GetSprite(item);
-            if (spriteData != null)
-                spriteBatch.DrawSpriteWithin(spriteData.Item1, spriteData.Item2, x, y, size, color ?? Color.White);
-        }
-
         /// <summary>Draw a sprite to the screen.</summary>
         /// <param name="batch">The sprite batch.</param>
         /// <param name="x">The X-position at which to start the line.</param>
@@ -82,7 +87,7 @@ namespace Pathoschild.LookupAnything
         /// <param name="color">The color to tint the sprite.</param>
         public static void DrawLine(this SpriteBatch batch, float x, float y, Vector2 size, Color? color = null)
         {
-            batch.Draw(Sprites.Pixel, new Rectangle((int)x, (int)y, (int)size.X, (int)size.Y), color ?? Color.White);
+            batch.Draw(CommonHelper.Pixel, new Rectangle((int)x, (int)y, (int)size.X, (int)size.Y), color ?? Color.White);
         }
 
         /// <summary>Draw a block of text to the screen with the specified wrap width.</summary>
@@ -131,7 +136,7 @@ namespace Pathoschild.LookupAnything
             float xOffset = 0;
             float yOffset = 0;
             float lineHeight = font.MeasureString("ABC").Y * scale;
-            float spaceWidth = DrawHelper.GetSpaceWidth(font) * scale;
+            float spaceWidth = CommonHelper.GetSpaceWidth(font) * scale;
             float blockWidth = 0;
             float blockHeight = lineHeight;
             foreach (string word in words)

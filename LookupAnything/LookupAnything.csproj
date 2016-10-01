@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\CommonHelper.cs" />
     <Compile Include="Components\DebugInterface.cs" />
     <Compile Include="Framework\Constants\FenceType.cs" />
     <Compile Include="Framework\Constants\FruitTreeGrowthStage.cs" />
@@ -75,7 +76,7 @@
     <Compile Include="Framework\Fields\ItemIconField.cs" />
     <Compile Include="Framework\Fields\ItemDropListField.cs" />
     <Compile Include="Framework\Fields\SkillBarField.cs" />
-    <Compile Include="Framework\GitVersion.cs" />
+    <Compile Include="Common\GitVersion.cs" />
     <Compile Include="Framework\InputMapConfiguration.cs" />
     <Compile Include="Framework\Models\GiftTasteModel.cs" />
     <Compile Include="Framework\Models\ObjectModel.cs" />
@@ -101,7 +102,7 @@
     <Compile Include="Framework\Targets\TreeTarget.cs" />
     <Compile Include="Framework\Targets\UnknownTarget.cs" />
     <Compile Include="Framework\TargetType.cs" />
-    <Compile Include="Framework\UpdateHelper.cs" />
+    <Compile Include="Common\UpdateHelper.cs" />
     <Compile Include="GameHelper.cs" />
     <Compile Include="Components\LookupMenu.cs" />
     <Compile Include="Components\Sprites.cs" />

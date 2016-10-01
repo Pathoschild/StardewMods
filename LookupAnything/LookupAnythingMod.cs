@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
+using Pathoschild.LookupAnything.Common;
 using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework;
 using Pathoschild.LookupAnything.Framework.Subjects;
