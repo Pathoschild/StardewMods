@@ -74,5 +74,6 @@ file if you want. These are the available settings:
 
 ## See also
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/518)
+* [Discussion thread](http://community.playstarbound.com/threads/smapi-chests-anywhere.122603/)
 * My other Stardew Valley mods: [Lookup Anything](https://github.com/Pathoschild/LookupAnything) and [Skip Intro](https://github.com/Pathoschild/StardewValley.SkipIntro)
 * This is an open-source fork of [AccessChestAnywhere](https://github.com/VIspReaderUS/AccessChestAnywhere) (which is currently inactive), with the [author's blessing](https://github.com/VIspReaderUS/AccessChestAnywhere/issues/1). Versions 1.0 and 1.1 are from that mod.
