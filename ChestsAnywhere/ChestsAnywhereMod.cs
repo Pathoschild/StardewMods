@@ -60,7 +60,7 @@ namespace ChestsAnywhere
             ManagedChest[] chests = (
                 from chest in this.GetChests()
                 where !chest.IsIgnored
-                orderby chest.Location ascending, (chest.Order ?? int.MaxValue) ascending, chest.Name ascending
+                orderby (this.Config.GroupByLocation ? chest.Location : null) ascending, (chest.Order ?? int.MaxValue) ascending, chest.Name ascending
                 select chest
             ).ToArray();
             ManagedChest selectedChest = chests.FirstOrDefault(p => p.Chest == this.SelectedChest) ?? chests.First();

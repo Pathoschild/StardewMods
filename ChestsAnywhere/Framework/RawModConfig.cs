@@ -16,6 +16,9 @@ namespace ChestsAnywhere.Framework
         /// <summary>The controller input map.</summary>
         public InputMapConfiguration<string> Controller { get; set; }
 
+        /// <summary>Whether to group tabs with a separate location dropdown.</summary>
+        public bool GroupByLocation { get; set; }
+
 
         /*********
         ** Public methods
@@ -66,7 +69,8 @@ namespace ChestsAnywhere.Framework
                     PrevChest = Enum.TryParse(this.Controller.PrevChest, out parsedButton) ? parsedButton : null as Buttons?,
                     NextChest = Enum.TryParse(this.Controller.NextChest, out parsedButton) ? parsedButton : null as Buttons?,
                     SortItems = Enum.TryParse(this.Controller.SortItems, out parsedButton) ? parsedButton : null as Buttons?,
-                }
+                },
+                GroupByLocation = this.GroupByLocation
             };
         }
     }

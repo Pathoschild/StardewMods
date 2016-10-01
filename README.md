@@ -42,6 +42,7 @@ file if you want. These are the available settings:
 | ----------------- | -------------------
 | `Keyboard`        | Set keyboard bindings. The default values are `B` to toggle the chest UI, and `Left`/`Right` to switch chests. See [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx).
 | `Controller`      | Set controller bindings. No buttons configured by default. See [valid buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.buttons.aspx).
+| `GroupByLocation` | Default `false`. Whether to add a separate location tab to filter chests.
 
 ## Versions
 1.0:
@@ -65,6 +66,9 @@ file if you want. These are the available settings:
 * Fixed farmhouse fridge not showing up
 * Location tab is now hidden if all your chests are in one place
 * Simplified default chest names (like "Chest #1" instead of "Chest(77,12)")
+
+1.3 (upcoming):
+* Location tab is no longer enabled by default (can be turned on in `config.json`).
 
 ## See also
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/518)

@@ -39,6 +39,9 @@ namespace ChestsAnywhere.Components
         /// <summary>The mod configuration.</summary>
         private readonly ModConfig Config;
 
+        /// <summary>Whether to show the location tab.</summary>
+        private bool ShowLocationTab => this.Config.GroupByLocation && this.Locations.Length > 1;
+
         /****
         ** UI
         ****/
@@ -198,7 +201,7 @@ namespace ChestsAnywhere.Components
 
             // tabs
             this.ChestTab.Draw(sprites);
-            if (this.Locations.Length > 1)
+            if (this.ShowLocationTab)
                 this.LocationTab.Draw(sprites);
 
             // tab dropdowns
@@ -227,7 +230,7 @@ namespace ChestsAnywhere.Components
         {
             // chest selector
             {
-                ManagedChest[] chests = this.Chests.Where(chest => chest.Location == this.SelectedLocation).ToArray();
+                ManagedChest[] chests = this.Chests.Where(chest => !this.ShowLocationTab || chest.Location == this.SelectedLocation).ToArray();
                 int x = this.xPositionOnScreen + Game1.tileSize / 4;
                 int y = this.yPositionOnScreen;
                 this.ChestSelector = new DropList<ManagedChest>(this.SelectedChest, chests, chest => chest.Name, x, y, true, this.Font);
@@ -256,7 +259,7 @@ namespace ChestsAnywhere.Components
             }
 
             // location
-            if (this.Locations.Length > 1)
+            if (this.ShowLocationTab)
             {
                 int x = this.xPositionOnScreen + this.width - Game1.tileSize / 4;
                 int y = this.yPositionOnScreen - Game1.tileSize - Game1.tileSize / 16;
