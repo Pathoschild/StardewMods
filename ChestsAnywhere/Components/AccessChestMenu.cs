@@ -61,7 +61,10 @@ namespace ChestsAnywhere.Components
         private DropList<string> LocationSelector;
 
         /// <summary>The button which sorts the chest items.</summary>
-        private ClickableTextureComponent OrganizeButton;
+        private ClickableTextureComponent OrganizeChestButton;
+
+        /// <summary>The button which sorts the inventory items.</summary>
+        private ClickableTextureComponent OrganizeInventoryButton;
 
         /*********
         ** Accessors
@@ -203,9 +206,11 @@ namespace ChestsAnywhere.Components
                 this.IsDisabled = true;
             }
 
-            // organize button
-            else if (this.OrganizeButton.containsPoint(x, y))
+            // organize buttons
+            else if (this.OrganizeChestButton.containsPoint(x, y))
                 this.SortChestItems();
+            else if (this.OrganizeInventoryButton.containsPoint(x, y))
+                this.SortInventory();
         }
 
         /// <summary>Render the UI.</summary>
@@ -214,8 +219,9 @@ namespace ChestsAnywhere.Components
         {
             this.DrawCount++;
 
-            // sort button
-            this.OrganizeButton.draw(sprites);
+            // organize buttons
+            this.OrganizeChestButton.draw(sprites);
+            this.OrganizeInventoryButton.draw(sprites);
 
             // chest with inventory menu
             base.draw(sprites);
@@ -242,8 +248,12 @@ namespace ChestsAnywhere.Components
         /// <summary>Initialise the inventory tools.</summary>
         private void InitialiseTools()
         {
-            // organize button
-            this.OrganizeButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + width, this.yPositionOnScreen + height / 3 + Game1.pixelZoom * 2, Game1.tileSize, Game1.tileSize), "", "Organize", Sprites.Buttons.Sheet, Sprites.Buttons.Organize, Game1.pixelZoom);
+            // organize buttons
+            int buttonHeight = Sprites.Buttons.Organize.Height * Game1.pixelZoom;
+            int buttonWidth = Sprites.Buttons.Organize.Width * Game1.pixelZoom;
+            int borderSize = 3 * Game1.pixelZoom; // size of menu frame
+            this.OrganizeChestButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + this.width, this.yPositionOnScreen + height / 2 - buttonHeight - borderSize, buttonWidth, buttonHeight), "", "Organize", Sprites.Buttons.Sheet, Sprites.Buttons.Organize, Game1.pixelZoom);
+            this.OrganizeInventoryButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + this.width, this.yPositionOnScreen + height - buttonHeight - borderSize, buttonWidth, buttonHeight), "", "Organize", Sprites.Buttons.Sheet, Sprites.Buttons.Organize, Game1.pixelZoom);
         }
 
         /// <summary>Initialise the chest and location selectors.</summary>

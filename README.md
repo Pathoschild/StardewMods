@@ -47,29 +47,30 @@ file if you want. These are the available settings:
 
 ## Versions
 1.0:
-* Initial release
+* Initial release.
 
 1.1:
-* Reworked UI
-* Added tabs for chests and locations
-* Added scrollable list for the two tabs
-* Chests can now be ignored
+* Reworked UI.
+* Added tabs for chests and locations.
+* Added scrollable list for the two tabs.
+* Chests can now be ignored.
 
 1.2:
-* Chests are now sorted alphabetically
-* Chests can now be sorted manually
-* Added item tooltips
-* Added organize button
-* Added controller support
-* Added support for rebinding keyboard/controller keys in `config.json`
-* Added hotkeys to navigate between chests
-* Fixed chests in constructed buildings (like barns) not showing up
-* Fixed farmhouse fridge not showing up
-* Location tab is now hidden if all your chests are in one place
-* Simplified default chest names (like "Chest #1" instead of "Chest(77,12)")
+* Chests are now sorted alphabetically.
+* Chests can now be sorted manually.
+* Added item tooltips.
+* Added organise button.
+* Added controller support.
+* Added support for rebinding keyboard/controller keys in `config.json`.
+* Added hotkeys to navigate between chests.
+* Fixed chests in constructed buildings (like barns) not showing up.
+* Fixed farmhouse fridge not showing up.
+* Location tab is now hidden if all your chests are in one place.
+* Simplified default chest names (like "Chest #1" instead of "Chest(77,12)").
 
 1.3 (upcoming):
 * Added version check on load.
+* Added organise button for inventory.
 * Improved chest/location dropdowns:
   * They can now be closed by clicking away.
   * They now show as many items as possible (instead of 10).
