@@ -143,28 +143,35 @@ namespace ChestsAnywhere.Components
             // chest dropdown
             if (this.ChestListOpen)
             {
-                if (!this.ChestSelector.containsPoint(x, y))
-                    return;
+                // close dropdown
                 this.ChestListOpen = false;
                 this.IsDisabled = false;
 
-                ManagedChest chest = this.ChestSelector.Select(x, y);
-                if (chest != null)
-                    this.SelectChest(chest);
+                // select chest
+                if (this.ChestSelector.containsPoint(x, y))
+                {
+                    ManagedChest chest = this.ChestSelector.Select(x, y);
+                    if (chest != null)
+                        this.SelectChest(chest);
+                }
             }
 
             // location dropdown
             else if (this.LocationListOpen)
             {
-                if (!this.LocationSelector.containsPoint(x, y))
-                    return;
+                // close dropdown
                 this.LocationListOpen = false;
                 this.IsDisabled = false;
-                string location = this.LocationSelector.Select(x, y);
-                if (location != null && location != this.SelectedLocation)
+
+                // select location
+                if (this.LocationSelector.containsPoint(x, y))
                 {
-                    this.SelectChest(this.Chests.First(p => p.Location == location));
-                    this.InitialiseSelectors();
+                    string location = this.LocationSelector.Select(x, y);
+                    if (location != null && location != this.SelectedLocation)
+                    {
+                        this.SelectChest(this.Chests.First(p => p.Location == location));
+                        this.InitialiseSelectors();
+                    }
                 }
             }
 
