@@ -100,3 +100,8 @@ Useful tools when working on this mod:
   to extract the game's assets and data.
 * [YAML Analyzer](http://catox.free.fr/StardewTools/yaml_analyzer.html) to help figure out data
   files.
+
+## See also
+* [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/518)
+* [Discussion thread](http://community.playstarbound.com/threads/smapi-lookup-anything.122929/)
+* My other Stardew Valley mods: [Chests Anywhere](https://github.com/Pathoschild/ChestsAnywhere) and [Skip Intro](https://github.com/Pathoschild/StardewValley.SkipIntro)

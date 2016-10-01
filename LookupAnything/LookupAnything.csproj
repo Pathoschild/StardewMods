@@ -140,10 +140,10 @@
   <PropertyGroup>
     <PostBuildEvent>
       set modDir=$(GamePath)\Mods\LookupAnything
-      if not exist "%25modDir%25" (mkdir "%25modDir%25")
-      copy "$(TargetPath)" "%25modDir%25\$(TargetFileName)"
-      copy "$(ProjectDir)manifest.json" "%25modDir%25\manifest.json"
-      copy "$(ProjectDir)data.json" "%25modDir%25\data.json"
+      if not exist "%modDir%" (mkdir "%modDir%")
+      copy "$(TargetPath)" "%modDir%\$(TargetFileName)"
+      copy "$(ProjectDir)manifest.json" "%modDir%\manifest.json"
+      copy "$(ProjectDir)data.json" "%modDir%\data.json"
     </PostBuildEvent>
   </PropertyGroup>
 </Project>

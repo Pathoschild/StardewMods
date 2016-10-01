@@ -41,7 +41,7 @@ namespace Pathoschild.LookupAnything.Components
             this.TargetFactory = targetFactory;
 
             // generate warning text
-            string[] keys = new[] { config.Keyboard.ToggleDebug != Keys.None ? config.Keyboard.ToggleDebug.ToString() : null, config.Controller.ToggleDebug?.ToString() }
+            string[] keys = new[] { config.Keyboard.IsValidKey(config.Keyboard.ToggleDebug) ? config.Keyboard.ToggleDebug.ToString() : null, config.Controller.IsValidKey(config.Controller.ToggleDebug) ? config.Controller.ToggleDebug.ToString() : null }
                     .Where(p => p != null)
                     .ToArray();
             this.WarningText = $"Debug info enabled; press {string.Join(" or ", keys)} to disable.";

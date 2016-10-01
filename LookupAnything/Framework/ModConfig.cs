@@ -12,7 +12,7 @@ namespace Pathoschild.LookupAnything.Framework
         public InputMapConfiguration<Keys> Keyboard { get; set; }
 
         /// <summary>The controller input map.</summary>
-        public InputMapConfiguration<Buttons?> Controller { get; set; }
+        public InputMapConfiguration<Buttons> Controller { get; set; }
 
         /// <summary>Whether to close the lookup UI when the lookup key is release.</summary>
         public bool HideOnKeyUp { get; set; }

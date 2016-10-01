@@ -240,7 +240,7 @@ namespace Pathoschild.LookupAnything
             if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning && this.NewRelease != null)
             {
                 this.HasSeenUpdateWarning = true;
-                GameHelper.ShowInfoMessage($"You can update LookupAnything from {this.CurrentVersion} to {this.NewRelease.Version}.");
+                GameHelper.ShowInfoMessage($"You can update Lookup Anything from {this.CurrentVersion} to {this.NewRelease.Version}.");
             }
         }
 

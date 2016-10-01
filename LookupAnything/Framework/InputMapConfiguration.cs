@@ -23,9 +23,9 @@ namespace Pathoschild.LookupAnything.Framework
 
 
         /*********
-        ** Accessors
+        ** Public methods
         *********/
-        /// <summary>Get whether any keys are configured.</summary>
+        /// <summary>Get whether the specified key is valid.</summary>
         /// <param name="key">The key to check.</param>
         public bool IsValidKey(T key)
         {

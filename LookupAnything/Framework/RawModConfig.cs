@@ -61,27 +61,40 @@ namespace Pathoschild.LookupAnything.Framework
         /// <summary>Get a parsed representation of the mod configuration.</summary>
         public ModConfig GetParsed()
         {
-            Keys parsedKey;
-            Buttons parsedButton;
             return new ModConfig
             {
                 ScrollAmount = this.ScrollAmount,
                 Keyboard = new InputMapConfiguration<Keys>
                 {
-                    ToggleLookup = Enum.TryParse(this.Keyboard.ToggleLookup, out parsedKey) ? parsedKey : Keys.F1,
-                    ScrollUp = Enum.TryParse(this.Keyboard.ScrollUp, out parsedKey) ? parsedKey : Keys.Up,
-                    ScrollDown = Enum.TryParse(this.Keyboard.ScrollDown, out parsedKey) ? parsedKey : Keys.Down,
-                    ToggleDebug = Enum.TryParse(this.Keyboard.ToggleDebug, out parsedKey) ? parsedKey : Keys.None
+                    ToggleLookup = this.TryParse(this.Keyboard.ToggleLookup, Keys.F1),
+                    ScrollUp = this.TryParse(this.Keyboard.ScrollUp, Keys.Up),
+                    ScrollDown = this.TryParse(this.Keyboard.ScrollDown, Keys.Down),
+                    ToggleDebug = this.TryParse(this.Keyboard.ToggleDebug, Keys.None)
                 },
-                Controller = new InputMapConfiguration<Buttons?>
+                Controller = new InputMapConfiguration<Buttons>
                 {
-                    ToggleLookup = Enum.TryParse(this.Controller.ToggleLookup, out parsedButton) ? parsedButton : null as Buttons?,
-                    ScrollUp = Enum.TryParse(this.Controller.ScrollUp, out parsedButton) ? parsedButton : null as Buttons?,
-                    ScrollDown = Enum.TryParse(this.Controller.ScrollDown, out parsedButton) ? parsedButton : null as Buttons?
+                    ToggleLookup = this.TryParse<Buttons>(this.Controller.ToggleLookup),
+                    ScrollUp = this.TryParse<Buttons>(this.Controller.ScrollUp),
+                    ScrollDown = this.TryParse<Buttons>(this.Controller.ScrollDown),
+                    ToggleDebug = this.TryParse<Buttons>(this.Controller.ToggleDebug)
                 },
                 HideOnKeyUp = this.HideOnKeyUp,
                 CheckForUpdates = this.CheckForUpdates
             };
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Parse a raw enum value.</summary>
+        /// <typeparam name="T">The enum type.</typeparam>
+        /// <param name="raw">The raw value.</param>
+        /// <param name="defaultValue">The default value if it can't be parsed.</param>
+        private T TryParse<T>(string raw, T defaultValue = default(T)) where T : struct
+        {
+            T parsed;
+            return Enum.TryParse(raw, out parsed) ? parsed : defaultValue;
         }
     }
 }
