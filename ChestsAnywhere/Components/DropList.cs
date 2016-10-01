@@ -17,6 +17,9 @@ namespace ChestsAnywhere.Components
         /*********
         ** Properties
         *********/
+        /// <summary>The padding applied to dropdown lists.</summary>
+        private const int DROPDOWN_PADDING = 5;
+
         /// <summary>The index of the selected item.</summary>
         private int SelectedIndex;
 
@@ -63,7 +66,7 @@ namespace ChestsAnywhere.Components
             this.ToRight = toRight;
 
             // set dimensions
-            this.bounds.Width = Game1.tileSize * 7;
+            this.bounds.Width = Math.Max((int)this.Items.Max(p => font.MeasureString(p.Name).X), Game1.tileSize * 2) + DROPDOWN_PADDING * 2;
             this.bounds.Height = this.FontHeight * 10 + Game1.tileSize / 16 * 9;
             this.bounds.X = toRight
                 ? x
@@ -127,7 +130,7 @@ namespace ChestsAnywhere.Components
             int height = this.FontHeight;
             for (int i = 0; i < this.Items.Length && i < 10; i++)
             {
-                this.ItemComponents.Add(new ClickableComponent(new Rectangle(x, y, width, height), i.ToString()));
+                this.ItemComponents.Add(new ClickableComponent(new Rectangle(x + DROPDOWN_PADDING * 2, y, width, height), i.ToString()));
                 y += this.FontHeight;
             }
         }
@@ -149,8 +152,8 @@ namespace ChestsAnywhere.Components
                 // draw text
                 DropListItem<TItem> item = this.Items.First(p => p.Index == int.Parse(component.name));
                 Vector2 position = this.ToRight
-                        ? new Vector2(component.bounds.X, component.bounds.Y + Game1.tileSize / 16)
-                        : new Vector2(component.bounds.X + component.bounds.Width - this.Font.MeasureString(item.Name).X, component.bounds.Y + Game1.tileSize / 16);
+                        ? new Vector2(component.bounds.X + DROPDOWN_PADDING, component.bounds.Y + Game1.tileSize / 16)
+                        : new Vector2(component.bounds.X + component.bounds.Width - this.Font.MeasureString(item.Name).X - DROPDOWN_PADDING, component.bounds.Y + Game1.tileSize / 16);
                 sprites.DrawString(this.Font, item.Name, position, Color.Black);
             }
         }

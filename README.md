@@ -72,6 +72,7 @@ file if you want. These are the available settings:
 * Added version check on load.
 * Location tab is no longer enabled by default (can be enabled via `config.json`).
 * Can now close dropdown lists by clicking away.
+* Improved dropdown list rendering.
 
 ## See also
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/518)
