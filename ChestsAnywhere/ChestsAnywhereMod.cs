@@ -52,9 +52,13 @@ namespace ChestsAnywhere
             // hook UI
             GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
             GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
-            ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
-            ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-            ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+            if (this.Config.Keyboard.HasAny())
+                ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
+            if (this.Config.Controller.HasAny())
+            {
+                ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+                ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+            }
         }
 
 
@@ -94,7 +98,10 @@ namespace ChestsAnywhere
         /// <param name="map">The configured input mapping.</param>
         private void ReceiveKeyPress<TKey>(TKey key, InputMapConfiguration<TKey> map)
         {
-            // perform bound action
+            if (!map.IsValidKey(key))
+                return;
+
+            // open menu
             if (key.Equals(map.Toggle) && Game1.activeClickableMenu == null)
                 this.OpenMenu();
         }

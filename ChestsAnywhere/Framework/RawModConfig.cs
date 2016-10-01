@@ -57,27 +57,39 @@ namespace ChestsAnywhere.Framework
         /// <summary>Get a parsed representation of the mod configuration.</summary>
         public ModConfig GetParsed()
         {
-            Keys parsedKey;
-            Buttons parsedButton;
             return new ModConfig
             {
                 Keyboard = new InputMapConfiguration<Keys>
                 {
-                    Toggle = Enum.TryParse(this.Keyboard.Toggle, out parsedKey) ? parsedKey : Keys.B,
-                    PrevChest = Enum.TryParse(this.Keyboard.PrevChest, out parsedKey) ? parsedKey : Keys.Left,
-                    NextChest = Enum.TryParse(this.Keyboard.NextChest, out parsedKey) ? parsedKey : Keys.Right,
-                    SortItems = Enum.TryParse(this.Keyboard.SortItems, out parsedKey) ? parsedKey : Keys.None
+                    Toggle = this.TryParse(this.Keyboard.Toggle, Keys.B),
+                    PrevChest = this.TryParse(this.Keyboard.PrevChest, Keys.Left),
+                    NextChest = this.TryParse(this.Keyboard.NextChest, Keys.Right),
+                    SortItems = this.TryParse(this.Keyboard.SortItems, Keys.None)
                 },
-                Controller = new InputMapConfiguration<Buttons?>
+                Controller = new InputMapConfiguration<Buttons>
                 {
-                    Toggle = Enum.TryParse(this.Controller.Toggle, out parsedButton) ? parsedButton : null as Buttons?,
-                    PrevChest = Enum.TryParse(this.Controller.PrevChest, out parsedButton) ? parsedButton : null as Buttons?,
-                    NextChest = Enum.TryParse(this.Controller.NextChest, out parsedButton) ? parsedButton : null as Buttons?,
-                    SortItems = Enum.TryParse(this.Controller.SortItems, out parsedButton) ? parsedButton : null as Buttons?,
+                    Toggle = this.TryParse<Buttons>(this.Controller.Toggle),
+                    PrevChest = this.TryParse<Buttons>(this.Controller.PrevChest),
+                    NextChest = this.TryParse<Buttons>(this.Controller.NextChest),
+                    SortItems = this.TryParse<Buttons>(this.Controller.SortItems)
                 },
                 CheckForUpdates = this.CheckForUpdates,
                 GroupByLocation = this.GroupByLocation
             };
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Parse a raw enum value.</summary>
+        /// <typeparam name="T">The enum type.</typeparam>
+        /// <param name="raw">The raw value.</param>
+        /// <param name="defaultValue">The default value if it can't be parsed.</param>
+        private T TryParse<T>(string raw, T defaultValue = default(T)) where T : struct
+        {
+            T parsed;
+            return Enum.TryParse(raw, out parsed) ? parsed : defaultValue;
         }
     }
 }

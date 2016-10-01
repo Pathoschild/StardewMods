@@ -92,33 +92,36 @@ namespace ChestsAnywhere.Components
         /// <param name="input">The key that was pressed.</param>
         public override void receiveKeyPress(Keys input)
         {
-            if (this.DrawCount <= 10)
-                return;
-
-            if (input == this.Config.Keyboard.Toggle || input == Keys.Escape)
-                this.exitThisMenuNoSound();
-            else if (input == this.Config.Keyboard.PrevChest)
-                this.SelectPreviousChest();
-            else if (input == this.Config.Keyboard.NextChest)
-                this.SelectNextChest();
-            else if (input == this.Config.Keyboard.SortItems)
-                this.SortChestItems();
+            this.ReceiveKey(input, this.Config.Keyboard);
         }
 
         /// <summary>The method invoked when the player presses a controller button.</summary>
         /// <param name="input">The button that was pressed.</param>
         public override void receiveGamePadButton(Buttons input)
         {
-            if (this.DrawCount <= 10)
+            this.ReceiveKey(input, this.Config.Controller);
+        }
+
+        /// <summary>The method invoked when the player presses a key.</summary>
+        /// <typeparam name="T">The key type.</typeparam>
+        /// <param name="input">The key that was pressed.</param>
+        /// <param name="config">The input configuration.</param>
+        public void ReceiveKey<T>(T input, InputMapConfiguration<T> config)
+        {
+            // ignore invalid input
+            if (this.DrawCount < 10)
+                return;
+            if (!config.IsValidKey(input))
                 return;
 
-            if (input == this.Config.Controller.Toggle)
+            // chest menu keys
+            if (input.Equals(config.Toggle))
                 this.exitThisMenuNoSound();
-            else if (input == this.Config.Controller.PrevChest)
+            else if (input.Equals(config.PrevChest))
                 this.SelectPreviousChest();
-            else if (input == this.Config.Controller.NextChest)
+            else if (input.Equals(config.NextChest))
                 this.SelectNextChest();
-            else if (input == this.Config.Controller.SortItems)
+            else if (input.Equals(config.SortItems))
                 this.SortChestItems();
         }
 
