@@ -36,11 +36,8 @@ namespace ChestsAnywhere.Components
         /// <summary>The name of the selected location.</summary>
         private string SelectedLocation => this.SelectedChest.Location;
 
-        /// <summary>The keyboard input map.</summary>
-        private readonly InputMapConfiguration<Keys> Keyboard;
-
-        /// <summary>The controller input map.</summary>
-        private readonly InputMapConfiguration<Buttons?> Controller;
+        /// <summary>The mod configuration.</summary>
+        private readonly ModConfig Config;
 
         /****
         ** UI
@@ -76,14 +73,12 @@ namespace ChestsAnywhere.Components
         /// <summary>Construct an instance.</summary>
         /// <param name="chests">The known chests.</param>
         /// <param name="selectedChest">The selected chest.</param>
-        /// <param name="keyboard">The keyboard input map.</param>
-        /// <param name="controller">The controller input map.</param>
-        public AccessChestMenu(ManagedChest[] chests, ManagedChest selectedChest, InputMapConfiguration<Keys> keyboard, InputMapConfiguration<Buttons?> controller)
+        /// <param name="config">The mod configuration.</param>
+        public AccessChestMenu(ManagedChest[] chests, ManagedChest selectedChest, ModConfig config)
         {
             this.Chests = chests;
             this.SelectedChest = selectedChest;
-            this.Keyboard = keyboard;
-            this.Controller = controller;
+            this.Config = config;
             this.Locations = this.Chests.Select(p => p.Location).Distinct().ToArray();
             this.InitialiseTabs();
             this.InitialiseSelectors();
@@ -97,13 +92,13 @@ namespace ChestsAnywhere.Components
             if (this.DrawCount <= 10)
                 return;
 
-            if (input == this.Keyboard.Toggle || input == Keys.Escape)
+            if (input == this.Config.Keyboard.Toggle || input == Keys.Escape)
                 this.exitThisMenuNoSound();
-            else if (input == this.Keyboard.PrevChest)
+            else if (input == this.Config.Keyboard.PrevChest)
                 this.SelectPreviousChest();
-            else if (input == this.Keyboard.NextChest)
+            else if (input == this.Config.Keyboard.NextChest)
                 this.SelectNextChest();
-            else if (input == this.Keyboard.SortItems)
+            else if (input == this.Config.Keyboard.SortItems)
                 this.SortChestItems();
         }
 
@@ -114,13 +109,13 @@ namespace ChestsAnywhere.Components
             if (this.DrawCount <= 10)
                 return;
 
-            if (input == this.Controller.Toggle)
+            if (input == this.Config.Controller.Toggle)
                 this.exitThisMenuNoSound();
-            else if (input == this.Controller.PrevChest)
+            else if (input == this.Config.Controller.PrevChest)
                 this.SelectPreviousChest();
-            else if (input == this.Controller.NextChest)
+            else if (input == this.Config.Controller.NextChest)
                 this.SelectNextChest();
-            else if (input == this.Controller.SortItems)
+            else if (input == this.Config.Controller.SortItems)
                 this.SortChestItems();
         }
 

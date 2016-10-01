@@ -2,7 +2,6 @@
 using System.Linq;
 using ChestsAnywhere.Components;
 using ChestsAnywhere.Framework;
-using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -21,11 +20,8 @@ namespace ChestsAnywhere
         /// <summary>The selected chest.</summary>
         private Chest SelectedChest;
 
-        /// <summary>The keyboard input map.</summary>
-        private InputMapConfiguration<Keys> Keyboard;
-
-        /// <summary>The controller input map.</summary>
-        private InputMapConfiguration<Buttons?> Controller;
+        /// <summary>The mod configuration.</summary>
+        private ModConfig Config;
 
 
         /*********
@@ -35,14 +31,12 @@ namespace ChestsAnywhere
         public override void Entry(params object[] objects)
         {
             // read config
-            var config = new Configuration().InitializeConfig(this.BaseConfigPath);
-            this.Keyboard = config.GetKeyboard();
-            this.Controller = config.GetController();
+            this.Config = new RawModConfig().InitializeConfig(this.BaseConfigPath).GetParsed();
 
             // hook UI
-            ControlEvents.KeyPressed += (sender, e) => this.TryOpenMenu(e.KeyPressed, this.Keyboard.Toggle);
-            ControlEvents.ControllerButtonPressed += (sender, e) => this.TryOpenMenu(e.ButtonPressed, this.Controller.Toggle);
-            ControlEvents.ControllerTriggerPressed += (sender, e) => this.TryOpenMenu(e.ButtonPressed, this.Controller.Toggle);
+            ControlEvents.KeyPressed += (sender, e) => this.TryOpenMenu(e.KeyPressed, this.Config.Keyboard.Toggle);
+            ControlEvents.ControllerButtonPressed += (sender, e) => this.TryOpenMenu(e.ButtonPressed, this.Config.Controller.Toggle);
+            ControlEvents.ControllerTriggerPressed += (sender, e) => this.TryOpenMenu(e.ButtonPressed, this.Config.Controller.Toggle);
         }
 
 
@@ -74,7 +68,7 @@ namespace ChestsAnywhere
             // render menu
             if (chests.Any())
             {
-                AccessChestMenu menu = new AccessChestMenu(chests, selectedChest, this.Keyboard, this.Controller);
+                AccessChestMenu menu = new AccessChestMenu(chests, selectedChest, this.Config);
                 menu.OnChestSelected += chest => this.SelectedChest = chest.Chest; // remember selected chest on next load
                 Game1.activeClickableMenu = menu;
             }
