@@ -77,6 +77,12 @@ file if you want. These are the available settings:
   * They now show up/down arrows when there are too many items to display at once.
 * Location tab is no longer enabled by default, and may be removed in a future version. [Comment now if you want to keep it!](http://community.playstarbound.com/threads/smapi-chests-anywhere.122603/)
 
+## Compiling the mod
+[Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is
+recommended. If you really want to compile the mod yourself, just edit `ChestsAnywhere.csproj` and
+set the `<GamePath>` setting to your Stardew Valley directory path. Launching the project in Visual
+Studio will compile the code, package it into the mod directory, and start the game.
+
 ## See also
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/518)
 * [Discussion thread](http://community.playstarbound.com/threads/smapi-chests-anywhere.122603/)
