@@ -2,6 +2,8 @@
 your chests from anywhere. Transfer items without having to run around, from the comfort of your
 bed to the deepest mine level.
 
+![](screenshots/animated-usage.gif)
+
 ## Installation
 1. Install [SMAPI](https://github.com/ClxS/SMAPI) (0.39.5+).
 2. Install [Chest Label System](http://www.nexusmods.com/stardewvalley/mods/242/) to name your
@@ -10,29 +12,17 @@ bed to the deepest mine level.
 4. Run the game using SMAPI.
 
 ## Usage
-### Access your chests
-Press `B` to open the menu:
+* **Access your chests:** press `B` to open the menu. This will show the chests on your farm and in
+  your buildings. Click the top-left menu to change chest, or navigate using the left and right
+  arrow keys.
+* **Sort chests:** your chests are sorted alphabetically by default. Want a different order? Just add
+  a number between pipes (like `|1|`) somewhere in the chest name:
 
-![](screenshots/menu.png)
+  ![](screenshots/tags-order-name.png)
 
-This will show the chests on your farm and in your buildings. You can click the top-right menu
-to change location, and the top-left menu to change chest:
-
-![](screenshots/menu-chest-list.png)
-
-You can also navigate between chests using the left and right arrow keys.
-
-### Sort chests
-Your chests are sorted alphabetically by default. Want a different order? Just add a number between
-pipes (like `|1|`) somewhere in the chest name:
-
-![](screenshots/tags-order-name.png)
-
-The chests will be sorted by that number, _then_ alphabetically. Chests with a specific order will
-appear before those without. (The number won't be shown in the list.)
-
-### Hide chests
-Hide a chest by adding `|ignore|` to its name.
+  The chests will be sorted by that number, _then_ alphabetically. Chests with a specific order will
+  appear before those without. (The number won't be shown in the list.)
+* **Hide chests:** add `|ignore|` to a chest's name, and it won't appear when you press `B`.
 
 ## Configuration
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
