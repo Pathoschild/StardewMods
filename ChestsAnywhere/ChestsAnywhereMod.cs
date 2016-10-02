@@ -52,7 +52,7 @@ namespace ChestsAnywhere
             this.CurrentVersion = UpdateHelper.GetSemanticVersion(this.Manifest.Version);
 
             // hook UI
-            GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
+            PlayerEvents.LoadedGame += (sender, e) => this.ReceiveGameLoaded();
             GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
             MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
 
