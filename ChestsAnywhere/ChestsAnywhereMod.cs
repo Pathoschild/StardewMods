@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChestsAnywhere.Common;
@@ -52,6 +53,8 @@ namespace ChestsAnywhere
             // hook UI
             GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
             GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
+
+            // hook input
             if (this.Config.Keyboard.HasAny())
                 ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
             if (this.Config.Controller.HasAny())
@@ -71,12 +74,19 @@ namespace ChestsAnywhere
             // check for an updated version
             if (this.Config.CheckForUpdates)
             {
-                Task.Factory.StartNew(() =>
+                try
                 {
-                    GitRelease release = UpdateHelper.GetLatestReleaseAsync("Pathoschild/ChestsAnywhere").Result;
-                    if (release.IsNewerThan(this.CurrentVersion))
-                        this.NewRelease = release;
-                });
+                    Task.Factory.StartNew(() =>
+                    {
+                        GitRelease release = UpdateHelper.GetLatestReleaseAsync("Pathoschild/ChestsAnywhere").Result;
+                        if (release.IsNewerThan(this.CurrentVersion))
+                            this.NewRelease = release;
+                    });
+                }
+                catch (Exception ex)
+                {
+                    this.HandleError(ex, "checking for a new version");
+                }
             }
         }
 
@@ -87,8 +97,16 @@ namespace ChestsAnywhere
             // render update warning
             if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning && this.NewRelease != null)
             {
-                this.HasSeenUpdateWarning = true;
-                CommonHelper.ShowInfoMessage($"You can update Chests Anywhere from {this.CurrentVersion} to {this.NewRelease.Version}.");
+                try
+                {
+
+                    this.HasSeenUpdateWarning = true;
+                    CommonHelper.ShowInfoMessage($"You can update Chests Anywhere from {this.CurrentVersion} to {this.NewRelease.Version}.");
+                }
+                catch (Exception ex)
+                {
+                    this.HandleError(ex, "showing the new version available");
+                }
             }
         }
 
@@ -98,12 +116,19 @@ namespace ChestsAnywhere
         /// <param name="map">The configured input mapping.</param>
         private void ReceiveKeyPress<TKey>(TKey key, InputMapConfiguration<TKey> map)
         {
-            if (!map.IsValidKey(key))
-                return;
+            try
+            {
+                if (!map.IsValidKey(key))
+                    return;
 
-            // open menu
-            if (key.Equals(map.Toggle) && Game1.activeClickableMenu == null)
-                this.OpenMenu();
+                // open menu
+                if (key.Equals(map.Toggle) && Game1.activeClickableMenu == null)
+                    this.OpenMenu();
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, "handling key input");
+            }
         }
 
         /// <summary>Open the menu UI.</summary>
@@ -160,6 +185,15 @@ namespace ChestsAnywhere
                         yield return new ManagedChest(fridge, location.Name, "Fridge");
                 }
             }
+        }
+
+        /// <summary>Log an error and warn the user.</summary>
+        /// <param name="ex">The exception to handle.</param>
+        /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up").</param>
+        private void HandleError(Exception ex, string verb)
+        {
+            CommonHelper.ShowErrorMessage($"Huh. Something went wrong {verb}. The game error log has the technical details.");
+            Log.Error(ex.ToString());
         }
     }
 }
