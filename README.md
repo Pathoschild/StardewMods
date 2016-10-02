@@ -14,13 +14,9 @@ bed to the deepest mine level.
   your buildings. Click the top-left menu to change chest, or navigate using the left and right
   arrow keys.
 * **Rename chests:** click the speech bubble next to the chest dropdown to rename the chest.
-* **Sort chests:** your chests are sorted alphabetically by default. Just add a number between
-  pipes in the chest name to change the order:
-
-  ![](screenshots/tags-order-name.png)
-
-  The chests will be sorted by that number, _then_ alphabetically. (The number won't be shown in
-  the list.)
+* **Sort chests:** your chests are sorted alphabetically by default. You can add a number between
+  pipes in the chest name (like "`Seeds |1|`") to sort by that number, _then_
+  alphabetically. (The number won't be shown in the list.)
 * **Hide chests:** add `|ignore|` to a chest's name, and it won't appear when you press `B`. Careful! You won't be able to show it again until you reset the name (e.g. by picking up the chest and putting it back down).
 
 ## Configuration
@@ -58,13 +54,14 @@ file if you want. These are the available settings:
 * Simplified default chest names (like "Chest #1" instead of "Chest(77,12)").
 
 1.3:
-* Added organise button for inventory.
 * Added button to rename a chest from the menu.
+* Added organise button for inventory.
 * Added mod update & minimum game version check on load.
 * Improved chest/location dropdowns:
   * They can now be closed by clicking away or pressing `ESC`.
   * They now show as many items as possible (instead of 10).
   * They now show up/down arrows when there are too many items to display at once.
+* Improved error handling.
 * Pressing `ESC` will now close the chest UI.
 * The location tab is no longer enabled by default, and may be removed in a future version. [Comment now if you want to keep it!](http://community.playstarbound.com/threads/smapi-chests-anywhere.122603/)
 
