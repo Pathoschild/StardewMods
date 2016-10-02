@@ -62,7 +62,7 @@ namespace ChestsAnywhere.Components
         }
 
         /// <summary>Sprites used to draw menus.</summary>
-            public static class Menu
+        public static class Menu
         {
             /// <summary>The sprite sheet containing the menu sprites.</summary>
             public static readonly Texture2D Sheet = Game1.menuTexture;
@@ -120,6 +120,13 @@ namespace ChestsAnywhere.Components
             public static readonly Rectangle Organize = new Rectangle(162, 440, 16, 16);
         }
 
+        /// <summary>Sprites used to draw a textbox.</summary>
+        public static class Textbox
+        {
+            /// <summary>The sprite sheet containing the textbox sprites.</summary>
+            public static Texture2D Sheet => Game1.content.Load<Texture2D>("LooseSprites\\textBox");
+        }
+
         /// <summary>Sprites used to draw icons.</summary>
         public static class Icons
         {
@@ -131,6 +138,9 @@ namespace ChestsAnywhere.Components
 
             /// <summary>An up arrow for scrolling content.</summary>
             public static readonly Rectangle UpArrow = new Rectangle(76, 72, 40, 44);
+
+            /// <summary>A speech bubble icon.</summary>
+            public static readonly Rectangle SpeechBubble = new Rectangle(66, 4, 14, 12);
         }
 
 
@@ -149,6 +159,34 @@ namespace ChestsAnywhere.Components
         public static void Draw(this SpriteBatch batch, Texture2D sheet, Rectangle sprite, int x, int y, int width, int height, Color? color = null)
         {
             batch.Draw(sheet, new Rectangle(x, y, width, height), sprite, color ?? Color.White);
+        }
+
+        /// <summary>Draw a menu background within the specified bounds.</summary>
+        /// <param name="batch">The sprite batch.</param>
+        /// <param name="bounds">The menu bounds.</param>
+        /// <param name="bisect">Whether to bisect into two stacked areas.</param>
+        public static void DrawMenuBackground(this SpriteBatch batch, Rectangle bounds, bool bisect = false)
+        {
+            // background
+            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.Background, bounds.X, bounds.Y, bounds.Width - Game1.tileSize / 8, bounds.Height - Game1.tileSize / 8);
+
+            // borders
+            int tileSize = Game1.tileSize;
+            int edgeWidth = Game1.tileSize / 2;
+            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.TopLeft, bounds.X, bounds.Y, edgeWidth, edgeWidth);
+            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.Top, bounds.X + edgeWidth, bounds.Y, bounds.Width - tileSize, edgeWidth);
+            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.TopRight, bounds.X + bounds.Width - edgeWidth, bounds.Y, edgeWidth, edgeWidth);
+            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.Left, bounds.X, bounds.Y + edgeWidth, edgeWidth, bounds.Height - tileSize);
+            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.Right, bounds.X + bounds.Width - edgeWidth, bounds.Y + edgeWidth, edgeWidth, bounds.Height - tileSize);
+            if (bisect)
+            {
+                batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.MiddleMiddle, bounds.X + edgeWidth, bounds.Y + bounds.Height / 2 - tileSize / 4, bounds.Width - tileSize, edgeWidth);
+                batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.MiddleLeft, bounds.X, bounds.Y + bounds.Height / 2 - tileSize / 4, edgeWidth, edgeWidth);
+                batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.MiddleRight, bounds.X + bounds.Width - edgeWidth, bounds.Y + bounds.Height / 2 - tileSize / 4, edgeWidth, edgeWidth);
+            }
+            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.BottomLeft, bounds.X, bounds.Y + bounds.Height - edgeWidth, edgeWidth, edgeWidth);
+            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.Bottom, bounds.X + edgeWidth, bounds.Y + bounds.Height - edgeWidth, bounds.Width - tileSize, edgeWidth);
+            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.BottomRight, bounds.X + bounds.Width - edgeWidth, bounds.Y + bounds.Height - edgeWidth, edgeWidth, edgeWidth);
         }
     }
 }

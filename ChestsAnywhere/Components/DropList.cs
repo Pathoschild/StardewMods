@@ -123,32 +123,33 @@ namespace ChestsAnywhere.Components
 
         /// <summary>Render the UI.</summary>
         /// <param name="sprites">The sprites to render.</param>
-        public void Draw(SpriteBatch sprites)
+        /// <param name="opacity">The opacity at which to draw.</param>
+        public void Draw(SpriteBatch sprites, float opacity = 1)
         {
             // draw dropdown items
             foreach (ClickableComponent component in this.ItemComponents)
             {
                 // draw background
                 if (component.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
-                    sprites.Draw(Sprites.DropDown.Sheet, component.bounds, Sprites.DropDown.HoverBackground, Color.White);
+                    sprites.Draw(Sprites.DropDown.Sheet, component.bounds, Sprites.DropDown.HoverBackground, Color.White * opacity);
                 else if (component.name.Equals(this.SelectedIndex.ToString()))
-                    sprites.Draw(Sprites.DropDown.Sheet, component.bounds, Sprites.DropDown.ActiveBackground, Color.White);
+                    sprites.Draw(Sprites.DropDown.Sheet, component.bounds, Sprites.DropDown.ActiveBackground, Color.White * opacity);
                 else
-                    sprites.Draw(Sprites.DropDown.Sheet, component.bounds, Sprites.DropDown.InactiveBackground, Color.White);
+                    sprites.Draw(Sprites.DropDown.Sheet, component.bounds, Sprites.DropDown.InactiveBackground, Color.White * opacity);
 
                 // draw text
                 DropListItem<TItem> item = this.Items.First(p => p.Index == int.Parse(component.name));
                 Vector2 position = this.ToRight
                         ? new Vector2(component.bounds.X + DROPDOWN_PADDING, component.bounds.Y + Game1.tileSize / 16)
                         : new Vector2(component.bounds.X + component.bounds.Width - this.Font.MeasureString(item.Name).X - DROPDOWN_PADDING, component.bounds.Y + Game1.tileSize / 16);
-                sprites.DrawString(this.Font, item.Name, position, Color.Black);
+                sprites.DrawString(this.Font, item.Name, position, Color.Black * opacity);
             }
 
             // draw up/down arrows
             if (this.FirstVisibleIndex > 0)
-                sprites.Draw(Sprites.Icons.Sheet, new Vector2(this.bounds.X - Sprites.Icons.UpArrow.Width, this.bounds.Y), Sprites.Icons.UpArrow, Color.White);
+                sprites.Draw(Sprites.Icons.Sheet, new Vector2(this.bounds.X - Sprites.Icons.UpArrow.Width, this.bounds.Y), Sprites.Icons.UpArrow, Color.White * opacity);
             if (this.FirstVisibleIndex < this.MaxFirstVisibleIndex)
-                sprites.Draw(Sprites.Icons.Sheet, new Vector2(this.bounds.X - Sprites.Icons.UpArrow.Width, this.bounds.Y + this.bounds.Height - Sprites.Icons.DownArrow.Height), Sprites.Icons.DownArrow, Color.White);
+                sprites.Draw(Sprites.Icons.Sheet, new Vector2(this.bounds.X - Sprites.Icons.UpArrow.Width, this.bounds.Y + this.bounds.Height - Sprites.Icons.DownArrow.Height), Sprites.Icons.DownArrow, Color.White * opacity);
         }
 
 

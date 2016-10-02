@@ -6,23 +6,22 @@ bed to the deepest mine level.
 
 ## Installation
 1. Install [SMAPI](https://github.com/ClxS/SMAPI) (0.39.5+).
-2. Install [Chest Label System](http://www.nexusmods.com/stardewvalley/mods/242/) to name your
-   chests. (Recommended but not required.)
 3. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/518).
 4. Run the game using SMAPI.
 
 ## Usage
-* **Access your chests:** press `B` to open the menu. This will show the chests on your farm and in
+* **Access chests:** press `B` to open the menu. This will show the chests on your farm and in
   your buildings. Click the top-left menu to change chest, or navigate using the left and right
   arrow keys.
-* **Sort chests:** your chests are sorted alphabetically by default. Want a different order? Just add
-  a number between pipes (like `|1|`) somewhere in the chest name:
+* **Rename chests:** click the speech bubble next to the chest dropdown to rename the chest.
+* **Sort chests:** your chests are sorted alphabetically by default. Just add a number between
+  pipes in the chest name to change the order:
 
   ![](screenshots/tags-order-name.png)
 
-  The chests will be sorted by that number, _then_ alphabetically. Chests with a specific order will
-  appear before those without. (The number won't be shown in the list.)
-* **Hide chests:** add `|ignore|` to a chest's name, and it won't appear when you press `B`.
+  The chests will be sorted by that number, _then_ alphabetically. (The number won't be shown in
+  the list.)
+* **Hide chests:** add `|ignore|` to a chest's name, and it won't appear when you press `B`. Careful! You won't be able to show it again until you reset the name (e.g. by picking up the chest and putting it back down).
 
 ## Configuration
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
@@ -61,12 +60,13 @@ file if you want. These are the available settings:
 1.3 (upcoming):
 * Added version check on load.
 * Added organise button for inventory.
+* Added button to rename a chest from the menu.
 * Improved chest/location dropdowns:
   * They can now be closed by clicking away or pressing `ESC`.
   * They now show as many items as possible (instead of 10).
   * They now show up/down arrows when there are too many items to display at once.
 * Pressing `ESC` will now close the chest UI.
-* Location tab is no longer enabled by default, and may be removed in a future version. [Comment now if you want to keep it!](http://community.playstarbound.com/threads/smapi-chests-anywhere.122603/)
+* The location tab is no longer enabled by default, and may be removed in a future version. [Comment now if you want to keep it!](http://community.playstarbound.com/threads/smapi-chests-anywhere.122603/)
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is

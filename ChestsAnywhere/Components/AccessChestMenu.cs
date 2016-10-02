@@ -22,10 +22,13 @@ namespace ChestsAnywhere.Components
         private int DrawCount;
 
         /// <summary>Whether the chest dropdown is open.</summary>
-        private bool ChestListOpen;
+        private bool IsChestListOpen;
 
         /// <summary>Whether the location dropdown is open.</summary>
-        private bool LocationListOpen;
+        private bool IsLocationListOpen;
+
+        /// <summary>Whether the 'edit chest' UI is being displayed.</summary>
+        private bool IsEditChestOpen => this.EditChestForm != null;
 
         /// <summary>The known chests.</summary>
         private readonly ManagedChest[] Chests;
@@ -57,6 +60,9 @@ namespace ChestsAnywhere.Components
         /// <summary>The chest selector dropdown.</summary>
         private DropList<ManagedChest> ChestSelector;
 
+        /// <summary>The button which edits the selected chest.</summary>
+        private ClickableTextureComponent EditChestButton;
+
         /// <summary>The location selector dropdown.</summary>
         private DropList<string> LocationSelector;
 
@@ -65,6 +71,10 @@ namespace ChestsAnywhere.Components
 
         /// <summary>The button which sorts the inventory items.</summary>
         private ClickableTextureComponent OrganizeInventoryButton;
+
+        /// <summary>The 'edit chest' form (if displayed).</summary>
+        private EditChestForm EditChestForm;
+
 
         /*********
         ** Accessors
@@ -117,13 +127,21 @@ namespace ChestsAnywhere.Components
             if (!config.IsValidKey(input))
                 return;
 
+            // 'edit chest' UI overrides input
+            if (this.IsEditChestOpen)
+            {
+                if (input.Equals(Keys.Escape))
+                    this.ToggleEditChest(false);
+                return;
+            }
+
             // chest menu keys
             if (input.Equals(Keys.Escape))
             {
-                if (this.ChestListOpen)
-                    this.ChestListOpen = false;
-                else if (this.LocationListOpen)
-                    this.LocationListOpen = false;
+                if (this.IsChestListOpen)
+                    this.IsChestListOpen = false;
+                else if (this.IsLocationListOpen)
+                    this.IsLocationListOpen = false;
                 else
                     this.exitThisMenuNoSound();
             }
@@ -141,9 +159,11 @@ namespace ChestsAnywhere.Components
         /// <param name="direction">The scroll direction.</param>
         public override void receiveScrollWheelAction(int direction)
         {
-            if (this.ChestListOpen)
+            if (this.IsEditChestOpen)
+                return; // 'edit chest' UI handles all input when open
+            else if (this.IsChestListOpen)
                 this.ChestSelector.ReceiveScrollWheelAction(direction);
-            else if (this.LocationListOpen)
+            else if (this.IsLocationListOpen)
                 this.LocationSelector.ReceiveScrollWheelAction(direction);
         }
 
@@ -164,13 +184,18 @@ namespace ChestsAnywhere.Components
         /// <param name="playSound">Whether to enable sound.</param>
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            base.receiveLeftClick(x, y, playSound);
+            // 'edit chest' UI (handles all input when open)
+            if (this.IsEditChestOpen)
+            {
+                this.EditChestForm.ReceiveLeftClick(x, y);
+                return;
+            }
 
             // chest dropdown
-            if (this.ChestListOpen)
+            else if (this.IsChestListOpen)
             {
                 // close dropdown
-                this.ChestListOpen = false;
+                this.IsChestListOpen = false;
                 this.IsDisabled = false;
 
                 // select chest
@@ -183,10 +208,10 @@ namespace ChestsAnywhere.Components
             }
 
             // location dropdown
-            else if (this.LocationListOpen)
+            else if (this.IsLocationListOpen)
             {
                 // close dropdown
-                this.LocationListOpen = false;
+                this.IsLocationListOpen = false;
                 this.IsDisabled = false;
 
                 // select location
@@ -201,17 +226,21 @@ namespace ChestsAnywhere.Components
                 }
             }
 
+            // edit chest tab
+            else if (this.EditChestButton.containsPoint(x, y))
+                this.ToggleEditChest(true);
+
             // chest tab
             else if (this.ChestTab.containsPoint(x, y))
             {
-                this.ChestListOpen = true;
+                this.IsChestListOpen = true;
                 this.IsDisabled = true;
             }
 
             // location tab
             else if (this.LocationTab?.containsPoint(x, y) == true)
             {
-                this.LocationListOpen = true;
+                this.IsLocationListOpen = true;
                 this.IsDisabled = true;
             }
 
@@ -220,6 +249,10 @@ namespace ChestsAnywhere.Components
                 this.SortChestItems();
             else if (this.OrganizeInventoryButton.containsPoint(x, y))
                 this.SortInventory();
+
+            // chest/inventory UI
+            else
+                base.receiveLeftClick(x, y, playSound);
         }
 
         /// <summary>Render the UI.</summary>
@@ -229,22 +262,32 @@ namespace ChestsAnywhere.Components
             this.DrawCount++;
 
             // organize buttons
-            this.OrganizeChestButton.draw(sprites);
-            this.OrganizeInventoryButton.draw(sprites);
+            this.OrganizeChestButton.draw(sprites, Color.White * this.Opacity, 1);
+            this.OrganizeInventoryButton.draw(sprites, Color.White * this.Opacity, 1);
 
             // chest with inventory menu
             base.draw(sprites);
 
             // tabs
             this.ChestTab.Draw(sprites);
+            this.EditChestButton.draw(sprites, Color.White * this.Opacity, 1);
             if (this.ShowLocationTab)
-                this.LocationTab.Draw(sprites);
+                this.LocationTab.Draw(sprites, this.Opacity);
 
             // tab dropdowns
-            if (this.ChestListOpen)
-                this.ChestSelector.Draw(sprites);
-            if (this.LocationListOpen)
-                this.LocationSelector.Draw(sprites);
+            if (this.IsChestListOpen)
+                this.ChestSelector.Draw(sprites, this.Opacity);
+            if (this.IsLocationListOpen)
+                this.LocationSelector.Draw(sprites, this.Opacity);
+
+            // 'edit chest' UI
+            if (this.IsEditChestOpen)
+            {
+                if (this.EditChestForm.IsActive)
+                    this.EditChestForm.Draw(sprites);
+                else
+                    this.ToggleEditChest(false);
+            }
 
             // mouse
             this.drawMouse(sprites);
@@ -298,6 +341,17 @@ namespace ChestsAnywhere.Components
                 this.ChestTab = new Tab(this.SelectedChest.Name, x, y, true, this.Font);
             }
 
+            // edit-chest button
+            {
+                Rectangle sprite = Sprites.Icons.SpeechBubble;
+                float zoom = Game1.pixelZoom / 2f;
+                int x = this.ChestTab.bounds.X + this.ChestTab.bounds.Width;
+                int y = this.ChestTab.bounds.Y;
+                int width = (int)(sprite.Width * zoom);
+                int height = (int)(sprite.Height * zoom);
+                this.EditChestButton = new ClickableTextureComponent(new Rectangle(x + 5, y + height / 2, width, height), "edit chest", "Edit chest", Sprites.Icons.Sheet, sprite, scale: zoom, drawLabel: false);
+            }
+
             // location
             if (this.ShowLocationTab)
             {
@@ -328,6 +382,24 @@ namespace ChestsAnywhere.Components
         {
             int cur = Array.IndexOf(this.Chests, this.SelectedChest);
             this.SelectChest(this.Chests[(cur + 1) % this.Chests.Length]);
+        }
+
+        /// <summary>Toggle the 'edit chest' form.</summary>
+        /// <param name="enabled">Whether the form should be enabled.</param>
+        private void ToggleEditChest(bool enabled)
+        {
+            if (enabled)
+            {
+                this.EditChestForm = new EditChestForm(this.SelectedChest);
+                this.Opacity = 0.5f;
+                this.IsDisabled = true;
+            }
+            else
+            {
+                this.EditChestForm = null;
+                this.Opacity = 1;
+                this.IsDisabled = false;
+            }
         }
     }
 }

@@ -34,6 +34,9 @@ namespace ChestsAnywhere.Components
         /// <summary>Whether the UI control is disabled, in which case it will no longer try to handle player interaction.</summary>
         protected bool IsDisabled { get; set; }
 
+        /// <summary>The opacity at which to draw.</summary>
+        protected float Opacity { get; set; } = 1;
+
 
         /*********
         ** Public methods
@@ -221,8 +224,7 @@ namespace ChestsAnywhere.Components
         public override void draw(SpriteBatch sprites)
         {
             // background
-            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.Background, this.xPositionOnScreen + Game1.tileSize / 16, this.yPositionOnScreen + Game1.tileSize / 16, this.width - Game1.tileSize / 8, this.height - Game1.tileSize / 8);
-            this.DrawBorder(sprites);
+            sprites.DrawMenuBackground(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 16, this.yPositionOnScreen + Game1.tileSize / 16, this.width - Game1.tileSize / 8, this.height - Game1.tileSize / 8), bisect: true);
 
             // slots
             this.DrawChestSlots(sprites);
@@ -354,7 +356,7 @@ namespace ChestsAnywhere.Components
                 if (slotCount - 36 >= this.PlayerItems.Count)
                     break;
 
-                this.PlayerItems[slotCount - 36]?.drawInMenu(sprites, new Vector2(this.Slots[slotCount].bounds.X, this.Slots[slotCount].bounds.Y), this.Slots[slotCount].containsPoint(Game1.getMouseX(), Game1.getMouseY()) ? 1f : 0.8f);
+                this.PlayerItems[slotCount - 36]?.drawInMenu(sprites, new Vector2(this.Slots[slotCount].bounds.X, this.Slots[slotCount].bounds.Y), this.Slots[slotCount].containsPoint(Game1.getMouseX(), Game1.getMouseY()) ? 1f : 0.8f, this.Opacity, 1f);
                 slotCount++;
             }
         }
@@ -369,7 +371,7 @@ namespace ChestsAnywhere.Components
                 if (slotCount >= this.ChestItems.Count)
                     break;
 
-                this.ChestItems[slotCount]?.drawInMenu(sprites, new Vector2(this.Slots[slotCount].bounds.X, this.Slots[slotCount].bounds.Y), this.Slots[slotCount].containsPoint(Game1.getMouseX(), Game1.getMouseY()) ? 1f : 0.8f);
+                this.ChestItems[slotCount]?.drawInMenu(sprites, new Vector2(this.Slots[slotCount].bounds.X, this.Slots[slotCount].bounds.Y), this.Slots[slotCount].containsPoint(Game1.getMouseX(), Game1.getMouseY()) ? 1f : 0.8f, this.Opacity, 1f);
                 slotCount++;
             }
         }
@@ -389,7 +391,7 @@ namespace ChestsAnywhere.Components
                     Rectangle slot = yCount * 12 + xCount <= Game1.player.maxItems
                         ? Sprites.Menu.Slot
                         : Sprites.Menu.SlotDisabled;
-                    sprites.Draw(Sprites.Menu.Sheet, slot, x, y, Game1.tileSize, Game1.tileSize);
+                    sprites.Draw(Sprites.Menu.Sheet, slot, x, y, Game1.tileSize, Game1.tileSize, Color.White * this.Opacity);
                     x += Game1.tileSize;
                     xCount++;
                 }
@@ -410,32 +412,13 @@ namespace ChestsAnywhere.Components
                 int x = this.xPositionOnScreen + Game1.tileSize / 2;
                 while (xCount < 12)
                 {
-                    sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.Slot, x, y, Game1.tileSize, Game1.tileSize);
+                    sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.Slot, x, y, Game1.tileSize, Game1.tileSize, Color.White * this.Opacity);
                     x += Game1.tileSize;
                     xCount++;
                 }
                 y += Game1.tileSize;
                 yCount++;
             }
-        }
-
-        /// <summary>Render the inventory border.</summary>
-        /// <param name="sprites">The sprites to render.</param>
-        private void DrawBorder(SpriteBatch sprites)
-        {
-            int tileSize = Game1.tileSize;
-            int edgeWidth = Game1.tileSize / 2;
-            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.TopLeft, this.xPositionOnScreen, this.yPositionOnScreen, edgeWidth, edgeWidth);
-            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.Top, this.xPositionOnScreen + edgeWidth, this.yPositionOnScreen, this.width - tileSize, edgeWidth);
-            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.TopRight, this.xPositionOnScreen + this.width - edgeWidth, this.yPositionOnScreen, edgeWidth, edgeWidth);
-            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.Left, this.xPositionOnScreen, this.yPositionOnScreen + edgeWidth, edgeWidth, this.height - tileSize);
-            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.Right, this.xPositionOnScreen + this.width - edgeWidth, this.yPositionOnScreen + edgeWidth, edgeWidth, this.height - tileSize);
-            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.MiddleMiddle, this.xPositionOnScreen + edgeWidth, this.yPositionOnScreen + this.height / 2 - tileSize / 4, this.width - tileSize, edgeWidth);
-            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.MiddleLeft, this.xPositionOnScreen, this.yPositionOnScreen + this.height / 2 - tileSize / 4, edgeWidth, edgeWidth);
-            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.MiddleRight, this.xPositionOnScreen + this.width - edgeWidth, this.yPositionOnScreen + this.height / 2 - tileSize / 4, edgeWidth, edgeWidth);
-            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.BottomLeft, this.xPositionOnScreen, this.yPositionOnScreen + this.height - edgeWidth, edgeWidth, edgeWidth);
-            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.Bottom, this.xPositionOnScreen + edgeWidth, this.yPositionOnScreen + this.height - edgeWidth, this.width - tileSize, edgeWidth);
-            sprites.Draw(Sprites.Menu.Sheet, Sprites.Menu.BottomRight, this.xPositionOnScreen + this.width - edgeWidth, this.yPositionOnScreen + this.height - edgeWidth, edgeWidth, edgeWidth);
         }
     }
 }
