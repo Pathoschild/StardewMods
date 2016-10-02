@@ -57,7 +57,7 @@ file if you want. These are the available settings:
 * Location tab is now hidden if all your chests are in one place.
 * Simplified default chest names (like "Chest #1" instead of "Chest(77,12)").
 
-1.3 (upcoming):
+1.3:
 * Added version check on load.
 * Added organise button for inventory.
 * Added button to rename a chest from the menu.
