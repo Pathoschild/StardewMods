@@ -82,6 +82,9 @@ namespace ChestsAnywhere.Components
         /// <summary>An event raised when the player selects a chest.</summary>
         public event Action<ManagedChest> OnChestSelected;
 
+        /// <summary>An event raised when the player edits a chest.</summary>
+        public event Action OnChestEdited;
+
 
         /*********
         ** Public methods
@@ -297,6 +300,7 @@ namespace ChestsAnywhere.Components
         public void Dispose()
         {
             // clear all events for garbage collection
+            this.OnChestEdited = null;
             this.OnChestSelected = null;
         }
 
@@ -406,6 +410,7 @@ namespace ChestsAnywhere.Components
                 this.EditChestForm = null;
                 this.Opacity = 1;
                 this.IsDisabled = false;
+                this.OnChestEdited?.Invoke();
             }
         }
     }
