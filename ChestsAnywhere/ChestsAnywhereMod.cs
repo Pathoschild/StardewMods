@@ -11,6 +11,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.Objects;
 
 namespace ChestsAnywhere
@@ -53,6 +54,7 @@ namespace ChestsAnywhere
             // hook UI
             GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
             GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
+            MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
 
             // hook input
             if (this.Config.Keyboard.HasAny())
@@ -107,6 +109,17 @@ namespace ChestsAnywhere
                 {
                     this.HandleError(ex, "showing the new version available");
                 }
+            }
+        }
+
+        /// <summary>The method invoked when a menu is closed.</summary>
+        private void ReceiveMenuClosed(IClickableMenu closedMenu)
+        {
+            if (closedMenu is AccessChestMenu)
+            {
+                AccessChestMenu menu = (AccessChestMenu)closedMenu;
+                menu.Dispose();
+
             }
         }
 

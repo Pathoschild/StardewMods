@@ -10,7 +10,7 @@ using StardewValley.Menus;
 namespace ChestsAnywhere.Components
 {
     /// <summary>A UI which lets the player choose a chest and location, and transfer transfer items between a chest and their inventory.</summary>
-    internal class AccessChestMenu : ChestWithInventory
+    internal class AccessChestMenu : ChestWithInventory, IDisposable
     {
         /*********
         ** Properties
@@ -291,6 +291,13 @@ namespace ChestsAnywhere.Components
 
             // mouse
             this.drawMouse(sprites);
+        }
+
+        /// <summary>Release all resources.</summary>
+        public void Dispose()
+        {
+            // clear all events for garbage collection
+            this.OnChestSelected = null;
         }
 
 
