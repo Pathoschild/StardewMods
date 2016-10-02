@@ -62,9 +62,10 @@ file if you want. These are the available settings:
 * Added version check on load.
 * Added organise button for inventory.
 * Improved chest/location dropdowns:
-  * They can now be closed by clicking away.
+  * They can now be closed by clicking away or pressing `ESC`.
   * They now show as many items as possible (instead of 10).
   * They now show up/down arrows when there are too many items to display at once.
+* Pressing `ESC` will now close the chest UI.
 * Location tab is no longer enabled by default, and may be removed in a future version. [Comment now if you want to keep it!](http://community.playstarbound.com/threads/smapi-chests-anywhere.122603/)
 
 ## Compiling the mod

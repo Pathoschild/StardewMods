@@ -118,7 +118,16 @@ namespace ChestsAnywhere.Components
                 return;
 
             // chest menu keys
-            if (input.Equals(config.Toggle))
+            if (input.Equals(Keys.Escape))
+            {
+                if (this.ChestListOpen)
+                    this.ChestListOpen = false;
+                else if (this.LocationListOpen)
+                    this.LocationListOpen = false;
+                else
+                    this.exitThisMenuNoSound();
+            }
+            else if (input.Equals(config.Toggle))
                 this.exitThisMenuNoSound();
             else if (input.Equals(config.PrevChest))
                 this.SelectPreviousChest();
