@@ -58,9 +58,9 @@ file if you want. These are the available settings:
 * Simplified default chest names (like "Chest #1" instead of "Chest(77,12)").
 
 1.3:
-* Added version check on load.
 * Added organise button for inventory.
 * Added button to rename a chest from the menu.
+* Added mod update & minimum game version check on load.
 * Improved chest/location dropdowns:
   * They can now be closed by clicking away or pressing `ESC`.
   * They now show as many items as possible (instead of 10).

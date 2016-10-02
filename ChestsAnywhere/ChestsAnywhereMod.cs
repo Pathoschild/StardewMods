@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ChestsAnywhere.Common;
 using ChestsAnywhere.Components;
@@ -73,6 +74,14 @@ namespace ChestsAnywhere
         /// <summary>The method invoked when the player loads the game.</summary>
         private void ReceiveGameLoaded()
         {
+            // validate version
+            string versionError = this.ValidateGameVersion();
+            if (versionError != null)
+            {
+                Log.Error(versionError);
+                CommonHelper.ShowErrorMessage(versionError);
+            }
+
             // check for an updated version
             if (this.Config.CheckForUpdates)
             {
@@ -206,6 +215,20 @@ namespace ChestsAnywhere
                         yield return new ManagedChest(fridge, location.Name, "Fridge");
                 }
             }
+        }
+
+        /// <summary>Validate that the game versions match the minimum requirements, and return an appropriate error message if not.</summary>
+        private string ValidateGameVersion()
+        {
+            string gameVersion = Regex.Replace(Game1.version, "^([0-9.]+).*", "$1");
+            string apiVersion = Constants.Version.VersionString;
+
+            if (string.Compare(gameVersion, Constant.MinimumGameVersion, StringComparison.InvariantCultureIgnoreCase) == -1)
+                return $"The Chests Anywhere mod requires a newer version of the game. Please update Stardew Valley from {gameVersion} to {Constant.MinimumGameVersion}.";
+            if (string.Compare(apiVersion, Constant.MinimumApiVersion, StringComparison.InvariantCultureIgnoreCase) == -1)
+                return $"The Chests Anywhere mod requires a newer version of SMAPI. Please update SMAPI from {apiVersion} to {Constant.MinimumApiVersion}.";
+
+            return null;
         }
 
         /// <summary>Log an error and warn the user.</summary>
