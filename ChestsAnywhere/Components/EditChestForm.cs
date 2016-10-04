@@ -22,13 +22,13 @@ namespace ChestsAnywhere.Components
         private Rectangle Bounds;
 
         /// <summary>The editable chest name.</summary>
-        private readonly TextBox NameField;
+        private readonly ValidatedTextBox NameField;
 
         /// <summary>The field order.</summary>
-        private readonly TextBox OrderField;
+        private readonly ValidatedTextBox OrderField;
 
         /// <summary>The editable category name.</summary>
-        private readonly TextBox CategoryField;
+        private readonly ValidatedTextBox CategoryField;
 
         /// <summary>The button which saves the settings.</summary>
         private readonly ClickableTextureComponent SaveButton;
@@ -54,9 +54,9 @@ namespace ChestsAnywhere.Components
 
             // build components
             int longTextWidth = (int)Game1.smallFont.MeasureString("A sufficiently, reasonably long string").X;
-            this.NameField = new TextBox(Sprites.Textbox.Sheet, null, Game1.smallFont, Color.Black) { Width = longTextWidth, Text = this.Chest.Name };
-            this.CategoryField = new TextBox(Sprites.Textbox.Sheet, null, Game1.smallFont, Color.Black) { Width = longTextWidth, Text = this.Chest.Category };
-            this.OrderField = new TextBox(Sprites.Textbox.Sheet, null, Game1.smallFont, Color.Black) { Width = (int)Game1.smallFont.MeasureString("9999999").X, Text = this.Chest.Order?.ToString() };
+            this.NameField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth, Text = this.Chest.Name };
+            this.CategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth, Text = this.Chest.Category };
+            this.OrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, Char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X, Text = this.Chest.Order?.ToString() };
             this.SaveButton = new ClickableTextureComponent(new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), "OK", "OK", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, IClickableMenu.borderWithDownArrowIndex), 1f, false);
         }
 
@@ -67,15 +67,16 @@ namespace ChestsAnywhere.Components
         public void ReceiveLeftClick(int x, int y)
         {
             // name field
-            if (this.GetBounds(this.NameField).Contains(x, y))
-                this.NameField.SelectMe();
+            if (this.NameField.GetBounds().Contains(x, y))
+                this.NameField.Select();
 
             // category field
-            else if (this.GetBounds(this.CategoryField).Contains(x, y))
-                this.CategoryField.SelectMe();
+            else if (this.CategoryField.GetBounds().Contains(x, y))
+                this.CategoryField.Select();
 
-            else if(this.GetBounds(this.OrderField).Contains(x, y))
-                this.OrderField.SelectMe();
+            // order field
+            else if (this.OrderField.GetBounds().Contains(x, y))
+                this.OrderField.Select();
 
             // save button
             else if (this.SaveButton.containsPoint(x, y))
@@ -103,14 +104,14 @@ namespace ChestsAnywhere.Components
                 topOffset += size.Y;
             }
 
-            // editable fields
+            // editable text fields
             var fields = new[] { Tuple.Create("Name:", this.NameField), Tuple.Create("Category:", this.CategoryField), Tuple.Create("Order:", this.OrderField) };
             int maxLabelWidth = (int)fields.Select(p => font.MeasureString(p.Item1).X).Max();
             foreach (var field in fields)
             {
                 // get data
                 string label = field.Item1;
-                TextBox textbox = field.Item2;
+                ValidatedTextBox textbox = field.Item2;
 
                 // draw label
                 Vector2 labelSize = sprites.DrawTextBlock(font, label, new Vector2(this.Bounds.X + padding + (int)(maxLabelWidth - font.MeasureString(label).X), this.Bounds.Y + topOffset + 7), this.Bounds.Width);
@@ -121,7 +122,7 @@ namespace ChestsAnywhere.Components
                 // update offset
                 topOffset += Math.Max(labelSize.Y + 7, textbox.Height);
             }
-            
+
             // save button
             this.SaveButton.bounds = new Rectangle(this.Bounds.X + padding, this.Bounds.Y + (int)topOffset, this.SaveButton.bounds.Width, this.SaveButton.bounds.Height);
             this.SaveButton.draw(sprites);
@@ -161,13 +162,6 @@ namespace ChestsAnywhere.Components
             int x = Game1.viewport.Width / 2 - width / 2;
             int y = Game1.viewport.Height / 2 - height / 2 + Game1.tileSize;
             this.Bounds = new Rectangle(x, y, width, height);
-        }
-
-        /// <summary>Get the bounds for an input element.</summary>
-        /// <param name="element">The input element.</param>
-        private Rectangle GetBounds(TextBox element)
-        {
-            return new Rectangle(element.X, element.Y, element.Width, element.Height);
         }
     }
 }

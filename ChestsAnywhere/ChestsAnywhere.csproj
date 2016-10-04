@@ -73,6 +73,7 @@
     <Compile Include="Components\DropList.cs" />
     <Compile Include="Components\EditChestForm.cs" />
     <Compile Include="Components\Sprites.cs" />
+    <Compile Include="Components\ValidatedTextBox.cs" />
     <Compile Include="Framework\Constants.cs" />
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\RawModConfig.cs" />
