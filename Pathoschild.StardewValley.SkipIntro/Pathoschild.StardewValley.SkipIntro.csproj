@@ -29,20 +29,26 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <GamePath>C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley</GamePath>
+    <StartAction>Program</StartAction>
+    <StartProgram>$(GamePath)\StardewModdingAPI.exe</StartProgram>
+    <StartWorkingDirectory>$(GamePath)</StartWorkingDirectory>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Stardew Valley">
-      <HintPath>C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\Stardew Valley.exe</HintPath>
+      <HintPath>$(GamePath)\Stardew Valley.exe</HintPath>
     </Reference>
     <Reference Include="StardewModdingAPI">
-      <HintPath>C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\StardewModdingAPI.exe</HintPath>
+      <HintPath>$(GamePath)\StardewModdingAPI.exe</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="xTile, Version=2.0.4.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\xTile.dll</HintPath>
+      <HintPath>$(GamePath)\xTile.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -55,7 +61,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-      set modDir=C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley\Mods\SkipIntro
+      set modDir=$(GamePath)\Mods\SkipIntro
       if not exist "%modDir%" (mkdir "%modDir%")
       copy "$(TargetPath)" "%modDir%\$(TargetFileName)"
       copy "$(ProjectDir)manifest.json" "%modDir%\manifest.json"
