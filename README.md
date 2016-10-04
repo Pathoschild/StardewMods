@@ -87,8 +87,10 @@ file if you want. These are the available settings:
 * Internal refactoring.
 
 1.4:
-* Updated for Stardew Valley 1.1.
-* Updated fence info for Gold Clock preventing decay.
+* Updated for Stardew Valley 1.1:
+  * updated fence info for Gold Clock preventing decay;
+  * added new fertile weeds;
+* Fixed a few missing stones & weeds.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
