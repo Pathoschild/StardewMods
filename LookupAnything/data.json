@@ -178,6 +178,24 @@ You shouldn't change this file unless you know what you're doing.
       "Output": 307
     },
 
+    /* mill */
+    {
+      "Name": "Wheat Flour",
+      "Type": "Mill",
+      "Ingredients": {
+        "262": 1 // wheat
+      },
+      "Output": 246
+    },
+    {
+      "Name": "Sugar",
+      "Type": "Mill",
+      "Ingredients": {
+        "284": 1 // beet
+      },
+      "Output": 245
+    },
+
     /* oil maker */
     {
       "Name": "Truffle Oil",
