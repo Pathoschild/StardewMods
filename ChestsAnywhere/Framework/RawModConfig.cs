@@ -16,9 +16,6 @@ namespace ChestsAnywhere.Framework
         /// <summary>The controller input map.</summary>
         public InputMapConfiguration<string> Controller { get; set; }
 
-        /// <summary>Whether to group tabs with a separate location dropdown.</summary>
-        public bool GroupByLocation { get; set; }
-
         /// <summary>Whether to check for updates to the mod.</summary>
         public bool CheckForUpdates { get; set; }
 
@@ -44,7 +41,6 @@ namespace ChestsAnywhere.Framework
                 SortItems = ""
             };
             this.CheckForUpdates = true;
-            this.GroupByLocation = false;
         }
 
         /// <summary>Construct the default configuration.</summary>
@@ -73,8 +69,7 @@ namespace ChestsAnywhere.Framework
                     NextChest = this.TryParse<Buttons>(this.Controller.NextChest),
                     SortItems = this.TryParse<Buttons>(this.Controller.SortItems)
                 },
-                CheckForUpdates = this.CheckForUpdates,
-                GroupByLocation = this.GroupByLocation
+                CheckForUpdates = this.CheckForUpdates
             };
         }
 

@@ -19,17 +19,20 @@ namespace ChestsAnywhere.Framework
         /// <summary>The chest instance.</summary>
         public Chest Chest { get; }
 
-        /// <summary>The name of the location or building which contains the chest.</summary>
-        public string Location { get; }
-
         /// <summary>The chest's display name.</summary>
-        public string Name { get; }
+        public string Name { get; private set; }
+
+        /// <summary>The category name (if any).</summary>
+        public string Category { get; private set; }
 
         /// <summary>Whether the chest should be ignored.</summary>
-        public bool IsIgnored { get; }
+        public bool IsIgnored { get; private set; }
 
-        /// <summary>The player's preferred chest order (if any).</summary>
-        public int? Order { get; }
+        /// <summary>The sort value (if any).</summary>
+        public int? Order { get; private set; }
+
+        /// <summary>The name of the location or building which contains the chest.</summary>
+        public string LocationName { get; }
 
 
         /*********
@@ -43,7 +46,7 @@ namespace ChestsAnywhere.Framework
         {
             // save values
             this.Chest = chest;
-            this.Location = location;
+            this.LocationName = location;
             this.Name = chest.Name != "Chest"
                 ? chest.Name
                 : defaultName;
@@ -51,23 +54,65 @@ namespace ChestsAnywhere.Framework
             // extract tags
             foreach (Match match in Regex.Matches(this.Name, ManagedChest.TagGroupPattern))
             {
-                string[] tags = match.Groups[1].Value.Split(' ');
-                foreach (string tag in tags)
-                {
-                    // ignore
-                    if (tag.ToLower() == "ignore")
-                    {
-                        this.IsIgnored = true;
-                        continue;
-                    }
+                string tag = match.Groups[1].Value;
 
-                    // order
-                    int order;
-                    if (int.TryParse(tag, out order))
-                        this.Order = order;
+                // ignore
+                if (tag.ToLower() == "ignore")
+                {
+                    this.IsIgnored = true;
+                    continue;
                 }
+
+                // category
+                if (tag.ToLower().StartsWith("cat:"))
+                {
+                    this.Category = tag.Substring(4).Trim();
+                    continue;
+                }
+
+                // order
+                int order;
+                if (int.TryParse(tag, out order))
+                    this.Order = order;
             }
             this.Name = Regex.Replace(this.Name, ManagedChest.TagGroupPattern, "").Trim();
+
+            // normalise
+            if(this.Category == null)
+                this.Category = "";
+        }
+
+        /// <summary>Update the chest metadata.</summary>
+        /// <param name="name">The chest's display name.</param>
+        /// <param name="category">The category name (if any).</param>
+        /// <param name="order">The sort value (if any).</param>
+        /// <param name="ignored">Whether the chest should be ignored.</param>
+        public void Update(string name, string category, int? order, bool ignored)
+        {
+            this.Name = !string.IsNullOrWhiteSpace(name) ? name.Trim() : this.Name;
+            this.Category = category?.Trim() ?? "";
+            this.Order = order;
+            this.IsIgnored = ignored;
+
+            this.Update();
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Update the chest metadata.</summary>
+        private void Update()
+        {
+            string name = this.Name;
+            if (this.Order.HasValue)
+                name += $" |{this.Order}|";
+            if (this.IsIgnored)
+                name += " |ignore|";
+            if (!string.IsNullOrWhiteSpace(this.Category))
+                name += $" |cat:{this.Category}|";
+
+            this.Chest.name = name;
         }
     }
 }

@@ -13,10 +13,8 @@ bed to the deepest mine level.
 * **Access chests:** press `B` to open the menu. This will show the chests on your farm and in
   your buildings. Click the top-left menu to change chest, or navigate using the left and right
   arrow keys.
-* **Rename chests:** click the speech bubble next to the chest dropdown to rename the chest.
-* **Sort chests:** your chests are sorted alphabetically by default. You can add a number between
-  pipes in the chest name (like "`Seeds |1|`") to sort by that number, _then_
-  alphabetically. (The number won't be shown in the list.)
+* **Edit chests:** click the speech bubble next to the chest dropdown to change the chest's name,
+  category, or sort order.
 * **Hide chests:** add `|ignore|` to a chest's name, and it won't appear when you press `B`. Careful! You won't be able to show it again until you reset the name (e.g. by picking up the chest and putting it back down).
 
 ## Configuration
@@ -28,7 +26,6 @@ file if you want. These are the available settings:
 | `Keyboard`        | Set keyboard bindings. The default values are `B` to toggle the chest UI, and `Left`/`Right` to switch chests. See [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx).
 | `Controller`      | Set controller bindings. No buttons configured by default. See [valid buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.buttons.aspx).
 | `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll see a small message at the bottom of the screen for a few seconds. This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
-| `GroupByLocation` | Default `false`. Whether to add a separate location tab to filter chests. This option may be removed in a future version. [Comment now if you want to keep it!](http://community.playstarbound.com/threads/smapi-chests-anywhere.122603/)
 
 ## Versions
 1.0:
@@ -64,7 +61,13 @@ file if you want. These are the available settings:
   * They now show up/down arrows when there are too many items to display at once.
 * Improved error handling.
 * Pressing `ESC` will now close the chest UI.
-* The location tab is no longer enabled by default, and may be removed in a future version. [Comment now if you want to keep it!](http://community.playstarbound.com/threads/smapi-chests-anywhere.122603/)
+* The location tab is no longer enabled by default, and may be removed in a future version.
+
+1.4:
+* Added chest category feature.
+* Added sort order field to edit-chest UI.
+* Removed location tab.
+* Fixed issue where edited chest name wasn't saved correctly.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is
