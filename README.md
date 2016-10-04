@@ -88,6 +88,7 @@ file if you want. These are the available settings:
 
 1.4:
 * Updated for Stardew Valley 1.1.
+* Updated fence info for Gold Clock preventing decay.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is

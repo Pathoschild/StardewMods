@@ -180,10 +180,17 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             if (item is Fence)
             {
                 Fence fence = (Fence)item;
-                float maxHealth = fence.isGate ? fence.maxHealth * 2 : fence.maxHealth;
-                float health = fence.health / maxHealth;
-                float daysLeft = fence.health * metadata.Constants.FenceDecayRate / 60 / 24;
-                yield return new PercentageBarField("Health", (int)fence.health, (int)maxHealth, Color.Green, Color.Red, $"{Math.Round(health * 100)}% (roughly {Math.Round(daysLeft)} days left)");
+
+                // health
+                if (Game1.getFarm().isBuildingConstructed(Constant.BuildingNames.GoldClock))
+                    yield return new GenericField("Health", "no decay with Gold Clock");
+                else
+                {
+                    float maxHealth = fence.isGate ? fence.maxHealth * 2 : fence.maxHealth;
+                    float health = fence.health / maxHealth;
+                    float daysLeft = fence.health * metadata.Constants.FenceDecayRate / 60 / 24;
+                    yield return new PercentageBarField("Health", (int)fence.health, (int)maxHealth, Color.Green, Color.Red, $"{Math.Round(health * 100)}% (roughly {Math.Round(daysLeft)} days left)");
+                }
             }
 
             // recipes

@@ -48,5 +48,12 @@ namespace Pathoschild.LookupAnything.Framework.Constants
             /// <summary>The internal name for the greenhouse.</summary>
             public static string Greenhouse = "Greenhouse";
         }
+
+        /// <summary>The names of buildings referenced by the mod.</summary>
+        public static class BuildingNames
+        {
+            /// <summary>The internal name for the Gold Clock.</summary>
+            public static string GoldClock = "Gold Clock";
+        }
     }
 }
