@@ -69,6 +69,7 @@
     <Compile Include="Common\UpdateHelper.cs" />
     <Compile Include="Components\AccessChestMenu.cs" />
     <Compile Include="ChestsAnywhereMod.cs" />
+    <Compile Include="Components\Checkbox.cs" />
     <Compile Include="Components\ChestWithInventory.cs" />
     <Compile Include="Components\DropList.cs" />
     <Compile Include="Components\EditChestForm.cs" />

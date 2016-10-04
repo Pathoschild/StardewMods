@@ -30,6 +30,9 @@ namespace ChestsAnywhere.Components
         /// <summary>The editable category name.</summary>
         private readonly ValidatedTextBox CategoryField;
 
+        /// <summary>The checkbox which indicates whether to hide the chest.</summary>
+        private readonly Checkbox HideChestField;
+
         /// <summary>The button which saves the settings.</summary>
         private readonly ClickableTextureComponent SaveButton;
 
@@ -57,6 +60,7 @@ namespace ChestsAnywhere.Components
             this.NameField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth, Text = this.Chest.Name };
             this.CategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth, Text = this.Chest.Category };
             this.OrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, Char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X, Text = this.Chest.Order?.ToString() };
+            this.HideChestField = new Checkbox(this.Chest.IsIgnored);
             this.SaveButton = new ClickableTextureComponent(new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), "OK", "OK", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, IClickableMenu.borderWithDownArrowIndex), 1f, false);
         }
 
@@ -78,6 +82,10 @@ namespace ChestsAnywhere.Components
             else if (this.OrderField.GetBounds().Contains(x, y))
                 this.OrderField.Select();
 
+            // 'hide chest' checkbox
+            else if (this.HideChestField.GetBounds().Contains(x, y))
+                this.HideChestField.Toggle();
+
             // save button
             else if (this.SaveButton.containsPoint(x, y))
             {
@@ -92,21 +100,24 @@ namespace ChestsAnywhere.Components
         {
             // get initial measurements
             SpriteFont font = Game1.smallFont;
+            const int gutter = 10;
             int padding = Game1.tileSize / 2;
             float topOffset = padding;
+            int maxLabelWidth = (int)new[] { "Location:", "Name:", "Category:", "Order:" }.Select(p => font.MeasureString(p).X).Max();
+
 
             // background
             sprites.DrawMenuBackground(this.Bounds);
 
-            // blurb
+            // Location name
             {
-                Vector2 size = sprites.DrawTextBlock(font, $"This chest is in the '{this.Chest.LocationName}' location and has {this.Chest.Chest.items.Count} items.", new Vector2(this.Bounds.X + padding, this.Bounds.Y + topOffset), this.Bounds.Width - Game1.tileSize);
-                topOffset += size.Y;
+                Vector2 labelSize = sprites.DrawTextBlock(font, $"Location:", new Vector2(this.Bounds.X + padding + (int)(maxLabelWidth - font.MeasureString("Location:").X), this.Bounds.Y + topOffset), this.Bounds.Width);
+                sprites.DrawTextBlock(font, this.Chest.LocationName, new Vector2(this.Bounds.X + padding + maxLabelWidth + gutter, this.Bounds.Y + topOffset), this.Bounds.Width);
+                topOffset += labelSize.Y;
             }
 
             // editable text fields
             var fields = new[] { Tuple.Create("Name:", this.NameField), Tuple.Create("Category:", this.CategoryField), Tuple.Create("Order:", this.OrderField) };
-            int maxLabelWidth = (int)fields.Select(p => font.MeasureString(p.Item1).X).Max();
             foreach (var field in fields)
             {
                 // get data
@@ -115,12 +126,22 @@ namespace ChestsAnywhere.Components
 
                 // draw label
                 Vector2 labelSize = sprites.DrawTextBlock(font, label, new Vector2(this.Bounds.X + padding + (int)(maxLabelWidth - font.MeasureString(label).X), this.Bounds.Y + topOffset + 7), this.Bounds.Width);
-                textbox.X = this.Bounds.X + padding + maxLabelWidth + 10;
+                textbox.X = this.Bounds.X + padding + maxLabelWidth + gutter;
                 textbox.Y = this.Bounds.Y + (int)topOffset;
                 textbox.Draw(sprites);
 
                 // update offset
                 topOffset += Math.Max(labelSize.Y + 7, textbox.Height);
+            }
+
+            // hide chest checkbox
+            {
+                this.HideChestField.X = this.Bounds.X + padding;
+                this.HideChestField.Y = this.Bounds.Y + (int)topOffset;
+                this.HideChestField.Width = 24;
+                this.HideChestField.Draw(sprites);
+                Vector2 labelSize = sprites.DrawTextBlock(font, "Hide this chest" + (this.HideChestField.Value ? " (irreversible until you replace chest!)" : ""), new Vector2(this.Bounds.X + padding + 7 + this.HideChestField.Width, this.Bounds.Y + topOffset), this.Bounds.Width, this.HideChestField.Value ? Color.Red : Color.Black);
+                topOffset += Math.Max(this.HideChestField.Width, labelSize.Y);
             }
 
             // save button
@@ -148,7 +169,7 @@ namespace ChestsAnywhere.Components
             }
 
             // update chest
-            this.Chest.Update(this.NameField.Text, this.CategoryField.Text, order, this.Chest.IsIgnored);
+            this.Chest.Update(this.NameField.Text, this.CategoryField.Text, order, this.HideChestField.Value);
         }
 
         /****

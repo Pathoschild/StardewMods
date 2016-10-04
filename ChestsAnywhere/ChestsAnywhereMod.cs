@@ -203,7 +203,7 @@ namespace ChestsAnywhere
                         if (building.indoors == null)
                             continue;
                         foreach (Chest chest in building.indoors.Objects.Values.OfType<Chest>())
-                            yield return new ManagedChest(chest, building.nameOfIndoorsWithoutUnique, $"Chest #{++namelessCount}");
+                            yield return new ManagedChest(chest, building.nameOfIndoors.TrimEnd('0','1','2','3','4','5','6','7','8','9'), $"Chest #{++namelessCount}");
                     }
                 }
 
