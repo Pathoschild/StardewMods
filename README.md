@@ -90,7 +90,7 @@ file if you want. These are the available settings:
 * Updated for Stardew Valley 1.1:
   * updated fence info for Gold Clock preventing decay;
   * added new fertile weeds (forest farm) and geode stones (hilltop farm);
-  * added new recipes for wheat flour (mill) and sugar (mill).
+  * added new recipes for coffee, mead, sugar, void mayonnaise, and wheat flour.
 * Fixed a few missing stones & weeds.
 
 ## Compiling the mod

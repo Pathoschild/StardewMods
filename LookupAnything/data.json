@@ -120,6 +120,22 @@ You shouldn't change this file unless you know what you're doing.
       "Output": 346
     },
     {
+      "Name": "Coffee",
+      "Type": "Keg",
+      "Ingredients": {
+        "433": 5 // coffee bean
+      },
+      "Output": 395
+    },
+    {
+      "Name": "Mead",
+      "Type": "Keg",
+      "Ingredients": {
+        "340": 1 // honey
+      },
+      "Output":  459
+    },
+    {
       "Name": "Pale Ale",
       "Type": "Keg",
       "Ingredients": {
@@ -176,6 +192,14 @@ You shouldn't change this file unless you know what you're doing.
         "442": 1 // duck egg
       },
       "Output": 307
+    },
+    {
+      "Name": "Void Mayonnaise",
+      "Type": "MayonnaiseMachine",
+      "Ingredients": {
+        "305": 1 // void egg
+      },
+      "Output": 308
     },
 
     /* mill */
