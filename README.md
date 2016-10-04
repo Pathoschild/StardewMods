@@ -89,7 +89,7 @@ file if you want. These are the available settings:
 1.4:
 * Updated for Stardew Valley 1.1:
   * updated fence info for Gold Clock preventing decay;
-  * added new fertile weeds;
+  * added new fertile weeds and geode stones.
 * Fixed a few missing stones & weeds.
 
 ## Compiling the mod

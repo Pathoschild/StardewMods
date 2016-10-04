@@ -346,6 +346,30 @@ You shouldn't change this file unless you know what you're doing.
       "Description": "A nondescript gray stone. Break apart to obtain stone.", // no meaningful default
       "ShowInventoryFields": false
     },
+    {
+      "SpriteID": [ 75 ],
+      "Context": "World",
+      "Name": "Geode Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain geodes.", // no meaningful default
+      "ShowInventoryFields": false
+    },
+    {
+      "SpriteID": [ 76 ],
+      "Context": "World",
+      "Name": "Frozen Geode Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain frozen geodes.", // no meaningful default
+      "ShowInventoryFields": false
+    },
+    {
+      "SpriteID": [ 77 ],
+      "Context": "World",
+      "Name": "Magma Geode Node",
+      "Type": "Stone",
+      "Description": "Break apart to obtain magma geodes.", // no meaningful default
+      "ShowInventoryFields": false
+    },
 
     /****
     ** Weeds & crystals (all identified as "Weeds" with no meaningful description, with a sale price despite being unsellable)
