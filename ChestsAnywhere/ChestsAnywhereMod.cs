@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using ChestsAnywhere.Common;
 using ChestsAnywhere.Components;
 using ChestsAnywhere.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -54,7 +53,7 @@ namespace ChestsAnywhere
 
             // hook UI
             PlayerEvents.LoadedGame += (sender, e) => this.ReceiveGameLoaded();
-            GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
+            GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering();
             MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
 
             // hook input
@@ -102,8 +101,7 @@ namespace ChestsAnywhere
         }
 
         /// <summary>The method invoked when the interface is rendering.</summary>
-        /// <param name="spriteBatch">The sprite batch being drawn.</param>
-        private void ReceiveInterfaceRendering(SpriteBatch spriteBatch)
+        private void ReceiveInterfaceRendering()
         {
             // render update warning
             if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning && this.NewRelease != null)
@@ -203,7 +201,7 @@ namespace ChestsAnywhere
                         if (building.indoors == null)
                             continue;
                         foreach (Chest chest in building.indoors.Objects.Values.OfType<Chest>())
-                            yield return new ManagedChest(chest, building.nameOfIndoors.TrimEnd('0','1','2','3','4','5','6','7','8','9'), $"Chest #{++namelessCount}");
+                            yield return new ManagedChest(chest, building.nameOfIndoors.TrimEnd('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'), $"Chest #{++namelessCount}");
                     }
                 }
 

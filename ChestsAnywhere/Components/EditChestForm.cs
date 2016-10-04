@@ -59,9 +59,9 @@ namespace ChestsAnywhere.Components
             int longTextWidth = (int)Game1.smallFont.MeasureString("A sufficiently, reasonably long string").X;
             this.NameField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth, Text = this.Chest.Name };
             this.CategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth, Text = this.Chest.Category };
-            this.OrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, Char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X, Text = this.Chest.Order?.ToString() };
+            this.OrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X, Text = this.Chest.Order?.ToString() };
             this.HideChestField = new Checkbox(this.Chest.IsIgnored);
-            this.SaveButton = new ClickableTextureComponent(new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), "OK", "OK", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, IClickableMenu.borderWithDownArrowIndex), 1f, false);
+            this.SaveButton = new ClickableTextureComponent("save-chest", new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), null, "OK", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, IClickableMenu.borderWithDownArrowIndex), 1f);
         }
 
         /// <summary>The method invoked when the player left-clicks on the form.</summary>
@@ -147,7 +147,6 @@ namespace ChestsAnywhere.Components
             // save button
             this.SaveButton.bounds = new Rectangle(this.Bounds.X + padding, this.Bounds.Y + (int)topOffset, this.SaveButton.bounds.Width, this.SaveButton.bounds.Height);
             this.SaveButton.draw(sprites);
-            topOffset += this.SaveButton.bounds.Height;
         }
 
 

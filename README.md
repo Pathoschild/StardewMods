@@ -5,7 +5,7 @@ bed to the deepest mine level.
 ![](screenshots/animated-usage.gif)
 
 ## Installation
-1. Install [SMAPI](https://github.com/ClxS/SMAPI) (0.39.5+).
+1. Install [SMAPI](https://github.com/ClxS/SMAPI) (0.40.1.1+).
 3. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/518).
 4. Run the game using SMAPI.
 
@@ -67,11 +67,12 @@ file if you want. These are the available settings:
 * The location tab is no longer enabled by default, and may be removed in a future version.
 
 1.4:
+* Updated for Stardew Valley 1.1.
 * Added chest category feature.
 * Added sort order field to edit-chest UI.
 * Added hide-chest field to edit-chest UI.
 * Removed location tab.
-* Fixed issue where edited chest name wasn't saved correctly.
+* Fixed edited chest name not saving correctly.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is

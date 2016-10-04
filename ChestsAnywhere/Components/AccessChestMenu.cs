@@ -311,8 +311,8 @@ namespace ChestsAnywhere.Components
             int buttonHeight = Sprites.Buttons.Organize.Height * Game1.pixelZoom;
             int buttonWidth = Sprites.Buttons.Organize.Width * Game1.pixelZoom;
             int borderSize = 3 * Game1.pixelZoom; // size of menu frame
-            this.OrganizeChestButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + this.width, this.yPositionOnScreen + height / 2 - buttonHeight - borderSize, buttonWidth, buttonHeight), "", "Organize", Sprites.Buttons.Sheet, Sprites.Buttons.Organize, Game1.pixelZoom);
-            this.OrganizeInventoryButton = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + this.width, this.yPositionOnScreen + height - buttonHeight - borderSize, buttonWidth, buttonHeight), "", "Organize", Sprites.Buttons.Sheet, Sprites.Buttons.Organize, Game1.pixelZoom);
+            this.OrganizeChestButton = new ClickableTextureComponent("organize-chest", new Rectangle(this.xPositionOnScreen + this.width, this.yPositionOnScreen + height / 2 - buttonHeight - borderSize, buttonWidth, buttonHeight), null, "Organize Chest", Sprites.Buttons.Sheet, Sprites.Buttons.Organize, Game1.pixelZoom);
+            this.OrganizeInventoryButton = new ClickableTextureComponent("organize-inventory", new Rectangle(this.xPositionOnScreen + this.width, this.yPositionOnScreen + height - buttonHeight - borderSize, buttonWidth, buttonHeight), null, "Organize Inventory", Sprites.Buttons.Sheet, Sprites.Buttons.Organize, Game1.pixelZoom);
         }
 
         /// <summary>Initialise the chest and category selectors.</summary>
@@ -353,7 +353,7 @@ namespace ChestsAnywhere.Components
                 int y = this.ChestTab.bounds.Y;
                 int width = (int)(sprite.Width * zoom);
                 int height = (int)(sprite.Height * zoom);
-                this.EditChestButton = new ClickableTextureComponent(new Rectangle(x + 5, y + height / 2, width, height), "edit chest", "Edit chest", Sprites.Icons.Sheet, sprite, scale: zoom, drawLabel: false);
+                this.EditChestButton = new ClickableTextureComponent("edit-chest", new Rectangle(x + 5, y + height / 2, width, height), null, "edit chest", Sprites.Icons.Sheet, sprite, zoom);
             }
 
             // category

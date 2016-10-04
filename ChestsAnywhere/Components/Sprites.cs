@@ -158,7 +158,7 @@ namespace ChestsAnywhere.Components
         /// <param name="sheet">The sprite sheet containing the sprite.</param>
         /// <param name="sprite">The sprite coordinates and dimensions in the sprite sheet.</param>
         /// <param name="x">The X-position at which to draw the sprite.</param>
-        /// <param name="Y">The X-position at which to draw the sprite.</param>
+        /// <param name="y">The X-position at which to draw the sprite.</param>
         /// <param name="width">The width to draw.</param>
         /// <param name="height">The height to draw.</param>
         /// <param name="color">The color to tint the sprite.</param>
