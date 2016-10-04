@@ -3,9 +3,9 @@
   "Authour": "Pathoschild",
   "Version": {
     "MajorVersion": 1,
-    "MinorVersion": 0,
+    "MinorVersion": 1,
     "PatchVersion": 0,
-    "Build": "1"
+    "Build": 0
   },
   "Description": "Skips the game's loading intro.",
   "UniqueID": "SkipIntro",
