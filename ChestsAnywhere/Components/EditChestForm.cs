@@ -117,7 +117,7 @@ namespace ChestsAnywhere.Components
             }
 
             // editable text fields
-            var fields = new[] { Tuple.Create("Name:", this.NameField), Tuple.Create("Category:", this.CategoryField), Tuple.Create("Order:", this.OrderField) };
+            var fields = new[] { Tuple.Create("Name:", this.NameField), Tuple.Create("Category:", this.CategoryField), Tuple.Create("Order:", this.OrderField) }.Where(p => p != null);
             foreach (var field in fields)
             {
                 // get data

@@ -9,7 +9,7 @@ using StardewValley.Menus;
 
 namespace ChestsAnywhere.Components
 {
-    /// <summary>A UI which lets the player choose a chest (optionally filtered by category), and transfer items between a chest and their inventory.</summary>
+    /// <summary>A UI which lets the player choose a chest, and transfer items between a chest and their inventory.</summary>
     internal class AccessChestMenu : ChestWithInventory, IDisposable
     {
         /*********
@@ -24,8 +24,8 @@ namespace ChestsAnywhere.Components
         /// <summary>Whether the chest dropdown is open.</summary>
         private bool IsChestListOpen;
 
-        /// <summary>Whether the category dropdown is open.</summary>
-        private bool IsCategoryListOpen;
+        /// <summary>Whether the group dropdown is open.</summary>
+        private bool IsGroupListOpen;
 
         /// <summary>Whether the 'edit chest' UI is being displayed.</summary>
         private bool IsEditChestOpen => this.EditChestForm != null;
@@ -34,16 +34,16 @@ namespace ChestsAnywhere.Components
         private readonly ManagedChest[] Chests;
 
         /// <summary>The unique chest categories.</summary>
-        private readonly string[] Categories;
+        private readonly string[] Groups;
 
-        /// <summary>The name of the selected category.</summary>
-        private string SelectedCategory => this.SelectedChest.Category;
+        /// <summary>The name of the selected group.</summary>
+        private string SelectedGroup => this.SelectedChest.GetGroup();
 
         /// <summary>The mod configuration.</summary>
         private readonly ModConfig Config;
 
-        /// <summary>Whether to show the category tab.</summary>
-        private bool ShowCategoryTab => this.Categories.Length > 1;
+        /// <summary>Whether to show the group tab.</summary>
+        private bool ShowGroupTab => this.Groups.Length > 1;
 
         /****
         ** UI
@@ -54,8 +54,8 @@ namespace ChestsAnywhere.Components
         /// <summary>The chest selector tab.</summary>
         private Tab ChestTab;
 
-        /// <summary>The category selector tab.</summary>
-        private Tab CategoryTab;
+        /// <summary>The group selector tab.</summary>
+        private Tab GroupTab;
 
         /// <summary>The chest selector dropdown.</summary>
         private DropList<ManagedChest> ChestSelector;
@@ -63,8 +63,8 @@ namespace ChestsAnywhere.Components
         /// <summary>The button which edits the selected chest.</summary>
         private ClickableTextureComponent EditChestButton;
 
-        /// <summary>The category selector dropdown.</summary>
-        private DropList<string> CategorySelector;
+        /// <summary>The group selector dropdown.</summary>
+        private DropList<string> GroupSelector;
 
         /// <summary>The button which sorts the chest items.</summary>
         private ClickableTextureComponent OrganizeChestButton;
@@ -98,7 +98,7 @@ namespace ChestsAnywhere.Components
             this.Chests = chests;
             this.SelectedChest = selectedChest;
             this.Config = config;
-            this.Categories = this.Chests.Select(p => p.Category).Distinct().ToArray();
+            this.Groups = this.Chests.Select(chest => chest.GetGroup()).Distinct().ToArray();
             this.InitialiseTabs();
             this.InitialiseSelectors();
             this.InitialiseTools();
@@ -143,8 +143,8 @@ namespace ChestsAnywhere.Components
             {
                 if (this.IsChestListOpen)
                     this.IsChestListOpen = false;
-                else if (this.IsCategoryListOpen)
-                    this.IsCategoryListOpen = false;
+                else if (this.IsGroupListOpen)
+                    this.IsGroupListOpen = false;
                 else
                     this.exitThisMenuNoSound();
             }
@@ -166,8 +166,8 @@ namespace ChestsAnywhere.Components
                 return; // 'edit chest' UI handles all input when open
             else if (this.IsChestListOpen)
                 this.ChestSelector.ReceiveScrollWheelAction(direction);
-            else if (this.IsCategoryListOpen)
-                this.CategorySelector?.ReceiveScrollWheelAction(direction);
+            else if (this.IsGroupListOpen)
+                this.GroupSelector?.ReceiveScrollWheelAction(direction);
         }
 
         /// <summary>The method invoked when the game window is resized.</summary>
@@ -176,7 +176,7 @@ namespace ChestsAnywhere.Components
         public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
         {
             this.ChestSelector.ReceiveGameWindowResized();
-            this.CategorySelector?.ReceiveGameWindowResized();
+            this.GroupSelector?.ReceiveGameWindowResized();
             this.InitialiseTabs();
             this.InitialiseTools();
         }
@@ -207,20 +207,20 @@ namespace ChestsAnywhere.Components
                 }
             }
 
-            // category dropdown
-            else if (this.IsCategoryListOpen)
+            // group dropdown
+            else if (this.IsGroupListOpen)
             {
                 // close dropdown
-                this.IsCategoryListOpen = false;
+                this.IsGroupListOpen = false;
                 this.IsDisabled = false;
 
-                // select category
-                if (this.CategorySelector.containsPoint(x, y))
+                // select group
+                if (this.GroupSelector.containsPoint(x, y))
                 {
-                    string category = this.CategorySelector.Select(x, y);
-                    if (category != null && category != this.SelectedCategory)
+                    string group = this.GroupSelector.Select(x, y);
+                    if (group != null && group != this.SelectedGroup)
                     {
-                        this.SelectChest(this.Chests.First(p => p.Category == category));
+                        this.SelectChest(this.Chests.First(chest => chest.GetGroup() == group));
                         this.InitialiseSelectors();
                     }
                 }
@@ -237,10 +237,10 @@ namespace ChestsAnywhere.Components
                 this.IsDisabled = true;
             }
 
-            // category tab
-            else if (this.CategoryTab?.containsPoint(x, y) == true)
+            // group tab
+            else if (this.GroupTab?.containsPoint(x, y) == true)
             {
-                this.IsCategoryListOpen = true;
+                this.IsGroupListOpen = true;
                 this.IsDisabled = true;
             }
 
@@ -270,14 +270,14 @@ namespace ChestsAnywhere.Components
 
             // tabs
             this.ChestTab.Draw(sprites);
-            this.CategoryTab?.Draw(sprites, this.Opacity);
+            this.GroupTab?.Draw(sprites, this.Opacity);
             this.EditChestButton.draw(sprites, Color.White * this.Opacity, 1);
 
             // tab dropdowns
             if (this.IsChestListOpen)
                 this.ChestSelector.Draw(sprites, this.Opacity);
-            if (this.IsCategoryListOpen)
-                this.CategorySelector.Draw(sprites, this.Opacity);
+            if (this.IsGroupListOpen)
+                this.GroupSelector.Draw(sprites, this.Opacity);
 
             // 'edit chest' UI
             if (this.IsEditChestOpen)
@@ -315,27 +315,27 @@ namespace ChestsAnywhere.Components
             this.OrganizeInventoryButton = new ClickableTextureComponent("organize-inventory", new Rectangle(this.xPositionOnScreen + this.width, this.yPositionOnScreen + height - buttonHeight - borderSize, buttonWidth, buttonHeight), null, "Organize Inventory", Sprites.Buttons.Sheet, Sprites.Buttons.Organize, Game1.pixelZoom);
         }
 
-        /// <summary>Initialise the chest and category selectors.</summary>
+        /// <summary>Initialise the chest and group selectors.</summary>
         private void InitialiseSelectors()
         {
             // chest selector
             {
-                ManagedChest[] chests = this.Chests.Where(chest => !this.ShowCategoryTab || chest.Category == this.SelectedCategory).ToArray();
+                ManagedChest[] chests = this.Chests.Where(chest => !this.ShowGroupTab || chest.GetGroup() == this.SelectedGroup).ToArray();
                 int x = this.xPositionOnScreen + Game1.tileSize / 4;
                 int y = this.yPositionOnScreen;
                 this.ChestSelector = new DropList<ManagedChest>(this.SelectedChest, chests, chest => chest.Name, x, y, true, this.Font);
             }
 
-            // category selector
-            if (this.ShowCategoryTab)
+            // group selector
+            if (this.ShowGroupTab)
             {
                 int x = this.xPositionOnScreen + this.width - Game1.tileSize / 4;
                 int y = this.yPositionOnScreen;
-                this.CategorySelector = new DropList<string>(this.SelectedCategory, this.Categories, category => !string.IsNullOrWhiteSpace(category) ? category : "(no category)", x, y, false, this.Font);
+                this.GroupSelector = new DropList<string>(this.SelectedGroup, this.Groups, group => group, x, y, false, this.Font);
             }
         }
 
-        /// <summary>Initialise the chest and category tabs.</summary>
+        /// <summary>Initialise the chest and group tabs.</summary>
         private void InitialiseTabs()
         {
             // chest
@@ -356,12 +356,12 @@ namespace ChestsAnywhere.Components
                 this.EditChestButton = new ClickableTextureComponent("edit-chest", new Rectangle(x + 5, y + height / 2, width, height), null, "edit chest", Sprites.Icons.Sheet, sprite, zoom);
             }
 
-            // category
-            if (this.ShowCategoryTab)
+            // group
+            if (this.ShowGroupTab)
             {
                 int x = this.xPositionOnScreen + this.width - Game1.tileSize / 4;
                 int y = this.yPositionOnScreen - Game1.tileSize - Game1.tileSize / 16;
-                this.CategoryTab = new Tab(!string.IsNullOrWhiteSpace(this.SelectedCategory) ? this.SelectedCategory : "(no category)", x, y, false, this.Font);
+                this.GroupTab = new Tab(this.SelectedGroup, x, y, false, this.Font);
             }
         }
 

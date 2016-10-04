@@ -82,6 +82,14 @@ namespace ChestsAnywhere.Framework
                 this.Category = "";
         }
 
+        /// <summary>Get the grouping category for a chest.</summary>
+        public string GetGroup()
+        {
+            return !string.IsNullOrWhiteSpace(this.Category)
+                ? this.Category
+                : this.LocationName;
+        }
+
         /// <summary>Update the chest metadata.</summary>
         /// <param name="name">The chest's display name.</param>
         /// <param name="category">The category name (if any).</param>

@@ -68,9 +68,8 @@ file if you want. These are the available settings:
 
 1.4:
 * Updated for Stardew Valley 1.1.
-* Added chest category feature (via edit-chest UI).
-* Added fields to edit sort order and hide chests via edit-chest UI.
-* Removed location grouping (replaced by categories).
+* Added chest category which lets you override the location grouping.
+* Added fields to edit sort order and hide chests.
 * Fixed edited chest name not saving correctly.
 
 ## Compiling the mod
