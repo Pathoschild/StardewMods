@@ -68,10 +68,9 @@ file if you want. These are the available settings:
 
 1.4:
 * Updated for Stardew Valley 1.1.
-* Added chest category feature.
-* Added sort order field to edit-chest UI.
-* Added hide-chest field to edit-chest UI.
-* Removed location tab.
+* Added chest category feature (via edit-chest UI).
+* Added fields to edit sort order and hide chests via edit-chest UI.
+* Removed location grouping (replaced by categories).
 * Fixed edited chest name not saving correctly.
 
 ## Compiling the mod
@@ -84,4 +83,4 @@ Studio will compile the code, package it into the mod directory, and start the g
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/518)
 * [Discussion thread](http://community.playstarbound.com/threads/smapi-chests-anywhere.122603/)
 * My other Stardew Valley mods: [Lookup Anything](https://github.com/Pathoschild/LookupAnything) and [Skip Intro](https://github.com/Pathoschild/StardewValley.SkipIntro)
-* This is an open-source fork of [AccessChestAnywhere](https://github.com/VIspReaderUS/AccessChestAnywhere) (which is currently inactive), with the [author's blessing](https://github.com/VIspReaderUS/AccessChestAnywhere/issues/1). Versions 1.0 and 1.1 are from that mod.
+* This is an [open-source fork](https://github.com/VIspReaderUS/AccessChestAnywhere/issues/1) of the inactive [AccessChestAnywhere](https://github.com/VIspReaderUS/AccessChestAnywhere) mod. Versions 1.0 and 1.1 are from that mod.
