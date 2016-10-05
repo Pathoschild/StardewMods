@@ -25,6 +25,9 @@ namespace Pathoschild.LookupAnything.Framework
         /// <summary>Whether to check for updates to the mod.</summary>
         public bool CheckForUpdates { get; set; }
 
+        /// <summary>Whether to log debug metadata useful for troubleshooting.</summary>
+        public bool DebugLog { get; set; }
+
 
         /*********
         ** Public methods
@@ -49,6 +52,7 @@ namespace Pathoschild.LookupAnything.Framework
             };
             this.HideOnKeyUp = false;
             this.CheckForUpdates = true;
+            this.DebugLog = false;
         }
 
         /// <summary>Construct the default configuration.</summary>
@@ -79,7 +83,8 @@ namespace Pathoschild.LookupAnything.Framework
                     ToggleDebug = this.TryParse<Buttons>(this.Controller.ToggleDebug)
                 },
                 HideOnKeyUp = this.HideOnKeyUp,
-                CheckForUpdates = this.CheckForUpdates
+                CheckForUpdates = this.CheckForUpdates,
+                DebugLog = this.DebugLog
             };
         }
 

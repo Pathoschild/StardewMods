@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Pathoschild.LookupAnything.Common;
 using Pathoschild.LookupAnything.Components;
 using Pathoschild.LookupAnything.Framework;
+using Pathoschild.LookupAnything.Framework.Logging;
 using Pathoschild.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -68,58 +69,84 @@ namespace Pathoschild.LookupAnything
         /// <summary>Initialise the mod.</summary>
         public override void Entry(params object[] objects)
         {
-            // validate version
-            string versionError = GameHelper.ValidateGameVersion();
-            if (versionError != null)
-                Log.Error(versionError);
-
-            // load config
-            this.Config = new RawModConfig().InitializeConfig(this.BaseConfigPath).GetParsed();
-
-            // load database
-            this.LoadMetadata();
-#if TEST_BUILD
-            this.OverrideFileWatcher = new FileSystemWatcher(this.PathOnDisk, this.DatabaseFileName) { EnableRaisingEvents = true };
-            this.OverrideFileWatcher.Changed += (sender, e) =>
+            using (ICumulativeLog log = new CumulativeLog())
             {
+                log.AppendLine("Lookup Anything initialising...");
+
+                // validate version
+                log.Append("checking game/API version... ");
+                string versionError = GameHelper.ValidateGameVersion();
+                if (versionError != null)
+                    Log.Error(versionError);
+                log.AppendLine("OK!");
+
+                // load config
+                log.Append("loading config... ");
+                this.Config = new RawModConfig().InitializeConfig(this.BaseConfigPath).GetParsed();
+                log.AppendLine(this.Config.DebugLog ? $"loaded: {JsonConvert.SerializeObject(this.Config)}" : "OK!");
+
+                // load database
+                log.Append("loading database... ");
                 this.LoadMetadata();
-                this.TargetFactory = new TargetFactory(this.Metadata);
-                this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config) { Enabled = this.DebugInterface.Enabled };
-            };
-#endif
-
-            // reset low-level cache once per game day (used for expensive queries that don't change within a day)
-            PlayerEvents.LoadedGame += (sender, e) => GameHelper.ResetCache(this.Metadata);
-            TimeEvents.OnNewDay += (sender, e) => GameHelper.ResetCache(this.Metadata);
-
-            // initialise functionality
-            this.CurrentVersion = UpdateHelper.GetSemanticVersion(this.Manifest.Version);
-            this.TargetFactory = new TargetFactory(this.Metadata);
-            this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config);
-
-            // hook up game events
-            GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
-            GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
-            MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
-
-            // hook up keyboard
-            if (this.Config.Keyboard.HasAny())
-            {
-                ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
-                if (this.Config.HideOnKeyUp)
-                    ControlEvents.KeyReleased += (sender, e) => this.ReceiveKeyRelease(e.KeyPressed, this.Config.Keyboard);
-            }
-
-            // hook up controller
-            if (this.Config.Controller.HasAny())
-            {
-                ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-                ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-                if (this.Config.HideOnKeyUp)
+#if TEST_BUILD
+                this.OverrideFileWatcher = new FileSystemWatcher(this.PathOnDisk, this.DatabaseFileName)
                 {
-                    ControlEvents.ControllerButtonReleased += (sender, e) => this.ReceiveKeyRelease(e.ButtonReleased, this.Config.Controller);
-                    ControlEvents.ControllerTriggerReleased += (sender, e) => this.ReceiveKeyRelease(e.ButtonReleased, this.Config.Controller);
+                    EnableRaisingEvents = true
+                };
+                this.OverrideFileWatcher.Changed += (sender, e) =>
+                {
+                    this.LoadMetadata();
+                    this.TargetFactory = new TargetFactory(this.Metadata);
+                    this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config)
+                    {
+                        Enabled = this.DebugInterface.Enabled
+                    };
+                };
+#endif
+                log.AppendLine("OK!");
+
+                // initialise functionality
+                log.Append("initialising framework... ");
+                this.CurrentVersion = UpdateHelper.GetSemanticVersion(this.Manifest.Version);
+                this.TargetFactory = new TargetFactory(this.Metadata);
+                this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config);
+                log.AppendLine("OK!");
+
+                // hook up events
+                log.Append("registering event listeners... ");
+                {
+                    // reset low-level cache once per game day (used for expensive queries that don't change within a day)
+                    PlayerEvents.LoadedGame += (sender, e) => GameHelper.ResetCache(this.Metadata);
+                    TimeEvents.OnNewDay += (sender, e) => GameHelper.ResetCache(this.Metadata);
+                    
+                    // hook up game events
+                    GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
+                    GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
+                    MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
+
+                    // hook up keyboard
+                    if (this.Config.Keyboard.HasAny())
+                    {
+                        ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
+                        if (this.Config.HideOnKeyUp)
+                            ControlEvents.KeyReleased += (sender, e) => this.ReceiveKeyRelease(e.KeyPressed, this.Config.Keyboard);
+                    }
+
+                    // hook up controller
+                    if (this.Config.Controller.HasAny())
+                    {
+                        ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+                        ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+                        if (this.Config.HideOnKeyUp)
+                        {
+                            ControlEvents.ControllerButtonReleased += (sender, e) => this.ReceiveKeyRelease(e.ButtonReleased, this.Config.Controller);
+                            ControlEvents.ControllerTriggerReleased += (sender, e) => this.ReceiveKeyRelease(e.ButtonReleased, this.Config.Controller);
+                        }
+                    }
                 }
+                log.AppendLine("OK!");
+
+                log.AppendLine(this.Config.DebugLog ? "ready!" : "ready! further logging disabled by config.");
             }
         }
 
@@ -140,9 +167,19 @@ namespace Pathoschild.LookupAnything
                 {
                     try
                     {
-                        GitRelease release = UpdateHelper.GetLatestReleaseAsync("Pathoschild/LookupAnything").Result;
-                        if (release.IsNewerThan(this.CurrentVersion))
-                            this.NewRelease = release;
+                        using (ICumulativeLog log = this.GetTaskLog())
+                        {
+                            log.Append("Lookup Anything checking for update... ");
+
+                            GitRelease release = UpdateHelper.GetLatestReleaseAsync("Pathoschild/LookupAnything").Result;
+                            if (release.IsNewerThan(this.CurrentVersion))
+                            {
+                                log.AppendLine("update to version {release.Name} available.");
+                                this.NewRelease = release;
+                            }
+                            else
+                                log.AppendLine("no update available.");
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -259,31 +296,49 @@ namespace Pathoschild.LookupAnything
         /// <summary>Show the lookup UI for the current target.</summary>
         private void ShowLookup()
         {
-            try
+            using (ICumulativeLog log = this.GetTaskLog())
             {
-                // validate version
-                string versionError = GameHelper.ValidateGameVersion();
-                if (versionError != null)
+                log.Append("Lookup Anything received a lookup request. ");
+
+                try
                 {
-                    GameHelper.ShowErrorMessage(versionError);
-                    Log.Error(versionError);
-                    return;
+                    // validate version
+                    string versionError = GameHelper.ValidateGameVersion();
+                    if (versionError != null)
+                    {
+                        GameHelper.ShowErrorMessage(versionError);
+                        Log.Error(versionError);
+                        return;
+                    }
+
+                    // get target
+                    ISubject subject = null;
+                    if (Game1.activeClickableMenu != null)
+                    {
+                        log.Append($"Searching the open '{Game1.activeClickableMenu.GetType().Name}' menu... ");
+                        subject = this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu, GameHelper.GetScreenCoordinatesFromCursor());
+                    }
+                    else
+                    {
+                        log.Append("Searching the world... ");
+                        subject = this.TargetFactory.GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile, GameHelper.GetScreenCoordinatesFromCursor());
+                    }
+                    if (subject == null)
+                    {
+                        log.AppendLine("no target found.");
+                        return;
+                    }
+
+
+                    // show lookup UI
+                    log.AppendLine($"showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.");
+                    this.PreviousMenu = Game1.activeClickableMenu;
+                    Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata);
                 }
-
-                // get target
-                ISubject subject = Game1.activeClickableMenu != null
-                    ? this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu, GameHelper.GetScreenCoordinatesFromCursor())
-                    : this.TargetFactory.GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile, GameHelper.GetScreenCoordinatesFromCursor());
-                if (subject == null)
-                    return;
-
-                // show lookup UI
-                this.PreviousMenu = Game1.activeClickableMenu;
-                Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata);
-            }
-            catch (Exception ex)
-            {
-                this.HandleError(ex, "looking that up");
+                catch (Exception ex)
+                {
+                    this.HandleError(ex, "looking that up");
+                }
             }
         }
 
@@ -324,7 +379,15 @@ namespace Pathoschild.LookupAnything
         private void HandleError(Exception ex, string verb)
         {
             GameHelper.ShowErrorMessage($"Huh. Something went wrong {verb}. The game error log has the technical details.");
-            Log.Error(ex.ToString());
+            Log.Error($"[Lookup Anything] Something went wrong {verb}:{Environment.NewLine}{ex}");
+        }
+
+        /// <summary>Get a logger which collects messages for a discrete task and logs them as one entry when disposed.</summary>
+        private ICumulativeLog GetTaskLog()
+        {
+            if(!this.Config.DebugLog)
+                return new DisabledLog();
+            return new CumulativeLog();
         }
     }
 }

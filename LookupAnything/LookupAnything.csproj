@@ -68,6 +68,7 @@
     <Compile Include="Framework\Constants\FenceType.cs" />
     <Compile Include="Framework\Constants\FruitTreeGrowthStage.cs" />
     <Compile Include="DataParser.cs" />
+    <Compile Include="Framework\Logging\CumulativeLog.cs" />
     <Compile Include="Framework\Data\ConstantData.cs" />
     <Compile Include="Framework\Data\ObjectContext.cs" />
     <Compile Include="Framework\Data\ObjectData.cs" />
@@ -78,6 +79,8 @@
     <Compile Include="Framework\Fields\SkillBarField.cs" />
     <Compile Include="Common\GitVersion.cs" />
     <Compile Include="Framework\InputMapConfiguration.cs" />
+    <Compile Include="Framework\Logging\DisabledLog.cs" />
+    <Compile Include="Framework\Logging\ICumulativeLog.cs" />
     <Compile Include="Framework\Models\GiftTasteModel.cs" />
     <Compile Include="Framework\Models\ObjectModel.cs" />
     <Compile Include="Framework\Models\RawGiftTasteModel.cs" />
