@@ -52,7 +52,7 @@ file if you want. These are the available settings:
 | `Controller`      | Set controller bindings. No buttons configured by default. See [valid buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.buttons.aspx).
 | `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll [see a small message at the bottom of the screen for a few seconds](screenshots/new-version-message.png). This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
 | `HideOnKeyUp`     | Default `false`. If enabled, the lookup window will be shown while you hold `F1` and disappear when you release it.
-| `DebugLog`        | Default `false`. Whether to log information to the console useful for troubleshooting issues.
+| `DebugLog`        | Default `true`. Whether to log information to the console useful for troubleshooting issues.
 
 ## Versions
 1.0:

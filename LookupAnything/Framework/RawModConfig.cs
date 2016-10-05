@@ -52,7 +52,7 @@ namespace Pathoschild.LookupAnything.Framework
             };
             this.HideOnKeyUp = false;
             this.CheckForUpdates = true;
-            this.DebugLog = false;
+            this.DebugLog = true;
         }
 
         /// <summary>Construct the default configuration.</summary>
