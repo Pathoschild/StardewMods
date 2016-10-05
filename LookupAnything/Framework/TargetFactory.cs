@@ -201,10 +201,38 @@ namespace Pathoschild.LookupAnything.Framework
 
         /// <summary>Get metadata for a menu element at the specified position.</summary>
         /// <param name="activeMenu">The active menu.</param>
-        public ISubject GetSubjectFrom(IClickableMenu activeMenu)
+        /// <param name="cursorPosition">The cursor's viewport-relative coordinates.</param>
+        public ISubject GetSubjectFrom(IClickableMenu activeMenu, Vector2 cursorPosition)
         {
+            // calendar
+            if (activeMenu is Billboard)
+            {
+                Billboard billboard = (Billboard)activeMenu;
+
+                // get target day
+                int selectedDay = -1;
+                {
+                    List<ClickableTextureComponent> calendarDays = GameHelper.GetPrivateField<List<ClickableTextureComponent>>(billboard, "calendarDays");
+                    for (int i = 0; i < calendarDays.Count; i++)
+                    {
+                        if (calendarDays[i].containsPoint((int)cursorPosition.X, (int)cursorPosition.Y))
+                        {
+                            selectedDay = i + 1;
+                            break;
+                        }
+                    }
+                }
+                if (selectedDay == -1)
+                    return null;
+
+                // get villager with a birthday on that date
+                NPC target = Utility.getAllCharacters().FirstOrDefault(p => p.birthday_Season == Game1.currentSeason && p.birthday_Day == selectedDay);
+                if(target != null)
+                    return new CharacterSubject(target, TargetType.Villager, this.Metadata);
+            }
+
             // inventory
-            if (activeMenu is GameMenu)
+            else if (activeMenu is GameMenu)
             {
                 // get current tab
                 List<IClickableMenu> tabs = GameHelper.GetPrivateField<List<IClickableMenu>>(activeMenu, "pages");

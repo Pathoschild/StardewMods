@@ -11,6 +11,7 @@ will be ready to harvest, how long a fence will last, why your farm animals are 
 
 ## Usage
 Just point your cursor at something and press `F1`. The mod will show live info about that object.
+You can do this to things you see in the world, in your inventory, or in the calendar.
 
 ## Examples
 Here are some representative screenshots (layout and values will change dynamically as needed).
@@ -93,6 +94,9 @@ file if you want. These are the available settings:
   * updated for Gold Clock preventing fence decay;
   * updated to latest binaries & increased minimum versions.
 * Fixed a few missing stones & weeds.
+
+1.5 (upcoming):
+* Lookup a villager from the calendar.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is

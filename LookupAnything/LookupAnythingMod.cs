@@ -272,7 +272,7 @@ namespace Pathoschild.LookupAnything
 
                 // get target
                 ISubject subject = Game1.activeClickableMenu != null
-                    ? this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu)
+                    ? this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu, GameHelper.GetScreenCoordinatesFromCursor())
                     : this.TargetFactory.GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile, GameHelper.GetScreenCoordinatesFromCursor());
                 if (subject == null)
                     return;
