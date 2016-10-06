@@ -35,10 +35,10 @@ namespace Pathoschild.LookupAnything.Components
         {
             contentBatch.DrawTextBlock(Game1.smallFont, $"({this.Result.TargetType}) {this.Result.Name}", position + new Vector2(70, this.Height / 2), width);
 
-            contentBatch.DrawLine(position.X, position.Y, new Vector2(Width, 1), Color.Blue);
-            contentBatch.DrawLine(position.X, position.Y, new Vector2(1, Height), Color.Red);
-            contentBatch.DrawLine(position.X + Width, position.Y, new Vector2(1, Height), Color.Pink);
-            contentBatch.DrawLine(position.X, position.Y + Height, new Vector2(Width, 1), Color.Green);
+            contentBatch.DrawLine(position.X, position.Y, new Vector2(Width, 1), Color.Black);
+            //contentBatch.DrawLine(position.X, position.Y, new Vector2(1, Height), Color.Red);
+            //contentBatch.DrawLine(position.X + Width, position.Y, new Vector2(1, Height), Color.Pink);
+            //contentBatch.DrawLine(position.X, position.Y + Height, new Vector2(Width, 1), Color.Green);
 
             this.panel = new ClickableComponent(new Rectangle((int)position.X, (int)position.Y, this.Width, this.Height), this.Result.Name);
             return new Vector2(this.Width, this.Height);
