@@ -23,14 +23,13 @@ namespace Pathoschild.LookupAnything
         ** Properties
         *********/
         /// <summary>The cached object data.</summary>
-        private static readonly Lazy<ObjectModel[]> Objects = new Lazy<ObjectModel[]>(() => DataParser.GetObjects().ToArray());
+        internal static readonly Lazy<ObjectModel[]> Objects = new Lazy<ObjectModel[]>(() => DataParser.GetObjects().ToArray());
 
         /// <summary>The cached villagers' gift tastes.</summary>
         private static Lazy<GiftTasteModel[]> GiftTastes;
 
         /// <summary>The cached recipes.</summary>
         private static Lazy<RecipeModel[]> Recipes;
-
 
         /*********
         ** Public methods
@@ -44,6 +43,16 @@ namespace Pathoschild.LookupAnything
         {
             GameHelper.GiftTastes = new Lazy<GiftTasteModel[]>(() => DataParser.GetGiftTastes(GameHelper.Objects.Value).ToArray());
             GameHelper.Recipes = new Lazy<RecipeModel[]>(() => DataParser.GetRecipes(metadata).ToArray());
+        }
+
+        public static ILookup<string, SearchResult> GetSearchLookup()
+        {
+            List<SearchResult> results = new List<SearchResult>();
+            results.AddRange(Utility.getAllCharacters().Select(npc => new SearchResult(npc)));
+            results.AddRange(DataParser.GetMonsters().Select(mob => new SearchResult(mob)));
+            results.AddRange(GameHelper.Objects.Value.Select(obj => new SearchResult(obj)));
+            results.AddRange(Game1.getFarm().animals.Select(kvp => new SearchResult(kvp.Value)));
+            return results.ToLookup(r => r.Name);
         }
 
         /****
@@ -370,5 +379,47 @@ namespace Pathoschild.LookupAnything
         {
             CommonHelper.ShowErrorMessage(message);
         }
+    }
+
+    internal class SearchResult
+    {
+        public SearchResult(NPC npc)
+        {
+            this.NPC = npc;
+            this.Name = npc.name;
+            this.TargetType = TargetType.Villager;
+        }
+
+        public SearchResult(MonsterData monster)
+        {
+            this.Monster = monster;
+            this.Name = monster.Name;
+            this.TargetType = TargetType.Monster;
+        }
+
+        public SearchResult(ObjectModel objectModel)
+        {
+            this.ObjectModel = objectModel;
+            this.Name = objectModel.Name;
+            this.TargetType = TargetType.Object;
+        }
+
+        public SearchResult(FarmAnimal farmAnimal)
+        {
+            this.FarmAnimal = farmAnimal;
+            this.Name = farmAnimal.name;
+            this.TargetType = TargetType.FarmAnimal;
+        }
+
+        public string Name { get; }
+        public TargetType TargetType { get; }
+
+        public NPC NPC { get; }
+
+        public MonsterData Monster { get; }
+
+        public ObjectModel ObjectModel { get; }
+
+        public FarmAnimal FarmAnimal { get; }
     }
 }

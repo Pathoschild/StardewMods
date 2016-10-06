@@ -118,7 +118,7 @@ namespace Pathoschild.LookupAnything
                     // reset low-level cache once per game day (used for expensive queries that don't change within a day)
                     PlayerEvents.LoadedGame += (sender, e) => GameHelper.ResetCache(this.Metadata);
                     TimeEvents.OnNewDay += (sender, e) => GameHelper.ResetCache(this.Metadata);
-                    
+
                     // hook up game events
                     GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
                     GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
@@ -209,6 +209,8 @@ namespace Pathoschild.LookupAnything
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollDown(this.Config.ScrollAmount);
                 else if (key.Equals(map.ToggleDebug))
                     this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
+                else if (key.Equals(map.ToggleSearch))
+                    this.ToggleSearch();
             }
             catch (Exception ex)
             {
@@ -359,6 +361,52 @@ namespace Pathoschild.LookupAnything
             }
         }
 
+        private void ToggleSearch()
+        {
+            if (Game1.activeClickableMenu is SearchMenu)
+                this.HideSearch();
+            else
+                this.ShowSearch();
+        }
+
+        /// <summary>Show the lookup UI for the current target.</summary>
+        private void ShowSearch()
+        {
+            using (ICumulativeLog log = this.GetTaskLog())
+            {
+                log.Append("Lookup Anything received a search request. ");
+
+                try
+                {                    
+                    // show search UI
+                    log.AppendLine($"showing search ui.");
+                    this.PreviousMenu = Game1.activeClickableMenu;
+                    Game1.activeClickableMenu = new SearchMenu(this.Metadata);
+                }
+                catch (Exception ex)
+                {
+                    this.HandleError(ex, "looking that up");
+                }
+            }
+        }
+
+        /// <summary>Show the lookup UI for the current target.</summary>
+        private void HideSearch()
+        {
+            try
+            {
+                if (Game1.activeClickableMenu is LookupMenu)
+                {
+                    Game1.playSound("bigDeSelect"); // match default behaviour when closing a menu
+                    Game1.activeClickableMenu = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, "closing the menu");
+            }
+        }
+
         /// <summary>Load the file containing metadata that's not available from the game directly.</summary>
         private void LoadMetadata()
         {
@@ -385,7 +433,7 @@ namespace Pathoschild.LookupAnything
         /// <summary>Get a logger which collects messages for a discrete task and logs them as one entry when disposed.</summary>
         private ICumulativeLog GetTaskLog()
         {
-            if(!this.Config.DebugLog)
+            if (!this.Config.DebugLog)
                 return new DisabledLog();
             return new CumulativeLog();
         }

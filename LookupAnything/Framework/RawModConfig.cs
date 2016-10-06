@@ -71,9 +71,10 @@ namespace Pathoschild.LookupAnything.Framework
                 Keyboard = new InputMapConfiguration<Keys>
                 {
                     ToggleLookup = this.TryParse(this.Keyboard.ToggleLookup, Keys.F1),
+                    ToggleSearch = this.TryParse(this.Keyboard.ToggleSearch, Keys.OemTilde),
                     ScrollUp = this.TryParse(this.Keyboard.ScrollUp, Keys.Up),
                     ScrollDown = this.TryParse(this.Keyboard.ScrollDown, Keys.Down),
-                    ToggleDebug = this.TryParse(this.Keyboard.ToggleDebug, Keys.None)
+                    ToggleDebug = this.TryParse(this.Keyboard.ToggleDebug, Keys.F2)
                 },
                 Controller = new InputMapConfiguration<Buttons>
                 {

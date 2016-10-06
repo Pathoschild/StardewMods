@@ -30,7 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <GamePath>C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley</GamePath>
+    <GamePath>C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley</GamePath>
     <StartAction>Program</StartAction>
     <StartProgram>$(GamePath)\StardewModdingAPI.exe</StartProgram>
     <StartWorkingDirectory>$(GamePath)</StartWorkingDirectory>
@@ -65,6 +65,9 @@
   <ItemGroup>
     <Compile Include="Common\CommonHelper.cs" />
     <Compile Include="Components\DebugInterface.cs" />
+    <Compile Include="Components\SearchMenu.cs" />
+    <Compile Include="Components\SearchResultComponent.cs" />
+    <Compile Include="Components\SearchTextBox.cs" />
     <Compile Include="Framework\Constants\FenceType.cs" />
     <Compile Include="Framework\Constants\FruitTreeGrowthStage.cs" />
     <Compile Include="DataParser.cs" />
