@@ -99,6 +99,7 @@ file if you want. These are the available settings:
 1.5 (upcoming):
 * added ability to lookup a villager from the calendar.
 * added optional debug log.
+* fixed crash in edge case where an error occurs handling a mapped input key whose string representation contains characters not available in the sprite font.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is

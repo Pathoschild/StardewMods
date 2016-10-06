@@ -212,7 +212,7 @@ namespace Pathoschild.LookupAnything
             }
             catch (Exception ex)
             {
-                this.HandleError(ex, $"handling input '{key}'.");
+                this.HandleError(ex, "handling your input", $"handling input '{key}'.");
             }
         }
 
@@ -232,7 +232,7 @@ namespace Pathoschild.LookupAnything
             }
             catch (Exception ex)
             {
-                this.HandleError(ex, $"handling input '{key}'.");
+                this.HandleError(ex, "handling your input", $"handling input '{key}'.");
             }
         }
 
@@ -375,11 +375,13 @@ namespace Pathoschild.LookupAnything
 
         /// <summary>Log an error and warn the user.</summary>
         /// <param name="ex">The exception to handle.</param>
-        /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up").</param>
-        private void HandleError(Exception ex, string verb)
+        /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up"). This is displayed on the screen, so it should be simple and avoid characters that might not be available in the sprite font.</param>
+        /// <param name="detailedVerb">A more detailed form of <see cref="verb"/> if applicable. This is displayed in the log, so it can be more technical and isn't constrained by the sprite font.</param>
+        private void HandleError(Exception ex, string verb, string detailedVerb = null)
         {
+            detailedVerb = detailedVerb ?? verb;
+            Log.Error($"[Lookup Anything] Something went wrong {detailedVerb}:{Environment.NewLine}{ex}");
             GameHelper.ShowErrorMessage($"Huh. Something went wrong {verb}. The game error log has the technical details.");
-            Log.Error($"[Lookup Anything] Something went wrong {verb}:{Environment.NewLine}{ex}");
         }
 
         /// <summary>Get a logger which collects messages for a discrete task and logs them as one entry when disposed.</summary>
