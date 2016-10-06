@@ -58,7 +58,7 @@ namespace Pathoschild.LookupAnything.Components
 
         private void SearchTextbox_Changed(object sender, string searchString)
         {
-            var results = this.SearchLookup.Where(sr => sr.Key.Contains(this.SearchTextbox.Text)).SelectMany(sr => sr);
+            var results = this.SearchLookup.Where(sr => sr.Key.ToLowerInvariant().Contains(this.SearchTextbox.Text.ToLowerInvariant())).SelectMany(sr => sr);
             this.SearchResults = results.Select(result => new SearchResultComponent(result)).ToArray();
         }
 
