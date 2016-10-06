@@ -174,6 +174,7 @@ namespace ChestsAnywhere.Components
         /// <param name="newBounds">The new window dimensions.</param>
         public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
         {
+            base.gameWindowSizeChanged(oldBounds, newBounds);
             this.ChestSelector.ReceiveGameWindowResized();
             this.GroupSelector?.ReceiveGameWindowResized();
             this.InitialiseTabs();

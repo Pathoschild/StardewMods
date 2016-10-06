@@ -44,12 +44,8 @@ namespace ChestsAnywhere.Components
         /// <summary>Construct an instance.</summary>
         public ChestWithInventory()
         {
-            this.width = Game1.tileSize * 13;
-            this.height = Game1.tileSize * 7 + Game1.tileSize / 2;
-            this.xPositionOnScreen = Game1.viewport.Width / 2 - this.width / 2;
-            this.yPositionOnScreen = Game1.viewport.Height / 2 - this.height / 2 + Game1.tileSize;
             this.PlayerItems = Game1.player.Items;
-            this.InitializeComponents();
+            this.ReinitialiseComponents();
         }
 
         /// <summary>The method invoked when the player's cursor on the inventory.</summary>
@@ -100,6 +96,15 @@ namespace ChestsAnywhere.Components
 
             // set
             this.HoveredItem = item;
+        }
+
+        /// <summary>The method invoked when the game window is resized.</summary>
+        /// <param name="oldBounds">The previous window dimensions.</param>
+        /// <param name="newBounds">The new window dimensions.</param>
+        public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
+        {
+            base.gameWindowSizeChanged(oldBounds, newBounds);
+            this.ReinitialiseComponents();
         }
 
         /// <summary>The method invoked when the player left-clicks on the inventory.</summary>
@@ -317,9 +322,16 @@ namespace ChestsAnywhere.Components
         }
 
         /// <summary>Initialise the inventory for rendering.</summary>
-        private void InitializeComponents()
+        private void ReinitialiseComponents()
         {
+            // dimensions
+            this.width = Game1.tileSize * 13;
+            this.height = Game1.tileSize * 7 + Game1.tileSize / 2;
+            this.xPositionOnScreen = Game1.viewport.Width / 2 - this.width / 2;
+            this.yPositionOnScreen = Game1.viewport.Height / 2 - this.height / 2 + Game1.tileSize;
+
             // slots
+            this.Slots.Clear();
             int wCount = 1;
             int y = this.yPositionOnScreen + Game1.tileSize / 2;
             while (wCount < 3)
