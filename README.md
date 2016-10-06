@@ -71,6 +71,7 @@ file if you want. These are the available settings:
 * Added chest category which lets you override the location grouping.
 * Added fields to edit sort order and hide chests.
 * Fixed edited chest name not saving correctly.
+* Fixed minor visual bugs.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is

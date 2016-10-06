@@ -173,7 +173,7 @@ namespace ChestsAnywhere.Components
             // get dropdown size
             this.bounds.Width = itemWidth;
             this.bounds.Height = itemHeight * this.MaxItems;
-            this.bounds.X = (int)this.Origin.X - (this.ToRight ? 0 : this.bounds.Width);
+            this.bounds.X = (int)this.Origin.X - (this.ToRight ? 0 : itemWidth);
             this.bounds.Y = (int)this.Origin.Y;
 
             // generate components
@@ -182,7 +182,7 @@ namespace ChestsAnywhere.Components
             int y = this.bounds.Y;
             for (int i = this.FirstVisibleIndex; i < this.MaxItems; i++)
             {
-                this.ItemComponents.Add(new ClickableComponent(new Rectangle(x + DROPDOWN_PADDING * 2, y, itemWidth, itemHeight), i.ToString()));
+                this.ItemComponents.Add(new ClickableComponent(new Rectangle(x, y, itemWidth, itemHeight), i.ToString()));
                 y += this.FontHeight;
             }
         }

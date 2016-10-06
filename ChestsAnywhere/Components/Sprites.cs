@@ -18,31 +18,31 @@ namespace ChestsAnywhere.Components
             public static readonly Texture2D Sheet = Game1.mouseCursors;
 
             /// <summary>The top-left corner.</summary>
-            public static readonly Rectangle TopLeft = new Rectangle(16, 384, 4, 4);
+            public static readonly Rectangle TopLeft = new Rectangle(0, 384, 5, 5);
 
             /// <summary>The top-right corner.</summary>
-            public static readonly Rectangle TopRight = new Rectangle(28, 384, 4, 4);
+            public static readonly Rectangle TopRight = new Rectangle(11, 384, 5, 5);
 
             /// <summary>The bottom-left corner.</summary>
-            public static readonly Rectangle BottomLeft = new Rectangle(16, 396, 4, 4);
+            public static readonly Rectangle BottomLeft = new Rectangle(0, 395, 5, 5);
 
             /// <summary>The bottom-right corner.</summary>
-            public static readonly Rectangle BottomRight = new Rectangle(28, 396, 4, 4);
+            public static readonly Rectangle BottomRight = new Rectangle(11, 395, 5, 5);
 
             /// <summary>The top edge.</summary>
-            public static readonly Rectangle Top = new Rectangle(21, 384, 4, 4);
+            public static readonly Rectangle Top = new Rectangle(4, 384, 1, 3);
 
             /// <summary>The left edge.</summary>
-            public static readonly Rectangle Left = new Rectangle(16, 389, 4, 4);
+            public static readonly Rectangle Left = new Rectangle(0, 388, 3, 1);
 
             /// <summary>The right edge.</summary>
-            public static readonly Rectangle Right = new Rectangle(28, 389, 4, 4);
+            public static readonly Rectangle Right = new Rectangle(13, 388, 3, 1);
 
             /// <summary>The bottom edge.</summary>
-            public static readonly Rectangle Bottom = new Rectangle(21, 396, 4, 4);
+            public static readonly Rectangle Bottom = new Rectangle(4, 397, 1, 3);
 
             /// <summary>The tab background.</summary>
-            public static readonly Rectangle Background = new Rectangle(21, 373, 4, 4);
+            public static readonly Rectangle Background = new Rectangle(5, 387, 1, 1);
         }
 
         /// <summary>Sprites used to draw a dropdown list.</summary>
@@ -68,37 +68,37 @@ namespace ChestsAnywhere.Components
             public static readonly Texture2D Sheet = Game1.menuTexture;
 
             /// <summary>The top-left corner.</summary>
-            public static readonly Rectangle TopLeft = new Rectangle(12, 16, 32, 32);
+            public static readonly Rectangle TopLeft = new Rectangle(12, 12, 24, 24);
 
             /// <summary>The top-right corner.</summary>
-            public static readonly Rectangle TopRight = new Rectangle(212, 16, 32, 32);
+            public static readonly Rectangle TopRight = new Rectangle(220, 12, 24, 24);
 
             /// <summary>The bottom-left corner.</summary>
-            public static readonly Rectangle BottomLeft = new Rectangle(12, 208, 32, 32);
+            public static readonly Rectangle BottomLeft = new Rectangle(12, 220, 24, 24);
 
             /// <summary>The bottom-right corner.</summary>
-            public static readonly Rectangle BottomRight = new Rectangle(212, 208, 32, 32);
+            public static readonly Rectangle BottomRight = new Rectangle(220, 220, 24, 24);
 
             /// <summary>The middle-left corner.</summary>
-            public static readonly Rectangle MiddleLeft = new Rectangle(12, 80, 32, 32);
-
-            /// <summary>The middle-middle corner.</summary>
-            public static readonly Rectangle MiddleMiddle = new Rectangle(132, 80, 32, 32);
+            public static readonly Rectangle MiddleLeft = new Rectangle(12, 84, 24, 24);
 
             /// <summary>The middle-right corner.</summary>
-            public static readonly Rectangle MiddleRight = new Rectangle(212, 80, 32, 32);
+            public static readonly Rectangle MiddleRight = new Rectangle(220, 84, 24, 24);
 
-            /// <summary>The top edge.</summary>
-            public static readonly Rectangle Top = new Rectangle(40, 16, 32, 32);
+            /// <summary>The top border.</summary>
+            public static readonly Rectangle Top = new Rectangle(40, 12, 1, 24);
 
-            /// <summary>The left edge.</summary>
-            public static readonly Rectangle Left = new Rectangle(12, 36, 32, 32);
+            /// <summary>The left border.</summary>
+            public static readonly Rectangle Left = new Rectangle(12, 36, 24, 1);
 
-            /// <summary>The right edge.</summary>
-            public static readonly Rectangle Right = new Rectangle(212, 40, 32, 32);
+            /// <summary>The right border.</summary>
+            public static readonly Rectangle Right = new Rectangle(220, 40, 24, 1);
 
-            /// <summary>The bottom edge.</summary>
-            public static readonly Rectangle Bottom = new Rectangle(36, 208, 32, 32);
+            /// <summary>The bottom border.</summary>
+            public static readonly Rectangle Bottom = new Rectangle(36, 220, 1, 24);
+
+            /// <summary>The middle border.</summary>
+            public static readonly Rectangle Middle = new Rectangle(132, 84, 1, 24);
 
             /// <summary>The menu background.</summary>
             public static readonly Rectangle Background = new Rectangle(64, 128, 64, 64);
@@ -173,26 +173,41 @@ namespace ChestsAnywhere.Components
         /// <param name="bisect">Whether to bisect into two stacked areas.</param>
         public static void DrawMenuBackground(this SpriteBatch batch, Rectangle bounds, bool bisect = false)
         {
-            // background
-            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.Background, bounds.X, bounds.Y, bounds.Width - Game1.tileSize / 8, bounds.Height - Game1.tileSize / 8);
+            // alias sprites to simplify code
+            var sheet = Sprites.Menu.Sheet;
+            var top = Sprites.Menu.Top;
+            var topRight = Sprites.Menu.TopRight;
+            var right = Sprites.Menu.Right;
+            var bottomRight = Sprites.Menu.BottomRight;
+            var bottom = Sprites.Menu.Bottom;
+            var bottomLeft = Sprites.Menu.BottomLeft;
+            var left = Sprites.Menu.Left;
+            var topLeft = Sprites.Menu.TopLeft;
+            var middleLeft = Sprites.Menu.MiddleLeft;
+            var middle = Sprites.Menu.Middle;
+            var middleRight = Sprites.Menu.MiddleRight;
+            
+            // draw background
+            batch.Draw(sheet, Sprites.Menu.Background, bounds.X + left.Width, bounds.Y + top.Height, bounds.Width - left.Width - right.Width, bounds.Height - top.Height - bottom.Height);
 
-            // borders
-            int tileSize = Game1.tileSize;
-            int edgeWidth = Game1.tileSize / 2;
-            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.TopLeft, bounds.X, bounds.Y, edgeWidth, edgeWidth);
-            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.Top, bounds.X + edgeWidth, bounds.Y, bounds.Width - tileSize, edgeWidth);
-            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.TopRight, bounds.X + bounds.Width - edgeWidth, bounds.Y, edgeWidth, edgeWidth);
-            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.Left, bounds.X, bounds.Y + edgeWidth, edgeWidth, bounds.Height - tileSize);
-            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.Right, bounds.X + bounds.Width - edgeWidth, bounds.Y + edgeWidth, edgeWidth, bounds.Height - tileSize);
+            // draw borders
+            batch.Draw(sheet, top, bounds.X + topLeft.Width, bounds.Y, bounds.Width - topLeft.Width - topRight.Width, top.Height);
+            batch.Draw(sheet, left, bounds.X, bounds.Y + topLeft.Height, left.Width, bounds.Height - topLeft.Height - bottomLeft.Height);
+            batch.Draw(sheet, right, bounds.X + bounds.Width - right.Width, bounds.Y + topRight.Height, right.Width, bounds.Height - topRight.Height - bottomRight.Height);
+            if (bisect)
+                batch.Draw(sheet, middle, bounds.X + middleLeft.Width, bounds.Y + bounds.Height / 2 - middle.Height / 2, bounds.Width - middleLeft.Width - middleRight.Width, middleRight.Height);
+            batch.Draw(sheet, bottom, bounds.X + bottomLeft.Width, bounds.Y + bounds.Height - bottom.Height, bounds.Width - bottomLeft.Width - bottomRight.Width, bottom.Height);
+
+            // draw border joints
+            batch.Draw(sheet, topLeft, bounds.X, bounds.Y, topLeft.Width, topLeft.Height);
+            batch.Draw(sheet, topRight, bounds.X + bounds.Width - topRight.Width, bounds.Y, topRight.Width, topRight.Height);
+            batch.Draw(sheet, bottomLeft, bounds.X, bounds.Y + bounds.Height - bottomLeft.Height, bottomLeft.Width, bottomLeft.Height);
+            batch.Draw(sheet, bottomRight, bounds.X + bounds.Width - bottomRight.Width, bounds.Y + bounds.Height - bottomRight.Height, bottomRight.Width, bottomRight.Height);
             if (bisect)
             {
-                batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.MiddleMiddle, bounds.X + edgeWidth, bounds.Y + bounds.Height / 2 - tileSize / 4, bounds.Width - tileSize, edgeWidth);
-                batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.MiddleLeft, bounds.X, bounds.Y + bounds.Height / 2 - tileSize / 4, edgeWidth, edgeWidth);
-                batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.MiddleRight, bounds.X + bounds.Width - edgeWidth, bounds.Y + bounds.Height / 2 - tileSize / 4, edgeWidth, edgeWidth);
+                batch.Draw(sheet, middleLeft, bounds.X, bounds.Y + bounds.Height / 2 - middleLeft.Height / 2, middleLeft.Width, middleLeft.Height);
+                batch.Draw(sheet, middleRight, bounds.X + bounds.Width - middleRight.Width, bounds.Y + bounds.Height / 2 - middleRight.Height / 2, middleRight.Width, middleRight.Height);
             }
-            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.BottomLeft, bounds.X, bounds.Y + bounds.Height - edgeWidth, edgeWidth, edgeWidth);
-            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.Bottom, bounds.X + edgeWidth, bounds.Y + bounds.Height - edgeWidth, bounds.Width - tileSize, edgeWidth);
-            batch.Draw(Sprites.Menu.Sheet, Sprites.Menu.BottomRight, bounds.X + bounds.Width - edgeWidth, bounds.Y + bounds.Height - edgeWidth, edgeWidth, edgeWidth);
         }
     }
 }

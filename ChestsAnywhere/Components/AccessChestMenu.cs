@@ -100,7 +100,6 @@ namespace ChestsAnywhere.Components
             this.Config = config;
             this.Groups = this.Chests.Select(chest => chest.GetGroup()).Distinct().ToArray();
             this.InitialiseTabs();
-            this.InitialiseSelectors();
             this.InitialiseTools();
         }
 
@@ -221,7 +220,7 @@ namespace ChestsAnywhere.Components
                     if (group != null && group != this.SelectedGroup)
                     {
                         this.SelectChest(this.Chests.First(chest => chest.GetGroup() == group));
-                        this.InitialiseSelectors();
+                        this.InitialiseTabs();
                     }
                 }
             }
@@ -315,34 +314,18 @@ namespace ChestsAnywhere.Components
             this.OrganizeInventoryButton = new ClickableTextureComponent("organize-inventory", new Rectangle(this.xPositionOnScreen + this.width, this.yPositionOnScreen + height - buttonHeight - borderSize, buttonWidth, buttonHeight), null, "Organize Inventory", Sprites.Buttons.Sheet, Sprites.Buttons.Organize, Game1.pixelZoom);
         }
 
-        /// <summary>Initialise the chest and group selectors.</summary>
-        private void InitialiseSelectors()
-        {
-            // chest selector
-            {
-                ManagedChest[] chests = this.Chests.Where(chest => !this.ShowGroupTab || chest.GetGroup() == this.SelectedGroup).ToArray();
-                int x = this.xPositionOnScreen + Game1.tileSize / 4;
-                int y = this.yPositionOnScreen;
-                this.ChestSelector = new DropList<ManagedChest>(this.SelectedChest, chests, chest => chest.Name, x, y, true, this.Font);
-            }
-
-            // group selector
-            if (this.ShowGroupTab)
-            {
-                int x = this.xPositionOnScreen + this.width - Game1.tileSize / 4;
-                int y = this.yPositionOnScreen;
-                this.GroupSelector = new DropList<string>(this.SelectedGroup, this.Groups, group => group, x, y, false, this.Font);
-            }
-        }
-
         /// <summary>Initialise the chest and group tabs.</summary>
         private void InitialiseTabs()
         {
-            // chest
+            // chest dropdown
             {
-                int x = this.xPositionOnScreen + Game1.tileSize / 4;
-                int y = this.yPositionOnScreen - Game1.tileSize - Game1.tileSize / 16;
-                this.ChestTab = new Tab(this.SelectedChest.Name, x, y, true, this.Font);
+                // tab
+                Vector2 tabSize = Tab.GetTabSize(this.Font, this.SelectedChest.Name);
+                this.ChestTab = new Tab(this.SelectedChest.Name, this.xPositionOnScreen + Sprites.Menu.TopLeft.Width / 2, this.yPositionOnScreen - (int)tabSize.Y, true, this.Font);
+
+                // dropdown
+                ManagedChest[] chests = this.Chests.Where(chest => !this.ShowGroupTab || chest.GetGroup() == this.SelectedGroup).ToArray();
+                this.ChestSelector = new DropList<ManagedChest>(this.SelectedChest, chests, chest => chest.Name, this.ChestTab.bounds.X, this.ChestTab.bounds.Bottom, true, this.Font);
             }
 
             // edit-chest button
@@ -359,9 +342,12 @@ namespace ChestsAnywhere.Components
             // group
             if (this.ShowGroupTab)
             {
-                int x = this.xPositionOnScreen + this.width - Game1.tileSize / 4;
-                int y = this.yPositionOnScreen - Game1.tileSize - Game1.tileSize / 16;
-                this.GroupTab = new Tab(this.SelectedGroup, x, y, false, this.Font);
+                // tab
+                Vector2 tabSize = Tab.GetTabSize(this.Font, this.SelectedGroup);
+                this.GroupTab = new Tab(this.SelectedGroup, this.xPositionOnScreen + this.width - Sprites.Menu.TopLeft.Width / 2, this.yPositionOnScreen - (int)tabSize.Y, false, this.Font);
+
+                // dropdown
+                this.GroupSelector = new DropList<string>(this.SelectedGroup, this.Groups, group => group, this.GroupTab.bounds.Right, this.GroupTab.bounds.Bottom, false, this.Font);
             }
         }
 

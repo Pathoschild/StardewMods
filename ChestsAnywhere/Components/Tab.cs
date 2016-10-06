@@ -30,12 +30,12 @@ namespace ChestsAnywhere.Components
             this.Font = font;
 
             // set bounds
-            Vector2 fontSize = font.MeasureString(name);
-            this.bounds.Width = (int)fontSize.X + Game1.tileSize / 2;
-            this.bounds.Height = (int)fontSize.Y + Game1.tileSize / 2;
-            this.bounds.X = toRight
-                ? x
-                : x - this.bounds.Width;
+            Vector2 size = Tab.GetTabSize(font, name);
+            this.bounds.Width = (int)size.X;
+            this.bounds.Height = (int)size.Y;
+            this.bounds.X = x;
+            if (!toRight)
+                this.bounds.X -= this.bounds.Width;
             this.bounds.Y = y;
         }
 
@@ -44,29 +44,39 @@ namespace ChestsAnywhere.Components
         /// <param name="opacity">The opacity at which to draw.</param>
         public void Draw(SpriteBatch sprites, float opacity = 1)
         {
-            // calculate sprite dimensions
-            int tileSize = Game1.tileSize;
-            int edgeSize = tileSize / 4; // the pixel width of an edge
-            int padding = tileSize / 2; // the pixel width of the edge padding
-
-            // get bounds
+            // calculate
             int x = this.bounds.X;
             int y = this.bounds.Y;
             int width = this.bounds.Width;
             int height = this.bounds.Height;
-
-            // draw sprites
+            int zoom = Game1.pixelZoom;
             Color color = Color.White * opacity;
-            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.TopLeft, x, y, edgeSize, edgeSize, color);
-            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.Top, x + edgeSize, y, width - padding, edgeSize, color);
-            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.TopRight, x + width - edgeSize, y, edgeSize, edgeSize, color);
-            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.Left, x, y + edgeSize, edgeSize, height - padding, color);
-            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.Right, x + width - edgeSize, y + edgeSize, edgeSize, height - padding, color);
-            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.BottomLeft, x, y + height - edgeSize, edgeSize, edgeSize, color);
-            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.Bottom, x + edgeSize, y + height - edgeSize, width - padding, edgeSize, color);
-            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.BottomRight, x + width - edgeSize, y + height - edgeSize, edgeSize, edgeSize, color);
-            sprites.Draw(Sprites.Tab.Sheet, Sprites.Tab.Background, x + edgeSize, y + edgeSize, width - padding, height - padding, color);
-            sprites.DrawString(this.Font, this.name, new Vector2(x + edgeSize, y + edgeSize + tileSize / 16), Color.Black * opacity);
+            int borderWidth = Sprites.Tab.Left.Width * zoom;
+            int cornerWidth = Sprites.Tab.TopLeft.Width * zoom;
+
+            // draw
+            var sheet = Sprites.Tab.Sheet;
+            sprites.Draw(sheet, Sprites.Tab.Background, x + borderWidth, y + borderWidth, width - borderWidth * 2, height - borderWidth * 2, color);
+            sprites.Draw(sheet, Sprites.Tab.Top, x + cornerWidth, y, width - borderWidth * 2, borderWidth, color);
+            sprites.Draw(sheet, Sprites.Tab.Left, x, y + cornerWidth, borderWidth, height - borderWidth * 2, color);
+            sprites.Draw(sheet, Sprites.Tab.Right, x + width - borderWidth, y + cornerWidth, borderWidth, height - cornerWidth * 2, color);
+            sprites.Draw(sheet, Sprites.Tab.Bottom, x + cornerWidth, y + height - borderWidth, width - borderWidth * 2, borderWidth, color);
+            sprites.Draw(sheet, Sprites.Tab.TopLeft, x, y, cornerWidth, cornerWidth, color);
+            sprites.Draw(sheet, Sprites.Tab.TopRight, x + width - cornerWidth, y, cornerWidth, cornerWidth, color);
+            sprites.Draw(sheet, Sprites.Tab.BottomLeft, x, y + height - cornerWidth, cornerWidth, cornerWidth, color);
+            sprites.Draw(sheet, Sprites.Tab.BottomRight, x + width - cornerWidth, y + height - cornerWidth, cornerWidth, cornerWidth, color);
+            sprites.DrawString(this.Font, this.name, new Vector2(x + cornerWidth, y + cornerWidth), Color.Black * opacity);
+        }
+
+        /// <summary>Get the size of the tab rendered for a given label.</summary>
+        /// <param name="font">The font with which to render text.</param>
+        /// <param name="name">The displayed tab text.</param>
+        public static Vector2 GetTabSize(SpriteFont font, string name)
+        {
+            return
+                font.MeasureString(name) // get font size
+                - new Vector2(0, 10) // adjust for font's broken measurement
+                + new Vector2(Sprites.Tab.TopLeft.Width * 2 * Game1.pixelZoom); // add space for borders
         }
     }
 }
