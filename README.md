@@ -70,8 +70,11 @@ file if you want. These are the available settings:
 * Updated for Stardew Valley 1.1.
 * Added chest category which lets you override the location grouping.
 * Added fields to edit sort order and hide chests.
-* Fixed UI not being resized when game window is resized.
 * Fixed edited chest name not saving correctly.
+
+1.5 (upcoming):
+* Fixed crash when clicking on an unavailable inventory slot.
+* Fixed UI not being resized when game window is resized.
 * Fixed minor visual bugs.
 
 ## Compiling the mod

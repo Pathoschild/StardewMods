@@ -96,9 +96,9 @@ namespace ChestsAnywhere.Components
         public AccessChestMenu(ManagedChest[] chests, ManagedChest selectedChest, ModConfig config)
         {
             this.Chests = chests;
-            this.SelectedChest = selectedChest;
             this.Config = config;
             this.Groups = this.Chests.Select(chest => chest.GetGroup()).Distinct().ToArray();
+            this.SelectChest(selectedChest);
             this.InitialiseTabs();
             this.InitialiseTools();
         }
@@ -354,9 +354,9 @@ namespace ChestsAnywhere.Components
 
         /// <summary>Switch to the specified chest.</summary>
         /// <param name="chest">The chest to select.</param>
-        private void SelectChest(ManagedChest chest)
+        public sealed override void SelectChest(ManagedChest chest)
         {
-            this.SelectedChest = chest;
+            base.SelectChest(chest);
             this.OnChestSelected?.Invoke(this.SelectedChest);
             this.InitialiseTabs();
         }
