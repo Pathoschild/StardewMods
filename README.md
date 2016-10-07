@@ -10,15 +10,18 @@ bed to the deepest mine level.
 4. Run the game using SMAPI.
 
 ## Usage
-You can **access chests** by pressing `B`. This will show the chests on your farm and in your
-buildings. Click the top-left dropdown to change chest (or use the left/right arrow keys).
+**Access chests** by pressing `B`. This will show your chests (and fridge) grouped by location
+or custom category. Navigate by clicking the top dropdowns, or pressing the `left` or `right` key.
+(See the next section if you want to change key bindings or add a controller.)
 
-You can **edit chests** by clicking the speech bubble next to the chest dropdown. This will
-[show a form](screenshots/edit-chest.png) where you can...
+**Edit chests** by clicking the edit icon (a speech bubble) after pressing `B` or opening a chest
+directly. This will [show a form](screenshots/edit-chest.png) where you can...
 * set the chest name;
-* set a category (which groups your chests using the top-right dropdown);
+* set a category (which overrides the location grouping);
 * set the sort order in the chest list;
-* or permanently hide the chest. (This is irreversible until you replace the chest!)
+* or hide the chest from the chest dropdown.
+
+**Point at a chest** in the world to see its name in a tooltip.
 
 ## Configuration
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
