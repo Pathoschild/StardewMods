@@ -235,13 +235,15 @@ namespace ChestsAnywhere
         private void OpenMenu()
         {
             // get chests
-            ManagedChest[] chests = (
-                from chest in ChestFactory.GetChests()
-                where !chest.IsIgnored
-                orderby chest.GetGroup() ascending, (chest.Order ?? int.MaxValue) ascending, chest.Name ascending
-                select chest
-            ).ToArray();
-            ManagedChest selectedChest = chests.FirstOrDefault(p => p.Chest == this.SelectedChest) ?? chests.First();
+            ManagedChest[] chests =
+                (
+                    from chest in ChestFactory.GetChests()
+                    where !chest.IsIgnored
+                    orderby chest.GetGroup() ascending, (chest.Order ?? int.MaxValue) ascending, chest.Name ascending
+                    select chest
+                )
+                .ToArray();
+            ManagedChest selectedChest = chests.FirstOrDefault(p => p.Chest == this.SelectedChest) ?? chests.FirstOrDefault();
 
             // render menu
             if (chests.Any())
@@ -250,6 +252,8 @@ namespace ChestsAnywhere
                 menu.OnChestSelected += chest => this.SelectedChest = chest.Chest; // remember selected chest on next load
                 Game1.activeClickableMenu = menu;
             }
+            else
+                CommonHelper.ShowInfoMessage("You don't have any chests yet. :)", duration: 1000);
         }
 
         /// <summary>Validate that the game versions match the minimum requirements, and return an appropriate error message if not.</summary>

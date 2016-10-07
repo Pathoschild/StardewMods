@@ -64,9 +64,10 @@ namespace ChestsAnywhere.Common
 
         /// <summary>Show an informational message to the player.</summary>
         /// <param name="message">The message to show.</param>
-        public static void ShowInfoMessage(string message)
+        /// <param name="duration">The number of milliseconds during which to keep the message on the screen before it fades (or <c>null</c> for the default time).</param>
+        public static void ShowInfoMessage(string message, int? duration = null)
         {
-            Game1.addHUDMessage(new HUDMessage(message, 3) { noIcon = true });
+            Game1.addHUDMessage(new HUDMessage(message, 3) { noIcon = true, timeLeft = duration ?? HUDMessage.defaultTime});
         }
 
         /// <summary>Show an error message to the player.</summary>

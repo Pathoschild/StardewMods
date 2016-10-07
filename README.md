@@ -76,14 +76,14 @@ file if you want. These are the available settings:
 * Fixed edited chest name not saving correctly.
 
 1.5 (upcoming):
-* Added name tooltip when pointing at a chest in the world.
-* Added edit button to default chest UI.
-* Added cancel button to edit-chest UI.
-* Fixed crash when clicking on an unavailable inventory slot.
+* Added name tooltip when your cursor is over a chest.
+* Added edit button when you open a chest directly.
+* Added cancel button when editing a chest.
 * Fixed fridge being accessible before it's unlocked.
+* Fixed error when you click an unavailable inventory slot.
+* Fixed error when you open the menu but don't have any chests.
 * Fixed UI not being resized when game window is resized.
-* Fixed various visual bugs.
-* Internal refactor.
+* Fixed visual issues.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is
