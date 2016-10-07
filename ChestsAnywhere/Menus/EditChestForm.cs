@@ -127,6 +127,14 @@ namespace ChestsAnywhere.Menus
             this.ReinitialiseComponents();
         }
 
+        /// <summary>The method invoked when the cursor is hovered over the control.</summary>
+        /// <param name="x">The cursor's X position.</param>
+        /// <param name="y">The cursor's Y position.</param>
+        public override void performHoverAction(int x, int y)
+        {
+            this.SaveButton.tryHover(x, y);
+        }
+
         /// <summary>Render the UI.</summary>
         /// <param name="batch">The sprite batch being drawn.</param>
         public override void draw(SpriteBatch batch)

@@ -77,8 +77,8 @@ file if you want. These are the available settings:
 * Added cancel button to edit-chest UI.
 * Fixed crash when clicking on an unavailable inventory slot.
 * Fixed UI not being resized when game window is resized.
-* Fixed minor visual bugs.
-* Internal refactoring.
+* Fixed various visual bugs.
+* Internal refactor.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is

@@ -51,6 +51,14 @@ namespace ChestsAnywhere.Menus.Overlays
                 Game1.activeClickableMenu = new EditChestForm(this.FetchChest(), this.Config);
         }
 
+        /// <summary>The method invoked when the cursor is hovered.</summary>
+        /// <param name="x">The cursor's X position.</param>
+        /// <param name="y">The cursor's Y position.</param>
+        protected override void ReceiveCursorHover(int x, int y)
+        {
+            this.Button.tryHover(x, y);
+        }
+
         /// <summary>Draw the overlay to the screen.</summary>
         /// <param name="batch">The sprite batch being drawn.</param>
         protected override void Draw(SpriteBatch batch)

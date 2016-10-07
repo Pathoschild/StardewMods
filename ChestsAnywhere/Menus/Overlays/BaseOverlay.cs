@@ -67,6 +67,11 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <param name="input">The button that was pressed.</param>
         protected virtual void ReceiveButtonPress(Buttons input) { }
 
+        /// <summary>The method invoked when the cursor is hovered.</summary>
+        /// <param name="x">The cursor's X position.</param>
+        /// <param name="y">The cursor's Y position.</param>
+        protected virtual void ReceiveCursorHover(int x, int y) { }
+
         /// <summary>Draw the mouse cursor.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Menus.IClickableMenu.drawMouse"/>.</remarks>
         protected void DrawCursor()
@@ -99,8 +104,9 @@ namespace ChestsAnywhere.Menus.Overlays
                 return;
             }
 
-            // detect left clicks
+            // trigger mouse events
             MouseState state = Mouse.GetState();
+            this.ReceiveCursorHover(state.X, state.Y);
             if (state.LeftButton == ButtonState.Pressed && this.LastMouseState.LeftButton != ButtonState.Pressed)
                 this.ReceiveLeftClick(state.X, state.Y);
             this.LastMouseState = state;
