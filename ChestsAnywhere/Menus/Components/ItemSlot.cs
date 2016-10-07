@@ -62,14 +62,13 @@ namespace ChestsAnywhere.Menus.Components
 
         /// <summary>Draw the inventory slot to the screen.</summary>
         /// <param name="batch">The sprite batch being drawn.</param>
-        /// <param name="opacity">The opacity at which to draw the slot.</param>
-        public void Draw(SpriteBatch batch, float opacity = 1f)
+        public void Draw(SpriteBatch batch)
         {
             // slot
-            batch.Draw(Sprites.Menu.Sheet, this.IsUsable ? Sprites.Menu.Slot : Sprites.Menu.SlotDisabled, this.Bounds.X, this.Bounds.Y, this.Bounds.Width, this.Bounds.Height, Color.White * opacity);
+            batch.Draw(Sprites.Menu.Sheet, this.IsUsable ? Sprites.Menu.Slot : Sprites.Menu.SlotDisabled, this.Bounds.X, this.Bounds.Y, this.Bounds.Width, this.Bounds.Height);
 
             // item
-            this.GetStack()?.drawInMenu(batch, new Vector2(this.Bounds.X, this.Bounds.Y), this.ContainsPoint(Game1.getMouseX(), Game1.getMouseY()) ? 1f : 0.8f, opacity, 1f);
+            this.GetStack()?.drawInMenu(batch, new Vector2(this.Bounds.X, this.Bounds.Y), this.ContainsPoint(Game1.getMouseX(), Game1.getMouseY()) ? 1f : 0.8f);
         }
     }
 }

@@ -73,9 +73,11 @@ file if you want. These are the available settings:
 * Fixed edited chest name not saving correctly.
 
 1.5 (upcoming):
+* Added cancel button to edit-chest UI.
 * Fixed crash when clicking on an unavailable inventory slot.
 * Fixed UI not being resized when game window is resized.
 * Fixed minor visual bugs.
+* Internal refactoring.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is

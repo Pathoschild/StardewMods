@@ -122,12 +122,8 @@ namespace ChestsAnywhere
         /// <summary>The method invoked when a menu is closed.</summary>
         private void ReceiveMenuClosed(IClickableMenu closedMenu)
         {
-            if (closedMenu is AccessChestMenu)
-            {
-                AccessChestMenu menu = (AccessChestMenu)closedMenu;
-                menu.Dispose();
-
-            }
+            if (closedMenu is EditChestForm)
+                this.OpenMenu();
         }
 
         /// <summary>The method invoked when the player presses an input button.</summary>
@@ -168,16 +164,8 @@ namespace ChestsAnywhere
             {
                 AccessChestMenu menu = new AccessChestMenu(chests, selectedChest, this.Config);
                 menu.OnChestSelected += chest => this.SelectedChest = chest.Chest; // remember selected chest on next load
-                menu.OnChestEdited += this.OnChestEdited;
                 Game1.activeClickableMenu = menu;
             }
-        }
-
-        /// <summary>The method called when the chest UI is updated.</summary>
-        private void OnChestEdited()
-        {
-            Game1.activeClickableMenu = null;
-            this.OpenMenu();
         }
 
         /// <summary>Get all player chests.</summary>

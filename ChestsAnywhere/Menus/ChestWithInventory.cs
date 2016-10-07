@@ -36,9 +36,6 @@ namespace ChestsAnywhere.Menus
         /// <summary>Whether the UI control is disabled, in which case it will no longer try to handle player interaction.</summary>
         protected bool IsDisabled { get; set; }
 
-        /// <summary>The opacity at which to draw.</summary>
-        protected float Opacity { get; set; } = 1;
-
 
         /*********
         ** Public methods
@@ -142,7 +139,7 @@ namespace ChestsAnywhere.Menus
 
             // slots
             foreach (ItemSlot slot in this.Slots)
-                slot.Draw(batch, this.Opacity);
+                slot.Draw(batch);
 
             // tooltips
             if (this.HoveredItem != null)

@@ -28,9 +28,6 @@ namespace ChestsAnywhere.Menus
         /// <summary>Whether the group dropdown is open.</summary>
         private bool IsGroupListOpen;
 
-        /// <summary>Whether the 'edit chest' UI is being displayed.</summary>
-        private bool IsEditChestOpen => this.EditChestForm != null;
-
         /// <summary>The known chests.</summary>
         private readonly ManagedChest[] Chests;
 
@@ -73,18 +70,12 @@ namespace ChestsAnywhere.Menus
         /// <summary>The button which sorts the inventory items.</summary>
         private ClickableTextureComponent OrganizeInventoryButton;
 
-        /// <summary>The 'edit chest' form (if displayed).</summary>
-        private EditChestForm EditChestForm;
-
 
         /*********
         ** Accessors
         *********/
         /// <summary>An event raised when the player selects a chest.</summary>
         public event Action<ManagedChest> OnChestSelected;
-
-        /// <summary>An event raised when the player edits a chest.</summary>
-        public event Action OnChestEdited;
 
 
         /*********
@@ -102,6 +93,7 @@ namespace ChestsAnywhere.Menus
             this.SelectChest(selectedChest);
             this.InitialiseTabs();
             this.InitialiseTools();
+            this.exitFunction = this.Dispose;
         }
 
         /// <summary>The method invoked when the player presses a key.</summary>
@@ -130,15 +122,7 @@ namespace ChestsAnywhere.Menus
             if (!config.IsValidKey(input))
                 return;
 
-            // 'edit chest' UI overrides input
-            if (this.IsEditChestOpen)
-            {
-                if (input.Equals(Keys.Escape))
-                    this.ToggleEditChest(false);
-                return;
-            }
-
-            // chest menu keys
+            // handle input
             if (input.Equals(Keys.Escape))
             {
                 if (this.IsChestListOpen)
@@ -146,10 +130,10 @@ namespace ChestsAnywhere.Menus
                 else if (this.IsGroupListOpen)
                     this.IsGroupListOpen = false;
                 else
-                    this.exitThisMenuNoSound();
+                    this.exitThisMenu();
             }
             else if (input.Equals(config.Toggle))
-                this.exitThisMenuNoSound();
+                this.exitThisMenu();
             else if (input.Equals(config.PrevChest))
                 this.SelectPreviousChest();
             else if (input.Equals(config.NextChest))
@@ -162,9 +146,7 @@ namespace ChestsAnywhere.Menus
         /// <param name="direction">The scroll direction.</param>
         public override void receiveScrollWheelAction(int direction)
         {
-            if (this.IsEditChestOpen)
-                return; // 'edit chest' UI handles all input when open
-            else if (this.IsChestListOpen)
+            if (this.IsChestListOpen)
                 this.ChestSelector.ReceiveScrollWheelAction(direction);
             else if (this.IsGroupListOpen)
                 this.GroupSelector?.ReceiveScrollWheelAction(direction);
@@ -188,12 +170,8 @@ namespace ChestsAnywhere.Menus
         /// <param name="playSound">Whether to enable sound.</param>
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            // 'edit chest' UI (handles all input when open)
-            if (this.IsEditChestOpen)
-                this.EditChestForm.ReceiveLeftClick(x, y);
-
             // chest dropdown
-            else if (this.IsChestListOpen)
+            if (this.IsChestListOpen)
             {
                 // close dropdown
                 this.IsChestListOpen = false;
@@ -229,7 +207,7 @@ namespace ChestsAnywhere.Menus
 
             // edit chest tab
             else if (this.EditChestButton.containsPoint(x, y))
-                this.ToggleEditChest(true);
+                Game1.activeClickableMenu = new EditChestForm(this.SelectedChest, this.Config);
 
             // chest tab
             else if (this.ChestTab.containsPoint(x, y))
@@ -256,6 +234,15 @@ namespace ChestsAnywhere.Menus
                 base.receiveLeftClick(x, y, playSound);
         }
 
+        /// <summary>Switch to the specified chest.</summary>
+        /// <param name="chest">The chest to select.</param>
+        public sealed override void SelectChest(ManagedChest chest)
+        {
+            base.SelectChest(chest);
+            this.OnChestSelected?.Invoke(this.SelectedChest);
+            this.InitialiseTabs();
+        }
+
         /// <summary>Render the UI.</summary>
         /// <param name="sprites">The sprites to render.</param>
         public override void draw(SpriteBatch sprites)
@@ -263,31 +250,22 @@ namespace ChestsAnywhere.Menus
             this.DrawCount++;
 
             // organize buttons
-            this.OrganizeChestButton.draw(sprites, Color.White * this.Opacity, 1);
-            this.OrganizeInventoryButton.draw(sprites, Color.White * this.Opacity, 1);
+            this.OrganizeChestButton.draw(sprites);
+            this.OrganizeInventoryButton.draw(sprites);
 
             // chest with inventory menu
             base.draw(sprites);
 
             // tabs
             this.ChestTab.Draw(sprites);
-            this.GroupTab?.Draw(sprites, this.Opacity);
-            this.EditChestButton.draw(sprites, Color.White * this.Opacity, 1);
+            this.GroupTab?.Draw(sprites);
+            this.EditChestButton.draw(sprites);
 
             // tab dropdowns
             if (this.IsChestListOpen)
-                this.ChestSelector.Draw(sprites, this.Opacity);
+                this.ChestSelector.Draw(sprites);
             if (this.IsGroupListOpen)
-                this.GroupSelector.Draw(sprites, this.Opacity);
-
-            // 'edit chest' UI
-            if (this.IsEditChestOpen)
-            {
-                if (this.EditChestForm.IsActive)
-                    this.EditChestForm.Draw(sprites);
-                else
-                    this.ToggleEditChest(false);
-            }
+                this.GroupSelector.Draw(sprites);
 
             // mouse
             this.drawMouse(sprites);
@@ -296,9 +274,7 @@ namespace ChestsAnywhere.Menus
         /// <summary>Release all resources.</summary>
         public void Dispose()
         {
-            // clear all events for garbage collection
-            this.OnChestEdited = null;
-            this.OnChestSelected = null;
+            this.OnChestSelected = null; // clear event handlers for garbage collection
         }
 
 
@@ -353,15 +329,6 @@ namespace ChestsAnywhere.Menus
             }
         }
 
-        /// <summary>Switch to the specified chest.</summary>
-        /// <param name="chest">The chest to select.</param>
-        public sealed override void SelectChest(ManagedChest chest)
-        {
-            base.SelectChest(chest);
-            this.OnChestSelected?.Invoke(this.SelectedChest);
-            this.InitialiseTabs();
-        }
-
         /// <summary>Switch to the previous chest in the list.</summary>
         private void SelectPreviousChest()
         {
@@ -374,25 +341,6 @@ namespace ChestsAnywhere.Menus
         {
             int cur = Array.IndexOf(this.Chests, this.SelectedChest);
             this.SelectChest(this.Chests[(cur + 1) % this.Chests.Length]);
-        }
-
-        /// <summary>Toggle the 'edit chest' form.</summary>
-        /// <param name="enabled">Whether the form should be enabled.</param>
-        private void ToggleEditChest(bool enabled)
-        {
-            if (enabled)
-            {
-                this.EditChestForm = new EditChestForm(this.SelectedChest);
-                this.Opacity = 0.5f;
-                this.IsDisabled = true;
-            }
-            else
-            {
-                this.EditChestForm = null;
-                this.Opacity = 1;
-                this.IsDisabled = false;
-                this.OnChestEdited?.Invoke();
-            }
         }
     }
 }
