@@ -80,6 +80,7 @@ file if you want. These are the available settings:
 * Added edit button to default chest UI.
 * Added cancel button to edit-chest UI.
 * Fixed crash when clicking on an unavailable inventory slot.
+* Fixed fridge being accessible before it's unlocked.
 * Fixed UI not being resized when game window is resized.
 * Fixed various visual bugs.
 * Internal refactor.

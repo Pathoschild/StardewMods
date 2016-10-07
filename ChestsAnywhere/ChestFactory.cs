@@ -41,7 +41,7 @@ namespace ChestsAnywhere
                 }
 
                 // farmhouse containers
-                if (location is FarmHouse)
+                if (location is FarmHouse && Game1.player.HouseUpgradeLevel > 0)
                 {
                     Chest fridge = (location as FarmHouse).fridge;
                     if (fridge != null)
