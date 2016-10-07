@@ -53,7 +53,7 @@ namespace ChestsAnywhere
 
             // hook UI
             PlayerEvents.LoadedGame += (sender, e) => this.ReceiveGameLoaded();
-            GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering();
+            GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveHudRendered();
             MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
 
             // hook input
@@ -101,14 +101,13 @@ namespace ChestsAnywhere
         }
 
         /// <summary>The method invoked when the interface is rendering.</summary>
-        private void ReceiveInterfaceRendering()
+        private void ReceiveHudRendered()
         {
             // render update warning
             if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning && this.NewRelease != null)
             {
                 try
                 {
-
                     this.HasSeenUpdateWarning = true;
                     CommonHelper.ShowInfoMessage($"You can update Chests Anywhere from {this.CurrentVersion} to {this.NewRelease.Version}.");
                 }

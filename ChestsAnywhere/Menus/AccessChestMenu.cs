@@ -2,6 +2,7 @@
 using System.Linq;
 using ChestsAnywhere.Framework;
 using ChestsAnywhere.Menus.Components;
+using ChestsAnywhere.Menus.Overlays;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -58,9 +59,6 @@ namespace ChestsAnywhere.Menus
         /// <summary>The chest selector dropdown.</summary>
         private DropList<ManagedChest> ChestSelector;
 
-        /// <summary>The button which edits the selected chest.</summary>
-        private ClickableTextureComponent EditChestButton;
-
         /// <summary>The group selector dropdown.</summary>
         private DropList<string> GroupSelector;
 
@@ -69,6 +67,9 @@ namespace ChestsAnywhere.Menus
 
         /// <summary>The button which sorts the inventory items.</summary>
         private ClickableTextureComponent OrganizeInventoryButton;
+
+        /// <summary>The button which edits the selected chest.</summary>
+        private EditButtonOverlay EditButtonOverlay;
 
 
         /*********
@@ -117,7 +118,7 @@ namespace ChestsAnywhere.Menus
         public void ReceiveKey<T>(T input, InputMapConfiguration<T> config)
         {
             // ignore invalid input
-            if (this.DrawCount < 10)
+            if (this.IsInitialising())
                 return;
             if (!config.IsValidKey(input))
                 return;
@@ -205,10 +206,6 @@ namespace ChestsAnywhere.Menus
                 }
             }
 
-            // edit chest tab
-            else if (this.EditChestButton.containsPoint(x, y))
-                Game1.activeClickableMenu = new EditChestForm(this.SelectedChest, this.Config);
-
             // chest tab
             else if (this.ChestTab.containsPoint(x, y))
             {
@@ -259,7 +256,6 @@ namespace ChestsAnywhere.Menus
             // tabs
             this.ChestTab.Draw(sprites);
             this.GroupTab?.Draw(sprites);
-            this.EditChestButton.draw(sprites);
 
             // tab dropdowns
             if (this.IsChestListOpen)
@@ -275,6 +271,7 @@ namespace ChestsAnywhere.Menus
         public void Dispose()
         {
             this.OnChestSelected = null; // clear event handlers for garbage collection
+            this.EditButtonOverlay?.Dispose();
         }
 
 
@@ -306,7 +303,8 @@ namespace ChestsAnywhere.Menus
                 this.ChestSelector = new DropList<ManagedChest>(this.SelectedChest, chests, chest => chest.Name, this.ChestTab.bounds.X, this.ChestTab.bounds.Bottom, true, this.Font);
             }
 
-            // edit-chest button
+            // edit chest button overlay
+            this.EditButtonOverlay?.Dispose();
             {
                 Rectangle sprite = Sprites.Icons.SpeechBubble;
                 float zoom = Game1.pixelZoom / 2f;
@@ -314,7 +312,7 @@ namespace ChestsAnywhere.Menus
                 int y = this.ChestTab.bounds.Y;
                 int width = (int)(sprite.Width * zoom);
                 int height = (int)(sprite.Height * zoom);
-                this.EditChestButton = new ClickableTextureComponent("edit-chest", new Rectangle(x + 5, y + height / 2, width, height), null, "edit chest", Sprites.Icons.Sheet, sprite, zoom);
+                this.EditButtonOverlay = new EditButtonOverlay(new Rectangle(x, y, width, height), () => this.SelectedChest, this.Config, keepAlive: () => this.IsInitialising() || Game1.activeClickableMenu == this);
             }
 
             // group
@@ -341,6 +339,12 @@ namespace ChestsAnywhere.Menus
         {
             int cur = Array.IndexOf(this.Chests, this.SelectedChest);
             this.SelectChest(this.Chests[(cur + 1) % this.Chests.Length]);
+        }
+
+        /// <summary>Get whether the menu is initialising itself.</summary>
+        private bool IsInitialising()
+        {
+            return this.DrawCount < 10;
         }
     }
 }
