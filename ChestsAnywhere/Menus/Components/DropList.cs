@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace ChestsAnywhere.Components
+namespace ChestsAnywhere.Menus.Components
 {
     /// <summary>A dropdown UI component which lets the player choose from a list of values.</summary>
     /// <typeparam name="TItem">The item type.</typeparam>

@@ -2,12 +2,13 @@
 using System.Linq;
 using ChestsAnywhere.Common;
 using ChestsAnywhere.Framework;
+using ChestsAnywhere.Menus.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace ChestsAnywhere.Components
+namespace ChestsAnywhere.Menus
 {
     /// <summary>A UI which lets the player edit a chest's data.</summary>
     internal class EditChestForm

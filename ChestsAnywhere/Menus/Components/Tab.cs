@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace ChestsAnywhere.Components
+namespace ChestsAnywhere.Menus.Components
 {
     /// <summary>A tab UI component which lets the player trigger a dropdown list.</summary>
     internal class Tab : ClickableComponent

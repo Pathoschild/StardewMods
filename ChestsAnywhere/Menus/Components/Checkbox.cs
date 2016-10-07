@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 
-namespace ChestsAnywhere.Components
+namespace ChestsAnywhere.Menus.Components
 {
     /// <summary>An input control which represents a boolean value.</summary>
     public class Checkbox

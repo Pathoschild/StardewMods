@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 
-namespace ChestsAnywhere.Components
+namespace ChestsAnywhere.Menus.Components
 {
     /// <summary>A drawable item slot.</summary>
     public class ItemSlot

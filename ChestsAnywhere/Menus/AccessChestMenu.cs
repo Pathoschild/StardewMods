@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
 using ChestsAnywhere.Framework;
+using ChestsAnywhere.Menus.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace ChestsAnywhere.Components
+namespace ChestsAnywhere.Menus
 {
     /// <summary>A UI which lets the player choose a chest, and transfer items between a chest and their inventory.</summary>
     internal class AccessChestMenu : ChestWithInventory, IDisposable
@@ -311,8 +312,8 @@ namespace ChestsAnywhere.Components
             int buttonHeight = Sprites.Buttons.Organize.Height * Game1.pixelZoom;
             int buttonWidth = Sprites.Buttons.Organize.Width * Game1.pixelZoom;
             int borderSize = 3 * Game1.pixelZoom; // size of menu frame
-            this.OrganizeChestButton = new ClickableTextureComponent("organize-chest", new Rectangle(this.xPositionOnScreen + this.width, this.yPositionOnScreen + height / 2 - buttonHeight - borderSize, buttonWidth, buttonHeight), null, "Organize Chest", Sprites.Buttons.Sheet, Sprites.Buttons.Organize, Game1.pixelZoom);
-            this.OrganizeInventoryButton = new ClickableTextureComponent("organize-inventory", new Rectangle(this.xPositionOnScreen + this.width, this.yPositionOnScreen + height - buttonHeight - borderSize, buttonWidth, buttonHeight), null, "Organize Inventory", Sprites.Buttons.Sheet, Sprites.Buttons.Organize, Game1.pixelZoom);
+            this.OrganizeChestButton = new ClickableTextureComponent("organize-chest", new Rectangle(this.xPositionOnScreen + this.width, this.yPositionOnScreen + this.height / 2 - buttonHeight - borderSize, buttonWidth, buttonHeight), null, "Organize Chest", Sprites.Buttons.Sheet, Sprites.Buttons.Organize, Game1.pixelZoom);
+            this.OrganizeInventoryButton = new ClickableTextureComponent("organize-inventory", new Rectangle(this.xPositionOnScreen + this.width, this.yPositionOnScreen + this.height - buttonHeight - borderSize, buttonWidth, buttonHeight), null, "Organize Inventory", Sprites.Buttons.Sheet, Sprites.Buttons.Organize, Game1.pixelZoom);
         }
 
         /// <summary>Initialise the chest and group tabs.</summary>

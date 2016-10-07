@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 
-namespace ChestsAnywhere.Components
+namespace ChestsAnywhere.Menus.Components
 {
     /// <summary>Simplifies access to the game's sprite sheets.</summary>
     /// <remarks>Each sprite is represented by a rectangle, which specifies the coordinates and dimensions of the image in the sprite sheet.</remarks>

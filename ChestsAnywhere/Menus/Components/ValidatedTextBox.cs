@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace ChestsAnywhere.Components
+namespace ChestsAnywhere.Menus.Components
 {
     /// <summary>A textbox control which only allows valid characters.</summary>
     internal class ValidatedTextBox : IKeyboardSubscriber
