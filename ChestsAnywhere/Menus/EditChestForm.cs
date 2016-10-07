@@ -172,7 +172,7 @@ namespace ChestsAnywhere.Menus
                 this.HideChestField.Y = this.yPositionOnScreen + (int)topOffset;
                 this.HideChestField.Width = 24;
                 this.HideChestField.Draw(batch);
-                Vector2 labelSize = batch.DrawTextBlock(font, "Hide this chest" + (this.HideChestField.Value ? " (irreversible until you replace chest!)" : ""), new Vector2(this.xPositionOnScreen + padding + 7 + this.HideChestField.Width, this.yPositionOnScreen + topOffset), this.width, this.HideChestField.Value ? Color.Red : Color.Black);
+                Vector2 labelSize = batch.DrawTextBlock(font, "Hide this chest" + (this.HideChestField.Value ? " (you'll need to find the chest to undo this!)" : ""), new Vector2(this.xPositionOnScreen + padding + 7 + this.HideChestField.Width, this.yPositionOnScreen + topOffset), this.width, this.HideChestField.Value ? Color.Red : Color.Black);
                 topOffset += Math.Max(this.HideChestField.Width, labelSize.Y);
             }
 

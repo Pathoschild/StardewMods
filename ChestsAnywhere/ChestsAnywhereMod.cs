@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using ChestsAnywhere.Common;
 using ChestsAnywhere.Framework;
 using ChestsAnywhere.Menus;
+using ChestsAnywhere.Menus.Components;
+using ChestsAnywhere.Menus.Overlays;
+using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -22,9 +25,6 @@ namespace ChestsAnywhere
         /*********
         ** Properties
         *********/
-        /// <summary>The selected chest.</summary>
-        private Chest SelectedChest;
-
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
@@ -40,6 +40,18 @@ namespace ChestsAnywhere
         /// <summary>Whether the update-available message has been shown since the game started.</summary>
         private bool HasSeenUpdateWarning;
 
+        /****
+        ** State
+        ****/
+        /// <summary>The selected chest.</summary>
+        private Chest SelectedChest;
+
+        /// <summary>The previous menu shown before the lookup UI was opened.</summary>
+        private IClickableMenu PreviousMenu;
+
+        /// <summary>The edit-chest button for the open chest (if any).</summary>
+        private EditButtonOverlay EditButtonOverlay;
+
 
         /*********
         ** Public methods
@@ -54,6 +66,8 @@ namespace ChestsAnywhere
             // hook UI
             PlayerEvents.LoadedGame += (sender, e) => this.ReceiveGameLoaded();
             GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveHudRendered();
+
+            MenuEvents.MenuChanged += (sender, e) => this.ReceiveMenuChanged(e.PriorMenu, e.NewMenu);
             MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
 
             // hook input
@@ -118,11 +132,53 @@ namespace ChestsAnywhere
             }
         }
 
+        /// <summary>The method invoked when a new menu is displayed.</summary>
+        /// <param name="previousMenu">The previous menu that was replaced (if any)</param>
+        /// <param name="newMenu">The menu that was opened.</param>
+        private void ReceiveMenuChanged(IClickableMenu previousMenu, IClickableMenu newMenu)
+        {
+            // track previous menu if opening edit UI
+            if (newMenu is EditChestForm)
+            {
+                this.PreviousMenu = previousMenu;
+                return;
+            }
+
+            // add edit button to chest UI
+            if (newMenu is ItemGrabMenu)
+            {
+                this.EditButtonOverlay?.Dispose();
+
+                // find open chest
+                ManagedChest chest = this.GetChests()
+                    .FirstOrDefault(p => p.Chest.currentLidFrame == 135); // player chest with an open lid (such a hack)
+                if (chest == null)
+                    return;
+
+                // add edit button
+                Rectangle sprite = Sprites.Icons.SpeechBubble;
+                float zoom = Game1.pixelZoom / 2f;
+                int width = (int)(sprite.Width * zoom);
+                int height = (int)(sprite.Height * zoom);
+                int x = newMenu.xPositionOnScreen - width;
+                int y = newMenu.yPositionOnScreen;
+                this.EditButtonOverlay = new EditButtonOverlay(new Rectangle(x, y, width, height), () => chest, this.Config, () => Game1.activeClickableMenu == newMenu);
+            }
+        }
+
         /// <summary>The method invoked when a menu is closed.</summary>
+        /// <param name="closedMenu">The menu that was closed.</param>
         private void ReceiveMenuClosed(IClickableMenu closedMenu)
         {
+            // restore menu prior to edit UI
             if (closedMenu is EditChestForm)
-                this.OpenMenu();
+            {
+                if (this.PreviousMenu is AccessChestMenu)
+                    this.OpenMenu(); // reload menu to reflect changes
+                else
+                    Game1.activeClickableMenu = this.PreviousMenu;
+                this.PreviousMenu = null;
+            }
         }
 
         /// <summary>The method invoked when the player presses an input button.</summary>
