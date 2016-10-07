@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -12,8 +11,6 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
-using StardewValley.Buildings;
-using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
 
@@ -66,7 +63,6 @@ namespace ChestsAnywhere
             // hook UI
             PlayerEvents.LoadedGame += (sender, e) => this.ReceiveGameLoaded();
             GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveHudRendered();
-
             MenuEvents.MenuChanged += (sender, e) => this.ReceiveMenuChanged(e.PriorMenu, e.NewMenu);
             MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
 
@@ -114,7 +110,7 @@ namespace ChestsAnywhere
             }
         }
 
-        /// <summary>The method invoked when the interface is rendering.</summary>
+        /// <summary>The method invoked when the interface has finished rendering.</summary>
         private void ReceiveHudRendered()
         {
             // render update warning
@@ -150,7 +146,7 @@ namespace ChestsAnywhere
                 this.EditButtonOverlay?.Dispose();
 
                 // find open chest
-                ManagedChest chest = this.GetChests()
+                ManagedChest chest = ChestFactory.GetChests()
                     .FirstOrDefault(p => p.Chest.currentLidFrame == 135); // player chest with an open lid (such a hack)
                 if (chest == null)
                     return;
@@ -207,7 +203,7 @@ namespace ChestsAnywhere
         {
             // get chests
             ManagedChest[] chests = (
-                from chest in this.GetChests()
+                from chest in ChestFactory.GetChests()
                 where !chest.IsIgnored
                 orderby chest.GetGroup() ascending, (chest.Order ?? int.MaxValue) ascending, chest.Name ascending
                 select chest
@@ -220,41 +216,6 @@ namespace ChestsAnywhere
                 AccessChestMenu menu = new AccessChestMenu(chests, selectedChest, this.Config);
                 menu.OnChestSelected += chest => this.SelectedChest = chest.Chest; // remember selected chest on next load
                 Game1.activeClickableMenu = menu;
-            }
-        }
-
-        /// <summary>Get all player chests.</summary>
-        private IEnumerable<ManagedChest> GetChests()
-        {
-            foreach (GameLocation location in Game1.locations)
-            {
-                // chests in location
-                {
-                    int namelessCount = 0;
-                    foreach (Chest chest in location.Objects.Values.OfType<Chest>())
-                        yield return new ManagedChest(chest, location.Name, $"Chest #{++namelessCount}");
-                }
-
-                // chests in constructed buildings
-                if (location is BuildableGameLocation)
-                {
-                    foreach (Building building in (location as BuildableGameLocation).buildings)
-                    {
-                        int namelessCount = 0;
-                        if (building.indoors == null)
-                            continue;
-                        foreach (Chest chest in building.indoors.Objects.Values.OfType<Chest>())
-                            yield return new ManagedChest(chest, building.nameOfIndoors.TrimEnd('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'), $"Chest #{++namelessCount}");
-                    }
-                }
-
-                // farmhouse containers
-                if (location is FarmHouse)
-                {
-                    Chest fridge = (location as FarmHouse).fridge;
-                    if (fridge != null)
-                        yield return new ManagedChest(fridge, location.Name, "Fridge");
-                }
             }
         }
 
