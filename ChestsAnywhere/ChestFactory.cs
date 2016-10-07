@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ChestsAnywhere.Framework;
+using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
@@ -47,6 +48,24 @@ namespace ChestsAnywhere
                         yield return new ManagedChest(fridge, location.Name, "Fridge");
                 }
             }
+        }
+
+        /// <summary>Get the player chest on the specified tile (if any).</summary>
+        /// <param name="tile">The tile to check.</param>
+        public static ManagedChest GetChestFromTile(Vector2 tile)
+        {
+            // get chest
+            Chest chest;
+            {
+                Object obj;
+                Game1.currentLocation.Objects.TryGetValue(tile, out obj);
+                chest = obj as Chest;
+            }
+
+            // return if valid
+            if (chest != null && chest.playerChest)
+                return new ManagedChest(chest, Game1.currentLocation.Name, "Chest");
+            return null;
         }
     }
 }

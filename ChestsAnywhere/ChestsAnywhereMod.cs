@@ -126,6 +126,14 @@ namespace ChestsAnywhere
                     this.HandleError(ex, "showing the new version available");
                 }
             }
+
+            // show chest label
+            ManagedChest cursorChest = ChestFactory.GetChestFromTile(Game1.currentCursorTile);
+            if (cursorChest != null)
+            {
+                Vector2 tooltipPosition = new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f);
+                CommonHelper.DrawHoverBox(Game1.spriteBatch, cursorChest.Name, tooltipPosition, Game1.viewport.Width - tooltipPosition.X - Game1.tileSize / 2f);
+            }
         }
 
         /// <summary>The method invoked when a new menu is displayed.</summary>
