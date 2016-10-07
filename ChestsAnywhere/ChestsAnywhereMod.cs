@@ -43,11 +43,8 @@ namespace ChestsAnywhere
         /// <summary>The selected chest.</summary>
         private Chest SelectedChest;
 
-        /// <summary>The previous menu shown before the lookup UI was opened.</summary>
-        private IClickableMenu PreviousMenu;
-
-        /// <summary>The edit-chest button for the open chest (if any).</summary>
-        private EditButtonOverlay EditButtonOverlay;
+        /// <summary>The context for the chest currently being viewed or edited.</summary>
+        private EditChestContext EditContext;
 
 
         /*********
@@ -136,37 +133,73 @@ namespace ChestsAnywhere
             }
         }
 
-        /// <summary>The method invoked when a new menu is displayed.</summary>
-        /// <param name="previousMenu">The previous menu that was replaced (if any)</param>
-        /// <param name="newMenu">The menu that was opened.</param>
+        /// <summary>The method invoked when the active menu changes.</summary>
+        /// <param name="previousMenu">The previous menu (if any)</param>
+        /// <param name="newMenu">The new menu (if any).</param>
         private void ReceiveMenuChanged(IClickableMenu previousMenu, IClickableMenu newMenu)
         {
-            // track previous menu if opening edit UI
-            if (newMenu is EditChestForm)
+            // open chest view (start context)
+            if (this.EditContext == null)
             {
-                this.PreviousMenu = previousMenu;
-                return;
+                if (newMenu is ItemGrabMenu)
+                {
+                    // find open chest
+                    ManagedChest chest = ChestFactory.GetChests().FirstOrDefault(p => p.Chest.currentLidFrame == 135);
+                    if (chest == null)
+                        return;
+
+                    // create edit button
+                    Rectangle sprite = Sprites.Icons.SpeechBubble;
+                    float zoom = Game1.pixelZoom / 2f;
+                    int width = (int)(sprite.Width * zoom);
+                    int height = (int)(sprite.Height * zoom);
+                    int x = newMenu.xPositionOnScreen - width;
+                    int y = newMenu.yPositionOnScreen;
+                    var editButton = new EditButtonOverlay(new Rectangle(x, y, width, height), () => chest, this.Config, () => this.EditContext != null);
+
+                    // track context
+                    this.EditContext = new EditChestContext { Chest = () => chest, ViewMenu = newMenu, EditButton = editButton };
+                }
+                else if (newMenu is AccessChestMenu)
+                {
+                    AccessChestMenu menu = (AccessChestMenu)newMenu;
+                    this.EditContext = new EditChestContext { Chest = () => menu.SelectedChest, ViewMenu = newMenu };
+                }
             }
 
-            // add edit button to chest UI
-            if (newMenu is ItemGrabMenu)
+            // open edit
+            else if (newMenu is EditChestForm)
             {
-                this.EditButtonOverlay?.Dispose();
+                this.EditContext.EditMenu = newMenu;
+                if (this.EditContext.EditButton != null)
+                    this.EditContext.EditButton.IsDisabled = true;
+            }
 
-                // find open chest
-                ManagedChest chest = ChestFactory.GetChests()
-                    .FirstOrDefault(p => p.Chest.currentLidFrame == 135); // player chest with an open lid (such a hack)
-                if (chest == null)
-                    return;
+            // close edit & resume view
+            else if (previousMenu is EditChestForm && newMenu != this.EditContext.ViewMenu)
+            {
+                // close edit
+                this.EditContext.EditMenu = null;
+                if (this.EditContext.EditButton != null)
+                    this.EditContext.EditButton.IsDisabled = false;
 
-                // add edit button
-                Rectangle sprite = Sprites.Icons.SpeechBubble;
-                float zoom = Game1.pixelZoom / 2f;
-                int width = (int)(sprite.Width * zoom);
-                int height = (int)(sprite.Height * zoom);
-                int x = newMenu.xPositionOnScreen - width;
-                int y = newMenu.yPositionOnScreen;
-                this.EditButtonOverlay = new EditButtonOverlay(new Rectangle(x, y, width, height), () => chest, this.Config, () => Game1.activeClickableMenu == newMenu);
+                // resume view
+                if (this.EditContext.ViewMenu is AccessChestMenu)
+                {
+                    // reset to reflect changes
+                    this.EditContext.Dispose();
+                    this.EditContext = null;
+                    this.OpenMenu();
+                }
+                else
+                    Game1.activeClickableMenu = this.EditContext.ViewMenu;
+            }
+
+            // close menu (end context)
+            else if (newMenu == null)
+            {
+                this.EditContext?.Dispose();
+                this.EditContext = null;
             }
         }
 
@@ -174,15 +207,7 @@ namespace ChestsAnywhere
         /// <param name="closedMenu">The menu that was closed.</param>
         private void ReceiveMenuClosed(IClickableMenu closedMenu)
         {
-            // restore menu prior to edit UI
-            if (closedMenu is EditChestForm)
-            {
-                if (this.PreviousMenu is AccessChestMenu)
-                    this.OpenMenu(); // reload menu to reflect changes
-                else
-                    Game1.activeClickableMenu = this.PreviousMenu;
-                this.PreviousMenu = null;
-            }
+            this.ReceiveMenuChanged(closedMenu, null);
         }
 
         /// <summary>The method invoked when the player presses an input button.</summary>

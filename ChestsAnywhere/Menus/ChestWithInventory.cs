@@ -30,11 +30,15 @@ namespace ChestsAnywhere.Menus
         /// <summary>The item under the player's cursor.</summary>
         private Item HoveredItem;
 
-        /// <summary>The selected chest.</summary>
-        protected ManagedChest SelectedChest { get; private set; }
-
         /// <summary>Whether the UI control is disabled, in which case it will no longer try to handle player interaction.</summary>
         protected bool IsDisabled { get; set; }
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The selected chest.</summary>
+        public ManagedChest SelectedChest { get; private set; }
 
 
         /*********

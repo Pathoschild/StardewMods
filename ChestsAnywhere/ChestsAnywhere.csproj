@@ -68,6 +68,7 @@
     <Compile Include="Common\GitVersion.cs" />
     <Compile Include="Common\UpdateHelper.cs" />
     <Compile Include="ChestFactory.cs" />
+    <Compile Include="Framework\EditChestContext.cs" />
     <Compile Include="Menus\AccessChestMenu.cs" />
     <Compile Include="ChestsAnywhereMod.cs" />
     <Compile Include="Menus\Components\Checkbox.cs" />

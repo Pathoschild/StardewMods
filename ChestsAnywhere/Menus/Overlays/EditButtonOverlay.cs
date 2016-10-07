@@ -25,6 +25,13 @@ namespace ChestsAnywhere.Menus.Overlays
 
 
         /*********
+        ** Accessors
+        *********/
+        /// <summary>Whether the component should be temporarily hidden and ignore input. (Call <see cref="BaseOverlay.Dispose"/> to remove it permanently.)</summary>
+        public bool IsDisabled { get; set; }
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
@@ -47,6 +54,9 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <param name="y">The Y-position of the cursor.</param>
         protected override void ReceiveLeftClick(int x, int y)
         {
+            if (this.IsDisabled)
+                return;
+
             if (this.Button.containsPoint(x, y))
                 Game1.activeClickableMenu = new EditChestForm(this.FetchChest(), this.Config);
         }
@@ -56,6 +66,9 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <param name="y">The cursor's Y position.</param>
         protected override void ReceiveCursorHover(int x, int y)
         {
+            if (this.IsDisabled)
+                return;
+
             this.Button.tryHover(x, y);
         }
 
@@ -63,6 +76,9 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <param name="batch">The sprite batch being drawn.</param>
         protected override void Draw(SpriteBatch batch)
         {
+            if (this.IsDisabled)
+                return;
+
             this.Button.draw(batch);
             this.DrawCursor();
         }
