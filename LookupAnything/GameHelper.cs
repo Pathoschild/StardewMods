@@ -66,8 +66,8 @@ namespace Pathoschild.LookupAnything
                 int curSeasonIndex = Array.IndexOf(seasons, Game1.currentSeason);
                 if (curSeasonIndex == -1)
                     throw new InvalidOperationException($"The current season '{Game1.currentSeason}' wasn't recognised.");
-                season = seasons[curSeasonIndex + (day / daysInSeason) % seasons.Length];
-                day = day % daysInSeason;
+                season = seasons[(curSeasonIndex + day / daysInSeason) % seasons.Length];
+                day %= daysInSeason;
             }
 
             return Tuple.Create(season, day);

@@ -100,6 +100,7 @@ file if you want. These are the available settings:
 * added ability to lookup a villager from the calendar.
 * added ability to lookup items from the chest menu.
 * added optional debug log.
+* fixed error when calculating a day offset that wraps into the next year.
 * fixed crash in edge case where an error occurs handling a mapped input key whose string representation contains characters not available in the sprite font.
 
 ## Compiling the mod
