@@ -200,14 +200,14 @@ namespace Pathoschild.LookupAnything.Framework
         }
 
         /// <summary>Get metadata for a menu element at the specified position.</summary>
-        /// <param name="activeMenu">The active menu.</param>
+        /// <param name="menu">The active menu.</param>
         /// <param name="cursorPosition">The cursor's viewport-relative coordinates.</param>
-        public ISubject GetSubjectFrom(IClickableMenu activeMenu, Vector2 cursorPosition)
+        public ISubject GetSubjectFrom(IClickableMenu menu, Vector2 cursorPosition)
         {
             // calendar
-            if (activeMenu is Billboard)
+            if (menu is Billboard)
             {
-                Billboard billboard = (Billboard)activeMenu;
+                Billboard billboard = (Billboard)menu;
 
                 // get target day
                 int selectedDay = -1;
@@ -231,12 +231,20 @@ namespace Pathoschild.LookupAnything.Framework
                     return new CharacterSubject(target, TargetType.Villager, this.Metadata);
             }
 
+            // chest
+            else if (menu is MenuWithInventory)
+            {
+                Item item = ((MenuWithInventory)menu).hoveredItem;
+                if(item != null)
+                    return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
+            }
+
             // inventory
-            else if (activeMenu is GameMenu)
+            else if (menu is GameMenu)
             {
                 // get current tab
-                List<IClickableMenu> tabs = GameHelper.GetPrivateField<List<IClickableMenu>>(activeMenu, "pages");
-                IClickableMenu curTab = tabs[((GameMenu)activeMenu).currentTab];
+                List<IClickableMenu> tabs = GameHelper.GetPrivateField<List<IClickableMenu>>(menu, "pages");
+                IClickableMenu curTab = tabs[((GameMenu)menu).currentTab];
                 if (curTab is InventoryPage)
                 {
                     Item item = GameHelper.GetPrivateField<Item>(curTab, "hoveredItem");
@@ -254,7 +262,7 @@ namespace Pathoschild.LookupAnything.Framework
             // by convention (for mod support)
             else
             {
-                Item item = GameHelper.GetPrivateField<Item>(activeMenu, "HoveredItem", required: false); // ChestsAnywhere
+                Item item = GameHelper.GetPrivateField<Item>(menu, "HoveredItem", required: false); // ChestsAnywhere
                 if (item != null)
                     return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
             }
