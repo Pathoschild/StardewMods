@@ -105,11 +105,13 @@ namespace ChestsAnywhere.Menus.Overlays
             }
 
             // trigger mouse events
-            MouseState state = Mouse.GetState();
-            this.ReceiveCursorHover(state.X, state.Y);
-            if (state.LeftButton == ButtonState.Pressed && this.LastMouseState.LeftButton != ButtonState.Pressed)
-                this.ReceiveLeftClick(state.X, state.Y);
-            this.LastMouseState = state;
+            MouseState mouseState = Mouse.GetState();
+            int mouseX = Game1.getOldMouseX();
+            int mouseY = Game1.getOldMouseY();
+            this.ReceiveCursorHover(mouseX, mouseY);
+            if (mouseState.LeftButton == ButtonState.Pressed && this.LastMouseState.LeftButton != ButtonState.Pressed)
+                this.ReceiveLeftClick(mouseX, mouseY);
+            this.LastMouseState = mouseState;
         }
 
         /// <summary>The method invoked when the player presses a key.</summary>
