@@ -1,6 +1,6 @@
 **Chests Anywhere** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you access
-your chests from anywhere. Transfer items without having to run around, from the comfort of your
-bed to the deepest mine level.
+your chests from anywhere and organise them your way. Transfer items without having to run around,
+from the comfort of your bed to the deepest mine level.
 
 ![](screenshots/animated-usage.gif)
 
@@ -10,16 +10,15 @@ bed to the deepest mine level.
 4. Run the game using SMAPI.
 
 ## Usage
-**Access chests** by pressing `B`. This will show your chests (and fridge) grouped by location
-or custom category. Navigate by clicking the top dropdowns, or pressing the `left` or `right` key.
-(See the next section if you want to change key bindings or add a controller.)
+**Access chests** by pressing `B`. This will show your chests (and fridge) grouped by category.
+Navigate by clicking the top dropdowns, or by pressing the `left` or `right` key.
 
-**Edit chests** by clicking the edit icon (a speech bubble) after pressing `B` or opening a chest
-directly. This will [show a form](screenshots/edit-chest.png) where you can...
+**Edit chests** by clicking the edit icon after opening a chest ([see example](screenshots/animated-edit.gif)).
+This will show a form where you can...
 * set the chest name;
-* set a category (which overrides the location grouping);
+* set a category (which defaults to its location);
 * set the sort order in the chest list;
-* or hide the chest from the chest dropdown.
+* or hide the chest from the chest list.
 
 **Point at a chest** in the world to see its name in a tooltip.
 
@@ -75,11 +74,11 @@ file if you want. These are the available settings:
 * Added fields to edit sort order and hide chests.
 * Fixed edited chest name not saving correctly.
 
-1.5 (upcoming):
+1.5:
 * Added name tooltip when your cursor is over a chest.
 * Added edit button when you open a chest directly.
 * Added cancel button when editing a chest.
-* Fixed fridge being accessible before it's unlocked.
+* Fixed fridge being accessible before you obtain it.
 * Fixed error when you click an unavailable inventory slot.
 * Fixed error when you open the menu but don't have any chests.
 * Fixed UI not being resized when game window is resized.
