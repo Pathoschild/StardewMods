@@ -23,7 +23,7 @@ namespace ChestsAnywhere
                 // chests in location
                 {
                     int namelessCount = 0;
-                    foreach (Chest chest in location.Objects.Values.OfType<Chest>())
+                    foreach (Chest chest in location.Objects.Values.OfType<Chest>().Where(p => p.playerChest))
                         yield return new ManagedChest(chest, location.Name, $"Chest #{++namelessCount}");
                 }
 

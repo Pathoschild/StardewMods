@@ -83,6 +83,7 @@ file if you want. These are the available settings:
 * Fixed error when you click an unavailable inventory slot.
 * Fixed error when you open the menu but don't have any chests.
 * Fixed UI not being resized when game window is resized.
+* Fixed Lewis' giftbox when you start a new game being usable as a chest.
 * Fixed visual issues.
 
 ## Compiling the mod
