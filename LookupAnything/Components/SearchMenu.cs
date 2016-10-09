@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pathoschild.LookupAnything.Common;
 using Pathoschild.LookupAnything.Framework;
 using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Fields;
 using Pathoschild.LookupAnything.Framework.Models;
 using Pathoschild.LookupAnything.Framework.Subjects;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -32,7 +35,7 @@ namespace Pathoschild.LookupAnything.Components
         /// <summary>The number of pixels to scroll.</summary>
         private int CurrentScroll;
 
-        private readonly ILookup<string, SearchResult> SearchLookup = GameHelper.GetSearchLookup();
+        private readonly ILookup<string, SearchResult> SearchLookup;
 
         /// <summary> Editable Search Query </summary>
         private readonly SearchTextBox SearchTextbox;
@@ -51,6 +54,7 @@ namespace Pathoschild.LookupAnything.Components
         public SearchMenu(Metadata metadata)
         {
             this.Metadata = metadata;
+            this.SearchLookup = GameHelper.GetSearchLookup(this.Metadata);
             this.CalculateDimensions();
             this.SearchTextbox = new SearchTextBox(Game1.smallFont, Color.Black);
             this.SearchTextbox.Select();
@@ -59,7 +63,42 @@ namespace Pathoschild.LookupAnything.Components
 
         private void SearchTextbox_Changed(object sender, string searchString)
         {
-            var results = this.SearchLookup.Where(sr => sr.Key.ToLowerInvariant().Contains(this.SearchTextbox.Text.ToLowerInvariant())).SelectMany(sr => sr);
+            // avoid searching empty strings for better performance
+            if (string.IsNullOrWhiteSpace(searchString))
+            {
+                this.SearchResults = Enumerable.Empty<SearchResultComponent>();
+                return;
+            }
+
+            searchString = searchString.ToLowerInvariant();
+            var scoreMerger = new Func<string, string, double>((string haystack, string needle) =>
+            {
+                // prefer starts with to contains (e.g. 'brea' yields 'bread/bream' over 'complete breakfast')
+                if (haystack.StartsWith(needle))
+                {
+                    if (haystack.Length == needle.Length)
+                    {
+                        return 0; // same string
+                    }
+                    return 0.5;
+                }
+                if (haystack.Contains(needle))
+                {
+                    return 1.5;
+                }
+                return Sift3.Compare(haystack, needle, 5); // (e.g. 'breaf' yields 1 for 'bread', 'bream')
+            });
+
+            var debugResults = this.SearchLookup
+                .Select(sr => new { Result = sr, Score = scoreMerger(sr.Key, searchString) })
+                .OrderBy(r => r.Score)
+                .Where(r => r.Score < 3) // experimentally, results under this score have to be horrendous typos to be relavent since the corpus is small 
+                .Take(20) // the above filter should be aggressive, if there are many results, most probably come from the pre-sifted constants (e.g. 'ore' and we want to include them)
+                .ToArray();
+
+            var results = debugResults
+                .Select(r => r.Result.First()); // only the first instance of results with this exact name
+
             this.SearchResults = results.Select(result => new SearchResultComponent(result)).ToArray();
         }
 
