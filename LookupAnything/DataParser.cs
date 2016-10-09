@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.LookupAnything.Framework;
 using Pathoschild.LookupAnything.Framework.Constants;
+using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Models;
 using StardewValley;
 using StardewValley.Objects;

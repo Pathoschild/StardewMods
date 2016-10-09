@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Pathoschild.LookupAnything
+namespace Pathoschild.LookupAnything.Framework.Data
 {
     /// <summary>A monster entry parsed from the game data.</summary>
     internal class MonsterData
