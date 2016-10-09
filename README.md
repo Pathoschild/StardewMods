@@ -97,14 +97,15 @@ file if you want. These are the available settings:
 * Fixed a few missing stones & weeds.
 
 1.5 (upcoming):
-* added ability to lookup a villager from the calendar.
-* added ability to lookup items from the chest menu.
-* added better fields when looking up your spouse.
-* added support for iridium quality introduced from Stardew Valley 1.1.1.
-* added optional debug log.
-* fixed error when screen resolution is too small to display lookup UI.
-* fixed error when calculating a day offset that wraps into the next year.
-* fixed crash in edge case where an error occurs handling a mapped input key whose string representation contains characters not available in the sprite font.
+* Added ability to lookup a villager from the calendar.
+* Added ability to lookup items from the chest menu.
+* Added better fields when looking up your spouse.
+* Added support for iridium quality introduced from Stardew Valley 1.1.1.
+* Added optional debug log.
+* Fixed error when screen resolution is too small to display lookup UI.
+* Fixed error when calculating a day offset that wraps into the next year.
+* Fixed crash in edge case where an error occurs handling a mapped input key whose string representation contains characters not available in the sprite font.
+* Fixed errors crashing the game in rare cases.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is

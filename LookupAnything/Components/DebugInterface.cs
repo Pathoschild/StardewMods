@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Pathoschild.LookupAnything.Framework;
 using Pathoschild.LookupAnything.Framework.Subjects;
 using Pathoschild.LookupAnything.Framework.Targets;
@@ -29,6 +29,7 @@ namespace Pathoschild.LookupAnything.Components
         /// <summary>Whether the debug interface is enabled.</summary>
         public bool Enabled { get; set; }
 
+
         /*********
         ** Public methods
         *********/
@@ -54,63 +55,81 @@ namespace Pathoschild.LookupAnything.Components
             if (!this.Enabled)
                 return;
 
-            // get location info
-            GameLocation currentLocation = Game1.currentLocation;
-            Vector2 cursorTile = Game1.currentCursorTile;
-            Vector2 cursorPosition = GameHelper.GetScreenCoordinatesFromCursor();
-
-            // show 'debug enabled' warning + cursor position
+            GameHelper.InterceptErrors("drawing debug info", () =>
             {
-                string metadata = $"{this.WarningText} Cursor tile ({cursorTile.X}, {cursorTile.Y}), position ({cursorPosition.X}, {cursorPosition.Y}).";
-                GameHelper.DrawHoverBox(spriteBatch, metadata, Vector2.Zero, Game1.viewport.Width);
-            }
+                // get location info
+                GameLocation currentLocation = Game1.currentLocation;
+                Vector2 cursorTile = Game1.currentCursorTile;
+                Vector2 cursorPosition = GameHelper.GetScreenCoordinatesFromCursor();
 
-            // show cursor pixel
-            spriteBatch.DrawLine(cursorPosition.X - 1, cursorPosition.Y - 1, new Vector2(Game1.pixelZoom, Game1.pixelZoom), Color.DarkRed);
-
-            // show targets within detection radius
-            Rectangle tileArea = GameHelper.GetScreenCoordinatesFromTile(Game1.currentCursorTile);
-            IEnumerable<ITarget> targets = this.TargetFactory
-                .GetNearbyTargets(currentLocation, cursorTile)
-                .OrderBy(p => p.Type == TargetType.Unknown ? 0 : 1); // if targets overlap, prioritise info on known targets
-            foreach (ITarget target in targets)
-            {
-                // get metadata
-                bool spriteAreaIntersects = target.GetSpriteArea().Intersects(tileArea);
-                ISubject subject = this.TargetFactory.GetSubjectFrom(target);
-
-                // draw tile
+                // show 'debug enabled' warning + cursor position
                 {
-                    Rectangle tile = GameHelper.GetScreenCoordinatesFromTile(target.GetTile());
-                    Color color = (subject != null ? Color.Green : Color.Red) * .5f;
-                    spriteBatch.DrawLine(tile.X, tile.Y, new Vector2(tile.Width, tile.Height), color);
+                    string metadata = $"{this.WarningText} Cursor tile ({cursorTile.X}, {cursorTile.Y}), position ({cursorPosition.X}, {cursorPosition.Y}).";
+                    GameHelper.DrawHoverBox(spriteBatch, metadata, Vector2.Zero, Game1.viewport.Width);
                 }
 
-                // draw sprite box
-                if (subject != null)
+                // show cursor pixel
+                spriteBatch.DrawLine(cursorPosition.X - 1, cursorPosition.Y - 1, new Vector2(Game1.pixelZoom, Game1.pixelZoom), Color.DarkRed);
+
+                // show targets within detection radius
+                Rectangle tileArea = GameHelper.GetScreenCoordinatesFromTile(Game1.currentCursorTile);
+                IEnumerable<ITarget> targets = this.TargetFactory
+                    .GetNearbyTargets(currentLocation, cursorTile)
+                    .OrderBy(p => p.Type == TargetType.Unknown ? 0 : 1);
+                // if targets overlap, prioritise info on known targets
+                foreach (ITarget target in targets)
                 {
-                    int borderSize = 3;
-                    Color borderColor = Color.Green;
-                    if (!spriteAreaIntersects)
+                    // get metadata
+                    bool spriteAreaIntersects = target.GetSpriteArea().Intersects(tileArea);
+                    ISubject subject = this.TargetFactory.GetSubjectFrom(target);
+
+                    // draw tile
                     {
-                        borderSize = 1;
-                        borderColor *= 0.5f;
+                        Rectangle tile = GameHelper.GetScreenCoordinatesFromTile(target.GetTile());
+                        Color color = (subject != null ? Color.Green : Color.Red) * .5f;
+                        spriteBatch.DrawLine(tile.X, tile.Y, new Vector2(tile.Width, tile.Height), color);
                     }
 
-                    Rectangle spriteBox = target.GetSpriteArea();
-                    spriteBatch.DrawLine(spriteBox.X, spriteBox.Y, new Vector2(spriteBox.Width, borderSize), borderColor); // top
-                    spriteBatch.DrawLine(spriteBox.X, spriteBox.Y, new Vector2(borderSize, spriteBox.Height), borderColor); // left
-                    spriteBatch.DrawLine(spriteBox.X + spriteBox.Width, spriteBox.Y, new Vector2(borderSize, spriteBox.Height), borderColor); // right
-                    spriteBatch.DrawLine(spriteBox.X, spriteBox.Y + spriteBox.Height, new Vector2(spriteBox.Width, borderSize), borderColor); // bottom
-                }
-            }
+                    // draw sprite box
+                    if (subject != null)
+                    {
+                        int borderSize = 3;
+                        Color borderColor = Color.Green;
+                        if (!spriteAreaIntersects)
+                        {
+                            borderSize = 1;
+                            borderColor *= 0.5f;
+                        }
 
-            // show current target name (if any)
+                        Rectangle spriteBox = target.GetSpriteArea();
+                        spriteBatch.DrawLine(spriteBox.X, spriteBox.Y, new Vector2(spriteBox.Width, borderSize), borderColor); // top
+                        spriteBatch.DrawLine(spriteBox.X, spriteBox.Y, new Vector2(borderSize, spriteBox.Height), borderColor); // left
+                        spriteBatch.DrawLine(spriteBox.X + spriteBox.Width, spriteBox.Y, new Vector2(borderSize, spriteBox.Height), borderColor); // right
+                        spriteBatch.DrawLine(spriteBox.X, spriteBox.Y + spriteBox.Height, new Vector2(spriteBox.Width, borderSize), borderColor); // bottom
+                    }
+                }
+
+                // show current target name (if any)
+                {
+                    ISubject subject = this.TargetFactory.GetSubjectFrom(currentLocation, cursorTile, cursorPosition);
+                    if (subject != null)
+                        GameHelper.DrawHoverBox(spriteBatch, subject.Name, new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f), Game1.viewport.Width / 4f);
+                }
+            }, this.OnDrawError);
+        }
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>The method invoked when an unhandled exception is intercepted.</summary>
+        /// <param name="ex">The intercepted exception.</param>
+        private void OnDrawError(Exception ex)
+        {
+            GameHelper.InterceptErrors("handling an error in the debug code", () =>
             {
-                ISubject subject = this.TargetFactory.GetSubjectFrom(currentLocation, cursorTile, cursorPosition);
-                if (subject != null)
-                    GameHelper.DrawHoverBox(spriteBatch, subject.Name, new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f), Game1.viewport.Width / 4f);
-            }
+                this.Enabled = false;
+            });
         }
     }
 }
