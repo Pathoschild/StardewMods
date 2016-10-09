@@ -144,7 +144,8 @@
     <PostBuildEvent>
       set modDir=$(GamePath)\Mods\LookupAnything
       if not exist "%modDir%" (mkdir "%modDir%")
-      copy "$(TargetPath)" "%modDir%\$(TargetFileName)"
+      copy "$(TargetDir)\$(TargetName).dll" "%modDir%\$(TargetName).dll"
+      copy "$(TargetDir)\$(TargetName).pdb" "%modDir%\$(TargetName).pdb"
       copy "$(ProjectDir)manifest.json" "%modDir%\manifest.json"
       copy "$(ProjectDir)data.json" "%modDir%\data.json"
     </PostBuildEvent>
