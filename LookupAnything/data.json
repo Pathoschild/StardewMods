@@ -18,6 +18,8 @@ You shouldn't change this file unless you know what you're doing.
 
     /* NPCs */
     "AsocialVillagers": [ "Bouncer", "Gunther" ],
+    "SpouseMaxFriendship": 3000,
+    "SpouseFriendshipForStardrop": 3375,
 
     /* players */
     "PlayerMaxSkillPoints": 15000,

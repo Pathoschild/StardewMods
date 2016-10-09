@@ -29,6 +29,12 @@ namespace Pathoschild.LookupAnything.Framework.Data
         /// <summary>The names of villagers with social data (e.g. birthdays or gift tastes).</summary>
         public string[] AsocialVillagers { get; set; }
 
+        /// <summary>The maximum friendship points for a married NPC.</summary>
+        public int SpouseMaxFriendship { get; set; }
+
+        /// <summary>The minimum friendship points with a married NPC before they give the player a stardrop.</summary>
+        public int SpouseFriendshipForStardrop { get; set; }
+
         /****
         ** Players
         ****/

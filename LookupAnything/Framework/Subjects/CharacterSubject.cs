@@ -63,15 +63,27 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 case TargetType.Villager:
                     if (!metadata.Constants.AsocialVillagers.Contains(npc.getName()))
                     {
+                        bool isSpouse = Game1.player.spouse == npc.name;
                         var giftTastes = this.GetGiftTastes(npc);
+
                         yield return new GenericField("Birthday", $"{Utility.capitalizeFirstLetter(npc.birthday_Season)} {npc.birthday_Day}");
-                        yield return new GenericField("Can romance", npc.datable);
+                        yield return new GenericField("Can romance", isSpouse ? "you're married! <" : GenericField.GetString(npc.datable));
+
+                        // friendship
                         if (Game1.player.friendships.ContainsKey(npc.name))
                         {
-                            yield return new CharacterFriendshipField("Friendship", Game1.player.friendships[npc.name][0], NPC.friendshipPointsPerHeartLevel, NPC.maxFriendshipPoints);
+                            // friendship
+                            int curFriendship = Game1.player.friendships[npc.name][0];
+                            if (isSpouse)
+                                yield return new CharacterFriendshipField("Friendship", curFriendship, NPC.friendshipPointsPerHeartLevel, metadata.Constants.SpouseMaxFriendship, metadata.Constants.SpouseFriendshipForStardrop);
+                            else
+                                yield return new CharacterFriendshipField("Friendship", curFriendship, NPC.friendshipPointsPerHeartLevel, NPC.maxFriendshipPoints);
+
+                            // socialising
                             yield return new GenericField("Talked today", Game1.player.friendships[npc.name][2] == 1);
                             yield return new GenericField("Gifted today", Game1.player.friendships[npc.name][3] > 0);
-                            yield return new GenericField("Gifted this week", $"{Game1.player.friendships[npc.name][1]} of {NPC.maxGiftsPerWeek}");
+                            if (!isSpouse)
+                                yield return new GenericField("Gifted this week", $"{Game1.player.friendships[npc.name][1]} of {NPC.maxGiftsPerWeek}");
                         }
                         else
                             yield return new GenericField("Friendship", "You haven't met them yet.");
