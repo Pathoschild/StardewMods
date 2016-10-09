@@ -8,6 +8,7 @@ using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Fields;
 using Pathoschild.LookupAnything.Framework.Models;
 using StardewValley;
+using StardewValley.Objects;
 using Object = StardewValley.Object;
 
 namespace Pathoschild.LookupAnything.Framework.Subjects
@@ -271,6 +272,10 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             catch (KeyNotFoundException)
             {
                 return null; // e.g. incubator
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return null; //TODO: Ring of Yorba, not sure why
             }
         }
 

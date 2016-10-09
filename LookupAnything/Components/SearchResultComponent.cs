@@ -41,6 +41,7 @@ namespace Pathoschild.LookupAnything.Components
             //contentBatch.DrawLine(position.X, position.Y + Height, new Vector2(Width, 1), Color.Green);
 
             this.panel = new ClickableComponent(new Rectangle((int)position.X, (int)position.Y, this.Width, this.Height), this.Result.Name);
+            this.Result.Subject.Value.DrawPortrait(contentBatch, position, new Vector2(70, 70));
             return new Vector2(this.Width, this.Height);
         }
     }

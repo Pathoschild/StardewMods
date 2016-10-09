@@ -11,6 +11,7 @@ using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Models;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
 
@@ -45,13 +46,21 @@ namespace Pathoschild.LookupAnything
             GameHelper.Recipes = new Lazy<RecipeModel[]>(() => DataParser.GetRecipes(metadata).ToArray());
         }
 
-        public static ILookup<string, SearchResult> GetSearchLookup()
+        public static ILookup<string, SearchResult> GetSearchLookup(Metadata metadata)
         {
             List<SearchResult> results = new List<SearchResult>();
-            results.AddRange(Utility.getAllCharacters().Select(npc => new SearchResult(npc)));
-            results.AddRange(DataParser.GetMonsters().Select(mob => new SearchResult(mob)));
+            results.AddRange(Utility.getAllCharacters().Select(npc => new SearchResult(npc, metadata)));
             results.AddRange(GameHelper.Objects.Value.Select(obj => new SearchResult(obj)));
-            results.AddRange(Game1.getFarm().animals.Select(kvp => new SearchResult(kvp.Value)));
+
+            var farm = Game1.getFarm();
+            IEnumerable<FarmAnimal> animals = farm.animals.Select(kvp => kvp.Value);
+            var buildingAnimals = farm.buildings
+                .Select(b => b.indoors as AnimalHouse)
+                .Where(ah => ah != null)
+                .SelectMany(ah => ah.animals)
+                .Select(kvp => kvp.Value);
+            results.AddRange(animals.Union(buildingAnimals).Select(animal => new SearchResult(animal)));
+            // results.AddRange(DataParser.GetRecipes(metadata).Select(recipe => new SearchResult(recipe)));
             return results.ToLookup(r => r.Name);
         }
 
@@ -379,47 +388,5 @@ namespace Pathoschild.LookupAnything
         {
             CommonHelper.ShowErrorMessage(message);
         }
-    }
-
-    internal class SearchResult
-    {
-        public SearchResult(NPC npc)
-        {
-            this.NPC = npc;
-            this.Name = npc.name;
-            this.TargetType = TargetType.Villager;
-        }
-
-        public SearchResult(MonsterData monster)
-        {
-            this.Monster = monster;
-            this.Name = monster.Name;
-            this.TargetType = TargetType.Monster;
-        }
-
-        public SearchResult(ObjectModel objectModel)
-        {
-            this.ObjectModel = objectModel;
-            this.Name = objectModel.Name;
-            this.TargetType = TargetType.Object;
-        }
-
-        public SearchResult(FarmAnimal farmAnimal)
-        {
-            this.FarmAnimal = farmAnimal;
-            this.Name = farmAnimal.name;
-            this.TargetType = TargetType.FarmAnimal;
-        }
-
-        public string Name { get; }
-        public TargetType TargetType { get; }
-
-        public NPC NPC { get; }
-
-        public MonsterData Monster { get; }
-
-        public ObjectModel ObjectModel { get; }
-
-        public FarmAnimal FarmAnimal { get; }
     }
 }

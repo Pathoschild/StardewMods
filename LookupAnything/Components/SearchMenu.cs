@@ -116,14 +116,7 @@ namespace Pathoschild.LookupAnything.Components
             {
                 if (result.containsPoint(x, y))
                 {
-                    ISubject subject = null;
-                    switch (result.Result.TargetType)
-                    {
-                        case TargetType.Object:
-                            var obj = GameHelper.GetObjectBySpriteIndex(result.Result.ObjectModel.ParentSpriteIndex);
-                            subject = new ItemSubject((obj as Item), ObjectContext.World, knownQuality: false);
-                            break;
-                    }
+                    ISubject subject = result.Result.Subject.Value;
                     Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata);
                     Game1.playSound("coin");
                 }
@@ -172,7 +165,7 @@ namespace Pathoschild.LookupAnything.Components
         {
             // Override to deliberately avoid calling base and letting another key close the menu
         }
-        
+
         /// <summary>Render the UI.</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>
         public override void draw(SpriteBatch spriteBatch)
