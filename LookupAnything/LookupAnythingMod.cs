@@ -395,7 +395,7 @@ namespace Pathoschild.LookupAnything
         {
             try
             {
-                if (Game1.activeClickableMenu is LookupMenu)
+                if (Game1.activeClickableMenu is SearchMenu)
                 {
                     Game1.playSound("bigDeSelect"); // match default behaviour when closing a menu
                     Game1.activeClickableMenu = null;

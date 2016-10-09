@@ -88,7 +88,8 @@ namespace Pathoschild.LookupAnything.Components
         /// <summary>Set the input focus to this control.</summary>
         public void Select()
         {
-            
+            this.Textbox.Selected = true;
+            this.Textbox.Highlighted = true;
             Game1.keyboardDispatcher.Subscriber = this;
         }
 

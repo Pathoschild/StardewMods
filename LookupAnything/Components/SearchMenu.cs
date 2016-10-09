@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Pathoschild.LookupAnything.Framework;
 using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Fields;
@@ -128,6 +129,11 @@ namespace Pathoschild.LookupAnything.Components
             this.CurrentScroll += amount;
         }
 
+        public override void receiveKeyPress(Keys key)
+        {
+            // Override to deliberately avoid calling base and letting another key close the menu
+        }
+        
         /// <summary>Render the UI.</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>
         public override void draw(SpriteBatch spriteBatch)
