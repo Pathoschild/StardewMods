@@ -43,7 +43,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
             }
 
             // prices by quality
-            return $"{saleValues[ItemQuality.Low]}g (low quality), {saleValues[ItemQuality.Medium]}g (medium), {saleValues[ItemQuality.High]}g (high)";
+            return $"{saleValues[ItemQuality.Low]}g, {saleValues[ItemQuality.Medium]}g (silver), {saleValues[ItemQuality.High]}g (gold), {saleValues[ItemQuality.Best]}g (iridium)";
         }
     }
 }

@@ -100,6 +100,7 @@ file if you want. These are the available settings:
 * added ability to lookup a villager from the calendar.
 * added ability to lookup items from the chest menu.
 * added better fields when looking up your spouse.
+* added support for iridium quality introduced from Stardew Valley 1.1.1.
 * added optional debug log.
 * fixed error when screen resolution is too small to display lookup UI.
 * fixed error when calculating a day offset that wraps into the next year.

@@ -7,6 +7,7 @@ namespace Pathoschild.LookupAnything.Framework.Constants
     {
         Low = Object.lowQuality,
         Medium = Object.medQuality,
-        High = Object.highQuality
+        High = Object.highQuality,
+        Best = Object.bestQuality
     }
 }

@@ -310,7 +310,8 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             {
                 [ItemQuality.Low] = getPrice(new Object(item.parentSheetIndex, 1)),
                 [ItemQuality.Medium] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Medium)),
-                [ItemQuality.High] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.High))
+                [ItemQuality.High] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.High)),
+                [ItemQuality.Best] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Best))
             };
         }
 
