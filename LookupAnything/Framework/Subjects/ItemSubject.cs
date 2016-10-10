@@ -143,20 +143,20 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     List<string> summary = new List<string>();
 
                     // harvest
-                    summary.Add($"harvest after {daysToFirstHarvest} {GameHelper.Pluralise(daysToFirstHarvest, "day")}" + (crop.regrowAfterHarvest != -1 ? $", then every {GameHelper.Pluralise(crop.regrowAfterHarvest, "day", $"{crop.regrowAfterHarvest} days")}" : ""));
+                    summary.Add($"-harvest after {daysToFirstHarvest} {GameHelper.Pluralise(daysToFirstHarvest, "day")}" + (crop.regrowAfterHarvest != -1 ? $", then every {GameHelper.Pluralise(crop.regrowAfterHarvest, "day", $"{crop.regrowAfterHarvest} days")}" : ""));
 
                     // seasons
-                    summary.Add($"grows in {string.Join(", ", crop.seasonsToGrowIn)}");
+                    summary.Add($"-grows in {string.Join(", ", crop.seasonsToGrowIn)}");
 
                     // drops
                     if (crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops > 0)
-                        summary.Add($"drops {crop.minHarvest} to {crop.maxHarvest} ({Math.Round(crop.chanceForExtraCrops * 100, 2)}% chance of extra crops)");
+                        summary.Add($"-drops {crop.minHarvest} to {crop.maxHarvest} ({Math.Round(crop.chanceForExtraCrops * 100, 2)}% chance of extra crops)");
                     else if (crop.minHarvest > 1)
-                        summary.Add($"drops {crop.minHarvest}");
+                        summary.Add($"-drops {crop.minHarvest}");
 
                     // crop sale price
                     Item drop = GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest);
-                    summary.Add($"sells for {SaleValueField.GetSummary(this.GetSaleValue(drop, false), 1)}");
+                    summary.Add($"-sells for {SaleValueField.GetSummary(this.GetSaleValue(drop, false), 1)}");
 
                     // generate field
                     yield return new GenericField("Crop", string.Join(Environment.NewLine, summary));
