@@ -9,7 +9,6 @@ using Pathoschild.LookupAnything.Framework.Fields;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Monsters;
-using Object = StardewValley.Object;
 
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
@@ -162,25 +161,12 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <param name="npc">The NPC.</param>
         private IDictionary<GiftTaste, Item[]> GetGiftTastes(NPC npc)
         {
-            IDictionary<GiftTaste, List<Item>> tastes = new Dictionary<GiftTaste, List<Item>>();
-            foreach (var objectInfo in Game1.objectInformation)
-            {
-                Object item = GameHelper.GetObjectBySpriteIndex(objectInfo.Key);
-                if (!npc.canReceiveThisItemAsGift(item))
-                    continue;
-                try
-                {
-                    GiftTaste taste = (GiftTaste)npc.getGiftTasteForThisItem(item);
-                    if (!tastes.ContainsKey(taste))
-                        tastes[taste] = new List<Item>();
-                    tastes[taste].Add(item);
-                }
-                catch (Exception)
-                {
-                    // some NPCs (e.g. dog) claim to allow gifts, but crash if you check their preference
-                }
-            }
-            return tastes.ToDictionary(p => p.Key, p => p.Value.ToArray());
+            return GameHelper.GetGiftTastes(npc)
+                .GroupBy(entry => entry.Value) // gift taste
+                .ToDictionary(
+                    tasteGroup => tasteGroup.Key, // gift taste
+                    tasteGroup => tasteGroup.Select(entry => (Item)entry.Key).ToArray() // items
+                );
         }
     }
 }
