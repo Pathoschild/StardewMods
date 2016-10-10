@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Fields;
+using Pathoschild.LookupAnything.Framework.Models;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Monsters;
@@ -62,26 +63,19 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 case TargetType.Villager:
                     if (!metadata.Constants.AsocialVillagers.Contains(npc.getName()))
                     {
-                        bool isSpouse = Game1.player.spouse == npc.name;
+                        FriendshipModel friendship = DataParser.GetFriendshipForVillager(Game1.player, npc, metadata);
                         var giftTastes = this.GetGiftTastes(npc);
 
                         yield return new GenericField("Birthday", $"{Utility.capitalizeFirstLetter(npc.birthday_Season)} {npc.birthday_Day}");
-                        yield return new GenericField("Can romance", isSpouse ? "you're married! <" : GenericField.GetString(npc.datable));
+                        yield return new GenericField("Can romance", friendship.IsSpouse ? "you're married! <" : GenericField.GetString(npc.datable));
 
                         // friendship
                         if (Game1.player.friendships.ContainsKey(npc.name))
                         {
-                            // friendship
-                            int curFriendship = Game1.player.friendships[npc.name][0];
-                            if (isSpouse)
-                                yield return new CharacterFriendshipField("Friendship", curFriendship, NPC.friendshipPointsPerHeartLevel, metadata.Constants.SpouseMaxFriendship, metadata.Constants.SpouseFriendshipForStardrop);
-                            else
-                                yield return new CharacterFriendshipField("Friendship", curFriendship, NPC.friendshipPointsPerHeartLevel, NPC.maxFriendshipPoints);
-
-                            // socialising
+                            yield return new CharacterFriendshipField("Friendship", friendship);
                             yield return new GenericField("Talked today", Game1.player.friendships[npc.name][2] == 1);
                             yield return new GenericField("Gifted today", Game1.player.friendships[npc.name][3] > 0);
-                            if (!isSpouse)
+                            if (!friendship.IsSpouse)
                                 yield return new GenericField("Gifted this week", $"{Game1.player.friendships[npc.name][1]} of {NPC.maxGiftsPerWeek}");
                         }
                         else
@@ -93,7 +87,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
 
                 case TargetType.Pet:
                     Pet pet = (Pet)npc;
-                    yield return new CharacterFriendshipField("Love", pet.friendshipTowardFarmer, Pet.maxFriendship / 10, Pet.maxFriendship);
+                    yield return new CharacterFriendshipField("Love", DataParser.GetFriendshipForPet(Game1.player, pet));
                     yield return new GenericField("Petted today", GameHelper.GetPrivateField<bool>(pet, "wasPetToday"));
                     break;
 

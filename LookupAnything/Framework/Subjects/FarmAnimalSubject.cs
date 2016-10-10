@@ -47,7 +47,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             }
 
             // yield fields
-            yield return new CharacterFriendshipField("Love", animal.friendshipTowardFarmer, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints);
+            yield return new CharacterFriendshipField("Love", DataParser.GetFriendshipForAnimal(Game1.player, animal, metadata));
             yield return new PercentageBarField("Happiness", animal.happiness, byte.MaxValue, Color.Green, Color.Gray, $"{Math.Round(animal.happiness / (metadata.Constants.AnimalMaxHappiness * 1f) * 100)}%");
             yield return new GenericField("Mood today", animal.getMoodMessage());
             yield return new GenericField("Complaints", this.GetMoodReason(animal));

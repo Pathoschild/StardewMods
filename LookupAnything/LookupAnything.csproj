@@ -68,6 +68,7 @@
     <Compile Include="Framework\Constants\FenceType.cs" />
     <Compile Include="Framework\Constants\FruitTreeGrowthStage.cs" />
     <Compile Include="DataParser.cs" />
+    <Compile Include="Framework\Models\FriendshipModel.cs" />
     <Compile Include="Framework\Logging\CumulativeLog.cs" />
     <Compile Include="Framework\Data\ConstantData.cs" />
     <Compile Include="Framework\Data\ObjectContext.cs" />

@@ -24,7 +24,7 @@ namespace Pathoschild.LookupAnything.Framework.Models
         /// <summary>Construct an instance.</summary>
         /// <param name="taste">How much the target villager likes this item.</param>
         /// <param name="villager">The name of the target villager.</param>
-        /// <param name="refID">The item parent sprite index.</param>
+        /// <param name="itemID">The item parent sprite index.</param>
         public GiftTasteModel(GiftTaste taste, string villager, int itemID)
         {
             this.Taste = taste;

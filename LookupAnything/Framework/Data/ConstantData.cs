@@ -30,6 +30,9 @@ namespace Pathoschild.LookupAnything.Framework.Data
         /// <summary>The names of villagers with social data (e.g. birthdays or gift tastes).</summary>
         public string[] AsocialVillagers { get; set; }
 
+        /// <summary>The number of hearts for dateable NPCs which are locked until you give them a bouquet.</summary>
+        public int DatingHearts { get; set; }
+
         /// <summary>The maximum friendship points for a married NPC.</summary>
         public int SpouseMaxFriendship { get; set; }
 

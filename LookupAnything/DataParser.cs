@@ -6,6 +6,7 @@ using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Models;
 using StardewValley;
+using StardewValley.Characters;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
 
@@ -17,6 +18,32 @@ namespace Pathoschild.LookupAnything
         /*********
         ** Public methods
         *********/
+        /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
+        /// <param name="player">The player.</param>
+        /// <param name="npc">The NPC.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public static FriendshipModel GetFriendshipForVillager(Farmer player, NPC npc, Metadata metadata)
+        {
+            return new FriendshipModel(player, npc, metadata.Constants);
+        }
+
+        /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
+        /// <param name="player">The player.</param>
+        /// <param name="pet">The pet.</param>
+        public static FriendshipModel GetFriendshipForPet(Farmer player, Pet pet)
+        {
+            return new FriendshipModel(pet.friendshipTowardFarmer, Pet.maxFriendship / 10, Pet.maxFriendship);
+        }
+
+        /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
+        /// <param name="player">The player.</param>
+        /// <param name="animal">The farm animal.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public static FriendshipModel GetFriendshipForAnimal(Farmer player, FarmAnimal animal, Metadata metadata)
+        {
+            return new FriendshipModel(animal.friendshipTowardFarmer, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints);
+        }
+
         /// <summary>Parse gift tastes.</summary>
         /// <param name="objects">The game's object data.</param>
         /// <remarks>

@@ -99,10 +99,11 @@ file if you want. These are the available settings:
 * Fixed a few missing stones & weeds.
 
 1.5 (upcoming):
-* Added ability to lookup a villager from the calendar.
-* Added ability to lookup items from the chest menu.
+* You can now lookup a villager from the calendar.
+* You can now lookup items from an open chest.
 * Added cask aging schedule.
 * Added better fields when looking up your spouse.
+* Added bouquet handling to heart meter for dateable NPCs.
 * Added support for iridium quality introduced from Stardew Valley 1.1.1.
 * Added optional debug log.
 * Added option to suppress SMAPI's `F2` debug hotkey, which can have unintended consequences like skipping an entire season or teleporting into walls.
