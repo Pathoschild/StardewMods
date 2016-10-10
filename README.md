@@ -54,6 +54,7 @@ file if you want. These are the available settings:
 | `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll [see a small message at the bottom of the screen for a few seconds](screenshots/new-version-message.png). This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
 | `HideOnKeyUp`     | Default `false`. If enabled, the lookup window will be shown while you hold `F1` and disappear when you release it.
 | `DebugLog`        | Default `true`. Whether to log information to the console useful for troubleshooting issues.
+| `SuppressGameDebug` | Default `true`. Disables SMAPI's `F2` debug hotkey, which can have unintended consequences like skipping an entire season or teleporting into walls. See [SMAPI issue #120](https://github.com/cjsu/SMAPI/issues/120).
 
 ## Versions
 1.0:
@@ -104,6 +105,7 @@ file if you want. These are the available settings:
 * Added better fields when looking up your spouse.
 * Added support for iridium quality introduced from Stardew Valley 1.1.1.
 * Added optional debug log.
+* Added option to suppress SMAPI's `F2` debug hotkey, which can have unintended consequences like skipping an entire season or teleporting into walls.
 * Fixed gift tastes not handling precedence in conflicting game data.
 * Fixed error when screen resolution is too small to display lookup UI.
 * Fixed error when calculating a day offset that wraps into the next year.

@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Pathoschild.LookupAnything.Common;
@@ -122,6 +123,8 @@ namespace Pathoschild.LookupAnything
                     GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
                     GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
                     MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
+                    if (this.Config.SuppressGameDebug)
+                        GameEvents.HalfSecondTick += (sender, e) => this.SuppressGameDebug();
 
                     // hook up keyboard
                     if (this.Config.Keyboard.HasAny())
@@ -335,7 +338,15 @@ namespace Pathoschild.LookupAnything
             });
         }
 
-
+        /// <summary>Immediately suppress the game's debug mode if it's enabled.</summary>
+        private void SuppressGameDebug()
+        {
+            if (Game1.debugMode)
+            {
+                Game1.debugMode = false;
+                Game1.addHUDMessage(new HUDMessage("Suppressed SMAPI F2 debug mode. (You can disable this in LookupAnything's config.json.)", 2) { timeLeft = 1000, transparency = 0.75f, color = Color.Gray });
+            }
+        }
 
         /// <summary>Get a logger which collects messages for a discrete task and logs them as one entry when disposed.</summary>
         private ICumulativeLog GetTaskLog()
