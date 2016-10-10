@@ -92,31 +92,52 @@ namespace Pathoschild.LookupAnything
                 }
             }
 
-            // order by precedence
+            // order by precedence (lower is better)
             tastes = tastes
                 .OrderBy(entry =>
                 {
                     bool isPersonal = !entry.IsUniversal;
                     bool isSpecific = !entry.IsCategory;
 
+                    // precedence between preferences
+                    int precedence;
+                    switch (entry.Taste)
+                    {
+                        case GiftTaste.Love:
+                            precedence = 1;
+                            break;
+                        case GiftTaste.Hate:
+                            precedence = 2;
+                            break;
+                        case GiftTaste.Like:
+                            precedence = 3;
+                            break;
+                        case GiftTaste.Dislike:
+                            precedence = 4;
+                            break;
+                        default:
+                            precedence = 5;
+                            break;
+                    }
+
                     // personal taste by item ID
                     if (isPersonal && isSpecific)
-                        return 1;
+                        return 10 + precedence;
 
                     // else universal taste by item ID
                     if (entry.IsUniversal && isSpecific)
-                        return 2;
+                        return 20 + precedence;
 
                     // else personal taste by category
                     if (isPersonal)
-                        return 3;
+                        return 30 + precedence;
 
                     // else universal taste by category (if not neutral)
                     if (entry.IsUniversal && entry.Taste != GiftTaste.Neutral)
-                        return 4;
+                        return 40 + precedence;
 
                     // else
-                    return 5;
+                    return 50 + precedence;
                 })
                 .ToList();
 

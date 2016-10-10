@@ -104,6 +104,7 @@ file if you want. These are the available settings:
 * Added better fields when looking up your spouse.
 * Added support for iridium quality introduced from Stardew Valley 1.1.1.
 * Added optional debug log.
+* Fixed gift tastes not handling precedence in conflicting game data.
 * Fixed error when screen resolution is too small to display lookup UI.
 * Fixed error when calculating a day offset that wraps into the next year.
 * Fixed crash in edge case where an error occurs handling a mapped input key whose string representation contains characters not available in the sprite font.
