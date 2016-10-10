@@ -117,15 +117,14 @@ file if you want. These are the available settings:
 * You can now lookup a villager from the calendar.
 * You can now lookup items from an open chest.
 * Added cask aging schedule.
-* Added better fields when looking up your spouse.
-* Added bouquet handling to heart meter for dateable NPCs.
-* Added support for iridium quality introduced from Stardew Valley 1.1.1.
-* Added optional debug log.
+* Added better NPC friendship fields which account for dating and marriage.
+* Added marriage stardrop to heart meter.
+* Added support for new iridium quality.
+* Added debug log.
 * Added option to suppress SMAPI's `F2` debug hotkey, which can have unintended consequences like skipping an entire season or teleporting into walls.
-* Fixed gift tastes not handling precedence in conflicting game data.
+* Fixed gift tastes not handling precedence when NPCs are conflicted about how they feel.
 * Fixed error when screen resolution is too small to display lookup UI.
 * Fixed error when calculating a day offset that wraps into the next year.
-* Fixed crash in edge case where an error occurs handling a mapped input key whose string representation contains characters not available in the sprite font.
 * Fixed errors crashing the game in rare cases.
 
 ## Compiling the mod
