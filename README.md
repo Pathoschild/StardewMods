@@ -40,7 +40,14 @@ Here are some representative screenshots (layout and values will change dynamica
 | fence           | ![](screenshots/fence.png) |
 | fruit tree      | ![](screenshots/fruit-tree.png) |
 | wild tree       | ![](screenshots/wild-tree.png) |
-| mine objects    | ![](screenshots/mine-gem.png) ![](screenshots/mine-ore.png) ![](screenshots/mine-stone.png) ![](screenshots/mine-ice.png) |
+
+### Mine objects
+| object  | screenshots |
+| ------- | ----------- |
+| gem     | ![](screenshots/mine-gem.png) |
+| ore     | ![](screenshots/mine-ore.png) |
+| stone   | ![](screenshots/mine-stone.png) |
+| ice     | ![](screenshots/mine-ice.png) |
 
 ## Configuration
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
