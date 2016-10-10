@@ -1,4 +1,5 @@
-﻿using StardewValley;
+﻿using System.Collections.Generic;
+using Pathoschild.LookupAnything.Framework.Constants;
 
 namespace Pathoschild.LookupAnything.Framework.Data
 {
@@ -12,15 +13,15 @@ namespace Pathoschild.LookupAnything.Framework.Data
         ** Farm animals
         ****/
         /// <summary>The number of friendship points per level for a farm animal.</summary>
-        /// <remarks>Derived from <see cref="FarmAnimal.dayUpdate"/>.</remarks>
+        /// <remarks>Derived from <see cref="StardewValley.FarmAnimal.dayUpdate"/>.</remarks>
         public int AnimalFriendshipPointsPerLevel { get; set; }
 
         /// <summary>The maximum number of friendship points for a farm animal.</summary>
-        /// <remarks>Derived from <see cref="FarmAnimal.dayUpdate"/>.</remarks>
+        /// <remarks>Derived from <see cref="StardewValley.FarmAnimal.dayUpdate"/>.</remarks>
         public int AnimalFriendshipMaxPoints { get; set; }
 
         /// <summary>The maximum happiness points for a farm animal.</summary>
-        /// <remarks>Derived from <see cref="FarmAnimal.dayUpdate"/>.</remarks>
+        /// <remarks>Derived from <see cref="StardewValley.FarmAnimal.dayUpdate"/>.</remarks>
         public int AnimalMaxHappiness { get; set; }
 
         /****
@@ -39,11 +40,11 @@ namespace Pathoschild.LookupAnything.Framework.Data
         ** Players
         ****/
         /// <summary>The maximum experience points for a skill.</summary>
-        /// <remarks>Derived from <see cref="Farmer.checkForLevelGain"/>.</remarks>
+        /// <remarks>Derived from <see cref="StardewValley.Farmer.checkForLevelGain"/>.</remarks>
         public int PlayerMaxSkillPoints { get; set; }
 
         /// <summary>The experience points needed for each skill level.</summary>
-        /// <remarks>Derived from <see cref="Farmer.checkForLevelGain"/>.</remarks>
+        /// <remarks>Derived from <see cref="StardewValley.Farmer.checkForLevelGain"/>.</remarks>
         public int[] PlayerSkillPointsPerLevel { get; set; }
 
         /****
@@ -53,7 +54,14 @@ namespace Pathoschild.LookupAnything.Framework.Data
         public int DaysInSeason { get; set; }
 
         /// <summary>The fractional rate at which fences decay (calculated as minutes divided by this value).</summary>
-        /// <remarks>Derived from <see cref="Fence.minutesElapsed"/>.</remarks>
+        /// <remarks>Derived from <see cref="StardewValley.Fence.minutesElapsed"/>.</remarks>
         public float FenceDecayRate { get; set; }
+
+        /****
+        ** Crafting
+        ****/
+        /// <summary>The age thresholds for casks.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.Objects.Cask.checkForMaturity"/>.</remarks>
+        public IDictionary<ItemQuality, int> CaskAgeSchedule { get; set; }
     }
 }

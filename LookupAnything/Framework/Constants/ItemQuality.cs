@@ -10,4 +10,15 @@ namespace Pathoschild.LookupAnything.Framework.Constants
         Gold = Object.highQuality,
         Iridium = Object.bestQuality
     }
+
+    /// <summary>Extension methods for <see cref="ItemQuality"/>.</summary>
+    public static class ItemQualityExtensions
+    {
+        /// <summary>Get the quality name.</summary>
+        /// <param name="current">The quality.</param>
+        public static string GetName(this ItemQuality current)
+        {
+            return current.ToString().ToLower();
+        }
+    }
 }

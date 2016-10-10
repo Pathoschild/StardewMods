@@ -8,6 +8,7 @@ using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Fields;
 using Pathoschild.LookupAnything.Framework.Models;
 using StardewValley;
+using StardewValley.Objects;
 using Object = StardewValley.Object;
 
 namespace Pathoschild.LookupAnything.Framework.Subjects
@@ -164,7 +165,46 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
 
             // crafting
             if (obj?.heldObject != null)
-                yield return new ItemIconField("Crafting", obj.heldObject, $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + GenericField.GetString(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready"));
+            {
+                if (obj is Cask)
+                {
+                    // get cask data
+                    Cask cask = (Cask)obj;
+                    Object agingObj = cask.heldObject;
+                    ItemQuality currentQuality = (ItemQuality)agingObj.quality;
+
+                    // calculate aging schedule
+                    float effectiveAge = metadata.Constants.CaskAgeSchedule.Values.Max() - cask.daysToMature;
+                    var schedule =
+                        (
+                            from entry in metadata.Constants.CaskAgeSchedule
+                            let quality = entry.Key
+                            let baseDays = entry.Value
+                            where baseDays > effectiveAge
+                            orderby baseDays ascending
+                            let daysLeft = (int)Math.Ceiling((baseDays - effectiveAge) / cask.agingRate)
+                            select new
+                            {
+                                Quality = quality,
+                                DaysLeft = daysLeft,
+                                HarvestDate = GameHelper.GetDayOffset(daysLeft, metadata.Constants.DaysInSeason)
+                            }
+                        )
+                        .ToArray();
+
+                    // display fields
+                    yield return new ItemIconField("Contents", obj.heldObject);
+                    if (cask.minutesUntilReady <= 0 || !schedule.Any())
+                        yield return new GenericField("Aging", $"{currentQuality.GetName()} quality ready");
+                    else
+                    {
+                        string scheduleStr = string.Join(Environment.NewLine, (from entry in schedule select $"-{entry.Quality.GetName()} {GameHelper.Pluralise(entry.DaysLeft, "tomorrow", $"in {entry.DaysLeft} days")} ({entry.HarvestDate.Item1} {entry.HarvestDate.Item2})"));
+                        yield return new GenericField("Aging", $"-{currentQuality.GetName()} now (use pickaxe to stop aging){Environment.NewLine}" + scheduleStr);
+                    }
+                }
+                else
+                    yield return new ItemIconField("Contents", obj.heldObject, $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + GenericField.GetString(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready"));
+            }
 
             // item
             if (showInventoryFields)

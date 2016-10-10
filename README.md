@@ -36,6 +36,7 @@ Here are some representative screenshots (layout and values will change dynamica
 | object          | screenshots |
 | --------------- | ----------- |
 | crafting object | ![](screenshots/crafting.png) |
+| cask            | ![](screenshots/cask.png) |
 | fence           | ![](screenshots/fence.png) |
 | fruit tree      | ![](screenshots/fruit-tree.png) |
 | wild tree       | ![](screenshots/wild-tree.png) |
@@ -99,6 +100,7 @@ file if you want. These are the available settings:
 1.5 (upcoming):
 * Added ability to lookup a villager from the calendar.
 * Added ability to lookup items from the chest menu.
+* Added cask aging schedule.
 * Added better fields when looking up your spouse.
 * Added support for iridium quality introduced from Stardew Valley 1.1.1.
 * Added optional debug log.
