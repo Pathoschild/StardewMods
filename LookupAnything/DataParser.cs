@@ -143,8 +143,9 @@ namespace Pathoschild.LookupAnything
 
             // get effective tastes
             {
-                // get category => item ID lookup
-                IDictionary<int, int[]> categoryItems =
+                // get item lookups
+                IDictionary<int, ObjectModel> objectsByID = objects.ToDictionary(p => p.ParentSpriteIndex);
+                IDictionary<int, int[]> objectsByCategory =
                     (
                         from entry in objects
                         where entry.Category < 0
@@ -157,11 +158,15 @@ namespace Pathoschild.LookupAnything
                 IDictionary<string, HashSet<int>> seenItemIDs = giftableVillagers.ToDictionary(name => name, name => new HashSet<int>());
                 foreach (RawGiftTasteModel entry in tastes)
                 {
+                    // ignore nonexistent items
+                    if (entry.IsCategory && !objectsByCategory.ContainsKey(entry.RefID))
+                        continue;
+                    if (!entry.IsCategory && !objectsByID.ContainsKey(entry.RefID))
+                        continue;
+
                     // get item IDs
-                    if (entry.IsCategory && !categoryItems.ContainsKey(entry.RefID))
-                        continue; // game lists some invalid categories in NPC gift tastes
                     int[] itemIDs = entry.IsCategory
-                        ? categoryItems[entry.RefID]
+                        ? objectsByCategory[entry.RefID]
                         : new[] { entry.RefID };
 
                     // get affected villagers
