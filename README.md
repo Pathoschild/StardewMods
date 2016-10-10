@@ -41,7 +41,6 @@ Here are some representative screenshots (layout and values will change dynamica
 | fruit tree      | ![](screenshots/fruit-tree.png) |
 | wild tree       | ![](screenshots/wild-tree.png) |
 | mine objects    | ![](screenshots/mine-gem.png) ![](screenshots/mine-ore.png) ![](screenshots/mine-stone.png) ![](screenshots/mine-ice.png) |
-| ...             | ![](screenshots/artifact-spot.png) |
 
 ## Configuration
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
