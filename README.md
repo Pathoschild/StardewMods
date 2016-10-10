@@ -4,6 +4,15 @@ will be ready to harvest, how long a fence will last, why your farm animals are 
 
 ![](screenshots/animated.gif)
 
+## Contents
+* [Installation](#installation)
+* [Usage](#usage)
+* [Examples](#examples)
+* [Configuration](#configuration)
+* [Versions](#versions)
+* [Compiling the mod](#compiling-the-mod)
+* [See also](#see-also)
+
 ## Installation
 1. Install [SMAPI](https://github.com/ClxS/SMAPI) (0.40+).
 2. [Install this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/541/).
