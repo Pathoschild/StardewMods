@@ -300,7 +300,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             {
                 ItemQuality quality = qualityIsKnown && item is Object
                     ? (ItemQuality)((Object)item).quality
-                    : ItemQuality.Low;
+                    : ItemQuality.Normal;
 
                 return new Dictionary<ItemQuality, int> { [quality] = getPrice(item) };
             }
@@ -308,10 +308,10 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             // multiple qualities
             return new Dictionary<ItemQuality, int>
             {
-                [ItemQuality.Low] = getPrice(new Object(item.parentSheetIndex, 1)),
-                [ItemQuality.Medium] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Medium)),
-                [ItemQuality.High] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.High)),
-                [ItemQuality.Best] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Best))
+                [ItemQuality.Normal] = getPrice(new Object(item.parentSheetIndex, 1)),
+                [ItemQuality.Silver] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
+                [ItemQuality.Gold] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Gold)),
+                [ItemQuality.Iridium] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Iridium))
             };
         }
 
