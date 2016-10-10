@@ -1,7 +1,7 @@
 ﻿namespace Pathoschild.LookupAnything.Framework.Data
 {
     /// <summary>A loot entry parsed from the game data.</summary>
-    public class ItemDropData
+    internal class ItemDropData
     {
         /*********
         ** Accessors

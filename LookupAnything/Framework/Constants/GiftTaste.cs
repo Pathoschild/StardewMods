@@ -3,7 +3,7 @@ using StardewValley;
 namespace Pathoschild.LookupAnything.Framework.Constants
 {
     /// <summary>Indicates how much an NPC likes a particular gift.</summary>
-    public enum GiftTaste
+    internal enum GiftTaste
     {
         Hate = NPC.gift_taste_hate,
         Dislike = NPC.gift_taste_dislike,

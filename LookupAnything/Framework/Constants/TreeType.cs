@@ -3,7 +3,7 @@ using StardewValley.TerrainFeatures;
 namespace Pathoschild.LookupAnything.Framework.Constants
 {
     /// <summary>Indicates a tree type.</summary>
-    public enum TreeType
+    internal enum TreeType
     {
         Oak = Tree.bushyTree,
         Maple = Tree.leafyTree,
