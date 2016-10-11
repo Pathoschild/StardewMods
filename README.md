@@ -113,7 +113,7 @@ file if you want. These are the available settings:
   * updated to latest binaries & increased minimum versions.
 * Fixed a few missing stones & weeds.
 
-1.5 (upcoming):
+1.5:
 * You can now lookup a villager from the calendar.
 * You can now lookup items from an open chest.
 * Added cask aging schedule.
