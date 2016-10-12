@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI.Events;
 using StardewValley;
+using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace ChestsAnywhere.Menus.Overlays
 {
@@ -16,6 +17,9 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <summary>The last mouse state.</summary>
         private MouseState LastMouseState;
 
+        /// <summary>The last viewport bounds.</summary>
+        private Rectangle LastViewport;
+
         /// <summary>Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</summary>
         private readonly Func<bool> KeepAliveCheck;
 
@@ -27,7 +31,7 @@ namespace ChestsAnywhere.Menus.Overlays
         public void Dispose()
         {
             GraphicsEvents.OnPostRenderGuiEvent -= this.OnPostRenderGuiEvent;
-            GameEvents.UpdateTick -= this.OnUpdateTicket;
+            GameEvents.UpdateTick -= this.OnUpdateTick;
             ControlEvents.KeyPressed -= this.OnKeyPressed;
             ControlEvents.ControllerButtonPressed -= this.OnControllerButtonPressed;
         }
@@ -44,8 +48,9 @@ namespace ChestsAnywhere.Menus.Overlays
         protected BaseOverlay(Func<bool> keepAlive = null)
         {
             this.KeepAliveCheck = keepAlive;
+            this.LastViewport = new Rectangle(Game1.viewport.X, Game1.viewport.Y, Game1.viewport.Width, Game1.viewport.Height);
             GraphicsEvents.OnPostRenderGuiEvent += this.OnPostRenderGuiEvent;
-            GameEvents.UpdateTick += this.OnUpdateTicket;
+            GameEvents.UpdateTick += this.OnUpdateTick;
             ControlEvents.KeyPressed += this.OnKeyPressed;
             ControlEvents.ControllerButtonPressed += this.OnControllerButtonPressed;
         }
@@ -72,6 +77,11 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <param name="y">The cursor's Y position.</param>
         protected virtual void ReceiveCursorHover(int x, int y) { }
 
+        /// <summary>The method invoked when the player resizes the game windoww.</summary>
+        /// <param name="oldBounds">The previous game window bounds.</param>
+        /// <param name="newBounds">The new game window bounds.</param>
+        protected virtual void ReceiveGameWindowResized(Rectangle oldBounds, Rectangle newBounds) { }
+
         /// <summary>Draw the mouse cursor.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Menus.IClickableMenu.drawMouse"/>.</remarks>
         protected void DrawCursor()
@@ -95,13 +105,22 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <summary>The method called once per event tick.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void OnUpdateTicket(object sender, EventArgs e)
+        private void OnUpdateTick(object sender, EventArgs e)
         {
             // detect end of life
             if (this.KeepAliveCheck != null && !this.KeepAliveCheck())
             {
                 this.Dispose();
                 return;
+            }
+
+            // trigger window resize event
+            Rectangle newViewport = Game1.viewport;
+            if (this.LastViewport.Width != newViewport.Width || this.LastViewport.Height != newViewport.Height)
+            {
+                newViewport = new Rectangle(newViewport.X, newViewport.Y, newViewport.Width, newViewport.Height);
+                this.ReceiveGameWindowResized(this.LastViewport, newViewport);
+                this.LastViewport = newViewport;
             }
 
             // trigger mouse events
