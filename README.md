@@ -4,6 +4,15 @@ will be ready to harvest, how long a fence will last, why your farm animals are 
 
 ![](screenshots/animated.gif)
 
+## Contents
+* [Installation](#installation)
+* [Usage](#usage)
+* [Examples](#examples)
+* [Configuration](#configuration)
+* [Versions](#versions)
+* [Compiling the mod](#compiling-the-mod)
+* [See also](#see-also)
+
 ## Installation
 1. Install [SMAPI](https://github.com/ClxS/SMAPI) (0.40+).
 2. [Install this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/541/).
@@ -36,11 +45,18 @@ Here are some representative screenshots (layout and values will change dynamica
 | object          | screenshots |
 | --------------- | ----------- |
 | crafting object | ![](screenshots/crafting.png) |
+| cask            | ![](screenshots/cask.png) |
 | fence           | ![](screenshots/fence.png) |
 | fruit tree      | ![](screenshots/fruit-tree.png) |
 | wild tree       | ![](screenshots/wild-tree.png) |
-| mine objects    | ![](screenshots/mine-gem.png) ![](screenshots/mine-ore.png) ![](screenshots/mine-stone.png) ![](screenshots/mine-ice.png) |
-| ...             | ![](screenshots/artifact-spot.png) |
+
+### Mine objects
+| object  | screenshots |
+| ------- | ----------- |
+| gem     | ![](screenshots/mine-gem.png) |
+| ore     | ![](screenshots/mine-ore.png) |
+| stone   | ![](screenshots/mine-stone.png) |
+| ice     | ![](screenshots/mine-ice.png) |
 
 ## Configuration
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
@@ -53,6 +69,7 @@ file if you want. These are the available settings:
 | `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll [see a small message at the bottom of the screen for a few seconds](screenshots/new-version-message.png). This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
 | `HideOnKeyUp`     | Default `false`. If enabled, the lookup window will be shown while you hold `F1` and disappear when you release it.
 | `DebugLog`        | Default `true`. Whether to log information to the console useful for troubleshooting issues.
+| `SuppressGameDebug` | Default `true`. Disables SMAPI's `F2` debug hotkey, which can have unintended consequences like skipping an entire season or teleporting into walls. See [SMAPI issue #120](https://github.com/cjsu/SMAPI/issues/120).
 
 ## Versions
 1.0:
@@ -96,9 +113,19 @@ file if you want. These are the available settings:
   * updated to latest binaries & increased minimum versions.
 * Fixed a few missing stones & weeds.
 
-1.5 (upcoming):
-* added ability to lookup a villager from the calendar.
-* added optional debug log.
+1.5:
+* You can now lookup a villager from the calendar.
+* You can now lookup items from an open chest.
+* Added cask aging schedule.
+* Added better NPC friendship fields which account for dating and marriage.
+* Added marriage stardrop to heart meter.
+* Added support for new iridium quality.
+* Added debug log.
+* Added option to suppress SMAPI's `F2` debug hotkey, which can have unintended consequences like skipping an entire season or teleporting into walls.
+* Fixed gift tastes not handling precedence when NPCs are conflicted about how they feel.
+* Fixed error when screen resolution is too small to display lookup UI.
+* Fixed error when calculating a day offset that wraps into the next year.
+* Fixed errors crashing the game in rare cases.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is

@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Components;
+using Pathoschild.LookupAnything.Framework.Models;
 using StardewValley;
 
 namespace Pathoschild.LookupAnything.Framework.Fields
@@ -12,14 +13,8 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /*********
         ** Properties
         *********/
-        /// <summary>The player's current friendship points with the NPC.</summary>
-        private readonly int FriendshipPoints;
-
-        /// <summary>The number of friendship points per heart level.</summary>
-        private readonly int PointsPerLevel;
-
-        /// <summary>The maximum number of friendship points.</summary>
-        private readonly int MaxPoints;
+        /// <summary>The player's current friendship data with the NPC.</summary>
+        private readonly FriendshipModel Friendship;
 
 
         /*********
@@ -27,15 +22,11 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
-        /// <param name="friendshipPoints">The player's current friendship points with the NPC.</param>
-        /// <param name="pointsPerLevel">The number of points per heart level.</param>
-        /// <param name="maxPoints">The maximum number of points.</param>
-        public CharacterFriendshipField(string label, int friendshipPoints, int pointsPerLevel, int maxPoints)
+        /// <param name="friendship">The player's current friendship data with the NPC.</param>
+        public CharacterFriendshipField(string label, FriendshipModel friendship)
             : base(label, null, hasValue: true)
         {
-            this.FriendshipPoints = friendshipPoints;
-            this.PointsPerLevel = pointsPerLevel;
-            this.MaxPoints = maxPoints;
+            this.Friendship = friendship;
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
@@ -46,30 +37,63 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <returns>Returns the drawn dimensions, or <c>null</c> to draw the <see cref="GenericField.Value"/> using the default format.</returns>
         public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
         {
-            // get points
-            int filledHearts = this.FriendshipPoints / this.PointsPerLevel;
-            int emptyHearts = (this.MaxPoints / this.PointsPerLevel) - filledHearts;
+            FriendshipModel friendship = this.Friendship;
 
             // draw hearts
             float leftOffset = 0;
-            for (int i = 0; i < filledHearts; i++)
+            for (int i = 0; i < friendship.TotalHearts; i++)
             {
-                spriteBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.FilledHeart, position.X + leftOffset, position.Y, scale: Game1.pixelZoom);
+                // get icon
+                Color color;
+                Rectangle icon;
+                if (friendship.LockedHearts >= friendship.TotalHearts - i)
+                {
+                    icon = Sprites.Icons.FilledHeart;
+                    color = Color.Black * 0.35f;
+                }
+                else if (i >= friendship.FilledHearts)
+                {
+                    icon = Sprites.Icons.EmptyHeart;
+                    color = Color.White;
+                }
+                else
+                {
+                    icon = Sprites.Icons.FilledHeart;
+                    color = Color.White;
+                }
+
+                // draw
+                spriteBatch.DrawSprite(Sprites.Icons.Sheet, icon, position.X + leftOffset, position.Y, color, Game1.pixelZoom);
                 leftOffset += Sprites.Icons.FilledHeart.Width * Game1.pixelZoom;
             }
-            for (int i = 0; i < emptyHearts; i++)
+
+            // draw stardrop (if applicable)
+            if (friendship.HasStardrop)
             {
-                spriteBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.EmptyHeart, position.X + leftOffset, position.Y, scale: Game1.pixelZoom);
-                leftOffset += Sprites.Icons.FilledHeart.Width * Game1.pixelZoom;
+                leftOffset += 1;
+                float zoom = (Sprites.Icons.EmptyHeart.Height / (Sprites.Icons.Stardrop.Height * 1f)) * Game1.pixelZoom;
+                spriteBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.Stardrop, position.X + leftOffset, position.Y, Color.White * 0.25f, zoom);
+                leftOffset += Sprites.Icons.Stardrop.Width * zoom;
+            }
+
+            // get caption text
+            string caption = null;
+            if (this.Friendship.EmptyHearts == 0 && this.Friendship.LockedHearts > 0)
+                caption = "(need bouquet for next)";
+            else
+            {
+                int pointsToNext = this.Friendship.GetPointsToNext();
+                if (pointsToNext > 0)
+                    caption = $"(next in {pointsToNext} pts)";
             }
 
             // draw caption
             float spaceSize = DrawHelper.GetSpaceWidth(font);
-            Vector2 textSize = this.FriendshipPoints < this.MaxPoints
-                ? spriteBatch.DrawTextBlock(font, $"(next in {this.PointsPerLevel - (this.FriendshipPoints % this.PointsPerLevel)} pts)", new Vector2(position.X + leftOffset + spaceSize, position.Y), wrapWidth - leftOffset)
-                : Vector2.Zero;
+            Vector2 textSize = Vector2.Zero;
+            if (caption != null)
+                textSize = spriteBatch.DrawTextBlock(font, caption, new Vector2(position.X + leftOffset + spaceSize, position.Y), wrapWidth - leftOffset);
 
-            return new Vector2(Math.Max(Sprites.Icons.FilledHeart.Height, textSize.X + spaceSize), Math.Max(Sprites.Icons.FilledHeart.Height * Game1.pixelZoom, textSize.Y));
+            return new Vector2(Sprites.Icons.FilledHeart.Width * Game1.pixelZoom * this.Friendship.TotalHearts + textSize.X + spaceSize, Math.Max(Sprites.Icons.FilledHeart.Height * Game1.pixelZoom, textSize.Y));
         }
     }
 }

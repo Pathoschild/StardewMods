@@ -6,10 +6,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Fields;
+using Pathoschild.LookupAnything.Framework.Models;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Monsters;
-using Object = StardewValley.Object;
 
 namespace Pathoschild.LookupAnything.Framework.Subjects
 {
@@ -63,13 +63,23 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 case TargetType.Villager:
                     if (!metadata.Constants.AsocialVillagers.Contains(npc.getName()))
                     {
+                        FriendshipModel friendship = DataParser.GetFriendshipForVillager(Game1.player, npc, metadata);
                         var giftTastes = this.GetGiftTastes(npc);
+
                         yield return new GenericField("Birthday", $"{Utility.capitalizeFirstLetter(npc.birthday_Season)} {npc.birthday_Day}");
-                        yield return new GenericField("Can romance", npc.datable);
-                        yield return new CharacterFriendshipField("Friendship", Game1.player.friendships[npc.name][0], NPC.friendshipPointsPerHeartLevel, NPC.maxFriendshipPoints);
-                        yield return new GenericField("Talked today", Game1.player.friendships[npc.name][2] == 1);
-                        yield return new GenericField("Gifted today", Game1.player.friendships[npc.name][3] > 0);
-                        yield return new GenericField("Gifted this week", $"{Game1.player.friendships[npc.name][1]} of {NPC.maxGiftsPerWeek}");
+                        yield return new GenericField("Can romance", friendship.IsSpouse ? "you're married! <" : GenericField.GetString(npc.datable));
+
+                        // friendship
+                        if (Game1.player.friendships.ContainsKey(npc.name))
+                        {
+                            yield return new CharacterFriendshipField("Friendship", friendship);
+                            yield return new GenericField("Talked today", Game1.player.friendships[npc.name][2] == 1);
+                            yield return new GenericField("Gifted today", Game1.player.friendships[npc.name][3] > 0);
+                            if (!friendship.IsSpouse)
+                                yield return new GenericField("Gifted this week", $"{Game1.player.friendships[npc.name][1]} of {NPC.maxGiftsPerWeek}");
+                        }
+                        else
+                            yield return new GenericField("Friendship", "You haven't met them yet.");
                         yield return new CharacterGiftTastesField("Loves gifts", giftTastes, GiftTaste.Love);
                         yield return new CharacterGiftTastesField("Likes gifts", giftTastes, GiftTaste.Like);
                     }
@@ -77,7 +87,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
 
                 case TargetType.Pet:
                     Pet pet = (Pet)npc;
-                    yield return new CharacterFriendshipField("Love", pet.friendshipTowardFarmer, Pet.maxFriendship / 10, Pet.maxFriendship);
+                    yield return new CharacterFriendshipField("Love", DataParser.GetFriendshipForPet(Game1.player, pet));
                     yield return new GenericField("Petted today", GameHelper.GetPrivateField<bool>(pet, "wasPetToday"));
                     break;
 
@@ -145,25 +155,12 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <param name="npc">The NPC.</param>
         private IDictionary<GiftTaste, Item[]> GetGiftTastes(NPC npc)
         {
-            IDictionary<GiftTaste, List<Item>> tastes = new Dictionary<GiftTaste, List<Item>>();
-            foreach (var objectInfo in Game1.objectInformation)
-            {
-                Object item = GameHelper.GetObjectBySpriteIndex(objectInfo.Key);
-                if (!npc.canReceiveThisItemAsGift(item))
-                    continue;
-                try
-                {
-                    GiftTaste taste = (GiftTaste)npc.getGiftTasteForThisItem(item);
-                    if (!tastes.ContainsKey(taste))
-                        tastes[taste] = new List<Item>();
-                    tastes[taste].Add(item);
-                }
-                catch (Exception)
-                {
-                    // some NPCs (e.g. dog) claim to allow gifts, but crash if you check their preference
-                }
-            }
-            return tastes.ToDictionary(p => p.Key, p => p.Value.ToArray());
+            return GameHelper.GetGiftTastes(npc)
+                .GroupBy(entry => entry.Value) // gift taste
+                .ToDictionary(
+                    tasteGroup => tasteGroup.Key, // gift taste
+                    tasteGroup => tasteGroup.Select(entry => (Item)entry.Key).ToArray() // items
+                );
         }
     }
 }

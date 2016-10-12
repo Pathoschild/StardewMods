@@ -143,20 +143,20 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     List<string> summary = new List<string>();
 
                     // harvest
-                    summary.Add($"harvest after {daysToFirstHarvest} {GameHelper.Pluralise(daysToFirstHarvest, "day")}" + (crop.regrowAfterHarvest != -1 ? $", then every {GameHelper.Pluralise(crop.regrowAfterHarvest, "day", $"{crop.regrowAfterHarvest} days")}" : ""));
+                    summary.Add($"-harvest after {daysToFirstHarvest} {GameHelper.Pluralise(daysToFirstHarvest, "day")}" + (crop.regrowAfterHarvest != -1 ? $", then every {GameHelper.Pluralise(crop.regrowAfterHarvest, "day", $"{crop.regrowAfterHarvest} days")}" : ""));
 
                     // seasons
-                    summary.Add($"grows in {string.Join(", ", crop.seasonsToGrowIn)}");
+                    summary.Add($"-grows in {string.Join(", ", crop.seasonsToGrowIn)}");
 
                     // drops
                     if (crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops > 0)
-                        summary.Add($"drops {crop.minHarvest} to {crop.maxHarvest} ({Math.Round(crop.chanceForExtraCrops * 100, 2)}% chance of extra crops)");
+                        summary.Add($"-drops {crop.minHarvest} to {crop.maxHarvest} ({Math.Round(crop.chanceForExtraCrops * 100, 2)}% chance of extra crops)");
                     else if (crop.minHarvest > 1)
-                        summary.Add($"drops {crop.minHarvest}");
+                        summary.Add($"-drops {crop.minHarvest}");
 
                     // crop sale price
                     Item drop = GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest);
-                    summary.Add($"sells for {SaleValueField.GetSummary(this.GetSaleValue(drop, false), 1)}");
+                    summary.Add($"-sells for {SaleValueField.GetSummary(this.GetSaleValue(drop, false), 1)}");
 
                     // generate field
                     yield return new GenericField("Crop", string.Join(Environment.NewLine, summary));
@@ -165,7 +165,46 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
 
             // crafting
             if (obj?.heldObject != null)
-                yield return new ItemIconField("Crafting", obj.heldObject, $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + GenericField.GetString(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready"));
+            {
+                if (obj is Cask)
+                {
+                    // get cask data
+                    Cask cask = (Cask)obj;
+                    Object agingObj = cask.heldObject;
+                    ItemQuality currentQuality = (ItemQuality)agingObj.quality;
+
+                    // calculate aging schedule
+                    float effectiveAge = metadata.Constants.CaskAgeSchedule.Values.Max() - cask.daysToMature;
+                    var schedule =
+                        (
+                            from entry in metadata.Constants.CaskAgeSchedule
+                            let quality = entry.Key
+                            let baseDays = entry.Value
+                            where baseDays > effectiveAge
+                            orderby baseDays ascending
+                            let daysLeft = (int)Math.Ceiling((baseDays - effectiveAge) / cask.agingRate)
+                            select new
+                            {
+                                Quality = quality,
+                                DaysLeft = daysLeft,
+                                HarvestDate = GameHelper.GetDayOffset(daysLeft, metadata.Constants.DaysInSeason)
+                            }
+                        )
+                        .ToArray();
+
+                    // display fields
+                    yield return new ItemIconField("Contents", obj.heldObject);
+                    if (cask.minutesUntilReady <= 0 || !schedule.Any())
+                        yield return new GenericField("Aging", $"{currentQuality.GetName()} quality ready");
+                    else
+                    {
+                        string scheduleStr = string.Join(Environment.NewLine, (from entry in schedule select $"-{entry.Quality.GetName()} {GameHelper.Pluralise(entry.DaysLeft, "tomorrow", $"in {entry.DaysLeft} days")} ({entry.HarvestDate.Item1} {entry.HarvestDate.Item2})"));
+                        yield return new GenericField("Aging", $"-{currentQuality.GetName()} now (use pickaxe to stop aging){Environment.NewLine}" + scheduleStr);
+                    }
+                }
+                else
+                    yield return new ItemIconField("Contents", obj.heldObject, $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + GenericField.GetString(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready"));
+            }
 
             // item
             if (showInventoryFields)
@@ -305,7 +344,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             {
                 ItemQuality quality = qualityIsKnown && item is Object
                     ? (ItemQuality)((Object)item).quality
-                    : ItemQuality.Low;
+                    : ItemQuality.Normal;
 
                 return new Dictionary<ItemQuality, int> { [quality] = getPrice(item) };
             }
@@ -313,9 +352,10 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             // multiple qualities
             return new Dictionary<ItemQuality, int>
             {
-                [ItemQuality.Low] = getPrice(new Object(item.parentSheetIndex, 1)),
-                [ItemQuality.Medium] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Medium)),
-                [ItemQuality.High] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.High))
+                [ItemQuality.Normal] = getPrice(new Object(item.parentSheetIndex, 1)),
+                [ItemQuality.Silver] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
+                [ItemQuality.Gold] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Gold)),
+                [ItemQuality.Iridium] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Iridium))
             };
         }
 

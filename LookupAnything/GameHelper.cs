@@ -84,8 +84,8 @@ namespace Pathoschild.LookupAnything
                 int curSeasonIndex = Array.IndexOf(seasons, Game1.currentSeason);
                 if (curSeasonIndex == -1)
                     throw new InvalidOperationException($"The current season '{Game1.currentSeason}' wasn't recognised.");
-                season = seasons[curSeasonIndex + (day / daysInSeason) % seasons.Length];
-                day = day % daysInSeason;
+                season = seasons[(curSeasonIndex + day / daysInSeason) % seasons.Length];
+                day %= daysInSeason;
             }
 
             return Tuple.Create(season, day);
@@ -247,6 +247,36 @@ namespace Pathoschild.LookupAnything
         }
 
         /****
+        ** Error handling
+        ****/
+        /// <summary>Intercept errors thrown by the action.</summary>
+        /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up"). This is displayed on the screen, so it should be simple and avoid characters that might not be available in the sprite font.</param>
+        /// <param name="action">The action to invoke.</param>
+        /// <param name="onError">A callback invoked if an error is intercepted.</param>
+        public static void InterceptErrors(string verb, Action action, Action<Exception> onError = null)
+        {
+            GameHelper.InterceptErrors(verb, null, action, onError);
+        }
+
+        /// <summary>Intercept errors thrown by the action.</summary>
+        /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up"). This is displayed on the screen, so it should be simple and avoid characters that might not be available in the sprite font.</param>
+        /// <param name="detailedVerb">A more detailed form of <see cref="verb"/> if applicable. This is displayed in the log, so it can be more technical and isn't constrained by the sprite font.</param>
+        /// <param name="action">The action to invoke.</param>
+        /// <param name="onError">A callback invoked if an error is intercepted.</param>
+        public static void InterceptErrors(string verb, string detailedVerb, Action action, Action<Exception> onError = null)
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                GameHelper.HandleError(ex, verb, detailedVerb);
+                onError?.Invoke(ex);
+            }
+        }
+
+        /****
         ** Formatting
         ****/
         /// <summary>Select the correct plural form for a word.</summary>
@@ -387,6 +417,21 @@ namespace Pathoschild.LookupAnything
         public static void ShowErrorMessage(string message)
         {
             CommonHelper.ShowErrorMessage(message);
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Log an error and warn the user.</summary>
+        /// <param name="ex">The exception to handle.</param>
+        /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up"). This is displayed on the screen, so it should be simple and avoid characters that might not be available in the sprite font.</param>
+        /// <param name="detailedVerb">A more detailed form of <see cref="verb"/> if applicable. This is displayed in the log, so it can be more technical and isn't constrained by the sprite font.</param>
+        private static void HandleError(Exception ex, string verb, string detailedVerb = null)
+        {
+            detailedVerb = detailedVerb ?? verb;
+            Log.Error($"[Lookup Anything] Something went wrong {detailedVerb}:{Environment.NewLine}{ex}");
+            GameHelper.ShowErrorMessage($"Huh. Something went wrong {verb}. The game error log has the technical details.");
         }
     }
 }

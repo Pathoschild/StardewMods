@@ -1,6 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Pathoschild.LookupAnything.Common;
@@ -123,6 +123,8 @@ namespace Pathoschild.LookupAnything
                     GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
                     GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
                     MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
+                    if (this.Config.SuppressGameDebug)
+                        GameEvents.HalfSecondTick += (sender, e) => this.SuppressGameDebug();
 
                     // hook up keyboard
                     if (this.Config.Keyboard.HasAny())
@@ -165,7 +167,7 @@ namespace Pathoschild.LookupAnything
             {
                 Task.Factory.StartNew(() =>
                 {
-                    try
+                    GameHelper.InterceptErrors("checking for a newer version", () =>
                     {
                         using (ICumulativeLog log = this.GetTaskLog())
                         {
@@ -180,11 +182,7 @@ namespace Pathoschild.LookupAnything
                             else
                                 log.AppendLine("no update available.");
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        this.HandleError(ex, "checking for a newer version");
-                    }
+                    });
                 });
             }
         }
@@ -198,9 +196,9 @@ namespace Pathoschild.LookupAnything
             if (!map.IsValidKey(key))
                 return;
 
-            try
+            // perform bound action
+            GameHelper.InterceptErrors("handling your input", $"handling input '{key}'", () =>
             {
-                // perform bound action
                 if (key.Equals(map.ToggleLookup))
                     this.ToggleLookup();
                 if (key.Equals(map.ScrollUp))
@@ -211,11 +209,7 @@ namespace Pathoschild.LookupAnything
                     this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
                 else if (key.Equals(map.ToggleSearch))
                     this.ToggleSearch();
-            }
-            catch (Exception ex)
-            {
-                this.HandleError(ex, $"handling input '{key}'.");
-            }
+            });
         }
 
         /// <summary>The method invoked when the player presses an input button.</summary>
@@ -227,34 +221,27 @@ namespace Pathoschild.LookupAnything
             if (!map.IsValidKey(key))
                 return;
 
-            try
+            // perform bound action
+            GameHelper.InterceptErrors("handling your input", $"handling input '{key}'", () =>
             {
                 if (key.Equals(map.ToggleLookup))
                     this.HideLookup();
-            }
-            catch (Exception ex)
-            {
-                this.HandleError(ex, $"handling input '{key}'.");
-            }
+            });
         }
 
         /// <summary>The method invoked when the player closes a displayed menu.</summary>
         /// <param name="closedMenu">The menu which the player just closed.</param>
         private void ReceiveMenuClosed(IClickableMenu closedMenu)
         {
-            try
+            // restore the previous menu if it was hidden to show the lookup UI
+            GameHelper.InterceptErrors("restoring the previous menu", () =>
             {
-                // restore the previous menu if it was hidden to display the lookup UI.
                 if (closedMenu is LookupMenu && this.PreviousMenu != null)
                 {
                     Game1.activeClickableMenu = this.PreviousMenu;
                     this.PreviousMenu = null;
                 }
-            }
-            catch (Exception ex)
-            {
-                this.HandleError(ex, "restoring the previous menu");
-            }
+            });
         }
 
         /// <summary>The method invoked when the interface is rendering.</summary>
@@ -263,17 +250,7 @@ namespace Pathoschild.LookupAnything
         {
             // render debug interface
             if (this.DebugInterface.Enabled)
-            {
-                try
-                {
-                    this.DebugInterface.Draw(spriteBatch);
-                }
-                catch (Exception ex)
-                {
-                    GameHelper.ShowErrorMessage("Huh. Something went wrong drawing the debug info. The game error log has the technical details.");
-                    Log.Error(ex.ToString());
-                }
-            }
+                this.DebugInterface.Draw(spriteBatch);
 
             // render update warning
             if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning && this.NewRelease != null)
@@ -298,12 +275,12 @@ namespace Pathoschild.LookupAnything
         /// <summary>Show the lookup UI for the current target.</summary>
         private void ShowLookup()
         {
-            using (ICumulativeLog log = this.GetTaskLog())
+            GameHelper.InterceptErrors("looking that up", () =>
             {
-                log.Append("Lookup Anything received a lookup request. ");
-
-                try
+                using (ICumulativeLog log = this.GetTaskLog())
                 {
+                    log.Append("Lookup Anything received a lookup request. ");
+
                     // validate version
                     string versionError = GameHelper.ValidateGameVersion();
                     if (versionError != null)
@@ -337,28 +314,20 @@ namespace Pathoschild.LookupAnything
                     this.PreviousMenu = Game1.activeClickableMenu;
                     Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata);
                 }
-                catch (Exception ex)
-                {
-                    this.HandleError(ex, "looking that up");
-                }
-            }
+            });
         }
 
         /// <summary>Show the lookup UI for the current target.</summary>
         private void HideLookup()
         {
-            try
+            GameHelper.InterceptErrors("closing the menu", () =>
             {
                 if (Game1.activeClickableMenu is LookupMenu)
                 {
                     Game1.playSound("bigDeSelect"); // match default behaviour when closing a menu
                     Game1.activeClickableMenu = null;
                 }
-            }
-            catch (Exception ex)
-            {
-                this.HandleError(ex, "closing the menu");
-            }
+            });
         }
 
         private void ToggleSearch()
@@ -372,62 +341,48 @@ namespace Pathoschild.LookupAnything
         /// <summary>Show the lookup UI for the current target.</summary>
         private void ShowSearch()
         {
-            using (ICumulativeLog log = this.GetTaskLog())
+            GameHelper.InterceptErrors("Showing Search UI", () =>
             {
-                log.Append("Lookup Anything received a search request. ");
-
-                try
-                {                    
+                using (ICumulativeLog log = this.GetTaskLog())
+                {
                     // show search UI
-                    log.AppendLine($"showing search ui.");
                     this.PreviousMenu = Game1.activeClickableMenu;
                     Game1.activeClickableMenu = new SearchMenu(this.Metadata);
                 }
-                catch (Exception ex)
-                {
-                    this.HandleError(ex, "looking that up");
-                }
-            }
+            });
         }
 
         /// <summary>Show the lookup UI for the current target.</summary>
         private void HideSearch()
         {
-            try
+            GameHelper.InterceptErrors("closing search menu", () =>
             {
                 if (Game1.activeClickableMenu is SearchMenu)
                 {
                     Game1.playSound("bigDeSelect"); // match default behaviour when closing a menu
                     Game1.activeClickableMenu = null;
                 }
-            }
-            catch (Exception ex)
-            {
-                this.HandleError(ex, "closing the menu");
-            }
+            });
         }
 
         /// <summary>Load the file containing metadata that's not available from the game directly.</summary>
         private void LoadMetadata()
         {
-            try
+            GameHelper.InterceptErrors("loading metadata", () =>
             {
                 string content = File.ReadAllText(Path.Combine(this.PathOnDisk, this.DatabaseFileName));
                 this.Metadata = JsonConvert.DeserializeObject<Metadata>(content);
-            }
-            catch (Exception ex)
-            {
-                this.HandleError(ex, "loading metadata");
-            }
+            });
         }
 
-        /// <summary>Log an error and warn the user.</summary>
-        /// <param name="ex">The exception to handle.</param>
-        /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up").</param>
-        private void HandleError(Exception ex, string verb)
+        /// <summary>Immediately suppress the game's debug mode if it's enabled.</summary>
+        private void SuppressGameDebug()
         {
-            GameHelper.ShowErrorMessage($"Huh. Something went wrong {verb}. The game error log has the technical details.");
-            Log.Error($"[Lookup Anything] Something went wrong {verb}:{Environment.NewLine}{ex}");
+            if (Game1.debugMode)
+            {
+                Game1.debugMode = false;
+                Game1.addHUDMessage(new HUDMessage("Suppressed SMAPI F2 debug mode. (You can disable this in LookupAnything's config.json.)", 2) { timeLeft = 1000, transparency = 0.75f, color = Color.Gray });
+            }
         }
 
         /// <summary>Get a logger which collects messages for a discrete task and logs them as one entry when disposed.</summary>

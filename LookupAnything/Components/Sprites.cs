@@ -39,6 +39,9 @@ namespace Pathoschild.LookupAnything.Components
 
             /// <summary>An up arrow for scrolling content.</summary>
             public static readonly Rectangle UpArrow = new Rectangle(76, 72, 40, 44);
+
+            /// <summary>A stardrop icon.</summary>
+            public static readonly Rectangle Stardrop = new Rectangle(346, 392, 8, 8);
         }
         
         /// <summary>Sprites used to draw a textbox.</summary>

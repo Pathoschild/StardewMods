@@ -72,6 +72,7 @@
     <Compile Include="Framework\Constants\FenceType.cs" />
     <Compile Include="Framework\Constants\FruitTreeGrowthStage.cs" />
     <Compile Include="DataParser.cs" />
+    <Compile Include="Framework\Models\FriendshipModel.cs" />
     <Compile Include="Framework\Logging\CumulativeLog.cs" />
     <Compile Include="Framework\Data\ConstantData.cs" />
     <Compile Include="Framework\Data\ObjectContext.cs" />
@@ -130,8 +131,8 @@
     <Compile Include="Framework\Subjects\ISubject.cs" />
     <Compile Include="Framework\Subjects\ItemSubject.cs" />
     <Compile Include="LookupAnythingMod.cs" />
-    <Compile Include="MonsterData.cs" />
-    <Compile Include="ItemDropData.cs" />
+    <Compile Include="Framework\Data\MonsterData.cs" />
+    <Compile Include="Framework\Data\ItemDropData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Framework\Targets\GenericTarget.cs" />
     <Compile Include="Framework\Models\RecipeModel.cs" />
@@ -149,7 +150,8 @@
     <PostBuildEvent>
       set modDir=$(GamePath)\Mods\LookupAnything
       if not exist "%modDir%" (mkdir "%modDir%")
-      copy "$(TargetPath)" "%modDir%\$(TargetFileName)"
+      copy "$(TargetDir)\$(TargetName).dll" "%modDir%\$(TargetName).dll"
+      copy "$(TargetDir)\$(TargetName).pdb" "%modDir%\$(TargetName).pdb"
       copy "$(ProjectDir)manifest.json" "%modDir%\manifest.json"
       copy "$(ProjectDir)data.json" "%modDir%\data.json"
     </PostBuildEvent>

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.LookupAnything.Framework;
 using Pathoschild.LookupAnything.Framework.Constants;
+using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Models;
 using StardewValley;
+using StardewValley.Characters;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
 
@@ -16,6 +18,32 @@ namespace Pathoschild.LookupAnything
         /*********
         ** Public methods
         *********/
+        /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
+        /// <param name="player">The player.</param>
+        /// <param name="npc">The NPC.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public static FriendshipModel GetFriendshipForVillager(Farmer player, NPC npc, Metadata metadata)
+        {
+            return new FriendshipModel(player, npc, metadata.Constants);
+        }
+
+        /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
+        /// <param name="player">The player.</param>
+        /// <param name="pet">The pet.</param>
+        public static FriendshipModel GetFriendshipForPet(Farmer player, Pet pet)
+        {
+            return new FriendshipModel(pet.friendshipTowardFarmer, Pet.maxFriendship / 10, Pet.maxFriendship);
+        }
+
+        /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
+        /// <param name="player">The player.</param>
+        /// <param name="animal">The farm animal.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public static FriendshipModel GetFriendshipForAnimal(Farmer player, FarmAnimal animal, Metadata metadata)
+        {
+            return new FriendshipModel(animal.friendshipTowardFarmer, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints);
+        }
+
         /// <summary>Parse gift tastes.</summary>
         /// <param name="objects">The game's object data.</param>
         /// <remarks>
@@ -91,38 +119,60 @@ namespace Pathoschild.LookupAnything
                 }
             }
 
-            // order by precedence
+            // order by precedence (lower is better)
             tastes = tastes
                 .OrderBy(entry =>
                 {
                     bool isPersonal = !entry.IsUniversal;
                     bool isSpecific = !entry.IsCategory;
 
+                    // precedence between preferences
+                    int precedence;
+                    switch (entry.Taste)
+                    {
+                        case GiftTaste.Love:
+                            precedence = 1;
+                            break;
+                        case GiftTaste.Hate:
+                            precedence = 2;
+                            break;
+                        case GiftTaste.Like:
+                            precedence = 3;
+                            break;
+                        case GiftTaste.Dislike:
+                            precedence = 4;
+                            break;
+                        default:
+                            precedence = 5;
+                            break;
+                    }
+
                     // personal taste by item ID
                     if (isPersonal && isSpecific)
-                        return 1;
+                        return 10 + precedence;
 
                     // else universal taste by item ID
                     if (entry.IsUniversal && isSpecific)
-                        return 2;
+                        return 20 + precedence;
 
                     // else personal taste by category
                     if (isPersonal)
-                        return 3;
+                        return 30 + precedence;
 
                     // else universal taste by category (if not neutral)
                     if (entry.IsUniversal && entry.Taste != GiftTaste.Neutral)
-                        return 4;
+                        return 40 + precedence;
 
                     // else
-                    return 5;
+                    return 50 + precedence;
                 })
                 .ToList();
 
             // get effective tastes
             {
-                // get category => item ID lookup
-                IDictionary<int, int[]> categoryItems =
+                // get item lookups
+                IDictionary<int, ObjectModel> objectsByID = objects.ToDictionary(p => p.ParentSpriteIndex);
+                IDictionary<int, int[]> objectsByCategory =
                     (
                         from entry in objects
                         where entry.Category < 0
@@ -135,11 +185,15 @@ namespace Pathoschild.LookupAnything
                 IDictionary<string, HashSet<int>> seenItemIDs = giftableVillagers.ToDictionary(name => name, name => new HashSet<int>());
                 foreach (RawGiftTasteModel entry in tastes)
                 {
+                    // ignore nonexistent items
+                    if (entry.IsCategory && !objectsByCategory.ContainsKey(entry.RefID))
+                        continue;
+                    if (!entry.IsCategory && !objectsByID.ContainsKey(entry.RefID))
+                        continue;
+
                     // get item IDs
-                    if (entry.IsCategory && !categoryItems.ContainsKey(entry.RefID))
-                        continue; // game lists some invalid categories in NPC gift tastes
                     int[] itemIDs = entry.IsCategory
-                        ? categoryItems[entry.RefID]
+                        ? objectsByCategory[entry.RefID]
                         : new[] { entry.RefID };
 
                     // get affected villagers

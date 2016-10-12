@@ -22,7 +22,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         /// <param name="saleValue">The flat sale value.</param>
         /// <param name="stackSize">The number of items in the stack.</param>
         public SaleValueField(string label, int saleValue, int stackSize)
-            : base(label, SaleValueField.GetSummary(new Dictionary<ItemQuality, int> { [ItemQuality.Low] = saleValue }, stackSize)) { }
+            : base(label, SaleValueField.GetSummary(new Dictionary<ItemQuality, int> { [ItemQuality.Normal] = saleValue }, stackSize)) { }
 
         /// <summary>Get the display value for sale price data.</summary>
         /// <param name="saleValues">The sale price data.</param>
@@ -43,7 +43,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
             }
 
             // prices by quality
-            return $"{saleValues[ItemQuality.Low]}g (low quality), {saleValues[ItemQuality.Medium]}g (medium), {saleValues[ItemQuality.High]}g (high)";
+            return $"{saleValues[ItemQuality.Normal]}g, {saleValues[ItemQuality.Silver]}g (silver), {saleValues[ItemQuality.Gold]}g (gold), {saleValues[ItemQuality.Iridium]}g (iridium)";
         }
     }
 }

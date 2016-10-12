@@ -3,7 +3,7 @@ using StardewTree = StardewValley.TerrainFeatures.Tree;
 namespace Pathoschild.LookupAnything.Framework.Constants
 {
     /// <summary>Indicates a tree's growth stage.</summary>
-    public enum WildTreeGrowthStage
+    internal enum WildTreeGrowthStage
     {
         Seed = StardewTree.seedStage,
         Sprout = StardewTree.sproutStage,

@@ -18,6 +18,9 @@ You shouldn't change this file unless you know what you're doing.
 
     /* NPCs */
     "AsocialVillagers": [ "Bouncer", "Gunther" ],
+    "DatingHearts": 2,
+    "SpouseMaxFriendship": 3000,
+    "SpouseFriendshipForStardrop": 3375,
 
     /* players */
     "PlayerMaxSkillPoints": 15000,
@@ -25,7 +28,14 @@ You shouldn't change this file unless you know what you're doing.
 
     /* time */
     "DaysInSeason": 28,
-    "FenceDecayRate": 1440
+    "FenceDecayRate": 1440,
+
+    /* crafting */
+    "CaskAgeSchedule": {
+      "Silver": 14,
+      "Gold": 28,
+      "Iridium": 56
+    }
   },
 
 
@@ -133,7 +143,7 @@ You shouldn't change this file unless you know what you're doing.
       "Ingredients": {
         "340": 1 // honey
       },
-      "Output":  459
+      "Output": 459
     },
     {
       "Name": "Pale Ale",
