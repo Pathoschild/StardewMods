@@ -16,13 +16,9 @@ namespace Pathoschild.LookupAnything.Components
 
         private ClickableComponent panel;
 
-        private int Width = 500;
-
-        private int Height = 70;
-
         public SearchResultComponent(SearchResult result)
         {
-            this.panel = new ClickableComponent(new Rectangle(0, 0, this.Width, this.Height), result.Name);
+            this.panel = new ClickableComponent(Rectangle.Empty, result.Name);
             this.Result = result;
         }
 
@@ -31,18 +27,24 @@ namespace Pathoschild.LookupAnything.Components
             return this.panel.containsPoint(x, y);
         }
 
-        public Vector2 draw(SpriteBatch contentBatch, Vector2 position, float width)
+        public Vector2 draw(SpriteBatch contentBatch, Vector2 position, int width, bool highlight = false)
         {
-            contentBatch.DrawTextBlock(Game1.smallFont, $"({this.Result.TargetType}) {this.Result.Name}", position + new Vector2(70, this.Height / 2), width);
+            int height = 70;
+            this.panel = new ClickableComponent(new Rectangle((int)position.X, (int)position.Y, width, height), this.Result.Name);
 
-            contentBatch.DrawLine(position.X, position.Y, new Vector2(Width, 1), Color.Black);
-            //contentBatch.DrawLine(position.X, position.Y, new Vector2(1, Height), Color.Red);
-            //contentBatch.DrawLine(position.X + Width, position.Y, new Vector2(1, Height), Color.Pink);
-            //contentBatch.DrawLine(position.X, position.Y + Height, new Vector2(Width, 1), Color.Green);
+            // draw highlight
+            if (highlight)
+                contentBatch.DrawLine(position.X, position.Y, new Vector2(width, height), Color.Beige);
 
-            this.panel = new ClickableComponent(new Rectangle((int)position.X, (int)position.Y, this.Width, this.Height), this.Result.Name);
+            // draw border
+            contentBatch.DrawLine(position.X, position.Y, new Vector2(width, 2), Color.Black);
+
+            // draw text
+            contentBatch.DrawTextBlock(Game1.smallFont, $"({this.Result.TargetType}) {this.Result.Name}", position + new Vector2(70, height / 2), width);                                  
+
+            // draw icon
             this.Result.Subject.Value.DrawPortrait(contentBatch, position, new Vector2(70, 70));
-            return new Vector2(this.Width, this.Height);
+            return new Vector2(width, height);
         }
     }
 }

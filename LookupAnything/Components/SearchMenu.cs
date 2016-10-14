@@ -212,7 +212,6 @@ namespace Pathoschild.LookupAnything.Components
                 // draw fields
                 float wrapWidth = this.width - leftOffset - gutter;
                 {
-                    // draw name & item type
                     {
                         Vector2 nameSize = contentBatch.DrawTextBlock(font, $"Search", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: true);
                         Vector2 typeSize = contentBatch.DrawTextBlock(font, $"(Lookup Anything)", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
@@ -224,9 +223,11 @@ namespace Pathoschild.LookupAnything.Components
                         this.SearchTextbox.Draw(contentBatch);
                         topOffset += this.SearchTextbox.Height;
 
+                        int mouseX = Game1.getMouseX(), mouseY = Game1.getMouseY();
                         foreach (var result in this.SearchResults)
                         {
-                            var objSize = result.draw(contentBatch, new Vector2(x + leftOffset, y + topOffset), wrapWidth);
+                            bool isHighlighted = result.containsPoint(mouseX, mouseY);
+                            var objSize = result.draw(contentBatch, new Vector2(x + leftOffset, y + topOffset), (int)wrapWidth, isHighlighted);
                             topOffset += objSize.Y;
                         }
                     }
