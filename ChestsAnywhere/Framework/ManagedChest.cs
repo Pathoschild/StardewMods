@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using StardewValley.Menus;
 using StardewValley.Objects;
 
 namespace ChestsAnywhere.Framework
@@ -42,7 +43,7 @@ namespace ChestsAnywhere.Framework
         /// <param name="chest">The chest instance.</param>
         /// <param name="location">The name of the location or building which contains the chest.</param>
         /// <param name="defaultName">The default name if it hasn't been customised.</param>
-        public ManagedChest(Chest chest, string location, string defaultName)
+        public ManagedChest(Chest chest, string location, string defaultName = "Chest")
         {
             // save values
             this.Chest = chest;
@@ -78,7 +79,7 @@ namespace ChestsAnywhere.Framework
             this.Name = Regex.Replace(this.Name, ManagedChest.TagGroupPattern, "").Trim();
 
             // normalise
-            if(this.Category == null)
+            if (this.Category == null)
                 this.Category = "";
         }
 
@@ -103,6 +104,13 @@ namespace ChestsAnywhere.Framework
             this.IsIgnored = ignored;
 
             this.Update();
+        }
+
+        /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
+        public IClickableMenu OpenMenu()
+        {
+            return new ItemGrabMenu(this.Chest.items, false, true, InventoryMenu.highlightAllItems, this.Chest.grabItemFromInventory, null, this.Chest.grabItemFromChest, false, true, true, true, true, 1);
         }
 
 

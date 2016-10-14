@@ -86,7 +86,9 @@ file if you want. These are the available settings:
 * Fixed visual issues.
 
 1.6 (upcoming):
+* Added compatibility with most mods that affects chests.
 * Removed sort hotkey.
+* Fixed issue were menu behaved unpredictably after closing edit form.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is

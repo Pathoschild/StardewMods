@@ -4,8 +4,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ChestsAnywhere.Common;
 using ChestsAnywhere.Framework;
-using ChestsAnywhere.Menus;
-using ChestsAnywhere.Menus.Components;
 using ChestsAnywhere.Menus.Overlays;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
@@ -43,8 +41,8 @@ namespace ChestsAnywhere
         /// <summary>The selected chest.</summary>
         private Chest SelectedChest;
 
-        /// <summary>The context for the chest currently being viewed or edited.</summary>
-        private EditChestContext EditContext;
+        /// <summary>The menu overlay which lets the player navigate and edit chests.</summary>
+        private ManageChestOverlay ManageChestOverlay;
 
 
         /*********
@@ -138,68 +136,31 @@ namespace ChestsAnywhere
         /// <param name="newMenu">The new menu (if any).</param>
         private void ReceiveMenuChanged(IClickableMenu previousMenu, IClickableMenu newMenu)
         {
-            // open chest view (start context)
-            if (this.EditContext == null)
+            // remove overlay
+            if (previousMenu is ItemGrabMenu)
             {
-                if (newMenu is ItemGrabMenu)
-                {
-                    // find open chest
-                    ManagedChest chest = ChestFactory.GetChests().FirstOrDefault(p => p.Chest.currentLidFrame == 135);
-                    if (chest == null)
-                        return;
-
-                    // create edit button
-                    Rectangle sprite = Sprites.Icons.SpeechBubble;
-                    float zoom = Game1.pixelZoom / 2f;
-                    int width = (int)(sprite.Width * zoom);
-                    int height = (int)(sprite.Height * zoom);
-                    int x = newMenu.xPositionOnScreen - width;
-                    int y = newMenu.yPositionOnScreen;
-                    var editButton = new EditButtonOverlay(new Rectangle(x, y, width, height), () => chest, this.Config, () => this.EditContext != null);
-
-                    // track context
-                    this.EditContext = new EditChestContext { Chest = () => chest, ViewMenu = newMenu, EditButton = editButton };
-                }
-                else if (newMenu is AccessChestMenu)
-                {
-                    AccessChestMenu menu = (AccessChestMenu)newMenu;
-                    this.EditContext = new EditChestContext { Chest = () => menu.SelectedChest, ViewMenu = newMenu };
-                }
+                this.ManageChestOverlay?.Dispose();
+                this.ManageChestOverlay = null;
             }
 
-            // open edit
-            else if (newMenu is EditChestForm)
+            // add overlay
+            if (newMenu is ItemGrabMenu)
             {
-                this.EditContext.EditMenu = newMenu;
-                if (this.EditContext.EditButton != null)
-                    this.EditContext.EditButton.IsDisabled = true;
-            }
+                // get chest data
+                ItemGrabMenu chestMenu = (ItemGrabMenu)newMenu;
+                ManagedChest[] chests = ChestFactory.GetChests().ToArray();
+                ManagedChest chest = ChestFactory.GetChestFromMenu(chestMenu);
+                if (chest == null)
+                    return;
 
-            // close edit & resume view
-            else if (previousMenu is EditChestForm && newMenu != this.EditContext.ViewMenu)
-            {
-                // close edit
-                this.EditContext.EditMenu = null;
-                if (this.EditContext.EditButton != null)
-                    this.EditContext.EditButton.IsDisabled = false;
-
-                // resume view
-                if (this.EditContext.ViewMenu is AccessChestMenu)
+                // add overlay
+                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config);
+                this.ManageChestOverlay.OnChestSelected += selected =>
                 {
-                    // reset to reflect changes
-                    this.EditContext.Dispose();
-                    this.EditContext = null;
+                    this.SelectedChest = selected.Chest;
+                    Game1.activeClickableMenu = selected.OpenMenu();
                     this.OpenMenu();
-                }
-                else
-                    Game1.activeClickableMenu = this.EditContext.ViewMenu;
-            }
-
-            // close menu (end context)
-            else if (newMenu == null)
-            {
-                this.EditContext?.Dispose();
-                this.EditContext = null;
+                };
             }
         }
 
@@ -246,12 +207,8 @@ namespace ChestsAnywhere
             ManagedChest selectedChest = chests.FirstOrDefault(p => p.Chest == this.SelectedChest) ?? chests.FirstOrDefault();
 
             // render menu
-            if (chests.Any())
-            {
-                AccessChestMenu menu = new AccessChestMenu(chests, selectedChest, this.Config);
-                menu.OnChestSelected += chest => this.SelectedChest = chest.Chest; // remember selected chest on next load
-                Game1.activeClickableMenu = menu;
-            }
+            if (selectedChest != null)
+                Game1.activeClickableMenu = selectedChest.OpenMenu();
             else
                 CommonHelper.ShowInfoMessage("You don't have any chests yet. :)", duration: 1000);
         }

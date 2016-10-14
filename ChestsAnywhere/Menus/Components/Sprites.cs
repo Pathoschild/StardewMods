@@ -147,6 +147,9 @@ namespace ChestsAnywhere.Menus.Components
 
             /// <summary>A filled checkbox icon.</summary>
             public static readonly Rectangle FilledCheckbox = new Rectangle(236, 425, 9, 9);
+
+            /// <summary>An exit button.</summary>
+            public static readonly Rectangle ExitButton = new Rectangle(337, 494, 12, 12);
         }
 
 

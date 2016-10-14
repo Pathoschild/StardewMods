@@ -28,7 +28,7 @@ namespace ChestsAnywhere.Menus.Overlays
         ** Public methods
         *********/
         /// <summary>Release all resources.</summary>
-        public void Dispose()
+        public virtual void Dispose()
         {
             GraphicsEvents.OnPostRenderGuiEvent -= this.OnPostRenderGuiEvent;
             GameEvents.UpdateTick -= this.OnUpdateTick;

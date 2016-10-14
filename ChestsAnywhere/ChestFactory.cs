@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.Objects;
 
 namespace ChestsAnywhere
@@ -24,7 +25,7 @@ namespace ChestsAnywhere
                 {
                     int namelessCount = 0;
                     foreach (Chest chest in location.Objects.Values.OfType<Chest>().Where(p => p.playerChest))
-                        yield return new ManagedChest(chest, location.Name, $"Chest #{++namelessCount}");
+                        yield return new ManagedChest(chest, ChestFactory.GetLocationName(location), $"Chest #{++namelessCount}");
                 }
 
                 // chests in constructed buildings
@@ -36,7 +37,7 @@ namespace ChestsAnywhere
                         if (building.indoors == null)
                             continue;
                         foreach (Chest chest in building.indoors.Objects.Values.OfType<Chest>())
-                            yield return new ManagedChest(chest, building.nameOfIndoors.TrimEnd('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'), $"Chest #{++namelessCount}");
+                            yield return new ManagedChest(chest, ChestFactory.GetLocationName(building), $"Chest #{++namelessCount}");
                     }
                 }
 
@@ -64,8 +65,42 @@ namespace ChestsAnywhere
 
             // return if valid
             if (chest != null && chest.playerChest)
-                return new ManagedChest(chest, Game1.currentLocation.Name, "Chest");
+                return new ManagedChest(chest, ChestFactory.GetLocationName(Game1.currentLocation));
             return null;
+        }
+
+        /// <summary>Get the player chest from the specified menu (if any).</summary>
+        /// <param name="menu">The menu to check.</param>
+        public static ManagedChest GetChestFromMenu(ItemGrabMenu menu)
+        {
+            // from menu target
+            Chest target = menu.behaviorOnItemGrab?.Target as Chest;
+            ManagedChest chest = target != null
+                ? ChestFactory.GetChests().FirstOrDefault(p => p.Chest == target)
+                : null;
+            if (chest != null)
+                return chest;
+
+            // fallback to open chest
+            return ChestFactory.GetChests().FirstOrDefault(p => p.Chest.currentLidFrame == 135);
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get the display name for a location.</summary>
+        /// <param name="location">The game location.</param>
+        private static string GetLocationName(GameLocation location)
+        {
+            return location.Name;
+        }
+
+        /// <summary>Get the display name for a location.</summary>
+        /// <param name="location">The game location.</param>
+        private static string GetLocationName(Building location)
+        {
+            return location.nameOfIndoors.TrimEnd('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
         }
     }
 }
