@@ -62,16 +62,16 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             {
                 case TargetType.Villager:
                     if (!metadata.Constants.AsocialVillagers.Contains(npc.getName()))
-                    {
-                        FriendshipModel friendship = DataParser.GetFriendshipForVillager(Game1.player, npc, metadata);
+                    {                        
                         var giftTastes = this.GetGiftTastes(npc);
 
-                        yield return new GenericField("Birthday", $"{Utility.capitalizeFirstLetter(npc.birthday_Season)} {npc.birthday_Day}");
-                        yield return new GenericField("Can romance", friendship.IsSpouse ? "you're married! <" : GenericField.GetString(npc.datable));
+                        yield return new GenericField("Birthday", $"{Utility.capitalizeFirstLetter(npc.birthday_Season)} {npc.birthday_Day}");                        
 
                         // friendship
                         if (Game1.player.friendships.ContainsKey(npc.name))
                         {
+                            FriendshipModel friendship = DataParser.GetFriendshipForVillager(Game1.player, npc, metadata);
+                            yield return new GenericField("Can romance", friendship.IsSpouse ? "you're married! <" : GenericField.GetString(npc.datable));
                             yield return new CharacterFriendshipField("Friendship", friendship);
                             yield return new GenericField("Talked today", Game1.player.friendships[npc.name][2] == 1);
                             yield return new GenericField("Gifted today", Game1.player.friendships[npc.name][3] > 0);
