@@ -244,9 +244,10 @@ namespace Pathoschild.LookupAnything.Components
                 if (this.MaxScroll > 0 && this.CurrentScroll < this.MaxScroll)
                     contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.DownArrow, x + gutter, y + contentHeight - Sprites.Icons.DownArrow.Height);
 
-                // end draw
+                // draw mouse cursor
+                this.drawMouse(contentBatch);
 
-                contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.EmptyHeart, Game1.getMouseX(), Game1.getMouseY());
+                // end draw
                 contentBatch.End();
             }
         }
