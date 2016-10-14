@@ -139,8 +139,6 @@ namespace ChestsAnywhere.Menus
                 this.SelectPreviousChest();
             else if (input.Equals(config.NextChest))
                 this.SelectNextChest();
-            else if (input.Equals(config.SortItems))
-                this.SortChestItems();
         }
 
         /// <summary>The method invoked when the player scrolls the dropdown using the mouse wheel.</summary>

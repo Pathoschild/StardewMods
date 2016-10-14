@@ -85,6 +85,9 @@ file if you want. These are the available settings:
 * Fixed Lewis' giftbox when you start a new game being usable as a chest.
 * Fixed visual issues.
 
+1.6 (upcoming):
+* Removed sort hotkey.
+
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is
 recommended. If you really want to compile the mod yourself, just edit `ChestsAnywhere.csproj` and
