@@ -214,8 +214,8 @@ namespace Pathoschild.LookupAnything.Components
                 {
                     // draw name & item type
                     {
-                        Vector2 nameSize = contentBatch.DrawTextBlock(font, $"Search UI.", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: true);
-                        Vector2 typeSize = contentBatch.DrawTextBlock(font, $"(pre-alpha)", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
+                        Vector2 nameSize = contentBatch.DrawTextBlock(font, $"Search", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: true);
+                        Vector2 typeSize = contentBatch.DrawTextBlock(font, $"(Lookup Anything)", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
                         topOffset += Math.Max(nameSize.Y, typeSize.Y);
 
                         this.SearchTextbox.X = (int)(x + leftOffset);
