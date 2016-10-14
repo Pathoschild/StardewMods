@@ -72,6 +72,10 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <param name="input">The button that was pressed.</param>
         protected virtual void ReceiveButtonPress(Buttons input) { }
 
+        /// <summary>The method invoked when the player uses the mouse scroll wheel.</summary>
+        /// <param name="amount">The scroll amount.</param>
+        protected virtual void ReceiveScrollWheelAction(int amount) { }
+
         /// <summary>The method invoked when the cursor is hovered.</summary>
         /// <param name="x">The cursor's X position.</param>
         /// <param name="y">The cursor's Y position.</param>
@@ -130,6 +134,8 @@ namespace ChestsAnywhere.Menus.Overlays
             this.ReceiveCursorHover(mouseX, mouseY);
             if (mouseState.LeftButton == ButtonState.Pressed && this.LastMouseState.LeftButton != ButtonState.Pressed)
                 this.ReceiveLeftClick(mouseX, mouseY);
+            if (mouseState.ScrollWheelValue != this.LastMouseState.ScrollWheelValue)
+                this.ReceiveScrollWheelAction(mouseState.ScrollWheelValue - this.LastMouseState.ScrollWheelValue);
             this.LastMouseState = mouseState;
         }
 
