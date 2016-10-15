@@ -90,6 +90,8 @@ namespace Pathoschild.LookupAnything.Components
         public override void receiveKeyPress(Keys key)
         {
             // deliberately avoid calling base, which may let another key close the menu
+            if(key.Equals(Keys.Escape))
+                this.exitThisMenu();
         }
 
         /// <summary>The method invoked when the player scrolls the mouse wheel on the lookup UI.</summary>
