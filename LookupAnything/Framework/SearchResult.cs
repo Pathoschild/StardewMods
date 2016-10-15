@@ -3,6 +3,7 @@ using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Models;
 using Pathoschild.LookupAnything.Framework.Subjects;
 using StardewValley;
+using StardewValley.Monsters;
 
 namespace Pathoschild.LookupAnything.Framework
 {
@@ -35,7 +36,7 @@ namespace Pathoschild.LookupAnything.Framework
         {
             this.DisplayName = npc.getName();
             this.Name = this.DisplayName.ToLowerInvariant();
-            this.TargetType = npc.GetType().Namespace.Contains("Monster")
+            this.TargetType = npc is Monster
                 ? TargetType.Monster
                 : TargetType.Villager;
             this.Subject = new Lazy<ISubject>(() => new CharacterSubject(npc, this.TargetType, metadata));
