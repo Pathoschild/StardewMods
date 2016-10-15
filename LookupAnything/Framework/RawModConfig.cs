@@ -44,14 +44,16 @@ namespace Pathoschild.LookupAnything.Framework
                 ToggleLookup = Keys.F1.ToString(),
                 ScrollUp = Keys.Up.ToString(),
                 ScrollDown = Keys.Down.ToString(),
-                ToggleDebug = ""
+                ToggleDebug = "",
+                ToggleSearch = ""
             };
             this.Controller = new InputMapConfiguration<string>
             {
                 ToggleLookup = "",
                 ScrollUp = "",
                 ScrollDown = "",
-                ToggleDebug = ""
+                ToggleDebug = "",
+                ToggleSearch = ""
             };
             this.HideOnKeyUp = false;
             this.CheckForUpdates = true;
@@ -78,7 +80,7 @@ namespace Pathoschild.LookupAnything.Framework
                     ToggleSearch = this.TryParse(this.Keyboard.ToggleSearch, Keys.OemTilde),
                     ScrollUp = this.TryParse(this.Keyboard.ScrollUp, Keys.Up),
                     ScrollDown = this.TryParse(this.Keyboard.ScrollDown, Keys.Down),
-                    ToggleDebug = this.TryParse(this.Keyboard.ToggleDebug, Keys.F2)
+                    ToggleDebug = this.TryParse(this.Keyboard.ToggleDebug, Keys.None)
                 },
                 Controller = new InputMapConfiguration<Buttons>
                 {

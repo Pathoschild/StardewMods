@@ -21,7 +21,7 @@ namespace Pathoschild.LookupAnything.Framework
         /// <summary>Toggle the display of debug information.</summary>
         public T ToggleDebug { get; set; }
 
-        /// <summary> Toggle the display of the search window </summary>
+        /// <summary>Toggle the display of the search window.</summary>
         public T ToggleSearch { get; set; }
 
 
