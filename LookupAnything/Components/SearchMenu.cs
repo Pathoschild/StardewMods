@@ -228,7 +228,6 @@ namespace Pathoschild.LookupAnything.Components
             }
 
             // get search results
-            search = search.ToLowerInvariant();
             this.SearchResults =
                 (
                     from entry in this.SearchLookup
@@ -248,6 +247,10 @@ namespace Pathoschild.LookupAnything.Components
         /// <param name="maxSiftOffset">The maximum number of characters to compare when sifting.</param>
         private double GetSearchScore(string target, string search, int maxSiftOffset)
         {
+            // normalise
+            search = search?.ToLowerInvariant();
+            target = target?.ToLowerInvariant();
+
             // handle empty values
             if (string.IsNullOrEmpty(target))
                 return string.IsNullOrEmpty(search) ? 0 : search.Length;

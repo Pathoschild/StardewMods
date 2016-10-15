@@ -16,9 +16,6 @@ namespace Pathoschild.LookupAnything.Framework
         /// <summary>The subject's display name.</summary>
         public string DisplayName { get; }
 
-        /// <summary>The internal search name.</summary>
-        public string Name { get; }
-
         /// <summary>The subject type.</summary>
         public TargetType TargetType { get; }
 
@@ -35,7 +32,6 @@ namespace Pathoschild.LookupAnything.Framework
         public SearchResult(NPC npc, Metadata metadata)
         {
             this.DisplayName = npc.getName();
-            this.Name = this.DisplayName.ToLowerInvariant();
             this.TargetType = npc is Monster
                 ? TargetType.Monster
                 : TargetType.Villager;
@@ -47,7 +43,6 @@ namespace Pathoschild.LookupAnything.Framework
         public SearchResult(ObjectModel objectModel)
         {
             this.DisplayName = objectModel.Name;
-            this.Name = this.DisplayName.ToLowerInvariant();
             this.TargetType = TargetType.Object;
             this.Subject = new Lazy<ISubject>(() => new ItemSubject(GameHelper.GetObjectBySpriteIndex(objectModel.ParentSpriteIndex), ObjectContext.World, knownQuality: false));
         }
@@ -57,7 +52,6 @@ namespace Pathoschild.LookupAnything.Framework
         public SearchResult(FarmAnimal animal)
         {
             this.DisplayName = animal.name;
-            this.Name = this.DisplayName.ToLowerInvariant();
             this.TargetType = TargetType.FarmAnimal;
             this.Subject = new Lazy<ISubject>(() => new FarmAnimalSubject(animal));
         }
@@ -67,7 +61,6 @@ namespace Pathoschild.LookupAnything.Framework
         public SearchResult(RecipeModel recipe)
         {
             this.DisplayName = recipe.Name;
-            this.Name = this.DisplayName.ToLowerInvariant();
             this.TargetType = TargetType.InventoryItem;
             this.Subject = new Lazy<ISubject>(() => new ItemSubject(recipe.CreateItem(), ObjectContext.Inventory, false));
         }

@@ -45,7 +45,7 @@ namespace Pathoschild.LookupAnything
             GameHelper.Recipes = new Lazy<RecipeModel[]>(() => DataParser.GetRecipes(metadata).ToArray());
         }
 
-        /// <summary>Get the subjects available for searching indexed by name.</summary>
+        /// <summary>Get the subjects available for searching indexed case-insensitively by name.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public static ILookup<string, SearchResult> GetSearchLookup(Metadata metadata)
         {
@@ -69,7 +69,7 @@ namespace Pathoschild.LookupAnything
             );
 
             // create lookup
-            return results.ToLookup(r => r.Name);
+            return results.ToLookup(r => r.DisplayName, StringComparer.InvariantCultureIgnoreCase);
         }
 
         /****
