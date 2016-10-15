@@ -159,7 +159,6 @@ namespace ChestsAnywhere
                 {
                     this.SelectedChest = selected.Chest;
                     Game1.activeClickableMenu = selected.OpenMenu();
-                    this.OpenMenu();
                 };
             }
         }

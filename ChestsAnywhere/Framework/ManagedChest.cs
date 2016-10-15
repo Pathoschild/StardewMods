@@ -113,6 +113,19 @@ namespace ChestsAnywhere.Framework
             return new ItemGrabMenu(this.Chest.items, false, true, InventoryMenu.highlightAllItems, this.Chest.grabItemFromInventory, null, this.Chest.grabItemFromChest, false, true, true, true, true, 1);
         }
 
+        /// <summary>Get whether the specified object is equal to the current object.</summary>
+        /// <param name="obj">The object to compare with the current object. </param>
+        public override bool Equals(object obj)
+        {
+            return this.Chest != null && this.Chest.Equals((obj as ManagedChest)?.Chest);
+        }
+
+        /// <summary>Serves as the default hash function.</summary>
+        public override int GetHashCode()
+        {
+            return this.Chest.GetHashCode();
+        }
+
 
         /*********
         ** Private methods

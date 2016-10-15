@@ -173,6 +173,7 @@ namespace ChestsAnywhere.Menus.Overlays
         protected override void Draw(SpriteBatch batch)
         {
             this.DrawCount++;
+            Rectangle bounds = new Rectangle(this.Menu.xPositionOnScreen, this.Menu.yPositionOnScreen, this.Menu.width, this.Menu.height);
 
             // access mode
             if (!this.ActiveElement.HasFlag(Element.EditForm))
@@ -197,17 +198,17 @@ namespace ChestsAnywhere.Menus.Overlays
                 // get initial measurements
                 SpriteFont font = Game1.smallFont;
                 const int gutter = 10;
-                int padding = Game1.tileSize / 2;
+                int padding = Game1.pixelZoom * 10;
                 float topOffset = padding;
                 int maxLabelWidth = (int)new[] { "Location:", "Name:", "Category:", "Order:" }.Select(p => font.MeasureString(p).X).Max();
 
                 // background
-                batch.DrawMenuBackground(new Rectangle(this.Menu.xPositionOnScreen, this.Menu.yPositionOnScreen, this.Menu.width, this.Menu.height));
+                batch.DrawMenuBackground(new Rectangle(bounds.X, bounds.Y, bounds.Width, bounds.Height));
 
                 // Location name
                 {
-                    Vector2 labelSize = batch.DrawTextBlock(font, "Location:", new Vector2(this.Menu.xPositionOnScreen + padding + (int)(maxLabelWidth - font.MeasureString("Location:").X), this.Menu.yPositionOnScreen + topOffset), this.Menu.width);
-                    batch.DrawTextBlock(font, this.Chest.LocationName, new Vector2(this.Menu.xPositionOnScreen + padding + maxLabelWidth + gutter, this.Menu.yPositionOnScreen + topOffset), this.Menu.width);
+                    Vector2 labelSize = batch.DrawTextBlock(font, "Location:", new Vector2(bounds.X + padding + (int)(maxLabelWidth - font.MeasureString("Location:").X), bounds.Y + topOffset), bounds.Width);
+                    batch.DrawTextBlock(font, this.Chest.LocationName, new Vector2(bounds.X + padding + maxLabelWidth + gutter, bounds.Y + topOffset), bounds.Width);
                     topOffset += labelSize.Y;
                 }
 
@@ -220,9 +221,9 @@ namespace ChestsAnywhere.Menus.Overlays
                     ValidatedTextBox textbox = field.Item2;
 
                     // draw label
-                    Vector2 labelSize = batch.DrawTextBlock(font, label, new Vector2(this.Menu.xPositionOnScreen + padding + (int)(maxLabelWidth - font.MeasureString(label).X), this.Menu.yPositionOnScreen + topOffset + 7), this.Menu.width);
-                    textbox.X = this.Menu.xPositionOnScreen + padding + maxLabelWidth + gutter;
-                    textbox.Y = this.Menu.yPositionOnScreen + (int)topOffset;
+                    Vector2 labelSize = batch.DrawTextBlock(font, label, new Vector2(bounds.X + padding + (int)(maxLabelWidth - font.MeasureString(label).X), bounds.Y + topOffset + 7), bounds.Width);
+                    textbox.X = bounds.X + padding + maxLabelWidth + gutter;
+                    textbox.Y = bounds.Y + (int)topOffset;
                     textbox.Draw(batch);
 
                     // update offset
@@ -231,16 +232,16 @@ namespace ChestsAnywhere.Menus.Overlays
 
                 // hide chest checkbox
                 {
-                    this.EditHideChestField.X = this.Menu.xPositionOnScreen + padding;
-                    this.EditHideChestField.Y = this.Menu.yPositionOnScreen + (int)topOffset;
+                    this.EditHideChestField.X = bounds.X + padding;
+                    this.EditHideChestField.Y = bounds.Y + (int)topOffset;
                     this.EditHideChestField.Width = 24;
                     this.EditHideChestField.Draw(batch);
-                    Vector2 labelSize = batch.DrawTextBlock(font, "Hide this chest" + (this.EditHideChestField.Value ? " (you'll need to find the chest to undo this!)" : ""), new Vector2(this.Menu.xPositionOnScreen + padding + 7 + this.EditHideChestField.Width, this.Menu.yPositionOnScreen + topOffset), this.Menu.width, this.EditHideChestField.Value ? Color.Red : Color.Black);
+                    Vector2 labelSize = batch.DrawTextBlock(font, "Hide this chest" + (this.EditHideChestField.Value ? " (you'll need to find the chest to undo this!)" : ""), new Vector2(bounds.X + padding + 7 + this.EditHideChestField.Width, bounds.Y + topOffset), this.Menu.width, this.EditHideChestField.Value ? Color.Red : Color.Black);
                     topOffset += Math.Max(this.EditHideChestField.Width, labelSize.Y);
                 }
 
                 // save button
-                this.EditSaveButton.bounds = new Rectangle(this.Menu.xPositionOnScreen + padding, this.Menu.yPositionOnScreen + (int)topOffset, this.EditSaveButton.bounds.Width, this.EditSaveButton.bounds.Height);
+                this.EditSaveButton.bounds = new Rectangle(bounds.X + padding, bounds.Y + (int)topOffset, this.EditSaveButton.bounds.Width, this.EditSaveButton.bounds.Height);
                 this.EditSaveButton.draw(batch);
 
                 // exit button
@@ -426,12 +427,14 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <summary>Initialise the edit-chest overlay for rendering.</summary>
         private void ReinitialiseComponents()
         {
+            Rectangle bounds = new Rectangle(this.Menu.xPositionOnScreen, this.Menu.yPositionOnScreen, this.Menu.width, this.Menu.height);
+
             // group dropdown
             if (this.ShowGroupTab)
             {
                 // tab
                 Vector2 tabSize = Tab.GetTabSize(this.Font, this.SelectedGroup);
-                this.GroupTab = new Tab(this.SelectedGroup, this.Menu.xPositionOnScreen - (int)tabSize.X - Game1.tileSize, this.Menu.yPositionOnScreen - (int)tabSize.Y, true, this.Font);
+                this.GroupTab = new Tab(this.SelectedGroup, bounds.Right - (int)tabSize.X - Game1.tileSize, bounds.Y - Game1.pixelZoom * 25, true, this.Font);
 
                 // dropdown
                 this.GroupSelector = new DropList<string>(this.SelectedGroup, this.Groups, group => group, this.GroupTab.bounds.Right, this.GroupTab.bounds.Bottom, false, this.Font);
@@ -440,8 +443,7 @@ namespace ChestsAnywhere.Menus.Overlays
             // chest dropdown
             {
                 // tab
-                Vector2 tabSize = Tab.GetTabSize(this.Font, this.Chest.Name);
-                this.ChestTab = new Tab(this.Chest.Name, this.Menu.xPositionOnScreen - (int)tabSize.X - Game1.tileSize, this.Menu.yPositionOnScreen, true, this.Font);
+                this.ChestTab = new Tab(this.Chest.Name, bounds.X, bounds.Y - Game1.pixelZoom * 25, true, this.Font);
 
                 // dropdown
                 ManagedChest[] chests = this.Chests.Where(chest => !this.ShowGroupTab || chest.GetGroup() == this.SelectedGroup).ToArray();
@@ -463,7 +465,7 @@ namespace ChestsAnywhere.Menus.Overlays
             this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X, Text = this.Chest.Order?.ToString() };
             this.EditHideChestField = new Checkbox(this.Chest.IsIgnored);
             this.EditSaveButton = new ClickableTextureComponent("save-chest", new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), null, "OK", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, IClickableMenu.borderWithDownArrowIndex), 1f);
-            this.EditExitButton = new ClickableTextureComponent(new Rectangle(this.Menu.xPositionOnScreen + this.Menu.width - 9 * Game1.pixelZoom, this.Menu.yPositionOnScreen - Game1.pixelZoom * 2, Sprites.Icons.ExitButton.Width * Game1.pixelZoom, Sprites.Icons.ExitButton.Height * Game1.pixelZoom), Sprites.Icons.Sheet, Sprites.Icons.ExitButton, Game1.pixelZoom);
+            this.EditExitButton = new ClickableTextureComponent(new Rectangle(bounds.Right - 9 * Game1.pixelZoom, bounds.Y - Game1.pixelZoom * 2, Sprites.Icons.ExitButton.Width * Game1.pixelZoom, Sprites.Icons.ExitButton.Height * Game1.pixelZoom), Sprites.Icons.Sheet, Sprites.Icons.ExitButton, Game1.pixelZoom);
         }
 
         /// <summary>Save the form input.</summary>
