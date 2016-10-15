@@ -54,7 +54,7 @@ namespace Pathoschild.LookupAnything.Components
             this.CalculateDimensions();
             this.SearchTextbox = new SearchTextBox(Game1.smallFont, Color.Black);
             this.SearchTextbox.Select();
-            this.SearchTextbox.Changed += (sender, text) => this.ReceiveSearchTextboxChanged(text);
+            this.SearchTextbox.OnChanged += (sender, text) => this.ReceiveSearchTextboxChanged(text);
         }
 
 

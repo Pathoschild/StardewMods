@@ -24,7 +24,7 @@ namespace Pathoschild.LookupAnything.Components
         ** Accessors
         *********/
         /// <summary>The event raised when the search text changes.</summary>
-        public event EventHandler<string> Changed;
+        public event EventHandler<string> OnChanged;
 
         /// <summary>The input text.</summary>
         public string Text
@@ -132,7 +132,7 @@ namespace Pathoschild.LookupAnything.Components
         {
             if (this.Text != this.LastText)
             {
-                this.Changed?.Invoke(this, this.Text);
+                this.OnChanged?.Invoke(this, this.Text);
                 this.LastText = this.Text;
             }
         }
