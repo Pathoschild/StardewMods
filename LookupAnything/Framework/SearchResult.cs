@@ -1,11 +1,10 @@
 using System;
-using Pathoschild.LookupAnything.Framework;
 using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Models;
 using Pathoschild.LookupAnything.Framework.Subjects;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything
+namespace Pathoschild.LookupAnything.Framework
 {
     /// <summary>Data about a subject which can be searched dynamically.</summary>
     internal class SearchResult
