@@ -11,7 +11,6 @@ using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Models;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Buildings;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
 
@@ -24,7 +23,7 @@ namespace Pathoschild.LookupAnything
         ** Properties
         *********/
         /// <summary>The cached object data.</summary>
-        internal static readonly Lazy<ObjectModel[]> Objects = new Lazy<ObjectModel[]>(() => DataParser.GetObjects().ToArray());
+        private static readonly Lazy<ObjectModel[]> Objects = new Lazy<ObjectModel[]>(() => DataParser.GetObjects().ToArray());
 
         /// <summary>The cached villagers' gift tastes.</summary>
         private static Lazy<GiftTasteModel[]> GiftTastes;
@@ -46,21 +45,30 @@ namespace Pathoschild.LookupAnything
             GameHelper.Recipes = new Lazy<RecipeModel[]>(() => DataParser.GetRecipes(metadata).ToArray());
         }
 
+        /// <summary>Get the subjects available for searching indexed by name.</summary>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public static ILookup<string, SearchResult> GetSearchLookup(Metadata metadata)
         {
             List<SearchResult> results = new List<SearchResult>();
+
+            // NPCs
             results.AddRange(Utility.getAllCharacters().Select(npc => new SearchResult(npc, metadata)));
+
+            // objects
             results.AddRange(GameHelper.Objects.Value.Select(obj => new SearchResult(obj)));
 
-            var farm = Game1.getFarm();
-            IEnumerable<FarmAnimal> animals = farm.animals.Select(kvp => kvp.Value);
-            var buildingAnimals = farm.buildings
-                .Select(b => b.indoors as AnimalHouse)
-                .Where(ah => ah != null)
-                .SelectMany(ah => ah.animals)
-                .Select(kvp => kvp.Value);
-            results.AddRange(animals.Union(buildingAnimals).Select(animal => new SearchResult(animal)));
-            // results.AddRange(DataParser.GetRecipes(metadata).Select(recipe => new SearchResult(recipe)));
+            // farm animals
+            Farm farm = Game1.getFarm();
+            results.AddRange(farm.animals.Values.Select(animal => new SearchResult(animal)));
+            results.AddRange(
+                farm.buildings
+                    .Select(building => building.indoors)
+                    .OfType<AnimalHouse>()
+                    .SelectMany(animalHouse => animalHouse.animals)
+                    .Select(animal => new SearchResult(animal.Value))
+            );
+
+            // create lookup
             return results.ToLookup(r => r.Name);
         }
 

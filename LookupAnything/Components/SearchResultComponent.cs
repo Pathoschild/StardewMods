@@ -1,50 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using StardewValley.Menus;
 
 namespace Pathoschild.LookupAnything.Components
 {
-    class SearchResultComponent
+    /// <summary>A clickable component representing a search result.</summary>
+    internal class SearchResultComponent : ClickableComponent
     {
-        public SearchResult Result { get; private set; }
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The search result.</summary>
+        public SearchResult Result { get; }
 
-        private ClickableComponent panel;
 
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="result">The search result.</param>
         public SearchResultComponent(SearchResult result)
+            : base(Rectangle.Empty, result.Name)
         {
-            this.panel = new ClickableComponent(Rectangle.Empty, result.Name);
             this.Result = result;
         }
 
-        public bool containsPoint(int x, int y)
+        /// <summary>Draw the search result to the screen.</summary>
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
+        /// <param name="position">The position at which to draw the search result.</param>
+        /// <param name="width">The width to draw.</param>
+        /// <param name="highlight">Whether to highlight the search result.</param>
+        public Vector2 Draw(SpriteBatch spriteBatch, Vector2 position, int width, bool highlight = false)
         {
-            return this.panel.containsPoint(x, y);
-        }
+            // update bounds
+            this.bounds.X = (int)position.X;
+            this.bounds.Y = (int)position.Y;
+            this.bounds.Width = width;
+            this.bounds.Height = 70;
+            const int borderWidth = 2;
+            int iconSize = 70;
+            int topPadding = this.bounds.Height / 2;
 
-        public Vector2 draw(SpriteBatch contentBatch, Vector2 position, int width, bool highlight = false)
-        {
-            int height = 70;
-            this.panel = new ClickableComponent(new Rectangle((int)position.X, (int)position.Y, width, height), this.Result.Name);
-
-            // draw highlight
+            // draw
             if (highlight)
-                contentBatch.DrawLine(position.X, position.Y, new Vector2(width, height), Color.Beige);
+                spriteBatch.DrawLine(this.bounds.X, this.bounds.Y, new Vector2(this.bounds.Width, this.bounds.Height), Color.Beige);
+            spriteBatch.DrawLine(this.bounds.X, this.bounds.Y, new Vector2(this.bounds.Width, borderWidth), Color.Black); // border
+            spriteBatch.DrawTextBlock(Game1.smallFont, $"({this.Result.TargetType}) {this.Result.Name}", new Vector2(this.bounds.X, this.bounds.Y) + new Vector2(iconSize, topPadding), this.bounds.Width - iconSize); // text
+            this.Result.Subject.Value.DrawPortrait(spriteBatch, position, new Vector2(iconSize)); // icon
 
-            // draw border
-            contentBatch.DrawLine(position.X, position.Y, new Vector2(width, 2), Color.Black);
-
-            // draw text
-            contentBatch.DrawTextBlock(Game1.smallFont, $"({this.Result.TargetType}) {this.Result.Name}", position + new Vector2(70, height / 2), width);                                  
-
-            // draw icon
-            this.Result.Subject.Value.DrawPortrait(contentBatch, position, new Vector2(70, 70));
-            return new Vector2(width, height);
+            // return size
+            return new Vector2(this.bounds.Width, this.bounds.Height);
         }
     }
 }

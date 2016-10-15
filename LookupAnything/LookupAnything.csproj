@@ -65,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\CommonHelper.cs" />
-    <Compile Include="Common\Sift3.cs" />
     <Compile Include="Components\DebugInterface.cs" />
     <Compile Include="Components\SearchMenu.cs" />
     <Compile Include="Components\SearchResultComponent.cs" />
@@ -139,7 +138,7 @@
     <Compile Include="Framework\Models\RecipeModel.cs" />
     <Compile Include="Framework\RecipeType.cs" />
     <Compile Include="DrawHelper.cs" />
-    <Compile Include="SearchResult.cs" />
+    <Compile Include="Framework\SearchResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data.json" />

@@ -7,55 +7,69 @@ using StardewValley;
 
 namespace Pathoschild.LookupAnything
 {
+    /// <summary>Data about a subject which can be searched dynamically.</summary>
     internal class SearchResult
     {
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The subject's display name.</summary>
+        public string DisplayName { get; }
+
+        /// <summary>The internal search name.</summary>
+        public string Name { get; }
+
+        /// <summary>The subject type.</summary>
+        public TargetType TargetType { get; }
+
+        /// <summary>The subject data.</summary>
+        public Lazy<ISubject> Subject { get; }
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="npc">The subject.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public SearchResult(NPC npc, Metadata metadata)
         {
             this.DisplayName = npc.getName();
             this.Name = this.DisplayName.ToLowerInvariant();
-            if (npc.GetType().Namespace.Contains("Monster"))
-            {
-                this.TargetType = TargetType.Monster;
-            }
-            else
-            {
-                this.TargetType = TargetType.Villager;
-            }
+            this.TargetType = npc.GetType().Namespace.Contains("Monster")
+                ? TargetType.Monster
+                : TargetType.Villager;
             this.Subject = new Lazy<ISubject>(() => new CharacterSubject(npc, this.TargetType, metadata));
         }
 
+        /// <summary>Construct an instance.</summary>
+        /// <param name="objectModel">The subject.</param>
         public SearchResult(ObjectModel objectModel)
         {
             this.DisplayName = objectModel.Name;
             this.Name = this.DisplayName.ToLowerInvariant();
-
             this.TargetType = TargetType.Object;
-            var lazyItem = new Lazy<Item>((() => GameHelper.GetObjectBySpriteIndex(objectModel.ParentSpriteIndex)));
-            this.Subject = new Lazy<ISubject>(() => new ItemSubject(lazyItem.Value, ObjectContext.World, knownQuality: false));
+            this.Subject = new Lazy<ISubject>(() => new ItemSubject(GameHelper.GetObjectBySpriteIndex(objectModel.ParentSpriteIndex), ObjectContext.World, knownQuality: false));
         }
 
-        public SearchResult(FarmAnimal farmAnimal)
+        /// <summary>Construct an instance.</summary>
+        /// <param name="animal">The subject.</param>
+        public SearchResult(FarmAnimal animal)
         {
-            this.DisplayName = farmAnimal.name;
+            this.DisplayName = animal.name;
             this.Name = this.DisplayName.ToLowerInvariant();
             this.TargetType = TargetType.FarmAnimal;
-            this.Subject = new Lazy<ISubject>(() => new FarmAnimalSubject(farmAnimal));
+            this.Subject = new Lazy<ISubject>(() => new FarmAnimalSubject(animal));
         }
 
-        public SearchResult(RecipeModel results)
+        /// <summary>Construct an instance.</summary>
+        /// <param name="recipe">The subject.</param>
+        public SearchResult(RecipeModel recipe)
         {
-            this.DisplayName = results.Name;
+            this.DisplayName = recipe.Name;
             this.Name = this.DisplayName.ToLowerInvariant();
             this.TargetType = TargetType.InventoryItem;
-            this.Subject = new Lazy<ISubject>(() => new ItemSubject(results.CreateItem(), ObjectContext.Inventory, false));
+            this.Subject = new Lazy<ISubject>(() => new ItemSubject(recipe.CreateItem(), ObjectContext.Inventory, false));
         }
-
-        public string DisplayName { get; }
-
-        public string Name { get; }
-
-        public TargetType TargetType { get; }
-
-        public Lazy<ISubject> Subject { get; }
     }
 }

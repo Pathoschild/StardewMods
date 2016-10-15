@@ -330,6 +330,7 @@ namespace Pathoschild.LookupAnything
             });
         }
 
+        /// <summary>Toggle the search UI.</summary>
         private void ToggleSearch()
         {
             if (Game1.activeClickableMenu is SearchMenu)
@@ -338,17 +339,13 @@ namespace Pathoschild.LookupAnything
                 this.ShowSearch();
         }
 
-        /// <summary>Show the lookup UI for the current target.</summary>
+        /// <summary>Show the search UI.</summary>
         private void ShowSearch()
         {
             GameHelper.InterceptErrors("Showing Search UI", () =>
             {
-                using (ICumulativeLog log = this.GetTaskLog())
-                {
-                    // show search UI
-                    this.PreviousMenu = Game1.activeClickableMenu;
-                    Game1.activeClickableMenu = new SearchMenu(this.Metadata);
-                }
+                this.PreviousMenu = Game1.activeClickableMenu;
+                Game1.activeClickableMenu = new SearchMenu(this.Metadata);
             });
         }
 

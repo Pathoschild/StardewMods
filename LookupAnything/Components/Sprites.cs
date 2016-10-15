@@ -43,7 +43,7 @@ namespace Pathoschild.LookupAnything.Components
             /// <summary>A stardrop icon.</summary>
             public static readonly Rectangle Stardrop = new Rectangle(346, 392, 8, 8);
         }
-        
+
         /// <summary>Sprites used to draw a textbox.</summary>
         public static class Textbox
         {

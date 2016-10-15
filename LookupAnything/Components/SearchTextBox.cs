@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -14,21 +10,21 @@ namespace Pathoschild.LookupAnything.Components
     /// <summary>A textbox fires events while searching.</summary>
     internal class SearchTextBox : IKeyboardSubscriber
     {
-        public event EventHandler<string> Changed;
-
         /*********
         ** Properties
         *********/
-
         /// <summary>The underlying textbox.</summary>
         private readonly TextBox Textbox;
 
-        /// <summary> The previous value of Text for change detection. </summary>
-        private string lastText = string.Empty;
+        /// <summary>The last search text received for change detection.</summary>
+        private string LastText = string.Empty;
+
 
         /*********
-        ** Properties
+        ** Accessors
         *********/
+        /// <summary>The event raised when the search text changes.</summary>
+        public event EventHandler<string> Changed;
 
         /// <summary>The input text.</summary>
         public string Text
@@ -72,14 +68,13 @@ namespace Pathoschild.LookupAnything.Components
             set { this.Textbox.Height = value; }
         }
 
+
         /*********
         ** Public methods
         *********/
-
         /// <summary>Construct an instance.</summary>
         /// <param name="font">The text font.</param>
         /// <param name="textColor">The text color.</param>
-        /// <param name="validate">A lambda which indicates whether the specified character is allowed.</param>
         public SearchTextBox(SpriteFont font, Color textColor)
         {
             this.Textbox = new TextBox(Sprites.Textbox.Sheet, null, font, textColor);
@@ -98,7 +93,7 @@ namespace Pathoschild.LookupAnything.Components
         public void RecieveTextInput(char inputChar)
         {
             this.Textbox.RecieveTextInput(inputChar);
-            NotifyChange();
+            this.NotifyChange();
         }
 
         /// <summary>Receive input from the user.</summary>
@@ -106,7 +101,7 @@ namespace Pathoschild.LookupAnything.Components
         public void RecieveTextInput(string text)
         {
             this.Textbox.RecieveTextInput(text);
-            NotifyChange();
+            this.NotifyChange();
         }
 
         /// <summary>Receive input from the user.</summary>
@@ -114,7 +109,7 @@ namespace Pathoschild.LookupAnything.Components
         public void RecieveCommandInput(char command)
         {
             this.Textbox.RecieveCommandInput(command);
-            NotifyChange();
+            this.NotifyChange();
         }
 
         /// <summary>Receive input from the user.</summary>
@@ -122,13 +117,7 @@ namespace Pathoschild.LookupAnything.Components
         public void RecieveSpecialInput(Keys key)
         {
             this.Textbox.RecieveSpecialInput(key);
-            NotifyChange();
-        }
-
-        /// <summary>Get the textbox's bounds on the screen.</summary>
-        public Rectangle GetBounds()
-        {
-            return new Rectangle(this.Textbox.X, this.Textbox.Y, this.Textbox.Width, this.Textbox.Height);
+            this.NotifyChange();
         }
 
         /// <summary>Draw the textbox.</summary>
@@ -137,14 +126,15 @@ namespace Pathoschild.LookupAnything.Components
         {
             this.Textbox.Draw(batch);
         }
-                
+
+        /// <summary>Detect updated search text and notify listeners.</summary>
         private void NotifyChange()
-        {            
-            if (!string.Equals(this.Text, this.lastText))
+        {
+            if (this.Text != this.LastText)
             {
                 this.Changed?.Invoke(this, this.Text);
+                this.LastText = this.Text;
             }
-            this.lastText = this.Text;
         }
     }
 }

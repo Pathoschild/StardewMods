@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Pathoschild.LookupAnything.Common;
 using Pathoschild.LookupAnything.Framework;
-using Pathoschild.LookupAnything.Framework.Data;
-using Pathoschild.LookupAnything.Framework.Fields;
-using Pathoschild.LookupAnything.Framework.Models;
 using Pathoschild.LookupAnything.Framework.Subjects;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
 namespace Pathoschild.LookupAnything.Components
 {
-    /// <summary>A UI which shows information about an item.</summary>
+    /// <summary>A UI which lets the player search for subjects.</summary>
     internal class SearchMenu : IClickableMenu
     {
         /*********
@@ -35,91 +29,53 @@ namespace Pathoschild.LookupAnything.Components
         /// <summary>The number of pixels to scroll.</summary>
         private int CurrentScroll;
 
+        /// <summary>The subjects available for searching indexed by name.</summary>
         private readonly ILookup<string, SearchResult> SearchLookup;
 
-        /// <summary> Editable Search Query </summary>
+        /// <summary>The search input box.</summary>
         private readonly SearchTextBox SearchTextbox;
 
+        /// <summary>The current search results.</summary>
         private IEnumerable<SearchResultComponent> SearchResults = Enumerable.Empty<SearchResultComponent>();
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public SearchMenu(Metadata metadata)
+        {
+            // save data
+            this.Metadata = metadata;
+            this.SearchLookup = GameHelper.GetSearchLookup(this.Metadata);
+
+            // initialise
+            this.CalculateDimensions();
+            this.SearchTextbox = new SearchTextBox(Game1.smallFont, Color.Black);
+            this.SearchTextbox.Select();
+            this.SearchTextbox.Changed += (sender, text) => this.ReceiveSearchTextboxChanged(text);
+        }
+
 
         /*********
         ** Public methods
         *********/
         /****
-        ** Constructors
-        ****/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="subject">The metadata to display.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public SearchMenu(Metadata metadata)
-        {
-            this.Metadata = metadata;
-            this.SearchLookup = GameHelper.GetSearchLookup(this.Metadata);
-            this.CalculateDimensions();
-            this.SearchTextbox = new SearchTextBox(Game1.smallFont, Color.Black);
-            this.SearchTextbox.Select();
-            this.SearchTextbox.Changed += SearchTextbox_Changed;
-        }
-
-        private void SearchTextbox_Changed(object sender, string searchString)
-        {
-            // avoid searching empty strings for better performance
-            if (string.IsNullOrWhiteSpace(searchString))
-            {
-                this.SearchResults = Enumerable.Empty<SearchResultComponent>();
-                return;
-            }
-
-            searchString = searchString.ToLowerInvariant();
-            var scoreMerger = new Func<string, string, double>((string haystack, string needle) =>
-            {
-                // prefer starts with to contains (e.g. 'brea' yields 'bread/bream' over 'complete breakfast')
-                if (haystack.StartsWith(needle))
-                {
-                    if (haystack.Length == needle.Length)
-                    {
-                        return 0; // same string
-                    }
-                    return 0.5;
-                }
-                if (haystack.Contains(needle))
-                {
-                    return 1.5;
-                }
-                return Sift3.Compare(haystack, needle, 5); // (e.g. 'breaf' yields 1 for 'bread', 'bream')
-            });
-
-            var debugResults = this.SearchLookup
-                .Select(sr => new { Result = sr, Score = scoreMerger(sr.Key, searchString) })
-                .OrderBy(r => r.Score)
-                .Where(r => r.Score < 3) // experimentally, results under this score have to be horrendous typos to be relavent since the corpus is small 
-                .Take(20) // the above filter should be aggressive, if there are many results, most probably come from the pre-sifted constants (e.g. 'ore' and we want to include them)
-                .ToArray();
-
-            var results = debugResults
-                .Select(r => r.Result.First()); // only the first instance of results with this exact name
-
-            this.SearchResults = results.Select(result => new SearchResultComponent(result)).ToArray();
-        }
-
-        /****
         ** Events
         ****/
-
         /// <summary>The method invoked when the player left-clicks on the lookup UI.</summary>
         /// <param name="x">The X-position of the cursor.</param>
         /// <param name="y">The Y-position of the cursor.</param>
         /// <param name="playSound">Whether to enable sound.</param>
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            foreach (var result in this.SearchResults)
+            SearchResultComponent match = this.SearchResults.FirstOrDefault(p => p.containsPoint(x, y));
+            if (match != null)
             {
-                if (result.containsPoint(x, y))
-                {
-                    ISubject subject = result.Result.Subject.Value;
-                    Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata);
-                    Game1.playSound("coin");
-                }
+                ISubject subject = match.Result.Subject.Value;
+                Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata);
+                Game1.playSound("coin");
             }
         }
 
@@ -128,6 +84,13 @@ namespace Pathoschild.LookupAnything.Components
         /// <param name="y">The Y-position of the cursor.</param>
         /// <param name="playSound">Whether to enable sound.</param>
         public override void receiveRightClick(int x, int y, bool playSound = true) { }
+
+        /// <summary>The method invoked when the player presses an input button.</summary>
+        /// <param name="key">The pressed input.</param>
+        public override void receiveKeyPress(Keys key)
+        {
+            // deliberately avoid calling base, which may let another key close the menu
+        }
 
         /// <summary>The method invoked when the player scrolls the mouse wheel on the lookup UI.</summary>
         /// <param name="direction">The scroll direction.</param>
@@ -159,11 +122,6 @@ namespace Pathoschild.LookupAnything.Components
         public void ScrollDown(int amount)
         {
             this.CurrentScroll += amount;
-        }
-
-        public override void receiveKeyPress(Keys key)
-        {
-            // Override to deliberately avoid calling base and letting another key close the menu
         }
 
         /// <summary>Render the UI.</summary>
@@ -213,8 +171,8 @@ namespace Pathoschild.LookupAnything.Components
                 float wrapWidth = this.width - leftOffset - gutter;
                 {
                     {
-                        Vector2 nameSize = contentBatch.DrawTextBlock(font, $"Search", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: true);
-                        Vector2 typeSize = contentBatch.DrawTextBlock(font, $"(Lookup Anything)", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
+                        Vector2 nameSize = contentBatch.DrawTextBlock(font, "Search", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: true);
+                        Vector2 typeSize = contentBatch.DrawTextBlock(font, "(Lookup Anything)", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
                         topOffset += Math.Max(nameSize.Y, typeSize.Y);
 
                         this.SearchTextbox.X = (int)(x + leftOffset);
@@ -223,11 +181,12 @@ namespace Pathoschild.LookupAnything.Components
                         this.SearchTextbox.Draw(contentBatch);
                         topOffset += this.SearchTextbox.Height;
 
-                        int mouseX = Game1.getMouseX(), mouseY = Game1.getMouseY();
-                        foreach (var result in this.SearchResults)
+                        int mouseX = Game1.getMouseX();
+                        int mouseY = Game1.getMouseY();
+                        foreach (SearchResultComponent result in this.SearchResults)
                         {
                             bool isHighlighted = result.containsPoint(mouseX, mouseY);
-                            var objSize = result.draw(contentBatch, new Vector2(x + leftOffset, y + topOffset), (int)wrapWidth, isHighlighted);
+                            var objSize = result.Draw(contentBatch, new Vector2(x + leftOffset, y + topOffset), (int)wrapWidth, isHighlighted);
                             topOffset += objSize.Y;
                         }
                     }
@@ -257,6 +216,86 @@ namespace Pathoschild.LookupAnything.Components
         /*********
         ** Private methods
         *********/
+        /// <summary>The method invoked when the player changes the search text.</summary>
+        /// <param name="search">The new search text.</param>
+        private void ReceiveSearchTextboxChanged(string search)
+        {
+            // nothing to search
+            if (string.IsNullOrWhiteSpace(search))
+            {
+                this.SearchResults = Enumerable.Empty<SearchResultComponent>();
+                return;
+            }
+
+            // get search results
+            search = search.ToLowerInvariant();
+            this.SearchResults =
+                (
+                    from entry in this.SearchLookup
+                    let name = entry.Key
+                    let score = this.GetSearchScore(name, search, 5)
+                    where score < 3 // since the corpus is small, low values usually have little relevance
+                    orderby score ascending
+                    select new SearchResultComponent(entry.First()) // get first result for each name
+                )
+                .Take(20) // the above filter should be aggressive, if there are many results, most probably come from the pre-sifted constants (e.g. 'ore' and we want to include them)
+                .ToArray();
+        }
+
+        /// <summary>Get a value indicating how closely two values match (higher is better).</summary>
+        /// <param name="target">The potential search result.</param>
+        /// <param name="search">The search string.</param>
+        /// <param name="maxSiftOffset">The maximum number of characters to compare when sifting.</param>
+        private double GetSearchScore(string target, string search, int maxSiftOffset)
+        {
+            // handle empty values
+            if (string.IsNullOrEmpty(target))
+                return string.IsNullOrEmpty(search) ? 0 : search.Length;
+            if (string.IsNullOrEmpty(search))
+                return target.Length;
+
+            // exact match
+            if (target == search)
+                return 0;
+
+            // prefer initial match (e.g. "brea" yields "bread" before "complete breakfast")
+            if (target.StartsWith(search))
+                return 0.5;
+            if (target.Contains(search))
+                return 1.5;
+
+            // get fuzzy search score
+            // This is an implementation of the Sift3 compare algorithm by Siderite; see https://siderite.blogspot.com/2007/04/super-fast-and-accurate-string-distance.html.
+            {
+                int indexA = 0, indexB = 0, longestCommonSubstring = 0;
+                while (indexA < target.Length && indexB < search.Length)
+                {
+                    if (target[indexA] == search[indexB])
+                        longestCommonSubstring++;
+                    else
+                    {
+                        for (int i = 1; i < maxSiftOffset; i++)
+                        {
+                            if ((indexA + i < target.Length) && (target[indexA + i] == search[indexB]))
+                            {
+                                indexA += i;
+                                break;
+                            }
+
+                            if ((indexB + i < search.Length) && (target[indexA] == search[indexB + i]))
+                            {
+                                indexB += i;
+                                break;
+                            }
+                        }
+                    }
+                    indexA++;
+                    indexB++;
+                }
+                return (target.Length + search.Length) / 2 - longestCommonSubstring;
+            }
+        }
+
         /// <summary>Calculate the rendered dimensions based on the current game scale.</summary>
         private void CalculateDimensions()
         {
