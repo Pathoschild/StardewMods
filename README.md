@@ -127,6 +127,9 @@ file if you want. These are the available settings:
 * Fixed error when calculating a day offset that wraps into the next year.
 * Fixed errors crashing the game in rare cases.
 
+1.6 (upcoming):
+* Fixed new error looking up a villager you haven't met yet
+
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
 recommended. If you really want to compile the mod yourself, just edit `LookupAnything.csproj` and

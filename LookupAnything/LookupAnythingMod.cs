@@ -176,7 +176,7 @@ namespace Pathoschild.LookupAnything
                             GitRelease release = UpdateHelper.GetLatestReleaseAsync("Pathoschild/LookupAnything").Result;
                             if (release.IsNewerThan(this.CurrentVersion))
                             {
-                                log.AppendLine("update to version {release.Name} available.");
+                                log.AppendLine($"update to version {release.Name} available.");
                                 this.NewRelease = release;
                             }
                             else
