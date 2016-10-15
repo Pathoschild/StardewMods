@@ -57,10 +57,6 @@ namespace Pathoschild.LookupAnything.Components
             this.SearchTextbox.OnChanged += (sender, text) => this.ReceiveSearchTextboxChanged(text);
         }
 
-
-        /*********
-        ** Public methods
-        *********/
         /****
         ** Events
         ****/
@@ -94,7 +90,7 @@ namespace Pathoschild.LookupAnything.Components
         public override void receiveKeyPress(Keys key)
         {
             // deliberately avoid calling base, which may let another key close the menu
-            if(key.Equals(Keys.Escape))
+            if (key.Equals(Keys.Escape))
                 this.exitThisMenu();
         }
 
