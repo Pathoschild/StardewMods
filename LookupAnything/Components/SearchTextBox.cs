@@ -8,7 +8,7 @@ using StardewValley.Menus;
 namespace Pathoschild.LookupAnything.Components
 {
     /// <summary>A textbox fires events while searching.</summary>
-    internal class SearchTextBox : IKeyboardSubscriber
+    internal class SearchTextBox : IKeyboardSubscriber, IDisposable
     {
         /*********
         ** Properties
@@ -135,6 +135,14 @@ namespace Pathoschild.LookupAnything.Components
                 this.OnChanged?.Invoke(this, this.Text);
                 this.LastText = this.Text;
             }
+        }
+
+        /// <summary>Release all resources.</summary>
+        public void Dispose()
+        {
+            this.OnChanged = null;
+            if (Game1.keyboardDispatcher.Subscriber == this)
+                Game1.keyboardDispatcher.Subscriber = null;
         }
     }
 }

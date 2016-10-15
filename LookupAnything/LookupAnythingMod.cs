@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -233,6 +234,10 @@ namespace Pathoschild.LookupAnything
         /// <param name="closedMenu">The menu which the player just closed.</param>
         private void ReceiveMenuClosed(IClickableMenu closedMenu)
         {
+            // dispose menu
+            if (closedMenu is LookupMenu || closedMenu is SearchMenu)
+                (closedMenu as IDisposable)?.Dispose();
+
             // restore the previous menu if it was hidden to show the lookup UI
             GameHelper.InterceptErrors("restoring the previous menu", () =>
             {

@@ -12,7 +12,7 @@ using StardewValley.Menus;
 namespace Pathoschild.LookupAnything.Components
 {
     /// <summary>A UI which lets the player search for subjects.</summary>
-    internal class SearchMenu : IClickableMenu
+    internal class SearchMenu : IClickableMenu, IDisposable
     {
         /*********
         ** Properties
@@ -73,6 +73,10 @@ namespace Pathoschild.LookupAnything.Components
             SearchResultComponent match = this.SearchResults.FirstOrDefault(p => p.containsPoint(x, y));
             if (match != null)
             {
+                // close search menu
+                this.Dispose();
+
+                // open lookup menu
                 ISubject subject = match.Result.Subject.Value;
                 Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata);
                 Game1.playSound("coin");
@@ -212,6 +216,12 @@ namespace Pathoschild.LookupAnything.Components
                 // end draw
                 contentBatch.End();
             }
+        }
+
+        /// <summary>Release all resources.</summary>
+        public void Dispose()
+        {
+            this.SearchTextbox.Dispose();
         }
 
 
