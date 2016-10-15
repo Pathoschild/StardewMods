@@ -296,7 +296,7 @@ namespace ChestsAnywhere.Menus.Overlays
             switch (this.ActiveElement)
             {
                 case Element.Menu:
-                    if (input.Equals(config.Toggle))
+                    if (input.Equals(config.Toggle) || input.Equals(Keys.Escape) || input.Equals(Game1.options.menuButton))
                         this.Exit();
                     else if (input.Equals(config.PrevChest))
                         this.SelectPreviousChest();
@@ -304,6 +304,13 @@ namespace ChestsAnywhere.Menus.Overlays
                         this.SelectNextChest();
                     else
                         return false;
+                    return true;
+
+                case Element.ChestList:
+                case Element.GroupList:
+                case Element.EditForm:
+                    if (input.Equals(Keys.Escape))
+                        this.ActiveElement = Element.Menu;
                     return true;
 
                 default:
@@ -410,7 +417,14 @@ namespace ChestsAnywhere.Menus.Overlays
                 // buttons & dropdown
                 default:
                     if (this.EditButton.containsPoint(x, y))
+                    {
+                        this.EditNameField.Text = this.Chest.Name;
+                        this.EditCategoryField.Text = this.Chest.GetGroup();
+                        this.EditOrderField.Text = this.Chest.Order?.ToString();
+                        this.EditHideChestField.Value = this.Chest.IsIgnored;
+
                         this.ActiveElement = Element.EditForm;
+                    }
                     else if (this.ChestTab.containsPoint(x, y))
                         this.ActiveElement = Element.ChestList;
                     else if (this.GroupTab?.containsPoint(x, y) == true)
@@ -515,7 +529,7 @@ namespace ChestsAnywhere.Menus.Overlays
         private void Exit()
         {
             this.Dispose();
-            Game1.activeClickableMenu = null;
+            this.Menu.exitThisMenu();
         }
 
         /// <summary>Switch to the previous chest in the list.</summary>
