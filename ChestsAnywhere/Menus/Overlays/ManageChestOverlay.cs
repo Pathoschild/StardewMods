@@ -268,28 +268,30 @@ namespace ChestsAnywhere.Menus.Overlays
 
         /// <summary>The method invoked when the player presses a key.</summary>
         /// <param name="input">The key that was pressed.</param>
-        protected override void ReceiveKeyPress(Keys input)
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        protected override bool ReceiveKeyPress(Keys input)
         {
-            this.ReceiveKey(input, this.Config.Keyboard);
+            return this.ReceiveKey(input, this.Config.Keyboard);
         }
 
         /// <summary>The method invoked when the player presses a controller button.</summary>
         /// <param name="input">The button that was pressed.</param>
-        protected override void ReceiveButtonPress(Buttons input)
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        protected override bool ReceiveButtonPress(Buttons input)
         {
-            this.ReceiveKey(input, this.Config.Controller);
+            return this.ReceiveKey(input, this.Config.Controller);
         }
 
         /// <summary>The method invoked when the player presses a key.</summary>
         /// <typeparam name="T">The key type.</typeparam>
         /// <param name="input">The key that was pressed.</param>
         /// <param name="config">The input configuration.</param>
-        /// <returns>Returns whether the input was handled.</returns>
-        public void ReceiveKey<T>(T input, InputMapConfiguration<T> config)
+        /// <returns>Whether the key has been handled and shouldn't be propagated further.</returns>
+        public bool ReceiveKey<T>(T input, InputMapConfiguration<T> config)
         {
             // ignore invalid input
             if (this.IsInitialising() || !config.IsValidKey(input))
-                return;
+                return false;
 
             switch (this.ActiveElement)
             {
@@ -300,29 +302,43 @@ namespace ChestsAnywhere.Menus.Overlays
                         this.SelectPreviousChest();
                     else if (input.Equals(config.NextChest))
                         this.SelectNextChest();
-                    break;
+                    else
+                        return false;
+                    return true;
+
+                default:
+                    return false;
             }
         }
 
         /// <summary>The method invoked when the player scrolls the dropdown using the mouse wheel.</summary>
         /// <param name="amount">The scroll direction.</param>
-        protected override void ReceiveScrollWheelAction(int amount)
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        protected override bool ReceiveScrollWheelAction(int amount)
         {
             switch (this.ActiveElement)
             {
                 case Element.ChestList:
                     this.ChestSelector.ReceiveScrollWheelAction(amount);
-                    break;
+                    return true;
+
                 case Element.GroupList:
                     this.GroupSelector?.ReceiveScrollWheelAction(amount);
-                    break;
+                    return true;
+
+                case Element.EditForm:
+                    return true; // suppress input
+
+                default:
+                    return false;
             }
         }
 
         /// <summary>The method invoked when the player left-clicks.</summary>
         /// <param name="x">The X-position of the cursor.</param>
         /// <param name="y">The Y-position of the cursor.</param>
-        protected override void ReceiveLeftClick(int x, int y)
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        protected override bool ReceiveLeftClick(int x, int y)
         {
             switch (this.ActiveElement)
             {
@@ -354,7 +370,8 @@ namespace ChestsAnywhere.Menus.Overlays
                     // exit button
                     else if (this.EditExitButton.containsPoint(x, y))
                         this.ActiveElement = Element.Menu;
-                    break;
+
+                    return true; // handle all clicks while open
 
                 // chest list
                 case Element.ChestList:
@@ -371,7 +388,7 @@ namespace ChestsAnywhere.Menus.Overlays
                             this.ReinitialiseComponents();
                         }
                     }
-                    break;
+                    return true; // handle all clicks while open
 
                 // group list
                 case Element.GroupList:
@@ -388,7 +405,7 @@ namespace ChestsAnywhere.Menus.Overlays
                             this.ReinitialiseComponents();
                         }
                     }
-                    break;
+                    return true; // handle all clicks while open
 
                 // buttons & dropdown
                 default:
@@ -398,25 +415,35 @@ namespace ChestsAnywhere.Menus.Overlays
                         this.ActiveElement = Element.ChestList;
                     else if (this.GroupTab?.containsPoint(x, y) == true)
                         this.ActiveElement = Element.GroupList;
-                    break;
+                    else
+                        return false;
+                    return true;
             }
         }
 
         /// <summary>The method invoked when the cursor is hovered.</summary>
         /// <param name="x">The cursor's X position.</param>
         /// <param name="y">The cursor's Y position.</param>
-        protected override void ReceiveCursorHover(int x, int y)
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        protected override bool ReceiveCursorHover(int x, int y)
         {
             switch (this.ActiveElement)
             {
                 case Element.Menu:
                     this.EditButton.tryHover(x, y);
-                    break;
+                    return false;
 
                 case Element.EditForm:
                     this.EditSaveButton.tryHover(x, y);
                     this.EditExitButton.tryHover(x, y);
-                    break;
+                    return true;
+
+                case Element.ChestList:
+                case Element.GroupList:
+                    return true; // suppress menu hover
+
+                default:
+                    return false;
             }
         }
 

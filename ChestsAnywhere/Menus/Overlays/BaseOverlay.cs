@@ -14,9 +14,6 @@ namespace ChestsAnywhere.Menus.Overlays
         /*********
         ** Properties
         *********/
-        /// <summary>The last mouse state.</summary>
-        private MouseState LastMouseState;
-
         /// <summary>The last viewport bounds.</summary>
         private Rectangle LastViewport;
 
@@ -34,6 +31,7 @@ namespace ChestsAnywhere.Menus.Overlays
             GameEvents.UpdateTick -= this.OnUpdateTick;
             ControlEvents.KeyPressed -= this.OnKeyPressed;
             ControlEvents.ControllerButtonPressed -= this.OnControllerButtonPressed;
+            ControlEvents.MouseChanged -= this.OnMouseChanged;
         }
 
 
@@ -53,6 +51,7 @@ namespace ChestsAnywhere.Menus.Overlays
             GameEvents.UpdateTick += this.OnUpdateTick;
             ControlEvents.KeyPressed += this.OnKeyPressed;
             ControlEvents.ControllerButtonPressed += this.OnControllerButtonPressed;
+            ControlEvents.MouseChanged += this.OnMouseChanged;
         }
 
         /// <summary>Draw the overlay to the screen.</summary>
@@ -62,24 +61,44 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <summary>The method invoked when the player left-clicks.</summary>
         /// <param name="x">The X-position of the cursor.</param>
         /// <param name="y">The Y-position of the cursor.</param>
-        protected virtual void ReceiveLeftClick(int x, int y) { }
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        protected virtual bool ReceiveLeftClick(int x, int y)
+        {
+            return false;
+        }
 
         /// <summary>The method invoked when the player presses a key.</summary>
         /// <param name="input">The key that was pressed.</param>
-        protected virtual void ReceiveKeyPress(Keys input) { }
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        protected virtual bool ReceiveKeyPress(Keys input)
+        {
+            return false;
+        }
 
         /// <summary>The method invoked when the player presses a controller button.</summary>
         /// <param name="input">The button that was pressed.</param>
-        protected virtual void ReceiveButtonPress(Buttons input) { }
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        protected virtual bool ReceiveButtonPress(Buttons input)
+        {
+            return false;
+        }
 
         /// <summary>The method invoked when the player uses the mouse scroll wheel.</summary>
         /// <param name="amount">The scroll amount.</param>
-        protected virtual void ReceiveScrollWheelAction(int amount) { }
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        protected virtual bool ReceiveScrollWheelAction(int amount)
+        {
+            return false;
+        }
 
         /// <summary>The method invoked when the cursor is hovered.</summary>
         /// <param name="x">The cursor's X position.</param>
         /// <param name="y">The cursor's Y position.</param>
-        protected virtual void ReceiveCursorHover(int x, int y) { }
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        protected virtual bool ReceiveCursorHover(int x, int y)
+        {
+            return false;
+        }
 
         /// <summary>The method invoked when the player resizes the game windoww.</summary>
         /// <param name="oldBounds">The previous game window bounds.</param>
@@ -126,17 +145,6 @@ namespace ChestsAnywhere.Menus.Overlays
                 this.ReceiveGameWindowResized(this.LastViewport, newViewport);
                 this.LastViewport = newViewport;
             }
-
-            // trigger mouse events
-            MouseState mouseState = Mouse.GetState();
-            int mouseX = Game1.getOldMouseX();
-            int mouseY = Game1.getOldMouseY();
-            this.ReceiveCursorHover(mouseX, mouseY);
-            if (mouseState.LeftButton == ButtonState.Pressed && this.LastMouseState.LeftButton != ButtonState.Pressed)
-                this.ReceiveLeftClick(mouseX, mouseY);
-            if (mouseState.ScrollWheelValue != this.LastMouseState.ScrollWheelValue)
-                this.ReceiveScrollWheelAction(mouseState.ScrollWheelValue - this.LastMouseState.ScrollWheelValue);
-            this.LastMouseState = mouseState;
         }
 
         /// <summary>The method invoked when the player presses a key.</summary>
@@ -144,7 +152,10 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <param name="e">The event arguments.</param>
         private void OnKeyPressed(object sender, EventArgsKeyPressed e)
         {
-            this.ReceiveKeyPress(e.KeyPressed);
+            bool handled = this.ReceiveKeyPress(e.KeyPressed);
+            if (handled)
+                Game1.oldKBState = Keyboard.GetState();
+
         }
 
         /// <summary>The method invoked when the player presses a key.</summary>
@@ -152,7 +163,42 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <param name="e">The event arguments.</param>
         private void OnControllerButtonPressed(object sender, EventArgsControllerButtonPressed e)
         {
-            this.ReceiveButtonPress(e.ButtonPressed);
+            bool handled = this.ReceiveButtonPress(e.ButtonPressed);
+            if (handled)
+                Game1.oldPadState = GamePad.GetState(PlayerIndex.One);
+        }
+
+        /// <summary>The method invoked when the mouse state changes.</summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnMouseChanged(object sender, EventArgsMouseStateChanged e)
+        {
+            // get data
+            MouseState oldState = e.PriorState;
+            MouseState newState = e.NewState;
+            int newX = Game1.getMouseX();
+            int newY = Game1.getMouseY();
+
+            // raise events
+            bool hoverHandled = this.ReceiveCursorHover(newX, newY);
+            bool leftClickHandled = oldState.LeftButton != ButtonState.Pressed && newState.LeftButton == ButtonState.Pressed && this.ReceiveLeftClick(newX, newY);
+            bool scrollHandled = oldState.ScrollWheelValue != newState.ScrollWheelValue && this.ReceiveScrollWheelAction(newState.ScrollWheelValue - oldState.ScrollWheelValue);
+
+            // suppress handled input
+            if (hoverHandled || leftClickHandled || scrollHandled)
+            {
+                MouseState cur = Game1.oldMouseState;
+                Game1.oldMouseState = new MouseState(
+                    x: cur.X,
+                    y: cur.Y,
+                    scrollWheel: scrollHandled ? newState.ScrollWheelValue : cur.ScrollWheelValue,
+                    leftButton: leftClickHandled ? newState.LeftButton : cur.LeftButton,
+                    middleButton: cur.MiddleButton,
+                    rightButton: cur.RightButton,
+                    xButton1: cur.XButton1,
+                    xButton2: cur.XButton2
+                );
+            }
         }
     }
 }
