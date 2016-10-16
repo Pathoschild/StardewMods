@@ -52,9 +52,12 @@ namespace ChestsAnywhere
         }
 
         /// <summary>Get all player chests in the order they should be displayed.</summary>
-        public static IEnumerable<ManagedChest> GetChestsInDisplayOrder()
+        /// <param name="selectedChest">The chest to show even if it's ignored.</param>
+        /// <param name="excludeIgnored">Whether to exclude chests marked as hidden.</param>
+        public static IEnumerable<ManagedChest> GetChestsForDisplay(Chest selectedChest = null, bool excludeIgnored = true)
         {
             return ChestFactory.GetChests()
+                .Where(chest => !excludeIgnored || !chest.IsIgnored || chest.Chest == selectedChest)
                 .OrderBy(p => p.Order ?? int.MaxValue)
                 .ThenBy(p => p.Name);
         }
