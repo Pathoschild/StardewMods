@@ -92,6 +92,9 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <summary>The edit button.</summary>
         private ClickableTextureComponent EditButton;
 
+        /// <summary>The button which sorts the player inventory.</summary>
+        private ClickableTextureComponent SortInventoryButton;
+
         /****
         ** Edit UI
         ****/
@@ -150,6 +153,13 @@ namespace ChestsAnywhere.Menus.Overlays
             this.ReinitialiseComponents();
         }
 
+        /// <summary>Sort the player's inventory.</summary>
+        public void SortInventory()
+        {
+            ItemGrabMenu.organizeItemsInList(Game1.player.items);
+            Game1.playSound("Ship");
+        }
+
         /// <summary>Switch to the specified chest.</summary>
         /// <param name="chest">The chest to select.</param>
         public void SelectChest(ManagedChest chest)
@@ -190,6 +200,7 @@ namespace ChestsAnywhere.Menus.Overlays
 
                 // edit button
                 this.EditButton.draw(batch);
+                this.SortInventoryButton.draw(batch);
             }
 
             // edit mode
@@ -302,6 +313,8 @@ namespace ChestsAnywhere.Menus.Overlays
                         this.SelectPreviousChest();
                     else if (input.Equals(config.NextChest))
                         this.SelectNextChest();
+                    else if (input.Equals(config.SortItems))
+                        this.SortInventory();
                     else
                         return false;
                     return true;
@@ -425,6 +438,8 @@ namespace ChestsAnywhere.Menus.Overlays
 
                         this.ActiveElement = Element.EditForm;
                     }
+                    else if (this.SortInventoryButton.containsPoint(x, y))
+                        this.SortInventory();
                     else if (this.ChestTab.containsPoint(x, y))
                         this.ActiveElement = Element.ChestList;
                     else if (this.GroupTab?.containsPoint(x, y) == true)
@@ -445,6 +460,7 @@ namespace ChestsAnywhere.Menus.Overlays
             {
                 case Element.Menu:
                     this.EditButton.tryHover(x, y);
+                    this.SortInventoryButton.tryHover(x, y);
                     return false;
 
                 case Element.EditForm:
@@ -496,7 +512,16 @@ namespace ChestsAnywhere.Menus.Overlays
                 Rectangle sprite = Sprites.Icons.SpeechBubble;
                 float zoom = Game1.pixelZoom / 2f;
                 Rectangle buttonBounds = new Rectangle(this.ChestTab.bounds.X + this.ChestTab.bounds.Width, this.ChestTab.bounds.Y, (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
-                this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, "edit chest", Sprites.Icons.Sheet, Sprites.Icons.SpeechBubble, zoom);
+                this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, "edit chest", Sprites.Icons.Sheet, sprite, zoom);
+            }
+
+            // sort inventory button overlay (based on OK button position)
+            {
+                Rectangle sprite = Sprites.Buttons.Organize;
+                ClickableTextureComponent okButton = this.Menu.okButton;
+                float zoom = Game1.pixelZoom;
+                Rectangle buttonBounds = new Rectangle(okButton.bounds.X, (int)(okButton.bounds.Y - sprite.Height * zoom), (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
+                this.SortInventoryButton = new ClickableTextureComponent("sort-inventory", buttonBounds, null, "sort inventory", Sprites.Icons.Sheet, sprite, zoom);
             }
 
             // edit form

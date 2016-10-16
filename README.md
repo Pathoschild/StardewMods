@@ -31,6 +31,7 @@ file if you want. These are the available settings:
 | `Keyboard`        | Set keyboard bindings. The default values are `B` to toggle the chest UI, and `Left`/`Right` to switch chests. See [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx).
 | `Controller`      | Set controller bindings. No buttons configured by default. See [valid buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.buttons.aspx).
 | `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll see a small message at the bottom of the screen for a few seconds. This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
+| `ShowHoverTooltips` | Default `true`. Whether to show the chest name in a tooltip when you point at a chest.
 
 ## Versions
 1.0:
@@ -89,7 +90,6 @@ file if you want. These are the available settings:
 * You can now navigate chests after opening one directly.
 * Added compatibility with most inventory mods.
 * Added an option to disable hover tooltips.
-* Removed inventory sorting.
 * Fixed controller toggle button not closing the menu.
 * Fixed chest menu behaving unpredictably after closing edit form in some cases.
 

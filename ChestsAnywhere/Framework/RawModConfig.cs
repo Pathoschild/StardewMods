@@ -33,7 +33,8 @@ namespace ChestsAnywhere.Framework
             {
                 Toggle = Keys.B.ToString(),
                 PrevChest = Keys.Left.ToString(),
-                NextChest = Keys.Right.ToString()
+                NextChest = Keys.Right.ToString(),
+                SortItems = ""
             };
             this.Controller = new InputMapConfiguration<string>
             {
@@ -61,13 +62,15 @@ namespace ChestsAnywhere.Framework
                 {
                     Toggle = this.TryParse(this.Keyboard.Toggle, Keys.B),
                     PrevChest = this.TryParse(this.Keyboard.PrevChest, Keys.Left),
-                    NextChest = this.TryParse(this.Keyboard.NextChest, Keys.Right)
+                    NextChest = this.TryParse(this.Keyboard.NextChest, Keys.Right),
+                    SortItems = this.TryParse<Keys>(this.Keyboard.SortItems)
                 },
                 Controller = new InputMapConfiguration<Buttons>
                 {
                     Toggle = this.TryParse<Buttons>(this.Controller.Toggle),
                     PrevChest = this.TryParse<Buttons>(this.Controller.PrevChest),
-                    NextChest = this.TryParse<Buttons>(this.Controller.NextChest)
+                    NextChest = this.TryParse<Buttons>(this.Controller.NextChest),
+                    SortItems = this.TryParse<Buttons>(this.Keyboard.SortItems)
                 },
                 CheckForUpdates = this.CheckForUpdates,
                 ShowHoverTooltips = this.ShowHoverTooltips
