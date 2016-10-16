@@ -148,7 +148,7 @@ namespace ChestsAnywhere
             {
                 // get chest data
                 ItemGrabMenu chestMenu = (ItemGrabMenu)newMenu;
-                ManagedChest[] chests = ChestFactory.GetChests().ToArray();
+                ManagedChest[] chests = ChestFactory.GetChestsInDisplayOrder().ToArray();
                 ManagedChest chest = ChestFactory.GetChestFromMenu(chestMenu);
                 if (chest == null)
                     return;
@@ -195,14 +195,7 @@ namespace ChestsAnywhere
         private void OpenMenu()
         {
             // get chests
-            ManagedChest[] chests =
-                (
-                    from chest in ChestFactory.GetChests()
-                    where !chest.IsIgnored
-                    orderby chest.GetGroup() ascending, (chest.Order ?? int.MaxValue) ascending, chest.Name ascending
-                    select chest
-                )
-                .ToArray();
+            ManagedChest[] chests = ChestFactory.GetChestsInDisplayOrder().Where(chest => !chest.IsIgnored).ToArray();
             ManagedChest selectedChest = chests.FirstOrDefault(p => p.Chest == this.SelectedChest) ?? chests.FirstOrDefault();
 
             // render menu

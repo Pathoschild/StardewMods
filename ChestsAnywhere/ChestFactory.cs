@@ -51,6 +51,14 @@ namespace ChestsAnywhere
             }
         }
 
+        /// <summary>Get all player chests in the order they should be displayed.</summary>
+        public static IEnumerable<ManagedChest> GetChestsInDisplayOrder()
+        {
+            return ChestFactory.GetChests()
+                .OrderBy(p => p.Order ?? int.MaxValue)
+                .ThenBy(p => p.Name);
+        }
+
         /// <summary>Get the player chest on the specified tile (if any).</summary>
         /// <param name="tile">The tile to check.</param>
         public static ManagedChest GetChestFromTile(Vector2 tile)
