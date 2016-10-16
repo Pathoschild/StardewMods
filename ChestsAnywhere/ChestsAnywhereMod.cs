@@ -149,14 +149,14 @@ namespace ChestsAnywhere
             // add overlay
             if (newMenu is ItemGrabMenu)
             {
-                // get chest data
+                // get open chest
                 ItemGrabMenu chestMenu = (ItemGrabMenu)newMenu;
                 ManagedChest chest = ChestFactory.GetChestFromMenu(chestMenu);
-                ManagedChest[] chests = ChestFactory.GetChestsForDisplay(selectedChest: chest.Chest).ToArray();
                 if (chest == null)
                     return;
 
                 // add overlay
+                ManagedChest[] chests = ChestFactory.GetChestsForDisplay(selectedChest: chest.Chest).ToArray();
                 this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config);
                 this.ManageChestOverlay.OnChestSelected += selected =>
                 {
