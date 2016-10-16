@@ -520,7 +520,7 @@ namespace ChestsAnywhere.Menus.Overlays
                 Rectangle sprite = Sprites.Buttons.Organize;
                 ClickableTextureComponent okButton = this.Menu.okButton;
                 float zoom = Game1.pixelZoom;
-                Rectangle buttonBounds = new Rectangle(okButton.bounds.X, (int)(okButton.bounds.Y - sprite.Height * zoom), (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
+                Rectangle buttonBounds = new Rectangle(okButton.bounds.X, (int)(okButton.bounds.Y - sprite.Height * zoom - 5 * zoom), (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
                 this.SortInventoryButton = new ClickableTextureComponent("sort-inventory", buttonBounds, null, "sort inventory", Sprites.Icons.Sheet, sprite, zoom);
             }
 
@@ -532,6 +532,9 @@ namespace ChestsAnywhere.Menus.Overlays
             this.EditHideChestField = new Checkbox(this.Chest.IsIgnored);
             this.EditSaveButton = new ClickableTextureComponent("save-chest", new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), null, "OK", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, IClickableMenu.borderWithDownArrowIndex), 1f);
             this.EditExitButton = new ClickableTextureComponent(new Rectangle(bounds.Right - 9 * Game1.pixelZoom, bounds.Y - Game1.pixelZoom * 2, Sprites.Icons.ExitButton.Width * Game1.pixelZoom, Sprites.Icons.ExitButton.Height * Game1.pixelZoom), Sprites.Icons.Sheet, Sprites.Icons.ExitButton, Game1.pixelZoom);
+
+            // adjust menu to fit
+            this.Menu.trashCan.bounds.Y = this.SortInventoryButton.bounds.Y - this.Menu.trashCan.bounds.Height - 2 * Game1.pixelZoom;
         }
 
         /// <summary>Save the form input.</summary>
