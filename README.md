@@ -86,9 +86,12 @@ file if you want. These are the available settings:
 * Fixed visual issues.
 
 1.6 (upcoming):
-* Added compatibility with most mods that affects chests.
-* Removed sort hotkey.
-* Fixed issue were menu behaved unpredictably after closing edit form.
+* You can now navigate chests after opening one directly.
+* Added compatibility with most inventory mods.
+* Added an option to disable hover tooltips.
+* Removed inventory sorting.
+* Fixed controller toggle button not closing the menu.
+* Fixed chest menu behaving unpredictably after closing edit form in some cases.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is

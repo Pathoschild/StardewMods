@@ -123,11 +123,14 @@ namespace ChestsAnywhere
             }
 
             // show chest label
-            ManagedChest cursorChest = ChestFactory.GetChestFromTile(Game1.currentCursorTile);
-            if (cursorChest != null)
+            if (this.Config.ShowHoverTooltips)
             {
-                Vector2 tooltipPosition = new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f);
-                CommonHelper.DrawHoverBox(Game1.spriteBatch, cursorChest.Name, tooltipPosition, Game1.viewport.Width - tooltipPosition.X - Game1.tileSize / 2f);
+                ManagedChest cursorChest = ChestFactory.GetChestFromTile(Game1.currentCursorTile);
+                if (cursorChest != null)
+                {
+                    Vector2 tooltipPosition = new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f);
+                    CommonHelper.DrawHoverBox(Game1.spriteBatch, cursorChest.Name, tooltipPosition, Game1.viewport.Width - tooltipPosition.X - Game1.tileSize / 2f);
+                }
             }
         }
 
