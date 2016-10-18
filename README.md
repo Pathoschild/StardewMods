@@ -1,4 +1,4 @@
-**Chests Anywhere** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you access
+﻿**Chests Anywhere** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you access
 your chests from anywhere and organise them your way. Transfer items without having to run around,
 from the comfort of your bed to the deepest mine level.
 
@@ -86,12 +86,13 @@ file if you want. These are the available settings:
 * Fixed Lewis' giftbox when you start a new game being usable as a chest.
 * Fixed visual issues.
 
-1.6 (upcoming):
-* You can now navigate chests after opening one directly.
+1.6:
+* Added Chests Anywhere UI when opening a chest directly.
 * Added compatibility with most inventory mods.
 * Added an option to disable hover tooltips.
 * Fixed controller toggle button not closing the menu.
 * Fixed chest menu behaving unpredictably after closing edit form in some cases.
+* Major rewrite under the hood.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is
