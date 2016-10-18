@@ -293,6 +293,14 @@ namespace ChestsAnywhere.Menus.Overlays
             return this.ReceiveKey(input, this.Config.Controller);
         }
 
+        /// <summary>The method invoked when the player presses a controller trigger.</summary>
+        /// <param name="input">The trigger that was pressed.</param>
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        protected override bool ReceiveTriggerPress(Buttons input)
+        {
+            return this.ReceiveKey(input, this.Config.Controller);
+        }
+
         /// <summary>The method invoked when the player presses a key.</summary>
         /// <typeparam name="T">The key type.</typeparam>
         /// <param name="input">The key that was pressed.</param>

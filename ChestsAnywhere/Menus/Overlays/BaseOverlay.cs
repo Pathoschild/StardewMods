@@ -31,6 +31,7 @@ namespace ChestsAnywhere.Menus.Overlays
             GameEvents.UpdateTick -= this.OnUpdateTick;
             ControlEvents.KeyPressed -= this.OnKeyPressed;
             ControlEvents.ControllerButtonPressed -= this.OnControllerButtonPressed;
+            ControlEvents.ControllerTriggerPressed -= this.OnControllerTriggerPressed;
             ControlEvents.MouseChanged -= this.OnMouseChanged;
         }
 
@@ -51,6 +52,7 @@ namespace ChestsAnywhere.Menus.Overlays
             GameEvents.UpdateTick += this.OnUpdateTick;
             ControlEvents.KeyPressed += this.OnKeyPressed;
             ControlEvents.ControllerButtonPressed += this.OnControllerButtonPressed;
+            ControlEvents.ControllerTriggerPressed += this.OnControllerTriggerPressed;
             ControlEvents.MouseChanged += this.OnMouseChanged;
         }
 
@@ -79,6 +81,14 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <param name="input">The button that was pressed.</param>
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected virtual bool ReceiveButtonPress(Buttons input)
+        {
+            return false;
+        }
+
+        /// <summary>The method invoked when the player presses a controller trigger.</summary>
+        /// <param name="input">The trigger that was pressed.</param>
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        protected virtual bool ReceiveTriggerPress(Buttons input)
         {
             return false;
         }
@@ -155,15 +165,24 @@ namespace ChestsAnywhere.Menus.Overlays
             bool handled = this.ReceiveKeyPress(e.KeyPressed);
             if (handled)
                 Game1.oldKBState = Keyboard.GetState();
-
         }
 
-        /// <summary>The method invoked when the player presses a key.</summary>
+       /// <summary>The method invoked when the player presses a controller button.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event arguments.</param>
         private void OnControllerButtonPressed(object sender, EventArgsControllerButtonPressed e)
         {
             bool handled = this.ReceiveButtonPress(e.ButtonPressed);
+            if (handled)
+                Game1.oldPadState = GamePad.GetState(PlayerIndex.One);
+        }
+
+        /// <summary>The method invoked when the player presses a controller trigger.</summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnControllerTriggerPressed(object sender, EventArgsControllerTriggerPressed e)
+        {
+            bool handled = this.ReceiveTriggerPress(e.ButtonPressed);
             if (handled)
                 Game1.oldPadState = GamePad.GetState(PlayerIndex.One);
         }
