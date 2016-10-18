@@ -40,7 +40,8 @@ namespace ChestsAnywhere.Framework
             {
                 Toggle = "",
                 PrevChest = "",
-                NextChest = ""
+                NextChest = "",
+                SortItems = ""
             };
             this.CheckForUpdates = true;
             this.ShowHoverTooltips = true;
