@@ -137,8 +137,9 @@ recommended for most users. If you really want to compile the mod yourself, read
 
 ### On Windows
 
-1. The build configuration will auto-detect the default Stardew Valley install paths. If you
-   customised it, correct the `<GamePath>` setting in the `LookupAnything.csproj` file.
+1. The build configuration will auto-detect your Stardew Valley install path. If it can't detect it
+   automatically, you'll see a build error indicating that and will need to set the `<GamePath>`
+   setting manually in the `LookupAnything.csproj` file.
 2. Build and launch the project in [Visual Studio](https://www.visualstudio.com/vs/community/). This
    will compile the code, package it into the mod directory, and start the game.
 3. Create a zip file from the `Mods/LookupAnything` directory.
@@ -146,8 +147,9 @@ recommended for most users. If you really want to compile the mod yourself, read
 
 ### On Linux/Mac
 
-1. The build configuration will auto-detect the default Stardew Valley install paths. If you
-   customised it, correct the `<GamePath>` setting in the `LookupAnything.csproj` file.
+1. The build configuration will auto-detect your Stardew Valley install path. If it can't detect it
+   automatically, you'll see a build error indicating that and will need to set the `<GamePath>`
+   setting manually in the `LookupAnything.csproj` file.
 2. Build the project in [MonoDevelop](http://www.monodevelop.com/).
 3. Copy the following files:
    * `data.json`

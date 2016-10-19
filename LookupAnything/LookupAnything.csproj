@@ -74,7 +74,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <!-- for Windows -->
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -167,6 +166,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- Validate game path & automate mod package -->
+    <Target Name="BeforeBuild">
+    <Error Text="Failed to find the game install path automatically; edit the *.csproj file and manually set the &lt;GamePath&gt; setting to the directory containing the Stardew Valley executable." Condition="!Exists('$(GamePath)')" />
+  </Target>
   <PropertyGroup Condition="$(OS) == 'Windows_NT'">
     <PostBuildEvent>
       set modDir=$(GamePath)\Mods\LookupAnything
