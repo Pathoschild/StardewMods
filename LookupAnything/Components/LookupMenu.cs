@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Framework;
 using Pathoschild.LookupAnything.Framework.Fields;
 using Pathoschild.LookupAnything.Framework.Subjects;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -103,6 +104,17 @@ namespace Pathoschild.LookupAnything.Components
             {
                 ISubject subject = this.Subject;
 
+                // disable when game is using immediate sprite sorting
+                // (This prevents Lookup Anything from creating new sprite batches, which breaks its core rendering logic.
+                // Fortunately this very rarely happens; the only known case is the Stardew Valley Fair, when the only thing
+                // you can look up anyway is the farmer.)
+                if (GameHelper.GetPrivateField<SpriteSortMode>(Game1.spriteBatch, "spriteSortMode") == SpriteSortMode.Immediate)
+                {
+                    Log.Debug("Lookup Anything aborted the lookup because the game's current rendering mode isn't compatible with the mod's UI. This only happens in rare cases (e.g. the Stardew Valley Fair).");
+                    this.exitThisMenu(playSound: false);
+                    return;
+                }
+                
                 // calculate dimensions
                 int x = this.xPositionOnScreen;
                 int y = this.yPositionOnScreen;
