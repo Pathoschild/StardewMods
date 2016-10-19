@@ -70,7 +70,7 @@
       <HintPath>$(GamePath)\StardewModdingAPI.exe</HintPath>
     </Reference>
     <Reference Include="xTile">
-      <HintPath>$(GamePath)\MacOS\xTile.dll</HintPath>
+      <HintPath>$(GamePath)\xTile.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
