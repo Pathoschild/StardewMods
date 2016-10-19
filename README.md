@@ -133,15 +133,39 @@ file if you want. These are the available settings:
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
-recommended. If you really want to compile the mod yourself, just edit `LookupAnything.csproj` and
-set the `<GamePath>` setting to your Stardew Valley directory path. Launching the project in Visual
-Studio will compile the code, package it into the mod directory, and start the game.
+recommended for most users. If you really want to compile the mod yourself, read on.
 
-Useful tools when working on this mod:
-* [dotPeek](https://www.jetbrains.com/decompiler/) to decompile the game into a Visual Studio
+### On Windows
+
+1. The build configuration will auto-detect the default Stardew Valley install paths. If you
+   customised it, correct the `<GamePath>` setting in the `LookupAnything.csproj` file.
+2. Build and launch the project in [Visual Studio](https://www.visualstudio.com/vs/community/). This
+   will compile the code, package it into the mod directory, and start the game.
+3. Create a zip file from the `Mods/LookupAnything` directory.
+
+
+### On Linux/Mac
+
+1. The build configuration will auto-detect the default Stardew Valley install paths. If you
+   customised it, correct the `<GamePath>` setting in the `LookupAnything.csproj` file.
+2. Build the project in [MonoDevelop](http://www.monodevelop.com/).
+3. Copy the following files:
+   * `data.json`
+   * `manifest.json`
+   * `LookupAnything.dll` 
+   * `LookupAnything.pdb`
+4. Paste the files into a `LookupAnything` subdirectory under SMAPI's `Mods` directory.
+5. Launch the game through SMAPI. (This will build the default `config.json` file.)
+6. Create a zip file from the `Mods\LookupAnything` directory.
+
+### Useful tools
+These may be useful when working on this mod:
+
+* Windows:
+  * [dotPeek](https://www.jetbrains.com/decompiler/) to decompile the game into a Visual Studio
   project.
-* [ReSharper](https://www.jetbrains.com/resharper/) to analyse the game code (e.g. find usages).
-* [XNB Extract](http://community.playstarbound.com/threads/modding-guides-and-general-modding-discussion-redux.109131/)
+  * [ReSharper](https://www.jetbrains.com/resharper/) to analyse the game code (e.g. find usages).
+  * [XNB Extract](http://community.playstarbound.com/threads/modding-guides-and-general-modding-discussion-redux.109131/)
   to extract the game's assets and data.
 * [YAML Analyzer](http://catox.free.fr/StardewTools/yaml_analyzer.html) to help figure out data
   files.
