@@ -108,13 +108,19 @@ namespace Pathoschild.LookupAnything.Components
                 // (This prevents Lookup Anything from creating new sprite batches, which breaks its core rendering logic.
                 // Fortunately this very rarely happens; the only known case is the Stardew Valley Fair, when the only thing
                 // you can look up anyway is the farmer.)
-                if (GameHelper.GetPrivateField<SpriteSortMode>(Game1.spriteBatch, "spriteSortMode") == SpriteSortMode.Immediate)
                 {
-                    Log.Debug("Lookup Anything aborted the lookup because the game's current rendering mode isn't compatible with the mod's UI. This only happens in rare cases (e.g. the Stardew Valley Fair).");
-                    this.exitThisMenu(playSound: false);
-                    return;
+                    SpriteSortMode sortMode =
+                        GameHelper.GetPrivateField<SpriteSortMode?>(Game1.spriteBatch, "spriteSortMode", required: false) // XNA
+                        ?? GameHelper.GetPrivateField<SpriteSortMode>(Game1.spriteBatch, "_sortMode"); // MonoGame
+                    if (sortMode == SpriteSortMode.Immediate)
+                    {
+                        Log.Debug(
+                            "Lookup Anything aborted the lookup because the game's current rendering mode isn't compatible with the mod's UI. This only happens in rare cases (e.g. the Stardew Valley Fair).");
+                        this.exitThisMenu(playSound: false);
+                        return;
+                    }
                 }
-                
+
                 // calculate dimensions
                 int x = this.xPositionOnScreen;
                 int y = this.yPositionOnScreen;
