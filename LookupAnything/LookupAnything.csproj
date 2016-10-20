@@ -29,50 +29,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-
-  <!-- mod build info -->
-  <PropertyGroup>
-    <GamePath>C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley</GamePath>
-    <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley</GamePath>
-    <GamePath Condition="!Exists('$(GamePath)')">~\Library\Application Support\Steam\steamapps\common\Stardew Valley\Contents\MacOS</GamePath>
-    <StartAction>Program</StartAction>
-    <StartProgram>$(GamePath)\StardewModdingAPI.exe</StartProgram>
-    <StartWorkingDirectory>$(GamePath)</StartWorkingDirectory>
-  </PropertyGroup>
-
-  <!-- references for Windows -->
-  <ItemGroup Condition="$(OS) == 'Windows_NT'">
-    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="Stardew Valley">
-      <HintPath>$(GamePath)\Stardew Valley.exe</HintPath>
-    </Reference>
-    <Reference Include="StardewModdingAPI">
-      <HintPath>$(GamePath)\StardewModdingAPI.exe</HintPath>
-    </Reference>
-    <Reference Include="xTile, Version=2.0.4.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GamePath)\xTile.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <!-- references for Linux/Mac -->
-  <ItemGroup Condition="$(OS) == 'Unix'">
-    <Reference Include="MonoGame.Framework">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GamePath)\MonoGame.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="StardewValley">
-      <HintPath>$(GamePath)\StardewValley.exe</HintPath>
-    </Reference>
-    <Reference Include="StardewModdingAPI">
-      <HintPath>$(GamePath)\StardewModdingAPI.exe</HintPath>
-    </Reference>
-    <Reference Include="xTile">
-      <HintPath>$(GamePath)\xTile.dll</HintPath>
-    </Reference>
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -166,9 +122,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- Validate game path & automate mod package -->
-    <Target Name="BeforeBuild">
-    <Error Text="Failed to find the game install path automatically; edit the *.csproj file and manually set the &lt;GamePath&gt; setting to the directory containing the Stardew Valley executable." Condition="!Exists('$(GamePath)')" />
+  <Import Project="..\packages\Pathoschild.Stardew.ModdingBuildConfig.1.0.0-alpha3\build\Pathoschild.Stardew.ModdingBuildConfig.targets" Condition="Exists('..\packages\Pathoschild.Stardew.ModdingBuildConfig.1.0.0-alpha3\build\Pathoschild.Stardew.ModdingBuildConfig.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Pathoschild.Stardew.ModdingBuildConfig.1.0.0-alpha3\build\Pathoschild.Stardew.ModdingBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Pathoschild.Stardew.ModdingBuildConfig.1.0.0-alpha3\build\Pathoschild.Stardew.ModdingBuildConfig.targets'))" />
   </Target>
   <PropertyGroup Condition="$(OS) == 'Windows_NT'">
     <PostBuildEvent>
