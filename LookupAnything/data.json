@@ -17,7 +17,7 @@ You shouldn't change this file unless you know what you're doing.
     "AnimalMaxHappiness": 255,
 
     /* NPCs */
-    "AsocialVillagers": [ "Bouncer", "Gunther" ],
+    "AsocialVillagers": [ "Bouncer", "Gunther", "Henchman", "Marlon", "Mister Qi" ],
     "DatingHearts": 2,
     "SpouseMaxFriendship": 3000,
     "SpouseFriendshipForStardrop": 3375,

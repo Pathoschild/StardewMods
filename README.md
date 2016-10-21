@@ -128,8 +128,9 @@ file if you want. These are the available settings:
 * Fixed errors crashing the game in rare cases.
 
 1.6 (upcoming):
-* Fixed error when looking up a villager you haven't met.
 * Disabled lookups when game rendering mode breaks Lookup Anything (only known to happen in the Stardew Valley Fair).
+* Fixed error when looking up a villager you haven't met.
+* Fixed error when looking up certain NPCs with no social data.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is

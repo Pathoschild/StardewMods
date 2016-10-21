@@ -62,10 +62,10 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             {
                 case TargetType.Villager:
                     if (!metadata.Constants.AsocialVillagers.Contains(npc.getName()))
-                    {                        
+                    {
                         var giftTastes = this.GetGiftTastes(npc);
 
-                        yield return new GenericField("Birthday", $"{Utility.capitalizeFirstLetter(npc.birthday_Season)} {npc.birthday_Day}");                        
+                        yield return new GenericField("Birthday", $"{Utility.capitalizeFirstLetter(npc.birthday_Season)} {npc.birthday_Day}");
 
                         // friendship
                         if (Game1.player.friendships.ContainsKey(npc.name))
