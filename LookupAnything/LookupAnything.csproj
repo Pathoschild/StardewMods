@@ -115,6 +115,7 @@
     <Compile Include="Framework\Models\RecipeModel.cs" />
     <Compile Include="Framework\RecipeType.cs" />
     <Compile Include="DrawHelper.cs" />
+    <Compile Include="Testing\AdHocTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data.json" />
