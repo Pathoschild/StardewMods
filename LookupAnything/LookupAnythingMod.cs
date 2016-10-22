@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -187,7 +188,21 @@ namespace Pathoschild.LookupAnything
                         {
                             log.Append("Lookup Anything checking for update... ");
 
-                            GitRelease release = UpdateHelper.GetLatestReleaseAsync("Pathoschild/LookupAnything").Result;
+                            // get version
+                            GitRelease release;
+                            try
+                            {
+                                release = UpdateHelper.GetLatestReleaseAsync("Pathoschild/LookupAnything").Result;
+                            }
+                            catch (Exception ex)
+                            {
+                                log.Dispose();
+                                Log.Error("Lookup Anything couldn't check for an updated version. This won't affect your game, but you may not be notified of new versions if this keeps happening. (Error details follow.)");
+                                Log.Debug(ex.ToString());
+                                return;
+                            }
+
+                            // validate
                             if (release.IsNewerThan(this.CurrentVersion))
                             {
                                 log.AppendLine($"update to version {release.Name} available.");
