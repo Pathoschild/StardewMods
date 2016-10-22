@@ -207,8 +207,8 @@ namespace ChestsAnywhere.Menus.Overlays
         private void OnMouseChanged(object sender, EventArgsMouseStateChanged e)
         {
             // get data
-            MouseState oldState = e.PriorState;
-            MouseState newState = e.NewState;
+            MouseState oldState = Game1.oldMouseState;
+            MouseState newState = Mouse.GetState();
             int newX = Game1.getMouseX();
             int newY = Game1.getMouseY();
 
