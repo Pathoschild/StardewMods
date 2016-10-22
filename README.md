@@ -4,8 +4,16 @@ from the comfort of your bed to the deepest mine level.
 
 ![](screenshots/animated-usage.gif)
 
+## Contents
+* [Installation](#installation)
+* [Usage](#usage)
+* [Configuration](#configuration)
+* [Versions](#versions)
+* [Compiling the mod](#compiling-the-mod)
+* [See also](#see-also)
+
 ## Installation
-1. Install [SMAPI](https://github.com/ClxS/SMAPI) (0.40.1.1+).
+1. [Install the latest version of SMAPI](http://canimod.com/guides/using-mods#installing-smapi).
 3. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/518).
 4. Run the game using SMAPI.
 
@@ -106,9 +114,48 @@ file if you want. These are the available settings:
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is
-recommended. If you really want to compile the mod yourself, just edit `ChestsAnywhere.csproj` and
-set the `<GamePath>` setting to your Stardew Valley directory path. Launching the project in Visual
-Studio will compile the code, package it into the mod directory, and start the game.
+recommended for most users. If you really want to compile the mod yourself, read on.
+
+This mod uses the [crossplatform build config](https://github.com/Pathoschild/Stardew.ModBuildConfig#readme)
+so it can be built on Linux, Mac, and Windows without changes. See [its documentation](https://github.com/Pathoschild/Stardew.ModBuildConfig#readme)
+for troubleshooting.
+
+### Compiling the mod for testing
+On Windows:
+
+1. Rebuild the project in [Visual Studio](https://www.visualstudio.com/vs/community/).  
+   <small>This will compile the code and package it into the mod directory.</small>
+2. Launch the project with debugging.  
+   <small>This will start the game through SMAPI and attach the Visual Studio debugger.</small>
+
+On Linux or Mac:
+
+1. Rebuild the project in [MonoDevelop](http://www.monodevelop.com/).
+2. Copy the following files from the `bin` directory:
+   * `manifest.json`
+   * `ChestsAnywhere.dll`
+   * `ChestsAnywhere.pdb`
+3. Paste the files into a `ChestsAnywhere` subdirectory under SMAPI's `Mods` directory.
+4. Launch the game through SMAPI.
+
+### Compiling the mod for release
+To package the mod for release:
+
+1. Delete the game's `Mods/ChestsAnywhere` directory.  
+   <small>(This ensures the package will be clean and have default configuration.)</small>
+2. Recompile the mod per the previous section.
+3. Launch the game through SMAPI to generate the default `config.json`.
+2. Create a zip file of the game's `Mods/ChestsAnywhere` folder. The zip name should include the
+   mod name, version, and platform. For example:
+
+   ```
+   ChestsAnywhere-1.7-Windows.zip
+      ChestsAnywhere/
+         ChestsAnywhere.dll
+         ChestsAnywhere.pdb
+         config.json
+         manifest.json
+   ```
 
 ## See also
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/518)
