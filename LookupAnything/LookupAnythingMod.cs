@@ -160,7 +160,8 @@ namespace Pathoschild.LookupAnything
             }
 
             // validate metadata
-            if (!this.Metadata.LooksValid())
+            this.IsDataValid = this.Metadata.LooksValid();
+            if (!this.IsDataValid)
             {
                 Log.Error("Lookup Anything's data.json file seems to be missing or corrupt. Lookups will be disabled.");
                 this.IsDataValid = false;
