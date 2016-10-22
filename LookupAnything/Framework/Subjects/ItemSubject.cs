@@ -209,7 +209,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             // item
             if (showInventoryFields)
             {
-                var giftTastes = this.GetGiftTastes(item);
+                var giftTastes = this.GetGiftTastes(item, metadata);
                 if (!isCrop)
                     yield return new SaleValueField("Sells for", this.GetSaleValue(item, this.KnownQuality), item.Stack);
                 yield return new ItemGiftTastesField("Loves this", giftTastes, GiftTaste.Love);
@@ -357,9 +357,10 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
         /// <param name="item">The potential gift item.</param>
-        private IDictionary<GiftTaste, string[]> GetGiftTastes(Item item)
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        private IDictionary<GiftTaste, string[]> GetGiftTastes(Item item, Metadata metadata)
         {
-            return GameHelper.GetGiftTastes(item)
+            return GameHelper.GetGiftTastes(item, metadata)
                 .GroupBy(p => p.Value, p => p.Key)
                 .ToDictionary(p => p.Key, p => p.ToArray());
         }

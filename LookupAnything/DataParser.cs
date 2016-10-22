@@ -44,29 +44,13 @@ namespace Pathoschild.LookupAnything
             return new FriendshipModel(animal.friendshipTowardFarmer, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints);
         }
 
-        /// <summary>Parse gift tastes.</summary>
+        /// <summary>Get the raw gift tastes from the underlying data.</summary>
         /// <param name="objects">The game's object data.</param>
-        /// <remarks>
-        /// Reverse engineered from <c>Data\NPCGiftTastes</c> and <see cref="StardewValley.NPC.getGiftTasteForThisItem"/>.
-        /// The game decides a villager's gift taste using a complicated algorithm which boils down to the first match out of:
-        ///   1. A villager's personal taste by item ID.
-        ///   2. A universal taste by item ID.
-        ///   3. A villager's personal taste by category.
-        ///   4. A universal taste by category (if not neutral).
-        ///   5. If the item's edibility is less than 0 (but not -300), hate.
-        ///   6. If the item's price is less than 20, dislike.
-        ///   7. If the item is an artifact...
-        ///      7a. and the NPC is Penny, like.
-        ///      7b. else neutral.
-        /// 
-        /// For each rule, their tastes are checked in this order: love, hate, like, dislike, or
-        /// neutral. (That is, if an NPC both loves and hates an item, love wins.)
-        /// </remarks>
+        /// <remarks>Reverse engineered from <c>Data\NPCGiftTastes</c> and <see cref="StardewValley.NPC.getGiftTasteForThisItem"/>.</remarks>
         public static IEnumerable<GiftTasteModel> GetGiftTastes(ObjectModel[] objects)
         {
             // extract raw values
-            string[] giftableVillagers;
-            var tastes = new List<RawGiftTasteModel>();
+            var tastes = new List<GiftTasteModel>();
             {
                 // define data schema
                 var universal = new Dictionary<string, GiftTaste>
@@ -87,11 +71,8 @@ namespace Pathoschild.LookupAnything
                     [9] = GiftTaste.Neutral
                 };
 
-                // get data
+                // read data
                 IDictionary<string, string> data = Game1.NPCGiftTastes;
-                giftableVillagers = data.Keys.Except(universal.Keys).ToArray();
-
-                // extract raw tastes
                 foreach (string villager in data.Keys)
                 {
                     string tasteStr = data[villager];
@@ -101,7 +82,7 @@ namespace Pathoschild.LookupAnything
                         GiftTaste taste = universal[villager];
                         tastes.AddRange(
                             from refID in tasteStr.Split(' ')
-                            select new RawGiftTasteModel(taste, "*", int.Parse(refID), isUniversal: true)
+                            select new GiftTasteModel(taste, "*", int.Parse(refID), isUniversal: true)
                         );
                     }
                     else
@@ -112,111 +93,18 @@ namespace Pathoschild.LookupAnything
                             tastes.AddRange(
                                 from refID in
                                     personalData[taste.Key].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                                select new RawGiftTasteModel(taste.Value, villager, int.Parse(refID))
+                                select new GiftTasteModel(taste.Value, villager, int.Parse(refID))
                             );
                         }
                     }
                 }
             }
 
-            // order by precedence (lower is better)
-            tastes = tastes
-                .OrderBy(entry =>
-                {
-                    bool isPersonal = !entry.IsUniversal;
-                    bool isSpecific = !entry.IsCategory;
-
-                    // precedence between preferences
-                    int precedence;
-                    switch (entry.Taste)
-                    {
-                        case GiftTaste.Love:
-                            precedence = 1;
-                            break;
-                        case GiftTaste.Hate:
-                            precedence = 2;
-                            break;
-                        case GiftTaste.Like:
-                            precedence = 3;
-                            break;
-                        case GiftTaste.Dislike:
-                            precedence = 4;
-                            break;
-                        default:
-                            precedence = 5;
-                            break;
-                    }
-
-                    // personal taste by item ID
-                    if (isPersonal && isSpecific)
-                        return 10 + precedence;
-
-                    // else universal taste by item ID
-                    if (entry.IsUniversal && isSpecific)
-                        return 20 + precedence;
-
-                    // else personal taste by category
-                    if (isPersonal)
-                        return 30 + precedence;
-
-                    // else universal taste by category (if not neutral)
-                    if (entry.IsUniversal && entry.Taste != GiftTaste.Neutral)
-                        return 40 + precedence;
-
-                    // else
-                    return 50 + precedence;
-                })
-                .ToList();
-
-            // get effective tastes
-            {
-                // get item lookups
-                IDictionary<int, ObjectModel> objectsByID = objects.ToDictionary(p => p.ParentSpriteIndex);
-                IDictionary<int, int[]> objectsByCategory =
-                    (
-                        from entry in objects
-                        where entry.Category < 0
-                        group entry by entry.Category into items
-                        select new { Category = items.Key, Items = items.Select(item => item.ParentSpriteIndex).ToArray() }
-                    )
-                    .ToDictionary(p => p.Category, p => p.Items);
-
-                // get tastes by precedence
-                IDictionary<string, HashSet<int>> seenItemIDs = giftableVillagers.ToDictionary(name => name, name => new HashSet<int>());
-                foreach (RawGiftTasteModel entry in tastes)
-                {
-                    // ignore nonexistent items
-                    if (entry.IsCategory && !objectsByCategory.ContainsKey(entry.RefID))
-                        continue;
-                    if (!entry.IsCategory && !objectsByID.ContainsKey(entry.RefID))
-                        continue;
-
-                    // get item IDs
-                    int[] itemIDs = entry.IsCategory
-                        ? objectsByCategory[entry.RefID]
-                        : new[] { entry.RefID };
-
-                    // get affected villagers
-                    string[] villagers = entry.IsUniversal
-                        ? giftableVillagers
-                        : new[] { entry.Villager };
-
-                    // yield if no conflict
-                    foreach (string villager in villagers)
-                    {
-                        foreach (int itemID in itemIDs)
-                        {
-                            // ignore if conflicts with a preceding taste
-                            if (seenItemIDs[villager].Contains(itemID))
-                                continue;
-                            seenItemIDs[villager].Add(itemID);
-
-                            // yield taste
-                            yield return new GiftTasteModel(entry.Taste, villager, itemID);
-                        }
-                    }
-                }
-            }
+            // get sanitised data
+            HashSet<int> validItemIDs = new HashSet<int>(objects.Select(p => p.ParentSpriteIndex));
+            HashSet<int> validCategories = new HashSet<int>(objects.Where(p => p.Category != 0).Select(p => p.Category));
+            return tastes
+                .Where(model => validCategories.Contains(model.RefID) || validItemIDs.Contains(model.RefID)); // ignore invalid entries
         }
 
         /// <summary>Parse monster data.</summary>

@@ -129,6 +129,7 @@ file if you want. These are the available settings:
 
 1.6 (upcoming):
 * Disabled lookups when game rendering mode breaks Lookup Anything (only known to happen in the Stardew Valley Fair).
+* Fixed incorrect gift tastes by deferring more to the game code (slower but more accurate).
 * Fixed error when looking up a villager you haven't met.
 * Fixed error when looking up certain NPCs with no social data.
 

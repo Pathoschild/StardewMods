@@ -63,9 +63,8 @@
     <Compile Include="Framework\InputMapConfiguration.cs" />
     <Compile Include="Framework\Logging\DisabledLog.cs" />
     <Compile Include="Framework\Logging\ICumulativeLog.cs" />
-    <Compile Include="Framework\Models\GiftTasteModel.cs" />
     <Compile Include="Framework\Models\ObjectModel.cs" />
-    <Compile Include="Framework\Models\RawGiftTasteModel.cs" />
+    <Compile Include="Framework\Models\GiftTasteModel.cs" />
     <Compile Include="Framework\Subjects\FarmerSubject.cs" />
     <Compile Include="Framework\Targets\CharacterTarget.cs" />
     <Compile Include="Framework\Targets\CropTarget.cs" />
@@ -115,7 +114,6 @@
     <Compile Include="Framework\Models\RecipeModel.cs" />
     <Compile Include="Framework\RecipeType.cs" />
     <Compile Include="DrawHelper.cs" />
-    <Compile Include="Testing\AdHocTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data.json" />

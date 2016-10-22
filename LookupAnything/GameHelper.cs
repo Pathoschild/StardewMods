@@ -73,29 +73,51 @@ namespace Pathoschild.LookupAnything
             return Tuple.Create(season, day);
         }
 
+        /// <summary>Get whether the specified NPC has social data like a birthday and gift tastes.</summary>
+        /// <param name="npc">The NPC to check.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public static bool IsSocialVillager(NPC npc, Metadata metadata)
+        {
+            return npc.isVillager() && !metadata.Constants.AsocialVillagers.Contains(npc.name);
+        }
+
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
         /// <param name="item">The item to check.</param>
-        public static IDictionary<string, GiftTaste> GetGiftTastes(Item item)
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public static IDictionary<string, GiftTaste> GetGiftTastes(Item item, Metadata metadata)
         {
             if (!item.canBeGivenAsGift())
                 return new Dictionary<string, GiftTaste>();
 
-            return GameHelper.GiftTastes.Value
-                .Where(p => p.ItemID == item.parentSheetIndex)
-                .ToDictionary(p => p.Villager, p => p.Taste);
+            return Utility.getAllCharacters()
+                .Where(npc => GameHelper.IsSocialVillager(npc, metadata))
+                .ToDictionary(npc => npc.name, npc => (GiftTaste)npc.getGiftTasteForThisItem(item));
         }
 
         /// <summary>Get the items a specified NPC can receive.</summary>
         /// <param name="npc">The NPC to check.</param>
-        public static IDictionary<Object, GiftTaste> GetGiftTastes(NPC npc)
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public static IDictionary<Object, GiftTaste> GetGiftTastes(NPC npc, Metadata metadata)
         {
-            if (!npc.isVillager())
+            if (!GameHelper.IsSocialVillager(npc, metadata))
                 return new Dictionary<Object, GiftTaste>();
 
-            string name = npc.getName();
-            return GameHelper.GiftTastes.Value
-                .Where(p => p.Villager == name)
-                .ToDictionary(p => GameHelper.GetObjectBySpriteIndex(p.ItemID), p => p.Taste);
+            // get giftable items
+            HashSet<int> giftableItemIDs = new HashSet<int>(
+                from int refID in GameHelper.GiftTastes.Value.Select(p => p.RefID)
+                from ObjectModel obj in GameHelper.Objects.Value
+                where obj.ParentSpriteIndex == refID || obj.Category == refID
+                select obj.ParentSpriteIndex
+            );
+
+            // get gift tastes
+            return
+                (
+                    from int itemID in giftableItemIDs
+                    let item = GameHelper.GetObjectBySpriteIndex(itemID)
+                    select new { Item = item, Taste = (GiftTaste)npc.getGiftTasteForThisItem(item) }
+                )
+                .ToDictionary(p => p.Item, p => p.Taste);
         }
 
         /// <summary>Get the recipes for which an item is needed.</summary>

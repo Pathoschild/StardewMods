@@ -63,7 +63,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 case TargetType.Villager:
                     if (!metadata.Constants.AsocialVillagers.Contains(npc.getName()))
                     {
-                        var giftTastes = this.GetGiftTastes(npc);
+                        var giftTastes = this.GetGiftTastes(npc, metadata);
 
                         yield return new GenericField("Birthday", $"{Utility.capitalizeFirstLetter(npc.birthday_Season)} {npc.birthday_Day}");
 
@@ -153,9 +153,10 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         *********/
         /// <summary>Get how much an NPC likes receiving each item as a gift.</summary>
         /// <param name="npc">The NPC.</param>
-        private IDictionary<GiftTaste, Item[]> GetGiftTastes(NPC npc)
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        private IDictionary<GiftTaste, Item[]> GetGiftTastes(NPC npc, Metadata metadata)
         {
-            return GameHelper.GetGiftTastes(npc)
+            return GameHelper.GetGiftTastes(npc, metadata)
                 .GroupBy(entry => entry.Value) // gift taste
                 .ToDictionary(
                     tasteGroup => tasteGroup.Key, // gift taste
