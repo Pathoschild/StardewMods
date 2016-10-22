@@ -203,11 +203,7 @@ namespace ChestsAnywhere
                     return;
 
                 // open menu
-                var gamepadOverride =
-                    Game1.options.gamepadControls && // Is Gamepad Enabled?
-                    Game1.activeClickableMenu is GameMenu && // Is the active menu the Game Menu?
-                    ((GameMenu)Game1.activeClickableMenu).currentTab == 0; // Is the active tab in the Game Menu your Inventory Page?
-                if (key.Equals(map.Toggle) && (Game1.activeClickableMenu == null || gamepadOverride))
+                if (key.Equals(map.Toggle) && (Game1.activeClickableMenu == null || (Game1.activeClickableMenu as GameMenu)?.currentTab == 0))
                     this.OpenMenu();
             }
             catch (Exception ex)

@@ -95,6 +95,7 @@ file if you want. These are the available settings:
 * Major rewrite under the hood.
 
 1.7 (upcoming):
+* Added support for opening chest overlay when inventory is open (mostly to allow more controller bindings).
 * Fixed update-check error on startup adding scary error text in console.
 
 ## Compiling the mod
