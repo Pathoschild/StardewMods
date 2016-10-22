@@ -106,6 +106,7 @@ file if you want. These are the available settings:
 * Added support for opening chest overlay from inventory (mostly to allow more controller bindings).
 * Added hotkeys to navigate categories.
 * Added default controller bindings for chest UI navigation.
+* Updated minimum game and SMAPI versions.
 * Fixed various controller issues in 1.6.
 * Fixed list scrolling broken in 1.6.
 * Fixed navigate-chest hotkeys ignoring category.
