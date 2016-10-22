@@ -130,7 +130,7 @@ file if you want. These are the available settings:
 1.6 (upcoming):
 * Added `data.json` validation on startup.
 * Disabled lookups when game rendering mode breaks Lookup Anything (only known to happen in the Stardew Valley Fair).
-* Fixed version-check errors on startup adding scary block of red error text to console.
+* Fixed update-check error on startup adding scary error text in console.
 * Fixed incorrect gift tastes by deferring more to the game code (slower but more accurate).
 * Fixed error when looking up a villager you haven't met.
 * Fixed error when looking up certain NPCs with no social data.
@@ -139,30 +139,48 @@ file if you want. These are the available settings:
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
 recommended for most users. If you really want to compile the mod yourself, read on.
 
-### On Windows
+This mod uses the [crossplatform build config](https://github.com/Pathoschild/Stardew.ModBuildConfig#readme)
+so it can be built on Linux, Mac, and Windows without changes. See [its documentation](https://github.com/Pathoschild/Stardew.ModBuildConfig#readme)
+for troubleshooting.
 
-1. The build configuration will auto-detect your Stardew Valley install path. If it can't detect it
-   automatically, you'll see a build error indicating that and will need to set the `<GamePath>`
-   setting manually in the `LookupAnything.csproj` file.
-2. Build and launch the project in [Visual Studio](https://www.visualstudio.com/vs/community/). This
-   will compile the code, package it into the mod directory, and start the game.
-3. Create a zip file from the `Mods/LookupAnything` directory.
+### Compiling the mod for testing
+On Windows:
 
+1. Rebuild the project in [Visual Studio](https://www.visualstudio.com/vs/community/).  
+   <small>This will compile the code and package it into the mod directory.</small>
+2. Launch the project with debugging.  
+   <small>This will start the game through SMAPI and attach the Visual Studio debugger.</small>
 
-### On Linux/Mac
+On Linux or Mac:
 
-1. The build configuration will auto-detect your Stardew Valley install path. If it can't detect it
-   automatically, you'll see a build error indicating that and will need to set the `<GamePath>`
-   setting manually in the `LookupAnything.csproj` file.
-2. Build the project in [MonoDevelop](http://www.monodevelop.com/).
-3. Copy the following files:
+1. Rebuild the project in [MonoDevelop](http://www.monodevelop.com/).
+2. Copy the following files from the `bin` directory:
    * `data.json`
    * `manifest.json`
-   * `LookupAnything.dll` 
+   * `LookupAnything.dll`
    * `LookupAnything.pdb`
-4. Paste the files into a `LookupAnything` subdirectory under SMAPI's `Mods` directory.
-5. Launch the game through SMAPI. (This will build the default `config.json` file.)
-6. Create a zip file from the `Mods\LookupAnything` directory.
+3. Paste the files into a `LookupAnything` subdirectory under SMAPI's `Mods` directory.
+4. Launch the game through SMAPI.
+
+### Compiling the mod for release
+To package the mod for release:
+
+1. Delete the game's `Mods/LookupAnything` directory.  
+   <small>(This ensures the package will be clean and have default configuration.)</small>
+2. Recompile the mod per the previous section.
+3. Launch the game through SMAPI to generate the default `config.json`.
+2. Create a zip file of the game's `Mods/LookupAnything` folder. The zip name should include the
+   mod name, version, and platform. For example:
+
+   ```
+   LookupAnything-1.6-Windows.zip
+      LookupAnything/
+         LookupAnything.dll
+         LookupAnything.pdb
+         data.json
+         config.json
+         manifest.json
+   ```
 
 ### Useful tools
 These may be useful when working on this mod:
