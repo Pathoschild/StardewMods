@@ -31,6 +31,12 @@ namespace Pathoschild.LookupAnything.Framework
         /*********
         ** Public methods
         *********/
+        /// <summary>Get whether the metadata seems to be basically valid.</summary>
+        public bool LooksValid()
+        {
+            return new object[] { this.Constants, this.Objects, this.Characters, this.AdventureGuildQuests, this.Recipes }.All(p => p != null);
+        }
+
         /// <summary>Get overrides for a game object.</summary>
         /// <param name="item">The item for which to get overrides.</param>
         /// <param name="context">The context for which to get an override.</param>

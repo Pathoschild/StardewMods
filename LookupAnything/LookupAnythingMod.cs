@@ -51,6 +51,12 @@ namespace Pathoschild.LookupAnything
         private bool HasSeenUpdateWarning;
 
         /****
+        ** Validation
+        ****/
+        /// <summary>Whether the metadata validation passed.</summary>
+        private bool IsDataValid;
+
+        /****
         ** State
         ****/
         /// <summary>The previous menu shown before the lookup UI was opened.</summary>
@@ -69,6 +75,7 @@ namespace Pathoschild.LookupAnything
         /// <summary>Initialise the mod.</summary>
         public override void Entry(params object[] objects)
         {
+            // initialise
             using (ICumulativeLog log = new CumulativeLog())
             {
                 log.AppendLine("Lookup Anything initialising...");
@@ -149,6 +156,13 @@ namespace Pathoschild.LookupAnything
                 log.AppendLine("OK!");
 
                 log.AppendLine(this.Config.DebugLog ? "ready!" : "ready! further logging disabled by config.");
+            }
+
+            // validate metadata
+            if (!this.Metadata.LooksValid())
+            {
+                Log.Error("Lookup Anything's data.json file seems to be missing or corrupt. Lookups will be disabled.");
+                this.IsDataValid = false;
             }
         }
 
@@ -273,6 +287,14 @@ namespace Pathoschild.LookupAnything
         /// <summary>Show the lookup UI for the current target.</summary>
         private void ShowLookup()
         {
+            // disable lookups if metadata is invalid
+            if (!this.IsDataValid)
+            {
+                GameHelper.ShowErrorMessage("Lookup Anything doesn't seem to be installed correctly: its data.json file is missing or corrupt.");
+                return;
+            }
+
+            // show menu
             GameHelper.InterceptErrors("looking that up", () =>
             {
                 using (ICumulativeLog log = this.GetTaskLog())
