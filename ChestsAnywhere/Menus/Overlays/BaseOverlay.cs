@@ -167,14 +167,28 @@ namespace ChestsAnywhere.Menus.Overlays
                 Game1.oldKBState = Keyboard.GetState();
         }
 
-       /// <summary>The method invoked when the player presses a controller button.</summary>
+        /// <summary>The method invoked when the player presses a controller button.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event arguments.</param>
         private void OnControllerButtonPressed(object sender, EventArgsControllerButtonPressed e)
         {
-            bool handled = this.ReceiveButtonPress(e.ButtonPressed);
-            if (handled)
-                Game1.oldPadState = GamePad.GetState(PlayerIndex.One);
+            GamePadState state = GamePad.GetState(PlayerIndex.One);
+
+            // handle controller cursor click
+            if (state.IsButtonDown(Buttons.A) && !Game1.oldPadState.IsButtonDown(Buttons.X))
+            {
+                bool handled = this.ReceiveLeftClick(Game1.getMouseX(), Game1.getMouseY());
+                if (handled)
+                    Game1.oldPadState = GamePad.GetState(PlayerIndex.One);
+            }
+
+            // handle button press
+            else
+            {
+                bool handled = this.ReceiveButtonPress(e.ButtonPressed);
+                if (handled)
+                    Game1.oldPadState = GamePad.GetState(PlayerIndex.One);
+            }
         }
 
         /// <summary>The method invoked when the player presses a controller trigger.</summary>

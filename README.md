@@ -95,7 +95,11 @@ file if you want. These are the available settings:
 * Major rewrite under the hood.
 
 1.7 (upcoming):
-* Added support for opening chest overlay when inventory is open (mostly to allow more controller bindings).
+* Added support for opening chest overlay from inventory (mostly to allow more controller bindings).
+* Added hotkeys to navigate categories.
+* Added default controller bindings for chest UI navigation.
+* Fixed various controller issues.
+* Fixed navigate-chest hotkeys ignoring category.
 * Fixed update-check error on startup adding scary error text in console.
 
 ## Compiling the mod

@@ -34,13 +34,13 @@ namespace ChestsAnywhere.Framework
                 Toggle = Keys.B.ToString(),
                 PrevChest = Keys.Left.ToString(),
                 NextChest = Keys.Right.ToString(),
-                PrevCategory = Keys.Down.ToString(),
-                NextCategory = Keys.Up.ToString(),
+                PrevCategory = Keys.Up.ToString(),
+                NextCategory = Keys.Down.ToString(),
                 SortItems = ""
             };
             this.Controller = new InputMapConfiguration<string>
             {
-                Toggle = Buttons.Back.ToString(),
+                Toggle = "",
                 PrevChest = Buttons.LeftShoulder.ToString(),
                 NextChest = Buttons.RightShoulder.ToString(),
                 PrevCategory = Buttons.LeftTrigger.ToString(),
@@ -68,13 +68,13 @@ namespace ChestsAnywhere.Framework
                     Toggle = this.TryParse(this.Keyboard.Toggle, Keys.B),
                     PrevChest = this.TryParse(this.Keyboard.PrevChest, Keys.Left),
                     NextChest = this.TryParse(this.Keyboard.NextChest, Keys.Right),
-                    PrevCategory = this.TryParse(this.Keyboard.PrevCategory, Keys.Down),
-                    NextCategory = this.TryParse(this.Keyboard.NextCategory, Keys.Up),
+                    PrevCategory = this.TryParse(this.Keyboard.PrevCategory, Keys.Up),
+                    NextCategory = this.TryParse(this.Keyboard.NextCategory, Keys.Down),
                     SortItems = this.TryParse<Keys>(this.Keyboard.SortItems)
                 },
                 Controller = new InputMapConfiguration<Buttons>
                 {
-                    Toggle = this.TryParse(this.Controller.Toggle, Buttons.Back),
+                    Toggle = this.TryParse<Buttons>(this.Controller.Toggle),
                     PrevChest = this.TryParse(this.Controller.PrevChest, Buttons.LeftShoulder),
                     NextChest = this.TryParse(this.Controller.NextChest, Buttons.RightShoulder),
                     PrevCategory = this.TryParse(this.Controller.PrevCategory, Buttons.LeftTrigger),
