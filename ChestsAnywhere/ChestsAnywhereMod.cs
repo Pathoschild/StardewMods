@@ -32,14 +32,8 @@ namespace ChestsAnywhere
         /// <summary>The newer release to notify the user about.</summary>
         private GitRelease NewRelease;
 
-        /// <summary>The update check didn't pass through.</summary>
-        private bool Errored;
-
         /// <summary>Whether the update-available message has been shown since the game started.</summary>
         private bool HasSeenUpdateWarning;
-
-        /// <summary>Whether the game version verification  has been shown since the game started.</summary>
-        private bool HasVerifiedGameVersion;
 
         /****
         ** State
@@ -62,6 +56,7 @@ namespace ChestsAnywhere
             this.CurrentVersion = UpdateHelper.GetSemanticVersion(this.Manifest.Version);
 
             // hook UI
+            GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
             GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveHudRendered();
             MenuEvents.MenuChanged += (sender, e) => this.ReceiveMenuChanged(e.PriorMenu, e.NewMenu);
             MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
@@ -74,79 +69,74 @@ namespace ChestsAnywhere
                 ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
                 ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
             }
-
-            if (this.Config.CheckForUpdates)
-                this.CheckforUpdates();
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>Checks if the current version of SMAPI or Stardew Valley can run the mod.</summary>
-        private void VerifyGameVersion()
+        /// <summary>The method invoked when the player loads the game.</summary>
+        private void ReceiveGameLoaded()
         {
-            // validate version
+            // validate game version
             string versionError = this.ValidateGameVersion();
-            if (versionError == null) return;
-
-            Log.Error(versionError);
-            CommonHelper.ShowErrorMessage(versionError);
-        }
-        
-        /// <summary>Checks if the mod has any avilable updates.</summary>
-        private void CheckforUpdates()
-        {
-            try
+            if (versionError != null)
             {
-                Task.Factory.StartNew(() =>
-                {
-                    GitRelease release = UpdateHelper.GetLatestReleaseAsync("Pathoschild/ChestsAnywhere").Result;
-
-                    if (release.Errored) {
-                        this.Errored = true;
-                        return;
-                    }
-
-                    if (release.IsNewerThan(this.CurrentVersion))
-                        this.NewRelease = release;
-                });
+                Log.Error(versionError);
+                CommonHelper.ShowErrorMessage(versionError);
             }
-            catch (Exception ex)
+
+            // check for mod update
+            if (this.Config.CheckForUpdates)
             {
-                this.HandleError(ex, "checking for a new version");
+                try
+                {
+                    Task.Factory.StartNew(() =>
+                    {
+                        // get version
+                        GitRelease release;
+                        try
+                        {
+                            release = UpdateHelper.GetLatestReleaseAsync("Pathoschild/ChestsAnywhere").Result;
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error("Chests Anywhere couldn't check for an updated version. This won't affect your game, but you may not be notified of new versions if this keeps happening. (Error details follow.)");
+                            Log.Debug(ex.ToString());
+                            return;
+                        }
+
+                        // validate
+                        if (release.IsNewerThan(this.CurrentVersion))
+                        {
+                            Log.Info($"Chests Anywhere can be updated from {this.CurrentVersion} to {release.Name}.");
+                            this.NewRelease = release;
+                        }
+                        else
+                            Log.Debug("Chests Anywhere checking for update... no update available.");
+                    });
+                }
+                catch (Exception ex)
+                {
+                    this.HandleError(ex, "checking for a new version");
+                }
             }
         }
 
         /// <summary>The method invoked when the interface has finished rendering.</summary>
         private void ReceiveHudRendered()
         {
-            if (!this.HasVerifiedGameVersion)
-                this.VerifyGameVersion();
-
-            // checks and renders update information
-            if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning)
+            // render update warning
+            if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning && this.NewRelease != null)
             {
-                this.HasSeenUpdateWarning = true;
-                if (this.NewRelease != null)
+                try
                 {
-                    try
-                    {
-                        CommonHelper.ShowInfoMessage($"You can update Chests Anywhere from {this.CurrentVersion} to {this.NewRelease.Version}.");
-                    }
-                    catch (Exception ex)
-                    {
-                        this.HandleError(ex, "showing the new version available");
-                    }
+                    this.HasSeenUpdateWarning = true;
+                    CommonHelper.ShowInfoMessage($"You can update Chests Anywhere from {this.CurrentVersion} to {this.NewRelease.Version}.");
                 }
-
-                if (this.Errored)
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        CommonHelper.ShowInfoMessage($"ChestsAnywhere: Updates check failed");
-                    }
-                    catch {}
+                    this.HandleError(ex, "showing the new version available");
                 }
             }
 
@@ -216,7 +206,7 @@ namespace ChestsAnywhere
                 var gamepadOverride =
                     Game1.options.gamepadControls && // Is Gamepad Enabled?
                     Game1.activeClickableMenu is GameMenu && // Is the active menu the Game Menu?
-                    ((GameMenu) Game1.activeClickableMenu).currentTab == 0; // Is the active tab in the Game Menu your Inventory Page?
+                    ((GameMenu)Game1.activeClickableMenu).currentTab == 0; // Is the active tab in the Game Menu your Inventory Page?
                 if (key.Equals(map.Toggle) && (Game1.activeClickableMenu == null || gamepadOverride))
                     this.OpenMenu();
             }

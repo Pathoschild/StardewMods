@@ -94,6 +94,9 @@ file if you want. These are the available settings:
 * Fixed chest menu behaving unpredictably after closing edit form in some cases.
 * Major rewrite under the hood.
 
+1.7 (upcoming):
+* Fixed update-check error on startup adding scary error text in console.
+
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is
 recommended. If you really want to compile the mod yourself, just edit `ChestsAnywhere.csproj` and

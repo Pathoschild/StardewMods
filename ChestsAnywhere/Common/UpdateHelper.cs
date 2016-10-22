@@ -1,10 +1,8 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using StardewModdingAPI;
 using Version = StardewModdingAPI.Version;
 
 namespace ChestsAnywhere.Common
@@ -32,24 +30,17 @@ namespace ChestsAnywhere.Common
             {
                 // get assembly info for user agent
                 AssemblyName assembly = typeof(UpdateHelper).Assembly.GetName();
-                try
+
+                // fetch latest release
+                using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://api.github.com/repos/{repository}/releases/latest"))
                 {
-                    // fetch latest release
-                    using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://api.github.com/repos/{repository}/releases/latest"))
+                    request.Headers.UserAgent.Add(new ProductInfoHeaderValue(assembly.Name, assembly.Version.ToString()));
+                    request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json")); // API version
+                    using (HttpResponseMessage response = await client.SendAsync(request))
                     {
-                        request.Headers.UserAgent.Add(new ProductInfoHeaderValue(assembly.Name, assembly.Version.ToString()));
-                        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json")); // API version
-                        using (HttpResponseMessage response = await client.SendAsync(request))
-                        {
-                            string responseText = await response.Content.ReadAsStringAsync();
-                            return JsonConvert.DeserializeObject<GitRelease>(responseText);
-                        }
+                        string responseText = await response.Content.ReadAsStringAsync();
+                        return JsonConvert.DeserializeObject<GitRelease>(responseText);
                     }
-                }
-                catch (HttpRequestException)
-                {
-                    Log.Error("Could not fetch response from: [https://api.github.com/];");
-                    return new GitRelease { Errored = true };
                 }
             }
         }

@@ -21,8 +21,6 @@ namespace ChestsAnywhere.Common
         [JsonProperty("body")]
         public string Summary { get; set; }
 
-        [JsonIgnore]
-        public bool Errored { get; set; }
 
         /*********
         ** Public methods
