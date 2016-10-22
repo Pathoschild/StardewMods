@@ -100,6 +100,7 @@ file if you want. These are the available settings:
 * Added default controller bindings for chest UI navigation.
 * Fixed various controller issues.
 * Fixed navigate-chest hotkeys ignoring category.
+* Fixed group list being unsorted.
 * Fixed update-check error on startup adding scary error text in console.
 
 ## Compiling the mod

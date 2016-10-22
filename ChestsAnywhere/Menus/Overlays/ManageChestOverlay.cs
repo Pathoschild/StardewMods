@@ -146,7 +146,7 @@ namespace ChestsAnywhere.Menus.Overlays
             // chests & config
             this.Chest = chest;
             this.Chests = chests;
-            this.Groups = chests.Select(p => p.GetGroup()).Distinct().ToArray();
+            this.Groups = chests.Select(p => p.GetGroup()).Distinct().OrderBy(p => p).ToArray();
             this.Config = config;
 
             // components
