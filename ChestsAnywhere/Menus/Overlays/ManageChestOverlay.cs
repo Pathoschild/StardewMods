@@ -290,6 +290,14 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveButtonPress(Buttons input)
         {
+            // Get the current state of the connected Gamepad for Player 1 (The Player)
+            var gamepad = GamePad.GetState(PlayerIndex.One);
+
+            // Check if button pressed matches the select button for LeftClick
+            if (gamepad.IsButtonDown(Buttons.A) && !Game1.oldPadState.IsButtonDown(Buttons.X))
+                return ReceiveLeftClick(Game1.getMouseX(), Game1.getMouseY());
+
+            // If it doesn't match the select button, proceed to check the button in ReceiveKey
             return this.ReceiveKey(input, this.Config.Controller);
         }
 
@@ -321,6 +329,10 @@ namespace ChestsAnywhere.Menus.Overlays
                         this.SelectPreviousChest();
                     else if (input.Equals(config.NextChest))
                         this.SelectNextChest();
+                    else if (input.Equals(config.PrevCategory))
+                        this.SelectPreviousCategory();
+                    else if (input.Equals(config.NextCategory))
+                        this.SelectNextCategory();
                     else if (input.Equals(config.SortItems))
                         this.SortInventory();
                     else
@@ -571,15 +583,35 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <summary>Switch to the previous chest in the list.</summary>
         private void SelectPreviousChest()
         {
-            int cur = Array.IndexOf(this.Chests, this.Chest);
-            this.SelectChest(this.Chests[cur != 0 ? cur - 1 : this.Chests.Length - 1]);
+            ManagedChest[] chests = GetChestsFromCategory(SelectedGroup);
+            int cur = Array.IndexOf(chests, this.Chest);
+            this.SelectChest(chests[cur != 0 ? cur - 1 : chests.Length - 1]);
         }
 
         /// <summary>Switch to the next chest in the list.</summary>
         private void SelectNextChest()
         {
-            int cur = Array.IndexOf(this.Chests, this.Chest);
-            this.SelectChest(this.Chests[(cur + 1) % this.Chests.Length]);
+            ManagedChest[] chests = GetChestsFromCategory(SelectedGroup);
+            int cur = Array.IndexOf(chests, this.Chest);
+            this.SelectChest(chests[(cur + 1) % chests.Length]);
+        }
+
+        private void SelectPreviousCategory()
+        {
+            int cur = Array.IndexOf(Groups, SelectedGroup);
+            this.SelectChest(Chests.First(chest => chest.GetGroup() == Groups[cur != 0 ? cur - 1 : Groups.Length - 1]));
+        }
+
+        private void SelectNextCategory()
+        {
+            int cur = Array.IndexOf(Groups, SelectedGroup);
+            this.SelectChest(Chests.First(chest => chest.GetGroup() == Groups[(cur + 1) % Groups.Length]));
+        }
+
+        /// <summary>Returns all chests of the specified category / group</summary>
+        private ManagedChest[] GetChestsFromCategory(string category)
+        {
+            return this.Chests.Where(chest => chest.GetGroup() == category).ToArray();
         }
 
         /// <summary>Get whether the menu is initialising itself.</summary>

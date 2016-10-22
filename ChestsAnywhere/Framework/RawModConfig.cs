@@ -34,13 +34,17 @@ namespace ChestsAnywhere.Framework
                 Toggle = Keys.B.ToString(),
                 PrevChest = Keys.Left.ToString(),
                 NextChest = Keys.Right.ToString(),
+                PrevCategory = Keys.Down.ToString(),
+                NextCategory = Keys.Up.ToString(),
                 SortItems = ""
             };
             this.Controller = new InputMapConfiguration<string>
             {
-                Toggle = "",
-                PrevChest = "",
-                NextChest = "",
+                Toggle = Buttons.Back.ToString(),
+                PrevChest = Buttons.LeftShoulder.ToString(),
+                NextChest = Buttons.RightShoulder.ToString(),
+                PrevCategory = Buttons.LeftTrigger.ToString(),
+                NextCategory = Buttons.RightTrigger.ToString(),
                 SortItems = ""
             };
             this.CheckForUpdates = true;
@@ -64,13 +68,17 @@ namespace ChestsAnywhere.Framework
                     Toggle = this.TryParse(this.Keyboard.Toggle, Keys.B),
                     PrevChest = this.TryParse(this.Keyboard.PrevChest, Keys.Left),
                     NextChest = this.TryParse(this.Keyboard.NextChest, Keys.Right),
+                    PrevCategory = this.TryParse(this.Keyboard.PrevCategory, Keys.Down),
+                    NextCategory = this.TryParse(this.Keyboard.NextCategory, Keys.Up),
                     SortItems = this.TryParse<Keys>(this.Keyboard.SortItems)
                 },
                 Controller = new InputMapConfiguration<Buttons>
                 {
-                    Toggle = this.TryParse<Buttons>(this.Controller.Toggle),
-                    PrevChest = this.TryParse<Buttons>(this.Controller.PrevChest),
-                    NextChest = this.TryParse<Buttons>(this.Controller.NextChest),
+                    Toggle = this.TryParse(this.Controller.Toggle, Buttons.Back),
+                    PrevChest = this.TryParse(this.Controller.PrevChest, Buttons.LeftShoulder),
+                    NextChest = this.TryParse(this.Controller.NextChest, Buttons.RightShoulder),
+                    PrevCategory = this.TryParse(this.Controller.PrevCategory, Buttons.LeftTrigger),
+                    NextCategory = this.TryParse(this.Controller.NextCategory, Buttons.RightTrigger),
                     SortItems = this.TryParse<Buttons>(this.Keyboard.SortItems)
                 },
                 CheckForUpdates = this.CheckForUpdates,

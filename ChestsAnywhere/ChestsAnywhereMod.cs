@@ -32,8 +32,14 @@ namespace ChestsAnywhere
         /// <summary>The newer release to notify the user about.</summary>
         private GitRelease NewRelease;
 
+        /// <summary>The update check didn't pass through.</summary>
+        private bool Errored;
+
         /// <summary>Whether the update-available message has been shown since the game started.</summary>
         private bool HasSeenUpdateWarning;
+
+        /// <summary>Whether the game version verification  has been shown since the game started.</summary>
+        private bool HasVerifiedGameVersion;
 
         /****
         ** State
@@ -56,7 +62,6 @@ namespace ChestsAnywhere
             this.CurrentVersion = UpdateHelper.GetSemanticVersion(this.Manifest.Version);
 
             // hook UI
-            PlayerEvents.LoadedGame += (sender, e) => this.ReceiveGameLoaded();
             GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveHudRendered();
             MenuEvents.MenuChanged += (sender, e) => this.ReceiveMenuChanged(e.PriorMenu, e.NewMenu);
             MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
@@ -69,56 +74,79 @@ namespace ChestsAnywhere
                 ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
                 ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
             }
+
+            if (this.Config.CheckForUpdates)
+                this.CheckforUpdates();
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked when the player loads the game.</summary>
-        private void ReceiveGameLoaded()
+        /// <summary>Checks if the current version of SMAPI or Stardew Valley can run the mod.</summary>
+        private void VerifyGameVersion()
         {
             // validate version
             string versionError = this.ValidateGameVersion();
-            if (versionError != null)
-            {
-                Log.Error(versionError);
-                CommonHelper.ShowErrorMessage(versionError);
-            }
+            if (versionError == null) return;
 
-            // check for an updated version
-            if (this.Config.CheckForUpdates)
+            Log.Error(versionError);
+            CommonHelper.ShowErrorMessage(versionError);
+        }
+        
+        /// <summary>Checks if the mod has any avilable updates.</summary>
+        private void CheckforUpdates()
+        {
+            try
             {
-                try
+                Task.Factory.StartNew(() =>
                 {
-                    Task.Factory.StartNew(() =>
-                    {
-                        GitRelease release = UpdateHelper.GetLatestReleaseAsync("Pathoschild/ChestsAnywhere").Result;
-                        if (release.IsNewerThan(this.CurrentVersion))
-                            this.NewRelease = release;
-                    });
-                }
-                catch (Exception ex)
-                {
-                    this.HandleError(ex, "checking for a new version");
-                }
+                    GitRelease release = UpdateHelper.GetLatestReleaseAsync("Pathoschild/ChestsAnywhere").Result;
+
+                    if (release.Errored) {
+                        this.Errored = true;
+                        return;
+                    }
+
+                    if (release.IsNewerThan(this.CurrentVersion))
+                        this.NewRelease = release;
+                });
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, "checking for a new version");
             }
         }
 
         /// <summary>The method invoked when the interface has finished rendering.</summary>
         private void ReceiveHudRendered()
         {
-            // render update warning
-            if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning && this.NewRelease != null)
+            if (!this.HasVerifiedGameVersion)
+                this.VerifyGameVersion();
+
+            // checks and renders update information
+            if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning)
             {
-                try
+                this.HasSeenUpdateWarning = true;
+                if (this.NewRelease != null)
                 {
-                    this.HasSeenUpdateWarning = true;
-                    CommonHelper.ShowInfoMessage($"You can update Chests Anywhere from {this.CurrentVersion} to {this.NewRelease.Version}.");
+                    try
+                    {
+                        CommonHelper.ShowInfoMessage($"You can update Chests Anywhere from {this.CurrentVersion} to {this.NewRelease.Version}.");
+                    }
+                    catch (Exception ex)
+                    {
+                        this.HandleError(ex, "showing the new version available");
+                    }
                 }
-                catch (Exception ex)
+
+                if (this.Errored)
                 {
-                    this.HandleError(ex, "showing the new version available");
+                    try
+                    {
+                        CommonHelper.ShowInfoMessage($"ChestsAnywhere: Updates check failed");
+                    }
+                    catch {}
                 }
             }
 
@@ -185,7 +213,11 @@ namespace ChestsAnywhere
                     return;
 
                 // open menu
-                if (key.Equals(map.Toggle) && Game1.activeClickableMenu == null)
+                var gamepadOverride =
+                    Game1.options.gamepadControls && // Is Gamepad Enabled?
+                    Game1.activeClickableMenu is GameMenu && // Is the active menu the Game Menu?
+                    ((GameMenu) Game1.activeClickableMenu).currentTab == 0; // Is the active tab in the Game Menu your Inventory Page?
+                if (key.Equals(map.Toggle) && (Game1.activeClickableMenu == null || gamepadOverride))
                     this.OpenMenu();
             }
             catch (Exception ex)
