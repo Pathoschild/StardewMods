@@ -218,8 +218,12 @@ namespace ChestsAnywhere.Menus.Overlays
 
                 // Location name
                 {
+                    string locationName = this.Chest.LocationName;
+                    if (this.Chest.Tile != Vector2.Zero)
+                        locationName += $" (tile {this.Chest.Tile.X}, {this.Chest.Tile.Y})";
+
                     Vector2 labelSize = batch.DrawTextBlock(font, "Location:", new Vector2(bounds.X + padding + (int)(maxLabelWidth - font.MeasureString("Location:").X), bounds.Y + topOffset), bounds.Width);
-                    batch.DrawTextBlock(font, this.Chest.LocationName, new Vector2(bounds.X + padding + maxLabelWidth + gutter, bounds.Y + topOffset), bounds.Width);
+                    batch.DrawTextBlock(font, locationName, new Vector2(bounds.X + padding + maxLabelWidth + gutter, bounds.Y + topOffset), bounds.Width);
                     topOffset += labelSize.Y;
                 }
 

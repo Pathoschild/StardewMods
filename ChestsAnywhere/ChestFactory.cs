@@ -24,8 +24,13 @@ namespace ChestsAnywhere
                 // chests in location
                 {
                     int namelessCount = 0;
-                    foreach (Chest chest in location.Objects.Values.OfType<Chest>().Where(p => p.playerChest))
-                        yield return new ManagedChest(chest, ChestFactory.GetLocationName(location), $"Chest #{++namelessCount}");
+                    foreach (KeyValuePair<Vector2, Object> pair in location.Objects)
+                    {
+                        Vector2 tile = pair.Key;
+                        Chest chest = pair.Value as Chest;
+                        if (chest != null && chest.playerChest)
+                            yield return new ManagedChest(chest, ChestFactory.GetLocationName(location), tile, $"Chest #{++namelessCount}");
+                    }
                 }
 
                 // chests in constructed buildings
@@ -36,8 +41,13 @@ namespace ChestsAnywhere
                         int namelessCount = 0;
                         if (building.indoors == null)
                             continue;
-                        foreach (Chest chest in building.indoors.Objects.Values.OfType<Chest>())
-                            yield return new ManagedChest(chest, ChestFactory.GetLocationName(building), $"Chest #{++namelessCount}");
+                        foreach (KeyValuePair<Vector2, Object> pair in building.indoors.Objects)
+                        {
+                            Vector2 tile = pair.Key;
+                            Chest chest = pair.Value as Chest;
+                            if (chest != null && chest.playerChest)
+                                yield return new ManagedChest(chest, ChestFactory.GetLocationName(building), tile, $"Chest #{++namelessCount}");
+                        }
                     }
                 }
 
@@ -46,7 +56,7 @@ namespace ChestsAnywhere
                 {
                     Chest fridge = (location as FarmHouse).fridge;
                     if (fridge != null)
-                        yield return new ManagedChest(fridge, location.Name, "Fridge");
+                        yield return new ManagedChest(fridge, location.Name, Vector2.Zero, "Fridge");
                 }
             }
         }
@@ -76,7 +86,7 @@ namespace ChestsAnywhere
 
             // return if valid
             if (chest != null && chest.playerChest)
-                return new ManagedChest(chest, ChestFactory.GetLocationName(Game1.currentLocation));
+                return new ManagedChest(chest, ChestFactory.GetLocationName(Game1.currentLocation), tile);
             return null;
         }
 

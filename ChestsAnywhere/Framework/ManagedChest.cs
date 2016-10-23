@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Microsoft.Xna.Framework;
 using StardewValley.Menus;
 using StardewValley.Objects;
 
@@ -35,6 +36,9 @@ namespace ChestsAnywhere.Framework
         /// <summary>The name of the location or building which contains the chest.</summary>
         public string LocationName { get; }
 
+        /// <summary>The chest's tile position within its location or building.</summary>
+        public Vector2 Tile { get; }
+
 
         /*********
         ** Public methods
@@ -42,12 +46,14 @@ namespace ChestsAnywhere.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="chest">The chest instance.</param>
         /// <param name="location">The name of the location or building which contains the chest.</param>
+        /// <param name="tile">The chest's tile position within its location or building.</param>
         /// <param name="defaultName">The default name if it hasn't been customised.</param>
-        public ManagedChest(Chest chest, string location, string defaultName = "Chest")
+        public ManagedChest(Chest chest, string location, Vector2 tile, string defaultName = "Chest")
         {
             // save values
             this.Chest = chest;
             this.LocationName = location;
+            this.Tile = tile;
             this.Name = chest.Name != "Chest"
                 ? chest.Name
                 : defaultName;
