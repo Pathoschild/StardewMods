@@ -108,6 +108,7 @@ file if you want. These are the available settings:
 * Added default controller bindings for chest UI navigation.
 * Added tile to location on edit screen.
 * Updated minimum game and SMAPI versions.
+* Fixed `B` controller button not cancelling like `ESC` key.
 * Fixed various controller issues in 1.6.
 * Fixed list scrolling broken in 1.6.
 * Fixed navigate-chest hotkeys ignoring category.

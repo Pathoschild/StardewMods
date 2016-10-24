@@ -319,7 +319,7 @@ namespace ChestsAnywhere.Menus.Overlays
             switch (this.ActiveElement)
             {
                 case Element.Menu:
-                    if (input.Equals(config.Toggle) || input.Equals(Keys.Escape) || input.Equals(Game1.options.menuButton))
+                    if (input.Equals(config.Toggle) || input.Equals(Keys.Escape) || input.Equals(Buttons.B))
                         this.Exit();
                     else if (input.Equals(config.PrevChest))
                         this.SelectPreviousChest();
@@ -338,7 +338,7 @@ namespace ChestsAnywhere.Menus.Overlays
                 case Element.ChestList:
                 case Element.GroupList:
                 case Element.EditForm:
-                    if (input.Equals(Keys.Escape))
+                    if (input.Equals(Keys.Escape) || input.Equals(Buttons.B))
                         this.ActiveElement = Element.Menu;
                     return true;
 
