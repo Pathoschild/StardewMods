@@ -105,6 +105,7 @@
     <Compile Include="Framework\Fields\ICustomField.cs" />
     <Compile Include="Framework\Subjects\ISubject.cs" />
     <Compile Include="Framework\Subjects\ItemSubject.cs" />
+    <Compile Include="GrammarHelper.cs" />
     <Compile Include="LookupAnythingMod.cs" />
     <Compile Include="Framework\Data\MonsterData.cs" />
     <Compile Include="Framework\Data\ItemDropData.cs" />

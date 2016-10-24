@@ -50,7 +50,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             if (!isMature)
             {
                 System.Tuple<string, int> dayOfMaturity = GameHelper.GetDayOffset(tree.daysUntilMature, metadata.Constants.DaysInSeason);
-                string growthText = $"mature on {dayOfMaturity.Item1} {dayOfMaturity.Item2} ({GameHelper.Pluralise(tree.daysUntilMature, "tomorrow", $"in {tree.daysUntilMature} days")})";
+                string growthText = $"mature on {dayOfMaturity.Item1} {dayOfMaturity.Item2} ({GrammarHelper.Pluralise(tree.daysUntilMature, "tomorrow", $"in {tree.daysUntilMature} days")})";
 
                 yield return new GenericField("Next fruit", "too young to bear fruit");
                 yield return new GenericField("Growth", growthText);

@@ -66,11 +66,11 @@ namespace Pathoschild.LookupAnything.Framework.Fields
                 TimeSpan span = (TimeSpan)value;
                 List<string> parts = new List<string>();
                 if (span.Days > 0)
-                    parts.Add($"{span.Days} {GameHelper.Pluralise(span.Days, "day")}");
+                    parts.Add($"{span.Days} {GrammarHelper.Pluralise(span.Days, "day")}");
                 if (span.Hours > 0)
-                    parts.Add($"{span.Hours} {GameHelper.Pluralise(span.Hours, "hour")}");
+                    parts.Add($"{span.Hours} {GrammarHelper.Pluralise(span.Hours, "hour")}");
                 if (span.Minutes > 0)
-                    parts.Add($"{span.Minutes} {GameHelper.Pluralise(span.Minutes, "minute")}");
+                    parts.Add($"{span.Minutes} {GrammarHelper.Pluralise(span.Minutes, "minute")}");
                 return string.Join(", ", parts);
             }
 

@@ -133,7 +133,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     else if (Game1.currentLocation.Name != Constant.LocationNames.Greenhouse && !crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Item1))
                         summary = $"too late in the season for the next harvest (would be on {dayOfNextHarvest.Item1} {dayOfNextHarvest.Item2})";
                     else
-                        summary = $"{dayOfNextHarvest.Item1} {dayOfNextHarvest.Item2} ({GameHelper.Pluralise(daysToNextHarvest, "tomorrow", $"in {daysToNextHarvest} days")})";
+                        summary = $"{dayOfNextHarvest.Item1} {dayOfNextHarvest.Item2} ({GrammarHelper.Pluralise(daysToNextHarvest, "tomorrow", $"in {daysToNextHarvest} days")})";
 
                     yield return new GenericField("Harvest", summary);
                 }
@@ -143,7 +143,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     List<string> summary = new List<string>();
 
                     // harvest
-                    summary.Add($"-harvest after {daysToFirstHarvest} {GameHelper.Pluralise(daysToFirstHarvest, "day")}" + (crop.regrowAfterHarvest != -1 ? $", then every {GameHelper.Pluralise(crop.regrowAfterHarvest, "day", $"{crop.regrowAfterHarvest} days")}" : ""));
+                    summary.Add($"-harvest after {daysToFirstHarvest} {GrammarHelper.Pluralise(daysToFirstHarvest, "day")}" + (crop.regrowAfterHarvest != -1 ? $", then every {GrammarHelper.Pluralise(crop.regrowAfterHarvest, "day", $"{crop.regrowAfterHarvest} days")}" : ""));
 
                     // seasons
                     summary.Add($"-grows in {string.Join(", ", crop.seasonsToGrowIn)}");
@@ -198,7 +198,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                         yield return new GenericField("Aging", $"{currentQuality.GetName()} quality ready");
                     else
                     {
-                        string scheduleStr = string.Join(Environment.NewLine, (from entry in schedule select $"-{entry.Quality.GetName()} {GameHelper.Pluralise(entry.DaysLeft, "tomorrow", $"in {entry.DaysLeft} days")} ({entry.HarvestDate.Item1} {entry.HarvestDate.Item2})"));
+                        string scheduleStr = string.Join(Environment.NewLine, (from entry in schedule select $"-{entry.Quality.GetName()} {GrammarHelper.Pluralise(entry.DaysLeft, "tomorrow", $"in {entry.DaysLeft} days")} ({entry.HarvestDate.Item1} {entry.HarvestDate.Item2})"));
                         yield return new GenericField("Aging", $"-{currentQuality.GetName()} now (use pickaxe to stop aging){Environment.NewLine}" + scheduleStr);
                     }
                 }
