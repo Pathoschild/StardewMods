@@ -24,6 +24,9 @@ namespace ChestsAnywhere.Framework
         /// <summary>The control which navigates to the next category.</summary>
         public T NextCategory { get; set; }
 
+        /// <summary>The control which edits the current chest.</summary>
+        public T EditChest { get; set; }
+
         /// <summary>The control which sorts items in the chest.</summary>
         public T SortItems { get; set; }
 
@@ -41,7 +44,7 @@ namespace ChestsAnywhere.Framework
         /// <summary>Get whether any keys are configured.</summary>
         public bool HasAny()
         {
-            return new[] { this.Toggle, this.PrevChest, this.NextChest, this.PrevCategory, this.NextCategory, this.SortItems }.Any(this.IsValidKey);
+            return new[] { this.Toggle, this.PrevChest, this.NextChest, this.PrevCategory, this.NextCategory, this.EditChest, this.SortItems }.Any(this.IsValidKey);
         }
     }
 }

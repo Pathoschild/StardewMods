@@ -105,8 +105,9 @@ file if you want. These are the available settings:
 1.7 (upcoming):
 * Added support for opening chest overlay from inventory (mostly to allow more controller bindings).
 * Added hotkeys to navigate categories.
+* Added hotkey to edit chest.
 * Added default controller bindings for chest UI navigation.
-* Added tile to location on edit screen.
+* Added location tile on edit screen.
 * Updated minimum game and SMAPI versions.
 * Fixed `B` controller button not cancelling like `ESC` key.
 * Fixed various controller issues in 1.6.

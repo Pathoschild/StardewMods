@@ -329,6 +329,8 @@ namespace ChestsAnywhere.Menus.Overlays
                         this.SelectPreviousCategory();
                     else if (input.Equals(config.NextCategory))
                         this.SelectNextCategory();
+                    else if (input.Equals(config.EditChest))
+                        this.OpenEdit();
                     else if (input.Equals(config.SortItems))
                         this.SortInventory();
                     else
@@ -446,14 +448,7 @@ namespace ChestsAnywhere.Menus.Overlays
                 // buttons & dropdown
                 default:
                     if (this.EditButton.containsPoint(x, y))
-                    {
-                        this.EditNameField.Text = this.Chest.Name;
-                        this.EditCategoryField.Text = this.Chest.GetGroup();
-                        this.EditOrderField.Text = this.Chest.Order?.ToString();
-                        this.EditHideChestField.Value = this.Chest.IsIgnored;
-
-                        this.ActiveElement = Element.EditForm;
-                    }
+                        this.OpenEdit();
                     else if (this.SortInventoryButton.containsPoint(x, y))
                         this.SortInventory();
                     else if (this.ChestTab.containsPoint(x, y))
@@ -606,6 +601,17 @@ namespace ChestsAnywhere.Menus.Overlays
             int curIndex = Array.IndexOf(Groups, SelectedGroup);
             string group = Groups[(curIndex + 1) % Groups.Length];
             this.SelectChest(Chests.First(chest => chest.GetGroup() == group));
+        }
+
+        /// <summary>Reset and display the edit screen.</summary>
+        private void OpenEdit()
+        {
+            this.EditNameField.Text = this.Chest.Name;
+            this.EditCategoryField.Text = this.Chest.GetGroup();
+            this.EditOrderField.Text = this.Chest.Order?.ToString();
+            this.EditHideChestField.Value = this.Chest.IsIgnored;
+
+            this.ActiveElement = Element.EditForm;
         }
 
         /// <summary>Get the chests in a given category.</summary>

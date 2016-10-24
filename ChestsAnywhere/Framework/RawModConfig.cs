@@ -36,6 +36,7 @@ namespace ChestsAnywhere.Framework
                 NextChest = Keys.Right.ToString(),
                 PrevCategory = Keys.Up.ToString(),
                 NextCategory = Keys.Down.ToString(),
+                EditChest = "",
                 SortItems = ""
             };
             this.Controller = new InputMapConfiguration<string>
@@ -45,6 +46,7 @@ namespace ChestsAnywhere.Framework
                 NextChest = Buttons.RightShoulder.ToString(),
                 PrevCategory = Buttons.LeftTrigger.ToString(),
                 NextCategory = Buttons.RightTrigger.ToString(),
+                EditChest = "",
                 SortItems = ""
             };
             this.CheckForUpdates = true;
@@ -70,6 +72,7 @@ namespace ChestsAnywhere.Framework
                     NextChest = this.TryParse(this.Keyboard.NextChest, Keys.Right),
                     PrevCategory = this.TryParse(this.Keyboard.PrevCategory, Keys.Up),
                     NextCategory = this.TryParse(this.Keyboard.NextCategory, Keys.Down),
+                    EditChest = this.TryParse<Keys>(this.Keyboard.EditChest),
                     SortItems = this.TryParse<Keys>(this.Keyboard.SortItems)
                 },
                 Controller = new InputMapConfiguration<Buttons>
@@ -79,6 +82,7 @@ namespace ChestsAnywhere.Framework
                     NextChest = this.TryParse(this.Controller.NextChest, Buttons.RightShoulder),
                     PrevCategory = this.TryParse(this.Controller.PrevCategory, Buttons.LeftTrigger),
                     NextCategory = this.TryParse(this.Controller.NextCategory, Buttons.RightTrigger),
+                    EditChest = this.TryParse<Buttons>(this.Controller.EditChest),
                     SortItems = this.TryParse<Buttons>(this.Keyboard.SortItems)
                 },
                 CheckForUpdates = this.CheckForUpdates,
