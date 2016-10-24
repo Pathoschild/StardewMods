@@ -27,6 +27,10 @@ namespace Pathoschild.LookupAnything.Framework
         /// <remarks>Derived from <see cref="Object.performObjectDropInAction"/>.</remarks>
         public RecipeData[] Recipes { get; set; }
 
+        /// <summary>The shops that buy items from the player.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.Menus.ShopMenu"/> constructor.</remarks>
+        public ShopData[] Shops { get; set; }
+
 
         /*********
         ** Public methods
@@ -34,7 +38,7 @@ namespace Pathoschild.LookupAnything.Framework
         /// <summary>Get whether the metadata seems to be basically valid.</summary>
         public bool LooksValid()
         {
-            return new object[] { this.Constants, this.Objects, this.Characters, this.AdventureGuildQuests, this.Recipes }.All(p => p != null);
+            return new object[] { this.Constants, this.Objects, this.Characters, this.AdventureGuildQuests, this.Recipes, this.Shops }.All(p => p != null);
         }
 
         /// <summary>Get overrides for a game object.</summary>
