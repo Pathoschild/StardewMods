@@ -3,11 +3,11 @@
   "Authour": "Pathoschild",
   "Version": {
     "MajorVersion": 1,
-    "MinorVersion": 6,
+    "MinorVersion": 7,
     "PatchVersion": 0,
     "Build": 0
   },
-  "Description": "Access your chests from anywhere. [version 1.6]",
+  "Description": "Access your chests from anywhere. [version 1.7]",
   "UniqueID": "ChestsAnywhere",
   "PerSaveConfigs": false,
   "EntryDll": "ChestsAnywhere.dll"

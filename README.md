@@ -102,7 +102,7 @@ file if you want. These are the available settings:
 * Fixed chest menu behaving unpredictably after closing edit form in some cases.
 * Major rewrite under the hood.
 
-1.7 (upcoming):
+1.7:
 * Added support for Linux and Mac.
 * Added support for opening chest overlay from inventory (mostly to allow more controller bindings).
 * Added hotkeys to navigate categories.
