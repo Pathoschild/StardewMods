@@ -83,7 +83,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.1.2.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Pathoschild.Stardew.ModBuildConfig.1.2.0\build\Pathoschild.Stardew.ModBuildConfig.targets'))" />
   </Target>
-  <PropertyGroup>
+  <PropertyGroup Condition="$(GamePlatform) == 'Windows'">
     <PostBuildEvent>
       set modDir=$(GamePath)\Mods\ChestsAnywhere
       if not exist "%modDir%" (mkdir "%modDir%")
