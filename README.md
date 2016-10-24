@@ -130,6 +130,7 @@ file if you want. These are the available settings:
 1.6 (upcoming):
 * Added `data.json` validation on startup.
 * Disabled lookups when game rendering mode breaks Lookup Anything (only known to happen in the Stardew Valley Fair).
+* Fixed sale price shown for unsellable items.
 * Fixed update-check error on startup adding scary error text in console.
 * Fixed incorrect gift tastes by deferring more to the game code (slower but more accurate).
 * Fixed error when looking up a villager you haven't met.

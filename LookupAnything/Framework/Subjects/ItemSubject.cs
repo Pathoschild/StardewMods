@@ -68,6 +68,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             bool isCrop = this.FromCrop != null;
             bool isSeed = this.SeedForCrop != null;
             bool isDeadCrop = this.FromCrop?.dead == true;
+            bool canSell = obj?.canBeShipped() == true || metadata.Shops.Any(shop => shop.BuysCategories.Contains(item.category));
 
             // get overrides
             bool showInventoryFields = true;
@@ -210,8 +211,11 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             if (showInventoryFields)
             {
                 var giftTastes = this.GetGiftTastes(item, metadata);
-                if (!isCrop)
-                    yield return new GenericField("Sells for", GenericField.GetSaleValueString(this.GetSaleValue(item, this.KnownQuality), item.Stack));
+                if (canSell && !isCrop)
+                {
+                    string saleValueSummary = GenericField.GetSaleValueString(this.GetSaleValue(item, this.KnownQuality), item.Stack);
+                    yield return new GenericField("Sells for", saleValueSummary);
+                }
                 yield return new ItemGiftTastesField("Loves this", giftTastes, GiftTaste.Love);
                 yield return new ItemGiftTastesField("Likes this", giftTastes, GiftTaste.Like);
             }
