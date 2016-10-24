@@ -1,5 +1,5 @@
-﻿using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -26,22 +26,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Common
         /// <param name="repository">The name of the repository from which to fetch releases (like "pathoschild/LookupAnything").</param>
         public static async Task<GitRelease> GetLatestReleaseAsync(string repository)
         {
-            using (HttpClient client = new HttpClient())
-            {
-                // get assembly info for user agent
-                AssemblyName assembly = typeof(UpdateHelper).Assembly.GetName();
+            // build request
+            // (avoid HttpClient for Mac compatibility)
+            HttpWebRequest request = WebRequest.CreateHttp($"https://api.github.com/repos/{repository}/releases/latest");
+            AssemblyName assembly = typeof(UpdateHelper).Assembly.GetName();
+            request.UserAgent = $"{assembly.Name}/{assembly.Version}";
+            request.Accept = "application/vnd.github.v3+json";
 
-                // fetch latest release
-                using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://api.github.com/repos/{repository}/releases/latest"))
-                {
-                    request.Headers.UserAgent.Add(new ProductInfoHeaderValue(assembly.Name, assembly.Version.ToString()));
-                    request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json")); // API version
-                    using (HttpResponseMessage response = await client.SendAsync(request))
-                    {
-                        string responseText = await response.Content.ReadAsStringAsync();
-                        return JsonConvert.DeserializeObject<GitRelease>(responseText);
-                    }
-                }
+            // fetch data 
+            using (WebResponse response = request.GetResponse())
+            using (Stream responseStream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(responseStream))
+            {
+                string responseText = reader.ReadToEnd();
+                return JsonConvert.DeserializeObject<GitRelease>(responseText);
             }
         }
     }
