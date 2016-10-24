@@ -213,8 +213,16 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 var giftTastes = this.GetGiftTastes(item, metadata);
                 if (canSell && !isCrop)
                 {
+                    // sale price
                     string saleValueSummary = GenericField.GetSaleValueString(this.GetSaleValue(item, this.KnownQuality), item.Stack);
                     yield return new GenericField("Sells for", saleValueSummary);
+
+                    // sell to
+                    List<string> buyers = new List<string>();
+                    if (obj?.canBeShipped() == true)
+                        buyers.Add("shipping box");
+                    buyers.AddRange(from shop in metadata.Shops where shop.BuysCategories.Contains(item.category) orderby shop.DisplayName select shop.DisplayName);
+                    yield return new GenericField("Sells to", GrammarHelper.OrList(buyers.ToArray()));
                 }
                 yield return new ItemGiftTastesField("Loves this", giftTastes, GiftTaste.Love);
                 yield return new ItemGiftTastesField("Likes this", giftTastes, GiftTaste.Like);
