@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 
-namespace ChestsAnywhere.Framework
+namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
     /// <summary>The raw mod configuration.</summary>
     internal class RawModConfig : Config

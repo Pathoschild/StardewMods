@@ -2,17 +2,17 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ChestsAnywhere.Common;
-using ChestsAnywhere.Framework;
-using ChestsAnywhere.Menus.Overlays;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.ChestsAnywhere.Common;
+using Pathoschild.Stardew.ChestsAnywhere.Framework;
+using Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
 
-namespace ChestsAnywhere
+namespace Pathoschild.Stardew.ChestsAnywhere
 {
     /// <summary>The mod entry point.</summary>
     public class ChestsAnywhereMod : Mod

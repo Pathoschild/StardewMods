@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ChestsAnywhere.Framework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace ChestsAnywhere.Menus.Components
+namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
 {
     /// <summary>A dropdown UI component which lets the player choose from a list of values.</summary>
     /// <typeparam name="TItem">The item type.</typeparam>

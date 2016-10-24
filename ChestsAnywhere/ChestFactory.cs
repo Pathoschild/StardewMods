@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ChestsAnywhere.Framework;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
 
-namespace ChestsAnywhere
+namespace Pathoschild.Stardew.ChestsAnywhere
 {
     /// <summary>Encapsulates logic for finding chests.</summary>
     internal static class ChestFactory

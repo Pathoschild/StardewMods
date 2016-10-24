@@ -7,7 +7,7 @@
     <ProjectGuid>{866D7B9E-531E-4F83-95EE-B3D7F2642876}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ChestsAnywhere</RootNamespace>
+    <RootNamespace>Pathoschild.Stardew.ChestsAnywhere</RootNamespace>
     <AssemblyName>ChestsAnywhere</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

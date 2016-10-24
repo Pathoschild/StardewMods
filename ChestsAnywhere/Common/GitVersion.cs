@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace ChestsAnywhere.Common
+namespace Pathoschild.Stardew.ChestsAnywhere.Common
 {
     /// <summary>Metadata about a GitHub release tag.</summary>
     internal class GitRelease

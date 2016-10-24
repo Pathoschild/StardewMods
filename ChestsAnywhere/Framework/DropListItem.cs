@@ -1,4 +1,4 @@
-namespace ChestsAnywhere.Framework
+namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
     /// <summary>An item in a drop list.</summary>
     /// <typeparam name="TItem">The item type.</typeparam>

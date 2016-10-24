@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace ChestsAnywhere.Framework
+namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
     /// <summary>The input mapping configuration.</summary>
     /// <typeparam name="T">The control type.</typeparam>

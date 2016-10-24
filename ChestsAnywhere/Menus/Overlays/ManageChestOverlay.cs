@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using ChestsAnywhere.Common;
-using ChestsAnywhere.Framework;
-using ChestsAnywhere.Menus.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pathoschild.Stardew.ChestsAnywhere.Common;
+using Pathoschild.Stardew.ChestsAnywhere.Framework;
+using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace ChestsAnywhere.Menus.Overlays
+namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 {
     /// <summary>An overlay for <see cref="ItemGrabMenu"/> which lets the player navigate and edit chests.</summary>
     internal class ManageChestOverlay : BaseOverlay
@@ -574,7 +574,7 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <summary>Switch to the previous chest in the list.</summary>
         private void SelectPreviousChest()
         {
-            ManagedChest[] chests = this.GetChestsFromCategory(SelectedGroup);
+            ManagedChest[] chests = this.GetChestsFromCategory(this.SelectedGroup);
             int curIndex = Array.IndexOf(chests, this.Chest);
             this.SelectChest(chests[curIndex != 0 ? curIndex - 1 : chests.Length - 1]);
         }
@@ -582,7 +582,7 @@ namespace ChestsAnywhere.Menus.Overlays
         /// <summary>Switch to the next chest in the list.</summary>
         private void SelectNextChest()
         {
-            ManagedChest[] chests = this.GetChestsFromCategory(SelectedGroup);
+            ManagedChest[] chests = this.GetChestsFromCategory(this.SelectedGroup);
             int curIndex = Array.IndexOf(chests, this.Chest);
             this.SelectChest(chests[(curIndex + 1) % chests.Length]);
         }
@@ -591,16 +591,16 @@ namespace ChestsAnywhere.Menus.Overlays
         private void SelectPreviousCategory()
         {
             int curIndex = Array.IndexOf(this.Groups, this.SelectedGroup);
-            string group = this.Groups[curIndex != 0 ? curIndex - 1 : Groups.Length - 1];
-            this.SelectChest(Chests.First(chest => chest.GetGroup() == group));
+            string group = this.Groups[curIndex != 0 ? curIndex - 1 : this.Groups.Length - 1];
+            this.SelectChest(this.Chests.First(chest => chest.GetGroup() == group));
         }
 
         /// <summary>Switch to the next category.</summary>
         private void SelectNextCategory()
         {
-            int curIndex = Array.IndexOf(Groups, SelectedGroup);
-            string group = Groups[(curIndex + 1) % Groups.Length];
-            this.SelectChest(Chests.First(chest => chest.GetGroup() == group));
+            int curIndex = Array.IndexOf(this.Groups, this.SelectedGroup);
+            string group = this.Groups[(curIndex + 1) % this.Groups.Length];
+            this.SelectChest(this.Chests.First(chest => chest.GetGroup() == group));
         }
 
         /// <summary>Reset and display the edit screen.</summary>

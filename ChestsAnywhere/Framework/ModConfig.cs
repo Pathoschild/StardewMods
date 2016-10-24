@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 
-namespace ChestsAnywhere.Framework
+namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
     /// <summary>The parsed mod configuration.</summary>
     internal class ModConfig

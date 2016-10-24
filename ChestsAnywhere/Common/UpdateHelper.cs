@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Version = StardewModdingAPI.Version;
 
-namespace ChestsAnywhere.Common
+namespace Pathoschild.Stardew.ChestsAnywhere.Common
 {
     /// <summary>Provides utility methods for mod updates.</summary>
     internal class UpdateHelper

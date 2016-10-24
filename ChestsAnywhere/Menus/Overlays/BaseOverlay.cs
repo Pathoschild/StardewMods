@@ -6,7 +6,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using Rectangle = xTile.Dimensions.Rectangle;
 
-namespace ChestsAnywhere.Menus.Overlays
+namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 {
     /// <summary>An interface which supports user interaction and overlays the active menu (if any).</summary>
     internal abstract class BaseOverlay : IDisposable

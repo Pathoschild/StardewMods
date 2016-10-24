@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using StardewValley.Menus;
 using StardewValley.Objects;
 
-namespace ChestsAnywhere.Framework
+namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
     /// <summary>A chest with metadata.</summary>
     internal class ManagedChest

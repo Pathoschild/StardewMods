@@ -1,6 +1,6 @@
 ﻿using StardewValley;
 
-namespace ChestsAnywhere.Framework
+namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
     /// <summary>Constant mod values.</summary>
     internal static class Constant
