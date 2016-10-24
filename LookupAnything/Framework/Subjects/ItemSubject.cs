@@ -156,7 +156,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
 
                     // crop sale price
                     Item drop = GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest);
-                    summary.Add($"-sells for {SaleValueField.GetSummary(this.GetSaleValue(drop, false), 1)}");
+                    summary.Add($"-sells for {GenericField.GetSaleValueString(this.GetSaleValue(drop, false), 1)}");
 
                     // generate field
                     yield return new GenericField("Crop", string.Join(Environment.NewLine, summary));
@@ -211,7 +211,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             {
                 var giftTastes = this.GetGiftTastes(item, metadata);
                 if (!isCrop)
-                    yield return new SaleValueField("Sells for", this.GetSaleValue(item, this.KnownQuality), item.Stack);
+                    yield return new GenericField("Sells for", GenericField.GetSaleValueString(this.GetSaleValue(item, this.KnownQuality), item.Stack));
                 yield return new ItemGiftTastesField("Loves this", giftTastes, GiftTaste.Love);
                 yield return new ItemGiftTastesField("Likes this", giftTastes, GiftTaste.Like);
             }

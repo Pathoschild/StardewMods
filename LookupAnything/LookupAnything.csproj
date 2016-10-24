@@ -97,7 +97,6 @@
     <Compile Include="Framework\Fields\CharacterFriendshipField.cs" />
     <Compile Include="Framework\Fields\CharacterGiftTastesField.cs" />
     <Compile Include="Framework\Fields\ItemGiftTastesField.cs" />
-    <Compile Include="Framework\Fields\SaleValueField.cs" />
     <Compile Include="Framework\Constants\GiftTaste.cs" />
     <Compile Include="Framework\TargetFactory.cs" />
     <Compile Include="Framework\Subjects\BaseSubject.cs" />

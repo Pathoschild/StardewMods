@@ -54,7 +54,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             yield return new ItemIconField("Produce ready", animal.currentProduce > 0 ? new StardewValley.Object(animal.currentProduce, 1) : null);
             if (!isFullyGrown)
                 yield return new GenericField("Growth", $"{daysUntilGrown} {GameHelper.Pluralise(daysUntilGrown, "day")} (on {dayOfMaturity.Item1} {dayOfMaturity.Item2})");
-            yield return new SaleValueField("Sells for", animal.getSellPrice(), 1);
+            yield return new GenericField("Sells for", GenericField.GetSaleValueString(animal.getSellPrice(), 1));
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>
