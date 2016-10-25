@@ -55,7 +55,7 @@ namespace Pathoschild.LookupAnything
         /// <param name="daysInSeason">The number of days in a season.</param>
         public static GameDate GetDate(int daysInSeason)
         {
-            return new GameDate(Game1.currentSeason, Game1.dayOfMonth, daysInSeason);
+            return new GameDate(Game1.currentSeason, Game1.dayOfMonth, Game1.year, daysInSeason);
         }
 
         /// <summary>Get the number of times the player has shipped a given item.</summary>

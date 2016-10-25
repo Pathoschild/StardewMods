@@ -16,6 +16,9 @@ You shouldn't change this file unless you know what you're doing.
     "AnimalFriendshipMaxPoints": 1000,
     "AnimalMaxHappiness": 255,
 
+    /* fruit trees */
+    "FruitTreeQualityGrowthTime": 112,
+
     /* NPCs */
     "AsocialVillagers": [ "Bouncer", "Gunther", "Henchman", "Marlon", "Mister Qi" ],
     "DatingHearts": 2,

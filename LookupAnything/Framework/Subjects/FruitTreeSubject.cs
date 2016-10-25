@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Fields;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -46,18 +48,6 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             bool isDead = tree.stump;
             bool isStruckByLightning = tree.struckByLightningCountdown > 0;
 
-            // show growth countdown
-            if (!isMature)
-            {
-                GameDate dayOfMaturity = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(tree.daysUntilMature);
-                string growthText = $"mature on {dayOfMaturity} ({GrammarHelper.Pluralise(tree.daysUntilMature, "tomorrow", $"in {tree.daysUntilMature} days")})";
-
-                yield return new GenericField("Next fruit", "too young to bear fruit");
-                yield return new GenericField("Growth", growthText);
-                if (this.HasAdjacentObjects(this.Tile))
-                    yield return new GenericField("Complaints", "can't grow because there are adjacent objects");
-            }
-
             // show next fruit
             if (isMature && !isDead)
             {
@@ -69,6 +59,54 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     yield return new GenericField("Next fruit", "won't grow any more fruit until you harvest those it has");
                 else
                     yield return new GenericField("Next fruit", "tomorrow");
+            }
+
+            // show growth data
+            if (!isMature)
+            {
+                GameDate dayOfMaturity = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(tree.daysUntilMature);
+                string growthText = $"mature on {dayOfMaturity} ({GrammarHelper.Pluralise(tree.daysUntilMature, "tomorrow", $"in {tree.daysUntilMature} days")})";
+
+                yield return new GenericField("Next fruit", "too young to bear fruit");
+                yield return new GenericField("Growth", growthText);
+                if (this.HasAdjacentObjects(this.Tile))
+                    yield return new GenericField("Complaints", "can't grow because there are adjacent objects");
+            }
+            else
+            {
+                // get quality schedule
+                ItemQuality currentQuality = this.GetCurrentQuality(tree, metadata.Constants.FruitTreeQualityGrowthTime);
+                if (currentQuality == ItemQuality.Iridium)
+                    yield return new GenericField("Quality", $"{currentQuality.GetName()} now");
+                else
+                {
+                    string[] summary = this
+                        .GetQualitySchedule(tree, currentQuality, metadata.Constants.FruitTreeQualityGrowthTime)
+                        .Select(entry =>
+                        {
+                            // read schedule
+                            ItemQuality quality = entry.Key;
+                            int daysLeft = entry.Value;
+                            GameDate date = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(daysLeft);
+                            int yearOffset = date.Year - Game1.year;
+
+                            // generate summary line
+                            if (daysLeft <= 0)
+                                return $"-{quality.GetName()} now";
+
+                            string line = $"-{quality.GetName()} on {date}";
+                            if (yearOffset == 1)
+                                line += " next year";
+                            else if (yearOffset > 0)
+                                line += $" in year {date.Year}";
+                            line += $" ({GrammarHelper.Pluralise(daysLeft, "tomorrow", $"in {daysLeft} days")})";
+
+                            return line;
+                        })
+                        .ToArray();
+
+                    yield return new GenericField("Quality", string.Join(Environment.NewLine, summary));
+                }
             }
 
             // show seasons
@@ -101,6 +139,48 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 let isEmptyDirt = location.terrainFeatures.ContainsKey(adjacentTile) && location.terrainFeatures[adjacentTile] is HoeDirt && ((HoeDirt)location.terrainFeatures[adjacentTile])?.crop == null
                 select isOccupied && !isEmptyDirt
             ).Any(p => p);
+        }
+
+        /// <summary>Get the fruit quality produced by a tree.</summary>
+        /// <param name="tree">The fruit tree.</param>
+        /// <param name="daysPerQuality">The number of days before the tree begins producing a higher quality.</param>
+        private ItemQuality GetCurrentQuality(FruitTree tree, int daysPerQuality)
+        {
+            int maturityLevel = Math.Min(0, Math.Max(3, -tree.daysUntilMature / daysPerQuality));
+            switch (maturityLevel)
+            {
+                case 0:
+                    return ItemQuality.Normal;
+                case 1:
+                    return ItemQuality.Silver;
+                case 2:
+                    return ItemQuality.Gold;
+                case 3:
+                    return ItemQuality.Iridium;
+                default:
+                    throw new NotSupportedException($"Unexpected quality level {maturityLevel}.");
+            }
+        }
+
+        /// <summary>Get a schedule indicating when a fruit tree will begin producing higher-quality fruit.</summary>
+        /// <param name="tree">The fruit tree.</param>
+        /// <param name="currentQuality">The current quality produced by the tree.</param>
+        /// <param name="daysPerQuality">The number of days before the tree begins producing a higher quality.</param>
+        private IEnumerable<KeyValuePair<ItemQuality, int>> GetQualitySchedule(FruitTree tree, ItemQuality currentQuality, int daysPerQuality)
+        {
+            // yield current
+            yield return new KeyValuePair<ItemQuality, int>(currentQuality, 0);
+
+            // yield future qualities
+            int dayOffset = -(daysPerQuality - (-tree.daysUntilMature % daysPerQuality));
+            foreach (ItemQuality futureQuality in new[] { ItemQuality.Silver, ItemQuality.Gold, ItemQuality.Iridium })
+            {
+                if (currentQuality >= futureQuality)
+                    continue;
+
+                dayOffset += daysPerQuality;
+                yield return new KeyValuePair<ItemQuality, int>(futureQuality, dayOffset);
+            }
         }
     }
 }

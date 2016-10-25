@@ -24,6 +24,10 @@ namespace Pathoschild.LookupAnything.Framework.Data
         /// <remarks>Derived from <see cref="StardewValley.FarmAnimal.dayUpdate"/>.</remarks>
         public int AnimalMaxHappiness { get; set; }
 
+        /// <summary>The number of days until a fruit tree produces a better-quality fruit.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.TerrainFeatures.FruitTree.shake"/>.</remarks>
+        public int FruitTreeQualityGrowthTime { get; set; }
+
         /****
         ** NPCs
         ****/

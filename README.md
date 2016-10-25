@@ -47,7 +47,7 @@ Here are some representative screenshots (layout and values will change dynamica
 | crafting object | ![](screenshots/crafting.png) |
 | cask            | ![](screenshots/cask.png) |
 | fence           | ![](screenshots/fence.png) |
-| fruit tree      | ![](screenshots/fruit-tree.png) |
+| fruit tree      | ![](screenshots/fruit-tree.png) ![](screenshots/fruit-tree2.png) |
 | wild tree       | ![](screenshots/wild-tree.png) |
 
 ### Mine objects
@@ -128,9 +128,10 @@ file if you want. These are the available settings:
 * Fixed errors crashing the game in rare cases.
 
 1.6 (upcoming):
-* Added 'needed for' item field for community center bundles, full shipment achievement, and polyculture achievement.
-* Added 'sells to' item field.
-* Added number owned item field.
+* Added item 'needed for' field for community center bundles, full shipment achievement, and polyculture achievement.
+* Added item 'sells to' field.
+* Added item number owned field.
+* Added fruit tree quality schedule.
 * Added `data.json` validation on startup.
 * Disabled lookups when game rendering mode breaks Lookup Anything (only known to happen in the Stardew Valley Fair).
 * Fixed sale price shown for unsellable items.
