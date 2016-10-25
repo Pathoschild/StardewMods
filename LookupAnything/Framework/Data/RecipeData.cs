@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Pathoschild.LookupAnything.Framework.Data
+namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>Metadata for a recipe that isn't available from the game data directly.</summary>
     internal class RecipeData

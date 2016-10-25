@@ -1,9 +1,9 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Components;
+using Pathoschild.Stardew.LookupAnything.Components;
 
-namespace Pathoschild.LookupAnything.Framework.Fields
+namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows a progress bar UI.</summary>
     internal class PercentageBarField : GenericField

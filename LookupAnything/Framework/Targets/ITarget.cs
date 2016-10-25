@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 
-namespace Pathoschild.LookupAnything.Framework.Targets
+namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about an object in the world.</summary>
     internal interface ITarget

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Pathoschild.LookupAnything.Framework.Models
+namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
     /// <summary>A bundle entry parsed from the game's data files.</summary>
     internal class BundleModel

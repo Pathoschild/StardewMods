@@ -1,4 +1,4 @@
-namespace Pathoschild.LookupAnything.Framework.Logging
+namespace Pathoschild.Stardew.LookupAnything.Framework.Logging
 {
     /// <summary>A logger that deliberately does nothing.</summary>
     internal class DisabledLog : ICumulativeLog

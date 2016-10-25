@@ -1,6 +1,6 @@
-using Pathoschild.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 
-namespace Pathoschild.LookupAnything.Framework.Models
+namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
     /// <summary>An item slot for a bundle.</summary>
     internal class BundleIngredientModel

@@ -1,4 +1,4 @@
-namespace Pathoschild.LookupAnything.Framework.Data
+namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>Information about an Adventure Guild monster-slaying quest.</summary>
     internal class AdventureGuildQuestData

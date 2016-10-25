@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using Pathoschild.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework.Fields
+namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows which items an NPC likes receiving.</summary>
     internal class CharacterGiftTastesField : GenericField

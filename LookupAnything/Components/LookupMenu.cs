@@ -2,14 +2,14 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework;
-using Pathoschild.LookupAnything.Framework.Fields;
-using Pathoschild.LookupAnything.Framework.Subjects;
+using Pathoschild.Stardew.LookupAnything.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Pathoschild.LookupAnything.Components
+namespace Pathoschild.Stardew.LookupAnything.Components
 {
     /// <summary>A UI which shows information about an item.</summary>
     internal class LookupMenu : IClickableMenu

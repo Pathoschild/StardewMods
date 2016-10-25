@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace Pathoschild.LookupAnything.Framework.Targets
+namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about an unknown object.</summary>
     internal class UnknownTarget : GenericTarget

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Pathoschild.LookupAnything.Framework;
-using Pathoschild.LookupAnything.Framework.Constants;
-using Pathoschild.LookupAnything.Framework.Data;
-using Pathoschild.LookupAnything.Framework.Models;
+using Pathoschild.Stardew.LookupAnything.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
 
-namespace Pathoschild.LookupAnything
+namespace Pathoschild.Stardew.LookupAnything
 {
     /// <summary>Parses the raw game data into usable models. These may be expensive operations and should be cached.</summary>
     internal class DataParser

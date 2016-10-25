@@ -1,10 +1,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
-namespace Pathoschild.LookupAnything.Framework.Targets
+namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about a wild tree.</summary>
     internal class TreeTarget : GenericTarget

@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework.Targets
+namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about a farmer (i.e. player).</summary>
     internal class FarmerTarget : GenericTarget

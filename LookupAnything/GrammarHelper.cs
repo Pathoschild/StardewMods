@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Pathoschild.LookupAnything
+namespace Pathoschild.Stardew.LookupAnything
 {
     /// <summary>A utility class for writing text output.</summary>
     internal class GrammarHelper

@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
-namespace Pathoschild.LookupAnything.Framework.Targets
+namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about a crop.</summary>
     internal class CropTarget : GenericTarget

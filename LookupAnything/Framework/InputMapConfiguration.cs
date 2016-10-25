@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace Pathoschild.LookupAnything.Framework
+namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     /// <summary>The input mapping configuration.</summary>
     /// <typeparam name="T">The control type.</typeparam>

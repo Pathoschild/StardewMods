@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework.Fields;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 
-namespace Pathoschild.LookupAnything.Framework.Subjects
+namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 {
     /// <summary>Provides metadata about something in the game.</summary>
     internal interface ISubject

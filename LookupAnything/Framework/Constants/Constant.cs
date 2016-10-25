@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Pathoschild.LookupAnything.Framework.Constants
+namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 {
     /// <summary>Constant mod values.</summary>
     internal static class Constant

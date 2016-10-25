@@ -1,7 +1,7 @@
-using Pathoschild.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework.Models
+namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
     /// <summary>Summarises details about the friendship between an NPC and a player.</summary>
     internal class FriendshipModel

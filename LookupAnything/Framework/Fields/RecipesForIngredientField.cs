@@ -3,10 +3,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework.Models;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework.Fields
+namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows a list of recipes containing an ingredient.</summary>
     internal class RecipesForIngredientField : GenericField

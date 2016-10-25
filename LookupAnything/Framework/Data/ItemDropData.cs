@@ -1,4 +1,4 @@
-﻿namespace Pathoschild.LookupAnything.Framework.Data
+﻿namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>A loot entry parsed from the game data.</summary>
     internal class ItemDropData

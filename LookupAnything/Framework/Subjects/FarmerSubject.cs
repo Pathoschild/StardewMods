@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework.Fields;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework.Subjects
+namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 {
     /// <summary>Describes a farmer (i.e. player).</summary>
     internal class FarmerSubject : BaseSubject

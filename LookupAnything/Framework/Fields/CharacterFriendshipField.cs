@@ -1,11 +1,11 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Components;
-using Pathoschild.LookupAnything.Framework.Models;
+using Pathoschild.Stardew.LookupAnything.Components;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework.Fields
+namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows friendship points.</summary>
     internal class CharacterFriendshipField : GenericField

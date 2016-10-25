@@ -2,7 +2,7 @@
 using System.Text;
 using StardewModdingAPI;
 
-namespace Pathoschild.LookupAnything.Framework.Logging
+namespace Pathoschild.Stardew.LookupAnything.Framework.Logging
 {
     /// <summary>Collects log messages for a discrete task and logs them as one entry.</summary>
     internal class CumulativeLog : ICumulativeLog

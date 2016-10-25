@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Pathoschild.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 
-namespace Pathoschild.LookupAnything.Framework.Data
+namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>Constant values hardcoded by the game.</summary>
     internal class ConstantData

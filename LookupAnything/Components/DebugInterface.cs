@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework;
-using Pathoschild.LookupAnything.Framework.Subjects;
-using Pathoschild.LookupAnything.Framework.Targets;
+using Pathoschild.Stardew.LookupAnything.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
+using Pathoschild.Stardew.LookupAnything.Framework.Targets;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Components
+namespace Pathoschild.Stardew.LookupAnything.Components
 {
     /// <summary>Draws debug information to the screen.</summary>
     internal class DebugInterface

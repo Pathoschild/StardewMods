@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 
-namespace Pathoschild.LookupAnything.Framework
+namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     /// <summary>The raw mod configuration.</summary>
     internal class RawModConfig : Config

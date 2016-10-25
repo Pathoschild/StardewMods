@@ -5,10 +5,10 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Common;
-using Pathoschild.LookupAnything.Framework;
-using Pathoschild.LookupAnything.Framework.Constants;
-using Pathoschild.LookupAnything.Framework.Models;
+using Pathoschild.Stardew.LookupAnything.Common;
+using Pathoschild.Stardew.LookupAnything.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
@@ -16,7 +16,7 @@ using StardewValley.Locations;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
 
-namespace Pathoschild.LookupAnything
+namespace Pathoschild.Stardew.LookupAnything
 {
     /// <summary>Provides utility methods for interacting with the game code.</summary>
     internal static class GameHelper

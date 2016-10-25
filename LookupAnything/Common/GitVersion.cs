@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Pathoschild.LookupAnything.Common
+namespace Pathoschild.Stardew.LookupAnything.Common
 {
     /// <summary>Metadata about a GitHub release tag.</summary>
     internal class GitRelease

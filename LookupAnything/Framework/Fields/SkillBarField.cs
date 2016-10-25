@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Pathoschild.LookupAnything.Framework.Fields
+namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows experience points for a skill.</summary>
     /// <remarks>Skill calculations reverse-engineered from <see cref="StardewValley.Farmer.checkForLevelGain"/>.</remarks>

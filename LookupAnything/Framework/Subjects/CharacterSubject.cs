@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework.Constants;
-using Pathoschild.LookupAnything.Framework.Data;
-using Pathoschild.LookupAnything.Framework.Fields;
-using Pathoschild.LookupAnything.Framework.Models;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Monsters;
 
-namespace Pathoschild.LookupAnything.Framework.Subjects
+namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 {
     /// <summary>Describes an NPC (including villagers, monsters, and pets).</summary>
     internal class CharacterSubject : BaseSubject

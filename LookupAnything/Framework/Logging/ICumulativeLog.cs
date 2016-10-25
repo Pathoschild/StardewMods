@@ -1,6 +1,6 @@
 using System;
 
-namespace Pathoschild.LookupAnything.Framework.Logging
+namespace Pathoschild.Stardew.LookupAnything.Framework.Logging
 {
     /// <summary>Collects log messages for a discrete task and logs them as one entry when disposed.</summary>
     internal interface ICumulativeLog : IDisposable

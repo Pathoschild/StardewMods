@@ -1,4 +1,4 @@
-namespace Pathoschild.LookupAnything.Framework
+namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     /// <summary>How a recipe is used to create an item.</summary>
     internal enum RecipeType

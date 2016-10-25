@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework.Input;
 
-namespace Pathoschild.LookupAnything.Framework
+namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     /// <summary>The parsed mod configuration.</summary>
     internal class ModConfig

@@ -1,8 +1,8 @@
 ﻿using System;
-using Pathoschild.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework
+namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     /// <summary>Represents an in-game date.</summary>
     public class GameDate

@@ -1,6 +1,6 @@
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework.Constants
+namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 {
     /// <summary>Indicates a fence type. Better fences last longer.</summary>
     internal enum FenceType

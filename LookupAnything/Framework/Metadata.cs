@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using Pathoschild.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework
+namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     /// <summary>Provides metadata that's not available from the game data directly (e.g. because it's buried in the logic).</summary>
     internal class Metadata

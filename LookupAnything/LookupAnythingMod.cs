@@ -4,17 +4,17 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
-using Pathoschild.LookupAnything.Common;
-using Pathoschild.LookupAnything.Components;
-using Pathoschild.LookupAnything.Framework;
-using Pathoschild.LookupAnything.Framework.Logging;
-using Pathoschild.LookupAnything.Framework.Subjects;
+using Pathoschild.Stardew.LookupAnything.Common;
+using Pathoschild.Stardew.LookupAnything.Components;
+using Pathoschild.Stardew.LookupAnything.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Logging;
+using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Pathoschild.LookupAnything
+namespace Pathoschild.Stardew.LookupAnything
 {
     /// <summary>The mod entry point.</summary>
     public class LookupAnythingMod : Mod

@@ -7,7 +7,7 @@
     <ProjectGuid>{2A9C0811-B2D2-474A-A84C-DDEB16206A62}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pathoschild.LookupAnything</RootNamespace>
+    <RootNamespace>Pathoschild.Stardew.LookupAnything</RootNamespace>
     <AssemblyName>LookupAnything</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

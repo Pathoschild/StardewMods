@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewValley;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
 
-namespace Pathoschild.LookupAnything.Framework.Fields
+namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows a list of item drops.</summary>
     internal class ItemDropListField : GenericField

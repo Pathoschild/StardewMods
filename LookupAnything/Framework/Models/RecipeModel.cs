@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework.Models
+namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
     /// <summary>Represents metadata about a recipe.</summary>
     internal class RecipeModel

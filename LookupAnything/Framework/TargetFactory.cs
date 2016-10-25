@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Pathoschild.LookupAnything.Framework.Data;
-using Pathoschild.LookupAnything.Framework.Subjects;
-using Pathoschild.LookupAnything.Framework.Targets;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
+using Pathoschild.Stardew.LookupAnything.Framework.Targets;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Menus;
 using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
 
-namespace Pathoschild.LookupAnything.Framework
+namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     /// <summary>Finds and analyses lookup targets in the world.</summary>
     internal class TargetFactory

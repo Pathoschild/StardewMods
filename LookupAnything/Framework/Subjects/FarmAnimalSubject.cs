@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework.Constants;
-using Pathoschild.LookupAnything.Framework.Fields;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework.Subjects
+namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 {
     /// <summary>Describes a farm animal.</summary>
     internal class FarmAnimalSubject : BaseSubject
