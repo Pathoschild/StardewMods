@@ -110,7 +110,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             }
 
             // show seasons
-            yield return new GenericField("Season", $"{tree.fruitSeason} (or any season in greenhouse)");
+            yield return new GenericField("Season", $"{tree.fruitSeason} (or anytime in greenhouse)");
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>
