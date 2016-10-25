@@ -235,6 +235,10 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                                 neededFor.Add($"polyculture achievement (ship {needed} more)");
                         }
 
+                        // full shipment achivement
+                        if (isObject && GameHelper.GetFullShipmentAchievementItems().Any(p => p.Key == obj.ParentSheetIndex && !p.Value))
+                            neededFor.Add("full shipment achievement (ship one)");
+
                         // yield
                         if (neededFor.Any())
                             yield return new GenericField("Needed for", string.Join(", ", neededFor));

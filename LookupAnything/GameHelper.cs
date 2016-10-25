@@ -82,6 +82,17 @@ namespace Pathoschild.LookupAnything
                 : 0;
         }
 
+        /// <summary>Get all shippable items.</summary>
+        /// <remarks>Derived from <see cref="Utility.hasFarmerShippedAllItems"/>.</remarks>
+        public static IEnumerable<KeyValuePair<int, bool>> GetFullShipmentAchievementItems()
+        {
+            return (
+                from obj in GameHelper.Objects.Value
+                where obj.Type != "Arch" && obj.Type != "Fish" && obj.Type != "Mineral" && obj.Type != "Cooking" && Object.isPotentialBasicShippedCategory(obj.ParentSpriteIndex, obj.Category.ToString())
+                select new KeyValuePair<int, bool>(obj.ParentSpriteIndex, Game1.player.basicShipped.ContainsKey(obj.ParentSpriteIndex))
+            );
+        }
+
         /// <summary>Get whether the specified NPC has social data like a birthday and gift tastes.</summary>
         /// <param name="npc">The NPC to check.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
