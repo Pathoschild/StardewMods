@@ -9,10 +9,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
         ** Accessors
         *********/
         /// <summary>The minimum supported version of Stardew Valley.</summary>
-        public static string MinimumGameVersion = "1.1";
+        public static string MinimumGameVersion = "1.11";
 
         /// <summary>The minimum supported version of SMAPI.</summary>
-        public static string MinimumApiVersion = "0.40.0 1.1";
+        public static string MinimumApiVersion = "0.40.0 1.1-3";
 
         /// <summary>The largest expected sprite size (measured in tiles).</summary>
         /// <remarks>This is used to account for sprites that extend beyond their tile when searching for targets. These values should be large enough to cover the largest target sprites, but small enough to minimise expensive cursor collision checks.</remarks>
