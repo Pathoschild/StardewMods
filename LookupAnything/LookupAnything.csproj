@@ -50,6 +50,8 @@
     <Compile Include="Framework\Constants\FruitTreeGrowthStage.cs" />
     <Compile Include="DataParser.cs" />
     <Compile Include="Framework\Data\ShopData.cs" />
+    <Compile Include="Framework\Models\BundleIngredientModel.cs" />
+    <Compile Include="Framework\Models\BundleModel.cs" />
     <Compile Include="Framework\Models\FriendshipModel.cs" />
     <Compile Include="Framework\Logging\CumulativeLog.cs" />
     <Compile Include="Framework\Data\ConstantData.cs" />

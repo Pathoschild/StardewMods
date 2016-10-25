@@ -18,6 +18,38 @@ namespace Pathoschild.LookupAnything
         /*********
         ** Public methods
         *********/
+        /// <summary>Read parsed data about the Community Center bundles.</summary>
+        /// <remarks>Derived from the <see cref="StardewValley.Locations.CommunityCenter"/> constructor and <see cref="StardewValley.Menus.JunimoNoteMenu.openRewardsMenu"/>.</remarks>
+        public static IEnumerable<BundleModel> GetBundles()
+        {
+            IDictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\Bundles");
+            foreach (var entry in data)
+            {
+                // parse key
+                string[] keyParts = entry.Key.Split('/');
+                string area = keyParts[0];
+                int id = int.Parse(keyParts[1]);
+
+                // parse value
+                string[] valueParts = entry.Value.Split('/');
+                string name = valueParts[0];
+                string reward = valueParts[1];
+                List<BundleIngredientModel> ingredients = new List<BundleIngredientModel>();
+                string[] ingredientData = valueParts[2].Split(' ');
+                for (int i = 0; i < ingredientData.Length; i += 3)
+                {
+                    int index = i / 3;
+                    int itemID = int.Parse(ingredientData[i]);
+                    int stack = int.Parse(ingredientData[i + 1]);
+                    ItemQuality quality = (ItemQuality)int.Parse(ingredientData[i + 2]);
+                    ingredients.Add(new BundleIngredientModel(index, itemID, stack, quality));
+                }
+
+                // create bundle
+                yield return new BundleModel(id, name, area, reward, ingredients);
+            }
+        }
+
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
         /// <param name="player">The player.</param>
         /// <param name="npc">The NPC.</param>

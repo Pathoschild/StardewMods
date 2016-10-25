@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using StardewValley;
 
 namespace Pathoschild.LookupAnything.Framework.Constants
 {
@@ -19,11 +18,14 @@ namespace Pathoschild.LookupAnything.Framework.Constants
         /// <remarks>This is used to account for sprites that extend beyond their tile when searching for targets. These values should be large enough to cover the largest target sprites, but small enough to minimise expensive cursor collision checks.</remarks>
         public static readonly Vector2 MaxTargetSpriteSize = new Vector2(3, 5);
 
-        /// <summary>The <see cref="Farmer.mailReceived"/> keys referenced by the mod.</summary>
+        /// <summary>The <see cref="StardewValley.Farmer.mailReceived"/> keys referenced by the mod.</summary>
         public static class MailLetters
         {
             /// <summary>Set when the spouse gives the player a stardrop.</summary>
             public const string ReceivedSpouseStardrop = "CF_Spouse";
+
+            /// <summary>Set when the player buys a Joja membership, which demolishes the community center.</summary>
+            public const string JojaMember = "JojaMember";
         }
 
         /// <summary>The season names.</summary>

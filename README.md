@@ -30,7 +30,7 @@ Here are some representative screenshots (layout and values will change dynamica
 | ----------- | ----------- |
 | crop        | ![](screenshots/crop.png) |
 | seeds       | ![](screenshots/seeds.png) |
-| inventory   | ![](screenshots/item.png) |
+| inventory   | ![](screenshots/item.png) ![](screenshots/item2.png) |
 
 ### Characters
 | character   | screenshots |
@@ -128,6 +128,7 @@ file if you want. These are the available settings:
 * Fixed errors crashing the game in rare cases.
 
 1.6 (upcoming):
+* Added 'needed for' item field for community center bundle.
 * Added `data.json` validation on startup.
 * Added 'sells to' item field.
 * Disabled lookups when game rendering mode breaks Lookup Anything (only known to happen in the Stardew Valley Fair).

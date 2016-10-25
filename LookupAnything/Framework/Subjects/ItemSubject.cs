@@ -8,6 +8,7 @@ using Pathoschild.LookupAnything.Framework.Data;
 using Pathoschild.LookupAnything.Framework.Fields;
 using Pathoschild.LookupAnything.Framework.Models;
 using StardewValley;
+using StardewValley.Locations;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
 
@@ -213,6 +214,14 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 var giftTastes = this.GetGiftTastes(item, metadata);
                 if (canSell && !isCrop)
                 {
+                    // bundles
+                    if (obj != null)
+                    {
+                        string[] unfinishedBundles = (from bundle in this.GetUnfinishedBundles(obj) orderby bundle.Area, bundle.Name select $"{bundle.Area}: {bundle.Name}").ToArray();
+                        if (unfinishedBundles.Any())
+                            yield return new GenericField("Needed for", $"community center ({string.Join(", ", unfinishedBundles)})");
+                    }
+
                     // sale price
                     string saleValueSummary = GenericField.GetSaleValueString(this.GetSaleValue(item, this.KnownQuality), item.Stack);
                     yield return new GenericField("Sells for", saleValueSummary);
@@ -334,6 +343,37 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             if (string.IsNullOrWhiteSpace(type) && item is Object)
                 type = ((Object)item).type;
             return type;
+        }
+
+        /// <summary>Get unfinished bundles which require this item.</summary>
+        /// <param name="item">The item for which to find bundles.</param>
+        private IEnumerable<BundleModel> GetUnfinishedBundles(Object item)
+        {
+            // no bundles for Joja members
+            if (Game1.player.hasOrWillReceiveMail(Constant.MailLetters.JojaMember))
+                yield break;
+
+            // get community center
+            CommunityCenter communityCenter = Game1.locations.OfType<CommunityCenter>().First();
+            if (communityCenter.areAllAreasComplete())
+                yield break;
+
+            // get bundles
+            foreach (BundleModel bundle in DataParser.GetBundles())
+            {
+                // ignore completed bundle
+                if (communityCenter.isBundleComplete(bundle.ID))
+                    continue;
+
+                // get ingredient
+                BundleIngredientModel ingredient = bundle.Ingredients.FirstOrDefault(p => p.ItemID == item.parentSheetIndex && p.Quality <= (ItemQuality)item.quality);
+                if (ingredient == null)
+                    continue;
+
+                // yield if missing
+                if (!communityCenter.bundles[bundle.ID][ingredient.Index])
+                    yield return bundle;
+            }
         }
 
         /// <summary>Get the possible sale values for an item.</summary>
