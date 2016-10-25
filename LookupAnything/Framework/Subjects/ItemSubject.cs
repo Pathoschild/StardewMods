@@ -212,38 +212,38 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             // item
             if (showInventoryFields)
             {
-                var giftTastes = this.GetGiftTastes(item, metadata);
-                if (canSell && !isCrop)
+                // needed for
                 {
-                    // needed for
+                    List<string> neededFor = new List<string>();
+
+                    // bundles
+                    if (isObject)
                     {
-                        List<string> neededFor = new List<string>();
-
-                        // bundles
-                        if (isObject)
-                        {
-                            string[] bundles = (from bundle in this.GetUnfinishedBundles(obj) orderby bundle.Area, bundle.Name select $"{bundle.Area}: {bundle.Name}").ToArray();
-                            if (bundles.Any())
-                                neededFor.Add($"community center ({string.Join(", ", bundles)})");
-                        }
-
-                        // polyculture achievement
-                        if (isObject && metadata.Constants.PolycultureCrops.Contains(obj.ParentSheetIndex))
-                        {
-                            int needed = metadata.Constants.PolycultureCount - GameHelper.GetShipped(obj.ParentSheetIndex);
-                            if (needed > 0)
-                                neededFor.Add($"polyculture achievement (ship {needed} more)");
-                        }
-
-                        // full shipment achivement
-                        if (isObject && GameHelper.GetFullShipmentAchievementItems().Any(p => p.Key == obj.ParentSheetIndex && !p.Value))
-                            neededFor.Add("full shipment achievement (ship one)");
-
-                        // yield
-                        if (neededFor.Any())
-                            yield return new GenericField("Needed for", string.Join(", ", neededFor));
+                        string[] bundles = (from bundle in this.GetUnfinishedBundles(obj) orderby bundle.Area, bundle.Name select $"{bundle.Area}: {bundle.Name}").ToArray();
+                        if (bundles.Any())
+                            neededFor.Add($"community center ({string.Join(", ", bundles)})");
                     }
 
+                    // polyculture achievement
+                    if (isObject && metadata.Constants.PolycultureCrops.Contains(obj.ParentSheetIndex))
+                    {
+                        int needed = metadata.Constants.PolycultureCount - GameHelper.GetShipped(obj.ParentSheetIndex);
+                        if (needed > 0)
+                            neededFor.Add($"polyculture achievement (ship {needed} more)");
+                    }
+
+                    // full shipment achivement
+                    if (isObject && GameHelper.GetFullShipmentAchievementItems().Any(p => p.Key == obj.ParentSheetIndex && !p.Value))
+                        neededFor.Add("full shipment achievement (ship one)");
+
+                    // yield
+                    if (neededFor.Any())
+                        yield return new GenericField("Needed for", string.Join(", ", neededFor));
+                }
+
+                // sale data
+                if (canSell && !isCrop)
+                {
                     // sale price
                     string saleValueSummary = GenericField.GetSaleValueString(this.GetSaleValue(item, this.KnownQuality), item.Stack);
                     yield return new GenericField("Sells for", saleValueSummary);
@@ -255,6 +255,9 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                     buyers.AddRange(from shop in metadata.Shops where shop.BuysCategories.Contains(item.category) orderby shop.DisplayName select shop.DisplayName);
                     yield return new GenericField("Sells to", GrammarHelper.OrList(buyers.ToArray()));
                 }
+
+                // gift tastes
+                var giftTastes = this.GetGiftTastes(item, metadata);
                 yield return new ItemGiftTastesField("Loves this", giftTastes, GiftTaste.Love);
                 yield return new ItemGiftTastesField("Likes this", giftTastes, GiftTaste.Like);
             }
