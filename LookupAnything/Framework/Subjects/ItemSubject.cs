@@ -286,6 +286,10 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 if (recipes.Any())
                     yield return new RecipesForIngredientField("Recipes", item, recipes);
             }
+
+            // owned
+            if (showInventoryFields && !isCrop && !(item is Tool))
+                yield return new GenericField("Owned", $"you own {GameHelper.CountExistingItems(item, ownedOnly: true)} of these");
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>

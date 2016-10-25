@@ -11,6 +11,8 @@ using Pathoschild.LookupAnything.Framework.Constants;
 using Pathoschild.LookupAnything.Framework.Models;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Buildings;
+using StardewValley.Locations;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
 
@@ -91,6 +93,76 @@ namespace Pathoschild.LookupAnything
                 where obj.Type != "Arch" && obj.Type != "Fish" && obj.Type != "Mineral" && obj.Type != "Cooking" && Object.isPotentialBasicShippedCategory(obj.ParentSpriteIndex, obj.Category.ToString())
                 select new KeyValuePair<int, bool>(obj.ParentSpriteIndex, Game1.player.basicShipped.ContainsKey(obj.ParentSpriteIndex))
             );
+        }
+
+        /// <summary>Get all items which exist in the world.</summary>
+        /// <param name="ownedOnly">Only include items owned by the player (e.g. in their inventory, chests, buildings, etc).</param>
+        /// <remarks>Derived from <see cref="Utility.doesItemWithThisIndexExistAnywhere"/>.</remarks>
+        public static IEnumerable<Item> GetAllExistingItems(bool ownedOnly = false)
+        {
+            List<Item> items = new List<Item>();
+
+            // inventory
+            items.AddRange(Game1.player.Items);
+
+            // in locations
+            var locations = Game1.locations.Concat(Game1.getFarm().buildings.Select(p => p.indoors).Where(p => p != null));
+            foreach (GameLocation location in locations)
+            {
+                // map objects
+                foreach (Object item in location.objects.Values)
+                {
+                    if (item is Chest || item.bigCraftable || !item.IsSpawnedObject)
+                        items.Add(item);
+                    items.Add(item.heldObject);
+                    if (item is Chest)
+                        items.AddRange((item as Chest).items);
+                }
+
+                // furniture
+                if (location is DecoratableLocation)
+                {
+                    foreach (Furniture furniture in (location as DecoratableLocation).furniture)
+                    {
+                        items.Add(furniture);
+                        items.Add(furniture.heldObject);
+                    }
+                }
+
+                // dropped items
+                if (!ownedOnly)
+                    items.AddRange(location.debris.Select(p => p.item));
+
+                // farm buildings
+                if (location is Farm)
+                {
+                    foreach (var building in (location as Farm).buildings)
+                    {
+                        if (building is Mill)
+                            items.AddRange((building as Mill).output.items);
+                        else if (building is JunimoHut)
+                            items.AddRange((building as JunimoHut).output.items);
+                    }
+                }
+
+                // farmhouse fridge
+                if (location is FarmHouse)
+                    items.AddRange((location as FarmHouse).fridge.items);
+            }
+
+            return items.Where(p => p != null);
+        }
+
+        /// <summary>Count how many of an item exists in the world.</summary>
+        /// <param name="item">The item to count.</param>
+        /// <param name="ownedOnly">Only include items owned by the player (e.g. in their inventory, chests, buildings, etc).</param>
+        /// <remarks>Derived from <see cref="Utility.doesItemWithThisIndexExistAnywhere"/>.</remarks>
+        public static int CountExistingItems(Item item, bool ownedOnly = false)
+        {
+            return GameHelper
+                .GetAllExistingItems(ownedOnly)
+                .Where(worldItem => worldItem.CompareTo(item) == 0)
+                .Sum(worldItem => worldItem.Stack);
         }
 
         /// <summary>Get whether the specified NPC has social data like a birthday and gift tastes.</summary>
