@@ -130,6 +130,7 @@ file if you want. These are the available settings:
 * Fixed errors crashing the game in rare cases.
 
 1.6:
+* Added support for Linux and Mac.
 * Added item 'needed for' field for community center bundles, full shipment achievement, and polyculture achievement.
 * Added item 'sells to' field.
 * Added item number owned field.
