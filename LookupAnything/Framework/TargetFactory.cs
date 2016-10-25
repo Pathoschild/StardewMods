@@ -259,6 +259,14 @@ namespace Pathoschild.LookupAnything.Framework
                 }
             }
 
+            // shop
+            else if (menu is ShopMenu)
+            {
+                Item item = GameHelper.GetPrivateField<Item>(menu, "hoveredItem");
+                if(item != null)
+                    return new ItemSubject(item.getOne(), ObjectContext.Inventory, knownQuality: true);
+            }
+
             // by convention (for mod support)
             else
             {

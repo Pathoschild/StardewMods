@@ -132,6 +132,7 @@ file if you want. These are the available settings:
 * Added item 'sells to' field.
 * Added item number owned field.
 * Added fruit tree quality schedule.
+* Added support for looking up shop items.
 * Added `data.json` validation on startup.
 * Disabled lookups when game rendering mode breaks Lookup Anything (only known to happen in the Stardew Valley Fair).
 * Fixed sale price shown for unsellable items.
