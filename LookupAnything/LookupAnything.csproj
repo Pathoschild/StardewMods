@@ -120,8 +120,12 @@
     <Compile Include="DrawHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="data.json" />
-    <None Include="manifest.json" />
+    <None Include="data.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
