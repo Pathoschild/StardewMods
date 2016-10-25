@@ -49,8 +49,8 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             // show growth countdown
             if (!isMature)
             {
-                System.Tuple<string, int> dayOfMaturity = GameHelper.GetDayOffset(tree.daysUntilMature, metadata.Constants.DaysInSeason);
-                string growthText = $"mature on {dayOfMaturity.Item1} {dayOfMaturity.Item2} ({GrammarHelper.Pluralise(tree.daysUntilMature, "tomorrow", $"in {tree.daysUntilMature} days")})";
+                GameDate dayOfMaturity = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(tree.daysUntilMature);
+                string growthText = $"mature on {dayOfMaturity} ({GrammarHelper.Pluralise(tree.daysUntilMature, "tomorrow", $"in {tree.daysUntilMature} days")})";
 
                 yield return new GenericField("Next fruit", "too young to bear fruit");
                 yield return new GenericField("Growth", growthText);

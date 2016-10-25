@@ -108,7 +108,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 {
                     // calculate next harvest
                     int daysToNextHarvest = 0;
-                    Tuple<string, int> dayOfNextHarvest = null;
+                    GameDate dayOfNextHarvest = null;
                     if (!canHarvestNow)
                     {
                         // calculate days until next harvest
@@ -126,17 +126,17 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                             else
                                 daysToNextHarvest = crop.dayOfCurrentPhase; // dayOfCurrentPhase decreases to 0 when fully grown, where <=0 is harvestable
                         }
-                        dayOfNextHarvest = GameHelper.GetDayOffset(daysToNextHarvest, metadata.Constants.DaysInSeason);
+                        dayOfNextHarvest = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(daysToNextHarvest);
                     }
 
                     // generate field
                     string summary;
                     if (canHarvestNow)
                         summary = "now";
-                    else if (Game1.currentLocation.Name != Constant.LocationNames.Greenhouse && !crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Item1))
-                        summary = $"too late in the season for the next harvest (would be on {dayOfNextHarvest.Item1} {dayOfNextHarvest.Item2})";
+                    else if (Game1.currentLocation.Name != Constant.LocationNames.Greenhouse && !crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Season))
+                        summary = $"too late in the season for the next harvest (would be on {dayOfNextHarvest})";
                     else
-                        summary = $"{dayOfNextHarvest.Item1} {dayOfNextHarvest.Item2} ({GrammarHelper.Pluralise(daysToNextHarvest, "tomorrow", $"in {daysToNextHarvest} days")})";
+                        summary = $"{dayOfNextHarvest} ({GrammarHelper.Pluralise(daysToNextHarvest, "tomorrow", $"in {daysToNextHarvest} days")})";
 
                     yield return new GenericField("Harvest", summary);
                 }
@@ -190,7 +190,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                             {
                                 Quality = quality,
                                 DaysLeft = daysLeft,
-                                HarvestDate = GameHelper.GetDayOffset(daysLeft, metadata.Constants.DaysInSeason)
+                                HarvestDate = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(daysLeft)
                             }
                         )
                         .ToArray();
@@ -201,7 +201,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                         yield return new GenericField("Aging", $"{currentQuality.GetName()} quality ready");
                     else
                     {
-                        string scheduleStr = string.Join(Environment.NewLine, (from entry in schedule select $"-{entry.Quality.GetName()} {GrammarHelper.Pluralise(entry.DaysLeft, "tomorrow", $"in {entry.DaysLeft} days")} ({entry.HarvestDate.Item1} {entry.HarvestDate.Item2})"));
+                        string scheduleStr = string.Join(Environment.NewLine, (from entry in schedule select $"-{entry.Quality.GetName()} {GrammarHelper.Pluralise(entry.DaysLeft, "tomorrow", $"in {entry.DaysLeft} days")} ({entry.HarvestDate})"));
                         yield return new GenericField("Aging", $"-{currentQuality.GetName()} now (use pickaxe to stop aging){Environment.NewLine}" + scheduleStr);
                     }
                 }

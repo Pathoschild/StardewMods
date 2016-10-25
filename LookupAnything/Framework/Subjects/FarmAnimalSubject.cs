@@ -39,11 +39,11 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             // calculate maturity
             bool isFullyGrown = animal.age >= animal.ageWhenMature;
             int daysUntilGrown = 0;
-            Tuple<string, int> dayOfMaturity = null;
+            GameDate dayOfMaturity = null;
             if (!isFullyGrown)
             {
                 daysUntilGrown = animal.ageWhenMature - animal.age;
-                dayOfMaturity = GameHelper.GetDayOffset(daysUntilGrown, metadata.Constants.DaysInSeason);
+                dayOfMaturity = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(daysUntilGrown);
             }
 
             // yield fields
@@ -53,7 +53,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             yield return new GenericField("Complaints", this.GetMoodReason(animal));
             yield return new ItemIconField("Produce ready", animal.currentProduce > 0 ? new StardewValley.Object(animal.currentProduce, 1) : null);
             if (!isFullyGrown)
-                yield return new GenericField("Growth", $"{daysUntilGrown} {GrammarHelper.Pluralise(daysUntilGrown, "day")} (on {dayOfMaturity.Item1} {dayOfMaturity.Item2})");
+                yield return new GenericField("Growth", $"{daysUntilGrown} {GrammarHelper.Pluralise(daysUntilGrown, "day")} (on {dayOfMaturity})");
             yield return new GenericField("Sells for", GenericField.GetSaleValueString(animal.getSellPrice(), 1));
         }
 
