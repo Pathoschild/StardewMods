@@ -66,5 +66,16 @@ namespace Pathoschild.LookupAnything.Framework.Data
         /// <summary>The age thresholds for casks.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Objects.Cask.checkForMaturity"/>.</remarks>
         public IDictionary<ItemQuality, int> CaskAgeSchedule { get; set; }
+
+        /****
+        ** Achievements
+        ****/
+        /// <summary>The crops that must be shipped for the polyculture achievement.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.Stats.checkForShippingAchievements"/>.</remarks>
+        public int[] PolycultureCrops { get; set; }
+
+        /// <summary>The number of each crop that must be shipped for the polyculture achievement.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.Stats.checkForShippingAchievements"/>.</remarks>
+        public int PolycultureCount { get; set; }
     }
 }

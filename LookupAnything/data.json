@@ -35,7 +35,11 @@ You shouldn't change this file unless you know what you're doing.
       "Silver": 14,
       "Gold": 28,
       "Iridium": 56
-    }
+    },
+
+    /* achievements */
+    "PolycultureCrops": [ 24, 188, 190, 192, 248, 250, 252, 254, 256, 258, 260, 262, 264, 266, 268, 270, 272, 274, 276, 278, 280, 282, 284, 300, 304, 398, 400, 433 ],
+    "PolycultureCount": 15
   },
 
   /*********

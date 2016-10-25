@@ -66,6 +66,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             // get data
             Item item = this.Target;
             Object obj = item as Object;
+            bool isObject = obj != null;
             bool isCrop = this.FromCrop != null;
             bool isSeed = this.SeedForCrop != null;
             bool isDeadCrop = this.FromCrop?.dead == true;
@@ -214,12 +215,29 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 var giftTastes = this.GetGiftTastes(item, metadata);
                 if (canSell && !isCrop)
                 {
-                    // bundles
-                    if (obj != null)
+                    // needed for
                     {
-                        string[] unfinishedBundles = (from bundle in this.GetUnfinishedBundles(obj) orderby bundle.Area, bundle.Name select $"{bundle.Area}: {bundle.Name}").ToArray();
-                        if (unfinishedBundles.Any())
-                            yield return new GenericField("Needed for", $"community center ({string.Join(", ", unfinishedBundles)})");
+                        List<string> neededFor = new List<string>();
+
+                        // bundles
+                        if (isObject)
+                        {
+                            string[] bundles = (from bundle in this.GetUnfinishedBundles(obj) orderby bundle.Area, bundle.Name select $"{bundle.Area}: {bundle.Name}").ToArray();
+                            if (bundles.Any())
+                                neededFor.Add($"community center ({string.Join(", ", bundles)})");
+                        }
+
+                        // polyculture achievement
+                        if (isObject && metadata.Constants.PolycultureCrops.Contains(obj.ParentSheetIndex))
+                        {
+                            int needed = metadata.Constants.PolycultureCount - GameHelper.GetShipped(obj.ParentSheetIndex);
+                            if (needed > 0)
+                                neededFor.Add($"polyculture achievement (ship {needed} more)");
+                        }
+
+                        // yield
+                        if (neededFor.Any())
+                            yield return new GenericField("Needed for", string.Join(", ", neededFor));
                     }
 
                     // sale price
@@ -255,7 +273,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
             }
 
             // recipes
-            if (obj != null && obj.bigCraftable != true)
+            if (isObject && obj.bigCraftable != true)
             {
                 RecipeModel[] recipes = GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
                 if (recipes.Any())

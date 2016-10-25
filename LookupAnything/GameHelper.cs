@@ -73,6 +73,15 @@ namespace Pathoschild.LookupAnything
             return Tuple.Create(season, day);
         }
 
+        /// <summary>Get the number of times the player has shipped a given item.</summary>
+        /// <param name="itemID">The item's parent sprite index.</param>
+        public static int GetShipped(int itemID)
+        {
+            return Game1.player.basicShipped.ContainsKey(itemID)
+                ? Game1.player.basicShipped[itemID]
+                : 0;
+        }
+
         /// <summary>Get whether the specified NPC has social data like a birthday and gift tastes.</summary>
         /// <param name="npc">The NPC to check.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>

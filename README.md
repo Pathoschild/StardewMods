@@ -128,7 +128,7 @@ file if you want. These are the available settings:
 * Fixed errors crashing the game in rare cases.
 
 1.6 (upcoming):
-* Added 'needed for' item field for community center bundle.
+* Added 'needed for' item field for community center bundles and polyculture achievement.
 * Added `data.json` validation on startup.
 * Added 'sells to' item field.
 * Disabled lookups when game rendering mode breaks Lookup Anything (only known to happen in the Stardew Valley Fair).
