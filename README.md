@@ -167,5 +167,5 @@ To package the mod for release:
 ## See also
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/518)
 * [Discussion thread](http://community.playstarbound.com/threads/smapi-chests-anywhere.122603/)
-* My other Stardew Valley mods: [Lookup Anything](https://github.com/Pathoschild/LookupAnything) and [Skip Intro](https://github.com/Pathoschild/StardewValley.SkipIntro)
+* My other Stardew Valley mods: [Lookup Anything](https://github.com/Pathoschild/LookupAnything), [No Debug Mode](https://github.com/Pathoschild/Stardew.NoDebugMode), and [Skip Intro](https://github.com/Pathoschild/StardewValley.SkipIntro)
 * This is an [open-source fork](https://github.com/VIspReaderUS/AccessChestAnywhere/issues/1) of the inactive [AccessChestAnywhere](https://github.com/VIspReaderUS/AccessChestAnywhere) mod. Versions 1.0 and 1.1 are from that mod.

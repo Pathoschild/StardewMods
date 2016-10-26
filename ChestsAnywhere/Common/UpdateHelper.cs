@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Common
             request.Accept = "application/vnd.github.v3+json";
 
             // fetch data 
-            using (WebResponse response = request.GetResponse())
+            using (WebResponse response = await request.GetResponseAsync())
             using (Stream responseStream = response.GetResponseStream())
             using (StreamReader reader = new StreamReader(responseStream))
             {
