@@ -144,6 +144,9 @@ file if you want. These are the available settings:
 * Fixed error when looking up a villager you haven't met.
 * Fixed error when looking up certain NPCs with no social data.
 
+1.7 (upcoming):
+* You can now lookup a villager from the social page.
+
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
 recommended for most users. If you really want to compile the mod yourself, read on.

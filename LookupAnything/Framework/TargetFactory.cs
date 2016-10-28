@@ -257,6 +257,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     if (item != null)
                         return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
                 }
+                else if (curTab is SocialPage)
+                {
+                    List<ClickableTextureComponent> entries = GameHelper.GetPrivateField<List<ClickableTextureComponent>>(curTab, "friendNames");
+                    foreach (var entry in entries)
+                    {
+                        if (entry.containsPoint((int) cursorPosition.X, (int) cursorPosition.Y))
+                        {
+                            NPC npc = Utility.getAllCharacters().FirstOrDefault(p => p.name == entry.name);
+                            if(npc != null)
+                                return new CharacterSubject(npc, TargetType.Villager, this.Metadata);
+                        }
+                    }
+                }
             }
 
             // shop
