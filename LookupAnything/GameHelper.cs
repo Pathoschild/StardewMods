@@ -14,6 +14,7 @@ using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Objects;
+using StardewValley.Tools;
 using Object = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything
@@ -78,10 +79,9 @@ namespace Pathoschild.Stardew.LookupAnything
             );
         }
 
-        /// <summary>Get all items which exist in the world.</summary>
-        /// <param name="ownedOnly">Only include items owned by the player (e.g. in their inventory, chests, buildings, etc).</param>
+        /// <summary>Get all items owned by the player.</summary>
         /// <remarks>Derived from <see cref="Utility.doesItemWithThisIndexExistAnywhere"/>.</remarks>
-        public static IEnumerable<Item> GetAllExistingItems(bool ownedOnly = false)
+        public static IEnumerable<Item> GetAllOwnedItems()
         {
             List<Item> items = new List<Item>();
 
@@ -89,17 +89,36 @@ namespace Pathoschild.Stardew.LookupAnything
             items.AddRange(Game1.player.Items);
 
             // in locations
-            var locations = Game1.locations.Concat(Game1.getFarm().buildings.Select(p => p.indoors).Where(p => p != null));
-            foreach (GameLocation location in locations)
+            foreach (GameLocation location in Game1.locations.Concat(Game1.getFarm().buildings.Select(p => p.indoors).Where(p => p != null)))
             {
                 // map objects
                 foreach (Object item in location.objects.Values)
                 {
-                    if (item is Chest || item.bigCraftable || !item.IsSpawnedObject)
-                        items.Add(item);
-                    items.Add(item.heldObject);
                     if (item is Chest)
-                        items.AddRange((item as Chest).items);
+                    {
+                        Chest chest = item as Chest;
+                        if (chest.playerChest)
+                        {
+                            items.Add(chest);
+                            items.AddRange(chest.items);
+                        }
+                    }
+                    else if (item is Cask)
+                    {
+                        items.Add(item);
+                        items.Add(item.heldObject); // cask contents can be retrieved anytime
+                    }
+                    else if (item.bigCraftable)
+                    {
+                        items.Add(item);
+                        if (item.minutesUntilReady == 0)
+                            items.Add(item.heldObject);
+                    }
+                    else if (!item.IsSpawnedObject)
+                    {
+                        items.Add(item);
+                        items.Add(item.heldObject);
+                    }
                 }
 
                 // furniture
@@ -112,11 +131,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     }
                 }
 
-                // dropped items
-                if (!ownedOnly)
-                    items.AddRange(location.debris.Select(p => p.item));
-
-                // farm buildings
+                // building output
                 if (location is Farm)
                 {
                     foreach (var building in (location as Farm).buildings)
@@ -136,16 +151,40 @@ namespace Pathoschild.Stardew.LookupAnything
             return items.Where(p => p != null);
         }
 
-        /// <summary>Count how many of an item exists in the world.</summary>
+        /// <summary>Count how many of an item the player owns.</summary>
         /// <param name="item">The item to count.</param>
-        /// <param name="ownedOnly">Only include items owned by the player (e.g. in their inventory, chests, buildings, etc).</param>
-        /// <remarks>Derived from <see cref="Utility.doesItemWithThisIndexExistAnywhere"/>.</remarks>
-        public static int CountExistingItems(Item item, bool ownedOnly = false)
+        public static int CountOwnedItems(Item item)
         {
-            return GameHelper
-                .GetAllExistingItems(ownedOnly)
-                .Where(worldItem => worldItem.CompareTo(item) == 0)
-                .Sum(worldItem => worldItem.Stack);
+            return (
+                from worldItem in GameHelper.GetAllOwnedItems()
+                where GameHelper.AreEquivalent(worldItem, item)
+                let canStack = worldItem.canStackWith(worldItem)
+                select canStack ? Math.Max(1, worldItem.Stack) : 1
+            ).Sum();
+        }
+
+        /// <summary>Get whether two items are the same type (ignoring flavour text like 'blueberry wine' vs 'cranberry wine').</summary>
+        /// <param name="a">The first item to compare.</param>
+        /// <param name="b">The second item to compare.</param>
+        private static bool AreEquivalent(Item a, Item b)
+        {
+            return
+                // same generic item type
+                a.GetType() == b.GetType()
+                && a.category == b.category
+                && a.parentSheetIndex == b.parentSheetIndex
+
+                // same discriminators
+                && (a as Object)?.bigCraftable == (b as Object)?.bigCraftable
+                && (a as Boots)?.indexInTileSheet == (b as Boots)?.indexInTileSheet
+                && (a as BreakableContainer)?.type == (b as BreakableContainer)?.type
+                && (a as Fence)?.isGate == (b as Fence)?.isGate
+                && (a as Fence)?.whichType == (b as Fence)?.whichType
+                && (a as Hat)?.which == (b as Hat)?.which
+                && (a as MeleeWeapon)?.type == (b as MeleeWeapon)?.type
+                && (a as Ring)?.indexInTileSheet == (b as Ring)?.indexInTileSheet
+                && (a as Tool)?.initialParentTileIndex == (b as Tool)?.initialParentTileIndex
+                && (a as Tool)?.CurrentParentTileIndex == (b as Tool)?.CurrentParentTileIndex;
         }
 
         /// <summary>Get whether the specified NPC has social data like a birthday and gift tastes.</summary>

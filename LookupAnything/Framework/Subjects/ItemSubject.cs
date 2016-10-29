@@ -289,7 +289,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             // owned
             if (showInventoryFields && !isCrop && !(item is Tool))
-                yield return new GenericField("Owned", $"you own {GameHelper.CountExistingItems(item, ownedOnly: true)} of these");
+                yield return new GenericField("Owned", $"you own {GameHelper.CountOwnedItems(item)} of these");
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>

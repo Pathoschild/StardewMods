@@ -146,6 +146,7 @@ file if you want. These are the available settings:
 
 1.7 (upcoming):
 * You can now lookup a villager from the social page.
+* Improved owned item counting.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
