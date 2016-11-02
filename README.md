@@ -4,7 +4,7 @@ information to the screen and unlocks the game's built-in debug commands.
 ## Usage
 Press the `~` key (configurable) to enable or disable debug mode. This will...
 
-1. Add the game's built-in debug info in the top-left corner:
+1. Show cursor crosshairs, the cursor's tile position, and the game's built-in debug info:
 
    ![screenshot](screenshots/debug-mode.png)
 
