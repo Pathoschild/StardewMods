@@ -14,6 +14,13 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>The mod configuration settings.</summary>
         private ModConfig Config;
 
+        /// <summary>Whether the built-in debug mode is enabled.</summary>
+        private bool DebugMode
+        {
+            get { return Game1.debugMode; }
+            set { Game1.debugMode = value; }
+        }
+
 
         /*********
         ** Public methods
@@ -72,7 +79,7 @@ namespace Pathoschild.Stardew.DebugMode
 
             // perform bound action
             if (key.Equals(map.ToggleDebug))
-                Game1.debugMode = !Game1.debugMode;
+                this.DebugMode = !this.DebugMode;
         }
     }
 }
