@@ -71,30 +71,17 @@ namespace Pathoschild.Stardew.DebugMode
         /*********
         ** Private methods
         *********/
+        /****
+        ** Event handlers
+        ****/
         /// <summary>The event called by SMAPI when rendering to the screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         /// <param name="pixel">The cached pixel used to draw overlays.</param>
         public void OnPostRenderEvent(object sender, EventArgs e, Texture2D pixel)
         {
-            if (!this.DebugMode)
-                return;
-            SpriteBatch batch = Game1.spriteBatch;
-            SpriteFont font = Game1.smallFont;
-
-            // draw cursor tile position
-            {
-                Vector2 tile = Game1.currentCursorTile;
-                Vector2 position = new Vector2(Game1.getOldMouseX(), Game1.getOldMouseY());
-
-                string text = $"{tile.X}, {tile.Y}";
-                Vector2 textSize = font.MeasureString(text);
-                batch.DrawString(font, text, new Vector2(position.X - textSize.X, position.Y), Color.Red);
-            }
-
-            // draw cursor crosshairs
-            batch.Draw(pixel, new Rectangle(0, Game1.getOldMouseY() - 1, Game1.viewport.Width, 3), Color.Black * 0.5f);
-            batch.Draw(pixel, new Rectangle(Game1.getOldMouseX() - 1, 0, 3, Game1.viewport.Height), Color.Black * 0.5f);
+            if (this.DebugMode)
+                this.DrawOverlay(Game1.spriteBatch, Game1.smallFont, pixel);
         }
 
         /// <summary>The method invoked when the player presses a keyboard button.</summary>
@@ -106,11 +93,8 @@ namespace Pathoschild.Stardew.DebugMode
             this.HandleInput(e.KeyPressed, this.Config.Keyboard);
 
             // suppress dangerous actions
-            if (!this.Config.AllowDangerousCommands && this.DebugMode && this.DestructiveKeys.Contains(e.KeyPressed))
-            {
-                Keys[] pressedKeys = Game1.oldKBState.GetPressedKeys().Union(new[] { e.KeyPressed }).ToArray();
-                Game1.oldKBState = new KeyboardState(pressedKeys);
-            }
+            if (this.DebugMode && !this.Config.AllowDangerousCommands)
+                this.SuppressKeyIfDangerous(e.KeyPressed);
         }
 
         /// <summary>The method invoked when the player presses a controller button.</summary>
@@ -129,6 +113,20 @@ namespace Pathoschild.Stardew.DebugMode
             this.HandleInput(e.ButtonPressed, this.Config.Controller);
         }
 
+        /****
+        ** Methods
+        ****/
+        /// <summary>Suppress the specified key if it's considered dangerous (see <see cref="ModConfig.AllowDangerousCommands"/>).</summary>
+        /// <param name="key">The pressed key to suppress.</param>
+        private void SuppressKeyIfDangerous(Keys key)
+        {
+            if (this.DestructiveKeys.Contains(key))
+            {
+                Keys[] pressedKeys = Game1.oldKBState.GetPressedKeys().Union(new[] { key }).ToArray();
+                Game1.oldKBState = new KeyboardState(pressedKeys);
+            }
+        }
+
         /// <summary>The method invoked when the player presses an input button.</summary>
         /// <typeparam name="TKey">The input type.</typeparam>
         /// <param name="key">The pressed input.</param>
@@ -141,6 +139,27 @@ namespace Pathoschild.Stardew.DebugMode
             // perform bound action
             if (key.Equals(map.ToggleDebug))
                 this.DebugMode = !this.DebugMode;
+        }
+
+        /// <summary>Draw the debug overlay to the screen.</summary>
+        /// <param name="batch">The sprite batch being drawn.</param>
+        /// <param name="font">The font with which to render text.</param>
+        /// <param name="pixel">A pixel texture that can be stretched and colourised for display.</param>
+        private void DrawOverlay(SpriteBatch batch, SpriteFont font, Texture2D pixel)
+        {
+            // draw cursor tile position
+            {
+                Vector2 tile = Game1.currentCursorTile;
+                Vector2 position = new Vector2(Game1.getOldMouseX(), Game1.getOldMouseY());
+
+                string text = $"{tile.X}, {tile.Y}";
+                Vector2 textSize = font.MeasureString(text);
+                batch.DrawString(font, text, new Vector2(position.X - textSize.X, position.Y), Color.Red);
+            }
+
+            // draw cursor crosshairs
+            batch.Draw(pixel, new Rectangle(0, Game1.getOldMouseY() - 1, Game1.viewport.Width, 3), Color.Black * 0.5f);
+            batch.Draw(pixel, new Rectangle(Game1.getOldMouseX() - 1, 0, 3, Game1.viewport.Height), Color.Black * 0.5f);
         }
     }
 }
