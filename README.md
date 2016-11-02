@@ -1,5 +1,6 @@
 **Debug Mode** is an open-source [Stardew Valley](http://stardewvalley.net/) mod which draws debug
-information to the screen and unlocks the game's built-in debug commands.
+info to the screen and unlocks the game's built-in debug commands. These commands include
+teleporting to key locations and manipulating time.
 
 ## Usage
 Press the `~` key (configurable) to enable or disable debug mode. This will...
@@ -15,13 +16,13 @@ Press the `~` key (configurable) to enable or disable debug mode. This will...
    `T`    | Add one hour to the clock.
    `SHIFT` + `Y` | Subtract 10 minutes from the clock.
    `Y`    | Add 10 minutes to the clock.
-   `1`    | Warp to the mountain.
-   `2`    | Warp to the town.
-   `3`    | Warp to the farm.
-   `4`    | Warp to the forest.
-   `5`    | Warp to the beach.
-   `6`    | Warp to the mine.
-   `7`    | Warp to the desert.
+   `1`    | Warp to the mountain (facing Robin's house).
+   `2`    | Warp to the town (on the path between the town and community center).
+   `3`    | Warp to the farm (at your farmhouse door).
+   `4`    | Warp to the forest (near the traveling cart).
+   `5`    | Warp to the beach (left of Elliott's house).
+   `6`    | Warp to the mine (at the inside entrance).
+   `7`    | Warp to the desert (in Sandy's shop).
    `K`    | Move down one mine level. If not currently in the mine, warp to it.
    `F5`   | Toggle the player.
    `F7`   | Draw a tile grid.

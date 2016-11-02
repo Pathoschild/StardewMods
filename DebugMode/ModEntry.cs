@@ -60,6 +60,9 @@ namespace Pathoschild.Stardew.DebugMode
                 ControlEvents.ControllerTriggerPressed += this.ReceiveTriggerPress;
             }
 
+            // hook warp event
+            LocationEvents.CurrentLocationChanged += this.ReceiveCurrentLocationChanged;
+
             // hook overlay
             GraphicsEvents.OnPostRenderEvent += (sender, e) => this.OnPostRenderEvent(sender, e, this.Pixel.Value);
         }
@@ -110,6 +113,15 @@ namespace Pathoschild.Stardew.DebugMode
             this.HandleInput(e.ButtonPressed, this.Config.Controller);
         }
 
+        /// <summary>The method invoked when the player warps into a new location.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ReceiveCurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
+        {
+            if (this.DebugMode)
+                this.CorrectEntryPosition(e.NewLocation, Game1.player);
+        }
+
         /****
         ** Methods
         ****/
@@ -136,6 +148,45 @@ namespace Pathoschild.Stardew.DebugMode
             // perform bound action
             if (key.Equals(map.ToggleDebug))
                 this.DebugMode = !this.DebugMode;
+        }
+
+        /// <summary>Correct the player's position when they warp into an area.</summary>
+        /// <param name="location">The location the player entered.</param>
+        /// <param name="player">The player who just warped.</param>
+        private void CorrectEntryPosition(GameLocation location, Farmer player)
+        {
+            switch (location.Name)
+            {
+                // desert (move from inside wall to natural entry point)
+                case "SandyHouse":
+                    this.MovePlayerFrom(player, new Vector2(16, 3), new Vector2(4, 9), PlayerDirection.Up);
+                    break;
+
+                // mountain (move down a bit to natural entry point)
+                case "Mountain":
+                    this.MovePlayerFrom(player, new Vector2(15, 35), new Vector2(15, 40), PlayerDirection.Up);
+                    break;
+
+                // town (move from middle of field near community center to path between town and community center)
+                case "Town":
+                    this.MovePlayerFrom(player, new Vector2(35, 35), new Vector2(48, 43), PlayerDirection.Up);
+                    break;
+            }
+        }
+
+        /// <summary>Move the player from one tile to another, if they're on that tile.</summary>
+        /// <param name="player">The player to move.</param>
+        /// <param name="fromTile">The tile position from which to move the player.</param>
+        /// <param name="toTile">The tile position to which to move the player.</param>
+        /// <param name="facingDirection">The direction the player should be facing after they're moved.</param>
+        private void MovePlayerFrom(Farmer player, Vector2 fromTile, Vector2 toTile, PlayerDirection facingDirection)
+        {
+            if (player.getTileX() == (int)fromTile.X && player.getTileY() == (int)fromTile.Y)
+            {
+                player.Position = new Vector2(toTile.X * Game1.tileSize, toTile.Y * Game1.tileSize);
+                player.facingDirection = (int)facingDirection;
+                player.setMovingInFacingDirection();
+            }
         }
 
         /// <summary>Create a pixel texture that can be stretched and colourised for display.</summary>
