@@ -16,6 +16,9 @@ namespace Pathoschild.Stardew.DebugMode.Framework
         /// <summary>The controller input map.</summary>
         public InputMapConfiguration<string> Controller { get; set; }
 
+        /// <summary>Allow debug commands which are destructive. A command is considered destructive if it immediately ends the current day, randomises the player or farmhouse decorations, or crashes the game.</summary>
+        public bool AllowDangerousCommands { get; set; }
+
 
         /*********
         ** Public methods
@@ -31,6 +34,7 @@ namespace Pathoschild.Stardew.DebugMode.Framework
             {
                 ToggleDebug = ""
             };
+            this.AllowDangerousCommands = false;
         }
 
         /// <summary>Construct the default configuration.</summary>

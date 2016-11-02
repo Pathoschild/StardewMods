@@ -1,4 +1,6 @@
-﻿using Pathoschild.Stardew.DebugMode.Framework;
+﻿using System.Linq;
+using Microsoft.Xna.Framework.Input;
+using Pathoschild.Stardew.DebugMode.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -20,6 +22,19 @@ namespace Pathoschild.Stardew.DebugMode
             get { return Game1.debugMode; }
             set { Game1.debugMode = value; }
         }
+
+        /// <summary>Keyboard keys which are mapped to a destructive action in debug mode. See <see cref="ModConfig.AllowDangerousCommands"/>.</summary>
+        private readonly Keys[] DestructiveKeys =
+        {
+            Keys.P, // ends current day
+            Keys.M, // ends current season
+            Keys.H, // randomises player's hat
+            Keys.I, // randomises player's hair
+            Keys.J, // randomises player's shirt and pants
+            Keys.L, // randomises player
+            Keys.U, // randomises farmhouse wallpaper and floors
+            Keys.F10 // tries to launch a multiplayer server and crashes
+        };
 
 
         /*********
@@ -49,7 +64,15 @@ namespace Pathoschild.Stardew.DebugMode
         /// <param name="e">The event data.</param>
         private void ReceiveKeyPress(object sender, EventArgsKeyPressed e)
         {
+            // handle hotkey
             this.HandleInput(e.KeyPressed, this.Config.Keyboard);
+
+            // suppress dangerous actions
+            if (!this.Config.AllowDangerousCommands && this.DebugMode && this.DestructiveKeys.Contains(e.KeyPressed))
+            {
+                Keys[] pressedKeys = Game1.oldKBState.GetPressedKeys().Union(new[] { e.KeyPressed }).ToArray();
+                Game1.oldKBState = new KeyboardState(pressedKeys);
+            }
         }
 
         /// <summary>The method invoked when the player presses a controller button.</summary>
