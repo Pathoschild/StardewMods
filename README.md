@@ -5,7 +5,7 @@ teleporting to key locations and manipulating time.
 ## Usage
 Press the `~` key (configurable) to enable or disable debug mode. This will...
 
-1. Show cursor crosshairs, the cursor's tile position, and the game's built-in debug info:
+1. Show cursor crosshairs (with the current map name and tile position), and the game's built-in debug info:
 
    ![screenshot](screenshots/debug-mode.png)
 

@@ -208,7 +208,7 @@ namespace Pathoschild.Stardew.DebugMode
                 Vector2 tile = Game1.currentCursorTile;
                 Vector2 position = new Vector2(Game1.getOldMouseX(), Game1.getOldMouseY());
 
-                string text = $"{tile.X}, {tile.Y}";
+                string text = $"{Game1.currentLocation.Name}{Environment.NewLine}{tile.X}, {tile.Y}";
                 Vector2 textSize = font.MeasureString(text);
                 batch.DrawString(font, text, new Vector2(position.X - textSize.X, position.Y), Color.Red);
             }
