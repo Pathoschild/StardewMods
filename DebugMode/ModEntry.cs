@@ -26,6 +26,9 @@ namespace Pathoschild.Stardew.DebugMode
             set { Game1.debugMode = value; }
         }
 
+        /// <summary>A pixel texture that can be stretched and colourised for display.</summary>
+        private Lazy<Texture2D> Pixel = new Lazy<Texture2D>(ModEntry.CreatePixel);
+
         /// <summary>Keyboard keys which are mapped to a destructive action in debug mode. See <see cref="ModConfig.AllowDangerousCommands"/>.</summary>
         private readonly Keys[] DestructiveKeys =
         {
@@ -58,13 +61,7 @@ namespace Pathoschild.Stardew.DebugMode
             }
 
             // hook overlay
-            Lazy<Texture2D> pixel = new Lazy<Texture2D>(() =>
-            {
-                Texture2D texture = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
-                texture.SetData(new[] { Color.White });
-                return texture;
-            });
-            GraphicsEvents.OnPostRenderEvent += (sender, e) => this.OnPostRenderEvent(sender, e, pixel.Value);
+            GraphicsEvents.OnPostRenderEvent += (sender, e) => this.OnPostRenderEvent(sender, e, this.Pixel.Value);
         }
 
 
@@ -139,6 +136,14 @@ namespace Pathoschild.Stardew.DebugMode
             // perform bound action
             if (key.Equals(map.ToggleDebug))
                 this.DebugMode = !this.DebugMode;
+        }
+
+        /// <summary>Create a pixel texture that can be stretched and colourised for display.</summary>
+        private static Texture2D CreatePixel()
+        {
+            Texture2D texture = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
+            texture.SetData(new[] { Color.White });
+            return texture;
         }
 
         /// <summary>Draw the debug overlay to the screen.</summary>
