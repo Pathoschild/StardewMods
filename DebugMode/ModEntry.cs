@@ -26,6 +26,11 @@ namespace Pathoschild.Stardew.DebugMode
 
             // hook events
             ControlEvents.KeyPressed += this.ReceiveKeyPress;
+            if (this.Config.Controller.HasAny())
+            {
+                ControlEvents.ControllerButtonPressed += this.ReceiveButtonPress;
+                ControlEvents.ControllerTriggerPressed += this.ReceiveTriggerPress;
+            }
         }
 
 
@@ -38,6 +43,22 @@ namespace Pathoschild.Stardew.DebugMode
         private void ReceiveKeyPress(object sender, EventArgsKeyPressed e)
         {
             this.HandleInput(e.KeyPressed, this.Config.Keyboard);
+        }
+
+        /// <summary>The method invoked when the player presses a controller button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ReceiveButtonPress(object sender, EventArgsControllerButtonPressed e)
+        {
+            this.HandleInput(e.ButtonPressed, this.Config.Controller);
+        }
+
+        /// <summary>The method invoked when the player presses a controller trigger button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ReceiveTriggerPress(object sender, EventArgsControllerTriggerPressed e)
+        {
+            this.HandleInput(e.ButtonPressed, this.Config.Controller);
         }
 
         /// <summary>The method invoked when the player presses an input button.</summary>
