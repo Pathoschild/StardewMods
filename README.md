@@ -1,6 +1,21 @@
-**Debug Mode** is an open-source [Stardew Valley](http://stardewvalley.net/) mod which draws debug
-info to the screen and unlocks the game's built-in debug commands. These commands include
-teleporting to key locations and manipulating time.
+**Debug Mode** is an open-source [Stardew Valley](http://stardewvalley.net/) mod which lets you
+press `~` to view debug information and unlock the game's debug commands (including teleportation
+and time manipulation).
+
+Compatible with Stardew Valley 1.1+ on Linux, Mac, and Windows.
+
+## Contents
+* [Installation](#installation)
+* [Usage](#usage)
+* [Configuration](#configuration)
+* [Versions](#versions)
+* [Compiling the mod](#compiling-the-mod)
+* [See also](#see-also)
+
+## Installation
+1. [Install the latest version of SMAPI](http://canimod.com/guides/using-mods#installing-smapi).
+2. [Install this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/679/).
+3. Run the game using SMAPI.
 
 ## Usage
 Press the `~` key (configurable) to enable or disable debug mode. This will...
@@ -26,8 +41,8 @@ Press the `~` key (configurable) to enable or disable debug mode. This will...
    `K`    | Move down one mine level. If not currently in the mine, warp to it.
    `F5`   | Toggle the player.
    `F7`   | Draw a tile grid.
-   `B`    | Shift up the toolbar row (that is, show the next higher inventory row).
-   `N`    | Shift down the toolbar row (that is, show the next higher inventory row).
+   `B`    | Shift the toolbar to show the next higher inventory row.
+   `N`    | Shift the toolbar to show the next lower inventory row.
 
 3. If you set `AllowDangerousCommands: true` in the [configuration](#configuration) (disabled by
    default), also unlock these debug commands:
@@ -56,7 +71,8 @@ setting           | what it affects
 ## Versions
 1.0:
 * Initial version which unlocks debug mode.
-* Suppress dangerous options by default.
+* Suppressed dangerous options by default.
+* Fixed default warp points.
 
 ## Compiling the mod
 Installing a stable release from Nexus Mods is recommended for most users. If you really want to
@@ -104,6 +120,6 @@ To package the mod for release:
    ```
 
 ## See also
-* <s>Nexus mod</s>
-* <s>Discussion thread</s>
+* [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/679)
+* [Discussion thread](http://www.nexusmods.com/stardewvalley/mods/679)
 * My other Stardew Valley mods: [Chests Anywhere](https://github.com/Pathoschild/ChestsAnywhere), [Lookup Anything](https://github.com/Pathoschild/LookupAnything), [No Debug Mode](https://github.com/Pathoschild/Stardew.NoDebugMode), and [Skip Intro](https://github.com/Pathoschild/StardewValley.SkipIntro)
