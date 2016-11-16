@@ -34,7 +34,7 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 ###Download [here](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
 
 ###How To Use:
-1. Get to your farm
+1. Get to your farm (this mod can only be activated on farmland, not in town, not even in greenhouse)
 2. Turn on Tractor Mode by clicking the hotkey to toggle it on.  
 You will receive a +1 speed buff showing that the Tractor Mode is now on.
 3. Hold your hoe if you want to till dirt  
@@ -64,7 +64,7 @@ If you have mod that change your farm to be bigger than default values then make
 ###Note:  
 Be careful when tilling your soil because the hoe can destroy your small-medium sized fruit trees.  
 Tractor Mode doesn't drain your stamina when using Hoe and Water can.  
-Water can doesn't need to be refill either but needs to have some water in it to work.  
+Water can doesn't need to be refilled but needs to have some water in it to work.  
 Tractor Mode works when you are on your horse however the horse body will block most of the actions so it doesn't work quite well. But it still work!  
 You can fertilize your crop AFTER sowing seeds with Tractor Mode.  
 
