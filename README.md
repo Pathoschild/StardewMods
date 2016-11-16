@@ -59,7 +59,7 @@ Check out KeyCode.txt file to find your desirable key code.
 
 3. mapWidth and mapHeight is used to estimate the maximum size of your farm.  
 Default is 170 for both because I don't think the farm map is bigger than 170 tiles in both directions.  
-If you have mod that change your farm to be bigger than default values then make sure to change these values accordingly (Don't have to be exact, just bigger is fine).
+If you have mod that change your farm to be bigger than default values then make sure to change these values accordingly (don't have to be exact, just bigger is fine).
 
 ###Note:  
 Be careful when tilling your soil because the hoe can destroy your small-medium sized fruit trees.  
