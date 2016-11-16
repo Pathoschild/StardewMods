@@ -31,8 +31,9 @@ namespace TractorMod
             if (StardewValley.Game1.currentLocation == null)
                 return;
 
+            MouseState currentMouseState = Mouse.GetState();
             KeyboardState currentKeyboardState = Keyboard.GetState();
-            DoAction(currentKeyboardState);
+            DoAction(currentKeyboardState, currentMouseState);
         }
 
         const int buffUniqueID = 58012397;
@@ -40,20 +41,45 @@ namespace TractorMod
         static int toggleDelay = 30;
         static int toggleDelayCount = 0;
 
-        static void DoAction(KeyboardState currentKeyboardState)
+        static int mouseHoldDelay = 5;
+        static int mouseHoldDelayCount = mouseHoldDelay;
+
+        static void DoAction(KeyboardState currentKeyboardState, MouseState currentMouseState)
         {
             if (Game1.currentLocation == null)
                 return;
 
             if (Game1.currentLocation.isFarm == false || Game1.currentLocation.isOutdoors == false)
+            {
+            	TractorOn = false;
                 return;
+            }
 
             if (tileSize == 0)
                 tileSize = (float)Game1.player.GetBoundingBox().Width;
 
+            //hold right mouse to activate
+            if (currentMouseState.RightButton == ButtonState.Pressed)
+            {
+                if(mouseHoldDelayCount > 0)
+                {
+                    mouseHoldDelayCount -= 1;
+                }
+                if(mouseHoldDelayCount <= 0)
+                {
+                    TractorOn = true;
+                    mouseHoldDelayCount = mouseHoldDelay;
+                }
+            }
+            else
+            {
+                TractorOn = false;
+            }
+
+            //or use keyboard to toggle on/off
+            /* remove this feature cause it conflicts with mouse activation and Im too lazy to resolve it, but all the support variables are still there xD
             if (toggleDelayCount > 0)
                 toggleDelayCount -= 1;
-
             if (currentKeyboardState.IsKeyDown(ModConfig.tractorKey))
             {
                 if (toggleDelayCount <= 0)
@@ -62,6 +88,7 @@ namespace TractorMod
                     toggleDelayCount = toggleDelay;
                 }
             }
+            */
 
             bool BuffAlready = false;
             if (TractorOn == false)
@@ -278,7 +305,7 @@ namespace TractorMod
 
         public override T GenerateDefaultConfig<T>()
         {
-            tractorKey = Keys.B;
+            tractorKey = 0; //default to none, no keyboard toggle by default
             minToolPower = 4;
             mapWidth = 170; //i dont think any farm maps exceed 170 tiles any direction
             mapHeight = 170;
