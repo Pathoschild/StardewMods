@@ -1,5 +1,5 @@
 # Tractor Mod - A SMAPI Mod for Stardew Valley
-#### A mod for stardew valley: auto till, water, fertilize, and seed dirt tiles on your farm by simply walking over it. 
+#### A mod for stardew valley: auto till, water, fertilize, and seed dirt tiles on your farm by simply walking over them. 
 
 Modder: PhthaloBlue  
 
