@@ -1,0 +1,15 @@
+﻿{
+	"Name": "TractorMod",
+	"Authour": "PhthaloBlue",
+	"Version":
+	{
+		"MajorVersion": 1,
+		"MinorVersion": 0,
+		"PatchVersion": 0,
+		"Build": ""
+	},
+	"UniqueID": "BlueMod_TractorMod",
+	"Description": "Auto hoe and water tiles, also sow seeds and fertilize tiles.",
+	"PerSaveConfigs": false,
+	"EntryDll":  "TractorMod.dll"
+}

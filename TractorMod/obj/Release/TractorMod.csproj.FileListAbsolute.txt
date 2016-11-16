@@ -1,0 +1,5 @@
+C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\PhthaloBlueMods\TractorMod\TractorMod\bin\Release\manifest.json
+C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\PhthaloBlueMods\TractorMod\TractorMod\bin\Release\TractorMod.dll
+C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\PhthaloBlueMods\TractorMod\TractorMod\bin\Release\TractorMod.pdb
+C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\PhthaloBlueMods\TractorMod\TractorMod\obj\Release\TractorMod.dll
+C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\PhthaloBlueMods\TractorMod\TractorMod\obj\Release\TractorMod.pdb
