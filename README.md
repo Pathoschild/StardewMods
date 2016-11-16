@@ -57,9 +57,11 @@ The buff will go away showing that the Mode is now off.
 
 
 ###Customize:  
-1. Change tractorKey to change hotkey.  
-Default hotkey is B but you can change hotkey by changing the config.json file.  
-Check out KeyCode.txt file to find your desirable key code.
+1. ~~Change tractorKey to change hotkey.~~  
+Default is 0 (no hotkey) but you can change hotkey by changing the config.json file.  
+This variable has been made **obsolete** in the latest update. It will not affect the mod in anyway.  
+~~Check out KeyCode.txt file to find your desirable key code~~  
+KeyCode.txt is no longer provided in newest version.
 
 2. Change minToolPower to lower the minimum tool upgrade require for the Mod to work.  
 0 = no upgrade required  
@@ -78,5 +80,6 @@ Tractor Mode doesn't drain your stamina when using Hoe and Water can.
 Water can doesn't need to be refilled but needs to have some water in it to work.  
 Tractor Mode works when you are on your horse however the horse body will block most of the actions so it doesn't work quite well. But it still work!  
 You can fertilize your crop AFTER sowing seeds with Tractor Mode.  
+Have fun farming! :)
 
 Contact me @ [buiphuonglamvn@gmail.com](mailto:buiphuonglamvn@gmail.com) regarding whatever.
