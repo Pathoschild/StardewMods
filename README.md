@@ -7,7 +7,7 @@ This is a mod that allows players to quickly till dirt, sow seeds, fertilize soi
 
 It is default to only work with iridium tools equipped so that the mod doesnt ruin your early game but you can change that in the config file.
 
-###Newest Version: 1.0.2
+###Newest Version: [1.0.2](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
 Change Log:
 + **Remove** keyboard activation toggle.  
 Tractor Mode will no longer turn on using keyboard.  
@@ -17,6 +17,7 @@ Tractor Mode will now be activated by holding down right click.
 Tractor Mode will be deactivated by releasing right click.
 + Tractor Mode will now automatically turn itself off outside farm.
 
+###Demo:  
 ####Till Dirt  
 ![gif-till dirt](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/TillDirt.gif)  
 
