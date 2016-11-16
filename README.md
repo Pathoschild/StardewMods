@@ -31,7 +31,7 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 4. Run [SMAPI](http://canimod.com/guides/using-mods#installing-smapi)
 
 
-###Download [here](https://github.com/lambui/StardewValleyMod_StashItemsToChest/releases)
+###Download [here](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
 
 ###How To Use:
 1. Get to your farm
