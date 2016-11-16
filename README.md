@@ -7,7 +7,18 @@ This is a mod that allows players to quickly till dirt, sow seeds, fertilize soi
 
 It is default to only work with iridium tools equipped so that the mod doesnt ruin your early game but you can change that in the config file.
 
-![gif](https://www.youtube.com/watch?v=O17f3lB7BFY)
+####Till Dirt  
+![gif-till dirt](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/TillDirt.gif)  
+
+####Water Crop    
+![gif-water crop](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/water.gif)  
+
+####Fertilize Soil    
+![gif-fertilize](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/fertilizing.gif)  
+
+####Sow Seeds      
+![gif-sow seed](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/sowingSeed.gif)  
+
 
 ###Require:  
 1. [Stardew Valley](http://store.steampowered.com/app/413150/)
