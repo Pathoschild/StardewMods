@@ -59,12 +59,13 @@ Check out KeyCode.txt file to find your desirable key code.
 
 3. mapWidth and mapHeight is used to estimate the maximum size of your farm.  
 Default is 170 for both because I don't think the map farm is bigger than 170 tiles in both directions.  
-If you have mod that change your farm to be bigger than defaults value then make sure to change accordingly.
+If you have mod that change your farm to be bigger than default values then make sure to change accordingly.
 
 ###Note:  
 Be careful when tilling your soil because the hoe can destroy your small-medium sized fruit trees.  
 Tractor Mode doesn't drain your stamina when using Hoe and Water can.  
 Water can doesn't need to be refill either but needs to have some water in it to work.  
 Tractor Mode works when you are on your horse however the horse body will block most of the actions so it doesn't work quite well. But it still work!  
+You can fertilize your crop AFTER sowing seeds with Tractor Mode.  
 
 Contact me @ [buiphuonglamvn@gmail.com](mailto:buiphuonglamvn@gmail.com) regarding whatever.
