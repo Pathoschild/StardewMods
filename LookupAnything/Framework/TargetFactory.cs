@@ -227,7 +227,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                 // get villager with a birthday on that date
                 NPC target = Utility.getAllCharacters().FirstOrDefault(p => p.birthday_Season == Game1.currentSeason && p.birthday_Day == selectedDay);
-                if(target != null)
+                if (target != null)
                     return new CharacterSubject(target, TargetType.Villager, this.Metadata);
             }
 
@@ -235,7 +235,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             else if (menu is MenuWithInventory)
             {
                 Item item = ((MenuWithInventory)menu).hoveredItem;
-                if(item != null)
+                if (item != null)
                     return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
             }
 
@@ -262,10 +262,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     List<ClickableTextureComponent> entries = GameHelper.GetPrivateField<List<ClickableTextureComponent>>(curTab, "friendNames");
                     foreach (var entry in entries)
                     {
-                        if (entry.containsPoint((int) cursorPosition.X, (int) cursorPosition.Y))
+                        if (entry.containsPoint((int)cursorPosition.X, (int)cursorPosition.Y))
                         {
                             NPC npc = Utility.getAllCharacters().FirstOrDefault(p => p.name == entry.name);
-                            if(npc != null)
+                            if (npc != null)
                                 return new CharacterSubject(npc, TargetType.Villager, this.Metadata);
                         }
                     }
@@ -276,7 +276,27 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             else if (menu is ShopMenu)
             {
                 Item item = GameHelper.GetPrivateField<Item>(menu, "hoveredItem");
-                if(item != null)
+                if (item != null)
+                    return new ItemSubject(item.getOne(), ObjectContext.Inventory, knownQuality: true);
+            }
+
+            // toolbar
+            else if (menu is Toolbar)
+            {
+                // find hovered slot
+                List<ClickableComponent> slots = GameHelper.GetPrivateField<List<ClickableComponent>>(menu, "buttons");
+                ClickableComponent hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint((int)cursorPosition.X, (int)cursorPosition.Y));
+                if (hoveredSlot == null)
+                    return null;
+
+                // get inventory index
+                int index = slots.IndexOf(hoveredSlot);
+                if (index < 0 || index > Game1.player.items.Count - 1)
+                    return null;
+
+                // get hovered item
+                Item item = Game1.player.items[index];
+                if (item != null)
                     return new ItemSubject(item.getOne(), ObjectContext.Inventory, knownQuality: true);
             }
 

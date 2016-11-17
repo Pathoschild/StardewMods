@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -285,7 +286,7 @@ namespace Pathoschild.Stardew.LookupAnything
             }
 
             // show menu
-            string logMessage = "Received a lookup request...";
+            StringBuilder logMessage = new StringBuilder("Received a lookup request...");
             this.Monitor.InterceptErrors("looking that up", () =>
             {
                 try
@@ -295,25 +296,13 @@ namespace Pathoschild.Stardew.LookupAnything
                     if (versionError != null)
                     {
                         GameHelper.ShowErrorMessage(versionError);
-                        this.Monitor.Log(logMessage, LogLevel.Trace);
+                        this.Monitor.Log(logMessage.ToString(), LogLevel.Trace);
                         this.Monitor.Log(versionError, LogLevel.Error);
                         return;
                     }
 
                     // get target
-                    ISubject subject;
-                    if (Game1.activeClickableMenu != null)
-                    {
-                        logMessage += $" searching the open '{Game1.activeClickableMenu.GetType().Name}' menu...";
-                        subject = this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu, GameHelper.GetScreenCoordinatesFromCursor());
-                    }
-                    else
-                    {
-                        logMessage += " searching the world...";
-                        subject = this.TargetFactory.GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile, GameHelper.GetScreenCoordinatesFromCursor());
-                    }
-
-                    // validate target
+                    ISubject subject = this.GetSubject(logMessage);
                     if (subject == null)
                     {
                         this.Monitor.Log($"{logMessage} no target found.", LogLevel.Trace);
@@ -331,6 +320,34 @@ namespace Pathoschild.Stardew.LookupAnything
                     throw;
                 }
             });
+        }
+
+        /// <summary>Get the most relevant subject under the player's cursor.</summary>
+        /// <param name="logMessage">The log message to which to append search details.</param>
+        private ISubject GetSubject(StringBuilder logMessage)
+        {
+            var cursorPos = GameHelper.GetScreenCoordinatesFromCursor();
+
+            // try menu
+            if (Game1.activeClickableMenu != null)
+            {
+                logMessage.Append($" searching the open '{Game1.activeClickableMenu.GetType().Name}' menu...");
+                return this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu, cursorPos);
+            }
+
+            // try HUD under cursor
+            foreach (IClickableMenu menu in Game1.onScreenMenus)
+            {
+                if (menu.isWithinBounds((int)cursorPos.X, (int)cursorPos.Y))
+                {
+                    logMessage.Append($" searching the on-screen '{menu.GetType().Name}' menu...");
+                    return this.TargetFactory.GetSubjectFrom(menu, cursorPos);
+                }
+            }
+
+            // try world
+            logMessage.Append(" searching the world...");
+            return this.TargetFactory.GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile, cursorPos);
         }
 
         /// <summary>Show the lookup UI for the current target.</summary>
