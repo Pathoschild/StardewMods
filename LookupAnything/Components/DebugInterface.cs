@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using Pathoschild.Stardew.LookupAnything.Framework.Targets;
+using StardewModdingAPI;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Components
@@ -19,8 +20,11 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Finds and analyses lookup targets in the world.</summary>
         private readonly TargetFactory TargetFactory;
 
+        /// <summary>Encapsulates monitoring and logging.</summary>
+        private readonly IMonitor Monitor;
+
         /// <summary>The warning text to display when debug mode is enabled.</summary>
-        public readonly string WarningText;
+        private readonly string WarningText;
 
 
         /*********
@@ -36,10 +40,12 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Construct an instance.</summary>
         /// <param name="targetFactory">Finds and analyses lookup targets in the world.</param>
         /// <param name="config">The mod configuration.</param>
-        public DebugInterface(TargetFactory targetFactory, ModConfig config)
+        /// <param name="monitor">Encapsulates monitoring and logging.</param>
+        public DebugInterface(TargetFactory targetFactory, ModConfig config, IMonitor monitor)
         {
-            // save factory
+            // save fields
             this.TargetFactory = targetFactory;
+            this.Monitor = monitor;
 
             // generate warning text
             string[] keys = new[] { config.Keyboard.IsValidKey(config.Keyboard.ToggleDebug) ? config.Keyboard.ToggleDebug.ToString() : null, config.Controller.IsValidKey(config.Controller.ToggleDebug) ? config.Controller.ToggleDebug.ToString() : null }
@@ -55,7 +61,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             if (!this.Enabled)
                 return;
 
-            GameHelper.InterceptErrors("drawing debug info", () =>
+            this.Monitor.InterceptErrors("drawing debug info", () =>
             {
                 // get location info
                 GameLocation currentLocation = Game1.currentLocation;
@@ -126,7 +132,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="ex">The intercepted exception.</param>
         private void OnDrawError(Exception ex)
         {
-            GameHelper.InterceptErrors("handling an error in the debug code", () =>
+            this.Monitor.InterceptErrors("handling an error in the debug code", () =>
             {
                 this.Enabled = false;
             });

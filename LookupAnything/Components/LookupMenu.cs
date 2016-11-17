@@ -20,6 +20,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>The subject metadata.</summary>
         private readonly ISubject Subject;
 
+        /// <summary>Encapsulates logging and monitoring.</summary>
+        private readonly IMonitor Monitor;
+
         /// <summary>The data to display for this subject.</summary>
         private readonly ICustomField[] Fields;
 
@@ -42,10 +45,12 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Construct an instance.</summary>
         /// <param name="subject">The metadata to display.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public LookupMenu(ISubject subject, Metadata metadata)
+        /// <param name="monitor">Encapsulates logging and monitoring.</param>
+        public LookupMenu(ISubject subject, Metadata metadata, IMonitor monitor)
         {
             this.Subject = subject;
             this.Fields = subject.GetData(metadata).Where(p => p.HasValue).ToArray();
+            this.Monitor = monitor;
             this.CalculateDimensions();
         }
 
@@ -100,7 +105,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="spriteBatch">The sprite batch being drawn.</param>
         public override void draw(SpriteBatch spriteBatch)
         {
-            GameHelper.InterceptErrors("drawing the lookup info", () =>
+            this.Monitor.InterceptErrors("drawing the lookup info", () =>
             {
                 ISubject subject = this.Subject;
 
@@ -114,8 +119,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                         ?? GameHelper.GetPrivateField<SpriteSortMode>(Game1.spriteBatch, "_sortMode"); // MonoGame
                     if (sortMode == SpriteSortMode.Immediate)
                     {
-                        Log.Debug(
-                            "Lookup Anything aborted the lookup because the game's current rendering mode isn't compatible with the mod's UI. This only happens in rare cases (e.g. the Stardew Valley Fair).");
+                        this.Monitor.Log("Aborted the lookup because the game's current rendering mode isn't compatible with the mod's UI. This only happens in rare cases (e.g. the Stardew Valley Fair).", LogLevel.Warn);
                         this.exitThisMenu(playSound: false);
                         return;
                     }
@@ -253,7 +257,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="ex">The intercepted exception.</param>
         private void OnDrawError(Exception ex)
         {
-            GameHelper.InterceptErrors("handling an error in the lookup code", () => this.exitThisMenu());
+            this.Monitor.InterceptErrors("handling an error in the lookup code", () => this.exitThisMenu());
         }
     }
 }

@@ -319,7 +319,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /*********
         ** Private methods
         *********/
-        /// <summary>Get the equivalent menu item for the specified target. (For example, the inventory item matching a fence object.)<</summary>
+        /// <summary>Get the equivalent menu item for the specified target. (For example, the inventory item matching a fence object.)</summary>
         /// <param name="item">The target item.</param>
         private Item GetMenuItem(Item item)
         {

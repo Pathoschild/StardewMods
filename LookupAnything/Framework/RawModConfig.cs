@@ -1,11 +1,10 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Input;
-using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     /// <summary>The raw mod configuration.</summary>
-    internal class RawModConfig : Config
+    internal class RawModConfig
     {
         /*********
         ** Accessors
@@ -57,13 +56,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             this.CheckForUpdates = true;
             this.DebugLog = true;
             this.SuppressGameDebug = true;
-        }
-
-        /// <summary>Construct the default configuration.</summary>
-        /// <typeparam name="T">The expected configuration type.</typeparam>
-        public override T GenerateDefaultConfig<T>()
-        {
-            return new RawModConfig() as T;
         }
 
         /// <summary>Get a parsed representation of the mod configuration.</summary>
