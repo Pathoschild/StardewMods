@@ -14,6 +14,7 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
   - To enable this mode, change **needHorse** in config.json file to 1 instead of 0.  
   - By enabling this mode, you can no longer use holding right click to enable Tractor Mode anymore.  
   - If you use this mode then make sure to set **tractorKey** (toggle hotkey) in config.json. Default is **B**.  
+  - Have to be on a horse to toggle on/off Tractor Mode.  
 + **Add** WTFMode.  
   - WTFMode means you can use your **pickaxe** and **axe** with Tractor Mode.  
   - To enable this, change WTFMode in config.json file to 1 instead of 0.  
