@@ -85,7 +85,7 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 
 2. Change tractorKey to change hotkey.
 Default is 0 (no hotkey) but you can change hotkey by changing the config.json file.  
-This variable has been made **obsolete** in the latest update. It will not affect the mod in anyway.  
+If you don't use horse mode then this hotkey is useless. You can ignore it in that case.  
 Check out KeyCode.txt file to find your desirable key code.   
 
 3. Change WTFMode to enable pickaxe and axe.  
