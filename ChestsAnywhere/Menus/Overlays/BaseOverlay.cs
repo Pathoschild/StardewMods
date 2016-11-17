@@ -207,14 +207,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         private void OnMouseChanged(object sender, EventArgsMouseStateChanged e)
         {
             // get data
-            MouseState oldState = Game1.oldMouseState;
-            MouseState newState = Mouse.GetState();
-            int newX = Game1.getMouseX();
-            int newY = Game1.getMouseY();
+            MouseState oldState = e.PriorState;
+            MouseState newState = e.NewState;
+            Point position = e.NewPosition;
 
             // raise events
-            bool hoverHandled = this.ReceiveCursorHover(newX, newY);
-            bool leftClickHandled = oldState.LeftButton != ButtonState.Pressed && newState.LeftButton == ButtonState.Pressed && this.ReceiveLeftClick(newX, newY);
+            bool hoverHandled = this.ReceiveCursorHover(position.X, position.Y);
+            bool leftClickHandled = oldState.LeftButton != ButtonState.Pressed && newState.LeftButton == ButtonState.Pressed && this.ReceiveLeftClick(position.X, position.Y);
             bool scrollHandled = oldState.ScrollWheelValue != newState.ScrollWheelValue && this.ReceiveScrollWheelAction(newState.ScrollWheelValue - oldState.ScrollWheelValue);
 
             // suppress handled input

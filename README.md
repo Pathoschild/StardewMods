@@ -119,6 +119,9 @@ file if you want. These are the available settings:
 * Fixed group list being unsorted.
 * Fixed update-check error on startup adding scary error text in console.
 
+1.8 (upcoming):
+* Updated to SMAPI 1.1.
+
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is
 recommended for most users. If you really want to compile the mod yourself, read on.

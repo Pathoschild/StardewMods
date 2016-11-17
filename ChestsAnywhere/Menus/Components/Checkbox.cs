@@ -49,7 +49,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         /// <param name="batch">The sprite batch.</param>
         public void Draw(SpriteBatch batch)
         {
-            float scale = this.Width / (float)(Sprites.Icons.FilledCheckbox.Width);
+            float scale = this.Width / (float)Sprites.Icons.FilledCheckbox.Width;
             batch.Draw(Sprites.Icons.Sheet, new Vector2(this.X, this.Y), this.Value ? Sprites.Icons.FilledCheckbox : Sprites.Icons.EmptyCheckbox, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1f);
         }
     }

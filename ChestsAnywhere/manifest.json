@@ -1,13 +1,14 @@
 ﻿{
   "Name": "ChestsAnywhere",
-  "Authour": "Pathoschild",
+  "Author": "Pathoschild",
   "Version": {
     "MajorVersion": 1,
     "MinorVersion": 7,
     "PatchVersion": 0,
-    "Build": 0
+    "Build": ""
   },
-  "Description": "Access your chests from anywhere. [version 1.7]",
+  "MinimumApiVersion": "1.1",
+  "Description": "Access your chests from anywhere.",
   "UniqueID": "ChestsAnywhere",
   "PerSaveConfigs": false,
   "EntryDll": "ChestsAnywhere.dll"

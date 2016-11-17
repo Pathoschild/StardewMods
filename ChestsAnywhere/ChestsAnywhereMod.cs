@@ -48,11 +48,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /*********
         ** Public methods
         *********/
-        /// <summary>Initialise the mod.</summary>
-        public override void Entry(params object[] objects)
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
+        /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
+        public override void Entry(IModHelper helper)
         {
             // read config
-            this.Config = new RawModConfig().InitializeConfig(this.BaseConfigPath).GetParsed();
+            this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
             this.CurrentVersion = UpdateHelper.GetSemanticVersion(this.Manifest.Version);
 
             // hook UI
@@ -82,7 +83,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             string versionError = this.ValidateGameVersion();
             if (versionError != null)
             {
-                Log.Error(versionError);
+                this.Monitor.Log(versionError, LogLevel.Error);
                 CommonHelper.ShowErrorMessage(versionError);
             }
 
@@ -101,19 +102,19 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         }
                         catch (Exception ex)
                         {
-                            Log.Error("Chests Anywhere couldn't check for an updated version. This won't affect your game, but you may not be notified of new versions if this keeps happening. (Error details follow.)");
-                            Log.Debug(ex.ToString());
+                            this.Monitor.Log("Couldn't check for an updated version. This won't affect your game, but you may not be notified of new versions if this keeps happening. Error details are shown in the log.", LogLevel.Warn);
+                            this.Monitor.Log(ex.ToString(), LogLevel.Trace);
                             return;
                         }
 
                         // validate
                         if (release.IsNewerThan(this.CurrentVersion))
                         {
-                            Log.Info($"Chests Anywhere can be updated from {this.CurrentVersion} to {release.Name}.");
+                            this.Monitor.Log($"Update to version {release.Name} available.", LogLevel.Alert);
                             this.NewRelease = release;
                         }
                         else
-                            Log.Debug("Chests Anywhere checking for update... no update available.");
+                            this.Monitor.Log("Checking for update... none found.", LogLevel.Trace);
                     });
                 }
                 catch (Exception ex)
@@ -230,7 +231,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         private string ValidateGameVersion()
         {
             string gameVersion = Regex.Replace(Game1.version, "^([0-9.]+).*", "$1");
-            string apiVersion = Constants.Version.VersionString;
+            string apiVersion = Constants.Version.ToString();
 
             if (string.Compare(gameVersion, Constant.MinimumGameVersion, StringComparison.InvariantCultureIgnoreCase) == -1)
                 return $"The Chests Anywhere mod requires a newer version of the game. Please update Stardew Valley from {gameVersion} to {Constant.MinimumGameVersion}.";
@@ -245,8 +246,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up").</param>
         private void HandleError(Exception ex, string verb)
         {
-            CommonHelper.ShowErrorMessage($"Huh. Something went wrong {verb}. The game error log has the technical details.");
-            Log.Error(ex.ToString());
+            this.Monitor.Log($"Something went wrong {verb}:\n{ex}", LogLevel.Error);
+            CommonHelper.ShowErrorMessage($"Huh. Something went wrong {verb}. The error log has the technical details.");
         }
     }
 }
