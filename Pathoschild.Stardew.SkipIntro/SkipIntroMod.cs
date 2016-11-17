@@ -4,7 +4,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.Menus;
 
-namespace Pathoschild.StardewValley.SkipIntro
+namespace Pathoschild.Stardew.SkipIntro
 {
     /// <summary>The mod entry point.</summary>
     public class SkipIntroMod : Mod

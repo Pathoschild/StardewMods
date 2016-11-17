@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pathoschild.StardewValley.SkipIntro", "Pathoschild.StardewValley.SkipIntro\Pathoschild.StardewValley.SkipIntro.csproj", "{56FB522E-923D-4582-AD3D-8EC80F09237A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pathoschild.Stardew.SkipIntro", "Pathoschild.Stardew.SkipIntro\Pathoschild.Stardew.SkipIntro.csproj", "{56FB522E-923D-4582-AD3D-8EC80F09237A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "~metadata", "~metadata", "{70BDBAFC-25F5-4727-AC1F-8C048FFDC19D}"
 	ProjectSection(SolutionItems) = preProject

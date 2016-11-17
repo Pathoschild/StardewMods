@@ -7,8 +7,8 @@
     <ProjectGuid>{56FB522E-923D-4582-AD3D-8EC80F09237A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pathoschild.StardewValley.SkipIntro</RootNamespace>
-    <AssemblyName>Pathoschild.StardewValley.SkipIntro</AssemblyName>
+    <RootNamespace>Pathoschild.Stardew.SkipIntro</RootNamespace>
+    <AssemblyName>Pathoschild.Stardew.SkipIntro</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

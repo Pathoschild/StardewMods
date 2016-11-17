@@ -10,5 +10,5 @@
   "MinimumApiVersion": "1.1",
   "Description": "Skips the game's loading intro.",
   "UniqueID": "SkipIntro",
-  "EntryDll": "Pathoschild.StardewValley.SkipIntro.dll"
+  "EntryDll": "Pathoschild.Stardew.SkipIntro.dll"
 }
