@@ -28,6 +28,9 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 + Tractor Mode will now automatically turn itself off outside farm.
 
 ###Demo:  
+####Horse Mode [+ Horse to Tractor mod by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/) for maximum immersion :)
+![gif-horse-mode](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/tractor2.gif)  
+
 ####Till Dirt  
 ![gif-till dirt](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/TillDirt.gif)  
 
