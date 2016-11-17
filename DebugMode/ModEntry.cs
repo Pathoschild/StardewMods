@@ -27,7 +27,7 @@ namespace Pathoschild.Stardew.DebugMode
         }
 
         /// <summary>A pixel texture that can be stretched and colourised for display.</summary>
-        private Lazy<Texture2D> Pixel = new Lazy<Texture2D>(ModEntry.CreatePixel);
+        private readonly Lazy<Texture2D> Pixel = new Lazy<Texture2D>(ModEntry.CreatePixel);
 
         /// <summary>Keyboard keys which are mapped to a destructive action in debug mode. See <see cref="ModConfig.AllowDangerousCommands"/>.</summary>
         private readonly Keys[] DestructiveKeys =
@@ -46,11 +46,12 @@ namespace Pathoschild.Stardew.DebugMode
         /*********
         ** Public methods
         *********/
-        /// <summary>Initialise the mod.</summary>
-        public override void Entry(params object[] objects)
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
+        /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
+        public override void Entry(IModHelper helper)
         {
             // initialise
-            this.Config = new RawModConfig().InitializeConfig(this.BaseConfigPath).GetParsed();
+            this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
 
             // hook input events
             ControlEvents.KeyPressed += this.ReceiveKeyPress;

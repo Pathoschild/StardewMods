@@ -74,6 +74,9 @@ setting           | what it affects
 * Suppressed dangerous options by default.
 * Fixed default warp points.
 
+1.1 (upcoming):
+* Updated to SMAPI 1.1.
+
 ## Compiling the mod
 Installing a stable release from Nexus Mods is recommended for most users. If you really want to
 compile the mod yourself, read on.
