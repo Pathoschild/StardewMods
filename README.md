@@ -12,6 +12,9 @@
 1.1:
 * Updated for Stardew Valley 1.1.
 
+1.2 (upcoming):
+* Updated to SMAPI 1.1.
+
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/533/) is
 recommended. If you really want to compile the mod yourself, just edit `Pathoschild.StardewValley.SkipIntro.csproj`

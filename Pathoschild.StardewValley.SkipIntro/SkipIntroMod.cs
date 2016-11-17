@@ -12,8 +12,9 @@ namespace Pathoschild.StardewValley.SkipIntro
         /*********
         ** Public methods
         *********/
-        /// <summary>Initialise the mod.</summary>
-        public override void Entry(params object[] objects)
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
+        /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
+        public override void Entry(IModHelper helper)
         {
             MenuEvents.MenuChanged += (sender, e) =>
             {
@@ -35,7 +36,7 @@ namespace Pathoschild.StardewValley.SkipIntro
                 }
                 catch (Exception ex)
                 {
-                    Log.Error($"'Skip Intro' mod couldn't skip the menu: {ex}");
+                    this.Monitor.Log($"Couldn't skip the menu: {ex}", LogLevel.Error);
                 }
             };
         }
