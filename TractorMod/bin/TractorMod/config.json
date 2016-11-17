@@ -1,5 +1,7 @@
 {
+  "needHorse": 0,
   "tractorKey": 66,
+  "WTFMode": 0,
   "minToolPower": 4,
   "mapWidth": 170,
   "mapHeight": 170

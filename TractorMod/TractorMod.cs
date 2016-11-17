@@ -20,9 +20,13 @@ namespace TractorMod
         public override void Entry(params object[] objects)
         {
             ModConfig = new TractorConfig().InitializeConfig(BaseConfigPath);
-            StardewModdingAPI.Events.GameEvents.EighthUpdateTick += UpdateTickEvent;
+
+            if(ModConfig.needHorse == 0)
+                StardewModdingAPI.Events.GameEvents.EighthUpdateTick += UpdateTickEvent;
+            else
+                StardewModdingAPI.Events.GameEvents.UpdateTick += UpdateTickEvent;
         }
-        //PhthaloBlue: these are my codes
+
         static void UpdateTickEvent(object sender, EventArgs e)
         {
             if (ModConfig == null)
@@ -58,37 +62,47 @@ namespace TractorMod
             if (tileSize == 0)
                 tileSize = (float)Game1.player.GetBoundingBox().Width;
 
-            //hold right mouse to activate
-            if (currentMouseState.RightButton == ButtonState.Pressed)
+            if (ModConfig.needHorse == 0)
             {
-                if(mouseHoldDelayCount > 0)
+                //if doesnt need horse then hold right click to activate
+                if (currentMouseState.RightButton == ButtonState.Pressed)
                 {
-                    mouseHoldDelayCount -= 1;
+                    if (mouseHoldDelayCount > 0)
+                    {
+                        mouseHoldDelayCount -= 1;
+                    }
+                    if (mouseHoldDelayCount <= 0)
+                    {
+                        TractorOn = true;
+                        mouseHoldDelayCount = mouseHoldDelay;
+                    }
                 }
-                if(mouseHoldDelayCount <= 0)
+                else
                 {
-                    TractorOn = true;
-                    mouseHoldDelayCount = mouseHoldDelay;
+                    TractorOn = false;
                 }
             }
             else
             {
-                TractorOn = false;
-            }
-
-            //or use keyboard to toggle on/off
-            /* remove this feature cause it conflicts with mouse activation and Im too lazy to resolve it, but all the support variables are still there xD
-            if (toggleDelayCount > 0)
-                toggleDelayCount -= 1;
-            if (currentKeyboardState.IsKeyDown(ModConfig.tractorKey))
-            {
-                if (toggleDelayCount <= 0)
+                if (toggleDelayCount > 0)
+                    toggleDelayCount -= 1;
+                if (Game1.player.isRidingHorse())
                 {
-                    TractorOn = !TractorOn;
-                    toggleDelayCount = toggleDelay;
+                    //or use keyboard to toggle on/off
+                    if (currentKeyboardState.IsKeyDown(ModConfig.tractorKey))
+                    {
+                        if (toggleDelayCount <= 0)
+                        {
+                            TractorOn = !TractorOn;
+                            toggleDelayCount = toggleDelay;
+                        }
+                    }
+                }
+                else
+                {
+                    TractorOn = false;
                 }
             }
-            */
 
             bool BuffAlready = false;
             if (TractorOn == false)
@@ -100,7 +114,10 @@ namespace TractorMod
                 {
                     if (buff.millisecondsDuration <= 35)
                     {
-                        buff.millisecondsDuration = 1000;
+                        if (ModConfig.needHorse == 0)
+                            buff.millisecondsDuration = 1000;
+                        else
+                            buff.millisecondsDuration = 2000;
                     }
                     BuffAlready = true;
                     break;
@@ -111,7 +128,10 @@ namespace TractorMod
             {
                 Buff TractorBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, "Tractor Power");
                 TractorBuff.which = buffUniqueID;
-                TractorBuff.millisecondsDuration = 1000;
+                if (ModConfig.needHorse == 0)
+                    TractorBuff.millisecondsDuration = 1000;
+                else
+                    TractorBuff.millisecondsDuration = 2000;
                 Game1.buffsDisplay.addOtherBuff(TractorBuff);
                 BuffAlready = true;
             }
@@ -119,7 +139,10 @@ namespace TractorMod
             if (Game1.player.CurrentTool == null)
                 ItemAction();
             else
-                ToolAction();
+            {
+                RunToolAction();
+            }
+                
         }
 
         public static void ItemAction()
@@ -198,44 +221,106 @@ namespace TractorMod
             }
         }
 
+        public static void RunToolAction()
+        {
+            if (ModConfig.WTFMode == 0)
+            {
+                if (Game1.player.CurrentTool.GetType() == typeof(Hoe) || Game1.player.CurrentTool.GetType() == typeof(WateringCan))
+                {
+                    if (ModConfig.needHorse == 0)
+                        ToolAction();
+                    else
+                        HorseToolAction();
+                }
+            }
+            else
+            {
+                if (ModConfig.needHorse == 0)
+                    ToolAction();
+                else
+                    HorseToolAction();
+            }
+        }
+
         public static void ToolAction()
+        {
+            Vector2 playerTile = new Vector2(0, 0);
+            bool foundplayerTile = false;
+            for (int i = 0; i < ModConfig.mapWidth; i++)
+            {
+                for (int j = 0; j < ModConfig.mapHeight; j++)
+                {
+                    Vector2 mapTile = new Vector2((int)i, (int)j);
+                    if (Game1.player == Game1.currentLocation.isTileOccupiedByFarmer(mapTile))
+                    {
+                        playerTile = mapTile;
+                        foundplayerTile = true;
+                        break;
+                    }
+                }
+                if (foundplayerTile)
+                    break;
+            }
+            if (foundplayerTile == false)
+                return;
+            List<Vector2> tileGrid = new List<Vector2>();
+            for (int i = 0; i < 2 * 1 + 1; i++)
+            {
+                for (int j = 0; j < 2 * 1 + 1; j++)
+                {
+                    Vector2 newVec = new Vector2(playerTile.X - 1, playerTile.Y - 1);
+
+                    newVec.X += (float)i;
+                    newVec.Y += (float)j;
+
+                    tileGrid.Add(newVec);
+                }
+            }
+
+
+            Tool currentTool = Game1.player.CurrentTool;
+            if (currentTool.upgradeLevel < ModConfig.minToolPower)
+                return;
+            int currentWater = 0;
+            if (currentTool.GetType() == typeof(WateringCan))
+            {
+                WateringCan currentWaterCan = (WateringCan)currentTool;
+                currentWater = currentWaterCan.WaterLeft;
+            }
+            float currentStamina = Game1.player.stamina;
+            Vector2 origin = new Vector2((float)Game1.player.GetBoundingBox().Center.X, (float)Game1.player.GetBoundingBox().Center.Y);
+            List<Vector2> affectedTileGrid = MakeVector2Grid(origin, 1);
+            int index = 0;
+            foreach (Vector2 tile in affectedTileGrid)
+            {
+                if(ModConfig.WTFMode == 0) //if WTFMode == 1 then it bypass all safety TerrainFeature check
+                {
+                    TerrainFeature terrainTile;
+                    if (Game1.currentLocation.terrainFeatures.TryGetValue(tileGrid[index], out terrainTile))
+                    {
+                        index++;
+                        if (Game1.player.CurrentTool.GetType() == typeof(WateringCan))
+                            Game1.player.CurrentTool.DoFunction(Game1.currentLocation, (int)Math.Round(tile.X, MidpointRounding.AwayFromZero), (int)Math.Round(tile.Y, MidpointRounding.AwayFromZero), 1, Game1.player);
+                        continue;
+                    }
+                }
+                index++;
+                Game1.player.CurrentTool.DoFunction(Game1.currentLocation, (int)Math.Round(tile.X, MidpointRounding.AwayFromZero), (int)Math.Round(tile.Y, MidpointRounding.AwayFromZero), 1, Game1.player);
+            }
+
+            Game1.player.stamina = currentStamina;
+
+            if (currentTool.GetType() == typeof(WateringCan))
+            {
+                WateringCan currentWaterCan = (WateringCan)currentTool;
+                currentWaterCan.WaterLeft = currentWater;
+            }
+        }
+
+        public static void HorseToolAction()
         {
             if (Game1.player.CurrentTool.GetType() == typeof(Hoe) || Game1.player.CurrentTool.GetType() == typeof(WateringCan))
             {
-                Vector2 playerTile = new Vector2(0,0);
-                bool foundplayerTile = false;
-                for(int i = 0; i < ModConfig.mapWidth; i++)
-                {
-                    for (int j = 0; j < ModConfig.mapHeight; j++)
-                    {
-                        Vector2 mapTile = new Vector2((int)i, (int)j);
-                        if (Game1.player == Game1.currentLocation.isTileOccupiedByFarmer(mapTile))
-                        {
-                            playerTile = mapTile;
-                            foundplayerTile = true;
-                            break;
-                        }
-                    }
-                    if (foundplayerTile)
-                        break;
-                }
-                if (foundplayerTile == false)
-                    return;
-                List<Vector2> tileGrid = new List<Vector2>();
-                for (int i = 0; i < 2 * 1 + 1; i++)
-                {
-                    for (int j = 0; j < 2 * 1 + 1; j++)
-                    {
-                        Vector2 newVec = new Vector2(playerTile.X - 1, playerTile.Y - 1);
-
-                        newVec.X += (float)i;
-                        newVec.Y += (float)j;
-
-                        tileGrid.Add(newVec);
-                    }
-                }
-
-
                 Tool currentTool = Game1.player.CurrentTool;
                 if (currentTool.upgradeLevel < ModConfig.minToolPower)
                     return;
@@ -245,27 +330,16 @@ namespace TractorMod
                     WateringCan currentWaterCan = (WateringCan)currentTool;
                     currentWater = currentWaterCan.WaterLeft;
                 }
-
                 float currentStamina = Game1.player.stamina;
                 Vector2 origin = new Vector2((float)Game1.player.GetBoundingBox().Center.X, (float)Game1.player.GetBoundingBox().Center.Y);
-                List<Vector2> affectedTileGrid = MakeVector2Grid(origin, 1);
-                int index = 0;
+                List<Vector2> affectedTileGrid = MakeVector2GridForHorse(origin, 1);
+
                 foreach (Vector2 tile in affectedTileGrid)
                 {
-                    TerrainFeature terrainTile;
-                    if (Game1.currentLocation.terrainFeatures.TryGetValue(tileGrid[index], out terrainTile))
-                    {
-                        index++;
-                        if(Game1.player.CurrentTool.GetType() == typeof(WateringCan))
-                            Game1.player.CurrentTool.DoFunction(Game1.currentLocation, (int)Math.Round(tile.X, MidpointRounding.AwayFromZero), (int)Math.Round(tile.Y, MidpointRounding.AwayFromZero), 1, Game1.player);
-                        continue;
-                    }
-                    index++;
                     Game1.player.CurrentTool.DoFunction(Game1.currentLocation, (int)Math.Round(tile.X, MidpointRounding.AwayFromZero), (int)Math.Round(tile.Y, MidpointRounding.AwayFromZero), 1, Game1.player);
                 }
 
                 Game1.player.stamina = currentStamina;
-
                 if (currentTool.GetType() == typeof(WateringCan))
                 {
                     WateringCan currentWaterCan = (WateringCan)currentTool;
@@ -276,18 +350,64 @@ namespace TractorMod
 
         public static float tileSize = 0;
         //this will make a list of all the vector2 around origin with size radius (ex: size = 3 => 7x7 grid)
-        static List<Vector2> MakeVector2Grid(Vector2 origin, int size)
+        static List<Vector2> MakeVector2GridForHorse(Vector2 origin, int size)
         {
             List<Vector2> grid = new List<Vector2>();
+            if (Game1.player.movementDirections.Count <= 0)
+                return new List<Vector2>();
+
             for (int i = 0; i < 2 * size + 1; i++)
             {
                 for (int j = 0; j < 2 * size + 1; j++)
                 {
-                    Vector2 newVec = new Vector2(origin.X - size * tileSize,
-                                                origin.Y - size * tileSize);
+                    bool NoAdd = false;
+                    switch (Game1.player.movementDirections[0])
+                    {
+                        case 0: if (j != 0) NoAdd = true; break;
+                        case 2: if (j != 0) NoAdd = true; break;
 
+                        case 1: if (i != 0) NoAdd = true; break;
+                        case 3: if (i != 0) NoAdd = true; break;
+                    }
+                    if (NoAdd)
+                        continue;
+
+                    Vector2 newVec = new Vector2(origin.X - size * tileSize, origin.Y - size * tileSize);
                     newVec.X += (float)i * tileSize;
                     newVec.Y += (float)j * tileSize;
+                    grid.Add(newVec);
+                }
+            }
+            
+            //adjust depending on facing
+            for (int i = 0; i < grid.Count; i++)
+            {
+                Vector2 temp = grid[i];
+                int numberOfTileBehindPlayer = 1;
+                switch (Game1.player.movementDirections[0])
+                {
+                    case 0: temp.Y += (numberOfTileBehindPlayer + 2) * tileSize; break; //go up
+                    case 1: temp.X -= numberOfTileBehindPlayer * tileSize; break; //right
+                    case 2: temp.Y -= (numberOfTileBehindPlayer) * tileSize; break; //down
+                    case 3: temp.X += (numberOfTileBehindPlayer + 2) * tileSize; break; //left
+                }
+                grid[i] = temp;
+            }
+            return grid;
+        }
+
+        static List<Vector2> MakeVector2Grid(Vector2 origin, int size)
+        {
+            List<Vector2> grid = new List<Vector2>();
+            for(int i = 0; i < 2*size+1; i++)
+            {
+                for (int j = 0; j < 2 * size + 1; j++)
+                {
+                    Vector2 newVec = new Vector2(origin.X - size*tileSize,
+                                                origin.Y - size*tileSize);
+
+                    newVec.X += (float) i*tileSize; 
+                    newVec.Y += (float) j*tileSize;
 
                     grid.Add(newVec);
                 }
@@ -298,14 +418,18 @@ namespace TractorMod
 
     public class TractorConfig : Config
     {
+        public int needHorse;
         public Keys tractorKey;
+        public int WTFMode;
         public int minToolPower;
         public int mapWidth;
         public int mapHeight;
 
         public override T GenerateDefaultConfig<T>()
         {
-            tractorKey = 0; //default to none, no keyboard toggle by default
+            needHorse = 0;
+            WTFMode = 0;
+            tractorKey = Keys.B;
             minToolPower = 4;
             mapWidth = 170; //i dont think any farm maps exceed 170 tiles any direction
             mapHeight = 170;
