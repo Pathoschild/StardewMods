@@ -40,6 +40,69 @@ You shouldn't change this file unless you know what you're doing.
       "Iridium": 56
     },
 
+    /* items */
+    "ItemsWithIridiumQuality": [
+      /* animal products */
+      -5, // eggs
+      -6, // milks
+      430, // truffle
+      440, // wool
+      444, // duck feather
+      446, // rabbit's foot
+
+      /* forage (foods) */
+      16, // wild horseradish
+      18, // daffodil
+      20, // leek
+      22, // dandelion
+      78, // cave carrot
+      88, // coconut
+      90, // cactus fruit
+      257, // morel
+      259, // fiddlehead fern
+      281, // chanterelle
+      283, // holly
+      296, // salmonberry
+      396, // spice berry
+      398, // grape
+      399, // spring onion
+      402, // sweet pea
+      404, // common mushroom
+      406, // wild plum
+      408, // hazelnut
+      410, // blackberry
+      412, // winter root
+      414, // crystal fruit
+      416, // snow yam
+      420, // red mushroom
+      422, // purple mushroom
+
+      /* forage (beach) */
+      372, // clam
+      392, // nautilus shell
+      393, // coral
+      394, // rainbow shell
+      397, // sea urchin
+      719, // mussel
+      723, // oyster
+
+      /* fruit tree produce */
+      613, // apple
+      634, // apricot
+      635, // orange
+      636, // peach
+      637, // pomegranate
+      638, // cherry
+
+      /* cask-aged artisanal products */
+      303, // pale ale
+      346, // beer
+      348, // wine
+      424, // cheese
+      426, // goat cheese
+      459 // mead
+    ],
+
     /* achievements */
     "PolycultureCrops": [ 24, 188, 190, 192, 248, 250, 252, 254, 256, 258, 260, 262, 264, 266, 268, 270, 272, 274, 276, 278, 280, 282, 284, 300, 304, 398, 400, 433 ],
     "PolycultureCount": 15

@@ -72,6 +72,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         public IDictionary<ItemQuality, int> CaskAgeSchedule { get; set; }
 
         /****
+        ** Items
+        ****/
+        /// <summary>Items which can have an iridium quality. This is a list of category IDs (negative) or item IDs (positive).</summary>
+        /// <remarks>
+        /// The following can have iridium quality:
+        /// • animal produce;
+        /// • fruit tree produce;
+        /// • artisanal products aged in the cask (derived from <see cref="StardewValley.Objects.Cask.performObjectDropInAction"/>);
+        /// • forage crops.
+        /// </remarks>
+        public int[] ItemsWithIridiumQuality { get; set; }
+
+        /****
         ** Achievements
         ****/
         /// <summary>The crops that must be shipped for the polyculture achievement.</summary>

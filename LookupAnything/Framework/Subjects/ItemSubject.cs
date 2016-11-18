@@ -159,7 +159,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                     // crop sale price
                     Item drop = GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest);
-                    summary.Add($"-sells for {GenericField.GetSaleValueString(this.GetSaleValue(drop, false), 1)}");
+                    summary.Add($"-sells for {GenericField.GetSaleValueString(this.GetSaleValue(drop, false, metadata), 1)}");
 
                     // generate field
                     yield return new GenericField("Crop", string.Join(Environment.NewLine, summary));
@@ -245,7 +245,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 if (canSell && !isCrop)
                 {
                     // sale price
-                    string saleValueSummary = GenericField.GetSaleValueString(this.GetSaleValue(item, this.KnownQuality), item.Stack);
+                    string saleValueSummary = GenericField.GetSaleValueString(this.GetSaleValue(item, this.KnownQuality, metadata), item.Stack);
                     yield return new GenericField("Sells for", saleValueSummary);
 
                     // sell to
@@ -408,7 +408,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Get the possible sale values for an item.</summary>
         /// <param name="item">The item.</param>
         /// <param name="qualityIsKnown">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
-        private IDictionary<ItemQuality, int> GetSaleValue(Item item, bool qualityIsKnown)
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        private IDictionary<ItemQuality, int> GetSaleValue(Item item, bool qualityIsKnown, Metadata metadata)
         {
             Func<Item, int> getPrice = i =>
             {
@@ -427,13 +428,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // multiple qualities
-            return new Dictionary<ItemQuality, int>
+            int[] iridiumItems = metadata.Constants.ItemsWithIridiumQuality;
+            var prices = new Dictionary<ItemQuality, int>
             {
                 [ItemQuality.Normal] = getPrice(new Object(item.parentSheetIndex, 1)),
                 [ItemQuality.Silver] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
-                [ItemQuality.Gold] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Gold)),
-                [ItemQuality.Iridium] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Iridium))
+                [ItemQuality.Gold] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Gold))
             };
+            if ((item as Object)?.bigCraftable != true && (iridiumItems.Contains(item.category) || iridiumItems.Contains(item.parentSheetIndex)))
+                prices[ItemQuality.Iridium] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Iridium));
+            return prices;
         }
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>

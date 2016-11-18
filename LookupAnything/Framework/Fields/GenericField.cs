@@ -105,7 +105,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             }
 
             // prices by quality
-            return $"{saleValues[ItemQuality.Normal]}g, {saleValues[ItemQuality.Silver]}g (silver), {saleValues[ItemQuality.Gold]}g (gold), {saleValues[ItemQuality.Iridium]}g (iridium)";
+            List<string> priceStrings = new List<string>();
+            for (ItemQuality quality = ItemQuality.Normal; ; quality = quality.GetNext())
+            {
+                if (saleValues.ContainsKey(quality))
+                    priceStrings.Add($"{saleValues[quality]}g" + (quality != ItemQuality.Normal ? $" ({quality.GetName()})" : ""));
+
+                if (quality.GetNext() == quality)
+                    break;
+            }
+            return string.Join(", ", priceStrings);
         }
     }
 }
