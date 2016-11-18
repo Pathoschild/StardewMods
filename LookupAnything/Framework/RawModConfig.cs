@@ -27,9 +27,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Whether to log debug metadata useful for troubleshooting.</summary>
         public bool DebugLog { get; set; }
 
-        /// <summary>Whether to suppress the game's debug mode (enabled by pressing <c>F2</c>) to prevent accidental use (e.g. losing a season).</summary>
-        public bool SuppressGameDebug { get; set; }
-
 
         /*********
         ** Public methods
@@ -55,7 +52,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             this.HideOnKeyUp = false;
             this.CheckForUpdates = true;
             this.DebugLog = true;
-            this.SuppressGameDebug = true;
         }
 
         /// <summary>Get a parsed representation of the mod configuration.</summary>
@@ -80,8 +76,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 },
                 HideOnKeyUp = this.HideOnKeyUp,
                 CheckForUpdates = this.CheckForUpdates,
-                DebugLog = this.DebugLog,
-                SuppressGameDebug = this.SuppressGameDebug
+                DebugLog = this.DebugLog
             };
         }
 

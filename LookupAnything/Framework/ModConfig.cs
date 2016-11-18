@@ -25,8 +25,5 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Whether to log debug metadata useful for troubleshooting.</summary>
         public bool DebugLog { get; set; }
-
-        /// <summary>Whether to suppress the game's debug mode (enabled by SMAPI when you press <c>F2</c>) to prevent accidental use, which may cause unintended consequences like skipping a season.</summary>
-        public bool SuppressGameDebug { get; set; }
     }
 }
