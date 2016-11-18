@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewValley;
 
@@ -46,8 +47,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="context">The context for which to get an override.</param>
         public ObjectData GetObject(Item item, ObjectContext context)
         {
-            ObjectSpriteSheet sheet = (item as Object)?.bigCraftable == true ? ObjectSpriteSheet.BigCraftable : ObjectSpriteSheet.Object;
-            return this?.Objects
+            ItemSpriteType sheet = item.GetSpriteType();
+            return this.Objects
                 .FirstOrDefault(obj => obj.SpriteSheet == sheet && obj.SpriteID.Contains(item.parentSheetIndex) && obj.Context.HasFlag(context));
         }
 

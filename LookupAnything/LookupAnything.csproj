@@ -57,7 +57,7 @@
     <Compile Include="Framework\Data\ConstantData.cs" />
     <Compile Include="Framework\Data\ObjectContext.cs" />
     <Compile Include="Framework\Data\ObjectData.cs" />
-    <Compile Include="Framework\Data\ObjectSpriteSheet.cs" />
+    <Compile Include="Framework\Constants\ItemSpriteType.cs" />
     <Compile Include="Framework\Data\RecipeData.cs" />
     <Compile Include="Framework\Fields\ItemIconField.cs" />
     <Compile Include="Framework\Fields\ItemDropListField.cs" />

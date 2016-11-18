@@ -175,7 +175,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 && a.parentSheetIndex == b.parentSheetIndex
 
                 // same discriminators
-                && (a as Object)?.bigCraftable == (b as Object)?.bigCraftable
+                && a.GetSpriteType() == b.GetSpriteType()
                 && (a as Boots)?.indexInTileSheet == (b as Boots)?.indexInTileSheet
                 && (a as BreakableContainer)?.type == (b as BreakableContainer)?.type
                 && (a as Fence)?.isGate == (b as Fence)?.isGate
@@ -259,6 +259,26 @@ namespace Pathoschild.Stardew.LookupAnything
         public static Object GetObjectBySpriteIndex(int index, int stack = 1)
         {
             return new Object(index, stack);
+        }
+
+        /// <summary>Get the sprite sheet to which the item's <see cref="Item.parentSheetIndex"/> refers.</summary>
+        /// <param name="item">The item to check.</param>
+        public static ItemSpriteType GetSpriteType(this Item item)
+        {
+            if (item is Object)
+            {
+                return ((Object)item).bigCraftable
+                    ? ItemSpriteType.BigCraftable
+                    : ItemSpriteType.Object;
+            }
+            if (item is Boots)
+                return ItemSpriteType.Boots;
+            if (item is Hat)
+                return ItemSpriteType.Hat;
+            if (item is Tool)
+                return ItemSpriteType.Tool;
+
+            return ItemSpriteType.Unknown;
         }
 
         /// <summary>Get all objects matching the reference ID.</summary>
@@ -479,7 +499,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <returns>Returns a tuple containing the sprite sheet and the sprite's position and dimensions within the sheet.</returns>
         public static Tuple<Texture2D, Rectangle> GetSprite(Item item)
         {
-            // stardard object
+            // standard object
             if (item is Object)
             {
                 Object obj = (Object)item;

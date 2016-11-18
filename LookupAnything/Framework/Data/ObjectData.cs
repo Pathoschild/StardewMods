@@ -1,3 +1,5 @@
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>Provides override metadata about a game item.</summary>
@@ -13,7 +15,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         public ObjectContext Context { get; set; } = ObjectContext.Any;
 
         /// <summary>The sprite sheet used to draw the object. A given sprite ID can be duplicated between two sprite sheets.</summary>
-        public ObjectSpriteSheet SpriteSheet { get; set; } = ObjectSpriteSheet.Object;
+        public ItemSpriteType SpriteSheet { get; set; } = ItemSpriteType.Object;
 
         /// <summary>The sprite IDs for this object.</summary>
         public int[] SpriteID { get; set; }

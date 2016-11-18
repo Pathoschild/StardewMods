@@ -280,7 +280,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // recipes
-            if (isObject && obj.bigCraftable != true)
+            if (item.GetSpriteType() == ItemSpriteType.Object)
             {
                 RecipeModel[] recipes = GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
                 if (recipes.Any())
@@ -435,7 +435,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 [ItemQuality.Silver] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
                 [ItemQuality.Gold] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Gold))
             };
-            if ((item as Object)?.bigCraftable != true && (iridiumItems.Contains(item.category) || iridiumItems.Contains(item.parentSheetIndex)))
+            if (item.GetSpriteType() == ItemSpriteType.Object && (iridiumItems.Contains(item.category) || iridiumItems.Contains(item.parentSheetIndex)))
                 prices[ItemQuality.Iridium] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Iridium));
             return prices;
         }
