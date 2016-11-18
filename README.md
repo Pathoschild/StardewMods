@@ -150,6 +150,7 @@ file if you want. These are the available settings:
 * Console logs are now less verbose.
 * Updated to SMAPI 1.1.
 * Fixed some cases where the item 'number owned' field was inacurate.
+* Fixed iridium prices being shown for items that can't have iridium quality.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
