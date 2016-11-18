@@ -144,12 +144,12 @@ file if you want. These are the available settings:
 * Fixed error when looking up a villager you haven't met.
 * Fixed error when looking up certain NPCs with no social data.
 
-1.7 (upcoming):
+1.7:
 * You can now lookup a villager from the social page.
 * You can now lookup an item from the toolbar.
-* Made console logs less verbose.
+* Console logs are now less verbose.
 * Updated to SMAPI 1.1.
-* Fixed some cases where item number owned field was inacurate.
+* Fixed some cases where the item 'number owned' field was inacurate.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
