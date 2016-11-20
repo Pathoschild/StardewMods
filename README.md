@@ -119,7 +119,7 @@ file if you want. These are the available settings:
 * Fixed group list being unsorted.
 * Fixed update-check error on startup adding scary error text in console.
 
-1.8 (upcoming):
+1.8:
 * Updated to SMAPI 1.1.
 
 ## Compiling the mod
