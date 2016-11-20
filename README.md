@@ -30,19 +30,34 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 
 ###Demo:  
 ####Horse Mode [+ Horse to Tractor mod by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/) for maximum immersion :)
-![gif-horse-mode](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/tractor2.gif)  
+<blockquote class="imgur-embed-pub" lang="en" data-id="nWcW7hh">
+<img href="//imgur.com/nWcW7hh">
+</blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8">
+</script>
 
 ####Till Dirt  
-![gif-till dirt](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/TillDirt.gif)  
+<blockquote class="imgur-embed-pub" lang="en" data-id="nWcW7hh">
+<img href="//imgur.com/pq6QqPq">
+</blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8">
+</script>
 
 ####Water Crop    
-![gif-water crop](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/water.gif)  
+<blockquote class="imgur-embed-pub" lang="en" data-id="nWcW7hh">
+<img href="//imgur.com/uZPRG8H">
+</blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8">
+</script>
 
 ####Fertilize Soil    
-![gif-fertilize](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/fertilizing.gif)  
+<blockquote class="imgur-embed-pub" lang="en" data-id="nWcW7hh">
+<img href="//imgur.com/Ts7Jxda">
+</blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8">
+</script>
 
 ####Sow Seeds      
-![gif-sow seed](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/sowingSeed.gif)  
+<blockquote class="imgur-embed-pub" lang="en" data-id="nWcW7hh">
+<img href="//imgur.com/PPYrTyK">
+</blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8">
+</script>
 
 
 ###Require:  
