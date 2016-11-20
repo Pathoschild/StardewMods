@@ -9,10 +9,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         ** Accessors
         *********/
         /// <summary>The minimum supported version of Stardew Valley.</summary>
-        public const string MinimumGameVersion = "1.11";
+        public const string MinimumGameVersion = "1.1";
 
         /// <summary>The minimum supported version of SMAPI.</summary>
-        public const string MinimumApiVersion = "0.40 1.1";
+        public const string MinimumApiVersion = "1.1";
 
         /// <summary>The number of rows in an inventory grid.</summary>
         public const int SlotRows = 3;
