@@ -9,7 +9,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
         ** Accessors
         *********/
         /// <summary>The minimum supported version of Stardew Valley.</summary>
-        public static string MinimumGameVersion = "1.11";
+        public static string MinimumGameVersion = "1.1";
 
         /// <summary>The minimum supported version of SMAPI.</summary>
         public static string MinimumApiVersion = "1.1";
