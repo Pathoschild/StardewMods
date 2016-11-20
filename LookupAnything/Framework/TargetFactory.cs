@@ -259,15 +259,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 }
                 else if (curTab is SocialPage)
                 {
-                    List<ClickableTextureComponent> entries = GameHelper.GetPrivateField<List<ClickableTextureComponent>>(curTab, "friendNames");
-                    foreach (var entry in entries)
+                    // get villagers on current page
+                    int scrollOffset = GameHelper.GetPrivateField<int>(curTab, "slotPosition");
+                    ClickableTextureComponent[] entries = GameHelper
+                        .GetPrivateField<List<ClickableTextureComponent>>(curTab, "friendNames")
+                        .Skip(scrollOffset)
+                        .ToArray();
+
+                    // find hovered villager
+                    ClickableTextureComponent entry = entries.FirstOrDefault(p => p.containsPoint((int)cursorPosition.X, (int)cursorPosition.Y));
+                    if (entry != null)
                     {
-                        if (entry.containsPoint((int)cursorPosition.X, (int)cursorPosition.Y))
-                        {
-                            NPC npc = Utility.getAllCharacters().FirstOrDefault(p => p.name == entry.name);
-                            if (npc != null)
-                                return new CharacterSubject(npc, TargetType.Villager, this.Metadata);
-                        }
+                        NPC npc = Utility.getAllCharacters().FirstOrDefault(p => p.name == entry.name);
+                        if (npc != null)
+                            return new CharacterSubject(npc, TargetType.Villager, this.Metadata);
                     }
                 }
             }
