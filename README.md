@@ -131,22 +131,12 @@ so it can be built on Linux, Mac, and Windows without changes. See [its document
 for troubleshooting.
 
 ### Compiling the mod for testing
-On Windows:
+To compile the mod and add it to the mods directory:
 
-1. Rebuild the project in [Visual Studio](https://www.visualstudio.com/vs/community/).  
+1. Rebuild the project in [Visual Studio](https://www.visualstudio.com/vs/community/) or [MonoDevelop](http://www.monodevelop.com/).  
    <small>This will compile the code and package it into the mod directory.</small>
 2. Launch the project with debugging.  
    <small>This will start the game through SMAPI and attach the Visual Studio debugger.</small>
-
-On Linux or Mac:
-
-1. Rebuild the project in [MonoDevelop](http://www.monodevelop.com/).
-2. Copy the following files from the `bin` directory:
-   * `manifest.json`
-   * `ChestsAnywhere.dll`
-   * `ChestsAnywhere.pdb`
-3. Paste the files into a `ChestsAnywhere` subdirectory under SMAPI's `Mods` directory.
-4. Launch the game through SMAPI.
 
 ### Compiling the mod for release
 To package the mod for release:
@@ -159,7 +149,7 @@ To package the mod for release:
    mod name, version, and platform. For example:
 
    ```
-   ChestsAnywhere-1.7-Windows.zip
+   ChestsAnywhere-1.8-Windows.zip
       ChestsAnywhere/
          ChestsAnywhere.dll
          ChestsAnywhere.pdb

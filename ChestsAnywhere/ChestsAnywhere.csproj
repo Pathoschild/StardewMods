@@ -83,12 +83,13 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.1.2.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Pathoschild.Stardew.ModBuildConfig.1.2.0\build\Pathoschild.Stardew.ModBuildConfig.targets'))" />
   </Target>
-  <PropertyGroup Condition="$(GamePlatform) == 'Windows'">
-    <PostBuildEvent>
-      set modDir=$(GamePath)\Mods\ChestsAnywhere
-      if not exist "%modDir%" (mkdir "%modDir%")
-      copy "$(TargetPath)" "%modDir%\$(TargetFileName)"
-      copy "$(ProjectDir)manifest.json" "%modDir%\manifest.json"
-    </PostBuildEvent>
-  </PropertyGroup>
+  <Target Name="AfterBuild">
+    <PropertyGroup>
+      <ModPath>$(GamePath)\Mods\ChestsAnywhere</ModPath>
+    </PropertyGroup>
+    <Copy SourceFiles="$(TargetPath)" DestinationFiles="$(ModPath)\$(TargetFileName)" />
+    <Copy SourceFiles="$(ProjectDir)manifest.json" DestinationFiles="$(ModPath)\manifest.json" />
+    <Copy Condition="$(OS) == 'Windows_NT'" SourceFiles="$(TargetDir)\$(TargetName).pdb" DestinationFiles="$(ModPath)\$(TargetName).pdb" />
+    <Copy Condition="$(OS) != 'Windows_NT'" SourceFiles="$(TargetDir)\$(TargetName).mdb" DestinationFiles="$(ModPath)\$(TargetName).mdb" />
+  </Target>
 </Project>
