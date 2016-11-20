@@ -81,7 +81,6 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // load config
             this.Config = this.Helper.ReadConfig<RawModConfig>().GetParsed();
-            this.Monitor.Log($"Initialising with lookup keys {this.Config.Controller.ToggleLookup} and {this.Config.Keyboard.ToggleLookup}.", LogLevel.Trace);
 
             // load database
             this.LoadMetadata();
