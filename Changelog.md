@@ -8,6 +8,8 @@
   - Check **Demo** section for demonstation of this feature.  
   - Check **Customize** section for new config options of this ability.  
 + **Add** Greenhouse.
++ **Add** Coops.
++ **Add** Barns.
   
 ####Change Log **v.1.1**:
 + **Add** Horse-tractor Mode.  
