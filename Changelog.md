@@ -1,4 +1,7 @@
 #Change Log:  
+####Change Log **v.1.2.1**:
++ **Fix** a bug that sometimes causes crash when player runs out of fertilizer/seeds while fertilizing/planting.
+
 ####Change Log **v.1.2**:
 + **Require** [SMAPI 1.1.1](https://github.com/ClxS/SMAPI/releases)
 + **Add** Harvest Ability.
