@@ -18,7 +18,7 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
   - Check **Customize** section for new config options of this ability.  
 + **Add** Greenhouse.
 
-####For past [changelog](https://github.com/lambui/StardewValleyMod_TractorMod/edit/master/Changelog.md)
+####For past [changelog](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 
 ###Demo:  
 ####Horse Mode [+ Horse to Tractor mod by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/) for maximum immersion :)
