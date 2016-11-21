@@ -17,6 +17,8 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
   - Check [**Demo**](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md) section for demonstation of this feature.  
   - Check [**Customize**](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md) section for new config options of this ability.  
 + **Add** Greenhouse.
++ **Add** Coops.
++ **Add** Barns.
 
 ####Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 
