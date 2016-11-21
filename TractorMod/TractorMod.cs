@@ -31,7 +31,7 @@ namespace TractorMod
         }
 
         public static TractorConfig ModConfig { get; protected set; }
-        public override void Entry(params object[] objects)
+        public override void Entry(IModHelper helper)
         {
             ModConfig = Helper.ReadConfig<TractorConfig>();
 
@@ -203,6 +203,7 @@ namespace TractorMod
                                     if (Game1.player.CurrentItem.Stack <= 0)
                                     {
                                         Game1.player.removeItemFromInventory(Game1.player.CurrentItem);
+                                        return;
                                     }
                                 }
                             }
@@ -215,6 +216,7 @@ namespace TractorMod
                                 if (Game1.player.CurrentItem.Stack <= 0)
                                 {
                                     Game1.player.removeItemFromInventory(Game1.player.CurrentItem);
+                                    return;
                                 }
                             }
                         }
