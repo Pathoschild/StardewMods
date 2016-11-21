@@ -125,6 +125,7 @@ If you have mod that change your farm to be bigger than default values then make
 + Water can doesn't need to be refilled but needs to have some water in it to work.  
 + You can fertilize your crop AFTER sowing seeds with Tractor Mode.  
 + Be extra careful with WTFMode haha
++ If you use Horse Mode then you can use [Horse Whistle Mod](https://www.google.com/#q=Horse+Whistle+stardew+valley) to bring your horse into Greenhouse, Coops, or Barns.
 + **Have fun farming! :)**
 
 Contact me @ [buiphuonglamvn@gmail.com](mailto:buiphuonglamvn@gmail.com) regarding whatever.
