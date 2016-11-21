@@ -68,13 +68,20 @@ namespace TractorMod
                 return;
 
             //if (Game1.currentLocation.isFarm == false || Game1.currentLocation.isOutdoors == false )
-            if (Game1.currentLocation.GetType() != typeof(Farm))
+            bool canRun = false;
+            if (Game1.currentLocation.GetType() == typeof(Farm))
+                canRun = true;
+            if (Game1.currentLocation.name.ToLower().Contains("greenhouse"))
+                canRun = true;
+            if (Game1.currentLocation.name.ToLower().Contains("coop"))
+                canRun = true;
+            if (Game1.currentLocation.name.ToLower().Contains("barn"))
+                canRun = true;
+
+            if(canRun == false)
             {
-                if(Game1.currentLocation.name.ToLower().Contains("greenhouse") == false)
-                {
-                    TractorOn = false;
-                    return;
-                }
+                TractorOn = false;
+                return;
             }
 
             if (tileSize == 0)
