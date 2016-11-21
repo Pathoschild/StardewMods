@@ -10,16 +10,30 @@ using System.IO;
 using Microsoft.Xna.Framework.Input;
 using StardewValley.Tools;
 using StardewValley.Locations;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
 namespace TractorMod
 {
     public class TractorMod : Mod
     {
+
+        public class TractorConfig
+        {
+            public int needHorse { get; set; } = 0;
+            public Keys tractorKey { get; set; } = Keys.B;
+            public int WTFMode { get; set; } = 0;
+            public int harvestMode { get; set; } = 1;
+            public int harvestRadius { get; set; } = 2;
+            public int minToolPower { get; set; } = 4; //iridium level
+            public int mapWidth { get; set; } = 170;
+            public int mapHeight { get; set; } = 170;
+        }
+
         public static TractorConfig ModConfig { get; protected set; }
         public override void Entry(params object[] objects)
         {
-            ModConfig = new TractorConfig().InitializeConfig(BaseConfigPath);
+            ModConfig = Helper.ReadConfig<TractorConfig>();
 
             if(ModConfig.needHorse == 0)
                 StardewModdingAPI.Events.GameEvents.EighthUpdateTick += UpdateTickEvent;
@@ -53,10 +67,14 @@ namespace TractorMod
             if (Game1.currentLocation == null)
                 return;
 
-            if (Game1.currentLocation.isFarm == false || Game1.currentLocation.isOutdoors == false)
+            //if (Game1.currentLocation.isFarm == false || Game1.currentLocation.isOutdoors == false )
+            if (Game1.currentLocation.GetType() != typeof(Farm))
             {
-            	TractorOn = false;
-                return;
+                if(Game1.currentLocation.name.ToLower().Contains("greenhouse") == false)
+                {
+                    TractorOn = false;
+                    return;
+                }
             }
 
             if (tileSize == 0)
@@ -153,34 +171,11 @@ namespace TractorMod
             if (Game1.player.CurrentItem.getCategoryName().ToLower() == "seed" || Game1.player.CurrentItem.getCategoryName().ToLower() == "fertilizer")
             {
                 Vector2 origin = new Vector2((float)Game1.player.GetBoundingBox().Center.X, (float)Game1.player.GetBoundingBox().Center.Y);
-                List<Vector2> affectedTileGrid = new List<Vector2>();
-                //isTileHoeDirt
-
-                foreach (var terrainfeature in Game1.currentLocation.terrainFeatures)
-                {
-                    if (terrainfeature.Value is HoeDirt)
-                    {
-                        HoeDirt hoedirtTile = (HoeDirt)terrainfeature.Value;
-                        Vector2 location = terrainfeature.Key;
-                        if (Game1.player == Game1.currentLocation.isTileOccupiedByFarmer(location))
-                        {
-                            for (int i = 0; i < 2 * 1 + 1; i++)
-                            {
-                                for (int j = 0; j < 2 * 1 + 1; j++)
-                                {
-                                    Vector2 newVec = new Vector2(location.X - 1,
-                                                                location.Y - 1);
-
-                                    newVec.X += (float)i;
-                                    newVec.Y += (float)j;
-
-                                    affectedTileGrid.Add(newVec);
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
+                Point tileOrigin = Utility.Vector2ToPoint(origin);
+                Vector2 playerTile = GetTileOccupiedByFarmer(Game1.player);
+                if (playerTile.X == -1)
+                    return;
+                List<Vector2> affectedTileGrid = MakeVector2TileGrid(playerTile, 1);
 
                 foreach (Vector2 tile in affectedTileGrid)
                 {
@@ -221,6 +216,100 @@ namespace TractorMod
             }
         }
 
+        public static void HarvestAction()
+        {
+            if (ModConfig.harvestMode == 0)
+                return;
+
+            Vector2 origin = new Vector2((float)Game1.player.GetBoundingBox().Center.X, (float)Game1.player.GetBoundingBox().Center.Y);
+            Point tileOrigin = Utility.Vector2ToPoint(origin);
+            Vector2 playerTile = GetTileOccupiedByFarmer(Game1.player);
+            if (playerTile.X == -1)
+                return;
+
+            List<Vector2> affectedTileGrid = MakeVector2TileGrid(playerTile, ModConfig.harvestRadius);
+            foreach (Vector2 tile in affectedTileGrid)
+            {
+                StardewValley.Object anObject;
+                if (Game1.currentLocation.objects.TryGetValue(tile, out anObject))
+                {
+                    if (anObject.isSpawnedObject)
+                    {
+                        if (anObject.isForage(Game1.currentLocation))
+                        {
+                            bool gatherer = CheckFarmerProfession(Game1.player, Farmer.gatherer);
+                            bool botanist = CheckFarmerProfession(Game1.player, Farmer.botanist);
+                            if (botanist)
+                                anObject.quality = 4;
+                            if (gatherer)
+                            {
+                                int num = new Random().Next(0, 100);
+                                if (num < 20)
+                                {
+                                    anObject.stack *= 2;
+                                }
+                            }
+                        }
+                        int slot = FindSlotForInputItemInFarmerInventory(Game1.player, anObject);
+                        if (slot == -1)
+                            continue;
+                        Game1.player.addItemToInventory(anObject, slot);
+                        Game1.currentLocation.removeObject(tile, false);
+                    }
+                }
+            }
+
+            foreach (Vector2 tile in affectedTileGrid)
+            {
+                    TerrainFeature terrainTile;
+                if (Game1.currentLocation.terrainFeatures.TryGetValue(tile, out terrainTile))
+                {
+                    if (Game1.currentLocation.terrainFeatures[tile] is HoeDirt)
+                    {
+                        HoeDirt hoedirtTile = (HoeDirt)Game1.currentLocation.terrainFeatures[tile];
+                        if (hoedirtTile.crop == null)
+                            continue;
+                        hoedirtTile.crop.harvest((int)tile.X, (int)tile.Y, hoedirtTile);
+                        continue;
+                    }
+
+                    if (Game1.currentLocation.terrainFeatures[tile] is FruitTree)
+                    {
+                        FruitTree tree = (FruitTree)Game1.currentLocation.terrainFeatures[tile];
+                        tree.shake(tile, false);
+                        continue;
+                    }
+                    
+                    //will test once I have giantcrop
+                    /*
+                    if(Game1.currentLocation.terrainFeatures[tile] is GiantCrop)
+                    {
+                        GiantCrop bigCrop = (GiantCrop)Game1.currentLocation.terrainFeatures[tile];
+                        bigCrop.performToolAction((Tool)new Axe(), 100, tile);
+                        continue;
+                    }
+                    */
+
+                    /*
+                    if(Game1.currentLocation.terrainFeatures[tile] is Grass)
+                    {
+                        //Grass grass = (Grass)Game1.currentLocation.terrainFeatures[tile];
+                        MeleeWeapon.doSwipe(((MeleeWeapon)Game1.player.CurrentTool).type, tile, 0, 1f, Game1.player); //cause freeze on horse cause player need to play swipe animation, but cant on horse
+                        //grass.performToolAction(Game1.player.CurrentTool, 1, tile, Game1.currentLocation);
+                        continue;
+                    }
+                    */
+
+
+                    if (Game1.currentLocation.terrainFeatures[tile] is Tree)
+                    {
+                        continue;
+                    }
+                }
+            }
+
+        }
+
         public static void RunToolAction()
         {
             if (ModConfig.WTFMode == 0)
@@ -232,13 +321,27 @@ namespace TractorMod
                     else
                         HorseToolAction();
                 }
+                else
+                {
+                    if (Game1.player.CurrentTool.GetType() == typeof(MeleeWeapon) && Game1.player.CurrentTool.name.ToLower().Contains("scythe"))
+                    {
+                        HarvestAction();
+                    }
+                }
             }
             else
             {
-                if (ModConfig.needHorse == 0)
-                    ToolAction();
+                if (Game1.player.CurrentTool.GetType() == typeof(MeleeWeapon) && Game1.player.CurrentTool.name.ToLower().Contains("scythe"))
+                {
+                    HarvestAction();
+                }
                 else
-                    HorseToolAction();
+                {
+                    if (ModConfig.needHorse == 0)
+                        ToolAction();
+                    else
+                        HorseToolAction();
+                }
             }
         }
 
@@ -276,7 +379,6 @@ namespace TractorMod
                     tileGrid.Add(newVec);
                 }
             }
-
 
             Tool currentTool = Game1.player.CurrentTool;
             if (currentTool.upgradeLevel < ModConfig.minToolPower)
@@ -399,7 +501,8 @@ namespace TractorMod
         static List<Vector2> MakeVector2Grid(Vector2 origin, int size)
         {
             List<Vector2> grid = new List<Vector2>();
-            for(int i = 0; i < 2*size+1; i++)
+
+            for (int i = 0; i < 2*size+1; i++)
             {
                 for (int j = 0; j < 2 * size + 1; j++)
                 {
@@ -414,26 +517,86 @@ namespace TractorMod
             }
             return grid;
         }
-    }
 
-    public class TractorConfig : Config
-    {
-        public int needHorse;
-        public Keys tractorKey;
-        public int WTFMode;
-        public int minToolPower;
-        public int mapWidth;
-        public int mapHeight;
-
-        public override T GenerateDefaultConfig<T>()
+        static List<Vector2> MakeVector2TileGrid(Vector2 origin, int size)
         {
-            needHorse = 0;
-            WTFMode = 0;
-            tractorKey = Keys.B;
-            minToolPower = 4;
-            mapWidth = 170; //i dont think any farm maps exceed 170 tiles any direction
-            mapHeight = 170;
-            return this as T;
+            List<Vector2> grid = new List<Vector2>();
+            for (int i = 0; i < 2 * size + 1; i++)
+            {
+                for (int j = 0; j < 2 * size + 1; j++)
+                {
+                    Vector2 newVec = new Vector2(origin.X - size,
+                                                origin.Y - size);
+
+                    newVec.X += (float)i;
+                    newVec.Y += (float)j;
+
+                    grid.Add(newVec);
+                }
+            }
+
+            return grid;
+        }
+
+        static Vector2 GetTileOccupiedByFarmer(Farmer input)
+        {
+            for(int i = 0; i <= ModConfig.mapWidth; i++)
+            {
+                for(int j = 0; j <= ModConfig.mapHeight; j++)
+                {
+                    if(input == Game1.currentLocation.isTileOccupiedByFarmer(new Vector2(i, j)))
+                    {
+                        return new Vector2(i, j);
+                    }
+                }
+            }
+            return new Vector2(-1, -1);
+        }
+
+        static int FindEmptySlotInFarmerInventory(Farmer input)
+        {
+            for(int i = 0; i < input.items.Count; i++)
+            {
+                if (input.items[i] == null)
+                    return i;
+            }
+            return -1;
+        }
+
+        static int FindSlotWithSameItemInFarmerInventory(Farmer input, Item inputItem)
+        {
+            for (int i = 0; i < input.items.Count; i++)
+            {
+                if (input.items[i] == null)
+                    continue;
+                if (input.items[i].getRemainingStackSpace() <= 0)
+                    continue;
+                if(input.items[i].canStackWith(inputItem))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        static int FindSlotForInputItemInFarmerInventory(Farmer input, Item inputItem)
+        {
+            int slot = FindSlotWithSameItemInFarmerInventory(input, inputItem);
+            if (slot == -1)
+            {
+                slot = FindEmptySlotInFarmerInventory(input);
+            }
+            return slot;
+        }
+
+        static bool CheckFarmerProfession(Farmer farmerInput, int professionIndex)
+        {
+            foreach(int i in farmerInput.professions)
+            {
+                if (i == professionIndex)
+                    return true; 
+            }
+            return false;
         }
     }
 }

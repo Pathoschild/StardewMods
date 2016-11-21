@@ -2,6 +2,8 @@
   "needHorse": 0,
   "tractorKey": 66,
   "WTFMode": 0,
+  "harvestMode": 1,
+  "harvestRadius": 2,
   "minToolPower": 4,
   "mapWidth": 170,
   "mapHeight": 170
