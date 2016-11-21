@@ -14,11 +14,11 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
   - You can harvest crops during Tractor Mode by holding **Scythe**.  
   - You can harvest fruits from fruit trees during Tractor Mode by holding **Scythe**.  
   - You can harvest dropped products (truffles, eggs, ...) during Tractor Mode by holding **Scythe**. 
-  - Check **Demo** section for demonstation of this feature.  
-  - Check **Customize** section for new config options of this ability.  
+  - Check [**Demo**](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md) section for demonstation of this feature.  
+  - Check [**Customize**](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md) section for new config options of this ability.  
 + **Add** Greenhouse.
 
-####For past [changelog](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
+####Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 
 ###Demo:  
 ####Horse Mode [+ Horse to Tractor mod by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/) for maximum immersion :)
