@@ -16,9 +16,9 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
   - You can harvest dropped products (truffles, eggs, ...) during Tractor Mode by holding **Scythe**. 
   - Check [**Demo**](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md) section for demonstation of this feature.  
   - Check [**Customize**](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md) section for new config options of this ability.  
-+ **Now Work In** Greenhouse.
-+ **Now Work In** Coops.
-+ **Now Work In** Barns.
++ Now work in **Greenhouse**.
++ Now work in **Coops**.
++ Now work in **Barns**.
 
 ####Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 
