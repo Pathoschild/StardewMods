@@ -19,6 +19,8 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 + Now work in **Greenhouse**.
 + Now work in **Coops**.
 + Now work in **Barns**.
++ **Note:**
+  - If you use Horse Mode then you can use [Horse Whistle Mod](https://www.google.com/#q=Horse+Whistle+stardew+valley) to bring your horse into Greenhouse, Coops, or Barns.
 
 ####Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 
