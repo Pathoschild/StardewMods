@@ -7,9 +7,9 @@
   - You can harvest dropped products (truffles, eggs, ...) during Tractor Mode by holding **Scythe**. 
   - Check **Demo** section for demonstation of this feature.  
   - Check **Customize** section for new config options of this ability.  
-+ **Add** Greenhouse.
-+ **Add** Coops.
-+ **Add** Barns.
++ Now work in **Greenhouse**.
++ Now work in **Coops**.
++ Now work in **Barns**.
   
 ####Change Log **v.1.1**:
 + **Add** Horse-tractor Mode.  
