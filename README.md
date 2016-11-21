@@ -7,7 +7,17 @@ This is a mod that allows players to quickly till dirt, sow seeds, fertilize soi
 
 It is default to only work with iridium tools equipped so that the mod doesnt ruin your early game but you can change that in the config file.
 
-###Latest Version: [1.1](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+###Latest Version: [1.2](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+####Change Log **v.1.2**:
++ **Require** [SMAPI 1.1.1](https://github.com/ClxS/SMAPI/releases)
++ **Add** Harvest Ability.
+  - You can harvest crops during Tractor Mode by holding **Scythe**.  
+  - You can harvest fruits from fruit trees during Tractor Mode by holding **Scythe**.  
+  - You can harvest dropped products (truffles, eggs, ...) during Tractor Mode by holding **Scythe**. 
+  - Check **Demo** section for demonstation of this feature.  
+  - Check **Customize** section for new config options of this ability.  
++ **Add** Greenhouse.
+  
 ####Change Log **v.1.1**:
 + **Add** Horse-tractor Mode.  
   - You can either use this mode (riding your horse and toggle on/off Tractor Mode) or normal mode (hold right click).  
@@ -30,24 +40,32 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 
 ###Demo:  
 ####Horse Mode [+ Horse to Tractor mod by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/) for maximum immersion :)
-![gif-horse-mode](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/tractor2.gif)  
+![gif-horse-mode](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/tractor2.gif)  
 
 ####Till Dirt  
-![gif-till dirt](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/TillDirt.gif)  
+![gif-till dirt](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/TillDirt.gif)  
 
 ####Water Crop    
-![gif-water crop](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/water.gif)  
+![gif-water crop](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/water.gif)  
 
 ####Fertilize Soil    
-![gif-fertilize](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/fertilizing.gif)  
+![gif-fertilize](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/fertilizing.gif)  
 
 ####Sow Seeds      
-![gif-sow seed](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/sowingSeed.gif)  
+![gif-sow seed](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/sowingSeed.gif)  
 
+####Harvest Crops      
+![gif-harvest_crop](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/harvestCrop.gif)  
+
+####Harvest Fruits      
+![gif-harvest_fruit](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/harvestFruitTree.gif)  
+
+####Harvest Truffles      
+![gif-harvest_drop](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/harvestDrop.gif)  
 
 ###Require:  
 1. [Stardew Valley](http://store.steampowered.com/app/413150/)
-2. [SMAPI: +0.40.1](https://github.com/ClxS/SMAPI/releases)
+2. [SMAPI: +1.1](https://github.com/ClxS/SMAPI/releases)
 
 ###Install:  
 1. Get [Stardew Valley](http://store.steampowered.com/app/413150/) $$$
@@ -84,17 +102,25 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 
 ###Customize:  
 1. Change needHorse to change mode.  
-0 is using normal mode.  
+0 is using normal mode. Default.  
 1 is using horse mode.  
 
-2. Change tractorKey to change hotkey.
+2. Change tractorKey to change hotkey.  
 Default is 0 (no hotkey) but you can change hotkey by changing the config.json file.  
 If you don't use horse mode then this hotkey is useless. You can ignore it in that case.  
 Check out KeyCode.txt file to find your desirable key code.   
 
-3. Change WTFMode to enable pickaxe and axe.  
-0 is axe, pickaxe disable.  
+3. Change WTFMode to enable/disable pickaxe and axe.  
+0 is axe, pickaxe disable. Default.
 1 is axe, pickaxe enable.  
+
+3. Change harvestMode to enable/disable harvest ability.  
+0 is disable harvest ability.  
+1 is enable harvest ability. Default.
+
+4. Change harvestRadius to change harvest area around player.  
+Harvest stuff in a square grid around player with edge being harvestRadius tiles away from player.  
+2 (5x5 grid around player) by Default.  
 
 4. Change minToolPower to lower the minimum tool upgrade require for the Mod to work.  
 0 = no upgrade required  
