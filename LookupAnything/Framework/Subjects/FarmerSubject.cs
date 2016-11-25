@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewValley;
+using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 {
@@ -70,20 +72,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <remarks>Derived from <see cref="GameLocation.answerDialogueAction"/>.</remarks>
         private string GetSpiritLuckMessage()
         {
-            if (Game1.dailyLuck <= -.12)
-                return "The spirits are furious today!";
-            if (Game1.dailyLuck < -.07)
-                return "The spirits are very displeased today.";
-            if (Game1.dailyLuck < 0)
-                return "The spirits are somewhat annoyed today.";
-            if (Game1.dailyLuck == 0)
-                return "The spirits are absolutely neutral today. Weird.";
-            if (Game1.dailyLuck < 0.07)
-                return "The spirits are in good humour today.";
-            if (Game1.dailyLuck < 0.12)
-                return "The spirits are very happy today.";
-            else
-                return "The spirits are joyous today!";
+            TV tv = new TV();
+            MethodInfo method = GameHelper.GetPrivateMethod(tv, "getFortuneForecast");
+            return (string)method.Invoke(tv, new object[0]);
         }
     }
 }

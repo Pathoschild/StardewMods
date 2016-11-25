@@ -152,6 +152,10 @@ file if you want. These are the available settings:
 * Fixed iridium prices being shown for items that can't have iridium quality.
 * `F2` debug mode is no longer suppressed (removed in latest version of SMAPI).
 
+1.8:
+* Fixed incorrect farmer luck message when the spirits are feeling neutral.
+* Fixed social menu lookup sometimes showing the wrong villager.
+
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
 recommended for most users. If you really want to compile the mod yourself, read on.
