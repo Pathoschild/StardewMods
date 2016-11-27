@@ -3,4 +3,3 @@ C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\PhthaloBlueMods\Tra
 C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\PhthaloBlueMods\TractorMod\TractorMod\bin\Release\TractorMod.pdb
 C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\PhthaloBlueMods\TractorMod\TractorMod\obj\Release\TractorMod.dll
 C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\PhthaloBlueMods\TractorMod\TractorMod\obj\Release\TractorMod.pdb
-C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\PhthaloBlueMods\TractorMod\TractorMod\obj\Release\TractorMod.csprojResolveAssemblyReference.cache

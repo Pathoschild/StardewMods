@@ -279,6 +279,8 @@ namespace TractorMod
                         if (hoedirtTile.crop == null)
                             continue;
                         hoedirtTile.crop.harvest((int)tile.X, (int)tile.Y, hoedirtTile);
+                        if (hoedirtTile.crop.regrowAfterHarvest == -1)
+                            hoedirtTile.destroyCrop(tile, true);
                         continue;
                     }
 
