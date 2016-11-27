@@ -7,7 +7,10 @@ This is a mod that allows players to quickly till dirt, sow seeds, fertilize soi
 
 It is default to only work with iridium tools equipped so that the mod doesnt ruin your early game but you can change that in the config file.
 
-###Latest Version: [1.2.1](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+###Latest Version: [1.2.2](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+####Change Log **v.1.2.2**:
++ **Fix** a bug that yields infinite harvest when harvesting non-regrowable crops.  
+
 ####Change Log **v.1.2.1**:
 + **Fix** a bug that sometimes causes crash when player runs out of fertilizer/seeds while fertilizing/planting.  
 
