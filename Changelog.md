@@ -1,4 +1,7 @@
 #Change Log:  
+####Change Log **v.1.2.2**:
++ **Fix** a bug that yields infinite harvest when harvesting non-regrowable crops.
+    
 ####Change Log **v.1.2.1**:
 + **Fix** a bug that sometimes causes crash when player runs out of fertilizer/seeds while fertilizing/planting.
 
