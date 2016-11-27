@@ -103,7 +103,7 @@ If you don't use horse mode then this hotkey is useless. You can ignore it in th
 Check out KeyCode.txt file to find your desirable key code.   
 
 3. Change WTFMode to enable/disable pickaxe and axe.  
-0 is axe, pickaxe disable. Default.
+0 is axe, pickaxe disable. Default.  
 1 is axe, pickaxe enable.  
 
 3. Change harvestMode to enable/disable harvest ability.  
