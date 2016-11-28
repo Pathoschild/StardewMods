@@ -265,10 +265,16 @@ namespace TractorMod
                                 }
                             }
                         }
+
+                        /* this for putting item directly in inventory, but its boring and not juicy enough
                         int slot = FindSlotForInputItemInFarmerInventory(Game1.player, anObject);
                         if (slot == -1)
                             continue;
                         Game1.player.addItemToInventory(anObject, slot);
+                        */
+
+                        for (int i = 0; i < anObject.stack; i++)
+                            Game1.currentLocation.debris.Add(new Debris(anObject, new Vector2(tile.X * Game1.tileSize, tile.Y * Game1.tileSize)));
                         Game1.currentLocation.removeObject(tile, false);
                         continue;
                     }
@@ -298,10 +304,20 @@ namespace TractorMod
                         if (hoedirtTile.crop == null)
                             continue;
 
-                        if(hoedirtTile.crop.harvest((int)tile.X, (int)tile.Y, hoedirtTile))
+                        Log.Debug(hoedirtTile.crop.indexOfHarvest);
+                        if (hoedirtTile.crop.harvest((int)tile.X, (int)tile.Y, hoedirtTile))
                         {
+                            if (hoedirtTile.crop.indexOfHarvest == 421) //sun flower
+                            {
+                                int seedDrop = new Random().Next(1, 4);
+                                for (int i = 0; i < seedDrop; i++)
+                                    Game1.createObjectDebris(431, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); //spawn sunflower seeds
+                            }
+
                             if (hoedirtTile.crop.regrowAfterHarvest == -1)
+                            {
                                 hoedirtTile.destroyCrop(tile, true);
+                            }
                         }
                         continue;
                     }
