@@ -1,6 +1,6 @@
 #Change Log:  
 ####Change Log **v.1.2.3**:
-+ **Add** ability to harvest animal grass (you will receive hay).
++ **Add** ability to harvest animal grass (you will receive hay stored in your silo).
 + **Fix** a bug that allows harvesting young non-regrowable crops.
 
 ####Change Log **v.1.2.2**:
