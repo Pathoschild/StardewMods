@@ -1,4 +1,8 @@
 #Change Log:  
+####Change Log **v.1.2.3**:
++ **Add** ability to harvest animal grass (you will receive hay).
++ **Fix** a bug that allows harvesting young non-regrowable crops.
+
 ####Change Log **v.1.2.2**:
 + **Fix** a bug that yields infinite harvest when harvesting non-regrowable crops.
     
