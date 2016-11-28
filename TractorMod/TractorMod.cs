@@ -62,6 +62,8 @@ namespace TractorMod
         static int mouseHoldDelay = 5;
         static int mouseHoldDelayCount = mouseHoldDelay;
 
+        static Farm ourFarm = null;
+
         static void DoAction(KeyboardState currentKeyboardState, MouseState currentMouseState)
         {
             if (Game1.currentLocation == null)
@@ -70,7 +72,11 @@ namespace TractorMod
             //if (Game1.currentLocation.isFarm == false || Game1.currentLocation.isOutdoors == false )
             bool canRun = false;
             if (Game1.currentLocation.GetType() == typeof(Farm))
+            {
+                if (ourFarm == null)
+                    ourFarm = (Farm)Game1.currentLocation;
                 canRun = true;
+            }
             if (Game1.currentLocation.name.ToLower().Contains("greenhouse"))
                 canRun = true;
             if (Game1.currentLocation.name.ToLower().Contains("coop"))
@@ -264,13 +270,26 @@ namespace TractorMod
                             continue;
                         Game1.player.addItemToInventory(anObject, slot);
                         Game1.currentLocation.removeObject(tile, false);
+                        continue;
                     }
+
+                    /*
+                    if (anObject.name.ToLower().Contains("weed"))
+                    {
+                        int slot = FindSlotForInputItemInFarmerInventory(Game1.player, anObject);
+                        if (slot == -1)
+                            continue;
+                        Game1.player.addItemToInventory(anObject, slot);
+                        Game1.currentLocation.removeObject(tile, false);
+                        continue;
+                    }
+                    */
                 }
             }
 
             foreach (Vector2 tile in affectedTileGrid)
             {
-                    TerrainFeature terrainTile;
+                TerrainFeature terrainTile;
                 if (Game1.currentLocation.terrainFeatures.TryGetValue(tile, out terrainTile))
                 {
                     if (Game1.currentLocation.terrainFeatures[tile] is HoeDirt)
@@ -278,9 +297,12 @@ namespace TractorMod
                         HoeDirt hoedirtTile = (HoeDirt)Game1.currentLocation.terrainFeatures[tile];
                         if (hoedirtTile.crop == null)
                             continue;
-                        hoedirtTile.crop.harvest((int)tile.X, (int)tile.Y, hoedirtTile);
-                        if (hoedirtTile.crop.regrowAfterHarvest == -1)
-                            hoedirtTile.destroyCrop(tile, true);
+
+                        if(hoedirtTile.crop.harvest((int)tile.X, (int)tile.Y, hoedirtTile))
+                        {
+                            if (hoedirtTile.crop.regrowAfterHarvest == -1)
+                                hoedirtTile.destroyCrop(tile, true);
+                        }
                         continue;
                     }
 
@@ -300,16 +322,15 @@ namespace TractorMod
                         continue;
                     }
                     */
-
-                    /*
+                    
                     if(Game1.currentLocation.terrainFeatures[tile] is Grass)
                     {
-                        //Grass grass = (Grass)Game1.currentLocation.terrainFeatures[tile];
-                        MeleeWeapon.doSwipe(((MeleeWeapon)Game1.player.CurrentTool).type, tile, 0, 1f, Game1.player); //cause freeze on horse cause player need to play swipe animation, but cant on horse
-                        //grass.performToolAction(Game1.player.CurrentTool, 1, tile, Game1.currentLocation);
+                        Grass grass = (Grass)Game1.currentLocation.terrainFeatures[tile];
+                        grass = null;
+                        Game1.currentLocation.terrainFeatures.Remove(tile);
+                        ourFarm.tryToAddHay(2);
                         continue;
                     }
-                    */
 
 
                     if (Game1.currentLocation.terrainFeatures[tile] is Tree)
