@@ -7,7 +7,11 @@ This is a mod that allows players to quickly till dirt, sow seeds, fertilize soi
 
 It is default to only work with iridium tools equipped so that the mod doesnt ruin your early game but you can change that in the config file.
 
-###Latest Version: [1.2.3](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+###Latest Version: [1.2.4](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+####Change Log v.1.2.4:
++ **Fix** a bug when harvesting sunflower doesn't yield seeds.
++ **Tweak** harvesting animal products now spawns little item-drops instead of adding them directly to inventory.
+
 ####Change Log **v.1.2.3**:
 + **Add** ability to harvest animal grass (you will receive hay stored in your silo)..
 + **Fix** a bug that allows harvesting young non-regrowable crops.
