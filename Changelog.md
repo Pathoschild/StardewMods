@@ -1,4 +1,8 @@
 #Change Log:  
+####Change Log **v.1.2.4**:
++ **Fix** a bug when harvesting sunflower doesn't yield seeds.  
++ **Tweak** harvesting animal products now spawns little item-drops instead of adding directly to inventory.  
+
 ####Change Log **v.1.2.3**:
 + **Add** ability to harvest animal grass (you will receive hay stored in your silo).
 + **Fix** a bug that allows harvesting young non-regrowable crops.
