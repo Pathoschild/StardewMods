@@ -86,6 +86,10 @@ Harvest stuff in a square grid around player with edge being harvestRadius tiles
 Default is 170 for both because I don't think the farm map is bigger than 170 tiles in both directions.  
 If you have mod that change your farm to be bigger than default values then make sure to change these values accordingly (don't have to be exact, just bigger is fine).
 
+6. globalTractor is use to limit areas the mod can function.  
+0 = can only use Tractor Mode within your farm land (and areas within it like barns, coops, greenhouse), this is default.  
+1 = can use Tractor Mode everywhere you want.  
+
 #Demo:  
 ####Horse Mode [+ Horse to Tractor mod by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/) for maximum immersion :)
 ![gif-horse-mode](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/tractor2.gif)  
