@@ -1,4 +1,10 @@
 #Change Log:  
+####Change Log **v.1.3**:
++ **Add** Global option:
+  - You can use Tractor Mode everywhere, no longer limited in the farm.  
+  - Turn this mod on by setting globalTractor equal to 1 in config.json. It is 0 (disable) by default.  
++ **Add** ability to harvest fiber-weeds.  
+
 ####Change Log **v.1.2.4**:
 + **Fix** a bug when harvesting sunflower doesn't yield seeds.  
 + **Tweak** harvesting animal products now spawns little item-drops instead of adding them directly to inventory.  
