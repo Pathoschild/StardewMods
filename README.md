@@ -11,7 +11,7 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 ####Change Log **v.1.3**:
 + **Add** Global option:
   - You can use Tractor Mode everywhere, no longer limited in the farm.  
-  - Turn this mod on by setting globalTractor equal to 1 in config.json. It is 0 (disable) by default.  
+  - Enable this by setting globalTractor equal to 1 in config.json. It is 0 (disable) by default.  
 + **Add** ability to harvest fiber-weeds.  
 
 ####Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
