@@ -78,38 +78,7 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
     The buff will go away showing that the Mode is now off.
 
 
-###Customize:  
-1. Change needHorse to change mode.  
-0 is using normal mode. Default.  
-1 is using horse mode.  
-
-2. Change tractorKey to change hotkey.  
-Default is 0 (no hotkey) but you can change hotkey by changing the config.json file.  
-If you don't use horse mode then this hotkey is useless. You can ignore it in that case.  
-Check out KeyCode.txt file to find your desirable key code.   
-
-3. Change WTFMode to enable/disable pickaxe and axe.  
-0 is axe, pickaxe disable. Default.  
-1 is axe, pickaxe enable.  
-
-3. Change harvestMode to enable/disable harvest ability.  
-0 is disable harvest ability.  
-1 is enable harvest ability. Default.
-
-4. Change harvestRadius to change harvest area around player.  
-Harvest stuff in a square grid around player with edge being harvestRadius tiles away from player.  
-2 (5x5 grid around player) by Default.  
-
-4. Change minToolPower to lower the minimum tool upgrade require for the Mod to work.  
-0 = no upgrade required  
-1 = copper upgrade  
-2 = silver  
-3 = gold  
-4 = iridium, this is default
-
-5. mapWidth and mapHeight is used to estimate the maximum size of your farm.  
-Default is 170 for both because I don't think the farm map is bigger than 170 tiles in both directions.  
-If you have mod that change your farm to be bigger than default values then make sure to change these values accordingly (don't have to be exact, just bigger is fine).
+###Customize: [see here in Customize section.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)  
 
 ###Note:  
 + Be careful when tilling your soil because the hoe can destroy your small-medium sized fruit trees.  
