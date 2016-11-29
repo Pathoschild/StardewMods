@@ -8,6 +8,7 @@ using StardewValley;
 using StardewModdingAPI;
 using System.IO;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Graphics;
 using StardewValley.Tools;
 using StardewValley.Locations;
 using StardewValley.Objects;
@@ -28,6 +29,7 @@ namespace TractorMod
             public int minToolPower { get; set; } = 4; //iridium level
             public int mapWidth { get; set; } = 170;
             public int mapHeight { get; set; } = 170;
+            public int globalTractor { get; set; } = 0;
         }
 
         public static TractorConfig ModConfig { get; protected set; }
@@ -82,6 +84,9 @@ namespace TractorMod
             if (Game1.currentLocation.name.ToLower().Contains("coop"))
                 canRun = true;
             if (Game1.currentLocation.name.ToLower().Contains("barn"))
+                canRun = true;
+
+            if (ModConfig.globalTractor != 0)
                 canRun = true;
 
             if(canRun == false)
@@ -279,17 +284,14 @@ namespace TractorMod
                         continue;
                     }
 
-                    /*
                     if (anObject.name.ToLower().Contains("weed"))
                     {
-                        int slot = FindSlotForInputItemInFarmerInventory(Game1.player, anObject);
-                        if (slot == -1)
-                            continue;
-                        Game1.player.addItemToInventory(anObject, slot);
+                        Game1.createObjectDebris(771, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); //fiber
+                        if(new Random().Next(0,10) < 1) //10% mixed seeds
+                            Game1.createObjectDebris(770, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); //fiber
                         Game1.currentLocation.removeObject(tile, false);
                         continue;
                     }
-                    */
                 }
             }
 
