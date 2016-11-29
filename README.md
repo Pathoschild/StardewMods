@@ -7,34 +7,12 @@ This is a mod that allows players to quickly till dirt, sow seeds, fertilize soi
 
 It is default to only work with iridium tools equipped so that the mod doesnt ruin your early game but you can change that in the config file.
 
-###Latest Version: [1.2.4](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
-####Change Log v.1.2.4:
-+ **Fix** a bug when harvesting sunflower doesn't yield seeds.
-+ **Tweak** harvesting animal products now spawns little item-drops instead of adding them directly to inventory.
-
-####Change Log **v.1.2.3**:
-+ **Add** ability to harvest animal grass (you will receive hay stored in your silo)..
-+ **Fix** a bug that allows harvesting young non-regrowable crops.
-
-####Change Log **v.1.2.2**:
-+ **Fix** a bug that yields infinite harvest when harvesting non-regrowable crops.  
-
-####Change Log **v.1.2.1**:
-+ **Fix** a bug that sometimes causes crash when player runs out of fertilizer/seeds while fertilizing/planting.  
-
-####Change Log **v.1.2**:
-+ **Require** [SMAPI 1.1.1](https://github.com/ClxS/SMAPI/releases)
-+ **Add** Harvest Ability.
-  - You can harvest crops during Tractor Mode by holding **Scythe**.  
-  - You can harvest fruits from fruit trees during Tractor Mode by holding **Scythe**.  
-  - You can harvest dropped products (truffles, eggs, ...) during Tractor Mode by holding **Scythe**. 
-  - Check [**Demo**](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md) section for demonstation of this feature.  
-  - Check [**Customize**](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md) section for new config options of this ability.  
-+ Now work in **Greenhouse**.
-+ Now work in **Coops**.
-+ Now work in **Barns**.
-+ **Note:**
-  - If you use Horse Mode then you can use [Horse Whistle Mod](https://www.google.com/#q=Horse+Whistle+stardew+valley) to bring your horse into Greenhouse, Coops, or Barns.
+###Latest Version: [1.3](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+####Change Log **v.1.3**:
++ **Add** Global option:
+  - You can use Tractor Mode everywhere, no longer limited in the farm.  
+  - Turn this mod on by setting globalTractor equal to 1 in config.json. It is 0 (disable) by default.  
++ **Add** ability to harvest fiber-weeds.  
 
 ####Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 
