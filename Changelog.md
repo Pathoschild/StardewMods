@@ -1,4 +1,29 @@
 #Change Log:  
+####Change Log **v.2.0**:
++ **Remove** horseMode.
+  - needHorse in config.json is removed.
+  - Ability to toggle TractorMode on horse is removed.
++ **Add** Tractor:
+  - Now you have a brand spanking new **Tractor** seperated from your horse.
+  - Tractor will return to the spot right behind your selling box every norming.
+  - Riding the Tractor automatically turn on TractorMode.
+  - tractorKey in config.json now sets hotkey to summon Tractor to your location. Default to B.
+  - tractor sprite and animation by [Horse to Tractor mod by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/)
+  - You can change tractor sprite and animation by modding tractor.xnb in TractorXNB folder.
++ **Add** option to change mouse-activation hotkey (activating TractorMod while not on Tractor).
+  - holdActivate in config.json file.
+  - 0: no mouse hotkey (can't activate TractorMode while not on Tractor). Default.
+  - 1: hold left mouse button to activate.
+  - 2: hold right mouse button to activate (this is the old one).
+  - 3: hold mouse wheel down to activate.
++ **Change** TractorMod buff.
+  - TractorMod no longer provides +1 speed buff.
+  - TractorMod now gives -2 speed buff (for balance).
+  - You can change it by changing tractorSpeed in config.json because I'm a good person.
++ **Add** horse summon hotkey.
+  - horseKey in config.json now sets hotkey to summon your horse (if you have one) to your location.
+  - Default to None (deactivated).
+  
 ####Change Log **v.1.3**:
 + **Add** Global option:
   - You can use Tractor Mode everywhere, no longer limited in the farm.  
@@ -54,13 +79,21 @@
 
 #Customize:  
 ####Everything is in config.json file
-1. Change needHorse to change mode.  
-0 is using normal mode. Default.  
-1 is using horse mode.  
+1. Change holdActivate to change mouse-activation
+0 is disable mouse-activation. Default.  
+1 is holding left mouse button to activate TractorMode.  
+2 is holding right mouse button to activate TractorMode.  
+3 is holding mouse wheel down to activate TractorMode.  
 
-2. Change tractorKey to change hotkey.  
-Default is 0 (no hotkey) but you can change hotkey by changing the config.json file.  
-If you don't use horse mode then this hotkey is useless. You can ignore it in that case.  
+2. Change tractorKey to change summon Tractor key.  
+Default is B but you can change hotkey by changing the config.json file.  
+Check out KeyCode.txt file to find your desirable key code.   
+
+2. Change tractorSpeed to change speed buff of the Tractor buff.  
+Default is -2.  
+
+2. Change horseKey to change summon horse key.  
+Default is 0 (no key assigned) but you can change hotkey by changing the config.json file.  
 Check out KeyCode.txt file to find your desirable key code.   
 
 3. Change WTFMode to enable/disable pickaxe and axe.  
