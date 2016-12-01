@@ -13,16 +13,31 @@ using StardewValley.Tools;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
+using StardewValley.Characters;
 
 namespace TractorMod
 {
     public class TractorMod : Mod
     {
+        public class Tractor : Horse
+        {
+            public Tractor() : base() { }
+            public Tractor(int tileX, int tileY) : base(tileX, tileY)
+            {
+                this.sprite = new AnimatedSprite(Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\TractorXNB\\tractor"), 0, 32, 32);
+                this.sprite.textureUsesFlippedRightForLeft = true;
+                this.sprite.loop = true;
+            }
+        }
 
         public class TractorConfig
         {
-            public int needHorse { get; set; } = 0;
+            public int holdActivate { get; set; } = 0;
             public Keys tractorKey { get; set; } = Keys.B;
+            public int tractorSpeed { get; set; } = -2;
+
+            public Keys horseKey { get; set; } = Keys.None;
+
             public int WTFMode { get; set; } = 0;
             public int harvestMode { get; set; } = 1;
             public int harvestRadius { get; set; } = 2;
@@ -33,14 +48,30 @@ namespace TractorMod
         }
 
         public static TractorConfig ModConfig { get; protected set; }
+
+        static Tractor ATractor = null;
         public override void Entry(IModHelper helper)
         {
             ModConfig = Helper.ReadConfig<TractorConfig>();
 
-            if(ModConfig.needHorse == 0)
-                StardewModdingAPI.Events.GameEvents.EighthUpdateTick += UpdateTickEvent;
-            else
-                StardewModdingAPI.Events.GameEvents.UpdateTick += UpdateTickEvent;
+            //delete tractor when sleep so that it doesnt get save
+            StardewModdingAPI.Events.TimeEvents.OnNewDay += (p, e) =>
+            {
+                if (ATractor != null)
+                {
+                    foreach (NPC character in Game1.getFarm().characters)
+                    {
+                        if (character is Tractor)
+                        {
+                            Game1.getFarm().characters.Remove(character);
+                            break;
+                        }
+                    }
+                    ATractor = null;
+                }
+            };
+
+            StardewModdingAPI.Events.GameEvents.UpdateTick += UpdateTickEvent;
         }
 
         static void UpdateTickEvent(object sender, EventArgs e)
@@ -58,8 +89,10 @@ namespace TractorMod
 
         const int buffUniqueID = 58012397;
         static bool TractorOn = false;
+        /*
         static int toggleDelay = 30;
         static int toggleDelayCount = 0;
+        */
 
         static int mouseHoldDelay = 5;
         static int mouseHoldDelayCount = mouseHoldDelay;
@@ -70,6 +103,61 @@ namespace TractorMod
         {
             if (Game1.currentLocation == null)
                 return;
+
+            //spawn Tractor
+            if (Game1.currentLocation is Farm)
+            {
+                if(ATractor == null)
+                {
+                    Vector2 tile = new Vector2(70, 13);
+                    ATractor = new Tractor((int)tile.X, (int)tile.Y);
+                    ATractor.name = "Tractor";
+                    Game1.getFarm().characters.Add((NPC)ATractor);
+                    Game1.warpCharacter((NPC)ATractor, "Farm", tile, false, true);
+                }
+            }
+
+            //summon Tractor
+            if (currentKeyboardState.IsKeyDown(ModConfig.tractorKey))
+            {
+                foreach (NPC character in Game1.getFarm().characters)
+                {
+                    if (character is Tractor)
+                    {
+                        if (ATractor == null)
+                            ATractor = (Tractor)character;
+                    }
+                }
+
+                Vector2 tile = Game1.player.getTileLocation();
+                if (ATractor == null)
+                {
+                    ATractor = new Tractor((int)tile.X, (int)tile.Y);
+                    ATractor.name = "Tractor";
+                    Game1.getFarm().characters.Add((NPC)ATractor);
+                    Game1.warpCharacter((NPC)ATractor, Game1.currentLocation.name, tile, false, true);
+                }
+                else
+                {
+                    Game1.warpCharacter((NPC)ATractor, Game1.currentLocation.name, tile, false, true);
+                }
+            }
+
+            //summon Horse
+            if (currentKeyboardState.IsKeyDown(ModConfig.horseKey))
+            {
+                foreach (NPC character in Game1.getFarm().characters)
+                {
+                    if (character is Tractor)
+                    {
+                        continue;
+                    }
+                    if(character is Horse)
+                    {
+                        Game1.warpCharacter((NPC)character, Game1.currentLocation.name, Game1.player.getTileLocation(), false, true);
+                    }
+                }
+            }
 
             //if (Game1.currentLocation.isFarm == false || Game1.currentLocation.isOutdoors == false )
             bool canRun = false;
@@ -95,48 +183,59 @@ namespace TractorMod
                 return;
             }
 
-            if (tileSize == 0)
-                tileSize = (float)Game1.player.GetBoundingBox().Width;
-
-            if (ModConfig.needHorse == 0)
+            TractorOn = false;
+            switch (ModConfig.holdActivate)
             {
-                //if doesnt need horse then hold right click to activate
-                if (currentMouseState.RightButton == ButtonState.Pressed)
-                {
-                    if (mouseHoldDelayCount > 0)
+                default: break;
+                case 1:
+                    if (currentMouseState.LeftButton == ButtonState.Pressed)
                     {
-                        mouseHoldDelayCount -= 1;
-                    }
-                    if (mouseHoldDelayCount <= 0)
-                    {
-                        TractorOn = true;
-                        mouseHoldDelayCount = mouseHoldDelay;
-                    }
-                }
-                else
-                {
-                    TractorOn = false;
-                }
-            }
-            else
-            {
-                if (toggleDelayCount > 0)
-                    toggleDelayCount -= 1;
-                if (Game1.player.isRidingHorse())
-                {
-                    //or use keyboard to toggle on/off
-                    if (currentKeyboardState.IsKeyDown(ModConfig.tractorKey))
-                    {
-                        if (toggleDelayCount <= 0)
+                        if (mouseHoldDelayCount > 0)
                         {
-                            TractorOn = !TractorOn;
-                            toggleDelayCount = toggleDelay;
+                            mouseHoldDelayCount -= 1;
+                        }
+                        if (mouseHoldDelayCount <= 0)
+                        {
+                            TractorOn = true;
+                            mouseHoldDelayCount = mouseHoldDelay;
                         }
                     }
-                }
-                else
+                    break;
+                case 2:
+                    if (currentMouseState.RightButton == ButtonState.Pressed)
+                    {
+                        if (mouseHoldDelayCount > 0)
+                        {
+                            mouseHoldDelayCount -= 1;
+                        }
+                        if (mouseHoldDelayCount <= 0)
+                        {
+                            TractorOn = true;
+                            mouseHoldDelayCount = mouseHoldDelay;
+                        }
+                    }
+                    break;
+                case 3:
+                    if (currentMouseState.MiddleButton == ButtonState.Pressed)
+                    {
+                        if (mouseHoldDelayCount > 0)
+                        {
+                            mouseHoldDelayCount -= 1;
+                        }
+                        if (mouseHoldDelayCount <= 0)
+                        {
+                            TractorOn = true;
+                            mouseHoldDelayCount = mouseHoldDelay;
+                        }
+                    }
+                    break;
+            }
+            
+            if(ATractor != null)
+            {
+                if(ATractor.rider == Game1.player)
                 {
-                    TractorOn = false;
+                    TractorOn = true;
                 }
             }
 
@@ -150,10 +249,7 @@ namespace TractorMod
                 {
                     if (buff.millisecondsDuration <= 35)
                     {
-                        if (ModConfig.needHorse == 0)
-                            buff.millisecondsDuration = 1000;
-                        else
-                            buff.millisecondsDuration = 2000;
+                        buff.millisecondsDuration = 1000;
                     }
                     BuffAlready = true;
                     break;
@@ -162,12 +258,9 @@ namespace TractorMod
 
             if (BuffAlready == false)
             {
-                Buff TractorBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, "Tractor Power");
+                Buff TractorBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, ModConfig.tractorSpeed, 0, 0, 1, "Tractor Power");
                 TractorBuff.which = buffUniqueID;
-                if (ModConfig.needHorse == 0)
-                    TractorBuff.millisecondsDuration = 1000;
-                else
-                    TractorBuff.millisecondsDuration = 2000;
+                TractorBuff.millisecondsDuration = 1000;
                 Game1.buffsDisplay.addOtherBuff(TractorBuff);
                 BuffAlready = true;
             }
@@ -366,7 +459,7 @@ namespace TractorMod
             {
                 if (Game1.player.CurrentTool.GetType() == typeof(Hoe) || Game1.player.CurrentTool.GetType() == typeof(WateringCan))
                 {
-                    if (ModConfig.needHorse == 0)
+                    if (Game1.player.isRidingHorse() == false)
                         ToolAction();
                     else
                         HorseToolAction();
@@ -387,7 +480,7 @@ namespace TractorMod
                 }
                 else
                 {
-                    if (ModConfig.needHorse == 0)
+                    if (Game1.player.isRidingHorse() == false)
                         ToolAction();
                     else
                         HorseToolAction();
@@ -499,8 +592,7 @@ namespace TractorMod
                 }
             }
         }
-
-        public static float tileSize = 0;
+        
         //this will make a list of all the vector2 around origin with size radius (ex: size = 3 => 7x7 grid)
         static List<Vector2> MakeVector2GridForHorse(Vector2 origin, int size)
         {
@@ -524,9 +616,9 @@ namespace TractorMod
                     if (NoAdd)
                         continue;
 
-                    Vector2 newVec = new Vector2(origin.X - size * tileSize, origin.Y - size * tileSize);
-                    newVec.X += (float)i * tileSize;
-                    newVec.Y += (float)j * tileSize;
+                    Vector2 newVec = new Vector2(origin.X - size * Game1.tileSize, origin.Y - size * Game1.tileSize);
+                    newVec.X += (float)i * Game1.tileSize;
+                    newVec.Y += (float)j * Game1.tileSize;
                     grid.Add(newVec);
                 }
             }
@@ -538,10 +630,10 @@ namespace TractorMod
                 int numberOfTileBehindPlayer = 1;
                 switch (Game1.player.movementDirections[0])
                 {
-                    case 0: temp.Y += (numberOfTileBehindPlayer + 2) * tileSize; break; //go up
-                    case 1: temp.X -= numberOfTileBehindPlayer * tileSize; break; //right
-                    case 2: temp.Y -= (numberOfTileBehindPlayer) * tileSize; break; //down
-                    case 3: temp.X += (numberOfTileBehindPlayer + 2) * tileSize; break; //left
+                    case 0: temp.Y += (numberOfTileBehindPlayer + 2) * Game1.tileSize; break; //go up
+                    case 1: temp.X -= numberOfTileBehindPlayer * Game1.tileSize; break; //right
+                    case 2: temp.Y -= (numberOfTileBehindPlayer) * Game1.tileSize; break; //down
+                    case 3: temp.X += (numberOfTileBehindPlayer + 2) * Game1.tileSize; break; //left
                 }
                 grid[i] = temp;
             }
@@ -556,11 +648,11 @@ namespace TractorMod
             {
                 for (int j = 0; j < 2 * size + 1; j++)
                 {
-                    Vector2 newVec = new Vector2(origin.X - size*tileSize,
-                                                origin.Y - size*tileSize);
+                    Vector2 newVec = new Vector2(origin.X - size* Game1.tileSize,
+                                                origin.Y - size* Game1.tileSize);
 
-                    newVec.X += (float) i*tileSize; 
-                    newVec.Y += (float) j*tileSize;
+                    newVec.X += (float) i* Game1.tileSize; 
+                    newVec.Y += (float) j* Game1.tileSize;
 
                     grid.Add(newVec);
                 }

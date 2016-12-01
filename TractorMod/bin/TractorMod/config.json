@@ -1,10 +1,13 @@
 {
-  "needHorse": 0,
+  "holdActivate": 0,
   "tractorKey": 66,
+  "tractorSpeed": -2,
+  "horseKey": 0,
   "WTFMode": 0,
   "harvestMode": 1,
   "harvestRadius": 2,
   "minToolPower": 4,
   "mapWidth": 170,
-  "mapHeight": 170
+  "mapHeight": 170,
+  "globalTractor": 0
 }
