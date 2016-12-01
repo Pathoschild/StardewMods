@@ -39,7 +39,7 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 ####BOTH TRACTOR AND HORSE!!!!!!!!
 ![image](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/realtractor.png)
 
-####Tractor [Horse to Tractor mod by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/) for maximum immersion :)
+####Tractor [(thank Horse to Tractor mod by Pewtershmitz for sprite)](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/)
 ![gif-horse-mode](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/tractor2.gif)  
 
 ####Till Dirt  
