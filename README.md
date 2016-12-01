@@ -7,13 +7,32 @@ This is a mod that allows players to quickly till dirt, sow seeds, fertilize soi
 
 It is default to only work with iridium tools equipped so that the mod doesnt ruin your early game but you can change that in the config file.
 
-###Latest Version: [1.3](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
-####Change Log **v.1.3**:
-+ **Add** Global option:
-  - You can use Tractor Mode everywhere, no longer limited in the farm.  
-  - Enable this by setting globalTractor equal to 1 in config.json. It is 0 (disable) by default.  
-+ **Add** ability to harvest fiber-weeds.  
-
+###Latest Version: [v.2.0](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+####Change Log **v.2.0**:
++ **Remove** horseMode.
+  - needHorse in config.json is removed.
+  - Ability to toggle TractorMode on horse is removed.
++ **Add** Tractor:
+  - Now you have a brand spanking new **Tractor** seperated from your horse.
+  - Tractor will return to the spot right behind your selling box every norming.
+  - Riding the Tractor automatically turn on TractorMode.
+  - tractorKey in config.json now sets hotkey to summon Tractor to your location. Default to B.
+  - tractor sprite and animation by [Horse to Tractor mod by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/)
+  - You can change tractor sprite and animation by modding tractor.xnb in TractorXNB folder.
++ **Add** option to change mouse-activation hotkey (activating TractorMod while not on Tractor).
+  - holdActivate in config.json file.
+  - 0: no mouse hotkey (can't activate TractorMode while not on Tractor). Default.
+  - 1: hold left mouse button to activate.
+  - 2: hold right mouse button to activate (this is the old one).
+  - 3: hold mouse wheel down to activate.
++ **Change** TractorMod buff.
+  - TractorMod no longer provides +1 speed buff.
+  - TractorMod now gives -2 speed buff (for balance).
+  - You can change it by changing tractorSpeed in config.json because I'm a good person.
++ **Add** horse summon hotkey.
+  - horseKey in config.json now sets hotkey to summon your horse (if you have one) to your location.
+  - Default to None (deactivated).
+  
 ####Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 
 ###Demo:  
@@ -55,26 +74,24 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 ###Download [here](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
 
 ###How To Use:
-+ Normal Mode:  
++ Normal: 
+  1. The Tractor will be behind selling box every morning.
+  2. Get on the Tractor.
+  3. Hold your hoe if you want to till dirt  
+    Hold water can if you want to water crop  
+    Hold seed bag(s) to sow seeds  
+    Hold fertilizer to fertilize tilled soil
+    Hold scythe to harvest
+  4. When done get off the Tractor to turn Tractor Mode off.
++ Mouse-Activating Mode:  
     1. Get to your farm (this mod can only be activated on farmland, not in town, not even in greenhouse)
-    2. Turn on Tractor Mode by holding down right click.  
-    You will receive a +1 speed buff showing that the Tractor Mode is now on.
+    2. Turn on Tractor Mode by holding down appropriate mouse button (set by holdActivate in config.json). 
+    You will receive a speed buff showing that the Tractor Mode is now on.
     3. Hold your hoe if you want to till dirt  
     Hold water can if you want to water crop  
     Hold seed bag(s) to sow seeds  
     Hold fertilizer to fertilize tilled soil
     4. After you are done with your farmwork, simply release right click to turn it off.  
-    The buff will go away showing that the Mode is now off.
-+ Horse Mode:  
-    1. Get to your farm (this mod can only be activated on farmland, not in town, not even in greenhouse)
-    2. Get on your horse.  
-    3. Turn on Tractor Mode by click toggle hotkey.  
-    You will receive a +1 speed buff showing that the Tractor Mode is now on.
-    3. Hold your hoe if you want to till dirt  
-    Hold water can if you want to water crop  
-    Hold seed bag(s) to sow seeds  
-    Hold fertilizer to fertilize tilled soil
-    4. After you are done with your farmwork, simply click toggle hotkey again to turn it off.  
     The buff will go away showing that the Mode is now off.
 
 
@@ -86,7 +103,6 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 + Water can doesn't need to be refilled but needs to have some water in it to work.  
 + You can fertilize your crop AFTER sowing seeds with Tractor Mode.  
 + Be extra careful with WTFMode haha
-+ If you use Horse Mode then you can use [Horse Whistle Mod](https://www.google.com/#q=Horse+Whistle+stardew+valley) to bring your horse into Greenhouse, Coops, or Barns.
 + **Have fun farming! :)**
 
 Contact me @ [buiphuonglamvn@gmail.com](mailto:buiphuonglamvn@gmail.com) regarding whatever.
