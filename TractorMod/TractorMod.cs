@@ -30,29 +30,46 @@ namespace TractorMod
             }
         }
 
+        public class ToolConfig
+        {
+            public string name { get; set; } = "";
+            public int minLevel { get; set; } = -1;
+            public int effectRadius { get; set; } = -1;
+
+            public ToolConfig(string nameInput, int minLevelInput = -1, int radiusInput = -1)
+            {
+                name = nameInput;
+                minLevel = minLevelInput;
+                effectRadius = radiusInput;
+            }
+        }
+
         public class TractorConfig
         {
+            public string info1 = "Add tool with exact name you would like to use with Tractor Mode.";
+            public string info2 = "Also custom minLevel and effective radius for each tool.";
+            public string info3 = "Ingame tools included: Pickaxe, Axe, Hoe, Watering Can.";
+            public string info4 = "I haven't tried tools like Shears or Milk Pail but you can :)";
+            public string info5 = "Delete Scythe entry if you don't want to harvest stuff.";
+            public ToolConfig[] tool { get; set; } = {
+                                                        new ToolConfig("Scythe", 0, 2),
+                                                        new ToolConfig("Hoe", 4, 1),
+                                                        new ToolConfig("Watering Can", 4, 1)
+                                                     };
+
             public int holdActivate { get; set; } = 0;
             public Keys tractorKey { get; set; } = Keys.B;
             public int tractorSpeed { get; set; } = -2;
-
             public Keys horseKey { get; set; } = Keys.None;
-
-            public int WTFMode { get; set; } = 0;
-            public int harvestMode { get; set; } = 1;
-            public int harvestRadius { get; set; } = 2;
-            public int minToolPower { get; set; } = 4; //iridium level
-            public int mapWidth { get; set; } = 170;
-            public int mapHeight { get; set; } = 170;
             public int globalTractor { get; set; } = 0;
         }
-
+        
         public static TractorConfig ModConfig { get; protected set; }
-
         static Tractor ATractor = null;
+        static bool IsNewDay = false;
         public override void Entry(IModHelper helper)
         {
-            ModConfig = Helper.ReadConfig<TractorConfig>();
+            ModConfig = helper.ReadConfig<TractorConfig>();
 
             //delete tractor when sleep so that it doesnt get save
             StardewModdingAPI.Events.TimeEvents.OnNewDay += (p, e) =>
@@ -69,6 +86,7 @@ namespace TractorMod
                     }
                     ATractor = null;
                 }
+                IsNewDay = true;
             };
 
             StardewModdingAPI.Events.GameEvents.UpdateTick += UpdateTickEvent;
@@ -96,24 +114,47 @@ namespace TractorMod
 
         static int mouseHoldDelay = 5;
         static int mouseHoldDelayCount = mouseHoldDelay;
+        static int playerOrientation = -1;
 
         static Farm ourFarm = null;
+        static void SpawnTractor()
+        {
+            //remove tractor if there is one already
+            foreach (NPC character in Game1.getFarm().characters)
+            {
+                if (character is Tractor)
+                {
+                    Game1.getFarm().characters.Remove(character);
+                    break;
+                }
+            }
 
+            //spawn tractor
+            Vector2 tile = new Vector2(70, 13);
+            ATractor = new Tractor((int)tile.X, (int)tile.Y);
+            ATractor.name = "Tractor";
+            Game1.getFarm().characters.Add((NPC)ATractor);
+            Game1.warpCharacter((NPC)ATractor, "Farm", tile, false, true);
+        }
         static void DoAction(KeyboardState currentKeyboardState, MouseState currentMouseState)
         {
             if (Game1.currentLocation == null)
                 return;
 
-            //spawn Tractor
+            //get playerOrientation
+            if(Game1.player.isMoving())
+                playerOrientation = Game1.player.movementDirections[0];
+
+            if (ourFarm == null)
+                ourFarm = Game1.getFarm();
+
+            //spawn Tractor on newday
             if (Game1.currentLocation is Farm)
             {
-                if(ATractor == null)
+                if(IsNewDay == true)
                 {
-                    Vector2 tile = new Vector2(70, 13);
-                    ATractor = new Tractor((int)tile.X, (int)tile.Y);
-                    ATractor.name = "Tractor";
-                    Game1.getFarm().characters.Add((NPC)ATractor);
-                    Game1.warpCharacter((NPC)ATractor, "Farm", tile, false, true);
+                    SpawnTractor();
+                    IsNewDay = false;
                 }
             }
 
@@ -132,15 +173,9 @@ namespace TractorMod
                 Vector2 tile = Game1.player.getTileLocation();
                 if (ATractor == null)
                 {
-                    ATractor = new Tractor((int)tile.X, (int)tile.Y);
-                    ATractor.name = "Tractor";
-                    Game1.getFarm().characters.Add((NPC)ATractor);
-                    Game1.warpCharacter((NPC)ATractor, Game1.currentLocation.name, tile, false, true);
+                    SpawnTractor();
                 }
-                else
-                {
-                    Game1.warpCharacter((NPC)ATractor, Game1.currentLocation.name, tile, false, true);
-                }
+                Game1.warpCharacter((NPC)ATractor, Game1.currentLocation.name, tile, false, true);
             }
 
             //summon Horse
@@ -158,31 +193,12 @@ namespace TractorMod
                     }
                 }
             }
-
-            //if (Game1.currentLocation.isFarm == false || Game1.currentLocation.isOutdoors == false )
-            bool canRun = false;
-            if (Game1.currentLocation.GetType() == typeof(Farm))
-            {
-                if (ourFarm == null)
-                    ourFarm = (Farm)Game1.currentLocation;
-                canRun = true;
-            }
-            if (Game1.currentLocation.name.ToLower().Contains("greenhouse"))
-                canRun = true;
-            if (Game1.currentLocation.name.ToLower().Contains("coop"))
-                canRun = true;
-            if (Game1.currentLocation.name.ToLower().Contains("barn"))
-                canRun = true;
-
-            if (ModConfig.globalTractor != 0)
-                canRun = true;
-
-            if(canRun == false)
-            {
-                TractorOn = false;
+            
+            //check if mod can run at current location
+            if (CanModRunAtCurrentLocation() == false)
                 return;
-            }
 
+            //if mod can run
             TractorOn = false;
             switch (ModConfig.holdActivate)
             {
@@ -238,11 +254,16 @@ namespace TractorMod
                     TractorOn = true;
                 }
             }
+            else //this should be unreachable code
+            {
+                SpawnTractor();
+            }
 
             bool BuffAlready = false;
             if (TractorOn == false)
                 return;
 
+            //find if tractor buff already applied
             foreach (Buff buff in Game1.buffsDisplay.otherBuffs)
             {
                 if (buff.which == buffUniqueID)
@@ -256,6 +277,7 @@ namespace TractorMod
                 }
             }
 
+            //create new buff if its not already applied
             if (BuffAlready == false)
             {
                 Buff TractorBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, ModConfig.tractorSpeed, 0, 0, 1, "Tractor Power");
@@ -264,14 +286,36 @@ namespace TractorMod
                 Game1.buffsDisplay.addOtherBuff(TractorBuff);
                 BuffAlready = true;
             }
-
+            
             if (Game1.player.CurrentTool == null)
                 ItemAction();
             else
-            {
                 RunToolAction();
-            }
-                
+        }
+
+        static bool CanModRunAtCurrentLocation()
+        {
+            if (ModConfig.globalTractor != 0)
+                return true;
+            
+            if (Game1.currentLocation.GetType() == typeof(Farm))
+                return true;
+            if (Game1.currentLocation.name.ToLower().Contains("greenhouse"))
+                return true;
+            if (Game1.currentLocation.name.ToLower().Contains("coop"))
+                return true;
+            if (Game1.currentLocation.name.ToLower().Contains("barn"))
+                return true;
+
+            return false;
+        }
+
+        public static void RunToolAction()
+        {
+            if (Game1.player.CurrentTool is MeleeWeapon && Game1.player.CurrentTool.name.ToLower().Contains("scythe"))
+                HarvestAction();
+            else
+                ToolAction();
         }
 
         public static void ItemAction()
@@ -281,12 +325,7 @@ namespace TractorMod
 
             if (Game1.player.CurrentItem.getCategoryName().ToLower() == "seed" || Game1.player.CurrentItem.getCategoryName().ToLower() == "fertilizer")
             {
-                Vector2 origin = new Vector2((float)Game1.player.GetBoundingBox().Center.X, (float)Game1.player.GetBoundingBox().Center.Y);
-                Point tileOrigin = Utility.Vector2ToPoint(origin);
-                Vector2 playerTile = GetTileOccupiedByFarmer(Game1.player);
-                if (playerTile.X == -1)
-                    return;
-                List<Vector2> affectedTileGrid = MakeVector2TileGrid(playerTile, 1);
+                List<Vector2> affectedTileGrid = MakeVector2TileGrid(Game1.player.getTileLocation(), 1);
 
                 foreach (Vector2 tile in affectedTileGrid)
                 {
@@ -331,16 +370,20 @@ namespace TractorMod
 
         public static void HarvestAction()
         {
-            if (ModConfig.harvestMode == 0)
+            //check if tool is enable from config
+            ToolConfig ConfigForCurrentTool = new ToolConfig("");
+            foreach (ToolConfig TC in ModConfig.tool)
+            {
+                if (Game1.player.CurrentTool.name.Contains("Scythe"))
+                {
+                    ConfigForCurrentTool = TC;
+                    break;
+                }
+            }
+            if (ConfigForCurrentTool.name == "")
                 return;
-
-            Vector2 origin = new Vector2((float)Game1.player.GetBoundingBox().Center.X, (float)Game1.player.GetBoundingBox().Center.Y);
-            Point tileOrigin = Utility.Vector2ToPoint(origin);
-            Vector2 playerTile = GetTileOccupiedByFarmer(Game1.player);
-            if (playerTile.X == -1)
-                return;
-
-            List<Vector2> affectedTileGrid = MakeVector2TileGrid(playerTile, ModConfig.harvestRadius);
+            int effectRadius = ConfigForCurrentTool.effectRadius;
+            List<Vector2> affectedTileGrid = MakeVector2TileGrid(Game1.player.getTileLocation(), effectRadius);
             foreach (Vector2 tile in affectedTileGrid)
             {
                 StardewValley.Object anObject;
@@ -398,8 +441,7 @@ namespace TractorMod
                         HoeDirt hoedirtTile = (HoeDirt)Game1.currentLocation.terrainFeatures[tile];
                         if (hoedirtTile.crop == null)
                             continue;
-
-                        Log.Debug(hoedirtTile.crop.indexOfHarvest);
+                        
                         if (hoedirtTile.crop.harvest((int)tile.X, (int)tile.Y, hoedirtTile))
                         {
                             if (hoedirtTile.crop.indexOfHarvest == 421) //sun flower
@@ -453,106 +495,57 @@ namespace TractorMod
 
         }
 
-        public static void RunToolAction()
-        {
-            if (ModConfig.WTFMode == 0)
-            {
-                if (Game1.player.CurrentTool.GetType() == typeof(Hoe) || Game1.player.CurrentTool.GetType() == typeof(WateringCan))
-                {
-                    if (Game1.player.isRidingHorse() == false)
-                        ToolAction();
-                    else
-                        HorseToolAction();
-                }
-                else
-                {
-                    if (Game1.player.CurrentTool.GetType() == typeof(MeleeWeapon) && Game1.player.CurrentTool.name.ToLower().Contains("scythe"))
-                    {
-                        HarvestAction();
-                    }
-                }
-            }
-            else
-            {
-                if (Game1.player.CurrentTool.GetType() == typeof(MeleeWeapon) && Game1.player.CurrentTool.name.ToLower().Contains("scythe"))
-                {
-                    HarvestAction();
-                }
-                else
-                {
-                    if (Game1.player.isRidingHorse() == false)
-                        ToolAction();
-                    else
-                        HorseToolAction();
-                }
-            }
-        }
-
         public static void ToolAction()
         {
-            Vector2 playerTile = new Vector2(0, 0);
-            bool foundplayerTile = false;
-            for (int i = 0; i < ModConfig.mapWidth; i++)
-            {
-                for (int j = 0; j < ModConfig.mapHeight; j++)
-                {
-                    Vector2 mapTile = new Vector2((int)i, (int)j);
-                    if (Game1.player == Game1.currentLocation.isTileOccupiedByFarmer(mapTile))
-                    {
-                        playerTile = mapTile;
-                        foundplayerTile = true;
-                        break;
-                    }
-                }
-                if (foundplayerTile)
-                    break;
-            }
-            if (foundplayerTile == false)
-                return;
-            List<Vector2> tileGrid = new List<Vector2>();
-            for (int i = 0; i < 2 * 1 + 1; i++)
-            {
-                for (int j = 0; j < 2 * 1 + 1; j++)
-                {
-                    Vector2 newVec = new Vector2(playerTile.X - 1, playerTile.Y - 1);
-
-                    newVec.X += (float)i;
-                    newVec.Y += (float)j;
-
-                    tileGrid.Add(newVec);
-                }
-            }
-
             Tool currentTool = Game1.player.CurrentTool;
-            if (currentTool.upgradeLevel < ModConfig.minToolPower)
+
+            //check if tool is enable from config
+            ToolConfig ConfigForCurrentTool = new ToolConfig("");
+            foreach(ToolConfig TC in ModConfig.tool)
+            {
+                if(currentTool.name.Contains(TC.name))
+                {
+                    ConfigForCurrentTool = TC;
+                    break;
+                }
+            }
+            
+            if (ConfigForCurrentTool.name == "")
                 return;
+            else
+                if (currentTool.upgradeLevel < ConfigForCurrentTool.minLevel)
+                    return;
+
+            int effectRadius = ConfigForCurrentTool.effectRadius;
             int currentWater = 0;
-            if (currentTool.GetType() == typeof(WateringCan))
+            if (currentTool is WateringCan)
             {
                 WateringCan currentWaterCan = (WateringCan)currentTool;
                 currentWater = currentWaterCan.WaterLeft;
             }
             float currentStamina = Game1.player.stamina;
             Vector2 origin = new Vector2((float)Game1.player.GetBoundingBox().Center.X, (float)Game1.player.GetBoundingBox().Center.Y);
-            List<Vector2> affectedTileGrid = MakeVector2Grid(origin, 1);
-            int index = 0;
-            foreach (Vector2 tile in affectedTileGrid)
+            List<Vector2> affectedTileGrid = MakeVector2TileGrid(Game1.player.getTileLocation(), effectRadius);
+
+            //if player on horse
+            Vector2 currentMountPosition = new Vector2();
+            if (Game1.player.isRidingHorse())
             {
-                if(ModConfig.WTFMode == 0) //if WTFMode == 1 then it bypass all safety TerrainFeature check
-                {
-                    TerrainFeature terrainTile;
-                    if (Game1.currentLocation.terrainFeatures.TryGetValue(tileGrid[index], out terrainTile))
-                    {
-                        index++;
-                        if (Game1.player.CurrentTool.GetType() == typeof(WateringCan))
-                            Game1.player.CurrentTool.DoFunction(Game1.currentLocation, (int)Math.Round(tile.X, MidpointRounding.AwayFromZero), (int)Math.Round(tile.Y, MidpointRounding.AwayFromZero), 1, Game1.player);
-                        continue;
-                    }
-                }
-                index++;
-                Game1.player.CurrentTool.DoFunction(Game1.currentLocation, (int)Math.Round(tile.X, MidpointRounding.AwayFromZero), (int)Math.Round(tile.Y, MidpointRounding.AwayFromZero), 1, Game1.player);
+                currentMountPosition = Game1.player.getMount().position;
+                Game1.player.getMount().position = new Vector2(0, 0);
             }
 
+            //tool use
+            foreach (Vector2 tile in affectedTileGrid)
+            {
+                Game1.player.CurrentTool.DoFunction(Game1.currentLocation, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), 1, Game1.player);
+            }
+
+            //after tool use
+            if (Game1.player.isRidingHorse())
+            {
+                Game1.player.getMount().position = currentMountPosition;
+            }
             Game1.player.stamina = currentStamina;
 
             if (currentTool.GetType() == typeof(WateringCan))
@@ -562,37 +555,6 @@ namespace TractorMod
             }
         }
 
-        public static void HorseToolAction()
-        {
-            if (Game1.player.CurrentTool.GetType() == typeof(Hoe) || Game1.player.CurrentTool.GetType() == typeof(WateringCan))
-            {
-                Tool currentTool = Game1.player.CurrentTool;
-                if (currentTool.upgradeLevel < ModConfig.minToolPower)
-                    return;
-                int currentWater = 0;
-                if (currentTool.GetType() == typeof(WateringCan))
-                {
-                    WateringCan currentWaterCan = (WateringCan)currentTool;
-                    currentWater = currentWaterCan.WaterLeft;
-                }
-                float currentStamina = Game1.player.stamina;
-                Vector2 origin = new Vector2((float)Game1.player.GetBoundingBox().Center.X, (float)Game1.player.GetBoundingBox().Center.Y);
-                List<Vector2> affectedTileGrid = MakeVector2GridForHorse(origin, 1);
-
-                foreach (Vector2 tile in affectedTileGrid)
-                {
-                    Game1.player.CurrentTool.DoFunction(Game1.currentLocation, (int)Math.Round(tile.X, MidpointRounding.AwayFromZero), (int)Math.Round(tile.Y, MidpointRounding.AwayFromZero), 1, Game1.player);
-                }
-
-                Game1.player.stamina = currentStamina;
-                if (currentTool.GetType() == typeof(WateringCan))
-                {
-                    WateringCan currentWaterCan = (WateringCan)currentTool;
-                    currentWaterCan.WaterLeft = currentWater;
-                }
-            }
-        }
-        
         //this will make a list of all the vector2 around origin with size radius (ex: size = 3 => 7x7 grid)
         static List<Vector2> MakeVector2GridForHorse(Vector2 origin, int size)
         {
@@ -622,7 +584,7 @@ namespace TractorMod
                     grid.Add(newVec);
                 }
             }
-            
+
             //adjust depending on facing
             for (int i = 0; i < grid.Count; i++)
             {
@@ -660,6 +622,53 @@ namespace TractorMod
             return grid;
         }
 
+        static List<Vector2> MakeVector2TileGridForHorse(Vector2 origin, int size)
+        {
+            List<Vector2> grid = new List<Vector2>();
+            if (Game1.player.isMoving() == false)
+                return new List<Vector2>();
+            
+            for (int i = 0; i < 2 * size + 1; i++)
+            {
+                for (int j = 0; j < 2 * size + 1; j++)
+                {
+                    bool NoAdd = false;
+                    switch (playerOrientation)
+                    {
+                        default: break;
+                        case 0: if (j != 0) NoAdd = true; break;
+                        case 2: if (j != 0) NoAdd = true; break;
+                        case 1: if (i != 0) NoAdd = true; break;
+                        case 3: if (i != 0) NoAdd = true; break;
+                    }
+                    if (NoAdd)
+                        continue;
+
+                    Vector2 newVec = new Vector2(origin.X - size, origin.Y - size);
+                    newVec.X += (float)i;
+                    newVec.Y += (float)j;
+                    grid.Add(newVec);
+                }
+            }
+
+            //adjust depending on facing
+            for (int i = 0; i < grid.Count; i++)
+            {
+                Vector2 temp = grid[i];
+                int numberOfTileBehindPlayer = 1;
+                switch (playerOrientation)
+                {
+                    default: break;
+                    case 0: temp.Y += (numberOfTileBehindPlayer + 2); break; //go up
+                    case 1: temp.X -= numberOfTileBehindPlayer; break; //right
+                    case 2: temp.Y -= (numberOfTileBehindPlayer); break; //down
+                    case 3: temp.X += (numberOfTileBehindPlayer + 2); break; //left
+                }
+                grid[i] = temp;
+            }
+            return grid;
+        }
+
         static List<Vector2> MakeVector2TileGrid(Vector2 origin, int size)
         {
             List<Vector2> grid = new List<Vector2>();
@@ -678,21 +687,6 @@ namespace TractorMod
             }
 
             return grid;
-        }
-
-        static Vector2 GetTileOccupiedByFarmer(Farmer input)
-        {
-            for(int i = 0; i <= ModConfig.mapWidth; i++)
-            {
-                for(int j = 0; j <= ModConfig.mapHeight; j++)
-                {
-                    if(input == Game1.currentLocation.isTileOccupiedByFarmer(new Vector2(i, j)))
-                    {
-                        return new Vector2(i, j);
-                    }
-                }
-            }
-            return new Vector2(-1, -1);
         }
 
         static int FindEmptySlotInFarmerInventory(Farmer input)
