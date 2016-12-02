@@ -7,7 +7,16 @@ This is a mod that allows players to quickly till dirt, sow seeds, fertilize soi
 
 It is default to only work with iridium tools equipped so that the mod doesnt ruin your early game but you can change that in the config file.
 
-###Latest Version: [v.2.0](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+###Latest Version: [v.2.1](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+####Change Log **v.2.1**:
++ **Change** config.json:
+  - Remove WTFMode
+  - Remove harvestMode, harvestRadius  
+  - Remove minToolPower
+  - Remove mapWidth, mapHeight. You no longer have to worry about your map size
+  - Add **tool** list and **info** regarding how to use it (do not delete info).
++ **Improve** algorithm, improve performance.
+
 ####Change Log **v.2.0**:
 + **Remove** horseMode.
   - needHorse in config.json is removed.
