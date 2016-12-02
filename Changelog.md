@@ -1,4 +1,13 @@
 #Change Log:  
+####Change Log **v.2.1**:
++ **Change** config.json:
+  - Remove WTFMode
+  - Remove harvestMode, harvestRadius  
+  - Remove minToolPower
+  - Remove mapWidth, mapHeight. You no longer have to worry about your map size
+  - Add **tool** list and **info** regarding how to use it (do not delete info).
++ **Improve** algorithm, improve performance.
+
 ####Change Log **v.2.0**:
 + **Remove** horseMode.
   - needHorse in config.json is removed.
@@ -79,6 +88,16 @@
 
 #Customize:  
 ####Everything is in config.json file
+1. Tool (explaint by info in config.json):  
+To add a tool, add a block of code at the end of the last block of code that look like this (separate these blocks with comma)  
+```
+{
+  "name": "Tool Name Here",
+  "minLevel": numerical value,
+  "effectRadius": another numberical value
+}
+```
+
 1. Change holdActivate to change mouse-activation
 0 is disable mouse-activation. Default.  
 1 is holding left mouse button to activate TractorMode.  
@@ -89,37 +108,14 @@
 Default is B but you can change hotkey by changing the config.json file.  
 Check out KeyCode.txt file to find your desirable key code.   
 
-2. Change tractorSpeed to change speed buff of the Tractor buff.  
+3. Change tractorSpeed to change speed buff of the Tractor buff.  
 Default is -2.  
 
-2. Change horseKey to change summon horse key.  
+4. Change horseKey to change summon horse key.  
 Default is 0 (no key assigned) but you can change hotkey by changing the config.json file.  
 Check out KeyCode.txt file to find your desirable key code.   
 
-3. Change WTFMode to enable/disable pickaxe and axe.  
-0 is axe, pickaxe disable. Default.
-1 is axe, pickaxe enable.  
-
-3. Change harvestMode to enable/disable harvest ability.  
-0 is disable harvest ability.  
-1 is enable harvest ability. Default.
-
-4. Change harvestRadius to change harvest area around player.  
-Harvest stuff in a square grid around player with edge being harvestRadius tiles away from player.  
-2 (5x5 grid around player) by Default.  
-
-4. Change minToolPower to lower the minimum tool upgrade require for the Mod to work.  
-0 = no upgrade required  
-1 = copper upgrade  
-2 = silver  
-3 = gold  
-4 = iridium, this is default
-
-5. mapWidth and mapHeight is used to estimate the maximum size of your farm.  
-Default is 170 for both because I don't think the farm map is bigger than 170 tiles in both directions.  
-If you have mod that change your farm to be bigger than default values then make sure to change these values accordingly (don't have to be exact, just bigger is fine).
-
-6. globalTractor is use to limit areas the mod can function.  
+5. globalTractor is use to limit areas the mod can function.  
 0 = can only use Tractor Mode within your farm land (and areas within it like barns, coops, greenhouse), this is default.  
 1 = can use Tractor Mode everywhere you want.  
 
