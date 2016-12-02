@@ -7,7 +7,11 @@ This is a mod that allows players to quickly till dirt, sow seeds, fertilize soi
 
 It is default to only work with iridium tools equipped so that the mod doesnt ruin your early game but you can change that in the config file.
 
-###Latest Version: [v.2.1](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+###Latest Version: [v.2.1.1](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+####Change Log **v.2.1.1**:
++ **Fix** a bug that prevents game from saving when sleeping if player left Tractor outside Farm.
++ **Fix** a bug that prevents player from summon horse if horse is outside Farm.
+
 ####Change Log **v.2.1**:
 + **Change** config.json:
   - Remove WTFMode
