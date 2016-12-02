@@ -19,6 +19,7 @@ namespace TractorMod
 {
     public class TractorMod : Mod
     {
+        static Vector2 tractorSpawnLocation = new Vector2(70, 13);
         public class Tractor : Horse
         {
             public Tractor() : base() { }
@@ -76,6 +77,7 @@ namespace TractorMod
             {
                 if (ATractor != null)
                 {
+                    Game1.warpCharacter((NPC)ATractor, "Farm", tractorSpawnLocation, false, true);
                     foreach (NPC character in Game1.getFarm().characters)
                     {
                         if (character is Tractor)
@@ -130,11 +132,10 @@ namespace TractorMod
             }
 
             //spawn tractor
-            Vector2 tile = new Vector2(70, 13);
-            ATractor = new Tractor((int)tile.X, (int)tile.Y);
+            ATractor = new Tractor((int)tractorSpawnLocation.X, (int)tractorSpawnLocation.Y);
             ATractor.name = "Tractor";
             Game1.getFarm().characters.Add((NPC)ATractor);
-            Game1.warpCharacter((NPC)ATractor, "Farm", tile, false, true);
+            Game1.warpCharacter((NPC)ATractor, "Farm", tractorSpawnLocation, false, true);
         }
         static void DoAction(KeyboardState currentKeyboardState, MouseState currentMouseState)
         {
@@ -161,35 +162,27 @@ namespace TractorMod
             //summon Tractor
             if (currentKeyboardState.IsKeyDown(ModConfig.tractorKey))
             {
-                foreach (NPC character in Game1.getFarm().characters)
-                {
-                    if (character is Tractor)
-                    {
-                        if (ATractor == null)
-                            ATractor = (Tractor)character;
-                    }
-                }
-
                 Vector2 tile = Game1.player.getTileLocation();
                 if (ATractor == null)
-                {
                     SpawnTractor();
-                }
                 Game1.warpCharacter((NPC)ATractor, Game1.currentLocation.name, tile, false, true);
             }
 
             //summon Horse
             if (currentKeyboardState.IsKeyDown(ModConfig.horseKey))
             {
-                foreach (NPC character in Game1.getFarm().characters)
+                foreach(GameLocation GL in Game1.locations)
                 {
-                    if (character is Tractor)
+                    foreach (NPC character in GL.characters)
                     {
-                        continue;
-                    }
-                    if(character is Horse)
-                    {
-                        Game1.warpCharacter((NPC)character, Game1.currentLocation.name, Game1.player.getTileLocation(), false, true);
+                        if (character is Tractor)
+                        {
+                            continue;
+                        }
+                        if (character is Horse)
+                        {
+                            Game1.warpCharacter((NPC)character, Game1.currentLocation.name, Game1.player.getTileLocation(), false, true);
+                        }
                     }
                 }
             }
