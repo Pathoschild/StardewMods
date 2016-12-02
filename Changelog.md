@@ -1,4 +1,8 @@
 #Change Log:  
+####Change Log **v.2.1.1**:
++ **Fix** a bug that prevents game from saving when sleeping if player left Tractor outside Farm.
++ **Fix** a bug that prevents player from summon horse if horse is outside Farm.
+
 ####Change Log **v.2.1**:
 + **Change** config.json:
   - Remove WTFMode
