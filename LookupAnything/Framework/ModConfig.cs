@@ -22,8 +22,5 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Whether to check for updates to the mod.</summary>
         public bool CheckForUpdates { get; set; }
-
-        /// <summary>Whether to log debug metadata useful for troubleshooting.</summary>
-        public bool DebugLog { get; set; }
     }
 }
