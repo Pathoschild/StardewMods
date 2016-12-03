@@ -16,7 +16,7 @@ Compatible with Stardew Valley 1.11+ on Linux, Mac, and Windows.
 * [See also](#see-also)
 
 ## Installation
-1. [Install the latest version of SMAPI](http://canimod.com/guides/using-mods#installing-smapi).
+1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
 2. [Install this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/541/).
 3. Run the game using SMAPI.
 
@@ -156,6 +156,7 @@ file if you want. These are the available settings:
 * Added museum donations to item 'needed for' field.
 * You can now lookup things behind trees when you're behind them.
 * You can now close the lookup UI by clicking outside it.
+* Updated to SMAPI 1.3.
 * Fixed incorrect farmer luck message when the spirits are feeling neutral.
 * Fixed social menu lookup sometimes showing the wrong villager.
 
@@ -179,14 +180,14 @@ To compile the mod and add it to the mods directory:
 To package the mod for release:
 
 1. Delete the game's `Mods/LookupAnything` directory.  
-   <small>(This ensures the package will be clean and have default configuration.)</small>
+   <small>(This ensures the package is clean and has default configuration.)</small>
 2. Recompile the mod per the previous section.
 3. Launch the game through SMAPI to generate the default `config.json`.
 2. Create a zip file of the game's `Mods/LookupAnything` folder. The zip name should include the
-   mod name, version, and platform. For example:
+   mod name and version. For example:
 
    ```
-   LookupAnything-1.6-Windows.zip
+   LookupAnything-1.6.zip
       LookupAnything/
          LookupAnything.dll
          LookupAnything.pdb
