@@ -373,13 +373,8 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Validate that the game versions match the minimum requirements, and return an appropriate error message if not.</summary>
         public static string ValidateGameVersion()
         {
-            string gameVersion = Regex.Replace(Game1.version, "^([0-9.]+).*", "$1");
-            string apiVersion = Constants.Version.ToString();
-
-            if (string.Compare(gameVersion, Constant.MinimumGameVersion, StringComparison.InvariantCultureIgnoreCase) == -1)
-                return $"The LookupAnything mod requires the latest version of the game. Please update Stardew Valley from {gameVersion} to {Constant.MinimumGameVersion}.";
-            if (string.Compare(apiVersion, Constant.MinimumApiVersion, StringComparison.InvariantCultureIgnoreCase) == -1)
-                return $"The LookupAnything mod requires the latest version of SMAPI. Please update SMAPI from {apiVersion} to {Constant.MinimumApiVersion}.";
+            if (string.Compare(Constants.Version.ToString(), Constant.MinimumApiVersion, StringComparison.InvariantCultureIgnoreCase) == -1)
+                return $"The LookupAnything mod requires the latest version of SMAPI. Please update SMAPI from {Constants.Version} to {Constant.MinimumApiVersion}.";
 
             return null;
         }
