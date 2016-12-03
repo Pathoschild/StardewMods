@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
 using StardewModdingAPI;
+using StardewModdingAPI.Advanced;
 using System.IO;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,6 +21,7 @@ namespace TractorMod
     public class TractorMod : Mod
     {
         static Vector2 tractorSpawnLocation = new Vector2(70, 13);
+
         public class Tractor : Horse
         {
             public Tractor() : base() { }
@@ -34,14 +36,38 @@ namespace TractorMod
         public class ToolConfig
         {
             public string name { get; set; } = "";
-            public int minLevel { get; set; } = -1;
-            public int effectRadius { get; set; } = -1;
+            public int minLevel { get; set; } = 0;
+            public int effectRadius { get; set; } = 1;
+            public int activeEveryTickAmount { get; set; } = 1;
+            private int activeCount = 0;
 
-            public ToolConfig(string nameInput, int minLevelInput = -1, int radiusInput = -1)
+            public ToolConfig() { }
+
+            public ToolConfig(string nameInput)
+            {
+                name = nameInput; 
+            }
+
+            public ToolConfig(string nameInput, int minLevelInput, int radiusInput, int activeEveryTickAmountInput)
             {
                 name = nameInput;
                 minLevel = minLevelInput;
                 effectRadius = radiusInput;
+                if (activeEveryTickAmountInput <= 0)
+                    activeEveryTickAmount = 1;
+                else
+                    activeEveryTickAmount = activeEveryTickAmountInput;
+            }
+
+            public void incrementActiveCount()
+            {
+                activeCount++;
+                activeCount %= activeEveryTickAmount;
+            }
+
+            public bool canToolBeActive()
+            {
+                return (activeCount == 0);
             }
         }
 
@@ -53,44 +79,36 @@ namespace TractorMod
             public string info4 = "I haven't tried tools like Shears or Milk Pail but you can :)";
             public string info5 = "Delete Scythe entry if you don't want to harvest stuff.";
             public ToolConfig[] tool { get; set; } = {
-                                                        new ToolConfig("Scythe", 0, 2),
-                                                        new ToolConfig("Hoe", 4, 1),
-                                                        new ToolConfig("Watering Can", 4, 1)
+                                                        new ToolConfig("Scythe", 0, 2, 1),
+                                                        new ToolConfig("Hoe", 4, 1, 1),
+                                                        new ToolConfig("Watering Can", 4, 1, 1)
                                                      };
 
+            public int ItemRadius { get; set; } = 1;
             public int holdActivate { get; set; } = 0;
             public Keys tractorKey { get; set; } = Keys.B;
             public int tractorSpeed { get; set; } = -2;
             public Keys horseKey { get; set; } = Keys.None;
             public int globalTractor { get; set; } = 0;
+            public Keys updateConfig { get; set; } = Keys.P;
         }
         
-        public static TractorConfig ModConfig { get; protected set; }
+        public static TractorConfig ModConfig { get; set; }
         static Tractor ATractor = null;
         static bool IsNewDay = false;
+        static IModHelper TheHelper = null;
         public override void Entry(IModHelper helper)
         {
+            TheHelper = helper;
             ModConfig = helper.ReadConfig<TractorConfig>();
 
             //delete tractor when sleep so that it doesnt get save
             StardewModdingAPI.Events.TimeEvents.OnNewDay += (p, e) =>
             {
-                if (ATractor != null)
-                {
-                    Game1.warpCharacter((NPC)ATractor, "Farm", tractorSpawnLocation, false, true);
-                    foreach (NPC character in Game1.getFarm().characters)
-                    {
-                        if (character is Tractor)
-                        {
-                            Game1.getFarm().characters.Remove(character);
-                            break;
-                        }
-                    }
-                    ATractor = null;
-                }
+                foreach (GameLocation GL in Game1.locations)
+                    RemoveEveryCharactersOfType<Tractor>(GL);
                 IsNewDay = true;
             };
-
             StardewModdingAPI.Events.GameEvents.UpdateTick += UpdateTickEvent;
         }
 
@@ -104,6 +122,8 @@ namespace TractorMod
 
             MouseState currentMouseState = Mouse.GetState();
             KeyboardState currentKeyboardState = Keyboard.GetState();
+            if (Keyboard.GetState().IsKeyDown(ModConfig.updateConfig))
+                ModConfig = TheHelper.ReadConfig<TractorConfig>();
             DoAction(currentKeyboardState, currentMouseState);
         }
 
@@ -137,6 +157,21 @@ namespace TractorMod
             Game1.getFarm().characters.Add((NPC)ATractor);
             Game1.warpCharacter((NPC)ATractor, "Farm", tractorSpawnLocation, false, true);
         }
+        static void RemoveEveryCharactersOfType<T>(GameLocation GL)
+        {
+            bool found = false;
+            foreach (NPC character in GL.characters)
+            {
+                if (character is T)
+                {
+                    found = true;
+                    GL.characters.Remove(character);
+                    break;
+                }
+            }
+            if (found)
+                RemoveEveryCharactersOfType<T>(GL);
+        }
         static void DoAction(KeyboardState currentKeyboardState, MouseState currentMouseState)
         {
             if (Game1.currentLocation == null)
@@ -166,6 +201,12 @@ namespace TractorMod
                 if (ATractor == null)
                     SpawnTractor();
                 Game1.warpCharacter((NPC)ATractor, Game1.currentLocation.name, tile, false, true);
+            }
+
+            //delete tractor
+            if (currentKeyboardState.IsKeyDown(Keys.P) && ATractor != null)
+            {
+                
             }
 
             //summon Horse
@@ -318,7 +359,7 @@ namespace TractorMod
 
             if (Game1.player.CurrentItem.getCategoryName().ToLower() == "seed" || Game1.player.CurrentItem.getCategoryName().ToLower() == "fertilizer")
             {
-                List<Vector2> affectedTileGrid = MakeVector2TileGrid(Game1.player.getTileLocation(), 1);
+                List<Vector2> affectedTileGrid = MakeVector2TileGrid(Game1.player.getTileLocation(), ModConfig.ItemRadius);
 
                 foreach (Vector2 tile in affectedTileGrid)
                 {
@@ -487,7 +528,7 @@ namespace TractorMod
             }
 
         }
-
+        
         public static void ToolAction()
         {
             Tool currentTool = Game1.player.CurrentTool;
@@ -508,6 +549,13 @@ namespace TractorMod
             else
                 if (currentTool.upgradeLevel < ConfigForCurrentTool.minLevel)
                     return;
+            
+            if(ConfigForCurrentTool.activeEveryTickAmount > 1)
+            {
+                ConfigForCurrentTool.incrementActiveCount();
+                if (ConfigForCurrentTool.canToolBeActive() == false)
+                    return;
+            }
 
             int effectRadius = ConfigForCurrentTool.effectRadius;
             int currentWater = 0;
@@ -516,6 +564,7 @@ namespace TractorMod
                 WateringCan currentWaterCan = (WateringCan)currentTool;
                 currentWater = currentWaterCan.WaterLeft;
             }
+
             float currentStamina = Game1.player.stamina;
             Vector2 origin = new Vector2((float)Game1.player.GetBoundingBox().Center.X, (float)Game1.player.GetBoundingBox().Center.Y);
             List<Vector2> affectedTileGrid = MakeVector2TileGrid(Game1.player.getTileLocation(), effectRadius);
