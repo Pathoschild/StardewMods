@@ -140,13 +140,14 @@ Check out KeyCode.txt file to find your desirable key code.
 1 = can use Tractor Mode everywhere you want.  
 
 + updateConfig sets hotkey for updating config.json ingame  
+Default is P but you can change hotkey by changing the config.json file.  
+Check out KeyCode.txt file to find your desirable key code.   
 <details><summary>*Click here for more details*</summary>
   updateConfig sets hotkey to make current config.json taking effect ingame.
   1. Make changes to config.json while playing, save it.
   2. Get ingame and press updateConfig hotkey. Now your config.json changes are live ingame.
 </details>
-Default is P but you can change hotkey by changing the config.json file.  
-Check out KeyCode.txt file to find your desirable key code.   
+
 
 #Demo:  
 ####Horse Mode [+ Horse to Tractor mod by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/) for maximum immersion :)
