@@ -9,7 +9,7 @@
 + **Add** ability to update config.json ingame.
   - updateConfig sets hotkey to make current config.json taking effect ingame.
   - Make changes to config.json while playing, save it.
-  - Get ingame and press updateConfig hotkey. Now your config.json changes are live ingame.
+  - Return to game and press updateConfig hotkey. Now your config.json changes are live ingame.
 
 ####Change Log **v.2.1.1**:
 + **Fix** a bug that prevents game from saving when sleeping if player left Tractor outside Farm.
@@ -104,36 +104,49 @@
 
 #Customize:  
 ####Everything is in config.json file
-1. Tool (explaint by info in config.json):  
++ Tool (explaint by info in config.json):  
 To add a tool, add a block of code at the end of the last block of code that look like this (separate these blocks with comma)  
+As long as you have the *name* variable, the config.json will auto generate other variables with default for you  
 ```
 {
   "name": "Tool Name Here",
-  "minLevel": numerical value,
-  "effectRadius": another numberical value
+  "minLevel": numerical value (default value 0),
+  "effectRadius": another numberical value (default value 1),
+  "actionEveryTickAmount": yet another numberical value (default value 1)
 }
 ```
 
-1. Change holdActivate to change mouse-activation
++ Change ItemRadius to change radius for seeding and fertilizing  
+
++ Change holdActivate to change mouse-activation
 0 is disable mouse-activation. Default.  
 1 is holding left mouse button to activate TractorMode.  
 2 is holding right mouse button to activate TractorMode.  
 3 is holding mouse wheel down to activate TractorMode.  
 
-2. Change tractorKey to change summon Tractor key.  
++ Change tractorKey to change summon Tractor key.  
 Default is B but you can change hotkey by changing the config.json file.  
 Check out KeyCode.txt file to find your desirable key code.   
 
-3. Change tractorSpeed to change speed buff of the Tractor buff.  
++ Change tractorSpeed to change speed buff of the Tractor buff.  
 Default is -2.  
 
-4. Change horseKey to change summon horse key.  
++ Change horseKey to change summon horse key.  
 Default is 0 (no key assigned) but you can change hotkey by changing the config.json file.  
 Check out KeyCode.txt file to find your desirable key code.   
 
-5. globalTractor is use to limit areas the mod can function.  
++ globalTractor is use to limit areas the mod can function.  
 0 = can only use Tractor Mode within your farm land (and areas within it like barns, coops, greenhouse), this is default.  
 1 = can use Tractor Mode everywhere you want.  
+
++ updateConfig sets hotkey for updating config.json ingame  
+<details><summary>*Click here for more details*</summary>
+  updateConfig sets hotkey to make current config.json taking effect ingame.
+  1. Make changes to config.json while playing, save it.
+  2. Get ingame and press updateConfig hotkey. Now your config.json changes are live ingame.
+</details>
+Default is P but you can change hotkey by changing the config.json file.  
+Check out KeyCode.txt file to find your desirable key code.   
 
 #Demo:  
 ####Horse Mode [+ Horse to Tractor mod by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/) for maximum immersion :)
