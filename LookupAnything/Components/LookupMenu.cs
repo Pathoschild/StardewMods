@@ -61,7 +61,11 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="x">The X-position of the cursor.</param>
         /// <param name="y">The Y-position of the cursor.</param>
         /// <param name="playSound">Whether to enable sound.</param>
-        public override void receiveLeftClick(int x, int y, bool playSound = true) { }
+        public override void receiveLeftClick(int x, int y, bool playSound = true)
+        {
+            if (!this.isWithinBounds(x, y))
+                this.exitThisMenu();
+        }
 
         /// <summary>The method invoked when the player right-clicks on the lookup UI.</summary>
         /// <param name="x">The X-position of the cursor.</param>
@@ -235,6 +239,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                     // end draw
                     contentBatch.End();
                 }
+
+                // draw cursor
+                base.drawMouse(Game1.spriteBatch);
             }, this.OnDrawError);
         }
 

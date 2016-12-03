@@ -153,6 +153,7 @@ file if you want. These are the available settings:
 * `F2` debug mode is no longer suppressed (removed in latest version of SMAPI).
 
 1.8:
+* The lookup UI can now be closed by clicking outside it.
 * Fixed incorrect farmer luck message when the spirits are feeling neutral.
 * Fixed social menu lookup sometimes showing the wrong villager.
 
