@@ -154,6 +154,7 @@ file if you want. These are the available settings:
 
 1.8:
 * The lookup UI can now be closed by clicking outside it.
+* You can now lookup things behind trees when you're behind them.
 * Fixed incorrect farmer luck message when the spirits are feeling neutral.
 * Fixed social menu lookup sometimes showing the wrong villager.
 

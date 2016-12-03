@@ -97,9 +97,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 if ((feature as HoeDirt)?.crop != null)
                     yield return new CropTarget(feature, spriteTile);
                 else if (feature is FruitTree)
+                {
+                    if (GameHelper.GetPrivateField<float>(feature, "alpha") < 0.8f)
+                        continue; // ignore when tree is faded out (so player can lookup things behind it)
                     yield return new FruitTreeTarget((FruitTree)feature, spriteTile);
+                }
                 else if (feature is Tree)
+                {
+                    if (GameHelper.GetPrivateField<float>(feature, "alpha") < 0.8f)
+                        continue; // ignore when tree is faded out (so player can lookup things behind it)
                     yield return new TreeTarget((Tree)feature, spriteTile);
+                }
                 else
                     yield return new UnknownTarget(feature, spriteTile);
             }
