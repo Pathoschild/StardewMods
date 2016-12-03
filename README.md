@@ -18,7 +18,7 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 + **Add** ability to update config.json ingame.
   - updateConfig sets hotkey to make current config.json taking effect ingame.
   - Make changes to config.json while playing, save it.
-  - Get ingame and press updateConfig hotkey. Now your config.json changes are live ingame.
+  - Return to game and press updateConfig hotkey. Now your config.json changes are live ingame.
 
 ####Change Log **v.2.1.1**:
 + **Fix** a bug that prevents game from saving when sleeping if player left Tractor outside Farm.
