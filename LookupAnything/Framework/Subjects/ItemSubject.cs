@@ -232,9 +232,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                             neededFor.Add($"polyculture achievement (ship {needed} more)");
                     }
 
-                    // full shipment achivement
+                    // full shipment achievement
                     if (isObject && GameHelper.GetFullShipmentAchievementItems().Any(p => p.Key == obj.ParentSheetIndex && !p.Value))
                         neededFor.Add("full shipment achievement (ship one)");
+
+                    // a full collection achievement
+                    LibraryMuseum museum = Game1.locations.OfType<LibraryMuseum>().FirstOrDefault();
+                    if (museum != null && museum.isItemSuitableForDonation(obj))
+                        neededFor.Add("full collection achievement (donate one to museum)");
 
                     // yield
                     if (neededFor.Any())
