@@ -1,4 +1,16 @@
 #Change Log:  
+####Change Log **v.2.1.2**:
++ **Fix** a bug that still prevents game from saving.
++ **Add** ability to custom active frequency of each tool to maintain game fps
+  - activeEveryTickAmount entry is added for each tool in config.json
+  - activeEveryTickAmount default is 1, meaning 1 action per 1 gametick.
+  - activeEveryTickAmount is 8, meaning 1 action per 8 gametick. Increase this value to improve game fps.
++ **Add** ItemRadius in config.json, it's radius for seeding and fertilizing.
++ **Add** ability to update config.json ingame.
+  - updateConfig sets hotkey to make current config.json taking effect ingame.
+  - Make changes to config.json while playing, save it.
+  - Get ingame and press updateConfig hotkey. Now your config.json changes are live ingame.
+
 ####Change Log **v.2.1.1**:
 + **Fix** a bug that prevents game from saving when sleeping if player left Tractor outside Farm.
 + **Fix** a bug that prevents player from summon horse if horse is outside Farm.
