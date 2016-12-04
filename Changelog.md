@@ -1,4 +1,7 @@
 #Change Log:  
+####Change Log **v.2.1.3**:
++ **Fix** a bug that freezes the game if player uses under power tools with Tractor on objects that require more powerful tools to break.  
+
 ####Change Log **v.2.1.2**:
 + **Fix** a bug that still prevents game from saving.
 + **Add** ability to custom active frequency of each tool to maintain game fps
