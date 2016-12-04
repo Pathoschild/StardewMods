@@ -60,7 +60,6 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 + Tractor Mode doesn't drain your stamina when using Hoe and Water can.  
 + Water can doesn't need to be refilled but needs to have some water in it to work.  
 + You can fertilize your crop AFTER sowing seeds with Tractor Mode.  
-+ Be extra careful with WTFMode haha
 + **Have fun farming! :)**
 
 Contact me @ [buiphuonglamvn@gmail.com](mailto:buiphuonglamvn@gmail.com) regarding whatever.
