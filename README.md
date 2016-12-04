@@ -74,10 +74,10 @@ setting           | what it affects
 * Suppressed dangerous options by default.
 * Fixed default warp points.
 
-1.1 (upcoming):
-* Updated to SMAPI 1.3.
+1.1:
 * Added active menu name to cursor info.
 * Added labels to cursor debug lines.
+* Updated to SMAPI 1.3.
 * Fixed error when enabled before the game loads.
 
 ## Compiling the mod
