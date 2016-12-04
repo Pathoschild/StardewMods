@@ -8,9 +8,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The minimum supported version of Stardew Valley.</summary>
-        public const string MinimumGameVersion = "1.1";
-
         /// <summary>The minimum supported version of SMAPI.</summary>
         public const string MinimumApiVersion = "1.1";
 
