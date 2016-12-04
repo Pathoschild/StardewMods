@@ -7,6 +7,7 @@ using Pathoschild.Stardew.DebugMode.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.DebugMode
 {
@@ -204,12 +205,23 @@ namespace Pathoschild.Stardew.DebugMode
         /// <param name="pixel">A pixel texture that can be stretched and colourised for display.</param>
         private void DrawOverlay(SpriteBatch batch, SpriteFont font, Texture2D pixel)
         {
-            // draw cursor tile position
+            // draw debug info at cursor position
             {
+                // get cursor position
                 Vector2 tile = Game1.currentCursorTile;
                 Vector2 position = new Vector2(Game1.getOldMouseX(), Game1.getOldMouseY());
 
-                string text = $"{Game1.currentLocation.Name}{Environment.NewLine}{tile.X}, {tile.Y}";
+                // generate debug text
+                GameLocation location = Game1.currentLocation;
+                Type menuType = Game1.activeClickableMenu?.GetType();
+                string[] lines = {
+                    $"tile: {tile.X}, {tile.Y}",
+                    $"map:  {location.Name}",
+                    menuType != null ? $"menu: {(menuType.Namespace == typeof(TitleMenu).Namespace ? menuType.Name : menuType.FullName)}" : null
+                };
+
+                // draw text
+                string text = string.Join(Environment.NewLine, lines.Where(p => p != null));
                 Vector2 textSize = font.MeasureString(text);
                 batch.DrawString(font, text, new Vector2(position.X - textSize.X, position.Y), Color.Red);
             }
