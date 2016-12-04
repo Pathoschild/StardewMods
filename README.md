@@ -122,6 +122,9 @@ file if you want. These are the available settings:
 1.8:
 * Updated to SMAPI 1.1.
 
+1.8.1:
+* Updated to SMAPI 1.3.
+
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/518/) is
 recommended for most users. If you really want to compile the mod yourself, read on.

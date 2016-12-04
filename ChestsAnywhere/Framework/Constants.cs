@@ -1,4 +1,5 @@
-﻿using StardewValley;
+﻿using StardewModdingAPI;
+using StardewValley;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
@@ -9,7 +10,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         ** Accessors
         *********/
         /// <summary>The minimum supported version of SMAPI.</summary>
-        public const string MinimumApiVersion = "1.1";
+        public static readonly Version MinimumApiVersion = new Version(1, 3, 0, null);
 
         /// <summary>The number of rows in an inventory grid.</summary>
         public const int SlotRows = 3;
