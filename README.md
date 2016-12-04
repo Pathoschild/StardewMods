@@ -1,7 +1,7 @@
 **Skip Intro** is a minimal [Stardew Valley](http://stardewvalley.net/) mod that skips the game's loading intro.
 
 ## Installation
-1. Install [SMAPI](https://github.com/ClxS/SMAPI) (0.40.1.1+).
+1. [Install SMAPI 1.3+](https://github.com/Pathoschild/SMAPI).
 2. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/533).
 3. Run the game using SMAPI.
 
@@ -12,8 +12,9 @@
 1.1:
 * Updated for Stardew Valley 1.1.
 
-1.2 (upcoming):
-* Updated to SMAPI 1.1.
+1.2:
+* Added support for Linux and Mac.
+* Updated to SMAPI 1.3.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/533/) is
