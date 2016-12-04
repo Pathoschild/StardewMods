@@ -78,6 +78,7 @@ setting           | what it affects
 * Updated to SMAPI 1.3.
 * Added active menu name to cursor info.
 * Added labels to cursor debug lines.
+* Fixed error when enabled before the game loads.
 
 ## Compiling the mod
 Installing a stable release from Nexus Mods is recommended for most users. If you really want to

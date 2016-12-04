@@ -215,8 +215,8 @@ namespace Pathoschild.Stardew.DebugMode
                 GameLocation location = Game1.currentLocation;
                 Type menuType = Game1.activeClickableMenu?.GetType();
                 string[] lines = {
-                    $"tile: {tile.X}, {tile.Y}",
-                    $"map:  {location.Name}",
+                    location != null ? $"tile: {tile.X}, {tile.Y}" : null,
+                    location != null ? $"map:  {location.Name}" : null,
                     menuType != null ? $"menu: {(menuType.Namespace == typeof(TitleMenu).Namespace ? menuType.Name : menuType.FullName)}" : null
                 };
 
