@@ -1,13 +1,16 @@
 # Tractor Mod - A SMAPI Mod for Stardew Valley
 #### A mod for stardew valley: auto till, water, fertilize, and seed dirt tiles on your farm by simply walking over them. 
 
-Modder: PhthaloBlue  
+**Modder:** PhthaloBlue  
 
 This is a mod that allows players to quickly till dirt, sow seeds, fertilize soil, and water crop by simple walking over them.  
 
 It is default to only work with iridium tools equipped so that the mod doesnt ruin your early game but you can change that in the config file.
 
-###Latest Version: [v.2.1.2](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+###Latest Version: [v.2.1.3](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+####Change Log **v.2.1.3**:
++ **Fix** a bug that freezes the game if player uses under power tools with Tractor on objects that require more powerful tools to break.  
+
 ####Change Log **v.2.1.2**:
 + **Fix** a bug that still prevents game from saving.
 + **Add** ability to custom active frequency of each tool to maintain game fps
