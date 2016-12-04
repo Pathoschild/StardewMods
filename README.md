@@ -75,7 +75,7 @@ setting           | what it affects
 * Fixed default warp points.
 
 1.1 (upcoming):
-* Updated to SMAPI 1.1.
+* Updated to SMAPI 1.3.
 
 ## Compiling the mod
 Installing a stable release from Nexus Mods is recommended for most users. If you really want to
