@@ -577,10 +577,30 @@ namespace TractorMod
                 Game1.player.getMount().position = new Vector2(0, 0);
             }
 
+            //Tool 
+            if(currentTool is Axe && currentTool.upgradeLevel < 2) //steel level
+                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.hollowLogIndex, affectedTileGrid);
+            if (currentTool is Axe && currentTool.upgradeLevel < 1)
+                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.stumpIndex, affectedTileGrid);
+            if (currentTool is Pickaxe && currentTool.upgradeLevel < 3)
+                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.meteoriteIndex, affectedTileGrid);
+            if (currentTool is Pickaxe && currentTool.upgradeLevel < 2)
+                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.boulderIndex, affectedTileGrid);
+            if (currentTool is Pickaxe && currentTool.upgradeLevel < 1)
+            {
+                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.mineRock1Index, affectedTileGrid);
+                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.mineRock2Index, affectedTileGrid);
+                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.mineRock3Index, affectedTileGrid);
+                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.mineRock4Index, affectedTileGrid);
+            }
+            Log.Debug(affectedTileGrid.Count);
+
             //tool use
+            Tool newTool = currentTool;
+            newTool.upgradeLevel = 4;
             foreach (Vector2 tile in affectedTileGrid)
             {
-                Game1.player.CurrentTool.DoFunction(Game1.currentLocation, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), 1, Game1.player);
+                newTool.DoFunction(Game1.currentLocation, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), 1, Game1.player);
             }
 
             //after tool use
@@ -774,6 +794,69 @@ namespace TractorMod
                 if (i == professionIndex)
                     return true; 
             }
+            return false;
+        }
+
+        static List<Vector2> RemoveTileWithResourceClumpType(int ResourceClumpIndex, List<Vector2> input)
+        {
+            List<Vector2> output = new List<Vector2>();
+            foreach(Vector2 tile in input)
+            {
+                if (CheckIfTileBelongToResourceClump(ResourceClumpIndex, tile))
+                    continue;
+                else
+                    output.Add(new Vector2(tile.X, tile.Y));
+            }
+
+            return output;
+        }
+
+        static bool CheckIfTileBelongToResourceClump(int ResourceClumpIndex, Vector2 tile)
+        {
+            TerrainFeature check;
+            if (Game1.currentLocation.terrainFeatures.TryGetValue(tile, out check))
+            {
+                if (check is ResourceClump)
+                {
+                    ResourceClump RC = (ResourceClump)check;
+                    if (RC.parentSheetIndex == ResourceClumpIndex)
+                        return true;
+                }
+            }
+
+            Vector2 tileToLeft = new Vector2(tile.X - 1, tile.Y);
+            if (Game1.currentLocation.terrainFeatures.TryGetValue(tileToLeft, out check))
+            {
+                if (check is ResourceClump)
+                {
+                    ResourceClump RC = (ResourceClump)check;
+                    if (RC.parentSheetIndex == ResourceClumpIndex)
+                        return true;
+                }
+            }
+
+            Vector2 tileToTopLeft = new Vector2(tile.X - 1, tile.Y - 1);
+            if (Game1.currentLocation.terrainFeatures.TryGetValue(tileToTopLeft, out check))
+            {
+                if (check is ResourceClump)
+                {
+                    ResourceClump RC = (ResourceClump)check;
+                    if (RC.parentSheetIndex == ResourceClumpIndex)
+                        return true;
+                }
+            }
+
+            Vector2 tileToTop = new Vector2(tile.X, tile.Y - 1);
+            if (Game1.currentLocation.terrainFeatures.TryGetValue(tileToTop, out check))
+            {
+                if (check is ResourceClump)
+                {
+                    ResourceClump RC = (ResourceClump)check;
+                    if (RC.parentSheetIndex == ResourceClumpIndex)
+                        return true;
+                }
+            }
+
             return false;
         }
     }
