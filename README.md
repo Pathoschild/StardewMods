@@ -11,85 +11,13 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 ####Change Log **v.2.1.3**:
 + **Fix** a bug that freezes the game if player uses under power tools with Tractor on objects that require more powerful tools to break.  
 
-####Change Log **v.2.1.2**:
-+ **Fix** a bug that still prevents game from saving.
-+ **Add** ability to custom active frequency of each tool to maintain game fps
-  - activeEveryTickAmount entry is added for each tool in config.json
-  - activeEveryTickAmount default is 1, meaning 1 action per 1 gametick.
-  - activeEveryTickAmount is 8, meaning 1 action per 8 gametick. Increase this value to improve game fps.
-+ **Add** ItemRadius in config.json, it's radius for seeding and fertilizing.
-+ **Add** ability to update config.json ingame.
-  - updateConfig sets hotkey to make current config.json taking effect ingame.
-  - Make changes to config.json while playing, save it.
-  - Return to game and press updateConfig hotkey. Now your config.json changes are live ingame.
-
-####Change Log **v.2.1.1**:
-+ **Fix** a bug that prevents game from saving when sleeping if player left Tractor outside Farm.
-+ **Fix** a bug that prevents player from summon horse if horse is outside Farm.
-
-####Change Log **v.2.1**:
-+ **Change** config.json:
-  - Remove WTFMode
-  - Remove harvestMode, harvestRadius  
-  - Remove minToolPower
-  - Remove mapWidth, mapHeight. You no longer have to worry about your map size
-  - Add **tool** list and **info** regarding how to use it (do not delete info).
-+ **Improve** algorithm, improve performance.
-
-####Change Log **v.2.0**:
-+ **Remove** horseMode.
-  - needHorse in config.json is removed.
-  - Ability to toggle TractorMode on horse is removed.
-+ **Add** Tractor:
-  - Now you have a brand spanking new **Tractor** seperated from your horse.
-  - Tractor will return to the spot right behind your selling box every norming.
-  - Riding the Tractor automatically turn on TractorMode.
-  - tractorKey in config.json now sets hotkey to summon Tractor to your location. Default to B.
-  - tractor sprite and animation by [Horse to Tractor mod by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/)
-  - You can change tractor sprite and animation by modding tractor.xnb in TractorXNB folder.
-+ **Add** option to change mouse-activation hotkey (activating TractorMod while not on Tractor).
-  - holdActivate in config.json file.
-  - 0: no mouse hotkey (can't activate TractorMode while not on Tractor). Default.
-  - 1: hold left mouse button to activate.
-  - 2: hold right mouse button to activate (this is the old one).
-  - 3: hold mouse wheel down to activate.
-+ **Change** TractorMod buff.
-  - TractorMod no longer provides +1 speed buff.
-  - TractorMod now gives -2 speed buff (for balance).
-  - You can change it by changing tractorSpeed in config.json because I'm a good person.
-+ **Add** horse summon hotkey.
-  - horseKey in config.json now sets hotkey to summon your horse (if you have one) to your location.
-  - Default to None (deactivated).
-  
 ####Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 
-###Demo:  
-####BOTH TRACTOR AND HORSE!!!!!!!!
-![image](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/realtractor.png)
-
+###Demo:
 ####Tractor [(thank Horse to Tractor mod by Pewtershmitz for sprite)](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/)
 ![gif-horse-mode](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/tractor2.gif)  
 
-####Till Dirt  
-![gif-till dirt](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/TillDirt.gif)  
-
-####Water Crop    
-![gif-water crop](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/water.gif)  
-
-####Fertilize Soil    
-![gif-fertilize](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/fertilizing.gif)  
-
-####Sow Seeds      
-![gif-sow seed](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/sowingSeed.gif)  
-
-####Harvest Crops      
-![gif-harvest_crop](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/harvestCrop.gif)  
-
-####Harvest Fruits      
-![gif-harvest_fruit](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/harvestFruitTree.gif)  
-
-####Harvest Truffles      
-![gif-harvest_drop](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/harvestDrop.gif)  
+####[More Demo gif in DEMO section here.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 
 ###Require:  
 1. [Stardew Valley](http://store.steampowered.com/app/413150/)
@@ -124,7 +52,6 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
     Hold fertilizer to fertilize tilled soil
     4. After you are done with your farmwork, simply release right click to turn it off.  
     The buff will go away showing that the Mode is now off.
-
 
 ###Customize: [see here in Customize section.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)  
 
