@@ -1,0 +1,37 @@
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.DataMaps.Framework;
+using StardewValley;
+using xTile.Dimensions;
+
+namespace Pathoschild.Stardew.DataMaps.Overlays
+{
+    /// <summary>An overlay which shows whether tiles are traversable by the player.</summary>
+    internal class TraversableOverlay : DataMapOverlay
+    {
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Get updated tile data.</summary>
+        /// <param name="location">The current location.</param>
+        /// <param name="visibleTiles"></param>
+        protected override IEnumerable<TileData> Update(GameLocation location, IEnumerable<Vector2> visibleTiles)
+        {
+            foreach (Vector2 tile in visibleTiles)
+            {
+                bool isPassable = location.isTilePassable(new Location((int)tile.X, (int)tile.Y), Game1.viewport);
+                bool isClear = isPassable && !location.isTileOccupied(tile);
+
+                Color color;
+                if (isPassable && isClear)
+                    color = Color.Green;
+                else if (isPassable)
+                    color = Color.Orange;
+                else
+                    color = Color.Red;
+
+                yield return new TileData(tile, color);
+            }
+        }
+    }
+}

@@ -1,4 +1,5 @@
 ﻿using Pathoschild.Stardew.DataMaps.Framework;
+using Pathoschild.Stardew.DataMaps.Overlays;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 
@@ -13,6 +14,9 @@ namespace Pathoschild.Stardew.DataMaps
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
+        /// <summary>The current overlay being displayed, if any.</summary>
+        private DataMapOverlay CurrentOverlay;
+
 
         /*********
         ** Public methods
@@ -25,10 +29,9 @@ namespace Pathoschild.Stardew.DataMaps
             this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
 
             // hook up events
+            GameEvents.SecondUpdateTick += (sender, e) => this.ReceiveUpdateTick();
             if (this.Config.Keyboard.HasAny())
                 ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
-
-            // hook up controller
             if (this.Config.Controller.HasAny())
             {
                 ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
@@ -53,8 +56,24 @@ namespace Pathoschild.Stardew.DataMaps
             this.Monitor.InterceptErrors("handling your input", $"handling input '{key}'", () =>
             {
                 if (key.Equals(map.ToggleMap))
-                    this.Monitor.Log("toggled map");
+                {
+                    if (this.CurrentOverlay != null)
+                    {
+                        this.CurrentOverlay.Dispose();
+                        this.CurrentOverlay = null;
+                    }
+                    else
+                        this.CurrentOverlay = new TraversableOverlay();
+
+                    this.Monitor.Log($"set overlay: {this.CurrentOverlay?.GetType().Name ?? "none"}", LogLevel.Trace);
+                }
             });
+        }
+
+        /// <summary>Receive an update tick.</summary>
+        private void ReceiveUpdateTick()
+        {
+            this.CurrentOverlay?.Update();
         }
     }
 }
