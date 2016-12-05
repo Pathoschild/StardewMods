@@ -40,6 +40,10 @@
     <Compile Include="Common\CommonHelper.cs" />
     <Compile Include="Common\GitRelease.cs" />
     <Compile Include="Common\UpdateHelper.cs" />
+    <Compile Include="Framework\InputMapConfiguration.cs" />
+    <Compile Include="Framework\InternalHelper.cs" />
+    <Compile Include="Framework\ModConfig.cs" />
+    <Compile Include="Framework\RawModConfig.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
