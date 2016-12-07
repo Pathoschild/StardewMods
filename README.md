@@ -18,11 +18,11 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
   - PhoneKey sets hotkey to call to PhthaloBlue Corp. to buy Tractor Garage. Default N.
   - TractorHousePrice sets Tractor Garage price. Default 150000.
 
-####Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
+![](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/phoneToPhthaloBlue.png)
+![](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/buildPage.png)
+![](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/TractorGarage.png)
 
-###Demo:
-####Tractor [(thank Horse to Tractor mod by Pewtershmitz for sprite)](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/)
-![gif-horse-mode](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/tractor2.gif)  
+####Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 
 ####[More Demo gif in DEMO section here.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 
