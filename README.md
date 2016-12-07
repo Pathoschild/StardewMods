@@ -15,8 +15,8 @@ It is default to only work with iridium tools equipped so that the mod doesnt ru
 + **Fix** a bug that yields infinite spring onion when harvest with Tractor Mode.
 + **Remove** globalTractor from config.json, it is now default.
 + **Add** PhoneKey and TractorHousePrice in config.json.
-  - PhoneKey sets hotkey to call to PhthaloBlue Corp. to buy Tractor Garage.
-  - TractorHousePrice sets Tractor Garage price.
+  - PhoneKey sets hotkey to call to PhthaloBlue Corp. to buy Tractor Garage. Default N.
+  - TractorHousePrice sets Tractor Garage price. Default 150000.
 
 ####Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 
