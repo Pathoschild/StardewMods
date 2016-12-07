@@ -100,7 +100,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             this.CalculateDimensions();
         }
 
-        /// <summary>The method called when the game window changes size.</summary>
+        /// <summary>The method called when the User presses a controller button.</summary>
         /// <param name="button">The controller button pressed.</param>
         public override void receiveGamePadButton(Buttons button)
         {
