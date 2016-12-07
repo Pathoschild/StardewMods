@@ -1,4 +1,14 @@
 #Change Log:  
+####Change Log **v.3.0.beta**:
++ **Remove** Tractor spawning in behind Selling Box every morning.
++ **Add** ability to phone in and buy Tractor Garage, a place to store your Tractor.
+  - Buy Tractor Garage to get access to Tractor.
++ **Fix** a bug that yields infinite spring onion when harvest with Tractor Mode.
++ **Remove** globalTractor from config.json, it is now default.
++ **Add** PhoneKey and TractorHousePrice in config.json.
+  - PhoneKey sets hotkey to call to PhthaloBlue Corp. to buy Tractor Garage.
+  - TractorHousePrice sets Tractor Garage price.
+
 ####Change Log **v.2.1.3**:
 + **Fix** a bug that freezes the game if player uses under power tools with Tractor on objects that require more powerful tools to break.  
 
