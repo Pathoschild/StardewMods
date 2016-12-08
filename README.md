@@ -40,7 +40,7 @@ This mod adds a **Garage** building which provides **Tractor** to help with your
 
 ###How To Use:
 + Normal: 
-  1. Buy Garage by using PhoneKey.
+  1. Buy Garage by using PhoneKey (Default is N).
   2. Wait for Garage to finish being built, and receive new Tractor afterward
   2. Get on the Tractor.
   3. Hold your hoe if you want to till dirt  
