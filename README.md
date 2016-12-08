@@ -67,6 +67,7 @@ This mod adds a **Garage** building which provides **Tractor** to help with your
 + Tractor Mode doesn't drain your stamina when using Hoe and Water can.  
 + Water can doesn't need to be refilled but needs to have some water in it to work.  
 + You can fertilize your crop AFTER sowing seeds with Tractor Mode.  
++ Thank [Horse to Tractor mod by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/) for the awesome Tractor sprite.
 + **Have fun farming! :)**
 
 Contact me @ [buiphuonglamvn@gmail.com](mailto:buiphuonglamvn@gmail.com) regarding whatever.
