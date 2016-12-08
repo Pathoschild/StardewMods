@@ -7,15 +7,24 @@ This mod adds a **Tractor** to help with your farm works.
 Tractor allows players to quickly till dirt, sow seeds, fertilize soil, and water crop by simple walking over map tiles.  
 It is default to only work with iridium tools equipped so that the mod doesnt ruin your early game but you can change that in the config file.
 
-###Latest Version: [v.2.1.3](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
-####Change Log **v.2.1.3**:
-+ **Fix** a bug that freezes the game if player uses under power tools with Tractor on objects that require more powerful tools to break.  
+###Latest Version: [v.3.0](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+####Change Log **v.3.0**:
++ **Remove** Tractor spawning in behind Selling Box every morning.
++ **Add** ability to phone in and buy Tractor Garage, a place to store your Tractor.
+  - Buy Tractor Garage to get access to Tractor.
++ **Fix** a bug that yields infinite spring onion when harvest with Tractor Mode.
++ **Fix** weird hoeing, watering area when using Tractor Mode after player charge those tools up previously.
++ **Remove** globalTractor from config.json, it is now default.
++ **Add** PhoneKey and TractorHousePrice in config.json.
+  - PhoneKey sets hotkey to call to PhthaloBlue Corp. to buy Tractor Garage.
+  - TractorHousePrice sets Tractor Garage price.
++ **Note:** You may notice a file called **TractorModSave.json** is generated. It is a save file for this mod. You may want to create back up for this file.
+
+![](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/phoneToPhthaloBlue.png)
+![](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/buildPage.png)
+![](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/TractorGarage.png)
 
 ####Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
-
-###Demo:
-####Tractor [(thank Horse to Tractor mod by Pewtershmitz for sprite)](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/)
-![gif-horse-mode](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/tractor2.gif)  
 
 ####[More Demo gif in DEMO section here.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 

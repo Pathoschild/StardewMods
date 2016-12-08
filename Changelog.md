@@ -1,4 +1,16 @@
 #Change Log:  
+####Change Log **v.3.0**:
++ **Remove** Tractor spawning in behind Selling Box every morning.
++ **Add** ability to phone in and buy Tractor Garage, a place to store your Tractor.
+  - Buy Tractor Garage to get access to Tractor.
++ **Fix** a bug that yields infinite spring onion when harvest with Tractor Mode.
++ **Fix** weird hoeing, watering area when using Tractor Mode after player charge those tools up previously.
++ **Remove** globalTractor from config.json, it is now default.
++ **Add** PhoneKey and TractorHousePrice in config.json.
+  - PhoneKey sets hotkey to call to PhthaloBlue Corp. to buy Tractor Garage.
+  - TractorHousePrice sets Tractor Garage price.
++ **Note:** You may notice a file called **TractorModSave.json** is generated. It is a save file for this mod. You may want to create back up for this file.
+
 ####Change Log **v.2.1.3**:
 + **Fix** a bug that freezes the game if player uses under power tools with Tractor on objects that require more powerful tools to break.  
 
@@ -138,9 +150,12 @@ Default is -2.
 Default is 0 (no key assigned) but you can change hotkey by changing the config.json file.  
 Check out KeyCode.txt file to find your desirable key code.   
 
-+ globalTractor is use to limit areas the mod can function.  
-0 = can only use Tractor Mode within your farm land (and areas within it like barns, coops, greenhouse), this is default.  
-1 = can use Tractor Mode everywhere you want.  
++ Change PhoneKey to change hotkey for your cellphone.  
+Default is N but you can change hotkey by changing the config.json file.  
+Check out KeyCode.txt file to find your desirable key code.   
+
++ Change TractorHousePrice to change Garage building price.  
+Default is 150000 (150.000 g) 
 
 + updateConfig sets hotkey for updating config.json ingame  
 Default is P but you can change hotkey by changing the config.json file.  
@@ -150,7 +165,6 @@ Check out KeyCode.txt file to find your desirable key code.
   1. Make changes to config.json while playing, save it.
   2. Get ingame and press updateConfig hotkey. Now your config.json changes are live ingame.
 </details>
-
 
 #Demo:  
 ####Horse Mode [+ Horse to Tractor mod by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/) for maximum immersion :)
