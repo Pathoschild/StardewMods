@@ -9,6 +9,7 @@
 + **Add** PhoneKey and TractorHousePrice in config.json.
   - PhoneKey sets hotkey to call to PhthaloBlue Corp. to buy Tractor Garage.
   - TractorHousePrice sets Tractor Garage price.
++ **Note:** You may notice a file called **TractorModSave.json** is generated. It is a save file for this mod. You may want to create back up for this file.
 
 ####Change Log **v.2.1.3**:
 + **Fix** a bug that freezes the game if player uses under power tools with Tractor on objects that require more powerful tools to break.  
