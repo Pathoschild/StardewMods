@@ -3,7 +3,7 @@
 
 **Modder:** PhthaloBlue  
 ###Overview
-This mod adds a **Garage** building which provides **Tractor** to help with your farm works.
+This mod adds a **Garage** building which provides **Tractor** to help with your farm works.  
 **Tractor** allows players to quickly till dirt, sow seeds, fertilize soil, and water crop by simple walking over map tiles.  
 It is default to only work with iridium tools equipped so that the mod doesnt ruin your early game but you can change that in the config file.
 
