@@ -19,7 +19,6 @@ This mod adds a **Garage** building which provides **Tractor** to help with your
   - TractorHousePrice sets Tractor Garage price.
 + **Note:** You may notice a file called **TractorModSave.json** is generated. It is a save file for this mod. You may want to create back up for this file.
 
-![](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/phoneToPhthaloBlue.png)
 ![](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/TractorGarage.png)
 
 ####Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
