@@ -40,7 +40,8 @@ This mod adds a **Garage** building which provides **Tractor** to help with your
 
 ###How To Use:
 + Normal: 
-  1. The Tractor will be behind selling box every morning.
+  1. Buy Garage by using PhoneKey.
+  2. Wait for Garage to finish being built, and receive new Tractor afterward
   2. Get on the Tractor.
   3. Hold your hoe if you want to till dirt  
     Hold water can if you want to water crop  
@@ -49,7 +50,7 @@ This mod adds a **Garage** building which provides **Tractor** to help with your
     Hold scythe to harvest 
   4. When done get off the Tractor to turn Tractor Mode off.
 + Mouse-Activating Mode:  
-    1. Get to your farm (this mod can only be activated on farmland, not in town, not even in greenhouse)
+    1. Get to your farm
     2. Turn on Tractor Mode by holding down appropriate mouse button (set by holdActivate in config.json). 
     You will receive a speed buff showing that the Tractor Mode is now on.
     3. Hold your hoe if you want to till dirt  
