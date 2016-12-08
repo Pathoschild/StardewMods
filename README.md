@@ -159,6 +159,9 @@ file if you want. These are the available settings:
 * Fixed incorrect farmer luck message when the spirits are feeling neutral.
 * Fixed social menu lookup sometimes showing the wrong villager.
 
+1.9 (upcoming):
+* Fixed a rare error caused by the game duplicating an NPC.
+
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
 recommended for most users. If you really want to compile the mod yourself, read on.

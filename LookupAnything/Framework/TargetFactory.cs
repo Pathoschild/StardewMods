@@ -234,7 +234,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     return null;
 
                 // get villager with a birthday on that date
-                NPC target = Utility.getAllCharacters().FirstOrDefault(p => p.birthday_Season == Game1.currentSeason && p.birthday_Day == selectedDay);
+                NPC target = GameHelper.GetAllCharacters().FirstOrDefault(p => p.birthday_Season == Game1.currentSeason && p.birthday_Day == selectedDay);
                 if (target != null)
                     return new CharacterSubject(target, TargetType.Villager, this.Metadata);
             }
@@ -278,7 +278,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     ClickableTextureComponent entry = entries.FirstOrDefault(p => p.containsPoint((int)cursorPosition.X, (int)cursorPosition.Y));
                     if (entry != null)
                     {
-                        NPC npc = Utility.getAllCharacters().FirstOrDefault(p => p.name == entry.name);
+                        NPC npc = GameHelper.GetAllCharacters().FirstOrDefault(p => p.name == entry.name);
                         if (npc != null)
                             return new CharacterSubject(npc, TargetType.Villager, this.Metadata);
                     }

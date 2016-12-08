@@ -151,6 +151,14 @@ namespace Pathoschild.Stardew.LookupAnything
             return items.Where(p => p != null);
         }
 
+        /// <summary>Get all NPCs currently in the world.</summary>
+        public static IEnumerable<NPC> GetAllCharacters()
+        {
+            return Utility
+                .getAllCharacters()
+                .Distinct(); // fix rare issue where the game duplicates an NPC (seems to happen when the player's child is born)
+        }
+
         /// <summary>Count how many of an item the player owns.</summary>
         /// <param name="item">The item to count.</param>
         public static int CountOwnedItems(Item item)
@@ -203,7 +211,7 @@ namespace Pathoschild.Stardew.LookupAnything
             if (!item.canBeGivenAsGift())
                 return new Dictionary<string, GiftTaste>();
 
-            return Utility.getAllCharacters()
+            return GameHelper.GetAllCharacters()
                 .Where(npc => GameHelper.IsSocialVillager(npc, metadata))
                 .ToDictionary(npc => npc.name, npc => (GiftTaste)npc.getGiftTasteForThisItem(item));
         }
