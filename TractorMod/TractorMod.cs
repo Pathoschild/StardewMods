@@ -777,29 +777,29 @@ namespace TractorMod
             }
 
         }
-        
+
         public static void ToolAction()
         {
             Tool currentTool = Game1.player.CurrentTool;
 
             //check if tool is enable from config
             TractorConfig.ToolConfig ConfigForCurrentTool = new TractorConfig.ToolConfig("");
-            foreach(TractorConfig.ToolConfig TC in ModConfig.tool)
+            foreach (TractorConfig.ToolConfig TC in ModConfig.tool)
             {
-                if(currentTool.name.Contains(TC.name))
+                if (currentTool.name.Contains(TC.name))
                 {
                     ConfigForCurrentTool = TC;
                     break;
                 }
             }
-            
+
             if (ConfigForCurrentTool.name == "")
                 return;
             else
                 if (currentTool.upgradeLevel < ConfigForCurrentTool.minLevel)
-                    return;
-            
-            if(ConfigForCurrentTool.activeEveryTickAmount > 1)
+                return;
+
+            if (ConfigForCurrentTool.activeEveryTickAmount > 1)
             {
                 ConfigForCurrentTool.incrementActiveCount();
                 if (ConfigForCurrentTool.canToolBeActive() == false)
@@ -827,6 +827,7 @@ namespace TractorMod
             }
 
             //Tool 
+            /*
             if(currentTool is Axe && currentTool.upgradeLevel < 2) //steel level
                 affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.hollowLogIndex, affectedTileGrid);
             if (currentTool is Axe && currentTool.upgradeLevel < 1)
@@ -842,13 +843,15 @@ namespace TractorMod
                 affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.mineRock3Index, affectedTileGrid);
                 affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.mineRock4Index, affectedTileGrid);
             }
-
+            */
+            
             //tool use
             Tool newTool = currentTool;
             newTool.upgradeLevel = 4;
+            Game1.player.toolPower = 0;
             foreach (Vector2 tile in affectedTileGrid)
             {
-                newTool.DoFunction(Game1.currentLocation, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), 1, Game1.player);
+                newTool.DoFunction(Game1.currentLocation, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), 0, Game1.player);
             }
 
             //after tool use
