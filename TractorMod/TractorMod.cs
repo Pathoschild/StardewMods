@@ -181,6 +181,11 @@ namespace TractorMod
             }
             return new SaveCollection.Save();
         }
+
+        public Save FindCurrentSave()
+        {
+            return FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
+        }
     }
     
     public class TractorConfig
@@ -434,6 +439,8 @@ namespace TractorMod
                 IsNewDay = false;
             }
             
+
+            //use cellphone
             if (currentKeyboardState.IsKeyDown(ModConfig.PhoneKey))
             {
                 if (PhthaloBlueCarpenterMenu.IsOpen)
@@ -479,7 +486,13 @@ namespace TractorMod
                     }
                 }
             }
-            
+
+            //disable Tractor Mode if player doesn't have TractorHouse built
+            /*
+            if (AllSaves.FindCurrentSave().TractorHouse.Count <= 0) 
+                return;
+            */
+
             //staring tractorMod
             TractorOn = false;
             switch (ModConfig.holdActivate)
