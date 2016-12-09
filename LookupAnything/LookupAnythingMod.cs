@@ -10,6 +10,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
+using Microsoft.Xna.Framework;
 
 namespace Pathoschild.Stardew.LookupAnything
 {
@@ -202,6 +203,8 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 if (key.Equals(map.ToggleLookup))
                     this.ToggleLookup();
+                if (key.Equals(map.ToggleLookupFront))
+                    this.ToggleLookup(true);
                 if (key.Equals(map.ScrollUp))
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollUp();
                 else if (key.Equals(map.ScrollDown))
@@ -223,7 +226,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // perform bound action
             this.Monitor.InterceptErrors("handling your input", $"handling input '{key}'", () =>
             {
-                if (key.Equals(map.ToggleLookup))
+                if (key.Equals(map.ToggleLookup) || key.Equals(map.ToggleLookupFront))
                     this.HideLookup();
             });
         }
@@ -263,16 +266,18 @@ namespace Pathoschild.Stardew.LookupAnything
         ** Helpers
         ****/
         /// <summary>Show the lookup UI for the current target.</summary>
-        private void ToggleLookup()
+        /// <param name="front">Whether or not to search for object in front of player.</param>
+        private void ToggleLookup(bool front = false)
         {
             if (Game1.activeClickableMenu is LookupMenu)
                 this.HideLookup();
             else
-                this.ShowLookup();
+                this.ShowLookup(front);
         }
 
         /// <summary>Show the lookup UI for the current target.</summary>
-        private void ShowLookup()
+        /// <param name="front">Whether or not to search for object in front of player.</param>
+        private void ShowLookup(bool front = false)
         {
             // disable lookups if metadata is invalid
             if (!this.IsDataValid)
@@ -298,7 +303,11 @@ namespace Pathoschild.Stardew.LookupAnything
                     }
 
                     // get target
-                    ISubject subject = this.GetSubject(logMessage);
+                    ISubject subject;
+                    if (front)
+                        subject = this.GetSubjectFront(logMessage);
+                    else
+                        subject = this.GetSubject(logMessage);
                     if (subject == null)
                     {
                         this.Monitor.Log($"{logMessage} no target found.", LogLevel.Trace);
@@ -346,7 +355,39 @@ namespace Pathoschild.Stardew.LookupAnything
             return this.TargetFactory.GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile, cursorPos);
         }
 
-        /// <summary>Show the lookup UI for the current target.</summary>
+        /// <summary>Get the subject infront of the player.</summary>
+        /// <param name="logMessage">The log message to which to append search details.</param>
+        private ISubject GetSubjectFront(StringBuilder logMessage)
+        {
+            if (Game1.activeClickableMenu != null)
+                return null;
+
+            // Check player facing direction and select that tile
+            Vector2 location = Game1.player.getTileLocation();
+            int dir = Game1.player.FacingDirection;
+            switch (dir)
+            {
+                case 0:     // Player is facing up
+                    location.Y -= 1;
+                    break;
+                case 1:     // Player is facing right
+                    location.X += 1;
+                    break;
+                case 2:     // Player is facing down
+                    location.Y += 1;
+                    break;
+                case 3:     // Player is facing left
+                    location.X -= 1;
+                    break;
+            }
+
+            // Convert tile location to screen coordinates
+            Rectangle target = GameHelper.GetScreenCoordinatesFromTile(location);
+            
+            return this.TargetFactory.GetSubjectFrom(Game1.currentLocation, location, new Vector2(target.Center.X, target.Center.Y), true);
+        }
+
+        /// <summary>Hide the lookup UI for the current target.</summary>
         private void HideLookup()
         {
             this.Monitor.InterceptErrors("closing the menu", () =>

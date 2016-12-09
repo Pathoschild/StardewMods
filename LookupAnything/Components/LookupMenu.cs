@@ -86,7 +86,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="direction">The scroll direction.</param>
         public override void receiveScrollWheelAction(int direction)
         {
-            if (direction > 0)          // Positive number scrolls window
+            if (direction > 0)          // Positive number scrolls window content up
                 this.ScrollUp();
             else
                 this.ScrollDown();
@@ -120,6 +120,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                     this.ScrollDown();
                     break;
                 default:
+                    base.receiveGamePadButton(button);
                     break;
             }
         }
