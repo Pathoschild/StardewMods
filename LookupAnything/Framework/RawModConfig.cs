@@ -35,6 +35,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             this.Keyboard = new InputMapConfiguration<string>
             {
                 ToggleLookup = Keys.F1.ToString(),
+                ToggleLookupFront = "",
                 ScrollUp = Keys.Up.ToString(),
                 ScrollDown = Keys.Down.ToString(),
                 ToggleDebug = ""
@@ -42,6 +43,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             this.Controller = new InputMapConfiguration<string>
             {
                 ToggleLookup = "",
+                ToggleLookupFront = "",
                 ScrollUp = "",
                 ScrollDown = "",
                 ToggleDebug = ""
@@ -59,6 +61,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 Keyboard = new InputMapConfiguration<Keys>
                 {
                     ToggleLookup = this.TryParse(this.Keyboard.ToggleLookup, Keys.F1),
+                    ToggleLookupFront = this.TryParse(this.Keyboard.ToggleLookupFront, Keys.F1),
                     ScrollUp = this.TryParse(this.Keyboard.ScrollUp, Keys.Up),
                     ScrollDown = this.TryParse(this.Keyboard.ScrollDown, Keys.Down),
                     ToggleDebug = this.TryParse(this.Keyboard.ToggleDebug, Keys.None)
@@ -66,6 +69,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 Controller = new InputMapConfiguration<Buttons>
                 {
                     ToggleLookup = this.TryParse<Buttons>(this.Controller.ToggleLookup),
+                    ToggleLookupFront = this.TryParse<Buttons>(this.Controller.ToggleLookupFront),
                     ScrollUp = this.TryParse<Buttons>(this.Controller.ScrollUp),
                     ScrollDown = this.TryParse<Buttons>(this.Controller.ScrollDown),
                     ToggleDebug = this.TryParse<Buttons>(this.Controller.ToggleDebug)
