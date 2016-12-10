@@ -227,8 +227,11 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                                             valueSize += labelSize.Y;
                                         }
 
+                                        string[] artisan = new[] { "Jelly", "Juice", "Pickle", "Wine" };
+                                        string checkArtisan = artisan.FirstOrDefault(a => item.Contains(a));
                                         Vector2 usedSpace;
-                                        if (OwnedItems.FirstOrDefault(i => i.Name.Equals(item)) != null)
+                                        if (OwnedItems.FirstOrDefault(i => i.Name.Equals(item)) != null ||
+                                            (checkArtisan != null && OwnedItems.FirstOrDefault(i => i.Name.Contains(checkArtisan)) != null))    // Fix artisan items
                                             usedSpace = contentBatch.DrawTextBlock(font, item, nextPosition, valueWidth, color: Color.Green);
                                         else
                                             usedSpace = contentBatch.DrawTextBlock(font, item, nextPosition, valueWidth);
