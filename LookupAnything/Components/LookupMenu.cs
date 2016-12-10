@@ -8,6 +8,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
+using Microsoft.Xna.Framework.Input;
 
 namespace Pathoschild.Stardew.LookupAnything.Components
 {
@@ -35,6 +36,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>The number of pixels to scroll.</summary>
         private int CurrentScroll;
 
+        /// <summary>Scroll amount configured by the user.</summary>
+        private int ScrollAmount;
+
 
         /*********
         ** Public methods
@@ -46,12 +50,14 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="subject">The metadata to display.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="monitor">Encapsulates logging and monitoring.</param>
-        public LookupMenu(ISubject subject, Metadata metadata, IMonitor monitor)
+        /// <param name="scroll">Scroll amount configured by the user.</param>
+        public LookupMenu(ISubject subject, Metadata metadata, IMonitor monitor, int scroll)
         {
             this.Subject = subject;
             this.Fields = subject.GetData(metadata).Where(p => p.HasValue).ToArray();
             this.Monitor = monitor;
             this.CalculateDimensions();
+            this.ScrollAmount = scroll;
         }
 
         /****
@@ -63,8 +69,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="playSound">Whether to enable sound.</param>
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            if (!this.isWithinBounds(x, y))
-                this.exitThisMenu();
+            this.HandleCursorLeftClick(x, y);
         }
 
         /// <summary>The method invoked when the player right-clicks on the lookup UI.</summary>
@@ -77,7 +82,10 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="direction">The scroll direction.</param>
         public override void receiveScrollWheelAction(int direction)
         {
-            this.CurrentScroll -= direction; // down direction == increased scroll
+            if (direction > 0)          // Positive number scrolls window content up
+                this.ScrollUp();
+            else
+                this.ScrollDown();
         }
 
         /// <summary>The method called when the game window changes size.</summary>
@@ -88,21 +96,60 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             this.CalculateDimensions();
         }
 
+        /// <summary>The method called when the player presses a controller button.</summary>
+        /// <param name="button">The controller button pressed.</param>
+        public override void receiveGamePadButton(Buttons button)
+        {
+            switch (button)
+            {
+                case Buttons.A:
+                    Point p = Game1.getMousePosition();
+                    this.HandleCursorLeftClick(p.X, p.Y);
+                    break;
+                case Buttons.B:
+                    this.exitThisMenu();
+                    break;
+                case Buttons.RightThumbstickUp:
+                    this.ScrollUp();
+                    break;
+                case Buttons.RightThumbstickDown:
+                    this.ScrollDown();
+                    break;
+                default:
+                    base.receiveGamePadButton(button);
+                    break;
+            }
+        }
+
         /****
         ** Methods
         ****/
         /// <summary>Scroll up the menu content by the specified amount (if possible).</summary>
-        /// <param name="amount">The number of pixels to scroll.</param>
-        public void ScrollUp(int amount)
+        public void ScrollUp()
         {
-            this.CurrentScroll -= amount;
+            this.CurrentScroll -= this.ScrollAmount;
         }
 
         /// <summary>Scroll down the menu content by the specified amount (if possible).</summary>
-        /// <param name="amount">The number of pixels to scroll.</param>
-        public void ScrollDown(int amount)
+        public void ScrollDown()
         {
-            this.CurrentScroll += amount;
+            this.CurrentScroll += this.ScrollAmount;
+        }
+
+        /// <summary>Combines the Left Click action with the equivalent controller button. All left click actions should be handled here only.</summary>
+        /// <param name="x">The X-position of the cursor.</param>
+        /// <param name="y">The Y-position of the cursor.</param>
+        public void HandleCursorLeftClick(int x, int y)
+        {
+            // Close menu when clicking outside of it
+            if (!this.isWithinBounds(x, y))
+                this.exitThisMenu();
+
+            // Add click action to scroll icons
+            if (UpIcon.Contains(x, y))
+                this.ScrollUp();
+            if (DownIcon.Contains(x, y))
+                this.ScrollDown();
         }
 
         /// <summary>Render the UI.</summary>
