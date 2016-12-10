@@ -39,6 +39,10 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Scroll amount configured by the user.</summary>
         private int ScrollAmount;
 
+        /// <summary>Arrow icon locations for click functionality.</summary>
+        private Rectangle UpIcon;
+        private Rectangle DownIcon;
+
 
         /*********
         ** Public methods
@@ -144,6 +148,12 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             // Close menu when clicking outside of it
             if (!this.isWithinBounds(x, y))
                 this.exitThisMenu();
+
+            // Add click action to scroll icons
+            if (UpIcon.Contains(x, y))
+                this.ScrollUp();
+            if (DownIcon.Contains(x, y))
+                this.ScrollDown();
         }
 
         /// <summary>Render the UI.</summary>
@@ -272,10 +282,14 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                     this.MaxScroll = Math.Max(0, (int)(topOffset - contentHeight + this.CurrentScroll));
 
                     // draw scroll icons
+                    Rectangle Up = Sprites.Icons.UpArrow;       // Shorter name to make code cleaner
+                    Rectangle Down = Sprites.Icons.DownArrow;   // Shorter name to make code cleaner
+                    this.UpIcon = new Rectangle(x + gutter, (int)(y + contentHeight - Up.Height - gutter - Down.Height), Up.Height, Up.Width);
+                    this.DownIcon = new Rectangle(x + gutter, (int)(y + contentHeight - Down.Height), Down.Height, Down.Width);
                     if (this.MaxScroll > 0 && this.CurrentScroll > 0)
-                        contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.UpArrow, x + gutter, y + contentHeight - Sprites.Icons.DownArrow.Height - gutter - Sprites.Icons.UpArrow.Height);
+                        contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.UpArrow, this.UpIcon.X, this.UpIcon.Y);
                     if (this.MaxScroll > 0 && this.CurrentScroll < this.MaxScroll)
-                        contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.DownArrow, x + gutter, y + contentHeight - Sprites.Icons.DownArrow.Height);
+                        contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.DownArrow, this.DownIcon.X, this.DownIcon.Y);
 
                     // end draw
                     contentBatch.End();
