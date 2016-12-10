@@ -132,27 +132,39 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to search.</param>
         /// <param name="position">The viewport-relative coordinates to search.</param>
-        public ITarget GetTargetFrom(GameLocation location, Vector2 tile, Vector2 position)
+        /// <param name="BehindPlayer">Whether or not you're searching behind the player sprite.</param>
+        public ITarget GetTargetFrom(GameLocation location, Vector2 tile, Vector2 position, bool BehindPlayer = false)
         {
             // get target sprites overlapping cursor position
             Rectangle tileArea = GameHelper.GetScreenCoordinatesFromTile(tile);
-            return (
-                // select targets whose sprites may overlap the cursor position
-                from target in this.GetNearbyTargets(location, tile)
-                let spriteArea = target.GetSpriteArea()
-                where target.Type != TargetType.Unknown
-                where target.IsAtTile(tile) || spriteArea.Intersects(tileArea)
+            if (!BehindPlayer)
+                return (
+                    // select targets whose sprites may overlap the cursor position
+                    from target in this.GetNearbyTargets(location, tile)
+                    let spriteArea = target.GetSpriteArea()
+                    where target.Type != TargetType.Unknown
+                    where target.IsAtTile(tile) || spriteArea.Intersects(tileArea)
 
-                // sort targets by layer
-                // (A higher Y value is closer to the foreground, and will occlude any sprites
-                // behind it. If two sprites at the same Y coordinate overlap, assume the left
-                // sprite occludes the right.)
-                orderby spriteArea.Y descending, spriteArea.X ascending
+                    // sort targets by layer
+                    // (A higher Y value is closer to the foreground, and will occlude any sprites
+                    // behind it. If two sprites at the same Y coordinate overlap, assume the left
+                    // sprite occludes the right.)
+                    orderby spriteArea.Y descending, spriteArea.X ascending
 
-                where target.SpriteIntersectsPixel(tile, position, spriteArea)
+                    where target.SpriteIntersectsPixel(tile, position, spriteArea)
 
-                select target
-            ).FirstOrDefault();
+                    select target
+                ).FirstOrDefault();
+            else
+                return (
+                    // select targets whose sprites may overlap the cursor position
+                    from target in this.GetNearbyTargets(location, tile)
+                    let spriteArea = target.GetSpriteArea()
+                    where target.Type != TargetType.Unknown
+                    where target.IsAtTile(tile)
+
+                    select target
+                ).FirstOrDefault();
         }
 
         /****
@@ -162,9 +174,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to search.</param>
         /// <param name="position">The viewport-relative coordinates to search.</param>
-        public ISubject GetSubjectFrom(GameLocation location, Vector2 tile, Vector2 position)
+        /// <param name="BehindPlayer">Whether or not you're searching behind the player sprite.</param>
+        public ISubject GetSubjectFrom(GameLocation location, Vector2 tile, Vector2 position, bool BehindPlayer = false)
         {
-            ITarget target = this.GetTargetFrom(location, tile, position);
+            ITarget target = this.GetTargetFrom(location, tile, position, BehindPlayer);
             return target != null
                 ? this.GetSubjectFrom(target)
                 : null;
