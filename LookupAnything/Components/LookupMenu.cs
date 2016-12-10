@@ -144,12 +144,6 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             // Close menu when clicking outside of it
             if (!this.isWithinBounds(x, y))
                 this.exitThisMenu();
-
-            // Add click action to scroll icons
-            if (UpIcon.Contains(x, y))
-                this.ScrollUp();
-            if (DownIcon.Contains(x, y))
-                this.ScrollDown();
         }
 
         /// <summary>Render the UI.</summary>
