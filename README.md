@@ -161,6 +161,7 @@ file if you want. These are the available settings:
 
 1.9 (upcoming):
 * Fixed a rare error caused by the game duplicating an NPC.
+* Fixed fruit tree quality schedule being incorrect in some cases.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
