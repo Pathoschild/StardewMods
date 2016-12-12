@@ -5,6 +5,7 @@ using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Objects;
@@ -272,7 +273,8 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get the recipe ingredients.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static RecipeModel[] GetRecipes(Metadata metadata)
+        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
+        public static RecipeModel[] GetRecipes(Metadata metadata, IReflectionHelper reflectionHelper)
         {
             List<RecipeModel> recipes = new List<RecipeModel>();
 
@@ -280,14 +282,14 @@ namespace Pathoschild.Stardew.LookupAnything
             recipes.AddRange(
                 from entry in CraftingRecipe.cookingRecipes
                 let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: true)
-                select new RecipeModel(recipe)
+                select new RecipeModel(recipe, reflectionHelper)
             );
 
             // crafting recipes
             recipes.AddRange(
                 from entry in CraftingRecipe.craftingRecipes
                 let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: false)
-                select new RecipeModel(recipe)
+                select new RecipeModel(recipe, reflectionHelper)
             );
 
             // recipes not available from game data

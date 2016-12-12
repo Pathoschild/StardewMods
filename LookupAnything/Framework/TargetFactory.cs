@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using Pathoschild.Stardew.LookupAnything.Framework.Targets;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Menus;
@@ -21,6 +22,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Provides metadata that's not available from the game data directly.</summary>
         private readonly Metadata Metadata;
 
+        /// <summary>Simplifies access to private game code.</summary>
+        private readonly IReflectionHelper Reflection;
+
 
         /*********
         ** Public methods
@@ -30,9 +34,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         ****/
         /// <summary>Construct an instance.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public TargetFactory(Metadata metadata)
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        public TargetFactory(Metadata metadata, IReflectionHelper reflection)
         {
             this.Metadata = metadata;
+            this.Reflection = reflection;
         }
 
         /****
@@ -61,7 +67,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 else if (npc is Monster)
                     type = TargetType.Monster;
 
-                yield return new CharacterTarget(type, npc, npc.getTileLocation());
+                yield return new CharacterTarget(type, npc, npc.getTileLocation(), this.Reflection);
             }
 
             // animals
@@ -82,7 +88,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 if (!GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
                     continue;
 
-                yield return new ObjectTarget(obj, spriteTile);
+                yield return new ObjectTarget(obj, spriteTile, this.Reflection);
             }
 
             // terrain features
@@ -95,18 +101,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     continue;
 
                 if ((feature as HoeDirt)?.crop != null)
-                    yield return new CropTarget(feature, spriteTile);
+                    yield return new CropTarget(feature, spriteTile, this.Reflection);
                 else if (feature is FruitTree)
                 {
-                    if (GameHelper.GetPrivateField<float>(feature, "alpha") < 0.8f)
+                    if (this.Reflection.GetPrivateValue<float>(feature, "alpha") < 0.8f)
                         continue; // ignore when tree is faded out (so player can lookup things behind it)
                     yield return new FruitTreeTarget((FruitTree)feature, spriteTile);
                 }
                 else if (feature is Tree)
                 {
-                    if (GameHelper.GetPrivateField<float>(feature, "alpha") < 0.8f)
+                    if (this.Reflection.GetPrivateValue<float>(feature, "alpha") < 0.8f)
                         continue; // ignore when tree is faded out (so player can lookup things behind it)
-                    yield return new TreeTarget((Tree)feature, spriteTile);
+                    yield return new TreeTarget((Tree)feature, spriteTile, this.Reflection);
                 }
                 else
                     yield return new UnknownTarget(feature, spriteTile);
@@ -176,11 +182,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case TargetType.Pet:
                 case TargetType.Monster:
                 case TargetType.Villager:
-                    return new CharacterSubject(target.GetValue<NPC>(), target.Type, this.Metadata);
+                    return new CharacterSubject(target.GetValue<NPC>(), target.Type, this.Metadata, this.Reflection);
 
                 // player
                 case TargetType.Farmer:
-                    return new FarmerSubject(target.GetValue<Farmer>());
+                    return new FarmerSubject(target.GetValue<Farmer>(), this.Reflection);
 
                 // animal
                 case TargetType.FarmAnimal:
@@ -220,7 +226,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // get target day
                 int selectedDay = -1;
                 {
-                    List<ClickableTextureComponent> calendarDays = GameHelper.GetPrivateField<List<ClickableTextureComponent>>(billboard, "calendarDays");
+                    List<ClickableTextureComponent> calendarDays = this.Reflection.GetPrivateValue<List<ClickableTextureComponent>>(billboard, "calendarDays");
                     for (int i = 0; i < calendarDays.Count; i++)
                     {
                         if (calendarDays[i].containsPoint((int)cursorPosition.X, (int)cursorPosition.Y))
@@ -236,7 +242,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // get villager with a birthday on that date
                 NPC target = GameHelper.GetAllCharacters().FirstOrDefault(p => p.birthday_Season == Game1.currentSeason && p.birthday_Day == selectedDay);
                 if (target != null)
-                    return new CharacterSubject(target, TargetType.Villager, this.Metadata);
+                    return new CharacterSubject(target, TargetType.Villager, this.Metadata, this.Reflection);
             }
 
             // chest
@@ -251,26 +257,26 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             else if (menu is GameMenu)
             {
                 // get current tab
-                List<IClickableMenu> tabs = GameHelper.GetPrivateField<List<IClickableMenu>>(menu, "pages");
+                List<IClickableMenu> tabs = this.Reflection.GetPrivateValue<List<IClickableMenu>>(menu, "pages");
                 IClickableMenu curTab = tabs[((GameMenu)menu).currentTab];
                 if (curTab is InventoryPage)
                 {
-                    Item item = GameHelper.GetPrivateField<Item>(curTab, "hoveredItem");
+                    Item item = this.Reflection.GetPrivateValue<Item>(curTab, "hoveredItem");
                     if (item != null)
                         return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
                 }
                 else if (curTab is CraftingPage)
                 {
-                    Item item = GameHelper.GetPrivateField<Item>(curTab, "hoverItem");
+                    Item item = this.Reflection.GetPrivateValue<Item>(curTab, "hoverItem");
                     if (item != null)
                         return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
                 }
                 else if (curTab is SocialPage)
                 {
                     // get villagers on current page
-                    int scrollOffset = GameHelper.GetPrivateField<int>(curTab, "slotPosition");
-                    ClickableTextureComponent[] entries = GameHelper
-                        .GetPrivateField<List<ClickableTextureComponent>>(curTab, "friendNames")
+                    int scrollOffset = this.Reflection.GetPrivateValue<int>(curTab, "slotPosition");
+                    ClickableTextureComponent[] entries = this.Reflection
+                        .GetPrivateValue<List<ClickableTextureComponent>>(curTab, "friendNames")
                         .Skip(scrollOffset)
                         .ToArray();
 
@@ -280,7 +286,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     {
                         NPC npc = GameHelper.GetAllCharacters().FirstOrDefault(p => p.name == entry.name);
                         if (npc != null)
-                            return new CharacterSubject(npc, TargetType.Villager, this.Metadata);
+                            return new CharacterSubject(npc, TargetType.Villager, this.Metadata, this.Reflection);
                     }
                 }
             }
@@ -288,7 +294,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             // shop
             else if (menu is ShopMenu)
             {
-                Item item = GameHelper.GetPrivateField<Item>(menu, "hoveredItem");
+                Item item = this.Reflection.GetPrivateValue<Item>(menu, "hoveredItem");
                 if (item != null)
                     return new ItemSubject(item.getOne(), ObjectContext.Inventory, knownQuality: true);
             }
@@ -297,7 +303,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             else if (menu is Toolbar)
             {
                 // find hovered slot
-                List<ClickableComponent> slots = GameHelper.GetPrivateField<List<ClickableComponent>>(menu, "buttons");
+                List<ClickableComponent> slots = this.Reflection.GetPrivateValue<List<ClickableComponent>>(menu, "buttons");
                 ClickableComponent hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint((int)cursorPosition.X, (int)cursorPosition.Y));
                 if (hoveredSlot == null)
                     return null;
@@ -316,7 +322,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             // by convention (for mod support)
             else
             {
-                Item item = GameHelper.GetPrivateField<Item>(menu, "HoveredItem", required: false); // ChestsAnywhere
+                Item item = this.Reflection.GetPrivateValue<Item>(menu, "HoveredItem", required: false); // ChestsAnywhere
                 if (item != null)
                     return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
             }

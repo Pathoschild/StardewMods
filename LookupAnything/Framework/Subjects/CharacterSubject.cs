@@ -7,6 +7,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Monsters;
@@ -25,6 +26,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>The lookup target.</summary>
         private readonly NPC Target;
 
+        /// <summary>Simplifies access to private game code.</summary>
+        private readonly IReflectionHelper Reflection;
+
 
         /*********
         ** Public methods
@@ -33,9 +37,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="npc">The lookup target.</param>
         /// <param name="type">The NPC type.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-        public CharacterSubject(NPC npc, TargetType type, Metadata metadata)
+        public CharacterSubject(NPC npc, TargetType type, Metadata metadata, IReflectionHelper reflectionHelper)
         {
+            this.Reflection = reflectionHelper;
+
             // get display type
             string typeName;
             if (type == TargetType.Villager)
@@ -88,13 +95,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 case TargetType.Pet:
                     Pet pet = (Pet)npc;
                     yield return new CharacterFriendshipField("Love", DataParser.GetFriendshipForPet(Game1.player, pet));
-                    yield return new GenericField("Petted today", GameHelper.GetPrivateField<bool>(pet, "wasPetToday"));
+                    yield return new GenericField("Petted today", this.Reflection.GetPrivateValue<bool>(pet, "wasPetToday"));
                     break;
 
                 case TargetType.Monster:
                     // basic info
                     Monster monster = (Monster)npc;
-                    yield return new GenericField("Invincible", $"For {GameHelper.GetPrivateField<int>(monster, "invincibleCountdown")} seconds", hasValue: monster.isInvincible());
+                    yield return new GenericField("Invincible", $"For {this.Reflection.GetPrivateValue<int>(monster, "invincibleCountdown")} seconds", hasValue: monster.isInvincible());
                     yield return new PercentageBarField("Health", monster.health, monster.maxHealth, Color.Green, Color.Gray, $"{Math.Round((monster.health / (monster.maxHealth * 1f) * 100))}% ({monster.health} of {monster.maxHealth})");
                     yield return new ItemDropListField("Drops", this.GetMonsterDrops(monster), defaultText: "nothing");
                     yield return new GenericField("XP", monster.experienceGained);

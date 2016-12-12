@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using StardewModdingAPI;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models
@@ -38,11 +39,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="recipe">The recipe to parse.</param>
-        public RecipeModel(CraftingRecipe recipe)
+        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
+        public RecipeModel(CraftingRecipe recipe, IReflectionHelper reflectionHelper)
             : this(
                 name: recipe.name,
                 type: recipe.isCookingRecipe ? RecipeType.Cooking : RecipeType.CraftingMenu,
-                ingredients: GameHelper.GetPrivateField<Dictionary<int, int>>(recipe, "recipeList"),
+                ingredients: reflectionHelper.GetPrivateField<Dictionary<int, int>>(recipe, "recipeList").GetValue(),
                 item: recipe.createItem,
                 mustBeLearned: true
             )

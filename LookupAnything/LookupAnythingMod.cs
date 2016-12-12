@@ -102,14 +102,14 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // initialise functionality
             this.CurrentVersion = UpdateHelper.GetSemanticVersion(this.Manifest.Version);
-            this.TargetFactory = new TargetFactory(this.Metadata);
+            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Reflection);
             this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config, this.Monitor);
 
             // hook up events
             {
                 // reset low-level cache once per game day (used for expensive queries that don't change within a day)
-                PlayerEvents.LoadedGame += (sender, e) => GameHelper.ResetCache(this.Metadata);
-                TimeEvents.OnNewDay += (sender, e) => GameHelper.ResetCache(this.Metadata);
+                PlayerEvents.LoadedGame += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection);
+                TimeEvents.OnNewDay += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection);
 
                 // hook up game events
                 GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
@@ -308,7 +308,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     // show lookup UI
                     this.Monitor.Log($"{logMessage} showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.", LogLevel.Trace);
                     this.PreviousMenu = Game1.activeClickableMenu;
-                    Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata, this.Monitor);
+                    Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata, this.Monitor, this.Helper.Reflection);
                 }
                 catch
                 {
