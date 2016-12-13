@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using Pathoschild.Stardew.LookupAnything.Framework.Targets;
@@ -10,6 +12,7 @@ using StardewValley.Characters;
 using StardewValley.Menus;
 using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
+using Object = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
@@ -128,56 +131,77 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             }
         }
 
+        /// <summary>Get the target on the specified tile.</summary>
+        /// <param name="location">The current location.</param>
+        /// <param name="tile">The tile to search.</param>
+        public ITarget GetTargetFromTile(GameLocation location, Vector2 tile)
+        {
+            return (
+                from target in this.GetNearbyTargets(location, tile)
+                where
+                    target.Type != TargetType.Unknown
+                    && target.IsAtTile(tile)
+                select target
+            ).FirstOrDefault();
+        }
+
         /// <summary>Get the target at the specified coordinate.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to search.</param>
-        /// <param name="position">The viewport-relative coordinates to search.</param>
-        /// <param name="BehindPlayer">Whether or not you're searching behind the player sprite.</param>
-        public ITarget GetTargetFrom(GameLocation location, Vector2 tile, Vector2 position, bool BehindPlayer = false)
+        /// <param name="position">The viewport-relative pixel coordinate to search.</param>
+        public ITarget GetTargetFromScreenCoordinate(GameLocation location, Vector2 tile, Vector2 position)
         {
             // get target sprites overlapping cursor position
             Rectangle tileArea = GameHelper.GetScreenCoordinatesFromTile(tile);
-            if (!BehindPlayer)
-                return (
-                    // select targets whose sprites may overlap the cursor position
-                    from target in this.GetNearbyTargets(location, tile)
-                    let spriteArea = target.GetSpriteArea()
-                    where target.Type != TargetType.Unknown
-                    where target.IsAtTile(tile) || spriteArea.Intersects(tileArea)
+            return (
+                // select targets whose sprites may overlap the target position
+                from target in this.GetNearbyTargets(location, tile)
+                let spriteArea = target.GetSpriteArea()
+                where
+                    target.Type != TargetType.Unknown
+                    && (target.IsAtTile(tile) || spriteArea.Intersects(tileArea))
 
-                    // sort targets by layer
-                    // (A higher Y value is closer to the foreground, and will occlude any sprites
-                    // behind it. If two sprites at the same Y coordinate overlap, assume the left
-                    // sprite occludes the right.)
-                    orderby spriteArea.Y descending, spriteArea.X ascending
+                // sort targets by layer
+                // (A higher Y value is closer to the foreground, and will occlude any sprites
+                // behind it. If two sprites at the same Y coordinate overlap, assume the left
+                // sprite occludes the right.)
+                orderby spriteArea.Y descending, spriteArea.X ascending
 
-                    where target.SpriteIntersectsPixel(tile, position, spriteArea)
+                where target.SpriteIntersectsPixel(tile, position, spriteArea)
 
-                    select target
-                ).FirstOrDefault();
-            else
-                return (
-                    // select targets whose sprites may overlap the cursor position
-                    from target in this.GetNearbyTargets(location, tile)
-                    let spriteArea = target.GetSpriteArea()
-                    where target.Type != TargetType.Unknown
-                    where target.IsAtTile(tile)
-
-                    select target
-                ).FirstOrDefault();
+                select target
+            ).FirstOrDefault();
         }
 
         /****
         ** Subjects
         ****/
         /// <summary>Get metadata for a Stardew object at the specified position.</summary>
+        /// <param name="player">The player performing the lookup.</param>
         /// <param name="location">The current location.</param>
-        /// <param name="tile">The tile to search.</param>
-        /// <param name="position">The viewport-relative coordinates to search.</param>
-        /// <param name="BehindPlayer">Whether or not you're searching behind the player sprite.</param>
-        public ISubject GetSubjectFrom(GameLocation location, Vector2 tile, Vector2 position, bool BehindPlayer = false)
+        /// <param name="lookupMode">The lookup target mode.</param>
+        public ISubject GetSubjectFrom(Farmer player, GameLocation location, LookupMode lookupMode)
         {
-            ITarget target = this.GetTargetFrom(location, tile, position, BehindPlayer);
+            // get target
+            ITarget target;
+            switch (lookupMode)
+            {
+                // under cursor
+                case LookupMode.Cursor:
+                    target = this.GetTargetFromScreenCoordinate(location, Game1.currentCursorTile, GameHelper.GetScreenCoordinatesFromCursor());
+                    break;
+
+                // in front of player
+                case LookupMode.FacingPlayer:
+                    Vector2 tile = this.GetFacingTile(Game1.player);
+                    target = this.GetTargetFromTile(location, tile);
+                    break;
+
+                default:
+                    throw new NotImplementedException($"Unknown lookup mode '{lookupMode}'.");
+            }
+
+            // get subject
             return target != null
                 ? this.GetSubjectFrom(target)
                 : null;
@@ -341,6 +365,31 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             }
 
             return null;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get the tile the player is facing.</summary>
+        /// <param name="player">The player to check.</param>
+        private Vector2 GetFacingTile(Farmer player)
+        {
+            Vector2 tile = player.getTileLocation();
+            FacingDirection direction = (FacingDirection)player.FacingDirection;
+            switch (direction)
+            {
+                case FacingDirection.Up:
+                    return tile + new Vector2(0, -1);
+                case FacingDirection.Right:
+                    return tile + new Vector2(1, 0);
+                case FacingDirection.Down:
+                    return tile + new Vector2(0, 1);
+                case FacingDirection.Left:
+                    return tile + new Vector2(-1, 0);
+                default:
+                    throw new NotImplementedException($"Unknown facing direction {direction}");
+            }
         }
     }
 }

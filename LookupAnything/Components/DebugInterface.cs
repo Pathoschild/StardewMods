@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using Pathoschild.Stardew.LookupAnything.Framework.Targets;
 using StardewModdingAPI;
@@ -117,7 +118,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
                 // show current target name (if any)
                 {
-                    ISubject subject = this.TargetFactory.GetSubjectFrom(currentLocation, cursorTile, cursorPosition);
+                    ISubject subject = this.TargetFactory.GetSubjectFrom(Game1.player, currentLocation, LookupMode.Cursor);
                     if (subject != null)
                         GameHelper.DrawHoverBox(spriteBatch, subject.Name, new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f), Game1.viewport.Width / 4f);
                 }

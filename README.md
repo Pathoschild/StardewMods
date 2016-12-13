@@ -66,8 +66,7 @@ file if you want. These are the available settings:
 
 | setting           | what it affects
 | ----------------- | -------------------
-| `Keyboard`        | Set keyboard bindings. The default values are `F1` to lookup, and `Up`/`Down` to scroll. See [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx).
-| `Controller`      | Set controller bindings. No buttons configured by default. See [valid buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.buttons.aspx).
+| `Controller`<br />`Keyboard` | Set the controller and keyboard buttons to use (see valid [keyboard buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx) and [controller buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.buttons.aspx)). The default values are `F1` to lookup, and `Up`/`Down` to scroll the lookup results. Available inputs:<ul><li>`ToggleLookup`: lookup whatever's under the cursor.</li><li>`ToggleLookupInFrontOfPlayer`: lookup whatever's in front of the player.</li><li>`ScrollUp`/`ScrollDown`: scroll the displayed lookup results.</li><li>`ToggleDebug`: show information intended for developers.</li></ul>
 | `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll see a small message at the bottom of the screen for a few seconds. This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
 | `HideOnKeyUp`     | Default `false`. If enabled, the lookup window will be shown while you hold `F1` and disappear when you release it.
 
@@ -160,6 +159,7 @@ file if you want. These are the available settings:
 * Fixed social menu lookup sometimes showing the wrong villager.
 
 1.9 (upcoming):
+* Added key to lookup what the player is facing for more intuitive controller use (not bound by default).
 * Fixed a rare error caused by the game duplicating an NPC.
 * Fixed fruit tree quality schedule being incorrect in some cases.
 
