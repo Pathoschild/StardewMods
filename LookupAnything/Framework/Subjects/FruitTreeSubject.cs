@@ -168,18 +168,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="daysPerQuality">The number of days before the tree begins producing a higher quality.</param>
         private IEnumerable<KeyValuePair<ItemQuality, int>> GetQualitySchedule(FruitTree tree, ItemQuality currentQuality, int daysPerQuality)
         {
+            if (tree.daysUntilMature > 0)
+                yield break; // not mature yet
+
             // yield current
             yield return new KeyValuePair<ItemQuality, int>(currentQuality, 0);
 
             // yield future qualities
-            int dayOffset = -(daysPerQuality - (-tree.daysUntilMature % daysPerQuality));
+            int dayOffset = daysPerQuality - Math.Abs(tree.daysUntilMature % daysPerQuality);
             foreach (ItemQuality futureQuality in new[] { ItemQuality.Silver, ItemQuality.Gold, ItemQuality.Iridium })
             {
                 if (currentQuality >= futureQuality)
                     continue;
 
-                dayOffset += daysPerQuality;
                 yield return new KeyValuePair<ItemQuality, int>(futureQuality, dayOffset);
+                dayOffset += daysPerQuality;
             }
         }
     }

@@ -30,6 +30,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>The aspect ratio of the page background.</summary>
         private readonly Vector2 AspectRatio = new Vector2(Sprites.Letter.Sprite.Width, Sprites.Letter.Sprite.Height);
 
+        /// <summary>Simplifies access to private game code.</summary>
+        private readonly IReflectionHelper Reflection;
+
         /// <summary>The maximum pixels to scroll.</summary>
         private int MaxScroll;
 
@@ -43,6 +46,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         private Rectangle UpIcon;
         private Rectangle DownIcon;
 
+        /// <summary>Whether the game's draw mode has been validated for compatibility.</summary>
+        private bool ValidatedDrawMode;
+
 
         /*********
         ** Public methods
@@ -55,13 +61,15 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="monitor">Encapsulates logging and monitoring.</param>
         /// <param name="scroll">Scroll amount configured by the user.</param>
-        public LookupMenu(ISubject subject, Metadata metadata, IMonitor monitor, int scroll)
+        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
+        public LookupMenu(ISubject subject, Metadata metadata, IMonitor monitor, int scroll, IReflectionHelper reflectionHelper)
         {
             this.Subject = subject;
             this.Fields = subject.GetData(metadata).Where(p => p.HasValue).ToArray();
             this.Monitor = monitor;
-            this.CalculateDimensions();
             this.ScrollAmount = scroll;
+            this.Reflection = reflectionHelper;
+            this.CalculateDimensions();
         }
 
         /****
@@ -168,16 +176,18 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 // (This prevents Lookup Anything from creating new sprite batches, which breaks its core rendering logic.
                 // Fortunately this very rarely happens; the only known case is the Stardew Valley Fair, when the only thing
                 // you can look up anyway is the farmer.)
+                if (!this.ValidatedDrawMode)
                 {
-                    SpriteSortMode sortMode =
-                        GameHelper.GetPrivateField<SpriteSortMode?>(Game1.spriteBatch, "spriteSortMode", required: false) // XNA
-                        ?? GameHelper.GetPrivateField<SpriteSortMode>(Game1.spriteBatch, "_sortMode"); // MonoGame
-                    if (sortMode == SpriteSortMode.Immediate)
+                    IPrivateField<SpriteSortMode> sortModeField =
+                        this.Reflection.GetPrivateField<SpriteSortMode>(Game1.spriteBatch, "spriteSortMode", required: false) // XNA
+                        ?? this.Reflection.GetPrivateField<SpriteSortMode>(Game1.spriteBatch, "_sortMode"); // MonoGame
+                    if (sortModeField.GetValue() == SpriteSortMode.Immediate)
                     {
                         this.Monitor.Log("Aborted the lookup because the game's current rendering mode isn't compatible with the mod's UI. This only happens in rare cases (e.g. the Stardew Valley Fair).", LogLevel.Warn);
                         this.exitThisMenu(playSound: false);
                         return;
                     }
+                    this.ValidatedDrawMode = true;
                 }
 
                 // calculate dimensions

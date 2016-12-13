@@ -31,10 +31,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Construct a default instance.</summary>
         public RawModConfig()
         {
-            this.ScrollAmount = 160;
             this.Keyboard = new InputMapConfiguration<string>
             {
                 ToggleLookup = Keys.F1.ToString(),
+                ToggleLookupInFrontOfPlayer = "",
                 ScrollUp = Keys.Up.ToString(),
                 ScrollDown = Keys.Down.ToString(),
                 ToggleDebug = ""
@@ -42,10 +42,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             this.Controller = new InputMapConfiguration<string>
             {
                 ToggleLookup = "",
+                ToggleLookupInFrontOfPlayer = "",
                 ScrollUp = "",
                 ScrollDown = "",
                 ToggleDebug = ""
             };
+            this.ScrollAmount = 160;
             this.HideOnKeyUp = false;
             this.CheckForUpdates = true;
         }
@@ -55,10 +57,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         {
             return new ModConfig
             {
-                ScrollAmount = this.ScrollAmount,
                 Keyboard = new InputMapConfiguration<Keys>
                 {
                     ToggleLookup = this.TryParse(this.Keyboard.ToggleLookup, Keys.F1),
+                    ToggleLookupInFrontOfPlayer = this.TryParse(this.Keyboard.ToggleLookupInFrontOfPlayer, Keys.None),
                     ScrollUp = this.TryParse(this.Keyboard.ScrollUp, Keys.Up),
                     ScrollDown = this.TryParse(this.Keyboard.ScrollDown, Keys.Down),
                     ToggleDebug = this.TryParse(this.Keyboard.ToggleDebug, Keys.None)
@@ -66,10 +68,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 Controller = new InputMapConfiguration<Buttons>
                 {
                     ToggleLookup = this.TryParse<Buttons>(this.Controller.ToggleLookup),
+                    ToggleLookupInFrontOfPlayer = this.TryParse<Buttons>(this.Controller.ToggleLookupInFrontOfPlayer),
                     ScrollUp = this.TryParse<Buttons>(this.Controller.ScrollUp),
                     ScrollDown = this.TryParse<Buttons>(this.Controller.ScrollDown),
                     ToggleDebug = this.TryParse<Buttons>(this.Controller.ToggleDebug)
                 },
+                ScrollAmount = this.ScrollAmount,
                 HideOnKeyUp = this.HideOnKeyUp,
                 CheckForUpdates = this.CheckForUpdates
             };

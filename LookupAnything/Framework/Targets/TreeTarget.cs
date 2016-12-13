@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
@@ -12,11 +13,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /*********
         ** Public methods
         *********/
+        /// <summary>Simplifies access to private game code.</summary>
+        private readonly IReflectionHelper Reflection;
+
+
+        /*********
+        ** Public methods
+        *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="obj">The underlying in-game object.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        public TreeTarget(Tree obj, Vector2? tilePosition = null)
-            : base(TargetType.WildTree, obj, tilePosition) { }
+        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
+        public TreeTarget(Tree obj, Vector2? tilePosition, IReflectionHelper reflectionHelper)
+            : base(TargetType.WildTree, obj, tilePosition)
+        {
+            this.Reflection = reflectionHelper;
+        }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         /// <remarks>Reverse-engineered from <see cref="Tree.draw"/>.</remarks>
@@ -38,7 +50,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             WildTreeGrowthStage growth = (WildTreeGrowthStage)tree.growthStage;
 
             // get sprite data
-            Texture2D spriteSheet = GameHelper.GetPrivateField<Texture2D>(tree, "texture");
+            Texture2D spriteSheet = this.Reflection.GetPrivateValue<Texture2D>(tree, "texture");
             SpriteEffects spriteEffects = tree.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             // check tree sprite

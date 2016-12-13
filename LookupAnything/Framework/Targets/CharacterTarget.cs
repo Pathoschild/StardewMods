@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Monsters;
 
@@ -9,14 +10,25 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
     internal class CharacterTarget : GenericTarget
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>Simplifies access to private game code.</summary>
+        private readonly IReflectionHelper Reflection;
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="type">The target type.</param>
         /// <param name="obj">The underlying in-game object.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        public CharacterTarget(TargetType type, NPC obj, Vector2? tilePosition = null)
-            : base(type, obj, tilePosition) { }
+        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
+        public CharacterTarget(TargetType type, NPC obj, Vector2? tilePosition, IReflectionHelper reflectionHelper)
+            : base(type, obj, tilePosition)
+        {
+            this.Reflection = reflectionHelper;
+        }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         public override Rectangle GetSpriteArea()
@@ -34,7 +46,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
                 yOrigin = boundingBox.Top - npc.sprite.spriteHeight * Game1.pixelZoom + (float)(System.Math.Sin(Game1.currentGameTime.TotalGameTime.Milliseconds / 1000.0 * (2.0 * System.Math.PI)) * 10.0);
             else if (npc is SquidKid)
             {
-                int yOffset = GameHelper.GetPrivateField<int>((SquidKid)npc, "yOffset");
+                int yOffset = this.Reflection.GetPrivateValue<int>((SquidKid)npc, "yOffset");
                 yOrigin = boundingBox.Bottom - npc.sprite.spriteHeight * Game1.pixelZoom + yOffset;
             }
             else

@@ -1,6 +1,6 @@
-using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
@@ -15,6 +15,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <summary>The underlying crop.</summary>
         private readonly Crop Crop;
 
+        /// <summary>Simplifies access to private game code.</summary>
+        private readonly IReflectionHelper Reflection;
+
 
         /*********
         ** Public methods
@@ -22,10 +25,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <summary>Construct an instance.</summary>
         /// <param name="obj">The underlying in-game object.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        public CropTarget(TerrainFeature obj, Vector2? tilePosition = null)
+        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
+        public CropTarget(TerrainFeature obj, Vector2? tilePosition, IReflectionHelper reflectionHelper)
             : base(TargetType.Crop, obj, tilePosition)
         {
             this.Crop = ((HoeDirt)obj).crop;
+            this.Reflection = reflectionHelper;
         }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
@@ -72,8 +77,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="crop">The crop.</param>
         private Rectangle GetSourceRectangle(Crop crop)
         {
-            MethodInfo method = GameHelper.GetPrivateMethod(crop, "getSourceRect");
-            return (Rectangle)method.Invoke(crop, new object[] { crop.rowInSpriteSheet });
+            return this.Reflection.GetPrivateMethod(crop, "getSourceRect").Invoke<Rectangle>(crop.rowInSpriteSheet);
         }
     }
 }

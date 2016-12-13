@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -43,10 +42,11 @@ namespace Pathoschild.Stardew.LookupAnything
         ****/
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static void ResetCache(Metadata metadata)
+        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
+        public static void ResetCache(Metadata metadata, IReflectionHelper reflectionHelper)
         {
             GameHelper.GiftTastes = new Lazy<GiftTasteModel[]>(() => DataParser.GetGiftTastes(GameHelper.Objects.Value).ToArray());
-            GameHelper.Recipes = new Lazy<RecipeModel[]>(() => DataParser.GetRecipes(metadata).ToArray());
+            GameHelper.Recipes = new Lazy<RecipeModel[]>(() => DataParser.GetRecipes(metadata, reflectionHelper).ToArray());
         }
 
         /****
@@ -322,74 +322,18 @@ namespace Pathoschild.Stardew.LookupAnything
             return true;
         }
 
+
         /****
-        ** Reflection
+        ** Error handling
         ****/
-        /// <summary>Get a private field value.</summary>
-        /// <typeparam name="T">The field type.</typeparam>
-        /// <param name="parent">The parent object.</param>
-        /// <param name="name">The field name.</param>
-        /// <param name="required">Whether to throw an exception if the private field is not found.</param>
-        public static T GetPrivateField<T>(object parent, string name, bool required = true)
-        {
-            if (parent == null)
-                return default(T);
-
-            // get field from hierarchy
-            FieldInfo field = null;
-            for (Type type = parent.GetType(); type != null && field == null; type = type.BaseType)
-                field = type.GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
-
-            // validate
-            if (field == null)
-            {
-                if (required)
-                    throw new InvalidOperationException($"The {parent.GetType().Name} object doesn't have a private '{name}' field.");
-                return default(T);
-            }
-
-            // get value
-            return (T)field.GetValue(parent);
-        }
-
-        /// <summary>Get a private method.</summary>
-        /// <param name="parent">The parent object.</param>
-        /// <param name="name">The field name.</param>
-        /// <param name="required">Whether to throw an exception if the private field is not found.</param>
-        public static MethodInfo GetPrivateMethod(object parent, string name, bool required = true)
-        {
-            if (parent == null)
-                throw new InvalidOperationException($"Can't get private method '{name}' on null instance.");
-
-            // get method from hierarchy
-            MethodInfo method = null;
-            for (Type type = parent.GetType(); type != null && method == null; type = type.BaseType)
-                method = type.GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic);
-
-            // validate
-            if (method == null)
-            {
-                if (required)
-                    throw new InvalidOperationException($"The {parent.GetType().Name} object doesn't have a private '{name}' method.");
-                return null;
-            }
-
-            // get value
-            return method;
-        }
-
         /// <summary>Validate that the game versions match the minimum requirements, and return an appropriate error message if not.</summary>
         public static string ValidateGameVersion()
         {
             if (string.Compare(Constants.Version.ToString(), Constant.MinimumApiVersion, StringComparison.InvariantCultureIgnoreCase) == -1)
                 return $"The LookupAnything mod requires the latest version of SMAPI. Please update SMAPI from {Constants.Version} to {Constant.MinimumApiVersion}.";
-
             return null;
         }
 
-        /****
-        ** Error handling
-        ****/
         /// <summary>Intercept errors thrown by the action.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up"). This is displayed on the screen, so it should be simple and avoid characters that might not be available in the sprite font.</param>

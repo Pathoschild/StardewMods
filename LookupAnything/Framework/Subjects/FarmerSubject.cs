@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 
@@ -18,16 +18,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>The lookup target.</summary>
         private readonly Farmer Target;
 
+        /// <summary>Simplifies access to private game code.</summary>
+        private readonly IReflectionHelper Reflection;
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="farmer">The lookup target.</param>
-        public FarmerSubject(Farmer farmer)
+        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
+        public FarmerSubject(Farmer farmer, IReflectionHelper reflectionHelper)
             : base(farmer.Name, null, "Player")
         {
             this.Target = farmer;
+            this.Reflection = reflectionHelper;
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -73,8 +78,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         private string GetSpiritLuckMessage()
         {
             TV tv = new TV();
-            MethodInfo method = GameHelper.GetPrivateMethod(tv, "getFortuneForecast");
-            return (string)method.Invoke(tv, new object[0]);
+            return this.Reflection.GetPrivateMethod(tv, "getFortuneForecast").Invoke<string>();
         }
     }
 }

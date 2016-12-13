@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Common;
 using Pathoschild.Stardew.LookupAnything.Components;
 using Pathoschild.Stardew.LookupAnything.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -102,14 +104,14 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // initialise functionality
             this.CurrentVersion = UpdateHelper.GetSemanticVersion(this.Manifest.Version);
-            this.TargetFactory = new TargetFactory(this.Metadata);
+            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Reflection);
             this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config, this.Monitor);
 
             // hook up events
             {
                 // reset low-level cache once per game day (used for expensive queries that don't change within a day)
-                PlayerEvents.LoadedGame += (sender, e) => GameHelper.ResetCache(this.Metadata);
-                TimeEvents.OnNewDay += (sender, e) => GameHelper.ResetCache(this.Metadata);
+                PlayerEvents.LoadedGame += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection);
+                TimeEvents.OnNewDay += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection);
 
                 // hook up game events
                 GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
@@ -201,8 +203,10 @@ namespace Pathoschild.Stardew.LookupAnything
             this.Monitor.InterceptErrors("handling your input", $"handling input '{key}'", () =>
             {
                 if (key.Equals(map.ToggleLookup))
-                    this.ToggleLookup();
-                if (key.Equals(map.ScrollUp))
+                    this.ToggleLookup(LookupMode.Cursor);
+                else if (key.Equals(map.ToggleLookupInFrontOfPlayer))
+                    this.ToggleLookup(LookupMode.FacingPlayer);
+                else if (key.Equals(map.ScrollUp))
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollUp();
                 else if (key.Equals(map.ScrollDown))
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollDown();
@@ -223,7 +227,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // perform bound action
             this.Monitor.InterceptErrors("handling your input", $"handling input '{key}'", () =>
             {
-                if (key.Equals(map.ToggleLookup))
+                if (key.Equals(map.ToggleLookup) || key.Equals(map.ToggleLookupInFrontOfPlayer))
                     this.HideLookup();
             });
         }
@@ -263,16 +267,18 @@ namespace Pathoschild.Stardew.LookupAnything
         ** Helpers
         ****/
         /// <summary>Show the lookup UI for the current target.</summary>
-        private void ToggleLookup()
+        /// <param name="lookupMode">The lookup target mode.</param>
+        private void ToggleLookup(LookupMode lookupMode)
         {
             if (Game1.activeClickableMenu is LookupMenu)
                 this.HideLookup();
             else
-                this.ShowLookup();
+                this.ShowLookup(lookupMode);
         }
 
         /// <summary>Show the lookup UI for the current target.</summary>
-        private void ShowLookup()
+        /// <param name="lookupMode">The lookup target mode.</param>
+        private void ShowLookup(LookupMode lookupMode)
         {
             // disable lookups if metadata is invalid
             if (!this.IsDataValid)
@@ -298,7 +304,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     }
 
                     // get target
-                    ISubject subject = this.GetSubject(logMessage);
+                    ISubject subject = this.GetSubject(logMessage, lookupMode);
                     if (subject == null)
                     {
                         this.Monitor.Log($"{logMessage} no target found.", LogLevel.Trace);
@@ -308,7 +314,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     // show lookup UI
                     this.Monitor.Log($"{logMessage} showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.", LogLevel.Trace);
                     this.PreviousMenu = Game1.activeClickableMenu;
-                    Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata, this.Monitor, this.Config.ScrollAmount);
+                    Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata, this.Monitor, this.Config.ScrollAmount, this.Helper.Reflection);
                 }
                 catch
                 {
@@ -320,30 +326,41 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get the most relevant subject under the player's cursor.</summary>
         /// <param name="logMessage">The log message to which to append search details.</param>
-        private ISubject GetSubject(StringBuilder logMessage)
+        /// <param name="lookupMode">The lookup target mode.</param>
+        private ISubject GetSubject(StringBuilder logMessage, LookupMode lookupMode)
         {
-            var cursorPos = GameHelper.GetScreenCoordinatesFromCursor();
-
-            // try menu
-            if (Game1.activeClickableMenu != null)
+            // menu under cursor
+            if (lookupMode == LookupMode.Cursor)
             {
-                logMessage.Append($" searching the open '{Game1.activeClickableMenu.GetType().Name}' menu...");
-                return this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu, cursorPos);
-            }
+                Vector2 cursorPos = GameHelper.GetScreenCoordinatesFromCursor();
 
-            // try HUD under cursor
-            foreach (IClickableMenu menu in Game1.onScreenMenus)
-            {
-                if (menu.isWithinBounds((int)cursorPos.X, (int)cursorPos.Y))
+                // try menu
+                if (Game1.activeClickableMenu != null)
                 {
-                    logMessage.Append($" searching the on-screen '{menu.GetType().Name}' menu...");
-                    return this.TargetFactory.GetSubjectFrom(menu, cursorPos);
+                    logMessage.Append($" searching the open '{Game1.activeClickableMenu.GetType().Name}' menu...");
+                    return this.TargetFactory.GetSubjectFrom(Game1.activeClickableMenu, cursorPos);
+                }
+
+                // try HUD under cursor
+                foreach (IClickableMenu menu in Game1.onScreenMenus)
+                {
+                    if (menu.isWithinBounds((int)cursorPos.X, (int)cursorPos.Y))
+                    {
+                        logMessage.Append($" searching the on-screen '{menu.GetType().Name}' menu...");
+                        return this.TargetFactory.GetSubjectFrom(menu, cursorPos);
+                    }
                 }
             }
 
             // try world
-            logMessage.Append(" searching the world...");
-            return this.TargetFactory.GetSubjectFrom(Game1.currentLocation, Game1.currentCursorTile, cursorPos);
+            if (Game1.activeClickableMenu == null)
+            {
+                logMessage.Append(" searching the world...");
+                return this.TargetFactory.GetSubjectFrom(Game1.player, Game1.currentLocation, lookupMode);
+            }
+
+            // not found
+            return null;
         }
 
         /// <summary>Show the lookup UI for the current target.</summary>

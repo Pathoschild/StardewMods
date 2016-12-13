@@ -46,9 +46,11 @@
   <ItemGroup>
     <Compile Include="Common\CommonHelper.cs" />
     <Compile Include="Components\DebugInterface.cs" />
+    <Compile Include="Framework\Constants\FacingDirection.cs" />
     <Compile Include="Framework\Constants\FenceType.cs" />
     <Compile Include="Framework\Constants\FruitTreeGrowthStage.cs" />
     <Compile Include="DataParser.cs" />
+    <Compile Include="Framework\Constants\LookupMode.cs" />
     <Compile Include="Framework\Data\ShopData.cs" />
     <Compile Include="Framework\GameDate.cs" />
     <Compile Include="Framework\Models\BundleIngredientModel.cs" />

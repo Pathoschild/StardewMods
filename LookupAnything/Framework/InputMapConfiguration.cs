@@ -9,8 +9,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The control which toggles the lookup UI.</summary>
+        /// <summary>The control which toggles the lookup UI for something under the cursor.</summary>
         public T ToggleLookup { get; set; }
+
+        /// <summary>The control which toggles the lookup UI for something in front of the player.</summary>
+        public T ToggleLookupInFrontOfPlayer { get; set; }
 
         /// <summary>The control which scrolls up long content.</summary>
         public T ScrollUp { get; set; }
@@ -35,7 +38,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Get whether any keys are configured.</summary>
         public bool HasAny()
         {
-            return new[] { this.ToggleLookup, this.ScrollUp, this.ScrollDown, this.ToggleDebug }.Any(this.IsValidKey);
+            return new[] { this.ToggleLookup, this.ToggleLookupInFrontOfPlayer, this.ScrollUp, this.ScrollDown, this.ToggleDebug }.Any(this.IsValidKey);
         }
     }
 }
