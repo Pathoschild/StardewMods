@@ -207,9 +207,9 @@ namespace Pathoschild.Stardew.LookupAnything
                 else if (key.Equals(map.ToggleLookupInFrontOfPlayer))
                     this.ToggleLookup(LookupMode.FacingPlayer);
                 else if (key.Equals(map.ScrollUp))
-                    (Game1.activeClickableMenu as LookupMenu)?.ScrollUp(this.Config.ScrollAmount);
+                    (Game1.activeClickableMenu as LookupMenu)?.ScrollUp();
                 else if (key.Equals(map.ScrollDown))
-                    (Game1.activeClickableMenu as LookupMenu)?.ScrollDown(this.Config.ScrollAmount);
+                    (Game1.activeClickableMenu as LookupMenu)?.ScrollDown();
                 else if (key.Equals(map.ToggleDebug))
                     this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
             });
@@ -314,7 +314,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     // show lookup UI
                     this.Monitor.Log($"{logMessage} showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.", LogLevel.Trace);
                     this.PreviousMenu = Game1.activeClickableMenu;
-                    Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata, this.Monitor, this.Helper.Reflection);
+                    Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata, this.Monitor, this.Config.ScrollAmount, this.Helper.Reflection);
                 }
                 catch
                 {
