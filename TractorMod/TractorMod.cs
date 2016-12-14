@@ -373,17 +373,10 @@ namespace TractorMod
         static Farm ourFarm = null;
         static void SpawnTractor(bool SpawnAtFirstTractorHouse = true)
         {
-            //remove tractor if there is one already
-            foreach (NPC character in Game1.getFarm().characters)
-            {
-                if (character is Tractor)
-                {
-                    Game1.getFarm().characters.Remove(character);
-                    break;
-                }
-            }
+            if (ATractor != null)
+                return;
 
-            if(SpawnAtFirstTractorHouse == false)
+            if (SpawnAtFirstTractorHouse == false)
             {
                 ATractor = new Tractor((int)tractorSpawnLocation.X, (int)tractorSpawnLocation.Y);
                 ATractor.name = "Tractor";
@@ -432,13 +425,12 @@ namespace TractorMod
             if (ourFarm == null)
                 ourFarm = Game1.getFarm();
 
-            if (Game1.currentLocation is Farm && IsNewDay)
+            if (Game1.currentLocation is Farm && IsNewDay && Game1.player.currentLocation is Farm)
             {
                 LoadModInfo();
                 SpawnTractor();
                 IsNewDay = false;
             }
-            
 
             //use cellphone
             if (currentKeyboardState.IsKeyDown(ModConfig.PhoneKey))
