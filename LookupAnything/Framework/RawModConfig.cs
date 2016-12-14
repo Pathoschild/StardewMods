@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>The controller input map.</summary>
         public InputMapConfiguration<string> Controller { get; set; }
 
-        /// <summary>The amount to scroll long content when pressing a 'scroll up' or 'scroll down' control.</summary>
+        /// <summary>The amount to scroll long content on each up/down scroll.</summary>
         public int ScrollAmount { get; set; }
 
         /// <summary>Whether the lookup UI should only be visible as long as the key is pressed.</summary>

@@ -159,7 +159,10 @@ file if you want. These are the available settings:
 * Fixed social menu lookup sometimes showing the wrong villager.
 
 1.9 (upcoming):
-* Added key to lookup what the player is facing for more intuitive controller use (not bound by default).
+* You can now lookup whatever's directly in front of you with a separate hotkey, for more intuitive controller use. (Not bound by default.)
+* You can now click on the up/down arrows to scroll content.
+* Fixed controller thumbsticks scrolling content too slowly.
+* Fixed controller button conventions not used by lookup menu.
 * Fixed a rare error caused by the game duplicating an NPC.
 * Fixed fruit tree quality schedule being incorrect in some cases.
 

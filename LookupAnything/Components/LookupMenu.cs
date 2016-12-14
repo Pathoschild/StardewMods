@@ -2,13 +2,13 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
-using Microsoft.Xna.Framework.Input;
 
 namespace Pathoschild.Stardew.LookupAnything.Components
 {
@@ -33,18 +33,23 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
 
+        /// <summary>The amount to scroll long content on each up/down scroll.</summary>
+        private readonly int ScrollAmount;
+
+        /// <summary>The clickable 'scroll up' icon.</summary>
+        private readonly ClickableTextureComponent ScrollUpButton;
+
+        /// <summary>The clickable 'scroll down' icon.</summary>
+        private readonly ClickableTextureComponent ScrollDownButton;
+
+        /// <summary>The spacing around the scroll buttons.</summary>
+        private readonly int ScrollButtonGutter = 15;
+
         /// <summary>The maximum pixels to scroll.</summary>
         private int MaxScroll;
 
         /// <summary>The number of pixels to scroll.</summary>
         private int CurrentScroll;
-
-        /// <summary>Scroll amount configured by the user.</summary>
-        private int ScrollAmount;
-
-        /// <summary>Arrow icon locations for click functionality.</summary>
-        private Rectangle UpIcon;
-        private Rectangle DownIcon;
 
         /// <summary>Whether the game's draw mode has been validated for compatibility.</summary>
         private bool ValidatedDrawMode;
@@ -60,16 +65,23 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="subject">The metadata to display.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="monitor">Encapsulates logging and monitoring.</param>
-        /// <param name="scroll">Scroll amount configured by the user.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public LookupMenu(ISubject subject, Metadata metadata, IMonitor monitor, int scroll, IReflectionHelper reflectionHelper)
+        /// <param name="scroll">The amount to scroll long content on each up/down scroll.</param>
+        public LookupMenu(ISubject subject, Metadata metadata, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll)
         {
+            // save data
             this.Subject = subject;
             this.Fields = subject.GetData(metadata).Where(p => p.HasValue).ToArray();
             this.Monitor = monitor;
-            this.ScrollAmount = scroll;
             this.Reflection = reflectionHelper;
-            this.CalculateDimensions();
+            this.ScrollAmount = scroll;
+
+            // add scroll buttons
+            this.ScrollUpButton = new ClickableTextureComponent(Rectangle.Empty, Sprites.Icons.Sheet, Sprites.Icons.UpArrow, 1);
+            this.ScrollDownButton = new ClickableTextureComponent(Rectangle.Empty, Sprites.Icons.Sheet, Sprites.Icons.DownArrow, 1);
+
+            // update layout
+            this.UpdateLayout();
         }
 
         /****
@@ -81,7 +93,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="playSound">Whether to enable sound.</param>
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            this.HandleCursorLeftClick(x, y);
+            this.HandleLeftClick(x, y);
         }
 
         /// <summary>The method invoked when the player right-clicks on the lookup UI.</summary>
@@ -94,7 +106,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="direction">The scroll direction.</param>
         public override void receiveScrollWheelAction(int direction)
         {
-            if (direction > 0)          // Positive number scrolls window content up
+            if (direction > 0)    // positive number scrolls content up
                 this.ScrollUp();
             else
                 this.ScrollDown();
@@ -105,7 +117,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="newBounds">The new viewport.</param>
         public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
         {
-            this.CalculateDimensions();
+            this.UpdateLayout();
         }
 
         /// <summary>The method called when the player presses a controller button.</summary>
@@ -114,21 +126,25 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         {
             switch (button)
             {
+                // left click
                 case Buttons.A:
                     Point p = Game1.getMousePosition();
-                    this.HandleCursorLeftClick(p.X, p.Y);
+                    this.HandleLeftClick(p.X, p.Y);
                     break;
+
+                // exit
                 case Buttons.B:
                     this.exitThisMenu();
                     break;
+
+                // scroll up
                 case Buttons.RightThumbstickUp:
                     this.ScrollUp();
                     break;
+
+                // scroll down
                 case Buttons.RightThumbstickDown:
                     this.ScrollDown();
-                    break;
-                default:
-                    base.receiveGamePadButton(button);
                     break;
             }
         }
@@ -148,19 +164,19 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             this.CurrentScroll += this.ScrollAmount;
         }
 
-        /// <summary>Combines the Left Click action with the equivalent controller button. All left click actions should be handled here only.</summary>
-        /// <param name="x">The X-position of the cursor.</param>
-        /// <param name="y">The Y-position of the cursor.</param>
-        public void HandleCursorLeftClick(int x, int y)
+        /// <summary>Handle a left-click from the player's mouse or controller.</summary>
+        /// <param name="x">The x-position of the cursor.</param>
+        /// <param name="y">The y-position of the cursor.</param>
+        public void HandleLeftClick(int x, int y)
         {
-            // Close menu when clicking outside of it
+            // close menu when clicked outside
             if (!this.isWithinBounds(x, y))
                 this.exitThisMenu();
 
-            // Add click action to scroll icons
-            if (UpIcon.Contains(x, y))
+            // scroll up or down
+            else if (this.ScrollUpButton.containsPoint(x, y))
                 this.ScrollUp();
-            if (DownIcon.Contains(x, y))
+            else if (this.ScrollDownButton.containsPoint(x, y))
                 this.ScrollDown();
         }
 
@@ -292,14 +308,10 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                     this.MaxScroll = Math.Max(0, (int)(topOffset - contentHeight + this.CurrentScroll));
 
                     // draw scroll icons
-                    Rectangle Up = Sprites.Icons.UpArrow;       // Shorter name to make code cleaner
-                    Rectangle Down = Sprites.Icons.DownArrow;   // Shorter name to make code cleaner
-                    this.UpIcon = new Rectangle(x + gutter, (int)(y + contentHeight - Up.Height - gutter - Down.Height), Up.Height, Up.Width);
-                    this.DownIcon = new Rectangle(x + gutter, (int)(y + contentHeight - Down.Height), Down.Height, Down.Width);
                     if (this.MaxScroll > 0 && this.CurrentScroll > 0)
-                        contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.UpArrow, this.UpIcon.X, this.UpIcon.Y);
+                        this.ScrollUpButton.draw(contentBatch);
                     if (this.MaxScroll > 0 && this.CurrentScroll < this.MaxScroll)
-                        contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.DownArrow, this.DownIcon.X, this.DownIcon.Y);
+                        this.ScrollDownButton.draw(spriteBatch);
 
                     // end draw
                     contentBatch.End();
@@ -314,15 +326,25 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /*********
         ** Private methods
         *********/
-        /// <summary>Calculate the rendered dimensions based on the current game scale.</summary>
-        private void CalculateDimensions()
+        /// <summary>Update the layout dimensions based on the current game scale.</summary>
+        private void UpdateLayout()
         {
+            // update size
             this.width = Math.Min(Game1.tileSize * 14, Game1.viewport.Width);
             this.height = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * this.width), Game1.viewport.Height);
 
+            // update position
             Vector2 origin = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height);
             this.xPositionOnScreen = (int)origin.X;
             this.yPositionOnScreen = (int)origin.Y;
+
+            // update up/down buttons
+            int x = this.xPositionOnScreen;
+            int y = this.yPositionOnScreen;
+            int gutter = this.ScrollButtonGutter;
+            float contentHeight = this.height - gutter * 2;
+            this.ScrollUpButton.bounds = new Rectangle(x + gutter, (int)(y + contentHeight - Sprites.Icons.UpArrow.Height - gutter - Sprites.Icons.DownArrow.Height), Sprites.Icons.UpArrow.Height, Sprites.Icons.UpArrow.Width);
+            this.ScrollDownButton.bounds = new Rectangle(x + gutter, (int)(y + contentHeight - Sprites.Icons.DownArrow.Height), Sprites.Icons.DownArrow.Height, Sprites.Icons.DownArrow.Width);
         }
 
         /// <summary>The method invoked when an unhandled exception is intercepted.</summary>
