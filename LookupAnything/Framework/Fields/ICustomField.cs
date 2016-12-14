@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         string Label { get; }
 
         /// <summary>The field value.</summary>
-        string Value { get; }
+        IFormattedText[] Value { get; }
 
         /// <summary>Whether the field should be displayed.</summary>
         bool HasValue { get; }

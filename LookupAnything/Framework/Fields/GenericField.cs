@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         public string Label { get; protected set; }
 
         /// <summary>The field value.</summary>
-        public string Value { get; protected set; }
+        public IFormattedText[] Value { get; protected set; }
 
         /// <summary>Whether the field should be displayed.</summary>
         public bool HasValue { get; protected set; }
@@ -33,8 +33,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         public GenericField(string label, object value, bool? hasValue = null)
         {
             this.Label = label;
-            this.Value = GenericField.GetString(value);
-            this.HasValue = hasValue ?? !string.IsNullOrWhiteSpace(this.Value);
+            this.Value = this.FormatValue(value);
+            this.HasValue = hasValue ?? this.Value?.Any() == true;
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="Value"/> using the default format).</summary>
@@ -52,9 +52,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /*********
         ** Protected methods
         *********/
+        /// <summary>Wrap text into a list of formatted snippets.</summary>
+        /// <param name="value">The text to wrap.</param>
+        protected IFormattedText[] FormatValue(object value)
+        {
+            // already formatted
+            if (value is IEnumerable<IFormattedText>)
+                return ((IEnumerable<IFormattedText>)value).ToArray();
+
+            // format
+            string str = GenericField.Stringify(value);
+            return !string.IsNullOrWhiteSpace(str)
+                ? new IFormattedText[] { new FormattedText(str) }
+                : new IFormattedText[0];
+        }
+
         /// <summary>Get a human-readable representation of a value.</summary>
         /// <param name="value">The underlying value.</param>
-        public static string GetString(object value)
+        public static string Stringify(object value)
         {
             // boolean
             if (value is bool)

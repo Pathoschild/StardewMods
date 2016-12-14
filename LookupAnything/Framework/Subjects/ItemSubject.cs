@@ -206,7 +206,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     }
                 }
                 else
-                    yield return new ItemIconField("Contents", obj.heldObject, $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + GenericField.GetString(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready"));
+                    yield return new ItemIconField("Contents", obj.heldObject, $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + GenericField.Stringify(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready"));
             }
 
             // item

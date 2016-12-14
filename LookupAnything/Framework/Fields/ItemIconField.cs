@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
             // draw icon & text
             spriteBatch.DrawIcon(this.Item, position.X, position.Y, iconSize);
-            Vector2 textSize = spriteBatch.DrawTextBlock(font, this.Value ?? this.Item.Name, position + new Vector2(iconSize.X + 5, 5), wrapWidth);
+            Vector2 textSize = spriteBatch.DrawTextBlock(font, this.FormatValue(this.Item.Name), position + new Vector2(iconSize.X + 5, 5), wrapWidth);
 
             // return size
             return new Vector2(wrapWidth, textSize.Y + 5);

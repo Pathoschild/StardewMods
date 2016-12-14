@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewValley;
 
@@ -25,13 +26,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Get the text to display.</summary>
         /// <param name="giftTastes">The items by how much this NPC likes receiving them.</param>
         /// <param name="showTaste">The gift taste to show.</param>
-        private static string GetText(IDictionary<GiftTaste, Item[]> giftTastes, GiftTaste showTaste)
+        private static IEnumerable<IFormattedText> GetText(IDictionary<GiftTaste, Item[]> giftTastes, GiftTaste showTaste)
         {
             if (!giftTastes.ContainsKey(showTaste))
-                return null;
+                yield break;
 
-            string[] names = giftTastes[showTaste].Select(p => p.Name).OrderBy(p => p).ToArray();
-            return string.Join(", ", names);
+            Item[] items = giftTastes[showTaste].OrderBy(p => p.Name).ToArray();
+            Item[] ownedItems = GameHelper.GetAllOwnedItems().ToArray();
+
+            for (int i = 0, last = items.Length - 1; i <= last; i++)
+            {
+                Item item = items[i];
+                bool owned = ownedItems.Any(p => p.parentSheetIndex == item.parentSheetIndex && p.category == item.category);
+                string text = i != last
+                    ? item.Name + ","
+                    : item.Name;
+                yield return new FormattedText(text, owned ? Color.Green : Color.Black);
+            }
         }
     }
 }

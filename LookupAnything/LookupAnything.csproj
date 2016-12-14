@@ -52,6 +52,8 @@
     <Compile Include="DataParser.cs" />
     <Compile Include="Framework\Constants\LookupMode.cs" />
     <Compile Include="Framework\Data\ShopData.cs" />
+    <Compile Include="Framework\FormattedText.cs" />
+    <Compile Include="Framework\IFormattedText.cs" />
     <Compile Include="Framework\GameDate.cs" />
     <Compile Include="Framework\Models\BundleIngredientModel.cs" />
     <Compile Include="Framework\Models\BundleModel.cs" />
