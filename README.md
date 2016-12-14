@@ -6,18 +6,10 @@
 This mod adds a **Garage** building which provides **Tractor** to help with your farm works.  
 **Tractor** allows players to quickly till dirt, sow seeds, fertilize soil, and water crop by simple walking over map tiles.  
 
-###Latest Version: [v.3.0](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
-####Change Log **v.3.0**:
-+ **Remove** Tractor spawning in behind Selling Box every morning.
-+ **Add** ability to phone in and buy Tractor Garage, a place to store your Tractor.
-  - Buy Tractor Garage to get access to Tractor.
-+ **Fix** a bug that yields infinite spring onion when harvest with Tractor Mode.
-+ **Fix** weird hoeing, watering area when using Tractor Mode after player charge those tools up previously.
-+ **Remove** globalTractor from config.json, it is now default.
-+ **Add** PhoneKey and TractorHousePrice in config.json.
-  - PhoneKey sets hotkey to call to PhthaloBlue Corp. to buy Tractor Garage.
-  - TractorHousePrice sets Tractor Garage price.
-+ **Note:** You may notice a file called **TractorModSave.json** is generated. It is a save file for this mod. You may want to create back up for this file.
+###Latest Version: [v.3.0.1](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+####Change Log **v.3.0.1**:
++ **Fix** a bug that gives 2 Tractors.
++ **Fix** a bug that causes crash when events happen after sleep (fairy, witch...), hopefully.
 
 ![](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/TractorGarage.png)
 
