@@ -166,6 +166,7 @@ file if you want. These are the available settings:
 * Fixed controller button conventions not used by lookup menu.
 * Fixed a rare error caused by the game duplicating an NPC.
 * Fixed fruit tree quality schedule being incorrect in some cases.
+* Fixed invalid button bindings in `config.json` being silently discarded.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is

@@ -82,7 +82,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 this.Monitor.Log(versionError, LogLevel.Error);
 
             // load config
-            this.Config = this.Helper.ReadConfig<RawModConfig>().GetParsed();
+            this.Config = this.Helper.ReadConfig<RawModConfig>().GetParsed(this.Monitor);
 
             // load database
             this.LoadMetadata();
