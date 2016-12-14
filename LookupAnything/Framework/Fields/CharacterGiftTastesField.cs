@@ -33,15 +33,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
             Item[] items = giftTastes[showTaste].OrderBy(p => p.Name).ToArray();
             Item[] ownedItems = GameHelper.GetAllOwnedItems().ToArray();
+            Item[] inventory = Game1.player.items.Where(p => p != null).ToArray();
 
             for (int i = 0, last = items.Length - 1; i <= last; i++)
             {
                 Item item = items[i];
-                bool owned = ownedItems.Any(p => p.parentSheetIndex == item.parentSheetIndex && p.category == item.category);
                 string text = i != last
                     ? item.Name + ","
                     : item.Name;
-                yield return new FormattedText(text, owned ? Color.Green : Color.Black);
+
+                if (inventory.Any(p => p.parentSheetIndex == item.parentSheetIndex && p.category == item.category)) // in inventory
+                    yield return new FormattedText(text, Color.Green);
+                else if (ownedItems.Any(p => p.parentSheetIndex == item.parentSheetIndex && p.category == item.category)) // owned
+                    yield return new FormattedText(text, Color.Black);
+                else
+                    yield return new FormattedText(text, Color.Gray);
             }
         }
     }
