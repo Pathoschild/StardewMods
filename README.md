@@ -159,6 +159,7 @@ file if you want. These are the available settings:
 * Fixed social menu lookup sometimes showing the wrong villager.
 
 1.9 (upcoming):
+* When looking up a villager, the gift list now highlights items you're carrying or own.
 * You can now lookup whatever's directly in front of you with a separate hotkey, for more intuitive controller use. (Not bound by default.)
 * You can now click on the up/down arrows to scroll content.
 * Fixed controller thumbsticks scrolling content too slowly.
