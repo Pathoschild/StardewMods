@@ -1,4 +1,8 @@
 #Change Log:  
+####Change Log **v.3.0.1**:
++ **Fix** a bug that gives 2 Tractors.
++ **Fix** a bug that causes crash when events happen after sleep (fairy, witch...), hopefully.
+
 ####Change Log **v.3.0**:
 + **Remove** Tractor spawning in behind Selling Box every morning.
 + **Add** ability to phone in and buy Tractor Garage, a place to store your Tractor.
