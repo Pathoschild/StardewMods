@@ -9,6 +9,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
+using System.Collections.Generic;
 
 namespace Pathoschild.Stardew.LookupAnything.Components
 {
@@ -285,10 +286,51 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                                 // draw label & value
                                 Vector2 labelSize = contentBatch.DrawTextBlock(font, field.Label, new Vector2(x + leftOffset + cellPadding, y + topOffset + cellPadding), wrapWidth);
                                 Vector2 valuePosition = new Vector2(x + leftOffset + labelWidth + cellPadding * 3, y + topOffset + cellPadding);
-                                Vector2 valueSize =
-                                    field.DrawValue(contentBatch, font, valuePosition, valueWidth)
-                                    ?? contentBatch.DrawTextBlock(font, field.Value, valuePosition, valueWidth);
-                                Vector2 rowSize = new Vector2(labelWidth + valueWidth + cellPadding * 4, Math.Max(labelSize.Y, valueSize.Y));
+                                float valueSize = 0f;
+                                if (field.Label.Contains("gifts"))
+                                {
+                                    string[] items = field.Value.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+                                    IEnumerable<Item> OwnedItems = GameHelper.GetAllOwnedItems();
+                                    string last = items.Last();
+                                    Vector2 nextPosition = valuePosition;
+                                    float AvailableWidth = valuePosition.X + valueWidth;
+                                    foreach (string item in items)
+                                    {
+                                        float strWidth = font.MeasureString(item + ",").X;
+                                        if (nextPosition.X + strWidth > AvailableWidth)
+                                        {
+                                            nextPosition.X = valuePosition.X;
+                                            nextPosition.Y += labelSize.Y;
+                                            valueSize += labelSize.Y;
+                                        }
+
+                                        string[] artisan = new[] { "Jelly", "Juice", "Pickle", "Wine" };
+                                        string checkArtisan = artisan.FirstOrDefault(a => item.Contains(a));
+                                        Vector2 usedSpace;
+                                        if (OwnedItems.FirstOrDefault(i => i.Name.Equals(item)) != null ||
+                                            (checkArtisan != null && OwnedItems.FirstOrDefault(i => i.Name.Contains(checkArtisan)) != null))    // Fix artisan items
+                                            usedSpace = contentBatch.DrawTextBlock(font, item, nextPosition, valueWidth, color: Color.Green);
+                                        else
+                                            usedSpace = contentBatch.DrawTextBlock(font, item, nextPosition, valueWidth);
+
+                                        nextPosition.X += usedSpace.X;
+
+                                        if (!item.Equals(last))
+                                        {
+                                            usedSpace = contentBatch.DrawTextBlock(font, ", ", nextPosition, valueWidth);
+                                            nextPosition.X += font.MeasureString(", ").X;
+                                        }
+                                    }
+                                    valueSize += labelSize.Y;
+                                }
+                                else
+                                {
+                                    Vector2 vector =
+                                        field.DrawValue(contentBatch, font, valuePosition, valueWidth)
+                                        ?? contentBatch.DrawTextBlock(font, field.Value, valuePosition, valueWidth);
+                                    valueSize = vector.Y;
+                                }
+                                Vector2 rowSize = new Vector2(labelWidth + valueWidth + cellPadding * 4, Math.Max(labelSize.Y, valueSize));
 
                                 // draw table row
                                 Color lineColor = Color.Gray;
@@ -299,7 +341,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                                 contentBatch.DrawLine(x + leftOffset + rowSize.X, y + topOffset, new Vector2(tableBorderWidth, rowSize.Y), lineColor); // right
 
                                 // update offset
-                                topOffset += Math.Max(labelSize.Y, valueSize.Y);
+                                topOffset += Math.Max(labelSize.Y, valueSize);
                             }
                         }
                     }
