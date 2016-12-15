@@ -39,7 +39,7 @@ This mod adds a **Garage** building which provides **Tractor** to help with your
     Hold water can if you want to water crop  
     Hold seed bag(s) to sow seeds  
     Hold fertilizer to fertilize tilled soil
-    Hold scythe to harvest 
+    Hold scythe to harvest  
   4. When done get off the Tractor to turn Tractor Mode off.
 + Mouse-Activating Mode:  
     1. Get to your farm
@@ -48,7 +48,8 @@ This mod adds a **Garage** building which provides **Tractor** to help with your
     3. Hold your hoe if you want to till dirt  
     Hold water can if you want to water crop  
     Hold seed bag(s) to sow seeds  
-    Hold fertilizer to fertilize tilled soil
+    Hold fertilizer to fertilize tilled soil  
+    Hold scythe to harvest  
     4. After you are done with your farmwork, simply release right click to turn it off.  
     The buff will go away showing that the Mode is now off.
 
