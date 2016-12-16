@@ -65,7 +65,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (!isMature)
             {
                 GameDate dayOfMaturity = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(tree.daysUntilMature);
-                string growthText = $"mature on {dayOfMaturity} ({GrammarHelper.Pluralise(tree.daysUntilMature, "tomorrow", $"in {tree.daysUntilMature} days")})";
+                string growthText = $"mature on {dayOfMaturity} ({TextHelper.Pluralise(tree.daysUntilMature, "tomorrow", $"in {tree.daysUntilMature} days")})";
 
                 yield return new GenericField("Next fruit", "too young to bear fruit");
                 yield return new GenericField("Growth", growthText);
@@ -99,7 +99,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                                 line += " next year";
                             else if (yearOffset > 0)
                                 line += $" in year {date.Year}";
-                            line += $" ({GrammarHelper.Pluralise(daysLeft, "tomorrow", $"in {daysLeft} days")})";
+                            line += $" ({TextHelper.Pluralise(daysLeft, "tomorrow", $"in {daysLeft} days")})";
 
                             return line;
                         })

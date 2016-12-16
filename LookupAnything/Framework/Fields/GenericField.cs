@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -61,36 +60,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 return ((IEnumerable<IFormattedText>)value).ToArray();
 
             // format
-            string str = GenericField.Stringify(value);
+            string str = TextHelper.Stringify(value);
             return !string.IsNullOrWhiteSpace(str)
                 ? new IFormattedText[] { new FormattedText(str) }
                 : new IFormattedText[0];
-        }
-
-        /// <summary>Get a human-readable representation of a value.</summary>
-        /// <param name="value">The underlying value.</param>
-        public static string Stringify(object value)
-        {
-            // boolean
-            if (value is bool)
-                return (bool)value ? "yes" : "no";
-
-            // time span
-            if (value is TimeSpan)
-            {
-                TimeSpan span = (TimeSpan)value;
-                List<string> parts = new List<string>();
-                if (span.Days > 0)
-                    parts.Add($"{span.Days} {GrammarHelper.Pluralise(span.Days, "day")}");
-                if (span.Hours > 0)
-                    parts.Add($"{span.Hours} {GrammarHelper.Pluralise(span.Hours, "hour")}");
-                if (span.Minutes > 0)
-                    parts.Add($"{span.Minutes} {GrammarHelper.Pluralise(span.Minutes, "minute")}");
-                return string.Join(", ", parts);
-            }
-
-            // else
-            return value?.ToString();
         }
 
         /// <summary>Get the display value for sale price data.</summary>

@@ -1,9 +1,11 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Pathoschild.Stardew.LookupAnything
 {
     /// <summary>A utility class for writing text output.</summary>
-    internal class GrammarHelper
+    internal class TextHelper
     {
         /*********
         ** Public methods
@@ -43,6 +45,32 @@ namespace Pathoschild.Stardew.LookupAnything
 
                     return list.ToString();
             }
+        }
+
+        /// <summary>Get a human-readable representation of a value.</summary>
+        /// <param name="value">The underlying value.</param>
+        public static string Stringify(object value)
+        {
+            // boolean
+            if (value is bool)
+                return (bool)value ? "yes" : "no";
+
+            // time span
+            if (value is TimeSpan)
+            {
+                TimeSpan span = (TimeSpan)value;
+                List<string> parts = new List<string>();
+                if (span.Days > 0)
+                    parts.Add($"{span.Days} {TextHelper.Pluralise(span.Days, "day")}");
+                if (span.Hours > 0)
+                    parts.Add($"{span.Hours} {TextHelper.Pluralise(span.Hours, "hour")}");
+                if (span.Minutes > 0)
+                    parts.Add($"{span.Minutes} {TextHelper.Pluralise(span.Minutes, "minute")}");
+                return string.Join(", ", parts);
+            }
+
+            // else
+            return value?.ToString();
         }
     }
 }

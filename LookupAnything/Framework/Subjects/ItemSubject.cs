@@ -136,7 +136,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     else if (Game1.currentLocation.Name != Constant.LocationNames.Greenhouse && !crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Season))
                         summary = $"too late in the season for the next harvest (would be on {dayOfNextHarvest})";
                     else
-                        summary = $"{dayOfNextHarvest} ({GrammarHelper.Pluralise(daysToNextHarvest, "tomorrow", $"in {daysToNextHarvest} days")})";
+                        summary = $"{dayOfNextHarvest} ({TextHelper.Pluralise(daysToNextHarvest, "tomorrow", $"in {daysToNextHarvest} days")})";
 
                     yield return new GenericField("Harvest", summary);
                 }
@@ -146,7 +146,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     List<string> summary = new List<string>();
 
                     // harvest
-                    summary.Add($"-harvest after {daysToFirstHarvest} {GrammarHelper.Pluralise(daysToFirstHarvest, "day")}" + (crop.regrowAfterHarvest != -1 ? $", then every {GrammarHelper.Pluralise(crop.regrowAfterHarvest, "day", $"{crop.regrowAfterHarvest} days")}" : ""));
+                    summary.Add($"-harvest after {daysToFirstHarvest} {TextHelper.Pluralise(daysToFirstHarvest, "day")}" + (crop.regrowAfterHarvest != -1 ? $", then every {TextHelper.Pluralise(crop.regrowAfterHarvest, "day", $"{crop.regrowAfterHarvest} days")}" : ""));
 
                     // seasons
                     summary.Add($"-grows in {string.Join(", ", crop.seasonsToGrowIn)}");
@@ -201,12 +201,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         yield return new GenericField("Aging", $"{currentQuality.GetName()} quality ready");
                     else
                     {
-                        string scheduleStr = string.Join(Environment.NewLine, (from entry in schedule select $"-{entry.Quality.GetName()} {GrammarHelper.Pluralise(entry.DaysLeft, "tomorrow", $"in {entry.DaysLeft} days")} ({entry.HarvestDate})"));
+                        string scheduleStr = string.Join(Environment.NewLine, (from entry in schedule select $"-{entry.Quality.GetName()} {TextHelper.Pluralise(entry.DaysLeft, "tomorrow", $"in {entry.DaysLeft} days")} ({entry.HarvestDate})"));
                         yield return new GenericField("Aging", $"-{currentQuality.GetName()} now (use pickaxe to stop aging){Environment.NewLine}" + scheduleStr);
                     }
                 }
                 else
-                    yield return new ItemIconField("Contents", obj.heldObject, $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + GenericField.Stringify(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready"));
+                    yield return new ItemIconField("Contents", obj.heldObject, $"{obj.heldObject.Name} " + (obj.minutesUntilReady > 0 ? "in " + TextHelper.Stringify(TimeSpan.FromMinutes(obj.minutesUntilReady)) : "ready"));
             }
 
             // item
@@ -258,7 +258,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     if (obj?.canBeShipped() == true)
                         buyers.Add("shipping box");
                     buyers.AddRange(from shop in metadata.Shops where shop.BuysCategories.Contains(item.category) orderby shop.DisplayName select shop.DisplayName);
-                    yield return new GenericField("Sells to", GrammarHelper.OrList(buyers.ToArray()));
+                    yield return new GenericField("Sells to", TextHelper.OrList(buyers.ToArray()));
                 }
 
                 // gift tastes
