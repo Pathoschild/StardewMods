@@ -135,9 +135,17 @@ namespace TractorMod
             this.sprite = new AnimatedSprite(Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\TractorXNB\\tractor"), 0, 32, 32);
             this.sprite.textureUsesFlippedRightForLeft = true;
             this.sprite.loop = true;
+            this.faceDirection(3);
+        }
+        public override Rectangle GetBoundingBox()
+        {
+            Rectangle boundingBox = base.GetBoundingBox();
+            if ((this.facingDirection == 0 || this.facingDirection == 2))
+                boundingBox.Inflate(-Game1.tileSize / 2 - Game1.pixelZoom, 0);
+            return boundingBox;
         }
     }
-
+    
     public class SaveCollection
     {
         public class Save
@@ -298,11 +306,16 @@ namespace TractorMod
                 foreach (Vector2 THS in currentSave.TractorHouse)
                 {
                     Game1.getFarm().buildStructure(new TractorHouse().SetDaysOfConstructionLeft(0), THS, false, Game1.player);
+                    if(IsNewTractor)
+                        SpawnTractor();
                 }
             }
         }
 
         static bool IsNewDay = false;
+        static bool IsNewTractor = false;
+        
+        //SMAPI starts here
         public override void Entry(IModHelper helper)
         {
             if (TheHelper == null)
@@ -327,10 +340,12 @@ namespace TractorMod
                 foreach (GameLocation GL in Game1.locations)
                     RemoveEveryCharactersOfType<Tractor>(GL);
                 IsNewDay = true;
+                IsNewTractor = true;
             };
             StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += (p, e) =>
             {
                 IsNewDay = true;
+                IsNewTractor = true;
             };
 
             //so that weird shit wouldnt happen
@@ -373,8 +388,11 @@ namespace TractorMod
         static Farm ourFarm = null;
         static void SpawnTractor(bool SpawnAtFirstTractorHouse = true)
         {
-            if (ATractor != null)
+            if (IsNewTractor == false)
                 return;
+
+            foreach (GameLocation GL in Game1.locations)
+                RemoveEveryCharactersOfType<Tractor>(GL);
 
             if (SpawnAtFirstTractorHouse == false)
             {
@@ -382,6 +400,7 @@ namespace TractorMod
                 ATractor.name = "Tractor";
                 Game1.getFarm().characters.Add((NPC)ATractor);
                 Game1.warpCharacter((NPC)ATractor, "Farm", tractorSpawnLocation, false, true);
+                IsNewTractor = false;
                 return;
             }
 
@@ -394,6 +413,7 @@ namespace TractorMod
                     ATractor.name = "Tractor";
                     Game1.getFarm().characters.Add((NPC)ATractor);
                     Game1.warpCharacter((NPC)ATractor, "Farm", new Vector2((int)building.tileX + 1, (int)building.tileY + 1), false, true);
+                    IsNewTractor = false;
                     break;
                 }
             }
@@ -417,6 +437,8 @@ namespace TractorMod
             if (found)
                 RemoveEveryCharactersOfType<T>(GL);
         }
+
+        //execute most of the mod thinking here
         static void DoAction(KeyboardState currentKeyboardState, MouseState currentMouseState)
         {
             if (Game1.currentLocation == null)
@@ -428,7 +450,6 @@ namespace TractorMod
             if (Game1.currentLocation is Farm && IsNewDay && Game1.player.currentLocation is Farm)
             {
                 LoadModInfo();
-                SpawnTractor();
                 IsNewDay = false;
             }
 
@@ -450,11 +471,12 @@ namespace TractorMod
             if (currentKeyboardState.IsKeyDown(ModConfig.tractorKey))
             {
                 Vector2 tile = Game1.player.getTileLocation();
-                if (ATractor == null) //check if you already own TractorHouse, if so then spawn tractor if its null
+                if (IsNewTractor) //check if you already own TractorHouse, if so then spawn tractor if its null
                 {
                     SaveCollection.Save currentSave = AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
                     if (currentSave.TractorHouse.Count > 0)
                         SpawnTractor(false);
+                       
                 }
                 if(ATractor != null)
                     Game1.warpCharacter((NPC)ATractor, Game1.currentLocation.name, tile, false, true);
@@ -574,6 +596,8 @@ namespace TractorMod
                 BuffAlready = true;
             }
             
+
+            //if Tractor Mode (buff) is ON
             if (Game1.player.CurrentTool == null)
                 ItemAction();
             else
@@ -1117,7 +1141,7 @@ namespace TractorMod
 
             return false;
         }
-
+        
         static void OpenPhthaloBlueCarpenterMenu(Farmer who, string whichAnswer)
         {
             switch (whichAnswer)
@@ -1141,7 +1165,7 @@ namespace TractorMod
                     TractorBP.namesOfOkayBuildingLocations.Clear();
                     TractorBP.namesOfOkayBuildingLocations.Add("Farm");
                     TractorBP.magical = true;
-                    Game1.activeClickableMenu = new PhthaloBlueCarpenterMenu().AddBluePrint<TractorHouse>(TractorBP);
+                    Game1.activeClickableMenu = new PhthaloBlueCarpenterMenu()  .AddBluePrint<TractorHouse>(TractorBP);
                     ((PhthaloBlueCarpenterMenu)Game1.activeClickableMenu).WherePlayerOpenThisMenu = Game1.currentLocation;
                     break;
                 case "Leave":
