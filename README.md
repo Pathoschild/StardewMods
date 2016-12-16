@@ -6,10 +6,10 @@
 This mod adds a **Garage** building which provides **Tractor** to help with your farm works.  
 **Tractor** allows players to quickly till dirt, sow seeds, fertilize soil, and water crop by simple walking over map tiles.  
 
-###Latest Version: [v.3.0.1](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
-####Change Log **v.3.0.1**:
-+ **Fix** a bug that gives 2 Tractors.
-+ **Fix** a bug that causes crash when events happen after sleep (fairy, witch...), hopefully.
+###Latest Version: [v.3.1](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+####Change Log **v.3.1**:
++ **Update** Tractor now 1-tile wide.
++ **Fix** Tractor unable to spawn in Garage on start of new day.
 
 ![](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/TractorGarage.png)
 
