@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
@@ -295,6 +296,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // owned
             if (showInventoryFields && !isCrop && !(item is Tool))
                 yield return new GenericField("Owned", $"you own {GameHelper.CountOwnedItems(item)} of these");
+        }
+
+        /// <summary>Get the data to display for this subject.</summary>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
+        {
+            // raw fields
+            foreach (IDebugField field in this.GetDebugFieldsFrom(this.Target))
+                yield return field;
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>

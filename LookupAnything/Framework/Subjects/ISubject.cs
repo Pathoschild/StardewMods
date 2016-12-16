@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
@@ -27,6 +28,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Get the data to display for this subject.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         IEnumerable<ICustomField> GetData(Metadata metadata);
+
+        /// <summary>Get raw debug data to display for this subject.</summary>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        IEnumerable<IDebugField> GetDebugFields(Metadata metadata);
 
         /// <summary>Draw the subject portrait (if available).</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>

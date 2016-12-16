@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -111,6 +112,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             // show seasons
             yield return new GenericField("Season", $"{tree.fruitSeason} (or anytime in greenhouse)");
+        }
+
+        /// <summary>Get raw debug data to display for this subject.</summary>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
+        {
+            // raw fields
+            foreach (IDebugField field in this.GetDebugFieldsFrom(this.Target))
+                yield return field;
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>

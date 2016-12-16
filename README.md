@@ -162,6 +162,7 @@ file if you want. These are the available settings:
 * When looking up a villager, the gift list now highlights items you're carrying or own.
 * You can now lookup whatever's directly in front of you with a separate hotkey, for more intuitive controller use. (Not bound by default.)
 * You can now click on the up/down arrows to scroll content.
+* When debug mode is on, you'll now see advanced data mining info.
 * Fixed controller thumbsticks scrolling content too slowly.
 * Fixed controller button conventions not used by lookup menu.
 * Fixed a rare error caused by the game duplicating an NPC.

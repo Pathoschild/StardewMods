@@ -1,6 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
@@ -27,6 +31,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Get the data to display for this subject.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public abstract IEnumerable<ICustomField> GetData(Metadata metadata);
+
+        /// <summary>Get raw debug data to display for this subject.</summary>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public abstract IEnumerable<IDebugField> GetDebugFields(Metadata metadata);
 
         /// <summary>Draw the subject portrait (if available).</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>
@@ -60,6 +68,25 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             this.Name = name;
             this.Description = description;
             this.Type = type;
+        }
+
+        /// <summary>Get all debug fields by reflecting over an instance.</summary>
+        /// <param name="obj">The object instance over which to reflect.</param>
+        protected IEnumerable<IDebugField> GetDebugFieldsFrom(object obj)
+        {
+            if (obj == null)
+                yield break;
+
+            for (Type type = obj.GetType(); type != null; type = type.BaseType)
+            {
+                IEnumerable<FieldInfo> fields = type
+                    .GetFields() // public fields
+                    .Concat(type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy)) // non-public fields
+                    .Where(field => !field.IsLiteral); // exclude constants
+
+                foreach (FieldInfo field in fields)
+                    yield return new GenericDebugField($"{type.Name}::{field.Name}", field.GetValue(obj));
+            }
         }
     }
 }

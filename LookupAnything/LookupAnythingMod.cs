@@ -314,7 +314,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     // show lookup UI
                     this.Monitor.Log($"{logMessage} showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.", LogLevel.Trace);
                     this.PreviousMenu = Game1.activeClickableMenu;
-                    Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount);
+                    Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, showDebugFields: this.DebugInterface.Enabled);
                 }
                 catch
                 {

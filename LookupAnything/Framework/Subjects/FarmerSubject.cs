@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
 using StardewValley;
@@ -53,6 +54,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new SkillBarField("Fishing skill", farmer.experiencePoints[Farmer.fishingSkill], maxSkillPoints, skillPointsPerLevel);
             yield return new SkillBarField("Combat skill", farmer.experiencePoints[Farmer.combatSkill], maxSkillPoints, skillPointsPerLevel);
             yield return new GenericField("Luck", $"{this.GetSpiritLuckMessage()}{Environment.NewLine}({(Game1.dailyLuck >= 0 ? "+" : "")}{Game1.dailyLuck * 100}% to many random checks)");
+        }
+
+        /// <summary>Get raw debug data to display for this subject.</summary>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
+        {
+            // raw fields
+            foreach (IDebugField field in this.GetDebugFieldsFrom(this.Target))
+                yield return field;
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>

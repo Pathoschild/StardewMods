@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.LookupAnything.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
@@ -67,7 +69,8 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="monitor">Encapsulates logging and monitoring.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="scroll">The amount to scroll long content on each up/down scroll.</param>
-        public LookupMenu(ISubject subject, Metadata metadata, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll)
+        /// <param name="showDebugFields">Whether to display debug fields.</param>
+        public LookupMenu(ISubject subject, Metadata metadata, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll, bool showDebugFields)
         {
             // save data
             this.Subject = subject;
@@ -75,6 +78,19 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             this.Monitor = monitor;
             this.Reflection = reflectionHelper;
             this.ScrollAmount = scroll;
+
+            // save debug fields
+            if (showDebugFields)
+            {
+                IDebugField[] debugFields = subject.GetDebugFields(metadata).ToArray();
+
+                List<ICustomField> addedFields = new List<ICustomField>();
+                if (debugFields.Any())
+                    addedFields.Add(new GenericField("[debug (raw)", string.Join(Environment.NewLine, debugFields.Select(p => $"{p.Label}: {p.Value}"))));
+
+                if (addedFields.Any())
+                    this.Fields = this.Fields.Concat(addedFields).ToArray();
+            }
 
             // add scroll buttons
             this.ScrollUpButton = new ClickableTextureComponent(Rectangle.Empty, Sprites.Icons.Sheet, Sprites.Icons.UpArrow, 1);
