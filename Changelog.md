@@ -1,4 +1,8 @@
 #Change Log:  
+####Change Log **v.3.1**:
++ **Update** Tractor now 1-tile wide.
++ **Fix** Tractor unable to spawn in Garage on start of new day.
+
 ####Change Log **v.3.0.1**:
 + **Fix** a bug that gives 2 Tractors.
 + **Fix** a bug that causes crash when events happen after sleep (fairy, witch...), hopefully.
