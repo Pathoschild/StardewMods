@@ -83,17 +83,13 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             if (showDebugFields)
             {
                 IDebugField[] debugFields = subject.GetDebugFields(metadata).ToArray();
-                IDebugField[] pinned = debugFields.Where(p => p.IsPinned).ToArray();
-                IDebugField[] unpinned = debugFields.Where(p => !p.IsPinned).ToArray();
-
-                List<ICustomField> addedFields = new List<ICustomField>();
-                if (pinned.Any())
-                    addedFields.Add(new GenericField("[debug (pinned)", string.Join(Environment.NewLine, pinned.Select(p => $"{p.Label}: {p.Value}"))));
-                if (unpinned.Any())
-                    addedFields.Add(new GenericField("[debug (raw)", string.Join(Environment.NewLine, unpinned.Select(p => $"{p.Label}: {p.Value}"))));
-
-                if (addedFields.Any())
-                    this.Fields = this.Fields.Concat(addedFields).ToArray();
+                this.Fields = this.Fields
+                    .Concat(new[]
+                    {
+                        new DataMiningField("debug (pinned)", debugFields.Where(p => p.IsPinned)),
+                        new DataMiningField("debug (raw)", debugFields.Where(p => !p.IsPinned))
+                    })
+                    .ToArray();
             }
 
             // add scroll buttons
