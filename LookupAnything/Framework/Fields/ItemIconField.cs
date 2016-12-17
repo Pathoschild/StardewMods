@@ -22,9 +22,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="item">The item for which to display an icon.</param>
         /// <param name="text">The text to display (if not the item name).</param>
         public ItemIconField(string label, Item item, string text = null)
-            : base(label, text, hasValue: item != null)
+            : base(label, null, hasValue: item != null)
         {
             this.Item = item;
+            if (item != null)
+            {
+                this.Value = !string.IsNullOrWhiteSpace(text)
+                    ? this.FormatValue(text)
+                    : this.FormatValue(item.Name);
+            }
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
@@ -41,7 +47,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
             // draw icon & text
             spriteBatch.DrawIcon(this.Item, position.X, position.Y, iconSize);
-            Vector2 textSize = spriteBatch.DrawTextBlock(font, this.FormatValue(this.Item.Name), position + new Vector2(iconSize.X + 5, 5), wrapWidth);
+            Vector2 textSize = spriteBatch.DrawTextBlock(font, this.Value, position + new Vector2(iconSize.X + 5, 5), wrapWidth);
 
             // return size
             return new Vector2(wrapWidth, textSize.Y + 5);
