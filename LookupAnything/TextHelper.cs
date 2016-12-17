@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace Pathoschild.Stardew.LookupAnything
 {
@@ -51,6 +54,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="value">The underlying value.</param>
         public static string Stringify(object value)
         {
+            if (value == null)
+                return null;
+
             // boolean
             if (value is bool)
                 return (bool)value ? "yes" : "no";
@@ -69,8 +75,51 @@ namespace Pathoschild.Stardew.LookupAnything
                 return string.Join(", ", parts);
             }
 
+            // vector
+            if (value is Vector2)
+            {
+                Vector2 vector = (Vector2)value;
+                return $"({vector.X}, {vector.Y})";
+            }
+
+            // rectangle
+            if (value is Rectangle)
+            {
+                Rectangle rect = (Rectangle)value;
+                return $"(x:{rect.X}, y:{rect.Y}, width:{rect.Width}, height:{rect.Height})";
+            }
+
+            // array
+            if (value is IEnumerable && !(value is string))
+            {
+                string[] values = (from val in ((IEnumerable)value).Cast<object>() select TextHelper.Stringify(val)).ToArray();
+                return "(" + string.Join(", ", values) + ")";
+            }
+
+            // color
+            if (value is Color)
+            {
+                Color color = (Color)value;
+                return $"(r:{color.R} g:{color.G} b:{color.B} a:{color.A})";
+            }
+
+            // KeyValue<TKey, TValue>
+            {
+                Type type = value.GetType();
+                if (type.IsGenericType)
+                {
+                    Type genericType = type.GetGenericTypeDefinition();
+                    if (genericType == typeof(KeyValuePair<,>))
+                    {
+                        string k = TextHelper.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Key)).GetValue(value));
+                        string v = TextHelper.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Value)).GetValue(value));
+                        return $"({k}: {v})";
+                    }
+                }
+            }
+
             // else
-            return value?.ToString();
+            return value.ToString();
         }
     }
 }
