@@ -67,8 +67,9 @@ file if you want. These are the available settings:
 | setting           | what it affects
 | ----------------- | -------------------
 | `Controller`<br />`Keyboard` | Set the controller and keyboard buttons to use (see valid [keyboard buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx) and [controller buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.buttons.aspx)). The default values are `F1` to lookup, and `Up`/`Down` to scroll the lookup results. Available inputs:<ul><li>`ToggleLookup`: lookup whatever's under the cursor.</li><li>`ToggleLookupInFrontOfPlayer`: lookup whatever's in front of the player.</li><li>`ScrollUp`/`ScrollDown`: scroll the displayed lookup results.</li><li>`ToggleDebug`: show information intended for developers.</li></ul>
-| `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll see a small message at the bottom of the screen for a few seconds. This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
 | `HideOnKeyUp`     | Default `false`. If enabled, the lookup window will be shown while you hold `F1` and disappear when you release it.
+| `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll see a small message at the bottom of the screen for a few seconds. This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
+| `ShowDataMiningFields` | Default `false`. Whether to show raw data useful for data miners (as separate fields at the bottom of lookup results). This is an advanced feature not intended for most players.
 
 ## Versions
 1.0:
@@ -162,7 +163,7 @@ file if you want. These are the available settings:
 * When looking up a villager, the gift list now highlights items you're carrying or own.
 * You can now lookup whatever's directly in front of you with a separate hotkey, for more intuitive controller use. (Not bound by default.)
 * You can now click on the up/down arrows to scroll content.
-* When debug mode is on, you'll now see advanced data mining info.
+* You can now view raw game data by enabling data mining fields in `config.json`.
 * Fixed controller thumbsticks scrolling content too slowly.
 * Fixed controller button conventions not used by lookup menu.
 * Fixed a rare error caused by the game duplicating an NPC.

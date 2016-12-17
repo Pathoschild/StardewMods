@@ -25,6 +25,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Whether to check for updates to the mod.</summary>
         public bool CheckForUpdates { get; set; }
 
+        /// <summary>Whether to show advanced data mining fields.</summary>
+        public bool ShowDataMiningFields { get; set; }
+
 
         /*********
         ** Public methods
@@ -51,6 +54,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             this.ScrollAmount = 160;
             this.HideOnKeyUp = false;
             this.CheckForUpdates = true;
+            this.ShowDataMiningFields = false;
         }
 
         /// <summary>Get a parsed representation of the mod configuration.</summary>
@@ -77,7 +81,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 },
                 ScrollAmount = this.ScrollAmount,
                 HideOnKeyUp = this.HideOnKeyUp,
-                CheckForUpdates = this.CheckForUpdates
+                CheckForUpdates = this.CheckForUpdates,
+                ShowDataMiningFields = this.ShowDataMiningFields
             };
         }
 

@@ -22,5 +22,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Whether to check for updates to the mod.</summary>
         public bool CheckForUpdates { get; set; }
+
+        /// <summary>Whether to show advanced data mining fields.</summary>
+        public bool ShowDataMiningFields { get; set; }
     }
 }
