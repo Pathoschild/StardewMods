@@ -2,9 +2,12 @@
 whatever's under your cursor when you press `F1`. Learn a villager's favourite gifts, when a crop
 will be ready to harvest, how long a fence will last, why your farm animals are unhappy, and more.
 
+For advanced users, the optional data mining mode also shows raw game values so you can see exactly
+what the game is doing.
+
 ![](screenshots/animated.gif)
 
-Compatible with Stardew Valley 1.11+ on Linux, Mac, and Windows.
+Compatible with Stardew Valley 1.1+ on Linux, Mac, and Windows.
 
 ## Contents
 * [Installation](#installation)
@@ -159,17 +162,18 @@ file if you want. These are the available settings:
 * Fixed incorrect farmer luck message when the spirits are feeling neutral.
 * Fixed social menu lookup sometimes showing the wrong villager.
 
-1.9 (upcoming):
-* When looking up a villager, the gift list now highlights items you're carrying or own.
-* You can now lookup whatever's directly in front of you with a separate hotkey, for more intuitive controller use. (Not bound by default.)
+1.9:
+* Villager lookups now highlight gifts you carry or own.
+* Added optional data mining fields which shows raw game data (enable via `config.json`).
 * You can now click on the up/down arrows to scroll content.
-* You can now view raw game data by enabling data mining fields in `config.json`.
-* Fixed controller thumbsticks scrolling content too slowly.
-* Fixed controller button conventions not used by lookup menu.
+* Improved controller support:
+  * You can now lookup what's directly in front of you using a separate hotkey. (Not bound by default.)
+  * Fixed controller thumbsticks scrolling content too slowly.
+  * Fixed controller button conventions not respected by lookup menu.
 * Fixed a rare error caused by the game duplicating an NPC.
-* Fixed fruit tree quality schedule being incorrect in some cases.
-* Fixed button bindings in `config.json` being discarded silently if invalid.
-* Fixed button bindings in `config.json` being case-sensitive.
+* Fixed fruit tree quality schedule being wrong in some cases.
+* Fixed input bindings in `config.json` being case-sensitive.
+* Fixed input bindings in `config.json` being discarded silently if invalid.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
