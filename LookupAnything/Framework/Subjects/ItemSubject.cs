@@ -323,6 +323,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // raw fields
             foreach (IDebugField field in this.GetDebugFieldsFrom(target))
                 yield return field;
+            if (crop != null)
+            {
+                foreach (IDebugField field in this.GetDebugFieldsFrom(crop))
+                    yield return new GenericDebugField($"crop::{field.Label}", field.Value, field.HasValue, field.IsPinned);
+            }
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>
