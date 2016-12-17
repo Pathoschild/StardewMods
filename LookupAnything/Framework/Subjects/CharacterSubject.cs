@@ -124,8 +124,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
         {
+            NPC target = this.Target;
+            Pet pet = target as Pet;
+
+            // pinned fields
+            yield return new GenericDebugField("facing direction", (FacingDirection)target.FacingDirection, pinned: true);
+            yield return new GenericDebugField("walking towards player", target.IsWalkingTowardPlayer, pinned: true);
+            if (Game1.player.friendships.ContainsKey(target.name))
+            {
+                FriendshipModel friendship = DataParser.GetFriendshipForVillager(Game1.player, target, metadata);
+                yield return new GenericDebugField("friendship", $"{friendship.Points} (max {friendship.MaxPoints})", pinned: true);
+            }
+            if (pet != null)
+                yield return new GenericDebugField("friendship", $"{pet.friendshipTowardFarmer} of {Pet.maxFriendship})", pinned: true);
+
             // raw fields
-            foreach (IDebugField field in this.GetDebugFieldsFrom(this.Target))
+            foreach (IDebugField field in this.GetDebugFieldsFrom(target))
                 yield return field;
         }
 

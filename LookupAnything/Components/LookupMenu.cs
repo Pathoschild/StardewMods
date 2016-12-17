@@ -83,10 +83,14 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             if (showDebugFields)
             {
                 IDebugField[] debugFields = subject.GetDebugFields(metadata).ToArray();
+                IDebugField[] pinned = debugFields.Where(p => p.IsPinned).ToArray();
+                IDebugField[] unpinned = debugFields.Where(p => !p.IsPinned).ToArray();
 
                 List<ICustomField> addedFields = new List<ICustomField>();
-                if (debugFields.Any())
-                    addedFields.Add(new GenericField("[debug (raw)", string.Join(Environment.NewLine, debugFields.Select(p => $"{p.Label}: {p.Value}"))));
+                if (pinned.Any())
+                    addedFields.Add(new GenericField("[debug (pinned)", string.Join(Environment.NewLine, pinned.Select(p => $"{p.Label}: {p.Value}"))));
+                if (unpinned.Any())
+                    addedFields.Add(new GenericField("[debug (raw)", string.Join(Environment.NewLine, unpinned.Select(p => $"{p.Label}: {p.Value}"))));
 
                 if (addedFields.Any())
                     this.Fields = this.Fields.Concat(addedFields).ToArray();

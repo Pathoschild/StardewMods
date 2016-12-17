@@ -60,8 +60,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
         {
+            Farmer target = this.Target;
+
+            // pinned fields
+            yield return new GenericDebugField("immunity", target.immunity, pinned: true);
+            yield return new GenericDebugField("resilience", target.resilience, pinned: true);
+            yield return new GenericDebugField("magnetic radius", target.MagneticRadius, pinned: true);
+
             // raw fields
-            foreach (IDebugField field in this.GetDebugFieldsFrom(this.Target))
+            foreach (IDebugField field in this.GetDebugFieldsFrom(target))
                 yield return field;
         }
 

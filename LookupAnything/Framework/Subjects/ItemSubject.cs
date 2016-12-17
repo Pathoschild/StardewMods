@@ -302,8 +302,26 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
         {
+            Item target = this.Target;
+            Object obj = target as Object;
+            Crop crop = this.FromCrop ?? this.SeedForCrop;
+
+            // pinned fields
+            yield return new GenericDebugField("item ID", target.parentSheetIndex, pinned: true);
+            yield return new GenericDebugField("category", $"{target.category} ({target.getCategoryName()})", pinned: true);
+            if (obj != null)
+            {
+                yield return new GenericDebugField("edibility", obj.Edibility, pinned: true);
+                yield return new GenericDebugField("item type", obj.Type, pinned: true);
+            }
+            if (crop != null)
+            {
+                yield return new GenericDebugField("crop fully grown", crop.fullyGrown, pinned: true);
+                yield return new GenericDebugField("crop phase", $"{crop.currentPhase} (day {crop.dayOfCurrentPhase} in phase)", pinned: true);
+            }
+
             // raw fields
-            foreach (IDebugField field in this.GetDebugFieldsFrom(this.Target))
+            foreach (IDebugField field in this.GetDebugFieldsFrom(target))
                 yield return field;
         }
 

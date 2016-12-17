@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new PercentageBarField("Happiness", animal.happiness, byte.MaxValue, Color.Green, Color.Gray, $"{Math.Round(animal.happiness / (metadata.Constants.AnimalMaxHappiness * 1f) * 100)}%");
             yield return new GenericField("Mood today", animal.getMoodMessage());
             yield return new GenericField("Complaints", this.GetMoodReason(animal));
-            yield return new ItemIconField("Produce ready", animal.currentProduce > 0 ? new StardewValley.Object(animal.currentProduce, 1) : null);
+            yield return new ItemIconField("Produce ready", animal.currentProduce > 0 ? GameHelper.GetObjectBySpriteIndex(animal.currentProduce) : null);
             if (!isFullyGrown)
                 yield return new GenericField("Growth", $"{daysUntilGrown} {TextHelper.Pluralise(daysUntilGrown, "day")} (on {dayOfMaturity})");
             yield return new GenericField("Sells for", GenericField.GetSaleValueString(animal.getSellPrice(), 1));
@@ -62,8 +62,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
         {
+            FarmAnimal target = this.Target;
+
+            // pinned fields
+            yield return new GenericDebugField("age", $"{target.age} days", pinned: true);
+            yield return new GenericDebugField("friendship", $"{target.friendshipTowardFarmer} (max {metadata.Constants.AnimalMaxHappiness})", pinned: true);
+            yield return new GenericDebugField("fullness", target.fullness, pinned: true);
+            yield return new GenericDebugField("happiness", target.happiness, pinned: true);
+
             // raw fields
-            foreach (IDebugField field in this.GetDebugFieldsFrom(this.Target))
+            foreach (IDebugField field in this.GetDebugFieldsFrom(target))
                 yield return field;
         }
 

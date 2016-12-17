@@ -14,5 +14,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.DebugFields
 
         /// <summary>Whether the field should be displayed.</summary>
         bool HasValue { get; }
+
+        /// <summary>Whether the field should be highlighted for special attention.</summary>
+        bool IsPinned { get; }
     }
 }

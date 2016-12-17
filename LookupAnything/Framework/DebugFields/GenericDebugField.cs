@@ -15,6 +15,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.DebugFields
         /// <summary>Whether the field should be displayed.</summary>
         public bool HasValue { get; protected set; }
 
+        /// <summary>Whether the field should be highlighted for special attention.</summary>
+        public bool IsPinned { get; protected set; }
+
 
         /*********
         ** Public methods
@@ -23,11 +26,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.DebugFields
         /// <param name="label">A short field label.</param>
         /// <param name="value">The field value.</param>
         /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-        public GenericDebugField(string label, object value, bool? hasValue = null)
+        /// <param name="pinned">Whether the field should be highlighted for special attention.</param>
+        public GenericDebugField(string label, object value, bool? hasValue = null, bool pinned = false)
         {
             this.Label = label;
             this.Value = TextHelper.Stringify(value);
             this.HasValue = hasValue ?? !string.IsNullOrWhiteSpace(this.Value);
+            this.IsPinned = pinned;
         }
     }
 }
