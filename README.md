@@ -12,8 +12,8 @@ Compatible with Stardew Valley 1.1+ on Linux, Mac, and Windows.
 ## Contents
 * [Installation](#installation)
 * [Usage](#usage)
-* [Examples](#examples)
 * [Configuration](#configuration)
+* [Showcase](#showcase)
 * [Versions](#versions)
 * [Compiling the mod](#compiling-the-mod)
 * [See also](#see-also)
@@ -27,42 +27,6 @@ Compatible with Stardew Valley 1.1+ on Linux, Mac, and Windows.
 Just point your cursor at something and press `F1`. The mod will show live info about that object.
 You can do this in the world, your inventory, the calendar, or a shop.
 
-## Examples
-Here are some representative screenshots (layout and values will change dynamically as needed).
-
-### Items
-| item        | screenshots |
-| ----------- | ----------- |
-| crop        | ![](screenshots/crop.png) |
-| seeds       | ![](screenshots/seeds.png) |
-| inventory   | ![](screenshots/item.png) ![](screenshots/item2.png) |
-
-### Characters
-| character   | screenshots |
-| ----------- | ----------- |
-| villager    | ![](screenshots/villager.png) |
-| pet         | ![](screenshots/pet.png) |
-| farm animal | ![](screenshots/farm-animal.png) |
-| monster     | ![](screenshots/monster.png) |
-| player      | ![](screenshots/player.png) |
-
-### Map objects
-| object          | screenshots |
-| --------------- | ----------- |
-| crafting object | ![](screenshots/crafting.png) |
-| cask            | ![](screenshots/cask.png) |
-| fence           | ![](screenshots/fence.png) |
-| fruit tree      | ![](screenshots/fruit-tree.png) ![](screenshots/fruit-tree2.png) |
-| wild tree       | ![](screenshots/wild-tree.png) |
-
-### Mine objects
-| object  | screenshots |
-| ------- | ----------- |
-| gem     | ![](screenshots/mine-gem.png) |
-| ore     | ![](screenshots/mine-ore.png) |
-| stone   | ![](screenshots/mine-stone.png) |
-| ice     | ![](screenshots/mine-ice.png) |
-
 ## Configuration
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
 file if you want. These are the available settings:
@@ -73,6 +37,68 @@ file if you want. These are the available settings:
 | `HideOnKeyUp`     | Default `false`. If enabled, the lookup window will be shown while you hold `F1` and disappear when you release it.
 | `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll see a small message at the bottom of the screen for a few seconds. This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
 | `ShowDataMiningFields` | Default `false`. Whether to show raw data useful for data miners (as separate fields at the bottom of lookup results). This is an advanced feature not intended for most players.
+
+## Showcase
+### Sample lookups
+* See a villager's social data, friendship with you, and the gifts they like. This will highlight
+  the gifts you're carrying (green) or own (black).
+  > ![](screenshots/villager.png)
+
+* See your farm animals' happiness, friendship, problems, and any produce ready for you.
+  > ![](screenshots/farm-animal.png)
+
+* See your own stats and skill progress. Each green bar represents your progress towards that level.
+  > ![](screenshots/player.png)
+
+* See a monster's stats, your progress towards the Adventurer's Guild eradication goals, and what
+  items the monster will drop when killed. The drop list will highlight which items will definitely
+  drop (black), and which might drop because you have the [Burglar's Ring](http://stardewvalleywiki.com/Burglar%27s_Ring)
+  (gray but not crossed out).
+  > ![](screenshots/monster.png)
+
+* See what an item is used for, and who likes getting it as a gift.
+  > ![](screenshots/item.png)
+
+* See when a crop will be ready to harvest.
+  > ![](screenshots/crop.png)
+
+* See when a crafting station will be ready.
+  > ![](screenshots/crafting.png)
+  > ![](screenshots/cask.png)
+
+* See when a tree will bear fruit, how long until its fruit quality increases, and any
+  problems preventing it from growing.
+  > ![](screenshots/fruit-tree2.png)
+  > ![](screenshots/fruit-tree.png)
+
+* See how long your fences will last.
+  > ![](screenshots/fence.png)
+
+* See what those mine objects do.
+  > ![](screenshots/mine-gem.png)
+  > ![](screenshots/mine-stone.png)
+  > ![](screenshots/mine-ore.png)
+  > ![](screenshots/mine-ice.png)
+
+### Where you can look things up
+You can look things up by pointing at them...
+
+where | example
+----- | -------
+in the world | ![](screenshots/target-world.png)
+| on the toolbar | ![](screenshots/target-toolbar.png)
+| in the calendar | ![](screenshots/target-calendar.png)
+| in the social menu | ![](screenshots/target-social-menu.png)
+| in your inventory or chests | ![](screenshots/target-inventory.png)
+| in shops | ![](screenshots/target-shops.png)
+
+
+### Data mining fields (advanced)
+Are you a data miner or trying to figure out the game mechanics? [Enable data mining fields](#configuration)
+to see raw game data too. This will show 'pinned' data handpicked by Lookup Anything, along with a
+full dynamic dump of the raw data:
+> ![](screenshots/debug-farm-animal-1.png)
+> ![](screenshots/debug-farm-animal-2.png)
 
 ## Versions
 1.0:
