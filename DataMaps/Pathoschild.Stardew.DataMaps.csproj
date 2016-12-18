@@ -69,9 +69,9 @@
     <PropertyGroup>
       <ModPath>$(GamePath)\Mods\DataMaps</ModPath>
     </PropertyGroup>
-    <Copy SourceFiles="$(TargetPath)" DestinationFiles="$(ModPath)\$(TargetFileName)" />
-    <Copy SourceFiles="$(ProjectDir)manifest.json" DestinationFiles="$(ModPath)\manifest.json" />
-    <Copy Condition="$(OS) == 'Windows_NT'" SourceFiles="$(TargetDir)\$(TargetName).pdb" DestinationFiles="$(ModPath)\$(TargetName).pdb" />
-    <Copy Condition="$(OS) != 'Windows_NT'" SourceFiles="$(TargetDir)\$(TargetName).dll.mdb" DestinationFiles="$(ModPath)\$(TargetName).dll.mdb" />
+    <Copy SourceFiles="$(TargetDir)\$(TargetName).dll" DestinationFolder="$(ModPath)" />
+    <Copy SourceFiles="$(TargetDir)\$(TargetName).pdb" DestinationFolder="$(ModPath)" Condition="Exists('$(TargetDir)\$(TargetName).pdb')" />
+    <Copy SourceFiles="$(TargetDir)\$(TargetName).dll.mdb" DestinationFolder="$(ModPath)" Condition="Exists('$(TargetDir)\$(TargetName).dll.mdb')" />
+    <Copy SourceFiles="$(ProjectDir)manifest.json" DestinationFolder="$(ModPath)" />
   </Target>
 </Project>
