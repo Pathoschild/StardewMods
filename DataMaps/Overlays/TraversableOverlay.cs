@@ -30,7 +30,7 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
             foreach (Vector2 tile in visibleTiles)
             {
                 bool isPassable = location.isTilePassable(new Location((int)tile.X, (int)tile.Y), Game1.viewport);
-                bool isClear = isPassable && !location.isTileOccupied(tile);
+                bool isClear = isPassable && !location.isTileOccupiedIgnoreFloors(tile);
 
                 Color color;
                 if (isPassable && isClear)
