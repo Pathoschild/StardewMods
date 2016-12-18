@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataMaps.Framework;
@@ -11,6 +12,16 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
     {
         /*********
         ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        public TraversableOverlay()
+            : base(new LegendMenu(Tuple.Create(Color.Green, "Clear"), Tuple.Create(Color.Orange, "Occupied"), Tuple.Create(Color.Red, "Impassable")))
+        {
+        }
+
+
+        /*********
+        ** Protected methods
         *********/
         /// <summary>Get updated tile data.</summary>
         /// <param name="location">The current location.</param>

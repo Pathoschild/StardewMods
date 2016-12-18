@@ -40,6 +40,7 @@
     <Compile Include="Common\CommonHelper.cs" />
     <Compile Include="Common\GitRelease.cs" />
     <Compile Include="Common\UpdateHelper.cs" />
+    <Compile Include="Framework\Sprites.cs" />
     <Compile Include="Overlays\BaseOverlay.cs" />
     <Compile Include="Overlays\DataMapOverlay.cs" />
     <Compile Include="Framework\TileData.cs" />
@@ -48,6 +49,7 @@
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\RawModConfig.cs" />
     <Compile Include="ModEntry.cs" />
+    <Compile Include="Overlays\LegendMenu.cs" />
     <Compile Include="Overlays\TraversableOverlay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

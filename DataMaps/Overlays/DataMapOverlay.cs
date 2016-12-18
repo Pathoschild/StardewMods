@@ -17,6 +17,9 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
         /*********
         ** Accessors
         *********/
+        /// <summary>The legend to display (if any).</summary>
+        public LegendMenu Legend { get; }
+
         /// <summary>The tiles to render.</summary>
         public TileData[] Tiles { get; protected set; }
 
@@ -25,11 +28,14 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public DataMapOverlay() { }
+        protected DataMapOverlay(LegendMenu legend)
+        {
+            this.Legend = legend;
+        }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="tiles">The tiles to render.</param>
-        public DataMapOverlay(IEnumerable<TileData> tiles)
+        protected DataMapOverlay(IEnumerable<TileData> tiles)
         {
             this.Tiles = tiles.ToArray();
         }
@@ -60,12 +66,24 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
             if (this.Tiles == null || this.Tiles.Length == 0)
                 return;
 
+            // draw tile overlay
             int tileSize = Game1.tileSize;
             foreach (TileData tile in this.Tiles.ToArray())
             {
                 Vector2 position = tile.TilePosition * tileSize - new Vector2(Game1.viewport.X, Game1.viewport.Y);
                 spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize), tile.Color * .3f);
             }
+
+            // draw legend
+            this.Legend?.Draw(spriteBatch);
+        }
+
+        /// <summary>The method invoked when the player resizes the game windoww.</summary>
+        /// <param name="oldBounds">The previous game window bounds.</param>
+        /// <param name="newBounds">The new game window bounds.</param>
+        protected override void ReceiveGameWindowResized(XRectangle oldBounds, XRectangle newBounds)
+        {
+            this.Legend?.ReceiveWindowSizeChanged(oldBounds, newBounds);
         }
 
         /// <summary>Get updated tile data.</summary>
