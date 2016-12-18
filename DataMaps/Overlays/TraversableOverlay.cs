@@ -15,17 +15,16 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
         *********/
         /// <summary>Construct an instance.</summary>
         public TraversableOverlay()
-            : base(new LegendMenu(Tuple.Create(Color.Green, "Clear"), Tuple.Create(Color.Orange, "Occupied"), Tuple.Create(Color.Red, "Impassable")))
-        {
-        }
+            : base(new LegendComponent(Tuple.Create(Color.Green, "Clear"), Tuple.Create(Color.Orange, "Occupied"), Tuple.Create(Color.Red, "Impassable")))
+        { }
 
 
         /*********
         ** Protected methods
         *********/
-        /// <summary>Get updated tile data.</summary>
+        /// <summary>Get updated tile overlay data.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="visibleTiles"></param>
+        /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
         protected override IEnumerable<TileData> Update(GameLocation location, IEnumerable<Vector2> visibleTiles)
         {
             foreach (Vector2 tile in visibleTiles)

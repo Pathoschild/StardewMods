@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.DataMaps.Common;
-using Pathoschild.Stardew.DataMaps.Components;
 using Pathoschild.Stardew.DataMaps.Framework;
 using StardewValley;
 using XRectangle = xTile.Dimensions.Rectangle;
@@ -18,7 +17,7 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
         ** Accessors
         *********/
         /// <summary>The legend to display (if any).</summary>
-        public LegendMenu Legend { get; }
+        public LegendComponent Legend { get; }
 
         /// <summary>The tiles to render.</summary>
         public TileData[] Tiles { get; protected set; }
@@ -28,7 +27,7 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        protected DataMapOverlay(LegendMenu legend)
+        protected DataMapOverlay(LegendComponent legend)
         {
             this.Legend = legend;
         }
@@ -86,9 +85,9 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
             this.Legend?.ReceiveWindowSizeChanged(oldBounds, newBounds);
         }
 
-        /// <summary>Get updated tile data.</summary>
+        /// <summary>Get updated tile overlay data.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="visibleTiles"></param>
+        /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
         protected abstract IEnumerable<TileData> Update(GameLocation location, IEnumerable<Vector2> visibleTiles);
 
         /// <summary>Get all tiles currently visible to the player.</summary>

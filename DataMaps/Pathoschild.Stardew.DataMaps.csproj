@@ -49,7 +49,7 @@
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\RawModConfig.cs" />
     <Compile Include="ModEntry.cs" />
-    <Compile Include="Overlays\LegendMenu.cs" />
+    <Compile Include="Overlays\LegendComponent.cs" />
     <Compile Include="Overlays\TraversableOverlay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

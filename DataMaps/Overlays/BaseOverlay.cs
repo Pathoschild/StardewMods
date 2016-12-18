@@ -6,7 +6,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using Rectangle = xTile.Dimensions.Rectangle;
 
-namespace Pathoschild.Stardew.DataMaps.Components
+namespace Pathoschild.Stardew.DataMaps.Overlays
 {
     /// <summary>An interface which supports user interaction and overlays the active menu (if any).</summary>
     internal abstract class BaseOverlay : IDisposable

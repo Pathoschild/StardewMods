@@ -10,7 +10,7 @@ using XRectangle = xTile.Dimensions.Rectangle;
 namespace Pathoschild.Stardew.DataMaps.Overlays
 {
     /// <summary>An on-screen menu that shows a legend of color => label mappings.</summary>
-    internal class LegendMenu
+    internal class LegendComponent
     {
         /*********
         ** Properties
@@ -45,7 +45,7 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="values">The values to show.</param>
-        public LegendMenu(params Tuple<Color, string>[] values)
+        public LegendComponent(params Tuple<Color, string>[] values)
         {
             this.Values = values;
             if (values.Any())
