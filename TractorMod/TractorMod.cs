@@ -359,7 +359,10 @@ namespace TractorMod
             StardewModdingAPI.Events.MenuEvents.MenuClosed += (p, e) =>
             {
                 if (e.PriorMenu is PhthaloBlueCarpenterMenu)
+                {
+                    ((PhthaloBlueCarpenterMenu)e.PriorMenu).Hangup();
                     PhthaloBlueCarpenterMenu.IsOpen = false;
+                }
             };
 
             StardewModdingAPI.Events.GameEvents.UpdateTick += UpdateTickEvent;
@@ -409,6 +412,8 @@ namespace TractorMod
             {
                 if(building is TractorHouse)
                 {
+                    if (building.daysOfConstructionLeft > 0)
+                        continue;
                     ATractor = new Tractor((int)building.tileX + 1, (int)building.tileY + 1);
                     ATractor.name = "Tractor";
                     Game1.getFarm().characters.Add((NPC)ATractor);
@@ -456,6 +461,8 @@ namespace TractorMod
             //use cellphone
             if (currentKeyboardState.IsKeyDown(ModConfig.PhoneKey))
             {
+                if (Game1.activeClickableMenu != null)
+                    return;
                 if (PhthaloBlueCarpenterMenu.IsOpen)
                     return;
                 Response[] answerChoices = new Response[2]
@@ -679,6 +686,7 @@ namespace TractorMod
             int effectRadius = ConfigForCurrentTool.effectRadius;
             List<Vector2> affectedTileGrid = MakeVector2TileGrid(Game1.player.getTileLocation(), effectRadius);
             
+            //harvesting objects
             foreach (Vector2 tile in affectedTileGrid)
             {
                 StardewValley.Object anObject;
@@ -719,6 +727,7 @@ namespace TractorMod
                 }
             }
 
+            //harvesting plants
             foreach (Vector2 tile in affectedTileGrid)
             {
                 TerrainFeature terrainTile;
@@ -729,7 +738,10 @@ namespace TractorMod
                         HoeDirt hoedirtTile = (HoeDirt)Game1.currentLocation.terrainFeatures[tile];
                         if (hoedirtTile.crop == null)
                             continue;
-                        
+
+                        int harvestMethod = hoedirtTile.crop.harvestMethod;
+                        hoedirtTile.crop.harvestMethod = Crop.sickleHarvest;
+
                         if (hoedirtTile.crop.whichForageCrop == 1) //spring onion
                         {
                             StardewValley.Object anObject = new StardewValley.Object(399, 1);
@@ -768,6 +780,9 @@ namespace TractorMod
                                 hoedirtTile.destroyCrop(tile, true);
                             }
                         }
+
+                        if (hoedirtTile.crop != null)
+                            hoedirtTile.crop.harvestMethod = harvestMethod;
                         continue;
                     }
 
@@ -804,7 +819,6 @@ namespace TractorMod
                     }
                 }
             }
-
         }
 
         public static void ToolAction()
@@ -844,7 +858,6 @@ namespace TractorMod
             }
 
             float currentStamina = Game1.player.stamina;
-            Vector2 origin = new Vector2((float)Game1.player.GetBoundingBox().Center.X, (float)Game1.player.GetBoundingBox().Center.Y);
             List<Vector2> affectedTileGrid = MakeVector2TileGrid(Game1.player.getTileLocation(), effectRadius);
 
             //if player on horse
@@ -856,41 +869,25 @@ namespace TractorMod
             }
 
             //Tool 
-            /*
-            if(currentTool is Axe && currentTool.upgradeLevel < 2) //steel level
-                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.hollowLogIndex, affectedTileGrid);
-            if (currentTool is Axe && currentTool.upgradeLevel < 1)
-                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.stumpIndex, affectedTileGrid);
-            if (currentTool is Pickaxe && currentTool.upgradeLevel < 3)
-                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.meteoriteIndex, affectedTileGrid);
-            if (currentTool is Pickaxe && currentTool.upgradeLevel < 2)
-                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.boulderIndex, affectedTileGrid);
-            if (currentTool is Pickaxe && currentTool.upgradeLevel < 1)
-            {
-                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.mineRock1Index, affectedTileGrid);
-                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.mineRock2Index, affectedTileGrid);
-                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.mineRock3Index, affectedTileGrid);
-                affectedTileGrid = RemoveTileWithResourceClumpType(ResourceClump.mineRock4Index, affectedTileGrid);
-            }
-            */
-            
-            //tool use
-            Tool newTool = currentTool;
-            newTool.upgradeLevel = 4;
+
+            //before tool use
+            int toolUpgrade = currentTool.upgradeLevel;
+            currentTool.upgradeLevel = 4;
             Game1.player.toolPower = 0;
+
+            //tool use
             foreach (Vector2 tile in affectedTileGrid)
             {
-                newTool.DoFunction(Game1.currentLocation, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), 0, Game1.player);
+                currentTool.DoFunction(Game1.currentLocation, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), 0, Game1.player);
             }
 
             //after tool use
             if (Game1.player.isRidingHorse())
-            {
                 Game1.player.getMount().position = currentMountPosition;
-            }
+            currentTool.upgradeLevel = toolUpgrade;
             Game1.player.stamina = currentStamina;
 
-            if (currentTool.GetType() == typeof(WateringCan))
+            if (currentTool is WateringCan)
             {
                 WateringCan currentWaterCan = (WateringCan)currentTool;
                 currentWaterCan.WaterLeft = currentWater;
