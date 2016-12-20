@@ -3,7 +3,7 @@
 + **Fix** being able to Call while another menu is open causing crash.
 + **Fix** Hang-up dialogue not displaying after closing PhthaloBlue Corp's building menu.
 + **Fix** Tractor spawning on Garage's under-construction area.
-+ **Fix** tool quality turining iridium quality after using Tractor.
++ **Fix** tool quality turning iridium quality after using Tractor.
 + **Fix** Tractor getting stuck when harvesting hand-harvested crops.
 
 ####Change Log **v.3.1**:
