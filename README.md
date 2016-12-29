@@ -4,7 +4,7 @@
 **Modder:** PhthaloBlue  
 ###Overview
 This mod adds a **Garage** building which provides **Tractor** to help with your farm works.  
-**Tractor** allows players to quickly till dirt, sow seeds, fertilize soil, and water crop by simple walking over map tiles.  
+**Tractor** allows players to quickly till dirt, sow seeds, fertilize soil, and water crop by simply walking over map tiles.  
 
 ###Latest Version: [v.3.1.1](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
 ####Change Log **v.3.1.1**:
