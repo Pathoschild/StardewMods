@@ -23,7 +23,7 @@ actionEveryTickAmount: number of game tick cool down after each tool action in T
 
 + Change ItemRadius to change radius for seeding and fertilizing  
 
-+ Change holdActivate to change mouse-activation
++ Change holdActivate to change mouse-activation  
 0 is disable mouse-activation. Default.  
 1 is holding left mouse button to activate TractorMode.  
 2 is holding right mouse button to activate TractorMode.  
