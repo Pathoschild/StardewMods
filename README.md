@@ -12,7 +12,8 @@ This mod adds a **Garage** building which provides **Tractor** to help with your
 + **Fix** Hang-up dialogue not displaying after closing PhthaloBlue Corp's building menu.
 + **Fix** Tractor spawning on Garage's under-construction area.
 + **Fix** tool quality turning iridium quality after using Tractor.
-+ **Fix** Tractor getting stuck when harvesting hand-harvested crops.
++ **Fix** Tractor getting stuck when harvesting hand-harvested crops.  
+
 ####Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 
 ![](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/TractorGarage.png)
