@@ -3,6 +3,8 @@ metadata maps.
 
 Compatible with Stardew Valley 1.11+ on Linux, Mac, and Windows.
 
+**This is in the early prototype stage.**
+
 ## Contents
 * [Installation](#installation)
 * [Usage](#usage)
