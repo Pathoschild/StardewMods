@@ -190,7 +190,7 @@ full dynamic dump of the raw data:
 
 1.9:
 * Villager lookups now highlight gifts you carry or own.
-* Added optional data mining fields which shows raw game data (enable via `config.json`).
+* Added optional data mining fields which show raw game data.
 * You can now click on the up/down arrows to scroll content.
 * Improved controller support:
   * You can now lookup what's directly in front of you using a separate hotkey. (Not bound by default.)
