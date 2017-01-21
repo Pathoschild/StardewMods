@@ -80,6 +80,9 @@ setting           | what it affects
 * Updated to SMAPI 1.3.
 * Fixed error when enabled before the game loads.
 
+1.2:
+* Fixed `AllowDangerousCommands` option having no effect.
+
 ## Compiling the mod
 Installing a stable release from Nexus Mods is recommended for most users. If you really want to
 compile the mod yourself, read on.
