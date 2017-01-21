@@ -48,7 +48,8 @@ namespace Pathoschild.Stardew.DebugMode.Framework
                 Controller = new InputMapConfiguration<Buttons>
                 {
                     ToggleDebug = this.TryParse<Buttons>(this.Controller.ToggleDebug)
-                }
+                },
+                AllowDangerousCommands = this.AllowDangerousCommands
             };
         }
 
