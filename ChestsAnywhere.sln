@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChestsAnywhere", "ChestsAny
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "metadata", "metadata", "{0A60EBCD-6388-42B9-BBB4-AE496DDF9EEC}"
 	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
