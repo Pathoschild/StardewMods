@@ -326,14 +326,6 @@ namespace Pathoschild.Stardew.LookupAnything
         /****
         ** Error handling
         ****/
-        /// <summary>Validate that the game versions match the minimum requirements, and return an appropriate error message if not.</summary>
-        public static string ValidateGameVersion()
-        {
-            if (string.Compare(Constants.Version.ToString(), Constant.MinimumApiVersion, StringComparison.InvariantCultureIgnoreCase) == -1)
-                return $"The LookupAnything mod requires the latest version of SMAPI. Please update SMAPI from {Constants.Version} to {Constant.MinimumApiVersion}.";
-            return null;
-        }
-
         /// <summary>Intercept errors thrown by the action.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up"). This is displayed on the screen, so it should be simple and avoid characters that might not be available in the sprite font.</param>

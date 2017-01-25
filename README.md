@@ -206,6 +206,7 @@ Enable tile lookups to see information about map tiles:
 
 1.10:
 * Added optional tile lookup feature.
+* Updated for SMAPI 1.7.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is

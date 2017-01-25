@@ -76,11 +76,6 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            // validate version
-            string versionError = GameHelper.ValidateGameVersion();
-            if (versionError != null)
-                this.Monitor.Log(versionError, LogLevel.Error);
-
             // load config
             this.Config = this.Helper.ReadConfig<RawModConfig>().GetParsed(this.Monitor);
 
@@ -103,15 +98,15 @@ namespace Pathoschild.Stardew.LookupAnything
 #endif
 
             // initialise functionality
-            this.CurrentVersion = UpdateHelper.GetSemanticVersion(this.Manifest.Version);
+            this.CurrentVersion = this.ModManifest.Version.ToString();
             this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Reflection);
             this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config, this.Monitor);
 
             // hook up events
             {
                 // reset low-level cache once per game day (used for expensive queries that don't change within a day)
-                PlayerEvents.LoadedGame += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection);
-                TimeEvents.OnNewDay += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection);
+                SaveEvents.AfterLoad += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection);
+                SaveEvents.AfterSave += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection);
 
                 // hook up game events
                 GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
@@ -293,16 +288,6 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 try
                 {
-                    // validate version
-                    string versionError = GameHelper.ValidateGameVersion();
-                    if (versionError != null)
-                    {
-                        GameHelper.ShowErrorMessage(versionError);
-                        this.Monitor.Log(logMessage.ToString(), LogLevel.Trace);
-                        this.Monitor.Log(versionError, LogLevel.Error);
-                        return;
-                    }
-
                     // get target
                     ISubject subject = this.GetSubject(logMessage, lookupMode);
                     if (subject == null)

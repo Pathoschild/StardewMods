@@ -107,8 +107,6 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="text">The block of text to write.</param>
         /// <param name="position">The position at which to draw the text.</param>
         /// <param name="wrapWidth">The width at which to wrap the text.</param>
-        /// <param name="color">The text color.</param>
-        /// <param name="bold">Whether to draw bold text.</param>
         /// <param name="scale">The font scale.</param>
         /// <returns>Returns the text dimensions.</returns>
         public static Vector2 DrawTextBlock(this SpriteBatch batch, SpriteFont font, IEnumerable<IFormattedText> text, Vector2 position, float wrapWidth, float scale = 1)

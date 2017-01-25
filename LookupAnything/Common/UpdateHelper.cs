@@ -3,7 +3,6 @@ using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Version = StardewModdingAPI.Version;
 
 namespace Pathoschild.Stardew.LookupAnything.Common
 {
@@ -13,15 +12,6 @@ namespace Pathoschild.Stardew.LookupAnything.Common
         /*********
         ** Public methods
         *********/
-        /// <summary>Get a semantic version number from the given version data.</summary>
-        /// <param name="version">The version data.</param>
-        public static string GetSemanticVersion(Version version)
-        {
-            return version.PatchVersion != 0
-                ? $"{version.MajorVersion}.{version.MinorVersion}.{version.PatchVersion}"
-                : $"{version.MajorVersion}.{version.MinorVersion}";
-        }
-
         /// <summary>Get the latest release in a GitHub repository.</summary>
         /// <param name="repository">The name of the repository from which to fetch releases (like "pathoschild/LookupAnything").</param>
         public static async Task<GitRelease> GetLatestReleaseAsync(string repository)

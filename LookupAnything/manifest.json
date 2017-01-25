@@ -7,7 +7,7 @@
     "PatchVersion": 0,
     "Build": ""
   },
-  "MinimumApiVersion": "1.4",
+  "MinimumApiVersion": "1.7",
   "Description": "View metadata about anything by pressing a button.",
   "UniqueID": "LookupAnything",
   "EntryDll": "LookupAnything.dll"
