@@ -17,16 +17,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public InputMapConfiguration<string> Controller { get; set; }
 
         /// <summary>The amount to scroll long content on each up/down scroll.</summary>
-        public int ScrollAmount { get; set; }
+        public int ScrollAmount { get; set; } = 160;
 
         /// <summary>Whether the lookup UI should only be visible as long as the key is pressed.</summary>
         public bool HideOnKeyUp { get; set; }
 
         /// <summary>Whether to check for updates to the mod.</summary>
-        public bool CheckForUpdates { get; set; }
+        public bool CheckForUpdates { get; set; } = true;
 
         /// <summary>Whether to show advanced data mining fields.</summary>
         public bool ShowDataMiningFields { get; set; }
+
+        /// <summary>Whether to include map tiles as lookup targets.</summary>
+        public bool EnableTileLookups { get; set; }
 
 
         /*********
@@ -51,10 +54,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 ScrollDown = "",
                 ToggleDebug = ""
             };
-            this.ScrollAmount = 160;
-            this.HideOnKeyUp = false;
-            this.CheckForUpdates = true;
-            this.ShowDataMiningFields = false;
         }
 
         /// <summary>Get a parsed representation of the mod configuration.</summary>
@@ -82,7 +81,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 ScrollAmount = this.ScrollAmount,
                 HideOnKeyUp = this.HideOnKeyUp,
                 CheckForUpdates = this.CheckForUpdates,
-                ShowDataMiningFields = this.ShowDataMiningFields
+                ShowDataMiningFields = this.ShowDataMiningFields,
+                EnableTileLookups = this.EnableTileLookups
             };
         }
 

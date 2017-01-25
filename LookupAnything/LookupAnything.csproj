@@ -74,6 +74,8 @@
     <Compile Include="Framework\Models\ObjectModel.cs" />
     <Compile Include="Framework\Models\GiftTasteModel.cs" />
     <Compile Include="Framework\Subjects\FarmerSubject.cs" />
+    <Compile Include="Framework\Subjects\TileSubject.cs" />
+    <Compile Include="Framework\Targets\TileTarget.cs" />
     <Compile Include="Framework\Targets\CharacterTarget.cs" />
     <Compile Include="Framework\Targets\CropTarget.cs" />
     <Compile Include="Framework\Targets\FarmAnimalTarget.cs" />

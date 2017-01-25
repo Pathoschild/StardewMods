@@ -100,6 +100,9 @@ full dynamic dump of the raw data:
 > ![](screenshots/debug-farm-animal-1.png)
 > ![](screenshots/debug-farm-animal-2.png)
 
+Enable tile lookups to see information about map tiles:
+> ![](screenshots/map-tile.png)
+
 ## Versions
 1.0:
 * Initial version.
@@ -200,6 +203,9 @@ full dynamic dump of the raw data:
 * Fixed fruit tree quality schedule being wrong in some cases.
 * Fixed input bindings in `config.json` being case-sensitive.
 * Fixed input bindings in `config.json` being discarded silently if invalid.
+
+1.10:
+* Added optional tile lookup feature.
 
 ## Compiling the mod
 [Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is

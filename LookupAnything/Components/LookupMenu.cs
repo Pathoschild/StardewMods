@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -55,6 +54,12 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
         /// <summary>Whether the game's draw mode has been validated for compatibility.</summary>
         private bool ValidatedDrawMode;
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>Whether the lookup is showing information for a tile.</summary>
+        public bool IsTileLookup { get; set; }
 
 
         /*********

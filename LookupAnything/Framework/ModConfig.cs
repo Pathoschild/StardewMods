@@ -25,5 +25,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Whether to show advanced data mining fields.</summary>
         public bool ShowDataMiningFields { get; set; }
+
+        /// <summary>Whether to include map tiles as lookup targets.</summary>
+        public bool EnableTileLookups { get; set; }
     }
 }

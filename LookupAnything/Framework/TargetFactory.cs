@@ -129,6 +129,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                 yield return new FarmerTarget(farmer);
             }
+
+            // tile
+            yield return new TileTarget(originTile);
         }
 
         /// <summary>Get the target on the specified tile.</summary>
@@ -165,7 +168,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // (A higher Y value is closer to the foreground, and will occlude any sprites
                 // behind it. If two sprites at the same Y coordinate overlap, assume the left
                 // sprite occludes the right.)
-                orderby spriteArea.Y descending, spriteArea.X ascending
+                orderby target.Type != TargetType.Tile ? 0 : 1, spriteArea.Y descending, spriteArea.X ascending
 
                 where target.SpriteIntersectsPixel(tile, position, spriteArea)
 
@@ -245,6 +248,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     return new ItemSubject(target.GetValue<Item>(), ObjectContext.Inventory, knownQuality: false);
                 case TargetType.Object:
                     return new ItemSubject(target.GetValue<Item>(), ObjectContext.World, knownQuality: false);
+
+                // tile
+                case TargetType.Tile:
+                    return new TileSubject(Game1.currentLocation, target.GetValue<Vector2>());
             }
 
             return null;

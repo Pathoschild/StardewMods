@@ -14,7 +14,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>A player's horse.</summary>
         Horse,
-        
+
         /// <summary>A forest spirit.</summary>
         Junimo,
 
@@ -52,6 +52,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         Crop,
 
         /// <summary>A generic terrain feature.</summary>
-        TerrainFeature
+        TerrainFeature,
+
+        /****
+        ** Map
+        ****/
+        /// <summary>A map tile.</summary>
+        Tile
     }
 }
