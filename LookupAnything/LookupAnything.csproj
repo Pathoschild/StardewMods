@@ -44,11 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Common\CommonConstants.cs">
+      <Link>Common\CommonConstants.cs</Link>
+    </Compile>
     <Compile Include="..\Common\CommonHelper.cs">
       <Link>Common\CommonHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\GitVersion.cs">
-      <Link>Common\GitVersion.cs</Link>
     </Compile>
     <Compile Include="..\Common\UpdateHelper.cs">
       <Link>Common\UpdateHelper.cs</Link>

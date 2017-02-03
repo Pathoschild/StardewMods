@@ -205,7 +205,7 @@ Enable tile lookups to see information about map tiles:
 
 1.10:
 * Added optional tile lookup feature.
-* Updated for SMAPI 1.7.
+* Updated to SMAPI 1.8.
 
 ### Useful tools
 These may be useful when working on this mod:

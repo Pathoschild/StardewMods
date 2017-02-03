@@ -42,10 +42,10 @@ namespace Pathoschild.Stardew.LookupAnything
         ** Version check
         ****/
         /// <summary>The current semantic version.</summary>
-        private string CurrentVersion;
+        private ISemanticVersion CurrentVersion;
 
         /// <summary>The newer release to notify the user about.</summary>
-        private GitRelease NewRelease;
+        private ISemanticVersion NewRelease;
 
         /// <summary>Whether the update-available message has been shown since the game started.</summary>
         private bool HasSeenUpdateWarning;
@@ -98,7 +98,7 @@ namespace Pathoschild.Stardew.LookupAnything
 #endif
 
             // initialise functionality
-            this.CurrentVersion = this.ModManifest.Version.ToString();
+            this.CurrentVersion = new SemanticVersion(this.ModManifest.Version.ToString());
             this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Reflection);
             this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config, this.Monitor);
 
@@ -160,10 +160,10 @@ namespace Pathoschild.Stardew.LookupAnything
                     this.Monitor.InterceptErrors("checking for a newer version", () =>
                     {
                         // get version
-                        GitRelease release;
+                        ISemanticVersion release;
                         try
                         {
-                            release = UpdateHelper.GetLatestReleaseAsync("Pathoschild/LookupAnything").Result;
+                            release = UpdateHelper.GetLatestReleaseAsync("LookupAnything").Result;
                         }
                         catch (Exception ex)
                         {
@@ -175,7 +175,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         // validate
                         if (release.IsNewerThan(this.CurrentVersion))
                         {
-                            this.Monitor.Log($"Update to version {release.Name} available.", LogLevel.Alert);
+                            this.Monitor.Log($"Update to version {release} available.", LogLevel.Alert);
                             this.NewRelease = release;
                         }
                         else
@@ -254,7 +254,7 @@ namespace Pathoschild.Stardew.LookupAnything
             if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning && this.NewRelease != null)
             {
                 this.HasSeenUpdateWarning = true;
-                GameHelper.ShowInfoMessage($"You can update Lookup Anything from {this.CurrentVersion} to {this.NewRelease.Version}.");
+                GameHelper.ShowInfoMessage($"You can update Lookup Anything from {this.CurrentVersion} to {this.NewRelease}.");
             }
         }
 

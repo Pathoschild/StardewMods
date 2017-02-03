@@ -1,8 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.Common
 {
@@ -12,24 +15,34 @@ namespace Pathoschild.Stardew.Common
         /*********
         ** Public methods
         *********/
-        /// <summary>Get the latest release in a GitHub repository.</summary>
-        /// <param name="repository">The name of the repository from which to fetch releases (like "pathoschild/LookupAnything").</param>
-        public static async Task<GitRelease> GetLatestReleaseAsync(string repository)
+        /// <summary>Get the latest release from the GitHub repository.</summary>
+        /// <param name="key">The mod key in the update document.</param>
+        /// <param name="url">The URL from which to fetch the release versions.</param>
+        public static async Task<ISemanticVersion> GetLatestReleaseAsync(string key, string url = CommonConstants.UpdateUrl)
         {
             // build request
             // (avoid HttpClient for Mac compatibility)
-            HttpWebRequest request = WebRequest.CreateHttp($"https://api.github.com/repos/{repository}/releases/latest");
+            HttpWebRequest request = WebRequest.CreateHttp(url);
             AssemblyName assembly = typeof(UpdateHelper).Assembly.GetName();
             request.UserAgent = $"{assembly.Name}/{assembly.Version}";
             request.Accept = "application/vnd.github.v3+json";
 
-            // fetch data 
+            // fetch data
             using (WebResponse response = await request.GetResponseAsync())
             using (Stream responseStream = response.GetResponseStream())
             using (StreamReader reader = new StreamReader(responseStream))
             {
                 string responseText = reader.ReadToEnd();
-                return JsonConvert.DeserializeObject<GitRelease>(responseText);
+                IDictionary<string, string> versions = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseText);
+
+                // validate
+                if (versions == null || !versions.ContainsKey("schema") || versions["schema"] != "1.0")
+                    throw new InvalidOperationException("The update check failed because the latest version info couldn't be parsed. The mod may need to be updated.");
+
+                // get version
+                return versions.ContainsKey(key)
+                    ? new SemanticVersion(versions[key])
+                    : null;
             }
         }
     }
