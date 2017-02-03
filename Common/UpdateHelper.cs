@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Pathoschild.Stardew.LookupAnything.Common
+namespace Pathoschild.Stardew.Common
 {
     /// <summary>Provides utility methods for mod updates.</summary>
     internal class UpdateHelper

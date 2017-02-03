@@ -44,7 +44,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\CommonHelper.cs" />
+    <Compile Include="..\Common\CommonHelper.cs">
+      <Link>Common\CommonHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Common\GitVersion.cs">
+      <Link>Common\GitVersion.cs</Link>
+    </Compile>
+    <Compile Include="..\Common\UpdateHelper.cs">
+      <Link>Common\UpdateHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Components\DebugInterface.cs" />
     <Compile Include="Framework\Constants\FacingDirection.cs" />
     <Compile Include="Framework\Constants\FenceType.cs" />
@@ -69,7 +80,6 @@
     <Compile Include="Framework\Fields\ItemIconField.cs" />
     <Compile Include="Framework\Fields\ItemDropListField.cs" />
     <Compile Include="Framework\Fields\SkillBarField.cs" />
-    <Compile Include="Common\GitVersion.cs" />
     <Compile Include="Framework\InputMapConfiguration.cs" />
     <Compile Include="Framework\Models\ObjectModel.cs" />
     <Compile Include="Framework\Models\GiftTasteModel.cs" />
@@ -96,7 +106,6 @@
     <Compile Include="Framework\Targets\TreeTarget.cs" />
     <Compile Include="Framework\Targets\UnknownTarget.cs" />
     <Compile Include="Framework\TargetType.cs" />
-    <Compile Include="Common\UpdateHelper.cs" />
     <Compile Include="GameHelper.cs" />
     <Compile Include="Components\LookupMenu.cs" />
     <Compile Include="Components\Sprites.cs" />
@@ -134,6 +143,12 @@
     </None>
     <None Include="packages.config" />
     <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{d781a4da-11dd-4c47-8c68-9b014cb69045}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Pathoschild.Stardew.ModBuildConfig.1.5.0\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.1.5.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" />

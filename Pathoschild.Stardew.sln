@@ -9,9 +9,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{D781A4DA-11DD-4C47-8C68-9B014CB69045}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +26,10 @@ Global
 		{2A9C0811-B2D2-474A-A84C-DDEB16206A62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A9C0811-B2D2-474A-A84C-DDEB16206A62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A9C0811-B2D2-474A-A84C-DDEB16206A62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D781A4DA-11DD-4C47-8C68-9B014CB69045}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D781A4DA-11DD-4C47-8C68-9B014CB69045}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D781A4DA-11DD-4C47-8C68-9B014CB69045}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D781A4DA-11DD-4C47-8C68-9B014CB69045}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

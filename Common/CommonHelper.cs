@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Pathoschild.Stardew.LookupAnything.Common
+namespace Pathoschild.Stardew.Common
 {
     /// <summary>Provides common utility methods for interacting with the game code shared by my various mods.</summary>
     internal static class CommonHelper
