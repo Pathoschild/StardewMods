@@ -1,4 +1,6 @@
-﻿**Lookup Anything** is a [Stardew Valley](http://stardewvalley.net/) mod that shows live info about
+﻿[&larr; back to all mods](../)
+
+**Lookup Anything** is a [Stardew Valley](http://stardewvalley.net/) mod that shows live info about
 whatever's under your cursor when you press `F1`. Learn a villager's favourite gifts, when a crop
 will be ready to harvest, how long a fence will last, why your farm animals are unhappy, and more.
 
@@ -10,24 +12,23 @@ what the game is doing.
 Compatible with Stardew Valley 1.1+ on Linux, Mac, and Windows.
 
 ## Contents
-* [Installation](#installation)
-* [Usage](#usage)
-* [Configuration](#configuration)
+* [Install](#install)
+* [Use](#use)
+* [Configure](#configure)
 * [Showcase](#showcase)
 * [Versions](#versions)
-* [Compiling the mod](#compiling-the-mod)
 * [See also](#see-also)
 
-## Installation
+## Install
 1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
 2. [Install this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/541/).
 3. Run the game using SMAPI.
 
-## Usage
+## Use
 Just point your cursor at something and press `F1`. The mod will show live info about that object.
 You can do this in the world, your inventory, the calendar, or a shop.
 
-## Configuration
+## Configure
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
 file if you want. These are the available settings:
 
@@ -208,42 +209,6 @@ Enable tile lookups to see information about map tiles:
 * Added optional tile lookup feature.
 * Updated for SMAPI 1.7.
 
-## Compiling the mod
-[Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
-recommended for most users. If you really want to compile the mod yourself, read on.
-
-This mod uses the [crossplatform build config](https://github.com/Pathoschild/Stardew.ModBuildConfig#readme)
-so it can be built on Linux, Mac, and Windows without changes. See [its documentation](https://github.com/Pathoschild/Stardew.ModBuildConfig#readme)
-for troubleshooting.
-
-### Compiling the mod for testing
-To compile the mod and add it to the mods directory:
-
-1. Rebuild the project in [Visual Studio](https://www.visualstudio.com/vs/community/) or [MonoDevelop](http://www.monodevelop.com/).  
-   <small>This will compile the code and package it into the mod directory.</small>
-2. Launch the project with debugging.  
-   <small>This will start the game through SMAPI and attach the Visual Studio debugger.</small>
-
-### Compiling the mod for release
-To package the mod for release:
-
-1. Delete the game's `Mods/LookupAnything` directory.  
-   <small>(This ensures the package is clean and has default configuration.)</small>
-2. Recompile the mod per the previous section.
-3. Launch the game through SMAPI to generate the default `config.json`.
-2. Create a zip file of the game's `Mods/LookupAnything` folder. The zip name should include the
-   mod name and version. For example:
-
-   ```
-   LookupAnything-1.6.zip
-      LookupAnything/
-         LookupAnything.dll
-         LookupAnything.pdb
-         data.json
-         config.json
-         manifest.json
-   ```
-
 ### Useful tools
 These may be useful when working on this mod:
 
@@ -259,4 +224,3 @@ These may be useful when working on this mod:
 ## See also
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/518)
 * [Discussion thread](http://community.playstarbound.com/threads/smapi-lookup-anything.122929/)
-* My other Stardew Valley mods: [Chests Anywhere](https://github.com/Pathoschild/ChestsAnywhere), [No Debug Mode](https://github.com/Pathoschild/Stardew.NoDebugMode), and [Skip Intro](https://github.com/Pathoschild/StardewValley.SkipIntro)
