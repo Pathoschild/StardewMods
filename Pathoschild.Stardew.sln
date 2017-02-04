@@ -15,9 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{D781A4DA-11DD-4C47-8C68-9B014CB69045}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common", "Common\Common.shproj", "{B9E9EDFC-E98A-4370-994F-40A9F39A0284}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Common\Common.projitems*{2a9c0811-b2d2-474a-a84c-ddeb16206a62}*SharedItemsImports = 4
+		Common\Common.projitems*{b9e9edfc-e98a-4370-994f-40a9f39a0284}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -27,10 +31,6 @@ Global
 		{2A9C0811-B2D2-474A-A84C-DDEB16206A62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A9C0811-B2D2-474A-A84C-DDEB16206A62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A9C0811-B2D2-474A-A84C-DDEB16206A62}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D781A4DA-11DD-4C47-8C68-9B014CB69045}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D781A4DA-11DD-4C47-8C68-9B014CB69045}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D781A4DA-11DD-4C47-8C68-9B014CB69045}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D781A4DA-11DD-4C47-8C68-9B014CB69045}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

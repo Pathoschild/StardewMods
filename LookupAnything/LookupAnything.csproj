@@ -44,15 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Common\CommonConstants.cs">
-      <Link>Common\CommonConstants.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\CommonHelper.cs">
-      <Link>Common\CommonHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Common\UpdateHelper.cs">
-      <Link>Common\UpdateHelper.cs</Link>
-    </Compile>
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
@@ -144,6 +135,7 @@
     <None Include="packages.config" />
     <None Include="README.md" />
   </ItemGroup>
+  <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Pathoschild.Stardew.ModBuildConfig.1.5.0\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.1.5.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
