@@ -204,7 +204,8 @@ Enable tile lookups to see information about map tiles:
 * Fixed input bindings in `config.json` being discarded silently if invalid.
 
 1.10:
-* Added optional tile lookup feature.
+* You can now lookup an item from the kitchen cooking menu.
+* You can now lookup map tile info (disabled by default).
 * Updated to SMAPI 1.8.
 
 ### Useful tools

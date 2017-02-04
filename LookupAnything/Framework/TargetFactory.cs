@@ -335,6 +335,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 }
             }
 
+            // kitchen
+            else if (menu is CraftingPage)
+            {
+                CraftingRecipe recipe = this.Reflection.GetPrivateValue<CraftingRecipe>(menu, "hoverRecipe");
+                if (recipe != null)
+                    return new ItemSubject(recipe.createItem(), ObjectContext.Inventory, knownQuality: true);
+            }
+
             // shop
             else if (menu is ShopMenu)
             {
