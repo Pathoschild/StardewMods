@@ -3,6 +3,7 @@ documentation and release notes:
 
 * [Chests Anywhere](ChestsAnywhere)
 * [Lookup Anything](LookupAnything)
+* [Skip Intro](SkipIntro)
 
 ## Compiling the mods
 Installing stable releases from Nexus Mods is recommended for most users. If you really want to
