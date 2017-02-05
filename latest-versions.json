@@ -1,5 +1,6 @@
 {
   "schema": 1.0,
   "LookupAnything": "1.10",
-  "ChestsAnywhere": "1.8.2"
+  "ChestsAnywhere": "1.8.2",
+  "SkipIntro": "1.2"
 }
