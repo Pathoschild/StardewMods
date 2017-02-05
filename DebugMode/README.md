@@ -68,38 +68,7 @@ setting           | what it affects
 `AllowDangerousCommands` | Default `false`. This allows debug commands which end the current day/season & save, randomise your player or farmhouse decorations, or crash the game. Only change this if you're aware of the consequences.
 
 ## Versions
-1.0:
-* Initial version which unlocks debug mode.
-* Suppressed dangerous options by default.
-* Fixed default warp points.
-
-1.1:
-* Added active menu name to cursor info.
-* Added labels to cursor debug lines.
-* Updated to SMAPI 1.3.
-* Fixed error when enabled before the game loads.
-
-1.2:
-* Fixed `AllowDangerousCommands` option having no effect.
-
-### Compiling the mod for release
-To package the mod for release:
-
-1. Delete the game's `Mods/DebugMode` directory.  
-   <small>(This ensures the package will be clean and have default configuration.)</small>
-2. Recompile the mod per the previous section.
-3. Launch the game through SMAPI to generate the default `config.json`.
-2. Create a zip file of the game's `Mods/DebugMode` folder. The zip name should include the
-   mod name, version, and platform. For example:
-
-   ```
-   DebugMode-1.6-Windows.zip
-      DebugMode/
-         Pathoschild.Stardew.DebugMode.dll
-         Pathoschild.Stardew.DebugMode.pdb
-         config.json
-         manifest.json
-   ```
+See [release notes](release-notes.md).
 
 ## See also
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/679)
