@@ -4,6 +4,7 @@ documentation and release notes:
 * [Chests Anywhere](ChestsAnywhere)
 * [Debug Mode](DebugMode)
 * [Lookup Anything](LookupAnything)
+* [No Debug Mode](NoDebugMode) (obsolete)
 * [Skip Intro](SkipIntro)
 
 ## Compiling the mods
