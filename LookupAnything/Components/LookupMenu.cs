@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
