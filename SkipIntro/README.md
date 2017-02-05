@@ -6,15 +6,7 @@
 3. Run the game using SMAPI.
 
 ## Versions
-1.0:
-* Initial release.
-
-1.1:
-* Updated for Stardew Valley 1.1.
-
-1.2:
-* Added support for Linux and Mac.
-* Updated to SMAPI 1.3.
+See [release notes](release-notes.md).
 
 ## See also
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/533)

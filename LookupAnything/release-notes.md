@@ -120,7 +120,7 @@ See [log](https://github.com/Pathoschild/StardewMods/compare/lookup-anything/1.0
 * Added error if game or SMAPI are out of date.
 
 ## 1.0
-See [log](https://github.com/Pathoschild/StardewMods/compare/lookup-anything/601d3c7964c5f2448f2791cd6f7205cb0b2f0835...lookup-anything/1.0).
+See [log](https://github.com/Pathoschild/StardewMods/compare/601d3c7964c5f2448f2791cd6f7205cb0b2f0835...lookup-anything/1.0).
 
 * Initial version.
 * Added support for NPCs (villagers, pets, farm animals, monsters, and players), items (crops and
