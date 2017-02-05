@@ -3,8 +3,9 @@
 # Release notes
 
 ## 1.3
-See log [part A](https://github.com/Pathoschild/StardewMods/compare/skip-intro/1.2...6b1b3f8fd70889d6723a43893ea8b9446fdce2fa) and [part B](https://github.com/Pathoschild/StardewMods/compare/5eb97b03b31135e8038840669edc4bb36e792467...skip-intro/1.3).
+See log ([1](https://github.com/Pathoschild/StardewMods/compare/skip-intro/1.2...6b1b3f8fd70889d6723a43893ea8b9446fdce2fa), [2](https://github.com/Pathoschild/StardewMods/compare/5eb97b03b31135e8038840669edc4bb36e792467...skip-intro/1.3)).
 
+* Will now skip to load screen. (This can be disabled in `config.json`.)
 * Added update check.
 * Updated to SMAPI 1.8.
 

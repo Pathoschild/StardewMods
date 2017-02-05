@@ -55,7 +55,7 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <param name="e">The event arguments.</param>
         private void ReceiveMenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
-            try
+            this.Monitor.InterceptErrors("skipping the menu", () =>
             {
                 // get menu
                 TitleMenu menu = e.NewMenu as TitleMenu;
@@ -65,11 +65,11 @@ namespace Pathoschild.Stardew.SkipIntro
                 // skip intro
                 this.Helper.Reflection.GetPrivateField<int>(menu, "chuckleFishTimer").SetValue(0);
                 menu.skipToTitleButtons();
-            }
-            catch (Exception ex)
-            {
-                this.Monitor.Log($"Couldn't skip the menu: {ex}", LogLevel.Error);
-            }
+
+                // skip to load screen
+                if (this.Config.SkipToLoadScreen)
+                    menu.performButtonAction("Load");
+            });
         }
     }
 }
