@@ -1,0 +1,14 @@
+﻿{
+  "Name": "DebugMode",
+  "Author": "Pathoschild",
+  "Version": {
+    "MajorVersion": 1,
+    "MinorVersion": 3,
+    "PatchVersion": 0,
+    "Build": null
+  },
+  "MinimumApiVersion": "1.8",
+  "Description": "Enables an overlay which provides debug information and unlocks the game's debug hotkeys.",
+  "UniqueID": "Pathoschild.Stardew.DebugMode",
+  "EntryDll": "Pathoschild.Stardew.DebugMode.dll"
+}

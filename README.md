@@ -2,6 +2,7 @@ This repository contains my SMAPI mods for Stardew Valley. See the individual mo
 documentation and release notes:
 
 * [Chests Anywhere](ChestsAnywhere)
+* [Debug Mode](DebugMode)
 * [Lookup Anything](LookupAnything)
 * [Skip Intro](SkipIntro)
 
