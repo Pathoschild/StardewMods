@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.Cache;
 using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -22,6 +23,7 @@ namespace Pathoschild.Stardew.Common
             // build request
             // (avoid HttpClient for Mac compatibility)
             HttpWebRequest request = WebRequest.CreateHttp(url);
+            request.CachePolicy = new RequestCachePolicy(RequestCacheLevel.Revalidate);
             AssemblyName assembly = typeof(UpdateHelper).Assembly.GetName();
             request.UserAgent = $"{assembly.Name}/{assembly.Version}";
 
@@ -42,7 +44,6 @@ namespace Pathoschild.Stardew.Common
         /// <param name="url">The URL from which to fetch the release versions.</param>
         public static async Task<ISemanticVersion> LogVersionCheck(IMonitor monitor, ISemanticVersion current, string key, string url = CommonConstants.UpdateUrl)
         {
-
             try
             {
                 // get version
