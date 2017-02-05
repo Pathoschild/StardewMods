@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading.Tasks;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.SkipIntro.Framework;
@@ -63,14 +62,9 @@ namespace Pathoschild.Stardew.SkipIntro
                 if (menu == null)
                     return;
 
-                // skip intro (except the Chucklefish logo)
+                // skip intro
+                this.Helper.Reflection.GetPrivateField<int>(menu, "chuckleFishTimer").SetValue(0);
                 menu.skipToTitleButtons();
-
-                // skip Chucklefish logo
-                FieldInfo logoTimer = menu.GetType().GetField("chuckleFishTimer", BindingFlags.Instance | BindingFlags.NonPublic);
-                if (logoTimer == null)
-                    throw new InvalidOperationException("The 'chuckleFishTimer' field doesn't exist.");
-                logoTimer.SetValue(menu, 0);
             }
             catch (Exception ex)
             {
