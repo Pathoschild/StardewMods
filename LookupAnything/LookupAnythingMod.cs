@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -157,30 +156,9 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 Task.Factory.StartNew(() =>
                 {
-                    this.Monitor.InterceptErrors("checking for a newer version", () =>
-                    {
-                        // get version
-                        ISemanticVersion release;
-                        try
-                        {
-                            release = UpdateHelper.GetLatestReleaseAsync("LookupAnything").Result;
-                        }
-                        catch (Exception ex)
-                        {
-                            this.Monitor.Log("Couldn't check for an updated version. This won't affect your game, but you may not be notified of new versions if this keeps happening. Error details are shown in the log.", LogLevel.Warn);
-                            this.Monitor.Log(ex.ToString(), LogLevel.Trace);
-                            return;
-                        }
-
-                        // validate
-                        if (release.IsNewerThan(this.CurrentVersion))
-                        {
-                            this.Monitor.Log($"Update to version {release} available.", LogLevel.Alert);
-                            this.NewRelease = release;
-                        }
-                        else
-                            this.Monitor.Log("Checking for update... none found.", LogLevel.Trace);
-                    });
+                    ISemanticVersion latest = UpdateHelper.LogVersionCheck(this.Monitor, this.ModManifest.Version, "LookupAnything").Result;
+                    if (latest.IsNewerThan(this.CurrentVersion))
+                        this.NewRelease = latest;
                 });
             }
         }
