@@ -18,6 +18,9 @@ namespace Pathoschild.Stardew.DebugMode.Framework
         /// <summary>Allow debug commands which are destructive. A command is considered destructive if it immediately ends the current day, randomises the player or farmhouse decorations, or crashes the game.</summary>
         public bool AllowDangerousCommands { get; set; }
 
+        /// <summary>Whether to check for updates to the mod.</summary>
+        public bool CheckForUpdates { get; set; } = true;
+
 
         /*********
         ** Public methods
@@ -33,7 +36,6 @@ namespace Pathoschild.Stardew.DebugMode.Framework
             {
                 ToggleDebug = ""
             };
-            this.AllowDangerousCommands = false;
         }
 
         /// <summary>Get a parsed representation of the mod configuration.</summary>
@@ -49,7 +51,8 @@ namespace Pathoschild.Stardew.DebugMode.Framework
                 {
                     ToggleDebug = this.TryParse<Buttons>(this.Controller.ToggleDebug)
                 },
-                AllowDangerousCommands = this.AllowDangerousCommands
+                AllowDangerousCommands = this.AllowDangerousCommands,
+                CheckForUpdates = this.CheckForUpdates
             };
         }
 

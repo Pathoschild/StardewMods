@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DebugMode.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -54,19 +56,16 @@ namespace Pathoschild.Stardew.DebugMode
             // initialise
             this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
 
-            // hook input events
+            // hook events
             ControlEvents.KeyPressed += this.ReceiveKeyPress;
             if (this.Config.Controller.HasAny())
             {
                 ControlEvents.ControllerButtonPressed += this.ReceiveButtonPress;
                 ControlEvents.ControllerTriggerPressed += this.ReceiveTriggerPress;
             }
-
-            // hook warp event
+            GameEvents.GameLoaded += this.ReceiveGameLoaded;
             LocationEvents.CurrentLocationChanged += this.ReceiveCurrentLocationChanged;
-
-            // hook overlay
-            GraphicsEvents.OnPostRenderEvent += (sender, e) => this.OnPostRenderEvent(sender, e, this.Pixel.Value);
+            GraphicsEvents.OnPostRenderEvent += this.OnPostRenderEvent;
         }
 
 
@@ -76,14 +75,28 @@ namespace Pathoschild.Stardew.DebugMode
         /****
         ** Event handlers
         ****/
+        /// <summary>The method invoked when the player loads the game.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void ReceiveGameLoaded(object sender, EventArgs e)
+        {
+            // check for an updated version
+            if (this.Config.CheckForUpdates)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    UpdateHelper.LogVersionCheck(this.Monitor, this.ModManifest.Version, "DebugMode").Wait();
+                });
+            }
+        }
+
         /// <summary>The event called by SMAPI when rendering to the screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        /// <param name="pixel">The cached pixel used to draw overlays.</param>
-        public void OnPostRenderEvent(object sender, EventArgs e, Texture2D pixel)
+        public void OnPostRenderEvent(object sender, EventArgs e)
         {
             if (this.DebugMode)
-                this.DrawOverlay(Game1.spriteBatch, Game1.smallFont, pixel);
+                this.DrawOverlay(Game1.spriteBatch, Game1.smallFont, this.Pixel.Value);
         }
 
         /// <summary>The method invoked when the player presses a keyboard button.</summary>

@@ -2,6 +2,12 @@
 
 # Release notes
 
+## 1.3
+See [log](https://github.com/Pathoschild/StardewMods/compare/640f34be5d6f80ca8f2924853537a8d8d1b145bd...debug-mode/1.3).
+
+* Added update check.
+* Updated for SMAPI 1.8.
+
 ## 1.2
 See [log](https://github.com/Pathoschild/StardewMods/compare/debug-mode/1.1...debug-mode/1.2).
 

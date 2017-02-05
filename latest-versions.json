@@ -1,6 +1,7 @@
 {
   "schema": 1.0,
-  "LookupAnything": "1.10",
   "ChestsAnywhere": "1.8.2",
+  "DebugMode": "1.2",
+  "LookupAnything": "1.10",
   "SkipIntro": "1.3"
 }
