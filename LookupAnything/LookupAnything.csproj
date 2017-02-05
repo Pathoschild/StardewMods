@@ -134,6 +134,7 @@
     </None>
     <None Include="packages.config" />
     <None Include="README.md" />
+    <None Include="release-notes.md" />
   </ItemGroup>
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

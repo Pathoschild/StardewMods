@@ -8,6 +8,7 @@ See [log](https://github.com/Pathoschild/StardewMods/compare/lookup-anything/1.9
 * You can now lookup an item from the kitchen cooking menu.
 * You can now lookup map tile info (disabled by default).
 * Updated to SMAPI 1.8.
+* Updated new-version-available check.
 
 ## 1.9
 See [log](https://github.com/Pathoschild/StardewMods/compare/lookup-anything/1.8...lookup-anything/1.8).

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.LookupAnything;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -213,7 +212,7 @@ namespace Pathoschild.Stardew.Common
         {
             detailedVerb = detailedVerb ?? verb;
             monitor.Log($"Something went wrong {detailedVerb}:\n{ex}", LogLevel.Error);
-            GameHelper.ShowErrorMessage($"Huh. Something went wrong {verb}. The error log has the technical details.");
+            CommonHelper.ShowErrorMessage($"Huh. Something went wrong {verb}. The error log has the technical details.");
         }
     }
 }
