@@ -2,6 +2,12 @@
 
 # Release notes
 
+## 1.8.2
+See [log](https://github.com/Pathoschild/StardewMods/compare/a8624da04e0c15e14bfb5936fcc720fe96930051...chests-anywhere/1.8.2).
+
+* Updated to SMAPI 1.8.
+* Updated new-version-available check.
+
 ## 1.8.1
 See [log](https://github.com/Pathoschild/StardewMods/compare/chests-anywhere/1.8...chests-anywhere/1.8.1).
 
