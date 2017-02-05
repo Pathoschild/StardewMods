@@ -19,6 +19,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = ".Common", "Common\.Common.s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChestsAnywhere", "ChestsAnywhere\ChestsAnywhere.csproj", "{866D7B9E-531E-4F83-95EE-B3D7F2642876}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkipIntro", "SkipIntro\SkipIntro.csproj", "{56FB522E-923D-4582-AD3D-8EC80F09237A}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Common\Common.projitems*{2a9c0811-b2d2-474a-a84c-ddeb16206a62}*SharedItemsImports = 4
@@ -38,6 +40,10 @@ Global
 		{866D7B9E-531E-4F83-95EE-B3D7F2642876}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{866D7B9E-531E-4F83-95EE-B3D7F2642876}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{866D7B9E-531E-4F83-95EE-B3D7F2642876}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56FB522E-923D-4582-AD3D-8EC80F09237A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56FB522E-923D-4582-AD3D-8EC80F09237A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56FB522E-923D-4582-AD3D-8EC80F09237A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56FB522E-923D-4582-AD3D-8EC80F09237A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
