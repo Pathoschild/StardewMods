@@ -48,9 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\CommonHelper.cs" />
-    <Compile Include="Common\GitVersion.cs" />
-    <Compile Include="Common\UpdateHelper.cs" />
     <Compile Include="ChestFactory.cs" />
     <Compile Include="ChestsAnywhereMod.cs" />
     <Compile Include="Menus\Components\Checkbox.cs" />
@@ -74,7 +71,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="README.md" />
   </ItemGroup>
+  <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Pathoschild.Stardew.ModBuildConfig.1.5.0\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.1.5.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

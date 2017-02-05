@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         ** Accessors
         *********/
         /// <summary>The minimum supported version of SMAPI.</summary>
-        public static readonly Version MinimumApiVersion = new Version(1, 3, 0, null);
+        public static readonly ISemanticVersion MinimumApiVersion = new SemanticVersion(1, 3, 0);
 
         /// <summary>The number of rows in an inventory grid.</summary>
         public const int SlotRows = 3;

@@ -4,9 +4,9 @@ using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Pathoschild.Stardew.ChestsAnywhere.Common;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
+using Pathoschild.Stardew.Common;
 using StardewValley;
 using StardewValley.Menus;
 

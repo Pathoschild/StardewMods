@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Pathoschild.Stardew.ChestsAnywhere.Common;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays;
+using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -26,10 +26,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         ** Version check
         ****/
         /// <summary>The current semantic version.</summary>
-        private string CurrentVersion;
+        private ISemanticVersion CurrentVersion;
 
         /// <summary>The newer release to notify the user about.</summary>
-        private GitRelease NewRelease;
+        private ISemanticVersion NewRelease;
 
         /// <summary>Whether the update-available message has been shown since the game started.</summary>
         private bool HasSeenUpdateWarning;
@@ -53,7 +53,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             // read config
             this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
-            this.CurrentVersion = UpdateHelper.GetSemanticVersion(this.Manifest.Version);
+            this.CurrentVersion = this.ModManifest.Version;
 
             // hook UI
             GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
@@ -93,27 +93,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 {
                     Task.Factory.StartNew(() =>
                     {
-                        // get version
-                        GitRelease release;
-                        try
+                        Task.Factory.StartNew(() =>
                         {
-                            release = UpdateHelper.GetLatestReleaseAsync("Pathoschild/ChestsAnywhere").Result;
-                        }
-                        catch (Exception ex)
-                        {
-                            this.Monitor.Log("Couldn't check for an updated version. This won't affect your game, but you may not be notified of new versions if this keeps happening. Error details are shown in the log.", LogLevel.Warn);
-                            this.Monitor.Log(ex.ToString(), LogLevel.Trace);
-                            return;
-                        }
-
-                        // validate
-                        if (release.IsNewerThan(this.CurrentVersion))
-                        {
-                            this.Monitor.Log($"Update to version {release.Name} available.", LogLevel.Alert);
-                            this.NewRelease = release;
-                        }
-                        else
-                            this.Monitor.Log("Checking for update... none found.", LogLevel.Trace);
+                            ISemanticVersion latest = UpdateHelper.LogVersionCheck(this.Monitor, this.ModManifest.Version, "ChestsAnywhere").Result;
+                            if (latest.IsNewerThan(this.CurrentVersion))
+                                this.NewRelease = latest;
+                        });
                     });
                 }
                 catch (Exception ex)
@@ -132,7 +117,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 try
                 {
                     this.HasSeenUpdateWarning = true;
-                    CommonHelper.ShowInfoMessage($"You can update Chests Anywhere from {this.CurrentVersion} to {this.NewRelease.Version}.");
+                    CommonHelper.ShowInfoMessage($"You can update Chests Anywhere from {this.CurrentVersion} to {this.NewRelease}.");
                 }
                 catch (Exception ex)
                 {
