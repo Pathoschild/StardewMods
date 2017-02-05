@@ -214,8 +214,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Validate that the game versions match the minimum requirements, and return an appropriate error message if not.</summary>
         private string ValidateGameVersion()
         {
-            if (Constant.MinimumApiVersion.IsNewerThan(Constants.Version))
-                return $"The Chests Anywhere mod requires a newer version of SMAPI. Please update SMAPI from {Constants.Version} to {Constant.MinimumApiVersion}.";
+            if (Constant.MinimumApiVersion.IsNewerThan(Constants.ApiVersion))
+                return $"The Chests Anywhere mod requires a newer version of SMAPI. Please update SMAPI from {Constants.ApiVersion} to {Constant.MinimumApiVersion}.";
 
             return null;
         }
