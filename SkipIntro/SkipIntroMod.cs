@@ -16,29 +16,38 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            MenuEvents.MenuChanged += (sender, e) =>
+            MenuEvents.MenuChanged += this.ReceiveMenuChanged;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>The method invoked when the game replaces one menu with another.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void ReceiveMenuChanged(object sender, EventArgsClickableMenuChanged e)
+        {
+            try
             {
-                try
-                {
-                    // get menu
-                    TitleMenu menu = e.NewMenu as TitleMenu;
-                    if (menu == null)
-                        return;
+                // get menu
+                TitleMenu menu = e.NewMenu as TitleMenu;
+                if (menu == null)
+                    return;
 
-                    // skip intro (except the Chucklefish logo)
-                    menu.skipToTitleButtons();
+                // skip intro (except the Chucklefish logo)
+                menu.skipToTitleButtons();
 
-                    // skip Chucklefish logo
-                    FieldInfo logoTimer = menu.GetType().GetField("chuckleFishTimer", BindingFlags.Instance | BindingFlags.NonPublic);
-                    if (logoTimer == null)
-                        throw new InvalidOperationException("The 'chuckleFishTimer' field doesn't exist.");
-                    logoTimer.SetValue(menu, 0);
-                }
-                catch (Exception ex)
-                {
-                    this.Monitor.Log($"Couldn't skip the menu: {ex}", LogLevel.Error);
-                }
-            };
+                // skip Chucklefish logo
+                FieldInfo logoTimer = menu.GetType().GetField("chuckleFishTimer", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (logoTimer == null)
+                    throw new InvalidOperationException("The 'chuckleFishTimer' field doesn't exist.");
+                logoTimer.SetValue(menu, 0);
+            }
+            catch (Exception ex)
+            {
+                this.Monitor.Log($"Couldn't skip the menu: {ex}", LogLevel.Error);
+            }
         }
     }
 }
