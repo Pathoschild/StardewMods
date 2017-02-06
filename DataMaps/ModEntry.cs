@@ -1,4 +1,5 @@
-﻿using Pathoschild.Stardew.DataMaps.Framework;
+﻿using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.DataMaps.Framework;
 using Pathoschild.Stardew.DataMaps.Overlays;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;

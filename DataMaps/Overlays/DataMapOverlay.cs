@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.DataMaps.Common;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
 using StardewValley;
 using XRectangle = xTile.Dimensions.Rectangle;
