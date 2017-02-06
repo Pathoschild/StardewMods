@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Pathoschild.Stardew.DebugMode</RootNamespace>
-    <AssemblyName>Pathoschild.Stardew.DebugMode</AssemblyName>
+    <AssemblyName>DebugMode</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,7 +32,7 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
@@ -48,7 +48,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="manifest.json" />
+    <None Include="manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="README.md" />
     <None Include="release-notes.md" />
@@ -62,13 +64,5 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.1.5.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Pathoschild.Stardew.ModBuildConfig.1.5.0\build\Pathoschild.Stardew.ModBuildConfig.targets'))" />
   </Target>
-  <PropertyGroup Condition="$(GamePlatform) == 'Windows'">
-    <PostBuildEvent>
-      set modDir=$(GamePath)\Mods\DebugMode
-      if not exist "%modDir%" (mkdir "%modDir%")
-      copy "$(TargetDir)\$(TargetName).dll" "%modDir%\$(TargetName).dll"
-      copy "$(TargetDir)\$(TargetName).pdb" "%modDir%\$(TargetName).pdb"
-      copy "$(ProjectDir)manifest.json" "%modDir%\manifest.json"
-    </PostBuildEvent>
-  </PropertyGroup>
+  <Import Project="$(SolutionDir)\deploy-mod.targets" />
 </Project>

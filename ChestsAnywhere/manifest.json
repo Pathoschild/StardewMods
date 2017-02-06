@@ -9,7 +9,6 @@
   },
   "MinimumApiVersion": "1.8",
   "Description": "Access your chests from anywhere.",
-  "UniqueID": "ChestsAnywhere",
-  "PerSaveConfigs": false,
+  "UniqueID": "Pathoschild.ChestsAnywhere",
   "EntryDll": "ChestsAnywhere.dll"
 }

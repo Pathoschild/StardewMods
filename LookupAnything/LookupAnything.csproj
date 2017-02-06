@@ -32,7 +32,7 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -145,14 +145,5 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.1.5.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Pathoschild.Stardew.ModBuildConfig.1.5.0\build\Pathoschild.Stardew.ModBuildConfig.targets'))" />
   </Target>
-  <Target Name="AfterBuild">
-    <PropertyGroup>
-      <ModPath>$(GamePath)\Mods\LookupAnything</ModPath>
-    </PropertyGroup>
-    <Copy SourceFiles="$(TargetPath)" DestinationFiles="$(ModPath)\$(TargetFileName)" />
-    <Copy SourceFiles="$(ProjectDir)manifest.json" DestinationFiles="$(ModPath)\manifest.json" />
-    <Copy SourceFiles="$(ProjectDir)data.json" DestinationFiles="$(ModPath)\data.json" />
-    <Copy Condition="$(OS) == 'Windows_NT'" SourceFiles="$(TargetDir)\$(TargetName).pdb" DestinationFiles="$(ModPath)\$(TargetName).pdb" />
-    <Copy Condition="$(OS) != 'Windows_NT'" SourceFiles="$(TargetDir)\$(TargetName).mdb" DestinationFiles="$(ModPath)\$(TargetName).mdb" />
-  </Target>
+  <Import Project="$(SolutionDir)\deploy-mod.targets" />
 </Project>

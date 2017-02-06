@@ -1,14 +1,13 @@
 ﻿{
   "Name": "NoDebugMode",
-  "Authour": "Pathoschild",
+  "Author": "Pathoschild",
   "Version": {
     "MajorVersion": 1,
     "MinorVersion": 0,
     "PatchVersion": 0,
-    "Build": 0
+    "Build": null
   },
-  "Description": "Disables SMAPI's F2 debug mode, which can cause unintended consequences like skipping an entire season or teleporting into walls. [version 1.0]",
-  "UniqueID": "NoDebugMode",
-  "PerSaveConfigs": false,
-  "EntryDll": "Pathoschild.Stardew.NoDebugMode.dll"
+  "Description": "Disables SMAPI's F2 debug mode, which can cause unintended consequences like skipping an entire season or teleporting into walls.",
+  "UniqueID": "Pathoschild.NoDebugMode",
+  "EntryDll": "NoDebugMode.dll"
 }

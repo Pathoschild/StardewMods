@@ -9,6 +9,6 @@
   },
   "MinimumApiVersion": "1.8",
   "Description": "View metadata about anything by pressing a button.",
-  "UniqueID": "LookupAnything",
+  "UniqueID": "Pathoschild.LookupAnything",
   "EntryDll": "LookupAnything.dll"
 }
