@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.SkipIntro.Framework;
 using StardewModdingAPI;
@@ -93,8 +94,7 @@ namespace Pathoschild.Stardew.SkipIntro
             {
                 // skip to main menu
                 case 1:
-                    this.Helper.Reflection.GetPrivateField<int>(menu, "chuckleFishTimer").SetValue(0);
-                    menu.skipToTitleButtons();
+                    menu.receiveKeyPress(Keys.Escape);
                     return true;
 
                 // skip to loading screen

@@ -4,7 +4,8 @@
 
 ## 1.4
 * Will now skip more smoothly.
-* Fixed main title buttons being temporarily misplaced when skip to load screen is enabled.
+* Fixed title music not playing after skip.
+* Fixed title buttons being temporarily misplaced when skip to load screen is enabled.
 
 ## 1.3
 See log ([1](https://github.com/Pathoschild/StardewMods/compare/skip-intro/1.2...6b1b3f8fd70889d6723a43893ea8b9446fdce2fa), [2](https://github.com/Pathoschild/StardewMods/compare/5eb97b03b31135e8038840669edc4bb36e792467...skip-intro/1.3)).
