@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using StardewValley;
 
 namespace Pathoschild.Stardew.FastAnimations.Framework
@@ -10,28 +9,25 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /*********
         ** Properties
         *********/
-        /// <summary>Manages sprites and animations for the player's character.</summary>
+        /// <summary>The player's character sprite and animation manager.</summary>
         private readonly FarmerSprite Farmer;
 
-        /// <summary>The last animation detected for the farmer.</summary>
-        private AnimationKey? LastFarmerAnimation;
+        /// <summary>The last animation frame detected for the farmer.</summary>
+        private AnimationFrame? LastFrame;
 
 
         /*********
         ** Accessors
         *********/
-        /// <summary>Raised after an animation starts.</summary>
-        public event Action<AnimationKey> OnAnimationStarted;
-
-        /// <summary>Raised after an animation ends.</summary>
-        public event Action<AnimationKey> OnAnimationEnded;
+        /// <summary>Raised after a new animation frame starts.</summary>
+        public event EventHandler<EventArgsAnimationFrame> OnNewFrame;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="farmer">Manages sprites and animations for the player's character.</param>
+        /// <param name="farmer">The player's character sprite and animation manager.</param>
         public AnimationEvents(FarmerSprite farmer)
         {
             this.Farmer = farmer;
@@ -40,21 +36,22 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /// <summary>Check for animation changes.</summary>
         public void Update()
         {
-            // animation ended
-            if (this.Farmer.CurrentAnimation?.Any() != true)
+            // no current animation
+            if (this.Farmer.CurrentAnimation == null || this.Farmer.CurrentAnimation.Count == 0)
             {
-                if (this.LastFarmerAnimation != null)
-                    this.OnAnimationEnded?.Invoke(this.LastFarmerAnimation.Value);
-                this.LastFarmerAnimation = null;
+                this.LastFrame = null;
                 return;
             }
 
-            // animation started
-            AnimationKey key = new AnimationKey(this.Farmer.CurrentAnimation.First());
-            if (!key.Equals(this.LastFarmerAnimation))
+            // raise events if new frame
+            AnimationFrame frame = new AnimationFrame(this.Farmer.SourceRect, this.Farmer.CurrentAnimation[0]);
+            bool isNewAnimation = this.LastFrame == null || !frame.IsSameAnimation(this.LastFrame.Value);
+            bool isNewFrame = isNewAnimation || !frame.IsSameFrame(this.LastFrame.Value);
+
+            if (isNewFrame)
             {
-                this.LastFarmerAnimation = key;
-                this.OnAnimationStarted?.Invoke(key);
+                this.OnNewFrame?.Invoke(null, new EventArgsAnimationFrame(frame, isNewAnimation));
+                this.LastFrame = frame;
             }
         }
     }

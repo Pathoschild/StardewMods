@@ -61,7 +61,7 @@ namespace Pathoschild.Stardew.FastAnimations
         {
             // initialise animation events
             this.AnimationEvents = new AnimationEvents(Game1.player.FarmerSprite);
-            this.AnimationEvents.OnAnimationStarted += this.ReceiveAnimationStarted;
+            this.AnimationEvents.OnNewFrame += this.ReceiveAnimationNewFrame;
         }
 
         /// <summary>The method invoked when the player presses a keyboard button.</summary>
@@ -73,9 +73,11 @@ namespace Pathoschild.Stardew.FastAnimations
         }
 
         /// <summary>The method invoked when an animation starts.</summary>
-        /// <param name="key">The animation key.</param>
-        private void ReceiveAnimationStarted(AnimationKey key)
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void ReceiveAnimationNewFrame(object sender, EventArgsAnimationFrame e)
         {
+            AnimationFrame frame = e.Frame;
         }
     }
 }
