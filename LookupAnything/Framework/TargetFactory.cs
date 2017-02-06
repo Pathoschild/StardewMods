@@ -50,7 +50,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Get all potential lookup targets in the current location.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="originTile">The tile from which to search for targets.</param>
-        public IEnumerable<ITarget> GetNearbyTargets(GameLocation location, Vector2 originTile)
+        /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
+        public IEnumerable<ITarget> GetNearbyTargets(GameLocation location, Vector2 originTile, bool includeMapTile)
         {
             // NPCs
             foreach (NPC npc in location.characters)
@@ -131,16 +132,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             }
 
             // tile
-            yield return new TileTarget(originTile);
+            if(includeMapTile)
+                yield return new TileTarget(originTile);
         }
 
         /// <summary>Get the target on the specified tile.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to search.</param>
-        public ITarget GetTargetFromTile(GameLocation location, Vector2 tile)
+        /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
+        public ITarget GetTargetFromTile(GameLocation location, Vector2 tile, bool includeMapTile)
         {
             return (
-                from target in this.GetNearbyTargets(location, tile)
+                from target in this.GetNearbyTargets(location, tile, includeMapTile)
                 where
                     target.Type != TargetType.Unknown
                     && target.IsAtTile(tile)
@@ -152,13 +155,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to search.</param>
         /// <param name="position">The viewport-relative pixel coordinate to search.</param>
-        public ITarget GetTargetFromScreenCoordinate(GameLocation location, Vector2 tile, Vector2 position)
+        /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
+        public ITarget GetTargetFromScreenCoordinate(GameLocation location, Vector2 tile, Vector2 position, bool includeMapTile)
         {
             // get target sprites overlapping cursor position
             Rectangle tileArea = GameHelper.GetScreenCoordinatesFromTile(tile);
             return (
                 // select targets whose sprites may overlap the target position
-                from target in this.GetNearbyTargets(location, tile)
+                from target in this.GetNearbyTargets(location, tile, includeMapTile)
                 let spriteArea = target.GetSpriteArea()
                 where
                     target.Type != TargetType.Unknown
@@ -183,7 +187,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="player">The player performing the lookup.</param>
         /// <param name="location">The current location.</param>
         /// <param name="lookupMode">The lookup target mode.</param>
-        public ISubject GetSubjectFrom(Farmer player, GameLocation location, LookupMode lookupMode)
+        /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
+        public ISubject GetSubjectFrom(Farmer player, GameLocation location, LookupMode lookupMode, bool includeMapTile)
         {
             // get target
             ITarget target;
@@ -191,13 +196,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             {
                 // under cursor
                 case LookupMode.Cursor:
-                    target = this.GetTargetFromScreenCoordinate(location, Game1.currentCursorTile, GameHelper.GetScreenCoordinatesFromCursor());
+                    target = this.GetTargetFromScreenCoordinate(location, Game1.currentCursorTile, GameHelper.GetScreenCoordinatesFromCursor(), includeMapTile);
                     break;
 
                 // in front of player
                 case LookupMode.FacingPlayer:
                     Vector2 tile = this.GetFacingTile(Game1.player);
-                    target = this.GetTargetFromTile(location, tile);
+                    target = this.GetTargetFromTile(location, tile, includeMapTile);
                     break;
 
                 default:

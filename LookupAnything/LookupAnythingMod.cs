@@ -319,7 +319,7 @@ namespace Pathoschild.Stardew.LookupAnything
             if (Game1.activeClickableMenu == null)
             {
                 logMessage.Append(" searching the world...");
-                return this.TargetFactory.GetSubjectFrom(Game1.player, Game1.currentLocation, lookupMode);
+                return this.TargetFactory.GetSubjectFrom(Game1.player, Game1.currentLocation, lookupMode, this.Config.EnableTileLookups);
             }
 
             // not found
