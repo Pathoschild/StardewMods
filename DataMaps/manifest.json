@@ -1,0 +1,13 @@
+﻿{
+  "Name": "DataMaps",
+  "Author": "Pathoschild",
+  "Version": {
+    "MajorVersion": 1,
+    "MinorVersion": 0,
+    "PatchVersion": 0,
+    "Build": ""
+  },
+  "Description": "Overlays the world with metadata maps.",
+  "UniqueID": "Pathoschild.Stardew.DataMaps",
+  "EntryDll": "Pathoschild.Stardew.DataMaps.dll"
+}
