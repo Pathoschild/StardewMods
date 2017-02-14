@@ -32,15 +32,5 @@ To package a mod for release:
    <small>(This ensures the package is clean and has default configuration.)</small>
 2. Recompile the mod per the previous section.
 3. Launch the game through SMAPI to generate the default `config.json` (if any).
-4. Delete the `.cache` in the mod folder.
-2. Create a zip file of the mod's folder in the `Mods` folder. The zip name should include the
-   mod name and version. For example:
-
-   ```
-   LookupAnything-1.0.zip
-      LookupAnything/
-         LookupAnything.dll
-         LookupAnything.pdb
-         config.json
-         manifest.json
-   ```
+4. Create a zip file of the mod's folder in the `Mods` folder. The zip name should include the
+   mod name and version (like `LookupAnything-1.0.zip`).
