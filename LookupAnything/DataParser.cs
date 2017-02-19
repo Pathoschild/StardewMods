@@ -261,7 +261,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     string description = fields[Object.objectInfoDescriptionIndex];
 
                     // type & category
-                    string[] typeParts = fields[Object.objectTypeIndex].Split(' ');
+                    string[] typeParts = fields[Object.objectInfoTypeIndex].Split(' ');
                     string typeName = typeParts[0];
                     int category = 0;
                     if (typeParts.Length > 1)
