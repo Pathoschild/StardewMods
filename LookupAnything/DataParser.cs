@@ -115,7 +115,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     {
                         GiftTaste taste = universal[villager];
                         tastes.AddRange(
-                            from refID in tasteStr.Split(' ')
+                            from refID in tasteStr.Split(new [] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
                             select new GiftTasteModel(taste, "*", int.Parse(refID), isUniversal: true)
                         );
                     }
