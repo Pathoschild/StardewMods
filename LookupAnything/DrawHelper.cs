@@ -125,6 +125,9 @@ namespace Pathoschild.Stardew.LookupAnything
             // draw text snippets
             foreach (IFormattedText snippet in text)
             {
+                if (snippet?.Text == null)
+                    continue;
+
                 // get word list
                 List<string> words = new List<string>();
                 foreach (string word in snippet.Text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
