@@ -1,5 +1,6 @@
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewValley;
+using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
@@ -63,7 +64,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="player">The player.</param>
         /// <param name="npc">The NPC.</param>
         /// <param name="constants">The constant assumptions.</param>
-        public FriendshipModel(Farmer player, NPC npc, ConstantData constants)
+        public FriendshipModel(SFarmer player, NPC npc, ConstantData constants)
         {
             // flags
             this.CanDate = npc.datable;

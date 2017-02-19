@@ -10,6 +10,7 @@ using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
+using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.LookupAnything
 {
@@ -55,7 +56,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="player">The player.</param>
         /// <param name="npc">The NPC.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static FriendshipModel GetFriendshipForVillager(Farmer player, NPC npc, Metadata metadata)
+        public static FriendshipModel GetFriendshipForVillager(SFarmer player, NPC npc, Metadata metadata)
         {
             return new FriendshipModel(player, npc, metadata.Constants);
         }
@@ -63,7 +64,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
         /// <param name="player">The player.</param>
         /// <param name="pet">The pet.</param>
-        public static FriendshipModel GetFriendshipForPet(Farmer player, Pet pet)
+        public static FriendshipModel GetFriendshipForPet(SFarmer player, Pet pet)
         {
             return new FriendshipModel(pet.friendshipTowardFarmer, Pet.maxFriendship / 10, Pet.maxFriendship);
         }
@@ -72,7 +73,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="player">The player.</param>
         /// <param name="animal">The farm animal.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static FriendshipModel GetFriendshipForAnimal(Farmer player, FarmAnimal animal, Metadata metadata)
+        public static FriendshipModel GetFriendshipForAnimal(SFarmer player, FarmAnimal animal, Metadata metadata)
         {
             return new FriendshipModel(animal.friendshipTowardFarmer, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints);
         }

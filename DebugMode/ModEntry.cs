@@ -10,6 +10,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
+using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.DebugMode
 {
@@ -168,7 +169,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>Correct the player's position when they warp into an area.</summary>
         /// <param name="location">The location the player entered.</param>
         /// <param name="player">The player who just warped.</param>
-        private void CorrectEntryPosition(GameLocation location, Farmer player)
+        private void CorrectEntryPosition(GameLocation location, SFarmer player)
         {
             switch (location.Name)
             {
@@ -194,7 +195,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <param name="fromTile">The tile position from which to move the player.</param>
         /// <param name="toTile">The tile position to which to move the player.</param>
         /// <param name="facingDirection">The direction the player should be facing after they're moved.</param>
-        private void MovePlayerFrom(Farmer player, Vector2 fromTile, Vector2 toTile, PlayerDirection facingDirection)
+        private void MovePlayerFrom(SFarmer player, Vector2 fromTile, Vector2 toTile, PlayerDirection facingDirection)
         {
             if (player.getTileX() == (int)fromTile.X && player.getTileY() == (int)fromTile.Y)
             {

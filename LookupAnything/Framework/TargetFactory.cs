@@ -13,6 +13,7 @@ using StardewValley.Menus;
 using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
 using Object = StardewValley.Object;
+using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
@@ -132,7 +133,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             }
 
             // tile
-            if(includeMapTile)
+            if (includeMapTile)
                 yield return new TileTarget(originTile);
         }
 
@@ -188,7 +189,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="location">The current location.</param>
         /// <param name="lookupMode">The lookup target mode.</param>
         /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
-        public ISubject GetSubjectFrom(Farmer player, GameLocation location, LookupMode lookupMode, bool includeMapTile)
+        public ISubject GetSubjectFrom(SFarmer player, GameLocation location, LookupMode lookupMode, bool includeMapTile)
         {
             // get target
             ITarget target;
@@ -231,7 +232,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                 // player
                 case TargetType.Farmer:
-                    return new FarmerSubject(target.GetValue<Farmer>(), this.Reflection);
+                    return new FarmerSubject(target.GetValue<SFarmer>(), this.Reflection);
 
                 // animal
                 case TargetType.FarmAnimal:
@@ -393,7 +394,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         *********/
         /// <summary>Get the tile the player is facing.</summary>
         /// <param name="player">The player to check.</param>
-        private Vector2 GetFacingTile(Farmer player)
+        private Vector2 GetFacingTile(SFarmer player)
         {
             Vector2 tile = player.getTileLocation();
             FacingDirection direction = (FacingDirection)player.FacingDirection;
