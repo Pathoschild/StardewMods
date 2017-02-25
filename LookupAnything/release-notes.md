@@ -2,6 +2,9 @@
 
 # Release notes
 
+## 1.11
+* Updated for Stardew Valley 1.2 and SMAPI 1.9.
+
 ## 1.10.1
 See [log](https://github.com/Pathoschild/StardewMods/compare/ef72f731449a795f0a1b478fdcb98bdda80d8020...lookup-anything/1.10.1).
 
