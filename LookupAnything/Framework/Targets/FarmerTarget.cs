@@ -1,5 +1,5 @@
 using Microsoft.Xna.Framework;
-using StardewValley;
+using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 {
@@ -11,13 +11,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="farmer">The underlying in-game object.</param>
-        public FarmerTarget(Farmer farmer)
+        public FarmerTarget(SFarmer farmer)
             : base(TargetType.Farmer, farmer, farmer.getTileLocation()) { }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         public override Rectangle GetSpriteArea()
         {
-            Farmer farmer = (Farmer)this.Value;
+            SFarmer farmer = (SFarmer)this.Value;
             return this.GetSpriteArea(farmer.GetBoundingBox(), farmer.FarmerSprite.SourceRect);
         }
 

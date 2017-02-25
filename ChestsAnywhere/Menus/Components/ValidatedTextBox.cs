@@ -82,7 +82,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         /// <summary>Set the input focus to this control.</summary>
         public void Select()
         {
-            this.Textbox.Highlighted = true;
             this.Textbox.Selected = true;
             Game1.keyboardDispatcher.Subscriber = this;
         }

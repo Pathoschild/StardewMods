@@ -2,6 +2,9 @@
 
 # Release notes
 
+## 1.5
+* Updated for Stardew Valley 1.2 and SMAPI 1.9.
+
 ## 1.4
 * Will now skip more smoothly.
 * Fixed title music not playing after skip.

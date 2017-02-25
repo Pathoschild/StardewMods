@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using StardewModdingAPI;
 using StardewValley;
+using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
@@ -75,7 +76,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 
         /// <summary>Get whether a player knows this recipe.</summary>
         /// <param name="farmer">The farmer to check.</param>
-        public bool KnowsRecipe(Farmer farmer)
+        public bool KnowsRecipe(SFarmer farmer)
         {
             return farmer.knowsRecipe(this.Name);
         }

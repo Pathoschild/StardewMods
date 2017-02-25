@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -137,9 +136,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         {
             // menu
             this.Menu = menu;
-            this.MenuInventoryMenu = (InventoryMenu)typeof(ItemGrabMenu).GetField("ItemsToGrabMenu", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(menu);
-            if (this.MenuInventoryMenu == null)
-                throw new InvalidOperationException("The menu doesn't seem to have a player inventory.");
+            this.MenuInventoryMenu = ((ItemGrabMenu)Game1.activeClickableMenu).ItemsToGrabMenu;
             this.DefaultChestHighlighter = menu.inventory.highlightMethod;
             this.DefaultInventoryHighlighter = this.MenuInventoryMenu.highlightMethod;
 
