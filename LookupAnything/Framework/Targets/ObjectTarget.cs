@@ -87,23 +87,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 
                 // connected to right fence
                 tile.X += 1;
-                if (location.objects.ContainsKey(tile) && location.objects[tile].GetType() == typeof(Fence) && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType))
+                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType))
                     index += 100;
 
                 // connected to left fence
                 tile.X -= 2;
-                if (location.objects.ContainsKey(tile) && location.objects[tile].GetType() == typeof(Fence) && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType))
+                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType))
                     index += 10;
 
                 // connected to top fence
                 tile.X += 1;
                 tile.Y += 1;
-                if (location.objects.ContainsKey(tile) && location.objects[tile].GetType() == typeof(Fence) && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType))
+                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType))
                     index += 500;
 
                 // connected to bottom fence
                 tile.Y -= 2;
-                if (location.objects.ContainsKey(tile) && location.objects[tile].GetType() == typeof(Fence) && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType))
+                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType))
                     index += 1000;
                 if (fence.isGate)
                 {
