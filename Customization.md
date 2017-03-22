@@ -2,7 +2,7 @@
 #### Everything is in config.json file
 + Tool (explaint by info in config.json):  
 To add a tool, add a block of code at the end of the last block of code that look like this (separate these blocks with comma)  
-As long as you have the *name* variable, the config.json will auto generate other variables with default for you  
+As long as you have the *name* variable, the config.json will auto generate other variables with default value for you  
 ```
 > example:
 {
