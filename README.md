@@ -24,7 +24,7 @@ This mod adds a **Garage** building which provides **Tractor** to help with your
 1. [Stardew Valley](http://store.steampowered.com/app/413150/)
 2. [SMAPI: +1.1](https://github.com/ClxS/SMAPI/releases)
 
-###Download [here](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+### Download [here](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
 
 ### Install:  
 1. Get [Stardew Valley](http://store.steampowered.com/app/413150/) $$$
