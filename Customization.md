@@ -47,11 +47,9 @@ Check out KeyCode.txt file to find your desirable key code.
 + Change TractorHousePrice to change Garage building price.  
 Default is 150000 (150.000 g) 
 
-+ updateConfig sets hotkey for updating config.json ingame  
++ updateConfig sets hotkey for applying changes in config.json live.  
 Default is P but you can change hotkey by changing the config.json file.  
-Check out KeyCode.txt file to find your desirable key code.   
-<details><summary>*Click here for more details*</summary>
-  updateConfig sets hotkey to make current config.json taking effect ingame.
-  1. Make changes to config.json while playing, save it.
+Check out KeyCode.txt file to find your desirable key code.
+
+  1. Make changes to config.json while playing, save it.  
   2. Get ingame and press updateConfig hotkey. Now your config.json changes are live ingame.
-</details>
