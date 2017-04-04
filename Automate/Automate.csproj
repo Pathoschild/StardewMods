@@ -53,7 +53,7 @@
     <Compile Include="Framework\MachineState.cs" />
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\Requirement.cs" />
-    <Compile Include="Machines\BeeHiveMachine.cs" />
+    <Compile Include="Machines\BeeHouseMachine.cs" />
     <Compile Include="Machines\CaskMachine.cs" />
     <Compile Include="Machines\CharcoalKilnMachine.cs" />
     <Compile Include="Machines\CheesePressMachine.cs" />
