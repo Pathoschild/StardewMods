@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewValley;
+using StardewValley.Objects;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate
 {
@@ -15,6 +21,15 @@ namespace Pathoschild.Stardew.Automate
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
+
+        /// <summary>Constructs machine instances.</summary>
+        private readonly MachineFactory Factory = new MachineFactory();
+
+        /// <summary>The machines to process.</summary>
+        private readonly IDictionary<GameLocation, MachineMetadata[]> Machines = new Dictionary<GameLocation, MachineMetadata[]>();
+
+        /// <summary>Whether machines are initialised.</summary>
+        private bool IsReady => Game1.hasLoadedGame && this.Machines.Any();
 
         /****
         ** Version check
@@ -40,15 +55,53 @@ namespace Pathoschild.Stardew.Automate
             this.Config = helper.ReadConfig<ModConfig>();
             this.CurrentVersion = this.ModManifest.Version;
 
-            // hook UI
+            // hooks for update check
             GameEvents.GameLoaded += this.GameEvents_GameLoaded;
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+
+            // hooks for automation
+            LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
+            LocationEvents.LocationObjectsChanged += this.LocationEvents_LocationObjectsChanged;
+            TimeEvents.TimeOfDayChanged += this.TimeEvents_TimeOfDayChanged;
         }
 
 
         /*********
         ** Private methods
         *********/
+        /****
+        ** Event handlers
+        ****/
+        /// <summary>The method invoked when a location is added or removed.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void LocationEvents_LocationsChanged(object sender, EventArgsGameLocationsChanged e)
+        {
+            this.Machines.Clear();
+            foreach (GameLocation location in this.Factory.GetLocationsWithChests())
+                this.Machines[location] = this.Factory.GetMachinesIn(location, this.Helper.Reflection).ToArray();
+        }
+
+        /// <summary>The method invoked when an object is added or removed to a location.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void LocationEvents_LocationObjectsChanged(object sender, EventArgsLocationObjectsChanged e)
+        {
+            this.Machines[Game1.currentLocation] = this.Factory.GetMachinesIn(Game1.currentLocation, this.Helper.Reflection).ToArray();
+        }
+
+        /// <summary>The method invoked when the in-game clock time changes.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void TimeEvents_TimeOfDayChanged(object sender, EventArgsIntChanged e)
+        {
+            if (!this.IsReady)
+                return;
+
+            foreach (MachineMetadata[] machines in this.Machines.Values)
+                this.ProcessMachines(machines);
+        }
+
         /// <summary>The method invoked when the player loads the game.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -95,6 +148,51 @@ namespace Pathoschild.Stardew.Automate
                 }
             }
 
+        }
+
+        /****
+        ** Methods
+        ****/
+        /// <summary>Process a set of machines.</summary>
+        /// <param name="machines">The machines to process.</param>
+        private void ProcessMachines(MachineMetadata[] machines)
+        {
+            foreach (MachineMetadata metadata in machines)
+            {
+                IMachine machine = metadata.Machine;
+
+                Chest[] chests = this.GetConnectedChests(metadata.Location, metadata.Position).ToArray();
+                switch (machine.GetState())
+                {
+                    case MachineState.Empty:
+                        machine.Pull(chests);
+                        break;
+
+                    case MachineState.Done:
+                        if (chests.TryPush(machine.GetOutput()))
+                            machine.Reset(true);
+                        break;
+                }
+            }
+        }
+
+        /// <summary>Get all chests connected to a tile.</summary>
+        /// <param name="location">The game location to search.</param>
+        /// <param name="tile">The tile for which to find connected chests.</param>
+        public IEnumerable<Chest> GetConnectedChests(GameLocation location, Vector2 tile)
+        {
+            if (location == null)
+                yield break;
+
+            Vector2[] connectedTiles = Utility.getSurroundingTileLocationsArray(tile);
+            foreach (Vector2 position in connectedTiles)
+            {
+                if (location.objects.TryGetValue(position, out SObject obj))
+                {
+                    if (obj is Chest chest)
+                        yield return chest;
+                }
+            }
         }
 
         /// <summary>Log an error and warn the user.</summary>
