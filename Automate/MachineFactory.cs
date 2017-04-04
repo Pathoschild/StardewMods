@@ -3,10 +3,12 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Automate.Machines.Objects;
+using Pathoschild.Stardew.Automate.Machines.TerrainFeatures;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
+using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate
@@ -41,6 +43,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="reflection">Simplifies access to private game code.</param>
         public IEnumerable<MachineMetadata> GetMachinesIn(GameLocation location, IReflectionHelper reflection)
         {
+            // object machines
             foreach (KeyValuePair<Vector2, SObject> pair in location.objects)
             {
                 Vector2 tile = pair.Key;
@@ -49,6 +52,19 @@ namespace Pathoschild.Stardew.Automate
                     continue;
 
                 IMachine machine = this.GetMachine(obj, location, tile, reflection);
+                if (machine != null)
+                    yield return new MachineMetadata(location, tile, machine);
+            }
+
+            // terrain feature machines
+            foreach (KeyValuePair<Vector2, TerrainFeature> pair in location.terrainFeatures)
+            {
+                Vector2 tile = pair.Key;
+                TerrainFeature feature = pair.Value;
+                if (feature == null)
+                    continue;
+
+                IMachine machine = this.GetMachine(feature);
                 if (machine != null)
                     yield return new MachineMetadata(location, tile, machine);
             }
@@ -108,6 +124,16 @@ namespace Pathoschild.Stardew.Automate
                 return new TapperMachine(obj, location, tile);
             if (obj.name == "Worm Bin")
                 return new WormBinMachine(obj);
+
+            return null;
+        }
+
+        /// <summary>Get a machine for the given terrain feature, if applicable.</summary>
+        /// <param name="feature">The terrain feature for which to get a machine.</param>
+        private IMachine GetMachine(TerrainFeature feature)
+        {
+            if (feature is FruitTree fruitTree)
+                return new FruitTreeMachine(fruitTree);
 
             return null;
         }

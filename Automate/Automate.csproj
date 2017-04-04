@@ -75,6 +75,7 @@
     <Compile Include="Machines\Objects\StatueOfPerfectionMachine.cs" />
     <Compile Include="Machines\Objects\TapperMachine.cs" />
     <Compile Include="Machines\Objects\WormBinMachine.cs" />
+    <Compile Include="Machines\TerrainFeatures\FruitTreeMachine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
