@@ -1,6 +1,7 @@
 This repository contains my SMAPI mods for Stardew Valley. See the individual mods for
 documentation and release notes:
 
+* [Automate](Automate) (in development)
 * [Chests Anywhere](ChestsAnywhere)
 * [Data Maps](DataMaps) (in development)
 * [Debug Mode](DebugMode)
