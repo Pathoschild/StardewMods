@@ -4,7 +4,7 @@ using StardewValley;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
-namespace Pathoschild.Stardew.Automate.Machines
+namespace Pathoschild.Stardew.Automate.Machines.Objects
 {
     // <summary>A cask that accepts input and provides output.</summary>
     internal class CaskMachine : GenericMachine<Cask>

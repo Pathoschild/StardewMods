@@ -3,7 +3,7 @@ using Pathoschild.Stardew.Automate.Framework;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
-namespace Pathoschild.Stardew.Automate.Machines
+namespace Pathoschild.Stardew.Automate.Machines.Objects
 {
     /// <summary>A furnace that accepts input and provides output.</summary>
     internal class FurnaceMachine : GenericMachine

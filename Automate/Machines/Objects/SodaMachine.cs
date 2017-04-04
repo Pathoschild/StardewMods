@@ -2,33 +2,33 @@
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
-namespace Pathoschild.Stardew.Automate.Machines
+namespace Pathoschild.Stardew.Automate.Machines.Objects
 {
-    /// <summary>A charcoal kiln that accepts input and provides output.</summary>
-    internal class CharcoalKilnMachine : GenericMachine
+    /// <summary>A soda machine that accepts input and provides output.</summary>
+    internal class SodaMachine : GenericMachine
     {
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
-        public CharcoalKilnMachine(SObject machine)
+        public SodaMachine(SObject machine)
             : base(machine) { }
+
+        /// <summary>Get the machine's processing state.</summary>
+        public override MachineState GetState()
+        {
+            return this.Machine.heldObject != null
+                ? MachineState.Done
+                : MachineState.Processing;
+        }
 
         /// <summary>Pull items from the connected chests.</summary>
         /// <param name="chests">The connected chests.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool Pull(Chest[] chests)
         {
-            // wood => coal
-            if (chests.TryConsume(388, 10))
-            {
-                this.Machine.heldObject = new SObject(382, 1);
-                this.Machine.minutesUntilReady = 30;
-                this.Machine.showNextIndex = true;
-                return true;
-            }
-            return false;
+            return false; // no input
         }
     }
 }

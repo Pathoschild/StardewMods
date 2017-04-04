@@ -1,26 +1,26 @@
 ﻿using Pathoschild.Stardew.Automate.Framework;
-using StardewValley;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
-namespace Pathoschild.Stardew.Automate.Machines
+namespace Pathoschild.Stardew.Automate.Machines.Objects
 {
-    /// <summary>A lightning rod that accepts input and provides output.</summary>
-    internal class LightningRodMachine : GenericMachine
+    /// <summary>A mushroom box that accepts input and provides output.</summary>
+    internal class MushroomBoxMachine : GenericMachine
     {
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
-        public LightningRodMachine(SObject machine)
+        public MushroomBoxMachine(SObject machine)
             : base(machine) { }
 
-        /// <summary>Get the output item.</summary>
-        /// <remarks>This should have no effect on the machine state, since the chests may not have room for the item.</remarks>
-        public override Item GetOutput()
+        /// <summary>Get the machine's processing state.</summary>
+        public override MachineState GetState()
         {
-            return this.Machine.heldObject.getOne();
+            return this.Machine.heldObject != null && this.Machine.readyForHarvest
+                ? MachineState.Done
+                : MachineState.Processing;
         }
 
         /// <summary>Pull items from the connected chests.</summary>
@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.Automate.Machines
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool Pull(Chest[] chests)
         {
-            return false; // no input
+            return false; // no input needed
         }
     }
 }

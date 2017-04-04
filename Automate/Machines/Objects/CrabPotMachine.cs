@@ -8,7 +8,7 @@ using StardewValley.Objects;
 using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
-namespace Pathoschild.Stardew.Automate.Machines
+namespace Pathoschild.Stardew.Automate.Machines.Objects
 {
     /// <summary>A crab pot that accepts input and provides output.</summary>
     internal class CrabPotMachine : GenericMachine<CrabPot>

@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
-using Pathoschild.Stardew.Automate.Machines;
+using Pathoschild.Stardew.Automate.Machines.Objects;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;

@@ -2,17 +2,17 @@
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
-namespace Pathoschild.Stardew.Automate.Machines
+namespace Pathoschild.Stardew.Automate.Machines.Objects
 {
-    /// <summary>A soda machine that accepts input and provides output.</summary>
-    internal class SodaMachine : GenericMachine
+    /// <summary>A statue of perfection that accepts input and provides output.</summary>
+    internal class StatueOfPerfectionMachine : GenericMachine
     {
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
-        public SodaMachine(SObject machine)
+        public StatueOfPerfectionMachine(SObject machine)
             : base(machine) { }
 
         /// <summary>Get the machine's processing state.</summary>

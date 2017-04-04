@@ -5,7 +5,7 @@ using StardewValley;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
-namespace Pathoschild.Stardew.Automate.Machines
+namespace Pathoschild.Stardew.Automate.Machines.Objects
 {
     /// <summary>A recycling maching that accepts input and provides output.</summary>
     internal class RecyclingMachine : GenericMachine
