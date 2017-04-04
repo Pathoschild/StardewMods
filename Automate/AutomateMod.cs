@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
-using StardewValley.Objects;
-using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate
 {
@@ -161,36 +158,16 @@ namespace Pathoschild.Stardew.Automate
             {
                 IMachine machine = metadata.Machine;
 
-                Chest[] chests = this.GetConnectedChests(metadata.Location, metadata.Position).ToArray();
                 switch (machine.GetState())
                 {
                     case MachineState.Empty:
-                        machine.Pull(chests);
+                        machine.Pull(metadata.Connected);
                         break;
 
                     case MachineState.Done:
-                        if (chests.TryPush(machine.GetOutput()))
+                        if (metadata.Connected.TryPush(machine.GetOutput()))
                             machine.Reset(true);
                         break;
-                }
-            }
-        }
-
-        /// <summary>Get all chests connected to a tile.</summary>
-        /// <param name="location">The game location to search.</param>
-        /// <param name="tile">The tile for which to find connected chests.</param>
-        public IEnumerable<Chest> GetConnectedChests(GameLocation location, Vector2 tile)
-        {
-            if (location == null)
-                yield break;
-
-            Vector2[] connectedTiles = Utility.getSurroundingTileLocationsArray(tile);
-            foreach (Vector2 position in connectedTiles)
-            {
-                if (location.objects.TryGetValue(position, out SObject obj))
-                {
-                    if (obj is Chest chest)
-                        yield return chest;
                 }
             }
         }

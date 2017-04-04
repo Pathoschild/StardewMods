@@ -1,5 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using StardewValley;
+using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -15,8 +18,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The location containing the machine.</summary>
         public GameLocation Location { get; }
 
-        /// <summary>The machine's position in its location.</summary>
-        public Vector2 Position { get; }
+        /// <summary>The chests connected to the machine.</summary>
+        public Chest[] Connected { get; }
 
 
         /*********
@@ -24,13 +27,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="location">The location containing the machine.</param>
-        /// <param name="position">The machine's position in its location.</param>
+        /// <param name="connected">The chests connected to the machine.</param>
         /// <param name="machine">The machine instance.</param>
-        public MachineMetadata(GameLocation location, Vector2 position, IMachine machine)
+        public MachineMetadata(GameLocation location, IEnumerable<Chest> connected, IMachine machine)
         {
             this.Location = location;
             this.Machine = machine;
-            this.Position = position;
+            this.Connected = connected.ToArray();
         }
     }
 }

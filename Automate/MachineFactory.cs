@@ -48,12 +48,14 @@ namespace Pathoschild.Stardew.Automate
             {
                 Vector2 tile = pair.Key;
                 SObject obj = pair.Value;
-                if (pair.Value == null)
-                    continue;
 
                 IMachine machine = this.GetMachine(obj, location, tile, reflection);
                 if (machine != null)
-                    yield return new MachineMetadata(location, tile, machine);
+                {
+                    Chest[] chests = this.GetConnected(location, tile).ToArray();
+                    if (chests.Any())
+                        yield return new MachineMetadata(location, chests, machine);
+                }
             }
 
             // terrain feature machines
@@ -61,12 +63,14 @@ namespace Pathoschild.Stardew.Automate
             {
                 Vector2 tile = pair.Key;
                 TerrainFeature feature = pair.Value;
-                if (feature == null)
-                    continue;
 
                 IMachine machine = this.GetMachine(feature);
                 if (machine != null)
-                    yield return new MachineMetadata(location, tile, machine);
+                {
+                    Chest[] chests = this.GetConnected(location, tile).ToArray();
+                    if (chests.Any())
+                        yield return new MachineMetadata(location, chests, machine);
+                }
             }
         }
 
@@ -136,6 +140,21 @@ namespace Pathoschild.Stardew.Automate
                 return new FruitTreeMachine(fruitTree);
 
             return null;
+        }
+
+        /// <summary>Get all chests connected to the given machine.</summary>
+        /// <param name="location">The location to search.</param>
+        /// <param name="tile">The tile position for which to find connected tiles.</param>
+        private IEnumerable<Chest> GetConnected(GameLocation location, Vector2 tile)
+        {
+            foreach (Vector2 connectedTile in Utility.getSurroundingTileLocationsArray(tile))
+            {
+                if (location.objects.TryGetValue(connectedTile, out SObject obj))
+                {
+                    if (obj is Chest chest)
+                        yield return chest;
+                }
+            }
         }
     }
 }
