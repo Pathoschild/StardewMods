@@ -48,7 +48,7 @@ namespace Pathoschild.Stardew.Automate
                 if (pair.Value == null)
                     continue;
 
-                IMachine machine = this.GetMachine(obj);
+                IMachine machine = this.GetMachine(obj, location, tile, reflection);
                 if (machine != null)
                     yield return new MachineMetadata(location, tile, machine);
             }
@@ -59,10 +59,55 @@ namespace Pathoschild.Stardew.Automate
         ** Private methods
         *********/
         /// <param name="obj">The object for which to get a machine.</param>
-        private IMachine GetMachine(SObject obj)
+        /// <param name="location">The location containing the machine.</param>
+        /// <param name="tile">The machine's position in its location.</param>
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        private IMachine GetMachine(SObject obj, GameLocation location, Vector2 tile, IReflectionHelper reflection)
         {
-            if (obj.name == "Keg")
+            if (obj.name == "Bee House")
+                return new BeeHouseMachine(obj, location, tile);
+            if (obj is Cask cask)
+                return new CaskMachine(cask);
+            if (obj.name == "Charcoal Kiln")
+                return new CharcoalKilnMachine(obj);
+            if (obj.name == "Cheese Press")
+                return new CheesePressMachine(obj);
+            if (obj is CrabPot pot)
+                return new CrabPotMachine(pot, reflection);
+            if (obj.Name == "Crystalarium")
+                return new CrystalariumMachine(obj, reflection);
+            if (obj.Name == "Furnace")
+                return new FurnaceMachine(obj, tile);
+            if (obj.Name == "Keg")
                 return new KegMachine(obj);
+            if (obj.name == "Lightning Rod")
+                return new LightningRodMachine(obj);
+            if (obj.name == "Loom")
+                return new LoomMachine(obj);
+            if (obj.name == "Mayonnaise Machine")
+                return new MayonnaiseMachine(obj);
+            if (obj.Name == "Mushroom Box")
+                return new MushroomBoxMachine(obj);
+            if (obj.name == "Oil Maker")
+                return new OilMakerMachine(obj);
+            if (obj.name == "Preserves Jar")
+                return new PreservesJarMachine(obj);
+            if (obj.name == "Recycling Machine")
+                return new RecyclingMachine(obj);
+            if (obj.name == "Seed Maker")
+                return new SeedMakerMachine(obj);
+            if (obj.name == "Slime Egg-Press")
+                return new SlimeEggPressMachine(obj);
+            if (obj.name == "Soda Machine")
+                return new SodaMachine(obj);
+            if (obj.name == "Statue Of Endless Fortune")
+                return new StatueOfEndlessFortuneMachine(obj);
+            if (obj.name == "Statue Of Perfection")
+                return new StatueOfPerfectionMachine(obj);
+            if (obj.name == "Tapper")
+                return new TapperMachine(obj, location, tile);
+            if (obj.name == "Worm Bin")
+                return new WormBinMachine(obj);
 
             return null;
         }

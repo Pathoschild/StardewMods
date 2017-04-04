@@ -53,7 +53,28 @@
     <Compile Include="Framework\MachineState.cs" />
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\Requirement.cs" />
+    <Compile Include="Machines\BeeHiveMachine.cs" />
+    <Compile Include="Machines\CaskMachine.cs" />
+    <Compile Include="Machines\CharcoalKilnMachine.cs" />
+    <Compile Include="Machines\CheesePressMachine.cs" />
+    <Compile Include="Machines\CrabPotMachine.cs" />
+    <Compile Include="Machines\CrystalariumMachine.cs" />
+    <Compile Include="Machines\FurnaceMachine.cs" />
     <Compile Include="Machines\KegMachine.cs" />
+    <Compile Include="Machines\LightningRodMachine.cs" />
+    <Compile Include="Machines\LoomMachine.cs" />
+    <Compile Include="Machines\MayonnaiseMachine.cs" />
+    <Compile Include="Machines\MushroomBoxMachine.cs" />
+    <Compile Include="Machines\OilMakerMachine.cs" />
+    <Compile Include="Machines\PreservesJarMachine.cs" />
+    <Compile Include="Machines\RecyclingMachine.cs" />
+    <Compile Include="Machines\SeedMakerMachine.cs" />
+    <Compile Include="Machines\SlimeEggPressMachine.cs" />
+    <Compile Include="Machines\SodaMachine.cs" />
+    <Compile Include="Machines\StatueOfEndlessFortuneMachine.cs" />
+    <Compile Include="Machines\StatueOfPerfectionMachine.cs" />
+    <Compile Include="Machines\TapperMachine.cs" />
+    <Compile Include="Machines\WormBinMachine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
