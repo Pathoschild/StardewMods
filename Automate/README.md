@@ -28,6 +28,7 @@ pull ingredients to process out of them. This can be used to automate...
 * [crystalariums](http://stardewvalleywiki.com/Crystalarium);
 * [fruit trees](http://stardewvalleywiki.com/Fruit_Trees);
 * [furnaces](http://stardewvalleywiki.com/Furnace);
+* [Junimo huts](http://stardewvalleywiki.com/Junimo_Hut);
 * [kegs](http://stardewvalleywiki.com/Keg);
 * [lightning rods](http://stardewvalleywiki.com/Lightning_Rod);
 * [looms](http://stardewvalleywiki.com/Loom);

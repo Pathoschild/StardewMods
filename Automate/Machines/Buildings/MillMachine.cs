@@ -77,7 +77,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Buildings
                 }
             }
 
-            return anyPulled; // no input
+            return anyPulled;
         }
 
 

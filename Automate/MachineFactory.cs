@@ -164,6 +164,8 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="building">The building for which to get a machine.</param>
         private IMachine GetMachine(Building building)
         {
+            if(building is JunimoHut hut)
+                return new JunimoHutMachine(hut);
             if (building is Mill mill)
                 return new MillMachine(mill);
 

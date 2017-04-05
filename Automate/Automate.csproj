@@ -54,6 +54,7 @@
     <Compile Include="Framework\MachineState.cs" />
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\Requirement.cs" />
+    <Compile Include="Machines\Buildings\JunimoHutMachine.cs" />
     <Compile Include="Machines\Buildings\MillMachine.cs" />
     <Compile Include="Machines\Objects\BeeHouseMachine.cs" />
     <Compile Include="Machines\Objects\CaskMachine.cs" />
