@@ -32,6 +32,7 @@ pull ingredients to process out of them. This can be used to automate...
 * [lightning rods](http://stardewvalleywiki.com/Lightning_Rod);
 * [looms](http://stardewvalleywiki.com/Loom);
 * [mayonnaise machines](http://stardewvalleywiki.com/Mayonnaise_Machine);
+* [mills](http://stardewvalleywiki.com/Mill);
 * [mushroom boxes](http://stardewvalleywiki.com/The_Cave#Mushrooms);
 * [oil makers](http://stardewvalleywiki.com/Oil_Maker);
 * [preserves jars](http://stardewvalleywiki.com/Preserves_Jar);

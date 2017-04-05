@@ -2,10 +2,12 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
+using Pathoschild.Stardew.Automate.Machines.Buildings;
 using Pathoschild.Stardew.Automate.Machines.Objects;
 using Pathoschild.Stardew.Automate.Machines.TerrainFeatures;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -70,6 +72,22 @@ namespace Pathoschild.Stardew.Automate
                     Chest[] chests = this.GetConnected(location, tile).ToArray();
                     if (chests.Any())
                         yield return new MachineMetadata(location, chests, machine);
+                }
+            }
+
+            // building machines
+            if (location is BuildableGameLocation buildableLocation)
+            {
+                foreach (Building building in buildableLocation.buildings)
+                {
+                    IMachine machine = this.GetMachine(building);
+                    if (machine != null)
+                    {
+                        Rectangle area = new Rectangle(building.tileX, building.tileY, building.tilesWide, building.tilesHigh);
+                        Chest[] chests = this.GetConnected(location, area).ToArray();
+                        if (chests.Any())
+                            yield return new MachineMetadata(location, chests, machine);
+                    }
                 }
             }
         }
@@ -142,6 +160,16 @@ namespace Pathoschild.Stardew.Automate
             return null;
         }
 
+        /// <summary>Get a machine for the given building, if applicable.</summary>
+        /// <param name="building">The building for which to get a machine.</param>
+        private IMachine GetMachine(Building building)
+        {
+            if (building is Mill mill)
+                return new MillMachine(mill);
+
+            return null;
+        }
+
         /// <summary>Get all chests connected to the given machine.</summary>
         /// <param name="location">The location to search.</param>
         /// <param name="tile">The tile position for which to find connected tiles.</param>
@@ -149,12 +177,57 @@ namespace Pathoschild.Stardew.Automate
         {
             foreach (Vector2 connectedTile in Utility.getSurroundingTileLocationsArray(tile))
             {
-                if (location.objects.TryGetValue(connectedTile, out SObject obj))
-                {
-                    if (obj is Chest chest)
-                        yield return chest;
-                }
+                if (this.TryGetChest(location, connectedTile, out Chest chest))
+                    yield return chest;
             }
+        }
+
+        /// <summary>Get all chests connected to the given machine.</summary>
+        /// <param name="location">The location to search.</param>
+        /// <param name="area">The tile area for which to find connected tiles.</param>
+        private IEnumerable<Chest> GetConnected(GameLocation location, Rectangle area)
+        {
+            // get surrounding corner
+            int left = area.X - 1;
+            int top = area.Y - 1;
+            int right = left + area.Width + 1;
+            int bottom = top + area.Height + 1;
+
+            // get connected chests
+            int i = 0;
+            for (int x = left; x <= right; x++)
+            {
+                if (this.TryGetChest(location, new Vector2(x, top), out Chest chest))
+                    yield return chest;
+            }
+            for (int y = top + 1; y <= bottom - 1; y++)
+            {
+                if (this.TryGetChest(location, new Vector2(left, y), out Chest leftChest))
+                    yield return leftChest;
+                if (this.TryGetChest(location, new Vector2(right, y), out Chest rightChest))
+                    yield return rightChest;
+            }
+            for (int x = left; x <= right; x++)
+            {
+                if (this.TryGetChest(location, new Vector2(x, bottom), out Chest chest))
+                    yield return chest;
+            }
+        }
+
+        /// <summary>Get the chest on a given tile, if any.</summary>
+        /// <param name="location">The location to search.</param>
+        /// <param name="tile">The tile to search.</param>
+        /// <param name="chest">The chest found on the tile.</param>
+        private bool TryGetChest(GameLocation location, Vector2 tile, out Chest chest)
+        {
+            if (location.objects.TryGetValue(tile, out SObject obj))
+            {
+                chest = obj as Chest;
+                return chest != null;
+            }
+
+            chest = null;
+            return false;
         }
     }
 }
