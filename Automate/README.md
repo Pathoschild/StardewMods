@@ -62,9 +62,19 @@ You can combine multiple machines with chests. For example:
   crystalarium (quartz) → chest ⇄ furnace
   ```
 
+* **Automatic iridium mead factory**  
+  A bee house produces honey every 4 days, which is turned into mead by the keg, which is then aged
+  to iridium quality by a cask. You can link up to five casks to the same chest to increase
+  production.
+  ```
+              cask
+               ⇅
+  bee hive → chest ⇄ keg
+  ```
+
 * **Semi-automatic iridium cheese factory**  
   Put your milk into the chest; the cheese press will turn it into cheese, and the cask will age it
-  to iridium quality. You can optionally link up to six casks to the same chest maximise production.
+  to iridium quality. You can link up to six casks to the same chest to increase production.
   ```
   cheese press ⇄ chest (containing milk) ⇄ cask
   ```
