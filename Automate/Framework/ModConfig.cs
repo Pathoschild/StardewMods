@@ -1,6 +1,6 @@
-namespace Pathoschild.Stardew.FastAnimations.Framework
+﻿namespace Pathoschild.Stardew.Automate.Framework
 {
-    /// <summary>The mod configuration.</summary>
+    /// <summary>The raw mod configuration.</summary>
     internal class ModConfig
     {
         /*********
