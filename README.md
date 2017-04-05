@@ -5,7 +5,6 @@ documentation and release notes:
 * [Chests Anywhere](ChestsAnywhere)
 * [Data Maps](DataMaps) (in development)
 * [Debug Mode](DebugMode)
-* [Fast Animations](FastAnimations) (in development)
 * [Lookup Anything](LookupAnything)
 * [No Debug Mode](NoDebugMode) (obsolete)
 * [Skip Intro](SkipIntro)
