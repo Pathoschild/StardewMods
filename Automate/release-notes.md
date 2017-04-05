@@ -7,4 +7,4 @@
 * Added support for bee houses, casks, charcoal kilns, cheese presses, crab pots, crystalariums,
   fruit trees, furnaces, kegs, lighting rods, looms, mayonnaise machines, mills, mushroom boxes,
   oil makers, preserves jars, recycling machines, seed makers, slime egg-presses, soda machines,
-  statuses of endless fortune, statuses of perfection, tappers, and worm bins.
+  statues of endless fortune, statues of perfection, tappers, and worm bins.
