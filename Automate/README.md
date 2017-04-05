@@ -43,38 +43,49 @@ pull ingredients to process out of them. This can be used to automate...
 * and [worm bins](http://stardewvalleywiki.com/Worm_Bin).
 
 ### Factories
-You can combine multiple machines with chests. For example:
+You can combine multiple machines with chests. Each chest can be connected to a maximum of eight
+machines (one in each direction), or seven machines so you can reach the chest.
+
+Here are a few examples:
 
 * **Automatic crab pots**  
   A worm bin produces bait, which is fed into the crab pot, which harvests fish into the chest. Any
-  trash is automatically recycled.
+  trash is automatically recycled. The final products are stored in the chest.
   ```
            recycling
             machine
                ⇅
-  worm bin → chest ⇄ crab pot
+   worm bin → chest ⇄ crab pot
   ```
 
 * **Automatic refined quartz factory**  
-  A crystalarium produces quartz every seven hours, which is smelted into refined quartz and stored
-  in the chest.
+  A crystalarium produces quartz every seven hours, which is smelted into refined quartz, which is
+  stored in the chest.
   ```
-  crystalarium (quartz) → chest ⇄ furnace
+  crystalarium (quartz) → chest (containing coal) ⇄ furnace
   ```
 
 * **Automatic iridium mead factory**  
-  A bee house produces honey every 4 days, which is turned into mead by the keg, which is then aged
-  to iridium quality by a cask. You can link up to five casks to the same chest to increase
-  production.
+  A bee house produces honey every 4 days, which is turned into mead, which is aged to iridium
+  quality, which is stored in the chest. You can link up to five casks to the same chest to
+  increase production.
   ```
               cask
                ⇅
   bee hive → chest ⇄ keg
   ```
 
+* **Automatic iridium bar factory**  
+  A statue of perfection produces iridium ore every day, which is smelted into bars, which are
+  stored in the chest.
+  ```
+   statue of perfection → chest (containing coal) ⇄ furnace
+  ```
+
 * **Semi-automatic iridium cheese factory**  
-  Put your milk into the chest; the cheese press will turn it into cheese, and the cask will age it
-  to iridium quality. You can link up to six casks to the same chest to increase production.
+  Put your milk into the chest. The milk is turned into cheese, which is aged to iridium quality,
+  which is stored in the chest. You can link up to six casks to the same chest to increase
+  production.
   ```
   cheese press ⇄ chest (containing milk) ⇄ cask
   ```
