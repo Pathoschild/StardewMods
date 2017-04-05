@@ -45,14 +45,29 @@ pull ingredients to process out of them. This can be used to automate...
 ### Factories
 You can combine multiple machines with chests. For example:
 
-* **Automated crab pots**  
-  _worm bin → chest ⇄ crab pot_
+* **Automatic crab pots**  
+  A worm bin produces bait, which is fed into the crab pot, which harvests fish into the chest. Any
+  trash is automatically recycled.
+  ```
+           recycling
+            machine
+               ⇅
+  worm bin → chest ⇄ crab pot
+  ```
 
-* **Automated refined quartz factory**  
-  _crystalarium (quartz) → chest ⇄ furnace_
+* **Automatic refined quartz factory**  
+  A crystalarium produces quartz every seven hours, which is smelted into refined quartz and stored
+  in the chest.
+  ```
+  crystalarium (quartz) → chest ⇄ furnace
+  ```
 
-* **Iridium-level cheese factory**  
-  _cheese press ⇄ chest (containing milk) ⇄ cask_
+* **Semi-automatic iridium cheese factory**  
+  Put your milk into the chest; the cheese press will turn it into cheese, and the cask will age it
+  to iridium quality. You can optionally link up to six casks to the same chest maximise production.
+  ```
+  cheese press ⇄ chest (containing milk) ⇄ cask
+  ```
 
 ## Configuration
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
