@@ -7,7 +7,7 @@
     "PatchVersion": 0,
     "Build": null
   },
-  "MinimumApiVersion": "1.10-beta",
+  "MinimumApiVersion": "1.9",
   "Description": "Lets you automate crafting machines, fruit trees, and more by connecting them to chests.",
   "UniqueID": "Pathoschild.Automate",
   "EntryDll": "Automate.dll"

@@ -2,8 +2,11 @@
 
 # Release notes
 
+## 1.6
+* Backported to Stardew Valley 1.11 until 1.2 is released.
+
 ## 1.5
-* Updated for Stardew Valley 1.2 and SMAPI 1.9.
+* Updated for Stardew Valley 1.2.
 
 ## 1.4
 * Will now skip more smoothly.

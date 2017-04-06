@@ -394,7 +394,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         {
             try
             {
+#if SDV_1_2
                 string x = item.DisplayName; // force display name to load, which is needed to get the description outside the inventory for some reason
+#endif
                 return item.getDescription();
             }
             catch (KeyNotFoundException)

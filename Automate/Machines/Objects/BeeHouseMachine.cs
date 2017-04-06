@@ -53,7 +53,9 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                 return null;
 
             // get flower data
+#if SDV_1_2
             SObject.HoneyType type = SObject.HoneyType.Wild;
+#endif
             string prefix = "Wild";
             int addedPrice = 0;
             if (this.Location is Farm)
@@ -64,6 +66,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                     string[] flowerData = Game1.objectInformation[flower.indexOfHarvest].Split('/');
                     prefix = flowerData[0];
                     addedPrice = Convert.ToInt32(flowerData[1]) * 2;
+#if SDV_1_2
                     switch (flower.indexOfHarvest)
                     {
                         case 376:
@@ -82,6 +85,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                             type = SObject.HoneyType.BlueJazz;
                             break;
                     }
+#endif
                 }
             }
 
@@ -90,7 +94,9 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             {
                 name = $"{prefix} Honey",
                 price = output.price + addedPrice,
+#if SDV_1_2
                 honeyType = type
+#endif
             };
         }
 

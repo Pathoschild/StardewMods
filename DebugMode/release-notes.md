@@ -2,8 +2,11 @@
 
 # Release notes
 
+## 1.5
+* Backported to Stardew Valley 1.11 until 1.2 is released.
+
 ## 1.4
-* Updated for Stardew Valley 1.2 and SMAPI 1.9.
+* Updated for Stardew Valley 1.2.
 
 ## 1.3
 See [log](https://github.com/Pathoschild/StardewMods/compare/640f34be5d6f80ca8f2924853537a8d8d1b145bd...debug-mode/1.3).

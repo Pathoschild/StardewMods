@@ -7,7 +7,7 @@
     "PatchVersion": 0,
     "Build": null
   },
-  "MinimumApiVersion": "1.9-beta.10",
+  "MinimumApiVersion": "1.9",
   "Description": "Enables an overlay which provides debug information and unlocks the game's debug hotkeys.",
   "UniqueID": "Pathoschild.DebugMode",
   "EntryDll": "DebugMode.dll"
