@@ -489,8 +489,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         private IDictionary<GiftTaste, string[]> GetGiftTastes(Item item, Metadata metadata)
         {
             return GameHelper.GetGiftTastes(item, metadata)
-                .GroupBy(p => p.Value, p => p.Key)
-                .ToDictionary(p => p.Key, p => p.ToArray());
+                .GroupBy(p => p.Value, p => p.Key.getName())
+                .ToDictionary(p => p.Key, p => p.Distinct().ToArray());
         }
     }
 }

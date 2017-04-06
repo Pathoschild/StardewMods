@@ -5,6 +5,7 @@
 ## 1.12
 * Backported to Stardew Valley 1.11 until 1.2 is released.
 * Fixed wrong sell price shown for equipment.
+* Fixed rare error caused by duplicate NPC names.
 
 ## 1.11
 * Updated for Stardew Valley 1.2.

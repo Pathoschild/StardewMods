@@ -206,14 +206,17 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
         /// <param name="item">The item to check.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static IDictionary<string, GiftTaste> GetGiftTastes(Item item, Metadata metadata)
+        public static IEnumerable<KeyValuePair<NPC, GiftTaste>> GetGiftTastes(Item item, Metadata metadata)
         {
             if (!item.canBeGivenAsGift())
-                return new Dictionary<string, GiftTaste>();
+                yield break;
 
-            return GameHelper.GetAllCharacters()
-                .Where(npc => GameHelper.IsSocialVillager(npc, metadata))
-                .ToDictionary(npc => npc.name, npc => (GiftTaste)npc.getGiftTasteForThisItem(item));
+            foreach (NPC npc in GameHelper.GetAllCharacters())
+            {
+                if (!GameHelper.IsSocialVillager(npc, metadata))
+                    continue;
+                yield return new KeyValuePair<NPC, GiftTaste>(npc, (GiftTaste)npc.getGiftTasteForThisItem(item));
+            }
         }
 
         /// <summary>Get the items a specified NPC can receive.</summary>
