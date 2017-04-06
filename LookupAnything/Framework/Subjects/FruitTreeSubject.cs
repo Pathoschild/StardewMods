@@ -163,7 +163,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="daysPerQuality">The number of days before the tree begins producing a higher quality.</param>
         private ItemQuality GetCurrentQuality(FruitTree tree, int daysPerQuality)
         {
-            int maturityLevel = Math.Min(0, Math.Max(3, -tree.daysUntilMature / daysPerQuality));
+            int maturityLevel = Math.Max(0, Math.Min(3, -tree.daysUntilMature / daysPerQuality));
             switch (maturityLevel)
             {
                 case 0:
