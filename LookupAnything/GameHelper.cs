@@ -276,9 +276,13 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="item">The item to check.</param>
         public static ItemSpriteType GetSpriteType(this Item item)
         {
-            if (item is Object)
+            if (item is Object obj)
             {
-                return ((Object)item).bigCraftable
+                if (obj is Furniture)
+                    return ItemSpriteType.Furniture;
+                if (obj is Wallpaper)
+                    return ItemSpriteType.Wallpaper;
+                return obj.bigCraftable
                     ? ItemSpriteType.BigCraftable
                     : ItemSpriteType.Object;
             }
