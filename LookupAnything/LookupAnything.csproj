@@ -57,6 +57,8 @@
     <Compile Include="Framework\DebugFields\GenericDebugField.cs" />
     <Compile Include="Framework\DebugFields\IDebugField.cs" />
     <Compile Include="Framework\Fields\DataMiningField.cs" />
+    <Compile Include="Framework\Fields\ILinkField.cs" />
+    <Compile Include="Framework\Fields\LinkField.cs" />
     <Compile Include="Framework\FormattedText.cs" />
     <Compile Include="Framework\IFormattedText.cs" />
     <Compile Include="Framework\GameDate.cs" />

@@ -296,6 +296,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // owned
             if (showInventoryFields && !isCrop && !(item is Tool))
                 yield return new GenericField("Owned", $"you own {GameHelper.CountOwnedItems(item)} of these");
+
+            // see also crop
+            bool seeAlsoCrop =
+                isSeed
+                && item.parentSheetIndex != this.SeedForCrop.indexOfHarvest // skip seeds which produce themselves (e.g. coffee beans)
+                && !(item.parentSheetIndex >= 495 && item.parentSheetIndex <= 497) // skip random seasonal seeds
+                && item.parentSheetIndex != 770; // skip mixed seeds
+            if (seeAlsoCrop)
+            {
+                Item drop = GameHelper.GetObjectBySpriteIndex(this.SeedForCrop.indexOfHarvest);
+                yield return new LinkField("See also", drop.Name, () => new ItemSubject(drop, ObjectContext.Inventory, false, this.SeedForCrop));
+            }
         }
 
         /// <summary>Get the data to display for this subject.</summary>
