@@ -2,7 +2,8 @@
 
 # Release notes
 
-## 1.6
+## 1.5.1
+* Updated to SMAPI 1.9.
 * Backported to Stardew Valley 1.11 until 1.2 is released.
 
 ## 1.5

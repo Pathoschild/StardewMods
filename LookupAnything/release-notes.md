@@ -3,9 +3,10 @@
 # Release notes
 
 ## 1.12
+* Updated to SMAPI 1.9.
 * Backported to Stardew Valley 1.11 until 1.2 is released.
-* Fixed wrong sell price shown for equipment.
-* Fixed fruit tree quality info.
+* Fixed incorrect sell price shown for equipment.
+* Fixed incorrect fruit tree quality info.
 * Fixed rare error caused by duplicate NPC names.
 * Fixed furniture/wallpaper being shown as potential recipe ingredients.
 

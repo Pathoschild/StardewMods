@@ -1,8 +1,8 @@
 {
   "schema": 1.0,
-  "Automate": "1.0",
-  "ChestsAnywhere": "1.8.2",
-  "DebugMode": "1.3",
-  "LookupAnything": "1.10.1",
-  "SkipIntro": "1.4"
+  "Automate": "1.1",
+  "ChestsAnywhere": "1.9.1",
+  "DebugMode": "1.4.1",
+  "LookupAnything": "1.12",
+  "SkipIntro": "1.5.1"
 }
