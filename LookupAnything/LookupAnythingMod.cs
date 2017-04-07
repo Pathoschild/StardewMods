@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -58,8 +60,8 @@ namespace Pathoschild.Stardew.LookupAnything
         /****
         ** State
         ****/
-        /// <summary>The previous menu shown before the lookup UI was opened.</summary>
-        private IClickableMenu PreviousMenu;
+        /// <summary>The previous menus shown before the current lookup UI was opened.</summary>
+        private readonly Stack<IClickableMenu> PreviousMenus = new Stack<IClickableMenu>();
 
         /// <summary>Finds and analyses lookup targets in the world.</summary>
         private TargetFactory TargetFactory;
@@ -201,7 +203,10 @@ namespace Pathoschild.Stardew.LookupAnything
             this.Monitor.InterceptErrors("handling your input", $"handling input '{key}'", () =>
             {
                 if (key.Equals(map.ToggleLookup) || key.Equals(map.ToggleLookupInFrontOfPlayer))
+                {
+                    this.PreviousMenus.Clear();
                     this.HideLookup();
+                }
             });
         }
 
@@ -212,11 +217,8 @@ namespace Pathoschild.Stardew.LookupAnything
             // restore the previous menu if it was hidden to show the lookup UI
             this.Monitor.InterceptErrors("restoring the previous menu", () =>
             {
-                if (closedMenu is LookupMenu && this.PreviousMenu != null)
-                {
-                    Game1.activeClickableMenu = this.PreviousMenu;
-                    this.PreviousMenu = null;
-                }
+                if (closedMenu is LookupMenu && this.PreviousMenus.Any())
+                    Game1.activeClickableMenu = this.PreviousMenus.Pop();
             });
         }
 
@@ -275,15 +277,27 @@ namespace Pathoschild.Stardew.LookupAnything
                     }
 
                     // show lookup UI
-                    this.Monitor.Log($"{logMessage} showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.", LogLevel.Trace);
-                    this.PreviousMenu = Game1.activeClickableMenu;
-                    Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, showDebugFields: this.Config.ShowDataMiningFields);
+                    this.Monitor.Log(logMessage.ToString(), LogLevel.Trace);
+                    this.ShowLookupFor(subject);
                 }
                 catch
                 {
                     this.Monitor.Log($"{logMessage} an error occurred.", LogLevel.Trace);
                     throw;
                 }
+            });
+        }
+
+        /// <summary>Show a lookup menu for the given subject.</summary>
+        /// <param name="subject">The subject to look up.</param>
+        internal void ShowLookupFor(ISubject subject)
+        {
+            this.Monitor.InterceptErrors("looking that up", () =>
+            {
+                this.Monitor.Log($"Showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.", LogLevel.Trace);
+                if (Game1.activeClickableMenu != null)
+                    this.PreviousMenus.Push(Game1.activeClickableMenu);
+                Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor);
             });
         }
 

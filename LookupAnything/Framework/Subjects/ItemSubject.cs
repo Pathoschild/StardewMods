@@ -296,6 +296,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // owned
             if (showInventoryFields && !isCrop && !(item is Tool))
                 yield return new GenericField("Owned", $"you own {GameHelper.CountOwnedItems(item)} of these");
+
+            // see also crop
+            bool seeAlsoCrop =
+                isSeed
+                && item.parentSheetIndex != this.SeedForCrop.indexOfHarvest // skip seeds which produce themselves (e.g. coffee beans)
+                && !(item.parentSheetIndex >= 495 && item.parentSheetIndex <= 497) // skip random seasonal seeds
+                && item.parentSheetIndex != 770; // skip mixed seeds
+            if (seeAlsoCrop)
+            {
+                Item drop = GameHelper.GetObjectBySpriteIndex(this.SeedForCrop.indexOfHarvest);
+                yield return new LinkField("See also", drop.Name, () => new ItemSubject(drop, ObjectContext.Inventory, false, this.SeedForCrop));
+            }
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -394,7 +406,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         {
             try
             {
+#if SDV_1_2
                 string x = item.DisplayName; // force display name to load, which is needed to get the description outside the inventory for some reason
+#endif
                 return item.getDescription();
             }
             catch (KeyNotFoundException)
@@ -450,32 +464,34 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         private IDictionary<ItemQuality, int> GetSaleValue(Item item, bool qualityIsKnown, Metadata metadata)
         {
-            Func<Item, int> getPrice = i =>
+            // get sale price
+            // derived from ShopMenu::receiveLeftClick
+            int GetPrice(Item i)
             {
-                int price = (i as Object)?.sellToStorePrice() ?? i.salePrice();
+                int price = (i as Object)?.sellToStorePrice() ?? (i.salePrice() / 2);
                 return price > 0 ? price : 0;
-            };
+            }
 
             // single quality
             if (!GameHelper.CanHaveQuality(item) || qualityIsKnown)
             {
-                ItemQuality quality = qualityIsKnown && item is Object
-                    ? (ItemQuality)((Object)item).quality
+                ItemQuality quality = qualityIsKnown && item is Object obj
+                    ? (ItemQuality)obj.quality
                     : ItemQuality.Normal;
 
-                return new Dictionary<ItemQuality, int> { [quality] = getPrice(item) };
+                return new Dictionary<ItemQuality, int> { [quality] = GetPrice(item) };
             }
 
             // multiple qualities
             int[] iridiumItems = metadata.Constants.ItemsWithIridiumQuality;
             var prices = new Dictionary<ItemQuality, int>
             {
-                [ItemQuality.Normal] = getPrice(new Object(item.parentSheetIndex, 1)),
-                [ItemQuality.Silver] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
-                [ItemQuality.Gold] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Gold))
+                [ItemQuality.Normal] = GetPrice(new Object(item.parentSheetIndex, 1)),
+                [ItemQuality.Silver] = GetPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
+                [ItemQuality.Gold] = GetPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Gold))
             };
             if (item.GetSpriteType() == ItemSpriteType.Object && (iridiumItems.Contains(item.category) || iridiumItems.Contains(item.parentSheetIndex)))
-                prices[ItemQuality.Iridium] = getPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Iridium));
+                prices[ItemQuality.Iridium] = GetPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Iridium));
             return prices;
         }
 
@@ -485,8 +501,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         private IDictionary<GiftTaste, string[]> GetGiftTastes(Item item, Metadata metadata)
         {
             return GameHelper.GetGiftTastes(item, metadata)
-                .GroupBy(p => p.Value, p => p.Key)
-                .ToDictionary(p => p.Key, p => p.ToArray());
+                .GroupBy(p => p.Value, p => p.Key.getName())
+                .ToDictionary(p => p.Key, p => p.Distinct().ToArray());
         }
     }
 }

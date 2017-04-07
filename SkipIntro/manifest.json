@@ -4,10 +4,10 @@
   "Version": {
     "MajorVersion": 1,
     "MinorVersion": 5,
-    "PatchVersion": 0,
+    "PatchVersion": 1,
     "Build": null
   },
-  "MinimumApiVersion": "1.9-beta.10",
+  "MinimumApiVersion": "1.9",
   "Description": "Skips the game's loading intro.",
   "UniqueID": "Pathoschild.SkipIntro",
   "EntryDll": "SkipIntro.dll"

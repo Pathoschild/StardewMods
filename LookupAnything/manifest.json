@@ -3,11 +3,11 @@
   "Author": "Pathoschild",
   "Version": {
     "MajorVersion": 1,
-    "MinorVersion": 11,
+    "MinorVersion": 12,
     "PatchVersion": 0,
     "Build": null
   },
-  "MinimumApiVersion": "1.9-beta.10",
+  "MinimumApiVersion": "1.9",
   "Description": "View metadata about anything by pressing a button.",
   "UniqueID": "Pathoschild.LookupAnything",
   "EntryDll": "LookupAnything.dll"

@@ -115,7 +115,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     {
                         GiftTaste taste = universal[villager];
                         tastes.AddRange(
-                            from refID in tasteStr.Split(new [] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                            from refID in tasteStr.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
                             select new GiftTasteModel(taste, "*", int.Parse(refID), isUniversal: true)
                         );
                     }
@@ -261,7 +261,11 @@ namespace Pathoschild.Stardew.LookupAnything
                     string description = fields[Object.objectInfoDescriptionIndex];
 
                     // type & category
+#if SDV_1_2
                     string[] typeParts = fields[Object.objectInfoTypeIndex].Split(' ');
+#else
+                    string[] typeParts = fields[Object.objectTypeIndex].Split(' ');
+#endif
                     string typeName = typeParts[0];
                     int category = 0;
                     if (typeParts.Length > 1)

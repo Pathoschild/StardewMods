@@ -15,8 +15,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
         /// <summary>The <c>Data\hats.xnb</c> sprite sheet used to draw boot equipment.</summary>
         Hat,
 
+        /// <summary>The <c>TileSheets\furniture.xnb</c> sprite sheet used to draw furniture.</summary>
+        Furniture,
+
         /// <summary>The <c>TileSheets\weapons.xnb</c> sprite sheet used to draw tools and weapons.</summary>
         Tool,
+
+        /// <summary>The <c>Maps\walls_and_floors</c> sprite sheet used to draw wallpapers and flooring.</summary>
+        Wallpaper,
 
         /// <summary>The item isn't covered by one of the known types.</summary>
         Unknown

@@ -56,8 +56,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         protected IFormattedText[] FormatValue(object value)
         {
             // already formatted
-            if (value is IEnumerable<IFormattedText>)
-                return ((IEnumerable<IFormattedText>)value).ToArray();
+            if (value is IFormattedText formattedValue)
+                return new[] { formattedValue };
+            if (value is IEnumerable<IFormattedText> valueList)
+                return valueList.ToArray();
 
             // format
             string str = TextHelper.Stringify(value);

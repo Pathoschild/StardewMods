@@ -2,6 +2,9 @@
 
 # Release notes
 
+## 1.1
+* Fixed worm bins not resetting correctly.
+
 ## 1.0
 * Initial version.
 * Added support for bee houses, casks, charcoal kilns, cheese presses, crab pots, crystalariums,

@@ -13,7 +13,7 @@ Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 
 ## Installation
 1. [Install the latest version of SMAPI](http://canimod.com/guides/using-mods#installing-smapi).
-3. Install <s>this mod from Nexus mods</s>.
+3. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/1063).
 4. Run the game using SMAPI.
 
 ## Usage
@@ -103,5 +103,5 @@ file if you want. These are the available settings:
 See [release notes](release-notes.md).
 
 ## See also
-* <s>Nexus mod</s>
-* <s>Discussion thread</s>
+* [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1063)
+* [Discussion thread](http://community.playstarbound.com/threads/automate.131913)

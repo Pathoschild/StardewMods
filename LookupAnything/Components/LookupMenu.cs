@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,6 +26,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
         /// <summary>Encapsulates logging and monitoring.</summary>
         private readonly IMonitor Monitor;
+
+        /// <summary>A callback which shows a new lookup for a given subject.</summary>
+        private readonly Action<ISubject> ShowNewPage;
 
         /// <summary>The data to display for this subject.</summary>
         private readonly ICustomField[] Fields;
@@ -56,6 +60,10 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Whether the game's draw mode has been validated for compatibility.</summary>
         private bool ValidatedDrawMode;
 
+        /// <summary>Click areas for link fields that open a new subject.</summary>
+        private readonly IDictionary<ILinkField, Rectangle> LinkFieldAreas = new Dictionary<ILinkField, Rectangle>();
+
+
         /*********
         ** Accessors
         *********/
@@ -76,7 +84,8 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="scroll">The amount to scroll long content on each up/down scroll.</param>
         /// <param name="showDebugFields">Whether to display debug fields.</param>
-        public LookupMenu(ISubject subject, Metadata metadata, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll, bool showDebugFields)
+        /// <param name="showNewPage">A callback which shows a new lookup for a given subject.</param>
+        public LookupMenu(ISubject subject, Metadata metadata, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll, bool showDebugFields, Action<ISubject> showNewPage)
         {
             // save data
             this.Subject = subject;
@@ -84,6 +93,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             this.Monitor = monitor;
             this.Reflection = reflectionHelper;
             this.ScrollAmount = scroll;
+            this.ShowNewPage = showNewPage;
 
             // save debug fields
             if (showDebugFields)
@@ -200,6 +210,21 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 this.ScrollUp();
             else if (this.ScrollDownButton.containsPoint(x, y))
                 this.ScrollDown();
+
+            // custom link fields
+            else
+            {
+                foreach (var area in this.LinkFieldAreas)
+                {
+                    if (area.Value.Contains(x, y))
+                    {
+                        ISubject subject = area.Key.GetLinkSubject();
+                        if (subject != null)
+                            this.ShowNewPage(subject);
+                        break;
+                    }
+                }
+            }
         }
 
         /// <summary>Render the UI.</summary>
@@ -319,6 +344,10 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                                 contentBatch.DrawLine(x + leftOffset, y + topOffset, new Vector2(tableBorderWidth, rowSize.Y), lineColor); // left
                                 contentBatch.DrawLine(x + leftOffset + labelWidth + cellPadding * 2, y + topOffset, new Vector2(tableBorderWidth, rowSize.Y), lineColor); // middle
                                 contentBatch.DrawLine(x + leftOffset + rowSize.X, y + topOffset, new Vector2(tableBorderWidth, rowSize.Y), lineColor); // right
+
+                                // track link area
+                                if (field is ILinkField linkField)
+                                    this.LinkFieldAreas[linkField] = new Rectangle((int)valuePosition.X, (int)valuePosition.Y, (int)valueSize.X, (int)valueSize.Y);
 
                                 // update offset
                                 topOffset += Math.Max(labelSize.Y, valueSize.Y);

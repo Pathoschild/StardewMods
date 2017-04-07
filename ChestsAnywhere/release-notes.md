@@ -2,8 +2,12 @@
 
 # Release notes
 
+## 1.9.1
+* Updated to SMAPI 1.9.
+* Backported to Stardew Valley 1.11 until 1.2 is released.
+
 ## 1.9
-* Updated for Stardew Valley 1.2 and SMAPI 1.9.
+* Updated for Stardew Valley 1.2.
 
 ## 1.8.2
 See [log](https://github.com/Pathoschild/StardewMods/compare/a8624da04e0c15e14bfb5936fcc720fe96930051...chests-anywhere/1.8.2).

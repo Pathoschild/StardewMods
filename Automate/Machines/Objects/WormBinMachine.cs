@@ -24,8 +24,8 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
 
             bin.heldObject = new SObject(685, Game1.random.Next(2, 6));
             bin.minutesUntilReady = 2600 - Game1.timeOfDay;
-            //bin.readyForHarvest = false;
-            //bin.showNextIndex = false;
+            bin.readyForHarvest = false;
+            bin.showNextIndex = false;
         }
 
         /// <summary>Pull items from the connected chests.</summary>
