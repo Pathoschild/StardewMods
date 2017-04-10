@@ -73,7 +73,9 @@ namespace Pathoschild.Stardew.FastAnimations
         {
             this.AnimationEvents?.Update();
 
-            if (this.Config.InstantEat && Game1.isEating)
+            if (Game1.activeClickableMenu is GeodeMenu geodeMenu)
+                this.SkipGeodeAnimation(geodeMenu);
+            else if (this.Config.InstantEat && Game1.isEating)
                 this.SkipEatingAnimation();
 
         }
@@ -105,6 +107,14 @@ namespace Pathoschild.Stardew.FastAnimations
             int animationID = this.Helper.Reflection.GetPrivateValue<int>(Game1.player.sprite, "currentSingleAnimation");
             Game1.playSound(animationID == FarmerSprite.drink ? "gulp" : "eat");
             Game1.doneEating();
+        }
+
+        /// <summary>Make the current break-geode animation instant.</summary>
+        /// <param name="menu">The open blacksmith geode menu.</param>
+        private void SkipGeodeAnimation(GeodeMenu menu)
+        {
+            while (menu.geodeAnimationTimer > 0)
+                menu.update(Game1.currentGameTime);
         }
     }
 }
