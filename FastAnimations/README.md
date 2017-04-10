@@ -26,6 +26,7 @@ file if you want. These are the available settings:
 
 setting           | what it affects
 :---------------- | :------------------
+`InstantEat` | Default `true`. Whether to make eating & drinking instant (including no confirmation dialogue).
 `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll see a message in the SMAPI console. This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
 
 ## Versions

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.FastAnimations
 {
@@ -70,6 +72,10 @@ namespace Pathoschild.Stardew.FastAnimations
         private void ReceiveUpdateTick(object sender, EventArgs e)
         {
             this.AnimationEvents?.Update();
+
+            if (this.Config.InstantEat && Game1.isEating)
+                this.SkipEatingAnimation();
+
         }
 
         /// <summary>The method invoked when an animation starts.</summary>
@@ -78,6 +84,27 @@ namespace Pathoschild.Stardew.FastAnimations
         private void ReceiveAnimationNewFrame(object sender, EventArgsAnimationFrame e)
         {
             AnimationFrame frame = e.Frame;
+        }
+
+        /// <summary>Make the current eating animation instant.</summary>
+        /// <remarks>See original logic in <see cref="Game1.pressActionButton"/>, <see cref="FarmerSprite"/>'s private <c>animateOnce(Gametime)</c> method, and <see cref="Game1.doneEating"/>.</remarks>
+        private void SkipEatingAnimation()
+        {
+            if (!Game1.isEating)
+                return;
+
+            // skip confirmation dialogue
+            if (Game1.activeClickableMenu is DialogueBox eatMenu)
+            {
+                Response yes = this.Helper.Reflection.GetPrivateValue<List<Response>>(eatMenu, "responses")[0];
+                Game1.currentLocation.answerDialogue(yes);
+                eatMenu.closeDialogue();
+            }
+
+            // skip animation
+            int animationID = this.Helper.Reflection.GetPrivateValue<int>(Game1.player.sprite, "currentSingleAnimation");
+            Game1.playSound(animationID == FarmerSprite.drink ? "gulp" : "eat");
+            Game1.doneEating();
         }
     }
 }
