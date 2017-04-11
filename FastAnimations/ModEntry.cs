@@ -19,9 +19,6 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
-        /// <summary>Raises events for animation changes.</summary>
-        private AnimationEvents AnimationEvents;
-
 
         /*********
         ** Public methods
@@ -33,7 +30,6 @@ namespace Pathoschild.Stardew.FastAnimations
             this.Config = helper.ReadConfig<ModConfig>();
 
             GameEvents.GameLoaded += this.ReceiveGameLoaded;
-            SaveEvents.AfterLoad += this.ReceiveSaveLoaded;
             GameEvents.UpdateTick += this.ReceiveUpdateTick;
         }
 
@@ -56,36 +52,16 @@ namespace Pathoschild.Stardew.FastAnimations
             }
         }
 
-        /// <summary>The method invoked after the player loads a save.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void ReceiveSaveLoaded(object sender, EventArgs e)
-        {
-            // initialise animation events
-            this.AnimationEvents = new AnimationEvents(Game1.player.FarmerSprite);
-            this.AnimationEvents.OnNewFrame += this.ReceiveAnimationNewFrame;
-        }
-
         /// <summary>The method invoked when the player presses a keyboard button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void ReceiveUpdateTick(object sender, EventArgs e)
         {
-            this.AnimationEvents?.Update();
-
             if (Game1.activeClickableMenu is GeodeMenu geodeMenu)
                 this.SkipGeodeAnimation(geodeMenu);
             else if (this.Config.InstantEat && Game1.isEating)
                 this.SkipEatingAnimation();
 
-        }
-
-        /// <summary>The method invoked when an animation starts.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void ReceiveAnimationNewFrame(object sender, EventArgsAnimationFrame e)
-        {
-            AnimationFrame frame = e.Frame;
         }
 
         /// <summary>Make the current eating animation instant.</summary>
