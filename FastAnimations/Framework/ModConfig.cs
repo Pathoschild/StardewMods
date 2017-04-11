@@ -17,5 +17,8 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
 
         /// <summary>Whether to make the milk pail instant.</summary>
         public bool InstantMilkPail { get; set; } = true;
+
+        /// <summary>Whether to make the shears instant.</summary>
+        public bool InstantShears { get; set; } = true;
     }
 }

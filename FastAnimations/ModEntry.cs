@@ -65,6 +65,8 @@ namespace Pathoschild.Stardew.FastAnimations
                 return;
             if (this.Config.InstantMilkPail && this.SkipMilkPailAnimation())
                 return;
+            if (this.Config.InstantShears && this.SkipShearAnimation())
+                return;
         }
 
 
@@ -72,6 +74,8 @@ namespace Pathoschild.Stardew.FastAnimations
         ** Methods
         ****/
         /// <summary>Make the current break-geode animation instant.</summary>
+        /// <returns>Returns whether a geode-breaking animation was skipped.</returns>
+        /// <remarks>See original logic in <see cref="GeodeMenu.receiveLeftClick"/>.</remarks>
         private bool SkipGeodeAnimation()
         {
             // get menu
@@ -88,6 +92,7 @@ namespace Pathoschild.Stardew.FastAnimations
         }
 
         /// <summary>Make the current eating animation instant.</summary>
+        /// <returns>Returns whether an eating animation was skipped.</returns>
         /// <remarks>See original logic in <see cref="Game1.pressActionButton"/>, <see cref="FarmerSprite"/>'s private <c>animateOnce(Gametime)</c> method, and <see cref="Game1.doneEating"/>.</remarks>
         private bool SkipEatingAnimation()
         {
@@ -110,7 +115,8 @@ namespace Pathoschild.Stardew.FastAnimations
         }
 
         /// <summary>Make the current milking animation instant.</summary>
-        /// <remarks>See original logic in <see cref="Game1.pressActionButton"/>, <see cref="FarmerSprite"/>'s private <c>animateOnce(Gametime)</c> method, and <see cref="Game1.doneEating"/>.</remarks>
+        /// <returns>Returns whether a milking animation was skipped.</returns>
+        /// <remarks>See original logic in <see cref="StardewValley.Tools.MilkPail.beginUsing"/>.</remarks>
         private bool SkipMilkPailAnimation()
         {
             if (Game1.player.Sprite.CurrentAnimation == null)
@@ -126,7 +132,26 @@ namespace Pathoschild.Stardew.FastAnimations
             Game1.player.forceCanMove();
             Farmer.useTool(Game1.player);
             return true;
+        }
 
+        /// <summary>Make the current shearing animation instant.</summary>
+        /// <returns>Returns whether a shearing animation was skipped.</returns>
+        /// <remarks>See original logic in <see cref="StardewValley.Tools.Shears.beginUsing"/>.</remarks>
+        private bool SkipShearAnimation()
+        {
+            if (Game1.player.Sprite.CurrentAnimation == null)
+                return false;
+
+            // check current animation
+            int animationID = this.GetAnimationID(Game1.player);
+            if (animationID != FarmerSprite.shearDown && animationID != FarmerSprite.shearLeft && animationID != FarmerSprite.shearRight && animationID != FarmerSprite.shearUp)
+                return false;
+
+            // skip animation
+            Game1.player.Sprite.StopAnimation();
+            Game1.player.forceCanMove();
+            Farmer.useTool(Game1.player);
+            return true;
         }
 
         /// <summary>Get the player's current animation ID.</summary>
