@@ -1,0 +1,14 @@
+﻿{
+  "Name": "Fast Animations",
+  "Author": "Pathoschild",
+  "Version": {
+    "MajorVersion": 0,
+    "MinorVersion": 2,
+    "PatchVersion": 0,
+    "Build": null
+  },
+  "MinimumApiVersion": "1.9",
+  "Description": "Makes many animations instant (based on settings in config.json).",
+  "UniqueID": "Pathoschild.FastAnimations",
+  "EntryDll": "FastAnimations.dll"
+}
