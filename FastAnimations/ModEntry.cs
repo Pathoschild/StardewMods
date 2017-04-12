@@ -91,8 +91,8 @@ namespace Pathoschild.Stardew.FastAnimations
                 yield return new EatingHandler(this.Helper.Reflection, config.EatAndDrinkSpeed);
             if (config.MilkSpeed > 1)
                 yield return new MilkingHandler(config.MilkSpeed);
-            if (config.InstantShears)
-                yield return new ShearingHandler();
+            if (config.ShearSpeed > 1)
+                yield return new ShearingHandler(config.ShearSpeed);
         }
     }
 }

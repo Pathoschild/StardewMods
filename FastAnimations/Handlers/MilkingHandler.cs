@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public void Update(int playerAnimationID)
         {
-            // speed up animations
+            // speed up animation
             GameTime gameTime = Game1.currentGameTime;
             GameLocation location = Game1.player.currentLocation;
             for (int i = 1; i < this.Multiplier; i++)

@@ -32,12 +32,12 @@ setting           | what it affects
 `BreakGeodeSpeed` | Default 20× speed. How fast the blacksmiths breaks geodes for you.
 `EatAndDrinkSpeed` | Default 10× speed. How fast you eat and drink.
 `MilkSpeed` | Default 5× speed. How fast you use the milk pail.
+`ShearSpeed` | Default 5× speed. How fast you use the shears.
 
 Other available settings:
 
 setting           | what it affects
 :---------------- | :------------------
-`InstantShears` | Default `true`. Whether to make shearing wool instant.
 `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll see a message in the SMAPI console. This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
 
 ## Versions
