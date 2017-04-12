@@ -4,6 +4,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.FastAnimations.Handlers
 {
     /// <summary>Handles the milking animation.</summary>
+    /// <remarks>See game logic in <see cref="StardewValley.Tools.MilkPail.beginUsing"/>.</remarks>
     internal class MilkingHandler : IAnimationHandler
     {
         /*********

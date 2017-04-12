@@ -5,6 +5,7 @@ using StardewValley.Menus;
 namespace Pathoschild.Stardew.FastAnimations.Handlers
 {
     /// <summary>Handles the geode-breaking animation.</summary>
+    /// <remarks>See game logic in <see cref="GeodeMenu.receiveLeftClick"/>.</remarks>
     internal class BreakingGeodeHandler : IAnimationHandler
     {
         /*********

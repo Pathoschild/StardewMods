@@ -4,6 +4,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.FastAnimations.Handlers
 {
     /// <summary>Handles the wool shearing animation.</summary>
+    /// <remarks>See game logic in <see cref="StardewValley.Tools.Shears.beginUsing"/>.</remarks>
     internal class ShearingHandler : IAnimationHandler
     {
         /*********

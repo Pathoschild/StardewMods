@@ -7,6 +7,7 @@ using StardewValley.Menus;
 namespace Pathoschild.Stardew.FastAnimations.Handlers
 {
     /// <summary>Handles the eating animation.</summary>
+    /// <remarks>See game logic in <see cref="Game1.pressActionButton"/> (opens confirmation dialogue), <see cref="Farmer.showEatingItem"/> (main animation logic), <see cref="FarmerSprite"/>'s private <c>animateOnce(Gametime)</c> method (runs animation + some logic), and <see cref="Game1.doneEating"/> (eats item and ends animation).</remarks>
     internal class EatingHandler : IAnimationHandler
     {
         /*********
