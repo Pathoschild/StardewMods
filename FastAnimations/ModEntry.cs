@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <param name="e">The event data.</param>
         private void ReceiveUpdateTick(object sender, EventArgs e)
         {
-            if (this.Config.InstantGeodes && this.SkipGeodeAnimation())
+            if (this.Config.BreakGeodeSpeed > 1 && this.FastGeodeAnimation())
                 return;
             if (this.Config.InstantEatAndDrink && this.SkipEatingAnimation())
                 return;
@@ -73,20 +73,18 @@ namespace Pathoschild.Stardew.FastAnimations
         /****
         ** Methods
         ****/
-        /// <summary>Make the current break-geode animation instant.</summary>
+        /// <summary>Speed up the current break-geode animation for a given update.</summary>
         /// <returns>Returns whether a geode-breaking animation was skipped.</returns>
         /// <remarks>See original logic in <see cref="GeodeMenu.receiveLeftClick"/>.</remarks>
-        private bool SkipGeodeAnimation()
+        private bool FastGeodeAnimation()
         {
             // get menu
             GeodeMenu menu = Game1.activeClickableMenu as GeodeMenu;
-            if (menu == null)
+            if (menu == null || menu.geodeAnimationTimer <= 0)
                 return false;
 
-            // skip animation
-            if (menu.geodeAnimationTimer <= 0)
-                return false;
-            while (menu.geodeAnimationTimer > 0)
+            // speed up animation
+            for (int i = 1; i < this.Config.BreakGeodeSpeed; i++)
                 menu.update(Game1.currentGameTime);
             return true;
         }
@@ -108,7 +106,7 @@ namespace Pathoschild.Stardew.FastAnimations
             }
 
             // skip animation
-            int animationID = this.GetAnimationID(Game1.player);
+            int animationID = this.GetAnimationID(Game1.player.sprite);
             Game1.playSound(animationID == FarmerSprite.drink ? "gulp" : "eat");
             Game1.doneEating();
             return true;
@@ -123,7 +121,7 @@ namespace Pathoschild.Stardew.FastAnimations
                 return false;
 
             // check current animation
-            int animationID = this.GetAnimationID(Game1.player);
+            int animationID = this.GetAnimationID(Game1.player.sprite);
             if (animationID != FarmerSprite.milkDown && animationID != FarmerSprite.milkLeft && animationID != FarmerSprite.milkRight && animationID != FarmerSprite.milkUp)
                 return false;
 
@@ -143,7 +141,7 @@ namespace Pathoschild.Stardew.FastAnimations
                 return false;
 
             // check current animation
-            int animationID = this.GetAnimationID(Game1.player);
+            int animationID = this.GetAnimationID(Game1.player.sprite);
             if (animationID != FarmerSprite.shearDown && animationID != FarmerSprite.shearLeft && animationID != FarmerSprite.shearRight && animationID != FarmerSprite.shearUp)
                 return false;
 
@@ -154,12 +152,20 @@ namespace Pathoschild.Stardew.FastAnimations
             return true;
         }
 
-        /// <summary>Get the player's current animation ID.</summary>
-        /// <param name="player">The player whose current animation to check.</param>
+        /// <summary>Get an animation's internal ID.</summary>
+        /// <param name="animation">The animation to check.</param>
         /// <returns>Returns the animation ID, or <c>-1</c> if none.</returns>
-        private int GetAnimationID(Farmer player)
+        private int GetAnimationID(AnimatedSprite animation)
         {
-            return this.Helper.Reflection.GetPrivateValue<int>(player.sprite, "currentSingleAnimation");
+            return this.Helper.Reflection.GetPrivateValue<int>(animation, "currentSingleAnimation");
+        }
+
+        /// <summary>Get the animation's frame index.</summary>
+        /// <param name="animation">The animation to check.</param>
+        /// <returns>Returns the frame index, or <c>-1</c> if none.</returns>
+        private int GetAnimationFrameIndex(AnimatedSprite animation)
+        {
+            return this.Helper.Reflection.GetPrivateValue<int>(animation, "currentAnimationIndex");
         }
     }
 }
