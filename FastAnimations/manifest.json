@@ -2,10 +2,10 @@
   "Name": "Fast Animations",
   "Author": "Pathoschild",
   "Version": {
-    "MajorVersion": 1,
-    "MinorVersion": 0,
+    "MajorVersion": 0,
+    "MinorVersion": 2,
     "PatchVersion": 0,
-    "Build": "alpha"
+    "Build": null
   },
   "MinimumApiVersion": "1.9",
   "Description": "Makes many animations instant (based on settings in config.json).",

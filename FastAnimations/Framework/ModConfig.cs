@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         public bool CheckForUpdates { get; set; } = true;
 
         /// <summary>The speed multiplier for eating and drinking.</summary>
-        public int EatAndDrinkSpeed { get; set; } = 10;
+        public int EatAndDrinkSpeed { get; set; } = 5;
 
         /// <summary>The speed multiplier for breaking geodes.</summary>
         public int BreakGeodeSpeed { get; set; } = 20;
