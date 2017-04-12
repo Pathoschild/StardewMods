@@ -1,4 +1,4 @@
-**Fast Animations** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you selectively
+﻿**Fast Animations** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you selectively
 make many animations much faster (including eating, drinking, breaking geodes, milking, etc).
 
 Compatible with Stardew Valley 1.11+ on Linux, Mac, and Windows.
@@ -22,12 +22,20 @@ which animations are instance (see next section).
 
 ## Configure
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
-file if you want. These are the available settings:
+file if you want.
+
+You can multiply the speed for each animation by a given number (for example, `1` for normal speed
+and `2` for double speed):
 
 setting           | what it affects
 :---------------- | :------------------
-`InstantEatAndDrink` | Default `true`. Whether to make eating & drinking instant (including no confirmation dialogue).
-`InstantBreakGeodes` | Default `true`. Whether to make the blacksmith break geodes instantly.
+`EatAndDrinkSpeed` | Default 10× speed. How fast your player eats or drinks.
+`BreakGeodeSpeed` | Default 20× speed. How fast the blacksmiths breaks geodes for you.
+
+Other available settings:
+
+setting           | what it affects
+:---------------- | :------------------
 `InstantMilkPail` | Default `true`. Whether to make milking instant.
 `InstantShears` | Default `true`. Whether to make shearing wool instant.
 `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll see a message in the SMAPI console. This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.

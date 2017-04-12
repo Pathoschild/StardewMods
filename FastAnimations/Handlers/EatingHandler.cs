@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -16,15 +18,23 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <summary>Simplifies access to private code.</summary>
         private readonly IReflectionHelper Reflection;
 
+        /// <summary>The temporary animations showing the item thrown into the air.</summary>
+        private readonly HashSet<TemporaryAnimatedSprite> ItemAnimations = new HashSet<TemporaryAnimatedSprite>();
+
+        /// <summary>The animation speed multiplier to apply.</summary>
+        private readonly int Multiplier;
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="reflection">Simplifies access to private code.</param>
-        public EatingHandler(IReflectionHelper reflection)
+        /// <param name="multiplier">The animation speed multiplier to apply.</param>
+        public EatingHandler(IReflectionHelper reflection, int multiplier)
         {
             this.Reflection = reflection;
+            this.Multiplier = multiplier;
         }
 
         /// <summary>Get whether the animation is currently active.</summary>
@@ -38,7 +48,9 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public void Update(int playerAnimationID)
         {
-            // skip confirmation dialogue
+            // When the animation starts, the game shows a yes/no dialogue asking the player to
+            // confirm they really want to eat the item. This code answers 'yes' and closes the
+            // dialogue.
             if (Game1.activeClickableMenu is DialogueBox eatMenu)
             {
                 Response yes = this.Reflection.GetPrivateValue<List<Response>>(eatMenu, "responses")[0];
@@ -46,9 +58,38 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
                 eatMenu.closeDialogue();
             }
 
-            // skip animation
-            Game1.playSound(playerAnimationID == FarmerSprite.drink ? "gulp" : "eat");
-            Game1.doneEating();
+            // The farmer animation spins off two main temporary animations: the item being held
+            // (at index 1) and the item being thrown into the air (at index 2). This code runs
+            // after each one is spawned, and adds it to the list of temporary animations to handle.
+            int indexInAnimation = Game1.player.FarmerSprite.indexInCurrentAnimation;
+            if (indexInAnimation <= 1)
+                this.ItemAnimations.Clear();
+            if ((indexInAnimation == 1 || indexInAnimation == 2) && Game1.player.itemToEat is Object obj && obj.parentSheetIndex != Object.stardrop)
+            {
+                Rectangle sourceRect = Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.parentSheetIndex, 16, 16);
+                TemporaryAnimatedSprite tempAnimation = Game1.player.currentLocation.TemporarySprites.LastOrDefault(p => p.Texture == Game1.objectSpriteSheet && p.sourceRect == sourceRect);
+                this.ItemAnimations.Add(tempAnimation);
+            }
+
+            // speed up animations
+            GameTime gameTime = Game1.currentGameTime;
+            GameLocation location = Game1.player.currentLocation;
+            for (int i = 1; i < this.Multiplier; i++)
+            {
+                // temporary item animations
+                foreach (TemporaryAnimatedSprite animation in this.ItemAnimations.ToArray())
+                {
+                    bool animationDone = animation.update(gameTime);
+                    if (animationDone)
+                    {
+                        this.ItemAnimations.Remove(animation);
+                        location.TemporarySprites.Remove(animation);
+                    }
+                }
+
+                // eating animation
+                Game1.player.Update(gameTime, location);
+            }
         }
     }
 }
