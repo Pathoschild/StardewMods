@@ -1,4 +1,5 @@
-﻿using Pathoschild.Stardew.FastAnimations.Framework;
+﻿using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.FastAnimations.Framework;
 using StardewValley;
 
 namespace Pathoschild.Stardew.FastAnimations.Handlers
@@ -8,8 +9,21 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
     internal class MilkingHandler : IAnimationHandler
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>The animation speed multiplier to apply.</summary>
+        private readonly int Multiplier;
+
+        /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="multiplier">The animation speed multiplier to apply.</param>
+        public MilkingHandler(int multiplier)
+        {
+            this.Multiplier = multiplier;
+        }
+
         /// <summary>Get whether the animation is currently active.</summary>
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public bool IsEnabled(int playerAnimationID)
@@ -28,10 +42,11 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public void Update(int playerAnimationID)
         {
-            // skip animation
-            Game1.player.Sprite.StopAnimation();
-            Game1.player.forceCanMove();
-            Farmer.useTool(Game1.player);
+            // speed up animations
+            GameTime gameTime = Game1.currentGameTime;
+            GameLocation location = Game1.player.currentLocation;
+            for (int i = 1; i < this.Multiplier; i++)
+                Game1.player.Update(gameTime, location);
         }
     }
 }
