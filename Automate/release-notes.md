@@ -4,6 +4,7 @@
 
 ## 1.2
 * Added support for hay hoppers and silos.
+* Fixed mills not accepting input if all their slots are taken, even if some slots aren't full.
 
 ## 1.1
 * Fixed worm bins not resetting correctly.
