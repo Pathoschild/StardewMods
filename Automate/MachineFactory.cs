@@ -114,6 +114,8 @@ namespace Pathoschild.Stardew.Automate
                 return new CrabPotMachine(pot, reflection);
             if (obj.Name == "Crystalarium")
                 return new CrystalariumMachine(obj, reflection);
+            if (obj.name == "Feed Hopper")
+                return new FeedHopperMachine();
             if (obj.Name == "Furnace")
                 return new FurnaceMachine(obj, tile);
             if (obj.Name == "Keg")
@@ -164,10 +166,12 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="building">The building for which to get a machine.</param>
         private IMachine GetMachine(Building building)
         {
-            if(building is JunimoHut hut)
+            if (building is JunimoHut hut)
                 return new JunimoHutMachine(hut);
             if (building is Mill mill)
                 return new MillMachine(mill);
+            if (building.buildingType == "Silo")
+                return new FeedHopperMachine();
 
             return null;
         }

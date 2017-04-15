@@ -2,6 +2,9 @@
 
 # Release notes
 
+## 1.2
+* Added support for hay hoppers and silos.
+
 ## 1.1
 * Fixed worm bins not resetting correctly.
 
