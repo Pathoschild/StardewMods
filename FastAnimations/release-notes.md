@@ -3,4 +3,4 @@
 # Release notes
 ## 1.0
 * Initial version.
-* Added support for instant eating, drinking, and geode breaking.
+* Added support for eating, drinking, milking, shearing, and geode breaking.

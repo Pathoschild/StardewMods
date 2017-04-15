@@ -1,31 +1,24 @@
 ﻿**Fast Animations** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you selectively
-make many animations much faster (including eating, drinking, breaking geodes, milking, etc).
+speed up many animations (currently eating, drinking, milking, shearing, and breaking geodes).
 
-Compatible with Stardew Valley 1.11+ on Linux, Mac, and Windows.
-
-**This is a pre-release prototype.**
+Compatible with Stardew Valley 1.1+ on Linux, Mac, and Windows.
 
 ## Contents
 * [Install](#install)
-* [Use](#use)
 * [Configure](#configure)
 * [See also](#see-also)
 
 ## Install
 1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
-2. <s>Install this mod from Nexus mods</s>.
+2. [Install this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/1089/).
 3. Run the game using SMAPI.
-
-## Use
-The mod will automatically make some animations in the game instant. You can optionally configure
-which animations are instance (see next section).
 
 ## Configure
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
 file if you want.
 
-You can multiply the speed for each animation by a given number (for example, `1` for normal speed
-and `2` for double speed):
+You can choose how fast each animation runs. Each value is a multiple of the original speed (e.g. `1` for
+normal speed or `2` for double speed):
 
 setting           | what it affects
 :---------------- | :------------------
@@ -44,5 +37,5 @@ setting           | what it affects
 See [release notes](release-notes.md).
 
 ## See also
-* <s>Nexus mod</s>
-* <s>Discussion thread</s>
+* [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1089/)
+* [Discussion thread](http://community.playstarbound.com/threads/smapi-fast-animations.132074/)
