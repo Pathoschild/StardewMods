@@ -1,6 +1,6 @@
-﻿using Pathoschild.Stardew.Automate.Framework;
+﻿using System;
+using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
-using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.Automate.Machines.Objects
 {
@@ -14,14 +14,13 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         public MachineState GetState()
         {
             Farm farm = Game1.getFarm();
-            return this.GetHaySpace(farm) > 0
+            return this.GetFreeSpace(farm) > 0
                 ? MachineState.Empty // 'empty' insofar as it will accept more input, not necessarily empty
                 : MachineState.Disabled;
         }
 
         /// <summary>Get the output item.</summary>
-        /// <remarks>This should have no effect on the machine state, since the chests may not have room for the item.</remarks>
-        public Item GetOutput()
+        public ITrackedStack GetOutput()
         {
             return null;
         }
@@ -33,40 +32,32 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             // not applicable
         }
 
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="chests">The connected chests.</param>
+        /// <summary>Pull items from the connected pipes.</summary>
+        /// <param name="pipes">The connected IO pipes.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public bool Pull(Chest[] chests)
+        public bool Pull(IPipe[] pipes)
         {
             Farm farm = Game1.getFarm();
 
             // skip if full
-            if (this.GetHaySpace(farm) <= 0)
+            if (this.GetFreeSpace(farm) <= 0)
                 return false;
 
-            // try to add hay until full
+            // try to add hay (178) until full
             bool anyPulled = false;
-            foreach (Chest chest in chests)
+            foreach (ITrackedStack stack in pipes.GetItems(p => p.Sample.parentSheetIndex == 178))
             {
-                foreach (Item item in chest.items.ToArray())
-                {
-                    // stop if full
-                    if (this.GetHaySpace(farm) <= 0)
-                        return anyPulled;
+                // get free space
+                int space = this.GetFreeSpace(farm);
+                if (space <= 0)
+                    return anyPulled;
 
-                    // pull hay
-                    if (item.parentSheetIndex == 178)
-                    {
-                        int added = item.Stack - farm.tryToAddHay(item.Stack);
-                        if (added == 0)
-                            return anyPulled;
-
-                        item.Stack -= added;
-                        if (item.Stack <= 0)
-                            chest.items.Remove(item);
-                        anyPulled = true;
-                    }
-                }
+                // pull hay
+                int maxToAdd = Math.Min(stack.Count, space);
+                int added = maxToAdd - farm.tryToAddHay(maxToAdd);
+                stack.Reduce(added);
+                if (added > 0)
+                    anyPulled = true;
             }
 
             return anyPulled;
@@ -79,7 +70,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         /// <summary>Get the amount of hay the hopper can still accept before it's full.</summary>
         /// <param name="farm">The farm to check.</param>
         /// <remarks>Derived from <see cref="Farm.tryToAddHay"/>.</remarks>
-        private int GetHaySpace(Farm farm)
+        private int GetFreeSpace(Farm farm)
         {
             return Utility.numSilos() * 240 - farm.piecesOfHay;
         }

@@ -33,95 +33,98 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
         }
 
-        /// <summary>Get all matching items from the given chests.</summary>
-        /// <param name="chests">The chests to search.</param>
+        /// <summary>Get all matching items from the given pipes.</summary>
+        /// <param name="pipes">The pipes to search.</param>
         /// <param name="predicate">Returns whether an item should be matched.</param>
-        public static IEnumerable<ChestItem> GetItems(this Chest[] chests, Func<Item, bool> predicate)
+        public static IEnumerable<ITrackedStack> GetItems(this IPipe[] pipes, Func<ITrackedStack, bool> predicate)
         {
-            foreach (Chest chest in chests)
+            foreach (IPipe pipe in pipes)
             {
-                foreach (Item item in chest.items)
+                foreach (ITrackedStack item in pipe)
                 {
                     if (predicate(item))
-                        yield return new ChestItem(chest, item);
+                        yield return item;
                 }
             }
         }
 
-        /// <summary>Get an ingredient needed for a given recipe.</summary>
-        /// <param name="chests">The chests to search.</param>
+        /// <summary>Get an ingredient needed for a recipe.</summary>
+        /// <param name="pipes">The pipes to search.</param>
         /// <param name="predicate">Returns whether an item should be matched.</param>
         /// <param name="count">The number of items to find.</param>
         /// <param name="requirement">The ingredient requirement with matching consumables.</param>
         /// <returns>Returns whether the requirement is met.</returns>
-        public static bool TryGetIngredient(this Chest[] chests, Func<Item, bool> predicate, int count, out Requirement requirement)
+        public static bool TryGetIngredient(this IPipe[] pipes, Func<ITrackedStack, bool> predicate, int count, out Requirement requirement)
         {
             int countMissing = count;
-            ChestItem[] consumables = chests.GetItems(predicate)
+            ITrackedStack[] consumables = pipes.GetItems(predicate)
                 .TakeWhile(chestItem =>
                 {
                     if (countMissing <= 0)
                         return false;
 
-                    countMissing -= chestItem.Item.Stack;
+                    countMissing -= chestItem.Count;
                     return true;
                 })
                 .ToArray();
 
-            requirement = new Requirement(consumables, count);
+            requirement = new Requirement(new TrackedItemCollection(consumables), count);
             return requirement.IsMet;
         }
 
-        /// <summary>Get an ingredient needed for a given recipe.</summary>
-        /// <param name="chests">The chests to search.</param>
+        /// <summary>Get an ingredient needed for a recipe.</summary>
+        /// <param name="pipes">The pipes to search.</param>
         /// <param name="itemID">The item ID.</param>
         /// <param name="count">The number of items to find.</param>
         /// <param name="requirement">The ingredient requirement with matching consumables.</param>
         /// <returns>Returns whether the requirement is met.</returns>
-        public static bool TryGetIngredient(this Chest[] chests, int itemID, int count, out Requirement requirement)
+        public static bool TryGetIngredient(this IPipe[] pipes, int itemID, int count, out Requirement requirement)
         {
-            return chests.TryGetIngredient(item => item.parentSheetIndex == itemID, count, out requirement);
+            return pipes.TryGetIngredient(item => item.Sample.parentSheetIndex == itemID, count, out requirement);
         }
 
-        /// <summary>Consume an ingredient from a given chest.</summary>
-        /// <param name="chests">The chests to search.</param>
+        /// <summary>Consume an ingredient needed for a recipe.</summary>
+        /// <param name="pipes">The chests to search.</param>
         /// <param name="predicate">Returns whether an item should be matched.</param>
         /// <param name="count">The number of items to find.</param>
         /// <returns>Returns whether the item was consumed.</returns>
-        public static bool TryConsume(this Chest[] chests, Func<Item, bool> predicate, int count)
+        public static bool TryConsume(this IPipe[] pipes, Func<ITrackedStack, bool> predicate, int count)
         {
-            if (chests.TryGetIngredient(predicate, count, out Requirement requirement))
+            if (pipes.TryGetIngredient(predicate, count, out Requirement requirement))
             {
-                requirement.Consume();
+                requirement.Reduce();
                 return true;
             }
             return false;
         }
 
-        /// <summary>Consume an ingredient from a given chest.</summary>
-        /// <param name="chests">The chests to search.</param>
+        /// <summary>Consume an ingredient needed for a recipe.</summary>
+        /// <param name="pipes">The chests to search.</param>
         /// <param name="itemID">The item ID.</param>
         /// <param name="count">The number of items to find.</param>
         /// <returns>Returns whether the item was consumed.</returns>
-        public static bool TryConsume(this Chest[] chests, int itemID, int count)
+        public static bool TryConsume(this IPipe[] pipes, int itemID, int count)
         {
-            return chests.TryConsume(item => item.parentSheetIndex == itemID, count);
+            return pipes.TryConsume(item => item.Sample.parentSheetIndex == itemID, count);
         }
 
-        /// <summary>Add the given item stack to the chests if there's space.</summary>
-        /// <param name="chests">The chests to fill.</param>
-        /// <param name="item">The item stack to push into the chest.</param>
-        public static bool TryPush(this Chest[] chests, Item item)
+        /// <summary>Add the given item stack to the pipes if there's space.</summary>
+        /// <param name="pipes">The pipes to fill.</param>
+        /// <param name="item">The item stack to push.</param>
+        public static bool TryPush(this IPipe[] pipes, ITrackedStack item)
         {
-            if (item == null)
+            if (item == null || item.Count <= 0)
                 return false;
 
-            foreach (Chest chest in chests)
+            int originalCount = item.Count;
+            foreach (IPipe pipe in pipes)
             {
-                if (chest.addItem(item) == null)
-                    return true;
+                pipe.Store(item);
+                if (item.Count <= 0)
+                    break;
             }
-            return false;
+
+            return item.Count < originalCount;
         }
     }
 }

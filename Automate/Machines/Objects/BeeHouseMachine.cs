@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
-using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Machines.Objects
@@ -44,8 +43,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         }
 
         /// <summary>Get the output item.</summary>
-        /// <remarks>This should have no effect on the machine state, since the chests may not have room for the item.</remarks>
-        public override Item GetOutput()
+        public override ITrackedStack GetOutput()
         {
             // get raw output
             SObject output = this.Machine.heldObject;
@@ -89,8 +87,8 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                 }
             }
 
-            // yield object
-            return new SObject(output.parentSheetIndex, output.stack)
+            // build object
+            SObject result = new SObject(output.parentSheetIndex, output.stack)
             {
                 name = $"{prefix} Honey",
                 price = output.price + addedPrice,
@@ -98,11 +96,26 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                 honeyType = type
 #endif
             };
+
+            // yield
+            return new TrackedItem(result, onEmpty: this.Reset);
         }
 
+        /// <summary>Pull items from the connected pipes.</summary>
+        /// <param name="pipes">The connected IO pipes.</param>
+        /// <returns>Returns whether the machine started processing an item.</returns>
+        public override bool Pull(IPipe[] pipes)
+        {
+            return false; // no input needed
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
         /// <summary>Reset the machine so it's ready to accept a new input.</summary>
-        /// <param name="outputTaken">Whether the current output was taken.</param>
-        public override void Reset(bool outputTaken)
+        /// <param name="item">The output item that was taken.</param>
+        private void Reset(Item item)
         {
             SObject machine = this.Machine;
 
@@ -110,14 +123,6 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             machine.minutesUntilReady = 2400 - Game1.timeOfDay + 4320;
             machine.readyForHarvest = false;
             machine.showNextIndex = false;
-        }
-
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="chests">The connected chests.</param>
-        /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(Chest[] chests)
-        {
-            return false; // no input needed
         }
     }
 }

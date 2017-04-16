@@ -1,8 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
 using StardewValley.Buildings;
-using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.Automate.Machines.Buildings
 {
@@ -35,24 +35,16 @@ namespace Pathoschild.Stardew.Automate.Machines.Buildings
         }
 
         /// <summary>Get the output item.</summary>
-        /// <remarks>This should have no effect on the machine state, since the chests may not have room for the item.</remarks>
-        public Item GetOutput()
+        public ITrackedStack GetOutput()
         {
-            return this.Hut.output.items.FirstOrDefault();
+            List<Item> inventory = this.Hut.output.items;
+            return new TrackedItem(inventory.FirstOrDefault(), onEmpty: item => inventory.Remove(item));
         }
 
-        /// <summary>Reset the machine so it's ready to accept a new input.</summary>
-        /// <param name="outputTaken">Whether the current output was taken.</param>
-        public void Reset(bool outputTaken)
-        {
-            if (this.Hut.output.items.Any())
-                this.Hut.output.items.RemoveAt(0);
-        }
-
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="chests">The connected chests.</param>
+        /// <summary>Pull items from the connected pipes.</summary>
+        /// <param name="pipes">The connected IO pipes.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public bool Pull(Chest[] chests)
+        public bool Pull(IPipe[] pipes)
         {
             return false; // no input
         }

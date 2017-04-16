@@ -165,8 +165,7 @@ namespace Pathoschild.Stardew.Automate
                         break;
 
                     case MachineState.Done:
-                        if (metadata.Connected.TryPush(machine.GetOutput()))
-                            machine.Reset(true);
+                        metadata.Connected.TryPush(machine.GetOutput());
                         break;
                 }
             }

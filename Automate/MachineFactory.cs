@@ -5,6 +5,7 @@ using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Automate.Machines.Buildings;
 using Pathoschild.Stardew.Automate.Machines.Objects;
 using Pathoschild.Stardew.Automate.Machines.TerrainFeatures;
+using Pathoschild.Stardew.Automate.Pipes;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
@@ -16,7 +17,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate
 {
     /// <summary>Constructs machine instances.</summary>
-    public class MachineFactory
+    internal class MachineFactory
     {
         /*********
         ** Public methods
@@ -54,9 +55,9 @@ namespace Pathoschild.Stardew.Automate
                 IMachine machine = this.GetMachine(obj, location, tile, reflection);
                 if (machine != null)
                 {
-                    Chest[] chests = this.GetConnected(location, tile).ToArray();
-                    if (chests.Any())
-                        yield return new MachineMetadata(location, chests, machine);
+                    IPipe[] pipes = this.GetConnected(location, tile).ToArray();
+                    if (pipes.Any())
+                        yield return new MachineMetadata(machine, location, pipes);
                 }
             }
 
@@ -69,9 +70,9 @@ namespace Pathoschild.Stardew.Automate
                 IMachine machine = this.GetMachine(feature);
                 if (machine != null)
                 {
-                    Chest[] chests = this.GetConnected(location, tile).ToArray();
-                    if (chests.Any())
-                        yield return new MachineMetadata(location, chests, machine);
+                    IPipe[] pipes = this.GetConnected(location, tile).ToArray();
+                    if (pipes.Any())
+                        yield return new MachineMetadata(machine, location, pipes);
                 }
             }
 
@@ -84,9 +85,9 @@ namespace Pathoschild.Stardew.Automate
                     if (machine != null)
                     {
                         Rectangle area = new Rectangle(building.tileX, building.tileY, building.tilesWide, building.tilesHigh);
-                        Chest[] chests = this.GetConnected(location, area).ToArray();
-                        if (chests.Any())
-                            yield return new MachineMetadata(location, chests, machine);
+                        IPipe[] pipes = this.GetConnected(location, area).ToArray();
+                        if (pipes.Any())
+                            yield return new MachineMetadata(machine, location, pipes);
                     }
                 }
             }
@@ -179,19 +180,19 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Get all chests connected to the given machine.</summary>
         /// <param name="location">The location to search.</param>
         /// <param name="tile">The tile position for which to find connected tiles.</param>
-        private IEnumerable<Chest> GetConnected(GameLocation location, Vector2 tile)
+        private IEnumerable<IPipe> GetConnected(GameLocation location, Vector2 tile)
         {
             foreach (Vector2 connectedTile in Utility.getSurroundingTileLocationsArray(tile))
             {
                 if (this.TryGetChest(location, connectedTile, out Chest chest))
-                    yield return chest;
+                    yield return new ChestPipe(chest);
             }
         }
 
         /// <summary>Get all chests connected to the given machine.</summary>
         /// <param name="location">The location to search.</param>
         /// <param name="area">The tile area for which to find connected tiles.</param>
-        private IEnumerable<Chest> GetConnected(GameLocation location, Rectangle area)
+        private IEnumerable<IPipe> GetConnected(GameLocation location, Rectangle area)
         {
             // get surrounding corner
             int left = area.X - 1;
@@ -200,23 +201,22 @@ namespace Pathoschild.Stardew.Automate
             int bottom = top + area.Height + 1;
 
             // get connected chests
-            int i = 0;
             for (int x = left; x <= right; x++)
             {
                 if (this.TryGetChest(location, new Vector2(x, top), out Chest chest))
-                    yield return chest;
+                    yield return new ChestPipe(chest);
             }
             for (int y = top + 1; y <= bottom - 1; y++)
             {
                 if (this.TryGetChest(location, new Vector2(left, y), out Chest leftChest))
-                    yield return leftChest;
+                    yield return new ChestPipe(leftChest);
                 if (this.TryGetChest(location, new Vector2(right, y), out Chest rightChest))
-                    yield return rightChest;
+                    yield return new ChestPipe(rightChest);
             }
             for (int x = left; x <= right; x++)
             {
                 if (this.TryGetChest(location, new Vector2(x, bottom), out Chest chest))
-                    yield return chest;
+                    yield return new ChestPipe(chest);
             }
         }
 

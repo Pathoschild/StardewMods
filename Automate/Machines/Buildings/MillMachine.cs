@@ -48,48 +48,33 @@ namespace Pathoschild.Stardew.Automate.Machines.Buildings
         }
 
         /// <summary>Get the output item.</summary>
-        /// <remarks>This should have no effect on the machine state, since the chests may not have room for the item.</remarks>
-        public Item GetOutput()
+        public ITrackedStack GetOutput()
         {
-            return this.Mill.output.items.FirstOrDefault();
+            List<Item> inventory = this.Mill.output.items;
+            return new TrackedItem(inventory.FirstOrDefault(), onEmpty: item => inventory.Remove(item));
         }
 
-        /// <summary>Reset the machine so it's ready to accept a new input.</summary>
-        /// <param name="outputTaken">Whether the current output was taken.</param>
-        public void Reset(bool outputTaken)
-        {
-            if (this.Mill.output.items.Any())
-                this.Mill.output.items.RemoveAt(0);
-        }
-
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="chests">The connected chests.</param>
+        /// <summary>Pull items from the connected pipes.</summary>
+        /// <param name="pipes">The connected IO pipes.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public bool Pull(Chest[] chests)
+        public bool Pull(IPipe[] pipes)
         {
             if (this.InputFull())
                 return false;
 
             // fill input with wheat (262) and beets (284)
             bool anyPulled = false;
-            foreach (Chest chest in chests)
+            foreach (ITrackedStack stack in pipes.GetItems(i => i.Sample.parentSheetIndex == 262 || i.Sample.parentSheetIndex == 284))
             {
-                foreach (Item item in chest.items.Where(i => i.parentSheetIndex == 262 || i.parentSheetIndex == 284).ToArray())
-                {
-                    // add item
-                    bool anyAdded = this.TryAddInput(item);
-                    if (!anyAdded)
-                        continue;
-                    anyPulled = true;
+                // add item
+                bool anyAdded = this.TryAddInput(stack);
+                if (!anyAdded)
+                    continue;
+                anyPulled = true;
 
-                    // remove stack from chest if emptied
-                    if (item.Stack <= 0)
-                        chest.items.Remove(item);
-
-                    // stop if full
-                    if (this.InputFull())
-                        return true;
-                }
+                // stop if full
+                if (this.InputFull())
+                    return true;
             }
 
             return anyPulled;
@@ -102,45 +87,43 @@ namespace Pathoschild.Stardew.Automate.Machines.Buildings
         /// <summary>Try to add an item to the input queue, and adjust its stack size accordingly.</summary>
         /// <param name="item">The item stack to add.</param>
         /// <returns>Returns whether any items were taken from the stack.</returns>
-        private bool TryAddInput(Item item)
+        private bool TryAddInput(ITrackedStack item)
         {
             // nothing to add
-            if (item.Stack <= 0)
+            if (item.Count <= 0)
                 return false;
 
             // clean up input bin
             this.Mill.input.clearNulls();
 
             // try adding to input
-            int originalSize = item.Stack;
+            int originalSize = item.Count;
             List<Item> slots = this.Mill.input.items;
-            int maxStackSize = this.MaxStackSize[item.parentSheetIndex];
+            int maxStackSize = this.MaxStackSize[item.Sample.parentSheetIndex];
             for (int i = 0; i < Chest.capacity; i++)
             {
                 // done
-                if (item.Stack <= 0)
+                if (item.Count <= 0)
                     break;
 
                 // add to existing slot
                 if (slots.Count > i)
                 {
                     Item slot = slots[i];
-                    if (item.canStackWith(slot) && slot.Stack < maxStackSize)
+                    if (item.Sample.canStackWith(slot) && slot.Stack < maxStackSize)
                     {
-                        int maxToAdd = Math.Min(item.Stack, maxStackSize - slot.Stack); // the most items we can add to the stack (in theory)
+                        int maxToAdd = Math.Min(item.Count, maxStackSize - slot.Stack); // the most items we can add to the stack (in theory)
                         int actualAdded = maxToAdd - slot.addToStack(maxToAdd); // how many items were actually added to the stack
-                        item.Stack -= actualAdded;
+                        item.Reduce(actualAdded);
                     }
                     continue;
                 }
 
                 // add to new slot
-                Item newSlot = item.getOne();
-                item.Stack = newSlot.addToStack(Math.Min(item.Stack - 1, maxStackSize));
-                slots.Add(newSlot);
+                slots.Add(item.Take(Math.Min(item.Count, maxStackSize)));
             }
 
-            return item.Stack < originalSize;
+            return item.Count < originalSize;
         }
 
         /// <summary>Get whether the mill's input bin is full.</summary>

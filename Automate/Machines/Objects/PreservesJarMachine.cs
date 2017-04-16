@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
-using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Machines.Objects
@@ -16,23 +15,23 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         public PreservesJarMachine(SObject machine)
             : base(machine) { }
 
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="chests">The connected chests.</param>
+        /// <summary>Pull items from the connected pipes.</summary>
+        /// <param name="pipes">The connected IO pipes.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(Chest[] chests)
+        public override bool Pull(IPipe[] pipes)
         {
             SObject jar = this.Machine;
 
             // fruit => jelly
-            if (chests.TryGetIngredient(item => item.category == SObject.FruitsCategory, 1, out Requirement fruit))
+            if (pipes.TryGetIngredient(item => item.Sample.category == SObject.FruitsCategory, 1, out Requirement fruit))
             {
-                fruit.Consume();
-                SObject item = (SObject)fruit.GetOne();
+                fruit.Reduce();
+                SObject sample = (SObject)fruit.Sample;
 
-                jar.heldObject = new SObject(Vector2.Zero, 344, item.Name + " Jelly", false, true, false, false)
+                jar.heldObject = new SObject(Vector2.Zero, 344, sample.Name + " Jelly", false, true, false, false)
                 {
-                    Price = 50 + item.Price * 2,
-                    name = item.Name + " Jelly",
+                    Price = 50 + sample.Price * 2,
+                    name = sample.Name + " Jelly",
 #if SDV_1_2
                     preserve = SObject.PreserveType.Jelly,
                     preservedParentSheetIndex = item.parentSheetIndex
@@ -43,15 +42,15 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             }
 
             // vegetable => pickled vegetable
-            if (chests.TryGetIngredient(item => item.category == SObject.VegetableCategory, 1, out Requirement vegetable))
+            if (pipes.TryGetIngredient(item => item.Sample.category == SObject.VegetableCategory, 1, out Requirement vegetable))
             {
-                vegetable.Consume();
-                SObject item = (SObject)vegetable.GetOne();
+                vegetable.Reduce();
+                SObject sample = (SObject)vegetable.Sample;
 
-                jar.heldObject = new SObject(Vector2.Zero, 342, "Pickled " + item.Name, false, true, false, false)
+                jar.heldObject = new SObject(Vector2.Zero, 342, "Pickled " + sample.Name, false, true, false, false)
                 {
-                    Price = 50 + item.Price * 2,
-                    name = "Pickled " + item.Name,
+                    Price = 50 + sample.Price * 2,
+                    name = "Pickled " + sample.Name,
 #if SDV_1_2
                     preserve = SObject.PreserveType.Pickle,
                     preservedParentSheetIndex = item.parentSheetIndex

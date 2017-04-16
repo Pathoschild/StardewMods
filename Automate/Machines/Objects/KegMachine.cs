@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
-using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Machines.Objects
@@ -16,15 +15,15 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         public KegMachine(SObject machine)
             : base(machine) { }
 
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="chests">The connected chests.</param>
+        /// <summary>Pull items from the connected pipes.</summary>
+        /// <param name="pipes">The connected IO pipes.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(Chest[] chests)
+        public override bool Pull(IPipe[] pipes)
         {
             SObject keg = this.Machine;
 
             // honey => mead
-            if (chests.TryConsume(340, 1))
+            if (pipes.TryConsume(340, 1))
             {
                 keg.heldObject = new SObject(Vector2.Zero, 459, "Mead", false, true, false, false) { name = "Mead" };
                 keg.minutesUntilReady = 600;
@@ -32,7 +31,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             }
 
             // coffee bean => coffee
-            if (chests.TryConsume(433, 5))
+            if (pipes.TryConsume(433, 5))
             {
                 keg.heldObject = new SObject(Vector2.Zero, 395, "Coffee", false, true, false, false) { name = "Coffee" };
                 keg.minutesUntilReady = 120;
@@ -40,7 +39,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             }
 
             // wheat => beer
-            if (chests.TryConsume(262, 1))
+            if (pipes.TryConsume(262, 1))
             {
                 keg.heldObject = new SObject(Vector2.Zero, 346, "Beer", false, true, false, false) { name = "Beer" };
                 keg.minutesUntilReady = 1750;
@@ -48,7 +47,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             }
 
             // hops => pale ale
-            if (chests.TryConsume(304, 1))
+            if (pipes.TryConsume(304, 1))
             {
                 keg.heldObject = new SObject(Vector2.Zero, 303, "Pale Ale", false, true, false, false) { name = "Pale Ale" };
                 keg.minutesUntilReady = 2250;
@@ -56,15 +55,15 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             }
 
             // fruit => wine
-            if (chests.TryGetIngredient(item => item.category == SObject.FruitsCategory, 1, out Requirement fruit))
+            if (pipes.TryGetIngredient(item => item.Sample.category == SObject.FruitsCategory, 1, out Requirement fruit))
             {
-                fruit.Consume();
-                SObject item = (SObject)fruit.GetOne();
+                fruit.Reduce();
+                SObject sample = (SObject)fruit.Sample;
 
-                keg.heldObject = new SObject(Vector2.Zero, 348, item.Name + " Wine", false, true, false, false)
+                keg.heldObject = new SObject(Vector2.Zero, 348, sample.Name + " Wine", false, true, false, false)
                 {
-                    name = item.Name + " Wine",
-                    Price = item.Price * 3,
+                    name = sample.Name + " Wine",
+                    Price = sample.Price * 3,
 #if SDV_1_2
                     preserve = SObject.PreserveType.Wine,
                     preservedParentSheetIndex = item.parentSheetIndex
@@ -75,15 +74,15 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             }
 
             // vegetable => juice
-            if (chests.TryGetIngredient(item => item.category == SObject.VegetableCategory, 1, out Requirement vegetable))
+            if (pipes.TryGetIngredient(item => item.Sample.category == SObject.VegetableCategory, 1, out Requirement vegetable))
             {
-                vegetable.Consume();
-                SObject item = (SObject)vegetable.GetOne();
+                vegetable.Reduce();
+                SObject sample = (SObject)vegetable.Sample;
 
-                keg.heldObject = new SObject(Vector2.Zero, 350, item.Name + " Juice", false, true, false, false)
+                keg.heldObject = new SObject(Vector2.Zero, 350, sample.Name + " Juice", false, true, false, false)
                 {
-                    name = item.Name + " Juice",
-                    Price = (int)(item.Price * 2.25),
+                    name = sample.Name + " Juice",
+                    Price = (int)(sample.Price * 2.25),
 #if SDV_1_2
                     preserve = SObject.PreserveType.Juice,
                     preservedParentSheetIndex = item.parentSheetIndex
