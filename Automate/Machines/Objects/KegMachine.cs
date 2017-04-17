@@ -66,7 +66,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                     Price = sample.Price * 3,
 #if SDV_1_2
                     preserve = SObject.PreserveType.Wine,
-                    preservedParentSheetIndex = item.parentSheetIndex
+                    preservedParentSheetIndex = sample.parentSheetIndex
 #endif
                 };
                 keg.minutesUntilReady = 10000;
@@ -85,7 +85,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                     Price = (int)(sample.Price * 2.25),
 #if SDV_1_2
                     preserve = SObject.PreserveType.Juice,
-                    preservedParentSheetIndex = item.parentSheetIndex
+                    preservedParentSheetIndex = sample.parentSheetIndex
 #endif
                 };
                 keg.minutesUntilReady = 6000;

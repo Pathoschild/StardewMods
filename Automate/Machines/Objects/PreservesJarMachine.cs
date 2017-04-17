@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                     name = sample.Name + " Jelly",
 #if SDV_1_2
                     preserve = SObject.PreserveType.Jelly,
-                    preservedParentSheetIndex = item.parentSheetIndex
+                    preservedParentSheetIndex = sample.parentSheetIndex
 #endif
                 };
                 jar.minutesUntilReady = 4000;
@@ -53,7 +53,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                     name = "Pickled " + sample.Name,
 #if SDV_1_2
                     preserve = SObject.PreserveType.Pickle,
-                    preservedParentSheetIndex = item.parentSheetIndex
+                    preservedParentSheetIndex = sample.parentSheetIndex
 #endif
                 };
                 jar.minutesUntilReady = 4000;
