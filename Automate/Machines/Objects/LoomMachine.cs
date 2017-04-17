@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
-using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Machines.Objects
@@ -16,24 +15,27 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         public LoomMachine(SObject machine)
             : base(machine) { }
 
-        /// <summary>Reset the machine so it's ready to accept a new input.</summary>
-        /// <param name="outputTaken">Whether the current output was taken.</param>
-        public override void Reset(bool outputTaken)
+        /// <summary>Get the output item.</summary>
+        public override ITrackedStack GetOutput()
         {
-            this.Machine.heldObject = null;
-            this.Machine.readyForHarvest = false;
-            this.Machine.showNextIndex = false;
+            SObject machine = this.Machine;
+            return new TrackedItem(machine.heldObject.heldObject, item =>
+            {
+                machine.heldObject = null;
+                machine.readyForHarvest = false;
+                machine.showNextIndex = false;
+            });
         }
 
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="chests">The connected chests.</param>
+        /// <summary>Pull items from the connected pipes.</summary>
+        /// <param name="pipes">The connected IO pipes.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(Chest[] chests)
+        public override bool Pull(IPipe[] pipes)
         {
             SObject loom = this.Machine;
 
             // wool => cloth
-            if (chests.TryConsume(440, 1))
+            if (pipes.TryConsume(440, 1))
             {
                 loom.heldObject = new SObject(Vector2.Zero, 428, null, false, true, false, false);
                 loom.minutesUntilReady = 240;

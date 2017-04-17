@@ -44,42 +44,35 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         }
 
         /// <summary>Get the output item.</summary>
-        /// <remarks>This should have no effect on the machine state, since the chests may not have room for the item.</remarks>
-        public override Item GetOutput()
-        {
-            return this.Machine.heldObject.getOne();
-        }
-
-        /// <summary>Reset the machine so it's ready to accept a new input.</summary>
-        /// <param name="outputTaken">Whether the current output was taken.</param>
-        public override void Reset(bool outputTaken)
+        public override ITrackedStack GetOutput()
         {
             Cask cask = this.Machine;
-
-            cask.heldObject = null;
-            cask.minutesUntilReady = 0;
-            cask.readyForHarvest = false;
-            cask.agingRate = 0;
-            cask.daysToMature = 0;
-        }
-
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="chests">The connected chests.</param>
-        /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(Chest[] chests)
-        {
-            Cask cask = this.Machine;
-
-            if (chests.TryGetIngredient(match => (match as SObject)?.quality < 4 && this.AgingRates.ContainsKey(match.parentSheetIndex), 1, out Requirement consumable))
+            return new TrackedItem(cask.heldObject.getOne(), item =>
             {
-                consumable.Consume();
-                SObject item = (SObject)consumable.GetOne();
+                cask.heldObject = null;
+                cask.minutesUntilReady = 0;
+                cask.readyForHarvest = false;
+                cask.agingRate = 0;
+                cask.daysToMature = 0;
+            });
+        }
 
-                cask.heldObject = item;
-                cask.agingRate = this.AgingRates[item.parentSheetIndex];
+        /// <summary>Pull items from the connected pipes.</summary>
+        /// <param name="pipes">The connected IO pipes.</param>
+        /// <returns>Returns whether the machine started processing an item.</returns>
+        public override bool Pull(IPipe[] pipes)
+        {
+            Cask cask = this.Machine;
+
+            if (pipes.TryGetIngredient(match => (match.Sample as SObject)?.quality < 4 && this.AgingRates.ContainsKey(match.Sample.parentSheetIndex), 1, out Requirement consumable))
+            {
+                SObject input = (SObject)consumable.Take();
+
+                cask.heldObject = input;
+                cask.agingRate = this.AgingRates[input.parentSheetIndex];
                 cask.daysToMature = 56;
                 cask.minutesUntilReady = 999999;
-                switch (item.quality)
+                switch (input.quality)
                 {
                     case SObject.medQuality:
                         cask.daysToMature = 42;

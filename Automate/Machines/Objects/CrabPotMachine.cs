@@ -47,27 +47,49 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                 : MachineState.Processing;
         }
 
+        /// <summary>Get the output item.</summary>
+        public override ITrackedStack GetOutput()
+        {
+            return new TrackedItem(this.Machine.heldObject, onEmpty: this.Reset);
+        }
+
+        /// <summary>Pull items from the connected pipes.</summary>
+        /// <param name="pipes">The connected IO pipes.</param>
+        /// <returns>Returns whether the machine started processing an item.</returns>
+        public override bool Pull(IPipe[] pipes)
+        {
+            // get bait
+            if (pipes.TryGetIngredient(item => item.Sample.category == SObject.baitCategory, 1, out Requirement bait))
+            {
+                this.Machine.bait = (SObject)bait.Take();
+                return true;
+            }
+
+            return false;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
         /// <summary>Reset the machine so it's ready to accept a new input.</summary>
-        /// <param name="outputTaken">Whether the current output was taken.</param>
-        public override void Reset(bool outputTaken)
+        /// <param name="item">The output item that was taken.</param>
+        /// <remarks>XP and achievement logic based on <see cref="CrabPot.checkForAction"/>.</remarks>
+        private void Reset(Item item)
         {
             CrabPot pot = this.Machine;
 
-            // apply logic from CrabPot.cs
-            if (outputTaken)
-            {
-                // add fishing XP
-                Game1.player.gainExperience(SFarmer.fishingSkill, 5);
+            // add fishing XP
+            Game1.player.gainExperience(SFarmer.fishingSkill, 5);
 
-                // mark fish caught for achievements and stats
-                IDictionary<int, string> fishData = Game1.content.Load<Dictionary<int, string>>("Data\\Fish");
-                if (fishData.ContainsKey(pot.heldObject.parentSheetIndex))
-                {
-                    string[] fields = fishData[pot.heldObject.parentSheetIndex].Split('/');
-                    int lowerSize = fields.Length > 5 ? Convert.ToInt32(fields[5]) : 1;
-                    int upperSize = fields.Length > 5 ? Convert.ToInt32(fields[6]) : 10;
-                    Game1.player.caughtFish(pot.heldObject.parentSheetIndex, Game1.random.Next(lowerSize, upperSize + 1));
-                }
+            // mark fish caught for achievements and stats
+            IDictionary<int, string> fishData = Game1.content.Load<Dictionary<int, string>>("Data\\Fish");
+            if (fishData.ContainsKey(item.parentSheetIndex))
+            {
+                string[] fields = fishData[item.parentSheetIndex].Split('/');
+                int lowerSize = fields.Length > 5 ? Convert.ToInt32(fields[5]) : 1;
+                int upperSize = fields.Length > 5 ? Convert.ToInt32(fields[6]) : 10;
+                Game1.player.caughtFish(item.parentSheetIndex, Game1.random.Next(lowerSize, upperSize + 1));
             }
 
             // reset pot
@@ -79,22 +101,6 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             this.Reflection.GetPrivateField<float>(pot, "lidFlapTimer").SetValue(60f);
             this.Reflection.GetPrivateField<Vector2>(pot, "shake").SetValue(Vector2.Zero);
             this.Reflection.GetPrivateField<float>(pot, "shakeTimer").SetValue(0f);
-        }
-
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="chests">The connected chests.</param>
-        /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(Chest[] chests)
-        {
-            // get bait
-            if (chests.TryGetIngredient(item => item.category == SObject.baitCategory, 1, out Requirement bait))
-            {
-                bait.Consume();
-                this.Machine.bait = (SObject)bait.GetOne();
-                return true;
-            }
-
-            return false;
         }
     }
 }

@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.2
+* Added support for hay hoppers and silos.
+* Added internal framework for transport pipes.
+* Fixed mills not accepting input if all their slots are taken, even if some slots aren't full.
+* Fixed seedmaker failing when another mod adds multiple seeds which produce the same crop.
 
 ## 1.1
 * Fixed worm bins not resetting correctly.

@@ -1,6 +1,5 @@
 ﻿using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
-using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Machines.Objects
@@ -17,19 +16,18 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             : base(machine) { }
 
         /// <summary>Get the output item.</summary>
-        /// <remarks>This should have no effect on the machine state, since the chests may not have room for the item.</remarks>
-        public override Item GetOutput()
+        public override ITrackedStack GetOutput()
         {
-            return this.Machine.heldObject.getOne();
+            return new TrackedItem(this.Machine.heldObject.getOne(), this.GenericReset);
         }
 
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="chests">The connected chests.</param>
+        /// <summary>Pull items from the connected pipes.</summary>
+        /// <param name="pipes">The connected IO pipes.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(Chest[] chests)
+        public override bool Pull(IPipe[] pipes)
         {
             // slime => slime egg
-            if (chests.TryConsume(766, 100))
+            if (pipes.TryConsume(766, 100))
             {
                 int parentSheetIndex = 680;
                 if (Game1.random.NextDouble() < 0.05)

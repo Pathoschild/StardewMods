@@ -58,17 +58,19 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
                 eatMenu.closeDialogue();
             }
 
-            // The farmer animation spins off two main temporary animations: the item being held
-            // (at index 1) and the item being thrown into the air (at index 2). This code runs
-            // after each one is spawned, and adds it to the list of temporary animations to handle.
+            // The farmer eating animation spins off two main temporary animations: the item being
+            // held (at index 1) and the item being thrown into the air (at index 2). The drinking
+            // animation only has one temporary animation (at index 1). This code runs after each
+            // one is spawned, and adds it to the list of temporary animations to handle.
             int indexInAnimation = Game1.player.FarmerSprite.indexInCurrentAnimation;
             if (indexInAnimation <= 1)
                 this.ItemAnimations.Clear();
-            if ((indexInAnimation == 1 || indexInAnimation == 2) && Game1.player.itemToEat is Object obj && obj.parentSheetIndex != Object.stardrop)
+            if ((indexInAnimation == 1 || (indexInAnimation == 2 && playerAnimationID == FarmerSprite.eat)) && Game1.player.itemToEat is Object obj && obj.parentSheetIndex != Object.stardrop)
             {
                 Rectangle sourceRect = Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.parentSheetIndex, 16, 16);
                 TemporaryAnimatedSprite tempAnimation = Game1.player.currentLocation.TemporarySprites.LastOrDefault(p => p.Texture == Game1.objectSpriteSheet && p.sourceRect == sourceRect);
-                this.ItemAnimations.Add(tempAnimation);
+                if (tempAnimation != null)
+                    this.ItemAnimations.Add(tempAnimation);
             }
 
             // speed up animations

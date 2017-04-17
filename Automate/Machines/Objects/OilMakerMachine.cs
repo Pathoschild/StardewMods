@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
-using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Machines.Objects
@@ -16,15 +15,15 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         public OilMakerMachine(SObject machine)
             : base(machine) { }
 
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="chests">The connected chests.</param>
+        /// <summary>Pull items from the connected pipes.</summary>
+        /// <param name="pipes">The connected IO pipes.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(Chest[] chests)
+        public override bool Pull(IPipe[] pipes)
         {
             SObject machine = this.Machine;
 
             // truffle => truffle oil
-            if (chests.TryConsume(430, 1))
+            if (pipes.TryConsume(430, 1))
             {
                 machine.heldObject = new SObject(Vector2.Zero, 432, null, false, true, false, false);
                 machine.minutesUntilReady = 360;
@@ -32,7 +31,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             }
 
             // sunflower seed => oil
-            if (chests.TryConsume(431, 1))
+            if (pipes.TryConsume(431, 1))
             {
                 machine.heldObject = new SObject(247, 1);
                 machine.minutesUntilReady = 3200;
@@ -40,7 +39,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             }
 
             // corn => oil
-            if (chests.TryConsume(270, 1))
+            if (pipes.TryConsume(270, 1))
             {
                 machine.heldObject = new SObject(Vector2.Zero, 247, null, false, true, false, false);
                 machine.minutesUntilReady = 1000;
@@ -48,7 +47,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             }
 
             // sunflower => oil
-            if (chests.TryConsume(421, 1))
+            if (pipes.TryConsume(421, 1))
             {
                 machine.heldObject = new SObject(Vector2.Zero, 247, null, false, true, false, false);
                 machine.minutesUntilReady = 60;

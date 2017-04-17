@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Objects;
+using Object = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Machines.Buildings
 {
@@ -15,6 +18,9 @@ namespace Pathoschild.Stardew.Automate.Machines.Buildings
         /// <summary>The underlying mill.</summary>
         private readonly Mill Mill;
 
+        /// <summary>The maximum stack size to allow for accepted items.</summary>
+        private readonly IDictionary<int, int> MaxStackSize;
+
 
         /*********
         ** Public methods
@@ -24,6 +30,11 @@ namespace Pathoschild.Stardew.Automate.Machines.Buildings
         public MillMachine(Mill mill)
         {
             this.Mill = mill;
+            this.MaxStackSize = new Dictionary<int, int>
+            {
+                [262] = new Object(262, 1).maximumStackSize(), // wheat => flour
+                [284] = new Object(284, 1).maximumStackSize() / 3 // beet => 3 sugar (reduce stack to avoid overfilling output)
+            };
         }
 
         /// <summary>Get the machine's processing state.</summary>
@@ -37,44 +48,33 @@ namespace Pathoschild.Stardew.Automate.Machines.Buildings
         }
 
         /// <summary>Get the output item.</summary>
-        /// <remarks>This should have no effect on the machine state, since the chests may not have room for the item.</remarks>
-        public Item GetOutput()
+        public ITrackedStack GetOutput()
         {
-            return this.Mill.output.items.FirstOrDefault();
+            List<Item> inventory = this.Mill.output.items;
+            return new TrackedItem(inventory.FirstOrDefault(), onEmpty: item => inventory.Remove(item));
         }
 
-        /// <summary>Reset the machine so it's ready to accept a new input.</summary>
-        /// <param name="outputTaken">Whether the current output was taken.</param>
-        public void Reset(bool outputTaken)
-        {
-            if (this.Mill.output.items.Any())
-                this.Mill.output.items.RemoveAt(0);
-        }
-
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="chests">The connected chests.</param>
+        /// <summary>Pull items from the connected pipes.</summary>
+        /// <param name="pipes">The connected IO pipes.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public bool Pull(Chest[] chests)
+        public bool Pull(IPipe[] pipes)
         {
             if (this.InputFull())
                 return false;
 
             // fill input with wheat (262) and beets (284)
             bool anyPulled = false;
-            foreach (Chest chest in chests)
+            foreach (ITrackedStack stack in pipes.GetItems(i => i.Sample.parentSheetIndex == 262 || i.Sample.parentSheetIndex == 284))
             {
-                foreach (Item item in chest.items.ToArray())
-                {
-                    if (this.InputFull())
-                        return anyPulled;
+                // add item
+                bool anyAdded = this.TryAddInput(stack);
+                if (!anyAdded)
+                    continue;
+                anyPulled = true;
 
-                    if (item.parentSheetIndex == 262 || item.parentSheetIndex == 284)
-                    {
-                        this.Mill.input.items.Add(item);
-                        chest.items.Remove(item);
-                        anyPulled = true;
-                    }
-                }
+                // stop if full
+                if (this.InputFull())
+                    return true;
             }
 
             return anyPulled;
@@ -84,10 +84,64 @@ namespace Pathoschild.Stardew.Automate.Machines.Buildings
         /*********
         ** Private methods
         *********/
+        /// <summary>Try to add an item to the input queue, and adjust its stack size accordingly.</summary>
+        /// <param name="item">The item stack to add.</param>
+        /// <returns>Returns whether any items were taken from the stack.</returns>
+        private bool TryAddInput(ITrackedStack item)
+        {
+            // nothing to add
+            if (item.Count <= 0)
+                return false;
+
+            // clean up input bin
+            this.Mill.input.clearNulls();
+
+            // try adding to input
+            int originalSize = item.Count;
+            List<Item> slots = this.Mill.input.items;
+            int maxStackSize = this.MaxStackSize[item.Sample.parentSheetIndex];
+            for (int i = 0; i < Chest.capacity; i++)
+            {
+                // done
+                if (item.Count <= 0)
+                    break;
+
+                // add to existing slot
+                if (slots.Count > i)
+                {
+                    Item slot = slots[i];
+                    if (item.Sample.canStackWith(slot) && slot.Stack < maxStackSize)
+                    {
+                        int maxToAdd = Math.Min(item.Count, maxStackSize - slot.Stack); // the most items we can add to the stack (in theory)
+                        int actualAdded = maxToAdd - slot.addToStack(maxToAdd); // how many items were actually added to the stack
+                        item.Reduce(actualAdded);
+                    }
+                    continue;
+                }
+
+                // add to new slot
+                slots.Add(item.Take(Math.Min(item.Count, maxStackSize)));
+            }
+
+            return item.Count < originalSize;
+        }
+
         /// <summary>Get whether the mill's input bin is full.</summary>
         private bool InputFull()
         {
-            return this.Mill.input.items.Count >= Chest.capacity;
+            var slots = this.Mill.input.items;
+
+            // free slots
+            if (slots.Count < Chest.capacity)
+                return false;
+
+            // free space in stacks
+            foreach (Item slot in slots)
+            {
+                if (slot == null || slot.Stack < this.MaxStackSize[slot.parentSheetIndex])
+                    return false;
+            }
+            return true;
         }
     }
 }

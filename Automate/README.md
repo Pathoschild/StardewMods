@@ -28,6 +28,7 @@ pull ingredients to process out of them. This can be used to automate...
 * [crystalariums](http://stardewvalleywiki.com/Crystalarium);
 * [fruit trees](http://stardewvalleywiki.com/Fruit_Trees);
 * [furnaces](http://stardewvalleywiki.com/Furnace);
+* [hay hoppers](http://stardewvalleywiki.com/Hay_Hopper);
 * [Junimo huts](http://stardewvalleywiki.com/Junimo_Hut);
 * [kegs](http://stardewvalleywiki.com/Keg);
 * [lightning rods](http://stardewvalleywiki.com/Lightning_Rod);
@@ -39,6 +40,7 @@ pull ingredients to process out of them. This can be used to automate...
 * [preserves jars](http://stardewvalleywiki.com/Preserves_Jar);
 * [recycling machines](http://stardewvalleywiki.com/Recycling_Machine);
 * [seed makers](http://stardewvalleywiki.com/Seed_Maker);
+* [silos](http://stardewvalleywiki.com/Silo);
 * [slime egg-presses](http://stardewvalleywiki.com/Slime_Egg);
 * [tappers](http://stardewvalleywiki.com/Tapper);
 * and [worm bins](http://stardewvalleywiki.com/Worm_Bin).

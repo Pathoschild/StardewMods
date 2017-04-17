@@ -1,35 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using StardewValley;
-using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
     /// <summary>A machine instance with metadata.</summary>
-    public class MachineMetadata
+    internal class MachineMetadata
     {
         /*********
         ** Accessors
         *********/
-        /// <summary>The machine instance.</summary>
-        public IMachine Machine { get; }
-
         /// <summary>The location containing the machine.</summary>
         public GameLocation Location { get; }
 
-        /// <summary>The chests connected to the machine.</summary>
-        public Chest[] Connected { get; }
+        /// <summary>The machine instance.</summary>
+        public IMachine Machine { get; }
+
+        /// <summary>The IO pipes connected to the machine.</summary>
+        public IPipe[] Connected { get; }
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="location">The location containing the machine.</param>
-        /// <param name="connected">The chests connected to the machine.</param>
         /// <param name="machine">The machine instance.</param>
-        public MachineMetadata(GameLocation location, IEnumerable<Chest> connected, IMachine machine)
+        /// <param name="location">The location containing the machine.</param>
+        /// <param name="connected">The IO pipes connected to the machine.</param>
+        public MachineMetadata(IMachine machine, GameLocation location, IEnumerable<IPipe> connected)
         {
             this.Location = location;
             this.Machine = machine;

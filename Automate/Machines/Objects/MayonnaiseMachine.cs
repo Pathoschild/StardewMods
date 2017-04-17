@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
-using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Machines.Objects
@@ -16,15 +15,15 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         public MayonnaiseMachine(SObject machine)
             : base(machine) { }
 
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="chests">The connected chests.</param>
+        /// <summary>Pull items from the connected pipes.</summary>
+        /// <param name="pipes">The connected IO pipes.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(Chest[] chests)
+        public override bool Pull(IPipe[] pipes)
         {
             SObject machine = this.Machine;
 
             // void egg => void mayonnaise
-            if (chests.TryConsume(305, 1))
+            if (pipes.TryConsume(305, 1))
             {
                 machine.heldObject = new SObject(Vector2.Zero, 308, null, false, true, false, false);
                 machine.minutesUntilReady = 180;
@@ -32,7 +31,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             }
 
             // duck egg => duck mayonnaise
-            if (chests.TryConsume(442, 1))
+            if (pipes.TryConsume(442, 1))
             {
                 machine.heldObject = new SObject(Vector2.Zero, 307, null, false, true, false, false);
                 machine.minutesUntilReady = 180;
@@ -40,7 +39,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             }
 
             // white/brown egg => normal mayonnaise
-            if (chests.TryConsume(176, 1) || chests.TryConsume(180, 1))
+            if (pipes.TryConsume(176, 1) || pipes.TryConsume(180, 1))
             {
                 machine.heldObject = new SObject(Vector2.Zero, 306, null, false, true, false, false);
                 machine.minutesUntilReady = 180;
@@ -48,7 +47,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             }
 
             // dinosaur or large white/brown egg => gold-quality mayonnaise
-            if (chests.TryConsume(107, 1) || chests.TryConsume(174, 1) || chests.TryConsume(182, 1))
+            if (pipes.TryConsume(107, 1) || pipes.TryConsume(174, 1) || pipes.TryConsume(182, 1))
             {
                 machine.heldObject = new SObject(Vector2.Zero, 306, null, false, true, false, false) { quality = SObject.highQuality };
                 machine.minutesUntilReady = 180;

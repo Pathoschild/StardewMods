@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using StardewValley;
-using StardewValley.Objects;
+﻿using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -11,8 +8,12 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The matching items available to consume.</summary>
-        public ChestItem[] Consumables { get; }
+        /// <summary>The items available to consumable.</summary>
+        public ITrackedStack Consumables { get; }
+
+        /// <summary>A sample item for comparison.</summary>
+        /// <remarks>This should not be a reference to the original stack.</remarks>
+        public Item Sample => this.Consumables.Sample;
 
         /// <summary>The number of items needed for the recipe.</summary>
         public int CountNeeded { get; }
@@ -27,44 +28,23 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="consumables">The matching items available to consume.</param>
         /// <param name="countNeeded">The number of items needed for the recipe.</param>
-        public Requirement(ChestItem[] consumables, int countNeeded)
+        public Requirement(ITrackedStack consumables, int countNeeded)
         {
             this.Consumables = consumables;
             this.CountNeeded = countNeeded;
-            this.IsMet = consumables.Sum(p => p.Item.Stack) >= countNeeded;
+            this.IsMet = consumables.Count >= countNeeded;
         }
 
-        /// <summary>Consume the required items.</summary>
-        public void Consume()
+        /// <summary>Remove the needed number of this item from the stack.</summary>
+        public void Reduce()
         {
-            int countNeeded = this.CountNeeded;
-            foreach (ChestItem chestItem in this.Consumables)
-            {
-                Chest chest = chestItem.Chest;
-                Item item = chestItem.Item;
-
-                // reduce stack
-                int reduceBy = Math.Min(countNeeded, item.Stack);
-                countNeeded -= reduceBy;
-                item.Stack -= reduceBy;
-
-                // remove stack if empty
-                if (item.Stack <= 0)
-                {
-                    chest.items.Remove(item);
-                    chest.clearNulls();
-                }
-
-                // exit if done
-                if (countNeeded <= 0)
-                    return;
-            }
+            this.Consumables.Reduce(this.CountNeeded);
         }
 
-        /// <summary>Get the first matching consumable item.</summary>
-        public Item GetOne()
+        /// <summary>Remove the needed number of this item from the stack and return a new stack matching the count.</summary>
+        public Item Take()
         {
-            return this.Consumables.FirstOrDefault()?.Item.getOne();
+            return this.Consumables.Take(this.CountNeeded);
         }
     }
 }

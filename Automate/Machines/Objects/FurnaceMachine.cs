@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
-using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Machines.Objects
@@ -27,12 +26,12 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             this.Tile = tile;
         }
 
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="chests">The connected chests.</param>
+        /// <summary>Pull items from the connected pipes.</summary>
+        /// <param name="pipes">The connected IO pipes.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(Chest[] chests)
+        public override bool Pull(IPipe[] pipes)
         {
-            if (this.TryPull(chests))
+            if (this.TryPull(pipes))
             {
                 // update furnace sprite
                 this.Machine.initializeLightSource(this.Tile);
@@ -46,55 +45,55 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         /*********
         ** Private methods
         *********/
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="chests">The connected chests.</param>
+        /// <summary>Pull items from the connected pipes.</summary>
+        /// <param name="pipes">The connected pipes.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        private bool TryPull(Chest[] chests)
+        private bool TryPull(IPipe[] pipes)
         {
             SObject furnace = this.Machine;
 
-            if (chests.TryGetIngredient(SObject.coal, 1, out Requirement coal))
+            if (pipes.TryGetIngredient(SObject.coal, 1, out Requirement coal))
             {
                 // iron bar
-                if (chests.TryConsume(SObject.iron, 5))
+                if (pipes.TryConsume(SObject.iron, 5))
                 {
-                    coal.Consume();
+                    coal.Reduce();
                     furnace.heldObject = new SObject(Vector2.Zero, SObject.ironBar, 1);
                     furnace.minutesUntilReady = 120;
                     return true;
                 }
 
                 // gold bar
-                if (chests.TryConsume(SObject.gold, 5))
+                if (pipes.TryConsume(SObject.gold, 5))
                 {
-                    coal.Consume();
+                    coal.Reduce();
                     furnace.heldObject = new SObject(Vector2.Zero, SObject.goldBar, 1);
                     furnace.minutesUntilReady = 300;
                     return true;
                 }
 
                 // iridium bar
-                if (chests.TryConsume(SObject.iridium, 5))
+                if (pipes.TryConsume(SObject.iridium, 5))
                 {
-                    coal.Consume();
+                    coal.Reduce();
                     furnace.heldObject = new SObject(Vector2.Zero, SObject.iridiumBar, 1);
                     furnace.minutesUntilReady = 480;
                     return true;
                 }
 
                 // refined quartz
-                if (chests.TryConsume(SObject.quartzIndex, 1))
+                if (pipes.TryConsume(SObject.quartzIndex, 1))
                 {
-                    coal.Consume();
+                    coal.Reduce();
                     furnace.heldObject = new SObject(Vector2.Zero, 338, "Refined Quartz", false, true, false, false);
                     furnace.minutesUntilReady = 90;
                     return true;
                 }
 
                 // copper bar
-                if (chests.TryConsume(SObject.copper, 5))
+                if (pipes.TryConsume(SObject.copper, 5))
                 {
-                    coal.Consume();
+                    coal.Reduce();
                     furnace.heldObject = new SObject(Vector2.Zero, SObject.copperBar, 1);
                     furnace.minutesUntilReady = 30;
                     return true;
