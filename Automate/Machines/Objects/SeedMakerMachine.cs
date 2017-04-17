@@ -73,7 +73,8 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             {
                 int dataCropID = Convert.ToInt32(entry.Value.Split('/')[3]);
                 int dataSeedID = entry.Key;
-                lookup.Add(dataCropID, dataSeedID);
+                if (!lookup.ContainsKey(dataCropID)) // if multiple crops have the same seed, use the earliest one (which is more likely the vanilla seed)
+                    lookup[dataCropID] = dataSeedID;
             }
 
             return lookup;
