@@ -104,10 +104,17 @@ namespace Pathoschild.Stardew.RotateToolbar
             this.Monitor.InterceptErrors("handling your input", $"handling input '{key}'", () =>
             {
                 if (key.Equals(this.Config.Keyboard.ShiftToNext))
-                    Game1.player.shiftToolbar(true);
+                    this.RotateToolbar(true);
                 else if (key.Equals(this.Config.Keyboard.ShiftToPrevious))
-                    Game1.player.shiftToolbar(false);
+                    this.RotateToolbar(false);
             });
+        }
+
+        /// <summary>Rotate the row shown in the toolbar.</summary>
+        /// <param name="next">Whether to show the next inventory row (else the previous).</param>
+        private void RotateToolbar(bool next)
+        {
+            Game1.player.shiftToolbar(next);
         }
     }
 }
