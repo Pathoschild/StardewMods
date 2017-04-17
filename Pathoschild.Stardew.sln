@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.3
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LookupAnything", "LookupAnything\LookupAnything.csproj", "{2A9C0811-B2D2-474A-A84C-DDEB16206A62}"
 EndProject
@@ -34,9 +34,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automate", "Automate\Automa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Archived", "Archived", "{2463896E-04FC-4BF9-8A34-1B3846D8E26E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RotateToolbar", "RotateToolbar\RotateToolbar.csproj", "{3ED4784C-6EA7-4DBE-8476-4E1FA972FC3D}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Common\Common.projitems*{2a9c0811-b2d2-474a-a84c-ddeb16206a62}*SharedItemsImports = 4
+		Common\Common.projitems*{3ed4784c-6ea7-4dbe-8476-4e1fa972fc3d}*SharedItemsImports = 4
 		Common\Common.projitems*{56fb522e-923d-4582-ad3d-8ec80f09237a}*SharedItemsImports = 4
 		Common\Common.projitems*{866d7b9e-531e-4f83-95ee-b3d7f2642876}*SharedItemsImports = 4
 		Common\Common.projitems*{a72152b0-ab75-44e4-86d8-f6b8b9920b59}*SharedItemsImports = 4
@@ -82,6 +85,10 @@ Global
 		{A72152B0-AB75-44E4-86D8-F6B8B9920B59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A72152B0-AB75-44E4-86D8-F6B8B9920B59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A72152B0-AB75-44E4-86D8-F6B8B9920B59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ED4784C-6EA7-4DBE-8476-4E1FA972FC3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ED4784C-6EA7-4DBE-8476-4E1FA972FC3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ED4784C-6EA7-4DBE-8476-4E1FA972FC3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ED4784C-6EA7-4DBE-8476-4E1FA972FC3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
