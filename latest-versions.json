@@ -1,9 +1,9 @@
 {
   "schema": 1.0,
-  "Automate": "1.1",
+  "Automate": "1.2",
   "ChestsAnywhere": "1.9.1",
   "DebugMode": "1.4.1",
-  "FastAnimations": "1.0",
+  "FastAnimations": "1.1",
   "LookupAnything": "1.12",
   "SkipIntro": "1.5.1"
 }

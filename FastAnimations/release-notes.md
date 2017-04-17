@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.1
-* Fixed background errors during drinking animation.
+* Fixed errors with drinking animation.
 
 ## 1.0
 * Initial version.

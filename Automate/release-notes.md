@@ -1,7 +1,6 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-
 ## 1.2
 * Added support for hay hoppers and silos.
 * Added internal framework for transport pipes.
