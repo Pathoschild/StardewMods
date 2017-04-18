@@ -15,7 +15,7 @@ using SFarmer = StardewValley.Farmer;
 namespace Pathoschild.Stardew.DebugMode
 {
     /// <summary>The mod entry point.</summary>
-    public class ModEntry : Mod
+    public class DebugModeMod : Mod
     {
         /*********
         ** Properties
@@ -26,12 +26,12 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>Whether the built-in debug mode is enabled.</summary>
         private bool DebugMode
         {
-            get { return Game1.debugMode; }
-            set { Game1.debugMode = value; }
+            get => Game1.debugMode;
+            set => Game1.debugMode = value;
         }
 
         /// <summary>A pixel texture that can be stretched and colourised for display.</summary>
-        private readonly Lazy<Texture2D> Pixel = new Lazy<Texture2D>(ModEntry.CreatePixel);
+        private readonly Lazy<Texture2D> Pixel = new Lazy<Texture2D>(DebugModeMod.CreatePixel);
 
         /// <summary>Keyboard keys which are mapped to a destructive action in debug mode. See <see cref="ModConfig.AllowDangerousCommands"/>.</summary>
         private readonly Keys[] DestructiveKeys =

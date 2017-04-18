@@ -8,6 +8,7 @@ documentation and release notes:
 * [Fast Animations](FastAnimations)
 * [Lookup Anything](LookupAnything)
 * [No Debug Mode](NoDebugMode) (obsolete)
+* [Rotate Toolbar](RotateToolbar)
 * [Skip Intro](SkipIntro)
 
 ## Compiling the mods

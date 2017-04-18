@@ -12,7 +12,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.FastAnimations
 {
     /// <summary>The mod entry point.</summary>
-    public class SkipIntroMod : Mod
+    public class FastAnimationsMod : Mod
     {
         /*********
         ** Properties
