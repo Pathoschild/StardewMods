@@ -12,7 +12,7 @@ Compatible with Stardew Valley 1.1+ on Linux, Mac, and Windows.
 
 ## Install
 1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
-2. <s>Install this mod from Nexus mods</s>.
+2. [Install this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/1100).
 3. Run the game using SMAPI.
 
 ## Configure
@@ -28,5 +28,5 @@ setting           | what it affects
 See [release notes](release-notes.md).
 
 ## See also
-* <s>Nexus mod</s>
-* <s>Discussion thread</s>
+* [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1100)
+* [Discussion thread](http://community.playstarbound.com/threads/rotate-toolbar.132264)
