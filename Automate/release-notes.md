@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.3
+* Fixed error when automating loom since 1.2.
+
 ## 1.2
 * Added support for hay hoppers and silos.
 * Added internal framework for transport pipes.
