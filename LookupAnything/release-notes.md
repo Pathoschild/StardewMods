@@ -2,7 +2,7 @@
 
 # Release notes
 
-## 1.13
+## 1.12.1
 * Fixed calendar lookup not working in Stardew Valley 1.2 beta.
 
 ## 1.12
