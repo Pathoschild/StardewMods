@@ -19,7 +19,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         public override ITrackedStack GetOutput()
         {
             SObject machine = this.Machine;
-            return new TrackedItem(machine.heldObject.heldObject, item =>
+            return new TrackedItem(machine.heldObject, item =>
             {
                 machine.heldObject = null;
                 machine.readyForHarvest = false;

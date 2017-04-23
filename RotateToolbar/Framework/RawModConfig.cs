@@ -46,13 +46,13 @@ namespace Pathoschild.Stardew.RotateToolbar.Framework
             {
                 Keyboard = new InputMapConfiguration<Keys>
                 {
-                    ShiftToPrevious = this.TryParse(monitor, this.Keyboard.ShiftToNext, Keys.None),
+                    ShiftToPrevious = this.TryParse(monitor, this.Keyboard.ShiftToPrevious, Keys.None),
                     ShiftToNext = this.TryParse(monitor, this.Keyboard.ShiftToNext, Keys.Tab)
                 },
                 Controller = new InputMapConfiguration<Buttons>
                 {
-                    ShiftToNext = this.TryParse<Buttons>(monitor, this.Controller.ShiftToNext),
-                    ShiftToPrevious = this.TryParse<Buttons>(monitor, this.Controller.ShiftToNext)
+                    ShiftToPrevious = this.TryParse<Buttons>(monitor, this.Controller.ShiftToPrevious),
+                    ShiftToNext = this.TryParse<Buttons>(monitor, this.Controller.ShiftToNext)
                 },
                 CheckForUpdates = this.CheckForUpdates,
             };

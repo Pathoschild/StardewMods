@@ -1,10 +1,10 @@
 {
   "schema": 1.0,
-  "Automate": "1.2",
+  "Automate": "1.2.1",
   "ChestsAnywhere": "1.9.1",
   "DebugMode": "1.4.1",
   "FastAnimations": "1.1",
-  "LookupAnything": "1.12",
-  "RotateToolbar": "1.0",
+  "LookupAnything": "1.12.1",
+  "RotateToolbar": "1.0.1",
   "SkipIntro": "1.5.1"
 }

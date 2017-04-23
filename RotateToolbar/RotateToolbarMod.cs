@@ -29,8 +29,8 @@ namespace Pathoschild.Stardew.RotateToolbar
 
             GameEvents.GameLoaded += this.GameEvents_GameLoaded;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
-            ControlEvents.ControllerButtonPressed += ControlEvents_ControllerButtonPressed;
-            ControlEvents.ControllerTriggerPressed += ControlEvents_ControllerTriggerPressed;
+            ControlEvents.ControllerButtonPressed += this.ControlEvents_ControllerButtonPressed;
+            ControlEvents.ControllerTriggerPressed += this.ControlEvents_ControllerTriggerPressed;
         }
 
 
@@ -103,9 +103,9 @@ namespace Pathoschild.Stardew.RotateToolbar
             // perform bound action
             this.Monitor.InterceptErrors("handling your input", $"handling input '{key}'", () =>
             {
-                if (key.Equals(this.Config.Keyboard.ShiftToNext))
+                if (key.Equals(map.ShiftToNext))
                     this.RotateToolbar(true);
-                else if (key.Equals(this.Config.Keyboard.ShiftToPrevious))
+                else if (key.Equals(map.ShiftToPrevious))
                     this.RotateToolbar(false);
             });
         }
