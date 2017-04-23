@@ -2,6 +2,9 @@
 
 # Release notes
 
+## 1.13
+* Fixed calendar lookup not working in Stardew Valley 1.2 beta.
+
 ## 1.12
 * Updated to SMAPI 1.9.
 * Backported to Stardew Valley 1.11 until 1.2 is released.
