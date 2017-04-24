@@ -3,11 +3,11 @@
   "Author": "Pathoschild",
   "Version": {
     "MajorVersion": 1,
-    "MinorVersion": 1,
+    "MinorVersion": 2,
     "PatchVersion": 0,
     "Build": null
   },
-  "MinimumApiVersion": "1.9",
+  "MinimumApiVersion": "1.10",
   "Description": "Speeds up many animations in the game (configurable via config.json).",
   "UniqueID": "Pathoschild.FastAnimations",
   "EntryDll": "FastAnimations.dll"

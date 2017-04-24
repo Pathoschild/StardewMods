@@ -276,11 +276,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // get target day
                 int selectedDay = -1;
                 {
-#if SDV_1_2
                     List<ClickableTextureComponent> calendarDays = billboard.calendarDays;
-#else
-                    List<ClickableTextureComponent> calendarDays = this.Reflection.GetPrivateValue<List<ClickableTextureComponent>>(billboard, "calendarDays");
-#endif
                     for (int i = 0; i < calendarDays.Count; i++)
                     {
                         if (calendarDays[i].containsPoint((int)cursorPosition.X, (int)cursorPosition.Y))
