@@ -1,6 +1,8 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.13
+* Updated for Stardew Valley 1.2.
 
 ## 1.12.1
 * Fixed calendar lookup not working in Stardew Valley 1.2 beta.
