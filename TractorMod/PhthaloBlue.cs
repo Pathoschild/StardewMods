@@ -51,6 +51,7 @@ namespace PhthaloBlue
         private bool moving;
         private bool magicalConstruction;
         private Dictionary<string, Type> BluePrintToBuildingDictionary;
+        private readonly IMonitor Monitor;
         public GameLocation WherePlayerOpenThisMenu { get; set; } = null;
 
         public BluePrint CurrentBlueprint
@@ -61,13 +62,14 @@ namespace PhthaloBlue
             }
         }
 
-        public PhthaloBlueCarpenterMenu()
+        public PhthaloBlueCarpenterMenu(IMonitor monitor)
         {
+            this.Monitor = monitor;
             if (PhthaloBlueNPC == null)
             {
                 PhthaloBlueNPC = new NPC();
                 PhthaloBlueNPC.name = "PhthaloBlue Corp.";
-                PhthaloBlueNPC.Portrait = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\TractorXNB\\PthaloBlueCorpPortrait\\PhthaloBlueCorp");
+                PhthaloBlueNPC.Portrait = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\PthaloBlueCorpPortrait\\PhthaloBlueCorp");
                 PhthaloBlueNPC.CurrentDialogue = new Stack<Dialogue>();
             }
 
@@ -383,7 +385,7 @@ namespace PhthaloBlue
         {
             if (WherePlayerOpenThisMenu == null)
             {
-                Log.Debug("WherePlayerOpenThisMenu is null");
+                this.Monitor.Log("WherePlayerOpenThisMenu is null");
                 return;
             }
 
@@ -408,7 +410,7 @@ namespace PhthaloBlue
         {
             if (WherePlayerOpenThisMenu == null)
             {
-                Log.Debug("WherePlayerOpenThisMenu is null");
+                this.Monitor.Log("WherePlayerOpenThisMenu is null");
                 return;
             }
 

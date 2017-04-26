@@ -18,6 +18,8 @@ using StardewValley.BellsAndWhistles;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using PhthaloBlue;
+using StardewModdingAPI.Events;
+using SFarmer = StardewValley.Farmer;
 
 namespace TractorMod
 {
@@ -38,7 +40,7 @@ namespace TractorMod
             maxOccupants = 0;
             tilesWide = 4;
             tilesHigh = 2;
-            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\TractorXNB\\TractorHouse");
+            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\TractorHouse");
             daysOfConstructionLeft = 1;
         }
 
@@ -57,7 +59,7 @@ namespace TractorMod
             maxOccupants = 0;
             tilesWide = 4;
             tilesHigh = 2;
-            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\TractorXNB\\Stable");
+            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\Stable");
             daysOfConstructionLeft = 0;
         }
 
@@ -76,7 +78,7 @@ namespace TractorMod
             maxOccupants = 0;
             tilesWide = 4;
             tilesHigh = 2;
-            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\TractorXNB\\Stable");
+            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\Stable");
             daysOfConstructionLeft = 0;
         }
 
@@ -132,7 +134,7 @@ namespace TractorMod
         public Tractor() : base() { }
         public Tractor(int tileX, int tileY) : base(tileX, tileY)
         {
-            this.sprite = new AnimatedSprite(Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\TractorXNB\\tractor"), 0, 32, 32);
+            this.sprite = new AnimatedSprite(Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\tractor"), 0, 32, 32);
             this.sprite.textureUsesFlippedRightForLeft = true;
             this.sprite.loop = true;
             this.faceDirection(3);
@@ -325,50 +327,58 @@ namespace TractorMod
             AllSaves = helper.ReadJsonFile<SaveCollection>("TractorModSave.json");
 
             //delete additional objects when sleep so that they dont get save to the vanilla save file
-            StardewModdingAPI.Events.TimeEvents.OnNewDay += (p, e) =>
-            {
-                //save before destroying
-                if (IsNewDay == false)
-                    SaveModInfo();
-
-                //destroying TractorHouse building
-                for (int i = Game1.getFarm().buildings.Count - 1; i >= 0; i--)
-                    if (Game1.getFarm().buildings[i] is TractorHouse)
-                        Game1.getFarm().destroyStructure(ourFarm.buildings[i]);
-
-                //destroying Tractor
-                foreach (GameLocation GL in Game1.locations)
-                    RemoveEveryCharactersOfType<Tractor>(GL);
-                IsNewDay = true;
-                IsNewTractor = true;
-            };
-            StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += (p, e) =>
-            {
-                IsNewDay = true;
-                IsNewTractor = true;
-            };
+            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
 
             //so that weird shit wouldnt happen
-            StardewModdingAPI.Events.MenuEvents.MenuChanged += (p, e) =>
-            {
-                if (e.NewMenu is PhthaloBlueCarpenterMenu)
-                    PhthaloBlueCarpenterMenu.IsOpen = true;
-                else
-                    PhthaloBlueCarpenterMenu.IsOpen = false;
-            };
-            StardewModdingAPI.Events.MenuEvents.MenuClosed += (p, e) =>
-            {
-                if (e.PriorMenu is PhthaloBlueCarpenterMenu)
-                {
-                    ((PhthaloBlueCarpenterMenu)e.PriorMenu).Hangup();
-                    PhthaloBlueCarpenterMenu.IsOpen = false;
-                }
-            };
+            MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
+            MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
 
-            StardewModdingAPI.Events.GameEvents.UpdateTick += UpdateTickEvent;
+            GameEvents.UpdateTick += this.UpdateTickEvent;
         }
 
-        static void UpdateTickEvent(object sender, EventArgs e)
+        private void SaveEvents_BeforeSave(object sender, EventArgs eventArgs)
+        {
+            //save before destroying
+            if (IsNewDay == false)
+                SaveModInfo();
+
+            //destroying TractorHouse building
+            for (int i = Game1.getFarm().buildings.Count - 1; i >= 0; i--)
+                if (Game1.getFarm().buildings[i] is TractorHouse)
+                    Game1.getFarm().destroyStructure(ourFarm.buildings[i]);
+
+            //destroying Tractor
+            foreach (GameLocation GL in Game1.locations)
+                RemoveEveryCharactersOfType<Tractor>(GL);
+            IsNewDay = true;
+            IsNewTractor = true;
+        }
+
+        private void TimeEvents_AfterDayStarted(object sender, EventArgs eventArgs)
+        {
+            IsNewDay = true;
+            IsNewTractor = true;
+        }
+
+        private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
+        {
+            if (e.NewMenu is PhthaloBlueCarpenterMenu)
+                PhthaloBlueCarpenterMenu.IsOpen = true;
+            else
+                PhthaloBlueCarpenterMenu.IsOpen = false;
+        }
+
+        private void MenuEvents_MenuClosed(object sender, EventArgsClickableMenuClosed e)
+        {
+            if (e.PriorMenu is PhthaloBlueCarpenterMenu)
+            {
+                ((PhthaloBlueCarpenterMenu)e.PriorMenu).Hangup();
+                PhthaloBlueCarpenterMenu.IsOpen = false;
+            }
+        }
+
+        private void UpdateTickEvent(object sender, EventArgs e)
         {
             if (ModConfig == null)
                 return;
@@ -444,7 +454,7 @@ namespace TractorMod
         }
 
         //execute most of the mod thinking here
-        static void DoAction(KeyboardState currentKeyboardState, MouseState currentMouseState)
+        private void DoAction(KeyboardState currentKeyboardState, MouseState currentMouseState)
         {
             if (Game1.currentLocation == null)
                 return;
@@ -471,7 +481,7 @@ namespace TractorMod
                     new Response("Leave", "Hang up")
                 };
 
-                Game1.currentLocation.createQuestionDialogue("Hello, this is PhthaloBlue Corporation. How can I help you?", answerChoices, OpenPhthaloBlueCarpenterMenu);
+                Game1.currentLocation.createQuestionDialogue("Hello, this is PhthaloBlue Corporation. How can I help you?", answerChoices, this.OpenPhthaloBlueCarpenterMenu);
             }
             
             //summon Tractor
@@ -596,10 +606,10 @@ namespace TractorMod
             //create new buff if its not already applied
             if (BuffAlready == false)
             {
-                Buff TractorBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, ModConfig.tractorSpeed, 0, 0, 1, "Tractor Power");
-                TractorBuff.which = buffUniqueID;
-                TractorBuff.millisecondsDuration = 1000;
-                Game1.buffsDisplay.addOtherBuff(TractorBuff);
+                Buff tractorBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, ModConfig.tractorSpeed, 0, 0, 1, "Tractor Power", "Tractor Power");
+                tractorBuff.which = buffUniqueID;
+                tractorBuff.millisecondsDuration = 1000;
+                Game1.buffsDisplay.addOtherBuff(tractorBuff);
                 BuffAlready = true;
             }
             
@@ -696,8 +706,8 @@ namespace TractorMod
                     {
                         if (anObject.isForage(Game1.currentLocation))
                         {
-                            bool gatherer = CheckFarmerProfession(Game1.player, Farmer.gatherer);
-                            bool botanist = CheckFarmerProfession(Game1.player, Farmer.botanist);
+                            bool gatherer = CheckFarmerProfession(Game1.player, SFarmer.gatherer);
+                            bool botanist = CheckFarmerProfession(Game1.player, SFarmer.botanist);
                             if (botanist)
                                 anObject.quality = 4;
                             if (gatherer)
@@ -745,8 +755,8 @@ namespace TractorMod
                         if (hoedirtTile.crop.whichForageCrop == 1) //spring onion
                         {
                             StardewValley.Object anObject = new StardewValley.Object(399, 1);
-                            bool gatherer = CheckFarmerProfession(Game1.player, Farmer.gatherer);
-                            bool botanist = CheckFarmerProfession(Game1.player, Farmer.botanist);
+                            bool gatherer = CheckFarmerProfession(Game1.player, SFarmer.gatherer);
+                            bool botanist = CheckFarmerProfession(Game1.player, SFarmer.botanist);
                             if (botanist)
                             {
                                 anObject.quality = 4;
@@ -1030,7 +1040,7 @@ namespace TractorMod
             return grid;
         }
 
-        static int FindEmptySlotInFarmerInventory(Farmer input)
+        static int FindEmptySlotInFarmerInventory(SFarmer input)
         {
             for(int i = 0; i < input.items.Count; i++)
             {
@@ -1040,7 +1050,7 @@ namespace TractorMod
             return -1;
         }
 
-        static int FindSlotWithSameItemInFarmerInventory(Farmer input, Item inputItem)
+        static int FindSlotWithSameItemInFarmerInventory(SFarmer input, Item inputItem)
         {
             for (int i = 0; i < input.items.Count; i++)
             {
@@ -1056,7 +1066,7 @@ namespace TractorMod
             return -1;
         }
 
-        static int FindSlotForInputItemInFarmerInventory(Farmer input, Item inputItem)
+        static int FindSlotForInputItemInFarmerInventory(SFarmer input, Item inputItem)
         {
             int slot = FindSlotWithSameItemInFarmerInventory(input, inputItem);
             if (slot == -1)
@@ -1066,7 +1076,7 @@ namespace TractorMod
             return slot;
         }
 
-        static bool CheckFarmerProfession(Farmer farmerInput, int professionIndex)
+        static bool CheckFarmerProfession(SFarmer farmerInput, int professionIndex)
         {
             foreach(int i in farmerInput.professions)
             {
@@ -1139,14 +1149,14 @@ namespace TractorMod
             return false;
         }
         
-        static void OpenPhthaloBlueCarpenterMenu(Farmer who, string whichAnswer)
+        private void OpenPhthaloBlueCarpenterMenu(SFarmer who, string whichAnswer)
         {
             switch (whichAnswer)
             {
                 case "Construct":
                     BluePrint TractorBP = new BluePrint("Garage");
                     TractorBP.itemsRequired.Clear();
-                    TractorBP.texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\TractorXNB\\TractorHouse");
+                    TractorBP.texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\TractorHouse");
                     TractorBP.humanDoor = new Point(-1, -1);
                     TractorBP.animalDoor = new Point(-2, -1);
                     TractorBP.mapToWarpTo = "null";
@@ -1162,11 +1172,11 @@ namespace TractorMod
                     TractorBP.namesOfOkayBuildingLocations.Clear();
                     TractorBP.namesOfOkayBuildingLocations.Add("Farm");
                     TractorBP.magical = true;
-                    Game1.activeClickableMenu = new PhthaloBlueCarpenterMenu()  .AddBluePrint<TractorHouse>(TractorBP);
+                    Game1.activeClickableMenu = new PhthaloBlueCarpenterMenu(this.Monitor)  .AddBluePrint<TractorHouse>(TractorBP);
                     ((PhthaloBlueCarpenterMenu)Game1.activeClickableMenu).WherePlayerOpenThisMenu = Game1.currentLocation;
                     break;
                 case "Leave":
-                    new PhthaloBlueCarpenterMenu().Hangup();
+                    new PhthaloBlueCarpenterMenu(this.Monitor).Hangup();
                     break;
             }
         }
