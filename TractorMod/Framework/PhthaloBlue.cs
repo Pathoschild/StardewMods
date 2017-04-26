@@ -10,7 +10,7 @@ using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Menus;
 
-namespace PhthaloBlue
+namespace TractorMod.Framework
 {
     public class PhthaloBlueCarpenterMenu : IClickableMenu
     {
