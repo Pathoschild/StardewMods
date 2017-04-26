@@ -1,22 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StardewValley;
-using StardewValley.Characters;
-using StardewModdingAPI;
-using System.IO;
-using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewValley.Tools;
-using StardewValley.Locations;
-using StardewValley.Buildings;
-using StardewValley.Menus;
+using Microsoft.Xna.Framework.Input;
+using StardewModdingAPI;
+using StardewValley;
 using StardewValley.BellsAndWhistles;
-using StardewValley.Objects;
-using StardewValley.TerrainFeatures;
+using StardewValley.Buildings;
+using StardewValley.Locations;
+using StardewValley.Menus;
 
 namespace PhthaloBlue
 {

@@ -1,24 +1,16 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StardewValley;
-using StardewValley.Characters;
-using StardewModdingAPI;
-using System.IO;
-using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewValley.Tools;
-using StardewValley.Locations;
-using StardewValley.Buildings;
-using StardewValley.Menus;
-using StardewValley.BellsAndWhistles;
-using StardewValley.Objects;
-using StardewValley.TerrainFeatures;
+using Microsoft.Xna.Framework.Input;
 using PhthaloBlue;
+using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewValley;
+using StardewValley.Buildings;
+using StardewValley.Characters;
+using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
 using SFarmer = StardewValley.Farmer;
 
 namespace TractorMod
@@ -147,7 +139,7 @@ namespace TractorMod
             return boundingBox;
         }
     }
-    
+
     public class SaveCollection
     {
         public class Save
@@ -197,7 +189,7 @@ namespace TractorMod
             return FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
         }
     }
-    
+
     public class TractorConfig
     {
         public class ToolConfig
@@ -263,7 +255,7 @@ namespace TractorMod
         static Vector2 tractorSpawnLocation = new Vector2(70, 13);
 
         public static TractorConfig ModConfig { get; set; }
-        
+
         static Tractor ATractor = null;
         static IModHelper TheHelper = null;
         static SaveCollection AllSaves;
@@ -308,7 +300,7 @@ namespace TractorMod
                 foreach (Vector2 THS in currentSave.TractorHouse)
                 {
                     Game1.getFarm().buildStructure(new TractorHouse().SetDaysOfConstructionLeft(0), THS, false, Game1.player);
-                    if(IsNewTractor)
+                    if (IsNewTractor)
                         SpawnTractor();
                 }
             }
@@ -316,7 +308,7 @@ namespace TractorMod
 
         static bool IsNewDay = false;
         static bool IsNewTractor = false;
-        
+
         //SMAPI starts here
         public override void Entry(IModHelper helper)
         {
@@ -418,9 +410,9 @@ namespace TractorMod
             }
 
             //spawn tractor
-            foreach(Building building in Game1.getFarm().buildings)
+            foreach (Building building in Game1.getFarm().buildings)
             {
-                if(building is TractorHouse)
+                if (building is TractorHouse)
                 {
                     if (building.daysOfConstructionLeft > 0)
                         continue;
@@ -483,7 +475,7 @@ namespace TractorMod
 
                 Game1.currentLocation.createQuestionDialogue("Hello, this is PhthaloBlue Corporation. How can I help you?", answerChoices, this.OpenPhthaloBlueCarpenterMenu);
             }
-            
+
             //summon Tractor
             if (currentKeyboardState.IsKeyDown(ModConfig.tractorKey))
             {
@@ -493,16 +485,16 @@ namespace TractorMod
                     SaveCollection.Save currentSave = AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
                     if (currentSave.TractorHouse.Count > 0)
                         SpawnTractor(false);
-                       
+
                 }
-                if(ATractor != null)
+                if (ATractor != null)
                     Game1.warpCharacter((NPC)ATractor, Game1.currentLocation.name, tile, false, true);
             }
 
             //summon Horse
             if (currentKeyboardState.IsKeyDown(ModConfig.horseKey))
             {
-                foreach(GameLocation GL in Game1.locations)
+                foreach (GameLocation GL in Game1.locations)
                 {
                     foreach (NPC character in GL.characters)
                     {
@@ -572,10 +564,10 @@ namespace TractorMod
                     }
                     break;
             }
-            
-            if(ATractor != null)
+
+            if (ATractor != null)
             {
-                if(ATractor.rider == Game1.player)
+                if (ATractor.rider == Game1.player)
                 {
                     TractorOn = true;
                 }
@@ -612,7 +604,7 @@ namespace TractorMod
                 Game1.buffsDisplay.addOtherBuff(tractorBuff);
                 BuffAlready = true;
             }
-            
+
 
             //if Tractor Mode (buff) is ON
             if (Game1.player.CurrentTool == null)
@@ -695,7 +687,7 @@ namespace TractorMod
                 return;
             int effectRadius = ConfigForCurrentTool.effectRadius;
             List<Vector2> affectedTileGrid = MakeVector2TileGrid(Game1.player.getTileLocation(), effectRadius);
-            
+
             //harvesting objects
             foreach (Vector2 tile in affectedTileGrid)
             {
@@ -729,7 +721,7 @@ namespace TractorMod
                     if (anObject.name.ToLower().Contains("weed"))
                     {
                         Game1.createObjectDebris(771, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); //fiber
-                        if(new Random().Next(0,10) < 1) //10% mixed seeds
+                        if (new Random().Next(0, 10) < 1) //10% mixed seeds
                             Game1.createObjectDebris(770, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); //fiber
                         Game1.currentLocation.removeObject(tile, false);
                         continue;
@@ -784,7 +776,7 @@ namespace TractorMod
                                 for (int i = 0; i < seedDrop; i++)
                                     Game1.createObjectDebris(431, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); //spawn sunflower seeds
                             }
-                            
+
                             if (hoedirtTile.crop.regrowAfterHarvest == -1)
                             {
                                 hoedirtTile.destroyCrop(tile, true);
@@ -802,7 +794,7 @@ namespace TractorMod
                         tree.shake(tile, false);
                         continue;
                     }
-                    
+
                     //will test once I have giantcrop
                     /*
                     if(Game1.currentLocation.terrainFeatures[tile] is GiantCrop)
@@ -812,8 +804,8 @@ namespace TractorMod
                         continue;
                     }
                     */
-                    
-                    if(Game1.currentLocation.terrainFeatures[tile] is Grass)
+
+                    if (Game1.currentLocation.terrainFeatures[tile] is Grass)
                     {
                         Grass grass = (Grass)Game1.currentLocation.terrainFeatures[tile];
                         grass = null;
@@ -955,15 +947,15 @@ namespace TractorMod
         {
             List<Vector2> grid = new List<Vector2>();
 
-            for (int i = 0; i < 2*size+1; i++)
+            for (int i = 0; i < 2 * size + 1; i++)
             {
                 for (int j = 0; j < 2 * size + 1; j++)
                 {
-                    Vector2 newVec = new Vector2(origin.X - size* Game1.tileSize,
-                                                origin.Y - size* Game1.tileSize);
+                    Vector2 newVec = new Vector2(origin.X - size * Game1.tileSize,
+                                                origin.Y - size * Game1.tileSize);
 
-                    newVec.X += (float) i* Game1.tileSize; 
-                    newVec.Y += (float) j* Game1.tileSize;
+                    newVec.X += (float)i * Game1.tileSize;
+                    newVec.Y += (float)j * Game1.tileSize;
 
                     grid.Add(newVec);
                 }
@@ -1042,7 +1034,7 @@ namespace TractorMod
 
         static int FindEmptySlotInFarmerInventory(SFarmer input)
         {
-            for(int i = 0; i < input.items.Count; i++)
+            for (int i = 0; i < input.items.Count; i++)
             {
                 if (input.items[i] == null)
                     return i;
@@ -1058,7 +1050,7 @@ namespace TractorMod
                     continue;
                 if (input.items[i].getRemainingStackSpace() <= 0)
                     continue;
-                if(input.items[i].canStackWith(inputItem))
+                if (input.items[i].canStackWith(inputItem))
                 {
                     return i;
                 }
@@ -1078,10 +1070,10 @@ namespace TractorMod
 
         static bool CheckFarmerProfession(SFarmer farmerInput, int professionIndex)
         {
-            foreach(int i in farmerInput.professions)
+            foreach (int i in farmerInput.professions)
             {
                 if (i == professionIndex)
-                    return true; 
+                    return true;
             }
             return false;
         }
@@ -1089,7 +1081,7 @@ namespace TractorMod
         static List<Vector2> RemoveTileWithResourceClumpType(int ResourceClumpIndex, List<Vector2> input)
         {
             List<Vector2> output = new List<Vector2>();
-            foreach(Vector2 tile in input)
+            foreach (Vector2 tile in input)
             {
                 if (CheckIfTileBelongToResourceClump(ResourceClumpIndex, tile))
                     continue;
@@ -1148,7 +1140,7 @@ namespace TractorMod
 
             return false;
         }
-        
+
         private void OpenPhthaloBlueCarpenterMenu(SFarmer who, string whichAnswer)
         {
             switch (whichAnswer)
@@ -1172,7 +1164,7 @@ namespace TractorMod
                     TractorBP.namesOfOkayBuildingLocations.Clear();
                     TractorBP.namesOfOkayBuildingLocations.Add("Farm");
                     TractorBP.magical = true;
-                    Game1.activeClickableMenu = new PhthaloBlueCarpenterMenu(this.Monitor)  .AddBluePrint<TractorHouse>(TractorBP);
+                    Game1.activeClickableMenu = new PhthaloBlueCarpenterMenu(this.Monitor).AddBluePrint<TractorHouse>(TractorBP);
                     ((PhthaloBlueCarpenterMenu)Game1.activeClickableMenu).WherePlayerOpenThisMenu = Game1.currentLocation;
                     break;
                 case "Leave":
