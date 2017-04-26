@@ -6,13 +6,13 @@
 This mod adds a **Garage** building which provides **Tractor** to help with your farm works.  
 **Tractor** allows players to quickly till dirt, sow seeds, fertilize soil, and water crop by simply walking over map tiles.  
 
-### Latest Version: [v.3.1.1](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
-#### Change Log **v.3.1.1**:
-+ **Fix** being able to Call while another menu is open causing crash.
-+ **Fix** Hang-up dialogue not displaying after closing PhthaloBlue Corp's building menu.
-+ **Fix** Tractor spawning on Garage's under-construction area.
-+ **Fix** tool quality turning iridium quality after using Tractor.
-+ **Fix** Tractor getting stuck when harvesting hand-harvested crops.  
+### Latest Version: [v.3.2](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+#### Change Log **v.3.2**, author [**Pathoschild**](https://github.com/Pathoschild):
++ Updates the code for Stardew Valley 1.2 and SMAPI 1.10.
++ Adds the missing asset files from the release package.
++ Adds the mod build package.
++ Adds a build task to automatically package the mod into the Mods folder.
++ Standardises the .gitignore and removes build output from source control.
 
 #### Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 
