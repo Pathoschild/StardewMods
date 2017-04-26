@@ -1,15 +1,13 @@
 ﻿{
-	"Name": "TractorMod",
-	"Authour": "PhthaloBlue",
-	"Version":
-	{
-		"MajorVersion": 3,
-		"MinorVersion": 1,
-		"PatchVersion": 1,
-		"Build": ""
-	},
-	"UniqueID": "BlueMod_TractorMod",
-	"Description": "Auto hoe and water tiles, also sow seeds and fertilize tiles.",
-	"PerSaveConfigs": false,
-	"EntryDll":  "TractorMod.dll"
+  "Name": "TractorMod",
+  "Author": "PhthaloBlue",
+  "Version": {
+    "MajorVersion": 3,
+    "MinorVersion": 1,
+    "PatchVersion": 1,
+    "Build": null
+  },
+  "UniqueID": "PhthaloBlue.TractorMod",
+  "Description": "Adds a tractor you can buy to quickly hoe, fertilise, seed, and water tiles.",
+  "EntryDll": "TractorMod.dll"
 }
