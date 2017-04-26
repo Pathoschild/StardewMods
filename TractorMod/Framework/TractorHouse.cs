@@ -7,6 +7,9 @@ namespace TractorMod.Framework
 {
     public class TractorHouse : Building
     {
+        /*********
+        ** Public methods
+        *********/
         public TractorHouse() : base()
         {
             buildingType = "Tractor House";

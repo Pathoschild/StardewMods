@@ -2,45 +2,61 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TractorMod.Framework
 {
+    public class ToolConfig
+    {
+        /*********
+        ** Properties
+        *********/
+        private int activeCount = 0;
+
+
+        /*********
+        ** Accessors
+        *********/
+        public string name { get; set; } = "";
+        public int minLevel { get; set; } = 0;
+        public int effectRadius { get; set; } = 1;
+        public int activeEveryTickAmount { get; set; } = 1;
+
+
+        /*********
+        ** Public methods
+        *********/
+        public ToolConfig() { }
+
+        public ToolConfig(string nameInput)
+        {
+            name = nameInput;
+        }
+
+        public ToolConfig(string nameInput, int minLevelInput, int radiusInput, int activeEveryTickAmountInput)
+        {
+            name = nameInput;
+            minLevel = minLevelInput;
+            effectRadius = radiusInput;
+            if (activeEveryTickAmountInput <= 0)
+                activeEveryTickAmount = 1;
+            else
+                activeEveryTickAmount = activeEveryTickAmountInput;
+        }
+
+        public void incrementActiveCount()
+        {
+            activeCount++;
+            activeCount %= activeEveryTickAmount;
+        }
+
+        public bool canToolBeActive()
+        {
+            return (activeCount == 0);
+        }
+    }
+
     public class TractorConfig
     {
-        public class ToolConfig
-        {
-            public string name { get; set; } = "";
-            public int minLevel { get; set; } = 0;
-            public int effectRadius { get; set; } = 1;
-            public int activeEveryTickAmount { get; set; } = 1;
-            private int activeCount = 0;
-
-            public ToolConfig() { }
-
-            public ToolConfig(string nameInput)
-            {
-                name = nameInput;
-            }
-
-            public ToolConfig(string nameInput, int minLevelInput, int radiusInput, int activeEveryTickAmountInput)
-            {
-                name = nameInput;
-                minLevel = minLevelInput;
-                effectRadius = radiusInput;
-                if (activeEveryTickAmountInput <= 0)
-                    activeEveryTickAmount = 1;
-                else
-                    activeEveryTickAmount = activeEveryTickAmountInput;
-            }
-
-            public void incrementActiveCount()
-            {
-                activeCount++;
-                activeCount %= activeEveryTickAmount;
-            }
-
-            public bool canToolBeActive()
-            {
-                return (activeCount == 0);
-            }
-        }
+        /*********
+        ** Accessors
+        *********/
         public string info1 = "Add tool with exact name you would like to use with Tractor Mode.";
         public string info2 = "Also custom minLevel and effective radius for each tool.";
         public string info3 = "Ingame tools included: Pickaxe, Axe, Hoe, Watering Can.";

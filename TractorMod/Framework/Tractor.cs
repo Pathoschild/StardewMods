@@ -7,7 +7,11 @@ namespace TractorMod.Framework
 {
     public class Tractor : Horse
     {
+        /*********
+        ** Public methods
+        *********/
         public Tractor() : base() { }
+
         public Tractor(int tileX, int tileY) : base(tileX, tileY)
         {
             this.sprite = new AnimatedSprite(Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\tractor"), 0, 32, 32);
@@ -15,6 +19,7 @@ namespace TractorMod.Framework
             this.sprite.loop = true;
             this.faceDirection(3);
         }
+
         public override Rectangle GetBoundingBox()
         {
             Rectangle boundingBox = base.GetBoundingBox();
