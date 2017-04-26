@@ -51,6 +51,7 @@ namespace PhthaloBlue
         private bool moving;
         private bool magicalConstruction;
         private Dictionary<string, Type> BluePrintToBuildingDictionary;
+        private readonly IMonitor Monitor;
         public GameLocation WherePlayerOpenThisMenu { get; set; } = null;
 
         public BluePrint CurrentBlueprint
@@ -61,8 +62,9 @@ namespace PhthaloBlue
             }
         }
 
-        public PhthaloBlueCarpenterMenu()
+        public PhthaloBlueCarpenterMenu(IMonitor monitor)
         {
+            this.Monitor = monitor;
             if (PhthaloBlueNPC == null)
             {
                 PhthaloBlueNPC = new NPC();
@@ -383,7 +385,7 @@ namespace PhthaloBlue
         {
             if (WherePlayerOpenThisMenu == null)
             {
-                Log.Debug("WherePlayerOpenThisMenu is null");
+                this.Monitor.Log("WherePlayerOpenThisMenu is null");
                 return;
             }
 
@@ -408,7 +410,7 @@ namespace PhthaloBlue
         {
             if (WherePlayerOpenThisMenu == null)
             {
-                Log.Debug("WherePlayerOpenThisMenu is null");
+                this.Monitor.Log("WherePlayerOpenThisMenu is null");
                 return;
             }
 

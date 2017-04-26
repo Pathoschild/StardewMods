@@ -327,8 +327,8 @@ namespace TractorMod
             AllSaves = helper.ReadJsonFile<SaveCollection>("TractorModSave.json");
 
             //delete additional objects when sleep so that they dont get save to the vanilla save file
-            TimeEvents.OnNewDay += this.TimeEvents_OnNewDay;
-            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
+            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
 
             //so that weird shit wouldnt happen
             MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
@@ -337,7 +337,7 @@ namespace TractorMod
             GameEvents.UpdateTick += this.UpdateTickEvent;
         }
 
-        private void TimeEvents_OnNewDay(object sender, EventArgsNewDay e)
+        private void SaveEvents_BeforeSave(object sender, EventArgs eventArgs)
         {
             //save before destroying
             if (IsNewDay == false)
@@ -355,7 +355,7 @@ namespace TractorMod
             IsNewTractor = true;
         }
 
-        private void TimeEvents_DayOfMonthChanged(object sender, EventArgsIntChanged e)
+        private void TimeEvents_AfterDayStarted(object sender, EventArgs eventArgs)
         {
             IsNewDay = true;
             IsNewTractor = true;
@@ -1172,11 +1172,11 @@ namespace TractorMod
                     TractorBP.namesOfOkayBuildingLocations.Clear();
                     TractorBP.namesOfOkayBuildingLocations.Add("Farm");
                     TractorBP.magical = true;
-                    Game1.activeClickableMenu = new PhthaloBlueCarpenterMenu()  .AddBluePrint<TractorHouse>(TractorBP);
+                    Game1.activeClickableMenu = new PhthaloBlueCarpenterMenu(this.Monitor)  .AddBluePrint<TractorHouse>(TractorBP);
                     ((PhthaloBlueCarpenterMenu)Game1.activeClickableMenu).WherePlayerOpenThisMenu = Game1.currentLocation;
                     break;
                 case "Leave":
-                    new PhthaloBlueCarpenterMenu().Hangup();
+                    new PhthaloBlueCarpenterMenu(this.Monitor).Hangup();
                     break;
             }
         }
