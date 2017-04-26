@@ -18,6 +18,7 @@ using StardewValley.BellsAndWhistles;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using PhthaloBlue;
+using StardewModdingAPI.Events;
 using SFarmer = StardewValley.Farmer;
 
 namespace TractorMod
@@ -326,50 +327,58 @@ namespace TractorMod
             AllSaves = helper.ReadJsonFile<SaveCollection>("TractorModSave.json");
 
             //delete additional objects when sleep so that they dont get save to the vanilla save file
-            StardewModdingAPI.Events.TimeEvents.OnNewDay += (p, e) =>
-            {
-                //save before destroying
-                if (IsNewDay == false)
-                    SaveModInfo();
-
-                //destroying TractorHouse building
-                for (int i = Game1.getFarm().buildings.Count - 1; i >= 0; i--)
-                    if (Game1.getFarm().buildings[i] is TractorHouse)
-                        Game1.getFarm().destroyStructure(ourFarm.buildings[i]);
-
-                //destroying Tractor
-                foreach (GameLocation GL in Game1.locations)
-                    RemoveEveryCharactersOfType<Tractor>(GL);
-                IsNewDay = true;
-                IsNewTractor = true;
-            };
-            StardewModdingAPI.Events.TimeEvents.DayOfMonthChanged += (p, e) =>
-            {
-                IsNewDay = true;
-                IsNewTractor = true;
-            };
+            TimeEvents.OnNewDay += this.TimeEvents_OnNewDay;
+            TimeEvents.DayOfMonthChanged += this.TimeEvents_DayOfMonthChanged;
 
             //so that weird shit wouldnt happen
-            StardewModdingAPI.Events.MenuEvents.MenuChanged += (p, e) =>
-            {
-                if (e.NewMenu is PhthaloBlueCarpenterMenu)
-                    PhthaloBlueCarpenterMenu.IsOpen = true;
-                else
-                    PhthaloBlueCarpenterMenu.IsOpen = false;
-            };
-            StardewModdingAPI.Events.MenuEvents.MenuClosed += (p, e) =>
-            {
-                if (e.PriorMenu is PhthaloBlueCarpenterMenu)
-                {
-                    ((PhthaloBlueCarpenterMenu)e.PriorMenu).Hangup();
-                    PhthaloBlueCarpenterMenu.IsOpen = false;
-                }
-            };
+            MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
+            MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
 
-            StardewModdingAPI.Events.GameEvents.UpdateTick += UpdateTickEvent;
+            GameEvents.UpdateTick += this.UpdateTickEvent;
         }
 
-        static void UpdateTickEvent(object sender, EventArgs e)
+        private void TimeEvents_OnNewDay(object sender, EventArgsNewDay e)
+        {
+            //save before destroying
+            if (IsNewDay == false)
+                SaveModInfo();
+
+            //destroying TractorHouse building
+            for (int i = Game1.getFarm().buildings.Count - 1; i >= 0; i--)
+                if (Game1.getFarm().buildings[i] is TractorHouse)
+                    Game1.getFarm().destroyStructure(ourFarm.buildings[i]);
+
+            //destroying Tractor
+            foreach (GameLocation GL in Game1.locations)
+                RemoveEveryCharactersOfType<Tractor>(GL);
+            IsNewDay = true;
+            IsNewTractor = true;
+        }
+
+        private void TimeEvents_DayOfMonthChanged(object sender, EventArgsIntChanged e)
+        {
+            IsNewDay = true;
+            IsNewTractor = true;
+        }
+
+        private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
+        {
+            if (e.NewMenu is PhthaloBlueCarpenterMenu)
+                PhthaloBlueCarpenterMenu.IsOpen = true;
+            else
+                PhthaloBlueCarpenterMenu.IsOpen = false;
+        }
+
+        private void MenuEvents_MenuClosed(object sender, EventArgsClickableMenuClosed e)
+        {
+            if (e.PriorMenu is PhthaloBlueCarpenterMenu)
+            {
+                ((PhthaloBlueCarpenterMenu)e.PriorMenu).Hangup();
+                PhthaloBlueCarpenterMenu.IsOpen = false;
+            }
+        }
+
+        private void UpdateTickEvent(object sender, EventArgs e)
         {
             if (ModConfig == null)
                 return;
@@ -445,7 +454,7 @@ namespace TractorMod
         }
 
         //execute most of the mod thinking here
-        static void DoAction(KeyboardState currentKeyboardState, MouseState currentMouseState)
+        private void DoAction(KeyboardState currentKeyboardState, MouseState currentMouseState)
         {
             if (Game1.currentLocation == null)
                 return;
@@ -472,7 +481,7 @@ namespace TractorMod
                     new Response("Leave", "Hang up")
                 };
 
-                Game1.currentLocation.createQuestionDialogue("Hello, this is PhthaloBlue Corporation. How can I help you?", answerChoices, OpenPhthaloBlueCarpenterMenu);
+                Game1.currentLocation.createQuestionDialogue("Hello, this is PhthaloBlue Corporation. How can I help you?", answerChoices, this.OpenPhthaloBlueCarpenterMenu);
             }
             
             //summon Tractor
@@ -1140,7 +1149,7 @@ namespace TractorMod
             return false;
         }
         
-        static void OpenPhthaloBlueCarpenterMenu(SFarmer who, string whichAnswer)
+        private void OpenPhthaloBlueCarpenterMenu(SFarmer who, string whichAnswer)
         {
             switch (whichAnswer)
             {
