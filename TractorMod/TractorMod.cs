@@ -38,7 +38,7 @@ namespace TractorMod
             maxOccupants = 0;
             tilesWide = 4;
             tilesHigh = 2;
-            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\TractorXNB\\TractorHouse");
+            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\TractorHouse");
             daysOfConstructionLeft = 1;
         }
 
@@ -57,7 +57,7 @@ namespace TractorMod
             maxOccupants = 0;
             tilesWide = 4;
             tilesHigh = 2;
-            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\TractorXNB\\Stable");
+            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\Stable");
             daysOfConstructionLeft = 0;
         }
 
@@ -76,7 +76,7 @@ namespace TractorMod
             maxOccupants = 0;
             tilesWide = 4;
             tilesHigh = 2;
-            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\TractorXNB\\Stable");
+            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\Stable");
             daysOfConstructionLeft = 0;
         }
 
@@ -132,7 +132,7 @@ namespace TractorMod
         public Tractor() : base() { }
         public Tractor(int tileX, int tileY) : base(tileX, tileY)
         {
-            this.sprite = new AnimatedSprite(Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\TractorXNB\\tractor"), 0, 32, 32);
+            this.sprite = new AnimatedSprite(Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\tractor"), 0, 32, 32);
             this.sprite.textureUsesFlippedRightForLeft = true;
             this.sprite.loop = true;
             this.faceDirection(3);
@@ -1146,7 +1146,7 @@ namespace TractorMod
                 case "Construct":
                     BluePrint TractorBP = new BluePrint("Garage");
                     TractorBP.itemsRequired.Clear();
-                    TractorBP.texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\TractorXNB\\TractorHouse");
+                    TractorBP.texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\TractorHouse");
                     TractorBP.humanDoor = new Point(-1, -1);
                     TractorBP.animalDoor = new Point(-2, -1);
                     TractorBP.mapToWarpTo = "null";

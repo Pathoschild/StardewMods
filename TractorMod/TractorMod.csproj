@@ -39,6 +39,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\PthaloBlueCorpPortrait\PhthaloBlueCorp.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="assets\Stable.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="assets\tractor.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="assets\TractorHouse.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="assets\Well.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -53,12 +68,9 @@
     <Error Condition="!Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.1.5.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Pathoschild.Stardew.ModBuildConfig.1.5.0\build\Pathoschild.Stardew.ModBuildConfig.targets'))" />
   </Target>
   <Target Name="AfterBuild">
-    <PropertyGroup>
-      <ModPath>$(GamePath)\Mods\$(TargetName)</ModPath>
-    </PropertyGroup>
-    <Copy SourceFiles="$(TargetDir)\$(TargetName).dll" DestinationFolder="$(ModPath)" />
-    <Copy SourceFiles="$(TargetDir)\$(TargetName).pdb" DestinationFolder="$(ModPath)" Condition="Exists('$(TargetDir)\$(TargetName).pdb')" />
-    <Copy SourceFiles="$(TargetDir)\$(TargetName).dll.mdb" DestinationFolder="$(ModPath)" Condition="Exists('$(TargetDir)\$(TargetName).dll.mdb')" />
-    <Copy SourceFiles="$(ProjectDir)manifest.json" DestinationFolder="$(ModPath)" />
+    <ItemGroup>
+      <ModFiles Include="$(TargetDir)\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(ModFiles)" DestinationFolder="$(GamePath)\Mods\$(TargetName)\%(RecursiveDir)" SkipUnchangedFiles="false" />
   </Target>
 </Project>

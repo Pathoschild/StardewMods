@@ -67,7 +67,7 @@ namespace PhthaloBlue
             {
                 PhthaloBlueNPC = new NPC();
                 PhthaloBlueNPC.name = "PhthaloBlue Corp.";
-                PhthaloBlueNPC.Portrait = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\TractorXNB\\PthaloBlueCorpPortrait\\PhthaloBlueCorp");
+                PhthaloBlueNPC.Portrait = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\PthaloBlueCorpPortrait\\PhthaloBlueCorp");
                 PhthaloBlueNPC.CurrentDialogue = new Stack<Dialogue>();
             }
 
