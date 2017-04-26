@@ -18,6 +18,7 @@ using StardewValley.BellsAndWhistles;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using PhthaloBlue;
+using SFarmer = StardewValley.Farmer;
 
 namespace TractorMod
 {
@@ -596,10 +597,10 @@ namespace TractorMod
             //create new buff if its not already applied
             if (BuffAlready == false)
             {
-                Buff TractorBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, ModConfig.tractorSpeed, 0, 0, 1, "Tractor Power");
-                TractorBuff.which = buffUniqueID;
-                TractorBuff.millisecondsDuration = 1000;
-                Game1.buffsDisplay.addOtherBuff(TractorBuff);
+                Buff tractorBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, ModConfig.tractorSpeed, 0, 0, 1, "Tractor Power", "Tractor Power");
+                tractorBuff.which = buffUniqueID;
+                tractorBuff.millisecondsDuration = 1000;
+                Game1.buffsDisplay.addOtherBuff(tractorBuff);
                 BuffAlready = true;
             }
             
@@ -696,8 +697,8 @@ namespace TractorMod
                     {
                         if (anObject.isForage(Game1.currentLocation))
                         {
-                            bool gatherer = CheckFarmerProfession(Game1.player, Farmer.gatherer);
-                            bool botanist = CheckFarmerProfession(Game1.player, Farmer.botanist);
+                            bool gatherer = CheckFarmerProfession(Game1.player, SFarmer.gatherer);
+                            bool botanist = CheckFarmerProfession(Game1.player, SFarmer.botanist);
                             if (botanist)
                                 anObject.quality = 4;
                             if (gatherer)
@@ -745,8 +746,8 @@ namespace TractorMod
                         if (hoedirtTile.crop.whichForageCrop == 1) //spring onion
                         {
                             StardewValley.Object anObject = new StardewValley.Object(399, 1);
-                            bool gatherer = CheckFarmerProfession(Game1.player, Farmer.gatherer);
-                            bool botanist = CheckFarmerProfession(Game1.player, Farmer.botanist);
+                            bool gatherer = CheckFarmerProfession(Game1.player, SFarmer.gatherer);
+                            bool botanist = CheckFarmerProfession(Game1.player, SFarmer.botanist);
                             if (botanist)
                             {
                                 anObject.quality = 4;
@@ -1030,7 +1031,7 @@ namespace TractorMod
             return grid;
         }
 
-        static int FindEmptySlotInFarmerInventory(Farmer input)
+        static int FindEmptySlotInFarmerInventory(SFarmer input)
         {
             for(int i = 0; i < input.items.Count; i++)
             {
@@ -1040,7 +1041,7 @@ namespace TractorMod
             return -1;
         }
 
-        static int FindSlotWithSameItemInFarmerInventory(Farmer input, Item inputItem)
+        static int FindSlotWithSameItemInFarmerInventory(SFarmer input, Item inputItem)
         {
             for (int i = 0; i < input.items.Count; i++)
             {
@@ -1056,7 +1057,7 @@ namespace TractorMod
             return -1;
         }
 
-        static int FindSlotForInputItemInFarmerInventory(Farmer input, Item inputItem)
+        static int FindSlotForInputItemInFarmerInventory(SFarmer input, Item inputItem)
         {
             int slot = FindSlotWithSameItemInFarmerInventory(input, inputItem);
             if (slot == -1)
@@ -1066,7 +1067,7 @@ namespace TractorMod
             return slot;
         }
 
-        static bool CheckFarmerProfession(Farmer farmerInput, int professionIndex)
+        static bool CheckFarmerProfession(SFarmer farmerInput, int professionIndex)
         {
             foreach(int i in farmerInput.professions)
             {
@@ -1139,7 +1140,7 @@ namespace TractorMod
             return false;
         }
         
-        static void OpenPhthaloBlueCarpenterMenu(Farmer who, string whichAnswer)
+        static void OpenPhthaloBlueCarpenterMenu(SFarmer who, string whichAnswer)
         {
             switch (whichAnswer)
             {
