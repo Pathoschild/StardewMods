@@ -1,4 +1,11 @@
 # Change Log:  
+#### Change Log **v.3.2**, author [**Pathoschild**](https://github.com/Pathoschild):
++ Updates the code for Stardew Valley 1.2 and SMAPI 1.10.
++ Adds the missing asset files from the release package.
++ Adds the mod build package.
++ Adds a build task to automatically package the mod into the Mods folder.
++ Standardises the .gitignore and removes build output from source control.
+
 #### Change Log **v.3.1.1**:
 + **Fix** being able to Call while another menu is open causing crash.
 + **Fix** Hang-up dialogue not displaying after closing PhthaloBlue Corp's building menu.
