@@ -14,7 +14,7 @@ This mod adds a **Garage** building which provides **Tractor** to help with your
 + Adds a build task to automatically package the mod into the Mods folder.
 + Standardises the .gitignore and removes build output from source control.
 
-#### Change Log **v3.2.1**, author [**Pathoschild**](https://github.com/Pathoschild):
+#### Change Log **v3.2.1**, author [**Pathoschild**](https://github.com/Pathoschild): (not out yet)
 + **Fix** some errors in Stardew Valley 1.2 with TractorMod 3.2.
 
 #### Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
