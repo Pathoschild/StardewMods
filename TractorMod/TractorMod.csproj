@@ -34,7 +34,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PhthaloBlue.cs" />
+    <Compile Include="Framework\PhthaloBlue.cs" />
+    <Compile Include="Framework\Save.cs" />
+    <Compile Include="Framework\SaveCollection.cs" />
+    <Compile Include="Framework\ToolConfig.cs" />
+    <Compile Include="Framework\Tractor.cs" />
+    <Compile Include="Framework\TractorConfig.cs" />
+    <Compile Include="Framework\TractorHouse.cs" />
     <Compile Include="TractorMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

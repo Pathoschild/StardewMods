@@ -1,364 +1,94 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StardewValley;
-using StardewValley.Characters;
-using StardewModdingAPI;
-using System.IO;
-using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewValley.Tools;
-using StardewValley.Locations;
-using StardewValley.Buildings;
-using StardewValley.Menus;
-using StardewValley.BellsAndWhistles;
-using StardewValley.Objects;
-using StardewValley.TerrainFeatures;
-using PhthaloBlue;
+using Microsoft.Xna.Framework.Input;
+using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewValley;
+using StardewValley.Buildings;
+using StardewValley.Characters;
+using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
+using TractorMod.Framework;
 using SFarmer = StardewValley.Farmer;
 
 namespace TractorMod
 {
-    public class TractorHouse : Building
-    {
-        public TractorHouse() : base()
-        {
-            buildingType = "Tractor House";
-            humanDoor = new Point(-1, -1);
-            animalDoor = new Point(-2, -1);
-            indoors = null;
-            nameOfIndoors = "";
-            baseNameOfIndoors = "";
-            nameOfIndoorsWithoutUnique = "";
-            magical = false;
-            tileX = 0;
-            tileY = 0;
-            maxOccupants = 0;
-            tilesWide = 4;
-            tilesHigh = 2;
-            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\TractorHouse");
-            daysOfConstructionLeft = 1;
-        }
-
-        public TractorHouse(BluePrint input, Vector2 tileLocation) : base(input, tileLocation)
-        {
-            buildingType = "Tractor House";
-            humanDoor = new Point(-1, -1);
-            animalDoor = new Point(-2, -1);
-            indoors = null;
-            nameOfIndoors = "";
-            baseNameOfIndoors = "";
-            nameOfIndoorsWithoutUnique = "";
-            magical = true;
-            tileX = (int)tileLocation.X;
-            tileY = (int)tileLocation.Y;
-            maxOccupants = 0;
-            tilesWide = 4;
-            tilesHigh = 2;
-            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\Stable");
-            daysOfConstructionLeft = 0;
-        }
-
-        public TractorHouse(Vector2 tileLocation) : base()
-        {
-            buildingType = "Tractor House";
-            humanDoor = new Point(-1, -1);
-            animalDoor = new Point(-2, -1);
-            indoors = null;
-            nameOfIndoors = "";
-            baseNameOfIndoors = "";
-            nameOfIndoorsWithoutUnique = "";
-            magical = true;
-            tileX = (int)tileLocation.X;
-            tileY = (int)tileLocation.Y;
-            maxOccupants = 0;
-            tilesWide = 4;
-            tilesHigh = 2;
-            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\Stable");
-            daysOfConstructionLeft = 0;
-        }
-
-        public TractorHouse SetDaysOfConstructionLeft(int input)
-        {
-            daysOfConstructionLeft = input;
-            return this;
-        }
-
-        public override bool intersects(Rectangle boundingBox)
-        {
-            if (daysOfConstructionLeft > 0)
-                return base.intersects(boundingBox);
-            if (!base.intersects(boundingBox))
-                return false;
-            if (boundingBox.X >= (this.tileX + 1) * Game1.tileSize && boundingBox.Right < (this.tileX + 3) * Game1.tileSize)
-                return boundingBox.Y <= (this.tileY + 1) * Game1.tileSize;
-            return true;
-        }
-
-        public override void draw(SpriteBatch b)
-        {
-            if (this.daysOfConstructionLeft > 0)
-            {
-                this.drawInConstruction(b);
-            }
-            else
-            {
-                this.drawShadow(b, -1, -1);
-                b.Draw(this.texture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.tileX * Game1.tileSize), (float)(this.tileY * Game1.tileSize + this.tilesHigh * Game1.tileSize))), new Rectangle?(this.texture.Bounds), this.color * this.alpha, 0.0f, new Vector2(0.0f, (float)this.texture.Bounds.Height), 4f, SpriteEffects.None, (float)((this.tileY + this.tilesHigh - 1) * Game1.tileSize) / 10000f);
-            }
-        }
-
-        public override void dayUpdate(int dayOfMonth)
-        {
-            base.dayUpdate(dayOfMonth);
-            if (this.daysOfConstructionLeft > 0)
-                return;
-            //this.grabHorse();
-            //do special action for this building here
-            /*
-             */
-        }
-
-        public override Rectangle getSourceRectForMenu()
-        {
-            return new Rectangle(0, 0, this.texture.Bounds.Width, this.texture.Bounds.Height);
-        }
-    }
-
-    public class Tractor : Horse
-    {
-        public Tractor() : base() { }
-        public Tractor(int tileX, int tileY) : base(tileX, tileY)
-        {
-            this.sprite = new AnimatedSprite(Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\tractor"), 0, 32, 32);
-            this.sprite.textureUsesFlippedRightForLeft = true;
-            this.sprite.loop = true;
-            this.faceDirection(3);
-        }
-        public override Rectangle GetBoundingBox()
-        {
-            Rectangle boundingBox = base.GetBoundingBox();
-            if ((this.facingDirection == 0 || this.facingDirection == 2))
-                boundingBox.Inflate(-Game1.tileSize / 2 - Game1.pixelZoom, 0);
-            return boundingBox;
-        }
-    }
-    
-    public class SaveCollection
-    {
-        public class Save
-        {
-            public string FarmerName { get; set; } = "";
-            public ulong SaveSeed { get; set; }
-            public List<Vector2> TractorHouse = new List<Vector2>();
-            public Save() { SaveSeed = ulong.MaxValue; }
-            public Save(string nameInput, ulong input)
-            {
-                SaveSeed = input;
-                FarmerName = nameInput;
-            }
-
-            public Save AddTractorHouse(int inputX, int inputY)
-            {
-                foreach (Vector2 THS in TractorHouse)
-                {
-                    if (THS.X == inputX && THS.Y == inputY)
-                        return this;
-                }
-                TractorHouse.Add(new Vector2(inputX, inputY));
-                return this;
-            }
-        }
-        public List<Save> saves = new List<Save>();
-        public SaveCollection() { }
-        public SaveCollection Add(Save input)
-        {
-            saves.Add(input);
-            return this;
-        }
-        public Save FindSave(string nameInput, ulong input)
-        {
-            foreach (SaveCollection.Save ASave in saves)
-            {
-                if (ASave.SaveSeed == input && ASave.FarmerName == nameInput)
-                {
-                    return ASave;
-                }
-            }
-            return new SaveCollection.Save();
-        }
-
-        public Save FindCurrentSave()
-        {
-            return FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
-        }
-    }
-    
-    public class TractorConfig
-    {
-        public class ToolConfig
-        {
-            public string name { get; set; } = "";
-            public int minLevel { get; set; } = 0;
-            public int effectRadius { get; set; } = 1;
-            public int activeEveryTickAmount { get; set; } = 1;
-            private int activeCount = 0;
-
-            public ToolConfig() { }
-
-            public ToolConfig(string nameInput)
-            {
-                name = nameInput;
-            }
-
-            public ToolConfig(string nameInput, int minLevelInput, int radiusInput, int activeEveryTickAmountInput)
-            {
-                name = nameInput;
-                minLevel = minLevelInput;
-                effectRadius = radiusInput;
-                if (activeEveryTickAmountInput <= 0)
-                    activeEveryTickAmount = 1;
-                else
-                    activeEveryTickAmount = activeEveryTickAmountInput;
-            }
-
-            public void incrementActiveCount()
-            {
-                activeCount++;
-                activeCount %= activeEveryTickAmount;
-            }
-
-            public bool canToolBeActive()
-            {
-                return (activeCount == 0);
-            }
-        }
-        public string info1 = "Add tool with exact name you would like to use with Tractor Mode.";
-        public string info2 = "Also custom minLevel and effective radius for each tool.";
-        public string info3 = "Ingame tools included: Pickaxe, Axe, Hoe, Watering Can.";
-        public string info4 = "I haven't tried tools like Shears or Milk Pail but you can :)";
-        public string info5 = "Delete Scythe entry if you don't want to harvest stuff.";
-        public ToolConfig[] tool { get; set; } = {
-                                                        new ToolConfig("Scythe", 0, 2, 1),
-                                                        new ToolConfig("Hoe"),
-                                                        new ToolConfig("Watering Can")
-                                                     };
-
-        public int ItemRadius { get; set; } = 1;
-        public int holdActivate { get; set; } = 0;
-        public Keys tractorKey { get; set; } = Keys.B;
-        public int tractorSpeed { get; set; } = -2;
-        public Keys horseKey { get; set; } = Keys.None;
-        public Keys PhoneKey { get; set; } = Keys.N;
-        public int TractorHousePrice { get; set; } = 150000;
-        public Keys updateConfig { get; set; } = Keys.P;
-    }
-
     public class TractorMod : Mod
     {
-        static Vector2 tractorSpawnLocation = new Vector2(70, 13);
+        /*********
+        ** Properties
+        *********/
+        private Vector2 tractorSpawnLocation = new Vector2(70, 13);
+        private TractorConfig ModConfig { get; set; }
+        private Tractor ATractor = null;
+        private SaveCollection AllSaves;
+        private bool IsNewDay = false;
+        private bool IsNewTractor = false;
+        const int buffUniqueID = 58012397;
+        private bool TractorOn = false;
+        private int mouseHoldDelay = 5;
+        private int mouseHoldDelayCount;
+        private Farm Farm = null;
 
-        public static TractorConfig ModConfig { get; set; }
-        
-        static Tractor ATractor = null;
-        static IModHelper TheHelper = null;
-        static SaveCollection AllSaves;
 
-        //use to write AllSaves info to some .json file to store save
-        static void SaveModInfo()
-        {
-            if (AllSaves == null)
-                AllSaves = new SaveCollection().Add(new SaveCollection.Save(Game1.player.name, Game1.uniqueIDForThisGame));
-
-            SaveCollection.Save currentSave = AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
-
-            if (currentSave.SaveSeed != ulong.MaxValue)
-            {
-                currentSave.TractorHouse.Clear();
-                foreach (Building b in Game1.getFarm().buildings)
-                {
-                    if (b is TractorHouse)
-                        currentSave.AddTractorHouse(b.tileX, b.tileY);
-                }
-            }
-            else
-            {
-                AllSaves.saves.Add(new SaveCollection.Save(Game1.player.name, Game1.uniqueIDForThisGame));
-                SaveModInfo();
-                return;
-            }
-            TheHelper.WriteJsonFile<SaveCollection>("TractorModSave.json", AllSaves);
-        }
-
-        //use to load save info from some .json file to AllSaves
-        static void LoadModInfo()
-        {
-            AllSaves = TheHelper.ReadJsonFile<SaveCollection>("TractorModSave.json");
-            if (AllSaves == null)
-                return;
-
-            SaveCollection.Save currentSave = AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
-
-            if (currentSave.SaveSeed != ulong.MaxValue)
-            {
-                foreach (Vector2 THS in currentSave.TractorHouse)
-                {
-                    Game1.getFarm().buildStructure(new TractorHouse().SetDaysOfConstructionLeft(0), THS, false, Game1.player);
-                    if(IsNewTractor)
-                        SpawnTractor();
-                }
-            }
-        }
-
-        static bool IsNewDay = false;
-        static bool IsNewTractor = false;
-        
-        //SMAPI starts here
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
+        /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            if (TheHelper == null)
-                TheHelper = helper;
+            this.ModConfig = helper.ReadConfig<TractorConfig>();
+            this.mouseHoldDelayCount = this.mouseHoldDelay;
 
-            ModConfig = helper.ReadConfig<TractorConfig>();
-            AllSaves = helper.ReadJsonFile<SaveCollection>("TractorModSave.json");
-
-            //delete additional objects when sleep so that they dont get save to the vanilla save file
-            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
+            // spawn tractor & remove it before save
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
+            LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
+            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
 
-            //so that weird shit wouldnt happen
+            // so that weird shit wouldnt happen
             MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
             MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
 
+            // handle player interaction
             GameEvents.UpdateTick += this.UpdateTickEvent;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        private void TimeEvents_AfterDayStarted(object sender, EventArgs eventArgs)
+        {
+            // set up for new day
+            this.IsNewDay = true;
+            this.IsNewTractor = true;
+            this.Farm = Game1.getFarm();
+        }
+
+        private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
+        {
+            // spawn tractor house & tractor
+            if (this.IsNewDay && e.NewLocation == this.Farm)
+            {
+                this.LoadModInfo();
+                this.IsNewDay = false;
+            }
         }
 
         private void SaveEvents_BeforeSave(object sender, EventArgs eventArgs)
         {
-            //save before destroying
-            if (IsNewDay == false)
-                SaveModInfo();
+            // save mod data
+            this.SaveModInfo();
 
-            //destroying TractorHouse building
-            for (int i = Game1.getFarm().buildings.Count - 1; i >= 0; i--)
-                if (Game1.getFarm().buildings[i] is TractorHouse)
-                    Game1.getFarm().destroyStructure(ourFarm.buildings[i]);
-
-            //destroying Tractor
-            foreach (GameLocation GL in Game1.locations)
-                RemoveEveryCharactersOfType<Tractor>(GL);
-            IsNewDay = true;
-            IsNewTractor = true;
-        }
-
-        private void TimeEvents_AfterDayStarted(object sender, EventArgs eventArgs)
-        {
-            IsNewDay = true;
-            IsNewTractor = true;
+            // remove tractor from save
+            foreach (TractorHouse tractorHouse in this.Farm.buildings.OfType<TractorHouse>().ToArray())
+                this.Farm.destroyStructure(tractorHouse);
+            foreach (GameLocation location in Game1.locations)
+                this.RemoveEveryCharactersOfType<Tractor>(location);
         }
 
         private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
@@ -380,26 +110,17 @@ namespace TractorMod
 
         private void UpdateTickEvent(object sender, EventArgs e)
         {
-            if (ModConfig == null)
-                return;
-
-            if (StardewValley.Game1.currentLocation == null)
+            if (this.ModConfig == null || Game1.currentLocation == null)
                 return;
 
             MouseState currentMouseState = Mouse.GetState();
             KeyboardState currentKeyboardState = Keyboard.GetState();
             if (Keyboard.GetState().IsKeyDown(ModConfig.updateConfig))
-                ModConfig = TheHelper.ReadConfig<TractorConfig>();
+                ModConfig = this.Helper.ReadConfig<TractorConfig>();
             DoAction(currentKeyboardState, currentMouseState);
         }
 
-        const int buffUniqueID = 58012397;
-        static bool TractorOn = false;
-        static int mouseHoldDelay = 5;
-        static int mouseHoldDelayCount = mouseHoldDelay;
-
-        static Farm ourFarm = null;
-        static void SpawnTractor(bool SpawnAtFirstTractorHouse = true)
+        private void SpawnTractor(bool SpawnAtFirstTractorHouse = true)
         {
             if (IsNewTractor == false)
                 return;
@@ -411,22 +132,22 @@ namespace TractorMod
             {
                 ATractor = new Tractor((int)tractorSpawnLocation.X, (int)tractorSpawnLocation.Y);
                 ATractor.name = "Tractor";
-                Game1.getFarm().characters.Add((NPC)ATractor);
+                this.Farm.characters.Add((NPC)ATractor);
                 Game1.warpCharacter((NPC)ATractor, "Farm", tractorSpawnLocation, false, true);
                 IsNewTractor = false;
                 return;
             }
 
             //spawn tractor
-            foreach(Building building in Game1.getFarm().buildings)
+            foreach (Building building in this.Farm.buildings)
             {
-                if(building is TractorHouse)
+                if (building is TractorHouse)
                 {
                     if (building.daysOfConstructionLeft > 0)
                         continue;
                     ATractor = new Tractor((int)building.tileX + 1, (int)building.tileY + 1);
                     ATractor.name = "Tractor";
-                    Game1.getFarm().characters.Add((NPC)ATractor);
+                    this.Farm.characters.Add((NPC)ATractor);
                     Game1.warpCharacter((NPC)ATractor, "Farm", new Vector2((int)building.tileX + 1, (int)building.tileY + 1), false, true);
                     IsNewTractor = false;
                     break;
@@ -437,7 +158,50 @@ namespace TractorMod
             ATractor.name = "Tractor";
             */
         }
-        static void RemoveEveryCharactersOfType<T>(GameLocation GL)
+
+        //use to write AllSaves info to some .json file to store save
+        private void SaveModInfo()
+        {
+            if (AllSaves == null)
+                AllSaves = new SaveCollection().Add(new Save(Game1.player.name, Game1.uniqueIDForThisGame));
+
+            Save currentSave = AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
+
+            if (currentSave.SaveSeed != ulong.MaxValue)
+            {
+                currentSave.TractorHouse.Clear();
+                foreach (Building b in this.Farm.buildings)
+                {
+                    if (b is TractorHouse)
+                        currentSave.AddTractorHouse(b.tileX, b.tileY);
+                }
+            }
+            else
+            {
+                AllSaves.saves.Add(new Save(Game1.player.name, Game1.uniqueIDForThisGame));
+                SaveModInfo();
+                return;
+            }
+            this.Helper.WriteJsonFile<SaveCollection>("TractorModSave.json", AllSaves);
+        }
+
+        //use to load save info from some .json file to AllSaves
+        private void LoadModInfo()
+        {
+            this.AllSaves = this.Helper.ReadJsonFile<SaveCollection>("TractorModSave.json") ?? new SaveCollection();
+            Save saveInfo = this.AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
+            if (saveInfo != null && saveInfo.SaveSeed != ulong.MaxValue)
+            {
+                foreach (Vector2 THS in saveInfo.TractorHouse)
+                {
+                    this.Farm.buildStructure(new TractorHouse().SetDaysOfConstructionLeft(0), THS, false, Game1.player);
+                    if (IsNewTractor)
+                        SpawnTractor();
+                }
+            }
+        }
+
+        private void RemoveEveryCharactersOfType<T>(GameLocation GL)
         {
             bool found = false;
             foreach (NPC character in GL.characters)
@@ -459,15 +223,6 @@ namespace TractorMod
             if (Game1.currentLocation == null)
                 return;
 
-            if (ourFarm == null)
-                ourFarm = Game1.getFarm();
-
-            if (Game1.currentLocation is Farm && IsNewDay && Game1.player.currentLocation is Farm)
-            {
-                LoadModInfo();
-                IsNewDay = false;
-            }
-
             //use cellphone
             if (currentKeyboardState.IsKeyDown(ModConfig.PhoneKey))
             {
@@ -483,26 +238,26 @@ namespace TractorMod
 
                 Game1.currentLocation.createQuestionDialogue("Hello, this is PhthaloBlue Corporation. How can I help you?", answerChoices, this.OpenPhthaloBlueCarpenterMenu);
             }
-            
+
             //summon Tractor
             if (currentKeyboardState.IsKeyDown(ModConfig.tractorKey))
             {
                 Vector2 tile = Game1.player.getTileLocation();
                 if (IsNewTractor) //check if you already own TractorHouse, if so then spawn tractor if its null
                 {
-                    SaveCollection.Save currentSave = AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
+                    Save currentSave = AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
                     if (currentSave.TractorHouse.Count > 0)
                         SpawnTractor(false);
-                       
+
                 }
-                if(ATractor != null)
+                if (ATractor != null)
                     Game1.warpCharacter((NPC)ATractor, Game1.currentLocation.name, tile, false, true);
             }
 
             //summon Horse
             if (currentKeyboardState.IsKeyDown(ModConfig.horseKey))
             {
-                foreach(GameLocation GL in Game1.locations)
+                foreach (GameLocation GL in Game1.locations)
                 {
                     foreach (NPC character in GL.characters)
                     {
@@ -572,10 +327,10 @@ namespace TractorMod
                     }
                     break;
             }
-            
-            if(ATractor != null)
+
+            if (ATractor != null)
             {
-                if(ATractor.rider == Game1.player)
+                if (ATractor.rider == Game1.player)
                 {
                     TractorOn = true;
                 }
@@ -612,7 +367,7 @@ namespace TractorMod
                 Game1.buffsDisplay.addOtherBuff(tractorBuff);
                 BuffAlready = true;
             }
-            
+
 
             //if Tractor Mode (buff) is ON
             if (Game1.player.CurrentTool == null)
@@ -621,7 +376,7 @@ namespace TractorMod
                 RunToolAction();
         }
 
-        public static void RunToolAction()
+        private void RunToolAction()
         {
             if (Game1.player.CurrentTool is MeleeWeapon && Game1.player.CurrentTool.name.ToLower().Contains("scythe"))
                 HarvestAction();
@@ -629,7 +384,7 @@ namespace TractorMod
                 ToolAction();
         }
 
-        public static void ItemAction()
+        private void ItemAction()
         {
             if (Game1.player.CurrentItem == null)
                 return;
@@ -679,11 +434,11 @@ namespace TractorMod
             }
         }
 
-        public static void HarvestAction()
+        private void HarvestAction()
         {
             //check if tool is enable from config
-            TractorConfig.ToolConfig ConfigForCurrentTool = new TractorConfig.ToolConfig("");
-            foreach (TractorConfig.ToolConfig TC in ModConfig.tool)
+            ToolConfig ConfigForCurrentTool = new ToolConfig("");
+            foreach (ToolConfig TC in ModConfig.tool)
             {
                 if (Game1.player.CurrentTool.name.Contains("Scythe"))
                 {
@@ -695,7 +450,7 @@ namespace TractorMod
                 return;
             int effectRadius = ConfigForCurrentTool.effectRadius;
             List<Vector2> affectedTileGrid = MakeVector2TileGrid(Game1.player.getTileLocation(), effectRadius);
-            
+
             //harvesting objects
             foreach (Vector2 tile in affectedTileGrid)
             {
@@ -729,7 +484,7 @@ namespace TractorMod
                     if (anObject.name.ToLower().Contains("weed"))
                     {
                         Game1.createObjectDebris(771, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); //fiber
-                        if(new Random().Next(0,10) < 1) //10% mixed seeds
+                        if (new Random().Next(0, 10) < 1) //10% mixed seeds
                             Game1.createObjectDebris(770, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); //fiber
                         Game1.currentLocation.removeObject(tile, false);
                         continue;
@@ -784,7 +539,7 @@ namespace TractorMod
                                 for (int i = 0; i < seedDrop; i++)
                                     Game1.createObjectDebris(431, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); //spawn sunflower seeds
                             }
-                            
+
                             if (hoedirtTile.crop.regrowAfterHarvest == -1)
                             {
                                 hoedirtTile.destroyCrop(tile, true);
@@ -802,7 +557,7 @@ namespace TractorMod
                         tree.shake(tile, false);
                         continue;
                     }
-                    
+
                     //will test once I have giantcrop
                     /*
                     if(Game1.currentLocation.terrainFeatures[tile] is GiantCrop)
@@ -812,13 +567,13 @@ namespace TractorMod
                         continue;
                     }
                     */
-                    
-                    if(Game1.currentLocation.terrainFeatures[tile] is Grass)
+
+                    if (Game1.currentLocation.terrainFeatures[tile] is Grass)
                     {
                         Grass grass = (Grass)Game1.currentLocation.terrainFeatures[tile];
                         grass = null;
                         Game1.currentLocation.terrainFeatures.Remove(tile);
-                        ourFarm.tryToAddHay(2);
+                        Farm.tryToAddHay(2);
                         continue;
                     }
 
@@ -831,13 +586,13 @@ namespace TractorMod
             }
         }
 
-        public static void ToolAction()
+        private void ToolAction()
         {
             Tool currentTool = Game1.player.CurrentTool;
 
             //check if tool is enable from config
-            TractorConfig.ToolConfig ConfigForCurrentTool = new TractorConfig.ToolConfig("");
-            foreach (TractorConfig.ToolConfig TC in ModConfig.tool)
+            ToolConfig ConfigForCurrentTool = new ToolConfig("");
+            foreach (ToolConfig TC in ModConfig.tool)
             {
                 if (currentTool.name.Contains(TC.name))
                 {
@@ -905,7 +660,7 @@ namespace TractorMod
         }
 
         //this will make a list of all the vector2 around origin with size radius (ex: size = 3 => 7x7 grid)
-        static List<Vector2> MakeVector2GridForHorse(Vector2 origin, int size)
+        private List<Vector2> MakeVector2GridForHorse(Vector2 origin, int size)
         {
             List<Vector2> grid = new List<Vector2>();
             if (Game1.player.movementDirections.Count <= 0)
@@ -951,19 +706,19 @@ namespace TractorMod
             return grid;
         }
 
-        static List<Vector2> MakeVector2Grid(Vector2 origin, int size)
+        private List<Vector2> MakeVector2Grid(Vector2 origin, int size)
         {
             List<Vector2> grid = new List<Vector2>();
 
-            for (int i = 0; i < 2*size+1; i++)
+            for (int i = 0; i < 2 * size + 1; i++)
             {
                 for (int j = 0; j < 2 * size + 1; j++)
                 {
-                    Vector2 newVec = new Vector2(origin.X - size* Game1.tileSize,
-                                                origin.Y - size* Game1.tileSize);
+                    Vector2 newVec = new Vector2(origin.X - size * Game1.tileSize,
+                                                origin.Y - size * Game1.tileSize);
 
-                    newVec.X += (float) i* Game1.tileSize; 
-                    newVec.Y += (float) j* Game1.tileSize;
+                    newVec.X += (float)i * Game1.tileSize;
+                    newVec.Y += (float)j * Game1.tileSize;
 
                     grid.Add(newVec);
                 }
@@ -972,7 +727,7 @@ namespace TractorMod
         }
 
         /*
-        static List<Vector2> MakeVector2TileGridForHorse(Vector2 origin, int size)
+        private List<Vector2> MakeVector2TileGridForHorse(Vector2 origin, int size)
         {
             List<Vector2> grid = new List<Vector2>();
             if (Game1.player.isMoving() == false)
@@ -1020,7 +775,7 @@ namespace TractorMod
         }
         */
 
-        static List<Vector2> MakeVector2TileGrid(Vector2 origin, int size)
+        private List<Vector2> MakeVector2TileGrid(Vector2 origin, int size)
         {
             List<Vector2> grid = new List<Vector2>();
             for (int i = 0; i < 2 * size + 1; i++)
@@ -1040,9 +795,9 @@ namespace TractorMod
             return grid;
         }
 
-        static int FindEmptySlotInFarmerInventory(SFarmer input)
+        private int FindEmptySlotInFarmerInventory(SFarmer input)
         {
-            for(int i = 0; i < input.items.Count; i++)
+            for (int i = 0; i < input.items.Count; i++)
             {
                 if (input.items[i] == null)
                     return i;
@@ -1050,7 +805,7 @@ namespace TractorMod
             return -1;
         }
 
-        static int FindSlotWithSameItemInFarmerInventory(SFarmer input, Item inputItem)
+        private int FindSlotWithSameItemInFarmerInventory(SFarmer input, Item inputItem)
         {
             for (int i = 0; i < input.items.Count; i++)
             {
@@ -1058,7 +813,7 @@ namespace TractorMod
                     continue;
                 if (input.items[i].getRemainingStackSpace() <= 0)
                     continue;
-                if(input.items[i].canStackWith(inputItem))
+                if (input.items[i].canStackWith(inputItem))
                 {
                     return i;
                 }
@@ -1066,7 +821,7 @@ namespace TractorMod
             return -1;
         }
 
-        static int FindSlotForInputItemInFarmerInventory(SFarmer input, Item inputItem)
+        private int FindSlotForInputItemInFarmerInventory(SFarmer input, Item inputItem)
         {
             int slot = FindSlotWithSameItemInFarmerInventory(input, inputItem);
             if (slot == -1)
@@ -1076,20 +831,20 @@ namespace TractorMod
             return slot;
         }
 
-        static bool CheckFarmerProfession(SFarmer farmerInput, int professionIndex)
+        private bool CheckFarmerProfession(SFarmer farmerInput, int professionIndex)
         {
-            foreach(int i in farmerInput.professions)
+            foreach (int i in farmerInput.professions)
             {
                 if (i == professionIndex)
-                    return true; 
+                    return true;
             }
             return false;
         }
 
-        static List<Vector2> RemoveTileWithResourceClumpType(int ResourceClumpIndex, List<Vector2> input)
+        private List<Vector2> RemoveTileWithResourceClumpType(int ResourceClumpIndex, List<Vector2> input)
         {
             List<Vector2> output = new List<Vector2>();
-            foreach(Vector2 tile in input)
+            foreach (Vector2 tile in input)
             {
                 if (CheckIfTileBelongToResourceClump(ResourceClumpIndex, tile))
                     continue;
@@ -1100,7 +855,7 @@ namespace TractorMod
             return output;
         }
 
-        static bool CheckIfTileBelongToResourceClump(int ResourceClumpIndex, Vector2 tile)
+        private bool CheckIfTileBelongToResourceClump(int ResourceClumpIndex, Vector2 tile)
         {
             TerrainFeature check;
             if (Game1.currentLocation.terrainFeatures.TryGetValue(tile, out check))
@@ -1148,7 +903,7 @@ namespace TractorMod
 
             return false;
         }
-        
+
         private void OpenPhthaloBlueCarpenterMenu(SFarmer who, string whichAnswer)
         {
             switch (whichAnswer)
@@ -1172,7 +927,7 @@ namespace TractorMod
                     TractorBP.namesOfOkayBuildingLocations.Clear();
                     TractorBP.namesOfOkayBuildingLocations.Add("Farm");
                     TractorBP.magical = true;
-                    Game1.activeClickableMenu = new PhthaloBlueCarpenterMenu(this.Monitor)  .AddBluePrint<TractorHouse>(TractorBP);
+                    Game1.activeClickableMenu = new PhthaloBlueCarpenterMenu(this.Monitor).AddBluePrint<TractorHouse>(TractorBP);
                     ((PhthaloBlueCarpenterMenu)Game1.activeClickableMenu).WherePlayerOpenThisMenu = Game1.currentLocation;
                     break;
                 case "Leave":

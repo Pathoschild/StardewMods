@@ -1,4 +1,7 @@
 # Change Log:  
+#### Change Log **v3.2.1**, author [**Pathoschild**](https://github.com/Pathoschild):
++ **Fix** some errors in Stardew Valley 1.2 with TractorMod 3.2.
+
 #### Change Log **v.3.2**, author [**Pathoschild**](https://github.com/Pathoschild):
 + Updates the code for Stardew Valley 1.2 and SMAPI 1.10.
 + Adds the missing asset files from the release package.

@@ -6,13 +6,16 @@
 This mod adds a **Garage** building which provides **Tractor** to help with your farm works.  
 **Tractor** allows players to quickly till dirt, sow seeds, fertilize soil, and water crop by simply walking over map tiles.  
 
-### Latest Version: [v.3.2](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+### Latest Version: [v.3.2.1](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
 #### Change Log **v.3.2**, author [**Pathoschild**](https://github.com/Pathoschild):
 + Updates the code for Stardew Valley 1.2 and SMAPI 1.10.
 + Adds the missing asset files from the release package.
 + Adds the mod build package.
 + Adds a build task to automatically package the mod into the Mods folder.
 + Standardises the .gitignore and removes build output from source control.
+
+#### Change Log **v3.2.1**, author [**Pathoschild**](https://github.com/Pathoschild):
++ **Fix** some errors in Stardew Valley 1.2 with TractorMod 3.2.
 
 #### Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
 

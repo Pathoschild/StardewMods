@@ -1,9 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TractorMod", "TractorMod\TractorMod.csproj", "{0510E2AC-EC06-4211-B733-FAF9D3A069EA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".metadata", ".metadata", "{F27FD2CB-6B26-48AF-AC3D-A8FE3ABF5014}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		Changelog.md = Changelog.md
+		Customization.md = Customization.md
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
