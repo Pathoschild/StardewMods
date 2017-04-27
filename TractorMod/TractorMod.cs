@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -30,7 +31,7 @@ namespace TractorMod
         private bool TractorOn = false;
         private int mouseHoldDelay = 5;
         private int mouseHoldDelayCount;
-        private Farm ourFarm = null;
+        private Farm Farm = null;
 
 
         /*********
@@ -41,17 +42,18 @@ namespace TractorMod
         public override void Entry(IModHelper helper)
         {
             this.ModConfig = helper.ReadConfig<TractorConfig>();
-            this.AllSaves = helper.ReadJsonFile<SaveCollection>("TractorModSave.json");
             this.mouseHoldDelayCount = this.mouseHoldDelay;
 
-            //delete additional objects when sleep so that they dont get save to the vanilla save file
-            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
+            // spawn tractor & remove it before save
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
+            LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
+            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
 
-            //so that weird shit wouldnt happen
+            // so that weird shit wouldnt happen
             MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
             MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
 
+            // handle player interaction
             GameEvents.UpdateTick += this.UpdateTickEvent;
         }
 
@@ -59,28 +61,34 @@ namespace TractorMod
         /*********
         ** Private methods
         *********/
-        private void SaveEvents_BeforeSave(object sender, EventArgs eventArgs)
-        {
-            //save before destroying
-            if (IsNewDay == false)
-                SaveModInfo();
-
-            //destroying TractorHouse building
-            for (int i = Game1.getFarm().buildings.Count - 1; i >= 0; i--)
-                if (Game1.getFarm().buildings[i] is TractorHouse)
-                    Game1.getFarm().destroyStructure(ourFarm.buildings[i]);
-
-            //destroying Tractor
-            foreach (GameLocation GL in Game1.locations)
-                RemoveEveryCharactersOfType<Tractor>(GL);
-            IsNewDay = true;
-            IsNewTractor = true;
-        }
-
         private void TimeEvents_AfterDayStarted(object sender, EventArgs eventArgs)
         {
-            IsNewDay = true;
-            IsNewTractor = true;
+            // set up for new day
+            this.IsNewDay = true;
+            this.IsNewTractor = true;
+            this.Farm = Game1.getFarm();
+        }
+
+        private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
+        {
+            // spawn tractor house & tractor
+            if (this.IsNewDay && e.NewLocation == this.Farm)
+            {
+                this.LoadModInfo();
+                this.IsNewDay = false;
+            }
+        }
+
+        private void SaveEvents_BeforeSave(object sender, EventArgs eventArgs)
+        {
+            // save mod data
+            this.SaveModInfo();
+
+            // remove tractor from save
+            foreach (TractorHouse tractorHouse in this.Farm.buildings.OfType<TractorHouse>().ToArray())
+                this.Farm.destroyStructure(tractorHouse);
+            foreach (GameLocation location in Game1.locations)
+                this.RemoveEveryCharactersOfType<Tractor>(location);
         }
 
         private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
@@ -102,10 +110,7 @@ namespace TractorMod
 
         private void UpdateTickEvent(object sender, EventArgs e)
         {
-            if (ModConfig == null)
-                return;
-
-            if (StardewValley.Game1.currentLocation == null)
+            if (this.ModConfig == null || Game1.currentLocation == null)
                 return;
 
             MouseState currentMouseState = Mouse.GetState();
@@ -115,7 +120,6 @@ namespace TractorMod
             DoAction(currentKeyboardState, currentMouseState);
         }
 
-        
         private void SpawnTractor(bool SpawnAtFirstTractorHouse = true)
         {
             if (IsNewTractor == false)
@@ -128,14 +132,14 @@ namespace TractorMod
             {
                 ATractor = new Tractor((int)tractorSpawnLocation.X, (int)tractorSpawnLocation.Y);
                 ATractor.name = "Tractor";
-                Game1.getFarm().characters.Add((NPC)ATractor);
+                this.Farm.characters.Add((NPC)ATractor);
                 Game1.warpCharacter((NPC)ATractor, "Farm", tractorSpawnLocation, false, true);
                 IsNewTractor = false;
                 return;
             }
 
             //spawn tractor
-            foreach (Building building in Game1.getFarm().buildings)
+            foreach (Building building in this.Farm.buildings)
             {
                 if (building is TractorHouse)
                 {
@@ -143,7 +147,7 @@ namespace TractorMod
                         continue;
                     ATractor = new Tractor((int)building.tileX + 1, (int)building.tileY + 1);
                     ATractor.name = "Tractor";
-                    Game1.getFarm().characters.Add((NPC)ATractor);
+                    this.Farm.characters.Add((NPC)ATractor);
                     Game1.warpCharacter((NPC)ATractor, "Farm", new Vector2((int)building.tileX + 1, (int)building.tileY + 1), false, true);
                     IsNewTractor = false;
                     break;
@@ -166,7 +170,7 @@ namespace TractorMod
             if (currentSave.SaveSeed != ulong.MaxValue)
             {
                 currentSave.TractorHouse.Clear();
-                foreach (Building b in Game1.getFarm().buildings)
+                foreach (Building b in this.Farm.buildings)
                 {
                     if (b is TractorHouse)
                         currentSave.AddTractorHouse(b.tileX, b.tileY);
@@ -184,17 +188,13 @@ namespace TractorMod
         //use to load save info from some .json file to AllSaves
         private void LoadModInfo()
         {
-            AllSaves = this.Helper.ReadJsonFile<SaveCollection>("TractorModSave.json");
-            if (AllSaves == null)
-                return;
-
-            Save currentSave = AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
-
-            if (currentSave.SaveSeed != ulong.MaxValue)
+            this.AllSaves = this.Helper.ReadJsonFile<SaveCollection>("TractorModSave.json") ?? new SaveCollection();
+            Save saveInfo = this.AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
+            if (saveInfo != null && saveInfo.SaveSeed != ulong.MaxValue)
             {
-                foreach (Vector2 THS in currentSave.TractorHouse)
+                foreach (Vector2 THS in saveInfo.TractorHouse)
                 {
-                    Game1.getFarm().buildStructure(new TractorHouse().SetDaysOfConstructionLeft(0), THS, false, Game1.player);
+                    this.Farm.buildStructure(new TractorHouse().SetDaysOfConstructionLeft(0), THS, false, Game1.player);
                     if (IsNewTractor)
                         SpawnTractor();
                 }
@@ -222,15 +222,6 @@ namespace TractorMod
         {
             if (Game1.currentLocation == null)
                 return;
-
-            if (ourFarm == null)
-                ourFarm = Game1.getFarm();
-
-            if (Game1.currentLocation is Farm && IsNewDay && Game1.player.currentLocation is Farm)
-            {
-                LoadModInfo();
-                IsNewDay = false;
-            }
 
             //use cellphone
             if (currentKeyboardState.IsKeyDown(ModConfig.PhoneKey))
@@ -582,7 +573,7 @@ namespace TractorMod
                         Grass grass = (Grass)Game1.currentLocation.terrainFeatures[tile];
                         grass = null;
                         Game1.currentLocation.terrainFeatures.Remove(tile);
-                        ourFarm.tryToAddHay(2);
+                        Farm.tryToAddHay(2);
                         continue;
                     }
 
