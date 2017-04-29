@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 
@@ -10,9 +11,9 @@ namespace TractorMod.Framework
         /*********
         ** Public methods
         *********/
-        public Tractor(int tileX, int tileY) : base(tileX, tileY)
+        public Tractor(int tileX, int tileY, IContentHelper content) : base(tileX, tileY)
         {
-            this.sprite = new AnimatedSprite(Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\tractor"), 0, 32, 32);
+            this.sprite = new AnimatedSprite(content.Load<Texture2D>(@"assets\tractor.png", ContentSource.ModFolder), 0, 32, 32);
             this.sprite.textureUsesFlippedRightForLeft = true;
             this.sprite.loop = true;
             this.faceDirection(3);

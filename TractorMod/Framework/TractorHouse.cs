@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 
@@ -10,7 +11,7 @@ namespace TractorMod.Framework
         /*********
         ** Public methods
         *********/
-        public TractorHouse()
+        public TractorHouse(IContentHelper content)
         {
             buildingType = "Tractor House";
             humanDoor = new Point(-1, -1);
@@ -25,7 +26,7 @@ namespace TractorMod.Framework
             maxOccupants = 0;
             tilesWide = 4;
             tilesHigh = 2;
-            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\TractorHouse");
+            texture = content.Load<Texture2D>(@"assets\TractorHouse.png", ContentSource.ModFolder);
             daysOfConstructionLeft = 1;
         }
 

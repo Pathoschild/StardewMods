@@ -130,7 +130,7 @@ namespace TractorMod
 
             if (!spawnAtFirstTractorHouse)
             {
-                ATractor = new Tractor((int)tractorSpawnLocation.X, (int)tractorSpawnLocation.Y);
+                ATractor = new Tractor((int)tractorSpawnLocation.X, (int)tractorSpawnLocation.Y, this.Helper.Content);
                 ATractor.name = "Tractor";
                 this.Farm.characters.Add(this.ATractor);
                 Game1.warpCharacter(this.ATractor, "Farm", tractorSpawnLocation, false, true);
@@ -145,7 +145,7 @@ namespace TractorMod
                 {
                     if (building.daysOfConstructionLeft > 0)
                         continue;
-                    ATractor = new Tractor(building.tileX + 1, building.tileY + 1);
+                    ATractor = new Tractor(building.tileX + 1, building.tileY + 1, this.Helper.Content);
                     ATractor.name = "Tractor";
                     this.Farm.characters.Add(this.ATractor);
                     Game1.warpCharacter(this.ATractor, "Farm", new Vector2(building.tileX + 1, building.tileY + 1), false, true);
@@ -194,7 +194,7 @@ namespace TractorMod
             {
                 foreach (Vector2 THS in saveInfo.TractorHouse)
                 {
-                    this.Farm.buildStructure(new TractorHouse().SetDaysOfConstructionLeft(0), THS, false, Game1.player);
+                    this.Farm.buildStructure(new TractorHouse(this.Helper.Content).SetDaysOfConstructionLeft(0), THS, false, Game1.player);
                     if (IsNewTractor)
                         SpawnTractor();
                 }
@@ -662,7 +662,7 @@ namespace TractorMod
                 case "Construct":
                     BluePrint TractorBP = new BluePrint("Garage");
                     TractorBP.itemsRequired.Clear();
-                    TractorBP.texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\TractorHouse");
+                    TractorBP.texture = this.Helper.Content.Load<Texture2D>(@"assets\TractorHouse.png", ContentSource.ModFolder);
                     TractorBP.humanDoor = new Point(-1, -1);
                     TractorBP.animalDoor = new Point(-2, -1);
                     TractorBP.mapToWarpTo = "null";
@@ -678,11 +678,11 @@ namespace TractorMod
                     TractorBP.namesOfOkayBuildingLocations.Clear();
                     TractorBP.namesOfOkayBuildingLocations.Add("Farm");
                     TractorBP.magical = true;
-                    Game1.activeClickableMenu = new PhthaloBlueCarpenterMenu(this.Monitor).AddBluePrint<TractorHouse>(TractorBP);
+                    Game1.activeClickableMenu = new PhthaloBlueCarpenterMenu(this.Monitor, this.Helper.Content).AddBluePrint<TractorHouse>(TractorBP, () => new TractorHouse(this.Helper.Content));
                     ((PhthaloBlueCarpenterMenu)Game1.activeClickableMenu).WherePlayerOpenThisMenu = Game1.currentLocation;
                     break;
                 case "Leave":
-                    new PhthaloBlueCarpenterMenu(this.Monitor).Hangup();
+                    new PhthaloBlueCarpenterMenu(this.Monitor, this.Helper.Content).Hangup();
                     break;
             }
         }

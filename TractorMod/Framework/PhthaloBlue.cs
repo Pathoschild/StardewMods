@@ -44,7 +44,7 @@ namespace TractorMod.Framework
         private bool demolishing;
         private bool moving;
         private bool magicalConstruction;
-        private Dictionary<string, Type> BluePrintToBuildingDictionary;
+        private Dictionary<string, Func<Building>> BluePrintToBuildingDictionary;
         private readonly IMonitor Monitor;
         private BluePrint CurrentBlueprint => this.blueprints[this.currentBlueprintIndex];
 
@@ -59,14 +59,14 @@ namespace TractorMod.Framework
         /*********
         ** Public methods
         *********/
-        public PhthaloBlueCarpenterMenu(IMonitor monitor)
+        public PhthaloBlueCarpenterMenu(IMonitor monitor, IContentHelper content)
         {
             this.Monitor = monitor;
             if (PhthaloBlueNPC == null)
             {
                 PhthaloBlueNPC = new NPC();
                 PhthaloBlueNPC.name = "PhthaloBlue Corp.";
-                PhthaloBlueNPC.Portrait = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\PthaloBlueCorpPortrait\\PhthaloBlueCorp");
+                PhthaloBlueNPC.Portrait = content.Load<Texture2D>(@"assets\PthaloBlueCorpPortrait\PhthaloBlueCorp.png", ContentSource.ModFolder);
                 PhthaloBlueNPC.CurrentDialogue = new Stack<Dialogue>();
             }
 
@@ -74,15 +74,15 @@ namespace TractorMod.Framework
             Game1.player.forceCanMove();
             this.resetBounds();
             this.blueprints = new List<BluePrint>();
-            BluePrintToBuildingDictionary = new Dictionary<string, Type>();
+            BluePrintToBuildingDictionary = new Dictionary<string, Func<Building>>();
             this.setNewActiveBlueprint();
         }
 
         //T = building class that will get built corresponding to input blueprint
-        public PhthaloBlueCarpenterMenu AddBluePrint<T>(BluePrint input)
+        public PhthaloBlueCarpenterMenu AddBluePrint<T>(BluePrint input, Func<Building> building)
         {
             blueprints.Add(input);
-            BluePrintToBuildingDictionary.Add(input.name, typeof(T));
+            BluePrintToBuildingDictionary.Add(input.name, building);
             setNewActiveBlueprint();
             return this;
         }
@@ -94,7 +94,7 @@ namespace TractorMod.Framework
 
             string NameOfCurrentBluePrint = CurrentBlueprint.name;
             if (BluePrintToBuildingDictionary.ContainsKey(NameOfCurrentBluePrint))
-                this.currentBuilding = (Building)Activator.CreateInstance(BluePrintToBuildingDictionary[NameOfCurrentBluePrint]);
+                this.currentBuilding = BluePrintToBuildingDictionary[NameOfCurrentBluePrint]();
             else
                 this.currentBuilding = new Building();
             this.price = this.blueprints[this.currentBlueprintIndex].moneyRequired;
