@@ -9,7 +9,6 @@ namespace TractorMod.Framework
         ** Accessors
         *********/
         public List<Save> saves = new List<Save>();
-        public SaveCollection() { }
 
 
         /*********

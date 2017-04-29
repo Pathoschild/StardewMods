@@ -10,8 +10,6 @@ namespace TractorMod.Framework
         /*********
         ** Public methods
         *********/
-        public Tractor() : base() { }
-
         public Tractor(int tileX, int tileY) : base(tileX, tileY)
         {
             this.sprite = new AnimatedSprite(Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\tractor"), 0, 32, 32);

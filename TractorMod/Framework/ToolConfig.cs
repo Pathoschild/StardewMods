@@ -5,14 +5,14 @@
         /*********
         ** Properties
         *********/
-        private int activeCount = 0;
+        private int activeCount;
 
 
         /*********
         ** Accessors
         *********/
         public string name { get; set; } = "";
-        public int minLevel { get; set; } = 0;
+        public int minLevel { get; set; }
         public int effectRadius { get; set; } = 1;
         public int activeEveryTickAmount { get; set; } = 1;
 
@@ -20,7 +20,7 @@
         /*********
         ** Public methods
         *********/
-        public ToolConfig() { }
+        public ToolConfig() { } // needed to read from config.json
 
         public ToolConfig(string nameInput)
         {
@@ -32,10 +32,9 @@
             name = nameInput;
             minLevel = minLevelInput;
             effectRadius = radiusInput;
-            if (activeEveryTickAmountInput <= 0)
-                activeEveryTickAmount = 1;
-            else
-                activeEveryTickAmount = activeEveryTickAmountInput;
+            this.activeEveryTickAmount = activeEveryTickAmountInput > 0
+                ? activeEveryTickAmountInput
+                : 1;
         }
 
         public void incrementActiveCount()
@@ -46,7 +45,7 @@
 
         public bool canToolBeActive()
         {
-            return (activeCount == 0);
+            return this.activeCount == 0;
         }
     }
 }

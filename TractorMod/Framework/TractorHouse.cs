@@ -10,7 +10,7 @@ namespace TractorMod.Framework
         /*********
         ** Public methods
         *********/
-        public TractorHouse() : base()
+        public TractorHouse()
         {
             buildingType = "Tractor House";
             humanDoor = new Point(-1, -1);
@@ -27,44 +27,6 @@ namespace TractorMod.Framework
             tilesHigh = 2;
             texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\TractorHouse");
             daysOfConstructionLeft = 1;
-        }
-
-        public TractorHouse(BluePrint input, Vector2 tileLocation) : base(input, tileLocation)
-        {
-            buildingType = "Tractor House";
-            humanDoor = new Point(-1, -1);
-            animalDoor = new Point(-2, -1);
-            indoors = null;
-            nameOfIndoors = "";
-            baseNameOfIndoors = "";
-            nameOfIndoorsWithoutUnique = "";
-            magical = true;
-            tileX = (int)tileLocation.X;
-            tileY = (int)tileLocation.Y;
-            maxOccupants = 0;
-            tilesWide = 4;
-            tilesHigh = 2;
-            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\Stable");
-            daysOfConstructionLeft = 0;
-        }
-
-        public TractorHouse(Vector2 tileLocation) : base()
-        {
-            buildingType = "Tractor House";
-            humanDoor = new Point(-1, -1);
-            animalDoor = new Point(-2, -1);
-            indoors = null;
-            nameOfIndoors = "";
-            baseNameOfIndoors = "";
-            nameOfIndoorsWithoutUnique = "";
-            magical = true;
-            tileX = (int)tileLocation.X;
-            tileY = (int)tileLocation.Y;
-            maxOccupants = 0;
-            tilesWide = 4;
-            tilesHigh = 2;
-            texture = Game1.content.Load<Texture2D>("..\\Mods\\TractorMod\\assets\\Stable");
-            daysOfConstructionLeft = 0;
         }
 
         public TractorHouse SetDaysOfConstructionLeft(int input)
@@ -92,20 +54,9 @@ namespace TractorMod.Framework
             }
             else
             {
-                this.drawShadow(b, -1, -1);
-                b.Draw(this.texture, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(this.tileX * Game1.tileSize), (float)(this.tileY * Game1.tileSize + this.tilesHigh * Game1.tileSize))), new Rectangle?(this.texture.Bounds), this.color * this.alpha, 0.0f, new Vector2(0.0f, (float)this.texture.Bounds.Height), 4f, SpriteEffects.None, (float)((this.tileY + this.tilesHigh - 1) * Game1.tileSize) / 10000f);
+                this.drawShadow(b);
+                b.Draw(this.texture, Game1.GlobalToLocal(Game1.viewport, new Vector2(this.tileX * Game1.tileSize, this.tileY * Game1.tileSize + this.tilesHigh * Game1.tileSize)), this.texture.Bounds, this.color * this.alpha, 0.0f, new Vector2(0.0f, this.texture.Bounds.Height), 4f, SpriteEffects.None, (this.tileY + this.tilesHigh - 1) * Game1.tileSize / 10000f);
             }
-        }
-
-        public override void dayUpdate(int dayOfMonth)
-        {
-            base.dayUpdate(dayOfMonth);
-            if (this.daysOfConstructionLeft > 0)
-                return;
-            //this.grabHorse();
-            //do special action for this building here
-            /*
-             */
         }
 
         public override Rectangle getSourceRectForMenu()

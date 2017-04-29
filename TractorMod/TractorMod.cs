@@ -23,15 +23,15 @@ namespace TractorMod
         *********/
         private Vector2 tractorSpawnLocation = new Vector2(70, 13);
         private TractorConfig ModConfig { get; set; }
-        private Tractor ATractor = null;
+        private Tractor ATractor;
         private SaveCollection AllSaves;
-        private bool IsNewDay = false;
-        private bool IsNewTractor = false;
+        private bool IsNewDay;
+        private bool IsNewTractor;
         const int buffUniqueID = 58012397;
-        private bool TractorOn = false;
+        private bool TractorOn;
         private int mouseHoldDelay = 5;
         private int mouseHoldDelayCount;
-        private Farm Farm = null;
+        private Farm Farm;
 
 
         /*********
@@ -120,20 +120,20 @@ namespace TractorMod
             DoAction(currentKeyboardState, currentMouseState);
         }
 
-        private void SpawnTractor(bool SpawnAtFirstTractorHouse = true)
+        private void SpawnTractor(bool spawnAtFirstTractorHouse = true)
         {
-            if (IsNewTractor == false)
+            if (!this.IsNewTractor)
                 return;
 
             foreach (GameLocation GL in Game1.locations)
                 RemoveEveryCharactersOfType<Tractor>(GL);
 
-            if (SpawnAtFirstTractorHouse == false)
+            if (!spawnAtFirstTractorHouse)
             {
                 ATractor = new Tractor((int)tractorSpawnLocation.X, (int)tractorSpawnLocation.Y);
                 ATractor.name = "Tractor";
-                this.Farm.characters.Add((NPC)ATractor);
-                Game1.warpCharacter((NPC)ATractor, "Farm", tractorSpawnLocation, false, true);
+                this.Farm.characters.Add(this.ATractor);
+                Game1.warpCharacter(this.ATractor, "Farm", tractorSpawnLocation, false, true);
                 IsNewTractor = false;
                 return;
             }
@@ -145,10 +145,10 @@ namespace TractorMod
                 {
                     if (building.daysOfConstructionLeft > 0)
                         continue;
-                    ATractor = new Tractor((int)building.tileX + 1, (int)building.tileY + 1);
+                    ATractor = new Tractor(building.tileX + 1, building.tileY + 1);
                     ATractor.name = "Tractor";
-                    this.Farm.characters.Add((NPC)ATractor);
-                    Game1.warpCharacter((NPC)ATractor, "Farm", new Vector2((int)building.tileX + 1, (int)building.tileY + 1), false, true);
+                    this.Farm.characters.Add(this.ATractor);
+                    Game1.warpCharacter(this.ATractor, "Farm", new Vector2(building.tileX + 1, building.tileY + 1), false, true);
                     IsNewTractor = false;
                     break;
                 }
@@ -182,7 +182,7 @@ namespace TractorMod
                 SaveModInfo();
                 return;
             }
-            this.Helper.WriteJsonFile<SaveCollection>("TractorModSave.json", AllSaves);
+            this.Helper.WriteJsonFile("TractorModSave.json", AllSaves);
         }
 
         //use to load save info from some .json file to AllSaves
@@ -230,8 +230,7 @@ namespace TractorMod
                     return;
                 if (PhthaloBlueCarpenterMenu.IsOpen)
                     return;
-                Response[] answerChoices = new Response[2]
-                {
+                Response[] answerChoices = {
                     new Response("Construct", "Browse PhthaloBlue Corp.'s building catalog"),
                     new Response("Leave", "Hang up")
                 };
@@ -251,7 +250,7 @@ namespace TractorMod
 
                 }
                 if (ATractor != null)
-                    Game1.warpCharacter((NPC)ATractor, Game1.currentLocation.name, tile, false, true);
+                    Game1.warpCharacter(this.ATractor, Game1.currentLocation.name, tile, false, true);
             }
 
             //summon Horse
@@ -267,7 +266,7 @@ namespace TractorMod
                         }
                         if (character is Horse)
                         {
-                            Game1.warpCharacter((NPC)character, Game1.currentLocation.name, Game1.player.getTileLocation(), false, true);
+                            Game1.warpCharacter(character, Game1.currentLocation.name, Game1.player.getTileLocation(), false, true);
                         }
                     }
                 }
@@ -280,20 +279,17 @@ namespace TractorMod
             */
 
             //staring tractorMod
-            TractorOn = false;
+            this.TractorOn = false;
             switch (ModConfig.holdActivate)
             {
-                default: break;
                 case 1:
                     if (currentMouseState.LeftButton == ButtonState.Pressed)
                     {
                         if (mouseHoldDelayCount > 0)
-                        {
                             mouseHoldDelayCount -= 1;
-                        }
                         if (mouseHoldDelayCount <= 0)
                         {
-                            TractorOn = true;
+                            this.TractorOn = true;
                             mouseHoldDelayCount = mouseHoldDelay;
                         }
                     }
@@ -302,12 +298,10 @@ namespace TractorMod
                     if (currentMouseState.RightButton == ButtonState.Pressed)
                     {
                         if (mouseHoldDelayCount > 0)
-                        {
                             mouseHoldDelayCount -= 1;
-                        }
                         if (mouseHoldDelayCount <= 0)
                         {
-                            TractorOn = true;
+                            this.TractorOn = true;
                             mouseHoldDelayCount = mouseHoldDelay;
                         }
                     }
@@ -316,12 +310,10 @@ namespace TractorMod
                     if (currentMouseState.MiddleButton == ButtonState.Pressed)
                     {
                         if (mouseHoldDelayCount > 0)
-                        {
                             mouseHoldDelayCount -= 1;
-                        }
                         if (mouseHoldDelayCount <= 0)
                         {
-                            TractorOn = true;
+                            this.TractorOn = true;
                             mouseHoldDelayCount = mouseHoldDelay;
                         }
                     }
@@ -331,17 +323,13 @@ namespace TractorMod
             if (ATractor != null)
             {
                 if (ATractor.rider == Game1.player)
-                {
-                    TractorOn = true;
-                }
+                    this.TractorOn = true;
             }
             else //this should be unreachable code
-            {
-                SpawnTractor();
-            }
+                this.SpawnTractor();
 
             bool BuffAlready = false;
-            if (TractorOn == false)
+            if (!TractorOn)
                 return;
 
             //find if tractor buff already applied
@@ -359,7 +347,7 @@ namespace TractorMod
             }
 
             //create new buff if its not already applied
-            if (BuffAlready == false)
+            if (!BuffAlready)
             {
                 Buff tractorBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, ModConfig.tractorSpeed, 0, 0, 1, "Tractor Power", "Tractor Power");
                 tractorBuff.which = buffUniqueID;
@@ -487,7 +475,6 @@ namespace TractorMod
                         if (new Random().Next(0, 10) < 1) //10% mixed seeds
                             Game1.createObjectDebris(770, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); //fiber
                         Game1.currentLocation.removeObject(tile, false);
-                        continue;
                     }
                 }
             }
@@ -527,7 +514,7 @@ namespace TractorMod
                             for (int i = 0; i < anObject.stack; i++)
                                 Game1.currentLocation.debris.Add(new Debris(anObject, new Vector2(tile.X * Game1.tileSize, tile.Y * Game1.tileSize)));
 
-                            hoedirtTile.destroyCrop(tile, true);
+                            hoedirtTile.destroyCrop(tile);
                             continue;
                         }
 
@@ -542,7 +529,7 @@ namespace TractorMod
 
                             if (hoedirtTile.crop.regrowAfterHarvest == -1)
                             {
-                                hoedirtTile.destroyCrop(tile, true);
+                                hoedirtTile.destroyCrop(tile);
                             }
                         }
 
@@ -558,28 +545,10 @@ namespace TractorMod
                         continue;
                     }
 
-                    //will test once I have giantcrop
-                    /*
-                    if(Game1.currentLocation.terrainFeatures[tile] is GiantCrop)
-                    {
-                        GiantCrop bigCrop = (GiantCrop)Game1.currentLocation.terrainFeatures[tile];
-                        bigCrop.performToolAction((Tool)new Axe(), 100, tile);
-                        continue;
-                    }
-                    */
-
                     if (Game1.currentLocation.terrainFeatures[tile] is Grass)
                     {
-                        Grass grass = (Grass)Game1.currentLocation.terrainFeatures[tile];
-                        grass = null;
                         Game1.currentLocation.terrainFeatures.Remove(tile);
                         Farm.tryToAddHay(2);
-                        continue;
-                    }
-
-
-                    if (Game1.currentLocation.terrainFeatures[tile] is Tree)
-                    {
                         continue;
                     }
                 }
@@ -591,30 +560,27 @@ namespace TractorMod
             Tool currentTool = Game1.player.CurrentTool;
 
             //check if tool is enable from config
-            ToolConfig ConfigForCurrentTool = new ToolConfig("");
-            foreach (ToolConfig TC in ModConfig.tool)
+            ToolConfig configForCurrentTool = new ToolConfig("");
+            foreach (ToolConfig toolConfig in ModConfig.tool)
             {
-                if (currentTool.name.Contains(TC.name))
+                if (currentTool.name.Contains(toolConfig.name))
                 {
-                    ConfigForCurrentTool = TC;
+                    configForCurrentTool = toolConfig;
                     break;
                 }
             }
 
-            if (ConfigForCurrentTool.name == "")
-                return;
-            else
-                if (currentTool.upgradeLevel < ConfigForCurrentTool.minLevel)
+            if (configForCurrentTool.name == "" || currentTool.upgradeLevel < configForCurrentTool.minLevel)
                 return;
 
-            if (ConfigForCurrentTool.activeEveryTickAmount > 1)
+            if (configForCurrentTool.activeEveryTickAmount > 1)
             {
-                ConfigForCurrentTool.incrementActiveCount();
-                if (ConfigForCurrentTool.canToolBeActive() == false)
+                configForCurrentTool.incrementActiveCount();
+                if (!configForCurrentTool.canToolBeActive())
                     return;
             }
 
-            int effectRadius = ConfigForCurrentTool.effectRadius;
+            int effectRadius = configForCurrentTool.effectRadius;
             int currentWater = 0;
             if (currentTool is WateringCan)
             {
@@ -659,122 +625,6 @@ namespace TractorMod
             }
         }
 
-        //this will make a list of all the vector2 around origin with size radius (ex: size = 3 => 7x7 grid)
-        private List<Vector2> MakeVector2GridForHorse(Vector2 origin, int size)
-        {
-            List<Vector2> grid = new List<Vector2>();
-            if (Game1.player.movementDirections.Count <= 0)
-                return new List<Vector2>();
-
-            for (int i = 0; i < 2 * size + 1; i++)
-            {
-                for (int j = 0; j < 2 * size + 1; j++)
-                {
-                    bool NoAdd = false;
-                    switch (Game1.player.movementDirections[0])
-                    {
-                        case 0: if (j != 0) NoAdd = true; break;
-                        case 2: if (j != 0) NoAdd = true; break;
-
-                        case 1: if (i != 0) NoAdd = true; break;
-                        case 3: if (i != 0) NoAdd = true; break;
-                    }
-                    if (NoAdd)
-                        continue;
-
-                    Vector2 newVec = new Vector2(origin.X - size * Game1.tileSize, origin.Y - size * Game1.tileSize);
-                    newVec.X += (float)i * Game1.tileSize;
-                    newVec.Y += (float)j * Game1.tileSize;
-                    grid.Add(newVec);
-                }
-            }
-
-            //adjust depending on facing
-            for (int i = 0; i < grid.Count; i++)
-            {
-                Vector2 temp = grid[i];
-                int numberOfTileBehindPlayer = 1;
-                switch (Game1.player.movementDirections[0])
-                {
-                    case 0: temp.Y += (numberOfTileBehindPlayer + 2) * Game1.tileSize; break; //go up
-                    case 1: temp.X -= numberOfTileBehindPlayer * Game1.tileSize; break; //right
-                    case 2: temp.Y -= (numberOfTileBehindPlayer) * Game1.tileSize; break; //down
-                    case 3: temp.X += (numberOfTileBehindPlayer + 2) * Game1.tileSize; break; //left
-                }
-                grid[i] = temp;
-            }
-            return grid;
-        }
-
-        private List<Vector2> MakeVector2Grid(Vector2 origin, int size)
-        {
-            List<Vector2> grid = new List<Vector2>();
-
-            for (int i = 0; i < 2 * size + 1; i++)
-            {
-                for (int j = 0; j < 2 * size + 1; j++)
-                {
-                    Vector2 newVec = new Vector2(origin.X - size * Game1.tileSize,
-                                                origin.Y - size * Game1.tileSize);
-
-                    newVec.X += (float)i * Game1.tileSize;
-                    newVec.Y += (float)j * Game1.tileSize;
-
-                    grid.Add(newVec);
-                }
-            }
-            return grid;
-        }
-
-        /*
-        private List<Vector2> MakeVector2TileGridForHorse(Vector2 origin, int size)
-        {
-            List<Vector2> grid = new List<Vector2>();
-            if (Game1.player.isMoving() == false)
-                return new List<Vector2>();
-            
-            for (int i = 0; i < 2 * size + 1; i++)
-            {
-                for (int j = 0; j < 2 * size + 1; j++)
-                {
-                    bool NoAdd = false;
-                    switch (playerOrientation)
-                    {
-                        default: break;
-                        case 0: if (j != 0) NoAdd = true; break;
-                        case 2: if (j != 0) NoAdd = true; break;
-                        case 1: if (i != 0) NoAdd = true; break;
-                        case 3: if (i != 0) NoAdd = true; break;
-                    }
-                    if (NoAdd)
-                        continue;
-
-                    Vector2 newVec = new Vector2(origin.X - size, origin.Y - size);
-                    newVec.X += (float)i;
-                    newVec.Y += (float)j;
-                    grid.Add(newVec);
-                }
-            }
-
-            //adjust depending on facing
-            for (int i = 0; i < grid.Count; i++)
-            {
-                Vector2 temp = grid[i];
-                int numberOfTileBehindPlayer = 1;
-                switch (playerOrientation)
-                {
-                    default: break;
-                    case 0: temp.Y += (numberOfTileBehindPlayer + 2); break; //go up
-                    case 1: temp.X -= numberOfTileBehindPlayer; break; //right
-                    case 2: temp.Y -= (numberOfTileBehindPlayer); break; //down
-                    case 3: temp.X += (numberOfTileBehindPlayer + 2); break; //left
-                }
-                grid[i] = temp;
-            }
-            return grid;
-        }
-        */
-
         private List<Vector2> MakeVector2TileGrid(Vector2 origin, int size)
         {
             List<Vector2> grid = new List<Vector2>();
@@ -785,50 +635,14 @@ namespace TractorMod
                     Vector2 newVec = new Vector2(origin.X - size,
                                                 origin.Y - size);
 
-                    newVec.X += (float)i;
-                    newVec.Y += (float)j;
+                    newVec.X += i;
+                    newVec.Y += j;
 
                     grid.Add(newVec);
                 }
             }
 
             return grid;
-        }
-
-        private int FindEmptySlotInFarmerInventory(SFarmer input)
-        {
-            for (int i = 0; i < input.items.Count; i++)
-            {
-                if (input.items[i] == null)
-                    return i;
-            }
-            return -1;
-        }
-
-        private int FindSlotWithSameItemInFarmerInventory(SFarmer input, Item inputItem)
-        {
-            for (int i = 0; i < input.items.Count; i++)
-            {
-                if (input.items[i] == null)
-                    continue;
-                if (input.items[i].getRemainingStackSpace() <= 0)
-                    continue;
-                if (input.items[i].canStackWith(inputItem))
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        private int FindSlotForInputItemInFarmerInventory(SFarmer input, Item inputItem)
-        {
-            int slot = FindSlotWithSameItemInFarmerInventory(input, inputItem);
-            if (slot == -1)
-            {
-                slot = FindEmptySlotInFarmerInventory(input);
-            }
-            return slot;
         }
 
         private bool CheckFarmerProfession(SFarmer farmerInput, int professionIndex)
@@ -838,69 +652,6 @@ namespace TractorMod
                 if (i == professionIndex)
                     return true;
             }
-            return false;
-        }
-
-        private List<Vector2> RemoveTileWithResourceClumpType(int ResourceClumpIndex, List<Vector2> input)
-        {
-            List<Vector2> output = new List<Vector2>();
-            foreach (Vector2 tile in input)
-            {
-                if (CheckIfTileBelongToResourceClump(ResourceClumpIndex, tile))
-                    continue;
-                else
-                    output.Add(new Vector2(tile.X, tile.Y));
-            }
-
-            return output;
-        }
-
-        private bool CheckIfTileBelongToResourceClump(int ResourceClumpIndex, Vector2 tile)
-        {
-            TerrainFeature check;
-            if (Game1.currentLocation.terrainFeatures.TryGetValue(tile, out check))
-            {
-                if (check is ResourceClump)
-                {
-                    ResourceClump RC = (ResourceClump)check;
-                    if (RC.parentSheetIndex == ResourceClumpIndex)
-                        return true;
-                }
-            }
-
-            Vector2 tileToLeft = new Vector2(tile.X - 1, tile.Y);
-            if (Game1.currentLocation.terrainFeatures.TryGetValue(tileToLeft, out check))
-            {
-                if (check is ResourceClump)
-                {
-                    ResourceClump RC = (ResourceClump)check;
-                    if (RC.parentSheetIndex == ResourceClumpIndex)
-                        return true;
-                }
-            }
-
-            Vector2 tileToTopLeft = new Vector2(tile.X - 1, tile.Y - 1);
-            if (Game1.currentLocation.terrainFeatures.TryGetValue(tileToTopLeft, out check))
-            {
-                if (check is ResourceClump)
-                {
-                    ResourceClump RC = (ResourceClump)check;
-                    if (RC.parentSheetIndex == ResourceClumpIndex)
-                        return true;
-                }
-            }
-
-            Vector2 tileToTop = new Vector2(tile.X, tile.Y - 1);
-            if (Game1.currentLocation.terrainFeatures.TryGetValue(tileToTop, out check))
-            {
-                if (check is ResourceClump)
-                {
-                    ResourceClump RC = (ResourceClump)check;
-                    if (RC.parentSheetIndex == ResourceClumpIndex)
-                        return true;
-                }
-            }
-
             return false;
         }
 
