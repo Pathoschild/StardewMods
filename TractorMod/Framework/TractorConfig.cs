@@ -8,15 +8,9 @@ namespace TractorMod.Framework
         /*********
         ** Accessors
         *********/
-        public string Info1 = "Add tool with exact name you would like to use with Tractor Mode.";
-        public string Info2 = "Also custom minLevel and effective radius for each tool.";
-        public string Info3 = "Ingame tools included: Pickaxe, Axe, Hoe, Watering Can.";
-        public string Info4 = "I haven't tried tools like Shears or Milk Pail but you can :)";
-        public string Info5 = "Delete Scythe entry if you don't want to harvest stuff.";
-
         /// <summary>The enabled tools.</summary>
         public ToolConfig[] Tool { get; set; } = {
-            new ToolConfig("Scythe", 0, 2, 1),
+            new ToolConfig("Scythe", 0, 2),
             new ToolConfig("Hoe"),
             new ToolConfig("Watering Can")
         };
