@@ -6,7 +6,7 @@ using StardewValley.Buildings;
 
 namespace TractorMod.Framework
 {
-    public class TractorHouse : Building
+    internal class TractorHouse : Building
     {
         /*********
         ** Public methods

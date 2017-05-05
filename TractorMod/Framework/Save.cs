@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace TractorMod.Framework
 {
-    public class Save
+    internal class Save
     {
         /*********
         ** Accessors

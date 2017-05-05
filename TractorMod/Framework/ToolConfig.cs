@@ -1,7 +1,7 @@
 ﻿namespace TractorMod.Framework
 {
     /// <summary>Configuration for a tool that can be used with the tractor.</summary>
-    public class ToolConfig
+    internal class ToolConfig
     {
         /*********
         ** Properties

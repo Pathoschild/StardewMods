@@ -27,7 +27,7 @@ namespace TractorMod
         private SaveCollection AllSaves;
         private bool IsNewDay;
         private bool IsNewTractor;
-        const int buffUniqueID = 58012397;
+        private const int buffUniqueID = 58012397;
         private bool TractorOn;
         private int mouseHoldDelay = 5;
         private int mouseHoldDelayCount;

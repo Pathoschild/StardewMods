@@ -3,7 +3,7 @@ using StardewValley;
 
 namespace TractorMod.Framework
 {
-    public class SaveCollection
+    internal class SaveCollection
     {
         /*********
         ** Accessors

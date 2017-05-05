@@ -12,7 +12,7 @@ using StardewValley.Menus;
 
 namespace TractorMod.Framework
 {
-    public class PhthaloBlueCarpenterMenu : IClickableMenu
+    internal class PhthaloBlueCarpenterMenu : IClickableMenu
     {
         /*********
         ** Properties

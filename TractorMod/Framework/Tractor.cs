@@ -6,7 +6,7 @@ using StardewValley.Characters;
 
 namespace TractorMod.Framework
 {
-    public class Tractor : Horse
+    internal class Tractor : Horse
     {
         /*********
         ** Public methods
