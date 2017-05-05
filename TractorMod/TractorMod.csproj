@@ -48,8 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Changelog.md" />
-    <None Include="Customization.md" />
+    <None Include="release-notes.md" />
     <None Include="LICENSE" />
     <None Include="manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -67,6 +66,10 @@
     <Content Include="assets\TractorHouse.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="screenshots\build-garage.png" />
+    <Content Include="screenshots\buy-garage.png" />
+    <Content Include="screenshots\final-garage.png" />
+    <Content Include="screenshots\tractor.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\deploy-mod.targets" />

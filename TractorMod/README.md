@@ -1,71 +1,63 @@
-# Tractor Mod - A SMAPI Mod for Stardew Valley
-#### A mod for stardew valley: auto till, water, fertilize, and seed dirt tiles on your farm by simply walking over map tiles. 
+﻿**Tractor Mor** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you buy a tractor
+(with accompanying tractor garage building) to quickly till, fertilize, seed, and fertilise your
+crops.
 
-**Modder:** PhthaloBlue  
-### Overview
-This mod adds a **Garage** building which provides **Tractor** to help with your farm works.  
-**Tractor** allows players to quickly till dirt, sow seeds, fertilize soil, and water crop by simply walking over map tiles.  
+Compatible with Stardew Valley 1.2.26+ on Linux, Mac, and Windows. Originally written by PhthaloBlue,
+and now maintained by the community — pull requests are welcome!
 
-### Latest Version: [v.3.2.1](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
-#### Change Log **v3.2.1**, author [**Pathoschild**](https://github.com/Pathoschild):
-+ **Fix** some errors in Stardew Valley 1.2 with TractorMod 3.2.
+## Contents
+* [Install](#install)
+* [Use](#use)
+* [Versions](#versions)
+* [See also](#see-also)
 
-#### Change Log **v.3.2**, author [**Pathoschild**](https://github.com/Pathoschild):
-+ Updates the code for Stardew Valley 1.2 and SMAPI 1.10.
-+ Adds the missing asset files from the release package.
-+ Adds the mod build package.
-+ Adds a build task to automatically package the mod into the Mods folder.
-+ Standardises the .gitignore and removes build output from source control.
+## Install
+1. [Install the latest version of SMAPI](http://canimod.com/for-players/install-smapi).
+2. Install <s>this mod from Nexus mods</s>.
+3. Run the game using SMAPI.
 
-#### Past [changelog.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
+## Use
+Press `N` (configurable) in-game to call PhthaloBlue Corp to buy a tractor garage:
+> ![](screenshots/buy-garage.png)
 
-![](https://github.com/lambui/StardewValleyMod_TractorMod/blob/gif/images/TractorGarage.png)
+...choose where you want it built:
+> ![](screenshots/build-garage.png)
 
-#### [More Demo gif in DEMO section here.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Changelog.md)
+...and PhthaloBlue Corp will build your garage overnight:
+> ![](screenshots/final-garage.png)
 
-### Require:  
-1. [Stardew Valley](http://store.steampowered.com/app/413150/)
-2. [SMAPI: +1.1](https://github.com/ClxS/SMAPI/releases)
+Now just get on the tractor, choose a tool or seeds or fertilizer, and drive:
+> ![](screenshots/tractor.png)
 
-### Download [here](https://github.com/lambui/StardewValleyMod_TractorMod/releases)
+## Configure
+The mod creates a `config.json` file the first time you run it. You can open the file in a text
+editor to configure the mod.
 
-### Install:  
-1. Get [Stardew Valley](http://store.steampowered.com/app/413150/) $$$
-2. [Install SMAPI](http://canimod.com/guides/using-mods#installing-smapi)
-3. Unzip the mod folder into Stardew Valley/Mods (just put TractorMod folder into /Mods folder)
-4. Run [SMAPI](http://canimod.com/guides/using-mods#installing-smapi)
+setting | effect
+:------ | :-----
+`ToolConfig` | Configure the tools to use with the tractor (see below).
+`ItemRadius` | The number of tiles on each side of the tractor to affect when seeding or fertilising (in addition to the tile under it).
+`HoldActivate` | The button to hold to activate the tractor tool. The possible values are `0` (always active), `1` (left mouse button), `2` (right mouse button), or `3` (right mouse button).
+`TractorKey` | The button which summons the tractor to your position (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
+`TractorSpeed` | The speed modifier when riding the tractor.
+`HorseKey` | The button which summons the horse to your position (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
+`PhoneKey` | The button which calls to buy a tractor garage (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
+`TractorHousePrice` | The gold price to buy a tractor garage.
+`UpdateConfig` | The button which reloads the mod configuration.
 
-### How To Use:
-+ Normal: 
-  1. Buy Garage by using PhoneKey (Default is N).
-  2. Wait for Garage to finish being built, and receive new Tractor afterward
-  2. Get on the Tractor.
-  3. Hold your hoe if you want to till dirt  
-    Hold water can if you want to water crop  
-    Hold seed bag(s) to sow seeds  
-    Hold fertilizer to fertilize tilled soil  
-    Hold scythe to harvest  
-  4. When done get off the Tractor to turn Tractor Mode off.
-+ Mouse-Activating Mode:  
-    1. Get to your farm
-    2. Turn on Tractor Mode by holding down appropriate mouse button (set by holdActivate in config.json). 
-    You will receive a speed buff showing that the Tractor Mode is now on.
-    3. Hold your hoe if you want to till dirt  
-    Hold water can if you want to water crop  
-    Hold seed bag(s) to sow seeds  
-    Hold fertilizer to fertilize tilled soil  
-    Hold scythe to harvest  
-    4. After you are done with your farmwork, simply release right click to turn it off.  
-    The buff will go away showing that the Mode is now off.
+The `ToolConfig` field contains multiple entries with these fields:
 
-### Customize: [see here in Customization.](https://github.com/lambui/StardewValleyMod_TractorMod/blob/master/Customization.md)  
+setting | effect
+:------ | :-----
+`Name` | The exact name of the tool to use (case-sensitive).
+`MinLevel` | The minimum tool upgrade level to use this tool in tractor mode (0 for basic tool, 1 for copper tool, etc).
+`EffectRadius` | The number of tiles on each side of the tractor to affect in addition to the tile under it (e.g. 1 for 3x3 grid or 2 for 5x5 grid).
+`ActiveEveryTickAmount` | The cooldown time between each use of the tool in tractor mode, in ticks. This is mainly for performance. There are ≈60 ticks per second.
 
-### Note:  
-+ Be careful when tilling your soil because the hoe can destroy your small-medium sized fruit trees.  
-+ Tractor Mode doesn't drain your stamina when using Hoe and Water can.  
-+ Water can doesn't need to be refilled but needs to have some water in it to work.  
-+ You can fertilize your crop AFTER sowing seeds with Tractor Mode.  
-+ Thank [Horse to Tractor mod by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/) for the awesome Tractor sprite.
-+ **Have fun farming! :)**
+## Versions
+See [release notes](release-notes.md).
 
-Contact me @ [buiphuonglamvn@gmail.com](mailto:buiphuonglamvn@gmail.com) regarding whatever.
+## See also
+* <s>Nexus mod</s>
+* [Discussion thread](http://community.playstarbound.com/threads/gameplay-mod-tractor-mod.126955/)
+* Thanks to [Pewtershmitz for the tractor sprites](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/)!

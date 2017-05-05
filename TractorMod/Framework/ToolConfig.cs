@@ -19,7 +19,7 @@
         /// <summary>The minimum tool upgrade level for this config to apply.</summary>
         public int MinLevel { get; set; }
 
-        /// <summary>The number of tiles on each side of the tractor to affect (in addition to the tile under it).</summary>
+        /// <summary>The number of tiles on each side of the tractor to affect when seeding or fertilising (in addition to the tile under it).</summary>
         public int EffectRadius { get; set; } = 1;
 
         /// <summary>The multiple of ticks at which to try using the tool.</summary>
