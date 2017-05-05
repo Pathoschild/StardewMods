@@ -1,6 +1,7 @@
 # Release notes
 ## 3.3
 * Removed summon-horse key.
+* Removed tractor mode activated by holding mouse button (now only when riding the tractor).
 
 ## 3.2.1
 * Fixed initialisation errors.

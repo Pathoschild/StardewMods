@@ -8,7 +8,6 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Buildings;
-using StardewValley.Characters;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using TractorMod.Framework;
@@ -29,8 +28,6 @@ namespace TractorMod
         private bool IsNewTractor;
         private const int buffUniqueID = 58012397;
         private bool TractorOn;
-        private int mouseHoldDelay = 5;
-        private int mouseHoldDelayCount;
         private Farm Farm;
 
 
@@ -42,7 +39,6 @@ namespace TractorMod
         public override void Entry(IModHelper helper)
         {
             this.ModConfig = helper.ReadConfig<TractorConfig>();
-            this.mouseHoldDelayCount = this.mouseHoldDelay;
 
             // spawn tractor & remove it before save
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
@@ -113,11 +109,10 @@ namespace TractorMod
             if (this.ModConfig == null || Game1.currentLocation == null)
                 return;
 
-            MouseState currentMouseState = Mouse.GetState();
-            KeyboardState currentKeyboardState = Keyboard.GetState();
-            if (Keyboard.GetState().IsKeyDown(ModConfig.UpdateConfig))
+            KeyboardState keyboard = Keyboard.GetState();
+            if (keyboard.IsKeyDown(ModConfig.UpdateConfig))
                 ModConfig = this.Helper.ReadConfig<TractorConfig>();
-            DoAction(currentKeyboardState, currentMouseState);
+            DoAction(keyboard);
         }
 
         private void SpawnTractor(bool spawnAtFirstTractorHouse = true)
@@ -218,7 +213,7 @@ namespace TractorMod
         }
 
         //execute most of the mod thinking here
-        private void DoAction(KeyboardState currentKeyboardState, MouseState currentMouseState)
+        private void DoAction(KeyboardState currentKeyboardState)
         {
             if (Game1.currentLocation == null)
                 return;
@@ -255,46 +250,6 @@ namespace TractorMod
 
             //staring tractorMod
             this.TractorOn = false;
-            switch (ModConfig.HoldActivate)
-            {
-                case 1:
-                    if (currentMouseState.LeftButton == ButtonState.Pressed)
-                    {
-                        if (mouseHoldDelayCount > 0)
-                            mouseHoldDelayCount -= 1;
-                        if (mouseHoldDelayCount <= 0)
-                        {
-                            this.TractorOn = true;
-                            mouseHoldDelayCount = mouseHoldDelay;
-                        }
-                    }
-                    break;
-                case 2:
-                    if (currentMouseState.RightButton == ButtonState.Pressed)
-                    {
-                        if (mouseHoldDelayCount > 0)
-                            mouseHoldDelayCount -= 1;
-                        if (mouseHoldDelayCount <= 0)
-                        {
-                            this.TractorOn = true;
-                            mouseHoldDelayCount = mouseHoldDelay;
-                        }
-                    }
-                    break;
-                case 3:
-                    if (currentMouseState.MiddleButton == ButtonState.Pressed)
-                    {
-                        if (mouseHoldDelayCount > 0)
-                            mouseHoldDelayCount -= 1;
-                        if (mouseHoldDelayCount <= 0)
-                        {
-                            this.TractorOn = true;
-                            mouseHoldDelayCount = mouseHoldDelay;
-                        }
-                    }
-                    break;
-            }
-
             if (ATractor != null)
             {
                 if (ATractor.rider == Game1.player)

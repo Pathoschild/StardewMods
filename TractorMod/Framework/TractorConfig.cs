@@ -24,9 +24,6 @@ namespace TractorMod.Framework
         /// <summary>The number of tiles on each side of the tractor to affect (in addition to the tile under it).</summary>
         public int ItemRadius { get; set; } = 1;
 
-        /// <summary>The button to hold to activate the tractor tool. The possible values are <c>0</c> (always active), <c>1</c> (left mouse button), <c>2</c> (right mouse button), or <c>3</c> (right mouse button).</summary>
-        public int HoldActivate { get; set; } = 0;
-
         /// <summary>The button which summons the tractor to your position.</summary>
         public Keys TractorKey { get; set; } = Keys.B;
 
