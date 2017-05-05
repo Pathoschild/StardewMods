@@ -37,10 +37,8 @@ setting | effect
 :------ | :-----
 `ToolConfig` | Configure the tools to use with the tractor (see below).
 `ItemRadius` | The number of tiles on each side of the tractor to affect when seeding or fertilising (in addition to the tile under it).
-`HoldActivate` | The button to hold to activate the tractor tool. The possible values are `0` (always active), `1` (left mouse button), `2` (right mouse button), or `3` (right mouse button).
 `TractorKey` | The button which summons the tractor to your position (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
 `TractorSpeed` | The speed modifier when riding the tractor.
-`HorseKey` | The button which summons the horse to your position (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
 `PhoneKey` | The button which calls to buy a tractor garage (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
 `TractorHousePrice` | The gold price to buy a tractor garage.
 `UpdateConfig` | The button which reloads the mod configuration.
