@@ -115,7 +115,7 @@ namespace TractorMod
 
             MouseState currentMouseState = Mouse.GetState();
             KeyboardState currentKeyboardState = Keyboard.GetState();
-            if (Keyboard.GetState().IsKeyDown(ModConfig.updateConfig))
+            if (Keyboard.GetState().IsKeyDown(ModConfig.UpdateConfig))
                 ModConfig = this.Helper.ReadConfig<TractorConfig>();
             DoAction(currentKeyboardState, currentMouseState);
         }
@@ -239,7 +239,7 @@ namespace TractorMod
             }
 
             //summon Tractor
-            if (currentKeyboardState.IsKeyDown(ModConfig.tractorKey))
+            if (currentKeyboardState.IsKeyDown(ModConfig.TractorKey))
             {
                 Vector2 tile = Game1.player.getTileLocation();
                 if (IsNewTractor) //check if you already own TractorHouse, if so then spawn tractor if its null
@@ -254,7 +254,7 @@ namespace TractorMod
             }
 
             //summon Horse
-            if (currentKeyboardState.IsKeyDown(ModConfig.horseKey))
+            if (currentKeyboardState.IsKeyDown(ModConfig.HorseKey))
             {
                 foreach (GameLocation GL in Game1.locations)
                 {
@@ -280,7 +280,7 @@ namespace TractorMod
 
             //staring tractorMod
             this.TractorOn = false;
-            switch (ModConfig.holdActivate)
+            switch (ModConfig.HoldActivate)
             {
                 case 1:
                     if (currentMouseState.LeftButton == ButtonState.Pressed)
@@ -349,7 +349,7 @@ namespace TractorMod
             //create new buff if its not already applied
             if (!BuffAlready)
             {
-                Buff tractorBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, ModConfig.tractorSpeed, 0, 0, 1, "Tractor Power", "Tractor Power");
+                Buff tractorBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, ModConfig.TractorSpeed, 0, 0, 1, "Tractor Power", "Tractor Power");
                 tractorBuff.which = buffUniqueID;
                 tractorBuff.millisecondsDuration = 1000;
                 Game1.buffsDisplay.addOtherBuff(tractorBuff);
@@ -426,7 +426,7 @@ namespace TractorMod
         {
             //check if tool is enable from config
             ToolConfig ConfigForCurrentTool = new ToolConfig("");
-            foreach (ToolConfig TC in ModConfig.tool)
+            foreach (ToolConfig TC in ModConfig.Tool)
             {
                 if (Game1.player.CurrentTool.name.Contains("Scythe"))
                 {
@@ -434,9 +434,9 @@ namespace TractorMod
                     break;
                 }
             }
-            if (ConfigForCurrentTool.name == "")
+            if (ConfigForCurrentTool.Name == "")
                 return;
-            int effectRadius = ConfigForCurrentTool.effectRadius;
+            int effectRadius = ConfigForCurrentTool.EffectRadius;
             List<Vector2> affectedTileGrid = MakeVector2TileGrid(Game1.player.getTileLocation(), effectRadius);
 
             //harvesting objects
@@ -560,27 +560,27 @@ namespace TractorMod
             Tool currentTool = Game1.player.CurrentTool;
 
             //check if tool is enable from config
-            ToolConfig configForCurrentTool = new ToolConfig("");
-            foreach (ToolConfig toolConfig in ModConfig.tool)
+            ToolConfig configForCurrentTool = null;
+            foreach (ToolConfig toolConfig in ModConfig.Tool)
             {
-                if (currentTool.name.Contains(toolConfig.name))
+                if (currentTool.name.Contains(toolConfig.Name))
                 {
                     configForCurrentTool = toolConfig;
                     break;
                 }
             }
 
-            if (configForCurrentTool.name == "" || currentTool.upgradeLevel < configForCurrentTool.minLevel)
+            if (configForCurrentTool == null || currentTool.upgradeLevel < configForCurrentTool.MinLevel)
                 return;
 
-            if (configForCurrentTool.activeEveryTickAmount > 1)
+            if (configForCurrentTool.ActiveEveryTickAmount > 1)
             {
-                configForCurrentTool.incrementActiveCount();
-                if (!configForCurrentTool.canToolBeActive())
+                configForCurrentTool.IncrementTicks();
+                if (!configForCurrentTool.IsReady())
                     return;
             }
 
-            int effectRadius = configForCurrentTool.effectRadius;
+            int effectRadius = configForCurrentTool.EffectRadius;
             int currentWater = 0;
             if (currentTool is WateringCan)
             {
@@ -632,8 +632,7 @@ namespace TractorMod
             {
                 for (int j = 0; j < 2 * size + 1; j++)
                 {
-                    Vector2 newVec = new Vector2(origin.X - size,
-                                                origin.Y - size);
+                    Vector2 newVec = new Vector2(origin.X - size, origin.Y - size);
 
                     newVec.X += i;
                     newVec.Y += j;
