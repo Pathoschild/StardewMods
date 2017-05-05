@@ -253,31 +253,6 @@ namespace TractorMod
                     Game1.warpCharacter(this.ATractor, Game1.currentLocation.name, tile, false, true);
             }
 
-            //summon Horse
-            if (currentKeyboardState.IsKeyDown(ModConfig.HorseKey))
-            {
-                foreach (GameLocation GL in Game1.locations)
-                {
-                    foreach (NPC character in GL.characters)
-                    {
-                        if (character is Tractor)
-                        {
-                            continue;
-                        }
-                        if (character is Horse)
-                        {
-                            Game1.warpCharacter(character, Game1.currentLocation.name, Game1.player.getTileLocation(), false, true);
-                        }
-                    }
-                }
-            }
-
-            //disable Tractor Mode if player doesn't have TractorHouse built
-            /*
-            if (AllSaves.FindCurrentSave().TractorHouse.Count <= 0) 
-                return;
-            */
-
             //staring tractorMod
             this.TractorOn = false;
             switch (ModConfig.HoldActivate)

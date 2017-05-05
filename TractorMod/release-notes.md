@@ -1,4 +1,7 @@
 # Release notes
+## 3.3
+* Removed summon-horse key.
+
 ## 3.2.1
 * Fixed initialisation errors.
 
