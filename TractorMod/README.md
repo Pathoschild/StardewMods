@@ -17,7 +17,7 @@ and now maintained by the community — pull requests are welcome!
 3. Run the game using SMAPI.
 
 ## Use
-Press `N` (configurable) in-game to call PhthaloBlue Corp to buy a tractor garage:
+Buy the tractor garage from Robin (a licensed PhthaloBlue Corp distributor):
 > ![](screenshots/buy-garage.png)
 
 ...choose where you want it built:
@@ -39,7 +39,6 @@ setting | effect
 `ItemRadius` | The number of tiles on each side of the tractor to affect when seeding or fertilising (in addition to the tile under it).
 `TractorKey` | The button which summons the tractor to your position (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
 `TractorSpeed` | The speed modifier when riding the tractor.
-`PhoneKey` | The button which calls to buy a tractor garage (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
 `TractorHousePrice` | The gold price to buy a tractor garage.
 `UpdateConfig` | The button which reloads the mod configuration.
 

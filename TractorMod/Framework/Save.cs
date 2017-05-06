@@ -11,26 +11,36 @@ namespace TractorMod.Framework
         public string FarmerName { get; set; } = "";
         public ulong SaveSeed { get; set; }
         public List<Vector2> TractorHouse = new List<Vector2>();
-        public Save() { SaveSeed = ulong.MaxValue; }
 
 
         /*********
         ** Public methods
         *********/
+        public Save()
+        {
+            SaveSeed = ulong.MaxValue;
+        }
+
         public Save(string nameInput, ulong input)
         {
             SaveSeed = input;
             FarmerName = nameInput;
         }
 
-        public Save AddTractorHouse(int inputX, int inputY)
+        public IEnumerable<Vector2> GetGarages()
         {
-            foreach (Vector2 THS in TractorHouse)
+            foreach (Vector2 position in this.TractorHouse)
+                yield return position;
+        }
+
+        public Save AddGarage(int inputX, int inputY)
+        {
+            foreach (Vector2 tile in TractorHouse)
             {
-                if (THS.X == inputX && THS.Y == inputY)
+                if (tile.X == inputX && tile.Y == inputY)
                     return this;
             }
-            TractorHouse.Add(new Vector2(inputX, inputY));
+            this.TractorHouse.Add(new Vector2(inputX, inputY));
             return this;
         }
     }

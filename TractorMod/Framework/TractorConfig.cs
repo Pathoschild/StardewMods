@@ -24,9 +24,6 @@ namespace TractorMod.Framework
         /// <summary>The speed modifier when riding the tractor.</summary>
         public int TractorSpeed { get; set; } = -2;
 
-        /// <summary>The button which calls to buy a tractor garage.</summary>
-        public Keys PhoneKey { get; set; } = Keys.N;
-
         /// <summary>The gold price to buy a tractor garage.</summary>
         public int TractorHousePrice { get; set; } = 150000;
 

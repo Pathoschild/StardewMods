@@ -1,5 +1,6 @@
 # Release notes
 ## 3.3
+* The tractor garage is now sold by Robin (a licensed distributor), and requires a few building materials. Removed phone menu to encourage local businesses.
 * Removed summon-horse key.
 * Removed tractor mode activated by holding mouse button (now only when riding the tractor).
 

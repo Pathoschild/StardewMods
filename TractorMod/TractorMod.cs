@@ -8,10 +8,13 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using TractorMod.Framework;
 using SFarmer = StardewValley.Farmer;
+using SObject = StardewValley.Object;
 
 namespace TractorMod
 {
@@ -22,13 +25,19 @@ namespace TractorMod
         *********/
         private Vector2 tractorSpawnLocation = new Vector2(70, 13);
         private TractorConfig ModConfig { get; set; }
-        private Tractor ATractor;
+        private Tractor Tractor;
         private SaveCollection AllSaves;
         private bool IsNewDay;
         private bool IsNewTractor;
         private const int buffUniqueID = 58012397;
         private bool TractorOn;
         private Farm Farm;
+
+        /// <summary>The tractor garage's building type.</summary>
+        private readonly string GarageBuildingType = "TractorGarage";
+
+        /// <summary>The tractor's NPC name.</summary>
+        private readonly string TractorName = "Tractor";
 
 
         /*********
@@ -47,7 +56,6 @@ namespace TractorMod
 
             // so that weird shit wouldnt happen
             MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
-            MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
 
             // handle player interaction
             GameEvents.UpdateTick += this.UpdateTickEvent;
@@ -81,7 +89,7 @@ namespace TractorMod
             this.SaveModInfo();
 
             // remove tractor from save
-            foreach (TractorHouse tractorHouse in this.Farm.buildings.OfType<TractorHouse>().ToArray())
+            foreach (Building tractorHouse in this.GetGarages(this.Farm).ToArray())
                 this.Farm.destroyStructure(tractorHouse);
             foreach (GameLocation location in Game1.locations)
                 this.RemoveEveryCharactersOfType<Tractor>(location);
@@ -89,18 +97,12 @@ namespace TractorMod
 
         private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
-            if (e.NewMenu is PhthaloBlueCarpenterMenu)
-                PhthaloBlueCarpenterMenu.IsOpen = true;
-            else
-                PhthaloBlueCarpenterMenu.IsOpen = false;
-        }
-
-        private void MenuEvents_MenuClosed(object sender, EventArgsClickableMenuClosed e)
-        {
-            if (e.PriorMenu is PhthaloBlueCarpenterMenu)
+            // add blueprint carpenter menu
+            if (e.NewMenu is CarpenterMenu menu)
             {
-                ((PhthaloBlueCarpenterMenu)e.PriorMenu).Hangup();
-                PhthaloBlueCarpenterMenu.IsOpen = false;
+                this.Helper.Reflection
+                    .GetPrivateValue<List<BluePrint>>(menu, "blueprints")
+                    .Add(this.GetBlueprint());
             }
         }
 
@@ -125,33 +127,24 @@ namespace TractorMod
 
             if (!spawnAtFirstTractorHouse)
             {
-                ATractor = new Tractor((int)tractorSpawnLocation.X, (int)tractorSpawnLocation.Y, this.Helper.Content);
-                ATractor.name = "Tractor";
-                this.Farm.characters.Add(this.ATractor);
-                Game1.warpCharacter(this.ATractor, "Farm", tractorSpawnLocation, false, true);
+                this.Tractor = new Tractor((int)tractorSpawnLocation.X, (int)tractorSpawnLocation.Y, this.Helper.Content) { name = this.TractorName };
+                this.Farm.characters.Add(this.Tractor);
+                Game1.warpCharacter(this.Tractor, "Farm", tractorSpawnLocation, false, true);
                 IsNewTractor = false;
                 return;
             }
 
-            //spawn tractor
-            foreach (Building building in this.Farm.buildings)
+            // spawn tractor
+            foreach (Building building in this.GetGarages(this.Farm))
             {
-                if (building is TractorHouse)
-                {
-                    if (building.daysOfConstructionLeft > 0)
-                        continue;
-                    ATractor = new Tractor(building.tileX + 1, building.tileY + 1, this.Helper.Content);
-                    ATractor.name = "Tractor";
-                    this.Farm.characters.Add(this.ATractor);
-                    Game1.warpCharacter(this.ATractor, "Farm", new Vector2(building.tileX + 1, building.tileY + 1), false, true);
-                    IsNewTractor = false;
-                    break;
-                }
+                if (building.daysOfConstructionLeft > 0)
+                    continue;
+                this.Tractor = new Tractor(building.tileX + 1, building.tileY + 1, this.Helper.Content) { name = this.TractorName };
+                this.Farm.characters.Add(this.Tractor);
+                Game1.warpCharacter(this.Tractor, "Farm", new Vector2(building.tileX + 1, building.tileY + 1), false, true);
+                this.IsNewTractor = false;
+                break;
             }
-            /*
-            ATractor = new Tractor((int)tractorSpawnLocation.X, (int)tractorSpawnLocation.Y);
-            ATractor.name = "Tractor";
-            */
         }
 
         //use to write AllSaves info to some .json file to store save
@@ -165,11 +158,8 @@ namespace TractorMod
             if (currentSave.SaveSeed != ulong.MaxValue)
             {
                 currentSave.TractorHouse.Clear();
-                foreach (Building b in this.Farm.buildings)
-                {
-                    if (b is TractorHouse)
-                        currentSave.AddTractorHouse(b.tileX, b.tileY);
-                }
+                foreach (Building building in this.GetGarages(this.Farm))
+                    currentSave.AddGarage(building.tileX, building.tileY);
             }
             else
             {
@@ -187,11 +177,13 @@ namespace TractorMod
             Save saveInfo = this.AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
             if (saveInfo != null && saveInfo.SaveSeed != ulong.MaxValue)
             {
-                foreach (Vector2 THS in saveInfo.TractorHouse)
+                foreach (Vector2 tile in saveInfo.GetGarages())
                 {
-                    this.Farm.buildStructure(new TractorHouse(this.Helper.Content).SetDaysOfConstructionLeft(0), THS, false, Game1.player);
-                    if (IsNewTractor)
-                        SpawnTractor();
+                    BluePrint blueprint = this.GetBlueprint();
+                    Building building = new Stable(blueprint, tile) { daysOfConstructionLeft = 0 };
+                    this.Farm.buildStructure(building, tile, false, Game1.player);
+                    if (this.IsNewTractor)
+                        this.SpawnTractor();
                 }
             }
         }
@@ -218,22 +210,7 @@ namespace TractorMod
             if (Game1.currentLocation == null)
                 return;
 
-            //use cellphone
-            if (currentKeyboardState.IsKeyDown(ModConfig.PhoneKey))
-            {
-                if (Game1.activeClickableMenu != null)
-                    return;
-                if (PhthaloBlueCarpenterMenu.IsOpen)
-                    return;
-                Response[] answerChoices = {
-                    new Response("Construct", "Browse PhthaloBlue Corp.'s building catalog"),
-                    new Response("Leave", "Hang up")
-                };
-
-                Game1.currentLocation.createQuestionDialogue("Hello, this is PhthaloBlue Corporation. How can I help you?", answerChoices, this.OpenPhthaloBlueCarpenterMenu);
-            }
-
-            //summon Tractor
+            // summon tractor
             if (currentKeyboardState.IsKeyDown(ModConfig.TractorKey))
             {
                 Vector2 tile = Game1.player.getTileLocation();
@@ -244,15 +221,15 @@ namespace TractorMod
                         SpawnTractor(false);
 
                 }
-                if (ATractor != null)
-                    Game1.warpCharacter(this.ATractor, Game1.currentLocation.name, tile, false, true);
+                if (this.Tractor != null)
+                    Game1.warpCharacter(this.Tractor, Game1.currentLocation.name, tile, false, true);
             }
 
             //staring tractorMod
             this.TractorOn = false;
-            if (ATractor != null)
+            if (this.Tractor != null)
             {
-                if (ATractor.rider == Game1.player)
+                if (this.Tractor.rider == Game1.player)
                     this.TractorOn = true;
             }
             else //this should be unreachable code
@@ -584,36 +561,41 @@ namespace TractorMod
             return false;
         }
 
-        private void OpenPhthaloBlueCarpenterMenu(SFarmer who, string whichAnswer)
+        /// <summary>Get a blueprint to construct the tractor garage.</summary>
+        private BluePrint GetBlueprint()
         {
-            switch (whichAnswer)
+            return new BluePrint(this.GarageBuildingType)
             {
-                case "Construct":
-                    BluePrint TractorBP = new BluePrint("Garage");
-                    TractorBP.itemsRequired.Clear();
-                    TractorBP.texture = this.Helper.Content.Load<Texture2D>(@"assets\TractorHouse.png", ContentSource.ModFolder);
-                    TractorBP.humanDoor = new Point(-1, -1);
-                    TractorBP.animalDoor = new Point(-2, -1);
-                    TractorBP.mapToWarpTo = "null";
-                    TractorBP.description = "A structure to store PhthaloBlue Corp.'s tractor.\nTractor included!";
-                    TractorBP.blueprintType = "Buildings";
-                    TractorBP.nameOfBuildingToUpgrade = "";
-                    TractorBP.actionBehavior = "null";
-                    TractorBP.maxOccupants = -1;
-                    TractorBP.moneyRequired = ModConfig.TractorHousePrice;
-                    TractorBP.tilesWidth = 4;
-                    TractorBP.tilesHeight = 2;
-                    TractorBP.sourceRectForMenuView = new Rectangle(0, 0, 64, 96);
-                    TractorBP.namesOfOkayBuildingLocations.Clear();
-                    TractorBP.namesOfOkayBuildingLocations.Add("Farm");
-                    TractorBP.magical = true;
-                    Game1.activeClickableMenu = new PhthaloBlueCarpenterMenu(this.Monitor, this.Helper.Content).AddBluePrint<TractorHouse>(TractorBP, () => new TractorHouse(this.Helper.Content));
-                    ((PhthaloBlueCarpenterMenu)Game1.activeClickableMenu).WherePlayerOpenThisMenu = Game1.currentLocation;
-                    break;
-                case "Leave":
-                    new PhthaloBlueCarpenterMenu(this.Monitor, this.Helper.Content).Hangup();
-                    break;
-            }
+                texture = this.Helper.Content.Load<Texture2D>(@"assets\TractorHouse.png"),
+                humanDoor = new Point(-1, -1),
+                animalDoor = new Point(-2, -1),
+                mapToWarpTo = "null",
+                displayName = "Tractor Garage",
+                description = "A structure to store PhthaloBlue Corp.'s tractor.\nTractor included!",
+                blueprintType = "Buildings",
+                nameOfBuildingToUpgrade = "",
+                actionBehavior = "null",
+                maxOccupants = -1,
+                moneyRequired = this.ModConfig.TractorHousePrice,
+                tilesWidth = 4,
+                tilesHeight = 2,
+                sourceRectForMenuView = new Rectangle(0, 0, 64, 96),
+                itemsRequired = new Dictionary<int, int>
+                {
+                    [SObject.ironBar] = 20,
+                    [SObject.iridiumBar] = 5,
+                    [787] = 5 // battery pack
+                },
+                magical = false,
+                namesOfOkayBuildingLocations = new List<string> { "Farm" }
+            };
+        }
+
+        /// <summary>Get all garages in the given location.</summary>
+        /// <param name="location">The location to search.</param>
+        private IEnumerable<Building> GetGarages(BuildableGameLocation location)
+        {
+            return location.buildings.Where(building => building.buildingType == this.GarageBuildingType);
         }
     }
 }
