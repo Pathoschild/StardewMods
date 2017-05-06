@@ -213,16 +213,8 @@ namespace TractorMod
             // summon tractor
             if (currentKeyboardState.IsKeyDown(ModConfig.TractorKey))
             {
-                Vector2 tile = Game1.player.getTileLocation();
-                if (IsNewTractor) //check if you already own TractorHouse, if so then spawn tractor if its null
-                {
-                    CustomSaveData currentSave = AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
-                    if (currentSave.TractorHouse.Count > 0)
-                        SpawnTractor(false);
-
-                }
                 if (this.Tractor != null)
-                    Game1.warpCharacter(this.Tractor, Game1.currentLocation.name, tile, false, true);
+                    Game1.warpCharacter(this.Tractor, Game1.currentLocation.name, Game1.player.getTileLocation(), false, true);
             }
 
             //staring tractorMod
