@@ -8,31 +8,31 @@ namespace TractorMod.Framework
         /*********
         ** Accessors
         *********/
-        public List<Save> saves = new List<Save>();
+        public List<CustomSaveData> saves = new List<CustomSaveData>();
 
 
         /*********
         ** Public methods
         *********/
-        public SaveCollection Add(Save input)
+        public SaveCollection Add(CustomSaveData input)
         {
             saves.Add(input);
             return this;
         }
 
-        public Save FindSave(string nameInput, ulong input)
+        public CustomSaveData FindSave(string nameInput, ulong input)
         {
-            foreach (Save ASave in saves)
+            foreach (CustomSaveData ASave in saves)
             {
                 if (ASave.SaveSeed == input && ASave.FarmerName == nameInput)
                 {
                     return ASave;
                 }
             }
-            return new Save();
+            return new CustomSaveData();
         }
 
-        public Save FindCurrentSave()
+        public CustomSaveData FindCurrentSave()
         {
             return FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
         }

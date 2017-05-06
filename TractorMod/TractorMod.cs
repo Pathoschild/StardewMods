@@ -151,9 +151,9 @@ namespace TractorMod
         private void SaveModInfo()
         {
             if (AllSaves == null)
-                AllSaves = new SaveCollection().Add(new Save(Game1.player.name, Game1.uniqueIDForThisGame));
+                AllSaves = new SaveCollection().Add(new CustomSaveData(Game1.player.name, Game1.uniqueIDForThisGame));
 
-            Save currentSave = AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
+            CustomSaveData currentSave = AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
 
             if (currentSave.SaveSeed != ulong.MaxValue)
             {
@@ -163,7 +163,7 @@ namespace TractorMod
             }
             else
             {
-                AllSaves.saves.Add(new Save(Game1.player.name, Game1.uniqueIDForThisGame));
+                AllSaves.saves.Add(new CustomSaveData(Game1.player.name, Game1.uniqueIDForThisGame));
                 SaveModInfo();
                 return;
             }
@@ -174,7 +174,7 @@ namespace TractorMod
         private void LoadModInfo()
         {
             this.AllSaves = this.Helper.ReadJsonFile<SaveCollection>("TractorModSave.json") ?? new SaveCollection();
-            Save saveInfo = this.AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
+            CustomSaveData saveInfo = this.AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
             if (saveInfo != null && saveInfo.SaveSeed != ulong.MaxValue)
             {
                 foreach (Vector2 tile in saveInfo.GetGarages())
@@ -216,7 +216,7 @@ namespace TractorMod
                 Vector2 tile = Game1.player.getTileLocation();
                 if (IsNewTractor) //check if you already own TractorHouse, if so then spawn tractor if its null
                 {
-                    Save currentSave = AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
+                    CustomSaveData currentSave = AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
                     if (currentSave.TractorHouse.Count > 0)
                         SpawnTractor(false);
 

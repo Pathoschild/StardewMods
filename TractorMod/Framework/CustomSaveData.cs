@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace TractorMod.Framework
 {
-    internal class Save
+    internal class CustomSaveData
     {
         /*********
         ** Accessors
@@ -16,12 +16,12 @@ namespace TractorMod.Framework
         /*********
         ** Public methods
         *********/
-        public Save()
+        public CustomSaveData()
         {
             SaveSeed = ulong.MaxValue;
         }
 
-        public Save(string nameInput, ulong input)
+        public CustomSaveData(string nameInput, ulong input)
         {
             SaveSeed = input;
             FarmerName = nameInput;
@@ -33,7 +33,7 @@ namespace TractorMod.Framework
                 yield return position;
         }
 
-        public Save AddGarage(int inputX, int inputY)
+        public CustomSaveData AddGarage(int inputX, int inputY)
         {
             foreach (Vector2 tile in TractorHouse)
             {
