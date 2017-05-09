@@ -161,9 +161,12 @@ namespace Pathoschild.Stardew.DebugMode
             if (!map.IsValidKey(key))
                 return;
 
-            // perform bound action
+           // perform bound action, toggle debug menu
             if (key.Equals(map.ToggleDebug))
+            {
+                Program.releaseBuild = !Program.releaseBuild;
                 this.DebugMode = !this.DebugMode;
+            }
         }
 
         /// <summary>Correct the player's position when they warp into an area.</summary>
