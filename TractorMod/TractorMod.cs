@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -48,6 +49,8 @@ namespace TractorMod
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            // read config
+            this.MigrateLegacySaveData(helper);
             this.ModConfig = helper.ReadConfig<TractorConfig>();
 
             // spawn tractor & remove it before save
@@ -141,13 +144,20 @@ namespace TractorMod
             }
         }
 
+        /// <summary>Get the mod-relative path for custom save data.</summary>
+        /// <param name="saveID">The save ID.</param>
+        private string GetDataPath(string saveID)
+        {
+            return $"data/{saveID}.json";
+        }
+
         /// <summary>Stash all tractor and garage data to a separate file to avoid breaking the save file.</summary>
         private void StashCustomData()
         {
             // back up garages
             Building[] garages = this.GetGarages(this.Farm).ToArray();
             CustomSaveData saveData = new CustomSaveData(garages);
-            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", saveData);
+            this.Helper.WriteJsonFile(this.GetDataPath(Constants.SaveFolderName), saveData);
 
             // remove tractors + buildings
             foreach (Building garage in garages)
@@ -160,7 +170,7 @@ namespace TractorMod
         private void RestoreCustomData()
         {
             // get save data
-            CustomSaveData saveData = this.Helper.ReadJsonFile<CustomSaveData>($"data/{Constants.SaveFolderName}.json");
+            CustomSaveData saveData = this.Helper.ReadJsonFile<CustomSaveData>(this.GetDataPath(Constants.SaveFolderName));
             if (saveData?.Buildings == null)
                 return;
 
@@ -173,6 +183,43 @@ namespace TractorMod
                 if (this.IsNewTractor)
                     this.SpawnTractor();
             }
+        }
+
+        /// <summary>Migrate the legacy <c>TractorModSave.json</c> file to the new config files.</summary>
+        /// <param name="helper">Provides simplified APIs for writing mods.</param>
+        private void MigrateLegacySaveData(IModHelper helper)
+        {
+            // get file
+            const string filename = "TractorModSave.json";
+            FileInfo file = new FileInfo(Path.Combine(helper.DirectoryPath, filename));
+            if (!file.Exists)
+                return;
+
+            // read legacy data
+            this.Monitor.Log($"Found legacy {filename}, migrating to new save data...");
+            IDictionary<string, CustomSaveData> saves = new Dictionary<string, CustomSaveData>();
+            {
+                LegacySaveData data = helper.ReadJsonFile<LegacySaveData>(filename);
+                if (data.Saves != null && data.Saves.Any())
+                {
+                    foreach (LegacySaveData.LegacySaveEntry saveData in data.Saves)
+                    {
+                        saves[$"{saveData.FarmerName}_{saveData.SaveSeed}"] = new CustomSaveData(
+                            saveData.TractorHouse.Select(p => new CustomSaveBuilding(new Vector2(p.X, p.Y), this.GarageBuildingType))
+                        );
+                    }
+                }
+            }
+
+            // write new files
+            foreach (var save in saves)
+            {
+                if (save.Value.Buildings.Any())
+                    helper.WriteJsonFile(this.GetDataPath(save.Key), save.Value);
+            }
+
+            // delete old file
+            file.Delete();
         }
 
         private void RemoveEveryCharactersOfType<T>(GameLocation GL)

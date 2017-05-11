@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley.Buildings;
 
@@ -23,7 +24,7 @@ namespace TractorMod.Framework
 
         /// <summary>Construct an instance.</summary>
         /// <param name="buildings">The custom buildings to save.</param>
-        public CustomSaveData(Building[] buildings)
+        public CustomSaveData(IEnumerable<Building> buildings)
         {
             this.Buildings =
                 (
@@ -32,6 +33,13 @@ namespace TractorMod.Framework
                     select new CustomSaveBuilding(tile, garage.buildingType)
                 )
                 .ToArray();
+        }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="buildings">The custom buildings to save.</param>
+        public CustomSaveData(IEnumerable<CustomSaveBuilding> buildings)
+        {
+            this.Buildings = buildings.ToArray();
         }
     }
 }
