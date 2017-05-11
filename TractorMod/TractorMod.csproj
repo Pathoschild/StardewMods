@@ -40,7 +40,6 @@
     <Compile Include="Framework\CustomSaveBuilding.cs" />
     <Compile Include="Framework\CustomSaveData.cs" />
     <Compile Include="Framework\LegacySaveData.cs" />
-    <Compile Include="Framework\ToolConfig.cs" />
     <Compile Include="Framework\Tractor.cs" />
     <Compile Include="Framework\TractorConfig.cs" />
     <Compile Include="TractorMod.cs" />

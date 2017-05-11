@@ -3,7 +3,8 @@
 * The tractor garage is now sold by Robin (a licensed distributor), and requires a few building materials. Removed phone menu to encourage local businesses.
 * Removed summon-horse key.
 * Removed tractor mode activated by holding mouse button (now only when riding the tractor).
-* Overhauled how data is saved. If you previously used TractorMod, your data will be migrated automatically.
+* Overhauled how data is saved. (Any previous data will be migrated automatically.)
+* Simplified the `config.json` by replacing per-tool settings with flags and common settings.
 * Can no longer summon tractor before building a tractor garage.
 
 ## 3.2.1
