@@ -25,15 +25,7 @@ namespace TractorMod.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="buildings">The custom buildings to save.</param>
         public CustomSaveData(IEnumerable<Building> buildings)
-        {
-            this.Buildings =
-                (
-                    from garage in buildings
-                    let tile = new Vector2(garage.tileX, garage.tileY)
-                    select new CustomSaveBuilding(tile, garage.buildingType)
-                )
-                .ToArray();
-        }
+            : this(buildings.Select(garage => new CustomSaveBuilding(new Vector2(garage.tileX, garage.tileY), garage.buildingType))) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="buildings">The custom buildings to save.</param>
