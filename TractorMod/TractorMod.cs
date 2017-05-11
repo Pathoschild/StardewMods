@@ -296,7 +296,7 @@ namespace TractorMod
             // perform tractor action
             Tool tool = Game1.player.CurrentTool;
             Item item = Game1.player.CurrentItem;
-            Vector2[] grid = this.GetTileGrid(Game1.player.getTileLocation(), this.ModConfig.EffectRadius).ToArray();
+            Vector2[] grid = this.GetTileGrid(Game1.player.getTileLocation(), this.ModConfig.Distance).ToArray();
             if (tool is MeleeWeapon && tool.name.ToLower().Contains("scythe"))
                 this.HarvestTiles(grid);
             else if (tool != null)
@@ -304,7 +304,6 @@ namespace TractorMod
             else if (item != null)
                 this.ApplyItem(item, grid);
         }
-
 
         /// <summary>Apply an item stack to the given tiles.</summary>
         /// <param name="item">The item stack to apply.</param>

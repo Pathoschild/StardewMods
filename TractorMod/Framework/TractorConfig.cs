@@ -18,7 +18,7 @@ namespace TractorMod.Framework
         public bool CanWater = true;
 
         /// <summary>The number of tiles on each side of the tractor to affect (in addition to the tile under it).</summary>
-        public int EffectRadius { get; set; } = 1;
+        public int Distance { get; set; } = 1;
 
         /// <summary>The button which summons the tractor to your position.</summary>
         public Keys TractorKey { get; set; } = Keys.B;
