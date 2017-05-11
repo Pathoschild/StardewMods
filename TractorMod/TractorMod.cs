@@ -481,22 +481,20 @@ namespace TractorMod
         private void ApplyTool(Tool tool, Vector2[] tiles)
         {
             // check if tool is enabled
-            switch (tool)
+            if (!this.ModConfig.CustomTools.Contains(tool.name))
             {
-                case WateringCan _:
-                    if (!this.ModConfig.CanWater)
-                        return;
-                    break;
+                switch (tool)
+                {
+                    case WateringCan _:
+                        if (!this.ModConfig.CanWater)
+                            return;
+                        break;
 
-                case Hoe _:
-                    if (!this.ModConfig.CanHoeDirt)
-                        return;
-                    break;
-
-                default:
-                    if (!this.ModConfig.CustomTools.Contains(tool.name))
-                        return;
-                    break;
+                    case Hoe _:
+                        if (!this.ModConfig.CanHoeDirt)
+                            return;
+                        break;
+                }
             }
 
             // track things that shouldn't decrease
