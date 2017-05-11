@@ -6,6 +6,7 @@
 * Overhauled how data is saved. (Any previous data will be migrated automatically.)
 * Simplified the `config.json` by replacing per-tool settings with flags and common settings.
 * Can no longer summon tractor before building a tractor garage.
+* Fixed tractor speed debuff lasting a second after you dismount tractor.
 
 ## 3.2.1
 * Fixed initialisation errors.

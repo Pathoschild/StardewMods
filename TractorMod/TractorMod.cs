@@ -287,7 +287,7 @@ namespace TractorMod
                 speedBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, ModConfig.TractorSpeed, 0, 0, 1, "Tractor Power", "Tractor Power") { which = this.BuffUniqueID };
                 Game1.buffsDisplay.addOtherBuff(speedBuff);
             }
-            speedBuff.millisecondsDuration = 1000;
+            speedBuff.millisecondsDuration = 100;
 
             // apply action cooldown
             this.SkippedActionTicks++;
