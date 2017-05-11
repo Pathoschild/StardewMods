@@ -1,47 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using Microsoft.Xna.Framework;
+using StardewValley.Buildings;
 
 namespace TractorMod.Framework
 {
+    /// <summary>Contains custom data that's stored outside the save file to avoid issues.</summary>
     internal class CustomSaveData
     {
         /*********
         ** Accessors
         *********/
-        public string FarmerName { get; set; } = "";
-        public ulong SaveSeed { get; set; }
-        public List<Vector2> TractorHouse = new List<Vector2>();
+        /// <summary>The custom buildings for this save.</summary>
+        public CustomSaveBuilding[] Buildings { get; set; }
 
 
         /*********
         ** Public methods
         *********/
-        public CustomSaveData()
-        {
-            SaveSeed = ulong.MaxValue;
-        }
+        /// <summary>Construct an instance.</summary>
+        /// <remarks>This constructor is needed to deserialise from JSON.</remarks>
+        public CustomSaveData() { }
 
-        public CustomSaveData(string nameInput, ulong input)
+        /// <summary>Construct an instance.</summary>
+        /// <param name="buildings">The custom buildings to save.</param>
+        public CustomSaveData(Building[] buildings)
         {
-            SaveSeed = input;
-            FarmerName = nameInput;
-        }
-
-        public IEnumerable<Vector2> GetGarages()
-        {
-            foreach (Vector2 position in this.TractorHouse)
-                yield return position;
-        }
-
-        public CustomSaveData AddGarage(int inputX, int inputY)
-        {
-            foreach (Vector2 tile in TractorHouse)
-            {
-                if (tile.X == inputX && tile.Y == inputY)
-                    return this;
-            }
-            this.TractorHouse.Add(new Vector2(inputX, inputY));
-            return this;
+            this.Buildings =
+                (
+                    from garage in buildings
+                    let tile = new Vector2(garage.tileX, garage.tileY)
+                    select new CustomSaveBuilding(tile, garage.buildingType)
+                )
+                .ToArray();
         }
     }
 }

@@ -23,21 +23,22 @@ namespace TractorMod
         /*********
         ** Properties
         *********/
-        private Vector2 tractorSpawnLocation = new Vector2(70, 13);
-        private TractorConfig ModConfig { get; set; }
-        private Tractor Tractor;
-        private SaveCollection AllSaves;
-        private bool IsNewDay;
-        private bool IsNewTractor;
-        private const int buffUniqueID = 58012397;
-        private bool TractorOn;
-        private Farm Farm;
-
         /// <summary>The tractor garage's building type.</summary>
         private readonly string GarageBuildingType = "TractorGarage";
 
         /// <summary>The tractor's NPC name.</summary>
         private readonly string TractorName = "Tractor";
+
+        private Vector2 tractorSpawnLocation = new Vector2(70, 13);
+        private TractorConfig ModConfig { get; set; }
+        private Tractor Tractor;
+        private bool IsNewDay;
+        private bool IsNewTractor;
+        private const int buffUniqueID = 58012397;
+        private bool TractorOn;
+
+        /// <summary>The current player's farm.</summary>
+        private Farm Farm;
 
 
         /*********
@@ -78,21 +79,14 @@ namespace TractorMod
             // spawn tractor house & tractor
             if (this.IsNewDay && e.NewLocation == this.Farm)
             {
-                this.LoadModInfo();
+                this.RestoreCustomData();
                 this.IsNewDay = false;
             }
         }
 
         private void SaveEvents_BeforeSave(object sender, EventArgs eventArgs)
         {
-            // save mod data
-            this.SaveModInfo();
-
-            // remove tractor from save
-            foreach (Building tractorHouse in this.GetGarages(this.Farm).ToArray())
-                this.Farm.destroyStructure(tractorHouse);
-            foreach (GameLocation location in Game1.locations)
-                this.RemoveEveryCharactersOfType<Tractor>(location);
+            this.StashCustomData();
         }
 
         private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
@@ -147,44 +141,37 @@ namespace TractorMod
             }
         }
 
-        //use to write AllSaves info to some .json file to store save
-        private void SaveModInfo()
+        /// <summary>Stash all tractor and garage data to a separate file to avoid breaking the save file.</summary>
+        private void StashCustomData()
         {
-            if (AllSaves == null)
-                AllSaves = new SaveCollection().Add(new CustomSaveData(Game1.player.name, Game1.uniqueIDForThisGame));
+            // back up garages
+            Building[] garages = this.GetGarages(this.Farm).ToArray();
+            CustomSaveData saveData = new CustomSaveData(garages);
+            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", saveData);
 
-            CustomSaveData currentSave = AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
-
-            if (currentSave.SaveSeed != ulong.MaxValue)
-            {
-                currentSave.TractorHouse.Clear();
-                foreach (Building building in this.GetGarages(this.Farm))
-                    currentSave.AddGarage(building.tileX, building.tileY);
-            }
-            else
-            {
-                AllSaves.saves.Add(new CustomSaveData(Game1.player.name, Game1.uniqueIDForThisGame));
-                SaveModInfo();
-                return;
-            }
-            this.Helper.WriteJsonFile("TractorModSave.json", AllSaves);
+            // remove tractors + buildings
+            foreach (Building garage in garages)
+                this.Farm.destroyStructure(garage);
+            foreach (GameLocation location in Game1.locations)
+                this.RemoveEveryCharactersOfType<Tractor>(location);
         }
 
-        //use to load save info from some .json file to AllSaves
-        private void LoadModInfo()
+        /// <summary>Restore tractor and garage data removed by <see cref="StashCustomData"/>.</summary>
+        private void RestoreCustomData()
         {
-            this.AllSaves = this.Helper.ReadJsonFile<SaveCollection>("TractorModSave.json") ?? new SaveCollection();
-            CustomSaveData saveInfo = this.AllSaves.FindSave(Game1.player.name, Game1.uniqueIDForThisGame);
-            if (saveInfo != null && saveInfo.SaveSeed != ulong.MaxValue)
+            // get save data
+            CustomSaveData saveData = this.Helper.ReadJsonFile<CustomSaveData>($"data/{Constants.SaveFolderName}.json");
+            if (saveData?.Buildings == null)
+                return;
+
+            // add garages
+            BluePrint blueprint = this.GetBlueprint();
+            foreach (CustomSaveBuilding garage in saveData.Buildings)
             {
-                foreach (Vector2 tile in saveInfo.GetGarages())
-                {
-                    BluePrint blueprint = this.GetBlueprint();
-                    Building building = new Stable(blueprint, tile) { daysOfConstructionLeft = 0 };
-                    this.Farm.buildStructure(building, tile, false, Game1.player);
-                    if (this.IsNewTractor)
-                        this.SpawnTractor();
-                }
+                Building newGarage = new Stable(blueprint, garage.Tile) { buildingType = this.GarageBuildingType, daysOfConstructionLeft = 0 }; // rebuild to avoid data issues
+                this.Farm.buildStructure(newGarage, garage.Tile, false, Game1.player);
+                if (this.IsNewTractor)
+                    this.SpawnTractor();
             }
         }
 
@@ -578,7 +565,7 @@ namespace TractorMod
                     [SObject.iridiumBar] = 5,
                     [787] = 5 // battery pack
                 },
-                magical = false,
+                magical = true,
                 namesOfOkayBuildingLocations = new List<string> { "Farm" }
             };
         }

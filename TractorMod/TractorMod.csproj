@@ -37,8 +37,8 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Framework\CustomSaveBuilding.cs" />
     <Compile Include="Framework\CustomSaveData.cs" />
-    <Compile Include="Framework\SaveCollection.cs" />
     <Compile Include="Framework\ToolConfig.cs" />
     <Compile Include="Framework\Tractor.cs" />
     <Compile Include="Framework\TractorConfig.cs" />
