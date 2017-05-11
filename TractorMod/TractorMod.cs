@@ -35,8 +35,8 @@ namespace TractorMod
         /// <summary>The unique buff ID for the tractor speed.</summary>
         private readonly int BuffUniqueID = 58012397;
 
-        /// <summary>The number of ticks between each tool use for a given tool.</summary>
-        private readonly int TicksBetweenToolUses = 12;
+        /// <summary>The number of ticks between each tractor action check.</summary>
+        private readonly int TicksPerAction = 12; // roughly five times per second
 
         /****
         ** State
@@ -53,8 +53,8 @@ namespace TractorMod
         /// <summary>Whether any custom data has been restored for the new day.</summary>
         private bool IsDataRestored;
 
-        /// <summary>Tracks the number of active tool ticks since a tool was last used.</summary>
-        private int ActiveToolTicks;
+        /// <summary>The number of ticks since the tractor last checked for an action to perform.</summary>
+        private int SkippedActionTicks;
 
 
         /*********
@@ -289,6 +289,12 @@ namespace TractorMod
             }
             speedBuff.millisecondsDuration = 1000;
 
+            // apply action cooldown
+            this.SkippedActionTicks++;
+            if (this.SkippedActionTicks % this.TicksPerAction != 0)
+                return;
+            this.SkippedActionTicks = 0;
+
             // perform tractor action
             Tool tool = Game1.player.CurrentTool;
             Item item = Game1.player.CurrentItem;
@@ -492,12 +498,6 @@ namespace TractorMod
                         return;
                     break;
             }
-
-            // apply cooldown
-            this.ActiveToolTicks++;
-            if (this.ActiveToolTicks % this.TicksBetweenToolUses != 0)
-                return;
-            this.ActiveToolTicks = 0;
 
             // track things that shouldn't decrease
             WateringCan wateringCan = tool as WateringCan;
