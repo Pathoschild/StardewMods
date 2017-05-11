@@ -513,7 +513,14 @@ namespace TractorMod
             tool.upgradeLevel = Tool.iridium;
             Game1.player.toolPower = 0;
             foreach (Vector2 tile in tiles)
+            {
+                // prevent hoe from destroy objects
+                if (tool is Hoe && Game1.currentLocation.objects.ContainsKey(tile))
+                    continue;
+
+                // use tool
                 tool.DoFunction(Game1.currentLocation, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), 0, Game1.player);
+            }
 
             // reset tools
             this.Tractor.position = mountPosition;
