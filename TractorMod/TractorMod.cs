@@ -42,7 +42,7 @@ namespace TractorMod
         ** State
         ****/
         /// <summary>The mod settings.</summary>
-        private TractorConfig ModConfig;
+        private TractorConfig Config;
 
         /// <summary>The current player's farm.</summary>
         private Farm Farm;
@@ -66,7 +66,7 @@ namespace TractorMod
         {
             // read config
             this.MigrateLegacySaveData(helper);
-            this.ModConfig = helper.ReadConfig<TractorConfig>();
+            this.Config = helper.ReadConfig<TractorConfig>();
 
             // spawn tractors & garages
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
@@ -144,7 +144,7 @@ namespace TractorMod
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
             // summon tractor
-            if (e.KeyPressed == this.ModConfig.TractorKey)
+            if (e.KeyPressed == this.Config.TractorKey)
             {
                 if (this.Tractor != null)
                     Game1.warpCharacter(this.Tractor, Game1.currentLocation.name, Game1.player.getTileLocation(), false, true);
@@ -284,7 +284,7 @@ namespace TractorMod
             Buff speedBuff = Game1.buffsDisplay.otherBuffs.FirstOrDefault(p => p.which == this.BuffUniqueID);
             if (speedBuff == null)
             {
-                speedBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, ModConfig.TractorSpeed, 0, 0, 1, "Tractor Power", "Tractor Power") { which = this.BuffUniqueID };
+                speedBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, this.Config.TractorSpeed, 0, 0, 1, "Tractor Power", "Tractor Power") { which = this.BuffUniqueID };
                 Game1.buffsDisplay.addOtherBuff(speedBuff);
             }
             speedBuff.millisecondsDuration = 100;
@@ -298,7 +298,7 @@ namespace TractorMod
             // perform tractor action
             Tool tool = Game1.player.CurrentTool;
             Item item = Game1.player.CurrentItem;
-            Vector2[] grid = this.GetTileGrid(Game1.player.getTileLocation(), this.ModConfig.Distance).ToArray();
+            Vector2[] grid = this.GetTileGrid(Game1.player.getTileLocation(), this.Config.Distance).ToArray();
             if (tool is MeleeWeapon && tool.name.ToLower().Contains("scythe"))
                 this.HarvestTiles(grid);
             else if (tool != null)
@@ -362,7 +362,7 @@ namespace TractorMod
         /// <param name="tiles">The tiles to harvest.</param>
         private void HarvestTiles(Vector2[] tiles)
         {
-            if (!this.ModConfig.CanHarvest)
+            if (!this.Config.CanHarvest)
                 return;
 
             foreach (Vector2 tile in tiles)
@@ -481,17 +481,17 @@ namespace TractorMod
         private void ApplyTool(Tool tool, Vector2[] tiles)
         {
             // check if tool is enabled
-            if (!this.ModConfig.CustomTools.Contains(tool.name))
+            if (!this.Config.CustomTools.Contains(tool.name))
             {
                 switch (tool)
                 {
                     case WateringCan _:
-                        if (!this.ModConfig.CanWater)
+                        if (!this.Config.CanWater)
                             return;
                         break;
 
                     case Hoe _:
-                        if (!this.ModConfig.CanHoeDirt)
+                        if (!this.Config.CanHoeDirt)
                             return;
                         break;
                 }
@@ -565,7 +565,7 @@ namespace TractorMod
                 nameOfBuildingToUpgrade = "",
                 actionBehavior = "null",
                 maxOccupants = -1,
-                moneyRequired = this.ModConfig.TractorHousePrice,
+                moneyRequired = this.Config.TractorHousePrice,
                 tilesWidth = 4,
                 tilesHeight = 2,
                 sourceRectForMenuView = new Rectangle(0, 0, 64, 96),
