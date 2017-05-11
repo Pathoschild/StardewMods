@@ -29,9 +29,6 @@ namespace TractorMod.Framework
         /// <summary>The gold price to buy a tractor garage.</summary>
         public int TractorHousePrice { get; set; } = 150000;
 
-        /// <summary>The button which reloads the mod configuration.</summary>
-        public Keys UpdateConfig { get; set; } = Keys.P;
-
         /// <summary>The custom tool names to allow. These must match the exact in-game tool name.</summary>
         public string[] CustomTools { get; set; } = new string[0];
     }

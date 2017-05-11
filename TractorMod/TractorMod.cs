@@ -149,10 +149,6 @@ namespace TractorMod
                 if (this.Tractor != null)
                     Game1.warpCharacter(this.Tractor, Game1.currentLocation.name, Game1.player.getTileLocation(), false, true);
             }
-
-            // reload config
-            else if (e.KeyPressed == this.ModConfig.UpdateConfig)
-                this.ModConfig = this.Helper.ReadConfig<TractorConfig>();
         }
 
         /// <summary>The event called when the game updates (roughly sixty times per second).</summary>
