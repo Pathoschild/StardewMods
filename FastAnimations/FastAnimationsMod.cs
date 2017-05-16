@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <param name="e">The event data.</param>
         private void ReceiveUpdateTick(object sender, EventArgs e)
         {
-            if (!Game1.hasLoadedGame || Game1.eventUp || !this.Handlers.Any())
+            if (!Context.IsWorldReady || Game1.eventUp || !this.Handlers.Any())
                 return;
 
             int playerAnimationID = this.Helper.Reflection.GetPrivateValue<int>(Game1.player.FarmerSprite, "currentSingleAnimation");

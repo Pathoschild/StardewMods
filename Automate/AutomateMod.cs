@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.Automate
         private readonly IDictionary<GameLocation, MachineMetadata[]> Machines = new Dictionary<GameLocation, MachineMetadata[]>();
 
         /// <summary>Whether machines are initialised.</summary>
-        private bool IsReady => Game1.hasLoadedGame && this.Machines.Any();
+        private bool IsReady => Context.IsWorldReady && this.Machines.Any();
 
 
         /*********
