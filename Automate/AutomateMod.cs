@@ -77,9 +77,14 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void LocationEvents_LocationsChanged(object sender, EventArgsGameLocationsChanged e)
         {
-            this.Machines.Clear();
-            foreach (GameLocation location in this.Factory.GetLocationsWithChests())
-                this.Machines[location] = this.Factory.GetMachinesIn(location, this.Helper.Reflection).ToArray();
+            try
+            {
+                this.ReloadAllMachines();
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, "updating locations");
+            }
         }
 
         /// <summary>The method invoked when an object is added or removed to a location.</summary>
@@ -87,7 +92,14 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void LocationEvents_LocationObjectsChanged(object sender, EventArgsLocationObjectsChanged e)
         {
-            this.Machines[Game1.currentLocation] = this.Factory.GetMachinesIn(Game1.currentLocation, this.Helper.Reflection).ToArray();
+            try
+            {
+                this.ReloadMachinesIn(Game1.currentLocation);
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, "updating the current location");
+            }
         }
 
         /// <summary>The method invoked when the in-game clock time changes.</summary>
@@ -98,13 +110,35 @@ namespace Pathoschild.Stardew.Automate
             if (!this.IsReady)
                 return;
 
-            foreach (MachineMetadata[] machines in this.Machines.Values)
-                this.ProcessMachines(machines);
+            try
+            {
+                foreach (MachineMetadata[] machines in this.Machines.Values)
+                    this.ProcessMachines(machines);
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, "processing machines");
+            }
         }
 
         /****
         ** Methods
         ****/
+        /// <summary>Reload all machines.</summary>
+        private void ReloadAllMachines()
+        {
+            this.Machines.Clear();
+            foreach (GameLocation location in this.Factory.GetLocationsWithChests())
+                this.ReloadMachinesIn(location);
+        }
+
+        /// <summary>Reload the machines in a given location.</summary>
+        /// <param name="location">The location whose location to reload.</param>
+        private void ReloadMachinesIn(GameLocation location)
+        {
+            this.Machines[location] = this.Factory.GetMachinesIn(location, this.Helper.Reflection).ToArray();
+        }
+
         /// <summary>Process a set of machines.</summary>
         /// <param name="machines">The machines to process.</param>
         private void ProcessMachines(MachineMetadata[] machines)
