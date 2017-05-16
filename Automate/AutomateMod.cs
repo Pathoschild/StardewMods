@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
@@ -28,18 +27,6 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Whether machines are initialised.</summary>
         private bool IsReady => Game1.hasLoadedGame && this.Machines.Any();
 
-        /****
-        ** Version check
-        ****/
-        /// <summary>The current semantic version.</summary>
-        private ISemanticVersion CurrentVersion;
-
-        /// <summary>The newer release to notify the user about.</summary>
-        private ISemanticVersion NewRelease;
-
-        /// <summary>Whether the update-available message has been shown since the game started.</summary>
-        private bool HasSeenUpdateWarning;
-
 
         /*********
         ** Public methods
@@ -50,13 +37,9 @@ namespace Pathoschild.Stardew.Automate
         {
             // read config
             this.Config = helper.ReadConfig<ModConfig>();
-            this.CurrentVersion = this.ModManifest.Version;
 
-            // hooks for update check
-            GameEvents.GameLoaded += this.GameEvents_GameLoaded;
+            // hook events
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-
-            // hooks for automation
             LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
             LocationEvents.LocationObjectsChanged += this.LocationEvents_LocationObjectsChanged;
             TimeEvents.TimeOfDayChanged += this.TimeEvents_TimeOfDayChanged;
@@ -69,6 +52,26 @@ namespace Pathoschild.Stardew.Automate
         /****
         ** Event handlers
         ****/
+        /// <summary>The method invoked when the player loads a save.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        {
+            try
+            {
+                // reload all machines
+                this.ReloadAllMachines();
+
+                // check for updates
+                if (this.Config.CheckForUpdates)
+                    UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "Automate");
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, "initialising after load");
+            }
+        }
+
         /// <summary>The method invoked when a location is added or removed.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -97,54 +100,6 @@ namespace Pathoschild.Stardew.Automate
 
             foreach (MachineMetadata[] machines in this.Machines.Values)
                 this.ProcessMachines(machines);
-        }
-
-        /// <summary>The method invoked when the player loads the game.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void GameEvents_GameLoaded(object sender, EventArgs e)
-        {
-            // check for mod update
-            if (this.Config.CheckForUpdates)
-            {
-                try
-                {
-                    Task.Factory.StartNew(() =>
-                    {
-                        Task.Factory.StartNew(() =>
-                        {
-                            ISemanticVersion latest = UpdateHelper.LogVersionCheck(this.Monitor, this.ModManifest.Version, "Automate").Result;
-                            if (latest.IsNewerThan(this.CurrentVersion))
-                                this.NewRelease = latest;
-                        });
-                    });
-                }
-                catch (Exception ex)
-                {
-                    this.HandleError(ex, "checking for a new version");
-                }
-            }
-        }
-
-        /// <summary>The method invoked when the interface has finished rendering.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
-        {
-            // render update warning
-            if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning && this.NewRelease != null)
-            {
-                try
-                {
-                    this.HasSeenUpdateWarning = true;
-                    CommonHelper.ShowInfoMessage($"You can update Automate from {this.CurrentVersion} to {this.NewRelease}.");
-                }
-                catch (Exception ex)
-                {
-                    this.HandleError(ex, "showing the new version available");
-                }
-            }
-
         }
 
         /****

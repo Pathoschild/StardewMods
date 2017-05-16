@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.4
+* Updated to SMAPI 1.13.
+
 ## 1.3
 * Updated for Stardew Valley 1.2.
 

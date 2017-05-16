@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.SkipIntro.Framework;
@@ -32,7 +31,7 @@ namespace Pathoschild.Stardew.SkipIntro
         {
             this.Config = helper.ReadConfig<ModConfig>();
 
-            GameEvents.GameLoaded += this.ReceiveGameLoaded;
+            SaveEvents.AfterLoad += this.ReceiveAfterLoad;
             GameEvents.EighthUpdateTick += this.ReceiveUpdateTick;
         }
 
@@ -43,19 +42,14 @@ namespace Pathoschild.Stardew.SkipIntro
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked when the player loads the game.</summary>
+        /// <summary>The method invoked after the player loads a saved game.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ReceiveGameLoaded(object sender, EventArgs e)
+        private void ReceiveAfterLoad(object sender, EventArgs e)
         {
-            // check for an updated version
+            // check for updates
             if (this.Config.CheckForUpdates)
-            {
-                Task.Factory.StartNew(() =>
-                {
-                    UpdateHelper.LogVersionCheck(this.Monitor, this.ModManifest.Version, "SkipIntro").Wait();
-                });
-            }
+                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "SkipIntro");
         }
 
         /// <summary>Receives an update tick.</summary>

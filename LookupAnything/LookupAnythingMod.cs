@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
@@ -38,18 +38,6 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Reloads the <see cref="Metadata"/> when the underlying file changes.</summary>
         private FileSystemWatcher OverrideFileWatcher;
 #endif
-
-        /****
-        ** Version check
-        ****/
-        /// <summary>The current semantic version.</summary>
-        private ISemanticVersion CurrentVersion;
-
-        /// <summary>The newer release to notify the user about.</summary>
-        private ISemanticVersion NewRelease;
-
-        /// <summary>Whether the update-available message has been shown since the game started.</summary>
-        private bool HasSeenUpdateWarning;
 
         /****
         ** Validation
@@ -99,7 +87,6 @@ namespace Pathoschild.Stardew.LookupAnything
 #endif
 
             // initialise functionality
-            this.CurrentVersion = new SemanticVersion(this.ModManifest.Version.ToString());
             this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Reflection);
             this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config, this.Monitor);
 
@@ -110,7 +97,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 SaveEvents.AfterSave += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection);
 
                 // hook up game events
-                GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
+                SaveEvents.AfterLoad += this.ReceiveAfterLoad;
                 GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
                 MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
 
@@ -150,19 +137,14 @@ namespace Pathoschild.Stardew.LookupAnything
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked when the player loads the game.</summary>
-        private void ReceiveGameLoaded()
+        /// <summary>The method invoked after the player loads a saved game.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void ReceiveAfterLoad(object sender, EventArgs e)
         {
-            // check for an updated version
+            // check for updates
             if (this.Config.CheckForUpdates)
-            {
-                Task.Factory.StartNew(() =>
-                {
-                    ISemanticVersion latest = UpdateHelper.LogVersionCheck(this.Monitor, this.ModManifest.Version, "LookupAnything").Result;
-                    if (latest.IsNewerThan(this.CurrentVersion))
-                        this.NewRelease = latest;
-                });
-            }
+                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "LookupAnything");
         }
 
         /// <summary>The method invoked when the player presses an input button.</summary>
@@ -229,13 +211,6 @@ namespace Pathoschild.Stardew.LookupAnything
             // render debug interface
             if (this.DebugInterface.Enabled)
                 this.DebugInterface.Draw(spriteBatch);
-
-            // render update warning
-            if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning && this.NewRelease != null)
-            {
-                this.HasSeenUpdateWarning = true;
-                GameHelper.ShowInfoMessage($"You can update Lookup Anything from {this.CurrentVersion} to {this.NewRelease}.");
-            }
         }
 
         /****

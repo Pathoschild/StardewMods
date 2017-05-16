@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays;
@@ -23,18 +22,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         private ModConfig Config;
 
         /****
-        ** Version check
-        ****/
-        /// <summary>The current semantic version.</summary>
-        private ISemanticVersion CurrentVersion;
-
-        /// <summary>The newer release to notify the user about.</summary>
-        private ISemanticVersion NewRelease;
-
-        /// <summary>Whether the update-available message has been shown since the game started.</summary>
-        private bool HasSeenUpdateWarning;
-
-        /****
         ** State
         ****/
         /// <summary>The selected chest.</summary>
@@ -53,10 +40,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             // read config
             this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
-            this.CurrentVersion = this.ModManifest.Version;
 
             // hook UI
-            GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
             GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveHudRendered();
             MenuEvents.MenuChanged += (sender, e) => this.ReceiveMenuChanged(e.PriorMenu, e.NewMenu);
             MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
@@ -69,14 +54,19 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
                 ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
             }
+
+            // hook game events
+            SaveEvents.AfterLoad += this.ReceiveAfterLoad;
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked when the player loads the game.</summary>
-        private void ReceiveGameLoaded()
+        /// <summary>The method invoked after the player loads a saved game.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void ReceiveAfterLoad(object sender, EventArgs e)
         {
             // validate game version
             string versionError = this.ValidateGameVersion();
@@ -86,45 +76,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 CommonHelper.ShowErrorMessage(versionError);
             }
 
-            // check for mod update
+            // check for updates
             if (this.Config.CheckForUpdates)
-            {
-                try
-                {
-                    Task.Factory.StartNew(() =>
-                    {
-                        Task.Factory.StartNew(() =>
-                        {
-                            ISemanticVersion latest = UpdateHelper.LogVersionCheck(this.Monitor, this.ModManifest.Version, "ChestsAnywhere").Result;
-                            if (latest.IsNewerThan(this.CurrentVersion))
-                                this.NewRelease = latest;
-                        });
-                    });
-                }
-                catch (Exception ex)
-                {
-                    this.HandleError(ex, "checking for a new version");
-                }
-            }
+                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "ChestsAnywhere");
         }
 
         /// <summary>The method invoked when the interface has finished rendering.</summary>
         private void ReceiveHudRendered()
         {
-            // render update warning
-            if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning && this.NewRelease != null)
-            {
-                try
-                {
-                    this.HasSeenUpdateWarning = true;
-                    CommonHelper.ShowInfoMessage($"You can update Chests Anywhere from {this.CurrentVersion} to {this.NewRelease}.");
-                }
-                catch (Exception ex)
-                {
-                    this.HandleError(ex, "showing the new version available");
-                }
-            }
-
             // show chest label
             if (this.Config.ShowHoverTooltips)
             {
