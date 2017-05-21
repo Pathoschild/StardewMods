@@ -18,9 +18,6 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
-        /// <summary>The update ticks that have been processed.</summary>
-        private int Step;
-
 
         /*********
         ** Public methods
@@ -32,7 +29,7 @@ namespace Pathoschild.Stardew.SkipIntro
             this.Config = helper.ReadConfig<ModConfig>();
 
             SaveEvents.AfterLoad += this.ReceiveAfterLoad;
-            GameEvents.EighthUpdateTick += this.ReceiveUpdateTick;
+            MenuEvents.MenuChanged += this.ReceiveMenuChanged;
         }
 
 
@@ -52,6 +49,15 @@ namespace Pathoschild.Stardew.SkipIntro
                 UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "SkipIntro");
         }
 
+        /// <summary>The method called when the player returns to the title screen.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void ReceiveMenuChanged(object sender, EventArgsClickableMenuChanged e)
+        {
+            if (e.NewMenu is TitleMenu)
+                GameEvents.UpdateTick += this.ReceiveUpdateTick;
+        }
+
         /// <summary>Receives an update tick.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -59,17 +65,21 @@ namespace Pathoschild.Stardew.SkipIntro
         {
             try
             {
+                // get open title screen
                 TitleMenu menu = Game1.activeClickableMenu as TitleMenu;
-                if (menu != null)
+                if (menu == null)
                 {
-                    if (!this.ApplySkip(menu, this.Step))
-                        GameEvents.UpdateTick -= this.ReceiveUpdateTick;
-                    this.Step++;
+                    GameEvents.UpdateTick -= this.ReceiveUpdateTick;
+                    return;
                 }
+
+                // skip intro
+                if (this.TrySkipIntro(menu))
+                    GameEvents.UpdateTick -= this.ReceiveUpdateTick;
             }
             catch (Exception ex)
             {
-                this.Monitor.InterceptError(ex, $"skipping the menu (step {this.Step})");
+                this.Monitor.InterceptError(ex, "skipping the intro");
                 GameEvents.UpdateTick -= this.ReceiveUpdateTick;
             }
         }
@@ -77,29 +87,26 @@ namespace Pathoschild.Stardew.SkipIntro
         /****
         ** Methods
         ****/
-        /// <summary>Apply the next skip step.</summary>
-        /// <param name="menu">The title menu to update.</param>
-        /// <param name="step">The step to apply (starting at 0).</param>
-        /// <returns>Returns whether there are more skip steps.</returns>
-        /// <remarks>The skip logic is applied over several update ticks to let the game update itself smoothly. This prevents a few issues like a long pause before the game window opens, or the title menu not resizing itself for full-screen display.</remarks>
-        private bool ApplySkip(TitleMenu menu, int step)
+        /// <summary>Skip the intro if the game is ready.</summary>
+        /// <param name="menu">The title menu whose intro to skip.</param>
+        private bool TrySkipIntro(TitleMenu menu)
         {
-            switch (step)
+            if (Game1.currentGameTime == null)
+                return false; // game isn't ready yet
+
+            // skip to title screen
+            menu.receiveKeyPress(Keys.Escape);
+            menu.update(Game1.currentGameTime);
+
+            // skip to load screen
+            if (this.Config.SkipToLoadScreen)
             {
-                // skip to main menu
-                case 1:
-                    menu.receiveKeyPress(Keys.Escape);
-                    return true;
-
-                // skip to loading screen
-                case 2:
-                    if (this.Config.SkipToLoadScreen)
-                        menu.performButtonAction("Load");
-                    return true;
-
-                default:
-                    return false;
+                menu.performButtonAction("Load");
+                while (TitleMenu.subMenu == null)
+                    menu.update(Game1.currentGameTime);
             }
+
+            return true;
         }
     }
 }

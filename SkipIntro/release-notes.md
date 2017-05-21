@@ -3,6 +3,8 @@
 # Release notes
 ## 1.7
 * Updated to SMAPI 1.13.
+* Skipping to the load screen is now much faster (since it skips the transition).
+* Fixed the intro not being skipped when you exit to title.
 
 ## 1.6
 * Updated for Stardew Valley 1.2.
