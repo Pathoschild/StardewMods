@@ -57,10 +57,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="type">The character type.</param>
         public CharacterData GetCharacter(NPC character, TargetType type)
         {
-            string name = character.getName();
-
             return
-                this.Characters?.FirstOrDefault(p => p.ID == $"{type}::{name}") // override by type + name
+                this.Characters?.FirstOrDefault(p => p.ID == $"{type}::{character.name}") // override by type + name
                 ?? this.Characters?.FirstOrDefault(p => p.ID == type.ToString()); // override by type
         }
 

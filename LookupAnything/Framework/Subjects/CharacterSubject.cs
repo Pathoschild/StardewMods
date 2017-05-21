@@ -69,7 +69,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             switch (this.TargetType)
             {
                 case TargetType.Villager:
-                    if (!metadata.Constants.AsocialVillagers.Contains(npc.getName()))
+                    if (!metadata.Constants.AsocialVillagers.Contains(npc.name))
                     {
                         var giftTastes = this.GetGiftTastes(npc, metadata);
 
@@ -148,7 +148,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         private IEnumerable<ItemDropData> GetMonsterDrops(Monster monster)
         {
             int[] drops = monster.objectsToDrop.ToArray();
-            ItemDropData[] possibleDrops = DataParser.GetMonsters().First(p => p.Name == monster.getName()).Drops;
+            ItemDropData[] possibleDrops = DataParser.GetMonsters().First(p => p.Name == monster.name).Drops;
 
             return (
                 from possibleDrop in possibleDrops

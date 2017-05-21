@@ -4,6 +4,7 @@
 ## 1.14
 * Updated to SMAPI 1.13.
 * You can now look up items from the Junimo bundle menu.
+* Fixed a few lookup errors when playing in a language other than English.
 
 ## 1.13
 * Updated for Stardew Valley 1.2.
