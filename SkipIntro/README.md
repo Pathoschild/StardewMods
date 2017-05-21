@@ -1,4 +1,6 @@
-**Skip Intro** is a minimal [Stardew Valley](http://stardewvalley.net/) mod that skips the game's loading intro.
+**Skip Intro** is a minimal [Stardew Valley](http://stardewvalley.net/) mod that skips straight to
+the title screen or load screen (configurable) when you start the game. It also skips the screen
+transitions, so starting the game is much faster.
 
 ## Install
 1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).

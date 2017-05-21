@@ -3,6 +3,7 @@
 # Release notes
 ## 1.6
 * Updated to SMAPI 1.13.
+* `F8` now shows the game's debug command input in debug mode.
 
 ## 1.5
 * Updated for Stardew Valley 1.2.
