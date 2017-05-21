@@ -98,6 +98,14 @@ namespace Pathoschild.Stardew.SkipIntro
             menu.receiveKeyPress(Keys.Escape);
             menu.update(Game1.currentGameTime);
 
+            // skip button transition
+            if (!this.Config.SkipToLoadScreen)
+            {
+                while (this.Helper.Reflection.GetPrivateValue<int>(menu, "buttonsToShow") < TitleMenu.numberOfButtons)
+                    menu.update(Game1.currentGameTime);
+            }
+
+
             // skip to load screen
             if (this.Config.SkipToLoadScreen)
             {
