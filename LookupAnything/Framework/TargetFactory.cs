@@ -265,8 +265,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Get metadata for a menu element at the specified position.</summary>
         /// <param name="menu">The active menu.</param>
-        /// <param name="cursorPosition">The cursor's viewport-relative coordinates.</param>
-        public ISubject GetSubjectFrom(IClickableMenu menu, Vector2 cursorPosition)
+        /// <param name="cursorPos">The cursor's viewport-relative coordinates.</param>
+        public ISubject GetSubjectFrom(IClickableMenu menu, Vector2 cursorPos)
         {
             switch (menu)
             {
@@ -277,7 +277,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         int selectedDay = -1;
                         for (int i = 0; i < billboard.calendarDays.Count; i++)
                         {
-                            if (billboard.calendarDays[i].containsPoint((int)cursorPosition.X, (int)cursorPosition.Y))
+                            if (billboard.calendarDays[i].containsPoint((int)cursorPos.X, (int)cursorPos.Y))
                             {
                                 selectedDay = i + 1;
                                 break;
@@ -335,7 +335,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                                         .ToArray();
 
                                     // find hovered villager
-                                    ClickableTextureComponent entry = entries.FirstOrDefault(p => p.containsPoint((int)cursorPosition.X, (int)cursorPosition.Y));
+                                    ClickableTextureComponent entry = entries.FirstOrDefault(p => p.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
                                     if (entry != null)
                                     {
                                         NPC npc = GameHelper.GetAllCharacters().FirstOrDefault(p => p.name == entry.name);
@@ -344,6 +344,38 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                                     }
                                 }
                                 break;
+                        }
+                    }
+                    break;
+
+                // Community Center bundle menu
+                case JunimoNoteMenu bundleMenu:
+                    {
+                        // hovered inventory item
+                        {
+                            Item item = this.Reflection.GetPrivateValue<Item>(menu, "hoveredItem");
+                            if (item != null)
+                                return new ItemSubject(item.getOne(), ObjectContext.Inventory, knownQuality: true);
+                        }
+
+                        // list of required ingredients
+                        for (int i = 0; i < bundleMenu.ingredientList.Count; i++)
+                        {
+                            if (bundleMenu.ingredientList[i].containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                            {
+                                Bundle bundle = this.Reflection.GetPrivateValue<Bundle>(bundleMenu, "currentPageBundle");
+                                var ingredient = bundle.ingredients[i];
+                                var item = GameHelper.GetObjectBySpriteIndex(ingredient.index, ingredient.stack);
+                                item.quality = ingredient.quality;
+                                return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
+                            }
+                        }
+
+                        // list of submitted ingredients
+                        foreach (ClickableTextureComponent slot in bundleMenu.ingredientSlots)
+                        {
+                            if (slot.item != null && slot.containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                                return new ItemSubject(slot.item, ObjectContext.Inventory, knownQuality: true);
                         }
                     }
                     break;
@@ -372,7 +404,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     {
                         // find hovered slot
                         List<ClickableComponent> slots = this.Reflection.GetPrivateValue<List<ClickableComponent>>(menu, "buttons");
-                        ClickableComponent hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint((int)cursorPosition.X, (int)cursorPosition.Y));
+                        ClickableComponent hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
                         if (hoveredSlot == null)
                             return null;
 

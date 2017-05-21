@@ -90,7 +90,7 @@ in the world | ![](screenshots/target-world.png)
 | in the social menu | ![](screenshots/target-social-menu.png)
 | in your inventory or chests | ![](screenshots/target-inventory.png)
 | in shops | ![](screenshots/target-shops.png)
-
+| in Community Center bundles<br /><small>(any item shown)</small> | ![](screenshots/target-bundle.png)
 
 ### Data mining fields (advanced)
 Are you a data miner or trying to figure out the game mechanics? [Enable data mining fields](#configuration)
