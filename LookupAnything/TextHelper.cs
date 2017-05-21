@@ -54,72 +54,66 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="value">The underlying value.</param>
         public static string Stringify(object value)
         {
-            if (value == null)
-                return null;
-
-            // boolean
-            if (value is bool)
-                return (bool)value ? "yes" : "no";
-
-            // time span
-            if (value is TimeSpan)
+            switch (value)
             {
-                TimeSpan span = (TimeSpan)value;
-                List<string> parts = new List<string>();
-                if (span.Days > 0)
-                    parts.Add($"{span.Days} {TextHelper.Pluralise(span.Days, "day")}");
-                if (span.Hours > 0)
-                    parts.Add($"{span.Hours} {TextHelper.Pluralise(span.Hours, "hour")}");
-                if (span.Minutes > 0)
-                    parts.Add($"{span.Minutes} {TextHelper.Pluralise(span.Minutes, "minute")}");
-                return string.Join(", ", parts);
-            }
+                case null:
+                    return null;
 
-            // vector
-            if (value is Vector2)
-            {
-                Vector2 vector = (Vector2)value;
-                return $"({vector.X}, {vector.Y})";
-            }
+                // boolean
+                case bool boolean:
+                    return boolean ? "yes" : "no";
 
-            // rectangle
-            if (value is Rectangle)
-            {
-                Rectangle rect = (Rectangle)value;
-                return $"(x:{rect.X}, y:{rect.Y}, width:{rect.Width}, height:{rect.Height})";
-            }
-
-            // array
-            if (value is IEnumerable && !(value is string))
-            {
-                string[] values = (from val in ((IEnumerable)value).Cast<object>() select TextHelper.Stringify(val)).ToArray();
-                return "(" + string.Join(", ", values) + ")";
-            }
-
-            // color
-            if (value is Color)
-            {
-                Color color = (Color)value;
-                return $"(r:{color.R} g:{color.G} b:{color.B} a:{color.A})";
-            }
-
-            // KeyValue<TKey, TValue>
-            {
-                Type type = value.GetType();
-                if (type.IsGenericType)
-                {
-                    Type genericType = type.GetGenericTypeDefinition();
-                    if (genericType == typeof(KeyValuePair<,>))
+                // time span
+                case TimeSpan span:
                     {
-                        string k = TextHelper.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Key)).GetValue(value));
-                        string v = TextHelper.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Value)).GetValue(value));
-                        return $"({k}: {v})";
+                        List<string> parts = new List<string>();
+                        if (span.Days > 0)
+                            parts.Add($"{span.Days} {TextHelper.Pluralise(span.Days, "day")}");
+                        if (span.Hours > 0)
+                            parts.Add($"{span.Hours} {TextHelper.Pluralise(span.Hours, "hour")}");
+                        if (span.Minutes > 0)
+                            parts.Add($"{span.Minutes} {TextHelper.Pluralise(span.Minutes, "minute")}");
+                        return string.Join(", ", parts);
                     }
-                }
-            }
 
-            // else
-            return value.ToString();
+                // vector
+                case Vector2 vector:
+                    return $"({vector.X}, {vector.Y})";
+
+                // rectangle
+                case Rectangle rect:
+                    return $"(x:{rect.X}, y:{rect.Y}, width:{rect.Width}, height:{rect.Height})";
+
+                // array
+                case IEnumerable array when !(value is string):
+                    {
+                        string[] values = (from val in array.Cast<object>() select TextHelper.Stringify(val)).ToArray();
+                        return "(" + string.Join(", ", values) + ")";
+                    }
+
+                // color
+                case Color color:
+                    return $"(r:{color.R} g:{color.G} b:{color.B} a:{color.A})";
+
+                default:
+                    // key/value pair
+                    {
+                        Type type = value.GetType();
+                        if (type.IsGenericType)
+                        {
+                            Type genericType = type.GetGenericTypeDefinition();
+                            if (genericType == typeof(KeyValuePair<,>))
+                            {
+                                string k = TextHelper.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Key)).GetValue(value));
+                                string v = TextHelper.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Value)).GetValue(value));
+                                return $"({k}: {v})";
+                            }
+                        }
+                    }
+
+                    // anything else
+                    return value.ToString();
+            }
         }
     }
 }

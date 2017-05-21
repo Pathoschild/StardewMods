@@ -44,9 +44,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
                 yOrigin = boundingBox.Center.Y;
             else if (npc is Bug)
                 yOrigin = boundingBox.Top - npc.sprite.spriteHeight * Game1.pixelZoom + (float)(System.Math.Sin(Game1.currentGameTime.TotalGameTime.Milliseconds / 1000.0 * (2.0 * System.Math.PI)) * 10.0);
-            else if (npc is SquidKid)
+            else if (npc is SquidKid squidKid)
             {
-                int yOffset = this.Reflection.GetPrivateValue<int>((SquidKid)npc, "yOffset");
+                int yOffset = this.Reflection.GetPrivateValue<int>(squidKid, "yOffset");
                 yOrigin = boundingBox.Bottom - npc.sprite.spriteHeight * Game1.pixelZoom + yOffset;
             }
             else

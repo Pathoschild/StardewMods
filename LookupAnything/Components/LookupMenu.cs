@@ -369,7 +369,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 }
 
                 // draw cursor
-                base.drawMouse(Game1.spriteBatch);
+                this.drawMouse(Game1.spriteBatch);
             }, this.OnDrawError);
         }
 

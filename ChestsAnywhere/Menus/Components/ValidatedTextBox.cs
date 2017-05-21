@@ -27,43 +27,43 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         /// <summary>The input text.</summary>
         public string Text
         {
-            get { return this.Textbox.Text; }
-            set { this.Textbox.Text = value; }
+            get => this.Textbox.Text;
+            set => this.Textbox.Text = value;
         }
 
         /// <summary>Whether the focus is in the textbox.</summary>
         public bool Selected
         {
-            get { return this.Textbox.Selected; }
-            set { this.Textbox.Selected = value; }
+            get => this.Textbox.Selected;
+            set => this.Textbox.Selected = value;
         }
 
         /// <summary>The X position of the rendered textbox.</summary>
         public int X
         {
-            get { return this.Textbox.X; }
-            set { this.Textbox.X = value; }
+            get => this.Textbox.X;
+            set => this.Textbox.X = value;
         }
 
         /// <summary>The Y position of the rendered textbox.</summary>
         public int Y
         {
-            get { return this.Textbox.Y; }
-            set { this.Textbox.Y = value; }
+            get => this.Textbox.Y;
+            set => this.Textbox.Y = value;
         }
 
         /// <summary>The width of the rendered textbox.</summary>
         public int Width
         {
-            get { return this.Textbox.Width; }
-            set { this.Textbox.Width = value; }
+            get => this.Textbox.Width;
+            set => this.Textbox.Width = value;
         }
 
         /// <summary>The height of the rendered textbox.</summary>
         public int Height
         {
-            get { return this.Textbox.Height; }
-            set { this.Textbox.Height = value; }
+            get => this.Textbox.Height;
+            set => this.Textbox.Height = value;
         }
 
         /*********

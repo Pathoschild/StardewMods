@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -170,10 +171,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // crafting
             if (obj?.heldObject != null)
             {
-                if (obj is Cask)
+                if (obj is Cask cask)
                 {
                     // get cask data
-                    Cask cask = (Cask)obj;
                     Object agingObj = cask.heldObject;
                     ItemQuality currentQuality = (ItemQuality)agingObj.quality;
 
@@ -269,10 +269,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // fence
-            if (item is Fence)
+            if (item is Fence fence)
             {
-                Fence fence = (Fence)item;
-
                 // health
                 if (Game1.getFarm().isBuildingConstructed(Constant.BuildingNames.GoldClock))
                     yield return new GenericField("Health", "no decay with Gold Clock");
@@ -374,10 +372,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         private Item GetMenuItem(Item item)
         {
             // fence
-            if (item is Fence)
+            if (item is Fence fence)
             {
-                Fence fence = (Fence)item;
-
                 // get equivalent object's sprite ID
                 FenceType fenceType = (FenceType)fence.whichType;
                 int? spriteID = null;
@@ -402,11 +398,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
         /// <summary>Get the item description.</summary>
         /// <param name="item">The item.</param>
+        [SuppressMessage("ReSharper", "AssignmentIsFullyDiscarded", Justification = "Discarding the value is deliberate. We need to call the property to trigger the data load, but we don't actually need the result.")]
         private string GetDescription(Item item)
         {
             try
             {
-                string x = item.DisplayName; // force display name to load, which is needed to get the description outside the inventory for some reason
+                _ = item.DisplayName; // force display name to load, which is needed to get the description outside the inventory for some reason
                 return item.getDescription();
             }
             catch (KeyNotFoundException)
@@ -420,8 +417,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         private string GetTypeValue(Item item)
         {
             string type = item.getCategoryName();
-            if (string.IsNullOrWhiteSpace(type) && item is Object)
-                type = ((Object)item).type;
+            if (string.IsNullOrWhiteSpace(type) && item is Object obj)
+                type = obj.type;
             return type;
         }
 

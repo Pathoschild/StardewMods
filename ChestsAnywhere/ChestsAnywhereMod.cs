@@ -109,10 +109,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             }
 
             // add overlay
-            if (newMenu is ItemGrabMenu)
+            if (newMenu is ItemGrabMenu chestMenu)
             {
                 // get open chest
-                ItemGrabMenu chestMenu = (ItemGrabMenu)newMenu;
                 ManagedChest chest = ChestFactory.GetChestFromMenu(chestMenu);
                 if (chest == null)
                     return;

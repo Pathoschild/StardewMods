@@ -35,8 +35,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             Rectangle boundingBox = obj.getBoundingBox(this.GetTile());
             if (obj.bigCraftable)
                 return this.GetSpriteArea(boundingBox, Object.getSourceRectForBigCraftable(obj.parentSheetIndex));
-            if (obj is Fence)
-                return this.GetSpriteArea(boundingBox, this.GetSourceRectangle((Fence)obj, Game1.currentLocation));
+            if (obj is Fence fence)
+                return this.GetSpriteArea(boundingBox, this.GetSourceRectangle(fence, Game1.currentLocation));
             else
                 return this.GetSpriteArea(boundingBox, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.parentSheetIndex, Object.spriteSheetTileSize, Object.spriteSheetTileSize));
         }
@@ -57,10 +57,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
                 spriteSheet = Game1.bigCraftableSpriteSheet;
                 sourceRectangle = Object.getSourceRectForBigCraftable(obj.parentSheetIndex);
             }
-            else if (obj is Fence)
+            else if (obj is Fence fence)
             {
                 spriteSheet = this.Reflection.GetPrivateValue<Texture2D>(obj, "fenceTexture");
-                sourceRectangle = this.GetSourceRectangle((Fence)obj, Game1.currentLocation);
+                sourceRectangle = this.GetSourceRectangle(fence, Game1.currentLocation);
             }
             else
             {

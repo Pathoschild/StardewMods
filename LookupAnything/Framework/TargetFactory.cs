@@ -107,17 +107,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                 if ((feature as HoeDirt)?.crop != null)
                     yield return new CropTarget(feature, spriteTile, this.Reflection);
-                else if (feature is FruitTree)
+                else if (feature is FruitTree fruitTree)
                 {
                     if (this.Reflection.GetPrivateValue<float>(feature, "alpha") < 0.8f)
                         continue; // ignore when tree is faded out (so player can lookup things behind it)
-                    yield return new FruitTreeTarget((FruitTree)feature, spriteTile);
+                    yield return new FruitTreeTarget(fruitTree, spriteTile);
                 }
-                else if (feature is Tree)
+                else if (feature is Tree wildTree)
                 {
                     if (this.Reflection.GetPrivateValue<float>(feature, "alpha") < 0.8f)
                         continue; // ignore when tree is faded out (so player can lookup things behind it)
-                    yield return new TreeTarget((Tree)feature, spriteTile, this.Reflection);
+                    yield return new TreeTarget(wildTree, spriteTile, this.Reflection);
                 }
                 else
                     yield return new UnknownTarget(feature, spriteTile);
@@ -268,121 +268,134 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="cursorPosition">The cursor's viewport-relative coordinates.</param>
         public ISubject GetSubjectFrom(IClickableMenu menu, Vector2 cursorPosition)
         {
-            // calendar
-            if (menu is Billboard)
+            switch (menu)
             {
-                Billboard billboard = (Billboard)menu;
-
-                // get target day
-                int selectedDay = -1;
-                {
-                    List<ClickableTextureComponent> calendarDays = billboard.calendarDays;
-                    for (int i = 0; i < calendarDays.Count; i++)
+                // calendar
+                case Billboard billboard:
                     {
-                        if (calendarDays[i].containsPoint((int)cursorPosition.X, (int)cursorPosition.Y))
+                        // get target day
+                        int selectedDay = -1;
+                        for (int i = 0; i < billboard.calendarDays.Count; i++)
                         {
-                            selectedDay = i + 1;
-                            break;
+                            if (billboard.calendarDays[i].containsPoint((int)cursorPosition.X, (int)cursorPosition.Y))
+                            {
+                                selectedDay = i + 1;
+                                break;
+                            }
+                        }
+                        if (selectedDay == -1)
+                            return null;
+
+                        // get villager with a birthday on that date
+                        NPC target = GameHelper.GetAllCharacters().FirstOrDefault(p => p.birthday_Season == Game1.currentSeason && p.birthday_Day == selectedDay);
+                        if (target != null)
+                            return new CharacterSubject(target, TargetType.Villager, this.Metadata, this.Reflection);
+                    }
+                    break;
+
+                // chest
+                case MenuWithInventory inventoryMenu:
+                    {
+                        Item item = inventoryMenu.hoveredItem;
+                        if (item != null)
+                            return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
+                    }
+                    break;
+
+                // inventory
+                case GameMenu gameMenu:
+                    {
+                        List<IClickableMenu> tabs = this.Reflection.GetPrivateValue<List<IClickableMenu>>(gameMenu, "pages");
+                        IClickableMenu curTab = tabs[gameMenu.currentTab];
+                        switch (curTab)
+                        {
+                            case InventoryPage _:
+                                {
+                                    Item item = this.Reflection.GetPrivateValue<Item>(curTab, "hoveredItem");
+                                    if (item != null)
+                                        return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
+                                }
+                                break;
+
+                            case CraftingPage _:
+                                {
+                                    Item item = this.Reflection.GetPrivateValue<Item>(curTab, "hoverItem");
+                                    if (item != null)
+                                        return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
+                                }
+                                break;
+
+                            case SocialPage _:
+                                {
+                                    // get villagers on current page
+                                    int scrollOffset = this.Reflection.GetPrivateValue<int>(curTab, "slotPosition");
+                                    ClickableTextureComponent[] entries = this.Reflection
+                                        .GetPrivateValue<List<ClickableTextureComponent>>(curTab, "friendNames")
+                                        .Skip(scrollOffset)
+                                        .ToArray();
+
+                                    // find hovered villager
+                                    ClickableTextureComponent entry = entries.FirstOrDefault(p => p.containsPoint((int)cursorPosition.X, (int)cursorPosition.Y));
+                                    if (entry != null)
+                                    {
+                                        NPC npc = GameHelper.GetAllCharacters().FirstOrDefault(p => p.name == entry.name);
+                                        if (npc != null)
+                                            return new CharacterSubject(npc, TargetType.Villager, this.Metadata, this.Reflection);
+                                    }
+                                }
+                                break;
                         }
                     }
-                }
-                if (selectedDay == -1)
-                    return null;
+                    break;
 
-                // get villager with a birthday on that date
-                NPC target = GameHelper.GetAllCharacters().FirstOrDefault(p => p.birthday_Season == Game1.currentSeason && p.birthday_Day == selectedDay);
-                if (target != null)
-                    return new CharacterSubject(target, TargetType.Villager, this.Metadata, this.Reflection);
-            }
-
-            // chest
-            else if (menu is MenuWithInventory)
-            {
-                Item item = ((MenuWithInventory)menu).hoveredItem;
-                if (item != null)
-                    return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
-            }
-
-            // inventory
-            else if (menu is GameMenu)
-            {
-                // get current tab
-                List<IClickableMenu> tabs = this.Reflection.GetPrivateValue<List<IClickableMenu>>(menu, "pages");
-                IClickableMenu curTab = tabs[((GameMenu)menu).currentTab];
-                if (curTab is InventoryPage)
-                {
-                    Item item = this.Reflection.GetPrivateValue<Item>(curTab, "hoveredItem");
-                    if (item != null)
-                        return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
-                }
-                else if (curTab is CraftingPage)
-                {
-                    Item item = this.Reflection.GetPrivateValue<Item>(curTab, "hoverItem");
-                    if (item != null)
-                        return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
-                }
-                else if (curTab is SocialPage)
-                {
-                    // get villagers on current page
-                    int scrollOffset = this.Reflection.GetPrivateValue<int>(curTab, "slotPosition");
-                    ClickableTextureComponent[] entries = this.Reflection
-                        .GetPrivateValue<List<ClickableTextureComponent>>(curTab, "friendNames")
-                        .Skip(scrollOffset)
-                        .ToArray();
-
-                    // find hovered villager
-                    ClickableTextureComponent entry = entries.FirstOrDefault(p => p.containsPoint((int)cursorPosition.X, (int)cursorPosition.Y));
-                    if (entry != null)
+                // kitchen
+                case CraftingPage _:
                     {
-                        NPC npc = GameHelper.GetAllCharacters().FirstOrDefault(p => p.name == entry.name);
-                        if (npc != null)
-                            return new CharacterSubject(npc, TargetType.Villager, this.Metadata, this.Reflection);
+                        CraftingRecipe recipe = this.Reflection.GetPrivateValue<CraftingRecipe>(menu, "hoverRecipe");
+                        if (recipe != null)
+                            return new ItemSubject(recipe.createItem(), ObjectContext.Inventory, knownQuality: true);
                     }
-                }
-            }
+                    break;
 
-            // kitchen
-            else if (menu is CraftingPage)
-            {
-                CraftingRecipe recipe = this.Reflection.GetPrivateValue<CraftingRecipe>(menu, "hoverRecipe");
-                if (recipe != null)
-                    return new ItemSubject(recipe.createItem(), ObjectContext.Inventory, knownQuality: true);
-            }
 
-            // shop
-            else if (menu is ShopMenu)
-            {
-                Item item = this.Reflection.GetPrivateValue<Item>(menu, "hoveredItem");
-                if (item != null)
-                    return new ItemSubject(item.getOne(), ObjectContext.Inventory, knownQuality: true);
-            }
+                // shop
+                case ShopMenu _:
+                    {
+                        Item item = this.Reflection.GetPrivateValue<Item>(menu, "hoveredItem");
+                        if (item != null)
+                            return new ItemSubject(item.getOne(), ObjectContext.Inventory, knownQuality: true);
+                    }
+                    break;
 
-            // toolbar
-            else if (menu is Toolbar)
-            {
-                // find hovered slot
-                List<ClickableComponent> slots = this.Reflection.GetPrivateValue<List<ClickableComponent>>(menu, "buttons");
-                ClickableComponent hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint((int)cursorPosition.X, (int)cursorPosition.Y));
-                if (hoveredSlot == null)
-                    return null;
+                // toolbar
+                case Toolbar _:
+                    {
+                        // find hovered slot
+                        List<ClickableComponent> slots = this.Reflection.GetPrivateValue<List<ClickableComponent>>(menu, "buttons");
+                        ClickableComponent hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint((int)cursorPosition.X, (int)cursorPosition.Y));
+                        if (hoveredSlot == null)
+                            return null;
 
-                // get inventory index
-                int index = slots.IndexOf(hoveredSlot);
-                if (index < 0 || index > Game1.player.items.Count - 1)
-                    return null;
+                        // get inventory index
+                        int index = slots.IndexOf(hoveredSlot);
+                        if (index < 0 || index > Game1.player.items.Count - 1)
+                            return null;
 
-                // get hovered item
-                Item item = Game1.player.items[index];
-                if (item != null)
-                    return new ItemSubject(item.getOne(), ObjectContext.Inventory, knownQuality: true);
-            }
+                        // get hovered item
+                        Item item = Game1.player.items[index];
+                        if (item != null)
+                            return new ItemSubject(item.getOne(), ObjectContext.Inventory, knownQuality: true);
+                    }
+                    break;
 
-            // by convention (for mod support)
-            else
-            {
-                Item item = this.Reflection.GetPrivateValue<Item>(menu, "HoveredItem", required: false); // ChestsAnywhere
-                if (item != null)
-                    return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
+                // by convention (for mod support)
+                default:
+                    {
+                        Item item = this.Reflection.GetPrivateValue<Item>(menu, "HoveredItem", required: false); // ChestsAnywhere
+                        if (item != null)
+                            return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
+                    }
+                    break;
             }
 
             return null;

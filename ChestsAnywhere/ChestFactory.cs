@@ -34,9 +34,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 }
 
                 // chests in constructed buildings
-                if (location is BuildableGameLocation)
+                if (location is BuildableGameLocation buildableLocation)
                 {
-                    foreach (Building building in (location as BuildableGameLocation).buildings)
+                    foreach (Building building in buildableLocation.buildings)
                     {
                         int namelessCount = 0;
                         if (building.indoors == null)
@@ -52,9 +52,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 }
 
                 // farmhouse containers
-                if (location is FarmHouse && Game1.player.HouseUpgradeLevel > 0)
+                if (location is FarmHouse house && Game1.player.HouseUpgradeLevel > 0)
                 {
-                    Chest fridge = (location as FarmHouse).fridge;
+                    Chest fridge = house.fridge;
                     if (fridge != null)
                         yield return new ManagedChest(fridge, location.Name, Vector2.Zero, "Fridge");
                 }
