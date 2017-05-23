@@ -57,19 +57,9 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            try
-            {
-                // reload all machines
-                this.ReloadAllMachines();
-
-                // check for updates
-                if (this.Config.CheckForUpdates)
-                    UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "Automate");
-            }
-            catch (Exception ex)
-            {
-                this.HandleError(ex, "initialising after load");
-            }
+            // check for updates
+            if (this.Config.CheckForUpdates)
+                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "Automate");
         }
 
         /// <summary>The method invoked when a location is added or removed.</summary>
