@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.Automate
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
             LocationEvents.LocationObjectsChanged += this.LocationEvents_LocationObjectsChanged;
-            TimeEvents.TimeOfDayChanged += this.TimeEvents_TimeOfDayChanged;
+            GameEvents.OneSecondTick += this.GameEvents_OneSecondTick;
         }
 
 
@@ -105,7 +105,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when the in-game clock time changes.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void TimeEvents_TimeOfDayChanged(object sender, EventArgsIntChanged e)
+        private void GameEvents_OneSecondTick(object sender, EventArgs e)
         {
             if (!this.IsReady)
                 return;
