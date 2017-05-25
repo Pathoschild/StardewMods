@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Components;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 
@@ -16,6 +17,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>The player's current friendship data with the NPC.</summary>
         private readonly FriendshipModel Friendship;
 
+        /// <summary>Provides methods for fetching translations and generating text.</summary>
+        private readonly TextHelper Text;
+
 
         /*********
         ** Public methods
@@ -23,10 +27,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
         /// <param name="friendship">The player's current friendship data with the NPC.</param>
-        public CharacterFriendshipField(string label, FriendshipModel friendship)
-            : base(label, null, hasValue: true)
+        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
+        public CharacterFriendshipField(string label, FriendshipModel friendship, TextHelper textHelper)
+            : base(label, hasValue: true)
         {
             this.Friendship = friendship;
+            this.Text = textHelper;
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
@@ -79,12 +85,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             // get caption text
             string caption = null;
             if (this.Friendship.EmptyHearts == 0 && this.Friendship.LockedHearts > 0)
-                caption = "(need bouquet for next)";
+                caption = $"({this.Text.Translate(L10n.Npc.FriendshipNeedBouquet)})";
             else
             {
                 int pointsToNext = this.Friendship.GetPointsToNext();
                 if (pointsToNext > 0)
-                    caption = $"(next in {pointsToNext} pts)";
+                    caption = $"({this.Text.Translate(L10n.Npc.FriendshipNeedPoints, new { count = pointsToNext })})";
             }
 
             // draw caption

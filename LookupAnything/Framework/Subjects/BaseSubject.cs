@@ -6,12 +6,20 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 {
     /// <summary>The base class for object metadata.</summary>
     internal abstract class BaseSubject : ISubject
     {
+        /*********
+        ** Properties
+        *********/
+        /// <summary>Provides methods for fetching translations and generating text.</summary>
+        protected TextHelper Text { get; }
+
+
         /*********
         ** Accessors
         *********/
@@ -48,13 +56,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
-        protected BaseSubject() { }
+        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
+        protected BaseSubject(TextHelper textHelper)
+        {
+            this.Text = textHelper;
+        }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The display name.</param>
         /// <param name="description">The object description (if applicable).</param>
         /// <param name="type">The object type.</param>
-        protected BaseSubject(string name, string description, string type)
+        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
+        protected BaseSubject(string name, string description, string type, TextHelper textHelper)
+            : this(textHelper)
         {
             this.Initialise(name, description, type);
         }
@@ -85,8 +99,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     .Where(field => !field.IsLiteral); // exclude constants
 
                 foreach (FieldInfo field in fields)
-                    yield return new GenericDebugField($"{type.Name}::{field.Name}", field.GetValue(obj));
+                    yield return new GenericDebugField($"{type.Name}::{field.Name}", this.Stringify(field.GetValue(obj)));
             }
+        }
+
+        /// <summary>Get a human-readable representation of a value.</summary>
+        /// <param name="value">The underlying value.</param>
+        protected string Stringify(object value)
+        {
+            return this.Text.Stringify(value);
+        }
+
+        /// <summary>Get a translation for the current locale.</summary>
+        /// <param name="key">The translation key.</param>
+        /// <param name="tokens">An anonymous object containing token key/value pairs, like <c>new { value = 42, name = "Cranberries" }</c>.</param>
+        /// <exception cref="KeyNotFoundException">The <paramref name="key" /> doesn't match an available translation.</exception>
+        public Translation Translate(string key, object tokens = null)
+        {
+            return this.Text.Translate(key, tokens);
         }
     }
 }

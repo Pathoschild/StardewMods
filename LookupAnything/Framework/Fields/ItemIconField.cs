@@ -22,14 +22,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="item">The item for which to display an icon.</param>
         /// <param name="text">The text to display (if not the item name).</param>
         public ItemIconField(string label, Item item, string text = null)
-            : base(label, null, hasValue: item != null)
+            : base(label, hasValue: item != null)
         {
             this.Item = item;
             if (item != null)
             {
                 this.Value = !string.IsNullOrWhiteSpace(text)
                     ? this.FormatValue(text)
-                    : this.FormatValue(item.Name);
+                    : this.FormatValue(item.DisplayName);
             }
         }
 

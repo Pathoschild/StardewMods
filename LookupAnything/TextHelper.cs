@@ -2,57 +2,56 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.LookupAnything
 {
-    /// <summary>A utility class for writing text output.</summary>
+    /// <summary>Provides methods for fetching translations and generating text.</summary>
     internal class TextHelper
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>Provides translations stored in the mod's <c>i18n</c> folder.</summary>
+        private readonly ITranslationHelper Translation;
+
+
+        /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="translation">Provides translations stored in the mod's <c>i18n</c> folder.</param>
+        public TextHelper(ITranslationHelper translation)
+        {
+            this.Translation = translation;
+        }
+
+        /// <summary>Get a translation for the current locale.</summary>
+        /// <param name="key">The translation key.</param>
+        /// <param name="tokens">An anonymous object containing token key/value pairs, like <c>new { value = 42, name = "Cranberries" }</c>.</param>
+        /// <exception cref="KeyNotFoundException">The <paramref name="key" /> doesn't match an available translation.</exception>
+        public Translation Translate(string key, object tokens = null)
+        {
+            Translation translation = this.Translation.Translate(key);
+            return tokens != null
+                ? translation.Tokens(tokens)
+                : translation;
+        }
+
         /// <summary>Select the correct plural form for a word.</summary>
         /// <param name="count">The number.</param>
         /// <param name="single">The singular form.</param>
         /// <param name="plural">The plural form.</param>
-        public static string Pluralise(int count, string single, string plural = null)
+        public string Pluralise(int count, string single, string plural = null)
         {
             return count == 1 ? single : (plural ?? single + "s");
         }
 
-        /// <summary>Get a human-readable list of values.</summary>
-        /// <param name="values">The values to print.</param>
-        public static string OrList(string[] values)
-        {
-            values = values ?? new string[0];
-            switch (values.Length)
-            {
-                case 0:
-                    return string.Empty;
-
-                case 1:
-                    return values[0];
-
-                case 2:
-                    return $"{values[0]} or {values[1]}";
-
-                default:
-                    StringBuilder list = new StringBuilder();
-                    list.Append(values[0]);
-                    for (int i = 1; i < values.Length - 1; i++)
-                        list.Append($", {values[i]}");
-                    if (values.Length != 1)
-                        list.Append($", or {values[values.Length - 1]}");
-
-                    return list.ToString();
-            }
-        }
-
         /// <summary>Get a human-readable representation of a value.</summary>
         /// <param name="value">The underlying value.</param>
-        public static string Stringify(object value)
+        public string Stringify(object value)
         {
             switch (value)
             {
@@ -61,18 +60,18 @@ namespace Pathoschild.Stardew.LookupAnything
 
                 // boolean
                 case bool boolean:
-                    return boolean ? "yes" : "no";
+                    return this.Translate(boolean ? L10n.Generic.Yes : L10n.Generic.No);
 
                 // time span
                 case TimeSpan span:
                     {
                         List<string> parts = new List<string>();
                         if (span.Days > 0)
-                            parts.Add($"{span.Days} {TextHelper.Pluralise(span.Days, "day")}");
+                            parts.Add(this.Translate(L10n.Generic.Days, new { count = span.Days }));
                         if (span.Hours > 0)
-                            parts.Add($"{span.Hours} {TextHelper.Pluralise(span.Hours, "hour")}");
+                            parts.Add(this.Translate(L10n.Generic.Hours, new { count = span.Hours }));
                         if (span.Minutes > 0)
-                            parts.Add($"{span.Minutes} {TextHelper.Pluralise(span.Minutes, "minute")}");
+                            parts.Add(this.Translate(L10n.Generic.Minutes, new { count = span.Minutes }));
                         return string.Join(", ", parts);
                     }
 
@@ -87,7 +86,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 // array
                 case IEnumerable array when !(value is string):
                     {
-                        string[] values = (from val in array.Cast<object>() select TextHelper.Stringify(val)).ToArray();
+                        string[] values = (from val in array.Cast<object>() select this.Stringify(val)).ToArray();
                         return "(" + string.Join(", ", values) + ")";
                     }
 
@@ -104,8 +103,8 @@ namespace Pathoschild.Stardew.LookupAnything
                             Type genericType = type.GetGenericTypeDefinition();
                             if (genericType == typeof(KeyValuePair<,>))
                             {
-                                string k = TextHelper.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Key)).GetValue(value));
-                                string v = TextHelper.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Value)).GetValue(value));
+                                string k = this.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Key)).GetValue(value));
+                                string v = this.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Value)).GetValue(value));
                                 return $"({k}: {v})";
                             }
                         }

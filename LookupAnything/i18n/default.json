@@ -1,0 +1,210 @@
+{
+    /*********
+    ** Generic translations
+    *********/
+    // generic field values
+    "generic.percent": "{{percent}}%",
+    "generic.percent-chance-of": "{{percent}}% chance of {{label}}",
+    "generic.percent-ratio": "{{percent}}% ({{value}} of {{max}})",
+    "generic.ratio": "{{value}} of {{max}}",
+    "generic.range": "{{min}} to {{max}}",
+    "generic.yes": "yes",
+    "generic.no": "no",
+    "generic.seconds": "{{count}} seconds",
+    "generic.minutes": "{{count}} minutes",
+    "generic.hours": "{{count}} hours",
+    "generic.days": "{{count}} days",
+    "generic.in-x-days": "in {{count}} days",
+    "generic.tomorrow": "tomorrow",
+    "generic.price": "{{price}}g",
+    "generic.price-for-quality": "{{price}}g ({{quality}})",
+    "generic.price-for-stack": "{{price}}g for stack of {{count}}",
+
+    // types
+    "type.fruit-tree": "Fruit tree",
+    "type.map-tile": "Map tile",
+    "type.monster": "Monster",
+    "type.player": "Player",
+    "type.villager": "Villager",
+
+    // item qualities
+    "quality.normal": "normal",
+    "quality.silver": "silver",
+    "quality.gold": "gold",
+    "quality.iridium": "iridium",
+
+
+    /*********
+    ** Specific lookups
+    *********/
+    // animal lookup labels
+    "animal.love": "Love",
+    "animal.happiness": "Happiness",
+    "animal.mood": "Mood today",
+    "animal.complaints": "Complaints",
+    "animal.produce-ready": "Produce ready",
+    "animal.growth": "Growth",
+    "animal.sells-for": "Sells for",
+
+    // animal lookup values
+    "animal.complaints.disturbed-by-dog": "was disturbed by {{name}}",
+    "animal.complaints.hungry": "wasn't fed yesterday",
+    "animal.complaints.left-out": "was left outside last night",
+    "animal.complaints.new-home": "moved into new home",
+    "animal.complaints.no-heater": "no heater in winter",
+    "animal.complaints.not-petted": "hasn't been petted today",
+
+    // fruit tree lookup labels
+    "fruit-tree.complaints": "Complaints",
+    "fruit-tree.name": "{{fruitName}} Tree",
+    "fruit-tree.growth": "Growth",
+    "fruit-tree.next-fruit": "Next fruit",
+    "fruit-tree.season": "Season",
+    "fruit-tree.quality": "Quality",
+
+    // fruit tree lookup values
+    "fruit-tree.complaints.adjacent-objects": "can't grow because there are adjacent objects",
+    "fruit-tree.growth.summary": "mature on {{date}}",
+    "fruit-tree.next-fruit.struck-by-lighting": "struck by lightning! Will recover in {{count}} days.",
+    "fruit-tree.next-fruit.out-of-season": "out of season",
+    "fruit-tree.next-fruit.max-fruit": "won't grow any more fruit until you harvest those it has",
+    "fruit-tree.next-fruit.too-young": "too young to bear fruit",
+    "fruit-tree.quality.now": "{{quality}} now",
+    "fruit-tree.quality.on-date": "{{quality}} on {{date}}",
+    "fruit-tree.quality.on-date-next-year": "{{quality}} on {{date}} next year",
+    "fruit-tree.quality.on-date-in-year-x": "{{quality}} on {{date}} in year {{year}}",
+    "fruit-tree.season.summary": "{{season}} (or anytime in greenhouse)",
+
+    // crop lookup labels
+    "crop.summary": "Crop",
+    "crop.harvest": "Harvest",
+
+    // crop lookup values
+    "crop.summary.dead": "This crop is dead.",
+    "crop.summary.drops-X": "drops {{count}}",
+    "crop.summary.drops-X-to-Y": "drops {{min}} to {{max}} ({{percent}}% chance of extra crops)",
+    "crop.summary.harvest-once": "harvest after {{daysToFirstHarvest}} days",
+    "crop.summary.harvest-multi": "harvest after {{daysToFirstHarvest}} days, then every {{daysToNextHarvests}} days",
+    "crop.summary.seasons": "grows in {{seasons}}",
+    "crop.summary.sells-for": "sells for {{price}}",
+    "crop.harvest.now": "now",
+    "crop.harvest.too-late": "too late in the season for the next harvest (would be on {{date}})",
+
+    // item lookup labels
+    "item.cask-contents": "Contents",
+    "item.cask-schedule": "Aging",
+    "item.contents": "Contents",
+    "item.needed-for": "Needed for",
+    "item.sells-for": "Sells for",
+    "item.sells-to": "Sells to",
+    "item.likes-this": "Likes this",
+    "item.loves-this": "Loves this",
+    "item.fence-health": "Health",
+    "item.recipes": "Recipes",
+    "item.number-owned": "Owned",
+    "item.see-also": "See also",
+
+    // item lookup values
+    "item.cask-schedule.now": "{{quality}} ready now",
+    "item.cask-schedule.now-partial": "{{quality}} now (use pickaxe to stop aging)",
+    "item.cask-schedule.tomorrow": "{{quality}} tomorrow",
+    "item.cask-schedule.in-x-days": "{{quality}} in {{count}} days ({{date}})",
+    "item.contents.ready": "{{name}} ready",
+    "item.contents.partial": "{{name}} in {{time}}",
+    "item.needed-for.community-center": "community center ({{bundles}})",
+    "item.needed-for.full-shipment": "full shipment achievement (ship one)",
+    "item.needed-for.polyculture": "polyculture achievement (ship {{count}} more)",
+    "item.needed-for.full-collection": "full collection achievement (donate one to museum)",
+    "item.sells-to.shipping-box": "shipping box",
+    "item.fence-health.gold-clock": "no decay with Gold Clock",
+    "item.fence-health.summary": "{{percent}}% (roughly {{count}} days left)",
+    "item.recipes.entry": "{{name}} (needs {{count}})",
+    "item.number-owned.summary": "you own {{count}} of these",
+
+    // monster lookup labels
+    "monster.invincible": "Invincible",
+    "monster.health": "Health",
+    "monster.drops": "Drops",
+    "monster.experience": "XP",
+    "monster.defence": "Defence",
+    "monster.attack": "Attack",
+    "monster.adventure-guild": "Adventure Guild",
+
+    // monster lookup values
+    "monster.drops.nothing": "nothing",
+    "monster.adventure-guild.complete": "complete",
+    "monster.adventure-guild.incomplete": "in progress",
+    "monster.adventure-guild.progress": "killed {{count}} of {{requiredCount}}",
+
+    // NPC lookup labels
+    "npc.birthday": "Birthday",
+    "npc.can-romance": "Can romance",
+    "npc.friendship": "Friendship",
+    "npc.talked-today": "Talked today",
+    "npc.gifted-today": "Gifted today",
+    "npc.gifted-this-week": "Gifted this week",
+    "npc.loves-gifts": "Loves gifts",
+    "npc.likes-gifts": "Likes gifts",
+
+    // NPC lookup values
+    "npc.can-romance.married": "You're married! <", // < turns into a heart
+    "npc.friendship.not-met": "You haven't met them yet.",
+    "npc.friendship.need-bouquet": "need bouquet for next",
+    "npc.friendship.need-points": "next in {{count}} pts",
+
+    // pet lookup labels
+    "pet.love": "Love",
+    "pet.petted-today": "Petted today",
+
+    // player lookup labels
+    "player.farm-name": "Farm name",
+    "player.favorite-thing": "Favourite thing",
+    "player.gender": "Gender",
+    "player.spouse": "Spouse",
+    "player.combat-skill": "Combat",
+    "player.farming-skill": "Farming",
+    "player.fishing-skill": "Fishing",
+    "player.foraging-skill": "Foraging",
+    "player.mining-skill": "Mining",
+    "player.luck": "Luck",
+
+    // player lookup values
+    "player.gender.male": "male",
+    "player.gender.female": "female",
+    "player.luck.summary": "{{percent}}% to many random checks",
+    "player.skill.progress": "level {{level}} ({{expNeeded}} XP to next)",
+    "player.skill.progress-last": "level {{level}}",
+
+    // tile lookup labels
+    "tile.description": "A tile position on the map. This is displayed because you enabled tile lookups in the configuration.",
+    "tile.map-name": "Map name",
+    "tile.tile": "Tile",
+    "tile.tile-index": "{{layerName}}: tile index",
+    "tile.tilesheet": "{{layerName}}: tilesheet",
+    "tile.blend-mode": "{{layerName}}: blend mode",
+    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
+    "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
+
+    // tile lookup values
+    "tile.tile.none-here": "no tile here",
+
+    // tree lookup labels
+    "tree.stage": "Growth stage",
+    "tree.next-growth": "Next Growth",
+    "tree.has-seed": "Has seed",
+
+    // tree lookup values
+    "tree.stage.done": "Fully grown",
+    "tree.stage.partial": "{{stageName}} ({{step}} of {{max}})",
+    "tree.next-growth.winter": "can't grow in winter outside greenhouse",
+    "tree.next-growth.adjacent-trees": "can't grow because other trees are too close",
+    "tree.next-growth.random": "20% chance to grow into {{stage}} tomorrow",
+
+    // tree stages
+    "tree.stages.seed": "seed",
+    "tree.stages.sprout": "sprout",
+    "tree.stages.sapling": "sapling",
+    "tree.stages.bush": "bush",
+    "tree.stages.smallTree": "small tree",
+    "tree.stages.tree": "tree"
+}

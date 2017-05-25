@@ -38,7 +38,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="emptyColor">The color of the empty bar.</param>
         /// <param name="text">The text to show next to the progress bar (if any).</param>
         public PercentageBarField(string label, int currentValue, int maxValue, Color filledColor, Color emptyColor, string text)
-            : base(label, null, hasValue: true)
+            : base(label, hasValue: true)
         {
             this.CurrentValue = currentValue;
             this.MaxValue = maxValue;

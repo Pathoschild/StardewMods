@@ -87,7 +87,7 @@ namespace Pathoschild.Stardew.LookupAnything
 #endif
 
             // initialise functionality
-            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Reflection);
+            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection);
             this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config, this.Monitor);
 
             // hook up events

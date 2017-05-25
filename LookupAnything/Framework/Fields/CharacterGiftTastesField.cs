@@ -31,7 +31,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             if (!giftTastes.ContainsKey(showTaste))
                 yield break;
 
-            Item[] items = giftTastes[showTaste].OrderBy(p => p.Name).ToArray();
+            Item[] items = giftTastes[showTaste].OrderBy(p => p.DisplayName).ToArray();
             Item[] ownedItems = GameHelper.GetAllOwnedItems().ToArray();
             Item[] inventory = Game1.player.items.Where(p => p != null).ToArray();
 
@@ -39,8 +39,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             {
                 Item item = items[i];
                 string text = i != last
-                    ? item.Name + ","
-                    : item.Name;
+                    ? item.DisplayName + ","
+                    : item.DisplayName;
 
                 if (inventory.Any(p => p.parentSheetIndex == item.parentSheetIndex && p.category == item.category)) // in inventory
                     yield return new FormattedText(text, Color.Green);

@@ -53,6 +53,7 @@
     <Compile Include="Framework\Constants\FruitTreeGrowthStage.cs" />
     <Compile Include="DataParser.cs" />
     <Compile Include="Framework\Constants\LookupMode.cs" />
+    <Compile Include="Framework\Constants\L10n.cs" />
     <Compile Include="Framework\Data\ShopData.cs" />
     <Compile Include="Framework\DebugFields\GenericDebugField.cs" />
     <Compile Include="Framework\DebugFields\IDebugField.cs" />
@@ -129,6 +130,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="data.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="i18n\default.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="manifest.json">
