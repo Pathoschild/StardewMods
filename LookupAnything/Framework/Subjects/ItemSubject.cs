@@ -237,7 +237,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     // bundles
                     if (isObject)
                     {
-                        string[] bundles = (from bundle in this.GetUnfinishedBundles(obj) orderby bundle.Area, bundle.DisplayName select $"{bundle.Area}: {bundle.DisplayName}").ToArray();
+                        string[] bundles = (from bundle in this.GetUnfinishedBundles(obj) orderby bundle.Area, bundle.DisplayName select $"{this.GetTranslatedBundleArea(bundle)}: {bundle.DisplayName}").ToArray();
                         if (bundles.Any())
                             neededFor.Add(this.Translate(L10n.Item.NeededForCommunityCenter, new { bundles = string.Join(", ", bundles) }));
                     }
@@ -470,6 +470,29 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 // yield if missing
                 if (!communityCenter.bundles[bundle.ID][ingredient.Index])
                     yield return bundle;
+            }
+        }
+
+        /// <summary>Get the translated name for a bundle's area.</summary>
+        /// <param name="bundle">The bundle.</param>
+        private string GetTranslatedBundleArea(BundleModel bundle)
+        {
+            switch (bundle.Area)
+            {
+                case "Pantry":
+                    return this.Translate(L10n.BundleAreas.Pantry);
+                case "Crafts Room":
+                    return this.Translate(L10n.BundleAreas.CraftsRoom);
+                case "Fish Tank":
+                    return this.Translate(L10n.BundleAreas.FishTank);
+                case "Boiler Room":
+                    return this.Translate(L10n.BundleAreas.BoilerRoom);
+                case "Vault":
+                    return this.Translate(L10n.BundleAreas.Vault);
+                case "Bulletin Board":
+                    return this.Translate(L10n.BundleAreas.BulletinBoard);
+                default:
+                    return bundle.Area;
             }
         }
 

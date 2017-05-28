@@ -33,6 +33,13 @@
     "quality.gold": "gold",
     "quality.iridium": "iridium",
 
+    // Community Center bundle areas
+    "bundle-area.pantry": "Pantry",
+    "bundle-area.crafts-room": "Crafts Room",
+    "bundle-area.fish-tank": "Fish Tank",
+    "bundle-area.boiler-room": "Boiler Room",
+    "bundle-area.vault": "Vault",
+    "bundle-area.bulletin-board": "Bulletin Board",
 
     /*********
     ** Specific lookups

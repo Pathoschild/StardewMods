@@ -81,6 +81,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public const string Villager = "type.villager";
         }
 
+        /// <summary>Community Center bundle areas.</summary>
+        public static class BundleAreas
+        {
+            /// <summary>A value like <c>Pantry</c>.</summary>
+            public const string Pantry = "bundle-area.pantry";
+
+            /// <summary>A value like <c>Crafts Room</c>.</summary>
+            public const string CraftsRoom = "bundle-area.crafts-room";
+
+            /// <summary>A value like <c>Fish Tank</c>.</summary>
+            public const string FishTank = "bundle-area.fish-tank";
+
+            /// <summary>A value like <c>Boiler Room</c>.</summary>
+            public const string BoilerRoom = "bundle-area.boiler-room";
+
+            /// <summary>A value like <c>Vault</c>.</summary>
+            public const string Vault = "bundle-area.vault";
+
+            /// <summary>A value like <c>Bulletin Board</c>.</summary>
+            public const string BulletinBoard = "bundle-area.bulletin-board";
+        }
+
         /// <summary>Animal lookup translations.</summary>
         public static class Animal
         {
