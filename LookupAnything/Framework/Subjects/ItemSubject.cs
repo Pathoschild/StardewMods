@@ -275,7 +275,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     List<string> buyers = new List<string>();
                     if (obj?.canBeShipped() == true)
                         buyers.Add(this.Translate(L10n.Item.SellsToShippingBox));
-                    buyers.AddRange(from shop in metadata.Shops where shop.BuysCategories.Contains(item.category) orderby shop.DisplayName select shop.DisplayName);
+                    buyers.AddRange(
+                        from shop in metadata.Shops
+                        where shop.BuysCategories.Contains(item.category)
+                        let name = this.Translate(shop.DisplayKey).ToString()
+                        orderby name
+                        select name
+                    );
                     yield return new GenericField(this.Translate(L10n.Item.SellsTo), string.Join(", ", buyers));
                 }
 

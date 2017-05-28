@@ -33,6 +33,9 @@
     "quality.gold": "gold",
     "quality.iridium": "iridium",
 
+    /*********
+    ** Data translations
+    *********/
     // Community Center bundle areas
     "bundle-area.pantry": "Pantry",
     "bundle-area.crafts-room": "Crafts Room",
@@ -40,6 +43,14 @@
     "bundle-area.boiler-room": "Boiler Room",
     "bundle-area.vault": "Vault",
     "bundle-area.bulletin-board": "Bulletin Board",
+
+    // shop names
+    "shop.adventure-guild": "Adventure Guild",
+    "shop.clint": "Clint",
+    "shop.marnie": "Marnie",
+    "shop.pierre": "Pierre",
+    "shop.robin": "Robin",
+    "shop.willy": "Willy",
 
     /*********
     ** Specific lookups
