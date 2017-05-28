@@ -9,6 +9,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
@@ -45,13 +46,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="item">The underlying target.</param>
         /// <param name="context">The context of the object being looked up.</param>
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
         /// <param name="fromCrop">The crop associated with the item (if applicable).</param>
-        public ItemSubject(TextHelper textHelper, Item item, ObjectContext context, bool knownQuality, Crop fromCrop = null)
-            : base(textHelper)
+        public ItemSubject(ITranslationHelper translations, Item item, ObjectContext context, bool knownQuality, Crop fromCrop = null)
+            : base(translations)
         {
             this.Target = item;
             this.DisplayItem = this.GetMenuItem(item);
@@ -140,7 +141,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     else if (Game1.currentLocation.Name != Constant.LocationNames.Greenhouse && !crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Season))
                         summary = this.Translate(L10n.Crop.HarvestTooLate, new { date = dayOfNextHarvest });
                     else
-                        summary = $"{dayOfNextHarvest} ({this.Text.Pluralise(daysToNextHarvest, this.Translate(L10n.Generic.Tomorrow), this.Translate(L10n.Generic.InXDays, new { count = daysToNextHarvest }))})";
+                        summary = $"{dayOfNextHarvest} ({this.Text.TranslatePlural(daysToNextHarvest, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = daysToNextHarvest })})";
 
                     yield return new GenericField(this.Translate(L10n.Crop.Harvest), summary);
                 }
@@ -211,7 +212,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         string scheduleStr = string.Join(Environment.NewLine, (
                             from entry in schedule
                             let tokens = new { quality = this.Translate(L10n.For(entry.Quality)), count = entry.DaysLeft, date = entry.HarvestDate }
-                            let str = this.Text.Pluralise(entry.DaysLeft, this.Text.Translate(L10n.Item.CaskScheduleTomorrow, tokens), this.Text.Translate(L10n.Item.CaskScheduleInXDays, tokens))
+                            let str = this.Text.TranslatePlural(entry.DaysLeft, L10n.Item.CaskScheduleTomorrow, L10n.Item.CaskScheduleInXDays).Tokens(tokens)
                             select $"-{str}"
                         ));
                         yield return new GenericField(this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskSchedulePartial, new { quality = curQualityName }) + Environment.NewLine + scheduleStr);

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
@@ -30,9 +31,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
-        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
-        public TreeSubject(Tree tree, Vector2 tile, TextHelper textHelper)
-            : base(TreeSubject.GetName(tree), null, "Tree", textHelper)
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public TreeSubject(Tree tree, Vector2 tile, ITranslationHelper translations)
+            : base(TreeSubject.GetName(tree), null, "Tree", translations)
         {
             this.Target = tree;
             this.Tile = tile;

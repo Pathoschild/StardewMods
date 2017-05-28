@@ -30,10 +30,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="farmer">The lookup target.</param>
-        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public FarmerSubject(SFarmer farmer, TextHelper textHelper, IReflectionHelper reflectionHelper)
-            : base(farmer.Name, null, textHelper.Translate(L10n.Types.Player), textHelper)
+        public FarmerSubject(SFarmer farmer, ITranslationHelper translations, IReflectionHelper reflectionHelper)
+            : base(farmer.Name, null, translations.Translate(L10n.Types.Player), translations)
         {
             this.Target = farmer;
             this.Reflection = reflectionHelper;

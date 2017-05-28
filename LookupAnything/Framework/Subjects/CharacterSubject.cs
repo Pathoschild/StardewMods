@@ -38,11 +38,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="npc">The lookup target.</param>
         /// <param name="type">The NPC type.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-        public CharacterSubject(NPC npc, TargetType type, Metadata metadata, TextHelper textHelper, IReflectionHelper reflectionHelper)
-            : base(textHelper)
+        public CharacterSubject(NPC npc, TargetType type, Metadata metadata, ITranslationHelper translations, IReflectionHelper reflectionHelper)
+            : base(translations)
         {
             this.Reflection = reflectionHelper;
 

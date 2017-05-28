@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using StardewModdingAPI;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
@@ -24,10 +25,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="animal">The lookup target.</param>
-        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <remarks>Reverse engineered from <see cref="FarmAnimal"/>.</remarks>
-        public FarmAnimalSubject(FarmAnimal animal, TextHelper textHelper)
-            : base(animal.displayName, null, animal.type, textHelper)
+        public FarmAnimalSubject(FarmAnimal animal, ITranslationHelper translations)
+            : base(animal.displayName, null, animal.type, translations)
         {
             this.Target = animal;
         }

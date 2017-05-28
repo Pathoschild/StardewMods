@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Components;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using StardewModdingAPI;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
@@ -17,8 +18,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>The player's current friendship data with the NPC.</summary>
         private readonly FriendshipModel Friendship;
 
-        /// <summary>Provides methods for fetching translations and generating text.</summary>
-        private readonly TextHelper Text;
+        /// <summary>Provides translations stored in the mod folder.</summary>
+        private readonly ITranslationHelper Translations;
 
 
         /*********
@@ -27,12 +28,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
         /// <param name="friendship">The player's current friendship data with the NPC.</param>
-        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
-        public CharacterFriendshipField(string label, FriendshipModel friendship, TextHelper textHelper)
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public CharacterFriendshipField(string label, FriendshipModel friendship, ITranslationHelper translations)
             : base(label, hasValue: true)
         {
             this.Friendship = friendship;
-            this.Text = textHelper;
+            this.Translations = translations;
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
@@ -85,12 +86,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             // get caption text
             string caption = null;
             if (this.Friendship.EmptyHearts == 0 && this.Friendship.LockedHearts > 0)
-                caption = $"({this.Text.Translate(L10n.Npc.FriendshipNeedBouquet)})";
+                caption = $"({this.Translations.Translate(L10n.Npc.FriendshipNeedBouquet)})";
             else
             {
                 int pointsToNext = this.Friendship.GetPointsToNext();
                 if (pointsToNext > 0)
-                    caption = $"({this.Text.Translate(L10n.Npc.FriendshipNeedPoints, new { count = pointsToNext })})";
+                    caption = $"({this.Translations.Translate(L10n.Npc.FriendshipNeedPoints, new { count = pointsToNext })})";
             }
 
             // draw caption

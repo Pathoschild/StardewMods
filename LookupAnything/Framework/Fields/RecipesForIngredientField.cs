@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using StardewModdingAPI;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
@@ -37,8 +38,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>The recipe data to list (type => recipe => {player knows recipe, number required for recipe}).</summary>
         private readonly Entry[] Recipes;
 
-        /// <summary>Provides methods for fetching translations and generating text.</summary>
-        private readonly TextHelper TextHelper;
+        /// <summary>Provides translations stored in the mod folder.</summary>
+        private readonly ITranslationHelper Translations;
 
 
         /*********
@@ -48,11 +49,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="label">A short field label.</param>
         /// <param name="item">The ingredient item.</param>
         /// <param name="recipes">The recipe to list.</param>
-        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
-        public RecipesForIngredientField(string label, Item item, RecipeModel[] recipes, TextHelper textHelper)
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public RecipesForIngredientField(string label, Item item, RecipeModel[] recipes, ITranslationHelper translations)
             : base(label, hasValue: true)
         {
-            this.TextHelper = textHelper;
+            this.Translations = translations;
             this.Recipes =
                 (
                     from recipe in recipes
@@ -102,7 +103,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
                 // draw text
                 Color color = entry.IsKnown ? Color.Black : Color.Gray;
-                Vector2 textSize = spriteBatch.DrawTextBlock(font, this.TextHelper.Translate(L10n.Item.RecipesEntry, new { name = entry.Name, count = entry.NumberRequired }), position + new Vector2(leftIndent + iconSize.X + 3, height + 5), wrapWidth - iconSize.X, color);
+                Vector2 textSize = spriteBatch.DrawTextBlock(font, this.Translations.Translate(L10n.Item.RecipesEntry, new { name = entry.Name, count = entry.NumberRequired }), position + new Vector2(leftIndent + iconSize.X + 3, height + 5), wrapWidth - iconSize.X, color);
 
                 height += Math.Max(iconSize.Y, textSize.Y) + 5;
             }

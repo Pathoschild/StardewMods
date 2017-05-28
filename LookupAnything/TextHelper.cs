@@ -6,52 +6,41 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewModdingAPI;
 
-namespace Pathoschild.Stardew.LookupAnything
+namespace Pathoschild.Stardew.LookupAnything.Framework
 {
-    /// <summary>Provides methods for fetching translations and generating text.</summary>
-    internal class TextHelper
+    /// <summary>Provides extension methods for <see cref="ITranslationHelper"/>.</summary>
+    internal static class TranslationHelperExtensions
     {
-        /*********
-        ** Properties
-        *********/
-        /// <summary>Provides translations stored in the mod's <c>i18n</c> folder.</summary>
-        private readonly ITranslationHelper Translation;
-
-
         /*********
         ** Public methods
         *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="translation">Provides translations stored in the mod's <c>i18n</c> folder.</param>
-        public TextHelper(ITranslationHelper translation)
-        {
-            this.Translation = translation;
-        }
-
         /// <summary>Get a translation for the current locale.</summary>
+        /// <param name="translations">The translation helper.</param>
         /// <param name="key">The translation key.</param>
         /// <param name="tokens">An anonymous object containing token key/value pairs, like <c>new { value = 42, name = "Cranberries" }</c>.</param>
         /// <exception cref="KeyNotFoundException">The <paramref name="key" /> doesn't match an available translation.</exception>
-        public Translation Translate(string key, object tokens = null)
+        public static Translation Translate(this ITranslationHelper translations, string key, object tokens = null)
         {
-            Translation translation = this.Translation.Translate(key);
+            Translation translation = translations.Translate(key);
             return tokens != null
                 ? translation.Tokens(tokens)
                 : translation;
         }
 
-        /// <summary>Select the correct plural form for a word.</summary>
+        /// <summary>Select the correct translation based on the plural form.</summary>
+        /// <param name="translations">The translation helper.</param>
         /// <param name="count">The number.</param>
-        /// <param name="single">The singular form.</param>
-        /// <param name="plural">The plural form.</param>
-        public string Pluralise(int count, string single, string plural)
+        /// <param name="singleKey">The singular form.</param>
+        /// <param name="pluralKey">The plural form.</param>
+        public static Translation TranslatePlural(this ITranslationHelper translations, int count, string singleKey, string pluralKey)
         {
-            return count == 1 ? single : plural;
+            return translations.Translate(count == 1 ? singleKey : pluralKey);
         }
 
         /// <summary>Get a human-readable representation of a value.</summary>
+        /// <param name="translations">The translation helper.</param>
         /// <param name="value">The underlying value.</param>
-        public string Stringify(object value)
+        public static string Stringify(this ITranslationHelper translations, object value)
         {
             switch (value)
             {
@@ -60,18 +49,18 @@ namespace Pathoschild.Stardew.LookupAnything
 
                 // boolean
                 case bool boolean:
-                    return this.Translate(boolean ? L10n.Generic.Yes : L10n.Generic.No);
+                    return translations.Translate(boolean ? L10n.Generic.Yes : L10n.Generic.No);
 
                 // time span
                 case TimeSpan span:
                     {
                         List<string> parts = new List<string>();
                         if (span.Days > 0)
-                            parts.Add(this.Translate(L10n.Generic.Days, new { count = span.Days }));
+                            parts.Add(translations.Translate(L10n.Generic.Days, new { count = span.Days }));
                         if (span.Hours > 0)
-                            parts.Add(this.Translate(L10n.Generic.Hours, new { count = span.Hours }));
+                            parts.Add(translations.Translate(L10n.Generic.Hours, new { count = span.Hours }));
                         if (span.Minutes > 0)
-                            parts.Add(this.Translate(L10n.Generic.Minutes, new { count = span.Minutes }));
+                            parts.Add(translations.Translate(L10n.Generic.Minutes, new { count = span.Minutes }));
                         return string.Join(", ", parts);
                     }
 
@@ -86,7 +75,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 // array
                 case IEnumerable array when !(value is string):
                     {
-                        string[] values = (from val in array.Cast<object>() select this.Stringify(val)).ToArray();
+                        string[] values = (from val in array.Cast<object>() select translations.Stringify(val)).ToArray();
                         return "(" + string.Join(", ", values) + ")";
                     }
 
@@ -103,8 +92,8 @@ namespace Pathoschild.Stardew.LookupAnything
                             Type genericType = type.GetGenericTypeDefinition();
                             if (genericType == typeof(KeyValuePair<,>))
                             {
-                                string k = this.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Key)).GetValue(value));
-                                string v = this.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Value)).GetValue(value));
+                                string k = translations.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Key)).GetValue(value));
+                                string v = translations.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Value)).GetValue(value));
                                 return $"({k}: {v})";
                             }
                         }

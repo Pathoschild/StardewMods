@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
@@ -23,8 +24,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>The text to display if there are no items.</summary>
         private readonly string DefaultText;
 
-        /// <summary>Provides methods for fetching translations and generating text.</summary>
-        private readonly TextHelper TextHelper;
+        /// <summary>Provides translations stored in the mod folder.</summary>
+        private readonly ITranslationHelper Translations;
 
 
         /*********
@@ -33,9 +34,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
         /// <param name="drops">The possible drops.</param>
-        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="defaultText">The text to display if there are no items (or <c>null</c> to hide the field).</param>
-        public ItemDropListField(string label, IEnumerable<ItemDropData> drops, TextHelper textHelper, string defaultText = null)
+        public ItemDropListField(string label, IEnumerable<ItemDropData> drops, ITranslationHelper translations, string defaultText = null)
             : base(label)
         {
             this.Drops =
@@ -48,7 +49,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 .ToArray();
             this.DefaultText = defaultText;
             this.HasValue = defaultText != null || this.Drops.Any();
-            this.TextHelper = textHelper;
+            this.Translations = translations;
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
@@ -79,9 +80,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 spriteBatch.DrawIcon(item, position.X, position.Y + height, iconSize, isGuaranteed ? Color.White : Color.White * 0.5f);
 
                 // draw text
-                string text = isGuaranteed ? item.DisplayName : this.TextHelper.Translate(L10n.Generic.PercentChanceOf, new { percent = Math.Round(drop.Probability, 4) * 100, label = item.DisplayName });
+                string text = isGuaranteed ? item.DisplayName : this.Translations.Translate(L10n.Generic.PercentChanceOf, new { percent = Math.Round(drop.Probability, 4) * 100, label = item.DisplayName });
                 if (drop.MaxDrop > 1)
-                    text += " (" + this.TextHelper.Translate(L10n.Generic.Range, new { min = 1, max = drop.MaxDrop }) + ")";
+                    text += " (" + this.Translations.Translate(L10n.Generic.Range, new { min = 1, max = drop.MaxDrop }) + ")";
                 Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(iconSize.X + 5, height + 5), wrapWidth, isGuaranteed ? Color.Black : Color.Gray);
 
                 // cross out item if it definitely won't drop

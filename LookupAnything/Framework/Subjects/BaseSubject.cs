@@ -16,8 +16,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /*********
         ** Properties
         *********/
-        /// <summary>Provides methods for fetching translations and generating text.</summary>
-        protected TextHelper Text { get; }
+        /// <summary>Provides translations stored in the mod folder.</summary>
+        protected ITranslationHelper Text { get; }
 
 
         /*********
@@ -56,19 +56,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
-        protected BaseSubject(TextHelper textHelper)
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        protected BaseSubject(ITranslationHelper translations)
         {
-            this.Text = textHelper;
+            this.Text = translations;
         }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The display name.</param>
         /// <param name="description">The object description (if applicable).</param>
         /// <param name="type">The object type.</param>
-        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
-        protected BaseSubject(string name, string description, string type, TextHelper textHelper)
-            : this(textHelper)
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        protected BaseSubject(string name, string description, string type, ITranslationHelper translations)
+            : this(translations)
         {
             this.Initialise(name, description, type);
         }

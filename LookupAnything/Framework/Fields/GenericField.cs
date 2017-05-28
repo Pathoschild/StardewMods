@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
@@ -87,17 +88,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Get the display value for sale price data.</summary>
         /// <param name="saleValue">The flat sale price.</param>
         /// <param name="stackSize">The number of items in the stack.</param>
-        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
-        public static string GetSaleValueString(int saleValue, int stackSize, TextHelper textHelper)
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public static string GetSaleValueString(int saleValue, int stackSize, ITranslationHelper translations)
         {
-            return GenericField.GetSaleValueString(new Dictionary<ItemQuality, int> { [ItemQuality.Normal] = saleValue }, stackSize, textHelper);
+            return GenericField.GetSaleValueString(new Dictionary<ItemQuality, int> { [ItemQuality.Normal] = saleValue }, stackSize, translations);
         }
 
         /// <summary>Get the display value for sale price data.</summary>
         /// <param name="saleValues">The sale price data.</param>
         /// <param name="stackSize">The number of items in the stack.</param>
-        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
-        public static string GetSaleValueString(IDictionary<ItemQuality, int> saleValues, int stackSize, TextHelper textHelper)
+        /// <param name="translations">Provides methods for fetching translations and generating text.</param>
+        public static string GetSaleValueString(IDictionary<ItemQuality, int> saleValues, int stackSize, ITranslationHelper translations)
         {
             // can't be sold
             if (saleValues == null || !saleValues.Any() || saleValues.Values.All(p => p == 0))
@@ -106,9 +107,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             // one quality
             if (saleValues.Count == 1)
             {
-                string result = textHelper.Translate(L10n.Generic.Price, new { price = saleValues.First().Value });
+                string result = translations.Translate(L10n.Generic.Price, new { price = saleValues.First().Value });
                 if (stackSize > 1)
-                    result += $" ({textHelper.Translate(L10n.Generic.PriceForStack, new { price = saleValues.First().Value * stackSize, count = stackSize })})";
+                    result += $" ({translations.Translate(L10n.Generic.PriceForStack, new { price = saleValues.First().Value * stackSize, count = stackSize })})";
                 return result;
             }
 
@@ -119,8 +120,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 if (saleValues.ContainsKey(quality))
                 {
                     priceStrings.Add(quality == ItemQuality.Normal
-                        ? textHelper.Translate(L10n.Generic.Price, new { price = saleValues[quality] })
-                        : textHelper.Translate(L10n.Generic.PriceForQuality, new { price = saleValues[quality], quality = textHelper.Translate(L10n.For(quality)) })
+                        ? translations.Translate(L10n.Generic.Price, new { price = saleValues[quality] })
+                        : translations.Translate(L10n.Generic.PriceForQuality, new { price = saleValues[quality], quality = translations.Translate(L10n.For(quality)) })
                     );
                 }
 

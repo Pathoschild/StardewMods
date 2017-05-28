@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using StardewModdingAPI;
 using StardewValley;
 using xTile.Layers;
 using xTile.ObjectModel;
@@ -31,8 +32,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="location">The game location.</param>
         /// <param name="position">The tile position.</param>
-        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
-        public TileSubject(GameLocation location, Vector2 position, TextHelper textHelper)
+        /// <param name="textHelper">Provides translations stored in the mod folder.</param>
+        public TileSubject(GameLocation location, Vector2 position, ITranslationHelper textHelper)
             : base($"({position.X}, {position.Y})", textHelper.Translate(L10n.Tile.Description), textHelper.Translate(L10n.Types.Tile), textHelper)
         {
             this.Location = location;

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
@@ -30,9 +31,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
-        /// <param name="textHelper">Provides methods for fetching translations and generating text.</param>
-        public FruitTreeSubject(FruitTree tree, Vector2 tile, TextHelper textHelper)
-            : base(textHelper.Translate(L10n.FruitTree.Name, new { fruitName = GameHelper.GetObjectBySpriteIndex(tree.indexOfFruit).DisplayName }), null, textHelper.Translate(L10n.Types.FruitTree), textHelper)
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public FruitTreeSubject(FruitTree tree, Vector2 tile, ITranslationHelper translations)
+            : base(translations.Translate(L10n.FruitTree.Name, new { fruitName = GameHelper.GetObjectBySpriteIndex(tree.indexOfFruit).DisplayName }), null, translations.Translate(L10n.Types.FruitTree), translations)
         {
             this.Target = tree;
             this.Tile = tile;
@@ -69,7 +70,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 GameDate dayOfMaturity = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(tree.daysUntilMature);
                 string grownOnDateText = this.Translate(L10n.FruitTree.GrowthSummary, new { date = dayOfMaturity });
-                string daysUntilGrownText = this.Text.Pluralise(tree.daysUntilMature, this.Translate(L10n.Generic.Tomorrow), this.Translate(L10n.Generic.InXDays, new { count = tree.daysUntilMature }));
+                string daysUntilGrownText = this.Text.TranslatePlural(tree.daysUntilMature, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = tree.daysUntilMature });
                 string growthText = $"{grownOnDateText} ({daysUntilGrownText})";
 
                 yield return new GenericField(this.Translate(L10n.FruitTree.NextFruit), this.Translate(L10n.FruitTree.NextFruitTooYoung));
@@ -109,7 +110,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                             else
                                 line = $"-{this.Translate(L10n.FruitTree.QualityOnDateInYearX, new { quality = qualityName, date = date, year = date.Year })}";
 
-                            line += $" ({this.Text.Pluralise(daysLeft, this.Translate(L10n.Generic.Tomorrow), this.Translate(L10n.Generic.InXDays, new { count = daysLeft }))})";
+                            line += $" ({this.Text.TranslatePlural(daysLeft, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = daysLeft })})";
 
                             return line;
                         })
