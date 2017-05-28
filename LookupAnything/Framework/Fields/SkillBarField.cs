@@ -52,8 +52,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             int pointsForNextLevel = nextLevelExp > 0 ? nextLevelExp - this.CurrentValue : 0;
             int currentLevel = nextLevelExp > 0 ? Array.IndexOf(pointsPerLevel, nextLevelExp) : pointsPerLevel.Length;
             string text = pointsForNextLevel > 0
-                ? this.Translations.Translate(L10n.Player.SkillProgress, new { level = currentLevel, expNeeded = pointsForNextLevel })
-                : this.Translations.Translate(L10n.Player.SkillProgressLast, new { level = currentLevel });
+                ? this.Translations.Get(L10n.Player.SkillProgress, new { level = currentLevel, expNeeded = pointsForNextLevel })
+                : this.Translations.Get(L10n.Player.SkillProgressLast, new { level = currentLevel });
 
             // draw bars
             const int barWidth = 25;

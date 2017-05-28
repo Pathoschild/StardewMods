@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="tile">The tree's tile position.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         public FruitTreeSubject(FruitTree tree, Vector2 tile, ITranslationHelper translations)
-            : base(translations.Translate(L10n.FruitTree.Name, new { fruitName = GameHelper.GetObjectBySpriteIndex(tree.indexOfFruit).DisplayName }), null, translations.Translate(L10n.Types.FruitTree), translations)
+            : base(translations.Get(L10n.FruitTree.Name, new { fruitName = GameHelper.GetObjectBySpriteIndex(tree.indexOfFruit).DisplayName }), null, translations.Get(L10n.Types.FruitTree), translations)
         {
             this.Target = tree;
             this.Tile = tile;
@@ -70,7 +70,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 GameDate dayOfMaturity = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(tree.daysUntilMature);
                 string grownOnDateText = this.Translate(L10n.FruitTree.GrowthSummary, new { date = dayOfMaturity });
-                string daysUntilGrownText = this.Text.TranslatePlural(tree.daysUntilMature, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = tree.daysUntilMature });
+                string daysUntilGrownText = this.Text.GetPlural(tree.daysUntilMature, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = tree.daysUntilMature });
                 string growthText = $"{grownOnDateText} ({daysUntilGrownText})";
 
                 yield return new GenericField(this.Translate(L10n.FruitTree.NextFruit), this.Translate(L10n.FruitTree.NextFruitTooYoung));
@@ -110,7 +110,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                             else
                                 line = $"-{this.Translate(L10n.FruitTree.QualityOnDateInYearX, new { quality = qualityName, date = date, year = date.Year })}";
 
-                            line += $" ({this.Text.TranslatePlural(daysLeft, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = daysLeft })})";
+                            line += $" ({this.Text.GetPlural(daysLeft, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = daysLeft })})";
 
                             return line;
                         })

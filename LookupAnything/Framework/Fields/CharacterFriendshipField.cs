@@ -86,12 +86,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             // get caption text
             string caption = null;
             if (this.Friendship.EmptyHearts == 0 && this.Friendship.LockedHearts > 0)
-                caption = $"({this.Translations.Translate(L10n.Npc.FriendshipNeedBouquet)})";
+                caption = $"({this.Translations.Get(L10n.Npc.FriendshipNeedBouquet)})";
             else
             {
                 int pointsToNext = this.Friendship.GetPointsToNext();
                 if (pointsToNext > 0)
-                    caption = $"({this.Translations.Translate(L10n.Npc.FriendshipNeedPoints, new { count = pointsToNext })})";
+                    caption = $"({this.Translations.Get(L10n.Npc.FriendshipNeedPoints, new { count = pointsToNext })})";
             }
 
             // draw caption

@@ -49,9 +49,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // get display type
             string typeName;
             if (type == TargetType.Villager)
-                typeName = this.Text.Translate(L10n.Types.Villager);
+                typeName = this.Text.Get(L10n.Types.Villager);
             else if (type == TargetType.Monster)
-                typeName = this.Text.Translate(L10n.Types.Monster);
+                typeName = this.Text.Get(L10n.Types.Monster);
             else
                 typeName = npc.GetType().Name;
 
@@ -75,7 +75,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     {
                         var giftTastes = this.GetGiftTastes(npc, metadata);
 
-                        yield return new GenericField(this.Text.Translate(L10n.Npc.Birthday), $"{Utility.capitalizeFirstLetter(npc.birthday_Season)} {npc.birthday_Day}");
+                        yield return new GenericField(this.Text.Get(L10n.Npc.Birthday), $"{Utility.capitalizeFirstLetter(npc.birthday_Season)} {npc.birthday_Day}");
 
                         // friendship
                         if (Game1.player.friendships.ContainsKey(npc.name))

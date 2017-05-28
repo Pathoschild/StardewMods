@@ -14,27 +14,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /*********
         ** Public methods
         *********/
-        /// <summary>Get a translation for the current locale.</summary>
-        /// <param name="translations">The translation helper.</param>
-        /// <param name="key">The translation key.</param>
-        /// <param name="tokens">An anonymous object containing token key/value pairs, like <c>new { value = 42, name = "Cranberries" }</c>.</param>
-        /// <exception cref="KeyNotFoundException">The <paramref name="key" /> doesn't match an available translation.</exception>
-        public static Translation Translate(this ITranslationHelper translations, string key, object tokens = null)
-        {
-            Translation translation = translations.Translate(key);
-            return tokens != null
-                ? translation.Tokens(tokens)
-                : translation;
-        }
-
         /// <summary>Select the correct translation based on the plural form.</summary>
         /// <param name="translations">The translation helper.</param>
         /// <param name="count">The number.</param>
         /// <param name="singleKey">The singular form.</param>
         /// <param name="pluralKey">The plural form.</param>
-        public static Translation TranslatePlural(this ITranslationHelper translations, int count, string singleKey, string pluralKey)
+        public static Translation GetPlural(this ITranslationHelper translations, int count, string singleKey, string pluralKey)
         {
-            return translations.Translate(count == 1 ? singleKey : pluralKey);
+            return translations.Get(count == 1 ? singleKey : pluralKey);
         }
 
         /// <summary>Get a human-readable representation of a value.</summary>
@@ -49,18 +36,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                 // boolean
                 case bool boolean:
-                    return translations.Translate(boolean ? L10n.Generic.Yes : L10n.Generic.No);
+                    return translations.Get(boolean ? L10n.Generic.Yes : L10n.Generic.No);
 
                 // time span
                 case TimeSpan span:
                     {
                         List<string> parts = new List<string>();
                         if (span.Days > 0)
-                            parts.Add(translations.Translate(L10n.Generic.Days, new { count = span.Days }));
+                            parts.Add(translations.Get(L10n.Generic.Days, new { count = span.Days }));
                         if (span.Hours > 0)
-                            parts.Add(translations.Translate(L10n.Generic.Hours, new { count = span.Hours }));
+                            parts.Add(translations.Get(L10n.Generic.Hours, new { count = span.Hours }));
                         if (span.Minutes > 0)
-                            parts.Add(translations.Translate(L10n.Generic.Minutes, new { count = span.Minutes }));
+                            parts.Add(translations.Get(L10n.Generic.Minutes, new { count = span.Minutes }));
                         return string.Join(", ", parts);
                     }
 

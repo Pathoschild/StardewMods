@@ -116,7 +116,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <exception cref="KeyNotFoundException">The <paramref name="key" /> doesn't match an available translation.</exception>
         public Translation Translate(string key, object tokens = null)
         {
-            return this.Text.Translate(key, tokens);
+            return this.Text.Get(key, tokens);
         }
     }
 }

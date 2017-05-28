@@ -141,7 +141,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     else if (Game1.currentLocation.Name != Constant.LocationNames.Greenhouse && !crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Season))
                         summary = this.Translate(L10n.Crop.HarvestTooLate, new { date = dayOfNextHarvest });
                     else
-                        summary = $"{dayOfNextHarvest} ({this.Text.TranslatePlural(daysToNextHarvest, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = daysToNextHarvest })})";
+                        summary = $"{dayOfNextHarvest} ({this.Text.GetPlural(daysToNextHarvest, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = daysToNextHarvest })})";
 
                     yield return new GenericField(this.Translate(L10n.Crop.Harvest), summary);
                 }
@@ -212,7 +212,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         string scheduleStr = string.Join(Environment.NewLine, (
                             from entry in schedule
                             let tokens = new { quality = this.Translate(L10n.For(entry.Quality)), count = entry.DaysLeft, date = entry.HarvestDate }
-                            let str = this.Text.TranslatePlural(entry.DaysLeft, L10n.Item.CaskScheduleTomorrow, L10n.Item.CaskScheduleInXDays).Tokens(tokens)
+                            let str = this.Text.GetPlural(entry.DaysLeft, L10n.Item.CaskScheduleTomorrow, L10n.Item.CaskScheduleInXDays).Tokens(tokens)
                             select $"-{str}"
                         ));
                         yield return new GenericField(this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskSchedulePartial, new { quality = curQualityName }) + Environment.NewLine + scheduleStr);

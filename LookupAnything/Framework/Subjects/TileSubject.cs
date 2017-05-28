@@ -32,9 +32,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="location">The game location.</param>
         /// <param name="position">The tile position.</param>
-        /// <param name="textHelper">Provides translations stored in the mod folder.</param>
-        public TileSubject(GameLocation location, Vector2 position, ITranslationHelper textHelper)
-            : base($"({position.X}, {position.Y})", textHelper.Translate(L10n.Tile.Description), textHelper.Translate(L10n.Types.Tile), textHelper)
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public TileSubject(GameLocation location, Vector2 position, ITranslationHelper translations)
+            : base($"({position.X}, {position.Y})", translations.Get(L10n.Tile.Description), translations.Get(L10n.Types.Tile), translations)
         {
             this.Location = location;
             this.Position = position;

@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         public FarmerSubject(SFarmer farmer, ITranslationHelper translations, IReflectionHelper reflectionHelper)
-            : base(farmer.Name, null, translations.Translate(L10n.Types.Player), translations)
+            : base(farmer.Name, null, translations.Get(L10n.Types.Player), translations)
         {
             this.Target = farmer;
             this.Reflection = reflectionHelper;
