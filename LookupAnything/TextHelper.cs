@@ -44,9 +44,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="count">The number.</param>
         /// <param name="single">The singular form.</param>
         /// <param name="plural">The plural form.</param>
-        public string Pluralise(int count, string single, string plural = null)
+        public string Pluralise(int count, string single, string plural)
         {
-            return count == 1 ? single : (plural ?? single + "s");
+            return count == 1 ? single : plural;
         }
 
         /// <summary>Get a human-readable representation of a value.</summary>
