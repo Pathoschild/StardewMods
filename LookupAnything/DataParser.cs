@@ -36,6 +36,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 string[] valueParts = entry.Value.Split('/');
                 string name = valueParts[0];
                 string reward = valueParts[1];
+                string displayName = valueParts.Last();
                 List<BundleIngredientModel> ingredients = new List<BundleIngredientModel>();
                 string[] ingredientData = valueParts[2].Split(' ');
                 for (int i = 0; i < ingredientData.Length; i += 3)
@@ -48,7 +49,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 }
 
                 // create bundle
-                yield return new BundleModel(id, name, area, reward, ingredients);
+                yield return new BundleModel(id, name, displayName, area, reward, ingredients);
             }
         }
 
