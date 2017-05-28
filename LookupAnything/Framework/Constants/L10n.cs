@@ -75,7 +75,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public const string Player = "type.player";
 
             /// <summary>A value like <c>Map tile</c>.</summary>
-            public const string Tile = "type.tile";
+            public const string Tile = "type.map-tile";
 
             /// <summary>A value like <c>Villager</c>.</summary>
             public const string Villager = "type.villager";

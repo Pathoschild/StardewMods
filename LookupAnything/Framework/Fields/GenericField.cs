@@ -118,7 +118,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             {
                 if (saleValues.ContainsKey(quality))
                 {
-                    priceStrings.Add(quality != ItemQuality.Normal
+                    priceStrings.Add(quality == ItemQuality.Normal
                         ? textHelper.Translate(L10n.Generic.Price, new { price = saleValues[quality] })
                         : textHelper.Translate(L10n.Generic.PriceForQuality, new { price = saleValues[quality], quality = textHelper.Translate(L10n.For(quality)) })
                     );

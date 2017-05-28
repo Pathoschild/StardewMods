@@ -81,7 +81,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         if (Game1.player.friendships.ContainsKey(npc.name))
                         {
                             FriendshipModel friendship = DataParser.GetFriendshipForVillager(Game1.player, npc, metadata);
-                            yield return new GenericField(this.Translate(L10n.Npc.CanRomance), friendship.IsSpouse ? L10n.Npc.CanRomanceMarried : this.Stringify(npc.datable));
+                            yield return new GenericField(this.Translate(L10n.Npc.CanRomance), friendship.IsSpouse ? this.Translate(L10n.Npc.CanRomanceMarried) : this.Stringify(npc.datable));
                             yield return new CharacterFriendshipField(this.Translate(L10n.Npc.Friendship), friendship, this.Text);
                             yield return new GenericField(this.Translate(L10n.Npc.TalkedToday), this.Stringify(Game1.player.friendships[npc.name][2] == 1));
                             yield return new GenericField(this.Translate(L10n.Npc.GiftedToday), this.Stringify(Game1.player.friendships[npc.name][3] > 0));

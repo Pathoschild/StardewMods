@@ -150,7 +150,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     List<string> summary = new List<string>();
 
                     // harvest
-                    summary.Add(crop.regrowAfterHarvest != -1
+                    summary.Add(crop.regrowAfterHarvest == -1
                         ? this.Translate(L10n.Crop.SummaryHarvestOnce, new { daysToFirstHarvest = daysToFirstHarvest })
                         : this.Translate(L10n.Crop.SummaryHarvestMulti, new { daysToFirstHarvest = daysToFirstHarvest, daysToNextHarvests = crop.regrowAfterHarvest })
                     );
@@ -169,7 +169,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     summary.Add(this.Translate(L10n.Crop.SummarySellsFor, new { price = GenericField.GetSaleValueString(this.GetSaleValue(drop, false, metadata), 1, this.Text) }));
 
                     // generate field
-                    yield return new GenericField(this.Translate(L10n.Crop.Summary), "-" + string.Join("-" + Environment.NewLine, summary));
+                    yield return new GenericField(this.Translate(L10n.Crop.Summary), "-" + string.Join($"{Environment.NewLine}-", summary));
                 }
             }
 
@@ -203,21 +203,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         .ToArray();
 
                     // display fields
-                    string agingLabel = this.Translate(L10n.Item.CaskSchedule);
-
-
-                    yield return new ItemIconField(agingLabel, obj.heldObject);
+                    yield return new ItemIconField(this.Translate(L10n.Item.Contents), obj.heldObject);
                     if (cask.minutesUntilReady <= 0 || !schedule.Any())
-                        yield return new GenericField(agingLabel, this.Translate(L10n.Item.CaskSchedule, new { quality = curQualityName }));
+                        yield return new GenericField(this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskScheduleNow, new { quality = curQualityName }));
                     else
                     {
                         string scheduleStr = string.Join(Environment.NewLine, (
                             from entry in schedule
                             let tokens = new { quality = this.Translate(L10n.For(entry.Quality)), count = entry.DaysLeft, date = entry.HarvestDate }
                             let str = this.Text.Pluralise(entry.DaysLeft, this.Text.Translate(L10n.Item.CaskScheduleTomorrow, tokens), this.Text.Translate(L10n.Item.CaskScheduleInXDays, tokens))
-                            select $"-{tokens.quality} {str}"
+                            select $"-{str}"
                         ));
-                        yield return new GenericField(agingLabel, this.Translate(L10n.Item.CaskSchedulePartial, new { quality = curQualityName }) + Environment.NewLine + scheduleStr);
+                        yield return new GenericField(this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskSchedulePartial, new { quality = curQualityName }) + Environment.NewLine + scheduleStr);
                     }
                 }
                 else
