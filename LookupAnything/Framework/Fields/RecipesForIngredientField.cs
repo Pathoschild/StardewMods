@@ -47,25 +47,26 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
-        /// <param name="item">The ingredient item.</param>
+        /// <param name="ingredient">The ingredient item.</param>
         /// <param name="recipes">The recipe to list.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public RecipesForIngredientField(string label, Item item, RecipeModel[] recipes, ITranslationHelper translations)
+        public RecipesForIngredientField(string label, Item ingredient, RecipeModel[] recipes, ITranslationHelper translations)
             : base(label, hasValue: true)
         {
             this.Translations = translations;
             this.Recipes =
                 (
                     from recipe in recipes
-                    let name = recipe.Name.Replace("$ingredient", item.DisplayName)
+                    let output = recipe.CreateItem(ingredient)
+                    let name = output.DisplayName
                     orderby recipe.Type.ToString(), name
                     select new Entry
                     {
                         Name = name,
                         Type = Regex.Replace(recipe.Type.ToString(), @"(\B[A-Z])", " $1"), // e.g. "OilMaker" => "Oil Maker"
                         IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
-                        NumberRequired = recipe.Ingredients.ContainsKey(item.parentSheetIndex) ? recipe.Ingredients[item.parentSheetIndex] : recipe.Ingredients[item.category],
-                        Item = recipe.CreateItem()
+                        NumberRequired = recipe.Ingredients.ContainsKey(ingredient.parentSheetIndex) ? recipe.Ingredients[ingredient.parentSheetIndex] : recipe.Ingredients[ingredient.category],
+                        Item = output
                     }
                 )
                 .ToArray();

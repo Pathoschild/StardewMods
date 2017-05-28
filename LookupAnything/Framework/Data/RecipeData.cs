@@ -8,9 +8,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         /*********
         ** Accessors
         *********/
-        /// <summary>The name of the recipe.</summary>
-        public string Name { get; set; }
-
         /// <summary>How the recipe is used to create an object.</summary>
         public RecipeType Type { get; set; }
 

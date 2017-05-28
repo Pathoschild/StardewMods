@@ -297,10 +297,41 @@ namespace Pathoschild.Stardew.LookupAnything
             // recipes not available from game data
             recipes.AddRange(
                 from entry in metadata.Recipes
-                select new RecipeModel(entry.Name, entry.Type, entry.Ingredients, () => GameHelper.GetObjectBySpriteIndex(entry.Output), false, entry.ExceptIngredients)
+                select new RecipeModel(null, entry.Type, entry.Ingredients, ingredient => DataParser.CreateRecipeItem(ingredient.parentSheetIndex, entry.Output), false, entry.ExceptIngredients)
             );
 
-            return recipes.OrderBy(p => p.Name).ToArray();
+            return recipes.ToArray();
+        }
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Create a custom recipe output.</summary>
+        /// <param name="inputID">The input ingredient ID.</param>
+        /// <param name="outputID">The output item ID.</param>
+        private static Object CreateRecipeItem(int inputID, int outputID)
+        {
+            Object item = GameHelper.GetObjectBySpriteIndex(outputID);
+            switch (outputID)
+            {
+                case 342:
+                    item.preserve = Object.PreserveType.Pickle;
+                    item.preservedParentSheetIndex = inputID;
+                    break;
+                case 344:
+                    item.preserve = Object.PreserveType.Jelly;
+                    item.preservedParentSheetIndex = inputID;
+                    break;
+                case 348:
+                    item.preserve = Object.PreserveType.Wine;
+                    item.preservedParentSheetIndex = inputID;
+                    break;
+                case 350:
+                    item.preserve = Object.PreserveType.Juice;
+                    item.preservedParentSheetIndex = inputID;
+                    break;
+            }
+            return item;
         }
     }
 }

@@ -150,146 +150,130 @@ You shouldn't change this file unless you know what you're doing.
     "Recipes": [
         /* charcoal kiln */
         {
-            "Name": "Coal",
             "Type": "CharcoalKiln",
             "Ingredients": {
                 "388": 10 // wood
             },
-            "Output": 382
+            "Output": 382 // coal
         },
 
         /* cheese press */
         {
-            "Name": "Cheese",
             "Type": "CheesePress",
             "Ingredients": {
                 "184": 1, // milk
                 "186": 1 // or large milk
             },
-            "Output": 424
+            "Output": 424 // cheese
         },
         {
-            "Name": "Goat Cheese",
             "Type": "CheesePress",
             "Ingredients": {
                 "436": 1, // goat milk
                 "438": 1 // or goat milk
             },
-            "Output": 426
+            "Output": 426 // goat cheese
         },
 
         /* furnace */
         {
-            "Name": "Copper Bar",
             "Type": "Furnace",
             "Ingredients": {
                 "382": 1, // coal
                 "378": 5 // copper ore
             },
-            "Output": 334
+            "Output": 334 // copper bar
         },
         {
-            "Name": "Iron Bar",
             "Type": "Furnace",
             "Ingredients": {
                 "382": 1, // coal
                 "380": 5 // iron ore
             },
-            "Output": 335
+            "Output": 335 // iron bar
         },
         {
-            "Name": "Gold Bar",
             "Type": "Furnace",
             "Ingredients": {
                 "382": 1, // coal
                 "384": 5 // gold ore
             },
-            "Output": 336
+            "Output": 336 // gold bar
         },
         {
-            "Name": "Iridium Bar",
             "Type": "Furnace",
             "Ingredients": {
                 "382": 1, // coal
                 "386": 5 // gold ore
             },
-            "Output": 337
+            "Output": 337 // iridium bar
         },
         {
-            "Name": "Refined Quartz",
             "Type": "Furnace",
             "Ingredients": {
                 "382": 1, // coal
                 "80": 1 // quartz
             },
-            "Output": 338
+            "Output": 338 // refined quartz
         },
 
         /* keg */
         {
-            "Name": "Beer",
             "Type": "Keg",
             "Ingredients": {
                 "262": 1 // wheat
             },
-            "Output": 346
+            "Output": 346 // beer
         },
         {
-            "Name": "Coffee",
             "Type": "Keg",
             "Ingredients": {
                 "433": 5 // coffee bean
             },
-            "Output": 395
+            "Output": 395 // coffee
         },
         {
-            "Name": "Mead",
             "Type": "Keg",
             "Ingredients": {
                 "340": 1 // honey
             },
-            "Output": 459
+            "Output": 459 // mead
         },
         {
-            "Name": "Pale Ale",
             "Type": "Keg",
             "Ingredients": {
                 "304": 1 // hops
             },
-            "Output": 303
+            "Output": 303 // pale ale
         },
         {
-            "Name": "$ingredient Wine",
             "Type": "Keg",
             "Ingredients": {
                 "-79": 1 // any fruit
             },
             "ExceptIngredients": [ 262, 304 ],
-            "Output": 348
+            "Output": 348 // wine
         },
         {
-            "Name": "$ingredient Juice",
             "Type": "Keg",
             "Ingredients": {
                 "-75": 1 // any vegetable
             },
             "ExceptIngredients": [ 262, 304 ],
-            "Output": 350
+            "Output": 350 // juice
         },
 
         /* loom */
         {
-            "Name": "Cloth",
             "Type": "Loom",
             "Ingredients": {
                 "440": 1 // wool
             },
-            "Output": 428
+            "Output": 428 // cloth
         },
 
         /* mayonnaise machine */
         {
-            "Name": "Mayonnaise",
             "Type": "MayonnaiseMachine",
             "Ingredients": {
                 "107": 1, // dinosaur egg
@@ -298,158 +282,141 @@ You shouldn't change this file unless you know what you're doing.
                 "180": 1, // or brown egg
                 "182": 1 // or large brown egg
             },
-            "Output": 306
+            "Output": 306 // mayonnaise
         },
         {
-            "Name": "Duck Mayonnaise",
             "Type": "MayonnaiseMachine",
             "Ingredients": {
                 "442": 1 // duck egg
             },
-            "Output": 307
+            "Output": 307 // duck mayonnaise
         },
         {
-            "Name": "Void Mayonnaise",
             "Type": "MayonnaiseMachine",
             "Ingredients": {
                 "305": 1 // void egg
             },
-            "Output": 308
+            "Output": 308 // void mayonnaise
         },
 
         /* mill */
         {
-            "Name": "Wheat Flour",
             "Type": "Mill",
             "Ingredients": {
                 "262": 1 // wheat
             },
-            "Output": 246
+            "Output": 246 // wheat flour
         },
         {
-            "Name": "Sugar",
             "Type": "Mill",
             "Ingredients": {
                 "284": 1 // beet
             },
-            "Output": 245
+            "Output": 245 // sugar
         },
 
         /* oil maker */
         {
-            "Name": "Truffle Oil",
             "Type": "OilMaker",
             "Ingredients": {
                 "430": 1 // truffle
             },
-            "Output": 432
+            "Output": 432 // truffle oil
         },
         {
-            "Name": "Oil",
             "Type": "OilMaker",
             "Ingredients": {
                 "270": 1, // corn
                 "421": 1, // or sunflower
                 "431": 1 // or sunflower seeds
             },
-            "Output": 247
+            "Output": 247 // oil
         },
 
         /* preserves jar */
         {
-            "Name": "$ingredient Jelly",
             "Type": "PreservesJar",
             "Ingredients": {
                 "-79": 1 // any fruit
             },
-            "Output": 344
+            "Output": 344 // jelly
         },
         {
-            "Name": "Pickled $ingredient",
             "Type": "PreservesJar",
             "Ingredients": {
                 "-75": 1 // any vegetable
             },
-            "Output": 342
+            "Output": 342 // pickled
         },
 
         /* recycling machine */
         {
-            "Name": "Coal",
             "Type": "RecyclingMachine",
             "Ingredients": {
                 "168": 1, // trash
                 "169": 1 // or driftwood
             },
-            "Output": 382
+            "Output": 382 // coal
         },
         {
-            "Name": "Iron Ore",
             "Type": "RecyclingMachine",
             "Ingredients": {
                 "168": 1 // trash
             },
-            "Output": 380
+            "Output": 380 // iron ore
         },
         {
-            "Name": "Refined Quartz",
             "Type": "RecyclingMachine",
             "Ingredients": {
                 "170": 1, // broken glasses
                 "171": 1, // or broken CD
                 "172": 1 // or soggy newspaper
             },
-            "Output": 338
+            "Output": 338 // refined quartz
         },
         {
-            "Name": "Stone",
             "Type": "RecyclingMachine",
             "Ingredients": {
                 "168": 1 // trash
             },
-            "Output": 390
+            "Output": 390 // stone
         },
         {
-            "Name": "Wood",
             "Type": "RecyclingMachine",
             "Ingredients": {
                 "169": 1 // driftwood
             },
-            "Output": 388
+            "Output": 388 // wood
         },
 
         /* slime egg-press */
         {
-            "Name": "Green Slime Egg",
             "Type": "SlimeEggPress",
             "Ingredients": {
                 "766": 100 // slime
             },
-            "Output": 680
+            "Output": 680 // green slime egg
         },
         {
-            "Name": "Purple Slime Egg",
             "Type": "SlimeEggPress",
             "Ingredients": {
                 "766": 100 // slime
             },
-            "Output": 439
+            "Output": 439 // purple slime egg
         },
         {
-            "Name": "Red Slime Egg",
             "Type": "SlimeEggPress",
             "Ingredients": {
                 "766": 100 // slime
             },
-            "Output": 437
+            "Output": 437 // red slime egg
         },
         {
-            "Name": "Blue Slime Egg",
             "Type": "SlimeEggPress",
             "Ingredients": {
                 "766": 100 // slime
             },
-            "Output": 413
+            "Output": 413 // blue slime egg
         }
     ],
 
