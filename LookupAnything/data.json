@@ -680,37 +680,30 @@ You shouldn't change this file unless you know what you're doing.
     *********/
     "AdventureGuildQuests": [
         {
-            "Category": "Slimes",
             "Targets": [ "Green Slime", "Frost Jelly", "Sludge" ],
             "RequiredKills": 1000
         },
         {
-            "Category": "Void Spirits",
             "Targets": [ "Shadow Guy", "Shadow Shaman", "Shadow Brute" ],
             "RequiredKills": 150
         },
         {
-            "Category": "Bats",
             "Targets": [ "Frost Bat", "Lava Bat" ],
             "RequiredKills": 200
         },
         {
-            "Category": "Skeletons",
             "Targets": [ "Skeleton", "Skeleton Mage" ],
             "RequiredKills": 50
         },
         {
-            "Category": "Cave Insects",
             "Targets": [ "Grub", "Fly", "Bug" ],
             "RequiredKills": 125
         },
         {
-            "Category": "Duggies",
             "Targets": [ "Duggy" ],
             "RequiredKills": 30
         },
         {
-            "Category": "Dust Sprites",
             "Targets": [ "Dust Spirit" ],
             "RequiredKills": 500
         }
