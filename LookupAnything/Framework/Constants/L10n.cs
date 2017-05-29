@@ -447,7 +447,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public const string Love = "pet.love";
 
             /// <summary>A value like <c>Petted today</c>.</summary>
-            public const string PettedToday = "npc.petted-today";
+            public const string PettedToday = "pet.petted-today";
         }
 
         /// <summary>Player lookup translations.</summary>
