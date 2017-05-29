@@ -23,14 +23,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         /****
         ** Overrides
         ****/
-        /// <summary>The overridden item name (if any).</summary>
-        public string Name { get; set; }
+        /// <summary>The translation key which should override the item name (if any).</summary>
+        public string NameKey { get; set; }
 
-        /// <summary>The overridden item description (if any).</summary>
-        public string Description { get; set; }
+        /// <summary>The translation key which should override the item description (if any).</summary>
+        public string DescriptionKey { get; set; }
 
-        /// <summary>The overridden item type name (if any).</summary>
-        public string Type { get; set; }
+        /// <summary>The translation key which should override the item type name (if any).</summary>
+        public string TypeKey { get; set; }
 
         /// <summary>Whether the player can pick up this item.</summary>
         public bool? ShowInventoryFields { get; set; }

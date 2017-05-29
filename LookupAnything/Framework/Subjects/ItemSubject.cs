@@ -83,9 +83,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 ObjectData objData = metadata.GetObject(item, this.Context);
                 if (objData != null)
                 {
-                    this.Name = objData.Name ?? this.Name;
-                    this.Description = objData.Description ?? this.Description;
-                    this.Type = objData.Type ?? this.Type;
+                    this.Name = objData.NameKey != null ? this.Translate(objData.NameKey) : this.Name;
+                    this.Description = objData.DescriptionKey != null ? this.Translate(objData.DescriptionKey) : this.Description;
+                    this.Type = objData.TypeKey != null ? this.Translate(objData.TypeKey) : this.Type;
                     showInventoryFields = objData.ShowInventoryFields ?? true;
                 }
             }
