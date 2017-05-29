@@ -2,7 +2,8 @@
 
 # Release notes
 ## 1.14
-* Updated to SMAPI 1.13.
+* Updated to SMAPI 1.14.
+* Added translation support.
 * You can now look up items from the Junimo bundle menu.
 * Fixed a few lookup errors when playing in a language other than English.
 
