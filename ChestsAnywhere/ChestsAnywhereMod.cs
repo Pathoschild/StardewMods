@@ -21,6 +21,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
+        /// <summary>Encapsulates logic for finding chests.</summary>
+        private ChestFactory ChestFactory;
+
+
         /****
         ** State
         ****/
@@ -38,8 +42,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            // read config
+            // initialise
             this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
+            this.ChestFactory = new ChestFactory();
 
             // hook UI
             GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveHudRendered();
@@ -87,7 +92,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // show chest label
             if (this.Config.ShowHoverTooltips)
             {
-                ManagedChest cursorChest = ChestFactory.GetChestFromTile(Game1.currentCursorTile);
+                ManagedChest cursorChest = this.ChestFactory.GetChestFromTile(Game1.currentCursorTile);
                 if (cursorChest != null)
                 {
                     Vector2 tooltipPosition = new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f);
@@ -112,12 +117,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             if (newMenu is ItemGrabMenu chestMenu)
             {
                 // get open chest
-                ManagedChest chest = ChestFactory.GetChestFromMenu(chestMenu);
+                ManagedChest chest = this.ChestFactory.GetChestFromMenu(chestMenu);
                 if (chest == null)
                     return;
 
                 // add overlay
-                ManagedChest[] chests = ChestFactory.GetChestsForDisplay(selectedChest: chest.Chest).ToArray();
+                ManagedChest[] chests = this.ChestFactory.GetChestsForDisplay(selectedChest: chest.Chest).ToArray();
                 this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config);
                 this.ManageChestOverlay.OnChestSelected += selected =>
                 {
@@ -159,7 +164,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         private void OpenMenu()
         {
             // get chests
-            ManagedChest[] chests = ChestFactory.GetChestsForDisplay().ToArray();
+            ManagedChest[] chests = this.ChestFactory.GetChestsForDisplay().ToArray();
             ManagedChest selectedChest = chests.FirstOrDefault(p => p.Chest == this.SelectedChest) ?? chests.FirstOrDefault();
 
             // render menu
