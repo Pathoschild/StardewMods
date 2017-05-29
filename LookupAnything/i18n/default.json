@@ -2,6 +2,10 @@
     /*********
     ** Generic translations
     *********/
+    // dates (possible tokens: {{seasonName}}, {{seasonNumber}}, {{dayNumber}}, {{year}})
+    "generic.date": "{{seasonName}} {{dayNumber}}",
+    "generic.date-with-year": "{{seasonName}} {{dayNumber}} in year {{year}}",
+
     // generic field values
     "generic.percent": "{{percent}}%",
     "generic.percent-chance-of": "{{percent}}% chance of {{label}}",
@@ -176,7 +180,6 @@
     "fruit-tree.quality.now": "{{quality}} now",
     "fruit-tree.quality.on-date": "{{quality}} on {{date}}",
     "fruit-tree.quality.on-date-next-year": "{{quality}} on {{date}} next year",
-    "fruit-tree.quality.on-date-in-year-x": "{{quality}} on {{date}} in year {{year}}",
     "fruit-tree.season.summary": "{{season}} (or anytime in greenhouse)",
 
     // crop lookup labels

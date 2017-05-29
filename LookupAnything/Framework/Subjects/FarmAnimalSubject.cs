@@ -56,7 +56,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new GenericField(this.Translate(L10n.Animal.Complaints), this.GetMoodReason(animal));
             yield return new ItemIconField(this.Translate(L10n.Animal.ProduceReady), animal.currentProduce > 0 ? GameHelper.GetObjectBySpriteIndex(animal.currentProduce) : null);
             if (!isFullyGrown)
-                yield return new GenericField(this.Translate(L10n.Animal.Growth), $"{this.Translate(L10n.Generic.Days, new { count = daysUntilGrown })} ({dayOfMaturity})");
+                yield return new GenericField(this.Translate(L10n.Animal.Growth), $"{this.Translate(L10n.Generic.Days, new { count = daysUntilGrown })} ({this.Stringify(dayOfMaturity)})");
             yield return new GenericField(this.Translate(L10n.Animal.SellsFor), GenericField.GetSaleValueString(animal.getSellPrice(), 1, this.Text));
         }
 

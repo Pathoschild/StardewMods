@@ -139,9 +139,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     if (canHarvestNow)
                         summary = this.Translate(L10n.Crop.HarvestNow);
                     else if (Game1.currentLocation.Name != Constant.LocationNames.Greenhouse && !crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Season))
-                        summary = this.Translate(L10n.Crop.HarvestTooLate, new { date = dayOfNextHarvest });
+                        summary = this.Translate(L10n.Crop.HarvestTooLate, new { date = this.Stringify(dayOfNextHarvest) });
                     else
-                        summary = $"{dayOfNextHarvest} ({this.Text.GetPlural(daysToNextHarvest, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = daysToNextHarvest })})";
+                        summary = $"{this.Stringify(dayOfNextHarvest)} ({this.Text.GetPlural(daysToNextHarvest, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = daysToNextHarvest })})";
 
                     yield return new GenericField(this.Translate(L10n.Crop.Harvest), summary);
                 }

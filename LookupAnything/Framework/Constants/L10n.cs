@@ -13,6 +13,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
         /// <summary>Generic field value translations.</summary>
         public static class Generic
         {
+            /// <summary>A value like <c>{{seasonName}} {{dayNumber}}</c>. Expected tokens: <c>{{seasonName}}, {{seasonNumber}}, {{dayNumber}}, {{year}}</c>.</summary>
+            public const string Date = "generic.date";
+
+            /// <summary>A value like <c>{{seasonName}} {{dayNumber}} in year {{Year}}</c>. Expected tokens: <c>{{seasonName}}, {{seasonNumber}}, {{dayNumber}}, {{year}}</c>.</summary>
+            public const string DateWithYear = "generic.date-with-year";
+
             /// <summary>A value like <c>{{percent}}%</c>.</summary>
             public const string Percent = "generic.percent";
 
@@ -215,9 +221,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>{{quality}} on {{date}} next year</c>.</summary>
             public const string QualityOnDateNextYear = "fruit-tree.quality.on-date-next-year";
-
-            /// <summary>A value like <c>{{quality}} on {{date}} in year {{year}}</c>.</summary>
-            public const string QualityOnDateInYearX = "fruit-tree.quality.on-date-in-year-x";
 
             /// <summary>A value like <c>{{season}} (or anytime in greenhouse)</c>.</summary>
             public const string SeasonSummary = "fruit-tree.season.summary";

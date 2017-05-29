@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewModdingAPI;
+using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
@@ -26,6 +27,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Get a human-readable representation of a value.</summary>
         /// <param name="translations">The translation helper.</param>
+        /// <param name="date">The game date.</param>
+        /// <param name="withYear">Whether to include the year number.</param>
+        public static string Stringify(this ITranslationHelper translations, GameDate date, bool withYear)
+        {
+            string key = withYear ? L10n.Generic.DateWithYear : L10n.Generic.Date;
+            return translations.Get(key, new
+            {
+                seasonNumber = Utility.getSeasonNumber(date.Season),
+                seasonName = Utility.getSeasonNameFromNumber(Utility.getSeasonNumber(date.Season)),
+                dayNumber = date.Day,
+                year = date.Year
+            });
+        }
+
+        /// <summary>Get a human-readable representation of a value.</summary>
+        /// <param name="translations">The translation helper.</param>
         /// <param name="value">The underlying value.</param>
         public static string Stringify(this ITranslationHelper translations, object value)
         {
@@ -37,6 +54,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // boolean
                 case bool boolean:
                     return translations.Get(boolean ? L10n.Generic.Yes : L10n.Generic.No);
+
+                // game date
+                case GameDate date:
+                    return translations.Stringify(date, withYear: false);
 
                 // time span
                 case TimeSpan span:

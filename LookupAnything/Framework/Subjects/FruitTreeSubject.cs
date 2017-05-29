@@ -69,7 +69,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (!isMature)
             {
                 GameDate dayOfMaturity = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(tree.daysUntilMature);
-                string grownOnDateText = this.Translate(L10n.FruitTree.GrowthSummary, new { date = dayOfMaturity });
+                string grownOnDateText = this.Translate(L10n.FruitTree.GrowthSummary, new { date = this.Stringify(dayOfMaturity) });
                 string daysUntilGrownText = this.Text.GetPlural(tree.daysUntilMature, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = tree.daysUntilMature });
                 string growthText = $"{grownOnDateText} ({daysUntilGrownText})";
 
@@ -104,11 +104,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                             string line;
                             if (yearOffset == 0)
-                                line = $"-{this.Translate(L10n.FruitTree.QualityOnDate, new { quality = qualityName, date = date })}";
+                                line = $"-{this.Translate(L10n.FruitTree.QualityOnDate, new { quality = qualityName, date = this.Stringify(date) })}";
                             else if (yearOffset == 1)
-                                line = $"-{this.Translate(L10n.FruitTree.QualityOnDateNextYear, new { quality = qualityName, date = date })}";
+                                line = $"-{this.Translate(L10n.FruitTree.QualityOnDateNextYear, new { quality = qualityName, date = this.Stringify(date) })}";
                             else
-                                line = $"-{this.Translate(L10n.FruitTree.QualityOnDateInYearX, new { quality = qualityName, date = date, year = date.Year })}";
+                                line = $"-{this.Translate(L10n.FruitTree.QualityOnDate, new { quality = qualityName, date = this.Text.Stringify(date, withYear: true), year = date.Year })}";
 
                             line += $" ({this.Text.GetPlural(daysLeft, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = daysLeft })})";
 
