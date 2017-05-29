@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.3
-* Updated to SMAPI 1.13.
+* Updated to SMAPI 1.14.
 
 ## 1.2
 * Updated for Stardew Valley 1.2.

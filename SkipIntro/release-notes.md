@@ -2,8 +2,8 @@
 
 # Release notes
 ## 1.7
-* Updated to SMAPI 1.13.
-* Start even more quickly — the mod now skips the title-screen and load-screen transitions too.
+* Updated to SMAPI 1.14.
+* Start even more quickly — the mod now skips the button/slide transitions on the title & load screens.
 * Fixed the intro not being skipped when you exit to title.
 
 ## 1.6
