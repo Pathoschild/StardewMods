@@ -2,7 +2,8 @@
 
 # Release notes
 ## 1.11
-* Updated to SMAPI 1.13.
+* Updated to SMAPI 1.14.
+* Added translation support.
 
 ## 1.10
 * Updated for Stardew Valley 1.2.

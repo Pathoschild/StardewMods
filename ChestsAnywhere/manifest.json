@@ -7,7 +7,7 @@
     "PatchVersion": 0,
     "Build": null
   },
-  "MinimumApiVersion": "1.10",
+  "MinimumApiVersion": "1.14",
   "Description": "Access your chests from anywhere.",
   "UniqueID": "Pathoschild.ChestsAnywhere",
   "EntryDll": "ChestsAnywhere.dll"

@@ -44,7 +44,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             // initialise
             this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
-            this.ChestFactory = new ChestFactory();
+            this.ChestFactory = new ChestFactory(helper.Translation);
 
             // hook UI
             GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveHudRendered();
@@ -123,7 +123,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
                 // add overlay
                 ManagedChest[] chests = this.ChestFactory.GetChestsForDisplay(selectedChest: chest.Chest).ToArray();
-                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config);
+                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Translation);
                 this.ManageChestOverlay.OnChestSelected += selected =>
                 {
                     this.SelectedChest = selected.Chest;

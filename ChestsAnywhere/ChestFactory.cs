@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
@@ -14,8 +15,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere
     internal class ChestFactory
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>Provides translations stored in the mod's folder.</summary>
+        private readonly ITranslationHelper Translations;
+
+
+        /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="translations">Provides translations stored in the mod's folder.</param>
+        public ChestFactory(ITranslationHelper translations)
+        {
+            this.Translations = translations;
+        }
+
         /// <summary>Get all player chests.</summary>
         public IEnumerable<ManagedChest> GetChests()
         {
@@ -29,7 +44,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         Vector2 tile = pair.Key;
                         Chest chest = pair.Value as Chest;
                         if (chest != null && chest.playerChest)
-                            yield return new ManagedChest(chest, this.GetLocationName(location), tile, $"Chest #{++namelessCount}");
+                            yield return new ManagedChest(chest, this.GetLocationName(location), tile, this.Translations.Get("default-chest-name", new { number = ++namelessCount }));
                     }
                 }
 
@@ -46,7 +61,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                             Vector2 tile = pair.Key;
                             Chest chest = pair.Value as Chest;
                             if (chest != null && chest.playerChest)
-                                yield return new ManagedChest(chest, this.GetLocationName(building), tile, $"Chest #{++namelessCount}");
+                                yield return new ManagedChest(chest, this.GetLocationName(building), tile, this.Translations.Get("default-name.chest", new { number = ++namelessCount }));
                         }
                     }
                 }
@@ -56,7 +71,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 {
                     Chest fridge = house.fridge;
                     if (fridge != null)
-                        yield return new ManagedChest(fridge, location.Name, Vector2.Zero, "Fridge");
+                        yield return new ManagedChest(fridge, location.Name, Vector2.Zero, this.Translations.Get("default-name.fridge"));
                 }
             }
         }
