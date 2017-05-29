@@ -43,10 +43,11 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public static void ResetCache(Metadata metadata, IReflectionHelper reflectionHelper)
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public static void ResetCache(Metadata metadata, IReflectionHelper reflectionHelper, ITranslationHelper translations)
         {
             GameHelper.GiftTastes = new Lazy<GiftTasteModel[]>(() => DataParser.GetGiftTastes(GameHelper.Objects.Value).ToArray());
-            GameHelper.Recipes = new Lazy<RecipeModel[]>(() => DataParser.GetRecipes(metadata, reflectionHelper).ToArray());
+            GameHelper.Recipes = new Lazy<RecipeModel[]>(() => DataParser.GetRecipes(metadata, reflectionHelper, translations).ToArray());
         }
 
         /****

@@ -93,8 +93,8 @@ namespace Pathoschild.Stardew.LookupAnything
             // hook up events
             {
                 // reset low-level cache once per game day (used for expensive queries that don't change within a day)
-                SaveEvents.AfterLoad += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection);
-                SaveEvents.AfterSave += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection);
+                SaveEvents.AfterLoad += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection, this.Helper.Translation);
+                SaveEvents.AfterSave += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection, this.Helper.Translation);
 
                 // hook up game events
                 SaveEvents.AfterLoad += this.ReceiveAfterLoad;

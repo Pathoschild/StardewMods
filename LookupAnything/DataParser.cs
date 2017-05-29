@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
@@ -276,7 +277,8 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get the recipe ingredients.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public static RecipeModel[] GetRecipes(Metadata metadata, IReflectionHelper reflectionHelper)
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public static RecipeModel[] GetRecipes(Metadata metadata, IReflectionHelper reflectionHelper, ITranslationHelper translations)
         {
             List<RecipeModel> recipes = new List<RecipeModel>();
 
@@ -284,20 +286,28 @@ namespace Pathoschild.Stardew.LookupAnything
             recipes.AddRange(
                 from entry in CraftingRecipe.cookingRecipes
                 let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: true)
-                select new RecipeModel(recipe, reflectionHelper)
+                select new RecipeModel(recipe, reflectionHelper, translations)
             );
 
             // crafting recipes
             recipes.AddRange(
                 from entry in CraftingRecipe.craftingRecipes
                 let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: false)
-                select new RecipeModel(recipe, reflectionHelper)
+                select new RecipeModel(recipe, reflectionHelper, translations)
             );
 
-            // recipes not available from game data
+            // machine recipes
             recipes.AddRange(
-                from entry in metadata.Recipes
-                select new RecipeModel(null, entry.Type, entry.Ingredients, ingredient => DataParser.CreateRecipeItem(ingredient.parentSheetIndex, entry.Output), false, entry.ExceptIngredients)
+                from entry in metadata.MachineRecipes
+                let machine = new Object(Vector2.Zero, entry.MachineID)
+                select new RecipeModel(null, machine.DisplayName, entry.Ingredients, ingredient => DataParser.CreateRecipeItem(ingredient.parentSheetIndex, entry.Output), false, entry.ExceptIngredients)
+            );
+
+            // building recipes
+            recipes.AddRange(
+                from entry in metadata.BuildingRecipes
+                let building = new BluePrint(entry.BuildingKey)
+                select new RecipeModel(null, building.displayName, entry.Ingredients, ingredient => DataParser.CreateRecipeItem(ingredient.parentSheetIndex, entry.Output), false, entry.ExceptIngredients)
             );
 
             return recipes.ToArray();

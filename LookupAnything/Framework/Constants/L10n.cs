@@ -103,6 +103,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public const string BulletinBoard = "bundle-area.bulletin-board";
         }
 
+        /// <summary>Recipe types.</summary>
+        public static class RecipeTypes
+        {
+            /// <summary>A value like <c>Cooking</c>.</summary>
+            public const string Cooking = "recipe-type.cooking";
+
+            /// <summary>A value like <c>Crafting</c>.</summary>
+            public const string Crafting = "recipe-type.crafting";
+        }
+
         /// <summary>Animal lookup translations.</summary>
         public static class Animal
         {

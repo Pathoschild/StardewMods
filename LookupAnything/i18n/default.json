@@ -52,6 +52,10 @@
     "shop.robin": "Robin",
     "shop.willy": "Willy",
 
+    // recipe types
+    "recipe-type.cooking": "Cooking",
+    "recipe-type.crafting": "Crafting",
+
     /*********
     ** Specific lookups
     *********/

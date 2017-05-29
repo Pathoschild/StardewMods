@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
@@ -59,11 +58,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     from recipe in recipes
                     let output = recipe.CreateItem(ingredient)
                     let name = output.DisplayName
-                    orderby recipe.Type.ToString(), name
+                    orderby recipe.DisplayType, name
                     select new Entry
                     {
                         Name = name,
-                        Type = Regex.Replace(recipe.Type.ToString(), @"(\B[A-Z])", " $1"), // e.g. "OilMaker" => "Oil Maker"
+                        Type = recipe.DisplayType,
                         IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
                         NumberRequired = recipe.Ingredients.ContainsKey(ingredient.parentSheetIndex) ? recipe.Ingredients[ingredient.parentSheetIndex] : recipe.Ingredients[ingredient.category],
                         Item = output

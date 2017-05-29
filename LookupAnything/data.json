@@ -145,12 +145,33 @@ You shouldn't change this file unless you know what you're doing.
     ],
 
     /*********
-    ** Recipes not available from game data
+    ** Building recipes (not available from game data)
     *********/
-    "Recipes": [
+    "BuildingRecipes": [
+        /* mill */
+        {
+            "BuildingKey": "Mill",
+            "Ingredients": {
+                "262": 1 // wheat
+            },
+            "Output": 246 // wheat flour
+        },
+        {
+            "BuildingKey": "Mill",
+            "Ingredients": {
+                "284": 1 // beet
+            },
+            "Output": 245 // sugar
+        }
+    ],
+
+    /*********
+    ** Machine recipes (not available from game data)
+    *********/
+    "MachineRecipes": [
         /* charcoal kiln */
         {
-            "Type": "CharcoalKiln",
+            "MachineID": 114,
             "Ingredients": {
                 "388": 10 // wood
             },
@@ -159,7 +180,7 @@ You shouldn't change this file unless you know what you're doing.
 
         /* cheese press */
         {
-            "Type": "CheesePress",
+            "MachineID": 16,
             "Ingredients": {
                 "184": 1, // milk
                 "186": 1 // or large milk
@@ -167,7 +188,7 @@ You shouldn't change this file unless you know what you're doing.
             "Output": 424 // cheese
         },
         {
-            "Type": "CheesePress",
+            "MachineID": 16,
             "Ingredients": {
                 "436": 1, // goat milk
                 "438": 1 // or goat milk
@@ -177,7 +198,7 @@ You shouldn't change this file unless you know what you're doing.
 
         /* furnace */
         {
-            "Type": "Furnace",
+            "MachineID": 13,
             "Ingredients": {
                 "382": 1, // coal
                 "378": 5 // copper ore
@@ -185,7 +206,7 @@ You shouldn't change this file unless you know what you're doing.
             "Output": 334 // copper bar
         },
         {
-            "Type": "Furnace",
+            "MachineID": 13,
             "Ingredients": {
                 "382": 1, // coal
                 "380": 5 // iron ore
@@ -193,7 +214,7 @@ You shouldn't change this file unless you know what you're doing.
             "Output": 335 // iron bar
         },
         {
-            "Type": "Furnace",
+            "MachineID": 13,
             "Ingredients": {
                 "382": 1, // coal
                 "384": 5 // gold ore
@@ -201,7 +222,7 @@ You shouldn't change this file unless you know what you're doing.
             "Output": 336 // gold bar
         },
         {
-            "Type": "Furnace",
+            "MachineID": 13,
             "Ingredients": {
                 "382": 1, // coal
                 "386": 5 // gold ore
@@ -209,7 +230,7 @@ You shouldn't change this file unless you know what you're doing.
             "Output": 337 // iridium bar
         },
         {
-            "Type": "Furnace",
+            "MachineID": 13,
             "Ingredients": {
                 "382": 1, // coal
                 "80": 1 // quartz
@@ -219,35 +240,35 @@ You shouldn't change this file unless you know what you're doing.
 
         /* keg */
         {
-            "Type": "Keg",
+            "MachineID": 12,
             "Ingredients": {
                 "262": 1 // wheat
             },
             "Output": 346 // beer
         },
         {
-            "Type": "Keg",
+            "MachineID": 12,
             "Ingredients": {
                 "433": 5 // coffee bean
             },
             "Output": 395 // coffee
         },
         {
-            "Type": "Keg",
+            "MachineID": 12,
             "Ingredients": {
                 "340": 1 // honey
             },
             "Output": 459 // mead
         },
         {
-            "Type": "Keg",
+            "MachineID": 12,
             "Ingredients": {
                 "304": 1 // hops
             },
             "Output": 303 // pale ale
         },
         {
-            "Type": "Keg",
+            "MachineID": 12,
             "Ingredients": {
                 "-79": 1 // any fruit
             },
@@ -255,7 +276,7 @@ You shouldn't change this file unless you know what you're doing.
             "Output": 348 // wine
         },
         {
-            "Type": "Keg",
+            "MachineID": 12,
             "Ingredients": {
                 "-75": 1 // any vegetable
             },
@@ -265,7 +286,7 @@ You shouldn't change this file unless you know what you're doing.
 
         /* loom */
         {
-            "Type": "Loom",
+            "MachineID": 17,
             "Ingredients": {
                 "440": 1 // wool
             },
@@ -274,7 +295,7 @@ You shouldn't change this file unless you know what you're doing.
 
         /* mayonnaise machine */
         {
-            "Type": "MayonnaiseMachine",
+            "MachineID": 24,
             "Ingredients": {
                 "107": 1, // dinosaur egg
                 "174": 1, // or large white egg
@@ -285,46 +306,30 @@ You shouldn't change this file unless you know what you're doing.
             "Output": 306 // mayonnaise
         },
         {
-            "Type": "MayonnaiseMachine",
+            "MachineID": 24,
             "Ingredients": {
                 "442": 1 // duck egg
             },
             "Output": 307 // duck mayonnaise
         },
         {
-            "Type": "MayonnaiseMachine",
+            "MachineID": 24,
             "Ingredients": {
                 "305": 1 // void egg
             },
             "Output": 308 // void mayonnaise
         },
 
-        /* mill */
-        {
-            "Type": "Mill",
-            "Ingredients": {
-                "262": 1 // wheat
-            },
-            "Output": 246 // wheat flour
-        },
-        {
-            "Type": "Mill",
-            "Ingredients": {
-                "284": 1 // beet
-            },
-            "Output": 245 // sugar
-        },
-
         /* oil maker */
         {
-            "Type": "OilMaker",
+            "MachineID": 19,
             "Ingredients": {
                 "430": 1 // truffle
             },
             "Output": 432 // truffle oil
         },
         {
-            "Type": "OilMaker",
+            "MachineID": 19,
             "Ingredients": {
                 "270": 1, // corn
                 "421": 1, // or sunflower
@@ -335,14 +340,14 @@ You shouldn't change this file unless you know what you're doing.
 
         /* preserves jar */
         {
-            "Type": "PreservesJar",
+            "MachineID": 15,
             "Ingredients": {
                 "-79": 1 // any fruit
             },
             "Output": 344 // jelly
         },
         {
-            "Type": "PreservesJar",
+            "MachineID": 15,
             "Ingredients": {
                 "-75": 1 // any vegetable
             },
@@ -351,7 +356,7 @@ You shouldn't change this file unless you know what you're doing.
 
         /* recycling machine */
         {
-            "Type": "RecyclingMachine",
+            "MachineID": 20,
             "Ingredients": {
                 "168": 1, // trash
                 "169": 1 // or driftwood
@@ -359,14 +364,14 @@ You shouldn't change this file unless you know what you're doing.
             "Output": 382 // coal
         },
         {
-            "Type": "RecyclingMachine",
+            "MachineID": 20,
             "Ingredients": {
                 "168": 1 // trash
             },
             "Output": 380 // iron ore
         },
         {
-            "Type": "RecyclingMachine",
+            "MachineID": 20,
             "Ingredients": {
                 "170": 1, // broken glasses
                 "171": 1, // or broken CD
@@ -375,14 +380,14 @@ You shouldn't change this file unless you know what you're doing.
             "Output": 338 // refined quartz
         },
         {
-            "Type": "RecyclingMachine",
+            "MachineID": 20,
             "Ingredients": {
                 "168": 1 // trash
             },
             "Output": 390 // stone
         },
         {
-            "Type": "RecyclingMachine",
+            "MachineID": 20,
             "Ingredients": {
                 "169": 1 // driftwood
             },
@@ -391,28 +396,28 @@ You shouldn't change this file unless you know what you're doing.
 
         /* slime egg-press */
         {
-            "Type": "SlimeEggPress",
+            "MachineID": 158,
             "Ingredients": {
                 "766": 100 // slime
             },
             "Output": 680 // green slime egg
         },
         {
-            "Type": "SlimeEggPress",
+            "MachineID": 158,
             "Ingredients": {
                 "766": 100 // slime
             },
             "Output": 439 // purple slime egg
         },
         {
-            "Type": "SlimeEggPress",
+            "MachineID": 158,
             "Ingredients": {
                 "766": 100 // slime
             },
             "Output": 437 // red slime egg
         },
         {
-            "Type": "SlimeEggPress",
+            "MachineID": 158,
             "Ingredients": {
                 "766": 100 // slime
             },
