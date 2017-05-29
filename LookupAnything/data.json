@@ -431,19 +431,15 @@ You shouldn't change this file unless you know what you're doing.
     "Characters": [
         {
             "ID": "Pet",
-            "Description": "Your loyal pet."
+            "DescriptionKey": "npc-overrides.pet-description"
         },
         {
             "ID": "Horse",
-            "Description": "Your loyal steed."
+            "DescriptionKey": "npc-overrides.horse-description"
         },
         {
             "ID": "Junimo",
-            "Description": "A forest spirit from the spirit world. Very little is known about them."
-        },
-        {
-            "ID": "Monster::Dust Spirit",
-            "Name": "Dust Sprite" // name was changed during development
+            "DescriptionKey": "npc-overrides.junimo-description"
         }
     ],
 

@@ -59,7 +59,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             this.Target = npc;
             this.TargetType = type;
             CharacterData overrides = metadata.GetCharacter(npc, type);
-            this.Initialise(overrides?.Name ?? npc.getName(), overrides?.Description, typeName);
+            string name = npc.getName();
+            string description = overrides?.DescriptionKey != null ? translations.Get(overrides.DescriptionKey) : null;
+            this.Initialise(name, description, typeName);
         }
 
         /// <summary>Get the data to display for this subject.</summary>

@@ -57,6 +57,14 @@
     "recipe-type.crafting": "Crafting",
 
     /*********
+    ** Overrides
+    *********/
+    // NPC overrides
+    "npc-overrides.pet-description": "Your loyal pet.",
+    "npc-overrides.horse-description": "Your loyal steed.",
+    "npc-overrides.junimo-description": "A forest spirit from the spirit world. Very little is known about them.",
+
+    /*********
     ** Specific lookups
     *********/
     // animal lookup labels
