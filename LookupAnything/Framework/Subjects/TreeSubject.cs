@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="tile">The tree's tile position.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         public TreeSubject(Tree tree, Vector2 tile, ITranslationHelper translations)
-            : base(TreeSubject.GetName(tree), null, "Tree", translations)
+            : base(TreeSubject.GetName(translations, tree), null, translations.Get(L10n.Types.Tree), translations)
         {
             this.Target = tree;
             this.Tile = tile;
@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             bool isFullyGrown = stage == WildTreeGrowthStage.Tree;
             yield return new GenericField(this.Translate(L10n.Tree.Stage), isFullyGrown
                 ? this.Translate(L10n.Tree.StageDone)
-                : this.Translate(L10n.Tree.StagePartial, new { stageName = L10n.For(stage), step = (int)stage, max = (int)WildTreeGrowthStage.Tree })
+                : this.Translate(L10n.Tree.StagePartial, new { stageName = this.Translate(L10n.For(stage)), step = (int)stage, max = (int)WildTreeGrowthStage.Tree })
             );
 
             // get growth scheduler
@@ -103,25 +103,25 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Private methods
         *********/
         /// <summary>Get a display name for the tree.</summary>
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="tree">The tree object.</param>
-        private static string GetName(Tree tree)
+        private static string GetName(ITranslationHelper translations, Tree tree)
         {
             TreeType type = (TreeType)tree.treeType;
-
             switch (type)
             {
                 case TreeType.Maple:
-                    return "Maple Tree";
+                    return translations.Get(L10n.Tree.NameMaple);
                 case TreeType.Oak:
-                    return "Oak Tree";
+                    return translations.Get(L10n.Tree.NameOak);
                 case TreeType.Pine:
-                    return "Pine Tree";
+                    return translations.Get(L10n.Tree.NamePine);
                 case TreeType.Palm:
-                    return "Palm Tree";
+                    return translations.Get(L10n.Tree.NamePalm);
                 case TreeType.BigMushroom:
-                    return "Big Mushroom";
+                    return translations.Get(L10n.Tree.NameBigMushroom);
                 default:
-                    return "(unknown tree)";
+                    return translations.Get(L10n.Tree.NameUnknown);
             }
         }
 

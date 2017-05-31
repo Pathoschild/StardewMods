@@ -83,6 +83,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Map tile</c>.</summary>
             public const string Tile = "type.map-tile";
 
+            /// <summary>A value like <c>Tree</c>.</summary>
+            public const string Tree = "type.tree";
+
             /// <summary>A value like <c>Villager</c>.</summary>
             public const string Villager = "type.villager";
         }
@@ -551,6 +554,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /****
             ** Labels
             ****/
+            /// <summary>A value like <c>Maple Tree</c>.</summary>
+            public const string NameMaple = "tree.name.maple";
+
+            /// <summary>A value like <c>Oak Tree</c>.</summary>
+            public const string NameOak = "tree.name.oak";
+
+            /// <summary>A value like <c>Pine Tree</c>.</summary>
+            public const string NamePine = "tree.name.pine";
+
+            /// <summary>A value like <c>Palm Tree</c>.</summary>
+            public const string NamePalm = "tree.name.palm";
+
+            /// <summary>A value like <c>Big Mushroom</c>.</summary>
+            public const string NameBigMushroom = "tree.name.big-mushroom";
+
+            /// <summary>A value like <c>Unknown Tree</c>.</summary>
+            public const string NameUnknown = "tree.name.unknown";
+
             /// <summary>A value like <c>Growth stage</c>.</summary>
             public const string Stage = "tree.stage";
 
