@@ -120,8 +120,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 }
             }
 
-            // show seasons
-            yield return new GenericField(this.Translate(L10n.FruitTree.Season), this.Translate(L10n.FruitTree.SeasonSummary, new { season = tree.fruitSeason }));
+            // show season
+            yield return new GenericField(this.Translate(L10n.FruitTree.Season), this.Translate(L10n.FruitTree.SeasonSummary, new { season = this.Text.GetSeasonName(tree.fruitSeason) }));
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>

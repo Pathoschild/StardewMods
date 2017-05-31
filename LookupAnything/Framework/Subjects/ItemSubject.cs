@@ -157,7 +157,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     );
 
                     // seasons
-                    summary.Add(this.Translate(L10n.Crop.SummarySeasons, new { seasons = string.Join(", ", crop.seasonsToGrowIn) }));
+                    summary.Add(this.Translate(L10n.Crop.SummarySeasons, new { seasons = string.Join(", ", this.Text.GetSeasonNames(crop.seasonsToGrowIn)) }));
 
                     // drops
                     if (crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops > 0)

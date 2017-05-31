@@ -25,6 +25,29 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return translations.Get(count == 1 ? singleKey : pluralKey);
         }
 
+        /// <summary>Get a translated season name from the game.</summary>
+        /// <param name="translations">The translation helper.</param>
+        /// <param name="season">The English season name.</param>
+        public static string GetSeasonName(this ITranslationHelper translations, string season)
+        {
+            if (string.IsNullOrWhiteSpace(season))
+                return season;
+
+            int id = Utility.getSeasonNumber(season);
+            if (id == -1)
+                throw new InvalidOperationException($"Can't translate unknown season '{season}'.");
+            return Utility.getSeasonNameFromNumber(id);
+        }
+
+        /// <summary>Get translated season names from the game.</summary>
+        /// <param name="translations">The translation helper.</param>
+        /// <param name="seasons">The English season names.</param>
+        public static IEnumerable<string> GetSeasonNames(this ITranslationHelper translations, IEnumerable<string> seasons)
+        {
+            foreach (string season in seasons)
+                yield return translations.GetSeasonName(season);
+        }
+
         /// <summary>Get a human-readable representation of a value.</summary>
         /// <param name="translations">The translation helper.</param>
         /// <param name="date">The game date.</param>
