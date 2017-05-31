@@ -44,7 +44,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         Vector2 tile = pair.Key;
                         Chest chest = pair.Value as Chest;
                         if (chest != null && chest.playerChest)
-                            yield return new ManagedChest(chest, this.GetLocationName(location), tile, this.Translations.Get("default-chest-name", new { number = ++namelessCount }));
+                            yield return new ManagedChest(chest, this.GetLocationName(location), tile, this.Translations.Get("default-name.chest", new { number = ++namelessCount }));
                     }
                 }
 
