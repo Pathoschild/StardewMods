@@ -31,6 +31,7 @@
     "type.player": "Player",
     "type.tree": "Tree",
     "type.villager": "Villager",
+    "type.other": "Other", // default type
 
     // item qualities
     "quality.normal": "normal",

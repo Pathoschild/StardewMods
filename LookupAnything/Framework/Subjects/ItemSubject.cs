@@ -442,10 +442,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="item">The item.</param>
         private string GetTypeValue(Item item)
         {
-            string type = item.getCategoryName();
-            if (string.IsNullOrWhiteSpace(type) && item is Object obj)
-                type = obj.Type;
-            return type;
+            string categoryName = item.getCategoryName();
+            return !string.IsNullOrWhiteSpace(categoryName)
+                ? categoryName
+                : this.Translate(L10n.Types.Other);
         }
 
         /// <summary>Get unfinished bundles which require this item.</summary>

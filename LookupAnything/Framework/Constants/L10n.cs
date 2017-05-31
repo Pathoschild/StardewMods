@@ -88,6 +88,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>Villager</c>.</summary>
             public const string Villager = "type.villager";
+
+            /// <summary>A value like <c>Other</c>.</summary>
+            public const string Other = "type.other";
         }
 
         /// <summary>Community Center bundle areas.</summary>
