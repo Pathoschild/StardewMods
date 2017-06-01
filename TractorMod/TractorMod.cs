@@ -362,7 +362,7 @@ namespace TractorMod
         /// <param name="tiles">The tiles to harvest.</param>
         private void HarvestTiles(Vector2[] tiles)
         {
-            if (!this.Config.CanHarvest)
+            if (!this.Config.ScytheHarvests)
                 return;
 
             foreach (Vector2 tile in tiles)
@@ -486,17 +486,17 @@ namespace TractorMod
                 switch (tool)
                 {
                     case WateringCan _:
-                        if (!this.Config.CanWater)
+                        if (!this.Config.WateringCanWaters)
                             return;
                         break;
 
                     case Hoe _:
-                        if (!this.Config.CanHoeDirt)
+                        if (!this.Config.HoeTillsDirt)
                             return;
                         break;
 
                     case Pickaxe _:
-                        if (!this.Config.CanClearHoedDirt && !this.Config.CanClearRocks)
+                        if (!this.Config.PickaxeClearsDirt && !this.Config.PickaxeBreaksRocks)
                             return; // nothing to do
                         break;
 
@@ -533,9 +533,9 @@ namespace TractorMod
                 // prevent pickaxe from destroying
                 if (tool is Pickaxe)
                 {
-                    if (!this.Config.CanClearHoedDirt && tileFeature is HoeDirt)
+                    if (!this.Config.PickaxeClearsDirt && tileFeature is HoeDirt)
                         continue;
-                    if (!this.Config.CanClearRocks && tileObj?.Name == "Stone")
+                    if (!this.Config.PickaxeBreaksRocks && tileObj?.Name == "Stone")
                         continue;
                 }
 

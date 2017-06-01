@@ -33,23 +33,18 @@ Now just get on the tractor, choose a tool or seeds or fertilizer, and drive:
 The mod creates a `config.json` file the first time you run it. You can open the file in a text
 editor to configure the mod.
 
-setting | effect
-:------ | :-----
-`ToolConfig` | Configure the tools to use with the tractor (see below).
-`ItemRadius` | The number of tiles on each side of the tractor to affect when seeding or fertilising (in addition to the tile under it).
-`TractorKey` | The button which summons the tractor to your position (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
-`TractorSpeed` | The speed modifier when riding the tractor.
-`TractorHousePrice` | The gold price to buy a tractor garage.
-`UpdateConfig` | The button which reloads the mod configuration.
-
-The `ToolConfig` field contains multiple entries with these fields:
-
-setting | effect
-:------ | :-----
-`Name` | The exact name of the tool to use (case-sensitive).
-`MinLevel` | The minimum tool upgrade level to use this tool in tractor mode (0 for basic tool, 1 for copper tool, etc).
-`EffectRadius` | The number of tiles on each side of the tractor to affect in addition to the tile under it (e.g. 1 for 3x3 grid or 2 for 5x5 grid).
-`ActiveEveryTickAmount` | The cooldown time between each use of the tool in tractor mode, in ticks. This is mainly for performance. There are ≈60 ticks per second.
+setting | default | effect
+:------ | :------ | :-----
+`ScytheHarvests` | `true` | Whether the tractor can harvest crops, fruit trees, or forage when the scythe is selected.
+`HoeTillsDirt` | `true` | Whether the tractor can hoe dirt tiles when the hoe is selected.
+`WateringCanWaters` | `true` | Whether the tractor can water tiles when the watering can is selected.
+`PickaxeClearsDirt` | `true` | Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.
+`PickaxeBreaksRocks` | `true` | Whether the tractor can break rocks when the pickaxe is selected.
+`CustomTools` | _(empty)_ | The custom tools to apply. These must match the exact in-game tool names.
+`Distance` | 1 | The number of tiles on each side of the tractor to affect (in addition to the tile under it).
+`TractorKey` | `B` | The button which summons the tractor to your position (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
+`TractorSpeed` | -2 | The speed modifier when riding the tractor.
+`TractorHousePrice` | 150000 | The gold price to buy a tractor garage.
 
 ## Versions
 See [release notes](release-notes.md).

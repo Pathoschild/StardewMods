@@ -9,19 +9,22 @@ namespace TractorMod.Framework
         ** Accessors
         *********/
         /// <summary>Whether the tractor can harvest crops, fruit trees, or forage when the scythe is selected.</summary>
-        public bool CanHarvest = true;
+        public bool ScytheHarvests = true;
 
         /// <summary>Whether the tractor can hoe dirt tiles when the hoe is selected.</summary>
-        public bool CanHoeDirt = true;
+        public bool HoeTillsDirt = true;
 
         /// <summary>Whether the tractor can water tiles when the watering can is selected.</summary>
-        public bool CanWater = true;
+        public bool WateringCanWaters = true;
 
         /// <summary>Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.</summary>
-        public bool CanClearHoedDirt = true;
+        public bool PickaxeClearsDirt = true;
 
         /// <summary>Whether the tractor can break rocks when the pickaxe is selected.</summary>
-        public bool CanClearRocks = true;
+        public bool PickaxeBreaksRocks = true;
+
+        /// <summary>The custom tools to allow. These must match the exact in-game tool names.</summary>
+        public string[] CustomTools { get; set; } = new string[0];
 
         /// <summary>The number of tiles on each side of the tractor to affect (in addition to the tile under it).</summary>
         public int Distance { get; set; } = 1;
@@ -34,8 +37,5 @@ namespace TractorMod.Framework
 
         /// <summary>The gold price to buy a tractor garage.</summary>
         public int TractorHousePrice { get; set; } = 150000;
-
-        /// <summary>The custom tool names to allow. These must match the exact in-game tool name.</summary>
-        public string[] CustomTools { get; set; } = new string[0];
     }
 }
