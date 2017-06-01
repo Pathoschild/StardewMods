@@ -17,13 +17,13 @@ and now maintained by the community — pull requests are welcome!
 3. Run the game using SMAPI.
 
 ## Use
-Buy the tractor garage from Robin (a licensed PhthaloBlue Corp distributor):
+Buy the tractor garage from Robin:
 > ![](screenshots/buy-garage.png)
 
 ...choose where you want it built:
 > ![](screenshots/build-garage.png)
 
-...and PhthaloBlue Corp will build your garage overnight:
+...and Robin will build your garage overnight:
 > ![](screenshots/final-garage.png)
 
 Now just get on the tractor, choose a tool or seeds or fertilizer, and drive:
