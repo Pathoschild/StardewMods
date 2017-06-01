@@ -494,6 +494,14 @@ namespace TractorMod
                         if (!this.Config.CanHoeDirt)
                             return;
                         break;
+
+                    case Pickaxe _:
+                        if (!this.Config.CanClearHoedDirt && !this.Config.CanClearRocks)
+                            return; // nothing to do
+                        break;
+
+                    default:
+                        return;
                 }
             }
 
@@ -512,12 +520,28 @@ namespace TractorMod
             Game1.player.toolPower = 0;
             foreach (Vector2 tile in tiles)
             {
-                // prevent hoe from destroy objects
-                if (tool is Hoe && Game1.currentLocation.objects.ContainsKey(tile))
-                    continue;
+                Game1.currentLocation.objects.TryGetValue(tile, out SObject tileObj);
+                Game1.currentLocation.terrainFeatures.TryGetValue(tile, out TerrainFeature tileFeature);
 
-                // use tool
-                tool.DoFunction(Game1.currentLocation, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), 0, Game1.player);
+                // prevent tools from destroying placed objects
+                if (tileObj != null && tileObj.Name != "Stone")
+                {
+                    if (tool is Hoe || tool is Pickaxe)
+                        continue;
+                }
+
+                // prevent pickaxe from destroying
+                if (tool is Pickaxe)
+                {
+                    if (!this.Config.CanClearHoedDirt && tileFeature is HoeDirt)
+                        continue;
+                    if (!this.Config.CanClearRocks && tileObj?.Name == "Stone")
+                        continue;
+                }
+
+                // use tool on center of tile
+                Vector2 useAt = (tile * Game1.tileSize) + new Vector2(Game1.tileSize / 2f);
+                tool.DoFunction(Game1.currentLocation, (int)useAt.X, (int)useAt.Y, 0, Game1.player);
             }
 
             // reset tools

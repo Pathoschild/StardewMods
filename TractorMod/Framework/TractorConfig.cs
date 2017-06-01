@@ -17,6 +17,12 @@ namespace TractorMod.Framework
         /// <summary>Whether the tractor can water tiles when the watering can is selected.</summary>
         public bool CanWater = true;
 
+        /// <summary>Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.</summary>
+        public bool CanClearHoedDirt = true;
+
+        /// <summary>Whether the tractor can break rocks when the pickaxe is selected.</summary>
+        public bool CanClearRocks = true;
+
         /// <summary>The number of tiles on each side of the tractor to affect (in addition to the tile under it).</summary>
         public int Distance { get; set; } = 1;
 
