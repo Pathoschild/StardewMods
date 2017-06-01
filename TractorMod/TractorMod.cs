@@ -211,6 +211,7 @@ namespace TractorMod
                         this.Tractor = new Tractor(building.tileX + 1, building.tileY + 1, this.Helper.Content) { name = this.TractorName };
                         this.Farm.characters.Add(this.Tractor);
                         Game1.warpCharacter(this.Tractor, "Farm", new Vector2(building.tileX + 1, building.tileY + 1), false, true);
+                        this.Tractor.Position = new Vector2(this.Tractor.Position.X + 20, this.Tractor.Position.Y);
                         break;
                     }
                 }
