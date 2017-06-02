@@ -20,11 +20,13 @@ namespace TractorMod.Framework
             this.daysOfConstructionLeft = daysOfConstructionLeft;
         }
 
+        /// <summary>Perform initial load logic.</summary>
+        /// <remarks>This overrides the stable logic to avoid spawning a horse.</remarks>
+        public override void load() { }
+
         /// <summary>Perform logic when the day starts.</summary>
         /// <param name="dayOfMonth">The current day of month.</param>
-        public override void dayUpdate(int dayOfMonth)
-        {
-            // prevent stable from grabbing horse
-        }
+        /// <remarks>This overrides the stable logic to avoid spawning a horse.</remarks>
+        public override void dayUpdate(int dayOfMonth) { }
     }
 }
