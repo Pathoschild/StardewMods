@@ -611,16 +611,13 @@ namespace TractorMod
                 nameOfBuildingToUpgrade = null,
                 actionBehavior = null,
                 maxOccupants = -1,
-                moneyRequired = this.Config.TractorHousePrice,
+                moneyRequired = this.Config.BuildPrice,
                 tilesWidth = 4,
                 tilesHeight = 2,
                 sourceRectForMenuView = new Rectangle(0, 0, 64, 96),
-                itemsRequired = new Dictionary<int, int>
-                {
-                    [SObject.ironBar] = 20,
-                    [SObject.iridiumBar] = 5,
-                    [787] = 5 // battery pack
-                },
+                itemsRequired = this.Config.BuildUsesResources
+                    ? new Dictionary<int, int>()
+                    : new Dictionary<int, int> { [SObject.ironBar] = 20, [SObject.iridiumBar] = 5, [787/* battery pack */] = 5 },
                 namesOfOkayBuildingLocations = new List<string> { "Farm" }
             };
         }

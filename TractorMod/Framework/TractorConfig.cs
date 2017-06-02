@@ -35,7 +35,10 @@ namespace TractorMod.Framework
         /// <summary>The speed modifier when riding the tractor.</summary>
         public int TractorSpeed { get; set; } = -2;
 
+        /// <summary>Whether you need to provide building resources to buy the garage.</summary>
+        public bool BuildUsesResources { get; set; } = true;
+
         /// <summary>The gold price to buy a tractor garage.</summary>
-        public int TractorHousePrice { get; set; } = 150000;
+        public int BuildPrice { get; set; } = 150000;
     }
 }

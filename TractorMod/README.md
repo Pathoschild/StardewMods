@@ -33,6 +33,8 @@ Now just get on the tractor, choose a tool or seeds or fertilizer, and drive:
 The mod creates a `config.json` file the first time you run it. You can open the file in a text
 editor to configure the mod.
 
+You can configure which tools can be used:
+
 setting | default | effect
 :------ | :------ | :-----
 `ScytheHarvests` | `true` | Whether the tractor can harvest crops, fruit trees, or forage when the scythe is selected.
@@ -41,10 +43,23 @@ setting | default | effect
 `PickaxeClearsDirt` | `true` | Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.
 `PickaxeBreaksRocks` | `true` | Whether the tractor can break rocks when the pickaxe is selected.
 `CustomTools` | _(empty)_ | The custom tools to apply. These must match the exact in-game tool names.
+
+Some general options:
+
+setting | default | effect
+:------ | :------ | :-----
 `Distance` | 1 | The number of tiles on each side of the tractor to affect (in addition to the tile under it).
 `TractorKey` | `B` | The button which summons the tractor to your position (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
 `TractorSpeed` | -2 | The speed modifier when riding the tractor.
-`TractorHousePrice` | 150000 | The gold price to buy a tractor garage.
+
+And change how the tractor is sold:
+
+setting | default | effect
+:------ | :------ | :-----
+`BuildPrice` | 150000 | The gold price to buy a tractor garage.
+`BuildUsesResources` | `true` | Whether you need to provide resources to build a tractor garage.
+
+
 
 ## Versions
 See [release notes](release-notes.md).

@@ -1,6 +1,6 @@
 # Release notes
 ## 3.3
-* The tractor garage is now sold by Robin, requires some building materials, and takes a few days for her to build.
+* The tractor garage is now sold by Robin, requires some building materials, and takes a few days for her to build. The price and whether resources are needed can be changed in `config.json`.
 * The tractor garage has a new sprite that better matches the game style.
 * Removed summon-horse key.
 * Removed tractor mode activated by holding mouse button (now only when riding the tractor).
