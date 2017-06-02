@@ -5,6 +5,7 @@
 * Updated to SMAPI 1.14.
 * Added translation support.
 * `F8` now shows the game's debug command input in debug mode.
+* Added German translations (thanks to Sasara!).
 
 ## 1.5
 * Updated for Stardew Valley 1.2.
