@@ -1,14 +1,15 @@
 # Release notes
-## 3.3
+## 4.0
 * The tractor garage is now sold by Robin, requires some building materials, and takes a few days for her to build. The price and whether resources are needed can be changed in `config.json`.
-* The tractor garage has a new sprite that better matches the game style.
-* Removed summon-horse key.
+* The tractor garage has a new look to match the game style thanks to [@Acerbicon](https://github.com/Acerbicon).
+* Simplified the `config.json`.
+* Added support for clearing dirt and breaking rocks with the pickaxe.
+* Removed summon-horse key (but kept summon-tractor key).
 * Removed tractor mode activated by holding mouse button (now only when riding the tractor).
-* Overhauled how data is saved. (Any previous data will be migrated automatically.)
-* Simplified the `config.json` by replacing per-tool settings with flags and common settings.
-* Can no longer summon tractor before building a tractor garage.
-* Fixed tractor speed debuff lasting a second after you dismount tractor.
+* Overhauled data saving (previous data will be migrated automatically).
 * Fixed hoe destroying objects.
+* Fixed tractor being summonable before a tractor garage is built.
+* Fixed tractor speed debuff lasting a second after you dismount tractor.
 
 ## 3.2.1
 * Fixed initialisation errors.
