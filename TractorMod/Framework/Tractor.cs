@@ -11,11 +11,15 @@ namespace TractorMod.Framework
         /*********
         ** Public methods
         *********/
-        public Tractor(int tileX, int tileY, IContentHelper content) : base(tileX, tileY)
+        public Tractor(string name, int tileX, int tileY, IContentHelper content)
+            : base(tileX, tileY)
         {
-            this.sprite = new AnimatedSprite(content.Load<Texture2D>(@"assets\tractor.png", ContentSource.ModFolder), 0, 32, 32);
-            this.sprite.textureUsesFlippedRightForLeft = true;
-            this.sprite.loop = true;
+            this.name = name;
+            this.sprite = new AnimatedSprite(content.Load<Texture2D>(@"assets\tractor.png"), 0, 32, 32)
+            {
+                textureUsesFlippedRightForLeft = true,
+                loop = true
+            };
             this.faceDirection(3);
         }
 

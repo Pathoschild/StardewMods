@@ -42,6 +42,7 @@
     <Compile Include="Framework\LegacySaveData.cs" />
     <Compile Include="Framework\Tractor.cs" />
     <Compile Include="Framework\TractorConfig.cs" />
+    <Compile Include="Framework\TractorGarage.cs" />
     <Compile Include="TractorMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

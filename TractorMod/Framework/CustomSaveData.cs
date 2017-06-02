@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using StardewValley.Buildings;
 
 namespace TractorMod.Framework
 {
@@ -21,11 +19,6 @@ namespace TractorMod.Framework
         /// <summary>Construct an instance.</summary>
         /// <remarks>This constructor is needed to deserialise from JSON.</remarks>
         public CustomSaveData() { }
-
-        /// <summary>Construct an instance.</summary>
-        /// <param name="buildings">The custom buildings to save.</param>
-        public CustomSaveData(IEnumerable<Building> buildings)
-            : this(buildings.Select(garage => new CustomSaveBuilding(new Vector2(garage.tileX, garage.tileY), garage.buildingType))) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="buildings">The custom buildings to save.</param>

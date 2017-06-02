@@ -38,6 +38,9 @@ namespace TractorMod
         /// <summary>The number of ticks between each tractor action check.</summary>
         private readonly int TicksPerAction = 12; // roughly five times per second
 
+        /// <summary>The number of days needed to build a tractor garage.</summary>
+        private readonly int GarageConstructionDays = 3;
+
         /****
         ** State
         ****/
@@ -50,8 +53,8 @@ namespace TractorMod
         /// <summary>The currently spawned tractor.</summary>
         private Tractor Tractor;
 
-        /// <summary>Whether any custom data has been restored for the new day.</summary>
-        private bool IsDataRestored;
+        /// <summary>Whether Robin is busy constructing a garage.</summary>
+        private bool IsRobinBusy;
 
         /// <summary>The number of ticks since the tractor last checked for an action to perform.</summary>
         private int SkippedActionTicks;
@@ -68,20 +71,15 @@ namespace TractorMod
             this.MigrateLegacySaveData(helper);
             this.Config = helper.ReadConfig<TractorConfig>();
 
-            // spawn tractors & garages
+            // spawn/unspawn tractor and garages
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
-            LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
-
-            // remove tractors & garages before save
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
 
-            // handle player interaction
-            ControlEvents.KeyPressed += ControlEvents_KeyPressed;
-
-            // so that weird shit wouldnt happen
+            // add blueprint to Robin's shop
             MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
 
-            // handle player interaction
+            // handle player interaction & tractor logic
+            ControlEvents.KeyPressed += ControlEvents_KeyPressed;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
         }
 
@@ -98,22 +96,9 @@ namespace TractorMod
         private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
             // set up for new day
-            this.IsDataRestored = false;
             this.Tractor = null;
             this.Farm = Game1.getFarm();
-        }
-
-        /// <summary>The event called when the player changes location.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
-        {
-            // spawn tractor house & tractor
-            if (!this.IsDataRestored && e.NewLocation == this.Farm)
-            {
-                this.RestoreCustomData();
-                this.IsDataRestored = true;
-            }
+            this.RestoreCustomData();
         }
 
         /// <summary>The event called before the game starts saving.</summary>
@@ -174,17 +159,28 @@ namespace TractorMod
         private void StashCustomData()
         {
             // back up garages
-            Building[] garages = this.GetGarages(this.Farm).ToArray();
-            CustomSaveData saveData = new CustomSaveData(garages);
+            IDictionary<Building, CustomSaveBuilding> garages = this.GetGarages(this.Farm);
+            CustomSaveData saveData = new CustomSaveData(garages.Values);
             this.Helper.WriteJsonFile(this.GetDataPath(Constants.SaveFolderName), saveData);
 
             // remove tractors + buildings
-            foreach (Building garage in garages)
+            foreach (Building garage in garages.Keys)
                 this.Farm.destroyStructure(garage);
             this.RemoveTractors();
+
+            // reset Robin construction
+            if (this.IsRobinBusy)
+            {
+                this.IsRobinBusy = false;
+                NPC robin = Game1.getCharacterFromName("Robin");
+                robin.ignoreScheduleToday = false;
+                robin.CurrentDialogue.Clear();
+                robin.dayUpdate(Game1.dayOfMonth);
+            }
         }
 
         /// <summary>Restore tractor and garage data removed by <see cref="StashCustomData"/>.</summary>
+        /// <remarks>The Robin construction logic is derived from <see cref="NPC.reloadSprite"/> and <see cref="StardewValley.Farm.resetForPlayerEntry"/>.</remarks>
         private void RestoreCustomData()
         {
             // get save data
@@ -194,26 +190,43 @@ namespace TractorMod
 
             // add tractor + garages
             BluePrint blueprint = this.GetBlueprint();
-            foreach (CustomSaveBuilding garage in saveData.Buildings)
+            foreach (CustomSaveBuilding garageData in saveData.Buildings)
             {
                 // add garage
-                Building newGarage = new Stable(blueprint, garage.Tile) { buildingType = this.GarageBuildingType, daysOfConstructionLeft = 0 }; // rebuild to avoid data issues
-                this.Farm.buildStructure(newGarage, garage.Tile, false, Game1.player);
+                TractorGarage garage = new TractorGarage(blueprint, garageData.Tile, Math.Max(0, garageData.DaysOfConstructionLeft - 1));
+                this.Farm.buildings.Add(garage);
 
-                // add tractor
-                if (this.Tractor == null)
+                // add Robin construction
+                if (garage.isUnderConstruction() && !this.IsRobinBusy)
                 {
-                    // spawn tractor
-                    foreach (Building building in this.GetGarages(this.Farm))
+                    this.IsRobinBusy = true;
+                    NPC robin = Game1.getCharacterFromName("Robin");
+
+                    // update Robin
+                    robin.ignoreMultiplayerUpdates = true;
+                    robin.sprite.setCurrentAnimation(new List<FarmerSprite.AnimationFrame>
                     {
-                        if (building.daysOfConstructionLeft > 0)
-                            continue;
-                        this.Tractor = new Tractor(building.tileX + 1, building.tileY + 1, this.Helper.Content) { name = this.TractorName };
-                        this.Farm.characters.Add(this.Tractor);
-                        Game1.warpCharacter(this.Tractor, "Farm", new Vector2(building.tileX + 1, building.tileY + 1), false, true);
-                        this.Tractor.Position = new Vector2(this.Tractor.Position.X + 20, this.Tractor.Position.Y);
-                        break;
-                    }
+                        new FarmerSprite.AnimationFrame(24, 75),
+                        new FarmerSprite.AnimationFrame(25, 75),
+                        new FarmerSprite.AnimationFrame(26, 300, false, false, farmer => this.Helper.Reflection.GetPrivateMethod(robin,"robinHammerSound").Invoke(farmer)),
+                        new FarmerSprite.AnimationFrame(27, 1000, false, false, farmer => this.Helper.Reflection.GetPrivateMethod(robin,"robinVariablePause").Invoke(farmer))
+                    });
+                    robin.ignoreScheduleToday = true;
+                    Game1.warpCharacter(robin, this.Farm.Name, new Vector2(garage.tileX + garage.tilesWide / 2, garage.tileY + garage.tilesHigh / 2), false, false);
+                    robin.position.X += Game1.tileSize / 4;
+                    robin.position.Y -= Game1.tileSize / 2;
+                    robin.CurrentDialogue.Clear();
+                    robin.CurrentDialogue.Push(new Dialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.3926"), robin));
+                }
+
+                // spawn tractor
+                if (this.Tractor == null && !garage.isUnderConstruction())
+                {
+                    this.Tractor = new Tractor(this.TractorName, garage.tileX + 1, garage.tileY + 1, this.Helper.Content);
+                    this.Farm.characters.Add(this.Tractor);
+                    Game1.warpCharacter(this.Tractor, this.Farm.Name, new Vector2(garage.tileX + 1, garage.tileY + 1), false, true);
+                    this.Tractor.Position = new Vector2(this.Tractor.Position.X + 20, this.Tractor.Position.Y);
+                    break;
                 }
             }
         }
@@ -238,7 +251,7 @@ namespace TractorMod
                     foreach (LegacySaveData.LegacySaveEntry saveData in data.Saves)
                     {
                         saves[$"{saveData.FarmerName}_{saveData.SaveSeed}"] = new CustomSaveData(
-                            saveData.TractorHouse.Select(p => new CustomSaveBuilding(new Vector2(p.X, p.Y), this.GarageBuildingType))
+                            saveData.TractorHouse.Select(p => new CustomSaveBuilding(new Vector2(p.X, p.Y), this.GarageBuildingType, 0))
                         );
                     }
                 }
@@ -568,11 +581,18 @@ namespace TractorMod
             }
         }
 
-        /// <summary>Get all garages in the given location.</summary>
+        /// <summary>Get garages in the given location to save.</summary>
         /// <param name="location">The location to search.</param>
-        private IEnumerable<Building> GetGarages(BuildableGameLocation location)
+        private IDictionary<Building, CustomSaveBuilding> GetGarages(BuildableGameLocation location)
         {
-            return location.buildings.Where(building => building.buildingType == this.GarageBuildingType);
+            return
+                (
+                    from building in location.buildings
+                    where building.buildingType == this.GarageBuildingType
+                    let constructionDaysLeft = building is TractorGarage ? building.daysOfConstructionLeft : this.GarageConstructionDays // override if building was added through the carpenter menu today
+                    select new { Key = building, Value = new CustomSaveBuilding(new Vector2(building.tileX, building.tileY), this.GarageBuildingType, constructionDaysLeft) }
+                )
+                .ToDictionary(p => p.Key, p => p.Value);
         }
 
         /// <summary>Get a blueprint to construct the tractor garage.</summary>
@@ -580,6 +600,7 @@ namespace TractorMod
         {
             return new BluePrint(this.GarageBuildingType)
             {
+                name = this.GarageBuildingType,
                 texture = this.Helper.Content.Load<Texture2D>(@"assets\TractorHouse.png"),
                 humanDoor = new Point(-1, -1),
                 animalDoor = new Point(-2, -1),
@@ -600,7 +621,6 @@ namespace TractorMod
                     [SObject.iridiumBar] = 5,
                     [787] = 5 // battery pack
                 },
-                magical = true,
                 namesOfOkayBuildingLocations = new List<string> { "Farm" }
             };
         }
