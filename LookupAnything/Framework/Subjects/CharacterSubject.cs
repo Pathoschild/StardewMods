@@ -77,7 +77,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     {
                         var giftTastes = this.GetGiftTastes(npc, metadata);
 
-                        yield return new GenericField(this.Text.Get(L10n.Npc.Birthday), $"{Utility.capitalizeFirstLetter(npc.birthday_Season)} {npc.birthday_Day}");
+                        // birthday
+                        GameDate birthday = new GameDate(npc.birthday_Season, npc.birthday_Day, Game1.year, metadata.Constants.DaysInSeason);
+                        yield return new GenericField(this.Text.Get(L10n.Npc.Birthday), this.Text.Stringify(birthday));
 
                         // friendship
                         if (Game1.player.friendships.ContainsKey(npc.name))
