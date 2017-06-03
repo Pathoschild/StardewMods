@@ -4,7 +4,7 @@
 ## 1.11
 * Updated to SMAPI 1.14.
 * Added translation support.
-* Added German translations (thanks to Sasara!).
+* Added Chinese and German translations. (Thanks to yuwenlan and Sasara respectively!)
 
 ## 1.10
 * Updated for Stardew Valley 1.2.

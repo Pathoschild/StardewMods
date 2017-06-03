@@ -10,7 +10,7 @@
     "generic.percent": "{{percent}}%",
     "generic.percent-chance-of": "{{percent}}%几率{{label}}",
     "generic.percent-ratio": "{{percent}}% ({{max}}中的{{value}})",
-    "generic.ratio": "{{max}}中的{{value}}",
+    "generic.ratio": "总数{{max}}中的{{value}}",
     "generic.range": "{{min}}到{{max}}",
     "generic.yes": "是",
     "generic.no": "否",
@@ -22,7 +22,7 @@
     "generic.tomorrow": "明天",
     "generic.price": "{{price}}g",
     "generic.price-for-quality": "{{price}}g({{quality}})",
-    "generic.price-for-stack": "{{count}}个总共价值{{price}}g",
+    "generic.price-for-stack": "{{count}}个，总共价值{{price}}g",
 
     // types
     "type.fruit-tree": "果树",
@@ -241,7 +241,7 @@
     "monster.drops.nothing": "无",
     "monster.adventure-guild.complete": "完成",
     "monster.adventure-guild.incomplete": "正在进行",
-    "monster.adventure-guild.progress": "击杀了{{requiredCount}}中的{{count}}",
+    "monster.adventure-guild.progress": "击杀了总数{{requiredCount}}中的{{count}}",
 
     // NPC lookup labels
     "npc.birthday": "生日",
@@ -308,7 +308,7 @@
     "tree.name.big-mushroom": "大蘑菇",
     "tree.name.unknown": "未知",
     "tree.stage.done": "完全长成",
-    "tree.stage.partial": "{{stageName}} ({{max}}中的{{step}})",
+    "tree.stage.partial": "{{stageName}} (总共{{max}}个阶段中的第{{step}}阶段)",
     "tree.next-growth.winter": "冬天在温室之外无法生长",
     "tree.next-growth.adjacent-trees": "因其他树靠的太近无法生长",
     "tree.next-growth.random": "有20%几率明天成长到{{stage}}",
