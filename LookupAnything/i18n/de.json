@@ -119,8 +119,6 @@
     "data.item.ruby-node.description": "Zerbrech es um Rubine zu bekommen.",
     "data.item.topaz-node.name": "Topas Ader",
     "data.item.topaz-node.description": "Zerbrech es um Topase zu bekommen.",
-    "data.item.sapphire-node.name": "Saphir Ader",
-    "data.item.sapphire-node.description": "Zerbrech es um Saphire zu bekommen.",
 
     // mine ores
     "data.item.copper-node.name": "Kupfer Ader",

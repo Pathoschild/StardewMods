@@ -564,7 +564,7 @@ You shouldn't change this file unless you know what you're doing.
             "DescriptionKey": "data.item.gem-node.description"
         },
         {
-            "SpriteID": [ 6 ],
+            "SpriteID": [ 6, 70 ],
             "Context": "World",
             "NameKey": "data.item.jade-node.name",
             "TypeKey": "data.type.stone",
@@ -597,13 +597,6 @@ You shouldn't change this file unless you know what you're doing.
             "NameKey": "data.item.topaz-node.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.topaz-node.description"
-        },
-        {
-            "SpriteID": [ 70 ],
-            "Context": "World",
-            "NameKey": "data.item.sapphire-node.name",
-            "TypeKey": "data.type.stone",
-            "DescriptionKey": "data.item.sapphire-node.description"
         },
 
         /* ores */

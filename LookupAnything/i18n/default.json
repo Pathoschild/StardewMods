@@ -119,8 +119,6 @@
     "data.item.ruby-node.description": "Break apart to obtain rubies.",
     "data.item.topaz-node.name": "Topaz Node",
     "data.item.topaz-node.description": "Break apart to obtain topaz.",
-    "data.item.sapphire-node.name": "Sapphire Node",
-    "data.item.sapphire-node.description": "Break apart to obtain sapphires.",
 
     // mine ores
     "data.item.copper-node.name": "Copper Node",
