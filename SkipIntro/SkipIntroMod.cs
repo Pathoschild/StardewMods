@@ -89,10 +89,12 @@ namespace Pathoschild.Stardew.SkipIntro
         ****/
         /// <summary>Skip the intro if the game is ready.</summary>
         /// <param name="menu">The title menu whose intro to skip.</param>
+        /// <returns>Returns whether the intro was skipped successfully.</returns>
         private bool TrySkipIntro(TitleMenu menu)
         {
+            // wait until the game is ready
             if (Game1.currentGameTime == null)
-                return false; // game isn't ready yet
+                return false;
 
             // skip to title screen
             menu.receiveKeyPress(Keys.Escape);
@@ -104,7 +106,6 @@ namespace Pathoschild.Stardew.SkipIntro
                 while (this.Helper.Reflection.GetPrivateValue<int>(menu, "buttonsToShow") < TitleMenu.numberOfButtons)
                     menu.update(Game1.currentGameTime);
             }
-
 
             // skip to load screen
             if (this.Config.SkipToLoadScreen)
