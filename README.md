@@ -1,4 +1,4 @@
-This repository contains my SMAPI mods for Stardew Valley. See the individual mods for
+﻿This repository contains my SMAPI mods for Stardew Valley. See the individual mods for
 documentation and release notes.
 
 ## Mods
@@ -37,7 +37,43 @@ Inactive mods:
   _(in development) Overlays the world with metadata maps._
 
 * **No Debug Mode** <small>([source](NoDebugMode))</small>  
-  _(obsolete) Disables SMAPI's F2 debug mode, which can cause unintended effects like skipping an entire season or teleporting into walls._
+  _(obsolete) Disables SMAPI's F2 debug mode, which can cause unintended effects like skipping an
+  entire season or teleporting into walls._
+
+## Translating the mods
+The mods can be translated into any language supported by the game, and SMAPI will automatically
+use the right translations. Three of the mods have translatable text:
+
+&nbsp;     | Chests Anywhere | Debug Mode | Lookup Anything | thanks to
+------     | --------------- | ---------- | --------------- | ---------
+Chinese    | ✓ [zh.json](ChestsAnywhere/i18n/zh.json) | ✓ [zh.json](DebugMode/i18n/zh.json) | ✓ [zh.json](LookupAnything/i18n/zh.json) | yuwenlan
+German     | ✓ [de.json](ChestsAnywhere/i18n/de.json) | ✓ [de.json](DebugMode/i18n/de.json) | ✓ [de.json](LookupAnything/i18n/de.json) | Sasara
+Japanese   | 
+Portuguese | 
+Spanish    | 
+
+Here's how to translate one of my mods:
+
+1. Copy `default.json` into a new file with the right name:
+
+   language   | file name
+   ---------- | ---------
+   Chinese    | `zh.json`
+   German     | `de.json`
+   Japanese   | `ja.json`
+   Portuguese | `pt.json`
+   Spanish    | `es.json`
+
+2. Translate the second part on each line:
+   ```json
+   "example-key": "some text here"
+                   ^-- translate this
+   ```
+   Don't change the quote characters, and don't translate the text inside `{{these brackets}}`.
+3. Launch the game to try your translations.  
+   _You can edit translations without restarting the game; just type `reload_i18n` in the SMAPI console to reload the translation files._
+
+Create an issue or pull request here with your translations, or send them to me privately. :)
 
 ## Compiling the mods
 Installing stable releases from Nexus Mods is recommended for most users. If you really want to
