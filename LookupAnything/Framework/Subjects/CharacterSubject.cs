@@ -38,18 +38,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="npc">The lookup target.</param>
         /// <param name="type">The NPC type.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-        public CharacterSubject(NPC npc, TargetType type, Metadata metadata, IReflectionHelper reflectionHelper)
+        public CharacterSubject(NPC npc, TargetType type, Metadata metadata, ITranslationHelper translations, IReflectionHelper reflectionHelper)
+            : base(translations)
         {
             this.Reflection = reflectionHelper;
 
             // get display type
             string typeName;
             if (type == TargetType.Villager)
-                typeName = "Villager";
+                typeName = this.Text.Get(L10n.Types.Villager);
             else if (type == TargetType.Monster)
-                typeName = "Monster";
+                typeName = this.Text.Get(L10n.Types.Monster);
             else
                 typeName = npc.GetType().Name;
 
@@ -57,7 +59,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             this.Target = npc;
             this.TargetType = type;
             CharacterData overrides = metadata.GetCharacter(npc, type);
-            this.Initialise(overrides?.Name ?? npc.getName(), overrides?.Description, typeName);
+            string name = npc.getName();
+            string description = overrides?.DescriptionKey != null ? translations.Get(overrides.DescriptionKey) : null;
+            this.Initialise(name, description, typeName);
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -69,52 +73,54 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             switch (this.TargetType)
             {
                 case TargetType.Villager:
-                    if (!metadata.Constants.AsocialVillagers.Contains(npc.getName()))
+                    if (!metadata.Constants.AsocialVillagers.Contains(npc.name))
                     {
                         var giftTastes = this.GetGiftTastes(npc, metadata);
 
-                        yield return new GenericField("Birthday", $"{Utility.capitalizeFirstLetter(npc.birthday_Season)} {npc.birthday_Day}");
+                        // birthday
+                        GameDate birthday = new GameDate(npc.birthday_Season, npc.birthday_Day, Game1.year, metadata.Constants.DaysInSeason);
+                        yield return new GenericField(this.Text.Get(L10n.Npc.Birthday), this.Text.Stringify(birthday));
 
                         // friendship
                         if (Game1.player.friendships.ContainsKey(npc.name))
                         {
                             FriendshipModel friendship = DataParser.GetFriendshipForVillager(Game1.player, npc, metadata);
-                            yield return new GenericField("Can romance", friendship.IsSpouse ? "you're married! <" : TextHelper.Stringify(npc.datable));
-                            yield return new CharacterFriendshipField("Friendship", friendship);
-                            yield return new GenericField("Talked today", Game1.player.friendships[npc.name][2] == 1);
-                            yield return new GenericField("Gifted today", Game1.player.friendships[npc.name][3] > 0);
+                            yield return new GenericField(this.Translate(L10n.Npc.CanRomance), friendship.IsSpouse ? this.Translate(L10n.Npc.CanRomanceMarried) : this.Stringify(npc.datable));
+                            yield return new CharacterFriendshipField(this.Translate(L10n.Npc.Friendship), friendship, this.Text);
+                            yield return new GenericField(this.Translate(L10n.Npc.TalkedToday), this.Stringify(Game1.player.friendships[npc.name][2] == 1));
+                            yield return new GenericField(this.Translate(L10n.Npc.GiftedToday), this.Stringify(Game1.player.friendships[npc.name][3] > 0));
                             if (!friendship.IsSpouse)
-                                yield return new GenericField("Gifted this week", $"{Game1.player.friendships[npc.name][1]} of {NPC.maxGiftsPerWeek}");
+                                yield return new GenericField(this.Translate(L10n.Npc.GiftedThisWeek), this.Translate(L10n.Generic.Ratio, new { value = Game1.player.friendships[npc.name][1], max = NPC.maxGiftsPerWeek }));
                         }
                         else
-                            yield return new GenericField("Friendship", "You haven't met them yet.");
-                        yield return new CharacterGiftTastesField("Loves gifts", giftTastes, GiftTaste.Love);
-                        yield return new CharacterGiftTastesField("Likes gifts", giftTastes, GiftTaste.Like);
+                            yield return new GenericField(this.Translate(L10n.Npc.Friendship), this.Translate(L10n.Npc.FriendshipNotMet));
+                        yield return new CharacterGiftTastesField(this.Translate(L10n.Npc.LovesGifts), giftTastes, GiftTaste.Love);
+                        yield return new CharacterGiftTastesField(this.Translate(L10n.Npc.LikesGifts), giftTastes, GiftTaste.Like);
                     }
                     break;
 
                 case TargetType.Pet:
                     Pet pet = (Pet)npc;
-                    yield return new CharacterFriendshipField("Love", DataParser.GetFriendshipForPet(Game1.player, pet));
-                    yield return new GenericField("Petted today", this.Reflection.GetPrivateValue<bool>(pet, "wasPetToday"));
+                    yield return new CharacterFriendshipField(this.Translate(L10n.Pet.Love), DataParser.GetFriendshipForPet(Game1.player, pet), this.Text);
+                    yield return new GenericField(this.Translate(L10n.Pet.PettedToday), this.Stringify(this.Reflection.GetPrivateValue<bool>(pet, "wasPetToday")));
                     break;
 
                 case TargetType.Monster:
                     // basic info
                     Monster monster = (Monster)npc;
-                    yield return new GenericField("Invincible", $"For {this.Reflection.GetPrivateValue<int>(monster, "invincibleCountdown")} seconds", hasValue: monster.isInvincible());
-                    yield return new PercentageBarField("Health", monster.health, monster.maxHealth, Color.Green, Color.Gray, $"{Math.Round((monster.health / (monster.maxHealth * 1f) * 100))}% ({monster.health} of {monster.maxHealth})");
-                    yield return new ItemDropListField("Drops", this.GetMonsterDrops(monster), defaultText: "nothing");
-                    yield return new GenericField("XP", monster.experienceGained);
-                    yield return new GenericField("Defence", monster.resilience);
-                    yield return new GenericField("Attack", monster.damageToFarmer);
+                    yield return new GenericField(this.Translate(L10n.Monster.Invincible), this.Translate(L10n.Generic.Seconds, new { count = this.Reflection.GetPrivateValue<int>(monster, "invincibleCountdown") }), hasValue: monster.isInvincible());
+                    yield return new PercentageBarField(this.Translate(L10n.Monster.Health), monster.health, monster.maxHealth, Color.Green, Color.Gray, this.Translate(L10n.Generic.PercentRatio, new { percent = Math.Round((monster.health / (monster.maxHealth * 1f) * 100)), value = monster.health, max = monster.maxHealth }));
+                    yield return new ItemDropListField(this.Translate(L10n.Monster.Drops), this.GetMonsterDrops(monster), this.Text, defaultText: this.Translate(L10n.Monster.DropsNothing));
+                    yield return new GenericField(this.Translate(L10n.Monster.Experience), this.Stringify(monster.experienceGained));
+                    yield return new GenericField(this.Translate(L10n.Monster.Defence), this.Stringify(monster.resilience));
+                    yield return new GenericField(this.Translate(L10n.Monster.Attack), this.Stringify(monster.damageToFarmer));
 
                     // Adventure Guild quest
                     AdventureGuildQuestData adventureGuildQuest = metadata.GetAdventurerGuildQuest(monster.name);
                     if (adventureGuildQuest != null)
                     {
                         int kills = adventureGuildQuest.Targets.Select(p => Game1.stats.getMonstersKilled(p)).Sum();
-                        yield return new GenericField("Adventure Guild", $"{(kills >= adventureGuildQuest.RequiredKills ? "complete" : "in progress")} (killed {kills} of {adventureGuildQuest.RequiredKills})");
+                        yield return new GenericField(this.Translate(L10n.Monster.AdventureGuild), $"{this.Translate(kills >= adventureGuildQuest.RequiredKills ? L10n.Monster.AdventureGuildComplete : L10n.Monster.AdventureGuildIncomplete)} ({this.Translate(L10n.Monster.AdventureGuildProgress, new { count = kills, requiredCount = adventureGuildQuest.RequiredKills })})");
                     }
                     break;
             }
@@ -128,8 +134,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             Pet pet = target as Pet;
 
             // pinned fields
-            yield return new GenericDebugField("facing direction", (FacingDirection)target.FacingDirection, pinned: true);
-            yield return new GenericDebugField("walking towards player", target.IsWalkingTowardPlayer, pinned: true);
+            yield return new GenericDebugField("facing direction", this.Stringify((FacingDirection)target.FacingDirection), pinned: true);
+            yield return new GenericDebugField("walking towards player", this.Stringify(target.IsWalkingTowardPlayer), pinned: true);
             if (Game1.player.friendships.ContainsKey(target.name))
             {
                 FriendshipModel friendship = DataParser.GetFriendshipForVillager(Game1.player, target, metadata);
@@ -148,7 +154,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         private IEnumerable<ItemDropData> GetMonsterDrops(Monster monster)
         {
             int[] drops = monster.objectsToDrop.ToArray();
-            ItemDropData[] possibleDrops = DataParser.GetMonsters().First(p => p.Name == monster.getName()).Drops;
+            ItemDropData[] possibleDrops = DataParser.GetMonsters().First(p => p.Name == monster.name).Drops;
 
             return (
                 from possibleDrop in possibleDrops

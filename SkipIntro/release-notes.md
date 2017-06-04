@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.7
+* Updated to SMAPI 1.14.
+* Start even more quickly — the mod now skips the button/slide transitions on the title & load screens.
+* Fixed the intro not being skipped when you exit to title.
+
 ## 1.6
 * Updated for Stardew Valley 1.2.
 

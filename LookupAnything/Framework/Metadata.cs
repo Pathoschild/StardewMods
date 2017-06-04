@@ -24,9 +24,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <remarks>Derived from <see cref="StardewValley.Locations.AdventureGuild.showMonsterKillList"/>.</remarks>
         public AdventureGuildQuestData[] AdventureGuildQuests { get; set; }
 
-        /// <summary>The recipes not available from the game data directly.</summary>
+        /// <summary>The building recipes.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.Buildings.Mill.dayUpdate"/>.</remarks>
+        public BuildingRecipeData[] BuildingRecipes { get; set; }
+
+        /// <summary>The machine recipes.</summary>
         /// <remarks>Derived from <see cref="Object.performObjectDropInAction"/>.</remarks>
-        public RecipeData[] Recipes { get; set; }
+        public MachineRecipeData[] MachineRecipes { get; set; }
 
         /// <summary>The shops that buy items from the player.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Menus.ShopMenu"/> constructor.</remarks>
@@ -39,7 +43,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Get whether the metadata seems to be basically valid.</summary>
         public bool LooksValid()
         {
-            return new object[] { this.Constants, this.Objects, this.Characters, this.AdventureGuildQuests, this.Recipes, this.Shops }.All(p => p != null);
+            return new object[] { this.Constants, this.Objects, this.Characters, this.AdventureGuildQuests, this.BuildingRecipes, this.MachineRecipes, this.Shops }.All(p => p != null);
         }
 
         /// <summary>Get overrides for a game object.</summary>
@@ -57,10 +61,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="type">The character type.</param>
         public CharacterData GetCharacter(NPC character, TargetType type)
         {
-            string name = character.getName();
-
             return
-                this.Characters?.FirstOrDefault(p => p.ID == $"{type}::{name}") // override by type + name
+                this.Characters?.FirstOrDefault(p => p.ID == $"{type}::{character.name}") // override by type + name
                 ?? this.Characters?.FirstOrDefault(p => p.ID == type.ToString()); // override by type
         }
 

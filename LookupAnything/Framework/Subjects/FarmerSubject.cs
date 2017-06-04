@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
@@ -29,9 +30,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="farmer">The lookup target.</param>
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public FarmerSubject(SFarmer farmer, IReflectionHelper reflectionHelper)
-            : base(farmer.Name, null, "Player")
+        public FarmerSubject(SFarmer farmer, ITranslationHelper translations, IReflectionHelper reflectionHelper)
+            : base(farmer.Name, null, translations.Get(L10n.Types.Player), translations)
         {
             this.Target = farmer;
             this.Reflection = reflectionHelper;
@@ -45,16 +47,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             int maxSkillPoints = metadata.Constants.PlayerMaxSkillPoints;
             int[] skillPointsPerLevel = metadata.Constants.PlayerSkillPointsPerLevel;
-            yield return new GenericField("Gender", farmer.IsMale ? "male" : "female");
-            yield return new GenericField("Farm name", farmer.farmName);
-            yield return new GenericField("Favourite thing", farmer.favoriteThing);
-            yield return new GenericField("Spouse", farmer.spouse, hasValue: farmer.isMarried());
-            yield return new SkillBarField("Farming skill", farmer.experiencePoints[SFarmer.farmingSkill], maxSkillPoints, skillPointsPerLevel);
-            yield return new SkillBarField("Mining skill", farmer.experiencePoints[SFarmer.miningSkill], maxSkillPoints, skillPointsPerLevel);
-            yield return new SkillBarField("Foraging skill", farmer.experiencePoints[SFarmer.foragingSkill], maxSkillPoints, skillPointsPerLevel);
-            yield return new SkillBarField("Fishing skill", farmer.experiencePoints[SFarmer.fishingSkill], maxSkillPoints, skillPointsPerLevel);
-            yield return new SkillBarField("Combat skill", farmer.experiencePoints[SFarmer.combatSkill], maxSkillPoints, skillPointsPerLevel);
-            yield return new GenericField("Luck", $"{this.GetSpiritLuckMessage()}{Environment.NewLine}({(Game1.dailyLuck >= 0 ? "+" : "")}{Game1.dailyLuck * 100}% to many random checks)");
+            string luckSummary = this.Translate(L10n.Player.LuckSummary, new { percent = (Game1.dailyLuck >= 0 ? "+" : "") + (Game1.dailyLuck * 100) });
+
+            yield return new GenericField(this.Translate(L10n.Player.Gender), this.Translate(farmer.IsMale ? L10n.Player.GenderMale : L10n.Player.GenderFemale));
+            yield return new GenericField(this.Translate(L10n.Player.FarmName), farmer.farmName);
+            yield return new GenericField(this.Translate(L10n.Player.FavoriteThing), farmer.favoriteThing);
+            yield return new GenericField(this.Translate(L10n.Player.Spouse), farmer.isMarried() ? Game1.getCharacterFromName(farmer.spouse).displayName : null);
+            yield return new SkillBarField(this.Translate(L10n.Player.FarmingSkill), farmer.experiencePoints[SFarmer.farmingSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
+            yield return new SkillBarField(this.Translate(L10n.Player.MiningSkill), farmer.experiencePoints[SFarmer.miningSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
+            yield return new SkillBarField(this.Translate(L10n.Player.ForagingSkill), farmer.experiencePoints[SFarmer.foragingSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
+            yield return new SkillBarField(this.Translate(L10n.Player.FishingSkill), farmer.experiencePoints[SFarmer.fishingSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
+            yield return new SkillBarField(this.Translate(L10n.Player.CombatSkill), farmer.experiencePoints[SFarmer.combatSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
+            yield return new GenericField(this.Translate(L10n.Player.Luck), $"{this.GetSpiritLuckMessage()}{Environment.NewLine}({luckSummary})");
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
@@ -91,7 +95,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /*********
         ** Public methods
         *********/
-        /// <summary>Get a summary of the player's luck today/</summary>
+        /// <summary>Get a summary of the player's luck today.</summary>
         /// <remarks>Derived from <see cref="GameLocation.answerDialogueAction"/>.</remarks>
         private string GetSpiritLuckMessage()
         {

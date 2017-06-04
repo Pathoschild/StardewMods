@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
 using Pathoschild.Stardew.Common;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -20,6 +21,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /****
         ** Data
         ****/
+        /// <summary>Provides translations stored in the mod's folder.</summary>
+        private readonly ITranslationHelper Translations;
+
         /// <summary>The available chests.</summary>
         private readonly ManagedChest[] Chests;
 
@@ -35,7 +39,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The overlay element which should receive input.</summary>
         private Element ActiveElement
         {
-            get { return this._activeElement; }
+            get => this._activeElement;
             set
             {
                 this._activeElement = value;
@@ -131,7 +135,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="chest">The selected chest.</param>
         /// <param name="chests">The available chests.</param>
         /// <param name="config">The mod configuration.</param>
-        public ManageChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config)
+        /// <param name="translations">Provides translations stored in the mod's folder.</param>
+        public ManageChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ITranslationHelper translations)
             : base(keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
         {
             // menu
@@ -145,6 +150,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.Chests = chests;
             this.Groups = chests.Select(p => p.GetGroup()).Distinct().OrderBy(p => p).ToArray();
             this.Config = config;
+
+            // translations
+            this.Translations = translations;
 
             // components
             this.ReinitialiseComponents();
@@ -203,12 +211,18 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             // edit mode
             else
             {
+                // get translations
+                string locationLabel = this.Translations.Get("label.location") + ":";
+                string nameLabel = this.Translations.Get("label.name") + ":";
+                string categoryLabel = this.Translations.Get("label.category") + ":";
+                string orderLabel = this.Translations.Get("label.order") + ":";
+
                 // get initial measurements
                 SpriteFont font = Game1.smallFont;
                 const int gutter = 10;
                 int padding = Game1.pixelZoom * 10;
                 float topOffset = padding;
-                int maxLabelWidth = (int)new[] { "Location:", "Name:", "Category:", "Order:" }.Select(p => font.MeasureString(p).X).Max();
+                int maxLabelWidth = (int)new[] { locationLabel, nameLabel, categoryLabel, orderLabel }.Select(p => font.MeasureString(p).X).Max();
 
                 // background
                 batch.DrawMenuBackground(new Rectangle(bounds.X, bounds.Y, bounds.Width, bounds.Height));
@@ -217,15 +231,15 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 {
                     string locationName = this.Chest.LocationName;
                     if (this.Chest.Tile != Vector2.Zero)
-                        locationName += $" (tile {this.Chest.Tile.X}, {this.Chest.Tile.Y})";
+                        locationName += $" (" + this.Translations.Get("label.location.tile", new { x = this.Chest.Tile.X, y = this.Chest.Tile.Y }) + ")";
 
-                    Vector2 labelSize = batch.DrawTextBlock(font, "Location:", new Vector2(bounds.X + padding + (int)(maxLabelWidth - font.MeasureString("Location:").X), bounds.Y + topOffset), bounds.Width);
+                    Vector2 labelSize = batch.DrawTextBlock(font, locationLabel, new Vector2(bounds.X + padding + (int)(maxLabelWidth - font.MeasureString(locationLabel).X), bounds.Y + topOffset), bounds.Width);
                     batch.DrawTextBlock(font, locationName, new Vector2(bounds.X + padding + maxLabelWidth + gutter, bounds.Y + topOffset), bounds.Width);
                     topOffset += labelSize.Y;
                 }
 
                 // editable text fields
-                var fields = new[] { Tuple.Create("Name:", this.EditNameField), Tuple.Create("Category:", this.EditCategoryField), Tuple.Create("Order:", this.EditOrderField) }.Where(p => p != null);
+                var fields = new[] { Tuple.Create(nameLabel, this.EditNameField), Tuple.Create(categoryLabel, this.EditCategoryField), Tuple.Create(orderLabel, this.EditOrderField) }.Where(p => p != null);
                 foreach (var field in fields)
                 {
                     // get data
@@ -248,7 +262,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     this.EditHideChestField.Y = bounds.Y + (int)topOffset;
                     this.EditHideChestField.Width = 24;
                     this.EditHideChestField.Draw(batch);
-                    Vector2 labelSize = batch.DrawTextBlock(font, "Hide this chest" + (this.EditHideChestField.Value ? " (you'll need to find the chest to undo this!)" : ""), new Vector2(bounds.X + padding + 7 + this.EditHideChestField.Width, bounds.Y + topOffset), this.Menu.width, this.EditHideChestField.Value ? Color.Red : Color.Black);
+                    string label = this.Translations.Get(this.EditHideChestField.Value ? "label.hide-chest-hidden" : "label.hide-chest");
+                    Vector2 labelSize = batch.DrawTextBlock(font, label, new Vector2(bounds.X + padding + 7 + this.EditHideChestField.Width, bounds.Y + topOffset), this.Menu.width, this.EditHideChestField.Value ? Color.Red : Color.Black);
                     topOffset += Math.Max(this.EditHideChestField.Width, labelSize.Y);
                 }
 
@@ -520,7 +535,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 Rectangle sprite = Sprites.Icons.SpeechBubble;
                 float zoom = Game1.pixelZoom / 2f;
                 Rectangle buttonBounds = new Rectangle(this.ChestTab.bounds.X + this.ChestTab.bounds.Width, this.ChestTab.bounds.Y, (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
-                this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, "edit chest", Sprites.Icons.Sheet, sprite, zoom);
+                this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, this.Translations.Get("button.edit-chest"), Sprites.Icons.Sheet, sprite, zoom);
             }
 
             // sort inventory button overlay (based on OK button position)
@@ -529,7 +544,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 ClickableTextureComponent okButton = this.Menu.okButton;
                 float zoom = Game1.pixelZoom;
                 Rectangle buttonBounds = new Rectangle(okButton.bounds.X, (int)(okButton.bounds.Y - sprite.Height * zoom - 5 * zoom), (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
-                this.SortInventoryButton = new ClickableTextureComponent("sort-inventory", buttonBounds, null, "sort inventory", Sprites.Icons.Sheet, sprite, zoom);
+                this.SortInventoryButton = new ClickableTextureComponent("sort-inventory", buttonBounds, null, this.Translations.Get("button.sort-inventory"), Sprites.Icons.Sheet, sprite, zoom);
             }
 
             // edit form
@@ -538,7 +553,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditCategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth, Text = this.Chest.Category };
             this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X, Text = this.Chest.Order?.ToString() };
             this.EditHideChestField = new Checkbox(this.Chest.IsIgnored);
-            this.EditSaveButton = new ClickableTextureComponent("save-chest", new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), null, "OK", Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, IClickableMenu.borderWithDownArrowIndex), 1f);
+            this.EditSaveButton = new ClickableTextureComponent("save-chest", new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), null, this.Translations.Get("button.ok"), Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, IClickableMenu.borderWithDownArrowIndex), 1f);
             this.EditExitButton = new ClickableTextureComponent(new Rectangle(bounds.Right - 9 * Game1.pixelZoom, bounds.Y - Game1.pixelZoom * 2, Sprites.Icons.ExitButton.Width * Game1.pixelZoom, Sprites.Icons.ExitButton.Height * Game1.pixelZoom), Sprites.Icons.Sheet, Sprites.Icons.ExitButton, Game1.pixelZoom);
 
             // adjust menu to fit

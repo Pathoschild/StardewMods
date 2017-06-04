@@ -16,10 +16,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         /****
         ** Overrides
         ****/
-        /// <summary>The overridden NPC name (if any).</summary>
-        public string Name { get; set; }
-
-        /// <summary>The overridden NPC description (if any).</summary>
-        public string Description { get; set; }
+        /// <summary>The translation key which should override the NPC description (if any).</summary>
+        public string DescriptionKey { get; set; }
     }
 }

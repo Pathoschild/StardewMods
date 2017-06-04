@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays;
@@ -22,17 +21,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
-        /****
-        ** Version check
-        ****/
-        /// <summary>The current semantic version.</summary>
-        private ISemanticVersion CurrentVersion;
+        /// <summary>Encapsulates logic for finding chests.</summary>
+        private ChestFactory ChestFactory;
 
-        /// <summary>The newer release to notify the user about.</summary>
-        private ISemanticVersion NewRelease;
-
-        /// <summary>Whether the update-available message has been shown since the game started.</summary>
-        private bool HasSeenUpdateWarning;
 
         /****
         ** State
@@ -51,12 +42,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            // read config
+            // initialise
             this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
-            this.CurrentVersion = this.ModManifest.Version;
+            this.ChestFactory = new ChestFactory(helper.Translation);
 
             // hook UI
-            GameEvents.GameLoaded += (sender, e) => this.ReceiveGameLoaded();
             GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveHudRendered();
             MenuEvents.MenuChanged += (sender, e) => this.ReceiveMenuChanged(e.PriorMenu, e.NewMenu);
             MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
@@ -69,14 +59,19 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
                 ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
             }
+
+            // hook game events
+            SaveEvents.AfterLoad += this.ReceiveAfterLoad;
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked when the player loads the game.</summary>
-        private void ReceiveGameLoaded()
+        /// <summary>The method invoked after the player loads a saved game.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void ReceiveAfterLoad(object sender, EventArgs e)
         {
             // validate game version
             string versionError = this.ValidateGameVersion();
@@ -86,49 +81,18 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 CommonHelper.ShowErrorMessage(versionError);
             }
 
-            // check for mod update
+            // check for updates
             if (this.Config.CheckForUpdates)
-            {
-                try
-                {
-                    Task.Factory.StartNew(() =>
-                    {
-                        Task.Factory.StartNew(() =>
-                        {
-                            ISemanticVersion latest = UpdateHelper.LogVersionCheck(this.Monitor, this.ModManifest.Version, "ChestsAnywhere").Result;
-                            if (latest.IsNewerThan(this.CurrentVersion))
-                                this.NewRelease = latest;
-                        });
-                    });
-                }
-                catch (Exception ex)
-                {
-                    this.HandleError(ex, "checking for a new version");
-                }
-            }
+                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "ChestsAnywhere");
         }
 
         /// <summary>The method invoked when the interface has finished rendering.</summary>
         private void ReceiveHudRendered()
         {
-            // render update warning
-            if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning && this.NewRelease != null)
-            {
-                try
-                {
-                    this.HasSeenUpdateWarning = true;
-                    CommonHelper.ShowInfoMessage($"You can update Chests Anywhere from {this.CurrentVersion} to {this.NewRelease}.");
-                }
-                catch (Exception ex)
-                {
-                    this.HandleError(ex, "showing the new version available");
-                }
-            }
-
             // show chest label
             if (this.Config.ShowHoverTooltips)
             {
-                ManagedChest cursorChest = ChestFactory.GetChestFromTile(Game1.currentCursorTile);
+                ManagedChest cursorChest = this.ChestFactory.GetChestFromTile(Game1.currentCursorTile);
                 if (cursorChest != null)
                 {
                     Vector2 tooltipPosition = new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f);
@@ -150,17 +114,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             }
 
             // add overlay
-            if (newMenu is ItemGrabMenu)
+            if (newMenu is ItemGrabMenu chestMenu)
             {
                 // get open chest
-                ItemGrabMenu chestMenu = (ItemGrabMenu)newMenu;
-                ManagedChest chest = ChestFactory.GetChestFromMenu(chestMenu);
+                ManagedChest chest = this.ChestFactory.GetChestFromMenu(chestMenu);
                 if (chest == null)
                     return;
 
                 // add overlay
-                ManagedChest[] chests = ChestFactory.GetChestsForDisplay(selectedChest: chest.Chest).ToArray();
-                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config);
+                ManagedChest[] chests = this.ChestFactory.GetChestsForDisplay(selectedChest: chest.Chest).ToArray();
+                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Translation);
                 this.ManageChestOverlay.OnChestSelected += selected =>
                 {
                     this.SelectedChest = selected.Chest;
@@ -201,7 +164,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         private void OpenMenu()
         {
             // get chests
-            ManagedChest[] chests = ChestFactory.GetChestsForDisplay().ToArray();
+            ManagedChest[] chests = this.ChestFactory.GetChestsForDisplay().ToArray();
             ManagedChest selectedChest = chests.FirstOrDefault(p => p.Chest == this.SelectedChest) ?? chests.FirstOrDefault();
 
             // render menu

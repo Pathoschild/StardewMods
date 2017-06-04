@@ -9,8 +9,8 @@
         /// <summary>The internal name of the shop's indoor location.</summary>
         public string LocationName { get; set; }
 
-        /// <summary>The human-readable shop name.</summary>
-        public string DisplayName { get; set; }
+        /// <summary>The translation key for the shop name.</summary>
+        public string DisplayKey { get; set; }
 
         /// <summary>The categories of items that the player can sell to this shop.</summary>
         public int[] BuysCategories { get; set; }

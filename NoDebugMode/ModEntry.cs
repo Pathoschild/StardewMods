@@ -27,7 +27,7 @@ namespace Pathoschild.Stardew.NoDebugMode
             if (Game1.debugMode)
             {
                 Game1.debugMode = false;
-                Log.Debug("No Debug Mode suppressed SMAPI F2 debug mode.");
+                this.Monitor.Log("No Debug Mode suppressed SMAPI F2 debug mode.");
             }
         }
     }

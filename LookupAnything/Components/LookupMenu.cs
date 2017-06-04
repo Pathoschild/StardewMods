@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
@@ -302,7 +303,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                     {
                         // draw name & item type
                         {
-                            Vector2 nameSize = contentBatch.DrawTextBlock(font, $"{subject.Name}.", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: true);
+                            Vector2 nameSize = contentBatch.DrawTextBlock(font, $"{subject.Name}.", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: Constant.AllowBold);
                             Vector2 typeSize = contentBatch.DrawTextBlock(font, $"{subject.Type}.", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
                             topOffset += Math.Max(nameSize.Y, typeSize.Y);
                         }
@@ -369,7 +370,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 }
 
                 // draw cursor
-                base.drawMouse(Game1.spriteBatch);
+                this.drawMouse(Game1.spriteBatch);
             }, this.OnDrawError);
         }
 

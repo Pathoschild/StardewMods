@@ -39,10 +39,10 @@ namespace Pathoschild.Stardew.Common
 
         /// <summary>Log a message to the console indicating the version check result.</summary>
         /// <param name="monitor">Writes messages to the console and log file.</param>
-        /// <param name="current">The current version.</param>
+        /// <param name="manifest">The mod manifest.</param>
         /// <param name="key">The mod key in the update document.</param>
         /// <param name="url">The URL from which to fetch the release versions.</param>
-        public static async Task<ISemanticVersion> LogVersionCheck(IMonitor monitor, ISemanticVersion current, string key, string url = CommonConstants.UpdateUrl)
+        public static async void LogVersionCheckAsync(IMonitor monitor, IManifest manifest, string key, string url = CommonConstants.UpdateUrl)
         {
             try
             {
@@ -60,20 +60,21 @@ namespace Pathoschild.Stardew.Common
                         latest = new SemanticVersion(versions[key]);
                 }
                 if (latest == null)
-                    return null;
+                    return;
 
                 // log check
-                if (latest.IsNewerThan(current))
+                if (latest.IsNewerThan(manifest.Version))
+                {
                     monitor.Log($"Update to version {latest} available.", LogLevel.Alert);
+                    if (Context.IsWorldReady)
+                        CommonHelper.ShowInfoMessage($"You can update {manifest.Name} from {manifest.Version} to {latest}.");
+                }
                 else
                     monitor.Log("Checking for update... none found.", LogLevel.Trace);
-
-                return latest;
             }
             catch (Exception ex)
             {
                 monitor.InterceptError(ex, "checking for a newer version");
-                return null;
             }
         }
     }

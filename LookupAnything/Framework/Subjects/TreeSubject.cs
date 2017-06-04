@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
@@ -30,8 +31,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
-        public TreeSubject(Tree tree, Vector2 tile)
-            : base(TreeSubject.GetName(tree), null, "Tree")
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public TreeSubject(Tree tree, Vector2 tile, ITranslationHelper translations)
+            : base(TreeSubject.GetName(translations, tree), null, translations.Get(L10n.Types.Tree), translations)
         {
             this.Target = tree;
             this.Tile = tile;
@@ -47,24 +49,26 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // get growth stage
             WildTreeGrowthStage stage = (WildTreeGrowthStage)Math.Min(tree.growthStage, (int)WildTreeGrowthStage.Tree);
             bool isFullyGrown = stage == WildTreeGrowthStage.Tree;
-            yield return isFullyGrown
-                ? new GenericField("Growth stage", "fully grown")
-                : new GenericField("Growth stage", $"{stage} ({(int)stage} of {(int)WildTreeGrowthStage.Tree})");
+            yield return new GenericField(this.Translate(L10n.Tree.Stage), isFullyGrown
+                ? this.Translate(L10n.Tree.StageDone)
+                : this.Translate(L10n.Tree.StagePartial, new { stageName = this.Translate(L10n.For(stage)), step = (int)stage, max = (int)WildTreeGrowthStage.Tree })
+            );
 
             // get growth scheduler
             if (!isFullyGrown)
             {
+                string label = this.Translate(L10n.Tree.NextGrowth);
                 if (Game1.IsWinter && Game1.currentLocation.Name != Constant.LocationNames.Greenhouse)
-                    yield return new GenericField("Next growth", "can't grow in winter outside greenhouse");
+                    yield return new GenericField(label, this.Translate(L10n.Tree.NextGrowthWinter));
                 else if (stage == WildTreeGrowthStage.SmallTree && this.HasAdjacentTrees(this.Tile))
-                    yield return new GenericField("Next growth", "can't grow because other trees are too close");
+                    yield return new GenericField(label, this.Translate(L10n.Tree.NextGrowthAdjacentTrees));
                 else
-                    yield return new GenericField("Next growth", $"20% chance to grow into {stage + 1} tomorrow");
+                    yield return new GenericField(label, this.Translate(L10n.Tree.NextGrowthRandom, new { stage = this.Translate(L10n.For(stage + 1)) }));
             }
 
             // get seed
             if (isFullyGrown)
-                yield return new GenericField("Has seed", tree.hasSeed);
+                yield return new GenericField(this.Translate(L10n.Tree.HasSeed), this.Stringify(tree.hasSeed));
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -74,7 +78,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             Tree target = this.Target;
 
             // pinned fields
-            yield return new GenericDebugField("has seed", target.hasSeed, pinned: true);
+            yield return new GenericDebugField("has seed", this.Stringify(target.hasSeed), pinned: true);
             yield return new GenericDebugField("growth stage", target.growthStage, pinned: true);
             yield return new GenericDebugField("health", target.health, pinned: true);
 
@@ -99,25 +103,25 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Private methods
         *********/
         /// <summary>Get a display name for the tree.</summary>
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="tree">The tree object.</param>
-        private static string GetName(Tree tree)
+        private static string GetName(ITranslationHelper translations, Tree tree)
         {
             TreeType type = (TreeType)tree.treeType;
-
             switch (type)
             {
                 case TreeType.Maple:
-                    return "Maple Tree";
+                    return translations.Get(L10n.Tree.NameMaple);
                 case TreeType.Oak:
-                    return "Oak Tree";
+                    return translations.Get(L10n.Tree.NameOak);
                 case TreeType.Pine:
-                    return "Pine Tree";
+                    return translations.Get(L10n.Tree.NamePine);
                 case TreeType.Palm:
-                    return "Palm Tree";
+                    return translations.Get(L10n.Tree.NamePalm);
                 case TreeType.BigMushroom:
-                    return "Big Mushroom";
+                    return translations.Get(L10n.Tree.NameBigMushroom);
                 default:
-                    return "(unknown tree)";
+                    return translations.Get(L10n.Tree.NameUnknown);
             }
         }
 

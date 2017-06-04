@@ -3,11 +3,11 @@
   "Author": "Pathoschild",
   "Version": {
     "MajorVersion": 1,
-    "MinorVersion": 6,
+    "MinorVersion": 7,
     "PatchVersion": 0,
     "Build": null
   },
-  "MinimumApiVersion": "1.10",
+  "MinimumApiVersion": "1.14",
   "Description": "Skips the game's loading intro.",
   "UniqueID": "Pathoschild.SkipIntro",
   "EntryDll": "SkipIntro.dll"

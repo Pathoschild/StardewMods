@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
@@ -15,6 +17,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>The experience points needed for each skill level.</summary>
         private readonly int[] SkillPointsPerLevel;
 
+        /// <summary>Provides translations stored in the mod folder.</summary>
+        private readonly ITranslationHelper Translations;
+
 
         /*********
         ** Public methods
@@ -24,10 +29,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="experience">The current progress value.</param>
         /// <param name="maxSkillPoints">The maximum experience points for a skill.</param>
         /// <param name="skillPointsPerLevel">The experience points needed for each skill level.</param>
-        public SkillBarField(string label, int experience, int maxSkillPoints, int[] skillPointsPerLevel)
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public SkillBarField(string label, int experience, int maxSkillPoints, int[] skillPointsPerLevel, ITranslationHelper translations)
             : base(label, experience, maxSkillPoints, Color.Green, Color.Gray, null)
         {
             this.SkillPointsPerLevel = skillPointsPerLevel;
+            this.Translations = translations;
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
@@ -45,8 +52,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             int pointsForNextLevel = nextLevelExp > 0 ? nextLevelExp - this.CurrentValue : 0;
             int currentLevel = nextLevelExp > 0 ? Array.IndexOf(pointsPerLevel, nextLevelExp) : pointsPerLevel.Length;
             string text = pointsForNextLevel > 0
-                ? $"level {currentLevel} ({pointsForNextLevel} exp to next)"
-                : $"level {currentLevel}";
+                ? this.Translations.Get(L10n.Player.SkillProgress, new { level = currentLevel, expNeeded = pointsForNextLevel })
+                : this.Translations.Get(L10n.Player.SkillProgressLast, new { level = currentLevel });
 
             // draw bars
             const int barWidth = 25;

@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using StardewModdingAPI;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
@@ -36,28 +37,35 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>The recipe data to list (type => recipe => {player knows recipe, number required for recipe}).</summary>
         private readonly Entry[] Recipes;
 
+        /// <summary>Provides translations stored in the mod folder.</summary>
+        private readonly ITranslationHelper Translations;
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
-        /// <param name="item">The ingredient item.</param>
+        /// <param name="ingredient">The ingredient item.</param>
         /// <param name="recipes">The recipe to list.</param>
-        public RecipesForIngredientField(string label, Item item, RecipeModel[] recipes)
-            : base(label, null, hasValue: true)
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public RecipesForIngredientField(string label, Item ingredient, RecipeModel[] recipes, ITranslationHelper translations)
+            : base(label, hasValue: true)
         {
+            this.Translations = translations;
             this.Recipes =
                 (
                     from recipe in recipes
-                    orderby recipe.Type.ToString(), recipe.Name
+                    let output = recipe.CreateItem(ingredient)
+                    let name = output.DisplayName
+                    orderby recipe.DisplayType, name
                     select new Entry
                     {
-                        Name = recipe.Name.Replace("$ingredient", item.Name),
-                        Type = Regex.Replace(recipe.Type.ToString(), @"(\B[A-Z])", " $1"), // e.g. "OilMaker" => "Oil Maker"
+                        Name = name,
+                        Type = recipe.DisplayType,
                         IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
-                        NumberRequired = recipe.Ingredients.ContainsKey(item.parentSheetIndex) ? recipe.Ingredients[item.parentSheetIndex] : recipe.Ingredients[item.category],
-                        Item = recipe.CreateItem()
+                        NumberRequired = recipe.Ingredients.ContainsKey(ingredient.parentSheetIndex) ? recipe.Ingredients[ingredient.parentSheetIndex] : recipe.Ingredients[ingredient.category],
+                        Item = output
                     }
                 )
                 .ToArray();
@@ -95,7 +103,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
                 // draw text
                 Color color = entry.IsKnown ? Color.Black : Color.Gray;
-                Vector2 textSize = spriteBatch.DrawTextBlock(font, $"{entry.Name} (needs {entry.NumberRequired})", position + new Vector2(leftIndent + iconSize.X + 3, height + 5), wrapWidth - iconSize.X, color);
+                Vector2 textSize = spriteBatch.DrawTextBlock(font, this.Translations.Get(L10n.Item.RecipesEntry, new { name = entry.Name, count = entry.NumberRequired }), position + new Vector2(leftIndent + iconSize.X + 3, height + 5), wrapWidth - iconSize.X, color);
 
                 height += Math.Max(iconSize.Y, textSize.Y) + 5;
             }

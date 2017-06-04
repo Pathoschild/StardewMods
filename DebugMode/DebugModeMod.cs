@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -58,13 +57,13 @@ namespace Pathoschild.Stardew.DebugMode
             this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
 
             // hook events
+            SaveEvents.AfterLoad += this.ReceiveAfterLoad;
             ControlEvents.KeyPressed += this.ReceiveKeyPress;
             if (this.Config.Controller.HasAny())
             {
                 ControlEvents.ControllerButtonPressed += this.ReceiveButtonPress;
                 ControlEvents.ControllerTriggerPressed += this.ReceiveTriggerPress;
             }
-            GameEvents.GameLoaded += this.ReceiveGameLoaded;
             LocationEvents.CurrentLocationChanged += this.ReceiveCurrentLocationChanged;
             GraphicsEvents.OnPostRenderEvent += this.OnPostRenderEvent;
         }
@@ -76,19 +75,14 @@ namespace Pathoschild.Stardew.DebugMode
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked when the player loads the game.</summary>
+        /// <summary>The method invoked after the player loads a saved game.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ReceiveGameLoaded(object sender, EventArgs e)
+        private void ReceiveAfterLoad(object sender, EventArgs e)
         {
-            // check for an updated version
+            // check for updates
             if (this.Config.CheckForUpdates)
-            {
-                Task.Factory.StartNew(() =>
-                {
-                    UpdateHelper.LogVersionCheck(this.Monitor, this.ModManifest.Version, "DebugMode").Wait();
-                });
-            }
+                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "DebugMode");
         }
 
         /// <summary>The event called by SMAPI when rendering to the screen.</summary>
@@ -161,9 +155,12 @@ namespace Pathoschild.Stardew.DebugMode
             if (!map.IsValidKey(key))
                 return;
 
-            // perform bound action
+           // perform bound action, toggle debug menu
             if (key.Equals(map.ToggleDebug))
+            {
+                Program.releaseBuild = !Program.releaseBuild;
                 this.DebugMode = !this.DebugMode;
+            }
         }
 
         /// <summary>Correct the player's position when they warp into an area.</summary>
@@ -229,9 +226,9 @@ namespace Pathoschild.Stardew.DebugMode
                 GameLocation location = Game1.currentLocation;
                 Type menuType = Game1.activeClickableMenu?.GetType();
                 string[] lines = {
-                    location != null ? $"tile: {tile.X}, {tile.Y}" : null,
-                    location != null ? $"map:  {location.Name}" : null,
-                    menuType != null ? $"menu: {(menuType.Namespace == typeof(TitleMenu).Namespace ? menuType.Name : menuType.FullName)}" : null
+                    location != null ? $"{this.Helper.Translation.Get("label.tile")}: {tile.X}, {tile.Y}" : null,
+                    location != null ? $"{this.Helper.Translation.Get("label.map")}:  {location.Name}" : null,
+                    menuType != null ? $"{this.Helper.Translation.Get("label.menu")}: {(menuType.Namespace == typeof(TitleMenu).Namespace ? menuType.Name : menuType.FullName)}" : null
                 };
 
                 // draw text

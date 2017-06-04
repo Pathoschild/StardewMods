@@ -43,10 +43,11 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public static void ResetCache(Metadata metadata, IReflectionHelper reflectionHelper)
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public static void ResetCache(Metadata metadata, IReflectionHelper reflectionHelper, ITranslationHelper translations)
         {
             GameHelper.GiftTastes = new Lazy<GiftTasteModel[]>(() => DataParser.GetGiftTastes(GameHelper.Objects.Value).ToArray());
-            GameHelper.Recipes = new Lazy<RecipeModel[]>(() => DataParser.GetRecipes(metadata, reflectionHelper).ToArray());
+            GameHelper.Recipes = new Lazy<RecipeModel[]>(() => DataParser.GetRecipes(metadata, reflectionHelper, translations).ToArray());
         }
 
         /****
@@ -94,9 +95,8 @@ namespace Pathoschild.Stardew.LookupAnything
                 // map objects
                 foreach (Object item in location.objects.Values)
                 {
-                    if (item is Chest)
+                    if (item is Chest chest)
                     {
-                        Chest chest = item as Chest;
                         if (chest.playerChest)
                         {
                             items.Add(chest);
@@ -122,9 +122,9 @@ namespace Pathoschild.Stardew.LookupAnything
                 }
 
                 // furniture
-                if (location is DecoratableLocation)
+                if (location is DecoratableLocation decorableLocation)
                 {
-                    foreach (Furniture furniture in (location as DecoratableLocation).furniture)
+                    foreach (Furniture furniture in decorableLocation.furniture)
                     {
                         items.Add(furniture);
                         items.Add(furniture.heldObject);
@@ -132,20 +132,20 @@ namespace Pathoschild.Stardew.LookupAnything
                 }
 
                 // building output
-                if (location is Farm)
+                if (location is Farm farm)
                 {
-                    foreach (var building in (location as Farm).buildings)
+                    foreach (var building in farm.buildings)
                     {
-                        if (building is Mill)
-                            items.AddRange((building as Mill).output.items);
-                        else if (building is JunimoHut)
-                            items.AddRange((building as JunimoHut).output.items);
+                        if (building is Mill mill)
+                            items.AddRange(mill.output.items);
+                        else if (building is JunimoHut hut)
+                            items.AddRange(hut.output.items);
                     }
                 }
 
                 // farmhouse fridge
-                if (location is FarmHouse)
-                    items.AddRange((location as FarmHouse).fridge.items);
+                if (location is FarmHouse house)
+                    items.AddRange(house.fridge.items);
             }
 
             return items.Where(p => p != null);
@@ -413,9 +413,8 @@ namespace Pathoschild.Stardew.LookupAnything
         public static Tuple<Texture2D, Rectangle> GetSprite(Item item)
         {
             // standard object
-            if (item is Object)
+            if (item is Object obj)
             {
-                Object obj = (Object)item;
                 return obj.bigCraftable
                     ? Tuple.Create(Game1.bigCraftableSpriteSheet, Object.getSourceRectForBigCraftable(obj.ParentSheetIndex))
                     : Tuple.Create(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, Object.spriteSheetTileSize, Object.spriteSheetTileSize));

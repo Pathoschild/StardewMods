@@ -40,6 +40,7 @@ Press the `~` key (configurable) to enable or disable debug mode. This will...
    `K`    | Move down one mine level. If not currently in the mine, warp to it.
    `F5`   | Toggle the player.
    `F7`   | Draw a tile grid.
+   `F8`   | Show a debug command input window (not currently documented).
    `B`    | Shift the toolbar to show the next higher inventory row.
    `N`    | Shift the toolbar to show the next lower inventory row.
 

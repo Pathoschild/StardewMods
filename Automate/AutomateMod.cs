@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
@@ -26,19 +25,7 @@ namespace Pathoschild.Stardew.Automate
         private readonly IDictionary<GameLocation, MachineMetadata[]> Machines = new Dictionary<GameLocation, MachineMetadata[]>();
 
         /// <summary>Whether machines are initialised.</summary>
-        private bool IsReady => Game1.hasLoadedGame && this.Machines.Any();
-
-        /****
-        ** Version check
-        ****/
-        /// <summary>The current semantic version.</summary>
-        private ISemanticVersion CurrentVersion;
-
-        /// <summary>The newer release to notify the user about.</summary>
-        private ISemanticVersion NewRelease;
-
-        /// <summary>Whether the update-available message has been shown since the game started.</summary>
-        private bool HasSeenUpdateWarning;
+        private bool IsReady => Context.IsWorldReady && this.Machines.Any();
 
 
         /*********
@@ -50,16 +37,12 @@ namespace Pathoschild.Stardew.Automate
         {
             // read config
             this.Config = helper.ReadConfig<ModConfig>();
-            this.CurrentVersion = this.ModManifest.Version;
 
-            // hooks for update check
-            GameEvents.GameLoaded += this.GameEvents_GameLoaded;
+            // hook events
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-
-            // hooks for automation
             LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
             LocationEvents.LocationObjectsChanged += this.LocationEvents_LocationObjectsChanged;
-            TimeEvents.TimeOfDayChanged += this.TimeEvents_TimeOfDayChanged;
+            GameEvents.OneSecondTick += this.GameEvents_OneSecondTick;
         }
 
 
@@ -69,14 +52,29 @@ namespace Pathoschild.Stardew.Automate
         /****
         ** Event handlers
         ****/
+        /// <summary>The method invoked when the player loads a save.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        {
+            // check for updates
+            if (this.Config.CheckForUpdates)
+                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "Automate");
+        }
+
         /// <summary>The method invoked when a location is added or removed.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void LocationEvents_LocationsChanged(object sender, EventArgsGameLocationsChanged e)
         {
-            this.Machines.Clear();
-            foreach (GameLocation location in this.Factory.GetLocationsWithChests())
-                this.Machines[location] = this.Factory.GetMachinesIn(location, this.Helper.Reflection).ToArray();
+            try
+            {
+                this.ReloadAllMachines();
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, "updating locations");
+            }
         }
 
         /// <summary>The method invoked when an object is added or removed to a location.</summary>
@@ -84,72 +82,53 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void LocationEvents_LocationObjectsChanged(object sender, EventArgsLocationObjectsChanged e)
         {
-            this.Machines[Game1.currentLocation] = this.Factory.GetMachinesIn(Game1.currentLocation, this.Helper.Reflection).ToArray();
+            try
+            {
+                this.ReloadMachinesIn(Game1.currentLocation);
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, "updating the current location");
+            }
         }
 
         /// <summary>The method invoked when the in-game clock time changes.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void TimeEvents_TimeOfDayChanged(object sender, EventArgsIntChanged e)
+        private void GameEvents_OneSecondTick(object sender, EventArgs e)
         {
             if (!this.IsReady)
                 return;
 
-            foreach (MachineMetadata[] machines in this.Machines.Values)
-                this.ProcessMachines(machines);
-        }
-
-        /// <summary>The method invoked when the player loads the game.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void GameEvents_GameLoaded(object sender, EventArgs e)
-        {
-            // check for mod update
-            if (this.Config.CheckForUpdates)
+            try
             {
-                try
-                {
-                    Task.Factory.StartNew(() =>
-                    {
-                        Task.Factory.StartNew(() =>
-                        {
-                            ISemanticVersion latest = UpdateHelper.LogVersionCheck(this.Monitor, this.ModManifest.Version, "Automate").Result;
-                            if (latest.IsNewerThan(this.CurrentVersion))
-                                this.NewRelease = latest;
-                        });
-                    });
-                }
-                catch (Exception ex)
-                {
-                    this.HandleError(ex, "checking for a new version");
-                }
+                foreach (MachineMetadata[] machines in this.Machines.Values)
+                    this.ProcessMachines(machines);
             }
-        }
-
-        /// <summary>The method invoked when the interface has finished rendering.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
-        {
-            // render update warning
-            if (this.Config.CheckForUpdates && !this.HasSeenUpdateWarning && this.NewRelease != null)
+            catch (Exception ex)
             {
-                try
-                {
-                    this.HasSeenUpdateWarning = true;
-                    CommonHelper.ShowInfoMessage($"You can update Automate from {this.CurrentVersion} to {this.NewRelease}.");
-                }
-                catch (Exception ex)
-                {
-                    this.HandleError(ex, "showing the new version available");
-                }
+                this.HandleError(ex, "processing machines");
             }
-
         }
 
         /****
         ** Methods
         ****/
+        /// <summary>Reload all machines.</summary>
+        private void ReloadAllMachines()
+        {
+            this.Machines.Clear();
+            foreach (GameLocation location in this.Factory.GetLocationsWithChests())
+                this.ReloadMachinesIn(location);
+        }
+
+        /// <summary>Reload the machines in a given location.</summary>
+        /// <param name="location">The location whose location to reload.</param>
+        private void ReloadMachinesIn(GameLocation location)
+        {
+            this.Machines[location] = this.Factory.GetMachinesIn(location, this.Helper.Reflection).ToArray();
+        }
+
         /// <summary>Process a set of machines.</summary>
         /// <param name="machines">The machines to process.</param>
         private void ProcessMachines(MachineMetadata[] machines)

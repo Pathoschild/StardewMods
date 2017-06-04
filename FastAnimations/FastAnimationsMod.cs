@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using Pathoschild.Stardew.FastAnimations.Handlers;
@@ -34,7 +33,7 @@ namespace Pathoschild.Stardew.FastAnimations
             this.Config = helper.ReadConfig<ModConfig>();
             this.Handlers = this.GetHandlers(this.Config).ToArray();
 
-            GameEvents.GameLoaded += this.ReceiveGameLoaded;
+            SaveEvents.AfterLoad += this.ReceiveAfterLoad;
             GameEvents.UpdateTick += this.ReceiveUpdateTick;
         }
 
@@ -45,19 +44,14 @@ namespace Pathoschild.Stardew.FastAnimations
         /****
         ** Events
         ****/
-        /// <summary>The method invoked when the game begins loading.</summary>
+        /// <summary>The method invoked after the player loads a saved game.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ReceiveGameLoaded(object sender, EventArgs e)
+        private void ReceiveAfterLoad(object sender, EventArgs e)
         {
-            // check for an updated version
+            // check for updates
             if (this.Config.CheckForUpdates)
-            {
-                Task.Factory.StartNew(() =>
-                {
-                    UpdateHelper.LogVersionCheck(this.Monitor, this.ModManifest.Version, "FastAnimations").Wait();
-                });
-            }
+                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "FastAnimations");
         }
 
         /// <summary>The method invoked when the player presses a keyboard button.</summary>
@@ -65,7 +59,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <param name="e">The event data.</param>
         private void ReceiveUpdateTick(object sender, EventArgs e)
         {
-            if (!Game1.hasLoadedGame || Game1.eventUp || !this.Handlers.Any())
+            if (!Context.IsWorldReady || Game1.eventUp || !this.Handlers.Any())
                 return;
 
             int playerAnimationID = this.Helper.Reflection.GetPrivateValue<int>(Game1.player.FarmerSprite, "currentSingleAnimation");

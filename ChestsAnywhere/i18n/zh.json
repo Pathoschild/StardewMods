@@ -1,0 +1,19 @@
+﻿{
+    // default chest names
+    "default-name.chest": "{{number}}号箱子",
+    "default-name.fridge": "冰箱",
+
+    // edit-chest labels
+    "label.location": "位置",
+    "label.location.tile": "地格 {{x}}, {{y}}",
+    "label.name": "名称",
+    "label.category": "分类",
+    "label.order": "顺序",
+    "label.hide-chest": "隐藏此箱子",
+    "label.hide-chest-hidden": "隐藏此箱子（你需要亲自找到该箱子撤销隐藏！）",
+
+    // button labels
+    "button.edit-chest": "编辑箱子",
+    "button.sort-inventory": "清单排序",
+    "button.ok": "OK"
+}

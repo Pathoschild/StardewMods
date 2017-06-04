@@ -1,6 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.14
+* Updated to SMAPI 1.14.
+* Added translation support.
+* Added Chinese and German translations. (Thanks to yuwenlan and Sasara respectively!)
+* You can now look up items from the Junimo bundle menu.
+* Fixed a few lookup errors when playing in a language other than English.
+
 ## 1.13
 * Updated for Stardew Valley 1.2.
 
@@ -26,8 +33,8 @@ See [log](https://github.com/Pathoschild/StardewMods/compare/ef72f731449a795f0a1
 ## 1.10
 See [log](https://github.com/Pathoschild/StardewMods/compare/lookup-anything/1.9...lookup-anything/1.10).
 
-* You can now lookup an item from the kitchen cooking menu.
-* You can now lookup map tile info (disabled by default).
+* You can now look up an item from the kitchen cooking menu.
+* You can now look up map tile info (disabled by default).
 * Updated to SMAPI 1.8.
 * Updated new-version-available check.
 
@@ -38,7 +45,7 @@ See [log](https://github.com/Pathoschild/StardewMods/compare/lookup-anything/1.8
 * Added optional data mining fields which show raw game data.
 * You can now click on the up/down arrows to scroll content.
 * Improved controller support:
-  * You can now lookup what's directly in front of you using a separate hotkey. (Not bound by default.)
+  * You can now look up what's directly in front of you using a separate hotkey. (Not bound by default.)
   * Fixed controller thumbsticks scrolling content too slowly.
   * Fixed controller button conventions not respected by lookup menu.
 * Fixed a rare error caused by the game duplicating an NPC.
@@ -50,7 +57,7 @@ See [log](https://github.com/Pathoschild/StardewMods/compare/lookup-anything/1.8
 See [log](https://github.com/Pathoschild/StardewMods/compare/lookup-anything/1.7...lookup-anything/1.8).
 
 * Added museum donations to item 'needed for' field.
-* You can now lookup things behind trees when you're behind them.
+* You can now look up things behind trees when you're behind them.
 * You can now close the lookup UI by clicking outside it.
 * Updated to SMAPI 1.3.
 * Fixed incorrect farmer luck message when the spirits are feeling neutral.
@@ -59,8 +66,8 @@ See [log](https://github.com/Pathoschild/StardewMods/compare/lookup-anything/1.7
 ## 1.7
 See [log](https://github.com/Pathoschild/StardewMods/compare/lookup-anything/1.6...lookup-anything/1.7).
 
-* You can now lookup a villager from the social page.
-* You can now lookup an item from the toolbar.
+* You can now look up a villager from the social page.
+* You can now look up an item from the toolbar.
 * Console logs are now less verbose.
 * Updated to SMAPI 1.1.
 * Fixed some cases where the item 'number owned' field was inacurate.
@@ -87,8 +94,8 @@ See [log](https://github.com/Pathoschild/StardewMods/compare/lookup-anything/1.5
 ## 1.5
 See [log](https://github.com/Pathoschild/StardewMods/compare/lookup-anything/1.4...lookup-anything/1.5).
 
-* You can now lookup a villager from the calendar.
-* You can now lookup items from an open chest.
+* You can now look up a villager from the calendar.
+* You can now look up items from an open chest.
 * Added cask aging schedule.
 * Added better NPC friendship fields which account for dating and marriage.
 * Added marriage stardrop to heart meter.
@@ -149,5 +156,5 @@ See [log](https://github.com/Pathoschild/StardewMods/compare/601d3c7964c5f2448f2
 * Added controller support and configurable bindings.
 * Added hidden debug mode.
 * Added version check on load.
-* Let players lookup a target from any visible part of its sprite.
+* Let players look up a target from any visible part of its sprite.
 

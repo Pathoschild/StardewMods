@@ -4,10 +4,10 @@
   "Version": {
     "MajorVersion": 1,
     "MinorVersion": 2,
-    "PatchVersion": 0,
+    "PatchVersion": 1,
     "Build": null
   },
-  "MinimumApiVersion": "1.10",
+  "MinimumApiVersion": "1.14",
   "Description": "Speeds up many animations in the game (configurable via config.json).",
   "UniqueID": "Pathoschild.FastAnimations",
   "EntryDll": "FastAnimations.dll"

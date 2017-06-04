@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.RotateToolbar.Framework;
 using StardewModdingAPI;
@@ -27,7 +26,7 @@ namespace Pathoschild.Stardew.RotateToolbar
         {
             this.Config = helper.ReadConfig<RawModConfig>().GetParsed(this.Monitor);
 
-            GameEvents.GameLoaded += this.GameEvents_GameLoaded;
+            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             ControlEvents.ControllerButtonPressed += this.ControlEvents_ControllerButtonPressed;
             ControlEvents.ControllerTriggerPressed += this.ControlEvents_ControllerTriggerPressed;
@@ -40,19 +39,14 @@ namespace Pathoschild.Stardew.RotateToolbar
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked when the player loads the game.</summary>
+        /// <summary>The method invoked after the player loads a saved game.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void GameEvents_GameLoaded(object sender, EventArgs e)
+        private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            // check for an updated version
+            // check for updates
             if (this.Config.CheckForUpdates)
-            {
-                Task.Factory.StartNew(() =>
-                {
-                    UpdateHelper.LogVersionCheck(this.Monitor, this.ModManifest.Version, "RotateToolbar").Wait();
-                });
-            }
+                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "RotateToolbar");
         }
 
         /// <summary>The method invoked when the player presses a keyboard button.</summary>
@@ -60,7 +54,7 @@ namespace Pathoschild.Stardew.RotateToolbar
         /// <param name="e">The event arguments.</param>
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            if (!Game1.hasLoadedGame)
+            if (!Context.IsWorldReady)
                 return;
 
             this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
@@ -71,7 +65,7 @@ namespace Pathoschild.Stardew.RotateToolbar
         /// <param name="e">The event arguments.</param>
         private void ControlEvents_ControllerTriggerPressed(object sender, EventArgsControllerTriggerPressed e)
         {
-            if (!Game1.hasLoadedGame)
+            if (!Context.IsWorldReady)
                 return;
 
             this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
@@ -82,7 +76,7 @@ namespace Pathoschild.Stardew.RotateToolbar
         /// <param name="e">The event arguments.</param>
         private void ControlEvents_ControllerButtonPressed(object sender, EventArgsControllerButtonPressed e)
         {
-            if (!Game1.hasLoadedGame)
+            if (!Context.IsWorldReady)
                 return;
 
             this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);

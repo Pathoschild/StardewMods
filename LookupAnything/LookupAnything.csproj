@@ -53,6 +53,8 @@
     <Compile Include="Framework\Constants\FruitTreeGrowthStage.cs" />
     <Compile Include="DataParser.cs" />
     <Compile Include="Framework\Constants\LookupMode.cs" />
+    <Compile Include="Framework\Constants\L10n.cs" />
+    <Compile Include="Framework\Data\BuildingRecipeData.cs" />
     <Compile Include="Framework\Data\ShopData.cs" />
     <Compile Include="Framework\DebugFields\GenericDebugField.cs" />
     <Compile Include="Framework\DebugFields\IDebugField.cs" />
@@ -69,7 +71,7 @@
     <Compile Include="Framework\Data\ObjectContext.cs" />
     <Compile Include="Framework\Data\ObjectData.cs" />
     <Compile Include="Framework\Constants\ItemSpriteType.cs" />
-    <Compile Include="Framework\Data\RecipeData.cs" />
+    <Compile Include="Framework\Data\MachineRecipeData.cs" />
     <Compile Include="Framework\Fields\ItemIconField.cs" />
     <Compile Include="Framework\Fields\ItemDropListField.cs" />
     <Compile Include="Framework\Fields\SkillBarField.cs" />
@@ -117,18 +119,26 @@
     <Compile Include="Framework\Fields\ICustomField.cs" />
     <Compile Include="Framework\Subjects\ISubject.cs" />
     <Compile Include="Framework\Subjects\ItemSubject.cs" />
-    <Compile Include="TextHelper.cs" />
+    <Compile Include="Framework\TranslationHelperExtensions.cs" />
     <Compile Include="LookupAnythingMod.cs" />
     <Compile Include="Framework\Data\MonsterData.cs" />
     <Compile Include="Framework\Data\ItemDropData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Framework\Targets\GenericTarget.cs" />
     <Compile Include="Framework\Models\RecipeModel.cs" />
-    <Compile Include="Framework\RecipeType.cs" />
     <Compile Include="DrawHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="i18n\de.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="i18n\default.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="i18n\zh.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="manifest.json">

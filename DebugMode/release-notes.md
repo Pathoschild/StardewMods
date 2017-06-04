@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.6
+* Updated to SMAPI 1.14.
+* Added translation support.
+* Added Chinese and German translations. (Thanks to yuwenlan and Sasara respectively!)
+* `F8` now shows the game's debug command input in debug mode.
+
 ## 1.5
 * Updated for Stardew Valley 1.2.
 

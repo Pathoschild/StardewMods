@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.SkipIntro.Framework;
@@ -19,9 +18,6 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
-        /// <summary>The update ticks that have been processed.</summary>
-        private int Step;
-
 
         /*********
         ** Public methods
@@ -32,8 +28,8 @@ namespace Pathoschild.Stardew.SkipIntro
         {
             this.Config = helper.ReadConfig<ModConfig>();
 
-            GameEvents.GameLoaded += this.ReceiveGameLoaded;
-            GameEvents.EighthUpdateTick += this.ReceiveUpdateTick;
+            SaveEvents.AfterLoad += this.ReceiveAfterLoad;
+            MenuEvents.MenuChanged += this.ReceiveMenuChanged;
         }
 
 
@@ -43,19 +39,23 @@ namespace Pathoschild.Stardew.SkipIntro
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked when the player loads the game.</summary>
+        /// <summary>The method invoked after the player loads a saved game.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ReceiveGameLoaded(object sender, EventArgs e)
+        private void ReceiveAfterLoad(object sender, EventArgs e)
         {
-            // check for an updated version
+            // check for updates
             if (this.Config.CheckForUpdates)
-            {
-                Task.Factory.StartNew(() =>
-                {
-                    UpdateHelper.LogVersionCheck(this.Monitor, this.ModManifest.Version, "SkipIntro").Wait();
-                });
-            }
+                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "SkipIntro");
+        }
+
+        /// <summary>The method called when the player returns to the title screen.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void ReceiveMenuChanged(object sender, EventArgsClickableMenuChanged e)
+        {
+            if (e.NewMenu is TitleMenu)
+                GameEvents.UpdateTick += this.ReceiveUpdateTick;
         }
 
         /// <summary>Receives an update tick.</summary>
@@ -65,17 +65,21 @@ namespace Pathoschild.Stardew.SkipIntro
         {
             try
             {
+                // get open title screen
                 TitleMenu menu = Game1.activeClickableMenu as TitleMenu;
-                if (menu != null)
+                if (menu == null)
                 {
-                    if (!this.ApplySkip(menu, this.Step))
-                        GameEvents.UpdateTick -= this.ReceiveUpdateTick;
-                    this.Step++;
+                    GameEvents.UpdateTick -= this.ReceiveUpdateTick;
+                    return;
                 }
+
+                // skip intro
+                if (this.TrySkipIntro(menu))
+                    GameEvents.UpdateTick -= this.ReceiveUpdateTick;
             }
             catch (Exception ex)
             {
-                this.Monitor.InterceptError(ex, $"skipping the menu (step {this.Step})");
+                this.Monitor.InterceptError(ex, "skipping the intro");
                 GameEvents.UpdateTick -= this.ReceiveUpdateTick;
             }
         }
@@ -83,29 +87,35 @@ namespace Pathoschild.Stardew.SkipIntro
         /****
         ** Methods
         ****/
-        /// <summary>Apply the next skip step.</summary>
-        /// <param name="menu">The title menu to update.</param>
-        /// <param name="step">The step to apply (starting at 0).</param>
-        /// <returns>Returns whether there are more skip steps.</returns>
-        /// <remarks>The skip logic is applied over several update ticks to let the game update itself smoothly. This prevents a few issues like a long pause before the game window opens, or the title menu not resizing itself for full-screen display.</remarks>
-        private bool ApplySkip(TitleMenu menu, int step)
+        /// <summary>Skip the intro if the game is ready.</summary>
+        /// <param name="menu">The title menu whose intro to skip.</param>
+        /// <returns>Returns whether the intro was skipped successfully.</returns>
+        private bool TrySkipIntro(TitleMenu menu)
         {
-            switch (step)
+            // wait until the game is ready
+            if (Game1.currentGameTime == null)
+                return false;
+
+            // skip to title screen
+            menu.receiveKeyPress(Keys.Escape);
+            menu.update(Game1.currentGameTime);
+
+            // skip button transition
+            if (!this.Config.SkipToLoadScreen)
             {
-                // skip to main menu
-                case 1:
-                    menu.receiveKeyPress(Keys.Escape);
-                    return true;
-
-                // skip to loading screen
-                case 2:
-                    if (this.Config.SkipToLoadScreen)
-                        menu.performButtonAction("Load");
-                    return true;
-
-                default:
-                    return false;
+                while (this.Helper.Reflection.GetPrivateValue<int>(menu, "buttonsToShow") < TitleMenu.numberOfButtons)
+                    menu.update(Game1.currentGameTime);
             }
+
+            // skip to load screen
+            if (this.Config.SkipToLoadScreen)
+            {
+                menu.performButtonAction("Load");
+                while (TitleMenu.subMenu == null)
+                    menu.update(Game1.currentGameTime);
+            }
+
+            return true;
         }
     }
 }

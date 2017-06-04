@@ -2,8 +2,10 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using StardewModdingAPI;
 using StardewValley;
 using xTile.Layers;
 using xTile.ObjectModel;
@@ -30,8 +32,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="location">The game location.</param>
         /// <param name="position">The tile position.</param>
-        public TileSubject(GameLocation location, Vector2 position)
-            : base($"({position.X}, {position.Y})", "A tile position on the map. This is displayed because you enabled tile lookups in the configuration.", "Map tile")
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public TileSubject(GameLocation location, Vector2 position, ITranslationHelper translations)
+            : base($"({position.X}, {position.Y})", translations.Get(L10n.Tile.Description), translations.Get(L10n.Types.Tile), translations)
         {
             this.Location = location;
             this.Position = position;
@@ -42,13 +45,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         public override IEnumerable<ICustomField> GetData(Metadata metadata)
         {
             // yield map data
-            yield return new GenericField("Map name", this.Location.Name);
+            yield return new GenericField(this.Translate(L10n.Tile.MapName), this.Location.Name);
 
             // get tiles
             Tile[] tiles = this.GetTiles(this.Location, this.Position).ToArray();
             if (!tiles.Any())
             {
-                yield return new GenericField("Tile", "no tile here");
+                yield return new GenericField(this.Translate(L10n.Tile.TileField), this.Translate(L10n.Tile.TileFieldNoneFound));
                 yield break;
             }
 
@@ -56,13 +59,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             foreach (Tile tile in tiles)
             {
                 string layerName = tile.Layer.Id;
-                yield return new GenericField($"{layerName}: tile index", tile.TileIndex);
-                yield return new GenericField($"{layerName}: tile sheet", tile.TileSheet.ImageSource.Replace("\\", ": ").Replace("/", ": "));
-                yield return new GenericField($"{layerName}: blend mode", tile.BlendMode);
+                yield return new GenericField(this.Translate(L10n.Tile.TileIndex, new { layerName = layerName }), this.Stringify(tile.TileIndex));
+                yield return new GenericField(this.Translate(L10n.Tile.TileSheet, new { layerName = layerName }), tile.TileSheet.ImageSource.Replace("\\", ": ").Replace("/", ": "));
+                yield return new GenericField(this.Translate(L10n.Tile.BlendMode, new { layerName = layerName }), this.Stringify(tile.BlendMode));
                 foreach (KeyValuePair<string, PropertyValue> property in tile.TileIndexProperties)
-                    yield return new GenericField($"{layerName}: ix props: {property.Key}", property.Value);
+                    yield return new GenericField(this.Translate(L10n.Tile.IndexProperty, new { layerName = layerName, propertyName = property.Key }), property.Value);
                 foreach (KeyValuePair<string, PropertyValue> property in tile.Properties)
-                    yield return new GenericField($"{layerName}: props: {property.Key}", property.Value);
+                    yield return new GenericField(this.Translate(L10n.Tile.TileProperty, new { layerName = layerName, propertyName = property.Key }), property.Value);
             }
         }
 

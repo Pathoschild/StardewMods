@@ -1,5 +1,4 @@
 ﻿using Pathoschild.Stardew.Automate.Framework;
-using StardewValley;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Machines.Objects

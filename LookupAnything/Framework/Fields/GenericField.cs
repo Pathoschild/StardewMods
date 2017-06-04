@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
@@ -29,10 +30,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="label">A short field label.</param>
         /// <param name="value">The field value.</param>
         /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-        public GenericField(string label, object value, bool? hasValue = null)
+        public GenericField(string label, string value, bool? hasValue = null)
         {
             this.Label = label;
             this.Value = this.FormatValue(value);
+            this.HasValue = hasValue ?? this.Value?.Any() == true;
+        }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="label">A short field label.</param>
+        /// <param name="value">The field value.</param>
+        /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
+        public GenericField(string label, IFormattedText value, bool? hasValue = null)
+            : this(label, new[] { value }, hasValue) { }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="label">A short field label.</param>
+        /// <param name="value">The field value.</param>
+        /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
+        public GenericField(string label, IEnumerable<IFormattedText> value, bool? hasValue = null)
+        {
+            this.Label = label;
+            this.Value = value.ToArray();
             this.HasValue = hasValue ?? this.Value?.Any() == true;
         }
 
@@ -51,35 +70,35 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /*********
         ** Protected methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="label">A short field label.</param>
+        /// <param name="hasValue">Whether the field should be displayed.</param>
+        protected GenericField(string label, bool hasValue = false)
+            : this(label, null as string, hasValue) { }
+
         /// <summary>Wrap text into a list of formatted snippets.</summary>
         /// <param name="value">The text to wrap.</param>
-        protected IFormattedText[] FormatValue(object value)
+        protected IFormattedText[] FormatValue(string value)
         {
-            // already formatted
-            if (value is IFormattedText formattedValue)
-                return new[] { formattedValue };
-            if (value is IEnumerable<IFormattedText> valueList)
-                return valueList.ToArray();
-
-            // format
-            string str = TextHelper.Stringify(value);
-            return !string.IsNullOrWhiteSpace(str)
-                ? new IFormattedText[] { new FormattedText(str) }
+            return !string.IsNullOrWhiteSpace(value)
+                ? new IFormattedText[] { new FormattedText(value) }
                 : new IFormattedText[0];
         }
 
         /// <summary>Get the display value for sale price data.</summary>
         /// <param name="saleValue">The flat sale price.</param>
         /// <param name="stackSize">The number of items in the stack.</param>
-        public static string GetSaleValueString(int saleValue, int stackSize)
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public static string GetSaleValueString(int saleValue, int stackSize, ITranslationHelper translations)
         {
-            return GenericField.GetSaleValueString(new Dictionary<ItemQuality, int> { [ItemQuality.Normal] = saleValue }, stackSize);
+            return GenericField.GetSaleValueString(new Dictionary<ItemQuality, int> { [ItemQuality.Normal] = saleValue }, stackSize, translations);
         }
 
         /// <summary>Get the display value for sale price data.</summary>
         /// <param name="saleValues">The sale price data.</param>
         /// <param name="stackSize">The number of items in the stack.</param>
-        public static string GetSaleValueString(IDictionary<ItemQuality, int> saleValues, int stackSize)
+        /// <param name="translations">Provides methods for fetching translations and generating text.</param>
+        public static string GetSaleValueString(IDictionary<ItemQuality, int> saleValues, int stackSize, ITranslationHelper translations)
         {
             // can't be sold
             if (saleValues == null || !saleValues.Any() || saleValues.Values.All(p => p == 0))
@@ -88,9 +107,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             // one quality
             if (saleValues.Count == 1)
             {
-                string result = $"{saleValues.First().Value}g";
+                string result = translations.Get(L10n.Generic.Price, new { price = saleValues.First().Value });
                 if (stackSize > 1)
-                    result += $" ({saleValues.First().Value * stackSize}g for stack of {stackSize})";
+                    result += $" ({translations.Get(L10n.Generic.PriceForStack, new { price = saleValues.First().Value * stackSize, count = stackSize })})";
                 return result;
             }
 
@@ -99,7 +118,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             for (ItemQuality quality = ItemQuality.Normal; ; quality = quality.GetNext())
             {
                 if (saleValues.ContainsKey(quality))
-                    priceStrings.Add($"{saleValues[quality]}g" + (quality != ItemQuality.Normal ? $" ({quality.GetName()})" : ""));
+                {
+                    priceStrings.Add(quality == ItemQuality.Normal
+                        ? translations.Get(L10n.Generic.Price, new { price = saleValues[quality] })
+                        : translations.Get(L10n.Generic.PriceForQuality, new { price = saleValues[quality], quality = translations.Get(L10n.For(quality)) })
+                    );
+                }
 
                 if (quality.GetNext() == quality)
                     break;

@@ -29,6 +29,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
 
+        /// <summary>Provides translations stored in the mod folder.</summary>
+        private readonly ITranslationHelper Translations;
+
 
         /*********
         ** Public methods
@@ -38,10 +41,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         ****/
         /// <summary>Construct an instance.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public TargetFactory(Metadata metadata, IReflectionHelper reflection)
+        public TargetFactory(Metadata metadata, ITranslationHelper translations, IReflectionHelper reflection)
         {
             this.Metadata = metadata;
+            this.Translations = translations;
             this.Reflection = reflection;
         }
 
@@ -107,17 +112,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                 if ((feature as HoeDirt)?.crop != null)
                     yield return new CropTarget(feature, spriteTile, this.Reflection);
-                else if (feature is FruitTree)
+                else if (feature is FruitTree fruitTree)
                 {
                     if (this.Reflection.GetPrivateValue<float>(feature, "alpha") < 0.8f)
                         continue; // ignore when tree is faded out (so player can lookup things behind it)
-                    yield return new FruitTreeTarget((FruitTree)feature, spriteTile);
+                    yield return new FruitTreeTarget(fruitTree, spriteTile);
                 }
-                else if (feature is Tree)
+                else if (feature is Tree wildTree)
                 {
                     if (this.Reflection.GetPrivateValue<float>(feature, "alpha") < 0.8f)
                         continue; // ignore when tree is faded out (so player can lookup things behind it)
-                    yield return new TreeTarget((Tree)feature, spriteTile, this.Reflection);
+                    yield return new TreeTarget(wildTree, spriteTile, this.Reflection);
                 }
                 else
                     yield return new UnknownTarget(feature, spriteTile);
@@ -207,7 +212,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     break;
 
                 default:
-                    throw new NotImplementedException($"Unknown lookup mode '{lookupMode}'.");
+                    throw new NotSupportedException($"Unknown lookup mode '{lookupMode}'.");
             }
 
             // get subject
@@ -228,36 +233,36 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case TargetType.Pet:
                 case TargetType.Monster:
                 case TargetType.Villager:
-                    return new CharacterSubject(target.GetValue<NPC>(), target.Type, this.Metadata, this.Reflection);
+                    return new CharacterSubject(target.GetValue<NPC>(), target.Type, this.Metadata, this.Translations, this.Reflection);
 
                 // player
                 case TargetType.Farmer:
-                    return new FarmerSubject(target.GetValue<SFarmer>(), this.Reflection);
+                    return new FarmerSubject(target.GetValue<SFarmer>(), this.Translations, this.Reflection);
 
                 // animal
                 case TargetType.FarmAnimal:
-                    return new FarmAnimalSubject(target.GetValue<FarmAnimal>());
+                    return new FarmAnimalSubject(target.GetValue<FarmAnimal>(), this.Translations);
 
                 // crop
                 case TargetType.Crop:
                     Crop crop = target.GetValue<HoeDirt>().crop;
-                    return new ItemSubject(GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest), ObjectContext.World, knownQuality: false, fromCrop: crop);
+                    return new ItemSubject(this.Translations, GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest), ObjectContext.World, knownQuality: false, fromCrop: crop);
 
                 // tree
                 case TargetType.FruitTree:
-                    return new FruitTreeSubject(target.GetValue<FruitTree>(), target.GetTile());
+                    return new FruitTreeSubject(target.GetValue<FruitTree>(), target.GetTile(), this.Translations);
                 case TargetType.WildTree:
-                    return new TreeSubject(target.GetValue<Tree>(), target.GetTile());
+                    return new TreeSubject(target.GetValue<Tree>(), target.GetTile(), this.Translations);
 
                 // object
                 case TargetType.InventoryItem:
-                    return new ItemSubject(target.GetValue<Item>(), ObjectContext.Inventory, knownQuality: false);
+                    return new ItemSubject(this.Translations, target.GetValue<Item>(), ObjectContext.Inventory, knownQuality: false);
                 case TargetType.Object:
-                    return new ItemSubject(target.GetValue<Item>(), ObjectContext.World, knownQuality: false);
+                    return new ItemSubject(this.Translations, target.GetValue<Item>(), ObjectContext.World, knownQuality: false);
 
                 // tile
                 case TargetType.Tile:
-                    return new TileSubject(Game1.currentLocation, target.GetValue<Vector2>());
+                    return new TileSubject(Game1.currentLocation, target.GetValue<Vector2>(), this.Translations);
             }
 
             return null;
@@ -265,124 +270,169 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Get metadata for a menu element at the specified position.</summary>
         /// <param name="menu">The active menu.</param>
-        /// <param name="cursorPosition">The cursor's viewport-relative coordinates.</param>
-        public ISubject GetSubjectFrom(IClickableMenu menu, Vector2 cursorPosition)
+        /// <param name="cursorPos">The cursor's viewport-relative coordinates.</param>
+        public ISubject GetSubjectFrom(IClickableMenu menu, Vector2 cursorPos)
         {
-            // calendar
-            if (menu is Billboard)
+            switch (menu)
             {
-                Billboard billboard = (Billboard)menu;
-
-                // get target day
-                int selectedDay = -1;
-                {
-                    List<ClickableTextureComponent> calendarDays = billboard.calendarDays;
-                    for (int i = 0; i < calendarDays.Count; i++)
+                // calendar
+                case Billboard billboard:
                     {
-                        if (calendarDays[i].containsPoint((int)cursorPosition.X, (int)cursorPosition.Y))
+                        // get target day
+                        int selectedDay = -1;
+                        for (int i = 0; i < billboard.calendarDays.Count; i++)
                         {
-                            selectedDay = i + 1;
-                            break;
+                            if (billboard.calendarDays[i].containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                            {
+                                selectedDay = i + 1;
+                                break;
+                            }
+                        }
+                        if (selectedDay == -1)
+                            return null;
+
+                        // get villager with a birthday on that date
+                        NPC target = GameHelper.GetAllCharacters().FirstOrDefault(p => p.birthday_Season == Game1.currentSeason && p.birthday_Day == selectedDay);
+                        if (target != null)
+                            return new CharacterSubject(target, TargetType.Villager, this.Metadata, this.Translations, this.Reflection);
+                    }
+                    break;
+
+                // chest
+                case MenuWithInventory inventoryMenu:
+                    {
+                        Item item = inventoryMenu.hoveredItem;
+                        if (item != null)
+                            return new ItemSubject(this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                    }
+                    break;
+
+                // inventory
+                case GameMenu gameMenu:
+                    {
+                        List<IClickableMenu> tabs = this.Reflection.GetPrivateValue<List<IClickableMenu>>(gameMenu, "pages");
+                        IClickableMenu curTab = tabs[gameMenu.currentTab];
+                        switch (curTab)
+                        {
+                            case InventoryPage _:
+                                {
+                                    Item item = this.Reflection.GetPrivateValue<Item>(curTab, "hoveredItem");
+                                    if (item != null)
+                                        return new ItemSubject(this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                                }
+                                break;
+
+                            case CraftingPage _:
+                                {
+                                    Item item = this.Reflection.GetPrivateValue<Item>(curTab, "hoverItem");
+                                    if (item != null)
+                                        return new ItemSubject(this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                                }
+                                break;
+
+                            case SocialPage _:
+                                {
+                                    // get villagers on current page
+                                    int scrollOffset = this.Reflection.GetPrivateValue<int>(curTab, "slotPosition");
+                                    ClickableTextureComponent[] entries = this.Reflection
+                                        .GetPrivateValue<List<ClickableTextureComponent>>(curTab, "friendNames")
+                                        .Skip(scrollOffset)
+                                        .ToArray();
+
+                                    // find hovered villager
+                                    ClickableTextureComponent entry = entries.FirstOrDefault(p => p.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
+                                    if (entry != null)
+                                    {
+                                        NPC npc = GameHelper.GetAllCharacters().FirstOrDefault(p => p.name == entry.name);
+                                        if (npc != null)
+                                            return new CharacterSubject(npc, TargetType.Villager, this.Metadata, this.Translations, this.Reflection);
+                                    }
+                                }
+                                break;
                         }
                     }
-                }
-                if (selectedDay == -1)
-                    return null;
+                    break;
 
-                // get villager with a birthday on that date
-                NPC target = GameHelper.GetAllCharacters().FirstOrDefault(p => p.birthday_Season == Game1.currentSeason && p.birthday_Day == selectedDay);
-                if (target != null)
-                    return new CharacterSubject(target, TargetType.Villager, this.Metadata, this.Reflection);
-            }
-
-            // chest
-            else if (menu is MenuWithInventory)
-            {
-                Item item = ((MenuWithInventory)menu).hoveredItem;
-                if (item != null)
-                    return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
-            }
-
-            // inventory
-            else if (menu is GameMenu)
-            {
-                // get current tab
-                List<IClickableMenu> tabs = this.Reflection.GetPrivateValue<List<IClickableMenu>>(menu, "pages");
-                IClickableMenu curTab = tabs[((GameMenu)menu).currentTab];
-                if (curTab is InventoryPage)
-                {
-                    Item item = this.Reflection.GetPrivateValue<Item>(curTab, "hoveredItem");
-                    if (item != null)
-                        return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
-                }
-                else if (curTab is CraftingPage)
-                {
-                    Item item = this.Reflection.GetPrivateValue<Item>(curTab, "hoverItem");
-                    if (item != null)
-                        return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
-                }
-                else if (curTab is SocialPage)
-                {
-                    // get villagers on current page
-                    int scrollOffset = this.Reflection.GetPrivateValue<int>(curTab, "slotPosition");
-                    ClickableTextureComponent[] entries = this.Reflection
-                        .GetPrivateValue<List<ClickableTextureComponent>>(curTab, "friendNames")
-                        .Skip(scrollOffset)
-                        .ToArray();
-
-                    // find hovered villager
-                    ClickableTextureComponent entry = entries.FirstOrDefault(p => p.containsPoint((int)cursorPosition.X, (int)cursorPosition.Y));
-                    if (entry != null)
+                // Community Center bundle menu
+                case JunimoNoteMenu bundleMenu:
                     {
-                        NPC npc = GameHelper.GetAllCharacters().FirstOrDefault(p => p.name == entry.name);
-                        if (npc != null)
-                            return new CharacterSubject(npc, TargetType.Villager, this.Metadata, this.Reflection);
+                        // hovered inventory item
+                        {
+                            Item item = this.Reflection.GetPrivateValue<Item>(menu, "hoveredItem");
+                            if (item != null)
+                                return new ItemSubject(this.Translations, item.getOne(), ObjectContext.Inventory, knownQuality: true);
+                        }
+
+                        // list of required ingredients
+                        for (int i = 0; i < bundleMenu.ingredientList.Count; i++)
+                        {
+                            if (bundleMenu.ingredientList[i].containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                            {
+                                Bundle bundle = this.Reflection.GetPrivateValue<Bundle>(bundleMenu, "currentPageBundle");
+                                var ingredient = bundle.ingredients[i];
+                                var item = GameHelper.GetObjectBySpriteIndex(ingredient.index, ingredient.stack);
+                                item.quality = ingredient.quality;
+                                return new ItemSubject(this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                            }
+                        }
+
+                        // list of submitted ingredients
+                        foreach (ClickableTextureComponent slot in bundleMenu.ingredientSlots)
+                        {
+                            if (slot.item != null && slot.containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                                return new ItemSubject(this.Translations, slot.item, ObjectContext.Inventory, knownQuality: true);
+                        }
                     }
-                }
-            }
+                    break;
 
-            // kitchen
-            else if (menu is CraftingPage)
-            {
-                CraftingRecipe recipe = this.Reflection.GetPrivateValue<CraftingRecipe>(menu, "hoverRecipe");
-                if (recipe != null)
-                    return new ItemSubject(recipe.createItem(), ObjectContext.Inventory, knownQuality: true);
-            }
+                // kitchen
+                case CraftingPage _:
+                    {
+                        CraftingRecipe recipe = this.Reflection.GetPrivateValue<CraftingRecipe>(menu, "hoverRecipe");
+                        if (recipe != null)
+                            return new ItemSubject(this.Translations, recipe.createItem(), ObjectContext.Inventory, knownQuality: true);
+                    }
+                    break;
 
-            // shop
-            else if (menu is ShopMenu)
-            {
-                Item item = this.Reflection.GetPrivateValue<Item>(menu, "hoveredItem");
-                if (item != null)
-                    return new ItemSubject(item.getOne(), ObjectContext.Inventory, knownQuality: true);
-            }
 
-            // toolbar
-            else if (menu is Toolbar)
-            {
-                // find hovered slot
-                List<ClickableComponent> slots = this.Reflection.GetPrivateValue<List<ClickableComponent>>(menu, "buttons");
-                ClickableComponent hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint((int)cursorPosition.X, (int)cursorPosition.Y));
-                if (hoveredSlot == null)
-                    return null;
+                // shop
+                case ShopMenu _:
+                    {
+                        Item item = this.Reflection.GetPrivateValue<Item>(menu, "hoveredItem");
+                        if (item != null)
+                            return new ItemSubject(this.Translations, item.getOne(), ObjectContext.Inventory, knownQuality: true);
+                    }
+                    break;
 
-                // get inventory index
-                int index = slots.IndexOf(hoveredSlot);
-                if (index < 0 || index > Game1.player.items.Count - 1)
-                    return null;
+                // toolbar
+                case Toolbar _:
+                    {
+                        // find hovered slot
+                        List<ClickableComponent> slots = this.Reflection.GetPrivateValue<List<ClickableComponent>>(menu, "buttons");
+                        ClickableComponent hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
+                        if (hoveredSlot == null)
+                            return null;
 
-                // get hovered item
-                Item item = Game1.player.items[index];
-                if (item != null)
-                    return new ItemSubject(item.getOne(), ObjectContext.Inventory, knownQuality: true);
-            }
+                        // get inventory index
+                        int index = slots.IndexOf(hoveredSlot);
+                        if (index < 0 || index > Game1.player.items.Count - 1)
+                            return null;
 
-            // by convention (for mod support)
-            else
-            {
-                Item item = this.Reflection.GetPrivateValue<Item>(menu, "HoveredItem", required: false); // ChestsAnywhere
-                if (item != null)
-                    return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
+                        // get hovered item
+                        Item item = Game1.player.items[index];
+                        if (item != null)
+                            return new ItemSubject(this.Translations, item.getOne(), ObjectContext.Inventory, knownQuality: true);
+                    }
+                    break;
+
+                // by convention (for mod support)
+                default:
+                    {
+                        Item item = this.Reflection.GetPrivateValue<Item>(menu, "HoveredItem", required: false); // ChestsAnywhere
+                        if (item != null)
+                            return new ItemSubject(this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                    }
+                    break;
             }
 
             return null;
@@ -409,7 +459,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case FacingDirection.Left:
                     return tile + new Vector2(-1, 0);
                 default:
-                    throw new NotImplementedException($"Unknown facing direction {direction}");
+                    throw new NotSupportedException($"Unknown facing direction {direction}");
             }
         }
     }

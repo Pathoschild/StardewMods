@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Pathoschild.Stardew.Automate.Framework;
-using StardewValley;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
