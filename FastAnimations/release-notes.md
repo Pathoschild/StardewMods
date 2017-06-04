@@ -1,7 +1,7 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## 1.3
+## 1.2.1
 * Updated to SMAPI 1.14.
 
 ## 1.2
