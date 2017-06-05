@@ -1,8 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Target Name="AfterBuild">
-    <ItemGroup>
-      <ModFiles Include="$(TargetDir)\**\*.*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(ModFiles)" DestinationFolder="$(GamePath)\Mods\$(TargetName)\%(RecursiveDir)" SkipUnchangedFiles="false" />
-  </Target>
+  <PropertyGroup>
+    <DeployModFolderName>$(TargetName)</DeployModFolderName>
+  </PropertyGroup>
 </Project>
