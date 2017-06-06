@@ -133,6 +133,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="i18n\de.json" />
+    <None Include="i18n\pt.json" />
     <None Include="i18n\default.json" />
     <None Include="i18n\zh.json" />
     <None Include="manifest.json" />

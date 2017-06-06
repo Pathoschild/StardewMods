@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming
+* Added Portuguese translations. (Thanks to Fabilows!)
+
 ## 1.11
 * Updated to SMAPI 1.14.
 * Added translation support.
