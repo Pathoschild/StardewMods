@@ -6,6 +6,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
@@ -42,11 +43,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // calculate maturity
             bool isFullyGrown = animal.age >= animal.ageWhenMature;
             int daysUntilGrown = 0;
-            GameDate dayOfMaturity = null;
+            SDate dayOfMaturity = null;
             if (!isFullyGrown)
             {
                 daysUntilGrown = animal.ageWhenMature - animal.age;
-                dayOfMaturity = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(daysUntilGrown);
+                dayOfMaturity = SDate.Now().AddDays(daysUntilGrown);
             }
 
             // yield fields

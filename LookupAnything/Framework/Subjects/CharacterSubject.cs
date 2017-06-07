@@ -9,6 +9,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Monsters;
@@ -110,7 +111,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     else
                     {
                         // birthday
-                        GameDate birthday = new GameDate(npc.birthday_Season, npc.birthday_Day, Game1.year, metadata.Constants.DaysInSeason);
+                        SDate birthday = new SDate(npc.birthday_Day, npc.birthday_Season);
                         yield return new GenericField(this.Text.Get(L10n.Npc.Birthday), this.Text.Stringify(birthday));
 
                         // friendship

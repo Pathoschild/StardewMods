@@ -10,6 +10,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
@@ -113,7 +114,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 {
                     // calculate next harvest
                     int daysToNextHarvest = 0;
-                    GameDate dayOfNextHarvest = null;
+                    SDate dayOfNextHarvest = null;
                     if (!canHarvestNow)
                     {
                         // calculate days until next harvest
@@ -131,7 +132,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                             else
                                 daysToNextHarvest = crop.dayOfCurrentPhase; // dayOfCurrentPhase decreases to 0 when fully grown, where <=0 is harvestable
                         }
-                        dayOfNextHarvest = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(daysToNextHarvest);
+                        dayOfNextHarvest = SDate.Now().AddDays(daysToNextHarvest);
                     }
 
                     // generate field
@@ -198,7 +199,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                             {
                                 Quality = quality,
                                 DaysLeft = daysLeft,
-                                HarvestDate = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(daysLeft)
+                                HarvestDate = SDate.Now().AddDays(daysLeft)
                             }
                         )
                         .ToArray();

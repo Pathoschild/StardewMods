@@ -7,6 +7,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
@@ -68,7 +69,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // show growth data
             if (!isMature)
             {
-                GameDate dayOfMaturity = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(tree.daysUntilMature);
+                SDate dayOfMaturity = SDate.Now().AddDays(tree.daysUntilMature);
                 string grownOnDateText = this.Translate(L10n.FruitTree.GrowthSummary, new { date = this.Stringify(dayOfMaturity) });
                 string daysUntilGrownText = this.Text.GetPlural(tree.daysUntilMature, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = tree.daysUntilMature });
                 string growthText = $"{grownOnDateText} ({daysUntilGrownText})";
@@ -93,7 +94,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                             // read schedule
                             ItemQuality quality = entry.Key;
                             int daysLeft = entry.Value;
-                            GameDate date = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(daysLeft);
+                            SDate date = SDate.Now().AddDays(daysLeft);
                             int yearOffset = date.Year - Game1.year;
 
                             // generate summary line

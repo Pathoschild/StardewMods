@@ -53,13 +53,6 @@ namespace Pathoschild.Stardew.LookupAnything
         /****
         ** Data helpers
         ****/
-        /// <summary>Get the current in-game date.</summary>
-        /// <param name="daysInSeason">The number of days in a season.</param>
-        public static GameDate GetDate(int daysInSeason)
-        {
-            return new GameDate(Game1.currentSeason, Game1.dayOfMonth, Game1.year, daysInSeason);
-        }
-
         /// <summary>Get the number of times the player has shipped a given item.</summary>
         /// <param name="itemID">The item's parent sprite index.</param>
         public static int GetShipped(int itemID)
