@@ -66,7 +66,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     continue;
 
                 TargetType type = TargetType.Unknown;
-                if (npc.isVillager())
+                if (npc is Child || npc.isVillager())
                     type = TargetType.Villager;
                 else if (npc is Horse)
                     type = TargetType.Horse;

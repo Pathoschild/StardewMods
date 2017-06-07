@@ -259,6 +259,17 @@
     "npc.friendship.need-bouquet": "need bouquet for next",
     "npc.friendship.need-points": "next in {{count}} pts",
 
+    // NPC child lookup labels
+    "npc.child.age": "Age",
+
+    // NPC child lookup values
+    "npc.child.age.description-partial": "{{label}} ({{count}} days to {{nextLabel}})",
+    "npc.child.age.description-grown": "{{label}}",
+    "npc.child.age.newborn": "newborn",
+    "npc.child.age.baby": "baby",
+    "npc.child.age.crawler": "crawler",
+    "npc.child.age.toddler": "toddler",
+
     // pet lookup labels
     "pet.love": "Love",
     "pet.petted-today": "Petted today",

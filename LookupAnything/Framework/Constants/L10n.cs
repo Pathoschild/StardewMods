@@ -449,6 +449,37 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public const string FriendshipNeedPoints = "npc.friendship.need-points";
         }
 
+        /// <summary>NPC child lookup translations.</summary>
+        public static class NpcChild
+        {
+            /****
+            ** Labels
+            ****/
+            /// <summary>A value like <c>Age</c>.</summary>
+            public const string Age = "npc.child.age";
+
+            /****
+            ** Values
+            ****/
+            /// <summary>A value like <c>{{label}} ({{count}} days to {{nextLabel}})</c>.</summary>
+            public const string AgeDescriptionPartial = "npc.child.age.description-partial";
+
+            /// <summary>A value like <c>{{label}}</c>.</summary>
+            public const string AgeDescriptionGrown = "npc.child.age.description-grown";
+
+            /// <summary>A value like <c>newborn</c>.</summary>
+            public const string AgeNewborn = "npc.child.age.newborn";
+
+            /// <summary>A value like <c>baby</c>.</summary>
+            public const string AgeBaby = "npc.child.age.baby";
+
+            /// <summary>A value like <c>crawler</c>.</summary>
+            public const string AgeCrawler = "npc.child.age.crawler";
+
+            /// <summary>A value like <c>toddler</c>.</summary>
+            public const string AgeToddler = "npc.child.age.toddler";
+        }
+
         /// <summary>Pet lookup translations.</summary>
         public static class Pet
         {
@@ -618,6 +649,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
         public static string For(ItemQuality quality)
         {
             return $"quality.{quality.GetName()}";
+        }
+
+        /// <summary>Get a translation key for an enum value.</summary>
+        /// <param name="age">The child age.</param>
+        public static string For(ChildAge age)
+        {
+            return $"npc.child.age.{age.ToString().ToLower()}";
         }
     }
 }

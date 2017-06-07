@@ -259,6 +259,17 @@
     "npc.friendship.need-bouquet": "Blumenstrauß jetzt erforderlich",
     "npc.friendship.need-points": "nächstes in {{count}} punkten",
 
+    // NPC child lookup labels // TODO
+    "npc.child.age": "Age",
+
+    // NPC child lookup values // TODO
+    "npc.child.age.description-partial": "{{label}} ({{count}} days to {{nextLabel}})",
+    "npc.child.age.description-grown": "{{label}}",
+    "npc.child.age.newborn": "newborn",
+    "npc.child.age.baby": "baby",
+    "npc.child.age.crawler": "crawler",
+    "npc.child.age.toddler": "toddler",
+
     // pet lookup labels
     "pet.love": "Liebe",
     "pet.petted-today": "Heute gestreichelt",

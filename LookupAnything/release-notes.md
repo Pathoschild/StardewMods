@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming
+* You can now look up your children.
 * Added Portuguese translations. (Thanks to Fabilows!)
 
 ## 1.14
