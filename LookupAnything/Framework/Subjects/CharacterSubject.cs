@@ -83,6 +83,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     // children
                     else if (npc is Child child)
                     {
+                        // birthday
+                        SDate birthday = SDate.Now().AddDays(-child.daysOld);
+                        yield return new GenericField(this.Text.Get(L10n.Npc.Birthday), this.Text.Stringify(birthday, withYear: true));
+
                         // age
                         {
                             ChildAge age = (ChildAge)child.age;
