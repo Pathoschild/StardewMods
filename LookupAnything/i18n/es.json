@@ -260,15 +260,15 @@
     "npc.friendship.need-points": "Siguiente en {{count}} puntos",
 
     // NPC child lookup labels
-    "npc.child.age": "Age",
+    "npc.child.age": "Edad",
 
     // NPC child lookup values
-    "npc.child.age.description-partial": "{{label}} ({{count}} days to {{nextLabel}})",
+    "npc.child.age.description-partial": "{{label}} ({{count}} Dias para {{nextLabel}})",
     "npc.child.age.description-grown": "{{label}}",
-    "npc.child.age.newborn": "newborn",
-    "npc.child.age.baby": "baby",
-    "npc.child.age.crawler": "crawler",
-    "npc.child.age.toddler": "toddler",
+    "npc.child.age.newborn": "Recien nacido",
+    "npc.child.age.baby": "Bebe",
+    "npc.child.age.crawler": "Bebe joven",
+    "npc.child.age.toddler": "Bebe maduro",
 
     // pet lookup labels
     "pet.love": "Amor",
@@ -322,13 +322,13 @@
     "tree.stage.partial": "{{stageName}} ({{step}} de {{max}})",
     "tree.next-growth.winter": "no puede crecer en el Invierno fuera del invernadero",
     "tree.next-growth.adjacent-trees": "no puede crecer porque otros arboles estan muy cerca",
-    "tree.next-growth.random": "20% Chances de crecer en {{stage}} manana",
+    "tree.next-growth.random": "20% Chances de crecer en {{stage}} maniana",
 
     // tree stages
-    "tree.stages.seed": "semilla",
-    "tree.stages.sprout": "brote",
-    "tree.stages.sapling": "joven",
-    "tree.stages.bush": "arbusto",
-    "tree.stages.smallTree": "àrbol pequeño",
+    "tree.stages.seed": "Semilla",
+    "tree.stages.sprout": "Brote",
+    "tree.stages.sapling": "Joven",
+    "tree.stages.bush": "Arbusto",
+    "tree.stages.smallTree": "Àrbol pequeño",
     "tree.stages.tree": "Àrbol"
 }
