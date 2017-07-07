@@ -30,6 +30,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>The control which sorts items in the chest.</summary>
         public T SortItems { get; set; }
 
+        /// <summary>The control which stacks items in the inventory.</summary>
+        public T StackItems { get; set; }
+
 
         /*********
         ** Public methods

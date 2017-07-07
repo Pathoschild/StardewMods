@@ -36,7 +36,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 PrevCategory = Keys.Up.ToString(),
                 NextCategory = Keys.Down.ToString(),
                 EditChest = "",
-                SortItems = ""
+                SortItems = "",
+                StackItems = ""
             };
             this.Controller = new InputMapConfiguration<string>
             {
@@ -46,7 +47,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 PrevCategory = Buttons.LeftTrigger.ToString(),
                 NextCategory = Buttons.RightTrigger.ToString(),
                 EditChest = "",
-                SortItems = ""
+                SortItems = "",
+                StackItems = ""
             };
             this.CheckForUpdates = true;
             this.ShowHoverTooltips = true;
@@ -65,7 +67,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                     PrevCategory = this.TryParse(this.Keyboard.PrevCategory, Keys.Up),
                     NextCategory = this.TryParse(this.Keyboard.NextCategory, Keys.Down),
                     EditChest = this.TryParse<Keys>(this.Keyboard.EditChest),
-                    SortItems = this.TryParse<Keys>(this.Keyboard.SortItems)
+                    SortItems = this.TryParse<Keys>(this.Keyboard.SortItems),
+                    StackItems = this.TryParse<Keys>(this.Keyboard.StackItems)
                 },
                 Controller = new InputMapConfiguration<Buttons>
                 {
@@ -75,7 +78,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                     PrevCategory = this.TryParse(this.Controller.PrevCategory, Buttons.LeftTrigger),
                     NextCategory = this.TryParse(this.Controller.NextCategory, Buttons.RightTrigger),
                     EditChest = this.TryParse<Buttons>(this.Controller.EditChest),
-                    SortItems = this.TryParse<Buttons>(this.Keyboard.SortItems)
+                    SortItems = this.TryParse<Buttons>(this.Keyboard.SortItems),
+                    StackItems = this.TryParse<Buttons>(this.Keyboard.StackItems)
                 },
                 CheckForUpdates = this.CheckForUpdates,
                 ShowHoverTooltips = this.ShowHoverTooltips

@@ -15,5 +15,6 @@
     // button labels
     "button.edit-chest": "edit chest",
     "button.sort-inventory": "sort inventory",
+    "button.stack-items": "stack items in inventory",
     "button.ok": "OK"
 }
