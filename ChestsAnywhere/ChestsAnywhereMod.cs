@@ -153,6 +153,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 // open menu
                 if (key.Equals(map.Toggle) && (Game1.activeClickableMenu == null || (Game1.activeClickableMenu as GameMenu)?.currentTab == 0))
                     this.OpenMenu();
+                else if (key.Equals(map.StackItems))
+                    this.StackItemsInInventory();
             }
             catch (Exception ex)
             {
@@ -172,6 +174,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 Game1.activeClickableMenu = selectedChest.OpenMenu();
             else
                 CommonHelper.ShowInfoMessage("You don't have any chests yet. :)", duration: 1000);
+        }
+        
+        private void StackItemsInInventory() {
+            ChestInventoryStacker.StackItemsInInventory(this.ChestFactory.GetChestsForDisplay().ToList());
         }
 
         /// <summary>Validate that the game versions match the minimum requirements, and return an appropriate error message if not.</summary>

@@ -68,6 +68,7 @@
     <Compile Include="Menus\Overlays\Element.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Menus\Components\Tab.cs" />
+    <Compile Include="ChestInventoryStacker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="i18n\de.json">
