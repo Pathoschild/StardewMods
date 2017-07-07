@@ -118,6 +118,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
 
             /// <summary>The inventory 'organize' button.</summary>
             public static readonly Rectangle Organize = new Rectangle(162, 440, 16, 16);
+
+            public static readonly Rectangle Stack = new Rectangle(108, 491, 16, 16);
         }
 
         /// <summary>Sprites used to draw a textbox.</summary>

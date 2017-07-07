@@ -98,6 +98,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The button which sorts the player inventory.</summary>
         private ClickableTextureComponent SortInventoryButton;
 
+        /// <summary>The button which stacks items in the player's inventory.</summary>
+        private ClickableTextureComponent StackItemsButton;
+
         /****
         ** Edit UI
         ****/
@@ -165,6 +168,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             Game1.playSound("Ship");
         }
 
+        /// <summary> Stacks items in the player's inventory with others found in the chests.</summary>
+        public void StackItemsInInventory()
+        {
+            ChestInventoryStacker.StackItemsInInventory(this.Chests.ToList());
+        }
+
         /// <summary>Switch to the specified chest.</summary>
         /// <param name="chest">The chest to select.</param>
         public void SelectChest(ManagedChest chest)
@@ -206,6 +215,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 // edit button
                 this.EditButton.draw(batch);
                 this.SortInventoryButton.draw(batch);
+                this.StackItemsButton.draw(batch);
             }
 
             // edit mode
@@ -463,6 +473,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         this.OpenEdit();
                     else if (this.SortInventoryButton.containsPoint(x, y))
                         this.SortInventory();
+                    else if (this.StackItemsButton.containsPoint(x, y))
+                        this.StackItemsInInventory();
                     else if (this.ChestTab.containsPoint(x, y))
                         this.ActiveElement = Element.ChestList;
                     else if (this.GroupTab?.containsPoint(x, y) == true)
@@ -484,6 +496,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 case Element.Menu:
                     this.EditButton.tryHover(x, y);
                     this.SortInventoryButton.tryHover(x, y);
+                    this.StackItemsButton.tryHover(x, y);
                     return false;
 
                 case Element.EditForm:
@@ -545,6 +558,29 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 float zoom = Game1.pixelZoom;
                 Rectangle buttonBounds = new Rectangle(okButton.bounds.X, (int)(okButton.bounds.Y - sprite.Height * zoom - 5 * zoom), (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
                 this.SortInventoryButton = new ClickableTextureComponent("sort-inventory", buttonBounds, null, this.Translations.Get("button.sort-inventory"), Sprites.Icons.Sheet, sprite, zoom);
+            }
+
+            // stack inventory button overlay (based on sort inventory button position)
+            {
+                var sprite = Sprites.Buttons.Stack;
+                var offsetButton = this.SortInventoryButton;
+                var zoom = Game1.pixelZoom;
+                var buttonBounds = new Rectangle(
+                    offsetButton.bounds.X + (int)(sprite.Width * zoom) + (int)(5 * zoom),
+                    (int)(offsetButton.bounds.Y),
+                    (int)(sprite.Width * zoom),
+                    (int)(sprite.Height * zoom)
+                );
+
+                this.StackItemsButton = new ClickableTextureComponent(
+                    "stack-items",
+                    buttonBounds,
+                    null,
+                    this.Translations.Get("button.stack-items"),
+                    Sprites.Icons.Sheet,
+                    sprite,
+                    zoom
+                );
             }
 
             // edit form
