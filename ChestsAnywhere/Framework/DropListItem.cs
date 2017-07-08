@@ -1,4 +1,4 @@
-namespace Pathoschild.Stardew.ChestsAnywhere.Framework
+﻿namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
     /// <summary>An item in a drop list.</summary>
     /// <typeparam name="TItem">The item type.</typeparam>
@@ -29,6 +29,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             this.Index = index;
             this.Name = name;
             this.Value = value;
-        } 
+        }
     }
 }

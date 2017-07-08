@@ -58,8 +58,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <param name="defaultValue">The default value if it can't be parsed.</param>
         private T TryParse<T>(string raw, T defaultValue = default(T)) where T : struct
         {
-            T parsed;
-            return Enum.TryParse(raw, out parsed) ? parsed : defaultValue;
+            return Enum.TryParse(raw, out T parsed) ? parsed : defaultValue;
         }
     }
 }

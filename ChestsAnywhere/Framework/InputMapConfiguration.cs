@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 
         /// <summary>The control which navigates to the next chest.</summary>
         public T NextChest { get; set; }
-        
+
         /// <summary>The control which navigates to the previous category.</summary>
         public T PrevCategory { get; set; }
 

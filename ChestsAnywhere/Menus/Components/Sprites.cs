@@ -189,7 +189,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
             var middleLeft = Sprites.Menu.MiddleLeft;
             var middle = Sprites.Menu.Middle;
             var middleRight = Sprites.Menu.MiddleRight;
-            
+
             // draw background
             batch.Draw(sheet, Sprites.Menu.Background, bounds.X + left.Width, bounds.Y + top.Height, bounds.Width - left.Width - right.Width, bounds.Height - top.Height - bottom.Height);
 

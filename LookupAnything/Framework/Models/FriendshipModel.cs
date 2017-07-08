@@ -1,4 +1,4 @@
-using Pathoschild.Stardew.LookupAnything.Framework.Data;
+﻿using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewValley;
 using SFarmer = StardewValley.Farmer;
 

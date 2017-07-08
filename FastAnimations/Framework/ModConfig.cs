@@ -1,4 +1,4 @@
-namespace Pathoschild.Stardew.FastAnimations.Framework
+﻿namespace Pathoschild.Stardew.FastAnimations.Framework
 {
     /// <summary>The mod configuration.</summary>
     internal class ModConfig

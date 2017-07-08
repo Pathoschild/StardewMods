@@ -231,7 +231,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 {
                     string locationName = this.Chest.LocationName;
                     if (this.Chest.Tile != Vector2.Zero)
-                        locationName += $" (" + this.Translations.Get("label.location.tile", new { x = this.Chest.Tile.X, y = this.Chest.Tile.Y }) + ")";
+                        locationName += " (" + this.Translations.Get("label.location.tile", new { x = this.Chest.Tile.X, y = this.Chest.Tile.Y }) + ")";
 
                     Vector2 labelSize = batch.DrawTextBlock(font, locationLabel, new Vector2(bounds.X + padding + (int)(maxLabelWidth - font.MeasureString(locationLabel).X), bounds.Y + topOffset), bounds.Width);
                     batch.DrawTextBlock(font, locationName, new Vector2(bounds.X + padding + maxLabelWidth + gutter, bounds.Y + topOffset), bounds.Width);
@@ -566,8 +566,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             // get order value
             int? order = null;
             {
-                int parsed;
-                if (int.TryParse(this.EditOrderField.Text, out parsed))
+                if (int.TryParse(this.EditOrderField.Text, out int parsed))
                     order = parsed;
             }
 

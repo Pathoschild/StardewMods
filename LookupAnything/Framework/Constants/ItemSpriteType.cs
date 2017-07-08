@@ -1,4 +1,4 @@
-namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
+﻿namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 {
     /// <summary>Indicates the sprite sheet used to draw an object. A given sprite ID can be duplicated between two sprite sheets.</summary>
     internal enum ItemSpriteType

@@ -1,4 +1,4 @@
-using StardewValley;
+﻿using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 {

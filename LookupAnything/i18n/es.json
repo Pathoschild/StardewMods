@@ -1,334 +1,334 @@
-{
-    /*********
-    ** Generic translations
-    *********/
-    // dates (possible tokens: {{seasonName}}, {{seasonNumber}}, {{dayNumber}}, {{year}})
-    "generic.date": "{{seasonName}} {{dayNumber}}",
-    "generic.date-with-year": "{{seasonName}} {{dayNumber}} En el aÒo {{year}}",
+Ôªø{
+  /*********
+  ** Generic translations
+  *********/
+  // dates (possible tokens: {{seasonName}}, {{seasonNumber}}, {{dayNumber}}, {{year}})
+  "generic.date": "{{seasonName}} {{dayNumber}}",
+  "generic.date-with-year": "{{seasonName}} {{dayNumber}} En el a√±o {{year}}",
 
-    // generic field values
-    "generic.percent": "{{percent}}%",
-    "generic.percent-chance-of": "{{percent}}% chance de {{label}}",
-    "generic.percent-ratio": "{{percent}}% ({{value}} De {{max}})",
-    "generic.ratio": "{{value}} De {{max}}",
-    "generic.range": "{{min}} Hasta {{max}}",
-    "generic.yes": "Si",
-    "generic.no": "No",
-    "generic.seconds": "{{count}} Segundos",
-    "generic.minutes": "{{count}} Minutos",
-    "generic.hours": "{{count}} Horas",
-    "generic.days": "{{count}} Dias",
-    "generic.in-x-days": "En {{count}} dias",
-    "generic.tomorrow": "Maniana",
-    "generic.price": "{{price}}g",
-    "generic.price-for-quality": "{{price}}g ({{quality}})",
-    "generic.price-for-stack": "{{price}}g Por stack de {{count}}",
+  // generic field values
+  "generic.percent": "{{percent}}%",
+  "generic.percent-chance-of": "{{percent}}% chance de {{label}}",
+  "generic.percent-ratio": "{{percent}}% ({{value}} De {{max}})",
+  "generic.ratio": "{{value}} De {{max}}",
+  "generic.range": "{{min}} Hasta {{max}}",
+  "generic.yes": "Si",
+  "generic.no": "No",
+  "generic.seconds": "{{count}} Segundos",
+  "generic.minutes": "{{count}} Minutos",
+  "generic.hours": "{{count}} Horas",
+  "generic.days": "{{count}} Dias",
+  "generic.in-x-days": "En {{count}} dias",
+  "generic.tomorrow": "Maniana",
+  "generic.price": "{{price}}g",
+  "generic.price-for-quality": "{{price}}g ({{quality}})",
+  "generic.price-for-stack": "{{price}}g Por stack de {{count}}",
 
-    // types
-    "type.fruit-tree": "¿rbol de frutas",
-    "type.map-tile": "Tile del mapa",
-    "type.monster": "Monstruo",
-    "type.player": "Jugador",
-    "type.tree": "¿rbol",
-    "type.villager": "Aldeano",
-    "type.other": "Otro", // default type
+  // types
+  "type.fruit-tree": "√Ärbol de frutas",
+  "type.map-tile": "Tile del mapa",
+  "type.monster": "Monstruo",
+  "type.player": "Jugador",
+  "type.tree": "√Ärbol",
+  "type.villager": "Aldeano",
+  "type.other": "Otro", // default type
 
-    // item qualities
-    "quality.normal": "Normal",
-    "quality.silver": "Plata",
-    "quality.gold": "Oro",
-    "quality.iridium": "Iridio",
+  // item qualities
+  "quality.normal": "Normal",
+  "quality.silver": "Plata",
+  "quality.gold": "Oro",
+  "quality.iridium": "Iridio",
 
-    /*********
-    ** Data translations
-    *********/
-    // Community Center bundle areas
-    "bundle-area.pantry": "Pantry",
-    "bundle-area.crafts-room": "Habitacion de Crafteos",
-    "bundle-area.fish-tank": "Tanque de Peces",
-    "bundle-area.boiler-room": "Sala de la Caldera",
-    "bundle-area.vault": "Sala de la Boveda",
-    "bundle-area.bulletin-board": "Tablon de Anuncios",
+  /*********
+  ** Data translations
+  *********/
+  // Community Center bundle areas
+  "bundle-area.pantry": "Pantry",
+  "bundle-area.crafts-room": "Habitacion de Crafteos",
+  "bundle-area.fish-tank": "Tanque de Peces",
+  "bundle-area.boiler-room": "Sala de la Caldera",
+  "bundle-area.vault": "Sala de la Boveda",
+  "bundle-area.bulletin-board": "Tablon de Anuncios",
 
-    // shop names
-    "shop.adventure-guild": "Gremio de Aventureros",
-    "shop.clint": "Clint",
-    "shop.marnie": "Marnie",
-    "shop.pierre": "Pierre",
-    "shop.robin": "Robin",
-    "shop.willy": "Willy",
+  // shop names
+  "shop.adventure-guild": "Gremio de Aventureros",
+  "shop.clint": "Clint",
+  "shop.marnie": "Marnie",
+  "shop.pierre": "Pierre",
+  "shop.robin": "Robin",
+  "shop.willy": "Willy",
 
-    // recipe types
-    "recipe-type.cooking": "Cocinar",
-    "recipe-type.crafting": "Craftear",
+  // recipe types
+  "recipe-type.cooking": "Cocinar",
+  "recipe-type.crafting": "Craftear",
 
-    /*********
-    ** NPC overrides
-    *********/
-    "data.npc.pet.description": "Tu leal mascota.",
-    "data.npc.horse.description": "Tu leal corcel.",
-    "data.npc.junimo.description": "Un espiritu del bosque del mundo de los espiritus. Muy poco se sabe sobre ellos.",
+  /*********
+  ** NPC overrides
+  *********/
+  "data.npc.pet.description": "Tu leal mascota.",
+  "data.npc.horse.description": "Tu leal corcel.",
+  "data.npc.junimo.description": "Un espiritu del bosque del mundo de los espiritus. Muy poco se sabe sobre ellos.",
 
-    /*********
-    ** Item overrides
-    *********/
-    // item types
-    "data.type.debris": "Escombros",
-    "data.type.stone": "Piedra",
-    "data.type.container": "Contenedor",
+  /*********
+  ** Item overrides
+  *********/
+  // item types
+  "data.type.debris": "Escombros",
+  "data.type.stone": "Piedra",
+  "data.type.container": "Contenedor",
 
-    // farm
-    "data.item.egg-incubator.description": "Incuba huevos en pollos bebe y patos.",
-    "data.item.broken-branch.name": "Rama Rota",
-    "data.item.broken-branch.description": "Una rama rota. Cortar con un hacha para obtener madera.",
-    "data.item.stone.name": "Piedra",
-    "data.item.stone.description": "Una piedra gris. Romper para obtener piedra.",
-    "data.item.geode.name": "Nodo de Geoda",
-    "data.item.geode.description": "Romper para obtener geodas.",
-    "data.item.frozen-geode.name": "Nodo de Geodas Congeladas",
-    "data.item.frozen-geode.description": "Romper para obtener geodas congeladas.",
-    "data.item.magma-geode.name": "Nodo de Geoda de Magma",
-    "data.item.magma-geode.description": "Romper para obtener Geodas de Magma.",
+  // farm
+  "data.item.egg-incubator.description": "Incuba huevos en pollos bebe y patos.",
+  "data.item.broken-branch.name": "Rama Rota",
+  "data.item.broken-branch.description": "Una rama rota. Cortar con un hacha para obtener madera.",
+  "data.item.stone.name": "Piedra",
+  "data.item.stone.description": "Una piedra gris. Romper para obtener piedra.",
+  "data.item.geode.name": "Nodo de Geoda",
+  "data.item.geode.description": "Romper para obtener geodas.",
+  "data.item.frozen-geode.name": "Nodo de Geodas Congeladas",
+  "data.item.frozen-geode.description": "Romper para obtener geodas congeladas.",
+  "data.item.magma-geode.name": "Nodo de Geoda de Magma",
+  "data.item.magma-geode.description": "Romper para obtener Geodas de Magma.",
 
-    // weeds & crystals
-    "data.item.weed.name": "Hierba",
-    "data.item.weed.description": "Una hierba. Talvez contenga fibras o semillas silvestres.",
-    "data.item.fertile-weed.name": "Hierba Fertil",
-    "data.item.fertile-weed.description": "Esta garantizado que va a soltar semillas silvestres.",
-    "data.item.ice-crystal.name": "Cristal de Hielo",
-    "data.item.ice-crystal.description": "Un cristal de hielo. Muy baja posibilidad de contener un cuarzo refinado.",
+  // weeds & crystals
+  "data.item.weed.name": "Hierba",
+  "data.item.weed.description": "Una hierba. Talvez contenga fibras o semillas silvestres.",
+  "data.item.fertile-weed.name": "Hierba Fertil",
+  "data.item.fertile-weed.description": "Esta garantizado que va a soltar semillas silvestres.",
+  "data.item.ice-crystal.name": "Cristal de Hielo",
+  "data.item.ice-crystal.description": "Un cristal de hielo. Muy baja posibilidad de contener un cuarzo refinado.",
 
-    // mine gems
-    "data.item.amethyst-node.name": "Conjunto de Amatistas",
-    "data.item.amethyst-node.description": "Romper para obtener amatistas.",
-    "data.item.aquamarine-node.name": "Nodo de Aquamarina",
-    "data.item.aquamarine-node.description": "Romper para obtener aquamarinas.",
-    "data.item.diamond-node.name": "Nodo de Diamante",
-    "data.item.diamond-node.description": "Romper para obtener diamantes.",
-    "data.item.emerald-node.name": "Nodo de Esmeralda",
-    "data.item.emerald-node.description": "Romper para obtener esmeraldas.",
-    "data.item.gem-node.name": "Nodo de Gema",
-    "data.item.gem-node.description": "Romper para obtener esmeralda, aquamarinas, rubies, amatistas, topacio, jade, o diamantes.",
-    "data.item.jade-node.name": "Nodo de Jade",
-    "data.item.jade-node.description": "Romper para obtener jade.",
-    "data.item.mystic-stone.name": "Piedra Mistica",
-    "data.item.mystic-stone.description": "Romper para obtener gemas raras o minerales, incluyendo fragmentos prism‡ticos.",
-    "data.item.prismatic-node.name": "Nodo Prism‡tico",
-    "data.item.prismatic-node.description": "Romper para obtener fragmentos prism‡ticos.",
-    "data.item.ruby-node.name": "Nodo de Rubi",
-    "data.item.ruby-node.description": "Romper para obtener rubies.",
-    "data.item.topaz-node.name": "Nodo de Topacio",
-    "data.item.topaz-node.description": "Romper para obtener topacio.",
+  // mine gems
+  "data.item.amethyst-node.name": "Conjunto de Amatistas",
+  "data.item.amethyst-node.description": "Romper para obtener amatistas.",
+  "data.item.aquamarine-node.name": "Nodo de Aquamarina",
+  "data.item.aquamarine-node.description": "Romper para obtener aquamarinas.",
+  "data.item.diamond-node.name": "Nodo de Diamante",
+  "data.item.diamond-node.description": "Romper para obtener diamantes.",
+  "data.item.emerald-node.name": "Nodo de Esmeralda",
+  "data.item.emerald-node.description": "Romper para obtener esmeraldas.",
+  "data.item.gem-node.name": "Nodo de Gema",
+  "data.item.gem-node.description": "Romper para obtener esmeralda, aquamarinas, rubies, amatistas, topacio, jade, o diamantes.",
+  "data.item.jade-node.name": "Nodo de Jade",
+  "data.item.jade-node.description": "Romper para obtener jade.",
+  "data.item.mystic-stone.name": "Piedra Mistica",
+  "data.item.mystic-stone.description": "Romper para obtener gemas raras o minerales, incluyendo fragmentos prism√†ticos.",
+  "data.item.prismatic-node.name": "Nodo Prism√†tico",
+  "data.item.prismatic-node.description": "Romper para obtener fragmentos prism√†ticos.",
+  "data.item.ruby-node.name": "Nodo de Rubi",
+  "data.item.ruby-node.description": "Romper para obtener rubies.",
+  "data.item.topaz-node.name": "Nodo de Topacio",
+  "data.item.topaz-node.description": "Romper para obtener topacio.",
 
-    // mine ores
-    "data.item.copper-node.name": "Nodo de Cobre",
-    "data.item.copper-node.description": "Romper para obtener mineral de cobre.",
-    "data.item.gold-node.name": "Nodo de Oro",
-    "data.item.gold-node.description": "Romper para obtener mineral de oro.",
-    "data.item.iridum-node.name": "Nodo de Iridio",
-    "data.item.iridum-node.description": "Romper para obtener mineral de iridio.",
-    "data.item.iron-node.name": "Nodo de hierro",
-    "data.item.iron-node.description": "Romper para obtener mineral de hierro.",
+  // mine ores
+  "data.item.copper-node.name": "Nodo de Cobre",
+  "data.item.copper-node.description": "Romper para obtener mineral de cobre.",
+  "data.item.gold-node.name": "Nodo de Oro",
+  "data.item.gold-node.description": "Romper para obtener mineral de oro.",
+  "data.item.iridum-node.name": "Nodo de Iridio",
+  "data.item.iridum-node.description": "Romper para obtener mineral de iridio.",
+  "data.item.iron-node.name": "Nodo de hierro",
+  "data.item.iron-node.description": "Romper para obtener mineral de hierro.",
 
-    // mine stones
-    "data.item.colored-stone.name": "Piedra de Colores",
-    "data.item.colored-stone.description": "Una piedra. Tal vez contenga piedras, minerales o geodas.",
-    "data.item.mine-stone.name": "Piedra",
-    "data.item.mine-stone.description": "Romper para obtener piedra.",
+  // mine stones
+  "data.item.colored-stone.name": "Piedra de Colores",
+  "data.item.colored-stone.description": "Una piedra. Tal vez contenga piedras, minerales o geodas.",
+  "data.item.mine-stone.name": "Piedra",
+  "data.item.mine-stone.description": "Romper para obtener piedra.",
 
-    // mine containers
-    "data.item.barrel.name": "Barril",
-    "data.item.barrel.description": "Romper para obtener diversos bienes.",
-    "data.item.box.name": "Caja",
-    "data.item.box.description": "Romper para obtener diversos bienes.",
+  // mine containers
+  "data.item.barrel.name": "Barril",
+  "data.item.barrel.description": "Romper para obtener diversos bienes.",
+  "data.item.box.name": "Caja",
+  "data.item.box.description": "Romper para obtener diversos bienes.",
 
-    /*********
-    ** Specific lookups
-    *********/
-    // animal lookup labels
-    "animal.love": "Amor",
-    "animal.happiness": "Felicidad",
-    "animal.mood": "Estado de Hoy",
-    "animal.complaints": "Queja",
-    "animal.produce-ready": "Produccion Lista",
-    "animal.growth": "Crecimiento",
-    "animal.sells-for": "Se vende por",
+  /*********
+  ** Specific lookups
+  *********/
+  // animal lookup labels
+  "animal.love": "Amor",
+  "animal.happiness": "Felicidad",
+  "animal.mood": "Estado de Hoy",
+  "animal.complaints": "Queja",
+  "animal.produce-ready": "Produccion Lista",
+  "animal.growth": "Crecimiento",
+  "animal.sells-for": "Se vende por",
 
-    // animal lookup values
-    "animal.complaints.disturbed-by-dog": "Fue perturbado/a por {{name}}",
-    "animal.complaints.hungry": "No fue alimentado/a ayer",
-    "animal.complaints.left-out": "Se quedo afuera anoche",
-    "animal.complaints.new-home": "Se fue a su nuevo hogar",
-    "animal.complaints.no-heater": "Sin calefactor en el Invierno",
-    "animal.complaints.not-petted": "No fue acariciado/a hoy",
+  // animal lookup values
+  "animal.complaints.disturbed-by-dog": "Fue perturbado/a por {{name}}",
+  "animal.complaints.hungry": "No fue alimentado/a ayer",
+  "animal.complaints.left-out": "Se quedo afuera anoche",
+  "animal.complaints.new-home": "Se fue a su nuevo hogar",
+  "animal.complaints.no-heater": "Sin calefactor en el Invierno",
+  "animal.complaints.not-petted": "No fue acariciado/a hoy",
 
-    // fruit tree lookup labels
-    "fruit-tree.complaints": "Quejas",
-    "fruit-tree.name": "{{fruitName}} ‡rbol",
-    "fruit-tree.growth": "Crecimiento",
-    "fruit-tree.next-fruit": "Siguiente fruta",
-    "fruit-tree.season": "Temporada",
-    "fruit-tree.quality": "Calidad",
+  // fruit tree lookup labels
+  "fruit-tree.complaints": "Quejas",
+  "fruit-tree.name": "{{fruitName}} √†rbol",
+  "fruit-tree.growth": "Crecimiento",
+  "fruit-tree.next-fruit": "Siguiente fruta",
+  "fruit-tree.season": "Temporada",
+  "fruit-tree.quality": "Calidad",
 
-    // fruit tree lookup values
-    "fruit-tree.complaints.adjacent-objects": "No puede crecer porque hay objetos adyacentes",
-    "fruit-tree.growth.summary": "Madura en {{date}}",
-    "fruit-tree.next-fruit.struck-by-lighting": "Golpeado por un trueno! Se recuperara en{{count}} dias.",
-    "fruit-tree.next-fruit.out-of-season": "Fuera de la temporada",
-    "fruit-tree.next-fruit.max-fruit": "No generara mas frutas hasta que coseches las que ya tiene",
-    "fruit-tree.next-fruit.too-young": "Demasiado joven para generar frutas",
-    "fruit-tree.quality.now": "{{quality}} Ahora",
-    "fruit-tree.quality.on-date": "{{quality}} En {{date}}",
-    "fruit-tree.quality.on-date-next-year": "{{quality}} en {{date}} El siguiente anio",
-    "fruit-tree.season.summary": "{{season}} (O en cualquier momento en el invernadero)",
+  // fruit tree lookup values
+  "fruit-tree.complaints.adjacent-objects": "No puede crecer porque hay objetos adyacentes",
+  "fruit-tree.growth.summary": "Madura en {{date}}",
+  "fruit-tree.next-fruit.struck-by-lighting": "Golpeado por un trueno! Se recuperara en{{count}} dias.",
+  "fruit-tree.next-fruit.out-of-season": "Fuera de la temporada",
+  "fruit-tree.next-fruit.max-fruit": "No generara mas frutas hasta que coseches las que ya tiene",
+  "fruit-tree.next-fruit.too-young": "Demasiado joven para generar frutas",
+  "fruit-tree.quality.now": "{{quality}} Ahora",
+  "fruit-tree.quality.on-date": "{{quality}} En {{date}}",
+  "fruit-tree.quality.on-date-next-year": "{{quality}} en {{date}} El siguiente anio",
+  "fruit-tree.season.summary": "{{season}} (O en cualquier momento en el invernadero)",
 
-    // crop lookup labels
-    "crop.summary": "Cultivo",
-    "crop.harvest": "Cosecha",
+  // crop lookup labels
+  "crop.summary": "Cultivo",
+  "crop.harvest": "Cosecha",
 
-    // crop lookup values
-    "crop.summary.dead": "Esta cosecha esta muerta.",
-    "crop.summary.drops-X": "Suelta {{count}}",
-    "crop.summary.drops-X-to-Y": "Suelta {{min}} hasta {{max}} ({{percent}}% chance de cultivos extra)",
-    "crop.summary.harvest-once": "Cosechar despues {{daysToFirstHarvest}} dias",
-    "crop.summary.harvest-multi": "Cosechar despues {{daysToFirstHarvest}} dias, luego cada {{daysToNextHarvests}} dÏas",
-    "crop.summary.seasons": "Crece en {{seasons}}",
-    "crop.summary.sells-for": "Se vende por {{price}}",
-    "crop.harvest.now": "Ahora",
-    "crop.harvest.too-late": "Demasiado tarde en la temporada para la cosecha (seria en {{date}})",
+  // crop lookup values
+  "crop.summary.dead": "Esta cosecha esta muerta.",
+  "crop.summary.drops-X": "Suelta {{count}}",
+  "crop.summary.drops-X-to-Y": "Suelta {{min}} hasta {{max}} ({{percent}}% chance de cultivos extra)",
+  "crop.summary.harvest-once": "Cosechar despues {{daysToFirstHarvest}} dias",
+  "crop.summary.harvest-multi": "Cosechar despues {{daysToFirstHarvest}} dias, luego cada {{daysToNextHarvests}} d√¨as",
+  "crop.summary.seasons": "Crece en {{seasons}}",
+  "crop.summary.sells-for": "Se vende por {{price}}",
+  "crop.harvest.now": "Ahora",
+  "crop.harvest.too-late": "Demasiado tarde en la temporada para la cosecha (seria en {{date}})",
 
-    // item lookup labels
-    "item.cask-contents": "Contiene",
-    "item.cask-schedule": "Envejecimiento",
-    "item.contents": "Contiene",
-    "item.needed-for": "Se nesecita para",
-    "item.sells-for": "Se vende por",
-    "item.sells-to": "Se vende a",
-    "item.likes-this": "Le gusta esto",
-    "item.loves-this": "Ama esto",
-    "item.fence-health": "Vida",
-    "item.recipes": "Recetas",
-    "item.number-owned": "AdueÒado",
-    "item.see-also": "Mirar tambien",
+  // item lookup labels
+  "item.cask-contents": "Contiene",
+  "item.cask-schedule": "Envejecimiento",
+  "item.contents": "Contiene",
+  "item.needed-for": "Se nesecita para",
+  "item.sells-for": "Se vende por",
+  "item.sells-to": "Se vende a",
+  "item.likes-this": "Le gusta esto",
+  "item.loves-this": "Ama esto",
+  "item.fence-health": "Vida",
+  "item.recipes": "Recetas",
+  "item.number-owned": "Adue√±ado",
+  "item.see-also": "Mirar tambien",
 
-    // item lookup values
-    "item.cask-schedule.now": "{{quality}} Listo ahora",
-    "item.cask-schedule.now-partial": "{{quality}} Ahora (use pickaxe to stop aging)",
-    "item.cask-schedule.tomorrow": "{{quality}} Manana",
-    "item.cask-schedule.in-x-days": "{{quality}} En {{count}} dias ({{date}})",
-    "item.contents.ready": "{{name}} Listo",
-    "item.contents.partial": "{{name}} En {{time}}",
-    "item.needed-for.community-center": "Centro de la comunidad ({{bundles}})",
-    "item.needed-for.full-shipment": "Logro de ''full shipment'' (enviar uno)",
-    "item.needed-for.polyculture": "Logro de ''polyculture'' (enviar {{count}} mas)",
-    "item.needed-for.full-collection": "Logro de ''full collection'' (donar esto al museo)",
-    "item.sells-to.shipping-box": "Caja de envio",
-    "item.fence-health.gold-clock": "Sin decaidas del reloj de oro",
-    "item.fence-health.summary": "{{percent}}% (Dificilmente {{count}} dias)",
-    "item.recipes.entry": "{{name}} (Necesita {{count}})",
-    "item.number-owned.summary": "Tienes {{count}} de estos",
+  // item lookup values
+  "item.cask-schedule.now": "{{quality}} Listo ahora",
+  "item.cask-schedule.now-partial": "{{quality}} Ahora (use pickaxe to stop aging)",
+  "item.cask-schedule.tomorrow": "{{quality}} Manana",
+  "item.cask-schedule.in-x-days": "{{quality}} En {{count}} dias ({{date}})",
+  "item.contents.ready": "{{name}} Listo",
+  "item.contents.partial": "{{name}} En {{time}}",
+  "item.needed-for.community-center": "Centro de la comunidad ({{bundles}})",
+  "item.needed-for.full-shipment": "Logro de ''full shipment'' (enviar uno)",
+  "item.needed-for.polyculture": "Logro de ''polyculture'' (enviar {{count}} mas)",
+  "item.needed-for.full-collection": "Logro de ''full collection'' (donar esto al museo)",
+  "item.sells-to.shipping-box": "Caja de envio",
+  "item.fence-health.gold-clock": "Sin decaidas del reloj de oro",
+  "item.fence-health.summary": "{{percent}}% (Dificilmente {{count}} dias)",
+  "item.recipes.entry": "{{name}} (Necesita {{count}})",
+  "item.number-owned.summary": "Tienes {{count}} de estos",
 
-    // monster lookup labels
-    "monster.invincible": "Invencible",
-    "monster.health": "Vida",
-    "monster.drops": "Drops",
-    "monster.experience": "EXP",
-    "monster.defence": "Defensa",
-    "monster.attack": "Attaque",
-    "monster.adventure-guild": "Gremio de Aventureros",
+  // monster lookup labels
+  "monster.invincible": "Invencible",
+  "monster.health": "Vida",
+  "monster.drops": "Drops",
+  "monster.experience": "EXP",
+  "monster.defence": "Defensa",
+  "monster.attack": "Attaque",
+  "monster.adventure-guild": "Gremio de Aventureros",
 
-    // monster lookup values
-    "monster.drops.nothing": "Nada",
-    "monster.adventure-guild.complete": "Completo",
-    "monster.adventure-guild.incomplete": "En progreso",
-    "monster.adventure-guild.progress": "Matados {{count}} de {{requiredCount}}",
+  // monster lookup values
+  "monster.drops.nothing": "Nada",
+  "monster.adventure-guild.complete": "Completo",
+  "monster.adventure-guild.incomplete": "En progreso",
+  "monster.adventure-guild.progress": "Matados {{count}} de {{requiredCount}}",
 
-    // NPC lookup labels
-    "npc.birthday": "Cumpleanos",
-    "npc.can-romance": "Se puede casar",
-    "npc.friendship": "Amistad",
-    "npc.talked-today": "Se le hablo hoy",
-    "npc.gifted-today": "Se le ha regalado algo hoy",
-    "npc.gifted-this-week": "Se le ha regalado algo esta semana",
-    "npc.loves-gifts": "Ama estos regalos",
-    "npc.likes-gifts": "Le gusta estos regalos",
+  // NPC lookup labels
+  "npc.birthday": "Cumpleanos",
+  "npc.can-romance": "Se puede casar",
+  "npc.friendship": "Amistad",
+  "npc.talked-today": "Se le hablo hoy",
+  "npc.gifted-today": "Se le ha regalado algo hoy",
+  "npc.gifted-this-week": "Se le ha regalado algo esta semana",
+  "npc.loves-gifts": "Ama estos regalos",
+  "npc.likes-gifts": "Le gusta estos regalos",
 
-    // NPC lookup values
-    "npc.can-romance.married": "Estas casado! <", // < turns into a heart
-    "npc.friendship.not-met": "No lo has conocido todavia.",
-    "npc.friendship.need-bouquet": "Necesitas un bouquet para lo siguiente",
-    "npc.friendship.need-points": "Siguiente en {{count}} puntos",
+  // NPC lookup values
+  "npc.can-romance.married": "Estas casado! <", // < turns into a heart
+  "npc.friendship.not-met": "No lo has conocido todavia.",
+  "npc.friendship.need-bouquet": "Necesitas un bouquet para lo siguiente",
+  "npc.friendship.need-points": "Siguiente en {{count}} puntos",
 
-    // NPC child lookup labels
-    "npc.child.age": "Edad",
+  // NPC child lookup labels
+  "npc.child.age": "Edad",
 
-    // NPC child lookup values
-    "npc.child.age.description-partial": "{{label}} ({{count}} Dias para {{nextLabel}})",
-    "npc.child.age.description-grown": "{{label}}",
-    "npc.child.age.newborn": "Recien nacido",
-    "npc.child.age.baby": "Bebe",
-    "npc.child.age.crawler": "Bebe joven",
-    "npc.child.age.toddler": "Bebe maduro",
+  // NPC child lookup values
+  "npc.child.age.description-partial": "{{label}} ({{count}} Dias para {{nextLabel}})",
+  "npc.child.age.description-grown": "{{label}}",
+  "npc.child.age.newborn": "Recien nacido",
+  "npc.child.age.baby": "Bebe",
+  "npc.child.age.crawler": "Bebe joven",
+  "npc.child.age.toddler": "Bebe maduro",
 
-    // pet lookup labels
-    "pet.love": "Amor",
-    "pet.petted-today": "Acariciado hoy",
+  // pet lookup labels
+  "pet.love": "Amor",
+  "pet.petted-today": "Acariciado hoy",
 
-    // player lookup labels
-    "player.farm-name": "Nombre de la granja",
-    "player.favorite-thing": "Cosa favorita",
-    "player.gender": "Genero",
-    "player.spouse": "Esposa",
-    "player.combat-skill": "Combate",
-    "player.farming-skill": "Agricultura",
-    "player.fishing-skill": "Pesca",
-    "player.foraging-skill": "Recoleccion",
-    "player.mining-skill": "Mineria",
-    "player.luck": "Suerte",
+  // player lookup labels
+  "player.farm-name": "Nombre de la granja",
+  "player.favorite-thing": "Cosa favorita",
+  "player.gender": "Genero",
+  "player.spouse": "Esposa",
+  "player.combat-skill": "Combate",
+  "player.farming-skill": "Agricultura",
+  "player.fishing-skill": "Pesca",
+  "player.foraging-skill": "Recoleccion",
+  "player.mining-skill": "Mineria",
+  "player.luck": "Suerte",
 
-    // player lookup values
-    "player.gender.male": "Hombre",
-    "player.gender.female": "Mujer",
-    "player.luck.summary": "{{percent}}% Para varios checkeos random",
-    "player.skill.progress": "Nivel {{level}} ({{expNeeded}} EXP Para el siguiente nivel)",
-    "player.skill.progress-last": "Nivel {{level}}",
+  // player lookup values
+  "player.gender.male": "Hombre",
+  "player.gender.female": "Mujer",
+  "player.luck.summary": "{{percent}}% Para varios checkeos random",
+  "player.skill.progress": "Nivel {{level}} ({{expNeeded}} EXP Para el siguiente nivel)",
+  "player.skill.progress-last": "Nivel {{level}}",
 
-    // tile lookup labels
-    "tile.description": "Una tile en el mapa. Esto se muestra ya que activaste el ''tile show up'' en la configuracion.",
-    "tile.map-name": "Nombre del mapa",
-    "tile.tile": "Tile",
-    "tile.tile-index": "{{layerName}}: indice de tile",
-    "tile.tilesheet": "{{layerName}}: tilesheet",
-    "tile.blend-mode": "{{layerName}}: modo mezcla",
-    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
+  // tile lookup labels
+  "tile.description": "Una tile en el mapa. Esto se muestra ya que activaste el ''tile show up'' en la configuracion.",
+  "tile.map-name": "Nombre del mapa",
+  "tile.tile": "Tile",
+  "tile.tile-index": "{{layerName}}: indice de tile",
+  "tile.tilesheet": "{{layerName}}: tilesheet",
+  "tile.blend-mode": "{{layerName}}: modo mezcla",
+  "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
+  "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
 
-    // tile lookup values
-    "tile.tile.none-here": "Sin titulo aqui",
+  // tile lookup values
+  "tile.tile.none-here": "Sin titulo aqui",
 
-    // tree lookup labels
-    "tree.stage": "Etapa de Crecimiento",
-    "tree.next-growth": "Siguiente Crecida",
-    "tree.has-seed": "Tiene Semilla",
+  // tree lookup labels
+  "tree.stage": "Etapa de Crecimiento",
+  "tree.next-growth": "Siguiente Crecida",
+  "tree.has-seed": "Tiene Semilla",
 
-    // non-fruit tree lookup values
-    "tree.name.maple": "¿rbol de Maple",
-    "tree.name.oak": "Roble",
-    "tree.name.pine": "Pino",
-    "tree.name.palm": "Palmera",
-    "tree.name.big-mushroom": "Gran Hongo",
-    "tree.name.unknown": "¿rbol desconocido",
-    "tree.stage.done": "Completamente maduro",
-    "tree.stage.partial": "{{stageName}} ({{step}} de {{max}})",
-    "tree.next-growth.winter": "no puede crecer en el Invierno fuera del invernadero",
-    "tree.next-growth.adjacent-trees": "no puede crecer porque otros arboles estan muy cerca",
-    "tree.next-growth.random": "20% Chances de crecer en {{stage}} maniana",
+  // non-fruit tree lookup values
+  "tree.name.maple": "√Ärbol de Maple",
+  "tree.name.oak": "Roble",
+  "tree.name.pine": "Pino",
+  "tree.name.palm": "Palmera",
+  "tree.name.big-mushroom": "Gran Hongo",
+  "tree.name.unknown": "√Ärbol desconocido",
+  "tree.stage.done": "Completamente maduro",
+  "tree.stage.partial": "{{stageName}} ({{step}} de {{max}})",
+  "tree.next-growth.winter": "no puede crecer en el Invierno fuera del invernadero",
+  "tree.next-growth.adjacent-trees": "no puede crecer porque otros arboles estan muy cerca",
+  "tree.next-growth.random": "20% Chances de crecer en {{stage}} maniana",
 
-    // tree stages
-    "tree.stages.seed": "Semilla",
-    "tree.stages.sprout": "Brote",
-    "tree.stages.sapling": "Joven",
-    "tree.stages.bush": "Arbusto",
-    "tree.stages.smallTree": "¿rbol pequeÒo",
-    "tree.stages.tree": "¿rbol"
+  // tree stages
+  "tree.stages.seed": "Semilla",
+  "tree.stages.sprout": "Brote",
+  "tree.stages.sapling": "Joven",
+  "tree.stages.bush": "Arbusto",
+  "tree.stages.smallTree": "√Ärbol peque√±o",
+  "tree.stages.tree": "√Ärbol"
 }

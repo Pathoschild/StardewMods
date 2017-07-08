@@ -1,4 +1,4 @@
-namespace Pathoschild.Stardew.LookupAnything.Framework.Data
+﻿namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>Provides override metadata about a game NPC.</summary>
     internal class CharacterData

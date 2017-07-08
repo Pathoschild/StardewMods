@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 
@@ -74,8 +74,7 @@ namespace Pathoschild.Stardew.RotateToolbar.Framework
                 return defaultValue;
 
             // valid enum
-            T parsed;
-            if (Enum.TryParse(raw, true, out parsed))
+            if (Enum.TryParse(raw, true, out T parsed))
                 return parsed;
 
             // invalid

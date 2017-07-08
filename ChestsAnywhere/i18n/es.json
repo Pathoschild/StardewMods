@@ -1,19 +1,19 @@
 ﻿{
-    // default chest names
-    "default-name.chest": "Cofre #{{number}}",
-    "default-name.fridge": "Refrigerador",
+  // default chest names
+  "default-name.chest": "Cofre #{{number}}",
+  "default-name.fridge": "Refrigerador",
 
-    // edit-chest labels
-    "label.location": "Localizacion",
-    "label.location.tile": "tile {{x}}, {{y}}",
-    "label.name": "Nombre",
-    "label.category": "Categoria",
-    "label.order": "Orden",
-    "label.hide-chest": "Esconder este cofre",
-    "label.hide-chest-hidden": "Esconder este cofre (Necesitaras encontrar el cofre para deshacer esto.!)",
+  // edit-chest labels
+  "label.location": "Localizacion",
+  "label.location.tile": "tile {{x}}, {{y}}",
+  "label.name": "Nombre",
+  "label.category": "Categoria",
+  "label.order": "Orden",
+  "label.hide-chest": "Esconder este cofre",
+  "label.hide-chest-hidden": "Esconder este cofre (Necesitaras encontrar el cofre para deshacer esto.!)",
 
-    // button labels
-    "button.edit-chest": "Editar cofre",
-    "button.sort-inventory": "Ordenar inventario",
-    "button.ok": "OK"
+  // button labels
+  "button.edit-chest": "Editar cofre",
+  "button.sort-inventory": "Ordenar inventario",
+  "button.ok": "OK"
 }

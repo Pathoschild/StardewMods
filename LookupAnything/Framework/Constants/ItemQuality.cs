@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Object = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
