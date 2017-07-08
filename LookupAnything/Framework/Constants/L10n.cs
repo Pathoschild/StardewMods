@@ -156,7 +156,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             ** Values
             ****/
             /// <summary>A value like <c>was disturbed by {{name}}</c>.</summary>
-            public const string ComplaintsDisturbedByDog = "animal.complaints.disturbed-by-dog";
+            public const string ComplaintsWildAnimalAttack = "animal.complaints.wild-animal-attack";
 
             /// <summary>A value like <c>wasn't fed yesterday</c>.</summary>
             public const string ComplaintsHungry = "animal.complaints.hungry";

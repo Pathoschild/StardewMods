@@ -155,12 +155,12 @@
   "animal.sells-for": "出售",
 
   // animal lookup values
-  "animal.complaints.disturbed-by-dog": "被{{name}}打扰",
   "animal.complaints.hungry": "昨天没有喂食",
   "animal.complaints.left-out": "昨晚被关在外面",
   "animal.complaints.new-home": "刚搬到新家",
   "animal.complaints.no-heater": "冬天没有暖气",
   "animal.complaints.not-petted": "今天还没有被爱抚",
+  "animal.complaints.wild-animal-attack": "attacked by wild animals during the night", // TODO
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "问题",

@@ -155,12 +155,12 @@
   "animal.sells-for": "Sells for",
 
   // animal lookup values
-  "animal.complaints.disturbed-by-dog": "was disturbed by {{name}}",
   "animal.complaints.hungry": "wasn't fed yesterday",
   "animal.complaints.left-out": "was left outside last night",
   "animal.complaints.new-home": "moved into new home",
   "animal.complaints.no-heater": "no heater in winter",
   "animal.complaints.not-petted": "hasn't been petted today",
+  "animal.complaints.wild-animal-attack": "attacked by wild animals during the night",
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "Complaints",

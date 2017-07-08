@@ -155,12 +155,12 @@
   "animal.sells-for": "Vende por",
 
   // animal lookup values
-  "animal.complaints.disturbed-by-dog": "Foi perturbado por {{name}}",
   "animal.complaints.hungry": "Não comeu ontem",
   "animal.complaints.left-out": "foi deixado pra fora na ultima noite",
   "animal.complaints.new-home": "Se mudou para uma casa nova",
   "animal.complaints.no-heater": "Sem coração no inverno",
   "animal.complaints.not-petted": "não recebeu carinho hoje",
+  "animal.complaints.wild-animal-attack": "attacked by wild animals during the night", // TODO
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "Reclamações",

@@ -114,7 +114,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     factors.Add(this.Translate(L10n.Animal.ComplaintsHungry));
                     break;
                 case FarmAnimal.disturbedByDog:
-                    factors.Add(this.Translate(L10n.Animal.ComplaintsDisturbedByDog, new { name = Game1.player.getPetName() }));
+                    factors.Add(this.Translate(L10n.Animal.ComplaintsWildAnimalAttack));
                     break;
                 case FarmAnimal.leftOutAtNight:
                     factors.Add(this.Translate(L10n.Animal.ComplaintsLeftOut));
