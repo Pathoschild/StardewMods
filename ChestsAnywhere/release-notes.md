@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming
-* Added Portuguese translations. (Thanks to Fabilows!)
+* Added Portuguese and Spanish translations. (Thanks to Fabilows and ThomasGabrielDelavault respectively!)
 
 ## 1.11
 * Updated to SMAPI 1.14.

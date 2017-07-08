@@ -3,7 +3,8 @@
 # Release notes
 ## Upcoming
 * You can now look up your children.
-* Added Portuguese translations. (Thanks to Fabilows!)
+* Added Portuguese and Spanish translations. (Thanks to Fabilows and ThomasGabrielDelavault respectively!)
+* Fixed animal complaint when they're attacked overnight.
 
 ## 1.14
 * Updated to SMAPI 1.14.
