@@ -64,6 +64,9 @@ setting | default | effect
 ## Versions
 See [release notes](release-notes.md).
 
+## License
+This mod is entirely released under the MIT license, **except** the tractor sprite which is unlicensed.
+
 ## See also
 * <s>Nexus mod</s>
 * [Discussion thread](http://community.playstarbound.com/threads/gameplay-mod-tractor-mod.126955/)
