@@ -37,7 +37,9 @@ namespace Pathoschild.Stardew.LookupAnything
                 string[] valueParts = entry.Value.Split('/');
                 string name = valueParts[0];
                 string reward = valueParts[1];
-                string displayName = valueParts.Last();
+                string displayName = LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en
+                    ? name // field isn't present in English
+                    : valueParts.Last(); // number of fields varies, but display name is always last
                 List<BundleIngredientModel> ingredients = new List<BundleIngredientModel>();
                 string[] ingredientData = valueParts[2].Split(' ');
                 for (int i = 0; i < ingredientData.Length; i += 3)

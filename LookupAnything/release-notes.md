@@ -4,7 +4,8 @@
 ## Upcoming
 * You can now look up your children.
 * Added Portuguese and Spanish translations. (Thanks to Fabilows and ThomasGabrielDelavault respectively!)
-* Fixed animal complaint when they're attacked overnight.
+* Fixed animal 'complaint' field text when the animals were attacked overnight.
+* Fixed item 'needed for' field not showing bundle area name in English.
 
 ## 1.14
 * Updated to SMAPI 1.14.
