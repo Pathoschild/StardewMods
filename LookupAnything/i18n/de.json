@@ -160,7 +160,7 @@
   "animal.complaints.new-home": "ist in ein neues Zuhause gezogen",
   "animal.complaints.no-heater": "kein Heizer im Winter",
   "animal.complaints.not-petted": "wurde heute nicht gestreichelt",
-  "animal.complaints.wild-animal-attack": "attacked by wild animals during the night", // TODO
+  "animal.complaints.wild-animal-attack": "Wurde in der Nacht von einem wildem Tier angegriffen",
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "Beschwerden",
@@ -259,16 +259,16 @@
   "npc.friendship.need-bouquet": "Blumenstrauß jetzt erforderlich",
   "npc.friendship.need-points": "nächstes in {{count}} punkten",
 
-  // NPC child lookup labels // TODO
-  "npc.child.age": "Age",
+  // NPC child lookup labels
+  "npc.child.age": "Alter",
 
-  // NPC child lookup values // TODO
-  "npc.child.age.description-partial": "{{label}} ({{count}} days to {{nextLabel}})",
+  // NPC child lookup values
+  "npc.child.age.description-partial": "{{label}} ({{count}} Tage zum {{nextLabel}})",
   "npc.child.age.description-grown": "{{label}}",
-  "npc.child.age.newborn": "newborn",
-  "npc.child.age.baby": "baby",
-  "npc.child.age.crawler": "crawler",
-  "npc.child.age.toddler": "toddler",
+  "npc.child.age.newborn": "Neugeborenes",
+  "npc.child.age.baby": "Baby",
+  "npc.child.age.crawler": "Krabbelnder",
+  "npc.child.age.toddler": "Kleinkind",
 
   // pet lookup labels
   "pet.love": "Liebe",
