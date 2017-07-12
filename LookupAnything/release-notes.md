@@ -2,8 +2,9 @@
 
 # Release notes
 ## Upcoming
-* You can now look up your children.
+* Added child lookups.
 * Added Portuguese and Spanish translations. (Thanks to Fabilows and ThomasGabrielDelavault respectively!)
+* Improved lookup matching — if there's no sprite under the cursor, but the cursor is over a tile which contains something, look that up. Especially useful for looking up planted seeds, which required very precise pointing.
 * Fixed animal 'complaint' field text when the animals were attacked overnight.
 * Fixed item 'needed for' field not showing bundle area name in English.
 
