@@ -160,7 +160,7 @@
   "animal.complaints.new-home": "Se mudou para uma casa nova",
   "animal.complaints.no-heater": "Sem coração no inverno",
   "animal.complaints.not-petted": "não recebeu carinho hoje",
-  "animal.complaints.wild-animal-attack": "attacked by wild animals during the night", // TODO
+  "animal.complaints.wild-animal-attack": "Foi atacado por animais selvagens durante a noite",
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "Reclamações",
@@ -259,16 +259,16 @@
   "npc.friendship.need-bouquet": "Precisa de um bouquet pra prosseguir",
   "npc.friendship.need-points": "precisa de {{count}} pontos para prosseguir",
 
-  // NPC child lookup labels // TODO
-  "npc.child.age": "Age",
+  // NPC child lookup labels
+  "npc.child.age": "Idade",
 
-  // NPC child lookup values // TODO
-  "npc.child.age.description-partial": "{{label}} ({{count}} days to {{nextLabel}})",
+  // NPC child lookup values
+  "npc.child.age.description-partial": "{{label}} ({{count}} dias para {{nextLabel}})",
   "npc.child.age.description-grown": "{{label}}",
-  "npc.child.age.newborn": "newborn",
-  "npc.child.age.baby": "baby",
-  "npc.child.age.crawler": "crawler",
-  "npc.child.age.toddler": "toddler",
+  "npc.child.age.newborn": "recém nascido",
+  "npc.child.age.baby": "bebê",
+  "npc.child.age.crawler": "bebê que está aprendendo a andar",
+  "npc.child.age.toddler": "criancinha",
 
   // pet lookup labels
   "pet.love": "Amor",
