@@ -14,7 +14,7 @@ using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
-using Object = StardewValley.Object;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 {
@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             this.Target = item;
             this.DisplayItem = this.GetMenuItem(item);
             this.FromCrop = fromCrop;
-            if ((item as Object)?.Type == "Seeds")
+            if ((item as SObject)?.Type == "Seeds")
                 this.SeedForCrop = new Crop(item.parentSheetIndex, 0, 0);
             this.Context = context;
             this.KnownQuality = knownQuality;
@@ -71,7 +71,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         {
             // get data
             Item item = this.Target;
-            Object obj = item as Object;
+            SObject obj = item as SObject;
             bool isObject = obj != null;
             bool isCrop = this.FromCrop != null;
             bool isSeed = this.SeedForCrop != null;
@@ -181,7 +181,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 if (obj is Cask cask)
                 {
                     // get cask data
-                    Object agingObj = cask.heldObject;
+                    SObject agingObj = cask.heldObject;
                     ItemQuality curQuality = (ItemQuality)agingObj.quality;
                     string curQualityName = this.Translate(L10n.For(curQuality));
 
@@ -340,7 +340,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
         {
             Item target = this.Target;
-            Object obj = target as Object;
+            SObject obj = target as SObject;
             Crop crop = this.FromCrop ?? this.SeedForCrop;
 
             // pinned fields
@@ -377,10 +377,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             Item item = this.DisplayItem;
 
             // draw stackable object
-            if ((item as Object)?.stack > 1)
+            if ((item as SObject)?.stack > 1)
             {
-                Object obj = (Object)item;
-                obj = new Object(obj.parentSheetIndex, 1, obj.isRecipe, obj.price, obj.quality) { bigCraftable = obj.bigCraftable }; // remove stack number (doesn't play well with clipped content)
+                SObject obj = (SObject)item;
+                obj = new SObject(obj.parentSheetIndex, 1, obj.isRecipe, obj.price, obj.quality) { bigCraftable = obj.bigCraftable }; // remove stack number (doesn't play well with clipped content)
                 obj.drawInMenu(spriteBatch, position, 1);
                 return true;
             }
@@ -417,7 +417,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                 // get object
                 if (spriteID.HasValue)
-                    return new Object(spriteID.Value, 1);
+                    return new SObject(spriteID.Value, 1);
             }
 
             return item;
@@ -451,7 +451,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
         /// <summary>Get unfinished bundles which require this item.</summary>
         /// <param name="item">The item for which to find bundles.</param>
-        private IEnumerable<BundleModel> GetUnfinishedBundles(Object item)
+        private IEnumerable<BundleModel> GetUnfinishedBundles(SObject item)
         {
             // no bundles for Joja members
             if (Game1.player.hasOrWillReceiveMail(Constant.MailLetters.JojaMember))
@@ -513,14 +513,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // derived from ShopMenu::receiveLeftClick
             int GetPrice(Item i)
             {
-                int price = (i as Object)?.sellToStorePrice() ?? (i.salePrice() / 2);
+                int price = (i as SObject)?.sellToStorePrice() ?? (i.salePrice() / 2);
                 return price > 0 ? price : 0;
             }
 
             // single quality
             if (!GameHelper.CanHaveQuality(item) || qualityIsKnown)
             {
-                ItemQuality quality = qualityIsKnown && item is Object obj
+                ItemQuality quality = qualityIsKnown && item is SObject obj
                     ? (ItemQuality)obj.quality
                     : ItemQuality.Normal;
 
@@ -531,12 +531,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             int[] iridiumItems = metadata.Constants.ItemsWithIridiumQuality;
             var prices = new Dictionary<ItemQuality, int>
             {
-                [ItemQuality.Normal] = GetPrice(new Object(item.parentSheetIndex, 1)),
-                [ItemQuality.Silver] = GetPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
-                [ItemQuality.Gold] = GetPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Gold))
+                [ItemQuality.Normal] = GetPrice(new SObject(item.parentSheetIndex, 1)),
+                [ItemQuality.Silver] = GetPrice(new SObject(item.parentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
+                [ItemQuality.Gold] = GetPrice(new SObject(item.parentSheetIndex, 1, quality: (int)ItemQuality.Gold))
             };
             if (item.GetSpriteType() == ItemSpriteType.Object && (iridiumItems.Contains(item.category) || iridiumItems.Contains(item.parentSheetIndex)))
-                prices[ItemQuality.Iridium] = GetPrice(new Object(item.parentSheetIndex, 1, quality: (int)ItemQuality.Iridium));
+                prices[ItemQuality.Iridium] = GetPrice(new SObject(item.parentSheetIndex, 1, quality: (int)ItemQuality.Iridium));
             return prices;
         }
 

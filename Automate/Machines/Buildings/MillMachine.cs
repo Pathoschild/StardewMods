@@ -5,7 +5,7 @@ using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Objects;
-using Object = StardewValley.Object;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Machines.Buildings
 {
@@ -32,8 +32,8 @@ namespace Pathoschild.Stardew.Automate.Machines.Buildings
             this.Mill = mill;
             this.MaxStackSize = new Dictionary<int, int>
             {
-                [262] = new Object(262, 1).maximumStackSize(), // wheat => flour
-                [284] = new Object(284, 1).maximumStackSize() / 3 // beet => 3 sugar (reduce stack to avoid overfilling output)
+                [262] = new SObject(262, 1).maximumStackSize(), // wheat => flour
+                [284] = new SObject(284, 1).maximumStackSize() / 3 // beet => 3 sugar (reduce stack to avoid overfilling output)
             };
         }
 

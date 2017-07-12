@@ -8,7 +8,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
-using Object = StardewValley.Object;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
@@ -19,7 +19,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Properties
         *********/
         /// <summary>The possible drops.</summary>
-        private readonly Tuple<ItemDropData, Object>[] Drops;
+        private readonly Tuple<ItemDropData, SObject>[] Drops;
 
         /// <summary>The text to display if there are no items.</summary>
         private readonly string DefaultText;
@@ -73,7 +73,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             {
                 // get data
                 ItemDropData drop = entry.Item1;
-                Object item = entry.Item2;
+                SObject item = entry.Item2;
                 bool isGuaranteed = drop.Probability > .99f;
 
                 // draw icon

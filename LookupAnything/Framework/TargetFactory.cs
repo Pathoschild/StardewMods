@@ -12,8 +12,8 @@ using StardewValley.Characters;
 using StardewValley.Menus;
 using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
-using Object = StardewValley.Object;
 using SFarmer = StardewValley.Farmer;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
@@ -93,7 +93,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             foreach (var pair in location.objects)
             {
                 Vector2 spriteTile = pair.Key;
-                Object obj = pair.Value;
+                SObject obj = pair.Value;
 
                 if (!GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
                     continue;
