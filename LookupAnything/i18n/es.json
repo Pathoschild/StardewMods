@@ -160,7 +160,7 @@
   "animal.complaints.new-home": "Se fue a su nuevo hogar",
   "animal.complaints.no-heater": "Sin calefactor en el Invierno",
   "animal.complaints.not-petted": "No fue acariciado/a hoy",
-  "animal.complaints.wild-animal-attack": "attacked by wild animals during the night", // TODO
+  "animal.complaints.wild-animal-attack": "atacado/a por animales salvajes durante la noche",
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "Quejas",
