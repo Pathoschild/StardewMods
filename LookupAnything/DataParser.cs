@@ -33,13 +33,15 @@ namespace Pathoschild.Stardew.LookupAnything
                 string area = keyParts[0];
                 int id = int.Parse(keyParts[1]);
 
-                // parse value
+                // parse bundle info
                 string[] valueParts = entry.Value.Split('/');
                 string name = valueParts[0];
                 string reward = valueParts[1];
                 string displayName = LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en
                     ? name // field isn't present in English
                     : valueParts.Last(); // number of fields varies, but display name is always last
+
+                // parse ingredients
                 List<BundleIngredientModel> ingredients = new List<BundleIngredientModel>();
                 string[] ingredientData = valueParts[2].Split(' ');
                 for (int i = 0; i < ingredientData.Length; i += 3)

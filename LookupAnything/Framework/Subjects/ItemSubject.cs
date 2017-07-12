@@ -463,20 +463,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 yield break;
 
             // get bundles
-            foreach (BundleModel bundle in DataParser.GetBundles())
+            if (item.GetType() == typeof(SObject) && !item.bigCraftable) // avoid false positives with hats, furniture, etc
             {
-                // ignore completed bundle
-                if (communityCenter.isBundleComplete(bundle.ID))
-                    continue;
+                foreach (BundleModel bundle in DataParser.GetBundles())
+                {
+                    // ignore completed bundle
+                    if (communityCenter.isBundleComplete(bundle.ID))
+                        continue;
 
-                // get ingredient
-                BundleIngredientModel ingredient = bundle.Ingredients.FirstOrDefault(p => p.ItemID == item.parentSheetIndex && p.Quality <= (ItemQuality)item.quality);
-                if (ingredient == null)
-                    continue;
+                    // get ingredient
+                    BundleIngredientModel ingredient = bundle.Ingredients.FirstOrDefault(p => p.ItemID == item.parentSheetIndex && p.Quality <= (ItemQuality)item.quality);
+                    if (ingredient == null)
+                        continue;
 
-                // yield if missing
-                if (!communityCenter.bundles[bundle.ID][ingredient.Index])
-                    yield return bundle;
+                    // yield if missing
+                    if (!communityCenter.bundles[bundle.ID][ingredient.Index])
+                        yield return bundle;
+                }
             }
         }
 
