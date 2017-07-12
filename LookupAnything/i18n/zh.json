@@ -160,7 +160,7 @@
   "animal.complaints.new-home": "刚搬到新家",
   "animal.complaints.no-heater": "冬天没有暖气",
   "animal.complaints.not-petted": "今天还没有被爱抚",
-  "animal.complaints.wild-animal-attack": "attacked by wild animals during the night", // TODO
+  "animal.complaints.wild-animal-attack": "夜晚被野生动物攻击了",
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "问题",
@@ -259,16 +259,16 @@
   "npc.friendship.need-bouquet": "需要花束进行到下一阶段",
   "npc.friendship.need-points": "下一等级需要{{count}}点好感度",
 
-  // NPC child lookup labels // TODO
-  "npc.child.age": "Age",
+  // NPC child lookup labels
+  "npc.child.age": "年龄",
 
-  // NPC child lookup values // TODO
-  "npc.child.age.description-partial": "{{label}} ({{count}} days to {{nextLabel}})",
+  // NPC child lookup values
+  "npc.child.age.description-partial": "目前位于{{label}}，还有({{count}}天进入{{nextLabel}})",
   "npc.child.age.description-grown": "{{label}}",
-  "npc.child.age.newborn": "newborn",
-  "npc.child.age.baby": "baby",
-  "npc.child.age.crawler": "crawler",
-  "npc.child.age.toddler": "toddler",
+  "npc.child.age.newborn": "新生儿期",
+  "npc.child.age.baby": "婴儿期",
+  "npc.child.age.crawler": "爬走期",
+  "npc.child.age.toddler": "幼童期",
 
   // pet lookup labels
   "pet.love": "友好度",
