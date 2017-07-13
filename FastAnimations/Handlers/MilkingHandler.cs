@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Pathoschild.Stardew.FastAnimations.Framework;
+﻿using Pathoschild.Stardew.FastAnimations.Framework;
 using StardewValley;
 
 namespace Pathoschild.Stardew.FastAnimations.Handlers
@@ -34,11 +33,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override void Update(int playerAnimationID)
         {
-            // speed up animation
-            GameTime gameTime = Game1.currentGameTime;
-            GameLocation location = Game1.player.currentLocation;
-            for (int i = 1; i < this.Multiplier; i++)
-                Game1.player.Update(gameTime, location);
+            this.SpeedUpPlayer(this.Multiplier);
         }
     }
 }

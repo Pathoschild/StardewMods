@@ -1,4 +1,5 @@
-﻿using StardewValley;
+﻿using Microsoft.Xna.Framework;
+using StardewValley;
 
 namespace Pathoschild.Stardew.FastAnimations.Framework
 {
@@ -36,6 +37,16 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         protected BaseAnimationHandler(int multiplier)
         {
             this.Multiplier = multiplier;
+        }
+
+        /// <summary>Speed up the player by the given multipler for the current update tick.</summary>
+        /// <param name="multiplier">The multiplier to apply to the player.</param>
+        protected void SpeedUpPlayer(int multiplier)
+        {
+            GameTime gameTime = Game1.currentGameTime;
+            GameLocation location = Game1.player.currentLocation;
+            for (int i = 1; i < multiplier; i++)
+                Game1.player.Update(gameTime, location);
         }
     }
 }
