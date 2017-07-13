@@ -15,6 +15,9 @@
         /// <summary>The speed multiplier for breaking geodes.</summary>
         public int BreakGeodeSpeed { get; set; } = 20;
 
+        /// <summary>The speed multiplier for fishing.</summary>
+        public int FishingSpeed { get; set; } = 1;
+
         /// <summary>The speed multiplier for milking.</summary>
         public int MilkSpeed { get; set; } = 5;
 
