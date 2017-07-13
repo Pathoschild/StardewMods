@@ -35,6 +35,7 @@
     </Compile>
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\IAnimationHandler.cs" />
+    <Compile Include="Framework\BaseAnimationHandler.cs" />
     <Compile Include="Handlers\BreakingGeodeHandler.cs" />
     <Compile Include="Handlers\ShearingHandler.cs" />
     <Compile Include="Handlers\MilkingHandler.cs" />

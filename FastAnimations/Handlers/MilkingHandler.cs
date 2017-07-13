@@ -6,27 +6,19 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
 {
     /// <summary>Handles the milking animation.</summary>
     /// <remarks>See game logic in <see cref="StardewValley.Tools.MilkPail.beginUsing"/>.</remarks>
-    internal class MilkingHandler : IAnimationHandler
+    internal class MilkingHandler : BaseAnimationHandler
     {
-        /*********
-        ** Properties
-        *********/
-        /// <summary>The animation speed multiplier to apply.</summary>
-        private readonly int Multiplier;
-
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
         public MilkingHandler(int multiplier)
-        {
-            this.Multiplier = multiplier;
-        }
+            : base(multiplier) { }
 
         /// <summary>Get whether the animation is currently active.</summary>
         /// <param name="playerAnimationID">The player's current animation ID.</param>
-        public bool IsEnabled(int playerAnimationID)
+        public override bool IsEnabled(int playerAnimationID)
         {
             return
                 Game1.player.Sprite.CurrentAnimation != null
@@ -40,7 +32,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>
         /// <param name="playerAnimationID">The player's current animation ID.</param>
-        public void Update(int playerAnimationID)
+        public override void Update(int playerAnimationID)
         {
             // speed up animation
             GameTime gameTime = Game1.currentGameTime;

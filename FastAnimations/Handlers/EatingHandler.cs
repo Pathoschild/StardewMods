@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
 {
     /// <summary>Handles the eating animation.</summary>
     /// <remarks>See game logic in <see cref="Game1.pressActionButton"/> (opens confirmation dialogue), <see cref="Farmer.showEatingItem"/> (main animation logic), <see cref="FarmerSprite"/>'s private <c>animateOnce(Gametime)</c> method (runs animation + some logic), and <see cref="Game1.doneEating"/> (eats item and ends animation).</remarks>
-    internal class EatingHandler : IAnimationHandler
+    internal class EatingHandler : BaseAnimationHandler
     {
         /*********
         ** Properties
@@ -21,9 +21,6 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <summary>The temporary animations showing the item thrown into the air.</summary>
         private readonly HashSet<TemporaryAnimatedSprite> ItemAnimations = new HashSet<TemporaryAnimatedSprite>();
 
-        /// <summary>The animation speed multiplier to apply.</summary>
-        private readonly int Multiplier;
-
 
         /*********
         ** Public methods
@@ -32,21 +29,21 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
         public EatingHandler(IReflectionHelper reflection, int multiplier)
+            : base(multiplier)
         {
             this.Reflection = reflection;
-            this.Multiplier = multiplier;
         }
 
         /// <summary>Get whether the animation is currently active.</summary>
         /// <param name="playerAnimationID">The player's current animation ID.</param>
-        public bool IsEnabled(int playerAnimationID)
+        public override bool IsEnabled(int playerAnimationID)
         {
             return Game1.isEating && Game1.player.Sprite.CurrentAnimation != null;
         }
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>
         /// <param name="playerAnimationID">The player's current animation ID.</param>
-        public void Update(int playerAnimationID)
+        public override void Update(int playerAnimationID)
         {
             // When the animation starts, the game shows a yes/no dialogue asking the player to
             // confirm they really want to eat the item. This code answers 'yes' and closes the
