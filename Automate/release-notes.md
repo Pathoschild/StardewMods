@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.5
+* Added support for trash cans.
+
 ## 1.4
 * Updated to SMAPI 1.14.
 * Machines are now automated once per second, instead of once per in-game clock change.

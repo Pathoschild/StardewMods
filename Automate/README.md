@@ -30,6 +30,7 @@ pull ingredients to process out of them. This can be used to automate...
 * [furnaces](http://stardewvalleywiki.com/Furnace);
 * [hay hoppers](http://stardewvalleywiki.com/Hay_Hopper);
 * [Junimo huts](http://stardewvalleywiki.com/Junimo_Hut);
+* [garbage cans](http://stardewvalleywiki.com/Garbage_Can);
 * [kegs](http://stardewvalleywiki.com/Keg);
 * [lightning rods](http://stardewvalleywiki.com/Lightning_Rod);
 * [looms](http://stardewvalleywiki.com/Loom);

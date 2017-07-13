@@ -91,6 +91,24 @@ namespace Pathoschild.Stardew.Automate
                     }
                 }
             }
+
+            // tile action property machines
+            for (int x = 0; x < location.Map.Layers[0].LayerWidth; x++)
+            {
+                for (int y = 0; y < location.Map.Layers[0].LayerHeight; y++)
+                {
+                    Vector2 tile = new Vector2(x, y);
+                    string action = location.doesTileHaveProperty(x, y, "Action", "Buildings");
+
+                    IMachine machine = this.GetMachine(location, tile, action, reflection);
+                    if (machine != null)
+                    {
+                        IPipe[] pipes = this.GetConnected(location, tile).ToArray();
+                        if (pipes.Any())
+                            yield return new MachineMetadata(machine, location, pipes);
+                    }
+                }
+            }
         }
 
 
@@ -173,6 +191,21 @@ namespace Pathoschild.Stardew.Automate
                 return new MillMachine(mill);
             if (building.buildingType == "Silo")
                 return new FeedHopperMachine();
+
+            return null;
+        }
+
+        /// <summary>Get a machine for the given tile action, if applicable.</summary>
+        /// <param name="location">The location containing the machine.</param>
+        /// <param name="tile">The machine's position in its location.</param>
+        /// <param name="action">The tile action.</param>
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        private IMachine GetMachine(GameLocation location, Vector2 tile, string action, IReflectionHelper reflection)
+        {
+            if (string.IsNullOrWhiteSpace(action))
+                return null;
+            if (action.StartsWith("Garbage ") && int.TryParse(action.Split(' ')[1], out int trashCanIndex))
+                return new TrashCanMachine(location, tile, trashCanIndex, reflection);
 
             return null;
         }
