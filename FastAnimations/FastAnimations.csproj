@@ -37,6 +37,7 @@
     <Compile Include="Framework\IAnimationHandler.cs" />
     <Compile Include="Framework\BaseAnimationHandler.cs" />
     <Compile Include="Handlers\BreakingGeodeHandler.cs" />
+    <Compile Include="Handlers\TreeFallingHandler.cs" />
     <Compile Include="Handlers\ShearingHandler.cs" />
     <Compile Include="Handlers\MilkingHandler.cs" />
     <Compile Include="Handlers\EatingHandler.cs" />
@@ -49,6 +50,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />

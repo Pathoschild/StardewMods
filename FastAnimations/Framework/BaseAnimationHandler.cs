@@ -1,4 +1,6 @@
-﻿namespace Pathoschild.Stardew.FastAnimations.Framework
+﻿using StardewValley;
+
+namespace Pathoschild.Stardew.FastAnimations.Framework
 {
     /// <summary>The base class for animation handlers.</summary>
     internal abstract class BaseAnimationHandler : IAnimationHandler
@@ -16,6 +18,10 @@
         /// <summary>Get whether the animation is currently active.</summary>
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public abstract bool IsEnabled(int playerAnimationID);
+
+        /// <summary>Perform any updates needed when the player enters a new location.</summary>
+        /// <param name="location">The new location.</param>
+        public virtual void OnNewLocation(GameLocation location) { }
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>
         /// <param name="playerAnimationID">The player's current animation ID.</param>

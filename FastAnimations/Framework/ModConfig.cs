@@ -20,5 +20,8 @@
 
         /// <summary>The speed multiplier for shearing.</summary>
         public int ShearSpeed { get; set; } = 5;
+
+        /// <summary>The speed multiplier for falling trees.</summary>
+        public int TreeFallSpeed { get; set; } = 1;
     }
 }
