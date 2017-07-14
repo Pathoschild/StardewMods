@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
@@ -52,7 +53,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="translations">The translation helper.</param>
         /// <param name="date">The game date.</param>
         /// <param name="withYear">Whether to include the year number.</param>
-        public static string Stringify(this ITranslationHelper translations, GameDate date, bool withYear)
+        public static string Stringify(this ITranslationHelper translations, SDate date, bool withYear)
         {
             string key = withYear ? L10n.Generic.DateWithYear : L10n.Generic.Date;
             return translations.Get(key, new
@@ -79,7 +80,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     return translations.Get(boolean ? L10n.Generic.Yes : L10n.Generic.No);
 
                 // game date
-                case GameDate date:
+                case SDate date:
                     return translations.Stringify(date, withYear: false);
 
                 // time span

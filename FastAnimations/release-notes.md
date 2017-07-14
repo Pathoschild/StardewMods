@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.3
+* Added support for fishing and falling trees (both disabled by default).
+
 ## 1.2.1
 * Updated to SMAPI 1.14.
 

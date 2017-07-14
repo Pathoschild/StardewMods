@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -12,8 +12,8 @@ using StardewValley.Characters;
 using StardewValley.Menus;
 using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
-using Object = StardewValley.Object;
 using SFarmer = StardewValley.Farmer;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
@@ -66,7 +66,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     continue;
 
                 TargetType type = TargetType.Unknown;
-                if (npc.isVillager())
+                if (npc is Child || npc.isVillager())
                     type = TargetType.Villager;
                 else if (npc is Horse)
                     type = TargetType.Horse;
@@ -93,7 +93,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             foreach (var pair in location.objects)
             {
                 Vector2 spriteTile = pair.Key;
-                Object obj = pair.Value;
+                SObject obj = pair.Value;
 
                 if (!GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
                     continue;
@@ -164,26 +164,27 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
         public ITarget GetTargetFromScreenCoordinate(GameLocation location, Vector2 tile, Vector2 position, bool includeMapTile)
         {
-            // get target sprites overlapping cursor position
+            // get target sprites which might overlap cursor position (first approximation)
             Rectangle tileArea = GameHelper.GetScreenCoordinatesFromTile(tile);
-            return (
-                // select targets whose sprites may overlap the target position
+            var candidates = (
                 from target in this.GetNearbyTargets(location, tile, includeMapTile)
                 let spriteArea = target.GetSpriteArea()
+                let isAtTile = target.IsAtTile(tile)
                 where
                     target.Type != TargetType.Unknown
-                    && (target.IsAtTile(tile) || spriteArea.Intersects(tileArea))
+                    && (isAtTile || spriteArea.Intersects(tileArea))
+                orderby
+                    target.Type != TargetType.Tile ? 0 : 1, // Tiles are always under anything else.
+                    spriteArea.Y descending,                // A higher Y value is closer to the foreground, and will occlude any sprites behind it.
+                    spriteArea.X ascending                  // If two sprites at the same Y coordinate overlap, assume the left sprite occludes the right.
 
-                // sort targets by layer
-                // (A higher Y value is closer to the foreground, and will occlude any sprites
-                // behind it. If two sprites at the same Y coordinate overlap, assume the left
-                // sprite occludes the right.)
-                orderby target.Type != TargetType.Tile ? 0 : 1, spriteArea.Y descending, spriteArea.X ascending
+                select new { target, spriteArea, isAtTile }
+            ).ToArray();
 
-                where target.SpriteIntersectsPixel(tile, position, spriteArea)
-
-                select target
-            ).FirstOrDefault();
+            // choose best match
+            return
+                candidates.FirstOrDefault(p => p.target.SpriteIntersectsPixel(tile, position, p.spriteArea))?.target // sprite pixel under cursor
+                ?? candidates.FirstOrDefault(p => p.isAtTile)?.target; // tile under cursor
         }
 
         /****

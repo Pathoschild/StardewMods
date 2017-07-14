@@ -1,4 +1,4 @@
-using StardewTree = StardewValley.TerrainFeatures.Tree;
+﻿using StardewTree = StardewValley.TerrainFeatures.Tree;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 {

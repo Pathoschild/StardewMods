@@ -14,7 +14,7 @@ using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.Tools;
-using Object = StardewValley.Object;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything
 {
@@ -53,13 +53,6 @@ namespace Pathoschild.Stardew.LookupAnything
         /****
         ** Data helpers
         ****/
-        /// <summary>Get the current in-game date.</summary>
-        /// <param name="daysInSeason">The number of days in a season.</param>
-        public static GameDate GetDate(int daysInSeason)
-        {
-            return new GameDate(Game1.currentSeason, Game1.dayOfMonth, Game1.year, daysInSeason);
-        }
-
         /// <summary>Get the number of times the player has shipped a given item.</summary>
         /// <param name="itemID">The item's parent sprite index.</param>
         public static int GetShipped(int itemID)
@@ -75,7 +68,7 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             return (
                 from obj in GameHelper.Objects.Value
-                where obj.Type != "Arch" && obj.Type != "Fish" && obj.Type != "Mineral" && obj.Type != "Cooking" && Object.isPotentialBasicShippedCategory(obj.ParentSpriteIndex, obj.Category.ToString())
+                where obj.Type != "Arch" && obj.Type != "Fish" && obj.Type != "Mineral" && obj.Type != "Cooking" && SObject.isPotentialBasicShippedCategory(obj.ParentSpriteIndex, obj.Category.ToString())
                 select new KeyValuePair<int, bool>(obj.ParentSpriteIndex, Game1.player.basicShipped.ContainsKey(obj.ParentSpriteIndex))
             );
         }
@@ -93,7 +86,7 @@ namespace Pathoschild.Stardew.LookupAnything
             foreach (GameLocation location in Game1.locations.Concat(Game1.getFarm().buildings.Select(p => p.indoors).Where(p => p != null)))
             {
                 // map objects
-                foreach (Object item in location.objects.Values)
+                foreach (SObject item in location.objects.Values)
                 {
                     if (item is Chest chest)
                     {
@@ -222,10 +215,10 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get the items a specified NPC can receive.</summary>
         /// <param name="npc">The NPC to check.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static IDictionary<Object, GiftTaste> GetGiftTastes(NPC npc, Metadata metadata)
+        public static IDictionary<SObject, GiftTaste> GetGiftTastes(NPC npc, Metadata metadata)
         {
             if (!GameHelper.IsSocialVillager(npc, metadata))
-                return new Dictionary<Object, GiftTaste>();
+                return new Dictionary<SObject, GiftTaste>();
 
             // get giftable items
             HashSet<int> giftableItemIDs = new HashSet<int>(
@@ -267,16 +260,16 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get an object by its parent sprite index.</summary>
         /// <param name="index">The parent sprite index.</param>
         /// <param name="stack">The number of items in the stack.</param>
-        public static Object GetObjectBySpriteIndex(int index, int stack = 1)
+        public static SObject GetObjectBySpriteIndex(int index, int stack = 1)
         {
-            return new Object(index, stack);
+            return new SObject(index, stack);
         }
 
         /// <summary>Get the sprite sheet to which the item's <see cref="Item.parentSheetIndex"/> refers.</summary>
         /// <param name="item">The item to check.</param>
         public static ItemSpriteType GetSpriteType(this Item item)
         {
-            if (item is Object obj)
+            if (item is SObject obj)
             {
                 if (obj is Furniture)
                     return ItemSpriteType.Furniture;
@@ -298,7 +291,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get all objects matching the reference ID.</summary>
         /// <param name="refID">The reference ID. This can be a category (negative value) or parent sprite index (positive value).</param>
-        public static IEnumerable<Object> GetObjectsByReferenceID(int refID)
+        public static IEnumerable<SObject> GetObjectsByReferenceID(int refID)
         {
             // category
             if (refID < 0)
@@ -323,7 +316,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 return false;
 
             // check type
-            if (new[] { "Crafting", "asdf" /*dig spots*/, "Quest" }.Contains((item as Object)?.Type))
+            if (new[] { "Crafting", "asdf" /*dig spots*/, "Quest" }.Contains((item as SObject)?.Type))
                 return false;
 
             return true;
@@ -413,18 +406,18 @@ namespace Pathoschild.Stardew.LookupAnything
         public static Tuple<Texture2D, Rectangle> GetSprite(Item item)
         {
             // standard object
-            if (item is Object obj)
+            if (item is SObject obj)
             {
                 return obj.bigCraftable
-                    ? Tuple.Create(Game1.bigCraftableSpriteSheet, Object.getSourceRectForBigCraftable(obj.ParentSheetIndex))
-                    : Tuple.Create(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, Object.spriteSheetTileSize, Object.spriteSheetTileSize));
+                    ? Tuple.Create(Game1.bigCraftableSpriteSheet, SObject.getSourceRectForBigCraftable(obj.ParentSheetIndex))
+                    : Tuple.Create(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
             }
 
             // boots or ring
             if (item is Boots || item is Ring)
             {
                 int indexInTileSheet = (item as Boots)?.indexInTileSheet ?? ((Ring)item).indexInTileSheet;
-                return Tuple.Create(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, indexInTileSheet, Object.spriteSheetTileSize, Object.spriteSheetTileSize));
+                return Tuple.Create(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, indexInTileSheet, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
             }
 
             // unknown item

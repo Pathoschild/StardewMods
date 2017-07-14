@@ -102,8 +102,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 return defaultValue;
 
             // valid enum
-            T parsed;
-            if (Enum.TryParse(raw, true, out parsed))
+            if (Enum.TryParse(raw, true, out T parsed))
                 return parsed;
 
             // invalid

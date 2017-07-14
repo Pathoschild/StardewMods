@@ -98,17 +98,20 @@ namespace Pathoschild.Stardew.RotateToolbar
             this.Monitor.InterceptErrors("handling your input", $"handling input '{key}'", () =>
             {
                 if (key.Equals(map.ShiftToNext))
-                    this.RotateToolbar(true);
+                    this.RotateToolbar(true, this.Config.DeselectItemOnRotate);
                 else if (key.Equals(map.ShiftToPrevious))
-                    this.RotateToolbar(false);
+                    this.RotateToolbar(false, this.Config.DeselectItemOnRotate);
             });
         }
 
         /// <summary>Rotate the row shown in the toolbar.</summary>
         /// <param name="next">Whether to show the next inventory row (else the previous).</param>
-        private void RotateToolbar(bool next)
+        /// <param name="deselectSlot">Whether to deselect the current slot.</param>
+        private void RotateToolbar(bool next, bool deselectSlot)
         {
             Game1.player.shiftToolbar(next);
+            if (deselectSlot)
+                Game1.player.CurrentToolIndex = int.MaxValue; // Farmer::CurrentItem/Tool ignore the index if it's higher than the inventory size
         }
     }
 }

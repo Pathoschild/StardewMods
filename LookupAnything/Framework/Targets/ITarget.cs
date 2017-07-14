@@ -1,5 +1,4 @@
-using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 {

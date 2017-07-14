@@ -10,8 +10,8 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Objects;
-using Object = StardewValley.Object;
 using SFarmer = StardewValley.Farmer;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything
 {
@@ -33,11 +33,15 @@ namespace Pathoschild.Stardew.LookupAnything
                 string area = keyParts[0];
                 int id = int.Parse(keyParts[1]);
 
-                // parse value
+                // parse bundle info
                 string[] valueParts = entry.Value.Split('/');
                 string name = valueParts[0];
                 string reward = valueParts[1];
-                string displayName = valueParts.Last();
+                string displayName = LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en
+                    ? name // field isn't present in English
+                    : valueParts.Last(); // number of fields varies, but display name is always last
+
+                // parse ingredients
                 List<BundleIngredientModel> ingredients = new List<BundleIngredientModel>();
                 string[] ingredientData = valueParts[2].Split(' ');
                 for (int i = 0; i < ingredientData.Length; i += 3)
@@ -186,29 +190,29 @@ namespace Pathoschild.Stardew.LookupAnything
 
                     // some item IDs have special meaning
                     if (itemID == Debris.copperDebris)
-                        itemID = Object.copper;
+                        itemID = SObject.copper;
                     else if (itemID == Debris.ironDebris)
-                        itemID = Object.iron;
+                        itemID = SObject.iron;
                     else if (itemID == Debris.coalDebris)
-                        itemID = Object.coal;
+                        itemID = SObject.coal;
                     else if (itemID == Debris.goldDebris)
-                        itemID = Object.gold;
+                        itemID = SObject.gold;
                     else if (itemID == Debris.coinsDebris)
                         continue; // no drop
                     else if (itemID == Debris.iridiumDebris)
-                        itemID = Object.iridium;
+                        itemID = SObject.iridium;
                     else if (itemID == Debris.woodDebris)
-                        itemID = Object.wood;
+                        itemID = SObject.wood;
                     else if (itemID == Debris.stoneDebris)
-                        itemID = Object.stone;
+                        itemID = SObject.stone;
 
                     // add drop
                     drops.Add(new ItemDropData(itemID, maxDrops, chance));
                 }
                 if (isMineMonster && Game1.player.timesReachedMineBottom >= 1)
                 {
-                    drops.Add(new ItemDropData(Object.diamondIndex, 1, 0.008f));
-                    drops.Add(new ItemDropData(Object.prismaticShardIndex, 1, 0.008f));
+                    drops.Add(new ItemDropData(SObject.diamondIndex, 1, 0.008f));
+                    drops.Add(new ItemDropData(SObject.prismaticShardIndex, 1, 0.008f));
                 }
 
                 // yield data
@@ -250,20 +254,20 @@ namespace Pathoschild.Stardew.LookupAnything
                         price: int.Parse(fields[2]),
                         edibility: -300,
                         type: fields[3],
-                        category: Object.ringCategory
+                        category: SObject.ringCategory
                     );
                 }
 
                 // any other object
                 else
                 {
-                    string name = fields[Object.objectInfoNameIndex];
-                    int price = int.Parse(fields[Object.objectInfoPriceIndex]);
-                    int edibility = int.Parse(fields[Object.objectInfoEdibilityIndex]);
-                    string description = fields[Object.objectInfoDescriptionIndex];
+                    string name = fields[SObject.objectInfoNameIndex];
+                    int price = int.Parse(fields[SObject.objectInfoPriceIndex]);
+                    int edibility = int.Parse(fields[SObject.objectInfoEdibilityIndex]);
+                    string description = fields[SObject.objectInfoDescriptionIndex];
 
                     // type & category
-                    string[] typeParts = fields[Object.objectInfoTypeIndex].Split(' ');
+                    string[] typeParts = fields[SObject.objectInfoTypeIndex].Split(' ');
                     string typeName = typeParts[0];
                     int category = 0;
                     if (typeParts.Length > 1)
@@ -299,7 +303,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // machine recipes
             recipes.AddRange(
                 from entry in metadata.MachineRecipes
-                let machine = new Object(Vector2.Zero, entry.MachineID)
+                let machine = new SObject(Vector2.Zero, entry.MachineID)
                 select new RecipeModel(null, machine.DisplayName, entry.Ingredients, ingredient => DataParser.CreateRecipeItem(ingredient.parentSheetIndex, entry.Output), false, entry.ExceptIngredients)
             );
 
@@ -319,25 +323,25 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Create a custom recipe output.</summary>
         /// <param name="inputID">The input ingredient ID.</param>
         /// <param name="outputID">The output item ID.</param>
-        private static Object CreateRecipeItem(int inputID, int outputID)
+        private static SObject CreateRecipeItem(int inputID, int outputID)
         {
-            Object item = GameHelper.GetObjectBySpriteIndex(outputID);
+            SObject item = GameHelper.GetObjectBySpriteIndex(outputID);
             switch (outputID)
             {
                 case 342:
-                    item.preserve = Object.PreserveType.Pickle;
+                    item.preserve = SObject.PreserveType.Pickle;
                     item.preservedParentSheetIndex = inputID;
                     break;
                 case 344:
-                    item.preserve = Object.PreserveType.Jelly;
+                    item.preserve = SObject.PreserveType.Jelly;
                     item.preservedParentSheetIndex = inputID;
                     break;
                 case 348:
-                    item.preserve = Object.PreserveType.Wine;
+                    item.preserve = SObject.PreserveType.Wine;
                     item.preservedParentSheetIndex = inputID;
                     break;
                 case 350:
-                    item.preserve = Object.PreserveType.Juice;
+                    item.preserve = SObject.PreserveType.Juice;
                     item.preservedParentSheetIndex = inputID;
                     break;
             }

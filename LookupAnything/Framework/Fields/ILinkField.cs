@@ -1,4 +1,4 @@
-using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
+﻿using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {

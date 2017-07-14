@@ -1,6 +1,14 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.15
+* You can now look up your children.
+* Added Portuguese and Spanish translations. (Thanks to Fabilows and ThomasGabrielDelavault respectively!)
+* Improved lookup matching — if there's no sprite under the cursor, it now tries to look up the tile contents.
+* Fixed animal 'complaint' field text when an animal was attacked overnight.
+* Fixed item 'needed for' field incorrectly matching non-fish items for fishing bundles.
+* Fixed item 'needed for' field not showing bundle area names in English.
+
 ## 1.14
 * Updated to SMAPI 1.14.
 * Added translation support.

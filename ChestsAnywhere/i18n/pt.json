@@ -1,0 +1,19 @@
+﻿{
+  // default chest names
+  "default-name.chest": "Baú #{{number}}",
+  "default-name.fridge": "Geladeira",
+
+  // edit-chest labels
+  "label.location": "Local",
+  "label.location.tile": "posição {{x}}, {{y}}",
+  "label.name": "Nome",
+  "label.category": "Categoria",
+  "label.order": "Ordem",
+  "label.hide-chest": "Esconder esse baú",
+  "label.hide-chest-hidden": "Esconder esse baú (Você terá que achar o baú para desfazer isso!)",
+
+  // button labels
+  "button.edit-chest": "editar baú",
+  "button.sort-inventory": "arrumar inventário",
+  "button.ok": "OK"
+}

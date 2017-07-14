@@ -9,6 +9,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Monsters;
@@ -73,12 +74,48 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             switch (this.TargetType)
             {
                 case TargetType.Villager:
-                    if (!metadata.Constants.AsocialVillagers.Contains(npc.name))
+                    // special NPCs like Gunther
+                    if (metadata.Constants.AsocialVillagers.Contains(npc.name))
                     {
-                        var giftTastes = this.GetGiftTastes(npc, metadata);
+                        // no data
+                    }
 
+                    // children
+                    else if (npc is Child child)
+                    {
                         // birthday
-                        GameDate birthday = new GameDate(npc.birthday_Season, npc.birthday_Day, Game1.year, metadata.Constants.DaysInSeason);
+                        SDate birthday = SDate.Now().AddDays(-child.daysOld);
+                        yield return new GenericField(this.Text.Get(L10n.Npc.Birthday), this.Text.Stringify(birthday, withYear: true));
+
+                        // age
+                        {
+                            ChildAge age = (ChildAge)child.age;
+                            bool isGrown = age == ChildAge.Toddler;
+                            int daysToNext = 13 - (child.daysOld % 13);
+
+                            string ageLabel = this.Translate(L10n.NpcChild.Age);
+                            string ageName = this.Translate(L10n.For(age));
+                            string ageDesc = isGrown
+                                ? this.Translate(L10n.NpcChild.AgeDescriptionGrown, new { label = ageName })
+                                : this.Translate(L10n.NpcChild.AgeDescriptionPartial, new { label = ageName, count = daysToNext, nextLabel = L10n.For(age + 1) });
+
+                            yield return new PercentageBarField(ageLabel, child.age, Child.toddler, Color.Green, Color.Gray, ageDesc);
+                        }
+
+                        // friendship
+                        if (Game1.player.friendships.ContainsKey(child.name))
+                        {
+                            FriendshipModel friendship = DataParser.GetFriendshipForVillager(Game1.player, child, metadata);
+                            yield return new CharacterFriendshipField(this.Translate(L10n.Npc.Friendship), friendship, this.Text);
+                            yield return new GenericField(this.Translate(L10n.Npc.TalkedToday), this.Stringify(Game1.player.friendships[child.name][2] == 1));
+                        }
+                    }
+
+                    // villagers
+                    else
+                    {
+                        // birthday
+                        SDate birthday = new SDate(npc.birthday_Day, npc.birthday_Season);
                         yield return new GenericField(this.Text.Get(L10n.Npc.Birthday), this.Text.Stringify(birthday));
 
                         // friendship
@@ -94,6 +131,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         }
                         else
                             yield return new GenericField(this.Translate(L10n.Npc.Friendship), this.Translate(L10n.Npc.FriendshipNotMet));
+
+                        // gift tastes
+                        var giftTastes = this.GetGiftTastes(npc, metadata);
                         yield return new CharacterGiftTastesField(this.Translate(L10n.Npc.LovesGifts), giftTastes, GiftTaste.Love);
                         yield return new CharacterGiftTastesField(this.Translate(L10n.Npc.LikesGifts), giftTastes, GiftTaste.Like);
                     }

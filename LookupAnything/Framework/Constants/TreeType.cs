@@ -1,4 +1,4 @@
-using StardewValley.TerrainFeatures;
+﻿using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 {

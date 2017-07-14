@@ -155,7 +155,7 @@ namespace Pathoschild.Stardew.DebugMode
             if (!map.IsValidKey(key))
                 return;
 
-           // perform bound action, toggle debug menu
+            // perform bound action, toggle debug menu
             if (key.Equals(map.ToggleDebug))
             {
                 Program.releaseBuild = !Program.releaseBuild;

@@ -1,4 +1,4 @@
-namespace Pathoschild.Stardew.FastAnimations.Framework
+﻿namespace Pathoschild.Stardew.FastAnimations.Framework
 {
     /// <summary>The mod configuration.</summary>
     internal class ModConfig
@@ -15,10 +15,16 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /// <summary>The speed multiplier for breaking geodes.</summary>
         public int BreakGeodeSpeed { get; set; } = 20;
 
+        /// <summary>The speed multiplier for fishing.</summary>
+        public int FishingSpeed { get; set; } = 1;
+
         /// <summary>The speed multiplier for milking.</summary>
         public int MilkSpeed { get; set; } = 5;
 
         /// <summary>The speed multiplier for shearing.</summary>
         public int ShearSpeed { get; set; } = 5;
+
+        /// <summary>The speed multiplier for falling trees.</summary>
+        public int TreeFallSpeed { get; set; } = 1;
     }
 }

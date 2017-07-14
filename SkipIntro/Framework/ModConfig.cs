@@ -1,4 +1,4 @@
-namespace Pathoschild.Stardew.SkipIntro.Framework
+﻿namespace Pathoschild.Stardew.SkipIntro.Framework
 {
     /// <summary>The mod configuration.</summary>
     internal class ModConfig

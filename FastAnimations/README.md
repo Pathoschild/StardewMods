@@ -20,12 +20,14 @@ file if you want.
 You can choose how fast each animation runs. Each value is a multiple of the original speed (e.g. `1` for
 normal speed or `2` for double speed):
 
-setting           | what it affects
-:---------------- | :------------------
-`BreakGeodeSpeed` | Default 20× speed. How fast the blacksmiths breaks geodes for you.
-`EatAndDrinkSpeed` | Default 10× speed. How fast you eat and drink.
-`MilkSpeed` | Default 5× speed. How fast you use the milk pail.
-`ShearSpeed` | Default 5× speed. How fast you use the shears.
+setting           | default | what it affects
+:---------------- | :------ | :------------------
+`BreakGeodeSpeed` | 20× | How fast the blacksmiths breaks geodes for you.
+`EatAndDrinkSpeed` | 10× | How fast you eat and drink.
+`FishingSpeed` | 1× | How fast you cast and reel when fishing (doesn't affect the minigame).
+`MilkSpeed` | 5× | How fast you use the milk pail.
+`ShearSpeed` | 5× | How fast you use the shears.
+`TreeFallingSpeed` | 1× | How fast trees fall after you chop them down.
 
 Other available settings:
 

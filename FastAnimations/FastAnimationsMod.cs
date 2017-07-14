@@ -35,6 +35,7 @@ namespace Pathoschild.Stardew.FastAnimations
 
             SaveEvents.AfterLoad += this.ReceiveAfterLoad;
             GameEvents.UpdateTick += this.ReceiveUpdateTick;
+            LocationEvents.CurrentLocationChanged += this.ReceiveLocationChanged;
         }
 
 
@@ -52,6 +53,22 @@ namespace Pathoschild.Stardew.FastAnimations
             // check for updates
             if (this.Config.CheckForUpdates)
                 UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "FastAnimations");
+
+            // initialise handlers
+            foreach (IAnimationHandler handler in this.Handlers)
+                handler.OnNewLocation(Game1.currentLocation);
+        }
+
+        /// <summary>The method invoked after the player warps to a new location.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void ReceiveLocationChanged(object sender, EventArgsCurrentLocationChanged e)
+        {
+            if (!Context.IsWorldReady || Game1.eventUp || !this.Handlers.Any())
+                return;
+
+            foreach (IAnimationHandler handler in this.Handlers)
+                handler.OnNewLocation(e.NewLocation);
         }
 
         /// <summary>The method invoked when the player presses a keyboard button.</summary>
@@ -83,10 +100,14 @@ namespace Pathoschild.Stardew.FastAnimations
                 yield return new BreakingGeodeHandler(config.BreakGeodeSpeed);
             if (config.EatAndDrinkSpeed > 1)
                 yield return new EatingHandler(this.Helper.Reflection, config.EatAndDrinkSpeed);
+            if (config.FishingSpeed > 1)
+                yield return new FishingHandler(config.FishingSpeed);
             if (config.MilkSpeed > 1)
                 yield return new MilkingHandler(config.MilkSpeed);
             if (config.ShearSpeed > 1)
                 yield return new ShearingHandler(config.ShearSpeed);
+            if (config.TreeFallSpeed > 1)
+                yield return new TreeFallingHandler(config.TreeFallSpeed, this.Helper.Reflection);
         }
     }
 }

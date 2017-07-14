@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 
@@ -15,6 +15,9 @@ namespace Pathoschild.Stardew.RotateToolbar.Framework
 
         /// <summary>The controller input map.</summary>
         public InputMapConfiguration<string> Controller { get; set; }
+
+        /// <summary>Whether to deselect the current slot after rotating the toolbar.</summary>
+        public bool DeselectItemOnRotate { get; set; } = false;
 
         /// <summary>Whether to check for updates to the mod.</summary>
         public bool CheckForUpdates { get; set; } = true;
@@ -54,7 +57,8 @@ namespace Pathoschild.Stardew.RotateToolbar.Framework
                     ShiftToPrevious = this.TryParse<Buttons>(monitor, this.Controller.ShiftToPrevious),
                     ShiftToNext = this.TryParse<Buttons>(monitor, this.Controller.ShiftToNext)
                 },
-                CheckForUpdates = this.CheckForUpdates,
+                DeselectItemOnRotate = this.DeselectItemOnRotate,
+                CheckForUpdates = this.CheckForUpdates
             };
         }
 
@@ -74,8 +78,7 @@ namespace Pathoschild.Stardew.RotateToolbar.Framework
                 return defaultValue;
 
             // valid enum
-            T parsed;
-            if (Enum.TryParse(raw, true, out parsed))
+            if (Enum.TryParse(raw, true, out T parsed))
                 return parsed;
 
             // invalid

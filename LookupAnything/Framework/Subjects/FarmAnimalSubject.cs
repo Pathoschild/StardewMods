@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,6 +6,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
@@ -42,11 +43,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // calculate maturity
             bool isFullyGrown = animal.age >= animal.ageWhenMature;
             int daysUntilGrown = 0;
-            GameDate dayOfMaturity = null;
+            SDate dayOfMaturity = null;
             if (!isFullyGrown)
             {
                 daysUntilGrown = animal.ageWhenMature - animal.age;
-                dayOfMaturity = GameHelper.GetDate(metadata.Constants.DaysInSeason).GetDayOffset(daysUntilGrown);
+                dayOfMaturity = SDate.Now().AddDays(daysUntilGrown);
             }
 
             // yield fields
@@ -113,7 +114,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     factors.Add(this.Translate(L10n.Animal.ComplaintsHungry));
                     break;
                 case FarmAnimal.disturbedByDog:
-                    factors.Add(this.Translate(L10n.Animal.ComplaintsDisturbedByDog, new { name = Game1.player.getPetName() }));
+                    factors.Add(this.Translate(L10n.Animal.ComplaintsWildAnimalAttack));
                     break;
                 case FarmAnimal.leftOutAtNight:
                     factors.Add(this.Translate(L10n.Animal.ComplaintsLeftOut));
