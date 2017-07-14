@@ -5,7 +5,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 
-namespace Pathoschild.Stardew.Automate.Machines.Objects
+namespace Pathoschild.Stardew.Automate.Machines.Tiles
 {
     /// <summary>A trash can that accepts input and provides output.</summary>
     internal class TrashCanMachine : IMachine

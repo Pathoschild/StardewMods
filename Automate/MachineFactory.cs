@@ -5,6 +5,7 @@ using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Automate.Machines.Buildings;
 using Pathoschild.Stardew.Automate.Machines.Objects;
 using Pathoschild.Stardew.Automate.Machines.TerrainFeatures;
+using Pathoschild.Stardew.Automate.Machines.Tiles;
 using Pathoschild.Stardew.Automate.Pipes;
 using StardewModdingAPI;
 using StardewValley;
@@ -19,6 +20,13 @@ namespace Pathoschild.Stardew.Automate
     /// <summary>Constructs machine instances.</summary>
     internal class MachineFactory
     {
+        /*********
+        ** Properties
+        *********/
+        /// <summary>The tile area on the farm matching the shipping bin.</summary>
+        private readonly Rectangle ShippingBinArea = new Rectangle(71, 14, 2, 1);
+
+
         /*********
         ** Public methods
         *********/
@@ -92,18 +100,15 @@ namespace Pathoschild.Stardew.Automate
                 }
             }
 
-            // tile action property machines
+            // map machines
             for (int x = 0; x < location.Map.Layers[0].LayerWidth; x++)
             {
                 for (int y = 0; y < location.Map.Layers[0].LayerHeight; y++)
                 {
                     Vector2 tile = new Vector2(x, y);
-                    string action = location.doesTileHaveProperty(x, y, "Action", "Buildings");
-
-                    IMachine machine = this.GetMachine(location, tile, action, reflection);
-                    if (machine != null)
+                    if (this.TryGetTileMachine(location, tile, reflection, out IMachine machine, out Vector2 size))
                     {
-                        IPipe[] pipes = this.GetConnected(location, tile).ToArray();
+                        IPipe[] pipes = this.GetConnected(location, new Rectangle(x, y, (int)size.X, (int)size.Y)).ToArray();
                         if (pipes.Any())
                             yield return new MachineMetadata(machine, location, pipes);
                     }
@@ -195,19 +200,37 @@ namespace Pathoschild.Stardew.Automate
             return null;
         }
 
-        /// <summary>Get a machine for the given tile action, if applicable.</summary>
+        /// <summary>Get a machine for the given tile, if applicable.</summary>
         /// <param name="location">The location containing the machine.</param>
         /// <param name="tile">The machine's position in its location.</param>
-        /// <param name="action">The tile action.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        private IMachine GetMachine(GameLocation location, Vector2 tile, string action, IReflectionHelper reflection)
+        /// <param name="machine">The generated machine instance.</param>
+        /// <param name="size">The size of the machine on the map.</param>
+        /// <remarks>Shipping bin logic from <see cref="Farm.leftClick"/>, garbage can logic from <see cref="Town.checkAction"/>.</remarks>
+        private bool TryGetTileMachine(GameLocation location, Vector2 tile, IReflectionHelper reflection, out IMachine machine, out Vector2 size)
         {
-            if (string.IsNullOrWhiteSpace(action))
-                return null;
-            if (action.StartsWith("Garbage ") && int.TryParse(action.Split(' ')[1], out int trashCanIndex))
-                return new TrashCanMachine(location, tile, trashCanIndex, reflection);
+            // shipping bin
+            // ReSharper disable once ImpureMethodCallOnReadonlyValueField -- false positive, method is not impure
+            if (location is Farm farm && this.ShippingBinArea.Contains((int)tile.X, (int)tile.Y))
+            {
+                machine = new ShippingBinMachine(farm);
+                size = new Vector2(this.ShippingBinArea.Width, this.ShippingBinArea.Height);
+                return true;
+            }
 
-            return null;
+            // garbage cans
+            string action = location.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Action", "Buildings");
+            if (!string.IsNullOrWhiteSpace(action) && action.StartsWith("Garbage ") && int.TryParse(action.Split(' ')[1], out int trashCanIndex))
+            {
+                machine = new TrashCanMachine(location, tile, trashCanIndex, reflection);
+                size = Vector2.One;
+                return true;
+            }
+
+            // none found
+            machine = null;
+            size = Vector2.Zero;
+            return false;
         }
 
         /// <summary>Get all chests connected to the given machine.</summary>
