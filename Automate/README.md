@@ -41,6 +41,7 @@ pull ingredients to process out of them. This can be used to automate...
 * [preserves jars](http://stardewvalleywiki.com/Preserves_Jar);
 * [recycling machines](http://stardewvalleywiki.com/Recycling_Machine);
 * [seed makers](http://stardewvalleywiki.com/Seed_Maker);
+* shipping bin;
 * [silos](http://stardewvalleywiki.com/Silo);
 * [slime egg-presses](http://stardewvalleywiki.com/Slime_Egg);
 * [tappers](http://stardewvalleywiki.com/Tapper);

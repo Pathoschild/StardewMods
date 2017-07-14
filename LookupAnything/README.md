@@ -42,6 +42,7 @@ file if you want. These are the available settings:
 * See a villager's social data, friendship with you, and the gifts they like. This will highlight
   the gifts you're carrying (green) or own (black).
   > ![](screenshots/villager.png)
+  > ![](screenshots/child.png)
 
 * See your farm animals' happiness, friendship, problems, and any produce ready for you.
   > ![](screenshots/farm-animal.png)

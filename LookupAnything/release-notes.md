@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.15
-* Added child lookups.
+* You can now look up your children.
 * Added Portuguese and Spanish translations. (Thanks to Fabilows and ThomasGabrielDelavault respectively!)
 * Improved lookup matching — if there's no sprite under the cursor, it now tries to look up the tile contents.
 * Fixed animal 'complaint' field text when an animal was attacked overnight.
