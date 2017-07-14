@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.5
-* Added support for trash cans.
+* Added support for the shipping bin and trash cans.
 
 ## 1.4
 * Updated to SMAPI 1.14.
