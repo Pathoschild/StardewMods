@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -97,7 +97,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                             string ageName = this.Translate(L10n.For(age));
                             string ageDesc = isGrown
                                 ? this.Translate(L10n.NpcChild.AgeDescriptionGrown, new { label = ageName })
-                                : this.Translate(L10n.NpcChild.AgeDescriptionPartial, new { label = ageName, count = daysToNext, nextLabel = L10n.For(age + 1) });
+                                : this.Translate(L10n.NpcChild.AgeDescriptionPartial, new { label = ageName, count = daysToNext, nextLabel = this.Text.Get(L10n.For(age + 1)) });
 
                             yield return new PercentageBarField(ageLabel, child.age, Child.toddler, Color.Green, Color.Gray, ageDesc);
                         }
