@@ -27,19 +27,16 @@ namespace Pathoschild.Stardew.Automate.Machines.Tiles
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="location">The location to search.</param>
+        /// <param name="town">The town to search.</param>
         /// <param name="tile">The machine's position in its location.</param>
         /// <param name="trashCanIndex">The trash can index.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public TrashCanMachine(GameLocation location, Vector2 tile, int trashCanIndex, IReflectionHelper reflection)
+        public TrashCanMachine(Town town, Vector2 tile, int trashCanIndex, IReflectionHelper reflection)
         {
             this.Tile = tile;
-            if (location is Town town)
-            {
-                this.TrashCansChecked = reflection.GetPrivateValue<bool[]>(town, "garbageChecked");
-                if (trashCanIndex > 0 && trashCanIndex < this.TrashCansChecked.Length)
-                    this.TrashCanIndex = trashCanIndex;
-            }
+            this.TrashCansChecked = reflection.GetPrivateValue<bool[]>(town, "garbageChecked");
+            if (trashCanIndex > 0 && trashCanIndex < this.TrashCansChecked.Length)
+                this.TrashCanIndex = trashCanIndex;
         }
 
         /// <summary>Get the machine's processing state.</summary>

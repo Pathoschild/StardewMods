@@ -219,12 +219,15 @@ namespace Pathoschild.Stardew.Automate
             }
 
             // garbage cans
-            string action = location.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Action", "Buildings");
-            if (!string.IsNullOrWhiteSpace(action) && action.StartsWith("Garbage ") && int.TryParse(action.Split(' ')[1], out int trashCanIndex))
+            if (location is Town town)
             {
-                machine = new TrashCanMachine(location, tile, trashCanIndex, reflection);
-                size = Vector2.One;
-                return true;
+                string action = town.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Action", "Buildings");
+                if (!string.IsNullOrWhiteSpace(action) && action.StartsWith("Garbage ") && int.TryParse(action.Split(' ')[1], out int trashCanIndex))
+                {
+                    machine = new TrashCanMachine(town, tile, trashCanIndex, reflection);
+                    size = Vector2.One;
+                    return true;
+                }
             }
 
             // none found
