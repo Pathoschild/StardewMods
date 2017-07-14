@@ -1,7 +1,7 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming
+## 1.6.1
 * Added Portuguese and Spanish translations. (Thanks to Fabilows and ThomasGabrielDelavault respectively!)
 
 ## 1.6

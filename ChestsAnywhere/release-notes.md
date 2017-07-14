@@ -1,8 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming
+## 1.11.1
 * Added Portuguese and Spanish translations. (Thanks to Fabilows and ThomasGabrielDelavault respectively!)
+* Fixed double cursor when using a controller.
 
 ## 1.11
 * Updated to SMAPI 1.14.
