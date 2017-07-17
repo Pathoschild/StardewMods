@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.5.1
+* Fixed shipping bin linking with chests that don't touch it on the right.
+
 ## 1.5
 * Added support for the shipping bin and trash cans.
 

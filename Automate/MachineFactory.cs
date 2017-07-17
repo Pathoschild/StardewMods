@@ -211,7 +211,7 @@ namespace Pathoschild.Stardew.Automate
         {
             // shipping bin
             // ReSharper disable once ImpureMethodCallOnReadonlyValueField -- false positive, method is not impure
-            if (location is Farm farm && this.ShippingBinArea.Contains((int)tile.X, (int)tile.Y))
+            if (location is Farm farm && (int)tile.X == this.ShippingBinArea.X && (int)tile.Y == this.ShippingBinArea.Y)
             {
                 machine = new ShippingBinMachine(farm);
                 size = new Vector2(this.ShippingBinArea.Width, this.ShippingBinArea.Height);
