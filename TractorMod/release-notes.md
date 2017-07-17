@@ -1,7 +1,7 @@
 # Release notes
 ## 4.0
 * The tractor garage is now sold by Robin, requires some building materials, and takes a few days for her to build. The price and whether resources are needed can be changed in `config.json`.
-* The tractor garage has a new look to match the game style thanks to [@Acerbicon](https://github.com/Acerbicon).
+* The tractor and garage have a new look to match the game style thanks to [@Zero-ui9](https://github.com/Zero-ui9) and [@Acerbicon](https://github.com/Acerbicon) respectively.
 * Simplified the `config.json`.
 * Added support for clearing dirt and breaking rocks with the pickaxe.
 * Removed summon-horse key (but kept summon-tractor key).
