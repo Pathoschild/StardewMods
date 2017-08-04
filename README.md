@@ -32,7 +32,7 @@ Active mods:
   _Skip straight to the title screen or load screen (configurable) when you start the game. It also
   skips the screen transitions, so starting the game is much faster._
 
-* **[The Long Night](http://www.nexusmods.com/stardewvalley/mods/533)** <small>([source](LongNight))</small>  
+* **[The Long Night](http://www.nexusmods.com/stardewvalley/mods/1369)** <small>([source](LongNight))</small>  
   _Disables collapsing. You just stay awake forever and the night never ends (until you go to bed)._
 
 Inactive mods:
