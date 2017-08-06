@@ -89,17 +89,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                         // age
                         {
-                            ChildAge age = (ChildAge)child.age;
-                            bool isGrown = age == ChildAge.Toddler;
-                            int daysToNext = 13 - (child.daysOld % 13);
+                            ChildAge stage = (ChildAge)child.age;
+                            int daysOld = child.daysOld;
+                            int daysToNext = this.GetDaysToNextChildGrowth(stage, daysOld);
+                            bool isGrown = daysToNext == -1;
+                            int daysAtNext = daysOld + (isGrown ? 0 : daysToNext);
 
                             string ageLabel = this.Translate(L10n.NpcChild.Age);
-                            string ageName = this.Translate(L10n.For(age));
+                            string ageName = this.Translate(L10n.For(stage));
                             string ageDesc = isGrown
                                 ? this.Translate(L10n.NpcChild.AgeDescriptionGrown, new { label = ageName })
-                                : this.Translate(L10n.NpcChild.AgeDescriptionPartial, new { label = ageName, count = daysToNext, nextLabel = this.Text.Get(L10n.For(age + 1)) });
+                                : this.Translate(L10n.NpcChild.AgeDescriptionPartial, new { label = ageName, count = daysToNext, nextLabel = this.Text.Get(L10n.For(stage + 1)) });
 
-                            yield return new PercentageBarField(ageLabel, child.age, Child.toddler, Color.Green, Color.Gray, ageDesc);
+                            yield return new PercentageBarField(ageLabel, child.daysOld, daysAtNext, Color.Green, Color.Gray, ageDesc);
                         }
 
                         // friendship
@@ -239,6 +241,26 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     tasteGroup => tasteGroup.Key, // gift taste
                     tasteGroup => tasteGroup.Select(entry => (Item)entry.Key).ToArray() // items
                 );
+        }
+
+        /// <summary>Get the number of days until a child grows to the next stage.</summary>
+        /// <param name="stage">The child's current growth stage.</param>
+        /// <param name="daysOld">The child's current age in days.</param>
+        /// <returns>Returns a number of days, or <c>-1</c> if the child won't grow any further.</returns>
+        /// <remarks>Derived from <see cref="Child.dayUpdate"/>.</remarks>
+        private int GetDaysToNextChildGrowth(ChildAge stage, int daysOld)
+        {
+            switch (stage)
+            {
+                case ChildAge.Newborn:
+                    return 13 - daysOld;
+                case ChildAge.Baby:
+                    return 27 - daysOld;
+                case ChildAge.Crawler:
+                    return 55 - daysOld;
+                default:
+                    return -1;
+            }
         }
     }
 }
