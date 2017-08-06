@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.15.1
+* Added Russian translations. (Thanks to SteaNN!)
+* Fixed missing translation in child 'age' field.
+* Fixed incorrect child age calculation.
+
 ## 1.15
 * You can now look up your children.
 * Added Portuguese and Spanish translations. (Thanks to Fabilows and ThomasGabrielDelavault respectively!)
