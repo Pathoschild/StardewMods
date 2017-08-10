@@ -24,8 +24,8 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The machines to process.</summary>
         private readonly IDictionary<GameLocation, MachineMetadata[]> Machines = new Dictionary<GameLocation, MachineMetadata[]>();
 
-        /// <summary>Whether machines are initialised.</summary>
-        private bool IsReady => Context.IsWorldReady && this.Machines.Any();
+        /// <summary>The locations that should be reloaded on the next update tick.</summary>
+        private readonly HashSet<GameLocation> ReloadQueue = new HashSet<GameLocation>();
 
 
         /*********
@@ -69,7 +69,9 @@ namespace Pathoschild.Stardew.Automate
         {
             try
             {
-                this.ReloadAllMachines();
+                this.Machines.Clear();
+                foreach (GameLocation location in e.NewLocations)
+                    this.ReloadQueue.Add(location);
             }
             catch (Exception ex)
             {
@@ -84,7 +86,7 @@ namespace Pathoschild.Stardew.Automate
         {
             try
             {
-                this.ReloadMachinesIn(Game1.currentLocation);
+                this.ReloadQueue.Add(Game1.currentLocation);
             }
             catch (Exception ex)
             {
@@ -97,11 +99,17 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void GameEvents_OneSecondTick(object sender, EventArgs e)
         {
-            if (!this.IsReady)
+            if(!Context.IsWorldReady)
                 return;
 
             try
             {
+                // reload machines if needed
+                foreach (GameLocation location in this.ReloadQueue)
+                    this.ReloadMachinesIn(location);
+                this.ReloadQueue.Clear();
+
+                // process machines
                 foreach (MachineMetadata[] machines in this.Machines.Values)
                     this.ProcessMachines(machines);
             }
@@ -114,14 +122,6 @@ namespace Pathoschild.Stardew.Automate
         /****
         ** Methods
         ****/
-        /// <summary>Reload all machines.</summary>
-        private void ReloadAllMachines()
-        {
-            this.Machines.Clear();
-            foreach (GameLocation location in this.Factory.GetLocationsWithChests())
-                this.ReloadMachinesIn(location);
-        }
-
         /// <summary>Reload the machines in a given location.</summary>
         /// <param name="location">The location whose location to reload.</param>
         private void ReloadMachinesIn(GameLocation location)

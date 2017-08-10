@@ -3,6 +3,7 @@
 # Release notes
 ## 1.5.2
 * Fixed rare error when an item was recently removed from a chest.
+* Fixed performance issues for some players.
 
 ## 1.5.1
 * Fixed shipping bin linking with chests that don't touch it on the right.
