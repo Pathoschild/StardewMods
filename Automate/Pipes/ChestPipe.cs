@@ -83,7 +83,10 @@ namespace Pathoschild.Stardew.Automate.Pipes
         public IEnumerator<ITrackedStack> GetEnumerator()
         {
             foreach (Item item in this.Chest.items.ToArray())
-                yield return this.GetTrackedItem(item);
+            {
+                if (item != null)
+                    yield return this.GetTrackedItem(item);
+            }
         }
 
         /// <summary>Returns an enumerator that iterates through a collection.</summary>
@@ -106,7 +109,7 @@ namespace Pathoschild.Stardew.Automate.Pipes
             int countFound = 0;
             foreach (Item item in this.Chest.items)
             {
-                if (predicate(item))
+                if (item != null && predicate(item))
                 {
                     countFound += item.Stack;
                     yield return this.GetTrackedItem(item);
