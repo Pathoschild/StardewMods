@@ -1,4 +1,4 @@
-﻿{
+{
   "schema": "1.0",
   "Automate": "1.5.1",
   "ChestsAnywhere": "1.11.1",
@@ -7,5 +7,6 @@
   "LookupAnything": "1.15.1",
   "RotateToolbar": "1.2",
   "SkipIntro": "1.7",
-  "TheLongNight": "1.0.1"
+  "TheLongNight": "1.0.1",
+  "TractorMod": "3.2.1"
 }
