@@ -47,6 +47,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="i18n\default.json" />
     <None Include="release-notes.md" />
     <None Include="LICENSE" />
     <None Include="manifest.json" />

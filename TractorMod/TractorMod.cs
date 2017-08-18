@@ -298,7 +298,7 @@ namespace Pathoschild.Stardew.TractorMod
             Buff speedBuff = Game1.buffsDisplay.otherBuffs.FirstOrDefault(p => p.which == this.BuffUniqueID);
             if (speedBuff == null)
             {
-                speedBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, this.Config.TractorSpeed, 0, 0, 1, "Tractor Power", "Tractor Power") { which = this.BuffUniqueID };
+                speedBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, this.Config.TractorSpeed, 0, 0, 1, "Tractor Power", this.Helper.Translation.Get("buff.name")) { which = this.BuffUniqueID };
                 Game1.buffsDisplay.addOtherBuff(speedBuff);
             }
             speedBuff.millisecondsDuration = 100;
@@ -605,8 +605,8 @@ namespace Pathoschild.Stardew.TractorMod
                 humanDoor = new Point(-1, -1),
                 animalDoor = new Point(-2, -1),
                 mapToWarpTo = null,
-                displayName = "Tractor Garage",
-                description = "A garage to store your farm tractor. Tractor included!",
+                displayName = this.Helper.Translation.Get("garage.name"),
+                description = this.Helper.Translation.Get("garage.description"),
                 blueprintType = "Buildings",
                 nameOfBuildingToUpgrade = null,
                 actionBehavior = null,

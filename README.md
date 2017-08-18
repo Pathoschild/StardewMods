@@ -53,14 +53,14 @@ Inactive mods:
 The mods can be translated into any language supported by the game, and SMAPI will automatically
 use the right translations. Three of the mods have translatable text:
 
-&nbsp;     | Chests Anywhere | Debug Mode | Lookup Anything | thanks to
-------     | --------------- | ---------- | --------------- | ---------
-Chinese    | ✓ [zh.json](ChestsAnywhere/i18n/zh.json) | ✓ [zh.json](DebugMode/i18n/zh.json) | ✓ [zh.json](LookupAnything/i18n/zh.json) | yuwenlan
-German     | ✓ [de.json](ChestsAnywhere/i18n/de.json) | ✓ [de.json](DebugMode/i18n/de.json) | ✓ [de.json](LookupAnything/i18n/de.json) | Sasara
-Japanese   | ❑ | ❑ | ❑ |
-Portuguese | ✓ [pt.json](ChestsAnywhere/i18n/pt.json) | ✓ [pt.json](DebugMode/i18n/pt.json) | ✓ [pt.json](LookupAnything/i18n/pt.json) | Fabilows
-Russian    | ❑ | ❑ | ✓ [ru.json](LookupAnything/i18n/ru.json) | SteaNN
-Spanish    | ✓ [es.json](ChestsAnywhere/i18n/es.json) | ✓ [es.json](DebugMode/i18n/es.json) | ✓ [es.json](LookupAnything/i18n/de.json) | ThomasGabrielDelavault
+&nbsp;     | Chests Anywhere | Debug Mode | Lookup Anything | Tractor Mod | thanks to
+------     | --------------- | ---------- | --------------- | ----------- || ---------
+Chinese    | ✓ [zh.json](ChestsAnywhere/i18n/zh.json) | ✓ [zh.json](DebugMode/i18n/zh.json) | ✓ [zh.json](LookupAnything/i18n/zh.json) | ❑ | yuwenlan
+German     | ✓ [de.json](ChestsAnywhere/i18n/de.json) | ✓ [de.json](DebugMode/i18n/de.json) | ✓ [de.json](LookupAnything/i18n/de.json) | ❑ |Sasara
+Japanese   | ❑ | ❑ | ❑ | ❑ |
+Portuguese | ✓ [pt.json](ChestsAnywhere/i18n/pt.json) | ✓ [pt.json](DebugMode/i18n/pt.json) | ✓ [pt.json](LookupAnything/i18n/pt.json) | ❑ | Fabilows
+Russian    | ❑ | ❑ | ✓ [ru.json](LookupAnything/i18n/ru.json) | ❑ | SteaNN
+Spanish    | ✓ [es.json](ChestsAnywhere/i18n/es.json) | ✓ [es.json](DebugMode/i18n/es.json) | ✓ [es.json](LookupAnything/i18n/de.json) | ❑ | ThomasGabrielDelavault
 
 Here's how to translate one of my mods:
 
