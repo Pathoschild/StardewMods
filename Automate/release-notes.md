@@ -2,8 +2,9 @@
 
 # Release notes
 ## 1.6
-* Machines now process items in the order they're found in chests.
-* Significantly improved performance when you have a lot of automated machines.
+* Rewrote machines so they process items in the order they're found.
+* Improved performance for players with a large number of machines.
+* Added `VerboseLogging` option to see more details about what the mod is doing.
 * Fixed rare error when an item was recently removed from a chest.
 
 ## 1.5.1

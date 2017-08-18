@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Common;
@@ -43,6 +44,10 @@ namespace Pathoschild.Stardew.Automate
             LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
             LocationEvents.LocationObjectsChanged += this.LocationEvents_LocationObjectsChanged;
             GameEvents.OneSecondTick += this.GameEvents_OneSecondTick;
+
+            // log info
+            if (this.Config.VerboseLogging)
+                this.Monitor.Log($"Verbose logging is enabled. This is useful when troubleshooting but can impact performance. It should be disabled if you don't explicitly need it. You can delete {Path.Combine(this.Helper.DirectoryPath, "config.json")} and restart the game to disable it.", LogLevel.Warn);
         }
 
 
@@ -67,6 +72,8 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void LocationEvents_LocationsChanged(object sender, EventArgsGameLocationsChanged e)
         {
+            this.VerboseLog("Location list changed, reloading all machines.");
+
             try
             {
                 this.Machines.Clear();
@@ -84,6 +91,8 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void LocationEvents_LocationObjectsChanged(object sender, EventArgsLocationObjectsChanged e)
         {
+            this.VerboseLog("Object list changed, reloading machines in current location.");
+
             try
             {
                 this.ReloadQueue.Add(Game1.currentLocation);
@@ -99,7 +108,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void GameEvents_OneSecondTick(object sender, EventArgs e)
         {
-            if(!Context.IsWorldReady)
+            if (!Context.IsWorldReady)
                 return;
 
             try
@@ -110,8 +119,7 @@ namespace Pathoschild.Stardew.Automate
                 this.ReloadQueue.Clear();
 
                 // process machines
-                foreach (MachineMetadata[] machines in this.Machines.Values)
-                    this.ProcessMachines(machines);
+                this.ProcessMachines(this.GetAllMachines());
             }
             catch (Exception ex)
             {
@@ -122,31 +130,56 @@ namespace Pathoschild.Stardew.Automate
         /****
         ** Methods
         ****/
+        /// <summary>Get the machines in every location.</summary>
+        private IEnumerable<MachineMetadata> GetAllMachines()
+        {
+            foreach (KeyValuePair<GameLocation, MachineMetadata[]> group in this.Machines)
+            {
+                foreach (MachineMetadata machine in group.Value)
+                    yield return machine;
+            }
+        }
+
         /// <summary>Reload the machines in a given location.</summary>
-        /// <param name="location">The location whose location to reload.</param>
+        /// <param name="location">The location whose machines to reload.</param>
         private void ReloadMachinesIn(GameLocation location)
         {
+            this.VerboseLog($"Reloading machines in {location.Name}...");
+
             this.Machines[location] = this.Factory.GetMachinesIn(location, this.Helper.Reflection).ToArray();
         }
 
         /// <summary>Process a set of machines.</summary>
         /// <param name="machines">The machines to process.</param>
-        private void ProcessMachines(MachineMetadata[] machines)
+        private void ProcessMachines(IEnumerable<MachineMetadata> machines)
         {
+            machines = machines.ToArray();
+
+            this.VerboseLog($"Automating {machines.Count()} machines...");
             foreach (MachineMetadata metadata in machines)
             {
                 IMachine machine = metadata.Machine;
+                string summary = $"Automating {metadata.Location.Name} > {machine.GetType().Name} ({metadata.Connected.Length} pipes)...";
 
-                switch (machine.GetState())
+                MachineState state = machine.GetState();
+                switch (state)
                 {
                     case MachineState.Empty:
-                        machine.Pull(metadata.Connected);
+                        bool pulled = machine.Pull(metadata.Connected);
+                        summary += pulled ? " accepted new input." : " no input found.";
                         break;
 
                     case MachineState.Done:
-                        metadata.Connected.TryPush(machine.GetOutput());
+                        bool pushed = metadata.Connected.TryPush(machine.GetOutput());
+                        summary += pushed ? " pushed output." : " done, but no pipes can accept its output.";
+                        break;
+
+                    default:
+                        summary += $" machine is {state.ToString().ToLower()}.";
                         break;
                 }
+
+                this.VerboseLog($"   {summary}");
             }
         }
 
@@ -157,6 +190,14 @@ namespace Pathoschild.Stardew.Automate
         {
             this.Monitor.Log($"Something went wrong {verb}:\n{ex}", LogLevel.Error);
             CommonHelper.ShowErrorMessage($"Huh. Something went wrong {verb}. The error log has the technical details.");
+        }
+
+        /// <summary>Log a trace message if verbose logging is enabled.</summary>
+        /// <param name="message">The message to log.</param>
+        private void VerboseLog(string message)
+        {
+            if (this.Config.VerboseLogging)
+                this.Monitor.Log(message, LogLevel.Trace);
         }
     }
 }
