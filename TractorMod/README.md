@@ -1,9 +1,8 @@
-﻿**Tractor Mor** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you buy a tractor
+**Tractor** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you buy a tractor
 (with accompanying tractor garage building) to quickly till, fertilize, seed, and fertilise your
 crops.
 
-Compatible with Stardew Valley 1.2.26+ on Linux, Mac, and Windows. Originally written by PhthaloBlue,
-and now maintained by the community — pull requests are welcome!
+Compatible with Stardew Valley 1.2.26+ on Linux, Mac, and Windows.
 
 ## Contents
 * [Install](#install)
@@ -59,8 +58,6 @@ setting | default | effect
 `BuildPrice` | 150000 | The gold price to buy a tractor garage.
 `BuildUsesResources` | `true` | Whether you need to provide resources to build a tractor garage.
 
-
-
 ## Versions
 See [release notes](release-notes.md).
 
@@ -69,5 +66,5 @@ This mod is entirely released under the MIT license, **except** the tractor spri
 
 ## See also
 * <s>Nexus mod</s>
-* [Discussion thread](http://community.playstarbound.com/threads/gameplay-mod-tractor-mod.126955/)
-* Thanks to [Pewtershmitz for the tractor sprites](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/)!
+* <s>Discussion thread</s>
+* Derived from [TractorMod](https://github.com/lambui/StardewValleyMod_TractorMod) by PhthaloBlue (@lambui), rewritten with their permission.

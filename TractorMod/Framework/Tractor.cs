@@ -4,7 +4,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 
-namespace TractorMod.Framework
+namespace Pathoschild.Stardew.TractorMod.Framework
 {
     internal class Tractor : Horse
     {

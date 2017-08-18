@@ -2,7 +2,7 @@
 using StardewValley;
 using StardewValley.Buildings;
 
-namespace TractorMod.Framework
+namespace Pathoschild.Stardew.TractorMod.Framework
 {
     /// <summary>The tractor garage building.</summary>
     internal class TractorGarage : Stable

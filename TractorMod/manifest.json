@@ -1,14 +1,14 @@
-﻿{
-  "Name": "TractorMod",
-  "Author": "PhthaloBlue & community",
+{
+  "Name": "Tractor",
+  "Author": "Pathoschild",
   "Version": {
     "MajorVersion": 4,
     "MinorVersion": 0,
     "PatchVersion": 0,
-    "Build": "beta"
+    "Build": null
   },
-  "MinimumApiVersion": "1.13",
-  "UniqueID": "community.TractorMod",
+  "MinimumApiVersion": "1.15",
+  "UniqueID": "Pathoschild.TractorMod",
   "Description": "Adds a tractor you can buy to quickly hoe, fertilise, seed, and water tiles.",
   "EntryDll": "TractorMod.dll"
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace TractorMod.Framework
+namespace Pathoschild.Stardew.TractorMod.Framework
 {
     /// <summary>The configuration file for the legacy save format.</summary>
     internal class LegacySaveData

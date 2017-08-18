@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework.Input;
 
-namespace TractorMod.Framework
+namespace Pathoschild.Stardew.TractorMod.Framework
 {
     /// <summary>The mod configuration model.</summary>
     internal class TractorConfig

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace TractorMod.Framework
+namespace Pathoschild.Stardew.TractorMod.Framework
 {
     /// <summary>Metadata for a stashed building.</summary>
     internal class CustomSaveBuilding

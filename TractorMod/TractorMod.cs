@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.TractorMod.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -12,11 +13,10 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
-using TractorMod.Framework;
 using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
-namespace TractorMod
+namespace Pathoschild.Stardew.TractorMod
 {
     public class TractorMod : Mod
     {
@@ -79,7 +79,7 @@ namespace TractorMod
             MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
 
             // handle player interaction & tractor logic
-            ControlEvents.KeyPressed += ControlEvents_KeyPressed;
+            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
         }
 
@@ -450,7 +450,7 @@ namespace TractorMod
                     // grass
                     case Grass _:
                         Game1.currentLocation.terrainFeatures.Remove(tile);
-                        Farm.tryToAddHay(2);
+                        this.Farm.tryToAddHay(2);
                         break;
 
                     // spawned object

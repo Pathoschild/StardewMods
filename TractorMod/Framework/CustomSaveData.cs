@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace TractorMod.Framework
+namespace Pathoschild.Stardew.TractorMod.Framework
 {
     /// <summary>Contains custom data that's stored outside the save file to avoid issues.</summary>
     internal class CustomSaveData
