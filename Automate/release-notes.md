@@ -1,6 +1,13 @@
-﻿[← back to readme](README.md)
+[← back to readme](README.md)
 
 # Release notes
+## 1.6
+* Rewrote machines so they process items in the order they're found.
+* Improved performance for players with a large number of machines.
+* Added `AutomationInterval` option to configure how often machines are automated.
+* Added `VerboseLogging` option to enable more detailed log info.
+* Fixed rare error when an item was recently removed from a chest.
+
 ## 1.5.1
 * Fixed shipping bin linking with chests that don't touch it on the right.
 

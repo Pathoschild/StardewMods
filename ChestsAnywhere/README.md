@@ -4,8 +4,6 @@ from the comfort of your bed to the deepest mine level.
 
 ![](screenshots/animated-usage.gif)
 
-Compatible with Stardew Valley 1.11+ on Linux, Mac, and Windows.
-
 ## Contents
 * [Installation](#installation)
 * [Usage](#usage)
@@ -14,7 +12,7 @@ Compatible with Stardew Valley 1.11+ on Linux, Mac, and Windows.
 * [See also](#see-also)
 
 ## Installation
-1. [Install the latest version of SMAPI](http://canimod.com/guides/using-mods#installing-smapi).
+1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
 3. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/518).
 4. Run the game using SMAPI.
 

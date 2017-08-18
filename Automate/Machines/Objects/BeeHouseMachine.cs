@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
@@ -18,6 +19,15 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         /// <summary>The machine's position in its location.</summary>
         private readonly Vector2 Tile;
 
+        /// <summary>The honey types produced by this beehouse indexed by input ID.</summary>
+        private readonly IDictionary<int, SObject.HoneyType> HoneyTypes = new Dictionary<int, SObject.HoneyType>
+        {
+            [376] = SObject.HoneyType.Poppy,
+            [591] = SObject.HoneyType.Tulip,
+            [593] = SObject.HoneyType.SummerSpangle,
+            [595] = SObject.HoneyType.FairyRose,
+            [597] = SObject.HoneyType.BlueJazz
+        };
 
 
         /*********
@@ -52,7 +62,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
 
             // get flower data
             SObject.HoneyType type = SObject.HoneyType.Wild;
-            string prefix = "Wild";
+            string prefix = type.ToString();
             int addedPrice = 0;
             if (this.Location is Farm)
             {
@@ -62,24 +72,8 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                     string[] flowerData = Game1.objectInformation[flower.indexOfHarvest].Split('/');
                     prefix = flowerData[0];
                     addedPrice = Convert.ToInt32(flowerData[1]) * 2;
-                    switch (flower.indexOfHarvest)
-                    {
-                        case 376:
-                            type = SObject.HoneyType.Poppy;
-                            break;
-                        case 591:
-                            type = SObject.HoneyType.Tulip;
-                            break;
-                        case 593:
-                            type = SObject.HoneyType.SummerSpangle;
-                            break;
-                        case 595:
-                            type = SObject.HoneyType.FairyRose;
-                            break;
-                        case 597:
-                            type = SObject.HoneyType.BlueJazz;
-                            break;
-                    }
+                    if(!this.HoneyTypes.TryGetValue(flower.indexOfHarvest, out type))
+                        type = SObject.HoneyType.Wild;
                 }
             }
 

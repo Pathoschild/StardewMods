@@ -1,4 +1,4 @@
-﻿using StardewValley;
+using StardewValley;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework
@@ -55,6 +55,20 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             this.Machine.heldObject = null;
             this.Machine.readyForHarvest = false;
+        }
+
+        /// <summary>Generic logic to pull items from connected pipes based on the given recipes.</summary>
+        /// <param name="pipes">The connected IO pipes.</param>
+        /// <param name="recipes">The recipes to match.</param>
+        protected bool GenericPullRecipe(IPipe[] pipes, Recipe[] recipes)
+        {
+            if (pipes.TryGetIngredient(recipes, out Consumable consumable, out Recipe recipe))
+            {
+                this.Machine.heldObject = recipe.Output(consumable.Take());
+                this.Machine.minutesUntilReady = recipe.Minutes;
+                return true;
+            }
+            return false;
         }
     }
 

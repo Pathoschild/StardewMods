@@ -1,0 +1,14 @@
+{
+  "Name": "Tractor",
+  "Author": "Pathoschild",
+  "Version": {
+    "MajorVersion": 4,
+    "MinorVersion": 0,
+    "PatchVersion": 0,
+    "Build": null
+  },
+  "MinimumApiVersion": "1.15",
+  "UniqueID": "Pathoschild.TractorMod",
+  "Description": "Lets you buy a tractor to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc.",
+  "EntryDll": "TractorMod.dll"
+}

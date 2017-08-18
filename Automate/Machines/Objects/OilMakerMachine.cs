@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using SObject = StardewValley.Object;
 
@@ -7,6 +7,46 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
     /// <summary>An oil maker that accepts input and provides output.</summary>
     internal class OilMakerMachine : GenericMachine
     {
+        /*********
+        ** Properties
+        *********/
+        /// <summary>The recipes to process.</summary>
+        private readonly Recipe[] Recipes =
+        {
+            // truffle => truffle oil
+            new Recipe(
+                input: 430,
+                inputCount: 1,
+                output: input => new SObject(Vector2.Zero, 432, null, false, true, false, false),
+                minutes: 360
+            ),
+
+            // sunflower seed => oil
+            new Recipe(
+                input: 431,
+                inputCount: 1,
+                output: input => new SObject(247, 1),
+                minutes: 3200
+            ),
+
+            // corn => oil
+            new Recipe(
+                input: 270,
+                inputCount: 1,
+                output: input => new SObject(Vector2.Zero, 247, null, false, true, false, false),
+                minutes: 1000
+            ), 
+
+            // sunflower => oil
+            new Recipe(
+                input: 421,
+                inputCount: 1,
+                output: input => new SObject(Vector2.Zero, 247, null, false, true, false, false),
+                minutes: 60
+            )
+        };
+
+
         /*********
         ** Public methods
         *********/
@@ -20,41 +60,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool Pull(IPipe[] pipes)
         {
-            SObject machine = this.Machine;
-
-            // truffle => truffle oil
-            if (pipes.TryConsume(430, 1))
-            {
-                machine.heldObject = new SObject(Vector2.Zero, 432, null, false, true, false, false);
-                machine.minutesUntilReady = 360;
-                return true;
-            }
-
-            // sunflower seed => oil
-            if (pipes.TryConsume(431, 1))
-            {
-                machine.heldObject = new SObject(247, 1);
-                machine.minutesUntilReady = 3200;
-                return true;
-            }
-
-            // corn => oil
-            if (pipes.TryConsume(270, 1))
-            {
-                machine.heldObject = new SObject(Vector2.Zero, 247, null, false, true, false, false);
-                machine.minutesUntilReady = 1000;
-                return true;
-            }
-
-            // sunflower => oil
-            if (pipes.TryConsume(421, 1))
-            {
-                machine.heldObject = new SObject(Vector2.Zero, 247, null, false, true, false, false);
-                machine.minutesUntilReady = 60;
-                return true;
-            }
-
-            return false;
+            return this.GenericPullRecipe(pipes, this.Recipes);
         }
     }
 }

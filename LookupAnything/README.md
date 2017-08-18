@@ -1,4 +1,4 @@
-﻿**Lookup Anything** is a [Stardew Valley](http://stardewvalley.net/) mod that shows live info about
+**Lookup Anything** is a [Stardew Valley](http://stardewvalley.net/) mod that shows live info about
 whatever's under your cursor when you press `F1`. Learn a villager's favourite gifts, when a crop
 will be ready to harvest, how long a fence will last, why your farm animals are unhappy, and more.
 
@@ -6,8 +6,6 @@ For advanced users, the optional data mining mode also shows raw game values so 
 what the game is doing.
 
 ![](screenshots/animated.gif)
-
-Compatible with Stardew Valley 1.1+ on Linux, Mac, and Windows.
 
 ## Contents
 * [Install](#install)

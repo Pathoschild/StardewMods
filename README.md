@@ -1,5 +1,7 @@
-﻿This repository contains my SMAPI mods for Stardew Valley. See the individual mods for
+This repository contains my SMAPI mods for Stardew Valley. See the individual mods for
 documentation and release notes.
+
+All mods are compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 
 ## Mods
 Active mods:
@@ -43,18 +45,22 @@ Inactive mods:
   _(obsolete) Disables SMAPI's F2 debug mode, which can cause unintended effects like skipping an
   entire season or teleporting into walls._
 
+* **Tractor Mod** <small>([source](TractorMod))</small>  
+  _(in development) Lets you buy a tractor (with accompanying tractor garage building) to quickly
+  till, fertilize, seed, and fertilise your crops._
+
 ## Translating the mods
 The mods can be translated into any language supported by the game, and SMAPI will automatically
 use the right translations. Three of the mods have translatable text:
 
-&nbsp;     | Chests Anywhere | Debug Mode | Lookup Anything | thanks to
-------     | --------------- | ---------- | --------------- | ---------
-Chinese    | ✓ [zh.json](ChestsAnywhere/i18n/zh.json) | ✓ [zh.json](DebugMode/i18n/zh.json) | ✓ [zh.json](LookupAnything/i18n/zh.json) | yuwenlan
-German     | ✓ [de.json](ChestsAnywhere/i18n/de.json) | ✓ [de.json](DebugMode/i18n/de.json) | ✓ [de.json](LookupAnything/i18n/de.json) | Sasara
-Japanese   | ❑ | ❑ | ❑ |
-Portuguese | ✓ [pt.json](ChestsAnywhere/i18n/pt.json) | ✓ [pt.json](DebugMode/i18n/pt.json) | ✓ [pt.json](LookupAnything/i18n/pt.json) | Fabilows
-Russian    | ❑ | ❑ | ✓ [ru.json](LookupAnything/i18n/ru.json) | SteaNN
-Spanish    | ✓ [es.json](ChestsAnywhere/i18n/es.json) | ✓ [es.json](DebugMode/i18n/es.json) | ✓ [es.json](LookupAnything/i18n/de.json) | ThomasGabrielDelavault
+&nbsp;     | Chests Anywhere | Debug Mode | Lookup Anything | Tractor Mod | thanks to
+------     | --------------- | ---------- | --------------- | ----------- || ---------
+Chinese    | ✓ [zh.json](ChestsAnywhere/i18n/zh.json) | ✓ [zh.json](DebugMode/i18n/zh.json) | ✓ [zh.json](LookupAnything/i18n/zh.json) | ❑ | yuwenlan
+German     | ✓ [de.json](ChestsAnywhere/i18n/de.json) | ✓ [de.json](DebugMode/i18n/de.json) | ✓ [de.json](LookupAnything/i18n/de.json) | ✓ [de.json](TractorMod/i18n/de.json) | Sasara
+Japanese   | ❑ | ❑ | ❑ | ❑ |
+Portuguese | ✓ [pt.json](ChestsAnywhere/i18n/pt.json) | ✓ [pt.json](DebugMode/i18n/pt.json) | ✓ [pt.json](LookupAnything/i18n/pt.json) | ❑ | Fabilows
+Russian    | ❑ | ❑ | ✓ [ru.json](LookupAnything/i18n/ru.json) | ❑ | SteaNN
+Spanish    | ✓ [es.json](ChestsAnywhere/i18n/es.json) | ✓ [es.json](DebugMode/i18n/es.json) | ✓ [es.json](LookupAnything/i18n/de.json) | ❑ | ThomasGabrielDelavault
 
 Here's how to translate one of my mods:
 

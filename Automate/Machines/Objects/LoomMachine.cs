@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using SObject = StardewValley.Object;
 
@@ -7,6 +7,22 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
     /// <summary>A loom that accepts input and provides output.</summary>
     internal class LoomMachine : GenericMachine
     {
+        /*********
+        ** Properties
+        *********/
+        /// <summary>The recipes to process.</summary>
+        private readonly Recipe[] Recipes =
+        {
+            // wool => cloth
+            new Recipe(
+                input: 440,
+                inputCount: 1,
+                output: item => new SObject(Vector2.Zero, 428, null, false, true, false, false),
+                minutes: 240
+            )
+        };
+
+
         /*********
         ** Public methods
         *********/
@@ -32,17 +48,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool Pull(IPipe[] pipes)
         {
-            SObject loom = this.Machine;
-
-            // wool => cloth
-            if (pipes.TryConsume(440, 1))
-            {
-                loom.heldObject = new SObject(Vector2.Zero, 428, null, false, true, false, false);
-                loom.minutesUntilReady = 240;
-                return true;
-            }
-
-            return false;
+            return this.GenericPullRecipe(pipes, this.Recipes);
         }
     }
 }

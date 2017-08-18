@@ -32,7 +32,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             SObject machine = this.Machine;
 
             // crop => seeds
-            if (pipes.TryGetIngredient(this.IsValidCrop, 1, out Requirement crop))
+            if (pipes.TryGetIngredient(this.IsValidCrop, 1, out Consumable crop))
             {
                 crop.Reduce();
                 int seedID = SeedMakerMachine.CropSeedIDs[crop.Sample.parentSheetIndex];

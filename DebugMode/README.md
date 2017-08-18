@@ -2,8 +2,6 @@
 press `~` to view debug information and unlock the game's debug commands (including teleportation
 and time manipulation).
 
-Compatible with Stardew Valley 1.1+ on Linux, Mac, and Windows.
-
 ## Contents
 * [Install](#install)
 * [Use](#use)
@@ -12,7 +10,7 @@ Compatible with Stardew Valley 1.1+ on Linux, Mac, and Windows.
 * [See also](#see-also)
 
 ## Install
-1. [Install the latest version of SMAPI](http://canimod.com/guides/using-mods#installing-smapi).
+1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
 2. [Install this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/679/).
 3. Run the game using SMAPI.
 

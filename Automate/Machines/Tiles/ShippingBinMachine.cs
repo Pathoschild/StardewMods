@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
 using SObject = StardewValley.Object;
@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Tiles
         /// <returns>Returns whether the machine started processing an item.</returns>
         public bool Pull(IPipe[] pipes)
         {
-            ITrackedStack tracker = pipes.GetItems(p => p.Sample is SObject obj && obj.canBeShipped()).Take(1).FirstOrDefault();
+            ITrackedStack tracker = pipes.GetItems().Where(p => p.Sample is SObject obj && obj.canBeShipped()).Take(1).FirstOrDefault();
             if (tracker != null)
             {
                 SObject item = (SObject)tracker.Take(tracker.Count);

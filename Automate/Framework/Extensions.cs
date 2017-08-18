@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -11,6 +11,9 @@ namespace Pathoschild.Stardew.Automate.Framework
     /// <summary>Provides utility extensions for machine automation.</summary>
     internal static class Extensions
     {
+        /*********
+        ** Public methods
+        *********/
         /****
         ** Chests
         ****/
@@ -33,31 +36,33 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
         }
 
-        /// <summary>Get all matching items from the given pipes.</summary>
+        /****
+        ** GetItems
+        ****/
+        /// <summary>Get all items from the given pipes.</summary>
         /// <param name="pipes">The pipes to search.</param>
-        /// <param name="predicate">Returns whether an item should be matched.</param>
-        public static IEnumerable<ITrackedStack> GetItems(this IPipe[] pipes, Func<ITrackedStack, bool> predicate)
+        public static IEnumerable<ITrackedStack> GetItems(this IPipe[] pipes)
         {
             foreach (IPipe pipe in pipes)
             {
                 foreach (ITrackedStack item in pipe)
-                {
-                    if (predicate(item))
-                        yield return item;
-                }
+                    yield return item;
             }
         }
 
+        /****
+        ** TryGetIngredient
+        ****/
         /// <summary>Get an ingredient needed for a recipe.</summary>
         /// <param name="pipes">The pipes to search.</param>
         /// <param name="predicate">Returns whether an item should be matched.</param>
         /// <param name="count">The number of items to find.</param>
-        /// <param name="requirement">The ingredient requirement with matching consumables.</param>
+        /// <param name="consumable">The matching consumables.</param>
         /// <returns>Returns whether the requirement is met.</returns>
-        public static bool TryGetIngredient(this IPipe[] pipes, Func<ITrackedStack, bool> predicate, int count, out Requirement requirement)
+        public static bool TryGetIngredient(this IPipe[] pipes, Func<ITrackedStack, bool> predicate, int count, out Consumable consumable)
         {
             int countMissing = count;
-            ITrackedStack[] consumables = pipes.GetItems(predicate)
+            ITrackedStack[] consumables = pipes.GetItems().Where(predicate)
                 .TakeWhile(chestItem =>
                 {
                     if (countMissing <= 0)
@@ -68,21 +73,58 @@ namespace Pathoschild.Stardew.Automate.Framework
                 })
                 .ToArray();
 
-            requirement = new Requirement(new TrackedItemCollection(consumables), count);
-            return requirement.IsMet;
+            consumable = new Consumable(new TrackedItemCollection(consumables), count);
+            return consumable.IsMet;
         }
 
         /// <summary>Get an ingredient needed for a recipe.</summary>
         /// <param name="pipes">The pipes to search.</param>
-        /// <param name="itemID">The item ID.</param>
+        /// <param name="id">The item or category ID.</param>
         /// <param name="count">The number of items to find.</param>
-        /// <param name="requirement">The ingredient requirement with matching consumables.</param>
+        /// <param name="consumable">The matching consumables.</param>
         /// <returns>Returns whether the requirement is met.</returns>
-        public static bool TryGetIngredient(this IPipe[] pipes, int itemID, int count, out Requirement requirement)
+        public static bool TryGetIngredient(this IPipe[] pipes, int id, int count, out Consumable consumable)
         {
-            return pipes.TryGetIngredient(item => item.Sample.parentSheetIndex == itemID, count, out requirement);
+            return pipes.TryGetIngredient(item => item.Sample.parentSheetIndex == id || item.Sample.category == id, count, out consumable);
         }
 
+        /// <summary>Get an ingredient needed for a recipe.</summary>
+        /// <param name="pipes">The pipes to search.</param>
+        /// <param name="recipes">The items to match.</param>
+        /// <param name="consumable">The matching consumables.</param>
+        /// <param name="recipe">The matched requisition.</param>
+        /// <returns>Returns whether the requirement is met.</returns>
+        public static bool TryGetIngredient(this IPipe[] pipes, Recipe[] recipes, out Consumable consumable, out Recipe recipe)
+        {
+            IDictionary<Recipe, List<ITrackedStack>> accumulator = recipes.ToDictionary(req => req, req => new List<ITrackedStack>());
+
+            foreach (ITrackedStack stack in pipes.GetItems())
+            {
+                foreach (var entry in accumulator)
+                {
+                    recipe = entry.Key;
+                    List<ITrackedStack> found = entry.Value;
+
+                    if (recipe.AcceptsInput(stack))
+                    {
+                        found.Add(stack);
+                        if (found.Sum(p => p.Count) >= recipe.InputCount)
+                        {
+                            consumable = new Consumable(new TrackedItemCollection(found), entry.Key.InputCount);
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            consumable = null;
+            recipe = null;
+            return false;
+        }
+
+        /****
+        ** TryConsume
+        ****/
         /// <summary>Consume an ingredient needed for a recipe.</summary>
         /// <param name="pipes">The chests to search.</param>
         /// <param name="predicate">Returns whether an item should be matched.</param>
@@ -90,7 +132,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <returns>Returns whether the item was consumed.</returns>
         public static bool TryConsume(this IPipe[] pipes, Func<ITrackedStack, bool> predicate, int count)
         {
-            if (pipes.TryGetIngredient(predicate, count, out Requirement requirement))
+            if (pipes.TryGetIngredient(predicate, count, out Consumable requirement))
             {
                 requirement.Reduce();
                 return true;
@@ -108,6 +150,10 @@ namespace Pathoschild.Stardew.Automate.Framework
             return pipes.TryConsume(item => item.Sample.parentSheetIndex == itemID, count);
         }
 
+
+        /****
+        ** TryPush
+        ****/
         /// <summary>Add the given item stack to the pipes if there's space.</summary>
         /// <param name="pipes">The pipes to fill.</param>
         /// <param name="item">The item stack to push.</param>

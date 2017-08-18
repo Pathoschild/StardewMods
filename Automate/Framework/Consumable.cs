@@ -1,9 +1,9 @@
-﻿using StardewValley;
+using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
-    /// <summary>An ingredient requirement for a recipe.</summary>
-    internal class Requirement
+    /// <summary>An ingredient stack (or stacks) which can be consumed by a machine.</summary>
+    internal class Consumable
     {
         /*********
         ** Accessors
@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="consumables">The matching items available to consume.</param>
         /// <param name="countNeeded">The number of items needed for the recipe.</param>
-        public Requirement(ITrackedStack consumables, int countNeeded)
+        public Consumable(ITrackedStack consumables, int countNeeded)
         {
             this.Consumables = consumables;
             this.CountNeeded = countNeeded;

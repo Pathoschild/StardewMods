@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Pathoschild.Stardew.Automate.Framework;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
@@ -63,7 +63,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         {
             Cask cask = this.Machine;
 
-            if (pipes.TryGetIngredient(match => (match.Sample as SObject)?.quality < 4 && this.AgingRates.ContainsKey(match.Sample.parentSheetIndex), 1, out Requirement consumable))
+            if (pipes.TryGetIngredient(match => (match.Sample as SObject)?.quality < 4 && this.AgingRates.ContainsKey(match.Sample.parentSheetIndex), 1, out Consumable consumable))
             {
                 SObject input = (SObject)consumable.Take();
 
