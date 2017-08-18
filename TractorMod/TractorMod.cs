@@ -616,8 +616,8 @@ namespace Pathoschild.Stardew.TractorMod
                 tilesHeight = 2,
                 sourceRectForMenuView = new Rectangle(0, 0, 64, 96),
                 itemsRequired = this.Config.BuildUsesResources
-                    ? new Dictionary<int, int>()
-                    : new Dictionary<int, int> { [SObject.ironBar] = 20, [SObject.iridiumBar] = 5, [787/* battery pack */] = 5 },
+                    ? new Dictionary<int, int> { [SObject.ironBar] = 20, [SObject.iridiumBar] = 5, [787/* battery pack */] = 5 }
+                    : new Dictionary<int, int>(),
                 namesOfOkayBuildingLocations = new List<string> { "Farm" }
             };
         }
