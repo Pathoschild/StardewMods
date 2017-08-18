@@ -9,7 +9,7 @@
 
 ## Install
 1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
-2. Install <s>this mod from Nexus mods</s>.
+2. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/1401).
 3. Run the game using SMAPI.
 
 ## Use
@@ -62,6 +62,6 @@ See [release notes](release-notes.md).
 This mod is entirely released under the MIT license, **except** the tractor sprite which is unlicensed.
 
 ## See also
-* <s>Nexus mod</s>
-* <s>Discussion thread</s>
+* [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1401)
+* [Discussion thread](http://community.playstarbound.com/threads/tractor-mod.136649/)
 * Derived from [TractorMod](https://github.com/lambui/StardewValleyMod_TractorMod) by PhthaloBlue (@lambui), rewritten with their permission.
