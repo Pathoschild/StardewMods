@@ -2,8 +2,6 @@
 press `~` to view debug information and unlock the game's debug commands (including teleportation
 and time manipulation).
 
-Compatible with Stardew Valley 1.1+ on Linux, Mac, and Windows.
-
 ## Contents
 * [Install](#install)
 * [Use](#use)

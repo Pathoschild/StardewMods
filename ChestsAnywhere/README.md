@@ -4,8 +4,6 @@ from the comfort of your bed to the deepest mine level.
 
 ![](screenshots/animated-usage.gif)
 
-Compatible with Stardew Valley 1.11+ on Linux, Mac, and Windows.
-
 ## Contents
 * [Installation](#installation)
 * [Usage](#usage)

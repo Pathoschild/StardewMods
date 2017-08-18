@@ -2,8 +2,6 @@
 next to a machine (like a furnace, cheese press, bee house, etc), and the machine will
 automatically pull raw items from the chest and push processed items into it.
 
-Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
-
 ## Contents
 * [Installation](#installation)
 * [Usage](#usage)

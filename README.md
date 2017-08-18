@@ -1,6 +1,8 @@
 This repository contains my SMAPI mods for Stardew Valley. See the individual mods for
 documentation and release notes.
 
+All mods are compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
+
 ## Mods
 Active mods:
 * **[Automate](http://www.nexusmods.com/stardewvalley/mods/1063)** <small>([source](Automate))</small>  

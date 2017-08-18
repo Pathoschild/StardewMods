@@ -1,9 +1,7 @@
-﻿**The Long Night** is a [Stardew Valley](http://stardewvalley.net/) mod that disables collapsing.
+**The Long Night** is a [Stardew Valley](http://stardewvalley.net/) mod that disables collapsing.
 You just stay awake forever and the night never ends (until you go to bed).
 
 > ![](screenshots/clock.png)
-
-Compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
 
 ## Contents
 * [Install](#install)

@@ -1,8 +1,6 @@
-﻿**Rotate Toolbar** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you rotate the top
+**Rotate Toolbar** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you rotate the top
 inventory row for the toolbar by pressing `Tab` (configurable):  
 ![](example.gif)
-
-Compatible with Stardew Valley 1.1+ on Linux, Mac, and Windows.
 
 ## Contents
 * [Install](#install)

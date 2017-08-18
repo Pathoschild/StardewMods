@@ -1,7 +1,5 @@
-﻿**Fast Animations** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you selectively
+**Fast Animations** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you selectively
 speed up many animations (currently eating, drinking, milking, shearing, and breaking geodes).
-
-Compatible with Stardew Valley 1.1+ on Linux, Mac, and Windows.
 
 ## Contents
 * [Install](#install)
