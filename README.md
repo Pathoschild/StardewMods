@@ -1,4 +1,4 @@
-﻿This repository contains my SMAPI mods for Stardew Valley. See the individual mods for
+This repository contains my SMAPI mods for Stardew Valley. See the individual mods for
 documentation and release notes.
 
 ## Mods
@@ -42,6 +42,10 @@ Inactive mods:
 * **No Debug Mode** <small>([source](NoDebugMode))</small>  
   _(obsolete) Disables SMAPI's F2 debug mode, which can cause unintended effects like skipping an
   entire season or teleporting into walls._
+
+* **Tractor Mod** <small>([source](TractorMod))</small>  
+  _(in development) Lets you buy a tractor (with accompanying tractor garage building) to quickly
+  till, fertilize, seed, and fertilise your crops._
 
 ## Translating the mods
 The mods can be translated into any language supported by the game, and SMAPI will automatically
