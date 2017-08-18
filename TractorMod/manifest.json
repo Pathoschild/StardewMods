@@ -9,6 +9,6 @@
   },
   "MinimumApiVersion": "1.15",
   "UniqueID": "Pathoschild.TractorMod",
-  "Description": "Adds a tractor you can buy to quickly hoe, fertilise, seed, and water tiles.",
+  "Description": "Lets you buy a tractor to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc.",
   "EntryDll": "TractorMod.dll"
 }
