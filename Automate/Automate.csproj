@@ -42,6 +42,7 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AutomateMod.cs" />
+    <Compile Include="Framework\Recipe.cs" />
     <Compile Include="Framework\TrackedItem.cs" />
     <Compile Include="Framework\Extensions.cs" />
     <Compile Include="Framework\GenericMachine.cs" />
@@ -53,7 +54,7 @@
     <Compile Include="Framework\MachineMetadata.cs" />
     <Compile Include="Framework\MachineState.cs" />
     <Compile Include="Framework\ModConfig.cs" />
-    <Compile Include="Framework\Requirement.cs" />
+    <Compile Include="Framework\Consumable.cs" />
     <Compile Include="Machines\Buildings\JunimoHutMachine.cs" />
     <Compile Include="Machines\Buildings\MillMachine.cs" />
     <Compile Include="Machines\Objects\FeedHopperMachine.cs" />

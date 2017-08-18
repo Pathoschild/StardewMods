@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         public override bool Pull(IPipe[] pipes)
         {
             // get bait
-            if (pipes.TryGetIngredient(item => item.Sample.category == SObject.baitCategory, 1, out Requirement bait))
+            if (pipes.TryGetIngredient(SObject.baitCategory, 1, out Consumable bait))
             {
                 this.Machine.bait = (SObject)bait.Take();
                 return true;

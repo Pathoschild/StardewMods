@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Automate.Framework;
@@ -64,7 +64,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Buildings
 
             // fill input with wheat (262) and beets (284)
             bool anyPulled = false;
-            foreach (ITrackedStack stack in pipes.GetItems(i => i.Sample.parentSheetIndex == 262 || i.Sample.parentSheetIndex == 284))
+            foreach (ITrackedStack stack in pipes.GetItems().Where(i => i.Sample.parentSheetIndex == 262 || i.Sample.parentSheetIndex == 284))
             {
                 // add item
                 bool anyAdded = this.TryAddInput(stack);

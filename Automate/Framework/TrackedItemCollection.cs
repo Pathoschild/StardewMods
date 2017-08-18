@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System.Collections.Generic;
+using System.Linq;
 using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework
@@ -29,10 +30,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="stacks">The underlying item stacks.</param>
-        public TrackedItemCollection(ITrackedStack[] stacks)
+        public TrackedItemCollection(IEnumerable<ITrackedStack> stacks)
         {
-            this.Stacks = stacks;
-            this.Sample = stacks.FirstOrDefault()?.Sample;
+            this.Stacks = stacks.ToArray();
+            this.Sample = this.Stacks.FirstOrDefault()?.Sample;
         }
 
         /// <summary>Remove the specified number of this item from the stack.</summary>
