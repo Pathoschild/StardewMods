@@ -37,6 +37,9 @@ Active mods:
 * **[The Long Night](http://www.nexusmods.com/stardewvalley/mods/1369)** <small>([source](LongNight))</small>  
   _Disables collapsing. You just stay awake forever and the night never ends (until you go to bed)._
 
+* **[Tractor Mod](http://www.nexusmods.com/stardewvalley/mods/1401)** <small>([source](TractorMod))</small>  
+  _Lets you buy a tractor to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc._
+
 Inactive mods:
 * **Data Maps** <small>([source](DataMaps))</small>  
   _(in development) Overlays the world with metadata maps._
@@ -44,10 +47,6 @@ Inactive mods:
 * **No Debug Mode** <small>([source](NoDebugMode))</small>  
   _(obsolete) Disables SMAPI's F2 debug mode, which can cause unintended effects like skipping an
   entire season or teleporting into walls._
-
-* **Tractor Mod** <small>([source](TractorMod))</small>  
-  _(in development) Lets you buy a tractor (with accompanying tractor garage building) to quickly
-  till, fertilize, seed, and fertilise your crops._
 
 ## Translating the mods
 The mods can be translated into any language supported by the game, and SMAPI will automatically
