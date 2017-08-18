@@ -11,7 +11,7 @@ Compatible with Stardew Valley 1.2.26+ on Linux, Mac, and Windows.
 * [See also](#see-also)
 
 ## Install
-1. [Install the latest version of SMAPI](http://canimod.com/for-players/install-smapi).
+1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
 2. Install <s>this mod from Nexus mods</s>.
 3. Run the game using SMAPI.
 
