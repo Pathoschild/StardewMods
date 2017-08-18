@@ -6,6 +6,8 @@ This is a rewrite of the original TractorMod by PhthaloBlue (@lambui).
 * The tractor and garage have a new look to match the game style thanks to [@Zero-ui9](https://github.com/Zero-ui9) and [@Acerbicon](https://github.com/Acerbicon) respectively.
 * Simplified the `config.json`.
 * Added support for clearing dirt and breaking rocks with the pickaxe.
+* Added translation support.
+* Added German translations by Sasara.
 * Removed summon-horse key (but kept summon-tractor key).
 * Removed tractor mode activated by holding mouse button (now only when riding the tractor).
 * Overhauled data saving (previous data will be migrated automatically).
