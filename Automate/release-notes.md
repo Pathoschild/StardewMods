@@ -4,7 +4,8 @@
 ## 1.6
 * Rewrote machines so they process items in the order they're found.
 * Improved performance for players with a large number of machines.
-* Added `VerboseLogging` option to see more details about what the mod is doing.
+* Added `AutomationInterval` option to configure how often machines are automated.
+* Added `VerboseLogging` option to enable more detailed log info.
 * Fixed rare error when an item was recently removed from a chest.
 
 ## 1.5.1

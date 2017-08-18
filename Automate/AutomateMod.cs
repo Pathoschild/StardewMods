@@ -28,6 +28,9 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The locations that should be reloaded on the next update tick.</summary>
         private readonly HashSet<GameLocation> ReloadQueue = new HashSet<GameLocation>();
 
+        /// <summary>The number of ticks until the next automation cycle.</summary>
+        private int AutomateCountdown;
+
 
         /*********
         ** Public methods
@@ -43,11 +46,12 @@ namespace Pathoschild.Stardew.Automate
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
             LocationEvents.LocationObjectsChanged += this.LocationEvents_LocationObjectsChanged;
-            GameEvents.OneSecondTick += this.GameEvents_OneSecondTick;
+            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
 
             // log info
             if (this.Config.VerboseLogging)
                 this.Monitor.Log($"Verbose logging is enabled. This is useful when troubleshooting but can impact performance. It should be disabled if you don't explicitly need it. You can delete {Path.Combine(this.Helper.DirectoryPath, "config.json")} and restart the game to disable it.", LogLevel.Warn);
+            this.VerboseLog($"Initialised with automation every {this.Config.AutomationInterval} ticks.");
         }
 
 
@@ -63,6 +67,7 @@ namespace Pathoschild.Stardew.Automate
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
             // check for updates
+            this.AutomateCountdown = this.Config.AutomationInterval;
             if (this.Config.CheckForUpdates)
                 UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "Automate");
         }
@@ -106,13 +111,19 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when the in-game clock time changes.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void GameEvents_OneSecondTick(object sender, EventArgs e)
+        private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
             if (!Context.IsWorldReady)
                 return;
 
             try
             {
+                // handle delay
+                this.AutomateCountdown--;
+                if (this.AutomateCountdown > 0)
+                    return;
+                this.AutomateCountdown = this.Config.AutomationInterval;
+
                 // reload machines if needed
                 foreach (GameLocation location in this.ReloadQueue)
                     this.ReloadMachinesIn(location);
