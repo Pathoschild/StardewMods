@@ -1,10 +1,10 @@
-﻿{
+{
   "Name": "Automate",
   "Author": "Pathoschild",
   "Version": {
     "MajorVersion": 1,
-    "MinorVersion": 5,
-    "PatchVersion": 1,
+    "MinorVersion": 6,
+    "PatchVersion": 0,
     "Build": null
   },
   "MinimumApiVersion": "1.15",
