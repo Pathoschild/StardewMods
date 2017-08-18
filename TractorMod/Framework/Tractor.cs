@@ -6,11 +6,17 @@ using StardewValley.Characters;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
-    internal class Tractor : Horse
+    /// <summary>The in-game tractor that can be ridden by the player.</summary>
+    internal sealed class Tractor : Horse
     {
         /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="name">The internal NPC name.</param>
+        /// <param name="tileX">The initial tile X position.</param>
+        /// <param name="tileY">The initial tile Y position.</param>
+        /// <param name="content">The content helper with which to load the tractor sprite.</param>
         public Tractor(string name, int tileX, int tileY, IContentHelper content)
             : base(tileX, tileY)
         {
@@ -23,6 +29,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             this.faceDirection(3);
         }
 
+        /// <summary>Get the bounding box for collision checks.</summary>
         public override Rectangle GetBoundingBox()
         {
             Rectangle boundingBox = base.GetBoundingBox();
