@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.6.1
+* Fixed machines inside buildings not being automated until you visit the building.
+
 ## 1.6
 * Rewrote machines so they process items in the order they're found.
 * Improved performance for players with a large number of machines.
