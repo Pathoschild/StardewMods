@@ -38,6 +38,7 @@ setting | default | effect
 `WateringCanWaters` | `true` | Whether the tractor can water tiles when the watering can is selected.
 `PickaxeClearsDirt` | `true` | Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.
 `PickaxeBreaksRocks` | `true` | Whether the tractor can break rocks when the pickaxe is selected.
+`PickaxeBreaksFlooring` | `false` | Whether the tractor can break flooring and paths when the pickaxe is selected.
 `CustomTools` | _(empty)_ | The custom tools to apply. These must match the exact in-game tool names.
 
 Some general options:

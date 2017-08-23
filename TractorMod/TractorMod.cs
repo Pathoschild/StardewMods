@@ -565,7 +565,7 @@ namespace Pathoschild.Stardew.TractorMod
                         break;
 
                     case Pickaxe _:
-                        if (!this.Config.PickaxeClearsDirt && !this.Config.PickaxeBreaksRocks)
+                        if (!this.Config.PickaxeClearsDirt && !this.Config.PickaxeBreaksRocks && !this.Config.PickaxeBreaksFlooring)
                             return; // nothing to do
                         break;
 
@@ -602,6 +602,13 @@ namespace Pathoschild.Stardew.TractorMod
                 // prevent pickaxe from destroying
                 if (tool is Pickaxe)
                 {
+                    // never destroy live crops
+                    if (tileFeature is HoeDirt dirt && dirt.crop != null && !dirt.crop.dead)
+                        continue;
+
+                    // don't destroy other things unless configured
+                    if (!this.Config.PickaxeBreaksFlooring && tileFeature is Flooring)
+                        continue;
                     if (!this.Config.PickaxeClearsDirt && tileFeature is HoeDirt)
                         continue;
                     if (!this.Config.PickaxeBreaksRocks && tileObj?.Name == "Stone")

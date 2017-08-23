@@ -9,19 +9,22 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         ** Accessors
         *********/
         /// <summary>Whether the tractor can harvest crops, fruit trees, or forage when the scythe is selected.</summary>
-        public bool ScytheHarvests = true;
+        public bool ScytheHarvests { get; set; } = true;
 
         /// <summary>Whether the tractor can hoe dirt tiles when the hoe is selected.</summary>
-        public bool HoeTillsDirt = true;
+        public bool HoeTillsDirt { get; set; } = true;
 
         /// <summary>Whether the tractor can water tiles when the watering can is selected.</summary>
-        public bool WateringCanWaters = true;
+        public bool WateringCanWaters { get; set; } = true;
 
         /// <summary>Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.</summary>
-        public bool PickaxeClearsDirt = true;
+        public bool PickaxeClearsDirt { get; set; } = true;
 
         /// <summary>Whether the tractor can break rocks when the pickaxe is selected.</summary>
-        public bool PickaxeBreaksRocks = true;
+        public bool PickaxeBreaksRocks { get; set; } = true;
+
+        /// <summary>Whether the tractor can break paths and flooring when the pickaxe is selected.</summary>
+        public bool PickaxeBreaksFlooring { get; set; } = false;
 
         /// <summary>The custom tools to allow. These must match the exact in-game tool names.</summary>
         public string[] CustomTools { get; set; } = new string[0];

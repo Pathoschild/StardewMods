@@ -2,6 +2,8 @@
 ## 4.0.1
 * Added to Pelican Fiber mod's building shop.
 * Added compatibility with CJB Cheats Menu's instant build option.
+* Pickaxe tractor no longer destroys live crops.
+* Pickaxe tractor no longer destroys paths/flooring (unless enabled).
 
 ## 4.0
 This is a rewrite of the original TractorMod by PhthaloBlue (@lambui).
