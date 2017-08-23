@@ -1,4 +1,7 @@
 # Release notes
+## 4.0.1
+* Added compatibility with Pelican Fiber mod.
+
 ## 4.0
 This is a rewrite of the original TractorMod by PhthaloBlue (@lambui).
 

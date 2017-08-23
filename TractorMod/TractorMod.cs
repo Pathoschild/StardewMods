@@ -115,10 +115,16 @@ namespace Pathoschild.Stardew.TractorMod
         private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
             // add blueprint to carpenter menu
-            if (e.NewMenu is CarpenterMenu menu)
+            if (e.NewMenu is CarpenterMenu)
             {
                 this.Helper.Reflection
-                    .GetPrivateValue<List<BluePrint>>(menu, "blueprints")
+                    .GetPrivateValue<List<BluePrint>>(e.NewMenu, "blueprints")
+                    .Add(this.GetBlueprint());
+            }
+            else if(e.NewMenu.GetType().FullName == "PelicanFiber.Framework.ConstructionMenu") // Pelican Fiber mod
+            {
+                this.Helper.Reflection
+                    .GetPrivateValue<List<BluePrint>>(e.NewMenu, "Blueprints")
                     .Add(this.GetBlueprint());
             }
         }
