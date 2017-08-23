@@ -1,6 +1,7 @@
 # Release notes
 ## 4.0.1
-* Added compatibility with Pelican Fiber mod.
+* Added to Pelican Fiber mod's building shop.
+* Added compatibility with CJB Cheats Menu's instant build option.
 
 ## 4.0
 This is a rewrite of the original TractorMod by PhthaloBlue (@lambui).

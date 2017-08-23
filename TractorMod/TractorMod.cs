@@ -32,6 +32,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The tractor's NPC name.</summary>
         private readonly string TractorName = "Tractor";
 
+        /// <summary>The full type name for the Pelican Fiber mod's construction menu.</summary>
+        private readonly string PelicanFiberMenuFullName = "PelicanFiber.Framework.ConstructionMenu";
+
         /// <summary>The unique buff ID for the tractor speed.</summary>
         private readonly int BuffUniqueID = 58012397;
 
@@ -58,6 +61,9 @@ namespace Pathoschild.Stardew.TractorMod
 
         /// <summary>The number of ticks since the tractor last checked for an action to perform.</summary>
         private int SkippedActionTicks;
+
+        /// <summary>The tractor garages which started construction today.</summary>
+        private readonly List<Building> GaragesStartedToday = new List<Building>();
 
 
         /*********
@@ -97,6 +103,7 @@ namespace Pathoschild.Stardew.TractorMod
         {
             // set up for new day
             this.Tractor = null;
+            this.GaragesStartedToday.Clear();
             this.Farm = Game1.getFarm();
             this.RestoreCustomData();
         }
@@ -121,7 +128,7 @@ namespace Pathoschild.Stardew.TractorMod
                     .GetPrivateValue<List<BluePrint>>(e.NewMenu, "blueprints")
                     .Add(this.GetBlueprint());
             }
-            else if(e.NewMenu.GetType().FullName == "PelicanFiber.Framework.ConstructionMenu") // Pelican Fiber mod
+            else if (e.NewMenu.GetType().FullName == this.PelicanFiberMenuFullName)
             {
                 this.Helper.Reflection
                     .GetPrivateValue<List<BluePrint>>(e.NewMenu, "Blueprints")
@@ -147,8 +154,70 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
+            if (Game1.activeClickableMenu is CarpenterMenu || Game1.activeClickableMenu?.GetType().FullName == this.PelicanFiberMenuFullName)
+                this.ProcessNewConstruction();
             if (Game1.currentLocation != null)
                 this.Update();
+        }
+
+        /****
+        ** State methods
+        ****/
+        /// <summary>Detect and fix tractor garages that started construction today.</summary>
+        private void ProcessNewConstruction()
+        {
+            foreach (Building garage in this.GetGarages(this.Farm).Keys)
+            {
+                // skip if not built today
+                if (garage is TractorGarage)
+                    continue;
+
+                // set construction days after it's placed
+                if (!this.GaragesStartedToday.Contains(garage))
+                {
+                    garage.daysOfConstructionLeft = this.GarageConstructionDays;
+                    this.GaragesStartedToday.Add(garage);
+                }
+
+                // spawn tractor if built instantly by a mod
+                if (!garage.isUnderConstruction())
+                {
+                    this.GaragesStartedToday.Remove(garage);
+                    this.Farm.destroyStructure(garage);
+                    this.Farm.buildings.Add(new TractorGarage(this.GetBlueprint(), new Vector2(garage.tileX, garage.tileY), 0));
+                    if (this.Tractor == null)
+                        this.Tractor = this.SpawnTractor(garage.tileX + 1, garage.tileY + 1);
+                }
+            }
+        }
+
+        /// <summary>Spawn a new tractor.</summary>
+        /// <param name="tileX">The tile X position at which to spawn it.</param>
+        /// <param name="tileY">The tile Y position at which to spawn it.</param>
+        private Tractor SpawnTractor(int tileX, int tileY)
+        {
+            Tractor tractor = new Tractor(this.TractorName, tileX, tileY, this.Helper.Content);
+            this.Farm.characters.Add(tractor);
+            Game1.warpCharacter(tractor, this.Farm.Name, new Vector2(tileX, tileY), false, true);
+            tractor.Position = new Vector2(tractor.Position.X + 20, tractor.Position.Y);
+            return tractor;
+        }
+
+        /// <summary>Remove all tractors from the game.</summary>
+        private void RemoveTractors()
+        {
+            // find all locations
+            IEnumerable<GameLocation> locations = Game1.locations
+                .Union(
+                    from location in Game1.locations.OfType<BuildableGameLocation>()
+                    from building in location.buildings
+                    where building.indoors != null
+                    select building.indoors
+                );
+
+            // remove tractors
+            foreach (GameLocation location in locations)
+                location.characters.RemoveAll(p => p is Tractor);
         }
 
         /****
@@ -228,10 +297,7 @@ namespace Pathoschild.Stardew.TractorMod
                 // spawn tractor
                 if (this.Tractor == null && !garage.isUnderConstruction())
                 {
-                    this.Tractor = new Tractor(this.TractorName, garage.tileX + 1, garage.tileY + 1, this.Helper.Content);
-                    this.Farm.characters.Add(this.Tractor);
-                    Game1.warpCharacter(this.Tractor, this.Farm.Name, new Vector2(garage.tileX + 1, garage.tileY + 1), false, true);
-                    this.Tractor.Position = new Vector2(this.Tractor.Position.X + 20, this.Tractor.Position.Y);
+                    this.Tractor = this.SpawnTractor(garage.tileX + 1, garage.tileY + 1);
                     break;
                 }
             }
@@ -272,23 +338,6 @@ namespace Pathoschild.Stardew.TractorMod
 
             // delete old file
             file.Delete();
-        }
-
-        /// <summary>Remove all tractors from the game.</summary>
-        private void RemoveTractors()
-        {
-            // find all locations
-            IEnumerable<GameLocation> locations = Game1.locations
-                .Union(
-                    from location in Game1.locations.OfType<BuildableGameLocation>()
-                    from building in location.buildings
-                    where building.indoors != null
-                    select building.indoors
-                );
-
-            // remove tractors
-            foreach (GameLocation location in locations)
-                location.characters.RemoveAll(p => p is Tractor);
         }
 
         /****
@@ -595,8 +644,7 @@ namespace Pathoschild.Stardew.TractorMod
                 (
                     from building in location.buildings
                     where building.buildingType == this.GarageBuildingType
-                    let constructionDaysLeft = building is TractorGarage ? building.daysOfConstructionLeft : this.GarageConstructionDays // override if building was added through the carpenter menu today
-                    select new { Key = building, Value = new CustomSaveBuilding(new Vector2(building.tileX, building.tileY), this.GarageBuildingType, constructionDaysLeft) }
+                    select new { Key = building, Value = new CustomSaveBuilding(new Vector2(building.tileX, building.tileY), this.GarageBuildingType, building.daysOfConstructionLeft) }
                 )
                 .ToDictionary(p => p.Key, p => p.Value);
         }
