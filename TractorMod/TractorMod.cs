@@ -11,9 +11,6 @@ using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Menus;
-using StardewValley.TerrainFeatures;
-using StardewValley.Tools;
-using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod
@@ -32,12 +29,6 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The full type name for the Pelican Fiber mod's construction menu.</summary>
         private readonly string PelicanFiberMenuFullName = "PelicanFiber.Framework.ConstructionMenu";
 
-        /// <summary>The unique buff ID for the tractor speed.</summary>
-        private readonly int BuffUniqueID = 58012397;
-
-        /// <summary>The number of ticks between each tractor action check.</summary>
-        private readonly int TicksPerAction = 12; // roughly five times per second
-
         /// <summary>The number of days needed to build a tractor garage.</summary>
         private readonly int GarageConstructionDays = 3;
 
@@ -55,9 +46,6 @@ namespace Pathoschild.Stardew.TractorMod
 
         /// <summary>Whether Robin is busy constructing a garage.</summary>
         private bool IsRobinBusy;
-
-        /// <summary>The number of ticks since the tractor last checked for an action to perform.</summary>
-        private int SkippedActionTicks;
 
         /// <summary>The tractor garages which started construction today.</summary>
         private readonly List<Building> GaragesStartedToday = new List<Building>();
@@ -150,8 +138,8 @@ namespace Pathoschild.Stardew.TractorMod
         {
             if (Game1.activeClickableMenu is CarpenterMenu || Game1.activeClickableMenu?.GetType().FullName == this.PelicanFiberMenuFullName)
                 this.ProcessNewConstruction();
-            if (Game1.currentLocation != null)
-                this.Update();
+            if (Context.IsPlayerFree)
+                this.Tractor.Update(this.Farm);
         }
 
         /****
@@ -190,7 +178,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="tileY">The tile Y position at which to spawn it.</param>
         private TractorManager SpawnTractor(int tileX, int tileY)
         {
-            TractorManager tractor = new TractorManager("Tractor", tileX, tileY, this.Helper.Content);
+            TractorManager tractor = new TractorManager(tileX, tileY, this.Config, this.Helper.Content, this.Helper.Translation);
             tractor.SetLocation(this.Farm, new Vector2(tileX, tileY));
             tractor.SetPixelPosition(new Vector2(tractor.Current.Position.X + 20, tractor.Current.Position.Y));
             return tractor;
@@ -318,308 +306,8 @@ namespace Pathoschild.Stardew.TractorMod
         }
 
         /****
-        ** Action methods
-        ****/
-        /// <summary>Update tractor effects and actions in the game.</summary>
-        private void Update()
-        {
-            if (Game1.player == null || this.Tractor?.IsRiding != true || Game1.activeClickableMenu != null)
-                return; // tractor isn't enabled
-
-            // apply tractor speed buff
-            Buff speedBuff = Game1.buffsDisplay.otherBuffs.FirstOrDefault(p => p.which == this.BuffUniqueID);
-            if (speedBuff == null)
-            {
-                speedBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, this.Config.TractorSpeed, 0, 0, 1, "Tractor Power", this.Helper.Translation.Get("buff.name")) { which = this.BuffUniqueID };
-                Game1.buffsDisplay.addOtherBuff(speedBuff);
-            }
-            speedBuff.millisecondsDuration = 100;
-
-            // apply action cooldown
-            this.SkippedActionTicks++;
-            if (this.SkippedActionTicks % this.TicksPerAction != 0)
-                return;
-            this.SkippedActionTicks = 0;
-
-            // perform tractor action
-            Tool tool = Game1.player.CurrentTool;
-            Item item = Game1.player.CurrentItem;
-            Vector2[] grid = this.GetTileGrid(Game1.player.getTileLocation(), this.Config.Distance).ToArray();
-            if (tool is MeleeWeapon && tool.name.ToLower().Contains("scythe"))
-                this.HarvestTiles(grid);
-            else if (tool != null)
-                this.ApplyTool(tool, grid);
-            else if (item != null)
-                this.ApplyItem(item, grid);
-        }
-
-        /// <summary>Apply an item stack to the given tiles.</summary>
-        /// <param name="item">The item stack to apply.</param>
-        /// <param name="tiles">The tiles to affect.</param>
-        private void ApplyItem(Item item, Vector2[] tiles)
-        {
-            // validate category
-            string category = item.getCategoryName().ToLower();
-            if (category != "seed" && category != "fertilizer")
-                return;
-
-            // act on affected tiles
-            foreach (Vector2 tile in tiles)
-            {
-                // get tilled dirt
-                if (!Game1.currentLocation.terrainFeatures.TryGetValue(tile, out TerrainFeature terrainTile) || !(terrainTile is HoeDirt dirt))
-                    continue;
-
-                // apply item
-                bool applied = false;
-                switch (category)
-                {
-                    case "seed":
-                        if (dirt.crop == null && dirt.plant(Game1.player.CurrentItem.parentSheetIndex, (int)tile.X, (int)tile.Y, Game1.player))
-                            applied = true;
-                        break;
-
-                    case "fertilizer":
-                        if (dirt.fertilizer == 0)
-                        {
-                            dirt.fertilizer = Game1.player.CurrentItem.parentSheetIndex;
-                            applied = true;
-                        }
-                        break;
-
-                    default:
-                        throw new NotSupportedException($"Unknown category '{category}'.");
-                }
-
-                // deduct from inventory
-                if (applied)
-                {
-                    Game1.player.CurrentItem.Stack -= 1;
-                    if (Game1.player.CurrentItem.Stack <= 0)
-                    {
-                        Game1.player.removeItemFromInventory(Game1.player.CurrentItem);
-                        return;
-                    }
-                }
-            }
-        }
-
-        /// <summary>Harvest the affected tiles.</summary>
-        /// <param name="tiles">The tiles to harvest.</param>
-        private void HarvestTiles(Vector2[] tiles)
-        {
-            if (!this.Config.ScytheHarvests)
-                return;
-
-            foreach (Vector2 tile in tiles)
-            {
-                // get feature/object on tile
-                object target;
-                {
-                    if (Game1.currentLocation.terrainFeatures.TryGetValue(tile, out TerrainFeature feature))
-                        target = feature;
-                    else if (Game1.currentLocation.objects.TryGetValue(tile, out SObject obj))
-                        target = obj;
-                    else
-                        continue;
-                }
-
-                // harvest target
-                switch (target)
-                {
-                    // crop or spring onion
-                    case HoeDirt dirt when dirt.crop != null:
-                    {
-                        // make item scythe-harvestable
-                        int oldHarvestMethod = dirt.crop.harvestMethod;
-                        dirt.crop.harvestMethod = Crop.sickleHarvest;
-
-                        // harvest spring onion
-                        if (dirt.crop.whichForageCrop == Crop.forageCrop_springOnion)
-                        {
-                            SObject onion = new SObject(399, 1);
-                            bool gatherer = Game1.player.professions.Contains(SFarmer.gatherer);
-                            bool botanist = Game1.player.professions.Contains(SFarmer.botanist);
-                            if (botanist)
-                                onion.quality = SObject.bestQuality;
-                            if (gatherer)
-                            {
-                                if (new Random().Next(0, 10) < 2)
-                                    onion.stack *= 2;
-                            }
-                            for (int i = 0; i < onion.stack; i++)
-                                Game1.currentLocation.debris.Add(new Debris(onion, new Vector2(tile.X * Game1.tileSize, tile.Y * Game1.tileSize)));
-
-                            dirt.destroyCrop(tile);
-                            continue;
-                        }
-
-                        // harvest crop
-                        if (dirt.crop.harvest((int)tile.X, (int)tile.Y, dirt))
-                        {
-                            if (dirt.crop.indexOfHarvest == 421) // sun flower
-                            {
-                                int seedDrop = new Random().Next(1, 4);
-                                for (int i = 0; i < seedDrop; i++)
-                                    Game1.createObjectDebris(431, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); // spawn sunflower seeds
-                            }
-
-                            if (dirt.crop.regrowAfterHarvest == -1)
-                                dirt.destroyCrop(tile);
-                        }
-
-                        // restore item harvest type
-                        if (dirt.crop != null)
-                            dirt.crop.harvestMethod = oldHarvestMethod;
-                        break;
-                    }
-
-                    // fruit tree
-                    case FruitTree tree:
-                        tree.shake(tile, false);
-                        break;
-
-                    // grass
-                    case Grass _:
-                        Game1.currentLocation.terrainFeatures.Remove(tile);
-                        this.Farm.tryToAddHay(2);
-                        break;
-
-                    // spawned object
-                    case SObject obj when obj.isSpawnedObject:
-                        // get output
-                        if (obj.isForage(Game1.currentLocation))
-                        {
-                            bool gatherer = Game1.player.professions.Contains(SFarmer.gatherer);
-                            bool botanist = Game1.player.professions.Contains(SFarmer.botanist);
-                            if (botanist)
-                                obj.quality = SObject.bestQuality;
-                            if (gatherer)
-                            {
-                                int num = new Random().Next(0, 100);
-                                if (num < 20)
-                                    obj.stack *= 2;
-                            }
-                        }
-
-                        // spawn output
-                        for (int i = 0; i < obj.stack; i++)
-                            Game1.currentLocation.debris.Add(new Debris(obj, new Vector2(tile.X * Game1.tileSize, tile.Y * Game1.tileSize)));
-
-                        // remove harvested object
-                        Game1.currentLocation.removeObject(tile, false);
-                        break;
-
-                    // weed
-                    case SObject obj when obj.name.ToLower().Contains("weed"):
-                        Game1.createObjectDebris(771, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); // fiber
-                        if (new Random().Next(0, 10) < 1)
-                            Game1.createObjectDebris(770, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); // 10% mixed seeds
-                        Game1.currentLocation.removeObject(tile, false);
-                        break;
-                }
-            }
-        }
-
-        /// <summary>Use a tool on the given tiles.</summary>
-        /// <param name="tool">The tool to use.</param>
-        /// <param name="tiles">The tiles to affect.</param>
-        private void ApplyTool(Tool tool, Vector2[] tiles)
-        {
-            // check if tool is enabled
-            if (!this.Config.CustomTools.Contains(tool.name))
-            {
-                switch (tool)
-                {
-                    case WateringCan _:
-                        if (!this.Config.WateringCanWaters)
-                            return;
-                        break;
-
-                    case Hoe _:
-                        if (!this.Config.HoeTillsDirt)
-                            return;
-                        break;
-
-                    case Pickaxe _:
-                        if (!this.Config.PickaxeClearsDirt && !this.Config.PickaxeBreaksRocks && !this.Config.PickaxeBreaksFlooring)
-                            return; // nothing to do
-                        break;
-
-                    default:
-                        return;
-                }
-            }
-
-            // track things that shouldn't decrease
-            WateringCan wateringCan = tool as WateringCan;
-            int waterInCan = wateringCan?.WaterLeft ?? 0;
-            float stamina = Game1.player.stamina;
-            int toolUpgrade = tool.upgradeLevel;
-            Vector2 mountPosition = this.Tractor.Current.position;
-
-            // use tools
-            this.Tractor.Current.position = new Vector2(0, 0);
-            if (wateringCan != null)
-                wateringCan.WaterLeft = wateringCan.waterCanMax;
-            tool.upgradeLevel = Tool.iridium;
-            Game1.player.toolPower = 0;
-            foreach (Vector2 tile in tiles)
-            {
-                Game1.currentLocation.objects.TryGetValue(tile, out SObject tileObj);
-                Game1.currentLocation.terrainFeatures.TryGetValue(tile, out TerrainFeature tileFeature);
-
-                // prevent tools from destroying placed objects
-                if (tileObj != null && tileObj.Name != "Stone")
-                {
-                    if (tool is Hoe || tool is Pickaxe)
-                        continue;
-                }
-
-                // prevent pickaxe from destroying
-                if (tool is Pickaxe)
-                {
-                    // never destroy live crops
-                    if (tileFeature is HoeDirt dirt && dirt.crop != null && !dirt.crop.dead)
-                        continue;
-
-                    // don't destroy other things unless configured
-                    if (!this.Config.PickaxeBreaksFlooring && tileFeature is Flooring)
-                        continue;
-                    if (!this.Config.PickaxeClearsDirt && tileFeature is HoeDirt)
-                        continue;
-                    if (!this.Config.PickaxeBreaksRocks && tileObj?.Name == "Stone")
-                        continue;
-                }
-
-                // use tool on center of tile
-                Vector2 useAt = (tile * Game1.tileSize) + new Vector2(Game1.tileSize / 2f);
-                tool.DoFunction(Game1.currentLocation, (int)useAt.X, (int)useAt.Y, 0, Game1.player);
-            }
-
-            // reset tools
-            this.Tractor.Current.position = mountPosition;
-            if (wateringCan != null)
-                wateringCan.WaterLeft = waterInCan;
-            tool.upgradeLevel = toolUpgrade;
-            Game1.player.stamina = stamina;
-        }
-
-        /****
         ** Helper methods
         ****/
-        /// <summary>Get a grid of tiles.</summary>
-        /// <param name="origin">The center of the grid.</param>
-        /// <param name="distance">The number of tiles in each direction to include.</param>
-        private IEnumerable<Vector2> GetTileGrid(Vector2 origin, int distance)
-        {
-            for (int x = -distance; x <= distance; x++)
-            {
-                for (int y = -distance; y <= distance; y++)
-                    yield return new Vector2(origin.X + x, origin.Y + y);
-            }
-        }
-
         /// <summary>Get garages in the given location to save.</summary>
         /// <param name="location">The location to search.</param>
         private IDictionary<Building, CustomSaveBuilding> GetGarages(BuildableGameLocation location)
