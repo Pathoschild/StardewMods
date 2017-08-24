@@ -2,8 +2,10 @@
 ## 4.0.1
 * Added to Pelican Fiber mod's building shop.
 * Added compatibility with CJB Cheats Menu's instant build option.
+* Added compatibility with Horse Whistle.
 * Pickaxe tractor no longer destroys live crops.
 * Pickaxe tractor no longer destroys paths/flooring (unless enabled).
+* Fixed game logic treating tractor as the player's horse in some cases where it shouldn't.
 
 ## 4.0
 This is a rewrite of the original TractorMod by PhthaloBlue (@lambui).

@@ -40,8 +40,10 @@
     <Compile Include="Framework\CustomSaveBuilding.cs" />
     <Compile Include="Framework\CustomSaveData.cs" />
     <Compile Include="Framework\LegacySaveData.cs" />
-    <Compile Include="Framework\TractorMount.cs" />
     <Compile Include="Framework\ModConfig.cs" />
+    <Compile Include="Framework\TractorManager.cs" />
+    <Compile Include="Framework\TractorMount.cs" />
+    <Compile Include="Framework\TractorStatic.cs" />
     <Compile Include="Framework\TractorGarage.cs" />
     <Compile Include="TractorMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

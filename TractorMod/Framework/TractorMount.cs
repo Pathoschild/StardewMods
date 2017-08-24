@@ -1,6 +1,5 @@
+using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 
@@ -10,23 +9,27 @@ namespace Pathoschild.Stardew.TractorMod.Framework
     internal sealed class TractorMount : Horse
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>The callback to invoke when the player mounts the tractor.</summary>
+        private readonly Action OnDismount;
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The internal NPC name.</param>
         /// <param name="tileX">The initial tile X position.</param>
         /// <param name="tileY">The initial tile Y position.</param>
-        /// <param name="content">The content helper with which to load the tractor sprite.</param>
-        public TractorMount(string name, int tileX, int tileY, IContentHelper content)
+        /// <param name="sprite">The animated tractor sprite.</param>
+        /// <param name="onDismount">The callback to invoke when the player dismounts the tractor.</param>
+        public TractorMount(string name, int tileX, int tileY, AnimatedSprite sprite, Action onDismount)
             : base(tileX, tileY)
         {
             this.name = name;
-            this.sprite = new AnimatedSprite(content.Load<Texture2D>(@"assets\tractor.png"), 0, 32, 32)
-            {
-                textureUsesFlippedRightForLeft = true,
-                loop = true
-            };
-            this.faceDirection(3);
+            this.sprite = sprite;
+            this.OnDismount = onDismount;
         }
 
         /// <summary>Get the bounding box for collision checks.</summary>
@@ -36,6 +39,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             if ((this.facingDirection == 0 || this.facingDirection == 2))
                 boundingBox.Inflate(-Game1.tileSize / 2 - Game1.pixelZoom, 0);
             return boundingBox;
+        }
+
+        /// <summary>Perform any update logic needed on update tick.</summary>
+        /// <param name="time">The current game time.</param>
+        /// <param name="location">The location containing the tractor.</param>
+        public override void update(GameTime time, GameLocation location)
+        {
+            if (this.rider == null)
+                this.OnDismount();
+            else
+                base.update(time, location);
         }
     }
 }

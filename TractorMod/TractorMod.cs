@@ -29,9 +29,6 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The tractor garage's building type.</summary>
         private readonly string GarageBuildingType = "TractorGarage";
 
-        /// <summary>The tractor's NPC name.</summary>
-        private readonly string TractorName = "Tractor";
-
         /// <summary>The full type name for the Pelican Fiber mod's construction menu.</summary>
         private readonly string PelicanFiberMenuFullName = "PelicanFiber.Framework.ConstructionMenu";
 
@@ -53,8 +50,8 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The current player's farm.</summary>
         private Farm Farm;
 
-        /// <summary>The currently spawned tractor.</summary>
-        private TractorMount Tractor;
+        /// <summary>Manages the tractor instance.</summary>
+        private TractorManager Tractor;
 
         /// <summary>Whether Robin is busy constructing a garage.</summary>
         private bool IsRobinBusy;
@@ -143,10 +140,7 @@ namespace Pathoschild.Stardew.TractorMod
         {
             // summon tractor
             if (e.KeyPressed == this.Config.TractorKey)
-            {
-                if (this.Tractor != null)
-                    Game1.warpCharacter(this.Tractor, Game1.currentLocation.name, Game1.player.getTileLocation(), false, true);
-            }
+                this.Tractor?.SetLocation(Game1.currentLocation, Game1.player.getTileLocation());
         }
 
         /// <summary>The event called when the game updates (roughly sixty times per second).</summary>
@@ -194,31 +188,14 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Spawn a new tractor.</summary>
         /// <param name="tileX">The tile X position at which to spawn it.</param>
         /// <param name="tileY">The tile Y position at which to spawn it.</param>
-        private TractorMount SpawnTractor(int tileX, int tileY)
+        private TractorManager SpawnTractor(int tileX, int tileY)
         {
-            TractorMount tractor = new TractorMount(this.TractorName, tileX, tileY, this.Helper.Content);
-            this.Farm.characters.Add(tractor);
-            Game1.warpCharacter(tractor, this.Farm.Name, new Vector2(tileX, tileY), false, true);
-            tractor.Position = new Vector2(tractor.Position.X + 20, tractor.Position.Y);
+            TractorManager tractor = new TractorManager("Tractor", tileX, tileY, this.Helper.Content);
+            tractor.SetLocation(this.Farm, new Vector2(tileX, tileY));
+            tractor.SetPixelPosition(new Vector2(tractor.Current.Position.X + 20, tractor.Current.Position.Y));
             return tractor;
         }
 
-        /// <summary>Remove all tractors from the game.</summary>
-        private void RemoveTractors()
-        {
-            // find all locations
-            IEnumerable<GameLocation> locations = Game1.locations
-                .Union(
-                    from location in Game1.locations.OfType<BuildableGameLocation>()
-                    from building in location.buildings
-                    where building.indoors != null
-                    select building.indoors
-                );
-
-            // remove tractors
-            foreach (GameLocation location in locations)
-                location.characters.RemoveAll(p => p is TractorMount);
-        }
 
         /****
         ** Save methods
@@ -241,7 +218,7 @@ namespace Pathoschild.Stardew.TractorMod
             // remove tractors + buildings
             foreach (Building garage in garages.Keys)
                 this.Farm.destroyStructure(garage);
-            this.RemoveTractors();
+            this.Tractor?.RemoveTractors();
 
             // reset Robin construction
             if (this.IsRobinBusy)
@@ -346,7 +323,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Update tractor effects and actions in the game.</summary>
         private void Update()
         {
-            if (Game1.player == null || this.Tractor?.rider != Game1.player || Game1.activeClickableMenu != null)
+            if (Game1.player == null || this.Tractor?.IsRiding != true || Game1.activeClickableMenu != null)
                 return; // tractor isn't enabled
 
             // apply tractor speed buff
@@ -452,50 +429,50 @@ namespace Pathoschild.Stardew.TractorMod
                 {
                     // crop or spring onion
                     case HoeDirt dirt when dirt.crop != null:
+                    {
+                        // make item scythe-harvestable
+                        int oldHarvestMethod = dirt.crop.harvestMethod;
+                        dirt.crop.harvestMethod = Crop.sickleHarvest;
+
+                        // harvest spring onion
+                        if (dirt.crop.whichForageCrop == Crop.forageCrop_springOnion)
                         {
-                            // make item scythe-harvestable
-                            int oldHarvestMethod = dirt.crop.harvestMethod;
-                            dirt.crop.harvestMethod = Crop.sickleHarvest;
-
-                            // harvest spring onion
-                            if (dirt.crop.whichForageCrop == Crop.forageCrop_springOnion)
+                            SObject onion = new SObject(399, 1);
+                            bool gatherer = Game1.player.professions.Contains(SFarmer.gatherer);
+                            bool botanist = Game1.player.professions.Contains(SFarmer.botanist);
+                            if (botanist)
+                                onion.quality = SObject.bestQuality;
+                            if (gatherer)
                             {
-                                SObject onion = new SObject(399, 1);
-                                bool gatherer = Game1.player.professions.Contains(SFarmer.gatherer);
-                                bool botanist = Game1.player.professions.Contains(SFarmer.botanist);
-                                if (botanist)
-                                    onion.quality = SObject.bestQuality;
-                                if (gatherer)
-                                {
-                                    if (new Random().Next(0, 10) < 2)
-                                        onion.stack *= 2;
-                                }
-                                for (int i = 0; i < onion.stack; i++)
-                                    Game1.currentLocation.debris.Add(new Debris(onion, new Vector2(tile.X * Game1.tileSize, tile.Y * Game1.tileSize)));
-
-                                dirt.destroyCrop(tile);
-                                continue;
+                                if (new Random().Next(0, 10) < 2)
+                                    onion.stack *= 2;
                             }
+                            for (int i = 0; i < onion.stack; i++)
+                                Game1.currentLocation.debris.Add(new Debris(onion, new Vector2(tile.X * Game1.tileSize, tile.Y * Game1.tileSize)));
 
-                            // harvest crop
-                            if (dirt.crop.harvest((int)tile.X, (int)tile.Y, dirt))
-                            {
-                                if (dirt.crop.indexOfHarvest == 421) // sun flower
-                                {
-                                    int seedDrop = new Random().Next(1, 4);
-                                    for (int i = 0; i < seedDrop; i++)
-                                        Game1.createObjectDebris(431, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); // spawn sunflower seeds
-                                }
-
-                                if (dirt.crop.regrowAfterHarvest == -1)
-                                    dirt.destroyCrop(tile);
-                            }
-
-                            // restore item harvest type
-                            if (dirt.crop != null)
-                                dirt.crop.harvestMethod = oldHarvestMethod;
-                            break;
+                            dirt.destroyCrop(tile);
+                            continue;
                         }
+
+                        // harvest crop
+                        if (dirt.crop.harvest((int)tile.X, (int)tile.Y, dirt))
+                        {
+                            if (dirt.crop.indexOfHarvest == 421) // sun flower
+                            {
+                                int seedDrop = new Random().Next(1, 4);
+                                for (int i = 0; i < seedDrop; i++)
+                                    Game1.createObjectDebris(431, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); // spawn sunflower seeds
+                            }
+
+                            if (dirt.crop.regrowAfterHarvest == -1)
+                                dirt.destroyCrop(tile);
+                        }
+
+                        // restore item harvest type
+                        if (dirt.crop != null)
+                            dirt.crop.harvestMethod = oldHarvestMethod;
+                        break;
+                    }
 
                     // fruit tree
                     case FruitTree tree:
@@ -579,10 +556,10 @@ namespace Pathoschild.Stardew.TractorMod
             int waterInCan = wateringCan?.WaterLeft ?? 0;
             float stamina = Game1.player.stamina;
             int toolUpgrade = tool.upgradeLevel;
-            Vector2 mountPosition = this.Tractor.position;
+            Vector2 mountPosition = this.Tractor.Current.position;
 
             // use tools
-            this.Tractor.position = new Vector2(0, 0);
+            this.Tractor.Current.position = new Vector2(0, 0);
             if (wateringCan != null)
                 wateringCan.WaterLeft = wateringCan.waterCanMax;
             tool.upgradeLevel = Tool.iridium;
@@ -621,7 +598,7 @@ namespace Pathoschild.Stardew.TractorMod
             }
 
             // reset tools
-            this.Tractor.position = mountPosition;
+            this.Tractor.Current.position = mountPosition;
             if (wateringCan != null)
                 wateringCan.WaterLeft = waterInCan;
             tool.upgradeLevel = toolUpgrade;
