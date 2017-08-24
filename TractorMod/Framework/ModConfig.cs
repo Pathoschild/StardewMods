@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
     /// <summary>The mod configuration model.</summary>
-    internal class TractorConfig
+    internal class ModConfig
     {
         /*********
         ** Accessors

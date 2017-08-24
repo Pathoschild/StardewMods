@@ -48,13 +48,13 @@ namespace Pathoschild.Stardew.TractorMod
         ** State
         ****/
         /// <summary>The mod settings.</summary>
-        private TractorConfig Config;
+        private ModConfig Config;
 
         /// <summary>The current player's farm.</summary>
         private Farm Farm;
 
         /// <summary>The currently spawned tractor.</summary>
-        private Tractor Tractor;
+        private TractorMount Tractor;
 
         /// <summary>Whether Robin is busy constructing a garage.</summary>
         private bool IsRobinBusy;
@@ -75,7 +75,7 @@ namespace Pathoschild.Stardew.TractorMod
         {
             // read config
             this.MigrateLegacySaveData(helper);
-            this.Config = helper.ReadConfig<TractorConfig>();
+            this.Config = helper.ReadConfig<ModConfig>();
 
             // spawn/unspawn tractor and garages
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
@@ -194,9 +194,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Spawn a new tractor.</summary>
         /// <param name="tileX">The tile X position at which to spawn it.</param>
         /// <param name="tileY">The tile Y position at which to spawn it.</param>
-        private Tractor SpawnTractor(int tileX, int tileY)
+        private TractorMount SpawnTractor(int tileX, int tileY)
         {
-            Tractor tractor = new Tractor(this.TractorName, tileX, tileY, this.Helper.Content);
+            TractorMount tractor = new TractorMount(this.TractorName, tileX, tileY, this.Helper.Content);
             this.Farm.characters.Add(tractor);
             Game1.warpCharacter(tractor, this.Farm.Name, new Vector2(tileX, tileY), false, true);
             tractor.Position = new Vector2(tractor.Position.X + 20, tractor.Position.Y);
@@ -217,7 +217,7 @@ namespace Pathoschild.Stardew.TractorMod
 
             // remove tractors
             foreach (GameLocation location in locations)
-                location.characters.RemoveAll(p => p is Tractor);
+                location.characters.RemoveAll(p => p is TractorMount);
         }
 
         /****

@@ -7,7 +7,7 @@ using StardewValley.Characters;
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
     /// <summary>The in-game tractor that can be ridden by the player.</summary>
-    internal sealed class Tractor : Horse
+    internal sealed class TractorMount : Horse
     {
         /*********
         ** Public methods
@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="tileX">The initial tile X position.</param>
         /// <param name="tileY">The initial tile Y position.</param>
         /// <param name="content">The content helper with which to load the tractor sprite.</param>
-        public Tractor(string name, int tileX, int tileY, IContentHelper content)
+        public TractorMount(string name, int tileX, int tileY, IContentHelper content)
             : base(tileX, tileY)
         {
             this.name = name;
