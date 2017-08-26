@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
        ** Properties
        *********/
         /// <summary>The recipes to process.</summary>
-        private Recipe[] Recipes;
+        private readonly Recipe[] Recipes;
 
         /*********
         ** Public methods
@@ -21,7 +21,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         public SlimeIncubatorMachine(SObject machine) : base(machine)
         {
             int minutesUntilReady = Game1.player.professions.Contains(2) ? 2000 : 4000;
-            
+
 
             this.Recipes = new Recipe[]{
                 // blue slime egg => object with parentSheetIndex of blue slime egg
@@ -44,7 +44,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                 new Recipe(
                     input: 439,
                     inputCount: 1,
-                    output: input => new SObject(439,1,false,-1,0),
+                    output: input => new SObject(439,1),
                     minutes: minutesUntilReady
                 ),
 
@@ -52,14 +52,14 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                 new Recipe(
                     input: 680,
                     inputCount: 1,
-                    output: input => new SObject(680,1,false,-1,0),
+                    output: input => new SObject(680,1),
                     minutes: minutesUntilReady
                 )
             };
         }
 
         /// <summary>Get the machine's processing state.</summary>
-        /// <remarks>The slime incubator does not produce an output object, so its never considered done.</remarks>
+        /// <remarks>The slime incubator does not produce an output object, so it is never done.</remarks>
         public override MachineState GetState()
         {
             if (this.Machine.heldObject == null)
@@ -84,6 +84,6 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             if (result)
                 this.Machine.parentSheetIndex = 157;
             return result;
-        }       
+        }
     }
 }

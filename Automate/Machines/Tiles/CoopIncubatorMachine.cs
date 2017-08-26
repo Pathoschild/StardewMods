@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Tiles
         ** Properties
         *********/
         /// <summary>The recipes to process.</summary>
-        private Recipe[] Recipes;
+        private readonly Recipe[] Recipes;
 
         /*********
         ** Public methods
@@ -29,7 +29,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Tiles
                 new Recipe(
                     input: -5,
                     inputCount: 1,
-                    output: item => new SObject(item.parentSheetIndex, 1, false, -1, 0),
+                    output: item => new SObject(item.parentSheetIndex, 1),
                     minutes: minutesUntilReady/2
                 ),
 
@@ -37,7 +37,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Tiles
                 new Recipe(
                     input: 107,
                     inputCount: 1,
-                    output: item => new SObject(item.parentSheetIndex, 1, false, -1, 0),
+                    output: item => new SObject(item.parentSheetIndex, 1),
                     minutes: minutesUntilReady
                 )
             };
