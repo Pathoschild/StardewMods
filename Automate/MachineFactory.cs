@@ -172,6 +172,10 @@ namespace Pathoschild.Stardew.Automate
                 return new TapperMachine(obj, location, tile);
             if (obj.name == "Worm Bin")
                 return new WormBinMachine(obj);
+            if (obj.name == "Slime Incubator")
+                return new SlimeIncubatorMachine(obj);
+            if (obj.name == "Incubator")
+                return new CoopIncubatorMachine(obj);
 
             return null;
         }

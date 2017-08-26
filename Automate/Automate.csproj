@@ -75,9 +75,11 @@
     <Compile Include="Machines\Objects\RecyclingMachine.cs" />
     <Compile Include="Machines\Objects\SeedMakerMachine.cs" />
     <Compile Include="Machines\Objects\SlimeEggPressMachine.cs" />
+    <Compile Include="Machines\Objects\SlimeIncubatorMachine.cs" />
     <Compile Include="Machines\Objects\SodaMachine.cs" />
     <Compile Include="Machines\Objects\StatueOfEndlessFortuneMachine.cs" />
     <Compile Include="Machines\Objects\StatueOfPerfectionMachine.cs" />
+    <Compile Include="Machines\Tiles\CoopIncubatorMachine.cs" />
     <Compile Include="Machines\Tiles\ShippingBinMachine.cs" />
     <Compile Include="Machines\Tiles\TrashCanMachine.cs" />
     <Compile Include="Machines\Objects\TapperMachine.cs" />
