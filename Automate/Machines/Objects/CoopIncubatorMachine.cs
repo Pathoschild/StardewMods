@@ -21,7 +21,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         /// <param name="machine">The underlying machine.</param>
         public CoopIncubatorMachine(SObject machine) : base(machine)
         {
-            int minutesUntilReady = Game1.player.professions.Contains(2) ? 18000 : 9000;
+            int minutesUntilReady = Game1.player.professions.Contains(2) ? 9000 : 18000;
 
             this.Recipes = new Recipe[]
             {
