@@ -8,8 +8,8 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
     internal class SlimeIncubatorMachine : GenericMachine
     {
         /*********
-       ** Properties
-       *********/
+        ** Properties
+        *********/
         /// <summary>The recipes to process.</summary>
         private readonly Recipe[] Recipes;
 
