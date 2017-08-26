@@ -79,7 +79,7 @@
     <Compile Include="Machines\Objects\SodaMachine.cs" />
     <Compile Include="Machines\Objects\StatueOfEndlessFortuneMachine.cs" />
     <Compile Include="Machines\Objects\StatueOfPerfectionMachine.cs" />
-    <Compile Include="Machines\Tiles\CoopIncubatorMachine.cs" />
+    <Compile Include="Machines\Objects\CoopIncubatorMachine.cs" />
     <Compile Include="Machines\Tiles\ShippingBinMachine.cs" />
     <Compile Include="Machines\Tiles\TrashCanMachine.cs" />
     <Compile Include="Machines\Objects\TapperMachine.cs" />

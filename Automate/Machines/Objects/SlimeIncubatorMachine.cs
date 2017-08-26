@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                 new Recipe(
                     input: 413,
                     inputCount: 1,
-                    output: input => new SObject(413,1,false,-1,0),
+                    output: input => new SObject(413,1),
                     minutes: minutesUntilReady
                 ),
 
@@ -36,7 +36,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                 new Recipe(
                     input: 437,
                     inputCount: 1,
-                    output: input => new SObject(437,1,false,-1,0),
+                    output: input => new SObject(437,1),
                     minutes: minutesUntilReady
                 ),
 

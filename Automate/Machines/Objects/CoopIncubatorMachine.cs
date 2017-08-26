@@ -3,7 +3,7 @@ using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
 using SObject = StardewValley.Object;
 
-namespace Pathoschild.Stardew.Automate.Machines.Tiles
+namespace Pathoschild.Stardew.Automate.Machines.Objects
 {
     /// <summary>A coop incubator that accepts eggs and spawns chickens.</summary>
     internal class CoopIncubatorMachine : GenericMachine
@@ -37,7 +37,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Tiles
                 new Recipe(
                     input: 107,
                     inputCount: 1,
-                    output: item => new SObject(item.parentSheetIndex, 1),
+                    output: item => new SObject(107, 1),
                     minutes: minutesUntilReady
                 )
             };
