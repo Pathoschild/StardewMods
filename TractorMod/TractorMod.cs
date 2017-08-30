@@ -139,7 +139,7 @@ namespace Pathoschild.Stardew.TractorMod
             if (Game1.activeClickableMenu is CarpenterMenu || Game1.activeClickableMenu?.GetType().FullName == this.PelicanFiberMenuFullName)
                 this.ProcessNewConstruction();
             if (Context.IsPlayerFree)
-                this.Tractor.Update(this.Farm);
+                this.Tractor?.Update();
         }
 
         /****
@@ -178,7 +178,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="tileY">The tile Y position at which to spawn it.</param>
         private TractorManager SpawnTractor(int tileX, int tileY)
         {
-            TractorManager tractor = new TractorManager(tileX, tileY, this.Config, this.Helper.Content, this.Helper.Translation);
+            TractorManager tractor = new TractorManager(tileX, tileY, this.Config, this.Helper.Content, this.Helper.Translation, this.Helper.Reflection);
             tractor.SetLocation(this.Farm, new Vector2(tileX, tileY));
             tractor.SetPixelPosition(new Vector2(tractor.Current.Position.X + 20, tractor.Current.Position.Y));
             return tractor;

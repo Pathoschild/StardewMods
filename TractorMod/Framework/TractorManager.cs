@@ -5,9 +5,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
+using xTile.Dimensions;
 using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
@@ -27,6 +29,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>Provides translations from the mod's i18n folder.</summary>
         private readonly ITranslationHelper Translation;
+
+        /// <summary>Simplifies access to private game code.</summary>
+        private readonly IReflectionHelper Reflection;
 
         /// <summary>The mod settings.</summary>
         private readonly ModConfig Config;
@@ -61,7 +66,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="config">The mod settings.</param>
         /// <param name="content">The content helper with which to load the tractor sprite.</param>
         /// <param name="translation">Provides translations from the mod's i18n folder.</param>
-        public TractorManager(int tileX, int tileY, ModConfig config, IContentHelper content, ITranslationHelper translation)
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        public TractorManager(int tileX, int tileY, ModConfig config, IContentHelper content, ITranslationHelper translation, IReflectionHelper reflection)
         {
             AnimatedSprite sprite = new AnimatedSprite(content.Load<Texture2D>(@"assets\tractor.png"), 0, 32, 32)
             {
@@ -73,6 +79,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             this.Mount = new TractorMount(typeof(TractorMount).Name, tileX, tileY, sprite, () => this.SetMounted(false));
             this.Config = config;
             this.Translation = translation;
+            this.Reflection = reflection;
         }
 
         /// <summary>Move the tractor to the given location.</summary>
@@ -108,8 +115,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         }
 
         /// <summary>Update tractor effects and actions in the game.</summary>
-        /// <param name="farm">The player's farm instance (not necessarily the current location).</param>
-        public void Update(Farm farm)
+        public void Update()
         {
             if (!this.IsRiding || Game1.activeClickableMenu != null)
                 return; // tractor isn't enabled
@@ -134,7 +140,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             Item item = Game1.player.CurrentItem;
             Vector2[] grid = this.GetTileGrid(Game1.player.getTileLocation(), this.Config.Distance).ToArray();
             if (tool is MeleeWeapon && tool.name.ToLower().Contains("scythe"))
-                this.HarvestTiles(farm, grid);
+                this.HarvestTiles(grid);
             else if (tool != null)
                 this.ApplyTool(tool, grid);
             else if (item != null)
@@ -197,119 +203,54 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         }
 
         /// <summary>Harvest the affected tiles.</summary>
-        /// <param name="farm">The player's farm instance (not necessarily the current location).</param>
         /// <param name="tiles">The tiles to harvest.</param>
-        private void HarvestTiles(Farm farm, Vector2[] tiles)
+        private void HarvestTiles(Vector2[] tiles)
         {
             if (!this.Config.ScytheHarvests)
                 return;
 
+            // harvest each tile
             foreach (Vector2 tile in tiles)
             {
-                // get feature/object on tile
-                object target;
+                if (Game1.currentLocation.terrainFeatures.TryGetValue(tile, out TerrainFeature feature))
                 {
-                    if (Game1.currentLocation.terrainFeatures.TryGetValue(tile, out TerrainFeature feature))
-                        target = feature;
-                    else if (Game1.currentLocation.objects.TryGetValue(tile, out SObject obj))
-                        target = obj;
-                    else
-                        continue;
-                }
-
-                // harvest target
-                switch (target)
-                {
-                    // crop or spring onion
-                    case HoeDirt dirt when dirt.crop != null:
-                        {
-                            // make item scythe-harvestable
-                            int oldHarvestMethod = dirt.crop.harvestMethod;
-                            dirt.crop.harvestMethod = Crop.sickleHarvest;
-
-                            // harvest spring onion
-                            if (dirt.crop.whichForageCrop == Crop.forageCrop_springOnion)
+                    switch (feature)
+                    {
+                        // crop or spring onion
+                        case HoeDirt dirt when dirt.crop != null:
                             {
-                                SObject onion = new SObject(399, 1);
-                                bool gatherer = Game1.player.professions.Contains(SFarmer.gatherer);
-                                bool botanist = Game1.player.professions.Contains(SFarmer.botanist);
-                                if (botanist)
-                                    onion.quality = SObject.bestQuality;
-                                if (gatherer)
+                                if (dirt.crop.harvestMethod == Crop.sickleHarvest)
+                                    dirt.performToolAction(Game1.player.CurrentTool, 0, tile, Game1.currentLocation);
+                                else
                                 {
-                                    if (new Random().Next(0, 10) < 2)
-                                        onion.stack *= 2;
-                                }
-                                for (int i = 0; i < onion.stack; i++)
-                                    Game1.currentLocation.debris.Add(new Debris(onion, new Vector2(tile.X * Game1.tileSize, tile.Y * Game1.tileSize)));
-
-                                dirt.destroyCrop(tile);
-                                continue;
-                            }
-
-                            // harvest crop
-                            if (dirt.crop.harvest((int)tile.X, (int)tile.Y, dirt))
-                            {
-                                if (dirt.crop.indexOfHarvest == 421) // sun flower
-                                {
-                                    int seedDrop = new Random().Next(1, 4);
-                                    for (int i = 0; i < seedDrop; i++)
-                                        Game1.createObjectDebris(431, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); // spawn sunflower seeds
+                                    this.TemporarilyCheckAction(tile);
                                 }
 
-                                if (dirt.crop.regrowAfterHarvest == -1)
-                                    dirt.destroyCrop(tile);
+                                break;
                             }
 
-                            // restore item harvest type
-                            if (dirt.crop != null)
-                                dirt.crop.harvestMethod = oldHarvestMethod;
+                        // fruit tree
+                        case FruitTree tree:
+                            tree.performUseAction(tile);
                             break;
-                        }
 
-                    // fruit tree
-                    case FruitTree tree:
-                        tree.shake(tile, false);
-                        break;
-
-                    // grass
-                    case Grass _:
-                        Game1.currentLocation.terrainFeatures.Remove(tile);
-                        farm.tryToAddHay(2);
-                        break;
-
-                    // spawned object
-                    case SObject obj when obj.isSpawnedObject:
-                        // get output
-                        if (obj.isForage(Game1.currentLocation))
-                        {
-                            bool gatherer = Game1.player.professions.Contains(SFarmer.gatherer);
-                            bool botanist = Game1.player.professions.Contains(SFarmer.botanist);
-                            if (botanist)
-                                obj.quality = SObject.bestQuality;
-                            if (gatherer)
-                            {
-                                int num = new Random().Next(0, 100);
-                                if (num < 20)
-                                    obj.stack *= 2;
-                            }
-                        }
-
-                        // spawn output
-                        for (int i = 0; i < obj.stack; i++)
-                            Game1.currentLocation.debris.Add(new Debris(obj, new Vector2(tile.X * Game1.tileSize, tile.Y * Game1.tileSize)));
-
-                        // remove harvested object
+                        // grass
+                        case Grass _:
+                            Game1.currentLocation.terrainFeatures.Remove(tile);
+                            if (Game1.getFarm().tryToAddHay(1) == 0) // returns number left
+                                Game1.addHUDMessage(new HUDMessage("Hay", HUDMessage.achievement_type, true, Color.LightGoldenrodYellow, new SObject(178, 1)));
+                            break;
+                    }
+                }
+                else if (Game1.currentLocation.objects.TryGetValue(tile, out SObject obj))
+                {
+                    if (obj.isSpawnedObject)
+                        this.TemporarilyCheckAction(tile);
+                    else if (obj.name.ToLower().Contains("weed"))
+                    {
+                        obj.performToolAction(Game1.player.CurrentTool);
                         Game1.currentLocation.removeObject(tile, false);
-                        break;
-
-                    // weed
-                    case SObject obj when obj.name.ToLower().Contains("weed"):
-                        Game1.createObjectDebris(771, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); // fiber
-                        if (new Random().Next(0, 10) < 1)
-                            Game1.createObjectDebris(770, (int)tile.X, (int)tile.Y, -1, 0, 1f, Game1.currentLocation); // 10% mixed seeds
-                        Game1.currentLocation.removeObject(tile, false);
-                        break;
+                    }
                 }
             }
         }
@@ -344,58 +285,92 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 }
             }
 
-            // track things that shouldn't decrease
-            WateringCan wateringCan = tool as WateringCan;
-            int waterInCan = wateringCan?.WaterLeft ?? 0;
-            float stamina = Game1.player.stamina;
-            int toolUpgrade = tool.upgradeLevel;
-            Vector2 mountPosition = this.Current.position;
-
             // use tools
-            this.Current.position = new Vector2(0, 0);
-            if (wateringCan != null)
-                wateringCan.WaterLeft = wateringCan.waterCanMax;
-            tool.upgradeLevel = Tool.iridium;
-            Game1.player.toolPower = 0;
-            foreach (Vector2 tile in tiles)
+            this.TemporarilyFakeInteraction(() =>
             {
-                Game1.currentLocation.objects.TryGetValue(tile, out SObject tileObj);
-                Game1.currentLocation.terrainFeatures.TryGetValue(tile, out TerrainFeature tileFeature);
-
-                // prevent tools from destroying placed objects
-                if (tileObj != null && tileObj.Name != "Stone")
+                foreach (Vector2 tile in tiles)
                 {
-                    if (tool is Hoe || tool is Pickaxe)
-                        continue;
+                    Game1.currentLocation.objects.TryGetValue(tile, out SObject tileObj);
+                    Game1.currentLocation.terrainFeatures.TryGetValue(tile, out TerrainFeature tileFeature);
+
+                    // prevent tools from destroying placed objects
+                    if (tileObj != null && tileObj.Name != "Stone")
+                    {
+                        if (tool is Hoe || tool is Pickaxe)
+                            continue;
+                    }
+
+                    // prevent pickaxe from destroying
+                    if (tool is Pickaxe)
+                    {
+                        // never destroy live crops
+                        if (tileFeature is HoeDirt dirt && dirt.crop != null && !dirt.crop.dead)
+                            continue;
+
+                        // don't destroy other things unless configured
+                        if (!this.Config.PickaxeBreaksFlooring && tileFeature is Flooring)
+                            continue;
+                        if (!this.Config.PickaxeClearsDirt && tileFeature is HoeDirt)
+                            continue;
+                        if (!this.Config.PickaxeBreaksRocks && tileObj?.Name == "Stone")
+                            continue;
+                    }
+
+                    // use tool on center of tile
+                    Vector2 useAt = (tile * Game1.tileSize) + new Vector2(Game1.tileSize / 2f);
+                    tool.DoFunction(Game1.currentLocation, (int)useAt.X, (int)useAt.Y, 0, Game1.player);
                 }
+            });
+        }
 
-                // prevent pickaxe from destroying
-                if (tool is Pickaxe)
-                {
-                    // never destroy live crops
-                    if (tileFeature is HoeDirt dirt && dirt.crop != null && !dirt.crop.dead)
-                        continue;
+        /// <summary>Temporarily dismount the player, check for an action at the given tile, then undo any changes to the player state.</summary>
+        /// <param name="tile">The tile coordinate to check.</param>
+        private void TemporarilyCheckAction(Vector2 tile)
+        {
+            this.TemporarilyFakeInteraction(() => Game1.currentLocation.checkAction(new Location((int)tile.X, (int)tile.Y), Game1.viewport, Game1.player));
+        }
 
-                    // don't destroy other things unless configured
-                    if (!this.Config.PickaxeBreaksFlooring && tileFeature is Flooring)
-                        continue;
-                    if (!this.Config.PickaxeClearsDirt && tileFeature is HoeDirt)
-                        continue;
-                    if (!this.Config.PickaxeBreaksRocks && tileObj?.Name == "Stone")
-                        continue;
-                }
+        /// <summary>Temporarily dismount and set up the player to interact with a tile, then return it to the previous state afterwards.</summary>
+        /// <param name="action">The action to perform.</param>
+        private void TemporarilyFakeInteraction(Action action)
+        {
+            // get references
+            SFarmer player = Game1.player;
+            IPrivateField<Horse> mountField = this.Reflection.GetPrivateField<Horse>(Game1.player, "mount");
 
-                // use tool on center of tile
-                Vector2 useAt = (tile * Game1.tileSize) + new Vector2(Game1.tileSize / 2f);
-                tool.DoFunction(Game1.currentLocation, (int)useAt.X, (int)useAt.Y, 0, Game1.player);
+            // save current state
+            Horse mount = mountField.GetValue();
+            Vector2 mountPosition = this.Current.position;
+            WateringCan wateringCan = player.CurrentTool as WateringCan;
+            int waterInCan = wateringCan?.WaterLeft ?? 0;
+            float stamina = player.stamina;
+            Vector2 position = player.position;
+            int currentToolIndex = player.CurrentToolIndex;
+            bool canMove = Game1.player.canMove; // fix player frozen due to animations when performing an action
+
+            // move mount out of the way
+            mountField.SetValue(null);
+            this.Current.position = new Vector2(-5, -5);
+
+            // perform action
+            try
+            {
+                action();
             }
+            finally
+            {
+                // move mount back
+                this.Current.position = mountPosition;
+                mountField.SetValue(mount);
 
-            // reset tools
-            this.Current.position = mountPosition;
-            if (wateringCan != null)
-                wateringCan.WaterLeft = waterInCan;
-            tool.upgradeLevel = toolUpgrade;
-            Game1.player.stamina = stamina;
+                // restore previous state
+                if (wateringCan != null)
+                    wateringCan.WaterLeft = waterInCan;
+                player.stamina = stamina;
+                player.position = position;
+                player.CurrentToolIndex = currentToolIndex;
+                Game1.player.canMove = canMove;
+            }
         }
 
         /// <summary>Get a grid of tiles.</summary>
