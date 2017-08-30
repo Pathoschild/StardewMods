@@ -261,10 +261,7 @@ namespace Pathoschild.Stardew.TractorMod
 
                 // spawn tractor
                 if (this.Tractor == null && !garage.isUnderConstruction())
-                {
                     this.Tractor = this.SpawnTractor(garage.tileX + 1, garage.tileY + 1);
-                    break;
-                }
             }
         }
 
