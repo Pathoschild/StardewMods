@@ -4,7 +4,7 @@
 * Added Tractor buff to pull nearby objects towards you.
 * Added scythe support for clearing dead crops.
 * Added hoe support for digging up artifact spots.
-* Added Russian translations by Ereb.
+* Added Chinese and Russian translations by yuwenlan and Ereb respectively.
 * Added warning when translation files are missing.
 * Fixed pickaxe destroying live crops, paths, and flooring.
 * Fixed game logic treating tractor as the player's horse in some cases where it shouldn't.

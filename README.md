@@ -54,7 +54,7 @@ use the right translations. Three of the mods have translatable text:
 
 &nbsp;     | Chests Anywhere | Debug Mode | Lookup Anything | Tractor Mod | thanks to
 ---------- | :-------------- | :--------- | :-------------- | :---------- | :--------
-Chinese    | ✓ [zh.json](ChestsAnywhere/i18n/zh.json) | ✓ [zh.json](DebugMode/i18n/zh.json) | ✓ [zh.json](LookupAnything/i18n/zh.json) | ❑ | yuwenlan
+Chinese    | ✓ [zh.json](ChestsAnywhere/i18n/zh.json) | ✓ [zh.json](DebugMode/i18n/zh.json) | ✓ [zh.json](LookupAnything/i18n/zh.json) | ✓ [zh.json](TractorMod/i18n/zh.json) | yuwenlan
 German     | ✓ [de.json](ChestsAnywhere/i18n/de.json) | ✓ [de.json](DebugMode/i18n/de.json) | ✓ [de.json](LookupAnything/i18n/de.json) | ✓ [de.json](TractorMod/i18n/de.json) | Sasara
 Japanese   | ❑ | ❑ | ❑ | ❑ |
 Portuguese | ✓ [pt.json](ChestsAnywhere/i18n/pt.json) | ✓ [pt.json](DebugMode/i18n/pt.json) | ✓ [pt.json](LookupAnything/i18n/pt.json) | ❑ | Fabilows
