@@ -62,6 +62,7 @@
     <Compile Include="Machines\Objects\CaskMachine.cs" />
     <Compile Include="Machines\Objects\CharcoalKilnMachine.cs" />
     <Compile Include="Machines\Objects\CheesePressMachine.cs" />
+    <Compile Include="Machines\Objects\CoopIncubatorMachine.cs" />
     <Compile Include="Machines\Objects\CrabPotMachine.cs" />
     <Compile Include="Machines\Objects\CrystalariumMachine.cs" />
     <Compile Include="Machines\Objects\FurnaceMachine.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Machines\Objects\RecyclingMachine.cs" />
     <Compile Include="Machines\Objects\SeedMakerMachine.cs" />
     <Compile Include="Machines\Objects\SlimeEggPressMachine.cs" />
+    <Compile Include="Machines\Objects\SlimeIncubatorMachine.cs" />
     <Compile Include="Machines\Objects\SodaMachine.cs" />
     <Compile Include="Machines\Objects\StatueOfEndlessFortuneMachine.cs" />
     <Compile Include="Machines\Objects\StatueOfPerfectionMachine.cs" />
