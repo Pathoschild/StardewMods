@@ -9,6 +9,7 @@
 * Fixed harvesting crops, breaking rocks, and foraging not providing XP.
 * Fixed harvesting hay not showing hay-gained message.
 * Fixed harvesting hay giving you double hay.
+* Fixed scythe not harvesting wild seed crops.
 * Fixed only the first garage being restored when you load the save.
 
 ## 4.0

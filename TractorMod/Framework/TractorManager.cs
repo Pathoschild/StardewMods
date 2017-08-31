@@ -215,6 +215,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             GameLocation location = Game1.currentLocation;
             foreach (Vector2 tile in tiles)
             {
+                // check terrain feature
                 if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature feature))
                 {
                     switch (feature)
@@ -244,7 +245,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                             break;
                     }
                 }
-                else if (location.objects.TryGetValue(tile, out SObject obj))
+
+                // check object
+                if (location.objects.TryGetValue(tile, out SObject obj))
                 {
                     if (obj.isSpawnedObject)
                         this.TemporarilyCheckAction(tile);
