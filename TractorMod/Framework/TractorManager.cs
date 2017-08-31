@@ -253,7 +253,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                         this.TemporarilyCheckAction(tile);
                     else if (obj.name.ToLower().Contains("weed"))
                     {
-                        obj.performToolAction(tool);
+                        this.UseToolOnTile(tool, tile); // doesn't do anything to the weed, but sets up for the tool action (e.g. sets last user)
+                        obj.performToolAction(tool);    // triggers weed drops, but doesn't remove weed
                         location.removeObject(tile, false);
                     }
                 }
