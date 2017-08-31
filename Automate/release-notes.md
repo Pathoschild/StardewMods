@@ -4,6 +4,7 @@
 ## 1.7
 * Added support for egg incubators and slime incubators.
 * Fixed machines inside buildings not being automated until you visit the building.
+* Fixed fruit tree automation never producing better than silver quality.
 
 ## 1.6
 * Rewrote machines so they process items in the order they're found.
