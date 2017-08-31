@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
@@ -142,6 +142,8 @@ namespace Pathoschild.Stardew.Automate
                 return new FeedHopperMachine();
             if (obj.Name == "Furnace")
                 return new FurnaceMachine(obj, tile);
+            if (obj.name == "Incubator")
+                return new CoopIncubatorMachine(obj);
             if (obj.Name == "Keg")
                 return new KegMachine(obj);
             if (obj.name == "Lightning Rod")
@@ -162,6 +164,8 @@ namespace Pathoschild.Stardew.Automate
                 return new SeedMakerMachine(obj);
             if (obj.name == "Slime Egg-Press")
                 return new SlimeEggPressMachine(obj);
+            if (obj.name == "Slime Incubator")
+                return new SlimeIncubatorMachine(obj);
             if (obj.name == "Soda Machine")
                 return new SodaMachine(obj);
             if (obj.name == "Statue Of Endless Fortune")
@@ -172,11 +176,6 @@ namespace Pathoschild.Stardew.Automate
                 return new TapperMachine(obj, location, tile);
             if (obj.name == "Worm Bin")
                 return new WormBinMachine(obj);
-            if (obj.name == "Slime Incubator")
-                return new SlimeIncubatorMachine(obj);
-            if (obj.name == "Incubator")
-                return new CoopIncubatorMachine(obj);
-
             return null;
         }
 

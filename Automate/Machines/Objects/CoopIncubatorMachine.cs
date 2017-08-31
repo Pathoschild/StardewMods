@@ -1,4 +1,3 @@
-﻿using System;
 using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
 using SObject = StardewValley.Object;
@@ -14,23 +13,24 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         /// <summary>The recipes to process.</summary>
         private readonly Recipe[] Recipes;
 
+
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
-        public CoopIncubatorMachine(SObject machine) : base(machine)
+        public CoopIncubatorMachine(SObject machine)
+            : base(machine)
         {
             int minutesUntilReady = Game1.player.professions.Contains(2) ? 9000 : 18000;
-
-            this.Recipes = new Recipe[]
+            this.Recipes = new[]
             {
                 // egg => chicken
                 new Recipe(
                     input: -5,
                     inputCount: 1,
                     output: item => new SObject(item.parentSheetIndex, 1),
-                    minutes: minutesUntilReady/2
+                    minutes: minutesUntilReady / 2
                 ),
 
                 // dinosaur egg => dinosaur
@@ -41,17 +41,15 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
                     minutes: minutesUntilReady
                 )
             };
-
         }
 
         /// <summary>Get the machine's processing state.</summary>
         /// <remarks>The coop incubator never produces an object output so it is never done.</remarks>
         public override MachineState GetState()
         {
-            if (this.Machine.heldObject == null)
-                return MachineState.Empty;
-
-            return MachineState.Processing;
+            return this.Machine.heldObject != null
+                ? MachineState.Processing
+                : MachineState.Empty;
         }
 
         /// <summary>Get the output item.</summary>
@@ -66,15 +64,15 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool Pull(IPipe[] pipes)
         {
-            bool processing = this.GenericPullRecipe(pipes, this.Recipes);
-
-            if (processing)
+            bool started = this.GenericPullRecipe(pipes, this.Recipes);
+            if (started)
             {
-                int eggIndex = this.Machine.heldObject.parentSheetIndex;
-                this.Machine.parentSheetIndex = eggIndex == 180 || eggIndex == 182 || eggIndex == 305 ? this.Machine.parentSheetIndex + 2 : this.Machine.parentSheetIndex + 1;
+                int eggID = this.Machine.heldObject.parentSheetIndex;
+                this.Machine.parentSheetIndex = eggID == 180 || eggID == 182 || eggID == 305
+                    ? this.Machine.parentSheetIndex + 2
+                    : this.Machine.parentSheetIndex + 1;
             }
-
-            return processing;
+            return started;
         }
     }
 }

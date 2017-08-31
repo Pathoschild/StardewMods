@@ -1,4 +1,4 @@
-﻿using Pathoschild.Stardew.Automate.Framework;
+using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
 using SObject = StardewValley.Object;
 
@@ -13,17 +13,17 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         /// <summary>The recipes to process.</summary>
         private readonly Recipe[] Recipes;
 
+
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
-        public SlimeIncubatorMachine(SObject machine) : base(machine)
+        public SlimeIncubatorMachine(SObject machine)
+            : base(machine)
         {
             int minutesUntilReady = Game1.player.professions.Contains(2) ? 2000 : 4000;
-
-
-            this.Recipes = new Recipe[]{
+            this.Recipes = new[] {
                 // blue slime egg => object with parentSheetIndex of blue slime egg
                 new Recipe(
                     input: 413,
@@ -62,10 +62,9 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         /// <remarks>The slime incubator does not produce an output object, so it is never done.</remarks>
         public override MachineState GetState()
         {
-            if (this.Machine.heldObject == null)
-                return MachineState.Empty;
-
-            return MachineState.Processing;
+            return this.Machine.heldObject != null
+                ? MachineState.Processing
+                : MachineState.Empty;
         }
 
         /// <summary>Get the output item.</summary>
@@ -80,10 +79,10 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool Pull(IPipe[] pipes)
         {
-            bool result = this.GenericPullRecipe(pipes, this.Recipes);
-            if (result)
+            bool started = this.GenericPullRecipe(pipes, this.Recipes);
+            if (started)
                 this.Machine.parentSheetIndex = 157;
-            return result;
+            return started;
         }
     }
 }

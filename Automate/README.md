@@ -29,6 +29,7 @@ pull ingredients to process out of them. This can be used to automate...
 * [hay hoppers](http://stardewvalleywiki.com/Hay_Hopper);
 * [Junimo huts](http://stardewvalleywiki.com/Junimo_Hut);
 * [garbage cans](http://stardewvalleywiki.com/Garbage_Can);
+* [incubators (for eggs)](https://stardewvalleywiki.com/Incubator);
 * [kegs](http://stardewvalleywiki.com/Keg);
 * [lightning rods](http://stardewvalleywiki.com/Lightning_Rod);
 * [looms](http://stardewvalleywiki.com/Loom);
@@ -42,6 +43,7 @@ pull ingredients to process out of them. This can be used to automate...
 * shipping bin;
 * [silos](http://stardewvalleywiki.com/Silo);
 * [slime egg-presses](http://stardewvalleywiki.com/Slime_Egg);
+* [slime incubators](https://stardewvalleywiki.com/Slime_Incubator);
 * [tappers](http://stardewvalleywiki.com/Tapper);
 * and [worm bins](http://stardewvalleywiki.com/Worm_Bin).
 
