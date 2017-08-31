@@ -1,6 +1,9 @@
-﻿[← back to readme](README.md)
+[← back to readme](README.md)
 
 # Release notes
+## 1.16
+* NPC gift tastes now list in-inventory and owned items first.
+
 ## 1.15.1
 * Added Russian translations. (Thanks to SteaNN!)
 * Fixed missing translation in child 'age' field.
