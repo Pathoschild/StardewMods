@@ -299,7 +299,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     Game1.currentLocation.terrainFeatures.TryGetValue(tile, out TerrainFeature tileFeature);
 
                     // prevent tools from destroying placed objects
-                    if (tileObj != null && tileObj.Name != "Stone")
+                    if (tileObj != null && tileObj.Name != "Stone" && tileObj.Name != "Artifact Spot")
                     {
                         if (tool is Hoe || tool is Pickaxe)
                             continue;
