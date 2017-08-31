@@ -124,7 +124,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             Buff speedBuff = Game1.buffsDisplay.otherBuffs.FirstOrDefault(p => p.which == this.BuffUniqueID);
             if (speedBuff == null)
             {
-                speedBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, 0, this.Config.TractorSpeed, 0, 0, 1, "Tractor Power", this.Translation.Get("buff.name")) { which = this.BuffUniqueID };
+                speedBuff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, this.Config.MagneticRadius, this.Config.TractorSpeed, 0, 0, 1, "Tractor Power", this.Translation.Get("buff.name")) { which = this.BuffUniqueID };
                 Game1.buffsDisplay.addOtherBuff(speedBuff);
             }
             speedBuff.millisecondsDuration = 100;

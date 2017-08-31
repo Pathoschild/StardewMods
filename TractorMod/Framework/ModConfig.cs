@@ -38,6 +38,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The speed modifier when riding the tractor.</summary>
         public int TractorSpeed { get; set; } = -2;
 
+        /// <summary>The magnetic radius when riding the tractor.</summary>
+        public int MagneticRadius { get; set; } = 384;
+
         /// <summary>Whether you need to provide building resources to buy the garage.</summary>
         public bool BuildUsesResources { get; set; } = true;
 
