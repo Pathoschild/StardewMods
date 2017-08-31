@@ -50,6 +50,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The tractor garages which started construction today.</summary>
         private readonly List<Building> GaragesStartedToday = new List<Building>();
 
+        /// <summary>Whether the player has any tractor garages.</summary>
+        private bool HasAnyGarages;
+
 
         /*********
         ** Public methods
@@ -91,6 +94,7 @@ namespace Pathoschild.Stardew.TractorMod
             this.GaragesStartedToday.Clear();
             this.Farm = Game1.getFarm();
             this.RestoreCustomData();
+            this.HasAnyGarages = this.GetGarages(this.Farm).Any();
         }
 
         /// <summary>The event called before the game starts saving.</summary>
@@ -107,17 +111,20 @@ namespace Pathoschild.Stardew.TractorMod
         private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
             // add blueprint to carpenter menu
-            if (e.NewMenu is CarpenterMenu)
+            if (Context.IsWorldReady && !this.HasAnyGarages)
             {
-                this.Helper.Reflection
-                    .GetPrivateValue<List<BluePrint>>(e.NewMenu, "blueprints")
-                    .Add(this.GetBlueprint());
-            }
-            else if (e.NewMenu.GetType().FullName == this.PelicanFiberMenuFullName)
-            {
-                this.Helper.Reflection
-                    .GetPrivateValue<List<BluePrint>>(e.NewMenu, "Blueprints")
-                    .Add(this.GetBlueprint());
+                if (e.NewMenu is CarpenterMenu)
+                {
+                    this.Helper.Reflection
+                        .GetPrivateValue<List<BluePrint>>(e.NewMenu, "blueprints")
+                        .Add(this.GetBlueprint());
+                }
+                else if (e.NewMenu.GetType().FullName == this.PelicanFiberMenuFullName)
+                {
+                    this.Helper.Reflection
+                        .GetPrivateValue<List<BluePrint>>(e.NewMenu, "Blueprints")
+                        .Add(this.GetBlueprint());
+                }
             }
         }
 
@@ -150,6 +157,8 @@ namespace Pathoschild.Stardew.TractorMod
         {
             foreach (Building garage in this.GetGarages(this.Farm).Keys)
             {
+                this.HasAnyGarages = true;
+
                 // skip if not built today
                 if (garage is TractorGarage)
                     continue;

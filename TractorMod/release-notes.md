@@ -12,6 +12,7 @@
 * Fixed harvesting hay giving you double hay.
 * Fixed scythe not harvesting wild seed crops.
 * Fixed only the first garage being restored when you load the save.
+* Fixed Robin letting you build multiple tractor garages.
 
 ## 4.0
 This is a rewrite of the original TractorMod by PhthaloBlue (@lambui).
