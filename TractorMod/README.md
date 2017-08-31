@@ -25,6 +25,17 @@ Buy the tractor garage from Robin:
 Now just get on the tractor, choose a tool or seeds or fertilizer, and drive:
 > ![](screenshots/tractor.png)
 
+You can do these by default:
+
+hold item  | effect
+---------- | ------
+fertiliser | fertilise tilled dirt.
+hoe        | till dirt.
+pickaxe    | break rocks; clear tilled dirt; clear dead crops.
+seeds      | plant seeds in tilled dirt.
+scythe     | harvest crops, fruit trees, or forage; clear dead crops.
+watering can | water crops.
+
 ## Configure
 The mod creates a `config.json` file the first time you run it. You can open the file in a text
 editor to configure the mod.

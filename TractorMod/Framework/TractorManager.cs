@@ -210,22 +210,24 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 return;
 
             // harvest each tile
+            SFarmer player = Game1.player;
+            Tool tool = player.CurrentTool;
+            GameLocation location = Game1.currentLocation;
             foreach (Vector2 tile in tiles)
             {
-                if (Game1.currentLocation.terrainFeatures.TryGetValue(tile, out TerrainFeature feature))
+                if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature feature))
                 {
                     switch (feature)
                     {
                         // crop or spring onion
                         case HoeDirt dirt when dirt.crop != null:
                             {
-                                if (dirt.crop.harvestMethod == Crop.sickleHarvest)
-                                    dirt.performToolAction(Game1.player.CurrentTool, 0, tile, Game1.currentLocation);
+                                if (dirt.crop.dead)
+                                    this.TemporarilyFakeInteraction(() => this.UseToolOnTile(new Pickaxe(), tile));
+                                else if (dirt.crop.harvestMethod == Crop.sickleHarvest)
+                                    dirt.performToolAction(tool, 0, tile, location);
                                 else
-                                {
                                     this.TemporarilyCheckAction(tile);
-                                }
-
                                 break;
                             }
 
@@ -236,20 +238,20 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
                         // grass
                         case Grass _:
-                            Game1.currentLocation.terrainFeatures.Remove(tile);
+                            location.terrainFeatures.Remove(tile);
                             if (Game1.getFarm().tryToAddHay(1) == 0) // returns number left
                                 Game1.addHUDMessage(new HUDMessage("Hay", HUDMessage.achievement_type, true, Color.LightGoldenrodYellow, new SObject(178, 1)));
                             break;
                     }
                 }
-                else if (Game1.currentLocation.objects.TryGetValue(tile, out SObject obj))
+                else if (location.objects.TryGetValue(tile, out SObject obj))
                 {
                     if (obj.isSpawnedObject)
                         this.TemporarilyCheckAction(tile);
                     else if (obj.name.ToLower().Contains("weed"))
                     {
-                        obj.performToolAction(Game1.player.CurrentTool);
-                        Game1.currentLocation.removeObject(tile, false);
+                        obj.performToolAction(tool);
+                        location.removeObject(tile, false);
                     }
                 }
             }
@@ -317,10 +319,19 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     }
 
                     // use tool on center of tile
-                    Vector2 useAt = (tile * Game1.tileSize) + new Vector2(Game1.tileSize / 2f);
-                    tool.DoFunction(Game1.currentLocation, (int)useAt.X, (int)useAt.Y, 0, Game1.player);
+                    this.UseToolOnTile(tool, tile);
                 }
             });
+        }
+
+        /// <summary>Use a tool on a tile.</summary>
+        /// <param name="tool">The tool to use.</param>
+        /// <param name="tile">The tile to affect.</param>
+        private void UseToolOnTile(Tool tool, Vector2 tile)
+        {
+            // use tool on center of tile
+            Vector2 useAt = (tile * Game1.tileSize) + new Vector2(Game1.tileSize / 2f);
+            tool.DoFunction(Game1.currentLocation, (int)useAt.X, (int)useAt.Y, 0, Game1.player);
         }
 
         /// <summary>Temporarily dismount the player, check for an action at the given tile, then undo any changes to the player state.</summary>

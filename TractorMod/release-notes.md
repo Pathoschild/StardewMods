@@ -1,12 +1,12 @@
 # Release notes
 ## 4.1
 * Added compatibility with CJB Cheats Menu (instant build option now works correctly), Pelican Fiber (garage now appears in its shops), and Horse Whistle (no longer sometimes summons the tractor).
-* Fixed pickaxe destroying live crops.
-* Fixed pickaxe destroying paths/flooring (unless enabled).
+* Scythe now clears dead crops.
+* Fixed pickaxe destroying live crops, paths, and flooring.
 * Fixed game logic treating tractor as the player's horse in some cases where it shouldn't.
 * Fixed issue where only the first garage was restored when you load the save.
 * Fixed harvesting crops, breaking rocks, and foraging not providing XP.
-* Fixed harvesting hay not showing hay toaster message.
+* Fixed harvesting hay not showing hay-gained message.
 * Fixed harvesting hay giving you double hay.
 
 ## 4.0
