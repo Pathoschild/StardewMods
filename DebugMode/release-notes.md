@@ -1,6 +1,9 @@
-﻿[← back to readme](README.md)
+[← back to readme](README.md)
 
 # Release notes
+## 1.6.2 (upcoming)
+* Added warning when translation files are missing.
+
 ## 1.6.1
 * Added Portuguese and Spanish translations. (Thanks to Fabilows and ThomasGabrielDelavault respectively!)
 

@@ -1,8 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.16
+## 1.16 (upcoming)
 * NPC gift tastes now list in-inventory and owned items first.
+* Added warning when translation files are missing.
 
 ## 1.15.1
 * Added Russian translations. (Thanks to SteaNN!)

@@ -1,10 +1,11 @@
 # Release notes
-## 4.1
+## 4.1 (upcoming)
 * Added compatibility with CJB Cheats Menu (instant build option now works correctly), Pelican Fiber (garage now appears in its shops), and Horse Whistle (no longer sometimes summons the tractor).
 * Added Tractor buff to pull nearby objects towards you.
 * Added scythe support for clearing dead crops.
 * Added hoe support for digging up artifact spots.
 * Added Russian translations by Ereb.
+* Added warning when translation files are missing.
 * Fixed pickaxe destroying live crops, paths, and flooring.
 * Fixed game logic treating tractor as the player's horse in some cases where it shouldn't.
 * Fixed seeds, fertiliser, and speed-gro not working if you don't play in English.

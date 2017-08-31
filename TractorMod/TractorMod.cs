@@ -75,6 +75,10 @@ namespace Pathoschild.Stardew.TractorMod
             // handle player interaction & tractor logic
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+
+            // validate translations
+            if (!helper.Translation.GetTranslations().Any())
+                this.Monitor.Log("The translation files in this mod's i18n folder seem to be missing. The mod will still work, but you'll see 'missing translation' messages. Try reinstalling the mod to fix this.", LogLevel.Warn);
         }
 
 

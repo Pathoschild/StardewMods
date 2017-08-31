@@ -33,7 +33,7 @@ fertiliser | fertilise tilled dirt.
 hoe        | till dirt.
 pickaxe    | break rocks; clear tilled dirt; clear dead crops.
 seeds      | plant seeds in tilled dirt.
-scythe     | harvest crops, fruit trees, or forage; clear dead crops.
+scythe     | harvest crops, fruit trees, or forage; clear weeds and dead crops.
 watering can | water crops.
 
 ## Configure

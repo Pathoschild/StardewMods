@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
@@ -62,6 +62,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
             // hook game events
             SaveEvents.AfterLoad += this.ReceiveAfterLoad;
+
+            // validate translations
+            if (!helper.Translation.GetTranslations().Any())
+                this.Monitor.Log("The translation files in this mod's i18n folder seem to be missing. The mod will still work, but you'll see 'missing translation' messages. Try reinstalling the mod to fix this.", LogLevel.Warn);
         }
 
 
