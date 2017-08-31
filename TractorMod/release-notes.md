@@ -2,6 +2,7 @@
 ## 4.1 (upcoming)
 * Added compatibility with CJB Cheats Menu (instant build option now works correctly), Pelican Fiber (garage now appears in its shops), and Horse Whistle (no longer sometimes summons the tractor).
 * Added Tractor buff to pull nearby objects towards you.
+* Added default axe support (only clears twigs and dead crops by default).
 * Added scythe support for clearing dead crops.
 * Added hoe support for digging up artifact spots.
 * Added Chinese and Russian translations by yuwenlan and Ereb respectively.

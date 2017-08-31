@@ -17,6 +17,15 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Whether the tractor can water tiles when the watering can is selected.</summary>
         public bool WateringCanWaters { get; set; } = true;
 
+        /// <summary>Whether the axe clears branch debris.</summary>
+        public bool AxeCutsBranches { get; set; } = true;
+
+        /// <summary>Whether the axe clears non-fruit trees.</summary>
+        public bool AxeCutsTrees { get; set; } = false;
+
+        /// <summary>Whether the axe clears fruit trees.</summary>
+        public bool AxeCutsFruitTrees { get; set; } = false;
+
         /// <summary>Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.</summary>
         public bool PickaxeClearsDirt { get; set; } = true;
 

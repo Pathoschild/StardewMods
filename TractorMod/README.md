@@ -29,9 +29,10 @@ You can do these by default:
 
 hold item  | effect
 ---------- | ------
+axe        | clear branch debris and dead crops.
 fertiliser | fertilise tilled dirt.
 hoe        | till dirt.
-pickaxe    | break rocks; clear tilled dirt; clear dead crops.
+pickaxe    | break rocks; clear tilled dirt and dead crops.
 seeds      | plant seeds in tilled dirt.
 scythe     | harvest crops, fruit trees, or forage; clear weeds and dead crops.
 watering can | water crops.
@@ -44,6 +45,9 @@ You can configure which tools can be used:
 
 setting | default | effect
 :------ | :------ | :-----
+`AxeCutsBranches` | `true` | Whether the axe clears branch debris.
+`AxeCutsTrees` | `false` | Whether the axe chops down non-fruit trees.
+`AxeCutsFruitTrees` | `false` | Whether the axe chops down fruit trees.
 `ScytheHarvests` | `true` | Whether the tractor can harvest crops, fruit trees, or forage when the scythe is selected.
 `HoeTillsDirt` | `true` | Whether the tractor can hoe dirt tiles when the hoe is selected.
 `WateringCanWaters` | `true` | Whether the tractor can water tiles when the watering can is selected.
@@ -52,7 +56,7 @@ setting | default | effect
 `PickaxeBreaksFlooring` | `false` | Whether the tractor can break flooring and paths when the pickaxe is selected.
 `CustomTools` | _(empty)_ | The custom tools to apply. These must match the exact in-game tool names.
 
-Some general options:
+And some general options:
 
 setting | default | effect
 :------ | :------ | :-----

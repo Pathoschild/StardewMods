@@ -283,7 +283,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
                     case Pickaxe _:
                         if (!this.Config.PickaxeClearsDirt && !this.Config.PickaxeBreaksRocks && !this.Config.PickaxeBreaksFlooring)
-                            return; // nothing to do
+                            return;
+                        break;
+
+                    case Axe _:
+                        if (!this.Config.AxeCutsBranches && !this.Config.AxeCutsTrees && !this.Config.AxeCutsFruitTrees)
+                            return;
                         break;
 
                     default:
@@ -300,9 +305,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     Game1.currentLocation.terrainFeatures.TryGetValue(tile, out TerrainFeature tileFeature);
 
                     // prevent tools from destroying placed objects
-                    if (tileObj != null && tileObj.Name != "Stone" && tileObj.Name != "Artifact Spot")
+                    if (tileObj != null && tileObj.Name != "Stone" && tileObj.Name != "Artifact Spot" && tileObj.Name != "Twig")
                     {
-                        if (tool is Hoe || tool is Pickaxe)
+                        if (tool is Hoe || tool is Pickaxe || tool is Axe)
                             continue;
                     }
 
@@ -319,6 +324,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                         if (!this.Config.PickaxeClearsDirt && tileFeature is HoeDirt)
                             continue;
                         if (!this.Config.PickaxeBreaksRocks && tileObj?.Name == "Stone")
+                            continue;
+                    }
+
+                    // prevent axe from destroying
+                    if(tool is Axe)
+                    {
+                        if (!this.Config.AxeCutsTrees && tileFeature is Tree)
+                            continue;
+                        if (!this.Config.AxeCutsFruitTrees && tileFeature is FruitTree)
+                            continue;
+                        if (!this.Config.AxeCutsBranches && tileObj?.Name == "Twig")
                             continue;
                     }
 
