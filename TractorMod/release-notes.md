@@ -5,10 +5,11 @@
 * Tractor now pulls nearby objects towards you.
 * Fixed pickaxe destroying live crops, paths, and flooring.
 * Fixed game logic treating tractor as the player's horse in some cases where it shouldn't.
-* Fixed issue where only the first garage was restored when you load the save.
+* Fixed seeds, fertiliser, and speed-gro not working if you don't play in English.
 * Fixed harvesting crops, breaking rocks, and foraging not providing XP.
 * Fixed harvesting hay not showing hay-gained message.
 * Fixed harvesting hay giving you double hay.
+* Fixed only the first garage being restored when you load the save.
 
 ## 4.0
 This is a rewrite of the original TractorMod by PhthaloBlue (@lambui).

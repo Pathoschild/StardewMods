@@ -157,8 +157,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         private void ApplyItem(Item item, Vector2[] tiles)
         {
             // validate category
-            string category = item.getCategoryName().ToLower();
-            if (category != "seed" && category != "fertilizer")
+            int category = item.category;
+            if (category != SObject.SeedsCategory && category != SObject.fertilizerCategory)
                 return;
 
             // act on affected tiles
@@ -172,12 +172,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 bool applied = false;
                 switch (category)
                 {
-                    case "seed":
+                    case SObject.SeedsCategory:
                         if (dirt.crop == null && dirt.plant(Game1.player.CurrentItem.parentSheetIndex, (int)tile.X, (int)tile.Y, Game1.player))
                             applied = true;
                         break;
 
-                    case "fertilizer":
+                    case SObject.fertilizerCategory:
                         if (dirt.fertilizer == 0)
                         {
                             dirt.fertilizer = Game1.player.CurrentItem.parentSheetIndex;
@@ -186,7 +186,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                         break;
 
                     default:
-                        throw new NotSupportedException($"Unknown category '{category}'.");
+                        throw new NotSupportedException($"Unknown category {category}.");
                 }
 
                 // deduct from inventory
