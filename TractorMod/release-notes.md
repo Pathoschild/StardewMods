@@ -9,6 +9,7 @@
 * Added warning when translation files are missing.
 * Tractor now only uses tools on tiles where they apply (i.e. no more spamming pickaxe sounds).
 * Fixed pickaxe destroying live crops, paths, and flooring.
+* Fixed pickaxe breaking boulders even if your pickaxe isn't upgraded enough.
 * Fixed game logic treating tractor as the player's horse in some cases where it shouldn't.
 * Fixed seeds, fertiliser, and speed-gro not working if you don't play in English.
 * Fixed harvesting crops, breaking rocks, and foraging not providing XP.

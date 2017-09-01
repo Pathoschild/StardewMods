@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -21,6 +23,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
         /// <summary>Whether to cut down fruit trees.</summary>
         private readonly bool CutFruitTrees;
+
+        /// <summary>The axe upgrade levels needed to break supported resource clumps.</summary>
+        /// <remarks>Derived from <see cref="ResourceClump.performToolAction"/>.</remarks>
+        private readonly IDictionary<int, int> ResourceUpgradeLevelsNeeded = new Dictionary<int, int>
+        {
+            [ResourceClump.stumpIndex] = Tool.copper,
+            [ResourceClump.hollowLogIndex] = Tool.steel
+        };
 
 
         /*********
@@ -70,6 +80,25 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // clear dead crops
             if (tileFeature is HoeDirt dirt && dirt.crop?.dead == true)
                 return this.UseToolOnTile(tool, tile);
+
+            // clear stumps
+            // This needs to check if the axe upgrade level is high enough first, to avoid spamming
+            // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
+            {
+                Rectangle tileArea = this.GetAbsoluteTileArea(tile);
+                ResourceClump stump =
+                    (
+                        from clump in this.GetResourceClumps(location)
+                        where
+                            clump.getBoundingBox(clump.tile).Intersects(tileArea)
+                            && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex)
+                            && tool.upgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex]
+                        select clump
+                    )
+                    .FirstOrDefault();
+                if (stump != null)
+                    this.UseToolOnTile(tool, tile);
+            }
 
             return false;
         }

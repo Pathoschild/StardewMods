@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
 using StardewValley;
+using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
@@ -65,6 +68,25 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             item.Stack -= 1;
             if (item.Stack <= 0)
                 player.removeItemFromInventory(item);
+        }
+
+        /// <summary>Get a rectangle representing the tile area in absolute pixels from the map origin.</summary>
+        /// <param name="tile">The tile position.</param>
+        protected Rectangle GetAbsoluteTileArea(Vector2 tile)
+        {
+            Vector2 pos = tile * Game1.tileSize;
+            return new Rectangle((int)pos.X, (int)pos.Y, Game1.tileSize, Game1.tileSize);
+        }
+
+        /// <summary>Get resource clumps in a given location.</summary>
+        /// <param name="location">The location to search.</param>
+        protected IEnumerable<ResourceClump> GetResourceClumps(GameLocation location)
+        {
+            if (location is Farm farm)
+                return farm.resourceClumps;
+            if (location is Woods woods)
+                return woods.stumps;
+            return new ResourceClump[0];
         }
     }
 }
