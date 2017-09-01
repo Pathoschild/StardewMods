@@ -1,6 +1,10 @@
 # Release notes
 ## 4.1 (upcoming)
-* Added compatibility with CJB Cheats Menu (instant build option now works correctly), Pelican Fiber (garage now appears in its shops), and Horse Whistle (no longer sometimes summons the tractor).
+* Added compatibility with...
+  * CJB Cheats Menu (instant build now works);
+  * Pelican Fiber (garage now appears in its shops);
+  * Horse Whistle (no longer sometimes summons the tractor);
+  * custom farm locations (no longer breaks saves).
 * Added Tractor buff to pull nearby objects towards you.
 * Added axe support.
 * Added scythe support for clearing dead crops.
