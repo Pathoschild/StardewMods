@@ -1,30 +1,35 @@
 # Release notes
 ## 4.1 (upcoming)
-* Added optional hold-to-activate mode.
-* Added axe support.
-* Added tractor buff to pull nearby objects towards you.
+New features:
+* Added a hold-to-activate mode (tractor won't do anything unless you hold a key).
+* Added default axe support (cutting trees disabled by default).
+* Added tractor buff which pulls nearby objects towards you.
 * Added compatibility with...
   * CJB Cheats Menu (instant build now works);
   * Pelican Fiber (garage now appears in its shops);
   * Horse Whistle (no longer sometimes summons the tractor);
   * custom farm locations (no longer breaks saves).
-* Added scythe support for clearing dead crops.
-* Added hoe support for digging up artifact spots.
+* Added update check.
+
+Feature changes:
+* Tractor no longer uses tools unless needed (no more spamming pickaxe sounds).
+* Pickaxe no longer destroys live crops, paths, and flooring.
+* Pickaxe no longer breaks boulders if your pickaxe isn't upgraded enough.
+* Scythe now clears dead crops.
+* Hoe now digs up artifact spots.
 * Added Chinese and Russian translations by yuwenlan and Ereb respectively.
 * Added warning when translation files are missing.
-* Added update check.
-* Tractor now only uses tools on tiles where they apply (i.e. no more spamming pickaxe sounds).
-* Fixed pickaxe destroying live crops, paths, and flooring.
-* Fixed pickaxe breaking boulders even if your pickaxe isn't upgraded enough.
+
+Fixes:
 * Fixed tractor letting you phase through objects in some cases.
 * Fixed game logic treating tractor as the player's horse in some cases where it shouldn't.
 * Fixed seeds, fertiliser, and speed-gro not working if you don't play in English.
 * Fixed harvesting crops, breaking rocks, and foraging not providing XP.
 * Fixed harvesting hay not showing hay-gained message.
 * Fixed harvesting hay giving you double hay.
-* Fixed scythe not harvesting wild seed crops.
-* Fixed only the first garage being restored when you load the save.
+* Fixed scythe not harvesting wild-seed crops.
 * Fixed Robin letting you build multiple tractor garages.
+* Fixed only the first garage being restored when you load the save (if you manage to build multiple).
 * Fixed visual bugs in tractor sprite.
 
 ## 4.0
