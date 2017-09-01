@@ -32,15 +32,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             this.OnDismount = onDismount;
         }
 
-        /// <summary>Get the bounding box for collision checks.</summary>
-        public override Rectangle GetBoundingBox()
-        {
-            Rectangle boundingBox = base.GetBoundingBox();
-            if ((this.facingDirection == 0 || this.facingDirection == 2))
-                boundingBox.Inflate(-Game1.tileSize / 2 - Game1.pixelZoom, 0);
-            return boundingBox;
-        }
-
         /// <summary>Perform any update logic needed on update tick.</summary>
         /// <param name="time">The current game time.</param>
         /// <param name="location">The location containing the tractor.</param>
