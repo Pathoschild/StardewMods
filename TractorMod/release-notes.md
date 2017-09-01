@@ -12,6 +12,7 @@
 * Added hoe support for digging up artifact spots.
 * Added Chinese and Russian translations by yuwenlan and Ereb respectively.
 * Added warning when translation files are missing.
+* Added update check.
 * Tractor now only uses tools on tiles where they apply (i.e. no more spamming pickaxe sounds).
 * Fixed pickaxe destroying live crops, paths, and flooring.
 * Fixed pickaxe breaking boulders even if your pickaxe isn't upgraded enough.

@@ -20,6 +20,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Whether the tractor can break paths and flooring when the pickaxe is selected.</summary>
         public bool PickaxeBreaksFlooring { get; set; } = false;
 
+        /// <summary>Whether to check for updates to the mod.</summary>
+        public bool CheckForUpdates { get; set; } = true;
+
+        /// <summary>The button which summons the tractor to your position.</summary>
+        public Keys TractorKey { get; set; } = Keys.B;
+
         /// <summary>A button which activates the tractor when held, or <c>null</c> to activate automatically.</summary>
         public Keys? HoldToActivateButton { get; set; } = null;
 
@@ -28,9 +34,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>The number of tiles on each side of the tractor to affect (in addition to the tile under it).</summary>
         public int Distance { get; set; } = 1;
-
-        /// <summary>The button which summons the tractor to your position.</summary>
-        public Keys TractorKey { get; set; } = Keys.B;
 
         /// <summary>The speed modifier when riding the tractor.</summary>
         public int TractorSpeed { get; set; } = -2;
