@@ -7,8 +7,6 @@ using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
-using StardewValley.Buildings;
-using StardewValley.Locations;
 
 namespace Pathoschild.Stardew.Automate
 {
@@ -84,21 +82,8 @@ namespace Pathoschild.Stardew.Automate
             try
             {
                 this.Machines.Clear();
-                foreach (GameLocation location in e.NewLocations)
-                {
-                    // location
+                foreach (GameLocation location in CommonHelper.GetLocations())
                     this.ReloadQueue.Add(location);
-
-                    // buildings
-                    if (location is BuildableGameLocation buildableLocation)
-                    {
-                        foreach (Building building in buildableLocation.buildings)
-                        {
-                            if (building.indoors != null)
-                                this.ReloadQueue.Add(building.indoors);
-                        }
-                    }
-                }
             }
             catch (Exception ex)
             {

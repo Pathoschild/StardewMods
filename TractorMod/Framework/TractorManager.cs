@@ -4,11 +4,11 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
-using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using SFarmer = StardewValley.Farmer;
@@ -106,17 +106,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Remove all tractors from the game.</summary>
         public void RemoveTractors()
         {
-            // find all locations
-            IEnumerable<GameLocation> locations = Game1.locations
-                .Union(
-                    from location in Game1.locations.OfType<BuildableGameLocation>()
-                    from building in location.buildings
-                    where building.indoors != null
-                    select building.indoors
-                );
-
             // remove tractors
-            foreach (GameLocation location in locations)
+            foreach (GameLocation location in CommonHelper.GetLocations())
                 location.characters.RemoveAll(p => p is TractorStatic || p is TractorMount);
         }
 

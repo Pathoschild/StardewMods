@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.TractorMod.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
 using StardewModdingAPI;
@@ -257,7 +258,7 @@ namespace Pathoschild.Stardew.TractorMod
 
             // add tractor + garages
             BluePrint blueprint = this.GetBlueprint();
-            BuildableGameLocation[] locations = this.GetLocations().OfType<BuildableGameLocation>().ToArray();
+            BuildableGameLocation[] locations = CommonHelper.GetLocations().OfType<BuildableGameLocation>().ToArray();
             foreach (CustomSaveBuilding garageData in saveData.Buildings)
             {
                 // get location
@@ -346,22 +347,10 @@ namespace Pathoschild.Stardew.TractorMod
         {
             return
                 (
-                    from location in this.GetLocations().OfType<BuildableGameLocation>()
+                    from location in CommonHelper.GetLocations().OfType<BuildableGameLocation>()
                     from building in location.buildings
                     where building.buildingType == this.GarageBuildingType
                     select new GarageMetadata(location, building, new CustomSaveBuilding(new Vector2(building.tileX, building.tileY), this.GarageBuildingType, this.GetMapName(location), building.daysOfConstructionLeft))
-                );
-        }
-
-        /// <summary>Get all game locations.</summary>
-        private IEnumerable<GameLocation> GetLocations()
-        {
-            return Game1.locations
-                .Concat(
-                    from location in Game1.locations.OfType<BuildableGameLocation>()
-                    from building in location.buildings
-                    where building.indoors != null
-                    select building.indoors
                 );
         }
 

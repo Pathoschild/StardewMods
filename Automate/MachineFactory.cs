@@ -7,6 +7,7 @@ using Pathoschild.Stardew.Automate.Machines.Objects;
 using Pathoschild.Stardew.Automate.Machines.TerrainFeatures;
 using Pathoschild.Stardew.Automate.Machines.Tiles;
 using Pathoschild.Stardew.Automate.Pipes;
+using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
@@ -33,16 +34,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Get all locations containing a player chest.</summary>
         public IEnumerable<GameLocation> GetLocationsWithChests()
         {
-            IEnumerable<GameLocation> locations =
-                Game1.locations
-                    .Concat(
-                        from location in Game1.locations.OfType<BuildableGameLocation>()
-                        from building in location.buildings
-                        where building.indoors != null
-                        select building.indoors
-                    );
-
-            foreach (GameLocation location in locations)
+            foreach (GameLocation location in CommonHelper.GetLocations())
             {
                 if (location.objects.Values.OfType<Chest>().Any(p => p.playerChest))
                     yield return location;

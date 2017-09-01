@@ -81,6 +81,7 @@
     <Content Include="screenshots\final-garage.png" />
     <Content Include="screenshots\tractor.png" />
   </ItemGroup>
+  <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\deploy-mod.targets" />
   <Import Project="..\packages\Pathoschild.Stardew.ModBuildConfig.1.7.1\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.1.7.1\build\Pathoschild.Stardew.ModBuildConfig.targets')" />

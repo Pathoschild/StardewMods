@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -83,7 +83,7 @@ namespace Pathoschild.Stardew.LookupAnything
             items.AddRange(Game1.player.Items);
 
             // in locations
-            foreach (GameLocation location in Game1.locations.Concat(Game1.getFarm().buildings.Select(p => p.indoors).Where(p => p != null)))
+            foreach (GameLocation location in CommonHelper.GetLocations())
             {
                 // map objects
                 foreach (SObject item in location.objects.Values)
