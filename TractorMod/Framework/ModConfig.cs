@@ -11,14 +11,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Whether the tractor can harvest crops, fruit trees, or forage when the scythe is selected.</summary>
         public bool ScytheHarvests { get; set; } = true;
 
-        /// <summary>Whether the tractor can hoe dirt tiles when the hoe is selected.</summary>
-        public bool HoeTillsDirt { get; set; } = true;
-
         /// <summary>Whether the tractor can water tiles when the watering can is selected.</summary>
         public bool WateringCanWaters { get; set; } = true;
 
-        /// <summary>Whether the axe clears branch debris.</summary>
-        public bool AxeCutsBranches { get; set; } = true;
+        /// <summary>Whether the axe clears twig debris.</summary>
+        public bool AxeCutsTwigs { get; set; } = true;
 
         /// <summary>Whether the axe clears non-fruit trees.</summary>
         public bool AxeCutsTrees { get; set; } = false;

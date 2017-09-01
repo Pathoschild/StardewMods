@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.TractorMod.Framework;
+using Pathoschild.Stardew.TractorMod.Framework.Attachments;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -38,6 +39,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The mod settings.</summary>
         private ModConfig Config;
 
+        /// <summary>The tractor attachments to apply.</summary>
+        private IAttachment[] Attachments;
+
         /// <summary>The current player's farm.</summary>
         private Farm Farm;
 
@@ -64,6 +68,17 @@ namespace Pathoschild.Stardew.TractorMod
             // read config
             this.MigrateLegacySaveData(helper);
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Attachments = new IAttachment[]
+            {
+                new CustomToolAttachment(this.Config), // should be first so it can override tools
+                new AxeAttachment(this.Config),
+                new FertilizerAttachment(),
+                new HoeAttachment(),
+                new PickaxeAttachment(this.Config),
+                new ScytheAttachment(this.Config),
+                new SeedAttachment(),
+                new WateringCanAttachment()
+            };
 
             // spawn/unspawn tractor and garages
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
@@ -191,7 +206,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="tileY">The tile Y position at which to spawn it.</param>
         private TractorManager SpawnTractor(int tileX, int tileY)
         {
-            TractorManager tractor = new TractorManager(tileX, tileY, this.Config, this.Helper.Content, this.Helper.Translation, this.Helper.Reflection);
+            TractorManager tractor = new TractorManager(tileX, tileY, this.Config, this.Attachments, this.Helper.Content, this.Helper.Translation, this.Helper.Reflection);
             tractor.SetLocation(this.Farm, new Vector2(tileX, tileY));
             tractor.SetPixelPosition(new Vector2(tractor.Current.Position.X + 20, tractor.Current.Position.Y));
             return tractor;

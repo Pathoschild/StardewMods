@@ -4,6 +4,7 @@
 ## Contents
 * [Install](#install)
 * [Use](#use)
+* [Configure](#configure)
 * [Versions](#versions)
 * [See also](#see-also)
 
@@ -27,15 +28,18 @@ Now just get on the tractor, choose a tool or seeds or fertilizer, and drive:
 
 You can do these by default:
 
-hold item  | effect
----------- | ------
-axe        | clear branch debris and dead crops.
-fertiliser | fertilise tilled dirt.
-hoe        | till dirt.
-pickaxe    | break rocks; clear tilled dirt and dead crops.
-seeds      | plant seeds in tilled dirt.
-scythe     | harvest crops, fruit trees, or forage; clear weeds and dead crops.
-watering can | water crops.
+hold item  | default effects | optional effects (disabled by default)
+---------- | --------------- | --------------------------------------
+axe        | clear twigs; clear dead crops. | chop down trees.
+fertiliser | fertilise dirt. | —
+hoe        | till dirt. | —
+pickaxe    | break rocks; clear tilled dirt; clear dead crops. | break paths/flooring.
+seeds      | plant seeds in dirt. | —
+scythe     | harvest crops, fruit trees, or forage; clear weeds and dead crops. | —
+watering can | water crops. | —
+
+The tractor uses no stamina when using tools, and the watering can won't run out of water. It will
+consume fertiliser or seeds when you sow those, though.
 
 ## Configure
 The mod creates a `config.json` file the first time you run it. You can open the file in a text
@@ -45,16 +49,15 @@ You can configure which tools can be used:
 
 setting | default | effect
 :------ | :------ | :-----
-`AxeCutsBranches` | `true` | Whether the axe clears branch debris.
-`AxeCutsTrees` | `false` | Whether the axe chops down non-fruit trees.
 `AxeCutsFruitTrees` | `false` | Whether the axe chops down fruit trees.
+`AxeCutsTrees` | `false` | Whether the axe chops down non-fruit trees.
+`AxeCutsTwigs` | `true` | Whether the axe clears twig debris.
 `ScytheHarvests` | `true` | Whether the tractor can harvest crops, fruit trees, or forage when the scythe is selected.
-`HoeTillsDirt` | `true` | Whether the tractor can hoe dirt tiles when the hoe is selected.
 `WateringCanWaters` | `true` | Whether the tractor can water tiles when the watering can is selected.
 `PickaxeClearsDirt` | `true` | Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.
 `PickaxeBreaksRocks` | `true` | Whether the tractor can break rocks when the pickaxe is selected.
 `PickaxeBreaksFlooring` | `false` | Whether the tractor can break flooring and paths when the pickaxe is selected.
-`CustomTools` | _(empty)_ | The custom tools to apply. These must match the exact in-game tool names.
+`CustomTools` | _(empty)_ | The custom tools to apply. If you specify a tool that's already supported (like the axe), this will override all limitations on its use. These must match the exact in-game tool names. For example: `"CustomTools": ["Axe"]`
 
 And some general options:
 
@@ -63,6 +66,7 @@ setting | default | effect
 `Distance` | 1 | The number of tiles on each side of the tractor to affect (in addition to the tile under it).
 `TractorKey` | `B` | The button which summons the tractor to your position (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
 `TractorSpeed` | -2 | The speed modifier when riding the tractor.
+`MagneticRadius` | 384 | The item attraction buff amount.
 
 And change how the tractor is sold:
 
@@ -73,9 +77,6 @@ setting | default | effect
 
 ## Versions
 See [release notes](release-notes.md).
-
-## License
-This mod is entirely released under the MIT license, **except** the tractor sprite which is unlicensed.
 
 ## See also
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1401)
