@@ -49,6 +49,7 @@ You can set some general options:
 
 setting | default | effect
 :------ | :------ | :-----
+`HoldToActivateKey` | (none) | If set, the tractor won't do anything unless you hold this key (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
 `Distance` | 1 | The number of tiles on each side of the tractor to affect (in addition to the tile under it).
 `TractorKey` | `B` | The button which summons the tractor to your position (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
 `TractorSpeed` | -2 | The speed modifier when riding the tractor.

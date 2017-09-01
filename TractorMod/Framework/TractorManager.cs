@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
 using StardewModdingAPI;
 using StardewValley;
@@ -125,7 +126,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             if (this.IsRiding && Game1.activeClickableMenu == null)
             {
                 this.UpdateBuff();
-                if (this.UpdateCooldown())
+                if (this.UpdateCooldown() && this.IsEnabled())
                     this.UpdateAttachmentEffects();
             }
         }
@@ -134,9 +135,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /*********
         ** Private methods
         *********/
-        /****
-        ** Main logic
-        ****/
         /// <summary>Apply the tractor buff to the current player.</summary>
         private void UpdateBuff()
         {
@@ -194,9 +192,18 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             });
         }
 
-        /****
-        ** Helpers
-        ****/
+        /// <summary>Get whether the tractor is toggled on by the player.</summary>
+        private bool IsEnabled()
+        {
+            // automatic mode
+            if (this.Config.HoldToActivateButton == null)
+                return true;
+
+            // hold-to-activate mode
+            KeyboardState state = Keyboard.GetState();
+            return state.IsKeyDown(this.Config.HoldToActivateButton.Value);
+        }
+
         /// <summary>Temporarily dismount and set up the player to interact with a tile, then return it to the previous state afterwards.</summary>
         /// <param name="action">The action to perform.</param>
         private void TemporarilyFakeInteraction(Action action)

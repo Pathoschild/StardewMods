@@ -1,12 +1,13 @@
 # Release notes
 ## 4.1 (upcoming)
+* Added optional hold-to-activate mode.
+* Added axe support.
+* Added tractor buff to pull nearby objects towards you.
 * Added compatibility with...
   * CJB Cheats Menu (instant build now works);
   * Pelican Fiber (garage now appears in its shops);
   * Horse Whistle (no longer sometimes summons the tractor);
   * custom farm locations (no longer breaks saves).
-* Added tractor buff to pull nearby objects towards you.
-* Added axe support.
 * Added scythe support for clearing dead crops.
 * Added hoe support for digging up artifact spots.
 * Added Chinese and Russian translations by yuwenlan and Ereb respectively.

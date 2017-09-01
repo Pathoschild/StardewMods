@@ -20,6 +20,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Whether the tractor can break paths and flooring when the pickaxe is selected.</summary>
         public bool PickaxeBreaksFlooring { get; set; } = false;
 
+        /// <summary>A button which activates the tractor when held, or <c>null</c> to activate automatically.</summary>
+        public Keys? HoldToActivateButton { get; set; } = null;
+
         /// <summary>The custom tools to allow. These must match the exact in-game tool names.</summary>
         public string[] CustomTools { get; set; } = new string[0];
 
