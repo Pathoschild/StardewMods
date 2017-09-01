@@ -5,7 +5,7 @@
   * Pelican Fiber (garage now appears in its shops);
   * Horse Whistle (no longer sometimes summons the tractor);
   * custom farm locations (no longer breaks saves).
-* Added Tractor buff to pull nearby objects towards you.
+* Added tractor buff to pull nearby objects towards you.
 * Added axe support.
 * Added scythe support for clearing dead crops.
 * Added hoe support for digging up artifact spots.

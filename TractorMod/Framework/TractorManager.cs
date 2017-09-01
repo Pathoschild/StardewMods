@@ -122,10 +122,24 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Update tractor effects and actions in the game.</summary>
         public void Update()
         {
-            if (!this.IsRiding || Game1.activeClickableMenu != null)
-                return; // tractor isn't enabled
+            if (this.IsRiding && Game1.activeClickableMenu == null)
+            {
+                this.UpdateBuff();
+                if (this.UpdateCooldown())
+                    this.UpdateAttachmentEffects();
+            }
+        }
 
-            // apply tractor speed buff
+
+        /*********
+        ** Private methods
+        *********/
+        /****
+        ** Main logic
+        ****/
+        /// <summary>Apply the tractor buff to the current player.</summary>
+        private void UpdateBuff()
+        {
             Buff buff = Game1.buffsDisplay.otherBuffs.FirstOrDefault(p => p.which == this.BuffUniqueID);
             if (buff == null)
             {
@@ -133,13 +147,24 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 Game1.buffsDisplay.addOtherBuff(buff);
             }
             buff.millisecondsDuration = 100;
+        }
 
-            // apply action cooldown
+        /// <summary>Update the attachment cooldown.</summary>
+        /// <returns>Returns whether the cooldown has ended.</returns>
+        private bool UpdateCooldown()
+        {
             this.SkippedActionTicks++;
-            if (this.SkippedActionTicks % this.TicksPerAction != 0)
-                return;
-            this.SkippedActionTicks = 0;
 
+            if (this.SkippedActionTicks % this.TicksPerAction != 0)
+                return false;
+
+            this.SkippedActionTicks = 0;
+            return true;
+        }
+
+        /// <summary>Apply any effects for the current tractor attachment.</summary>
+        private void UpdateAttachmentEffects()
+        {
             // get context
             SFarmer player = Game1.player;
             GameLocation location = Game1.currentLocation;
@@ -169,10 +194,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             });
         }
 
-
-        /*********
-        ** Private methods
-        *********/
+        /****
+        ** Helpers
+        ****/
         /// <summary>Temporarily dismount and set up the player to interact with a tile, then return it to the previous state afterwards.</summary>
         /// <param name="action">The action to perform.</param>
         private void TemporarilyFakeInteraction(Action action)
