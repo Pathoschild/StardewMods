@@ -45,21 +45,7 @@ consume fertiliser or seeds when you sow those, though.
 The mod creates a `config.json` file the first time you run it. You can open the file in a text
 editor to configure the mod.
 
-You can configure which tools can be used:
-
-setting | default | effect
-:------ | :------ | :-----
-`AxeCutsFruitTrees` | `false` | Whether the axe chops down fruit trees.
-`AxeCutsTrees` | `false` | Whether the axe chops down non-fruit trees.
-`AxeCutsTwigs` | `true` | Whether the axe clears twig debris.
-`ScytheHarvests` | `true` | Whether the tractor can harvest crops, fruit trees, or forage when the scythe is selected.
-`WateringCanWaters` | `true` | Whether the tractor can water tiles when the watering can is selected.
-`PickaxeClearsDirt` | `true` | Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.
-`PickaxeBreaksRocks` | `true` | Whether the tractor can break rocks when the pickaxe is selected.
-`PickaxeBreaksFlooring` | `false` | Whether the tractor can break flooring and paths when the pickaxe is selected.
-`CustomTools` | _(empty)_ | The custom tools to apply. If you specify a tool that's already supported (like the axe), this will override all limitations on its use. These must match the exact in-game tool names. For example: `"CustomTools": ["Axe"]`
-
-And some general options:
+You can set some general options:
 
 setting | default | effect
 :------ | :------ | :-----
@@ -67,6 +53,16 @@ setting | default | effect
 `TractorKey` | `B` | The button which summons the tractor to your position (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
 `TractorSpeed` | -2 | The speed modifier when riding the tractor.
 `MagneticRadius` | 384 | The item attraction buff amount.
+
+And toggle advanced tool features:
+
+setting | default | effect
+:------ | :------ | :-----
+`AxeCutsFruitTrees` | `false` | Whether the axe chops down fruit trees.
+`AxeCutsTrees` | `false` | Whether the axe chops down non-fruit trees.
+`PickaxeClearsDirt` | `true` | Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.
+`PickaxeBreaksFlooring` | `false` | Whether the tractor can break flooring and paths when the pickaxe is selected.
+`CustomTools` | _(empty)_ | The custom tools to apply. If you specify a tool that's already supported (like the axe), this will override all limitations on its use. These must match the exact in-game tool names. For example: `"CustomTools": ["Axe"]`
 
 And change how the tractor is sold:
 

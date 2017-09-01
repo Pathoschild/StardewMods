@@ -11,22 +11,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
     internal class ScytheAttachment : BaseAttachment
     {
         /*********
-        ** Properties
-        *********/
-        /// <summary>Whether to harvest crops.</summary>
-        private readonly bool Harvest;
-
-
-        /*********
         ** Public methods
         *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="config">The mod configuration.</param>
-        public ScytheAttachment(ModConfig config)
-        {
-            this.Harvest = config.ScytheHarvests;
-        }
-
         /// <summary>Get whether the tool is currently enabled.</summary>
         /// <param name="player">The current player.</param>
         /// <param name="tool">The tool selected by the player (if any).</param>
@@ -65,16 +51,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                     this.UseToolOnTile(new Pickaxe(), tile); // clear dead crop
                     return true;
                 }
-
-                if (this.Harvest)
-                {
-                    if (dirt.crop.harvestMethod == Crop.sickleHarvest)
-                        dirt.performToolAction(tool, 0, tile, location);
-                    else
-                        this.CheckTileAction(location, tile, player);
-                    return true;
-                }
-                return false;
+                if (dirt.crop.harvestMethod == Crop.sickleHarvest)
+                    dirt.performToolAction(tool, 0, tile, location);
+                else
+                    this.CheckTileAction(location, tile, player);
+                return true;
             }
 
             // fruit tree

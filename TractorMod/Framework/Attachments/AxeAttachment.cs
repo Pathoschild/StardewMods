@@ -15,9 +15,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /*********
         ** Properties
         *********/
-        /// <summary>Whether to destroy twig debris.</summary>
-        private readonly bool CutTwigs;
-
         /// <summary>Whether to cut down non-fruit trees.</summary>
         private readonly bool CutTrees;
 
@@ -40,7 +37,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="config">The mod configuration.</param>
         public AxeAttachment(ModConfig config)
         {
-            this.CutTwigs = config.AxeCutsTwigs;
             this.CutTrees = config.AxeCutsTrees;
             this.CutFruitTrees = config.AxeCutsFruitTrees;
         }
@@ -67,7 +63,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         {
             // clear twigs
             if (tileObj?.Name == "Twig")
-                return this.CutTwigs && this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile);
 
             // cut non-fruit tree
             if (tileFeature is Tree)

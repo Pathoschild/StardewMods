@@ -75,7 +75,7 @@ namespace Pathoschild.Stardew.TractorMod
                 new FertilizerAttachment(),
                 new HoeAttachment(),
                 new PickaxeAttachment(this.Config),
-                new ScytheAttachment(this.Config),
+                new ScytheAttachment(),
                 new SeedAttachment(),
                 new WateringCanAttachment()
             };

@@ -18,9 +18,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>Whether to destroy flooring and paths.</summary>
         private readonly bool BreakFlooring;
 
-        /// <summary>Whether to break rocks.</summary>
-        private readonly bool BreakRocks;
-
         /// <summary>Whether to clear tilled dirt.</summary>
         private readonly bool ClearDirt;
 
@@ -41,7 +38,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public PickaxeAttachment(ModConfig config)
         {
             this.BreakFlooring = config.PickaxeBreaksFlooring;
-            this.BreakRocks = config.PickaxeBreaksRocks;
             this.ClearDirt = config.PickaxeClearsDirt;
         }
 
@@ -67,7 +63,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         {
             // break stones
             if (tileObj?.Name == "Stone")
-                return this.BreakRocks && this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile);
 
             // break flooring & paths
             if (tileFeature is Flooring)
@@ -88,7 +84,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // clear boulders / meteorites
             // This needs to check if the axe upgrade level is high enough first, to avoid spamming
             // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
-            if (this.BreakRocks)
             {
                 Rectangle tileArea = this.GetAbsoluteTileArea(tile);
                 ResourceClump stump =
