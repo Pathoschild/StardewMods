@@ -46,5 +46,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>The gold price to buy a tractor garage.</summary>
         public int BuildPrice { get; set; } = 150000;
+
+        /// <summary>Whether to highlight the tractor radius when riding it.</summary>
+        public bool HighlightRadius { get; set; }
     }
 }

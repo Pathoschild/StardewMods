@@ -122,6 +122,33 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             }
         }
 
+        /// <summary>Draw anything needed to the screen.</summary>
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
+        public void DrawRadius(SpriteBatch spriteBatch)
+        {
+            bool enabled = this.IsEnabled();
+
+            foreach (Vector2 tile in this.GetTileGrid(Game1.player.getTileLocation(), this.Config.Distance))
+            {
+                // get tile area in screen pixels
+                Rectangle area = new Rectangle((int)(tile.X * Game1.tileSize - Game1.viewport.X), (int)(tile.Y * Game1.tileSize - Game1.viewport.Y), Game1.tileSize, Game1.tileSize);
+
+                // choose tile color
+                Color color = enabled ? Color.Green : Color.Red;
+
+                // draw background
+                spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, area.Height), color * 0.2f);
+
+                // draw border
+                int borderSize = 1;
+                Color borderColor = color * 0.5f;
+                spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, borderSize), borderColor); // top
+                spriteBatch.DrawLine(area.X, area.Y, new Vector2(borderSize, area.Height), borderColor); // left
+                spriteBatch.DrawLine(area.X + area.Width, area.Y, new Vector2(borderSize, area.Height), borderColor); // right
+                spriteBatch.DrawLine(area.X, area.Y + area.Height, new Vector2(area.Width, borderSize), borderColor); // bottom
+            }
+        }
+
 
         /*********
         ** Private methods

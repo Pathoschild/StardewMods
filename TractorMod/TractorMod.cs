@@ -83,6 +83,10 @@ namespace Pathoschild.Stardew.TractorMod
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
 
+            // show debug info
+            if(this.Config.HighlightRadius)
+                GraphicsEvents.OnPostRenderEvent += this.GraphicsEvents_OnPostRenderEvent;
+
             // add blueprint to Robin's shop
             MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
 
@@ -130,6 +134,15 @@ namespace Pathoschild.Stardew.TractorMod
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
             this.StashCustomData();
+        }
+
+        /// <summary>The event called when the game is drawing to the screen.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void GraphicsEvents_OnPostRenderEvent(object sender, EventArgs e)
+        {
+            if(Context.IsWorldReady && Game1.activeClickableMenu == null && this.Config.HighlightRadius && this.Tractor?.IsRiding == true)
+                this.Tractor?.DrawRadius(Game1.spriteBatch);
         }
 
         /// <summary>The event called after a new menu is opened.</summary>

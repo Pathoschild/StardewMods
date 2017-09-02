@@ -9,6 +9,7 @@ New features:
   * Pelican Fiber (garage now appears in its shops);
   * Horse Whistle (no longer sometimes summons the tractor);
   * custom farm locations (no longer breaks saves).
+* Added option to highlight tractor radius.
 * Added update check.
 
 Feature changes:
