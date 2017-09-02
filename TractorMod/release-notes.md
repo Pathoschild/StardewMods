@@ -31,6 +31,7 @@ Fixes:
 * Fixed scythe not harvesting wild-seed crops.
 * Fixed Robin letting you build multiple tractor garages.
 * Fixed only the first garage being restored when you load the save (if you manage to build multiple).
+* Fixed tractor interaction grid being offset in some cases.
 * Fixed visual bugs in tractor sprite.
 
 ## 4.0

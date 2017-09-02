@@ -194,11 +194,21 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             if (!attachments.Any())
                 return;
 
+            // get tile grid to affect
+            // This must be done outside the temporary interaction block below, since that dismounts
+            // the player which changes their position from what the player may expect.
+            Vector2[] grid = this.GetTileGrid(Game1.player.getTileLocation(), this.Config.Distance).ToArray();
+
             // apply tools
             this.TemporarilyFakeInteraction(() =>
             {
-                foreach (Vector2 tile in this.GetTileGrid(Game1.player.getTileLocation(), this.Config.Distance))
+                foreach (Vector2 tile in grid)
                 {
+                    // face tile to avoid game skipping interaction
+                    player.position = new Vector2(tile.X - 1, tile.Y) * Game1.tileSize;
+                    player.facingDirection = 1;
+
+                    // apply attachment effects
                     location.objects.TryGetValue(tile, out SObject tileObj);
                     location.terrainFeatures.TryGetValue(tile, out TerrainFeature tileFeature);
                     foreach (IAttachment attachment in attachments)
@@ -237,6 +247,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             int waterInCan = wateringCan?.WaterLeft ?? 0;
             float stamina = player.stamina;
             Vector2 position = player.position;
+            int facingDirection = player.facingDirection;
             int currentToolIndex = player.CurrentToolIndex;
             bool canMove = Game1.player.canMove; // fix player frozen due to animations when performing an action
 
@@ -260,6 +271,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     wateringCan.WaterLeft = waterInCan;
                 player.stamina = stamina;
                 player.position = position;
+                player.facingDirection = facingDirection;
                 player.CurrentToolIndex = currentToolIndex;
                 Game1.player.canMove = canMove;
             }
