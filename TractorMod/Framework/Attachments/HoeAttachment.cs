@@ -33,7 +33,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return this.UseToolOnTile(tool, tile);
+            // till plain dirt
+            if (tileFeature == null && tileObj == null)
+                return this.UseToolOnTile(tool, tile);
+
+            return false;
         }
     }
 }
