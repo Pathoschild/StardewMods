@@ -204,7 +204,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Detect and fix tractor garages that started construction today.</summary>
         private void ProcessNewConstruction()
         {
-            foreach (GarageMetadata metadata in this.GetGarages())
+            foreach (GarageMetadata metadata in this.GetGarages().ToArray())
             {
                 this.HasAnyGarages = true;
                 Building garage = metadata.Building;
