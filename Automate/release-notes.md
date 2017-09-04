@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.7
+* Added support for egg incubators and slime incubators.
+* Fixed machines inside buildings not being automated until you visit the building.
+* Fixed fruit tree automation never producing better than silver quality.
+* Fixed machines in a custom location that gets removed not being unloaded.
+
 ## 1.6
 * Rewrote machines so they process items in the order they're found.
 * Improved performance for players with a large number of machines.

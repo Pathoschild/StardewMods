@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
+using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
@@ -34,7 +35,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Get all player chests.</summary>
         public IEnumerable<ManagedChest> GetChests()
         {
-            foreach (GameLocation location in Game1.locations)
+            foreach (GameLocation location in CommonHelper.GetLocations())
             {
                 // chests in location
                 {
@@ -45,24 +46,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         Chest chest = pair.Value as Chest;
                         if (chest != null && chest.playerChest)
                             yield return new ManagedChest(chest, this.GetLocationName(location), tile, this.Translations.Get("default-name.chest", new { number = ++namelessCount }));
-                    }
-                }
-
-                // chests in constructed buildings
-                if (location is BuildableGameLocation buildableLocation)
-                {
-                    foreach (Building building in buildableLocation.buildings)
-                    {
-                        int namelessCount = 0;
-                        if (building.indoors == null)
-                            continue;
-                        foreach (KeyValuePair<Vector2, Object> pair in building.indoors.Objects)
-                        {
-                            Vector2 tile = pair.Key;
-                            Chest chest = pair.Value as Chest;
-                            if (chest != null && chest.playerChest)
-                                yield return new ManagedChest(chest, this.GetLocationName(building), tile, this.Translations.Get("default-name.chest", new { number = ++namelessCount }));
-                        }
                     }
                 }
 

@@ -1,4 +1,40 @@
 # Release notes
+## 4.1
+New features:
+* Added an optional hold-to-activate mode (tractor won't do anything unless you hold a key).
+* Added default axe support (cutting trees disabled by default).
+* Added tractor buff which pulls nearby objects towards you.
+* Added compatibility with...
+  * CJB Cheats Menu (instant build now works);
+  * Pelican Fiber (garage now appears in its shops);
+  * Horse Whistle (no longer sometimes summons the tractor);
+  * custom farm locations (no longer breaks saves).
+* Added option to highlight tractor radius.
+* Added update check.
+* Added an experimental feature which lets the tractor pass through trellis crops (disabled by default).
+
+Feature changes:
+* Tractor no longer uses tools unless needed (no more spamming pickaxe sounds).
+* Pickaxe no longer destroys live crops, paths, and flooring.
+* Pickaxe no longer breaks boulders if your pickaxe isn't upgraded enough.
+* Scythe now clears dead crops.
+* Hoe now digs up artifact spots.
+* Added Chinese and Russian translations by yuwenlan and Ereb respectively.
+* Added warning when translation files are missing.
+
+Fixes:
+* Fixed tractor letting you phase through objects in some cases.
+* Fixed game logic treating tractor as the player's horse in some cases where it shouldn't.
+* Fixed seeds, fertiliser, and speed-gro not working if you don't play in English.
+* Fixed harvesting crops, breaking rocks, and foraging not providing XP.
+* Fixed harvesting hay not showing hay-gained message.
+* Fixed harvesting hay giving you double hay.
+* Fixed scythe not harvesting wild-seed crops.
+* Fixed Robin letting you build multiple tractor garages.
+* Fixed only the first garage being restored when you load the save (if you manage to build multiple).
+* Fixed tractor interaction grid being offset in some cases.
+* Fixed visual bugs in tractor sprite.
+
 ## 4.0
 This is a rewrite of the original TractorMod by PhthaloBlue (@lambui).
 

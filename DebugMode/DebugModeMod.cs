@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -66,6 +66,10 @@ namespace Pathoschild.Stardew.DebugMode
             }
             LocationEvents.CurrentLocationChanged += this.ReceiveCurrentLocationChanged;
             GraphicsEvents.OnPostRenderEvent += this.OnPostRenderEvent;
+
+            // validate translations
+            if (!helper.Translation.GetTranslations().Any())
+                this.Monitor.Log("The translation files in this mod's i18n folder seem to be missing. The mod will still work, but you'll see 'missing translation' messages. Try reinstalling the mod to fix this.", LogLevel.Warn);
         }
 
 

@@ -1,10 +1,12 @@
-﻿using Pathoschild.Stardew.Automate.Framework;
+using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
 using StardewValley.TerrainFeatures;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Machines.TerrainFeatures
 {
     /// <summary>A fruit tree machine that accepts input and provides output.</summary>
+    /// <remarks>Derived from <see cref="FruitTree.shake"/>.</remarks>
     internal class FruitTreeMachine : IMachine
     {
         /*********
@@ -42,17 +44,17 @@ namespace Pathoschild.Stardew.Automate.Machines.TerrainFeatures
 
             // if struck by lightning => coal
             if (tree.struckByLightningCountdown > 0)
-                return new TrackedItem(new Object(382, tree.fruitsOnTree), onReduced: this.OnOutputReduced);
+                return new TrackedItem(new SObject(382, tree.fruitsOnTree), onReduced: this.OnOutputReduced);
 
             // else => fruit
-            int quality = 0;
+            int quality = SObject.lowQuality;
             if (tree.daysUntilMature <= -112)
-                quality = 1;
-            else if (tree.daysUntilMature <= -224)
-                quality = 2;
-            else if (tree.daysUntilMature <= -336)
-                quality = 4;
-            return new TrackedItem(new Object(tree.indexOfFruit, tree.fruitsOnTree, quality: quality), onReduced: this.OnOutputReduced);
+                quality = SObject.medQuality;
+            if (tree.daysUntilMature <= -224)
+                quality = SObject.highQuality;
+            if (tree.daysUntilMature <= -336)
+                quality = SObject.bestQuality;
+            return new TrackedItem(new SObject(tree.indexOfFruit, tree.fruitsOnTree, quality: quality), onReduced: this.OnOutputReduced);
         }
 
         /// <summary>Pull items from the connected pipes.</summary>

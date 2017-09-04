@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -129,6 +129,10 @@ namespace Pathoschild.Stardew.LookupAnything
                 this.Monitor.Log("The data.json file seems to be missing or corrupt. Lookups will be disabled.", LogLevel.Error);
                 this.IsDataValid = false;
             }
+
+            // validate translations
+            if(!helper.Translation.GetTranslations().Any())
+                this.Monitor.Log("The translation files in this mod's i18n folder seem to be missing. The mod will still work, but you'll see 'missing translation' messages. Try reinstalling the mod to fix this.", LogLevel.Warn);
         }
 
         /*********

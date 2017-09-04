@@ -1,6 +1,12 @@
-﻿[← back to readme](README.md)
+[← back to readme](README.md)
 
 # Release notes
+## 1.16
+* NPC gift tastes now list inventory and owned items first.
+* Added warning when translation files are missing.
+* Fixed items inside buildings constructed in custom locations not being found for gift taste info.
+* Fixed lookup errors with some custom NPCs.
+
 ## 1.15.1
 * Added Russian translations. (Thanks to SteaNN!)
 * Fixed missing translation in child 'age' field.

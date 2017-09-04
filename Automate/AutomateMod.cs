@@ -82,7 +82,7 @@ namespace Pathoschild.Stardew.Automate
             try
             {
                 this.Machines.Clear();
-                foreach (GameLocation location in e.NewLocations)
+                foreach (GameLocation location in CommonHelper.GetLocations())
                     this.ReloadQueue.Add(location);
             }
             catch (Exception ex)

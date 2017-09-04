@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
@@ -31,20 +31,30 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             if (!giftTastes.ContainsKey(showTaste))
                 yield break;
 
-            Item[] items = giftTastes[showTaste].OrderBy(p => p.DisplayName).ToArray();
+            // get item data
             Item[] ownedItems = GameHelper.GetAllOwnedItems().ToArray();
             Item[] inventory = Game1.player.items.Where(p => p != null).ToArray();
+            var items =
+                (
+                    from item in giftTastes[showTaste]
+                    let isInventory = inventory.Any(p => p.parentSheetIndex == item.parentSheetIndex && p.category == item.category)
+                    let isOwned = ownedItems.Any(p => p.parentSheetIndex == item.parentSheetIndex && p.category == item.category)
+                    orderby isInventory descending, isOwned descending, item.DisplayName
+                    select new { Item = item, IsInventory = isInventory, IsOwned = isOwned }
+                )
+                .ToArray();
 
+            // generate text
             for (int i = 0, last = items.Length - 1; i <= last; i++)
             {
-                Item item = items[i];
+                var entry = items[i];
                 string text = i != last
-                    ? item.DisplayName + ","
-                    : item.DisplayName;
+                    ? entry.Item.DisplayName + ","
+                    : entry.Item.DisplayName;
 
-                if (inventory.Any(p => p.parentSheetIndex == item.parentSheetIndex && p.category == item.category)) // in inventory
+                if (entry.IsInventory)
                     yield return new FormattedText(text, Color.Green);
-                else if (ownedItems.Any(p => p.parentSheetIndex == item.parentSheetIndex && p.category == item.category)) // owned
+                else if (entry.IsOwned)
                     yield return new FormattedText(text, Color.Black);
                 else
                     yield return new FormattedText(text, Color.Gray);

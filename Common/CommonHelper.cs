@@ -1,9 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Locations;
 using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.Common
@@ -33,6 +35,21 @@ namespace Pathoschild.Stardew.Common
         /*********
         ** Public methods
         *********/
+        /****
+        ** Game
+        ****/
+        /// <summary>Get all game locations.</summary>
+        public static IEnumerable<GameLocation> GetLocations()
+        {
+            return Game1.locations
+                .Concat(
+                    from location in Game1.locations.OfType<BuildableGameLocation>()
+                    from building in location.buildings
+                    where building.indoors != null
+                    select building.indoors
+                );
+        }
+
         /****
         ** Fonts
         ****/

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -117,8 +117,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     else
                     {
                         // birthday
-                        SDate birthday = new SDate(npc.birthday_Day, npc.birthday_Season);
-                        yield return new GenericField(this.Text.Get(L10n.Npc.Birthday), this.Text.Stringify(birthday));
+                        if (npc.birthday_Season != null)
+                        {
+                            SDate birthday = new SDate(npc.birthday_Day, npc.birthday_Season);
+                            yield return new GenericField(this.Text.Get(L10n.Npc.Birthday), this.Text.Stringify(birthday));
+                        }
 
                         // friendship
                         if (Game1.player.friendships.ContainsKey(npc.name))
