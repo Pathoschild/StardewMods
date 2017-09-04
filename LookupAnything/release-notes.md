@@ -5,6 +5,7 @@
 * NPC gift tastes now list in-inventory and owned items first.
 * Added warning when translation files are missing.
 * Fixed items inside buildings constructed in custom locations not being found for gift taste info.
+* Fixed error looking up items when another mods adds a custom non-social NPC.
 
 ## 1.15.1
 * Added Russian translations. (Thanks to SteaNN!)

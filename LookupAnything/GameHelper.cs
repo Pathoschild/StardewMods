@@ -208,7 +208,10 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 if (!GameHelper.IsSocialVillager(npc, metadata))
                     continue;
-                yield return new KeyValuePair<NPC, GiftTaste>(npc, (GiftTaste)npc.getGiftTasteForThisItem(item));
+
+                GiftTaste? taste = GameHelper.GetGiftTaste(npc, item);
+                if (taste.HasValue)
+                    yield return new KeyValuePair<NPC, GiftTaste>(npc, taste.Value);
             }
         }
 
@@ -233,7 +236,9 @@ namespace Pathoschild.Stardew.LookupAnything
                 (
                     from int itemID in giftableItemIDs
                     let item = GameHelper.GetObjectBySpriteIndex(itemID)
-                    select new { Item = item, Taste = (GiftTaste)npc.getGiftTasteForThisItem(item) }
+                    let taste = GameHelper.GetGiftTaste(npc, item)
+                    where taste.HasValue
+                    select new { Item = item, Taste = taste.Value }
                 )
                 .ToDictionary(p => p.Item, p => p.Taste);
         }
@@ -450,6 +455,27 @@ namespace Pathoschild.Stardew.LookupAnything
         public static void ShowErrorMessage(string message)
         {
             CommonHelper.ShowErrorMessage(message);
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get an NPC's preference for an item.</summary>
+        /// <param name="npc">The NPC whose gift taste to get.</param>
+        /// <param name="item">The item to check.</param>
+        /// <returns>Returns the NPC's gift taste if applicable, else <c>null</c>.</returns>
+        private static GiftTaste? GetGiftTaste(NPC npc, Item item)
+        {
+            try
+            {
+                return (GiftTaste)npc.getGiftTasteForThisItem(item);
+            }
+            catch
+            {
+                // fails for non-social NPCs
+                return null;
+            }
         }
     }
 }
