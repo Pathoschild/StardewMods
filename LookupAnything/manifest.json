@@ -1,10 +1,10 @@
-﻿{
+{
   "Name": "LookupAnything",
   "Author": "Pathoschild",
   "Version": {
     "MajorVersion": 1,
-    "MinorVersion": 15,
-    "PatchVersion": 1,
+    "MinorVersion": 16,
+    "PatchVersion": 0,
     "Build": null
   },
   "MinimumApiVersion": "1.15",

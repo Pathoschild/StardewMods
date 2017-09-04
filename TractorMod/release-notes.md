@@ -1,5 +1,5 @@
 # Release notes
-## 4.1 (upcoming)
+## 4.1
 New features:
 * Added an optional hold-to-activate mode (tractor won't do anything unless you hold a key).
 * Added default axe support (cutting trees disabled by default).

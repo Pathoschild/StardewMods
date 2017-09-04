@@ -1,11 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.16 (upcoming)
-* NPC gift tastes now list in-inventory and owned items first.
+## 1.16
+* NPC gift tastes now list inventory and owned items first.
 * Added warning when translation files are missing.
 * Fixed items inside buildings constructed in custom locations not being found for gift taste info.
-* Fixed error looking up items when another mods adds a custom non-social NPC.
+* Fixed lookup errors with some custom NPCs.
 
 ## 1.15.1
 * Added Russian translations. (Thanks to SteaNN!)
