@@ -1,7 +1,7 @@
 # Release notes
 ## 4.1 (upcoming)
 New features:
-* Added a hold-to-activate mode (tractor won't do anything unless you hold a key).
+* Added an optional hold-to-activate mode (tractor won't do anything unless you hold a key).
 * Added default axe support (cutting trees disabled by default).
 * Added tractor buff which pulls nearby objects towards you.
 * Added compatibility with...
@@ -11,6 +11,7 @@ New features:
   * custom farm locations (no longer breaks saves).
 * Added option to highlight tractor radius.
 * Added update check.
+* Added an experimental feature which lets the tractor pass through trellis crops (disabled by default).
 
 Feature changes:
 * Tractor no longer uses tools unless needed (no more spamming pickaxe sounds).

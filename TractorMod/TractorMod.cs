@@ -84,7 +84,7 @@ namespace Pathoschild.Stardew.TractorMod
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
 
             // show debug info
-            if(this.Config.HighlightRadius)
+            if (this.Config.HighlightRadius)
                 GraphicsEvents.OnPostRenderEvent += this.GraphicsEvents_OnPostRenderEvent;
 
             // add blueprint to Robin's shop
@@ -93,6 +93,7 @@ namespace Pathoschild.Stardew.TractorMod
             // handle player interaction & tractor logic
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+            LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
 
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
@@ -115,7 +116,7 @@ namespace Pathoschild.Stardew.TractorMod
             if (this.Config.CheckForUpdates)
                 UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "TractorMod");
         }
-        
+
         /// <summary>The event called when a new day begins.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -141,7 +142,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void GraphicsEvents_OnPostRenderEvent(object sender, EventArgs e)
         {
-            if(Context.IsWorldReady && Game1.activeClickableMenu == null && this.Config.HighlightRadius && this.Tractor?.IsRiding == true)
+            if (Context.IsWorldReady && Game1.activeClickableMenu == null && this.Config.HighlightRadius && this.Tractor?.IsRiding == true)
                 this.Tractor?.DrawRadius(Game1.spriteBatch);
         }
 
@@ -187,6 +188,14 @@ namespace Pathoschild.Stardew.TractorMod
                 this.ProcessNewConstruction();
             if (Context.IsPlayerFree)
                 this.Tractor?.Update();
+        }
+
+        /// <summary>The event called when the player warps to a new location.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
+        {
+            this.Tractor?.UpdateForNewLocation(e.PriorLocation, e.NewLocation);
         }
 
         /****

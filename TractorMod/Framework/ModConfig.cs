@@ -23,6 +23,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Whether to check for updates to the mod.</summary>
         public bool CheckForUpdates { get; set; } = true;
 
+        /// <summary>Whether to use the experimental feature which lets the tractor pass through trellis crops.</summary>
+        public bool PassThroughTrellisCrops { get; set; }
+
         /// <summary>The button which summons the tractor to your position.</summary>
         public Keys TractorKey { get; set; } = Keys.B;
 
