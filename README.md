@@ -58,7 +58,7 @@ Chinese    | ✓ [zh.json](ChestsAnywhere/i18n/zh.json) | ✓ [zh.json](DebugMod
 German     | ✓ [de.json](ChestsAnywhere/i18n/de.json) | ✓ [de.json](DebugMode/i18n/de.json) | ✓ [de.json](LookupAnything/i18n/de.json) | ✓ [de.json](TractorMod/i18n/de.json) | Sasara
 Japanese   | ❑ | ❑ | ❑ | ❑ |
 Portuguese | ✓ [pt.json](ChestsAnywhere/i18n/pt.json) | ✓ [pt.json](DebugMode/i18n/pt.json) | ✓ [pt.json](LookupAnything/i18n/pt.json) | ✓ [pt.json](TractorMod/i18n/pt.json) | Fabilows
-Russian    | ❑ | ❑ | ✓ [ru.json](LookupAnything/i18n/ru.json) | ✓ [ru.json](TractorMod/i18n/ru.json) | SteaNN, Ereb
+Russian    | ✓ [ru.json](ChestsAnywhere/i18n/ru.json) | ❑ | ✓ [ru.json](LookupAnything/i18n/ru.json) | ✓ [ru.json](TractorMod/i18n/ru.json) | SteaNN, Ereb, vanja-san
 Spanish    | ✓ [es.json](ChestsAnywhere/i18n/es.json) | ✓ [es.json](DebugMode/i18n/es.json) | ✓ [es.json](LookupAnything/i18n/de.json) | ❑ | ThomasGabrielDelavault
 
 Here's how to translate one of my mods:

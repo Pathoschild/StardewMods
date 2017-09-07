@@ -2,16 +2,17 @@
 
 # Release notes
 ## 1.11.2 (upcoming)
+* Added Russian translations by vanja-san.
 * Added warning when translation files are missing.
 
 ## 1.11.1
-* Added Portuguese and Spanish translations. (Thanks to Fabilows and ThomasGabrielDelavault respectively!)
+* Added Portuguese and Spanish translations by Fabilows and ThomasGabrielDelavault respectively.
 * Fixed double cursor when using a controller.
 
 ## 1.11
 * Updated to SMAPI 1.14.
 * Added translation support.
-* Added Chinese and German translations. (Thanks to yuwenlan and Sasara respectively!)
+* Added Chinese and German translations by yuwenlan and Sasara respectively.
 
 ## 1.10
 * Updated for Stardew Valley 1.2.
