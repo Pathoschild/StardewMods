@@ -1,4 +1,8 @@
 # Release notes
+## 4.2 (upcoming)
+Feature changes:
+* Added Portuguese translations by Fabilows.
+
 ## 4.1
 New features:
 * Added an optional hold-to-activate mode (tractor won't do anything unless you hold a key).
