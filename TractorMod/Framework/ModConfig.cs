@@ -14,6 +14,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Whether the axe clears non-fruit trees.</summary>
         public bool AxeCutsTrees { get; set; } = false;
 
+        /// <summary>Whether the axe clears live crops.</summary>
+        public bool AxeClearsCrops { get; set; } = false;
+
         /// <summary>Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.</summary>
         public bool PickaxeClearsDirt { get; set; } = true;
 

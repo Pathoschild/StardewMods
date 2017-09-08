@@ -1,6 +1,6 @@
 # Release notes
 ## 4.2 (upcoming)
-Feature changes:
+* Added option for axe to clear live crops.
 * Added Portuguese translations by Fabilows.
 
 ## 4.1

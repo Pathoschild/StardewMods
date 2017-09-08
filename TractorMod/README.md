@@ -30,7 +30,7 @@ You can do these by default:
 
 hold item  | default effects | optional effects (disabled by default)
 ---------- | --------------- | --------------------------------------
-axe        | clear twigs; clear dead crops. | chop down trees.
+axe        | clear twigs; clear dead crops. | chop down trees; clear live crops.
 fertiliser | fertilise dirt. | —
 hoe        | till dirt. | —
 pickaxe    | break rocks; clear tilled dirt; clear dead crops. | break paths/flooring.
