@@ -72,12 +72,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="tileY">The initial tile Y position.</param>
         /// <param name="config">The mod settings.</param>
         /// <param name="attachments">The tractor attachments to apply.</param>
-        /// <param name="content">The content helper with which to load the tractor sprite.</param>
+        /// <param name="spritesheet">The content helper with which to load the tractor sprite.</param>
         /// <param name="translation">Provides translations from the mod's i18n folder.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public TractorManager(int tileX, int tileY, ModConfig config, IEnumerable<IAttachment> attachments, IContentHelper content, ITranslationHelper translation, IReflectionHelper reflection)
+        public TractorManager(int tileX, int tileY, ModConfig config, IEnumerable<IAttachment> attachments, Texture2D spritesheet, ITranslationHelper translation, IReflectionHelper reflection)
         {
-            AnimatedSprite sprite = new AnimatedSprite(content.Load<Texture2D>(@"assets\tractor.png"), 0, 32, 32)
+            AnimatedSprite sprite = new AnimatedSprite(spritesheet, 0, 32, 32)
             {
                 textureUsesFlippedRightForLeft = true,
                 loop = true

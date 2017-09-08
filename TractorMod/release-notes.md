@@ -1,6 +1,7 @@
 # Release notes
 ## 4.2 (upcoming)
 * Added option for axe to clear live crops.
+* Added support for seasonal textures.
 * Added Portuguese translations by Fabilows.
 
 ## 4.1

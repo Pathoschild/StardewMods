@@ -239,7 +239,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="tileY">The tile Y position at which to spawn it.</param>
         private TractorManager SpawnTractor(BuildableGameLocation location, int tileX, int tileY)
         {
-            TractorManager tractor = new TractorManager(tileX, tileY, this.Config, this.Attachments, this.Helper.Content, this.Helper.Translation, this.Helper.Reflection);
+            TractorManager tractor = new TractorManager(tileX, tileY, this.Config, this.Attachments, this.GetTexture("tractor"), this.Helper.Translation, this.Helper.Reflection);
             tractor.SetLocation(location, new Vector2(tileX, tileY));
             tractor.SetPixelPosition(new Vector2(tractor.Current.Position.X + 20, tractor.Current.Position.Y));
             return tractor;
@@ -393,7 +393,7 @@ namespace Pathoschild.Stardew.TractorMod
             return new BluePrint(this.GarageBuildingType)
             {
                 name = this.GarageBuildingType,
-                texture = this.Helper.Content.Load<Texture2D>(@"assets\TractorHouse.png"),
+                texture = this.GetTexture("garage"),
                 humanDoor = new Point(-1, -1),
                 animalDoor = new Point(-2, -1),
                 mapToWarpTo = null,
@@ -412,6 +412,19 @@ namespace Pathoschild.Stardew.TractorMod
                     : new Dictionary<int, int>(),
                 namesOfOkayBuildingLocations = new List<string> { "Farm" }
             };
+        }
+
+        /// <summary>Get a texture from the assets folder (including seasonal logic if applicable).</summary>
+        /// <param name="key">The unique key without the path or extension (like 'tractor' or 'garage').</param>
+        private Texture2D GetTexture(string key)
+        {
+            // try seasonal texture
+            string seasonalKey = $"assets/{Game1.currentSeason}_{key}.png";
+            if (File.Exists(Path.Combine(this.Helper.DirectoryPath, seasonalKey)))
+                return this.Helper.Content.Load<Texture2D>(seasonalKey);
+
+            // default to single texture
+            return this.Helper.Content.Load<Texture2D>($"assets/{key}.png");
         }
 
         /// <summary>Get a unique map name for the given location.</summary>

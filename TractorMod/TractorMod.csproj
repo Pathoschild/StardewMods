@@ -78,7 +78,7 @@
     <Content Include="assets\tractor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\TractorHouse.png">
+    <Content Include="assets\garage.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="screenshots\build-garage.png" />
