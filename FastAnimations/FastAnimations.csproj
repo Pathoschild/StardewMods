@@ -37,11 +37,11 @@
     <Compile Include="Framework\IAnimationHandler.cs" />
     <Compile Include="Framework\BaseAnimationHandler.cs" />
     <Compile Include="Handlers\BreakingGeodeHandler.cs" />
-    <Compile Include="Handlers\FishingHandler.cs" />
-    <Compile Include="Handlers\TreeFallingHandler.cs" />
-    <Compile Include="Handlers\ShearingHandler.cs" />
-    <Compile Include="Handlers\MilkingHandler.cs" />
     <Compile Include="Handlers\EatingHandler.cs" />
+    <Compile Include="Handlers\FishingHandler.cs" />
+    <Compile Include="Handlers\ToolHandler.cs" />
+    <Compile Include="Handlers\TreeFallingHandler.cs" />
+    <Compile Include="Handlers\MilkingHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FastAnimationsMod.cs" />
   </ItemGroup>
