@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
@@ -98,7 +98,7 @@ namespace Pathoschild.Stardew.FastAnimations
         {
             if (config.BreakGeodeSpeed > 1)
                 yield return new BreakingGeodeHandler(config.BreakGeodeSpeed);
-            if (config.EatAndDrinkSpeed > 1)
+            if (config.EatAndDrinkSpeed > 1) 
                 yield return new EatingHandler(this.Helper.Reflection, config.EatAndDrinkSpeed);
             if (config.FishingSpeed > 1)
                 yield return new FishingHandler(config.FishingSpeed);
@@ -108,6 +108,9 @@ namespace Pathoschild.Stardew.FastAnimations
                 yield return new ShearingHandler(config.ShearSpeed);
             if (config.TreeFallSpeed > 1)
                 yield return new TreeFallingHandler(config.TreeFallSpeed, this.Helper.Reflection);
+            if (config.FarmerSpeed > 1) 
+                yield return new FarmerHandler(config.FarmerSpeed);
+
         }
     }
 }
