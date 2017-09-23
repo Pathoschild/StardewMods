@@ -39,18 +39,20 @@ namespace Pathoschild.Stardew.Automate.Framework
                         if (hasPipe)
                             color = Color.Green * 0.2f;
                         else
-                            color = Color.Red * 0.2f;
+                            color = Color.Blue * 0.2f;
+                    }
 
-                        // draw border
-                        int borderSize = 1;
-                        Color borderColor = color * 0.5f;
+                    spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, area.Height), color);// draw border
+
+                    if (color != Color.Black * 0.5f)
+                    {
+                        int borderSize = 5;
+                        Color borderColor = color * 0.75f;
                         spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, borderSize), borderColor); // top
                         spriteBatch.DrawLine(area.X, area.Y, new Vector2(borderSize, area.Height), borderColor); // left
                         spriteBatch.DrawLine(area.X + area.Width, area.Y, new Vector2(borderSize, area.Height), borderColor); // right
                         spriteBatch.DrawLine(area.X, area.Y + area.Height, new Vector2(area.Width, borderSize), borderColor); // bottom
                     }
-
-                    spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, area.Height), color);
                 }
             }
         }
@@ -61,8 +63,12 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             foreach (MachineMetadata machine in this.Machines)
             {
-                Vector2 tile = new Vector2(machine.TileBounds.X, machine.TileBounds.Y);
-                machineTilesHasPipe[tile] = machine.Connected.Any();
+                for(int tileX = 0; tileX < machine.TileBounds.Width; tileX++)
+                    for(int tileY = 0; tileY < machine.TileBounds.Height; tileY++)
+                    {
+                        Vector2 tile = new Vector2(machine.TileBounds.X + tileX, machine.TileBounds.Y + tileY);
+                        machineTilesHasPipe[tile] = machine.Connected.Any();
+                    }
             }
 
             return machineTilesHasPipe;
