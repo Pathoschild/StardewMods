@@ -138,6 +138,19 @@ namespace Pathoschild.Stardew.Automate
             }
         }
 
+        /// <summary>The event called when the player presses a keyboard button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        {
+            // startup the overlay
+            if (e.KeyPressed == this.Config.MenuKey)
+            {
+                IEnumerable<MachineMetadata> machines = this.Factory.GetMachinesIn(Game1.currentLocation, this.Helper.Reflection);
+                Game1.activeClickableMenu = new MenuOverlay(machines);
+            }
+        }
+
         /****
         ** Methods
         ****/
