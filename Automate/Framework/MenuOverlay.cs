@@ -32,25 +32,25 @@ namespace Pathoschild.Stardew.Automate.Framework
                 for (int y = Game1.viewport.Y / Game1.tileSize; y < (Game1.viewport.Y + Game1.viewport.Height) / Game1.tileSize; y++)
                 {
                     Vector2 tile = new Vector2(x, y);
-                    Color color = Color.Black * 0.75f;
+                    Rectangle area = new Rectangle(x * Game1.tileSize - Game1.viewport.X, y * Game1.tileSize - Game1.viewport.Y, Game1.tileSize, Game1.tileSize);
+                    Color color = Color.Black * 0.5f;
                     if (machineTilesHasPipe.TryGetValue(tile, out bool hasPipe))
                     {
                         if (hasPipe)
-                            color = Color.Green * 0.5f;
-                        if (!hasPipe)
-                            color = Color.DarkGreen * 0.5f;
+                            color = Color.Green * 0.2f;
+                        else
+                            color = Color.Red * 0.2f;
+
+                        // draw border
+                        int borderSize = 1;
+                        Color borderColor = color * 0.5f;
+                        spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, borderSize), borderColor); // top
+                        spriteBatch.DrawLine(area.X, area.Y, new Vector2(borderSize, area.Height), borderColor); // left
+                        spriteBatch.DrawLine(area.X + area.Width, area.Y, new Vector2(borderSize, area.Height), borderColor); // right
+                        spriteBatch.DrawLine(area.X, area.Y + area.Height, new Vector2(area.Width, borderSize), borderColor); // bottom
                     }
 
-                    Rectangle area = new Rectangle((int)tile.X * Game1.tileSize - Game1.viewport.X, (int)tile.Y * Game1.tileSize - Game1.viewport.Y, Game1.tileSize, Game1.tileSize);
-                    spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, area.Height), color * 0.2f);
-
-                    // draw border
-                    int borderSize = 1;
-                    Color borderColor = color * 0.5f;
-                    spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, borderSize), borderColor); // top
-                    spriteBatch.DrawLine(area.X, area.Y, new Vector2(borderSize, area.Height), borderColor); // left
-                    spriteBatch.DrawLine(area.X + area.Width, area.Y, new Vector2(borderSize, area.Height), borderColor); // right
-                    spriteBatch.DrawLine(area.X, area.Y + area.Height, new Vector2(area.Width, borderSize), borderColor); // bottom
+                    spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, area.Height), color);
                 }
             }
         }
@@ -61,8 +61,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             foreach (MachineMetadata machine in this.Machines)
             {
-                // get tile area in screen pixels
-                Vector2 tile = new Vector2((int)(machine.TileBounds.X * Game1.tileSize - Game1.viewport.X), (int)(machine.TileBounds.Y * Game1.tileSize - Game1.viewport.Y));
+                Vector2 tile = new Vector2(machine.TileBounds.X, machine.TileBounds.Y);
                 machineTilesHasPipe[tile] = machine.Connected.Any();
             }
 
