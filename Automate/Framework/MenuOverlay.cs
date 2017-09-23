@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pathoschild.Stardew.Common;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -11,15 +12,10 @@ namespace Pathoschild.Stardew.Automate.Framework
     class MenuOverlay : IClickableMenu
     {
         private readonly IEnumerable<MachineMetadata> Machines;
+
         public MenuOverlay(IEnumerable<MachineMetadata> machines)
         {
-            //this.Machines = from machine in machines
-            //                where machine.TileLocation != Vector2.Zero
-            //                orderby
-            //                machine.TileLocation.Y ascending,
-            //                machine.TileLocation.X ascending
-            //                select machine;
-
+            this.Machines = machines;
             Game1.viewportFreeze = true;
             Game1.displayHUD = false;
             this.exitFunction = this.ReturnToPlayer;
@@ -27,8 +23,52 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         public override void draw(SpriteBatch spriteBatch)
         {
+            //spriteBatch.DrawLine(0, 0, new Vector2(Game1.viewport.Width, Game1.viewport.Height), Color.Black * 0.5f);
+            //DrawMachinesTiles(spriteBatch);
+            IDictionary<Vector2, bool> machineTilesHasPipe = GetMachineTiles();
 
+            for (int x = Game1.viewport.X / Game1.tileSize; x < (Game1.viewport.X + Game1.viewport.Width) / Game1.tileSize; x++)
+            {
+                for (int y = Game1.viewport.Y / Game1.tileSize; y < (Game1.viewport.Y + Game1.viewport.Height) / Game1.tileSize; y++)
+                {
+                    Vector2 tile = new Vector2(x, y);
+                    Color color = Color.Black * 0.75f;
+                    if (machineTilesHasPipe.TryGetValue(tile, out bool hasPipe))
+                    {
+                        if (hasPipe)
+                            color = Color.Green * 0.5f;
+                        if (!hasPipe)
+                            color = Color.DarkGreen * 0.5f;
+                    }
+
+                    Rectangle area = new Rectangle((int)tile.X * Game1.tileSize - Game1.viewport.X, (int)tile.Y * Game1.tileSize - Game1.viewport.Y, Game1.tileSize, Game1.tileSize);
+                    spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, area.Height), color * 0.2f);
+
+                    // draw border
+                    int borderSize = 1;
+                    Color borderColor = color * 0.5f;
+                    spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, borderSize), borderColor); // top
+                    spriteBatch.DrawLine(area.X, area.Y, new Vector2(borderSize, area.Height), borderColor); // left
+                    spriteBatch.DrawLine(area.X + area.Width, area.Y, new Vector2(borderSize, area.Height), borderColor); // right
+                    spriteBatch.DrawLine(area.X, area.Y + area.Height, new Vector2(area.Width, borderSize), borderColor); // bottom
+                }
+            }
         }
+
+        public IDictionary<Vector2, bool> GetMachineTiles()
+        {
+            IDictionary<Vector2, bool> machineTilesHasPipe = new Dictionary<Vector2, bool>();
+
+            foreach (MachineMetadata machine in this.Machines)
+            {
+                // get tile area in screen pixels
+                Vector2 tile = new Vector2((int)(machine.TileBounds.X * Game1.tileSize - Game1.viewport.X), (int)(machine.TileBounds.Y * Game1.tileSize - Game1.viewport.Y));
+                machineTilesHasPipe[tile] = machine.Connected.Any();
+            }
+
+            return machineTilesHasPipe;
+        }
+
 
         public override void receiveKeyPress(Keys key)
         {
@@ -76,9 +116,35 @@ namespace Pathoschild.Stardew.Automate.Framework
             Game1.displayHUD = true;
         }
 
-        public void DrawMachinesIn(SpriteBatch spriteBatch)
+        public void DrawMachinesTiles(SpriteBatch spriteBatch)
         {
+            foreach (MachineMetadata machine in this.Machines)
+            {
+                // get tile area in screen pixels
+                Rectangle area = new Rectangle((int)(machine.TileBounds.X * Game1.tileSize - Game1.viewport.X), (int)(machine.TileBounds.Y * Game1.tileSize - Game1.viewport.Y), Game1.tileSize, Game1.tileSize);
+                Color color;
 
+                if (machine.Connected.Any())
+                {
+                    color = Color.Green;
+                    // draw background
+                    spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, area.Height), color * 0.2f);
+                }
+                else
+                {
+                    color = Color.DarkGreen;
+                    // draw background
+                    spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, area.Height), color * 0.2f);
+                }
+
+                // draw border
+                int borderSize = 1;
+                Color borderColor = color * 0.5f;
+                spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, borderSize), borderColor); // top
+                spriteBatch.DrawLine(area.X, area.Y, new Vector2(borderSize, area.Height), borderColor); // left
+                spriteBatch.DrawLine(area.X + area.Width, area.Y, new Vector2(borderSize, area.Height), borderColor); // right
+                spriteBatch.DrawLine(area.X, area.Y + area.Height, new Vector2(area.Width, borderSize), borderColor); // bottom
+            }
         }
     }
 }

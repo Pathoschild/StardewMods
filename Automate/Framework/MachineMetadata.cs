@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework
@@ -19,19 +22,19 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The IO pipes connected to the machine.</summary>
         public IPipe[] Connected { get; }
 
+        public Rectangle TileBounds { get; }
 
-        /*********
-        ** Public methods
-        *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The machine instance.</param>
         /// <param name="location">The location containing the machine.</param>
         /// <param name="connected">The IO pipes connected to the machine.</param>
-        public MachineMetadata(IMachine machine, GameLocation location, IEnumerable<IPipe> connected)
+        /// <param name="tileBounds">The machine's tiles.</param>
+        public MachineMetadata(IMachine machine, GameLocation location, IEnumerable<IPipe> connected, Rectangle tileBounds)
         {
             this.Location = location;
             this.Machine = machine;
             this.Connected = connected.ToArray();
+            this.TileBounds = tileBounds;
         }
     }
 }

@@ -48,6 +48,9 @@ namespace Pathoschild.Stardew.Automate
             LocationEvents.LocationObjectsChanged += this.LocationEvents_LocationObjectsChanged;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
 
+            // handle player interaction
+            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
+
             // log info
             if (this.Config.VerboseLogging)
                 this.Monitor.Log($"Verbose logging is enabled. This is useful when troubleshooting but can impact performance. It should be disabled if you don't explicitly need it. You can delete {Path.Combine(this.Helper.DirectoryPath, "config.json")} and restart the game to disable it.", LogLevel.Warn);
@@ -146,8 +149,8 @@ namespace Pathoschild.Stardew.Automate
             // startup the overlay
             if (e.KeyPressed == this.Config.MenuKey)
             {
-                IEnumerable<MachineMetadata> machines = this.Factory.GetMachinesIn(Game1.currentLocation, this.Helper.Reflection);
-                Game1.activeClickableMenu = new MenuOverlay(machines);
+                IEnumerable<MachineMetadata> allMachines = this.Factory.GetAllMachinesIn(Game1.currentLocation, this.Helper.Reflection);
+                Game1.activeClickableMenu = new MenuOverlay(allMachines);
             }
         }
 
@@ -170,7 +173,7 @@ namespace Pathoschild.Stardew.Automate
         {
             this.VerboseLog($"Reloading machines in {location.Name}...");
 
-            this.Machines[location] = this.Factory.GetMachinesIn(location, this.Helper.Reflection).ToArray();
+            this.Machines[location] = this.Factory.GetConnectedMachinesIn(location, this.Helper.Reflection).ToArray();
         }
 
         /// <summary>Process a set of machines.</summary>

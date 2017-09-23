@@ -44,7 +44,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Get all machines in a given location.</summary>
         /// <param name="location">The location to search.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public IEnumerable<MachineMetadata> GetMachinesIn(GameLocation location, IReflectionHelper reflection)
+        public IEnumerable<MachineMetadata> GetAllMachinesIn(GameLocation location, IReflectionHelper reflection)
         {
             // object machines
             foreach (KeyValuePair<Vector2, SObject> pair in location.objects)
@@ -55,9 +55,9 @@ namespace Pathoschild.Stardew.Automate
                 IMachine machine = this.GetMachine(obj, location, tile, reflection);
                 if (machine != null)
                 {
+                    Rectangle tileBounds = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
                     IPipe[] pipes = this.GetConnected(location, tile).ToArray();
-                    if (pipes.Any())
-                        yield return new MachineMetadata(machine, location, pipes);
+                    yield return new MachineMetadata(machine, location, pipes, tileBounds);
                 }
             }
 
@@ -70,9 +70,9 @@ namespace Pathoschild.Stardew.Automate
                 IMachine machine = this.GetMachine(feature);
                 if (machine != null)
                 {
+                    Rectangle tileBounds = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
                     IPipe[] pipes = this.GetConnected(location, tile).ToArray();
-                    if (pipes.Any())
-                        yield return new MachineMetadata(machine, location, pipes);
+                    yield return new MachineMetadata(machine, location, pipes, tileBounds);
                 }
             }
 
@@ -86,8 +86,7 @@ namespace Pathoschild.Stardew.Automate
                     {
                         Rectangle area = new Rectangle(building.tileX, building.tileY, building.tilesWide, building.tilesHigh);
                         IPipe[] pipes = this.GetConnected(location, area).ToArray();
-                        if (pipes.Any())
-                            yield return new MachineMetadata(machine, location, pipes);
+                        yield return new MachineMetadata(machine, location, pipes, area);
                     }
                 }
             }
@@ -100,12 +99,22 @@ namespace Pathoschild.Stardew.Automate
                     Vector2 tile = new Vector2(x, y);
                     if (this.TryGetTileMachine(location, tile, reflection, out IMachine machine, out Vector2 size))
                     {
-                        IPipe[] pipes = this.GetConnected(location, new Rectangle(x, y, (int)size.X, (int)size.Y)).ToArray();
-                        if (pipes.Any())
-                            yield return new MachineMetadata(machine, location, pipes);
+                        Rectangle tileBounds = new Rectangle(x, y, (int)size.X, (int)size.Y);
+                        IPipe[] pipes = this.GetConnected(location, tileBounds).ToArray();
+                        yield return new MachineMetadata(machine, location, pipes, tileBounds);
                     }
                 }
             }
+        }
+
+        /// <summary>Get only connected machines in a given location.</summary>
+        /// <param name="location">The location to search.</param>
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        public IEnumerable<MachineMetadata> GetConnectedMachinesIn(GameLocation location, IReflectionHelper reflection)
+        {
+            return this
+                .GetAllMachinesIn(location, reflection)
+                .Where(machine => machine.Connected.Any());
         }
 
 
