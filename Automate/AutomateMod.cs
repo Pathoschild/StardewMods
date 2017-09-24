@@ -8,6 +8,7 @@ using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.Automate
 {
@@ -147,13 +148,22 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
-            // startup the overlay
-            if (e.KeyPressed == this.Config.MenuKey)
+            try
             {
-                IEnumerable<MachineMetadata> allMachines = this.Factory.GetAllMachinesIn(Game1.currentLocation, this.Helper.Reflection);
+                // open menu
+                if (e.KeyPressed.Equals(this.Config.MenuKey) && (Game1.activeClickableMenu == null || (Game1.activeClickableMenu as GameMenu)?.currentTab == 0))
+                {
+                    IEnumerable<MachineMetadata> allMachines = this.Factory.GetAllMachinesIn(Game1.currentLocation, this.Helper.Reflection);
 
-                // Renders the menu
-                Game1.activeClickableMenu = new MenuOverlay(allMachines);
+                    // Renders the menu
+                    Game1.activeClickableMenu = new MenuOverlay(allMachines);
+                }
+                else if (e.KeyPressed.Equals(this.Config.MenuKey) && Game1.activeClickableMenu != null)
+                    Game1.activeClickableMenu.exitThisMenu();
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, "handling key input");
             }
         }
 

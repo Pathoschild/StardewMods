@@ -46,6 +46,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="reflection">Simplifies access to private game code.</param>
         public IEnumerable<MachineMetadata> GetAllMachinesIn(GameLocation location, IReflectionHelper reflection)
         {
+            // Should machinemetadata store the HashSet<Vector2> of the machine it connects to? Might have to refactor
             // object machines
             foreach (KeyValuePair<Vector2, SObject> pair in location.objects)
             {
@@ -243,6 +244,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="tile">The tile position for which to find connected tiles.</param>
         private IEnumerable<IPipe> GetConnected(GameLocation location, Vector2 tile)
         {
+            // Should this store the HashSet<Vector2> of the machine it connects to? Might have to refactor
             foreach (Vector2 connectedTile in Utility.getSurroundingTileLocationsArray(tile))
             {
                 if (this.TryGetChest(location, connectedTile, out Chest chest))
@@ -261,6 +263,7 @@ namespace Pathoschild.Stardew.Automate
             int right = left + area.Width + 1;
             int bottom = top + area.Height + 1;
 
+            // Should this store the HashSet<Vector2> of the machine it connects to? Might have to refactor
             // get connected chests
             for (int x = left; x <= right; x++)
             {

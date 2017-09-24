@@ -133,7 +133,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Private methods
         *********/
 
-        /// <summary>The method called to update the camera's positiom.</summary>
+        /// <summary>The method called to update the camera's position.</summary>
         /// <param name="x">Pans the camera by adding to the X coordinate./param>
         /// <param name="y">Pans the camera by adding to the Y coordinate.</param>
         private static void PanScreen(int x, int y)
@@ -167,7 +167,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         //    Game1.viewport.Y = Game1.currentLocation.map.DisplayHeight - Game1.viewport.Height;
         //}
 
-        /// <summary>Returns the camera to following the player.</summary>
+        /// <summary>Resets and returns the camera to following the player.</summary>
         private void ReturnToPlayer()
         {
             Game1.viewportFreeze = false;
@@ -178,6 +178,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <returns>Returns a dictionary containing the tiles the machine stands on and if it's connected.</returns>
         private IDictionary<Vector2, bool> GetMachineTiles()
         {
+            // Should this be IDictionary<HashSet<Vector2>, bool>?
+            // Since we want to group the tiles of a building together.
             IDictionary<Vector2, bool> machines = new Dictionary<Vector2, bool>();
 
             foreach (MachineMetadata machine in this.Machines)
@@ -198,6 +200,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         private IDictionary<Vector2, bool> GetChestTiles()
         {
             // get all connected chests
+            // Should this be IDictionary<HashSet<Vector2>, bool>?
             IDictionary<Vector2, bool> chests =
                 (
                     from machine in this.Machines

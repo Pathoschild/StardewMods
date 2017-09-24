@@ -20,6 +20,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The IO pipes connected to the machine.</summary>
         public IPipe[] Connected { get; }
 
+        // Should this be HashSet<Vector2>? Since a building is technically a group of tiles.
         /// <summary>The tiles the machine stand on.</summary>
         public Rectangle TileBounds { get; }
 

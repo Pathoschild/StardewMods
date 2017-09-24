@@ -18,6 +18,7 @@ namespace Pathoschild.Stardew.Automate.Pipes
         /// <summary>The underlying chest.</summary>
         private readonly Chest Chest;
 
+        // Should this be HashSet<Vector2> since it might be connecting to a building, therefore a group of many tiles?
         /// <summary>The tile the pipe is connected to.</summary>
         private readonly Vector2 SourceTile;
 
@@ -27,7 +28,7 @@ namespace Pathoschild.Stardew.Automate.Pipes
 
         /// <summary>Construct an instance.</summary>
         /// <param name="chest">The underlying chest.</param>
-        /// <param name="sourceTile">The tile the chest stands on.</param>
+        /// <param name="sourceTile">The tile the pipe is connected to.</param>
         public ChestPipe(Chest chest, Vector2 sourceTile)
         {
             this.Chest = chest;
