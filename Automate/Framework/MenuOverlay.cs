@@ -109,18 +109,18 @@ namespace Pathoschild.Stardew.Automate.Framework
             if (Game1.options.SnappyMenus)
                 return;
             if (Game1.options.doesInputListContain(Game1.options.moveDownButton, key))
-                Game1.panScreen(0, 4);
+                PanScreen(0, 4);
             else if (Game1.options.doesInputListContain(Game1.options.moveRightButton, key))
-                Game1.panScreen(4, 0);
+                PanScreen(4, 0);
             else if (Game1.options.doesInputListContain(Game1.options.moveUpButton, key))
             {
-                Game1.panScreen(0, -4);
+                PanScreen(0, -4);
             }
             else
             {
                 if (!Game1.options.doesInputListContain(Game1.options.moveLeftButton, key))
                     return;
-                Game1.panScreen(-4, 0);
+                PanScreen(-4, 0);
             }
         }
 
@@ -130,16 +130,41 @@ namespace Pathoschild.Stardew.Automate.Framework
             int num1 = Game1.getOldMouseX() + Game1.viewport.X;
             int num2 = Game1.getOldMouseY() + Game1.viewport.Y;
             if (num1 - Game1.viewport.X < Game1.tileSize)
-                Game1.panScreen(-8, 0);
+                PanScreen(-8, 0);
             else if (num1 - (Game1.viewport.X + Game1.viewport.Width) >= -Game1.tileSize * 2)
-                Game1.panScreen(8, 0);
+                PanScreen(8, 0);
             if (num2 - Game1.viewport.Y < Game1.tileSize)
-                Game1.panScreen(0, -8);
+                PanScreen(0, -8);
             else if (num2 - (Game1.viewport.Y + Game1.viewport.Height) >= -Game1.tileSize)
-                Game1.panScreen(0, 8);
+                PanScreen(0, 8);
             foreach (Keys pressedKey in Game1.oldKBState.GetPressedKeys())
                 this.receiveKeyPress(pressedKey);
         }
+
+        public static void PanScreen(int x, int y)
+        {
+            Game1.previousViewportPosition.X = (float)Game1.viewport.Location.X;
+            Game1.previousViewportPosition.Y = (float)Game1.viewport.Location.Y;
+            Game1.viewport.X += x;
+            Game1.viewport.Y += y;
+            if (Game1.currentLocation.IsOutdoors)
+                Game1.clampViewportToGameMap(); 
+            Game1.updateRaindropPosition();
+        }
+
+        // Not used, might change in the future if we want limit the bounds of the cameraPanning inside.
+        //public static void ClampViewportToGameMap()
+        //{
+        //    if (Game1.viewport.X < 0)
+        //        Game1.viewport.X = 0;
+        //    if (Game1.viewport.X > Game1.currentLocation.map.DisplayWidth - Game1.viewport.Width)
+        //        Game1.viewport.X = Game1.currentLocation.map.DisplayWidth - Game1.viewport.Width;
+        //    if (Game1.viewport.Y < 0)
+        //        Game1.viewport.Y = 0;
+        //    if (Game1.viewport.Y <= Game1.currentLocation.map.DisplayHeight - Game1.viewport.Height)
+        //        return;
+        //    Game1.viewport.Y = Game1.currentLocation.map.DisplayHeight - Game1.viewport.Height;
+        //}
 
         public override void receiveRightClick(int x, int y, bool playSound = true) { }
 
