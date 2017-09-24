@@ -18,27 +18,24 @@ namespace Pathoschild.Stardew.Automate.Pipes
         /// <summary>The underlying chest.</summary>
         private readonly Chest Chest;
 
+        /// <summary>The tile the pipe is connected to.</summary>
         private readonly Vector2 SourceTile;
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="chest">The underlying chest.</param>
-        public ChestPipe(Chest chest)
-        {
-            this.Chest = chest;
-        }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="chest">The underlying chest.</param>
+        /// <param name="sourceTile">The tile the chest stands on.</param>
         public ChestPipe(Chest chest, Vector2 sourceTile)
         {
             this.Chest = chest;
             this.SourceTile = sourceTile;
         }
 
-
+        /// <summary>Gets the tile of the pipe.</summary>
+        /// <returns>Returns the tile the pipe is connected to.</returns>
         public Vector2 GetSourceTile()
         {
             return this.SourceTile;

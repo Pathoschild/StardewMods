@@ -19,6 +19,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <remarks>If the storage can't hold the entire stack, it should reduce the tracked stack accordingly.</remarks>
         void Store(ITrackedStack stack);
 
+        /// <summary>Gets the tile of the pipe.</summary>
+        /// <returns>Returns the tile the pipe is connected to.</returns>
         Vector2 GetSourceTile();
     }
 }

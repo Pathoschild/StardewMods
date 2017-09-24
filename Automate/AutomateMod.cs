@@ -142,7 +142,7 @@ namespace Pathoschild.Stardew.Automate
             }
         }
 
-        /// <summary>The event called when the player presses a keyboard button.</summary>
+        /// <summary>The method invoked when the player presses the menu overlay button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
@@ -151,8 +151,9 @@ namespace Pathoschild.Stardew.Automate
             if (e.KeyPressed == this.Config.MenuKey)
             {
                 IEnumerable<MachineMetadata> allMachines = this.Factory.GetAllMachinesIn(Game1.currentLocation, this.Helper.Reflection);
-                IDictionary<Vector2, bool> chestTileHasPipe = this.Factory.GetConnectedChestTiles(Game1.currentLocation, this.Helper.Reflection);
-                Game1.activeClickableMenu = new MenuOverlay(allMachines, chestTileHasPipe);
+
+                // Renders the menu
+                Game1.activeClickableMenu = new MenuOverlay(allMachines);
             }
         }
 

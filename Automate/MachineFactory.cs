@@ -117,28 +117,6 @@ namespace Pathoschild.Stardew.Automate
                 .Where(machine => machine.Connected.Any());
         }
 
-        public IDictionary<Vector2, bool> GetConnectedChestTiles(GameLocation location, IReflectionHelper reflection)
-        {
-            // get all connected chests
-            IDictionary<Vector2, bool> chests =
-                (
-                    from machine in this.GetConnectedMachinesIn(location, reflection)
-                    from pipe in machine.Connected
-                    select pipe.GetSourceTile()
-                )
-                .Distinct()
-                .ToDictionary(tile => tile, tile => true);
-
-            // get all unconnected chests
-            //foreach (var pair in location.objects)
-            //{
-            //    if (pair.Value is Chest && !chests.ContainsKey(pair.Key))
-            //        chests[pair.Key] = false;
-            //}
-
-            return chests;
-        }
-
 
         /*********
         ** Private methods
@@ -208,7 +186,6 @@ namespace Pathoschild.Stardew.Automate
         {
             if (feature is FruitTree fruitTree)
                 return new FruitTreeMachine(fruitTree);
-
             return null;
         }
 
@@ -222,7 +199,6 @@ namespace Pathoschild.Stardew.Automate
                 return new MillMachine(mill);
             if (building.buildingType == "Silo")
                 return new FeedHopperMachine();
-
             return null;
         }
 

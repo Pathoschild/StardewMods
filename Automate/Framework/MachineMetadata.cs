@@ -20,13 +20,14 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The IO pipes connected to the machine.</summary>
         public IPipe[] Connected { get; }
 
+        /// <summary>The tiles the machine stand on.</summary>
         public Rectangle TileBounds { get; }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The machine instance.</param>
         /// <param name="location">The location containing the machine.</param>
         /// <param name="connected">The IO pipes connected to the machine.</param>
-        /// <param name="tileBounds">The machine's tiles.</param>
+        /// <param name="tileBounds">The tiles the machine stand on.</param>
         public MachineMetadata(IMachine machine, GameLocation location, IEnumerable<IPipe> connected, Rectangle tileBounds)
         {
             this.Location = location;
