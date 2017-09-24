@@ -7,16 +7,20 @@ using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
 using StardewValley;
 using StardewValley.Menus;
+using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
     class MenuOverlay : IClickableMenu
     {
         private readonly IEnumerable<MachineMetadata> Machines;
+        private readonly IDictionary<Vector2, bool> ChestTileHasPipe;
 
-        public MenuOverlay(IEnumerable<MachineMetadata> machines)
+        public MenuOverlay(IEnumerable<MachineMetadata> machines, IDictionary<Vector2, bool> chestTileHasPipe)
         {
             this.Machines = machines;
+            this.ChestTileHasPipe = chestTileHasPipe;
+
             Game1.viewportFreeze = true;
             Game1.displayHUD = false;
             this.exitFunction = this.ReturnToPlayer;
@@ -41,6 +45,14 @@ namespace Pathoschild.Stardew.Automate.Framework
                     if (machineTilesHasPipe.TryGetValue(tile, out bool hasPipe))
                     {
                         if (hasPipe)
+                            color = Color.Green * 0.2f;
+                        else
+                            color = Color.Red * 0.2f;
+                    }
+
+                    if (this.GetAllChestTiles().TryGetValue(tile, out bool hasConnection))
+                    {
+                        if (hasConnection)
                             color = Color.Green * 0.2f;
                         else
                             color = Color.Red * 0.2f;
@@ -76,6 +88,18 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
 
             return machineTilesHasPipe;
+        }
+
+        public IDictionary<Vector2, bool> GetAllChestTiles()
+        {
+            // get all unconnected chests
+            foreach (var pair in Game1.currentLocation.objects)
+            {
+                if (pair.Value is Chest && !this.ChestTileHasPipe.ContainsKey(pair.Key))
+                    this.ChestTileHasPipe[pair.Key] = false;
+            }
+
+            return this.ChestTileHasPipe;
         }
 
 

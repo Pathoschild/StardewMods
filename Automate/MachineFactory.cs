@@ -117,6 +117,28 @@ namespace Pathoschild.Stardew.Automate
                 .Where(machine => machine.Connected.Any());
         }
 
+        public IDictionary<Vector2, bool> GetConnectedChestTiles(GameLocation location, IReflectionHelper reflection)
+        {
+            // get all connected chests
+            IDictionary<Vector2, bool> chests =
+                (
+                    from machine in this.GetConnectedMachinesIn(location, reflection)
+                    from pipe in machine.Connected
+                    select pipe.GetSourceTile()
+                )
+                .Distinct()
+                .ToDictionary(tile => tile, tile => true);
+
+            // get all unconnected chests
+            //foreach (var pair in location.objects)
+            //{
+            //    if (pair.Value is Chest && !chests.ContainsKey(pair.Key))
+            //        chests[pair.Key] = false;
+            //}
+
+            return chests;
+        }
+
 
         /*********
         ** Private methods
@@ -248,7 +270,7 @@ namespace Pathoschild.Stardew.Automate
             foreach (Vector2 connectedTile in Utility.getSurroundingTileLocationsArray(tile))
             {
                 if (this.TryGetChest(location, connectedTile, out Chest chest))
-                    yield return new ChestPipe(chest);
+                    yield return new ChestPipe(chest, connectedTile);
             }
         }
 
@@ -266,20 +288,24 @@ namespace Pathoschild.Stardew.Automate
             // get connected chests
             for (int x = left; x <= right; x++)
             {
-                if (this.TryGetChest(location, new Vector2(x, top), out Chest chest))
-                    yield return new ChestPipe(chest);
+                Vector2 tile = new Vector2(x, top);
+                if (this.TryGetChest(location, tile, out Chest chest))
+                    yield return new ChestPipe(chest, tile);
             }
             for (int y = top + 1; y <= bottom - 1; y++)
             {
-                if (this.TryGetChest(location, new Vector2(left, y), out Chest leftChest))
-                    yield return new ChestPipe(leftChest);
-                if (this.TryGetChest(location, new Vector2(right, y), out Chest rightChest))
-                    yield return new ChestPipe(rightChest);
+                Vector2 leftY = new Vector2(left, y);
+                Vector2 rightY = new Vector2(right, y);
+                if (this.TryGetChest(location, leftY, out Chest leftChest))
+                    yield return new ChestPipe(leftChest, leftY);
+                if (this.TryGetChest(location, rightY, out Chest rightChest))
+                    yield return new ChestPipe(rightChest, rightY);
             }
             for (int x = left; x <= right; x++)
             {
-                if (this.TryGetChest(location, new Vector2(x, bottom), out Chest chest))
-                    yield return new ChestPipe(chest);
+                Vector2 tile = new Vector2(x, bottom);
+                if (this.TryGetChest(location, tile, out Chest chest))
+                    yield return new ChestPipe(chest, tile);
             }
         }
 

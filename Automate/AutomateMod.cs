@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
@@ -150,7 +151,8 @@ namespace Pathoschild.Stardew.Automate
             if (e.KeyPressed == this.Config.MenuKey)
             {
                 IEnumerable<MachineMetadata> allMachines = this.Factory.GetAllMachinesIn(Game1.currentLocation, this.Helper.Reflection);
-                Game1.activeClickableMenu = new MenuOverlay(allMachines);
+                IDictionary<Vector2, bool> chestTileHasPipe = this.Factory.GetConnectedChestTiles(Game1.currentLocation, this.Helper.Reflection);
+                Game1.activeClickableMenu = new MenuOverlay(allMachines, chestTileHasPipe);
             }
         }
 
