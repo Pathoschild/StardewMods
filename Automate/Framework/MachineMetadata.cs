@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.Common;
 using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework

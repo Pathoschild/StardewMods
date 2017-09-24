@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -23,13 +24,16 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         public override void draw(SpriteBatch spriteBatch)
         {
-            //spriteBatch.DrawLine(0, 0, new Vector2(Game1.viewport.Width, Game1.viewport.Height), Color.Black * 0.5f);
-            //DrawMachinesTiles(spriteBatch);
             IDictionary<Vector2, bool> machineTilesHasPipe = GetMachineTiles();
 
-            for (int x = Game1.viewport.X / Game1.tileSize; x < (Game1.viewport.X + Game1.viewport.Width) / Game1.tileSize; x++)
+            int tileXOnScreen = Game1.viewport.X / Game1.tileSize;
+            int tileYOnScreen = Game1.viewport.Y / Game1.tileSize;
+            int maximumTilesXOnScreen = (int)Math.Ceiling((Game1.viewport.X + Game1.viewport.Width) / (decimal)Game1.tileSize);
+            int maximumTilesYOnScreen = (int)Math.Ceiling((Game1.viewport.Y + Game1.viewport.Height) / (decimal)Game1.tileSize);
+
+            for (int x = tileXOnScreen; x < maximumTilesXOnScreen; x++)
             {
-                for (int y = Game1.viewport.Y / Game1.tileSize; y < (Game1.viewport.Y + Game1.viewport.Height) / Game1.tileSize; y++)
+                for (int y = tileYOnScreen; y < maximumTilesYOnScreen; y++)
                 {
                     Vector2 tile = new Vector2(x, y);
                     Rectangle area = new Rectangle(x * Game1.tileSize - Game1.viewport.X, y * Game1.tileSize - Game1.viewport.Y, Game1.tileSize, Game1.tileSize);
@@ -39,7 +43,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                         if (hasPipe)
                             color = Color.Green * 0.2f;
                         else
-                            color = Color.Blue * 0.2f;
+                            color = Color.Red * 0.2f;
                     }
 
                     spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, area.Height), color);// draw border
@@ -119,37 +123,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             Game1.viewportFreeze = false;
             Game1.displayHUD = true;
-        }
-
-        public void DrawMachinesTiles(SpriteBatch spriteBatch)
-        {
-            foreach (MachineMetadata machine in this.Machines)
-            {
-                // get tile area in screen pixels
-                Rectangle area = new Rectangle((int)(machine.TileBounds.X * Game1.tileSize - Game1.viewport.X), (int)(machine.TileBounds.Y * Game1.tileSize - Game1.viewport.Y), Game1.tileSize, Game1.tileSize);
-                Color color;
-
-                if (machine.Connected.Any())
-                {
-                    color = Color.Green;
-                    // draw background
-                    spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, area.Height), color * 0.2f);
-                }
-                else
-                {
-                    color = Color.DarkGreen;
-                    // draw background
-                    spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, area.Height), color * 0.2f);
-                }
-
-                // draw border
-                int borderSize = 1;
-                Color borderColor = color * 0.5f;
-                spriteBatch.DrawLine(area.X, area.Y, new Vector2(area.Width, borderSize), borderColor); // top
-                spriteBatch.DrawLine(area.X, area.Y, new Vector2(borderSize, area.Height), borderColor); // left
-                spriteBatch.DrawLine(area.X + area.Width, area.Y, new Vector2(borderSize, area.Height), borderColor); // right
-                spriteBatch.DrawLine(area.X, area.Y + area.Height, new Vector2(area.Width, borderSize), borderColor); // bottom
-            }
         }
     }
 }
