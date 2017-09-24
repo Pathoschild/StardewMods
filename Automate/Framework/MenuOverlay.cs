@@ -123,7 +123,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 this.receiveKeyPress(pressedKey);
         }
 
-        /// <summary>The method invoked when the player left-clicks.</summary>
+        /// <summary>The method invoked when the player right-clicks.</summary>
         /// <param name="x">The X-position of the cursor.</param>
         /// <param name="y">The Y-position of the cursor.</param>
         /// <remarks></remarks>
