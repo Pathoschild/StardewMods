@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
-using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.Automate
 {
@@ -150,16 +148,18 @@ namespace Pathoschild.Stardew.Automate
         {
             try
             {
-                // open menu
-                if (e.KeyPressed.Equals(this.Config.MenuKey) && (Game1.activeClickableMenu == null || (Game1.activeClickableMenu as GameMenu)?.currentTab == 0))
+                // toggle menu
+                if (e.KeyPressed == this.Config.MenuKey)
                 {
-                    IEnumerable<MachineMetadata> allMachines = this.Factory.GetAllMachinesIn(Game1.currentLocation, this.Helper.Reflection);
-
-                    // Renders the menu
-                    Game1.activeClickableMenu = new MenuOverlay(allMachines);
+                    if (Game1.activeClickableMenu == null)
+                    {
+                        Game1.activeClickableMenu = new MenuOverlay(
+                            this.Factory.GetAllMachinesIn(Game1.currentLocation, this.Helper.Reflection)
+                        );
+                    }
+                    else if (Game1.activeClickableMenu is MenuOverlay menu)
+                        menu.exitThisMenu();
                 }
-                else if (e.KeyPressed.Equals(this.Config.MenuKey) && Game1.activeClickableMenu != null)
-                    Game1.activeClickableMenu.exitThisMenu();
             }
             catch (Exception ex)
             {
