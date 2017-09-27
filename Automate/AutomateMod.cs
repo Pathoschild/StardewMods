@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.Automate
 {
@@ -47,6 +49,9 @@ namespace Pathoschild.Stardew.Automate
             LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
             LocationEvents.LocationObjectsChanged += this.LocationEvents_LocationObjectsChanged;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+
+            // handle player interaction
+            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
 
             // log info
             if (this.Config.VerboseLogging)
@@ -138,6 +143,30 @@ namespace Pathoschild.Stardew.Automate
             }
         }
 
+        /// <summary>The method invoked when the player presses the menu overlay button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        {
+            try
+            {
+                // open menu
+                if (e.KeyPressed.Equals(this.Config.MenuKey) && (Game1.activeClickableMenu == null || (Game1.activeClickableMenu as GameMenu)?.currentTab == 0))
+                {
+                    IEnumerable<MachineMetadata> allMachines = this.Factory.GetAllMachinesIn(Game1.currentLocation, this.Helper.Reflection);
+
+                    // Renders the menu
+                    Game1.activeClickableMenu = new MenuOverlay(allMachines);
+                }
+                else if (e.KeyPressed.Equals(this.Config.MenuKey) && Game1.activeClickableMenu != null)
+                    Game1.activeClickableMenu.exitThisMenu();
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, "handling key input");
+            }
+        }
+
         /****
         ** Methods
         ****/
@@ -157,7 +186,7 @@ namespace Pathoschild.Stardew.Automate
         {
             this.VerboseLog($"Reloading machines in {location.Name}...");
 
-            this.Machines[location] = this.Factory.GetMachinesIn(location, this.Helper.Reflection).ToArray();
+            this.Machines[location] = this.Factory.GetConnectedMachinesIn(location, this.Helper.Reflection).ToArray();
         }
 
         /// <summary>Process a set of machines.</summary>

@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
 using StardewValley.Objects;
@@ -17,16 +18,30 @@ namespace Pathoschild.Stardew.Automate.Pipes
         /// <summary>The underlying chest.</summary>
         private readonly Chest Chest;
 
+        // Should this be HashSet<Vector2> since it might be connecting to a building, therefore a group of many tiles?
+        /// <summary>The tile the pipe is connected to.</summary>
+        private readonly Vector2 SourceTile;
 
         /*********
         ** Public methods
         *********/
+
         /// <summary>Construct an instance.</summary>
         /// <param name="chest">The underlying chest.</param>
-        public ChestPipe(Chest chest)
+        /// <param name="sourceTile">The tile the pipe is connected to.</param>
+        public ChestPipe(Chest chest, Vector2 sourceTile)
         {
             this.Chest = chest;
+            this.SourceTile = sourceTile;
         }
+
+        /// <summary>Gets the tile of the pipe.</summary>
+        /// <returns>Returns the tile the pipe is connected to.</returns>
+        public Vector2 GetSourceTile()
+        {
+            return this.SourceTile;
+        }
+
 
         /// <summary>Store an item stack.</summary>
         /// <param name="stack">The item stack to store.</param>

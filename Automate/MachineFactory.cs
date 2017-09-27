@@ -44,8 +44,9 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Get all machines in a given location.</summary>
         /// <param name="location">The location to search.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public IEnumerable<MachineMetadata> GetMachinesIn(GameLocation location, IReflectionHelper reflection)
+        public IEnumerable<MachineMetadata> GetAllMachinesIn(GameLocation location, IReflectionHelper reflection)
         {
+            // Should machinemetadata store the HashSet<Vector2> of the machine it connects to? Might have to refactor
             // object machines
             foreach (KeyValuePair<Vector2, SObject> pair in location.objects)
             {
@@ -55,9 +56,9 @@ namespace Pathoschild.Stardew.Automate
                 IMachine machine = this.GetMachine(obj, location, tile, reflection);
                 if (machine != null)
                 {
+                    Rectangle tileBounds = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
                     IPipe[] pipes = this.GetConnected(location, tile).ToArray();
-                    if (pipes.Any())
-                        yield return new MachineMetadata(machine, location, pipes);
+                    yield return new MachineMetadata(machine, location, pipes, tileBounds);
                 }
             }
 
@@ -70,9 +71,9 @@ namespace Pathoschild.Stardew.Automate
                 IMachine machine = this.GetMachine(feature);
                 if (machine != null)
                 {
+                    Rectangle tileBounds = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
                     IPipe[] pipes = this.GetConnected(location, tile).ToArray();
-                    if (pipes.Any())
-                        yield return new MachineMetadata(machine, location, pipes);
+                    yield return new MachineMetadata(machine, location, pipes, tileBounds);
                 }
             }
 
@@ -86,8 +87,7 @@ namespace Pathoschild.Stardew.Automate
                     {
                         Rectangle area = new Rectangle(building.tileX, building.tileY, building.tilesWide, building.tilesHigh);
                         IPipe[] pipes = this.GetConnected(location, area).ToArray();
-                        if (pipes.Any())
-                            yield return new MachineMetadata(machine, location, pipes);
+                        yield return new MachineMetadata(machine, location, pipes, area);
                     }
                 }
             }
@@ -100,12 +100,22 @@ namespace Pathoschild.Stardew.Automate
                     Vector2 tile = new Vector2(x, y);
                     if (this.TryGetTileMachine(location, tile, reflection, out IMachine machine, out Vector2 size))
                     {
-                        IPipe[] pipes = this.GetConnected(location, new Rectangle(x, y, (int)size.X, (int)size.Y)).ToArray();
-                        if (pipes.Any())
-                            yield return new MachineMetadata(machine, location, pipes);
+                        Rectangle tileBounds = new Rectangle(x, y, (int)size.X, (int)size.Y);
+                        IPipe[] pipes = this.GetConnected(location, tileBounds).ToArray();
+                        yield return new MachineMetadata(machine, location, pipes, tileBounds);
                     }
                 }
             }
+        }
+
+        /// <summary>Get only connected machines in a given location.</summary>
+        /// <param name="location">The location to search.</param>
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        public IEnumerable<MachineMetadata> GetConnectedMachinesIn(GameLocation location, IReflectionHelper reflection)
+        {
+            return this
+                .GetAllMachinesIn(location, reflection)
+                .Where(machine => machine.Connected.Any());
         }
 
 
@@ -177,7 +187,6 @@ namespace Pathoschild.Stardew.Automate
         {
             if (feature is FruitTree fruitTree)
                 return new FruitTreeMachine(fruitTree);
-
             return null;
         }
 
@@ -191,7 +200,6 @@ namespace Pathoschild.Stardew.Automate
                 return new MillMachine(mill);
             if (building.buildingType == "Silo")
                 return new FeedHopperMachine();
-
             return null;
         }
 
@@ -236,10 +244,11 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="tile">The tile position for which to find connected tiles.</param>
         private IEnumerable<IPipe> GetConnected(GameLocation location, Vector2 tile)
         {
+            // Should this store the HashSet<Vector2> of the machine it connects to? Might have to refactor
             foreach (Vector2 connectedTile in Utility.getSurroundingTileLocationsArray(tile))
             {
                 if (this.TryGetChest(location, connectedTile, out Chest chest))
-                    yield return new ChestPipe(chest);
+                    yield return new ChestPipe(chest, connectedTile);
             }
         }
 
@@ -254,23 +263,28 @@ namespace Pathoschild.Stardew.Automate
             int right = left + area.Width + 1;
             int bottom = top + area.Height + 1;
 
+            // Should this store the HashSet<Vector2> of the machine it connects to? Might have to refactor
             // get connected chests
             for (int x = left; x <= right; x++)
             {
-                if (this.TryGetChest(location, new Vector2(x, top), out Chest chest))
-                    yield return new ChestPipe(chest);
+                Vector2 tile = new Vector2(x, top);
+                if (this.TryGetChest(location, tile, out Chest chest))
+                    yield return new ChestPipe(chest, tile);
             }
             for (int y = top + 1; y <= bottom - 1; y++)
             {
-                if (this.TryGetChest(location, new Vector2(left, y), out Chest leftChest))
-                    yield return new ChestPipe(leftChest);
-                if (this.TryGetChest(location, new Vector2(right, y), out Chest rightChest))
-                    yield return new ChestPipe(rightChest);
+                Vector2 leftY = new Vector2(left, y);
+                Vector2 rightY = new Vector2(right, y);
+                if (this.TryGetChest(location, leftY, out Chest leftChest))
+                    yield return new ChestPipe(leftChest, leftY);
+                if (this.TryGetChest(location, rightY, out Chest rightChest))
+                    yield return new ChestPipe(rightChest, rightY);
             }
             for (int x = left; x <= right; x++)
             {
-                if (this.TryGetChest(location, new Vector2(x, bottom), out Chest chest))
-                    yield return new ChestPipe(chest);
+                Vector2 tile = new Vector2(x, bottom);
+                if (this.TryGetChest(location, tile, out Chest chest))
+                    yield return new ChestPipe(chest, tile);
             }
         }
 

@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework
@@ -17,5 +18,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="stack">The item stack to store.</param>
         /// <remarks>If the storage can't hold the entire stack, it should reduce the tracked stack accordingly.</remarks>
         void Store(ITrackedStack stack);
+
+        // Should this be HashSet<Vector2>?
+        /// <summary>Gets the tile of the pipe.</summary>
+        /// <returns>Returns the tile the pipe is connected to.</returns>
+        Vector2 GetSourceTile();
     }
 }
