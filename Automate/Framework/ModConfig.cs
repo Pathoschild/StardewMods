@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The number of ticks between each automation process (60 = once per second).</summary>
         public int AutomationInterval { get; set; } = 60;
 
-        /// <summary>The button which starts up the menu overlay.</summary>
-        public Keys MenuKey { get; set; } = Keys.U;
+        /// <summary>The button which toggles the automation overlay.</summary>
+        public Keys ToggleOverlayKey { get; set; } = Keys.U;
     }
 }

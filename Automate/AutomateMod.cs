@@ -149,7 +149,7 @@ namespace Pathoschild.Stardew.Automate
             try
             {
                 // toggle menu
-                if (e.KeyPressed == this.Config.MenuKey)
+                if (e.KeyPressed == this.Config.ToggleOverlayKey)
                 {
                     if (Game1.activeClickableMenu == null)
                     {

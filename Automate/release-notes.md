@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.8
+* Added readonly overlay to show automatable machines.
+
 ## 1.7
 * Added support for egg incubators and slime incubators.
 * Fixed machines inside buildings not being automated until you visit the building.
