@@ -59,6 +59,9 @@ namespace Pathoschild.Stardew.Automate.Framework
             int maxX = (int)Math.Ceiling((Game1.viewport.X + Game1.viewport.Width) / (decimal)Game1.tileSize);
             int maxY = (int)Math.Ceiling((Game1.viewport.Y + Game1.viewport.Height) / (decimal)Game1.tileSize);
 
+
+            int borderSize = 5;
+
             for (int x = minX; x < maxX; x++)
             {
                 for (int y = minY; y < maxY; y++)
@@ -76,6 +79,9 @@ namespace Pathoschild.Stardew.Automate.Framework
                             color = Color.Green * 0.2f;
                         else
                             color = Color.Red * 0.2f;
+
+                        if (this.ClickedTiles.Contains(tile))
+                            color = Color.Orange * 0.2f;
                     }
                     else if (this.ChestTileConnections.TryGetValue(tile, out bool hasConnection))
                     {
@@ -84,6 +90,9 @@ namespace Pathoschild.Stardew.Automate.Framework
                             color = Color.Green * 0.2f;
                         else
                             color = Color.Red * 0.2f;
+
+                        if (this.ClickedTiles.Contains(tile))
+                            color = Color.Orange * 0.2f;
                     }
 
                     // draw background
@@ -92,7 +101,6 @@ namespace Pathoschild.Stardew.Automate.Framework
                     // draw border
                     if (hasTarget)
                     {
-                        int borderSize = 5;
                         Color borderColor = color * 0.75f;
                         spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, borderSize), borderColor); // top
                         spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // left
@@ -102,20 +110,33 @@ namespace Pathoschild.Stardew.Automate.Framework
                 }
             }
 
-            foreach(Vector2 tile in this.ClickedTiles)
+            foreach (Vector2 tile in this.ClickedTiles)
             {
-                int borderSize = 5;
-                Color borderColor = Color.Orange * 0.75f;
+                Color borderColor = Color.Blue * 0.75f;
                 Rectangle screenArea = new Rectangle((int)tile.X * Game1.tileSize - Game1.viewport.X, (int)tile.Y * Game1.tileSize - Game1.viewport.Y, Game1.tileSize, Game1.tileSize);
 
-                if (tile.X == this.ClickedTiles.Max(c => c.X))
-                    spriteBatch.DrawLine(screenArea.X + screenArea.Width, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor);
-                if (tile.X == this.ClickedTiles.Min(c => c.X))
-                    spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor);
-                if (tile.Y == this.ClickedTiles.Max(c => c.Y))
-                    spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, borderSize), borderColor);
-                if (tile.Y == this.ClickedTiles.Min(c => c.Y))
-                    spriteBatch.DrawLine(screenArea.X, screenArea.Y + screenArea.Height, new Vector2(screenArea.Width, borderSize), borderColor);
+                //get surrounding corner
+                float left = tile.X - 1;
+                float top = tile.Y - 1;
+                float right = tile.X + 1;
+                float bottom = tile.Y + 1;
+
+                if (!this.ClickedTiles.Contains(new Vector2(tile.X, top)))
+                {
+                    spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, borderSize), borderColor); // top
+                }
+                if (!this.ClickedTiles.Contains(new Vector2(tile.X, bottom)))
+                {
+                    spriteBatch.DrawLine(screenArea.X, screenArea.Y + screenArea.Height, new Vector2(screenArea.Width, borderSize), borderColor); // bottom
+                }
+                if (!this.ClickedTiles.Contains(new Vector2(left, tile.Y)))
+                {
+                    spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // left
+                }
+                if (!this.ClickedTiles.Contains(new Vector2(right, tile.Y)))
+                {
+                    spriteBatch.DrawLine(screenArea.X + screenArea.Width, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // right
+                }
             }
 
             this.drawMouse(spriteBatch);
@@ -173,24 +194,29 @@ namespace Pathoschild.Stardew.Automate.Framework
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
             Vector2 tile = new Vector2((x + Game1.viewport.X) / Game1.tileSize, (y + Game1.viewport.Y) / Game1.tileSize);
-            
-            bool isAdjacent = Utility
-                .getAdjacentTileLocationsArray(tile)
-                .Intersect(this.ClickedTiles)
-                .Any();
-
-            if(!this.ClickedTiles.Contains(tile))
-            {
-                if(this.ClickedTiles.Count < 1)
-                    this.ClickedTiles.Add(tile);
-                else if(isAdjacent)
-                    this.ClickedTiles.Add(tile);
-            }
-            else
+            if (this.ClickedTiles.Contains(tile))
                 this.ClickedTiles.Remove(tile);
-
+            else if (this.CanAddToGroup(tile, this.ClickedTiles))
+                this.ClickedTiles.Add(tile);
         }
 
+        private bool CanAddToGroup(Vector2 tile, HashSet<Vector2> groupTiles)
+        {
+            // first tile
+            if (!groupTiles.Any())
+                return true;
+
+            // adjacent to any tile in group
+            return IsAdjacentTile(tile, groupTiles);
+        }
+
+        private bool IsAdjacentTile(Vector2 tile, HashSet<Vector2> groupTiles)
+        {
+            return Utility
+                .getAdjacentTileLocationsArray(tile)
+                .Intersect(groupTiles)
+                .Any();
+        }
 
         /*********
         ** Private methods
