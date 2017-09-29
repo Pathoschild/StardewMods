@@ -30,6 +30,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The amount by which to pan the screen quickly.</summary>
         private readonly int FastPanAmount = 8;
 
+        private HashSet<Vector2> ClickedTiles;
+
 
         /*********
         ** Public methods
@@ -41,6 +43,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             machines = machines.ToArray();
             this.MachineTileConnections = this.GetMachineTileConnections(machines);
             this.ChestTileConnections = this.GetChestTileConnections(machines);
+            this.ClickedTiles = new HashSet<Vector2>();
             this.exitFunction = this.ReleaseViewport;
 
             this.TakeViewport();
@@ -98,6 +101,24 @@ namespace Pathoschild.Stardew.Automate.Framework
                     }
                 }
             }
+
+            foreach(Vector2 tile in this.ClickedTiles)
+            {
+                int borderSize = 5;
+                Color borderColor = Color.Orange * 0.75f;
+                Rectangle screenArea = new Rectangle((int)tile.X * Game1.tileSize - Game1.viewport.X, (int)tile.Y * Game1.tileSize - Game1.viewport.Y, Game1.tileSize, Game1.tileSize);
+
+                if (tile.X == this.ClickedTiles.Max(c => c.X))
+                    spriteBatch.DrawLine(screenArea.X + screenArea.Width, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor);
+                if (tile.X == this.ClickedTiles.Min(c => c.X))
+                    spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor);
+                if (tile.Y == this.ClickedTiles.Max(c => c.Y))
+                    spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, borderSize), borderColor);
+                if (tile.Y == this.ClickedTiles.Min(c => c.Y))
+                    spriteBatch.DrawLine(screenArea.X, screenArea.Y + screenArea.Height, new Vector2(screenArea.Width, borderSize), borderColor);
+            }
+
+            this.drawMouse(spriteBatch);
         }
 
         /// <summary>Handle keyboard input from the player.</summary>
@@ -149,10 +170,32 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="playSound">Whether to enable sound.</param>
         public override void receiveRightClick(int x, int y, bool playSound = true) { }
 
+        public override void receiveLeftClick(int x, int y, bool playSound = true)
+        {
+            Vector2 tile = new Vector2((x + Game1.viewport.X) / Game1.tileSize, (y + Game1.viewport.Y) / Game1.tileSize);
+            
+            bool isAdjacent = Utility
+                .getAdjacentTileLocationsArray(tile)
+                .Intersect(this.ClickedTiles)
+                .Any();
+
+            if(!this.ClickedTiles.Contains(tile))
+            {
+                if(this.ClickedTiles.Count < 1)
+                    this.ClickedTiles.Add(tile);
+                else if(isAdjacent)
+                    this.ClickedTiles.Add(tile);
+            }
+            else
+                this.ClickedTiles.Remove(tile);
+
+        }
+
 
         /*********
         ** Private methods
         *********/
+
         /// <summary>The method called to update the camera's position.</summary>
         /// <param name="x">Pans the camera by adding to the X coordinate.</param>
         /// <param name="y">Pans the camera by adding to the Y coordinate.</param>
