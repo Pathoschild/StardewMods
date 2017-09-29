@@ -107,19 +107,15 @@ namespace Pathoschild.Stardew.Automate.Framework
                     bool hasTarget = false;
                     if (this.MachineTileConnections.TryGetValue(tile, out bool hasPipe))
                     {
-                        hasTarget = true;
-                        if (hasPipe)
-                            color = Color.Green * 0.2f;
-                        else
-                            color = Color.Red * 0.2f;
+                        color = ColorTiles(color, tile, hasPipe, out bool isTarget);
+
+                        hasTarget = isTarget; // should this be is Not selected or something
                     }
                     else if (this.ChestTileConnections.TryGetValue(tile, out bool hasConnection))
                     {
-                        hasTarget = true;
-                        if (hasConnection)
-                            color = Color.Green * 0.2f;
-                        else
-                            color = Color.Red * 0.2f;
+                        color = ColorTiles(color, tile, hasConnection, out bool isTarget);
+
+                        hasTarget = isTarget;
                     }
 
                     // draw background
@@ -176,34 +172,6 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             if(this.ClickedTiles.Any())
             {
-                foreach (Vector2 tile in this.ClickedTiles)
-                {
-                    Color borderColor = Color.Orange * 0.75f;
-                    Rectangle screenArea = new Rectangle((int)tile.X * Game1.tileSize - Game1.viewport.X, (int)tile.Y * Game1.tileSize - Game1.viewport.Y, Game1.tileSize, Game1.tileSize);
-
-                    //get surrounding corner
-                    float left = tile.X - 1;
-                    float top = tile.Y - 1;
-                    float right = tile.X + 1;
-                    float bottom = tile.Y + 1;
-
-                    if (!this.ClickedTiles.Contains(new Vector2(tile.X, top)))
-                    {
-                        spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, borderSize), borderColor); // top
-                    }
-                    if (!this.ClickedTiles.Contains(new Vector2(tile.X, bottom)))
-                    {
-                        spriteBatch.DrawLine(screenArea.X, screenArea.Y + screenArea.Height, new Vector2(screenArea.Width, borderSize), borderColor); // bottom
-                    }
-                    if (!this.ClickedTiles.Contains(new Vector2(left, tile.Y)))
-                    {
-                        spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // left
-                    }
-                    if (!this.ClickedTiles.Contains(new Vector2(right, tile.Y)))
-                    {
-                        spriteBatch.DrawLine(screenArea.X + screenArea.Width, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // right
-                    }
-                }
                 this.saveButton.draw(spriteBatch);
             }
 
@@ -262,36 +230,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
             Vector2 tile = new Vector2((x + Game1.viewport.X) / Game1.tileSize, (y + Game1.viewport.Y) / Game1.tileSize);
-            
-        }
-
-        private HashSet<Vector2> GroupTiles(Vector2 tile)
-        {
-            HashSet<Vector2> clickedTiles = new HashSet<Vector2>();
-            if (clickedTiles.Contains(tile))
-                clickedTiles.Remove(tile);
-            else if (this.CanAddToGroup(tile, clickedTiles))
-                clickedTiles.Add(tile);
-
-            return clickedTiles;
-        }
-
-        private bool CanAddToGroup(Vector2 tile, HashSet<Vector2> groupTiles)
-        {
-            // first tile
-            if (!groupTiles.Any())
-                return true;
-
-            // adjacent to any tile in group
-            return IsAdjacentTile(tile, groupTiles);
-        }
-
-        private bool IsAdjacentTile(Vector2 tile, HashSet<Vector2> groupTiles)
-        {
-            return Utility
-                .getAdjacentTileLocationsArray(tile)
-                .Intersect(groupTiles)
-                .Any();
+            if (this.ClickedTiles.Contains(tile))
+                this.ClickedTiles.Remove(tile);
+            else if (this.CanAddToGroup(tile, this.ClickedTiles))
+                this.ClickedTiles.Add(tile);
         }
 
         /*********
@@ -380,6 +322,45 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
 
             return found;
+        }
+
+        //private HashSet<Vector2> GroupTiles(Vector2 tile) { }
+
+        private bool CanAddToGroup(Vector2 tile, HashSet<Vector2> groupTiles)
+        {
+            // first tile
+            if (!groupTiles.Any())
+                return true;
+
+            // adjacent to any tile in group
+            return IsAdjacentTile(tile, groupTiles);
+        }
+
+        private bool IsAdjacentTile(Vector2 tile, HashSet<Vector2> groupTiles)
+        {
+            return Utility
+                .getAdjacentTileLocationsArray(tile)
+                .Intersect(groupTiles)
+                .Any();
+        }
+
+        private Color ColorTiles(Color color, Vector2 tile, bool hasConnection, out bool hasTarget)
+        {
+            if (this.ClickedTiles.Contains(tile))
+            {
+                hasTarget = false;
+                color = Color.Orange * 0.2f;
+            }
+            else
+            {
+                hasTarget = true;
+                if (hasConnection)
+                    color = Color.Green * 0.2f;
+                else
+                    color = Color.Red * 0.2f;
+            }
+
+            return color;
         }
     }
 }
