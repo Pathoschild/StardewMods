@@ -137,9 +137,46 @@ namespace Pathoschild.Stardew.Automate.Framework
                 }
             }
 
-            foreach(HashSet<Vector2> groupedTiles in this.GroupsOfTiles)
+            if(this.GroupsOfTiles.Any())
             {
-                foreach (Vector2 tile in groupedTiles)
+                foreach (HashSet<Vector2> groupedTiles in this.GroupsOfTiles)
+                {
+                    foreach (Vector2 tile in groupedTiles)
+                    {
+                        Color borderColor = Color.Orange * 0.75f;
+                        Rectangle screenArea = new Rectangle((int)tile.X * Game1.tileSize - Game1.viewport.X, (int)tile.Y * Game1.tileSize - Game1.viewport.Y, Game1.tileSize, Game1.tileSize);
+
+                        //get surrounding corner
+                        float left = tile.X - 1;
+                        float top = tile.Y - 1;
+                        float right = tile.X + 1;
+                        float bottom = tile.Y + 1;
+
+                        if (!groupedTiles.Contains(new Vector2(tile.X, top)))
+                        {
+                            spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, borderSize), borderColor); // top
+                        }
+                        if (!groupedTiles.Contains(new Vector2(tile.X, bottom)))
+                        {
+                            spriteBatch.DrawLine(screenArea.X, screenArea.Y + screenArea.Height, new Vector2(screenArea.Width, borderSize), borderColor); // bottom
+                        }
+                        if (!groupedTiles.Contains(new Vector2(left, tile.Y)))
+                        {
+                            spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // left
+                        }
+                        if (!groupedTiles.Contains(new Vector2(right, tile.Y)))
+                        {
+                            spriteBatch.DrawLine(screenArea.X + screenArea.Width, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // right
+                        }
+                    }
+                }
+
+                //this.deleteButton.draw(spriteBatch);
+            }
+
+            if(this.ClickedTiles.Any())
+            {
+                foreach (Vector2 tile in this.ClickedTiles)
                 {
                     Color borderColor = Color.Orange * 0.75f;
                     Rectangle screenArea = new Rectangle((int)tile.X * Game1.tileSize - Game1.viewport.X, (int)tile.Y * Game1.tileSize - Game1.viewport.Y, Game1.tileSize, Game1.tileSize);
@@ -150,27 +187,26 @@ namespace Pathoschild.Stardew.Automate.Framework
                     float right = tile.X + 1;
                     float bottom = tile.Y + 1;
 
-                    if (!groupedTiles.Contains(new Vector2(tile.X, top)))
+                    if (!this.ClickedTiles.Contains(new Vector2(tile.X, top)))
                     {
                         spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, borderSize), borderColor); // top
                     }
-                    if (!groupedTiles.Contains(new Vector2(tile.X, bottom)))
+                    if (!this.ClickedTiles.Contains(new Vector2(tile.X, bottom)))
                     {
                         spriteBatch.DrawLine(screenArea.X, screenArea.Y + screenArea.Height, new Vector2(screenArea.Width, borderSize), borderColor); // bottom
                     }
-                    if (!groupedTiles.Contains(new Vector2(left, tile.Y)))
+                    if (!this.ClickedTiles.Contains(new Vector2(left, tile.Y)))
                     {
                         spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // left
                     }
-                    if (!groupedTiles.Contains(new Vector2(right, tile.Y)))
+                    if (!this.ClickedTiles.Contains(new Vector2(right, tile.Y)))
                     {
                         spriteBatch.DrawLine(screenArea.X + screenArea.Width, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // right
                     }
                 }
+                this.saveButton.draw(spriteBatch);
             }
 
-            this.saveButton.draw(spriteBatch);
-            //this.deleteButton.draw(spriteBatch);
             this.drawMouse(spriteBatch);
         }
 
