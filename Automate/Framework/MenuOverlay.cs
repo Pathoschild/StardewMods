@@ -256,10 +256,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="playSound">Whether to enable sound.</param>
         public override void receiveRightClick(int x, int y, bool playSound = true) { }
 
+        /// <summary>The method invoked when the player left-clicks on the menu.</summary>
+        /// <param name="x">The X-position of the cursor.</param>
+        /// <param name="y">The Y-position of the cursor.</param>
+        /// <param name="playSound">Whether to enable sound.</param>
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
             Vector2 tile = new Vector2((x + Game1.viewport.X) / Game1.tileSize, (y + Game1.viewport.Y) / Game1.tileSize);
-            HashSet<Vector2> clickedTiles = new HashSet<Vector2>();
             if (this.ClickedTiles.Contains(tile))
                 this.ClickedTiles.Remove(tile);
             else if (this.CanAddToGroup(tile, this.ClickedTiles))
@@ -267,7 +270,8 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             if (this.saveButton.containsPoint(x, y))
             {
-                this.GroupsOfTiles.Add();
+                HashSet<Vector2> clickedTiles = new HashSet<Vector2>(this.ClickedTiles);
+                this.GroupsOfTiles.Add(clickedTiles);
                 this.ClickedTiles.Clear();
             }
             if (this.deleteButton.containsPoint(x, y))
