@@ -145,12 +145,12 @@ namespace Pathoschild.Stardew.Automate.Framework
 
 
             // draw edit buttons
-            if (this.EditingFactory?.Count() > 1)
+            if (this.EditingFactory != null && this.EditingFactory.Any())
             {
-                this.SaveButton.bounds.X = (int)(this.EditingFactory.Max(c => c.X) + 1) * Game1.tileSize - Game1.viewport.X;
-                this.SaveButton.bounds.Y = (int)(this.EditingFactory.Max(c => c.Y) + 1) * Game1.tileSize - Game1.viewport.Y;
-                this.DeleteButton.bounds.X = (int)(this.EditingFactory.Max(c => c.X) + 2) * Game1.tileSize - Game1.viewport.X;
-                this.DeleteButton.bounds.Y = (int)(this.EditingFactory.Max(c => c.Y) + 1) * Game1.tileSize - Game1.viewport.Y;
+                this.SaveButton.bounds.X = ((int)this.EditingFactory.Max(c => c.X) + 1) * Game1.tileSize - Game1.viewport.X;
+                this.SaveButton.bounds.Y = ((int)this.EditingFactory.Max(c => c.Y) + 1) * Game1.tileSize - Game1.viewport.Y;
+                this.DeleteButton.bounds.X = ((int)this.EditingFactory.Max(c => c.X) + 2) * Game1.tileSize - Game1.viewport.X;
+                this.DeleteButton.bounds.Y = ((int)this.EditingFactory.Max(c => c.Y) + 1) * Game1.tileSize - Game1.viewport.Y;
 
                 this.SaveButton.draw(spriteBatch);
                 this.DeleteButton.draw(spriteBatch);
