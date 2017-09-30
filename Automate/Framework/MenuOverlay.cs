@@ -18,6 +18,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Properties
         *********/
+
         /// <summary>The tiles containing a machine and whether it's connected to anything.</summary>
         private readonly IDictionary<Vector2, bool> MachineTileConnections;
 
@@ -46,12 +47,12 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machines">The machines to manage in the overlay.</param>
-        public MenuOverlay(IEnumerable<MachineMetadata> machines)
+        public MenuOverlay(IEnumerable<MachineMetadata> machines, List<HashSet<Vector2>> storage)
         {
             machines = machines.ToArray();
             this.MachineTileConnections = this.GetMachineTileConnections(machines);
             this.ChestTileConnections = this.GetChestTileConnections(machines);
-            this.GroupsOfTiles = new List<HashSet<Vector2>>();
+            this.GroupsOfTiles = storage;
             this.ClickedTiles = new HashSet<Vector2>();
             SetUpButtons();
 
@@ -266,7 +267,6 @@ namespace Pathoschild.Stardew.Automate.Framework
             
             if (inGroup) // if tile is in the group in the list, edit that group
             {
-
                 this.GroupsOfTiles.Remove(group);
                 this.ClickedTiles = new HashSet<Vector2>(group);
                 group.Clear();
@@ -397,6 +397,11 @@ namespace Pathoschild.Stardew.Automate.Framework
                 .getAdjacentTileLocationsArray(tile)
                 .Intersect(groupTiles)
                 .Any();
+        }
+
+        private bool IsGroupContiguous(HashSet<Vector2> group)
+        {
+
         }
     }
 }
