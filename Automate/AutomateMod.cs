@@ -79,7 +79,7 @@ namespace Pathoschild.Stardew.Automate
             if (this.Config.CheckForUpdates)
                 UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "Automate");
 
-            // load save data
+            // load save data from file
             this.SaveData = this.Helper.ReadJsonFile<SaveData>($"data/{Constants.SaveFolderName}.json") ?? new SaveData();
         }
 
@@ -88,7 +88,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
-            // save factory data
+            // write save data to file
             this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", this.SaveData);
         }
 
@@ -172,7 +172,7 @@ namespace Pathoschild.Stardew.Automate
                     {
                         Game1.activeClickableMenu = new MenuOverlay(
                             this.Factory.GetAllMachinesIn(Game1.currentLocation, this.Helper.Reflection),
-                            this.SaveData.Factories
+                            this.SaveData.Groups
                         );
                     }
                     else if (Game1.activeClickableMenu is MenuOverlay menu)

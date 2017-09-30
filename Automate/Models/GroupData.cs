@@ -5,8 +5,8 @@ using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Models
 {
-    /// <summary>A collection of machines and chests that operate as one unit.</summary>
-    internal class FactoryGroupData
+    /// <summary>Save data for a group of machines and storage that operate as one unit.</summary>
+    internal class GroupData
     {
         /*********
         ** Properties
@@ -19,17 +19,17 @@ namespace Pathoschild.Stardew.Automate.Models
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public FactoryGroupData()
+        public GroupData()
             : this(new HashSet<Vector2>()) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="tiles">The tile which are part of this group.</param>
-        public FactoryGroupData(HashSet<Vector2> tiles)
+        public GroupData(HashSet<Vector2> tiles)
         {
             this.Tiles = tiles;
         }
 
-        /// <summary>Add an tile to the factory.</summary>
+        /// <summary>Add a tile to the group.</summary>
         /// <param name="tile">The tile to add.</param>
         /// <returns>Whether the tile was added.</returns>
         public bool Add(Vector2 tile)
@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.Automate.Models
             return true;
         }
 
-        /// <summary>Remove a tile from the factory.</summary>
+        /// <summary>Remove a tile from the group.</summary>
         /// <param name="tile">The tile to remove.</param>
         public bool Remove(Vector2 tile)
         {
@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.Automate.Models
             return this.Tiles.Remove(tile);
         }
 
-        /// <summary>Add a tile to the factory if it's valid and not already present, else remove it if possible.</summary>
+        /// <summary>Add a tile to the group if it's valid and not already present, else remove it if possible.</summary>
         /// <param name="tile">The tile to remove.</param>
         public bool AddOrRemove(Vector2 tile)
         {
@@ -72,7 +72,7 @@ namespace Pathoschild.Stardew.Automate.Models
         /*********
         ** Private methods
         *********/
-        /// <summary>Get whether a tile can be added to a group.</summary>
+        /// <summary>Get whether a tile can be added to the group.</summary>
         /// <param name="tile">The tile to check.</param>
         private bool CanAdd(Vector2 tile)
         {
@@ -84,7 +84,7 @@ namespace Pathoschild.Stardew.Automate.Models
                 || this.IsAdjacentTo(tile); // adjacent to any group tile
         }
 
-        /// <summary>Get whether a tile can be removed from the factory.</summary>
+        /// <summary>Get whether a tile can be removed from the group.</summary>
         /// <param name="tile">The tile to check.</param>
         private bool CanRemove(Vector2 tile)
         {
@@ -123,7 +123,7 @@ namespace Pathoschild.Stardew.Automate.Models
                 }
             }
 
-            // check if removing this tile would make the factory non-contiguous
+            // check if removing this tile would make the group non-contiguous
             return !unvisited.Any();
         }
     }

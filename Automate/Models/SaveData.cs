@@ -8,7 +8,7 @@ namespace Pathoschild.Stardew.Automate.Models
         /*********
         ** Accessors
         *********/
-        /// <summary>The factory groups created by the player.</summary>
-        public HashSet<FactoryGroupData> Factories { get; set; } = new HashSet<FactoryGroupData>();
+        /// <summary>The machine/storage groups created by the player.</summary>
+        public HashSet<GroupData> Groups { get; set; } = new HashSet<GroupData>();
     }
 }
