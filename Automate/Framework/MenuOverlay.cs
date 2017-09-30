@@ -111,9 +111,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             int minY = Game1.viewport.Y / Game1.tileSize;
             int maxX = (int)Math.Ceiling((Game1.viewport.X + Game1.viewport.Width) / (decimal)Game1.tileSize);
             int maxY = (int)Math.Ceiling((Game1.viewport.Y + Game1.viewport.Height) / (decimal)Game1.tileSize);
-
-
-            int borderSize = 5;
+            
 
             for (int x = minX; x < maxX; x++)
             {
@@ -144,6 +142,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                     // draw tile border if tile is not selected
                     if (!selected)
                     {
+                        int borderSize = 5;
                         Color borderColor = color * 0.75f;
                         spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, borderSize), borderColor); // top
                         spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // left
@@ -159,6 +158,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 {
                     foreach (Vector2 tile in groupedTiles)
                     {
+                        int borderSize = 1;
                         Color borderColor = Color.White * 0.75f;
                         Rectangle screenArea = new Rectangle((int)tile.X * Game1.tileSize - Game1.viewport.X, (int)tile.Y * Game1.tileSize - Game1.viewport.Y, Game1.tileSize, Game1.tileSize);
 
@@ -186,8 +186,6 @@ namespace Pathoschild.Stardew.Automate.Framework
                         }
                     }
                 }
-
-                //this.deleteButton.draw(spriteBatch);
             }
 
             if(this.ClickedTiles.Count > 1)
@@ -263,17 +261,30 @@ namespace Pathoschild.Stardew.Automate.Framework
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
             Vector2 tile = new Vector2((x + Game1.viewport.X) / Game1.tileSize, (y + Game1.viewport.Y) / Game1.tileSize);
-            if (this.ClickedTiles.Contains(tile))
-                this.ClickedTiles.Remove(tile);
-            else if (this.CanAddToGroup(tile, this.ClickedTiles))
-                this.ClickedTiles.Add(tile);
+            HashSet<Vector2> group = this.GroupsOfTiles.FirstOrDefault(hash => hash.Contains(tile));
+            bool inGroup = group != null;
+            
+            if (inGroup) // if tile is in the group in the list, edit that group
+            {
+
+                this.GroupsOfTiles.Remove(group);
+                this.ClickedTiles = new HashSet<Vector2>(group);
+                group.Clear();
+            }
+            else
+            {
+                if (this.ClickedTiles.Contains(tile))
+                    this.ClickedTiles.Remove(tile);
+                else if (CanAddToGroup(tile, this.ClickedTiles))
+                    this.ClickedTiles.Add(tile);
+            }
 
             if (this.saveButton.containsPoint(x, y))
             {
-                HashSet<Vector2> clickedTiles = new HashSet<Vector2>(this.ClickedTiles);
-                this.GroupsOfTiles.Add(clickedTiles);
+                this.GroupsOfTiles.Add(new HashSet<Vector2>(this.ClickedTiles));
                 this.ClickedTiles.Clear();
             }
+
             if (this.deleteButton.containsPoint(x, y))
             {
                 this.ClickedTiles.Clear();
