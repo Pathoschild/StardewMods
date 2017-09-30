@@ -43,6 +43,7 @@
     </Compile>
     <Compile Include="AutomateMod.cs" />
     <Compile Include="Framework\FactoryGroup.cs" />
+    <Compile Include="Framework\FactoryGroupData.cs" />
     <Compile Include="Framework\MenuOverlay.cs" />
     <Compile Include="Framework\Recipe.cs" />
     <Compile Include="Framework\TrackedItem.cs" />

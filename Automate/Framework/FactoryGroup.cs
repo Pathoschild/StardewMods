@@ -5,8 +5,19 @@ using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
-    class FactoryGroup
+    internal class FactoryGroup
     {
+        public FactoryGroupData Data { get; }
+        //When we connect then we can store this
+        //public IEnumerable<MachineMetadata> Machines { get; }
+        //public IEnumerable<IPipe> Pipes { get; }
+
+        /// <summary>Checks if the tile already exist.</summary>
+        /// <param name="tile">The given tile.</param>
+        public bool Contains(Vector2 tile) {
+            return this.Data.Tiles.Contains(tile);
+        }
+
         public bool CanAddToGroup(Vector2 tile, HashSet<Vector2> groupTiles)
         {
             // first tile
