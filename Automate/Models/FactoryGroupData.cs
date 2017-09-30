@@ -1,13 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley;
 
-namespace Pathoschild.Stardew.Automate.Framework
+namespace Pathoschild.Stardew.Automate.Models
 {
     /// <summary>A collection of machines and chests that operate as one unit.</summary>
-    internal class FactoryGroup : IEnumerable<Vector2>
+    internal class FactoryGroupData
     {
         /*********
         ** Properties
@@ -20,12 +19,12 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public FactoryGroup()
+        public FactoryGroupData()
             : this(new HashSet<Vector2>()) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="tiles">The tile which are part of this group.</param>
-        public FactoryGroup(HashSet<Vector2> tiles)
+        public FactoryGroupData(HashSet<Vector2> tiles)
         {
             this.Tiles = tiles;
         }
@@ -67,18 +66,6 @@ namespace Pathoschild.Stardew.Automate.Framework
                 .getAdjacentTileLocationsArray(tile)
                 .Intersect(this.Tiles)
                 .Any();
-        }
-
-        /// <summary>Get an enumerator that iterates through the collection.</summary>
-        public IEnumerator<Vector2> GetEnumerator()
-        {
-            return this.Tiles.GetEnumerator();
-        }
-
-        /// <summary>Get an enumerator that iterates through the collection.</summary>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
         }
 
 
