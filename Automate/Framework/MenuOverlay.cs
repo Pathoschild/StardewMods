@@ -252,7 +252,11 @@ namespace Pathoschild.Stardew.Automate.Framework
 
                 // toggle tile in factory
                 else
-                    this.EditingFactory?.AddOrRemove(tile);
+                {
+                    bool isTileReserved = this.Factories.Any(p => p != this.EditingFactory && p.Contains(tile));
+                    if (!isTileReserved)
+                        this.EditingFactory?.AddOrRemove(tile);
+                }
             }
 
         }
