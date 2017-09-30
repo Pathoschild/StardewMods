@@ -5,29 +5,25 @@ using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
+    /// <summary>Provides utility methods for factory groups.</summary>
     internal class FactoryGroup
     {
-        public FactoryGroupData Data { get; }
-        //When we connect then we can store this
-        //public IEnumerable<MachineMetadata> Machines { get; }
-        //public IEnumerable<IPipe> Pipes { get; }
-
-        /// <summary>Checks if the tile already exist.</summary>
-        /// <param name="tile">The given tile.</param>
-        public bool Contains(Vector2 tile) {
-            return this.Data.Tiles.Contains(tile);
-        }
-
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Get whether a tile can be added to a group.</summary>
+        /// <param name="tile">The tile to check.</param>
+        /// <param name="groupTiles">The group to check.</param>
         public bool CanAddToGroup(Vector2 tile, HashSet<Vector2> groupTiles)
         {
-            // first tile
-            if (!groupTiles.Any())
-                return true;
-
-            // adjacent to any tile in group
-            return IsAdjacentTile(tile, groupTiles);
+            return
+                !groupTiles.Any() // first tile
+                || this.IsAdjacentTile(tile, groupTiles); // adjacent to any group tile
         }
 
+        /// <summary>Get whether a tile is adjacent to any tile in a group.</summary>
+        /// <param name="tile">The tile to check.</param>
+        /// <param name="groupTiles">The group to check.</param>
         public bool IsAdjacentTile(Vector2 tile, HashSet<Vector2> groupTiles)
         {
             return Utility

@@ -20,7 +20,8 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
-        private List<HashSet<Vector2>> Storage;
+        /// <summary>The machine groups configured by the player.</summary>
+        private IList<HashSet<Vector2>> Groups;
 
         /// <summary>Constructs machine instances.</summary>
         private readonly MachineFactory Factory = new MachineFactory();
@@ -78,13 +79,16 @@ namespace Pathoschild.Stardew.Automate
             if (this.Config.CheckForUpdates)
                 UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "Automate");
 
-            this.Storage = this.Helper.ReadJsonFile<List<HashSet<Vector2>>>("storage/{Constants.SaveFolderName}.json") ?? new List<HashSet<Vector2>>();
+            this.Groups = this.Helper.ReadJsonFile<List<HashSet<Vector2>>>("storage/{Constants.SaveFolderName}.json") ?? new List<HashSet<Vector2>>();
         }
 
+        /// <summary>The event called before the game starts saving.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
             // write file
-            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", this.Storage);
+            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", this.Groups);
         }
 
         /// <summary>The method invoked when a location is added or removed.</summary>
@@ -167,7 +171,7 @@ namespace Pathoschild.Stardew.Automate
                     {
                         Game1.activeClickableMenu = new MenuOverlay(
                             this.Factory.GetAllMachinesIn(Game1.currentLocation, this.Helper.Reflection),
-                            this.Storage
+                            this.Groups
                         );
                     }
                     else if (Game1.activeClickableMenu is MenuOverlay menu)

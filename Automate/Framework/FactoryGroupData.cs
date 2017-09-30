@@ -1,15 +1,15 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
+    /// <summary>Metadata about a factory group which can read and saved.</summary>
     internal class FactoryGroupData
     {
-        public string Name { get; set; }
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The tiles which are part of this group.</summary>
         public IList<Vector2> Tiles { get; set; }
     }
 }
