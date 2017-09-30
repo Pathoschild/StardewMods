@@ -127,48 +127,22 @@ namespace Pathoschild.Stardew.Automate.Framework
                     // draw background
                     spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, screenArea.Height), color);
 
-                    // draw tile border if tile is not selected
-                    if (!selected)
-                    {
-                        int borderSize = 5;
-                        Color borderColor = color * 0.75f;
-                        spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, borderSize), borderColor); // top
-                        spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // left
-                        spriteBatch.DrawLine(screenArea.X + screenArea.Width, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // right
-                        spriteBatch.DrawLine(screenArea.X, screenArea.Y + screenArea.Height, new Vector2(screenArea.Width, borderSize), borderColor); // bottom
-                    }
+                    // draw tile border
+                    int borderSize = 5;
+                    Color borderColor = color * 0.75f;
+                    spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, borderSize), borderColor); // top
+                    spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // left
+                    spriteBatch.DrawLine(screenArea.X + screenArea.Width, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // right
+                    spriteBatch.DrawLine(screenArea.X, screenArea.Y + screenArea.Height, new Vector2(screenArea.Width, borderSize), borderColor); // bottom
                 }
             }
 
             // draw group borders
-            if (this.Factories.Any())
-            {
-                foreach (FactoryGroup factory in this.Factories)
-                {
-                    foreach (Vector2 tile in factory)
-                    {
-                        int borderSize = 1;
-                        Color borderColor = Color.White * 0.75f;
-                        Rectangle screenArea = new Rectangle((int)tile.X * Game1.tileSize - Game1.viewport.X, (int)tile.Y * Game1.tileSize - Game1.viewport.Y, Game1.tileSize, Game1.tileSize);
+            foreach (FactoryGroup factory in this.Factories)
+                this.DrawFactoryBorders(spriteBatch, factory);
+            if (this.EditingFactory != null)
+                this.DrawFactoryBorders(spriteBatch, this.EditingFactory, Color.Green);
 
-                        // top
-                        if (!factory.Contains(new Vector2(tile.X, tile.Y - 1)))
-                            spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, borderSize), borderColor); // top
-
-                        // bottom
-                        if (!factory.Contains(new Vector2(tile.X, tile.Y + 1)))
-                            spriteBatch.DrawLine(screenArea.X, screenArea.Y + screenArea.Height, new Vector2(screenArea.Width, borderSize), borderColor); // bottom
-
-                        // left
-                        if (!factory.Contains(new Vector2(tile.X - 1, tile.Y)))
-                            spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // left
-
-                        // right
-                        if (!factory.Contains(new Vector2(tile.X + 1, tile.Y)))
-                            spriteBatch.DrawLine(screenArea.X + screenArea.Width, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // right
-                    }
-                }
-            }
 
             // draw edit buttons
             if (this.EditingFactory?.Count() > 1)
@@ -381,6 +355,36 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
 
             return found;
+        }
+
+        /// <summary>Draw the borders around a factory's tiles.</summary>
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
+        /// <param name="factory">The factory to border.</param>
+        /// <param name="color">The border color (or <c>null</c> for default).</param>
+        private void DrawFactoryBorders(SpriteBatch spriteBatch, FactoryGroup factory, Color? color = null)
+        {
+            foreach (Vector2 tile in factory)
+            {
+                int borderSize = 1;
+                Color borderColor = color ?? (Color.White * 0.75f);
+                Rectangle screenArea = new Rectangle((int)tile.X * Game1.tileSize - Game1.viewport.X, (int)tile.Y * Game1.tileSize - Game1.viewport.Y, Game1.tileSize, Game1.tileSize);
+
+                // top
+                if (!factory.Contains(new Vector2(tile.X, tile.Y - 1)))
+                    spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, borderSize), borderColor); // top
+
+                // bottom
+                if (!factory.Contains(new Vector2(tile.X, tile.Y + 1)))
+                    spriteBatch.DrawLine(screenArea.X, screenArea.Y + screenArea.Height, new Vector2(screenArea.Width, borderSize), borderColor); // bottom
+
+                // left
+                if (!factory.Contains(new Vector2(tile.X - 1, tile.Y)))
+                    spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // left
+
+                // right
+                if (!factory.Contains(new Vector2(tile.X + 1, tile.Y)))
+                    spriteBatch.DrawLine(screenArea.X + screenArea.Width, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // right
+            }
         }
     }
 }
