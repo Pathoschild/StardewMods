@@ -12,11 +12,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Properties
         *********/
-        /// <summary>The underlying data.</summary>
-        private FactoryGroupData Data { get; }
-
         /// <summary>The tiles which are part of this group.</summary>
-        private HashSet<Vector2> Tiles => this.Data.Tiles;
+        public HashSet<Vector2> Tiles { get; }
 
 
         /*********
@@ -24,13 +21,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         public FactoryGroup()
-            : this(new FactoryGroupData()) { }
+            : this(new HashSet<Vector2>()) { }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="data">The tile data.</param>
-        public FactoryGroup(FactoryGroupData data)
+        /// <param name="tiles">The tile which are part of this group.</param>
+        public FactoryGroup(HashSet<Vector2> tiles)
         {
-            this.Data = data;
+            this.Tiles = tiles;
         }
 
         /// <summary>Add an tile to the factory.</summary>
@@ -70,12 +67,6 @@ namespace Pathoschild.Stardew.Automate.Framework
                 .getAdjacentTileLocationsArray(tile)
                 .Intersect(this.Tiles)
                 .Any();
-        }
-
-        /// <summary>Get the underlying data.</summary>
-        public FactoryGroupData GetData()
-        {
-            return this.Data;
         }
 
         /// <summary>Get an enumerator that iterates through the collection.</summary>

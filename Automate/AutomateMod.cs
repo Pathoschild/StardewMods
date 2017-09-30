@@ -79,8 +79,7 @@ namespace Pathoschild.Stardew.Automate
                 UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "Automate");
 
             // load factories
-            FactoryGroupData[] factoryData = this.Helper.ReadJsonFile<FactoryGroupData[]>($"data/{Constants.SaveFolderName}.json") ?? new FactoryGroupData[0];
-            this.Factories = new List<FactoryGroup>(factoryData.Select(data => new FactoryGroup(data)));
+            this.Factories = (this.Helper.ReadJsonFile<FactoryGroup[]>($"data/{Constants.SaveFolderName}.json") ?? new FactoryGroup[0]).ToList();
         }
 
         /// <summary>The event called before the game starts saving.</summary>
@@ -89,8 +88,7 @@ namespace Pathoschild.Stardew.Automate
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
             // save factory data
-            FactoryGroupData[] factoryData = this.Factories.Select(p => p.GetData()).ToArray();
-            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", factoryData);
+            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", this.Factories);
         }
 
         /// <summary>The method invoked when a location is added or removed.</summary>
