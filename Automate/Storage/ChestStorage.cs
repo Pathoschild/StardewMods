@@ -7,10 +7,10 @@ using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
 using StardewValley.Objects;
 
-namespace Pathoschild.Stardew.Automate.Pipes
+namespace Pathoschild.Stardew.Automate.Storage
 {
     /// <summary>An object which can store or provide items for machines to use.</summary>
-    internal class ChestPipe : IPipe
+    internal class ChestStorage : IStorage
     {
         /*********
         ** Properties
@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.Automate.Pipes
         /// <summary>Construct an instance.</summary>
         /// <param name="chest">The underlying chest.</param>
         /// <param name="sourceTile">The tile the pipe is connected to.</param>
-        public ChestPipe(Chest chest, Vector2 sourceTile)
+        public ChestStorage(Chest chest, Vector2 sourceTile)
         {
             this.Chest = chest;
             this.SourceTile = sourceTile;

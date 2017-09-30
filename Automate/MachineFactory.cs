@@ -6,7 +6,7 @@ using Pathoschild.Stardew.Automate.Machines.Buildings;
 using Pathoschild.Stardew.Automate.Machines.Objects;
 using Pathoschild.Stardew.Automate.Machines.TerrainFeatures;
 using Pathoschild.Stardew.Automate.Machines.Tiles;
-using Pathoschild.Stardew.Automate.Pipes;
+using Pathoschild.Stardew.Automate.Storage;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
@@ -243,7 +243,7 @@ namespace Pathoschild.Stardew.Automate
             foreach (Vector2 connectedTile in Utility.getSurroundingTileLocationsArray(tile))
             {
                 if (this.TryGetChest(location, connectedTile, out Chest chest))
-                    yield return new ChestPipe(chest, connectedTile);
+                    yield return new Pipe(new ChestStorage(chest, connectedTile));
             }
         }
 
@@ -263,22 +263,22 @@ namespace Pathoschild.Stardew.Automate
             {
                 Vector2 tile = new Vector2(x, top);
                 if (this.TryGetChest(location, tile, out Chest chest))
-                    yield return new ChestPipe(chest, tile);
+                    yield return new Pipe(new ChestStorage(chest, tile));
             }
             for (int y = top + 1; y <= bottom - 1; y++)
             {
                 Vector2 leftTile = new Vector2(left, y);
                 Vector2 rightTile = new Vector2(right, y);
                 if (this.TryGetChest(location, leftTile, out Chest leftChest))
-                    yield return new ChestPipe(leftChest, leftTile);
+                    yield return new Pipe(new ChestStorage(leftChest, leftTile));
                 if (this.TryGetChest(location, rightTile, out Chest rightChest))
-                    yield return new ChestPipe(rightChest, rightTile);
+                    yield return new Pipe(new ChestStorage(rightChest, rightTile));
             }
             for (int x = left; x <= right; x++)
             {
                 Vector2 tile = new Vector2(x, bottom);
                 if (this.TryGetChest(location, tile, out Chest chest))
-                    yield return new ChestPipe(chest, tile);
+                    yield return new Pipe(new ChestStorage(chest, tile));
             }
         }
 

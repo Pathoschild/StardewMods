@@ -346,7 +346,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                     from machine in machines
                     where machine.Connected.Any()
                     from pipe in machine.Connected
-                    select pipe.GetSourceTile()
+                    select pipe.Endpoint.GetSourceTile()
                 )
                 .Distinct()
                 .ToDictionary(tile => tile, tile => true);
