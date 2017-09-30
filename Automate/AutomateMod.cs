@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Pathoschild.Stardew.Automate.Framework;
-using Pathoschild.Stardew.Automate.Models;
+using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;

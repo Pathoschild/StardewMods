@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Pathoschild.Stardew.Automate.Models
+namespace Pathoschild.Stardew.Automate.Framework.Models
 {
     /// <summary>Persistent player data.</summary>
     internal class SaveData

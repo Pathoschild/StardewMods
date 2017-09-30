@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework.Input;
 
-namespace Pathoschild.Stardew.Automate.Framework
+namespace Pathoschild.Stardew.Automate.Framework.Models
 {
     /// <summary>The raw mod configuration.</summary>
     internal class ModConfig

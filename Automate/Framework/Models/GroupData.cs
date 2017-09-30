@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley;
 
-namespace Pathoschild.Stardew.Automate.Models
+namespace Pathoschild.Stardew.Automate.Framework.Models
 {
     /// <summary>Save data for a group of machines and storage that operate as one unit.</summary>
     internal class GroupData

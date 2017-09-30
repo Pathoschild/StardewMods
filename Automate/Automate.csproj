@@ -43,7 +43,7 @@
     </Compile>
     <Compile Include="AutomateMod.cs" />
     <Compile Include="Framework\Pipe.cs" />
-    <Compile Include="Models\GroupData.cs" />
+    <Compile Include="Framework\Models\GroupData.cs" />
     <Compile Include="Framework\IStorage.cs" />
     <Compile Include="Framework\MenuOverlay.cs" />
     <Compile Include="Framework\Recipe.cs" />
@@ -57,7 +57,7 @@
     <Compile Include="MachineFactory.cs" />
     <Compile Include="Framework\MachineMetadata.cs" />
     <Compile Include="Framework\MachineState.cs" />
-    <Compile Include="Framework\ModConfig.cs" />
+    <Compile Include="Framework\Models\ModConfig.cs" />
     <Compile Include="Framework\Consumable.cs" />
     <Compile Include="Machines\Buildings\JunimoHutMachine.cs" />
     <Compile Include="Machines\Buildings\MillMachine.cs" />
@@ -89,7 +89,7 @@
     <Compile Include="Machines\Objects\TapperMachine.cs" />
     <Compile Include="Machines\Objects\WormBinMachine.cs" />
     <Compile Include="Machines\TerrainFeatures\FruitTreeMachine.cs" />
-    <Compile Include="Models\SaveData.cs" />
+    <Compile Include="Framework\Models\SaveData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage\ChestStorage.cs" />
   </ItemGroup>

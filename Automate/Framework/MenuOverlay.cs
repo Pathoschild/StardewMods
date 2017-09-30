@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Pathoschild.Stardew.Automate.Models;
+using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
 using StardewValley;
 using StardewValley.Menus;
