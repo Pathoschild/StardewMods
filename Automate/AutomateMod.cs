@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
@@ -18,6 +19,8 @@ namespace Pathoschild.Stardew.Automate
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
+
+        private List<HashSet<Vector2>> Storage;
 
         /// <summary>Constructs machine instances.</summary>
         private readonly MachineFactory Factory = new MachineFactory();
@@ -44,6 +47,7 @@ namespace Pathoschild.Stardew.Automate
 
             // hook events
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
             LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
             LocationEvents.LocationObjectsChanged += this.LocationEvents_LocationObjectsChanged;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
@@ -73,6 +77,14 @@ namespace Pathoschild.Stardew.Automate
             this.AutomateCountdown = this.Config.AutomationInterval;
             if (this.Config.CheckForUpdates)
                 UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "Automate");
+
+            this.Storage = this.Helper.ReadJsonFile<List<HashSet<Vector2>>>("storage/{Constants.SaveFolderName}.json") ?? new List<HashSet<Vector2>>();
+        }
+
+        private void SaveEvents_BeforeSave(object sender, EventArgs e)
+        {
+            // write file
+            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", this.Storage);
         }
 
         /// <summary>The method invoked when a location is added or removed.</summary>
@@ -154,7 +166,8 @@ namespace Pathoschild.Stardew.Automate
                     if (Game1.activeClickableMenu == null)
                     {
                         Game1.activeClickableMenu = new MenuOverlay(
-                            this.Factory.GetAllMachinesIn(Game1.currentLocation, this.Helper.Reflection)
+                            this.Factory.GetAllMachinesIn(Game1.currentLocation, this.Helper.Reflection),
+                            this.Storage
                         );
                     }
                     else if (Game1.activeClickableMenu is MenuOverlay menu)

@@ -18,6 +18,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Properties
         *********/
+
+        private readonly FactoryGroup GroupFactory = new FactoryGroup();
+
         /// <summary>The tiles containing a machine and whether it's connected to anything.</summary>
         private readonly IDictionary<Vector2, bool> MachineTileConnections;
 
@@ -30,20 +33,85 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The amount by which to pan the screen quickly.</summary>
         private readonly int FastPanAmount = 8;
 
+        private List<HashSet<Vector2>> GroupsOfTiles;
+
+        private HashSet<Vector2> ClickedTiles;
+
+        private ClickableTextureComponent saveButton;
+
+        private ClickableTextureComponent deleteButton;
+
+        private ClickableTextureComponent connectButton;
+
+        private string hoverText = "";
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machines">The machines to manage in the overlay.</param>
-        public MenuOverlay(IEnumerable<MachineMetadata> machines)
+        public MenuOverlay(IEnumerable<MachineMetadata> machines, List<HashSet<Vector2>> storage)
         {
             machines = machines.ToArray();
             this.MachineTileConnections = this.GetMachineTileConnections(machines);
             this.ChestTileConnections = this.GetChestTileConnections(machines);
+            this.GroupsOfTiles = storage;
+            this.ClickedTiles = new HashSet<Vector2>();
+            SetUpButtons();
+
             this.exitFunction = this.ReleaseViewport;
 
             this.TakeViewport();
+        }
+
+        public void SetUpButtons()
+        {
+            Rectangle okBtnXNBTilesheet = Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46, -1, -1);
+            ClickableTextureComponent okBtnTextureComponent = new ClickableTextureComponent("OK", new Microsoft.Xna.Framework.Rectangle(Game1.viewport.Width - Game1.tileSize * 2, Game1.viewport.Height - Game1.tileSize * 2, Game1.tileSize, Game1.tileSize), (string)null, "Save Group", Game1.mouseCursors, okBtnXNBTilesheet, 1f, false);
+            this.saveButton = okBtnTextureComponent;
+
+            Rectangle cancelBtnXNBTileSheet = Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 47, -1, -1);
+            ClickableTextureComponent cancelBtnTextureComponent = new ClickableTextureComponent("OK", new Microsoft.Xna.Framework.Rectangle(Game1.viewport.Width - Game1.tileSize * 3, Game1.viewport.Height - Game1.tileSize * 2, Game1.tileSize, Game1.tileSize), (string)null, "Delete Group", Game1.mouseCursors, cancelBtnXNBTileSheet, 1f, false);
+            this.deleteButton = cancelBtnTextureComponent;
+
+            Rectangle buildBtnXNBTileSheet = new Microsoft.Xna.Framework.Rectangle(366, 373, 16, 16);
+            ClickableTextureComponent buildBtnTextureComponent = new ClickableTextureComponent("OK", new Microsoft.Xna.Framework.Rectangle(Game1.viewport.Width - Game1.tileSize * 2, Game1.tileSize, Game1.tileSize, Game1.tileSize), (string)null, "Save Group", Game1.mouseCursors, buildBtnXNBTileSheet, (float)Game1.pixelZoom, false);
+            this.connectButton = buildBtnTextureComponent;
+        }
+
+        public override void performHoverAction(int x, int y)
+        {
+            this.saveButton.tryHover(x, y, 0.1f);
+            this.deleteButton.tryHover(x, y, 0.1f);
+            this.connectButton.tryHover(x, y, 0.1f);
+            if (this.saveButton.containsPoint(x, y))
+                this.hoverText = "Save Group";
+            else if (this.deleteButton.containsPoint(x, y))
+                this.hoverText = "Delete Group";
+            else if (this.connectButton.containsPoint(x, y))
+                this.hoverText = "Connect Group";
+            else
+                this.hoverText = "";
+        }
+
+        private Color ColorTiles(Color color, Vector2 tile, bool hasConnection, out bool isSelected)
+        {
+            if (this.ClickedTiles.Contains(tile))
+            {
+                isSelected = true;
+                color = Color.Orange * 0.2f;
+            }
+            else
+            {
+                isSelected = false;
+                if (hasConnection)
+                    color = Color.Green * 0.2f;
+                else
+                    color = Color.Red * 0.2f;
+            }
+
+            return color;
         }
 
         /// <summary>Draw the overlay to the screen.</summary>
@@ -55,6 +123,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             int minY = Game1.viewport.Y / Game1.tileSize;
             int maxX = (int)Math.Ceiling((Game1.viewport.X + Game1.viewport.Width) / (decimal)Game1.tileSize);
             int maxY = (int)Math.Ceiling((Game1.viewport.Y + Game1.viewport.Height) / (decimal)Game1.tileSize);
+            
 
             for (int x = minX; x < maxX; x++)
             {
@@ -65,29 +134,25 @@ namespace Pathoschild.Stardew.Automate.Framework
 
                     // get color coding
                     Color color = Color.Black * 0.5f;
-                    bool hasTarget = false;
+                    bool selected = true;
                     if (this.MachineTileConnections.TryGetValue(tile, out bool hasPipe))
                     {
-                        hasTarget = true;
-                        if (hasPipe)
-                            color = Color.Green * 0.2f;
-                        else
-                            color = Color.Red * 0.2f;
+                        color = ColorTiles(color, tile, hasPipe, out bool isSelected);
+
+                        selected = isSelected; // should this be is Not selected or something
                     }
                     else if (this.ChestTileConnections.TryGetValue(tile, out bool hasConnection))
                     {
-                        hasTarget = true;
-                        if (hasConnection)
-                            color = Color.Green * 0.2f;
-                        else
-                            color = Color.Red * 0.2f;
+                        color = ColorTiles(color, tile, hasConnection, out bool isSelected);
+
+                        selected = isSelected;
                     }
 
                     // draw background
                     spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, screenArea.Height), color);
 
-                    // draw border
-                    if (hasTarget)
+                    // draw tile border if tile is not selected
+                    if (!selected)
                     {
                         int borderSize = 5;
                         Color borderColor = color * 0.75f;
@@ -98,6 +163,59 @@ namespace Pathoschild.Stardew.Automate.Framework
                     }
                 }
             }
+
+            if(this.GroupsOfTiles.Any())
+            {
+                foreach (HashSet<Vector2> groupedTiles in this.GroupsOfTiles)
+                {
+                    foreach (Vector2 tile in groupedTiles)
+                    {
+                        int borderSize = 1;
+                        Color borderColor = Color.White * 0.75f;
+                        Rectangle screenArea = new Rectangle((int)tile.X * Game1.tileSize - Game1.viewport.X, (int)tile.Y * Game1.tileSize - Game1.viewport.Y, Game1.tileSize, Game1.tileSize);
+
+                        //get surrounding corner
+                        float left = tile.X - 1;
+                        float top = tile.Y - 1;
+                        float right = tile.X + 1;
+                        float bottom = tile.Y + 1;
+
+                        if (!groupedTiles.Contains(new Vector2(tile.X, top)))
+                        {
+                            spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, borderSize), borderColor); // top
+                        }
+                        if (!groupedTiles.Contains(new Vector2(tile.X, bottom)))
+                        {
+                            spriteBatch.DrawLine(screenArea.X, screenArea.Y + screenArea.Height, new Vector2(screenArea.Width, borderSize), borderColor); // bottom
+                        }
+                        if (!groupedTiles.Contains(new Vector2(left, tile.Y)))
+                        {
+                            spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // left
+                        }
+                        if (!groupedTiles.Contains(new Vector2(right, tile.Y)))
+                        {
+                            spriteBatch.DrawLine(screenArea.X + screenArea.Width, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // right
+                        }
+                    }
+                }
+            }
+
+            if(this.ClickedTiles.Count > 1)
+            {
+                this.saveButton.bounds.X = (int)(this.ClickedTiles.Max(c => c.X) + 1) * Game1.tileSize - Game1.viewport.X;
+                this.saveButton.bounds.Y = (int)(this.ClickedTiles.Max(c => c.Y) + 1) * Game1.tileSize - Game1.viewport.Y;
+                this.deleteButton.bounds.X = (int)(this.ClickedTiles.Max(c => c.X) + 2) * Game1.tileSize - Game1.viewport.X;
+                this.deleteButton.bounds.Y = (int)(this.ClickedTiles.Max(c => c.Y) + 1) * Game1.tileSize - Game1.viewport.Y;
+
+                this.saveButton.draw(spriteBatch);
+                this.deleteButton.draw(spriteBatch);
+            }
+
+            this.connectButton.draw(spriteBatch);
+            this.drawMouse(spriteBatch);
+            if (this.hoverText.Length <= 0)
+                return;
+            IClickableMenu.drawHoverText(spriteBatch, this.hoverText, Game1.dialogueFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, -1, -1, -1, -1, 1f, (CraftingRecipe)null);
         }
 
         /// <summary>Handle keyboard input from the player.</summary>
@@ -149,10 +267,46 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="playSound">Whether to enable sound.</param>
         public override void receiveRightClick(int x, int y, bool playSound = true) { }
 
+        /// <summary>The method invoked when the player left-clicks on the menu.</summary>
+        /// <param name="x">The X-position of the cursor.</param>
+        /// <param name="y">The Y-position of the cursor.</param>
+        /// <param name="playSound">Whether to enable sound.</param>
+        public override void receiveLeftClick(int x, int y, bool playSound = true)
+        {
+            Vector2 tile = new Vector2((x + Game1.viewport.X) / Game1.tileSize, (y + Game1.viewport.Y) / Game1.tileSize);
+            HashSet<Vector2> group = this.GroupsOfTiles.FirstOrDefault(hash => hash.Contains(tile));
+            bool inGroup = group != null;
+            
+            if (inGroup) // if tile is in the group in the list, edit that group
+            {
+                this.GroupsOfTiles.Remove(group);
+                this.ClickedTiles = new HashSet<Vector2>(group);
+                group.Clear();
+            }
+            else
+            {
+                if (this.ClickedTiles.Contains(tile) && !this.GroupFactory.IsBridgeTile(tile, this.ClickedTiles.ToArray()))
+                    this.ClickedTiles.Remove(tile);
+                else if (this.GroupFactory.CanAddToGroup(tile, this.ClickedTiles))
+                    this.ClickedTiles.Add(tile);
+            }
+
+            if (this.saveButton.containsPoint(x, y))
+            {
+                this.GroupsOfTiles.Add(new HashSet<Vector2>(this.ClickedTiles));
+                this.ClickedTiles.Clear();
+            }
+
+            if (this.deleteButton.containsPoint(x, y))
+            {
+                this.ClickedTiles.Clear();
+            }
+        }
 
         /*********
         ** Private methods
         *********/
+
         /// <summary>The method called to update the camera's position.</summary>
         /// <param name="x">Pans the camera by adding to the X coordinate.</param>
         /// <param name="y">Pans the camera by adding to the Y coordinate.</param>
