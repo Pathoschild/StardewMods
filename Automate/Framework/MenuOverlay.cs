@@ -19,6 +19,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Properties
         *********/
 
+        private readonly FactoryGroup GroupFactory = new FactoryGroup();
+
         /// <summary>The tiles containing a machine and whether it's connected to anything.</summary>
         private readonly IDictionary<Vector2, bool> MachineTileConnections;
 
@@ -38,6 +40,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         private ClickableTextureComponent saveButton;
 
         private ClickableTextureComponent deleteButton;
+
+        private ClickableTextureComponent connectButton;
 
         private string hoverText = "";
 
@@ -63,23 +67,30 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         public void SetUpButtons()
         {
-            Rectangle okXNBTilesheet = Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46, -1, -1);
-            ClickableTextureComponent okTextureComponent = new ClickableTextureComponent("OK", new Microsoft.Xna.Framework.Rectangle(Game1.viewport.Width - Game1.tileSize * 2, Game1.viewport.Height - Game1.tileSize * 2, Game1.tileSize, Game1.tileSize), (string)null, "Save Group", Game1.mouseCursors, okXNBTilesheet, 1f, false);
-            this.saveButton = okTextureComponent;
+            Rectangle okBtnXNBTilesheet = Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46, -1, -1);
+            ClickableTextureComponent okBtnTextureComponent = new ClickableTextureComponent("OK", new Microsoft.Xna.Framework.Rectangle(Game1.viewport.Width - Game1.tileSize * 2, Game1.viewport.Height - Game1.tileSize * 2, Game1.tileSize, Game1.tileSize), (string)null, "Save Group", Game1.mouseCursors, okBtnXNBTilesheet, 1f, false);
+            this.saveButton = okBtnTextureComponent;
 
-            Rectangle cancelXNBTileSheet = Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 47, -1, -1);
-            ClickableTextureComponent cancelTextureComponent = new ClickableTextureComponent("OK", new Microsoft.Xna.Framework.Rectangle(Game1.viewport.Width - Game1.tileSize * 3, Game1.viewport.Height - Game1.tileSize * 2, Game1.tileSize, Game1.tileSize), (string)null, "Delete Group", Game1.mouseCursors, cancelXNBTileSheet, 1f, false);
-            this.deleteButton = cancelTextureComponent;
+            Rectangle cancelBtnXNBTileSheet = Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 47, -1, -1);
+            ClickableTextureComponent cancelBtnTextureComponent = new ClickableTextureComponent("OK", new Microsoft.Xna.Framework.Rectangle(Game1.viewport.Width - Game1.tileSize * 3, Game1.viewport.Height - Game1.tileSize * 2, Game1.tileSize, Game1.tileSize), (string)null, "Delete Group", Game1.mouseCursors, cancelBtnXNBTileSheet, 1f, false);
+            this.deleteButton = cancelBtnTextureComponent;
+
+            Rectangle buildBtnXNBTileSheet = new Microsoft.Xna.Framework.Rectangle(366, 373, 16, 16);
+            ClickableTextureComponent buildBtnTextureComponent = new ClickableTextureComponent("OK", new Microsoft.Xna.Framework.Rectangle(Game1.viewport.Width - Game1.tileSize * 2, Game1.tileSize, Game1.tileSize, Game1.tileSize), (string)null, "Save Group", Game1.mouseCursors, buildBtnXNBTileSheet, (float)Game1.pixelZoom, false);
+            this.connectButton = buildBtnTextureComponent;
         }
 
         public override void performHoverAction(int x, int y)
         {
             this.saveButton.tryHover(x, y, 0.1f);
             this.deleteButton.tryHover(x, y, 0.1f);
+            this.connectButton.tryHover(x, y, 0.1f);
             if (this.saveButton.containsPoint(x, y))
                 this.hoverText = "Save Group";
             else if (this.deleteButton.containsPoint(x, y))
                 this.hoverText = "Delete Group";
+            else if (this.connectButton.containsPoint(x, y))
+                this.hoverText = "Connect Group";
             else
                 this.hoverText = "";
         }
@@ -200,6 +211,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 this.deleteButton.draw(spriteBatch);
             }
 
+            this.connectButton.draw(spriteBatch);
             this.drawMouse(spriteBatch);
             if (this.hoverText.Length <= 0)
                 return;
@@ -273,9 +285,9 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
             else
             {
-                if (this.ClickedTiles.Contains(tile))
+                if (this.ClickedTiles.Contains(tile) && !this.GroupFactory.IsBridgeTile(tile, this.ClickedTiles.ToArray()))
                     this.ClickedTiles.Remove(tile);
-                else if (CanAddToGroup(tile, this.ClickedTiles))
+                else if (this.GroupFactory.CanAddToGroup(tile, this.ClickedTiles))
                     this.ClickedTiles.Add(tile);
             }
 
@@ -377,31 +389,6 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
 
             return found;
-        }
-
-        //private HashSet<Vector2> GroupTiles(Vector2 tile) { }
-
-        private bool CanAddToGroup(Vector2 tile, HashSet<Vector2> groupTiles)
-        {
-            // first tile
-            if (!groupTiles.Any())
-                return true;
-
-            // adjacent to any tile in group
-            return IsAdjacentTile(tile, groupTiles);
-        }
-
-        private bool IsAdjacentTile(Vector2 tile, HashSet<Vector2> groupTiles)
-        {
-            return Utility
-                .getAdjacentTileLocationsArray(tile)
-                .Intersect(groupTiles)
-                .Any();
-        }
-
-        private bool IsGroupContiguous(HashSet<Vector2> group)
-        {
-
         }
     }
 }
