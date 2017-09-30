@@ -18,9 +18,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Properties
         *********/
-        /// <summary>Provides utility methods for factory groups.</summary>
-        private readonly FactoryGroup GroupFactory = new FactoryGroup();
-
         /// <summary>The tiles containing a machine and whether it's connected to anything.</summary>
         private readonly IDictionary<Vector2, bool> MachineTileConnections;
 
@@ -33,8 +30,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The amount by which to pan the screen quickly.</summary>
         private readonly int FastPanAmount = 8;
 
-        /// <summary>The machine groups configured by the player.</summary>
-        private readonly IList<HashSet<Vector2>> GroupsOfTiles;
+        /// <summary>The factories configured by the player.</summary>
+        private readonly IList<FactoryGroup> Factories;
 
         /// <summary>The save-group button to render.</summary>
         private readonly ClickableTextureComponent SaveButton;
@@ -45,8 +42,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The save button to render.</summary>
         private readonly ClickableTextureComponent ConnectButton;
 
-        /// <summary>The tiles that part of the current selection.</summary>
-        private HashSet<Vector2> ClickedTiles = new HashSet<Vector2>();
+        /// <summary>The factory being edited.</summary>
+        private FactoryGroup EditingFactory;
 
         /// <summary>The text to show in a tooltip.</summary>
         private string HoverText;
@@ -57,14 +54,14 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machines">The machines to manage in the overlay.</param>
-        /// <param name="groups">The machine groups configured by the player.</param>
-        public MenuOverlay(IEnumerable<MachineMetadata> machines, IList<HashSet<Vector2>> groups)
+        /// <param name="factories">The machine groups configured by the player.</param>
+        public MenuOverlay(IEnumerable<MachineMetadata> machines, IList<FactoryGroup> factories)
         {
             // init
             machines = machines.ToArray();
             this.MachineTileConnections = this.GetMachineTileConnections(machines);
             this.ChestTileConnections = this.GetChestTileConnections(machines);
-            this.GroupsOfTiles = groups;
+            this.Factories = factories;
 
             // init buttons
             Rectangle okSprite = Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46);
@@ -121,7 +118,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
                     // get tile color
                     Color color = Color.Black * 0.5f;
-                    bool selected = this.ClickedTiles.Contains(tile);
+                    bool selected = this.EditingFactory?.Contains(tile) == true;
                     if (this.MachineTileConnections.TryGetValue(tile, out bool hasPipe))
                         color = this.GetTileColor(hasPipe, selected);
                     else if (this.ChestTileConnections.TryGetValue(tile, out bool hasConnection))
@@ -144,42 +141,42 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
 
             // draw group borders
-            if (this.GroupsOfTiles.Any())
+            if (this.Factories.Any())
             {
-                foreach (HashSet<Vector2> groupedTiles in this.GroupsOfTiles)
+                foreach (FactoryGroup factory in this.Factories)
                 {
-                    foreach (Vector2 tile in groupedTiles)
+                    foreach (Vector2 tile in factory)
                     {
                         int borderSize = 1;
                         Color borderColor = Color.White * 0.75f;
                         Rectangle screenArea = new Rectangle((int)tile.X * Game1.tileSize - Game1.viewport.X, (int)tile.Y * Game1.tileSize - Game1.viewport.Y, Game1.tileSize, Game1.tileSize);
 
                         // top
-                        if (!groupedTiles.Contains(new Vector2(tile.X, tile.Y - 1)))
+                        if (!factory.Contains(new Vector2(tile.X, tile.Y - 1)))
                             spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(screenArea.Width, borderSize), borderColor); // top
 
                         // bottom
-                        if (!groupedTiles.Contains(new Vector2(tile.X, tile.Y + 1)))
+                        if (!factory.Contains(new Vector2(tile.X, tile.Y + 1)))
                             spriteBatch.DrawLine(screenArea.X, screenArea.Y + screenArea.Height, new Vector2(screenArea.Width, borderSize), borderColor); // bottom
 
                         // left
-                        if (!groupedTiles.Contains(new Vector2(tile.X - 1, tile.Y)))
+                        if (!factory.Contains(new Vector2(tile.X - 1, tile.Y)))
                             spriteBatch.DrawLine(screenArea.X, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // left
 
                         // right
-                        if (!groupedTiles.Contains(new Vector2(tile.X + 1, tile.Y)))
+                        if (!factory.Contains(new Vector2(tile.X + 1, tile.Y)))
                             spriteBatch.DrawLine(screenArea.X + screenArea.Width, screenArea.Y, new Vector2(borderSize, screenArea.Height), borderColor); // right
                     }
                 }
             }
 
             // draw edit buttons
-            if (this.ClickedTiles.Count > 1)
+            if (this.EditingFactory?.Count() > 1)
             {
-                this.SaveButton.bounds.X = (int)(this.ClickedTiles.Max(c => c.X) + 1) * Game1.tileSize - Game1.viewport.X;
-                this.SaveButton.bounds.Y = (int)(this.ClickedTiles.Max(c => c.Y) + 1) * Game1.tileSize - Game1.viewport.Y;
-                this.DeleteButton.bounds.X = (int)(this.ClickedTiles.Max(c => c.X) + 2) * Game1.tileSize - Game1.viewport.X;
-                this.DeleteButton.bounds.Y = (int)(this.ClickedTiles.Max(c => c.Y) + 1) * Game1.tileSize - Game1.viewport.Y;
+                this.SaveButton.bounds.X = (int)(this.EditingFactory.Max(c => c.X) + 1) * Game1.tileSize - Game1.viewport.X;
+                this.SaveButton.bounds.Y = (int)(this.EditingFactory.Max(c => c.Y) + 1) * Game1.tileSize - Game1.viewport.Y;
+                this.DeleteButton.bounds.X = (int)(this.EditingFactory.Max(c => c.X) + 2) * Game1.tileSize - Game1.viewport.X;
+                this.DeleteButton.bounds.Y = (int)(this.EditingFactory.Max(c => c.Y) + 1) * Game1.tileSize - Game1.viewport.Y;
 
                 this.SaveButton.draw(spriteBatch);
                 this.DeleteButton.draw(spriteBatch);
@@ -250,37 +247,40 @@ namespace Pathoschild.Stardew.Automate.Framework
         [SuppressMessage("ReSharper", "PossibleLossOfFraction", Justification = "Deliberate conversion to tile coordinates")]
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            Vector2 tile = new Vector2((x + Game1.viewport.X) / Game1.tileSize, (y + Game1.viewport.Y) / Game1.tileSize);
-            HashSet<Vector2> group = this.GroupsOfTiles.FirstOrDefault(hash => hash.Contains(tile));
-            bool inGroup = group != null;
-
-            // handle tile click
-            if (inGroup) // if tile is in the group in the list, edit that group
-            {
-                this.GroupsOfTiles.Remove(group);
-                this.ClickedTiles = new HashSet<Vector2>(group);
-                group.Clear();
-            }
-            else
-            {
-                if (this.ClickedTiles.Contains(tile) && !this.GroupFactory.IsBridgeTile(tile, this.ClickedTiles.ToArray()))
-                    this.ClickedTiles.Remove(tile);
-                else if (this.GroupFactory.CanAddToGroup(tile, this.ClickedTiles))
-                    this.ClickedTiles.Add(tile);
-            }
+            bool isEditing = this.EditingFactory != null;
 
             // save click
-            if (this.SaveButton.containsPoint(x, y))
+            if (isEditing && this.SaveButton.containsPoint(x, y))
             {
-                this.GroupsOfTiles.Add(new HashSet<Vector2>(this.ClickedTiles));
-                this.ClickedTiles.Clear();
+                if (!this.Factories.Contains(this.EditingFactory))
+                    this.Factories.Add(this.EditingFactory);
+                this.EditingFactory = null;
             }
 
             // delete click
-            if (this.DeleteButton.containsPoint(x, y))
+            else if (isEditing && this.DeleteButton.containsPoint(x, y))
             {
-                this.ClickedTiles.Clear();
+                this.Factories.Remove(this.EditingFactory);
+                this.EditingFactory = null;
             }
+
+            // tile click
+            else
+            {
+                Vector2 tile = new Vector2((x + Game1.viewport.X) / Game1.tileSize, (y + Game1.viewport.Y) / Game1.tileSize);
+
+                // start editing factory
+                if (this.EditingFactory == null)
+                {
+                    this.EditingFactory = this.Factories.FirstOrDefault(p => p.Contains(tile)) ?? new FactoryGroup();
+                    this.EditingFactory.Add(tile);
+                }
+
+                // toggle tile in factory
+                else
+                    this.EditingFactory?.AddOrRemove(tile);
+            }
+
         }
 
         /*********

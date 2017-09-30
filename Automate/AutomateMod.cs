@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
@@ -20,8 +19,8 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
-        /// <summary>The machine groups configured by the player.</summary>
-        private IList<HashSet<Vector2>> Groups;
+        /// <summary>The factories configured by the player.</summary>
+        private IList<FactoryGroup> Factories;
 
         /// <summary>Constructs machine instances.</summary>
         private readonly MachineFactory Factory = new MachineFactory();
@@ -79,7 +78,9 @@ namespace Pathoschild.Stardew.Automate
             if (this.Config.CheckForUpdates)
                 UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "Automate");
 
-            this.Groups = this.Helper.ReadJsonFile<List<HashSet<Vector2>>>("storage/{Constants.SaveFolderName}.json") ?? new List<HashSet<Vector2>>();
+            // load factories
+            FactoryGroupData[] factoryData = this.Helper.ReadJsonFile<FactoryGroupData[]>($"data/{Constants.SaveFolderName}.json") ?? new FactoryGroupData[0];
+            this.Factories = new List<FactoryGroup>(factoryData.Select(data => new FactoryGroup(data)));
         }
 
         /// <summary>The event called before the game starts saving.</summary>
@@ -87,8 +88,9 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
-            // write file
-            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", this.Groups);
+            // save factory data
+            FactoryGroupData[] factoryData = this.Factories.Select(p => p.GetData()).ToArray();
+            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", factoryData);
         }
 
         /// <summary>The method invoked when a location is added or removed.</summary>
@@ -171,7 +173,7 @@ namespace Pathoschild.Stardew.Automate
                     {
                         Game1.activeClickableMenu = new MenuOverlay(
                             this.Factory.GetAllMachinesIn(Game1.currentLocation, this.Helper.Reflection),
-                            this.Groups
+                            this.Factories
                         );
                     }
                     else if (Game1.activeClickableMenu is MenuOverlay menu)

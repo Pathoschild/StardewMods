@@ -10,6 +10,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Accessors
         *********/
         /// <summary>The tiles which are part of this group.</summary>
-        public IList<Vector2> Tiles { get; set; }
+        public HashSet<Vector2> Tiles { get; set; } = new HashSet<Vector2>();
     }
 }
