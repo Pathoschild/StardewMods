@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -332,7 +332,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             {
                 case Element.Menu:
                     if (input.Equals(config.Toggle) || input.Equals(Keys.Escape) || input.Equals(Buttons.B))
-                        this.Exit();
+                    {
+                        if (this.Menu.readyToClose())
+                            this.Exit();
+                    }
                     else if (input.Equals(config.PrevChest))
                         this.SelectPreviousChest();
                     else if (input.Equals(config.NextChest))

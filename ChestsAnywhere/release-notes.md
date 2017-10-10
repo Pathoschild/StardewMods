@@ -4,6 +4,7 @@
 ## 1.11.2 (upcoming)
 * Added Russian translations by vanja-san.
 * Added warning when translation files are missing.
+* Fixed being able to close the menu while holding an item, which makes that item disappear.
 
 ## 1.11.1
 * Added Portuguese and Spanish translations by Fabilows and ThomasGabrielDelavault respectively.
