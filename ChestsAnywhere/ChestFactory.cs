@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
+using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
@@ -43,9 +43,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     foreach (KeyValuePair<Vector2, Object> pair in location.Objects)
                     {
                         Vector2 tile = pair.Key;
-                        Chest chest = pair.Value as Chest;
-                        if (chest != null && chest.playerChest)
-                            yield return new ManagedChest(chest, this.GetLocationName(location), tile, this.Translations.Get("default-name.chest", new { number = ++namelessCount }));
+                        if (pair.Value is Chest chest && chest.playerChest)
+                            yield return new ManagedChest(new ChestContainer(chest), this.GetLocationName(location), tile, this.Translations.Get("default-name.chest", new { number = ++namelessCount }));
                     }
                 }
 
@@ -54,18 +53,18 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 {
                     Chest fridge = house.fridge;
                     if (fridge != null)
-                        yield return new ManagedChest(fridge, location.Name, Vector2.Zero, this.Translations.Get("default-name.fridge"));
+                        yield return new ManagedChest(new ChestContainer(fridge), location.Name, Vector2.Zero, this.Translations.Get("default-name.fridge"));
                 }
             }
         }
 
         /// <summary>Get all player chests in the order they should be displayed.</summary>
-        /// <param name="selectedChest">The chest to show even if it's ignored.</param>
+        /// <param name="selected">The container to show even if it's ignored.</param>
         /// <param name="excludeIgnored">Whether to exclude chests marked as hidden.</param>
-        public IEnumerable<ManagedChest> GetChestsForDisplay(Chest selectedChest = null, bool excludeIgnored = true)
+        public IEnumerable<ManagedChest> GetChestsForDisplay(IContainer selected = null, bool excludeIgnored = true)
         {
             return this.GetChests()
-                .Where(chest => !excludeIgnored || !chest.IsIgnored || chest.Chest == selectedChest)
+                .Where(chest => !excludeIgnored || !chest.IsIgnored || chest.Container == selected)
                 .OrderBy(p => p.Order ?? int.MaxValue)
                 .ThenBy(p => p.Name);
         }
@@ -74,18 +73,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="tile">The tile to check.</param>
         public ManagedChest GetChestFromTile(Vector2 tile)
         {
-            // get chest
-            Chest chest;
-            {
-                Object obj;
-                Game1.currentLocation.Objects.TryGetValue(tile, out obj);
-                chest = obj as Chest;
-            }
+            if (!Game1.currentLocation.Objects.TryGetValue(tile, out Object obj) || !(obj is Chest chest))
+                return null;
 
-            // return if valid
-            if (chest != null && chest.playerChest)
-                return new ManagedChest(chest, this.GetLocationName(Game1.currentLocation), tile);
-            return null;
+            return this.GetChests().FirstOrDefault(p => p.Container.Instance == chest);
         }
 
         /// <summary>Get the player chest from the specified menu (if any).</summary>
@@ -93,15 +84,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         public ManagedChest GetChestFromMenu(ItemGrabMenu menu)
         {
             // from menu target
-            Chest target = menu.behaviorOnItemGrab?.Target as Chest;
-            ManagedChest chest = target != null
-                ? this.GetChests().FirstOrDefault(p => p.Chest == target)
+            ManagedChest chest = menu.behaviorOnItemGrab?.Target is Chest target
+                ? this.GetChests().FirstOrDefault(p => p.Container.Instance == target)
                 : null;
             if (chest != null)
                 return chest;
 
             // fallback to open chest
-            return this.GetChests().FirstOrDefault(p => p.Chest.currentLidFrame == 135);
+            return this.GetChests().FirstOrDefault(p => p.Container.IsOpen());
         }
 
 
@@ -113,13 +103,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         private string GetLocationName(GameLocation location)
         {
             return location.Name;
-        }
-
-        /// <summary>Get the display name for a location.</summary>
-        /// <param name="location">The game location.</param>
-        private string GetLocationName(Building location)
-        {
-            return location.nameOfIndoors.TrimEnd('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
         }
     }
 }

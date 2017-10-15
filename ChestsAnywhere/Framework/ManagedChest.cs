@@ -1,7 +1,7 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using StardewValley.Menus;
-using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
@@ -18,8 +18,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The chest instance.</summary>
-        public Chest Chest { get; }
+        /// <summary>The storage container.</summary>
+        public IContainer Container { get; }
 
         /// <summary>The chest's display name.</summary>
         public string Name { get; private set; }
@@ -44,19 +44,17 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="chest">The chest instance.</param>
+        /// <param name="container">The storage container.</param>
         /// <param name="location">The name of the location or building which contains the chest.</param>
         /// <param name="tile">The chest's tile position within its location or building.</param>
-        /// <param name="defaultName">The default name if it hasn't been customised.</param>
-        public ManagedChest(Chest chest, string location, Vector2 tile, string defaultName = "Chest")
+        /// <param name="defaultName">The default name to display if it hasn't been customised.</param>
+        public ManagedChest(IContainer container, string location, Vector2 tile, string defaultName)
         {
             // save values
-            this.Chest = chest;
+            this.Container = container;
             this.LocationName = location;
             this.Tile = tile;
-            this.Name = chest.Name != "Chest"
-                ? chest.Name
-                : defaultName;
+            this.Name = !container.HasDefaultName() ? container.Name : defaultName;
 
             // extract tags
             foreach (Match match in Regex.Matches(this.Name, ManagedChest.TagGroupPattern))
@@ -78,8 +76,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 }
 
                 // order
-                int order;
-                if (int.TryParse(tag, out order))
+                if (int.TryParse(tag, out int order))
                     this.Order = order;
             }
             this.Name = Regex.Replace(this.Name, ManagedChest.TagGroupPattern, "").Trim();
@@ -116,20 +113,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
         public IClickableMenu OpenMenu()
         {
-            return new ItemGrabMenu(this.Chest.items, false, true, InventoryMenu.highlightAllItems, this.Chest.grabItemFromInventory, null, this.Chest.grabItemFromChest, false, true, true, true, true, 1);
+            return new ItemGrabMenu(this.Container.Items, false, true, InventoryMenu.highlightAllItems, this.Container.GrabItemFromInventory, null, this.Container.GrabItemFromContainer, false, true, true, true, true, 1);
         }
 
         /// <summary>Get whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object. </param>
         public override bool Equals(object obj)
         {
-            return this.Chest != null && this.Chest.Equals((obj as ManagedChest)?.Chest);
+            return this.Container != null && this.Container.Equals((obj as ManagedChest)?.Container);
         }
 
         /// <summary>Serves as the default hash function.</summary>
         public override int GetHashCode()
         {
-            return this.Chest.GetHashCode();
+            return this.Container.GetHashCode();
         }
 
 
@@ -147,7 +144,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             if (!string.IsNullOrWhiteSpace(this.Category))
                 name += $" |cat:{this.Category}|";
 
-            this.Chest.name = name;
+            this.Container.Name = name;
         }
     }
 }

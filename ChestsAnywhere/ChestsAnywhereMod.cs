@@ -8,7 +8,6 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
-using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.ChestsAnywhere
 {
@@ -28,8 +27,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /****
         ** State
         ****/
-        /// <summary>The selected chest.</summary>
-        private Chest SelectedChest;
+        /// <summary>The selected in-game container instance.</summary>
+        private object SelectedTarget;
 
         /// <summary>The menu overlay which lets the player navigate and edit chests.</summary>
         private ManageChestOverlay ManageChestOverlay;
@@ -122,11 +121,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     return;
 
                 // add overlay
-                ManagedChest[] chests = this.ChestFactory.GetChestsForDisplay(selectedChest: chest.Chest).ToArray();
+                ManagedChest[] chests = this.ChestFactory.GetChestsForDisplay(selected: chest.Container).ToArray();
                 this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Translation);
                 this.ManageChestOverlay.OnChestSelected += selected =>
                 {
-                    this.SelectedChest = selected.Chest;
+                    this.SelectedTarget = selected.Container.Instance;
                     Game1.activeClickableMenu = selected.OpenMenu();
                 };
             }
@@ -165,7 +164,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             // get chests
             ManagedChest[] chests = this.ChestFactory.GetChestsForDisplay().ToArray();
-            ManagedChest selectedChest = chests.FirstOrDefault(p => p.Chest == this.SelectedChest) ?? chests.FirstOrDefault();
+            ManagedChest selectedChest = chests.FirstOrDefault(p => p.Container.Instance == this.SelectedTarget) ?? chests.FirstOrDefault();
 
             // render menu
             if (selectedChest != null)
