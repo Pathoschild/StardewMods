@@ -4,6 +4,7 @@
 ## 1.17 (upcoming)
 * Updated to SMAPI 2.0.
 * Switched to SMAPI update checks.
+* Fixed `HideOnKeyUp` mode not returning to previous menu on close.
 
 ## 1.16
 * NPC gift tastes now list inventory and owned items first.

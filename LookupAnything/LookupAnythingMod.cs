@@ -177,10 +177,7 @@ namespace Pathoschild.Stardew.LookupAnything
             this.Monitor.InterceptErrors("handling your input", $"handling input '{key}'", () =>
             {
                 if (key.Equals(map.ToggleLookup) || key.Equals(map.ToggleLookupInFrontOfPlayer))
-                {
-                    this.PreviousMenus.Clear();
                     this.HideLookup();
-                }
             });
         }
 
@@ -263,7 +260,10 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 this.Monitor.Log($"Showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.", LogLevel.Trace);
                 if (Game1.activeClickableMenu != null)
-                    this.PreviousMenus.Push(Game1.activeClickableMenu);
+                {
+                    if (!this.Config.HideOnKeyUp || !(Game1.activeClickableMenu is LookupMenu))
+                        this.PreviousMenus.Push(Game1.activeClickableMenu);
+                }
                 Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor);
             });
         }
