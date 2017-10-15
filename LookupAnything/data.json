@@ -681,7 +681,7 @@ You shouldn't change this file unless you know what you're doing.
             "RequiredKills": 150
         },
         {
-            "Targets": [ "Frost Bat", "Lava Bat" ],
+            "Targets": [ "Bat", "Frost Bat", "Lava Bat" ],
             "RequiredKills": 200
         },
         {

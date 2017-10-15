@@ -4,6 +4,7 @@
 ## 1.17 (upcoming)
 * Updated to SMAPI 2.0.
 * Switched to SMAPI update checks.
+* Fixed basic bat kills not counted towards Adventure Quest goal.
 * Fixed `HideOnKeyUp` mode not returning to previous menu on close.
 
 ## 1.16
