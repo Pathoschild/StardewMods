@@ -1,6 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.17 (upcoming)
+* Updated to SMAPI 2.0.
+* Switched to SMAPI update checks.
+
 ## 1.16
 * NPC gift tastes now list inventory and owned items first.
 * Added warning when translation files are missing.

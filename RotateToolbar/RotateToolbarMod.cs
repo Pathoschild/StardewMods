@@ -1,4 +1,3 @@
-﻿using System;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.RotateToolbar.Framework;
 using StardewModdingAPI;
@@ -26,7 +25,6 @@ namespace Pathoschild.Stardew.RotateToolbar
         {
             this.Config = helper.ReadConfig<RawModConfig>().GetParsed(this.Monitor);
 
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             ControlEvents.ControllerButtonPressed += this.ControlEvents_ControllerButtonPressed;
             ControlEvents.ControllerTriggerPressed += this.ControlEvents_ControllerTriggerPressed;
@@ -39,16 +37,6 @@ namespace Pathoschild.Stardew.RotateToolbar
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked after the player loads a saved game.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
-        {
-            // check for updates
-            if (this.Config.CheckForUpdates)
-                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "RotateToolbar");
-        }
-
         /// <summary>The method invoked when the player presses a keyboard button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework.Input;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
@@ -14,9 +14,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 
         /// <summary>The controller input map.</summary>
         public InputMapConfiguration<string> Controller { get; set; }
-
-        /// <summary>Whether to check for updates to the mod.</summary>
-        public bool CheckForUpdates { get; set; }
 
         /// <summary>Whether to show the chest name in a tooltip when you point at a chest.</summary>
         public bool ShowHoverTooltips { get; set; }
@@ -48,7 +45,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 EditChest = "",
                 SortItems = ""
             };
-            this.CheckForUpdates = true;
             this.ShowHoverTooltips = true;
         }
 
@@ -77,7 +73,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                     EditChest = this.TryParse<Buttons>(this.Controller.EditChest),
                     SortItems = this.TryParse<Buttons>(this.Keyboard.SortItems)
                 },
-                CheckForUpdates = this.CheckForUpdates,
                 ShowHoverTooltips = this.ShowHoverTooltips
             };
         }

@@ -84,10 +84,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 this.Monitor.Log(versionError, LogLevel.Error);
                 CommonHelper.ShowErrorMessage(versionError);
             }
-
-            // check for updates
-            if (this.Config.CheckForUpdates)
-                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "ChestsAnywhere");
         }
 
         /// <summary>The method invoked when the interface has finished rendering.</summary>

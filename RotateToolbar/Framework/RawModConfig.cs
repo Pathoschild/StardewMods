@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 
@@ -18,9 +18,6 @@ namespace Pathoschild.Stardew.RotateToolbar.Framework
 
         /// <summary>Whether to deselect the current slot after rotating the toolbar.</summary>
         public bool DeselectItemOnRotate { get; set; } = false;
-
-        /// <summary>Whether to check for updates to the mod.</summary>
-        public bool CheckForUpdates { get; set; } = true;
 
 
         /*********
@@ -57,8 +54,7 @@ namespace Pathoschild.Stardew.RotateToolbar.Framework
                     ShiftToPrevious = this.TryParse<Buttons>(monitor, this.Controller.ShiftToPrevious),
                     ShiftToNext = this.TryParse<Buttons>(monitor, this.Controller.ShiftToNext)
                 },
-                DeselectItemOnRotate = this.DeselectItemOnRotate,
-                CheckForUpdates = this.CheckForUpdates
+                DeselectItemOnRotate = this.DeselectItemOnRotate
             };
         }
 

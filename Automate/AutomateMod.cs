@@ -74,10 +74,8 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            // check for updates
+            // reset automation interval
             this.AutomateCountdown = this.Config.AutomationInterval;
-            if (this.Config.CheckForUpdates)
-                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "Automate");
 
             // load save data from file
             this.SaveData = this.Helper.ReadJsonFile<SaveData>($"data/{Constants.SaveFolderName}.json") ?? new SaveData();

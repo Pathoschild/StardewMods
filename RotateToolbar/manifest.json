@@ -2,8 +2,9 @@
   "Name": "Rotate Toolbar",
   "Author": "Pathoschild",
   "Version": "1.2",
-  "MinimumApiVersion": "1.15",
+  "MinimumApiVersion": "2.0",
   "Description": "Rotate the toolbar by pressing a button.",
   "UniqueID": "Pathoschild.RotateToolbar",
-  "EntryDll": "RotateToolbar.dll"
+  "EntryDll": "RotateToolbar.dll",
+  "UpdateKeys": [ "Nexus:1100" ]
 }

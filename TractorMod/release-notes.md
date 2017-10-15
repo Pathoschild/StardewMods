@@ -1,8 +1,10 @@
 # Release notes
 ## 4.2 (upcoming)
+* Updated to SMAPI 2.0.
 * Added option for axe to clear live crops.
 * Added support for seasonal textures.
 * Added Portuguese translations by Fabilows.
+* Switched to SMAPI update checks.
 
 ## 4.1
 New features:

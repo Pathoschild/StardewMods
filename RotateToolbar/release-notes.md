@@ -1,6 +1,10 @@
-﻿[← back to readme](README.md)
+[← back to readme](README.md)
 
 # Release notes
+## 1.3 (upcoming)
+* Updated to SMAPI 2.0.
+* Switched to SMAPI update checks.
+
 ## 1.2
 * Added option to deselect item on rotate.
 

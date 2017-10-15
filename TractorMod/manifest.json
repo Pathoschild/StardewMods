@@ -2,8 +2,9 @@
   "Name": "Tractor Mod",
   "Author": "Pathoschild",
   "Version": "4.1",
-  "MinimumApiVersion": "1.15",
+  "MinimumApiVersion": "2.0",
   "UniqueID": "Pathoschild.TractorMod",
   "Description": "Lets you buy a tractor to more efficiently work with crops, clear twigs and rocks, etc.",
-  "EntryDll": "TractorMod.dll"
+  "EntryDll": "TractorMod.dll",
+  "UpdateKeys": [ "Nexus:1401" ]
 }

@@ -18,14 +18,6 @@ You just stay awake forever and the night never ends (until you go to bed).
 ## Use
 The mod is automatic — just stay past 2am, as long as you want.
 
-## Configure
-The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
-file if you want. These are the available settings:
-
-| setting           | what it affects
-| ----------------- | -------------------
-| `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll see a small message at the bottom of the screen for a few seconds. This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
-
 ## Versions
 See [release notes](release-notes.md).
 

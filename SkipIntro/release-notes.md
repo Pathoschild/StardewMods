@@ -1,6 +1,10 @@
-﻿[← back to readme](README.md)
+[← back to readme](README.md)
 
 # Release notes
+## 1.8 (upcoming)
+* Updated to SMAPI 2.0.
+* Switched to SMAPI update checks.
+
 ## 1.7
 * Updated to SMAPI 1.14.
 * Start even more quickly — the mod now skips the button/slide transitions on the title & load screens.

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 
@@ -21,9 +21,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Whether the lookup UI should only be visible as long as the key is pressed.</summary>
         public bool HideOnKeyUp { get; set; }
-
-        /// <summary>Whether to check for updates to the mod.</summary>
-        public bool CheckForUpdates { get; set; } = true;
 
         /// <summary>Whether to show advanced data mining fields.</summary>
         public bool ShowDataMiningFields { get; set; }
@@ -80,7 +77,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 },
                 ScrollAmount = this.ScrollAmount,
                 HideOnKeyUp = this.HideOnKeyUp,
-                CheckForUpdates = this.CheckForUpdates,
                 ShowDataMiningFields = this.ShowDataMiningFields,
                 EnableTileLookups = this.EnableTileLookups
             };

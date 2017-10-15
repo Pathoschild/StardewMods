@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DebugMode.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -57,7 +56,6 @@ namespace Pathoschild.Stardew.DebugMode
             this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
 
             // hook events
-            SaveEvents.AfterLoad += this.ReceiveAfterLoad;
             ControlEvents.KeyPressed += this.ReceiveKeyPress;
             if (this.Config.Controller.HasAny())
             {
@@ -79,16 +77,6 @@ namespace Pathoschild.Stardew.DebugMode
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked after the player loads a saved game.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void ReceiveAfterLoad(object sender, EventArgs e)
-        {
-            // check for updates
-            if (this.Config.CheckForUpdates)
-                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "DebugMode");
-        }
-
         /// <summary>The event called by SMAPI when rendering to the screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>

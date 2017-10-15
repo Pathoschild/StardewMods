@@ -2,8 +2,9 @@
   "Name": "Automate",
   "Author": "Pathoschild",
   "Version": "1.7",
-  "MinimumApiVersion": "1.15",
+  "MinimumApiVersion": "2.0",
   "Description": "Lets you automate crafting machines, fruit trees, and more by connecting them to chests.",
   "UniqueID": "Pathoschild.Automate",
-  "EntryDll": "Automate.dll"
+  "EntryDll": "Automate.dll",
+  "UpdateKeys": [ "Nexus:1063" ]
 }

@@ -103,7 +103,6 @@ setting           | what it affects
 ----------------- | -------------------
 `ToggleOverlayKey` | Default `U`. The keyboard button which toggles the overlay to view automatable machines.
 `AutomationInterval` | Default `60`. The number of update ticks between each automation cycle (one second is ≈60 ticks).
-`CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll see a small message at the bottom of the screen for a few seconds. This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
 `VerboseLogging` | Default `false`. Whether to write more detailed information about what the mod is doing to the log file. This is useful for troubleshooting, but may impact performance and should generally be disabled.
 
 ## Versions

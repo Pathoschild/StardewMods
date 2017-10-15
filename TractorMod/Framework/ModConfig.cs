@@ -23,9 +23,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Whether the tractor can break paths and flooring when the pickaxe is selected.</summary>
         public bool PickaxeBreaksFlooring { get; set; } = false;
 
-        /// <summary>Whether to check for updates to the mod.</summary>
-        public bool CheckForUpdates { get; set; } = true;
-
         /// <summary>Whether to use the experimental feature which lets the tractor pass through trellis crops.</summary>
         public bool PassThroughTrellisCrops { get; set; }
 

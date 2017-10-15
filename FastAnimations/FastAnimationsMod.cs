@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using Pathoschild.Stardew.FastAnimations.Handlers;
 using StardewModdingAPI;
@@ -50,10 +49,6 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <param name="e">The event arguments.</param>
         private void ReceiveAfterLoad(object sender, EventArgs e)
         {
-            // check for updates
-            if (this.Config.CheckForUpdates)
-                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "FastAnimations");
-
             // initialise handlers
             foreach (IAnimationHandler handler in this.Handlers)
                 handler.OnNewLocation(Game1.currentLocation);

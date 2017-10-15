@@ -2,7 +2,9 @@
 
 # Release notes
 ## 1.8 (upcoming)
+* Updated to SMAPI 2.0.
 * Added readonly overlay to show automatable machines.
+* Switched to SMAPI update checks.
 
 ## 1.7
 * Added support for egg incubators and slime incubators.

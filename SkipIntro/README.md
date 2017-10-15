@@ -13,7 +13,6 @@ file if you want. These are the available settings:
 
 | setting           | what it affects
 | ----------------- | -------------------
-| `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll see a message in the SMAPI console. This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
 | `SkipToLoadScreen` | Default `true`. Whether to skip straight to the load-save screen (instead of the title screen).
 
 ## Versions

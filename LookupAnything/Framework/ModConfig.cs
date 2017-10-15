@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
@@ -19,9 +19,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>The amount to scroll long content on each up/down scroll.</summary>
         public int ScrollAmount { get; set; }
-
-        /// <summary>Whether to check for updates to the mod.</summary>
-        public bool CheckForUpdates { get; set; }
 
         /// <summary>Whether to show advanced data mining fields.</summary>
         public bool ShowDataMiningFields { get; set; }

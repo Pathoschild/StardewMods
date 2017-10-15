@@ -79,7 +79,6 @@ namespace Pathoschild.Stardew.TractorMod
             };
 
             // spawn/unspawn tractor and garages
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
 
@@ -107,16 +106,6 @@ namespace Pathoschild.Stardew.TractorMod
         /****
         ** Event handlers
         ****/
-        /// <summary>The event called when the player loads a save.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
-        {
-            // check for updates
-            if (this.Config.CheckForUpdates)
-                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "TractorMod");
-        }
-
         /// <summary>The event called when a new day begins.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>

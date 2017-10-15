@@ -1,9 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.11.2 (upcoming)
+## 1.12 (upcoming)
+* Updated to SMAPI 2.0.
 * Added Russian translations by vanja-san.
 * Added warning when translation files are missing.
+* Switched to SMAPI update checks.
 * Fixed being able to close the menu while holding an item, which makes that item disappear.
 
 ## 1.11.1
