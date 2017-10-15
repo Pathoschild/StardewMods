@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.FastAnimations.Framework;
@@ -21,6 +21,9 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <summary>The temporary animations showing the item thrown into the air.</summary>
         private readonly HashSet<TemporaryAnimatedSprite> ItemAnimations = new HashSet<TemporaryAnimatedSprite>();
 
+        /// <summary>Whether to disable the confirmation dialogue before eating or drinking.</summary>
+        private readonly bool DisableConfirmation;
+
 
         /*********
         ** Public methods
@@ -28,10 +31,12 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <summary>Construct an instance.</summary>
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
-        public EatingHandler(IReflectionHelper reflection, int multiplier)
+        /// <param name="disableConfirmation">Whether to disable the confirmation dialogue before eating or drinking.</param>
+        public EatingHandler(IReflectionHelper reflection, int multiplier, bool disableConfirmation)
             : base(multiplier)
         {
             this.Reflection = reflection;
+            this.DisableConfirmation = disableConfirmation;
         }
 
         /// <summary>Get whether the animation is currently active.</summary>
@@ -50,9 +55,14 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
             // dialogue.
             if (Game1.activeClickableMenu is DialogueBox eatMenu)
             {
-                Response yes = this.Reflection.GetPrivateValue<List<Response>>(eatMenu, "responses")[0];
-                Game1.currentLocation.answerDialogue(yes);
-                eatMenu.closeDialogue();
+                if (this.DisableConfirmation)
+                {
+                    Response yes = this.Reflection.GetPrivateValue<List<Response>>(eatMenu, "responses")[0];
+                    Game1.currentLocation.answerDialogue(yes);
+                    eatMenu.closeDialogue();
+                }
+                else
+                    return; // wait until confirmation closed
             }
 
             // The farmer eating animation spins off two main temporary animations: the item being

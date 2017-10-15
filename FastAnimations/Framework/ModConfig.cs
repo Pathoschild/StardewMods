@@ -6,6 +6,9 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /*********
         ** Accessors
         *********/
+        /// <summary>Whether to disable the confirmation dialogue before eating or drinking.</summary>
+        public bool DisableEatAndDrinkConfirmation { get; set; } = false;
+
         /// <summary>The speed multiplier for eating and drinking.</summary>
         public int EatAndDrinkSpeed { get; set; } = 5;
 
