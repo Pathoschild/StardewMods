@@ -49,6 +49,7 @@
     <Compile Include="Framework\CustomSaveBuilding.cs" />
     <Compile Include="Framework\CustomSaveData.cs" />
     <Compile Include="Framework\LegacySaveData.cs" />
+    <Compile Include="Framework\ModAttachments\SeedBagAttachment.cs" />
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\BaseAttachment.cs" />
     <Compile Include="Framework\TractorManager.cs" />

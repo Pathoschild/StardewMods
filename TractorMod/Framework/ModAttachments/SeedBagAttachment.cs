@@ -1,16 +1,21 @@
 using Microsoft.Xna.Framework;
-using Pathoschild.Stardew.TractorMod.Framework.ModAttachments;
 using StardewValley;
 using StardewValley.TerrainFeatures;
-using StardewValley.Tools;
 using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
-namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
+namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
 {
-    /// <summary>An attachment for the hoe.</summary>
-    internal class HoeAttachment : BaseAttachment
+    /// <summary>An attachment for the Seed Bag mod.</summary>
+    internal class SeedBagAttachment : BaseAttachment
     {
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The <see cref="System.Type.FullName"/> value for the Seed Bag mod's seed bag.</summary>
+        internal const string SeedBagTypeName = "SeedBag.SeedBagTool";
+
+
         /*********
         ** Public methods
         *********/
@@ -21,7 +26,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return tool is Hoe && tool.GetType().FullName != SeedBagAttachment.SeedBagTypeName;
+            return tool?.GetType().FullName == SeedBagAttachment.SeedBagTypeName;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -35,7 +40,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
             // till plain dirt
-            if (tileFeature == null && tileObj == null)
+            if (tileFeature is HoeDirt)
                 return this.UseToolOnTile(tool, tile);
 
             return false;

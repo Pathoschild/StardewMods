@@ -3,6 +3,7 @@
 * Updated to SMAPI 2.0.
 * Added option for axe to clear live crops.
 * Added support for seasonal textures.
+* Added support for the Seed Bag mod's seed bag.
 * Added Portuguese translations by Fabilows.
 * Switched to SMAPI update checks.
 

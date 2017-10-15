@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.TractorMod.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
+using Pathoschild.Stardew.TractorMod.Framework.ModAttachments;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -75,6 +76,7 @@ namespace Pathoschild.Stardew.TractorMod
                 new PickaxeAttachment(this.Config),
                 new ScytheAttachment(),
                 new SeedAttachment(),
+                new SeedBagAttachment(),
                 new WateringCanAttachment()
             };
 
