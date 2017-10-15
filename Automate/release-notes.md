@@ -1,7 +1,7 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.8
+## 1.8 (upcoming)
 * Added readonly overlay to show automatable machines.
 
 ## 1.7

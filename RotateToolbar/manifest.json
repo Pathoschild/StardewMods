@@ -1,12 +1,7 @@
-﻿{
+{
   "Name": "Rotate Toolbar",
   "Author": "Pathoschild",
-  "Version": {
-    "MajorVersion": 1,
-    "MinorVersion": 2,
-    "PatchVersion": 0,
-    "Build": null
-  },
+  "Version": "1.2",
   "MinimumApiVersion": "1.15",
   "Description": "Rotate the toolbar by pressing a button.",
   "UniqueID": "Pathoschild.RotateToolbar",
