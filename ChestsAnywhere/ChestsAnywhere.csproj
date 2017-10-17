@@ -51,6 +51,7 @@
     <Compile Include="ChestsAnywhereMod.cs" />
     <Compile Include="Framework\Containers\ChestContainer.cs" />
     <Compile Include="Framework\Containers\IContainer.cs" />
+    <Compile Include="Framework\Containers\JunimoHutContainer.cs" />
     <Compile Include="Menus\Components\Checkbox.cs" />
     <Compile Include="Menus\Components\DropList.cs" />
     <Compile Include="Menus\Components\Sprites.cs" />

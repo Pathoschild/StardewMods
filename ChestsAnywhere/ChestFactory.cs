@@ -6,6 +6,7 @@ using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
@@ -39,12 +40,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             {
                 // chests in location
                 {
-                    int namelessCount = 0;
+                    int namelessChests = 0;
                     foreach (KeyValuePair<Vector2, Object> pair in location.Objects)
                     {
                         Vector2 tile = pair.Key;
                         if (pair.Value is Chest chest && chest.playerChest)
-                            yield return new ManagedChest(new ChestContainer(chest), this.GetLocationName(location), tile, this.Translations.Get("default-name.chest", new { number = ++namelessCount }));
+                            yield return new ManagedChest(new ChestContainer(chest), this.GetLocationName(location), tile, this.Translations.Get("default-name.chest", new { number = ++namelessChests }));
                     }
                 }
 
@@ -54,6 +55,17 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     Chest fridge = house.fridge;
                     if (fridge != null)
                         yield return new ManagedChest(new ChestContainer(fridge), location.Name, Vector2.Zero, this.Translations.Get("default-name.fridge"));
+                }
+
+                // buildings
+                if (location is BuildableGameLocation buildableLocation)
+                {
+                    int namelessHuts = 0;
+                    foreach (Building building in buildableLocation.buildings)
+                    {
+                        if (building is JunimoHut hut)
+                            yield return new ManagedChest(new JunimoHutContainer(hut), this.GetLocationName(location), new Vector2(hut.tileX, hut.tileY), this.Translations.Get("default-name.junimo-hut", new { number = ++namelessHuts }));
+                    }
                 }
             }
         }

@@ -1,7 +1,8 @@
-﻿{
+{
   // default chest names
   "default-name.chest": "Сундук #{{number}}",
   "default-name.fridge": "Холодильник",
+  "default-name.junimo-hut": "Юнимос #{{number}}", // TODO: verify
 
   // edit-chest labels
   "label.location": "Расположение",

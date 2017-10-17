@@ -1,7 +1,8 @@
-﻿{
+{
   // default chest names
   "default-name.chest": "{{number}}号箱子",
   "default-name.fridge": "冰箱",
+  "default-name.junimo-hut": "{{number}}祝尼魔小屋", // TODO: verify
 
   // edit-chest labels
   "label.location": "位置",

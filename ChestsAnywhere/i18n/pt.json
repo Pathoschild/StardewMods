@@ -1,7 +1,8 @@
-﻿{
+{
   // default chest names
   "default-name.chest": "Baú #{{number}}",
   "default-name.fridge": "Geladeira",
+  "default-name.junimo-hut": "Cabana dos junimos #{{number}}", // TODO: verify
 
   // edit-chest labels
   "label.location": "Local",
