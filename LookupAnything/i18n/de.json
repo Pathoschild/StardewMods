@@ -18,7 +18,7 @@
   "generic.minutes": "{{count}} Minuten",
   "generic.hours": "{{count}} Stunden",
   "generic.days": "{{count}} Tage",
-  "generic.in-x-days": "in {{count}} tagen",
+  "generic.in-x-days": "in {{count}} Tagen",
   "generic.tomorrow": "Morgen",
   "generic.price": "{{price}}g",
   "generic.price-for-quality": "{{price}}g ({{quality}})",
@@ -44,14 +44,14 @@
   *********/
   // Community Center bundle areas
   "bundle-area.pantry": "Speisekammer",
-  "bundle-area.crafts-room": "Handwerk Zimmer",
-  "bundle-area.fish-tank": "Fisch Tank",
+  "bundle-area.crafts-room": "Handwerksraum",
+  "bundle-area.fish-tank": "Aquarium",
   "bundle-area.boiler-room": "Heizungsraum",
   "bundle-area.vault": "Tresor",
   "bundle-area.bulletin-board": "Schwarzes Brett",
 
   // shop names
-  "shop.adventure-guild": "Abenteurer Gilde",
+  "shop.adventure-guild": "Abenteurergilde",
   "shop.clint": "Clint",
   "shop.marnie": "Marnie",
   "shop.pierre": "Pierre",
@@ -78,25 +78,25 @@
   "data.type.container": "Container",
 
   // farm
-  "data.item.egg-incubator.description": "Brütet Eier zu baby Hünchen und Enten.",
+  "data.item.egg-incubator.description": "Brütet Eier zu Küken und Entchen aus.",
   "data.item.broken-branch.name": "Zerbrochener Ast",
-  "data.item.broken-branch.description": "Ein Zerbrochener Ast. Hack es mit deiner Axt um Holz zu bekommen.",
+  "data.item.broken-branch.description": "Ein Zerbrochener Ast. Zerhack es mit deiner Axt um Holz zu bekommen.",
   "data.item.stone.name": "Stein",
   "data.item.stone.description": "Ein unscheinbarer grauer Stein. Zerbrech ihn um Steine zu bekommen.",
-  "data.item.geode.name": "Geode Ader",
-  "data.item.geode.description": "Zerbrech es um Geode zu bekommen.",
-  "data.item.frozen-geode.name": "Gefrorene Geode Ader",
-  "data.item.frozen-geode.description": "Zerbrech es um gefrorene Geode zu bekommen.",
-  "data.item.magma-geode.name": "Magma Geode Ader",
-  "data.item.magma-geode.description": "Zerbrech es um Magma geode zu bekommen.",
+  "data.item.geode.name": "Geode",
+  "data.item.geode.description": "Zerbrech es um eine Geode zu bekommen.",
+  "data.item.frozen-geode.name": "Gefrorene Geode",
+  "data.item.frozen-geode.description": "Zerbrech es um eine gefrorene Geode zu bekommen.",
+  "data.item.magma-geode.name": "Magma Geode",
+  "data.item.magma-geode.description": "Zerbrech es um eine Magma Geode zu bekommen.",
 
   // weeds & crystals
   "data.item.weed.name": "Gras",
-  "data.item.weed.description": "unscheinbares Gras. enthält vielleicht gemischte Samen oder Faser.",
+  "data.item.weed.description": "Unscheinbares Gras. Enthält vielleicht gemischte Samen oder Fasern.",
   "data.item.fertile-weed.name": "Fruchtbares Gras",
-  "data.item.fertile-weed.description": "wird defenitiv wilde Samen fallen lassen.",
+  "data.item.fertile-weed.description": "Wird definitiv wilde Samen fallen lassen.",
   "data.item.ice-crystal.name": "Eis Kristall",
-  "data.item.ice-crystal.description": "Ein unscheinbarer Eis Kristall. Sehr kleine chance verfeinerten Quartz zu enthalten.",
+  "data.item.ice-crystal.description": "Ein unscheinbarer Eis Kristall. Sehr geringe Chance verfeinerten Quartz zu enthalten.",
 
   // mine gems
   "data.item.amethyst-node.name": "Amethyst Haufen",
@@ -126,7 +126,7 @@
   "data.item.gold-node.name": "Gold Ader",
   "data.item.gold-node.description": "Zerbrech es um Gold Erz zu bekommen.",
   "data.item.iridum-node.name": "Iridium Ader",
-  "data.item.iridum-node.description": "Zerbrech es um iridium Erz zu bekommen.",
+  "data.item.iridum-node.description": "Zerbrech es um Iridium Erz zu bekommen.",
   "data.item.iron-node.name": "Eisen Ader",
   "data.item.iron-node.description": "Zerbrech es um Eisen Erz zu bekommen.",
 
@@ -152,14 +152,14 @@
   "animal.complaints": "Beschwerden",
   "animal.produce-ready": "Produkt fertig",
   "animal.growth": "Wachstum",
-  "animal.sells-for": "Verkauft für",
+  "animal.sells-for": "Verkaufen für",
 
   // animal lookup values
-  "animal.complaints.hungry": "wurde gestern nicht gefütter",
-  "animal.complaints.left-out": "wurde letzte Nacht draußen gelassen",
-  "animal.complaints.new-home": "ist in ein neues Zuhause gezogen",
-  "animal.complaints.no-heater": "kein Heizer im Winter",
-  "animal.complaints.not-petted": "wurde heute nicht gestreichelt",
+  "animal.complaints.hungry": "Wurde gestern nicht gefüttert",
+  "animal.complaints.left-out": "Wurde letzte Nacht draußen gelassen",
+  "animal.complaints.new-home": "Ist in ein neues Zuhause gezogen",
+  "animal.complaints.no-heater": "Keine Heizung im Winter",
+  "animal.complaints.not-petted": "Wurde heute nicht gestreichelt",
   "animal.complaints.wild-animal-attack": "Wurde in der Nacht von einem wildem Tier angegriffen",
 
   // fruit tree lookup labels
@@ -171,12 +171,12 @@
   "fruit-tree.quality": "Qualität",
 
   // fruit tree lookup values
-  "fruit-tree.complaints.adjacent-objects": "kann nicht wachsen weil objecte in der umgebung sind",
+  "fruit-tree.complaints.adjacent-objects": "kann nicht wachsen weil Objekte in der Umgebung sind",
   "fruit-tree.growth.summary": "Ausgewachsen am {{date}}",
-  "fruit-tree.next-fruit.struck-by-lighting": "getroffen vom Blitz! erhohlt sich in {{count}} tagen.",
+  "fruit-tree.next-fruit.struck-by-lighting": "getroffen von einem Blitz! Erhohlt sich in {{count}} Tagen.",
   "fruit-tree.next-fruit.out-of-season": "ausserhalb der Jahreszeit",
-  "fruit-tree.next-fruit.max-fruit": "wird keine Früchte mehr bekommen bis sie geerntet werden",
-  "fruit-tree.next-fruit.too-young": "zu jung um Früchte zu trange",
+  "fruit-tree.next-fruit.max-fruit": "Wird keine Früchte mehr tragen, bis sie geerntet werden",
+  "fruit-tree.next-fruit.too-young": "Zu jung um Früchte zu tragen",
   "fruit-tree.quality.now": "{{quality}} jetzt",
   "fruit-tree.quality.on-date": "{{quality}} am {{date}}",
   "fruit-tree.quality.on-date-next-year": "{{quality}} am {{date}} nächstes Jahr",
@@ -190,10 +190,10 @@
   "crop.summary.dead": "diese Saat ist tot.",
   "crop.summary.drops-X": "Beute {{count}}",
   "crop.summary.drops-X-to-Y": "Beute {{min}} bis {{max}} ({{percent}}% chance auf extra saat)",
-  "crop.summary.harvest-once": "Ernte in {{daysToFirstHarvest}} tagen",
-  "crop.summary.harvest-multi": "Ernte nach {{daysToFirstHarvest}} tagen, danach alle {{daysToNextHarvests}} Tage",
+  "crop.summary.harvest-once": "Ernte in {{daysToFirstHarvest}} Tagen",
+  "crop.summary.harvest-multi": "Ernte nach {{daysToFirstHarvest}} Tagen, danach alle {{daysToNextHarvests}} Tage",
   "crop.summary.seasons": "wächst im {{seasons}}",
-  "crop.summary.sells-for": "verkauft für {{price}}",
+  "crop.summary.sells-for": "verkaufen für {{price}}",
   "crop.harvest.now": "jetzt",
   "crop.harvest.too-late": "zu spät in der Jahrezeit für noch eine Ernte (wäre am {{date}})",
 
@@ -202,14 +202,14 @@
   "item.cask-schedule": "Alter",
   "item.contents": "Inhalt",
   "item.needed-for": "Gebraucht für",
-  "item.sells-for": "Verkauft für",
-  "item.sells-to": "Verkauft an",
+  "item.sells-for": "Verkaufen für",
+  "item.sells-to": "Verkaufen an",
   "item.likes-this": "Mag das",
   "item.loves-this": "Liebt das",
   "item.fence-health": "Leben",
   "item.recipes": "Rezepte",
   "item.number-owned": "Besitzt",
-  "item.see-also": "sieh auch",
+  "item.see-also": "siehe auch",
 
   // item lookup values
   "item.cask-schedule.now": "{{quality}} bereit jetzt",
@@ -220,22 +220,22 @@
   "item.contents.partial": "{{name}} in {{time}}",
   "item.needed-for.community-center": "Gemeindezentrum ({{bundles}})",
   "item.needed-for.full-shipment": "Volle Lieferung Errungenschaft (liefer einen)",
-  "item.needed-for.polyculture": "polykulture Errungenschaft (liefer noch {{count}})",
-  "item.needed-for.full-collection": "Vollständige Sammlung Errungenschaft (Spende eins zum Museum)",
+  "item.needed-for.polyculture": "Polykultur Errungenschaft (liefer noch {{count}})",
+  "item.needed-for.full-collection": "Eine vollständige Sammlung Errungenschaft (Spende eins zum Museum)",
   "item.sells-to.shipping-box": "Lieferungs Box",
-  "item.fence-health.gold-clock": "keine zerfall mit Gold Uhr",
+  "item.fence-health.gold-clock": "Kein Zerfall mit Gold Uhr",
   "item.fence-health.summary": "{{percent}}% (noch etwa {{count}} Tage übrig)",
   "item.recipes.entry": "{{name}} (braucht {{count}})",
   "item.number-owned.summary": "du besitzt {{count}}",
 
   // monster lookup labels
-  "monster.invincible": "unbesiegbar",
+  "monster.invincible": "Unbesiegbar",
   "monster.health": "Leben",
   "monster.drops": "Beute",
   "monster.experience": "XP",
   "monster.defence": "Verteidigung",
   "monster.attack": "Angriff",
-  "monster.adventure-guild": "Abenteurer Gilde",
+  "monster.adventure-guild": "Abenteurergilde",
 
   // monster lookup values
   "monster.drops.nothing": "nichts",
@@ -307,7 +307,7 @@
   "tile.tile.none-here": "kein Tile hier",
 
   // tree lookup labels
-  "tree.stage": "Wachstums Stadium",
+  "tree.stage": "Wachstumsstadium",
   "tree.next-growth": "Nächstes Wachstum",
   "tree.has-seed": "Besitzt Samen",
 
