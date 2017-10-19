@@ -8,6 +8,7 @@
 * Added warning when translation files are missing.
 * Switched to SMAPI update checks.
 * Fixed being able to close the menu while holding an item, which makes that item disappear.
+* Fixed typo in German translations (thanks to [@d0x7](https://github.com/d0x7)).
 
 ## 1.11.1
 * Added Portuguese and Spanish translations by Fabilows and ThomasGabrielDelavault respectively.
