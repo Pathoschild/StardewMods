@@ -32,9 +32,9 @@ namespace Pathoschild.Stardew.FastAnimations
             this.Config = helper.ReadConfig<ModConfig>();
             this.Handlers = this.GetHandlers(this.Config).ToArray();
 
-            SaveEvents.AfterLoad += this.ReceiveAfterLoad;
-            GameEvents.UpdateTick += this.ReceiveUpdateTick;
-            LocationEvents.CurrentLocationChanged += this.ReceiveLocationChanged;
+            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+            LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
         }
 
 
@@ -47,7 +47,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <summary>The method invoked after the player loads a saved game.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ReceiveAfterLoad(object sender, EventArgs e)
+        private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
             // initialise handlers
             foreach (IAnimationHandler handler in this.Handlers)
@@ -57,7 +57,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <summary>The method invoked after the player warps to a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ReceiveLocationChanged(object sender, EventArgsCurrentLocationChanged e)
+        private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
         {
             if (!Context.IsWorldReady || Game1.eventUp || !this.Handlers.Any())
                 return;
@@ -69,7 +69,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <summary>The method invoked when the player presses a keyboard button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void ReceiveUpdateTick(object sender, EventArgs e)
+        private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
             if (!Context.IsWorldReady || Game1.eventUp || !this.Handlers.Any())
                 return;

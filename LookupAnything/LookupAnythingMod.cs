@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Components;
 using Pathoschild.Stardew.LookupAnything.Framework;
@@ -90,33 +90,27 @@ namespace Pathoschild.Stardew.LookupAnything
             this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config, this.Monitor);
 
             // hook up events
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
+            GraphicsEvents.OnPostRenderHudEvent += this.GraphicsEvents_OnPostRenderHudEvent;
+            MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
+
+            // hook up keyboard
+            if (this.Config.Keyboard.HasAny())
             {
-                // reset low-level cache once per game day (used for expensive queries that don't change within a day)
-                SaveEvents.AfterLoad += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection, this.Helper.Translation);
-                SaveEvents.AfterSave += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection, this.Helper.Translation);
+                ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
+                if (this.Config.HideOnKeyUp)
+                    ControlEvents.KeyReleased += this.ControlEvents_KeyReleased;
+            }
 
-                // hook up game events
-                GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
-                MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
-
-                // hook up keyboard
-                if (this.Config.Keyboard.HasAny())
+            // hook up controller
+            if (this.Config.Controller.HasAny())
+            {
+                ControlEvents.ControllerButtonPressed += this.ControlEvents_ControllerButtonPressed;
+                ControlEvents.ControllerTriggerPressed += this.ControlEvents_ControllerTriggerPressed;
+                if (this.Config.HideOnKeyUp)
                 {
-                    ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
-                    if (this.Config.HideOnKeyUp)
-                        ControlEvents.KeyReleased += (sender, e) => this.ReceiveKeyRelease(e.KeyPressed, this.Config.Keyboard);
-                }
-
-                // hook up controller
-                if (this.Config.Controller.HasAny())
-                {
-                    ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-                    ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-                    if (this.Config.HideOnKeyUp)
-                    {
-                        ControlEvents.ControllerButtonReleased += (sender, e) => this.ReceiveKeyRelease(e.ButtonReleased, this.Config.Controller);
-                        ControlEvents.ControllerTriggerReleased += (sender, e) => this.ReceiveKeyRelease(e.ButtonReleased, this.Config.Controller);
-                    }
+                    ControlEvents.ControllerButtonReleased += this.ControlEvents_ControllerButtonReleased;
+                    ControlEvents.ControllerTriggerReleased += this.ControlEvents_ControllerTriggerReleased;
                 }
             }
 
@@ -139,6 +133,39 @@ namespace Pathoschild.Stardew.LookupAnything
         /****
         ** Event handlers
         ****/
+        /// <summary>The method invoked when a new day starts.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
+        {
+            // reset low-level cache once per game day (used for expensive queries that don't change within a day)
+            GameHelper.ResetCache(this.Metadata, this.Helper.Reflection, this.Helper.Translation);
+        }
+
+        /// <summary>The method invoked when the player presses a keyboard button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        {
+            this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
+        }
+
+        /// <summary>The method invoked when the player presses a controller button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ControlEvents_ControllerButtonPressed(object sender, EventArgsControllerButtonPressed e)
+        {
+            this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+        }
+
+        /// <summary>The method invoked when the player presses a controller trigger button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ControlEvents_ControllerTriggerPressed(object sender, EventArgsControllerTriggerPressed e)
+        {
+            this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+        }
+
         /// <summary>The method invoked when the player presses an input button.</summary>
         /// <typeparam name="TKey">The input type.</typeparam>
         /// <param name="key">The pressed input.</param>
@@ -164,6 +191,30 @@ namespace Pathoschild.Stardew.LookupAnything
             });
         }
 
+        /// <summary>The method invoked when the player releases a keyboard button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ControlEvents_KeyReleased(object sender, EventArgsKeyPressed e)
+        {
+            this.ReceiveKeyRelease(e.KeyPressed, this.Config.Keyboard);
+        }
+
+        /// <summary>The method invoked when the player releases a controller button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ControlEvents_ControllerButtonReleased(object sender, EventArgsControllerButtonReleased e)
+        {
+            this.ReceiveKeyRelease(e.ButtonReleased, this.Config.Controller);
+        }
+
+        /// <summary>The method invoked when the player releases a controller trigger button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ControlEvents_ControllerTriggerReleased(object sender, EventArgsControllerTriggerReleased e)
+        {
+            this.ReceiveKeyRelease(e.ButtonReleased, this.Config.Controller);
+        }
+
         /// <summary>The method invoked when the player presses an input button.</summary>
         /// <typeparam name="TKey">The input type.</typeparam>
         /// <param name="key">The pressed input.</param>
@@ -182,24 +233,26 @@ namespace Pathoschild.Stardew.LookupAnything
         }
 
         /// <summary>The method invoked when the player closes a displayed menu.</summary>
-        /// <param name="closedMenu">The menu which the player just closed.</param>
-        private void ReceiveMenuClosed(IClickableMenu closedMenu)
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void MenuEvents_MenuClosed(object sender, EventArgsClickableMenuClosed e)
         {
             // restore the previous menu if it was hidden to show the lookup UI
             this.Monitor.InterceptErrors("restoring the previous menu", () =>
             {
-                if (closedMenu is LookupMenu && this.PreviousMenus.Any())
+                if (e.PriorMenu is LookupMenu && this.PreviousMenus.Any())
                     Game1.activeClickableMenu = this.PreviousMenus.Pop();
             });
         }
 
         /// <summary>The method invoked when the interface is rendering.</summary>
-        /// <param name="spriteBatch">The sprite batch being drawn.</param>
-        private void ReceiveInterfaceRendering(SpriteBatch spriteBatch)
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void GraphicsEvents_OnPostRenderHudEvent(object sender, EventArgs e)
         {
             // render debug interface
             if (this.DebugInterface.Enabled)
-                this.DebugInterface.Draw(spriteBatch);
+                this.DebugInterface.Draw(Game1.spriteBatch);
         }
 
         /****

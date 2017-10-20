@@ -56,14 +56,14 @@ namespace Pathoschild.Stardew.DebugMode
             this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
 
             // hook events
-            ControlEvents.KeyPressed += this.ReceiveKeyPress;
+            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             if (this.Config.Controller.HasAny())
             {
-                ControlEvents.ControllerButtonPressed += this.ReceiveButtonPress;
-                ControlEvents.ControllerTriggerPressed += this.ReceiveTriggerPress;
+                ControlEvents.ControllerButtonPressed += this.ControlEvents_ControllerButtonPressed;
+                ControlEvents.ControllerTriggerPressed += this.ControlEvents_ControllerTriggerPressed;
             }
-            LocationEvents.CurrentLocationChanged += this.ReceiveCurrentLocationChanged;
-            GraphicsEvents.OnPostRenderEvent += this.OnPostRenderEvent;
+            LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
+            GraphicsEvents.OnPostRenderEvent += this.GraphicsEvents_OnPostRenderEvent;
 
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
@@ -80,7 +80,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>The event called by SMAPI when rendering to the screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        public void OnPostRenderEvent(object sender, EventArgs e)
+        public void GraphicsEvents_OnPostRenderEvent(object sender, EventArgs e)
         {
             if (this.DebugMode)
                 this.DrawOverlay(Game1.spriteBatch, Game1.smallFont, this.Pixel.Value);
@@ -89,7 +89,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>The method invoked when the player presses a keyboard button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void ReceiveKeyPress(object sender, EventArgsKeyPressed e)
+        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
         {
             // handle hotkey
             this.HandleInput(e.KeyPressed, this.Config.Keyboard);
@@ -102,7 +102,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>The method invoked when the player presses a controller button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void ReceiveButtonPress(object sender, EventArgsControllerButtonPressed e)
+        private void ControlEvents_ControllerButtonPressed(object sender, EventArgsControllerButtonPressed e)
         {
             this.HandleInput(e.ButtonPressed, this.Config.Controller);
         }
@@ -110,7 +110,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>The method invoked when the player presses a controller trigger button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void ReceiveTriggerPress(object sender, EventArgsControllerTriggerPressed e)
+        private void ControlEvents_ControllerTriggerPressed(object sender, EventArgsControllerTriggerPressed e)
         {
             this.HandleInput(e.ButtonPressed, this.Config.Controller);
         }
@@ -118,7 +118,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>The method invoked when the player warps into a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void ReceiveCurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
+        private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
         {
             if (this.DebugMode)
                 this.CorrectEntryPosition(e.NewLocation, Game1.player);

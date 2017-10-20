@@ -1,4 +1,5 @@
-﻿using Pathoschild.Stardew.Common;
+using System;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
 using Pathoschild.Stardew.DataMaps.Overlays;
 using StardewModdingAPI;
@@ -30,13 +31,13 @@ namespace Pathoschild.Stardew.DataMaps
             this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
 
             // hook up events
-            GameEvents.SecondUpdateTick += (sender, e) => this.ReceiveUpdateTick();
+            GameEvents.SecondUpdateTick += this.GameEvents_SecondUpdateTick;
             if (this.Config.Keyboard.HasAny())
-                ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
+                ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             if (this.Config.Controller.HasAny())
             {
-                ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-                ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+                ControlEvents.ControllerButtonPressed += this.ControlEvents_ControllerButtonPressed;
+                ControlEvents.ControllerTriggerPressed += this.ControlEvents_ControllerTriggerPressed;
             }
         }
 
@@ -44,6 +45,30 @@ namespace Pathoschild.Stardew.DataMaps
         /*********
         ** Private methods
         *********/
+        /// <summary>The method invoked when the player presses a keyboard button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        {
+            this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
+        }
+
+        /// <summary>The method invoked when the player presses a controller button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ControlEvents_ControllerButtonPressed(object sender, EventArgsControllerButtonPressed e)
+        {
+            this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+        }
+
+        /// <summary>The method invoked when the player presses a controller trigger button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ControlEvents_ControllerTriggerPressed(object sender, EventArgsControllerTriggerPressed e)
+        {
+            this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+        }
+
         /// <summary>The method invoked when the player presses an input button.</summary>
         /// <typeparam name="TKey">The input type.</typeparam>
         /// <param name="key">The pressed input.</param>
@@ -72,7 +97,9 @@ namespace Pathoschild.Stardew.DataMaps
         }
 
         /// <summary>Receive an update tick.</summary>
-        private void ReceiveUpdateTick()
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void GameEvents_SecondUpdateTick(object sender, EventArgs e)
         {
             this.CurrentOverlay?.Update();
         }

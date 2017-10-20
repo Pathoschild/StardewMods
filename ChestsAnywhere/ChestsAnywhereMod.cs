@@ -46,21 +46,21 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             this.ChestFactory = new ChestFactory(helper.Translation);
 
             // hook UI
-            GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveHudRendered();
-            MenuEvents.MenuChanged += (sender, e) => this.ReceiveMenuChanged(e.PriorMenu, e.NewMenu);
-            MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
+            GraphicsEvents.OnPostRenderHudEvent += this.GraphicsEvents_OnPostRenderHudEvent;
+            MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
+            MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
 
             // hook input
             if (this.Config.Keyboard.HasAny())
-                ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
+                ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
             if (this.Config.Controller.HasAny())
             {
-                ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-                ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+                ControlEvents.ControllerButtonPressed += this.ControlEvents_ControllerButtonPressed;
+                ControlEvents.ControllerTriggerPressed += this.ControlEvents_ControllerTriggerPressed;
             }
 
             // hook game events
-            SaveEvents.AfterLoad += this.ReceiveAfterLoad;
+            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
 
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
@@ -74,7 +74,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>The method invoked after the player loads a saved game.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ReceiveAfterLoad(object sender, EventArgs e)
+        private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
             // validate game version
             string versionError = this.ValidateGameVersion();
@@ -86,7 +86,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         }
 
         /// <summary>The method invoked when the interface has finished rendering.</summary>
-        private void ReceiveHudRendered()
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void GraphicsEvents_OnPostRenderHudEvent(object sender, EventArgs e)
         {
             // show chest label
             if (this.Config.ShowHoverTooltips)
@@ -101,19 +103,19 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         }
 
         /// <summary>The method invoked when the active menu changes.</summary>
-        /// <param name="previousMenu">The previous menu (if any)</param>
-        /// <param name="newMenu">The new menu (if any).</param>
-        private void ReceiveMenuChanged(IClickableMenu previousMenu, IClickableMenu newMenu)
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
             // remove overlay
-            if (previousMenu is ItemGrabMenu)
+            if (e.PriorMenu is ItemGrabMenu)
             {
                 this.ManageChestOverlay?.Dispose();
                 this.ManageChestOverlay = null;
             }
 
             // add overlay
-            if (newMenu is ItemGrabMenu chestMenu)
+            if (e.NewMenu is ItemGrabMenu chestMenu)
             {
                 // get open chest
                 ManagedChest chest = this.ChestFactory.GetChestFromMenu(chestMenu);
@@ -132,10 +134,35 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         }
 
         /// <summary>The method invoked when a menu is closed.</summary>
-        /// <param name="closedMenu">The menu that was closed.</param>
-        private void ReceiveMenuClosed(IClickableMenu closedMenu)
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void MenuEvents_MenuClosed(object sender, EventArgsClickableMenuClosed e)
         {
-            this.ReceiveMenuChanged(closedMenu, null);
+            this.MenuEvents_MenuChanged(e.PriorMenu, null);
+        }
+
+        /// <summary>The method invoked when the player presses a keyboard button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        {
+            this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
+        }
+
+        /// <summary>The method invoked when the player presses a controller button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ControlEvents_ControllerButtonPressed(object sender, EventArgsControllerButtonPressed e)
+        {
+            this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
+        }
+
+        /// <summary>The method invoked when the player presses a controller trigger button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void ControlEvents_ControllerTriggerPressed(object sender, EventArgsControllerTriggerPressed e)
+        {
+            this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
         }
 
         /// <summary>The method invoked when the player presses an input button.</summary>
