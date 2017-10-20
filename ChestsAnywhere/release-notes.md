@@ -10,8 +10,7 @@
 * Switched to SMAPI update checks.
 * Fixed being able to close the menu while holding an item, which makes that item disappear.
 * Fixed typo in German translations.
-
-Updated translations thanks to Dorion/[@d0x7](https://github.com/d0x7) (German) and yuwenlan (Chinese).
+* Improved translations thanks to Dorian/[@d0x7](https://github.com/d0x7) (German) and yuwenlan (Chinese).
 
 ## 1.11.1
 * Added Portuguese and Spanish translations by Fabilows and ThomasGabrielDelavault respectively.
