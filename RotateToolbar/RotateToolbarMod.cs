@@ -1,3 +1,4 @@
+using System.Linq;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.RotateToolbar.Framework;
 using StardewModdingAPI;
@@ -23,11 +24,9 @@ namespace Pathoschild.Stardew.RotateToolbar
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            this.Config = helper.ReadConfig<RawModConfig>().GetParsed(this.Monitor);
+            this.Config = helper.ReadConfig<ModConfig>();
 
-            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
-            ControlEvents.ControllerButtonPressed += this.ControlEvents_ControllerButtonPressed;
-            ControlEvents.ControllerTriggerPressed += this.ControlEvents_ControllerTriggerPressed;
+            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
         }
 
 
@@ -37,57 +36,22 @@ namespace Pathoschild.Stardew.RotateToolbar
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked when the player presses a keyboard button.</summary>
+        /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
         {
             if (!Context.IsWorldReady)
-                return;
-
-            this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
-        }
-
-        /// <summary>The method invoked when the player presses a controller button.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void ControlEvents_ControllerTriggerPressed(object sender, EventArgsControllerTriggerPressed e)
-        {
-            if (!Context.IsWorldReady)
-                return;
-
-            this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-        }
-
-        /// <summary>The method invoked when the player presses a controller trigger button.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void ControlEvents_ControllerButtonPressed(object sender, EventArgsControllerButtonPressed e)
-        {
-            if (!Context.IsWorldReady)
-                return;
-
-            this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-        }
-
-        /****
-        ** Methods
-        ****/
-        /// <summary>The method invoked when the player presses an input button.</summary>
-        /// <typeparam name="TKey">The input type.</typeparam>
-        /// <param name="key">The pressed input.</param>
-        /// <param name="map">The configured input mapping.</param>
-        private void ReceiveKeyPress<TKey>(TKey key, InputMapConfiguration<TKey> map)
-        {
-            if (!map.IsValidKey(key))
                 return;
 
             // perform bound action
-            this.Monitor.InterceptErrors("handling your input", $"handling input '{key}'", () =>
+            this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
             {
-                if (key.Equals(map.ShiftToNext))
+                var controls = this.Config.Controls;
+
+                if (controls.ShiftToNext.Contains(e.Button))
                     this.RotateToolbar(true, this.Config.DeselectItemOnRotate);
-                else if (key.Equals(map.ShiftToPrevious))
+                else if (controls.ShiftToPrevious.Contains(e.Button))
                     this.RotateToolbar(false, this.Config.DeselectItemOnRotate);
             });
         }

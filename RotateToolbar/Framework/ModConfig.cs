@@ -1,4 +1,6 @@
-using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
+using Pathoschild.Stardew.Common;
+using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.RotateToolbar.Framework
 {
@@ -8,13 +10,26 @@ namespace Pathoschild.Stardew.RotateToolbar.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The keyboard input map.</summary>
-        public InputMapConfiguration<Keys> Keyboard { get; set; }
-
-        /// <summary>The controller input map.</summary>
-        public InputMapConfiguration<Buttons> Controller { get; set; }
-
         /// <summary>Whether to deselect the current slot after rotating the toolbar.</summary>
         public bool DeselectItemOnRotate { get; set; } = false;
+
+        /// <summary>The control bindings.</summary>
+        public ModConfigControls Controls { get; set; } = new ModConfigControls();
+
+
+        /*********
+        ** Nested models
+        *********/
+        /// <summary>A set of control bindings.</summary>
+        public class ModConfigControls
+        {
+            /// <summary>The control which rotates the toolbar up (i.e. show the previous inventory row).</summary>
+            [JsonConverter(typeof(StringEnumArrayConverter))]
+            public SButton[] ShiftToPrevious { get; set; } = new SButton[0];
+
+            /// <summary>The control which rotates the toolbar up (i.e. show the next inventory row).</summary>
+            [JsonConverter(typeof(StringEnumArrayConverter))]
+            public SButton[] ShiftToNext { get; set; } = { SButton.Tab };
+        }
     }
 }
