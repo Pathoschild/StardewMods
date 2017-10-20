@@ -14,7 +14,7 @@ using StardewValley.Objects;
 namespace Pathoschild.Stardew.Automate.Framework
 {
     /// <summary>The overlay which highlights automatable machines.</summary>
-    internal class MenuOverlay : IClickableMenu
+    internal class OverlayMenu : IClickableMenu
     {
         /*********
         ** Properties
@@ -56,7 +56,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="machines">The machines to manage in the overlay.</param>
         /// <param name="groups">The machine/storage groups that operate as single units.</param>
-        public MenuOverlay(IEnumerable<MachineMetadata> machines, ISet<GroupData> groups)
+        public OverlayMenu(IEnumerable<MachineMetadata> machines, ISet<GroupData> groups)
         {
             // init
             machines = machines.ToArray();

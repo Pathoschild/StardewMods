@@ -168,12 +168,12 @@ namespace Pathoschild.Stardew.Automate
                 {
                     if (Game1.activeClickableMenu == null)
                     {
-                        Game1.activeClickableMenu = new MenuOverlay(
+                        Game1.activeClickableMenu = new OverlayMenu(
                             this.Factory.GetAllMachinesIn(Game1.currentLocation, this.Helper.Reflection),
                             this.SaveData.Groups
                         );
                     }
-                    else if (Game1.activeClickableMenu is MenuOverlay menu)
+                    else if (Game1.activeClickableMenu is OverlayMenu menu)
                         menu.exitThisMenu();
                 }
             }

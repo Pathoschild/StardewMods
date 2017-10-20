@@ -44,7 +44,7 @@
     <Compile Include="Framework\Pipe.cs" />
     <Compile Include="Framework\Models\GroupData.cs" />
     <Compile Include="Framework\IStorage.cs" />
-    <Compile Include="Framework\MenuOverlay.cs" />
+    <Compile Include="Framework\OverlayMenu.cs" />
     <Compile Include="Framework\Recipe.cs" />
     <Compile Include="Framework\TrackedItem.cs" />
     <Compile Include="Framework\Extensions.cs" />
