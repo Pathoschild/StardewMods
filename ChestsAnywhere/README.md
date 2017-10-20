@@ -35,8 +35,7 @@ file if you want. These are the available settings:
 
 | setting           | what it affects
 | ----------------- | -------------------
-| `Keyboard`        | Set keyboard bindings. The default values are `B` to toggle the chest UI, `Left`/`Right` to switch chests, and `Up`/`Down` to switch categories. See [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx).
-| `Controller`      | Set controller bindings. The shoulder buttons are used to navigate chests when the menu is open, but there's no toggle by default. The toggle can be used from the inventory screen. See [valid buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.buttons.aspx).
+| `Controls`        | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). The default keyboard bindings are `B` to toggle the chest UI, `Left`/`Right` to switch chests, and `Up`/`Down` to switch categories. The default controller bindings are the shoulder and trigger buttons to navigate chests while the menu is open.
 | `ShowHoverTooltips` | Default `true`. Whether to show the chest name in a tooltip when you point at a chest.
 
 ## Versions

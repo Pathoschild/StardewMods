@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         public override void Entry(IModHelper helper)
         {
             // initialise
-            this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
+            this.Config = helper.ReadConfig<ModConfig>();
             this.ChestFactory = new ChestFactory(helper.Translation);
 
             // hook UI
@@ -51,13 +51,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
 
             // hook input
-            if (this.Config.Keyboard.HasAny())
-                ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
-            if (this.Config.Controller.HasAny())
-            {
-                ControlEvents.ControllerButtonPressed += this.ControlEvents_ControllerButtonPressed;
-                ControlEvents.ControllerTriggerPressed += this.ControlEvents_ControllerTriggerPressed;
-            }
+            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
 
             // hook game events
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
@@ -138,46 +132,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="e">The event arguments.</param>
         private void MenuEvents_MenuClosed(object sender, EventArgsClickableMenuClosed e)
         {
-            this.MenuEvents_MenuChanged(e.PriorMenu, null);
+            this.MenuEvents_MenuChanged(sender, new EventArgsClickableMenuChanged(e.PriorMenu, null));
         }
 
-        /// <summary>The method invoked when the player presses a keyboard button.</summary>
+        /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
-        {
-            this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
-        }
-
-        /// <summary>The method invoked when the player presses a controller button.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ControlEvents_ControllerButtonPressed(object sender, EventArgsControllerButtonPressed e)
-        {
-            this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-        }
-
-        /// <summary>The method invoked when the player presses a controller trigger button.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ControlEvents_ControllerTriggerPressed(object sender, EventArgsControllerTriggerPressed e)
-        {
-            this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-        }
-
-        /// <summary>The method invoked when the player presses an input button.</summary>
-        /// <typeparam name="TKey">The input type.</typeparam>
-        /// <param name="key">The pressed input.</param>
-        /// <param name="map">The configured input mapping.</param>
-        private void ReceiveKeyPress<TKey>(TKey key, InputMapConfiguration<TKey> map)
+        /// <param name="e">The event arguments.</param>
+        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
         {
             try
             {
-                if (!map.IsValidKey(key))
-                    return;
+                var controls = this.Config.Controls;
 
                 // open menu
-                if (key.Equals(map.Toggle) && (Game1.activeClickableMenu == null || (Game1.activeClickableMenu as GameMenu)?.currentTab == 0))
+                if (controls.Toggle.Contains(e.Button) && (Game1.activeClickableMenu == null || (Game1.activeClickableMenu as GameMenu)?.currentTab == 0))
                     this.OpenMenu();
             }
             catch (Exception ex)

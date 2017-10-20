@@ -4,6 +4,7 @@
 ## 1.12 (upcoming)
 * Updated to SMAPI 2.0.
 * Added support for Junimo huts.
+* Unified key bindings in `config.json` and added support for mouse button bindings.
 * Added Russian translations by vanja-san.
 * Added warning when translation files are missing.
 * Switched to SMAPI update checks.

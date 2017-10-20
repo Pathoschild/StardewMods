@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
 using Pathoschild.Stardew.Common;
@@ -293,60 +292,34 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.ReinitialiseComponents();
         }
 
-        /// <summary>The method invoked when the player presses a key.</summary>
-        /// <param name="input">The key that was pressed.</param>
-        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
-        protected override bool ReceiveKeyPress(Keys input)
-        {
-            return this.ReceiveKey(input, this.Config.Keyboard);
-        }
-
-        /// <summary>The method invoked when the player presses a controller button.</summary>
+        /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="input">The button that was pressed.</param>
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
-        protected override bool ReceiveButtonPress(Buttons input)
+        protected override bool ReceiveButtonPress(SButton input)
         {
-            return this.ReceiveKey(input, this.Config.Controller);
-        }
-
-        /// <summary>The method invoked when the player presses a controller trigger.</summary>
-        /// <param name="input">The trigger that was pressed.</param>
-        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
-        protected override bool ReceiveTriggerPress(Buttons input)
-        {
-            return this.ReceiveKey(input, this.Config.Controller);
-        }
-
-        /// <summary>The method invoked when the player presses a key.</summary>
-        /// <typeparam name="T">The key type.</typeparam>
-        /// <param name="input">The key that was pressed.</param>
-        /// <param name="config">The input configuration.</param>
-        /// <returns>Whether the key has been handled and shouldn't be propagated further.</returns>
-        public bool ReceiveKey<T>(T input, InputMapConfiguration<T> config)
-        {
-            // ignore invalid input
-            if (this.IsInitialising() || !config.IsValidKey(input))
+            if (this.IsInitialising())
                 return false;
 
+            var controls = this.Config.Controls;
             switch (this.ActiveElement)
             {
                 case Element.Menu:
-                    if (input.Equals(config.Toggle) || input.Equals(Keys.Escape) || input.Equals(Buttons.B))
+                    if (controls.Toggle.Contains(input) || input == SButton.Escape || input == SButton.ControllerB)
                     {
                         if (this.Menu.readyToClose())
                             this.Exit();
                     }
-                    else if (input.Equals(config.PrevChest))
+                    else if (controls.PrevChest.Contains(input))
                         this.SelectPreviousChest();
-                    else if (input.Equals(config.NextChest))
+                    else if (controls.NextChest.Contains(input))
                         this.SelectNextChest();
-                    else if (input.Equals(config.PrevCategory))
+                    else if (controls.PrevCategory.Contains(input))
                         this.SelectPreviousCategory();
-                    else if (input.Equals(config.NextCategory))
+                    else if (controls.NextCategory.Contains(input))
                         this.SelectNextCategory();
-                    else if (input.Equals(config.EditChest))
+                    else if (controls.EditChest.Contains(input))
                         this.OpenEdit();
-                    else if (input.Equals(config.SortItems))
+                    else if (controls.SortItems.Contains(input))
                         this.SortInventory();
                     else
                         return false;
@@ -355,7 +328,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 case Element.ChestList:
                 case Element.GroupList:
                 case Element.EditForm:
-                    if (input.Equals(Keys.Escape) || input.Equals(Buttons.B))
+                    if (input == SButton.Escape || input == SButton.ControllerB)
                         this.ActiveElement = Element.Menu;
                     return true;
 
