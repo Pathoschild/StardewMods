@@ -9,7 +9,9 @@
 * Unified controller + keyboard bindings in `config.json` and enabled mouse bindings.
 * Switched to SMAPI update checks.
 * Fixed being able to close the menu while holding an item, which makes that item disappear.
-* Fixed typo in German translations (thanks to [@d0x7](https://github.com/d0x7)).
+* Fixed typo in German translations.
+
+Updated translations thanks to Dorion/[@d0x7](https://github.com/d0x7) (German) and yuwenlan (Chinese).
 
 ## 1.11.1
 * Added Portuguese and Spanish translations by Fabilows and ThomasGabrielDelavault respectively.
