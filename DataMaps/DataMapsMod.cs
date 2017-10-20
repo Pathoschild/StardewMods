@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
 using Pathoschild.Stardew.DataMaps.Overlays;
@@ -28,60 +29,28 @@ namespace Pathoschild.Stardew.DataMaps
         public override void Entry(IModHelper helper)
         {
             // load config
-            this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
+            this.Config = helper.ReadConfig<ModConfig>();
 
             // hook up events
             GameEvents.SecondUpdateTick += this.GameEvents_SecondUpdateTick;
-            if (this.Config.Keyboard.HasAny())
-                ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
-            if (this.Config.Controller.HasAny())
-            {
-                ControlEvents.ControllerButtonPressed += this.ControlEvents_ControllerButtonPressed;
-                ControlEvents.ControllerTriggerPressed += this.ControlEvents_ControllerTriggerPressed;
-            }
+            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked when the player presses a keyboard button.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
-        {
-            this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
-        }
-
-        /// <summary>The method invoked when the player presses a controller button.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ControlEvents_ControllerButtonPressed(object sender, EventArgsControllerButtonPressed e)
-        {
-            this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-        }
-
-        /// <summary>The method invoked when the player presses a controller trigger button.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ControlEvents_ControllerTriggerPressed(object sender, EventArgsControllerTriggerPressed e)
-        {
-            this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-        }
-
         /// <summary>The method invoked when the player presses an input button.</summary>
-        /// <typeparam name="TKey">The input type.</typeparam>
-        /// <param name="key">The pressed input.</param>
-        /// <param name="map">The configured input mapping.</param>
-        private void ReceiveKeyPress<TKey>(TKey key, InputMapConfiguration<TKey> map)
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
         {
-            if (!map.IsValidKey(key))
-                return;
-
             // perform bound action
-            this.Monitor.InterceptErrors("handling your input", $"handling input '{key}'", () =>
+            this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
             {
-                if (key.Equals(map.ToggleMap))
+                var controls = this.Config.Controls;
+
+                if (controls.ToggleMap.Contains(e.Button))
                 {
                     if (this.CurrentOverlay != null)
                     {

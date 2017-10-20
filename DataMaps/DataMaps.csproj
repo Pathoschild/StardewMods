@@ -40,9 +40,7 @@
     <Compile Include="Overlays\BaseOverlay.cs" />
     <Compile Include="Overlays\DataMapOverlay.cs" />
     <Compile Include="Framework\TileData.cs" />
-    <Compile Include="Framework\InputMapConfiguration.cs" />
     <Compile Include="Framework\ModConfig.cs" />
-    <Compile Include="Framework\RawModConfig.cs" />
     <Compile Include="DataMapsMod.cs" />
     <Compile Include="Overlays\LegendComponent.cs" />
     <Compile Include="Overlays\TraversableOverlay.cs" />

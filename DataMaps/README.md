@@ -21,8 +21,13 @@ _TO DO_
 ## Examples
 _TO DO_
 
-## Configure
-_TO DO_
+## Configuration
+The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
+file if you want. These are the available settings:
+
+setting           | what it affects
+----------------- | -------------------
+`Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). The default value is `F2` to toggle the overlay.
 
 ## Versions
 _TO DO_
