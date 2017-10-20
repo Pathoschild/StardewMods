@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -50,10 +50,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             this.Monitor = monitor;
 
             // generate warning text
-            string[] keys = new[] { config.Keyboard.IsValidKey(config.Keyboard.ToggleDebug) ? config.Keyboard.ToggleDebug.ToString() : null, config.Controller.IsValidKey(config.Controller.ToggleDebug) ? config.Controller.ToggleDebug.ToString() : null }
-                    .Where(p => p != null)
-                    .ToArray();
-            this.WarningText = $"Debug info enabled; press {string.Join(" or ", keys)} to disable.";
+            this.WarningText = $"Debug info enabled; press {string.Join(" or ", config.Controls)} to disable.";
         }
 
         /// <summary>Draw debug metadata to the screen.</summary>

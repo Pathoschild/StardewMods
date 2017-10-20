@@ -65,7 +65,7 @@ namespace Pathoschild.Stardew.LookupAnything
         public override void Entry(IModHelper helper)
         {
             // load config
-            this.Config = this.Helper.ReadConfig<RawModConfig>().GetParsed(this.Monitor);
+            this.Config = this.Helper.ReadConfig<ModConfig>();
 
             // load database
             this.LoadMetadata();
@@ -93,26 +93,9 @@ namespace Pathoschild.Stardew.LookupAnything
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             GraphicsEvents.OnPostRenderHudEvent += this.GraphicsEvents_OnPostRenderHudEvent;
             MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
-
-            // hook up keyboard
-            if (this.Config.Keyboard.HasAny())
-            {
-                ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
-                if (this.Config.HideOnKeyUp)
-                    ControlEvents.KeyReleased += this.ControlEvents_KeyReleased;
-            }
-
-            // hook up controller
-            if (this.Config.Controller.HasAny())
-            {
-                ControlEvents.ControllerButtonPressed += this.ControlEvents_ControllerButtonPressed;
-                ControlEvents.ControllerTriggerPressed += this.ControlEvents_ControllerTriggerPressed;
-                if (this.Config.HideOnKeyUp)
-                {
-                    ControlEvents.ControllerButtonReleased += this.ControlEvents_ControllerButtonReleased;
-                    ControlEvents.ControllerTriggerReleased += this.ControlEvents_ControllerTriggerReleased;
-                }
-            }
+            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
+            if (this.Config.HideOnKeyUp)
+                InputEvents.ButtonReleased += this.InputEvents_ButtonReleased;
 
             // validate metadata
             this.IsDataValid = this.Metadata.LooksValid();
@@ -126,6 +109,7 @@ namespace Pathoschild.Stardew.LookupAnything
             if (!helper.Translation.GetTranslations().Any())
                 this.Monitor.Log("The translation files in this mod's i18n folder seem to be missing. The mod will still work, but you'll see 'missing translation' messages. Try reinstalling the mod to fix this.", LogLevel.Warn);
         }
+
 
         /*********
         ** Private methods
@@ -142,92 +126,40 @@ namespace Pathoschild.Stardew.LookupAnything
             GameHelper.ResetCache(this.Metadata, this.Helper.Reflection, this.Helper.Translation);
         }
 
-        /// <summary>The method invoked when the player presses a keyboard button.</summary>
+        /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
         {
-            this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
-        }
-
-        /// <summary>The method invoked when the player presses a controller button.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ControlEvents_ControllerButtonPressed(object sender, EventArgsControllerButtonPressed e)
-        {
-            this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-        }
-
-        /// <summary>The method invoked when the player presses a controller trigger button.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ControlEvents_ControllerTriggerPressed(object sender, EventArgsControllerTriggerPressed e)
-        {
-            this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-        }
-
-        /// <summary>The method invoked when the player presses an input button.</summary>
-        /// <typeparam name="TKey">The input type.</typeparam>
-        /// <param name="key">The pressed input.</param>
-        /// <param name="map">The configured input mapping.</param>
-        private void ReceiveKeyPress<TKey>(TKey key, InputMapConfiguration<TKey> map)
-        {
-            if (!map.IsValidKey(key))
-                return;
-
             // perform bound action
-            this.Monitor.InterceptErrors("handling your input", $"handling input '{key}'", () =>
+            this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
             {
-                if (key.Equals(map.ToggleLookup))
+                var controls = this.Config.Controls;
+
+                if (controls.ToggleLookup.Contains(e.Button))
                     this.ToggleLookup(LookupMode.Cursor);
-                else if (key.Equals(map.ToggleLookupInFrontOfPlayer))
+                else if (controls.ToggleLookupInFrontOfPlayer.Contains(e.Button))
                     this.ToggleLookup(LookupMode.FacingPlayer);
-                else if (key.Equals(map.ScrollUp))
+                else if (controls.ScrollUp.Contains(e.Button))
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollUp();
-                else if (key.Equals(map.ScrollDown))
+                else if (controls.ScrollDown.Contains(e.Button))
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollDown();
-                else if (key.Equals(map.ToggleDebug))
+                else if (controls.ToggleDebug.Contains(e.Button))
                     this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
             });
         }
 
-        /// <summary>The method invoked when the player releases a keyboard button.</summary>
+        /// <summary>The method invoked when the player releases a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void ControlEvents_KeyReleased(object sender, EventArgsKeyPressed e)
+        private void InputEvents_ButtonReleased(object sender, EventArgsInput e)
         {
-            this.ReceiveKeyRelease(e.KeyPressed, this.Config.Keyboard);
-        }
-
-        /// <summary>The method invoked when the player releases a controller button.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ControlEvents_ControllerButtonReleased(object sender, EventArgsControllerButtonReleased e)
-        {
-            this.ReceiveKeyRelease(e.ButtonReleased, this.Config.Controller);
-        }
-
-        /// <summary>The method invoked when the player releases a controller trigger button.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ControlEvents_ControllerTriggerReleased(object sender, EventArgsControllerTriggerReleased e)
-        {
-            this.ReceiveKeyRelease(e.ButtonReleased, this.Config.Controller);
-        }
-
-        /// <summary>The method invoked when the player presses an input button.</summary>
-        /// <typeparam name="TKey">The input type.</typeparam>
-        /// <param name="key">The pressed input.</param>
-        /// <param name="map">The configured input mapping.</param>
-        private void ReceiveKeyRelease<TKey>(TKey key, InputMapConfiguration<TKey> map)
-        {
-            if (!map.IsValidKey(key))
-                return;
-
             // perform bound action
-            this.Monitor.InterceptErrors("handling your input", $"handling input '{key}'", () =>
+            this.Monitor.InterceptErrors("handling your input", $"handling input release '{e.Button}'", () =>
             {
-                if (key.Equals(map.ToggleLookup) || key.Equals(map.ToggleLookupInFrontOfPlayer))
+                var controls = this.Config.Controls;
+
+                if (controls.ToggleLookup.Contains(e.Button) || controls.ToggleLookupInFrontOfPlayer.Contains(e.Button))
                     this.HideLookup();
             });
         }
