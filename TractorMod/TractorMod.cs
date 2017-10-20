@@ -32,6 +32,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The full type name for the Pelican Fiber mod's construction menu.</summary>
         private readonly string PelicanFiberMenuFullName = "PelicanFiber.Framework.ConstructionMenu";
 
+        /// <summary>The full type name for the Farm Expansion mod's construction menu.</summary>
+        private readonly string FarmExpansionMenuFullName = "FarmExpansion.Menus.FECarpenterMenu";
+
         /// <summary>The number of days needed to build a tractor garage.</summary>
         private readonly int GarageConstructionDays = 3;
 
@@ -56,6 +59,12 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Whether the player has any tractor garages.</summary>
         private bool HasAnyGarages;
 
+        /// <summary>Whether the Pelican Fiber mod is loaded.</summary>
+        private bool IsPelicanFiberLoaded;
+
+        /// <summary>Whether the Farm Expansion mod is loaded.</summary>
+        private bool IsFarmExpansionLoaded;
+
 
         /*********
         ** Public methods
@@ -64,6 +73,10 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            // enable mod compatibility fixes
+            this.IsPelicanFiberLoaded = helper.ModRegistry.IsLoaded("jwdred.PelicanFiber");
+            this.IsFarmExpansionLoaded = helper.ModRegistry.IsLoaded("Advize.FarmExpansion") && helper.ModRegistry.Get("Advize.FarmExpansion").Version.IsNewerThan("3.0"); // fields added in 3.0.1
+
             // read config
             this.MigrateLegacySaveData(helper);
             this.Config = helper.ReadConfig<ModConfig>();
@@ -145,17 +158,26 @@ namespace Pathoschild.Stardew.TractorMod
             // add blueprint to carpenter menu
             if (Context.IsWorldReady && !this.HasAnyGarages)
             {
+                // default menu
                 if (e.NewMenu is CarpenterMenu)
                 {
                     this.Helper.Reflection
                         .GetPrivateValue<List<BluePrint>>(e.NewMenu, "blueprints")
                         .Add(this.GetBlueprint());
                 }
-                else if (e.NewMenu.GetType().FullName == this.PelicanFiberMenuFullName)
+
+                // modded menus
+                else if (this.IsPelicanFiberLoaded && e.NewMenu.GetType().FullName == this.PelicanFiberMenuFullName)
                 {
                     this.Helper.Reflection
                         .GetPrivateValue<List<BluePrint>>(e.NewMenu, "Blueprints")
                         .Add(this.GetBlueprint());
+                }
+                else if (this.IsFarmExpansionLoaded && e.NewMenu.GetType().FullName == this.FarmExpansionMenuFullName)
+                {
+                    this.Helper.Reflection
+                        .GetPrivateMethod(e.NewMenu, "AddFarmBluePrint")
+                        .Invoke(this.GetBlueprint());
                 }
             }
         }
