@@ -5,7 +5,7 @@
 * Added support for seasonal textures.
 * Added support for the Seed Bag mod's seed bag.
 * Added compatibility with Farm Expansion.
-* Added Portuguese translations by Fabilows.
+* Added Portuguese translations by Fabilows and [@TaelFayre](https://github.com/taelfayre).
 * Switched to SMAPI update checks.
 
 ## 4.1
