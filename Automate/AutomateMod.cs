@@ -54,7 +54,7 @@ namespace Pathoschild.Stardew.Automate
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
 
             // handle player interaction
-            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
+            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
 
             // log info
             if (this.Config.VerboseLogging)
@@ -156,15 +156,15 @@ namespace Pathoschild.Stardew.Automate
             }
         }
 
-        /// <summary>The method invoked when the player presses the menu overlay button.</summary>
+        /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
         {
             try
             {
                 // toggle menu
-                if (e.KeyPressed == this.Config.ToggleOverlayKey)
+                if (this.Config.Controls.ToggleOverlay.Contains(e.Button))
                 {
                     if (Game1.activeClickableMenu == null)
                     {

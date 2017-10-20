@@ -1,4 +1,6 @@
-using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
+using Pathoschild.Stardew.Common;
+using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.Automate.Framework.Models
 {
@@ -14,7 +16,19 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /// <summary>The number of ticks between each automation process (60 = once per second).</summary>
         public int AutomationInterval { get; set; } = 60;
 
-        /// <summary>The button which toggles the automation overlay.</summary>
-        public Keys ToggleOverlayKey { get; set; } = Keys.U;
+        /// <summary>The control bindings.</summary>
+        public ModConfigControls Controls { get; set; } = new ModConfigControls();
+
+
+        /*********
+        ** Nested models
+        *********/
+        /// <summary>A set of control bindings.</summary>
+        public class ModConfigControls
+        {
+            /// <summary>The button which toggles the automation overlay.</summary>
+            [JsonConverter(typeof(StringEnumArrayConverter))]
+            public SButton[] ToggleOverlay { get; set; } = { SButton.U };
+        }
     }
 }

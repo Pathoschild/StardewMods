@@ -101,7 +101,7 @@ file if you want. These are the available settings:
 
 setting           | what it affects
 ----------------- | -------------------
-`ToggleOverlayKey` | Default `U`. The keyboard button which toggles the overlay to view automatable machines.
+`Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). The default value is `U` to toggle the automation overlay.
 `AutomationInterval` | Default `60`. The number of update ticks between each automation cycle (one second is ≈60 ticks).
 `VerboseLogging` | Default `false`. Whether to write more detailed information about what the mod is doing to the log file. This is useful for troubleshooting, but may impact performance and should generally be disabled.
 

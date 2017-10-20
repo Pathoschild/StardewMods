@@ -3,7 +3,7 @@
 # Release notes
 ## 1.8 (upcoming)
 * Updated to SMAPI 2.0.
-* Added readonly overlay to show automatable machines.
+* Added overlay to visualise machine factory groups.
 * Switched to SMAPI update checks.
 
 ## 1.7
