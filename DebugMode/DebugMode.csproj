@@ -39,10 +39,8 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Framework\InputMapConfiguration.cs" />
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\PlayerDirection.cs" />
-    <Compile Include="Framework\RawModConfig.cs" />
     <Compile Include="DebugModeMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

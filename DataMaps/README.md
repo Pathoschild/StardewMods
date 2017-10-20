@@ -27,7 +27,7 @@ file if you want. These are the available settings:
 
 setting           | what it affects
 ----------------- | -------------------
-`Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). The default value is `F2` to toggle the overlay.
+`Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default value is `F2` to toggle the overlay.
 
 ## Versions
 _TO DO_
