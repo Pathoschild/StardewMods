@@ -37,7 +37,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Framework\Sprites.cs" />
-    <Compile Include="Overlays\BaseOverlay.cs" />
     <Compile Include="Overlays\DataMapOverlay.cs" />
     <Compile Include="Framework\TileData.cs" />
     <Compile Include="Framework\ModConfig.cs" />

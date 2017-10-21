@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using Rectangle = xTile.Dimensions.Rectangle;
 
-namespace Pathoschild.Stardew.DataMaps.Overlays
+namespace Pathoschild.Stardew.Common
 {
     /// <summary>An interface which supports user interaction and overlays the active menu (if any).</summary>
     internal abstract class BaseOverlay : IDisposable
@@ -29,9 +30,7 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
         {
             GraphicsEvents.OnPostRenderEvent -= this.OnPostRenderEvent;
             GameEvents.UpdateTick -= this.OnUpdateTick;
-            ControlEvents.KeyPressed -= this.OnKeyPressed;
-            ControlEvents.ControllerButtonPressed -= this.OnControllerButtonPressed;
-            ControlEvents.ControllerTriggerPressed -= this.OnControllerTriggerPressed;
+            InputEvents.ButtonPressed -= this.OnButtonPressed;
             ControlEvents.MouseChanged -= this.OnMouseChanged;
         }
 
@@ -50,9 +49,7 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
             this.LastViewport = new Rectangle(Game1.viewport.X, Game1.viewport.Y, Game1.viewport.Width, Game1.viewport.Height);
             GraphicsEvents.OnPostRenderEvent += this.OnPostRenderEvent;
             GameEvents.UpdateTick += this.OnUpdateTick;
-            ControlEvents.KeyPressed += this.OnKeyPressed;
-            ControlEvents.ControllerButtonPressed += this.OnControllerButtonPressed;
-            ControlEvents.ControllerTriggerPressed += this.OnControllerTriggerPressed;
+            InputEvents.ButtonPressed += this.OnButtonPressed;
             ControlEvents.MouseChanged += this.OnMouseChanged;
         }
 
@@ -69,26 +66,10 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
             return false;
         }
 
-        /// <summary>The method invoked when the player presses a key.</summary>
-        /// <param name="input">The key that was pressed.</param>
-        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
-        protected virtual bool ReceiveKeyPress(Keys input)
-        {
-            return false;
-        }
-
-        /// <summary>The method invoked when the player presses a controller button.</summary>
+        /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="input">The button that was pressed.</param>
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
-        protected virtual bool ReceiveButtonPress(Buttons input)
-        {
-            return false;
-        }
-
-        /// <summary>The method invoked when the player presses a controller trigger.</summary>
-        /// <param name="input">The trigger that was pressed.</param>
-        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
-        protected virtual bool ReceiveTriggerPress(Buttons input)
+        protected virtual bool ReceiveButtonPress(SButton input)
         {
             return false;
         }
@@ -121,7 +102,7 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
         {
             if (Game1.options.hardwareCursor)
                 return;
-            Game1.spriteBatch.Draw(Game1.mouseCursors, new Vector2(Game1.getOldMouseX(), Game1.getOldMouseY()), Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 0, 16, 16), Color.White, 0.0f, Vector2.Zero, Game1.pixelZoom + Game1.dialogueButtonScale / 150f, SpriteEffects.None, 0f);
+            Game1.spriteBatch.Draw(Game1.mouseCursors, new Vector2(Game1.getMouseX(), Game1.getMouseY()), Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.options.SnappyMenus ? 44 : 0, 16, 16), Color.White * Game1.mouseCursorTransparency, 0.0f, Vector2.Zero, Game1.pixelZoom + Game1.dialogueButtonScale / 150f, SpriteEffects.None, 1f);
         }
 
         /****
@@ -160,45 +141,14 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
         /// <summary>The method invoked when the player presses a key.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void OnKeyPressed(object sender, EventArgsKeyPressed e)
+        private void OnButtonPressed(object sender, EventArgsInput e)
         {
-            bool handled = this.ReceiveKeyPress(e.KeyPressed);
+            bool handled = e.IsClick
+                ? this.ReceiveLeftClick(Game1.getMouseX(), Game1.getMouseY())
+                : this.ReceiveButtonPress(e.Button);
+
             if (handled)
-                Game1.oldKBState = Keyboard.GetState();
-        }
-
-        /// <summary>The method invoked when the player presses a controller button.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnControllerButtonPressed(object sender, EventArgsControllerButtonPressed e)
-        {
-            GamePadState state = GamePad.GetState(PlayerIndex.One);
-
-            // handle controller cursor click
-            if (state.IsButtonDown(Buttons.A) && !Game1.oldPadState.IsButtonDown(Buttons.X))
-            {
-                bool handled = this.ReceiveLeftClick(Game1.getMouseX(), Game1.getMouseY());
-                if (handled)
-                    Game1.oldPadState = GamePad.GetState(PlayerIndex.One);
-            }
-
-            // handle button press
-            else
-            {
-                bool handled = this.ReceiveButtonPress(e.ButtonPressed);
-                if (handled)
-                    Game1.oldPadState = GamePad.GetState(PlayerIndex.One);
-            }
-        }
-
-        /// <summary>The method invoked when the player presses a controller trigger.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnControllerTriggerPressed(object sender, EventArgsControllerTriggerPressed e)
-        {
-            bool handled = this.ReceiveTriggerPress(e.ButtonPressed);
-            if (handled)
-                Game1.oldPadState = GamePad.GetState(PlayerIndex.One);
+                e.SuppressButton();
         }
 
         /// <summary>The method invoked when the mouse state changes.</summary>
@@ -213,18 +163,17 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
 
             // raise events
             bool hoverHandled = this.ReceiveCursorHover(position.X, position.Y);
-            bool leftClickHandled = oldState.LeftButton != ButtonState.Pressed && newState.LeftButton == ButtonState.Pressed && this.ReceiveLeftClick(position.X, position.Y);
             bool scrollHandled = oldState.ScrollWheelValue != newState.ScrollWheelValue && this.ReceiveScrollWheelAction(newState.ScrollWheelValue - oldState.ScrollWheelValue);
 
             // suppress handled input
-            if (hoverHandled || leftClickHandled || scrollHandled)
+            if (hoverHandled || scrollHandled)
             {
                 MouseState cur = Game1.oldMouseState;
                 Game1.oldMouseState = new MouseState(
                     x: cur.X,
                     y: cur.Y,
                     scrollWheel: scrollHandled ? newState.ScrollWheelValue : cur.ScrollWheelValue,
-                    leftButton: leftClickHandled ? newState.LeftButton : cur.LeftButton,
+                    leftButton: cur.LeftButton,
                     middleButton: cur.MiddleButton,
                     rightButton: cur.RightButton,
                     xButton1: cur.XButton1,

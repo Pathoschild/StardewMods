@@ -63,7 +63,6 @@
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\DropListItem.cs" />
     <Compile Include="Framework\ManagedChest.cs" />
-    <Compile Include="Menus\Overlays\BaseOverlay.cs" />
     <Compile Include="Menus\Overlays\ManageChestOverlay.cs" />
     <Compile Include="Menus\Overlays\Element.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
