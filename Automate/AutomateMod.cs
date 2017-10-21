@@ -32,6 +32,9 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The number of ticks until the next automation cycle.</summary>
         private int AutomateCountdown;
 
+        /// <summary>The current overlay being displayed, if any.</summary>
+        private OverlayMenu CurrentOverlay;
+
 
         /*********
         ** Public methods
@@ -45,6 +48,7 @@ namespace Pathoschild.Stardew.Automate
 
             // hook events
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
             LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
             LocationEvents.LocationObjectsChanged += this.LocationEvents_LocationObjectsChanged;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
@@ -72,6 +76,15 @@ namespace Pathoschild.Stardew.Automate
         {
             // reset automation interval
             this.AutomateCountdown = this.Config.AutomationInterval;
+            this.DisableOverlay();
+        }
+
+        /// <summary>The method invoked when the player warps to a new location.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
+        {
+            this.ResetOverlayIfShown();
         }
 
         /// <summary>The method invoked when a location is added or removed.</summary>
@@ -127,9 +140,14 @@ namespace Pathoschild.Stardew.Automate
                 this.AutomateCountdown = this.Config.AutomationInterval;
 
                 // reload machines if needed
-                foreach (GameLocation location in this.ReloadQueue)
-                    this.ReloadMachinesIn(location);
-                this.ReloadQueue.Clear();
+                if (this.ReloadQueue.Any())
+                {
+                    foreach (GameLocation location in this.ReloadQueue)
+                        this.ReloadMachinesIn(location);
+                    this.ReloadQueue.Clear();
+
+                    this.ResetOverlayIfShown();
+                }
 
                 // process machines
                 foreach (MachineGroup group in this.GetAllMachineGroups())
@@ -151,10 +169,10 @@ namespace Pathoschild.Stardew.Automate
                 // toggle menu
                 if (this.Config.Controls.ToggleOverlay.Contains(e.Button))
                 {
-                    if (Game1.activeClickableMenu == null)
-                        Game1.activeClickableMenu = new OverlayMenu(this.Factory.GetMachineGroups(Game1.currentLocation, this.Helper.Reflection));
-                    else if (Game1.activeClickableMenu is OverlayMenu menu)
-                        menu.exitThisMenu();
+                    if (this.CurrentOverlay != null)
+                        this.DisableOverlay();
+                    else
+                        this.EnableOverlay();
                 }
             }
             catch (Exception ex)
@@ -200,6 +218,30 @@ namespace Pathoschild.Stardew.Automate
         {
             if (this.Config.VerboseLogging)
                 this.Monitor.Log(message, LogLevel.Trace);
+        }
+
+        /// <summary>Disable the overlay, if shown.</summary>
+        private void DisableOverlay()
+        {
+            this.CurrentOverlay?.Dispose();
+            this.CurrentOverlay = null;
+        }
+
+        /// <summary>Enable the overlay.</summary>
+        private void EnableOverlay()
+        {
+            if (this.CurrentOverlay == null)
+                this.CurrentOverlay = new OverlayMenu(this.Factory.GetMachineGroups(Game1.currentLocation, this.Helper.Reflection));
+        }
+
+        /// <summary>Reset the overlay if it's being shown.</summary>
+        private void ResetOverlayIfShown()
+        {
+            if (this.CurrentOverlay != null)
+            {
+                this.DisableOverlay();
+                this.EnableOverlay();
+            }
         }
     }
 }
