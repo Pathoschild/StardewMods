@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using StardewValley;
-using StardewValley.Menus;
+using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 {
@@ -16,15 +16,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The container's name.</summary>
         string Name { get; set; }
 
-        /// <summary>The items in the storage container.</summary>
-        List<Item> Items { get; }
-
-        /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
-        ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory { get; }
-
-        /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
-        ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer { get; }
-
         /// <summary>Whether the player can configure the container.</summary>
         bool IsEditable { get; }
 
@@ -37,6 +28,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 
         /// <summary>Get whether the container has its default name.</summary>
         bool HasDefaultName();
+
+        /// <summary>Add an item to the container from the player inventory.</summary>
+        /// <param name="item">The item taken.</param>
+        /// <param name="player">The player taking the item.</param>
+        void GrabItemFromInventory(Item item, SFarmer player);
+
+        /// <summary>Add an item to the player inventory from the container.</summary>
+        /// <param name="item">The item taken.</param>
+        /// <param name="player">The player taking the item.</param>
+        void GrabItemFromContainer(Item item, SFarmer player);
 
         /// <summary>Get whether the specified object is equal to the current object.</summary>
         /// <param name="obj">The object to compare with the current object. </param>

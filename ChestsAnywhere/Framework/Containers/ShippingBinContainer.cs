@@ -9,19 +9,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
     internal class ShippingBinContainer : ChestContainer
     {
         /*********
-        ** Accessors
-        *********/
-        /// <summary>Whether the player can configure the container.</summary>
-        public override bool IsEditable { get; } = false;
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="contents">The shipping bin inventory.</param>
         public ShippingBinContainer(List<Item> contents)
-            : base(new Chest(0, contents, Vector2.Zero)) { }
+            : base(new Chest(0, contents, Vector2.Zero), isEditable: false) { }
 
         /// <summary>Get whether the in-game container is open.</summary>
         public override bool IsOpen()

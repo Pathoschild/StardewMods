@@ -99,12 +99,17 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="menu">The menu to check.</param>
         public ManagedChest GetChestFromMenu(ItemGrabMenu menu)
         {
-            // from menu target
-            ManagedChest chest = menu.behaviorOnItemGrab?.Target is Chest target
-                ? this.GetChests().FirstOrDefault(p => p.Container.Inventory == target.items)
-                : null;
-            if (chest != null)
-                return chest;
+            // get from opened inventory
+            {
+                object target = menu.behaviorOnItemGrab?.Target;
+                List<Item> inventory = (target as Chest)?.items ?? (target as ChestContainer)?.Inventory;
+                if (inventory != null)
+                {
+                    ManagedChest chest = this.GetChests().FirstOrDefault(p => p.Container.Inventory == inventory);
+                    if (chest != null)
+                        return chest;
+                }
+            }
 
             // fallback to open chest
             return this.GetChests().FirstOrDefault(p => p.Container.IsOpen());

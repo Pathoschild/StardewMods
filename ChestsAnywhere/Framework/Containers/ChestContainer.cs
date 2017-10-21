@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 {
@@ -28,17 +29,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             set => this.Chest.name = value;
         }
 
-        /// <summary>The items in the storage container.</summary>
-        public List<Item> Items => this.Chest.items;
-
-        /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
-        public ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory => this.Chest.grabItemFromInventory;
-
-        /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
-        public ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer => this.Chest.grabItemFromChest;
-
         /// <summary>Whether the player can configure the container.</summary>
-        public virtual bool IsEditable { get; } = true;
+        public bool IsEditable { get; }
 
 
         /*********
@@ -46,9 +38,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="chest">The in-game chest.</param>
-        public ChestContainer(Chest chest)
+        /// <param name="isEditable">Whether the player can configure the container.</param>
+        public ChestContainer(Chest chest, bool isEditable = true)
         {
             this.Chest = chest;
+            this.IsEditable = isEditable;
         }
 
         /// <summary>Get whether the in-game container is open.</summary>
@@ -61,6 +55,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         public virtual bool HasDefaultName()
         {
             return this.Name == "Chest";
+        }
+
+        /// <summary>Add an item to the container from the player inventory.</summary>
+        /// <param name="item">The item taken.</param>
+        /// <param name="player">The player taking the item.</param>
+        public void GrabItemFromInventory(Item item, SFarmer player)
+        {
+            this.Chest.grabItemFromInventory(item, player);
+        }
+
+        /// <summary>Add an item to the player inventory from the container.</summary>
+        /// <param name="item">The item taken.</param>
+        /// <param name="player">The player taking the item.</param>
+        public void GrabItemFromContainer(Item item, SFarmer player)
+        {
+            this.Chest.grabItemFromChest(item, player);
         }
 
         /// <summary>Get whether the specified object is equal to the current object.</summary>

@@ -113,7 +113,18 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
         public IClickableMenu OpenMenu()
         {
-            return new ItemGrabMenu(this.Container.Items, false, true, InventoryMenu.highlightAllItems, this.Container.GrabItemFromInventory, null, this.Container.GrabItemFromContainer, false, true, true, true, true, 1);
+            return new ItemGrabMenu(
+                inventory: this.Container.Inventory,
+                reverseGrab: false,
+                showReceivingMenu: true,
+                highlightFunction: InventoryMenu.highlightAllItems,
+                behaviorOnItemSelectFunction: this.Container.GrabItemFromInventory,
+                message: null,
+                behaviorOnItemGrab: this.Container.GrabItemFromContainer,
+                canBeExitedWithKey: true,
+                showOrganizeButton: true,
+                source: ItemGrabMenu.source_chest
+            );
         }
 
         /// <summary>Get whether the specified object is equal to the current object.</summary>
