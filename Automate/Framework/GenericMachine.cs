@@ -62,7 +62,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="recipes">The recipes to match.</param>
         protected bool GenericPullRecipe(IStorage storage, Recipe[] recipes)
         {
-            if (storage.TryGetIngredient(recipes, out Consumable consumable, out Recipe recipe))
+            if (storage.TryGetIngredient(recipes, out IConsumable consumable, out Recipe recipe))
             {
                 this.Machine.heldObject = recipe.Output(consumable.Take());
                 this.Machine.minutesUntilReady = recipe.Minutes;
