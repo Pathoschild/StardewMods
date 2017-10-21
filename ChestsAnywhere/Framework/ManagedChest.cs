@@ -127,17 +127,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             );
         }
 
-        /// <summary>Get whether the specified object is equal to the current object.</summary>
-        /// <param name="obj">The object to compare with the current object. </param>
-        public override bool Equals(object obj)
+        /// <summary>Get whether the managed chest has the same inventory as another.</summary>
+        /// <param name="other">The other chest to compare.</param>
+        public bool ManagesSameInventoryAs(ManagedChest other)
         {
-            return this.Container != null && this.Container.Equals((obj as ManagedChest)?.Container);
-        }
-
-        /// <summary>Serves as the default hash function.</summary>
-        public override int GetHashCode()
-        {
-            return this.Container.GetHashCode();
+            return other != null && this.Container.Inventory == other.Container.Inventory;
         }
 
 

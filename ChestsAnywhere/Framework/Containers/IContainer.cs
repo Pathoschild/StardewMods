@@ -4,7 +4,7 @@ using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 {
-    /// <summary>Represents an in-game object which can store items.</summary>
+    /// <summary>An in-game container which can store items.</summary>
     internal interface IContainer
     {
         /*********
@@ -42,12 +42,5 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <param name="item">The item taken.</param>
         /// <param name="player">The player taking the item.</param>
         void GrabItemFromContainer(Item item, SFarmer player);
-
-        /// <summary>Get whether the specified object is equal to the current object.</summary>
-        /// <param name="obj">The object to compare with the current object. </param>
-        bool Equals(object obj);
-
-        /// <summary>Serves as the default hash function.</summary>
-        int GetHashCode();
     }
 }

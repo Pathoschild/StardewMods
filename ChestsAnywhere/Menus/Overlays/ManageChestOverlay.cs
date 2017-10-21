@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -561,11 +562,26 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.Menu.exitThisMenu();
         }
 
+        /// <summary>Get the index of a chest in the selected group.</summary>
+        /// <param name="chest">The chest to find.</param>
+        /// <param name="chests">The chests to search.</param>
+        private int GetChestIndex(ManagedChest chest, IEnumerable<ManagedChest> chests)
+        {
+            int i = 0;
+            foreach (ManagedChest cur in chests)
+            {
+                if (cur.ManagesSameInventoryAs(chest))
+                    return i;
+                i++;
+            }
+            return -1;
+        }
+
         /// <summary>Switch to the previous chest in the list.</summary>
         private void SelectPreviousChest()
         {
             ManagedChest[] chests = this.GetChestsFromCategory(this.SelectedGroup);
-            int curIndex = Array.IndexOf(chests, this.Chest);
+            int curIndex = this.GetChestIndex(this.Chest, chests);
             this.SelectChest(chests[curIndex != 0 ? curIndex - 1 : chests.Length - 1]);
         }
 
@@ -573,7 +589,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         private void SelectNextChest()
         {
             ManagedChest[] chests = this.GetChestsFromCategory(this.SelectedGroup);
-            int curIndex = Array.IndexOf(chests, this.Chest);
+            int curIndex = this.GetChestIndex(this.Chest, chests);
             this.SelectChest(chests[(curIndex + 1) % chests.Length]);
         }
 

@@ -79,18 +79,5 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         {
             this.Chest.grabItemFromChest(item, player);
         }
-
-        /// <summary>Get whether the specified object is equal to the current object.</summary>
-        /// <param name="obj">The object to compare with the current object. </param>
-        public override bool Equals(object obj)
-        {
-            return this.Chest.Equals((obj as ChestContainer)?.Chest);
-        }
-
-        /// <summary>Serves as the default hash function.</summary>
-        public override int GetHashCode()
-        {
-            return this.Chest.GetHashCode();
-        }
     }
 }
