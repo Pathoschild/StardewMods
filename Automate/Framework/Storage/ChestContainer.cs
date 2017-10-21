@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Objects;
 
@@ -17,26 +16,15 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         /// <summary>The underlying chest.</summary>
         private readonly Chest Chest;
 
-        /// <summary>The chest tile.</summary>
-        private readonly Vector2 SourceTile;
-
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="chest">The underlying chest.</param>
-        /// <param name="sourceTile">The tile the pipe is connected to.</param>
-        public ChestContainer(Chest chest, Vector2 sourceTile)
+        public ChestContainer(Chest chest)
         {
             this.Chest = chest;
-            this.SourceTile = sourceTile;
-        }
-
-        /// <summary>Get the tile connected to this pipe.</summary>
-        public Vector2 GetSourceTile()
-        {
-            return this.SourceTile;
         }
 
         /// <summary>Store an item stack.</summary>

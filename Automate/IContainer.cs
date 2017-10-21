@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using StardewValley;
 
 namespace Pathoschild.Stardew.Automate
@@ -21,8 +20,5 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="stack">The item stack to store.</param>
         /// <remarks>If the storage can't hold the entire stack, it should reduce the tracked stack accordingly.</remarks>
         void Store(ITrackedStack stack);
-
-        /// <summary>Get the tile connected to this pipe.</summary>
-        Vector2 GetSourceTile();
     }
 }

@@ -93,7 +93,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                     }
                     else if (this.TryGetChest(location, tile, out Chest chest))
                     {
-                        group.Add(new ChestContainer(chest, tile));
+                        group.Add(new ChestContainer(chest));
                         foundSize = Vector2.One;
                     }
                     else
