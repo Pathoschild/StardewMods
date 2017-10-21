@@ -7,7 +7,7 @@
 * Switched to SMAPI update checks.
 * Fixed basic bat kills not counted towards Adventure Quest goal.
 * Fixed `HideOnKeyUp` mode not returning to previous menu on close.
-* Improved translations thanks to Dorian/[@d0x7](https://github.com/d0x7) (German).
+* Improved translations thanks to Dorian/[@d0x7](https://github.com/d0x7) (German) and [@TaelFayre](https://github.com/TaelFayre) (Portuguese).
 
 ## 1.16
 * NPC gift tastes now list inventory and owned items first.
