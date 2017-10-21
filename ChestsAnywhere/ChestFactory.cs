@@ -22,15 +22,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Provides translations stored in the mod's folder.</summary>
         private readonly ITranslationHelper Translations;
 
+        /// <summary>Simplifies access to private game data.</summary>
+        private readonly IReflectionHelper Reflection;
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations stored in the mod's folder.</param>
-        public ChestFactory(ITranslationHelper translations)
+        /// <param name="reflection">Simplifies access to private game data.</param>
+        public ChestFactory(ITranslationHelper translations, IReflectionHelper reflection)
         {
             this.Translations = translations;
+            this.Reflection = reflection;
         }
 
         /// <summary>Get all player chests.</summary>
@@ -70,7 +75,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
                 // shipping bin
                 if (location is Farm farm)
-                    yield return new ManagedChest(new ShippingBinContainer(farm.shippingBin), farm.Name, Vector2.Zero, this.Translations.Get("default-name.shipping-bin"));
+                    yield return new ManagedChest(new ShippingBinContainer(farm, this.Reflection), farm.Name, Vector2.Zero, this.Translations.Get("default-name.shipping-bin"));
             }
         }
 
@@ -102,7 +107,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // get from opened inventory
             {
                 object target = menu.behaviorOnItemGrab?.Target;
-                List<Item> inventory = (target as Chest)?.items ?? (target as ChestContainer)?.Inventory;
+                List<Item> inventory = (target as Chest)?.items ?? (target as IContainer)?.Inventory;
                 if (inventory != null)
                 {
                     ManagedChest chest = this.GetChests().FirstOrDefault(p => p.Container.Inventory == inventory);

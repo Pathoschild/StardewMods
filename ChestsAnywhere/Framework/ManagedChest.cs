@@ -123,7 +123,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 behaviorOnItemGrab: this.Container.GrabItemFromContainer,
                 canBeExitedWithKey: true,
                 showOrganizeButton: true,
-                source: ItemGrabMenu.source_chest
+                source: this.Container.IsChest ? ItemGrabMenu.source_chest : ItemGrabMenu.source_none
             );
         }
 

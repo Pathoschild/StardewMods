@@ -32,6 +32,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Whether the player can configure the container.</summary>
         public bool IsEditable { get; }
 
+        /// <summary>Whether to enable chest-specific UI.</summary>
+        public bool IsChest { get; }
+
 
         /*********
         ** Public methods
@@ -39,20 +42,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Construct an instance.</summary>
         /// <param name="chest">The in-game chest.</param>
         /// <param name="isEditable">Whether the player can configure the container.</param>
-        public ChestContainer(Chest chest, bool isEditable = true)
+        /// <param name="isChest">Whether to enable chest-specific UI.</param>
+        public ChestContainer(Chest chest, bool isEditable = true, bool isChest = true)
         {
             this.Chest = chest;
             this.IsEditable = isEditable;
+            this.IsChest = isChest;
         }
 
         /// <summary>Get whether the in-game container is open.</summary>
-        public virtual bool IsOpen()
+        public bool IsOpen()
         {
             return this.Chest.currentLidFrame == 135;
         }
 
         /// <summary>Get whether the container has its default name.</summary>
-        public virtual bool HasDefaultName()
+        public bool HasDefaultName()
         {
             return this.Name == "Chest";
         }

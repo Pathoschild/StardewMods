@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
+using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
@@ -44,7 +45,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             // initialise
             this.Config = helper.ReadConfig<ModConfig>();
-            this.ChestFactory = new ChestFactory(helper.Translation);
+            this.ChestFactory = new ChestFactory(helper.Translation, helper.Reflection);
 
             // hook UI
             GraphicsEvents.OnPostRenderHudEvent += this.GraphicsEvents_OnPostRenderHudEvent;
@@ -116,6 +117,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 ManagedChest chest = this.ChestFactory.GetChestFromMenu(chestMenu);
                 if (chest == null)
                     return;
+
+                // reopen shipping box in standard chest UI
+                if (chest.Container is ShippingBinContainer && !chestMenu.showReceivingMenu)
+                    Game1.activeClickableMenu = chest.OpenMenu();
 
                 // add overlay
                 ManagedChest[] chests = this.ChestFactory.GetChestsForDisplay(selected: chest.Container).ToArray();

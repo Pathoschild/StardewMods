@@ -19,6 +19,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Whether the player can configure the container.</summary>
         bool IsEditable { get; }
 
+        /// <summary>Whether to enable chest-specific UI.</summary>
+        bool IsChest { get; }
+
 
         /*********
         ** Public methods
