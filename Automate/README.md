@@ -50,75 +50,37 @@ This can be used to automate...
 * and [worm bins](http://stardewvalleywiki.com/Worm_Bin).
 
 ### Factories
-Each chest can be connected to any number of machines, and the machines don't all need to be of the
-same type. A chest will connect to any machine that's touching it, any machines touching those
-machines, etc.
+You can connect chests to any number of machines, and they don't all need to be the same type. A
+chest will connect to any adjacent machine (i.e. one tile in every direction including
+diagonal), any machines adjacent to those machines, etc. You can press `U` (configurable) to see
+which machines are being automated.
 
-Here are a few examples:
+Here are a few example factories. You can increase production by just adding more machines.
 
 * **Automatic crab pots**  
-  A worm bin produces bait, which is fed into the crab pots, which harvest fish into the chest. Any
-  trash is automatically recycled. The final products are stored in the chest.
-  ```
-  ┌────────────┐ ┌────────────┐
-  │ recycling  │ │  crab pot  │
-  │  machine   │ │            │
-  └────────────┘ └────────────┘
-  ╔════════════╗ ┌────────────┐
-  ║   chest    ║ │  crab pot  │
-  ║            ║ │            │
-  ╚════════════╝ └────────────┘
-  ┌────────────┐ ┌────────────┐
-  │  worm bin  │ │  crab pot  │
-  │            │ │            │
-  └────────────┘ └────────────┘
-  ```
+  A worm bin produces bait, which is fed into the crab pots, which harvest fish and recycle trash.
+  The final products are stored in the chest.
+  > ![](screenshots/crab-pot-factory.png)
 
 * **Automatic refined quartz factory**  
-  A crystalarium produces quartz every seven hours, which is smelted into refined quartz, which is
-  stored in the chest.
-  ```
-  ┌────────────┐ ╔════════════╗ ┌────────────┐
-  │crystalarium│ ║   chest    ║ │  furnace   │
-  │            │ ║ (with coal)║ │            │
-  └────────────┘ ╚════════════╝ └────────────┘
-  ```
+  A crystalarium produces quartz, which is smelted into refined quartz, which is stored in the
+  chest.
+  > ![](screenshots/refined-quartz-factory.png)
 
 * **Automatic iridium mead factory**  
-  A bee house produces honey every 4 days, which is turned into mead, which is aged to iridium
-  quality, which is stored in the chest. You can link up to five casks to the same chest to
-  increase production.
-  ```
-                 ┌────────────┐
-                 │    cask    │
-                 │            │
-                 └────────────┘
-  ┌────────────┐ ╔════════════╗ ┌────────────┐
-  │  bee hive  │ ║   chest    ║ │    keg     │
-  │            │ ║            ║ │            │
-  └────────────┘ ╚════════════╝ └────────────┘
-  ```
+  A bee house produces honey, which is turned into mead, which is aged to iridium quality, which is
+  stored in the chest.
+  > ![](screenshots/iridium-mead-factory.png)
 
 * **Automatic iridium bar factory**  
-  A statue of perfection produces iridium ore every day, which is smelted into bars, which are
-  stored in the chest.
-  ```
-  ┌────────────┐ ╔════════════╗ ┌────────────┐
-  │ statue of  │ ║   chest    ║ │  furnace   │
-  │ perfection │ ║ (with coal)║ │            │
-  └────────────┘ ╚════════════╝ └────────────┘
-  ```
+  A statue of perfection produces iridium ore, which is smelted into bars, which are stored in the
+  chest.
+  > ![](screenshots/iridium-bar-factory.png)
 
 * **Semi-automatic iridium cheese factory**  
-  Put your milk into the chest. The milk is turned into cheese, which is aged to iridium quality,
-  which is stored in the chest. You can link up to six casks to the same chest to increase
-  production.
-  ```
-  ┌────────────┐ ╔════════════╗ ┌────────────┐
-  │   cheese   │ ║   chest    ║ │    cask    │
-  │   press    │ ║ (with milk)║ │            │
-  └────────────┘ ╚════════════╝ └────────────┘
-  ```
+  Put your milk in the chest and it'll be turned into cheese, then aged to iridium quality, then
+  put back in the chest.
+  > ![](screenshots/iridium-cheese-factory.png)
 
 ## Configuration
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
