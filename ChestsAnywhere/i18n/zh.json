@@ -3,6 +3,7 @@
   "default-name.chest": "{{number}}号箱子",
   "default-name.fridge": "冰箱",
   "default-name.junimo-hut": "{{number}}座祝尼魔小屋",
+  "default-name.shipping-bin": "Shipping bin", // TODO
 
   // edit-chest labels
   "label.location": "位置",

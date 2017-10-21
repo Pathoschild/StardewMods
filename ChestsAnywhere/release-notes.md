@@ -3,6 +3,7 @@
 # Release notes
 ## 1.12 (upcoming)
 * Updated to SMAPI 2.0.
+* Added support for the shipping bin.
 * Added support for Junimo huts.
 * Added Russian translations by vanja-san.
 * Added warning when translation files are missing.

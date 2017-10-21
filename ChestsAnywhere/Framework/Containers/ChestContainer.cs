@@ -18,8 +18,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /*********
         ** Accessors
         *********/
-        /// <summary>The in-game container instance.</summary>
-        public object Instance => this.Chest;
+        /// <summary>The underlying inventory.</summary>
+        public List<Item> Inventory => this.Chest.items;
 
         /// <summary>The container's name.</summary>
         public string Name
@@ -37,6 +37,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
         public ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer => this.Chest.grabItemFromChest;
 
+        /// <summary>Whether the player can configure the container.</summary>
+        public virtual bool IsEditable { get; } = true;
+
 
         /*********
         ** Public methods
@@ -49,13 +52,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         }
 
         /// <summary>Get whether the in-game container is open.</summary>
-        public bool IsOpen()
+        public virtual bool IsOpen()
         {
             return this.Chest.currentLidFrame == 135;
         }
 
         /// <summary>Get whether the container has its default name.</summary>
-        public bool HasDefaultName()
+        public virtual bool HasDefaultName()
         {
             return this.Name == "Chest";
         }

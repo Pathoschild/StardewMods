@@ -10,8 +10,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /*********
         ** Accessors
         *********/
-        /// <summary>The in-game container instance.</summary>
-        object Instance { get; }
+        /// <summary>The underlying inventory.</summary>
+        List<Item> Inventory { get; }
 
         /// <summary>The container's name.</summary>
         string Name { get; set; }
@@ -24,6 +24,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 
         /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
         ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer { get; }
+
+        /// <summary>Whether the player can configure the container.</summary>
+        bool IsEditable { get; }
 
 
         /*********

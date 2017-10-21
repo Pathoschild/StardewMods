@@ -3,6 +3,7 @@
   "default-name.chest": "Baú #{{number}}",
   "default-name.fridge": "Geladeira",
   "default-name.junimo-hut": "Cabana dos junimos #{{number}}", // TODO: verify
+  "default-name.shipping-bin": "Shipping bin", // TODO
 
   // edit-chest labels
   "label.location": "Local",

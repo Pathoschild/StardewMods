@@ -3,6 +3,7 @@
   "default-name.chest": "Сундук #{{number}}",
   "default-name.fridge": "Холодильник",
   "default-name.junimo-hut": "Юнимос #{{number}}", // TODO: verify
+  "default-name.shipping-bin": "Shipping bin", // TODO
 
   // edit-chest labels
   "label.location": "Расположение",

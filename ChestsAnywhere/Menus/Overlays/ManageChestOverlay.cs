@@ -203,7 +203,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     this.GroupSelector.Draw(batch);
 
                 // edit button
-                this.EditButton.draw(batch);
+                if (this.Chest.Container.IsEditable)
+                    this.EditButton.draw(batch);
                 this.SortInventoryButton.draw(batch);
             }
 
@@ -435,7 +436,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
                 // buttons & dropdown
                 default:
-                    if (this.EditButton.containsPoint(x, y))
+                    if (this.Chest.Container.IsEditable && this.EditButton.containsPoint(x, y))
                         this.OpenEdit();
                     else if (this.SortInventoryButton.containsPoint(x, y))
                         this.SortInventory();
@@ -458,7 +459,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             switch (this.ActiveElement)
             {
                 case Element.Menu:
-                    this.EditButton.tryHover(x, y);
+                    if (this.Chest.Container.IsEditable)
+                        this.EditButton.tryHover(x, y);
                     this.SortInventoryButton.tryHover(x, y);
                     return false;
 
@@ -507,6 +509,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             }
 
             // edit chest button overlay (based on chest dropdown position)
+            if (this.Chest.Container.IsEditable)
             {
                 Rectangle sprite = Sprites.Icons.SpeechBubble;
                 float zoom = Game1.pixelZoom / 2f;

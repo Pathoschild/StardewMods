@@ -67,6 +67,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                             yield return new ManagedChest(new JunimoHutContainer(hut), this.GetLocationName(location), new Vector2(hut.tileX, hut.tileY), this.Translations.Get("default-name.junimo-hut", new { number = ++namelessHuts }));
                     }
                 }
+
+                // shipping bin
+                if (location is Farm farm)
+                    yield return new ManagedChest(new ShippingBinContainer(farm.shippingBin), farm.Name, Vector2.Zero, this.Translations.Get("default-name.shipping-bin"));
             }
         }
 
@@ -88,7 +92,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             if (!Game1.currentLocation.Objects.TryGetValue(tile, out Object obj) || !(obj is Chest chest))
                 return null;
 
-            return this.GetChests().FirstOrDefault(p => p.Container.Instance == chest);
+            return this.GetChests().FirstOrDefault(p => p.Container.Inventory == chest.items);
         }
 
         /// <summary>Get the player chest from the specified menu (if any).</summary>
@@ -97,7 +101,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             // from menu target
             ManagedChest chest = menu.behaviorOnItemGrab?.Target is Chest target
-                ? this.GetChests().FirstOrDefault(p => p.Container.Instance == target)
+                ? this.GetChests().FirstOrDefault(p => p.Container.Inventory == target.items)
                 : null;
             if (chest != null)
                 return chest;
