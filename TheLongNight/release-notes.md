@@ -1,7 +1,7 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.1
+## 1.0.2 (upcoming)
 * Updated to SMAPI 2.0.
 * Switched to SMAPI update checks.
 

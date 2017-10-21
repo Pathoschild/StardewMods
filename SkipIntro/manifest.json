@@ -1,8 +1,8 @@
 {
   "Name": "SkipIntro",
   "Author": "Pathoschild",
-  "Version": "1.7",
-  "MinimumApiVersion": "2.0",
+  "Version": "1.7.1",
+  "MinimumApiVersion": "2.1",
   "Description": "Skips the game's loading intro.",
   "UniqueID": "Pathoschild.SkipIntro",
   "EntryDll": "SkipIntro.dll",

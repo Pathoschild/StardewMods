@@ -1,8 +1,8 @@
 {
   "Name": "ChestsAnywhere",
   "Author": "Pathoschild",
-  "Version": "1.11.1",
-  "MinimumApiVersion": "2.0",
+  "Version": "1.12",
+  "MinimumApiVersion": "2.1",
   "Description": "Access your chests from anywhere.",
   "UniqueID": "Pathoschild.ChestsAnywhere",
   "EntryDll": "ChestsAnywhere.dll",
