@@ -1,6 +1,6 @@
 **Chests Anywhere** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you access
-your chests from anywhere and organise them your way. Transfer items without having to run around,
-from the comfort of your bed to the deepest mine level.
+your chests, fridge, Junimo huts, and shipping bin from anywhere and organise them your way.
+Transfer items without having to run around, from the comfort of your bed to the deepest mine level.
 
 ![](screenshots/animated-usage.gif)
 
@@ -17,8 +17,8 @@ from the comfort of your bed to the deepest mine level.
 4. Run the game using SMAPI.
 
 ## Usage
-**Access chests** by pressing `B`. This will show your chests (and fridge) grouped by category.
-Navigate by clicking the top dropdowns, or by pressing the `left` or `right` key.
+**Access chests** by pressing `B`. This will show your chests grouped by category. Navigate by
+clicking the top dropdowns, or by pressing the `left` or `right` key.
 
 **Edit chests** by clicking the edit icon after opening a chest ([see example](screenshots/animated-edit.gif)).
 This will show a form where you can...
