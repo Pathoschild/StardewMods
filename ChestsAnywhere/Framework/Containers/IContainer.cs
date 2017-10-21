@@ -29,6 +29,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Get whether the container has its default name.</summary>
         bool HasDefaultName();
 
+        /// <summary>Get whether the inventory can accept the item type.</summary>
+        /// <param name="item">The item.</param>
+        bool CanAcceptItem(Item item);
+
         /// <summary>Add an item to the container from the player inventory.</summary>
         /// <param name="item">The item taken.</param>
         /// <param name="player">The player taking the item.</param>

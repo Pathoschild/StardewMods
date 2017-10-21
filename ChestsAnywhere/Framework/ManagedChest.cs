@@ -117,7 +117,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 inventory: this.Container.Inventory,
                 reverseGrab: false,
                 showReceivingMenu: true,
-                highlightFunction: InventoryMenu.highlightAllItems,
+                highlightFunction: this.Container.CanAcceptItem,
                 behaviorOnItemSelectFunction: this.Container.GrabItemFromInventory,
                 message: null,
                 behaviorOnItemGrab: this.Container.GrabItemFromContainer,

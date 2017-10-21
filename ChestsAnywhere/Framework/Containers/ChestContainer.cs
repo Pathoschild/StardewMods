@@ -57,6 +57,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             return this.Name == "Chest";
         }
 
+        /// <summary>Get whether the inventory can accept the item type.</summary>
+        /// <param name="item">The item.</param>
+        public bool CanAcceptItem(Item item)
+        {
+            return InventoryMenu.highlightAllItems(item);
+        }
+
         /// <summary>Add an item to the container from the player inventory.</summary>
         /// <param name="item">The item taken.</param>
         /// <param name="player">The player taking the item.</param>
