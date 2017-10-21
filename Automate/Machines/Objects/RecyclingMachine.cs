@@ -67,14 +67,14 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         public RecyclingMachine(SObject machine)
             : base(machine) { }
 
-        /// <summary>Pull items from the connected pipes.</summary>
-        /// <param name="pipes">The connected IO pipes.</param>
+        /// <summary>Provide input to the machine.</summary>
+        /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(IPipe[] pipes)
+        public override bool SetInput(IStorage input)
         {
             //Random random = new Random((int)Game1.uniqueIDForThisGame / 2 + (int)Game1.stats.DaysPlayed + Game1.timeOfDay + (int)machine.tileLocation.X * 200 + (int)machine.tileLocation.Y);
 
-            if (this.GenericPullRecipe(pipes, this.Recipes))
+            if (this.GenericPullRecipe(input, this.Recipes))
             {
                 Game1.stats.PiecesOfTrashRecycled += 1;
                 return true;

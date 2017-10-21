@@ -1,4 +1,4 @@
-﻿namespace Pathoschild.Stardew.Automate.Framework
+namespace Pathoschild.Stardew.Automate.Framework
 {
     /// <summary>A machine that accepts input and provides output.</summary>
     internal interface IMachine
@@ -12,9 +12,9 @@
         /// <summary>Get the output item.</summary>
         ITrackedStack GetOutput();
 
-        /// <summary>Pull items from the connected chests.</summary>
-        /// <param name="pipes">The connected IO pipes.</param>
+        /// <summary>Provide input to the machine.</summary>
+        /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        bool Pull(IPipe[] pipes);
+        bool SetInput(IStorage input);
     }
 }

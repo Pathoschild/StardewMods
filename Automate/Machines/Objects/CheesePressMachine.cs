@@ -55,12 +55,12 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         public CheesePressMachine(SObject machine)
             : base(machine) { }
 
-        /// <summary>Pull items from the connected pipes.</summary>
-        /// <param name="pipes">The connected IO pipes.</param>
+        /// <summary>Provide input to the machine.</summary>
+        /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(IPipe[] pipes)
+        public override bool SetInput(IStorage input)
         {
-            if (pipes.TryGetIngredient(this.Recipes, out Consumable consumable, out Recipe recipe))
+            if (input.TryGetIngredient(this.Recipes, out Consumable consumable, out Recipe recipe))
             {
                 this.Machine.heldObject = recipe.Output(consumable.Take());
                 this.Machine.minutesUntilReady = recipe.Minutes;

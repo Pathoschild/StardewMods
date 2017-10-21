@@ -54,17 +54,17 @@ namespace Pathoschild.Stardew.Automate.Machines.Buildings
             return new TrackedItem(inventory.FirstOrDefault(), onEmpty: item => inventory.Remove(item));
         }
 
-        /// <summary>Pull items from the connected pipes.</summary>
-        /// <param name="pipes">The connected IO pipes.</param>
+        /// <summary>Provide input to the machine.</summary>
+        /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public bool Pull(IPipe[] pipes)
+        public bool SetInput(IStorage input)
         {
             if (this.InputFull())
                 return false;
 
             // fill input with wheat (262) and beets (284)
             bool anyPulled = false;
-            foreach (ITrackedStack stack in pipes.GetItems().Where(i => i.Sample.parentSheetIndex == 262 || i.Sample.parentSheetIndex == 284))
+            foreach (ITrackedStack stack in input.GetItems().Where(i => i.Sample.parentSheetIndex == 262 || i.Sample.parentSheetIndex == 284))
             {
                 // add item
                 bool anyAdded = this.TryAddInput(stack);

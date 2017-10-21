@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
@@ -24,15 +24,15 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
         public SeedMakerMachine(SObject machine)
             : base(machine) { }
 
-        /// <summary>Pull items from the connected pipes.</summary>
-        /// <param name="pipes">The connected IO pipes.</param>
+        /// <summary>Provide input to the machine.</summary>
+        /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(IPipe[] pipes)
+        public override bool SetInput(IStorage input)
         {
             SObject machine = this.Machine;
 
             // crop => seeds
-            if (pipes.TryGetIngredient(this.IsValidCrop, 1, out Consumable crop))
+            if (input.TryGetIngredient(this.IsValidCrop, 1, out Consumable crop))
             {
                 crop.Reduce();
                 int seedID = SeedMakerMachine.CropSeedIDs[crop.Sample.parentSheetIndex];

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
@@ -34,17 +34,17 @@ namespace Pathoschild.Stardew.Automate.Machines.Buildings
             return MachineState.Processing;
         }
 
-        /// <summary>Get the output item.</summary>
+        /// <summary>Get the machine output.</summary>
         public ITrackedStack GetOutput()
         {
             List<Item> inventory = this.Hut.output.items;
             return new TrackedItem(inventory.FirstOrDefault(), onEmpty: item => inventory.Remove(item));
         }
 
-        /// <summary>Pull items from the connected pipes.</summary>
-        /// <param name="pipes">The connected IO pipes.</param>
+        /// <summary>Provide input to the machine.</summary>
+        /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public bool Pull(IPipe[] pipes)
+        public bool SetInput(IStorage input)
         {
             return false; // no input
         }

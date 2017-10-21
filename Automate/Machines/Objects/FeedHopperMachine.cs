@@ -33,10 +33,10 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             // not applicable
         }
 
-        /// <summary>Pull items from the connected pipes.</summary>
-        /// <param name="pipes">The connected IO pipes.</param>
+        /// <summary>Provide input to the machine.</summary>
+        /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public bool Pull(IPipe[] pipes)
+        public bool SetInput(IStorage input)
         {
             Farm farm = Game1.getFarm();
 
@@ -46,7 +46,7 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
 
             // try to add hay (178) until full
             bool anyPulled = false;
-            foreach (ITrackedStack stack in pipes.GetItems().Where(p => p.Sample.parentSheetIndex == 178))
+            foreach (ITrackedStack stack in input.GetItems().Where(p => p.Sample.parentSheetIndex == 178))
             {
                 // get free space
                 int space = this.GetFreeSpace(farm);

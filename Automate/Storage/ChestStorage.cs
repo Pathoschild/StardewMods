@@ -9,8 +9,8 @@ using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.Automate.Storage
 {
-    /// <summary>An object which can store or provide items for machines to use.</summary>
-    internal class ChestStorage : IStorage
+    /// <summary>A in-game chest which can provide or store items.</summary>
+    internal class ChestContainer : IContainer
     {
         /*********
         ** Properties
@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.Automate.Storage
         /// <summary>Construct an instance.</summary>
         /// <param name="chest">The underlying chest.</param>
         /// <param name="sourceTile">The tile the pipe is connected to.</param>
-        public ChestStorage(Chest chest, Vector2 sourceTile)
+        public ChestContainer(Chest chest, Vector2 sourceTile)
         {
             this.Chest = chest;
             this.SourceTile = sourceTile;

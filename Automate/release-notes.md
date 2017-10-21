@@ -3,6 +3,8 @@
 # Release notes
 ## 1.8 (upcoming)
 * Updated to SMAPI 2.0.
+* Chests will now automate any number of machines, either directly adjacent or connected through an
+  adjacent machine.
 * Added overlay to visualise machine factory groups.
 * Switched to SMAPI update checks.
 

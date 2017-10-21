@@ -7,7 +7,6 @@ using Pathoschild.Stardew.Automate.Machines.Objects;
 using Pathoschild.Stardew.Automate.Machines.TerrainFeatures;
 using Pathoschild.Stardew.Automate.Machines.Tiles;
 using Pathoschild.Stardew.Automate.Storage;
-using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
@@ -31,76 +30,20 @@ namespace Pathoschild.Stardew.Automate
         /*********
         ** Public methods
         *********/
-        /// <summary>Get all locations containing a player chest.</summary>
-        public IEnumerable<GameLocation> GetLocationsWithChests()
-        {
-            foreach (GameLocation location in CommonHelper.GetLocations())
-            {
-                if (location.objects.Values.OfType<Chest>().Any(p => p.playerChest))
-                    yield return location;
-            }
-        }
-
-        /// <summary>Get all machines in a location.</summary>
+        /// <summary>Get all machine groups in a location.</summary>
         /// <param name="location">The location to search.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public IEnumerable<MachineMetadata> GetAllMachinesIn(GameLocation location, IReflectionHelper reflection)
+        public IEnumerable<MachineGroup> GetMachineGroups(GameLocation location, IReflectionHelper reflection)
         {
-            // object machines
-            foreach (KeyValuePair<Vector2, SObject> pair in location.objects)
+            MachineGroupBuilder builder = new MachineGroupBuilder(location);
+            ISet<Vector2> visited = new HashSet<Vector2>();
+            foreach (Vector2 tile in location.GetTiles())
             {
-                Vector2 tile = pair.Key;
-                SObject obj = pair.Value;
-
-                IMachine machine = this.GetMachine(obj, location, tile, reflection);
-                if (machine != null)
+                this.FloodFillGroup(builder, location, tile, visited, reflection);
+                if (builder.HasTiles())
                 {
-                    IPipe[] pipes = this.GetConnected(location, tile).ToArray();
-                    yield return new MachineMetadata(machine, location, pipes, tile);
-                }
-            }
-
-            // terrain feature machines
-            foreach (KeyValuePair<Vector2, TerrainFeature> pair in location.terrainFeatures)
-            {
-                Vector2 tile = pair.Key;
-                TerrainFeature feature = pair.Value;
-
-                IMachine machine = this.GetMachine(feature);
-                if (machine != null)
-                {
-                    IPipe[] pipes = this.GetConnected(location, tile).ToArray();
-                    yield return new MachineMetadata(machine, location, pipes, tile);
-                }
-            }
-
-            // building machines
-            if (location is BuildableGameLocation buildableLocation)
-            {
-                foreach (Building building in buildableLocation.buildings)
-                {
-                    IMachine machine = this.GetMachine(building);
-                    if (machine != null)
-                    {
-                        Rectangle tileArea = new Rectangle(building.tileX, building.tileY, building.tilesWide, building.tilesHigh);
-                        IPipe[] pipes = this.GetConnected(location, tileArea).ToArray();
-                        yield return new MachineMetadata(machine, location, pipes, tileArea);
-                    }
-                }
-            }
-
-            // map machines
-            for (int x = 0; x < location.Map.Layers[0].LayerWidth; x++)
-            {
-                for (int y = 0; y < location.Map.Layers[0].LayerHeight; y++)
-                {
-                    Vector2 tile = new Vector2(x, y);
-                    if (this.TryGetTileMachine(location, tile, reflection, out IMachine machine, out Vector2 size))
-                    {
-                        Rectangle tileArea = new Rectangle(x, y, (int)size.X, (int)size.Y);
-                        IPipe[] pipes = this.GetConnected(location, tileArea).ToArray();
-                        yield return new MachineMetadata(machine, location, pipes, tileArea);
-                    }
+                    yield return builder.Build();
+                    builder.Reset();
                 }
             }
         }
@@ -108,17 +51,131 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Get machines with connections in a location.</summary>
         /// <param name="location">The location to search.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public IEnumerable<MachineMetadata> GetConnectedMachinesIn(GameLocation location, IReflectionHelper reflection)
+        public IEnumerable<MachineGroup> GetActiveMachinesGroups(GameLocation location, IReflectionHelper reflection)
         {
             return this
-                .GetAllMachinesIn(location, reflection)
-                .Where(machine => machine.Connected.Any());
+                .GetMachineGroups(location, reflection)
+                .Where(group => group.HasInternalAutomation);
         }
 
 
         /*********
         ** Private methods
         *********/
+        /// <summary>Extend the given machine group to include all machines and containers connected to the given tile, if any.</summary>
+        /// <param name="group">The machine group to extend.</param>
+        /// <param name="location">The location to search.</param>
+        /// <param name="origin">The first tile to check.</param>
+        /// <param name="visited">A lookup of visited tiles.</param>
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        private void FloodFillGroup(MachineGroupBuilder group, GameLocation location, Vector2 origin, ISet<Vector2> visited, IReflectionHelper reflection)
+        {
+            // skip if already visited
+            if (visited.Contains(origin))
+                return;
+
+            // flood-fill connected machines & containers
+            Queue<Vector2> queue = new Queue<Vector2>();
+            queue.Enqueue(origin);
+            while (queue.Any())
+            {
+                // get tile
+                Vector2 tile = queue.Dequeue();
+                if (!visited.Add(tile))
+                    continue;
+
+                // get machine or container on tile
+                Vector2 foundSize;
+                {
+                    if (this.TryGetMachine(location, tile, reflection, out IMachine machine, out Vector2 size))
+                    {
+                        group.Add(machine);
+                        foundSize = size;
+                    }
+                    else if (this.TryGetChest(location, tile, out Chest chest))
+                    {
+                        group.Add(new ChestContainer(chest, tile));
+                        foundSize = Vector2.One;
+                    }
+                    else
+                        continue;
+                }
+
+                // handle machine tiles
+                {
+                    Rectangle tileArea = new Rectangle((int)tile.X, (int)tile.Y, (int)foundSize.X, (int)foundSize.Y);
+                    group.Add(tileArea);
+                    foreach (Vector2 cur in tileArea.GetTiles())
+                        visited.Add(cur);
+                }
+
+                // check surrounding tiles
+                foreach (Vector2 next in tile.GetSurroundingTiles())
+                {
+                    if (!visited.Contains(next))
+                        queue.Enqueue(next);
+                }
+            }
+        }
+
+        /// <summary>Get a machine from the given tile, if any.</summary>
+        /// <param name="location">The location to search.</param>
+        /// <param name="tile">The tile to search.</param>
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        /// <param name="machine">The machine found on the tile.</param>
+        /// <param name="size">The tile size of the machine found on the tile.</param>
+        /// <returns>Returns whether a machine was found on the tile.</returns>
+        private bool TryGetMachine(GameLocation location, Vector2 tile, IReflectionHelper reflection, out IMachine machine, out Vector2 size)
+        {
+            // object machine
+            if (location.objects.TryGetValue(tile, out SObject obj))
+            {
+                machine = this.GetMachine(obj, location, tile, reflection);
+                if (machine != null)
+                {
+                    size = Vector2.One;
+                    return true;
+                }
+            }
+
+            // terrain feature machine
+            if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature feature))
+            {
+                machine = this.GetMachine(feature);
+                if (machine != null)
+                {
+                    size = Vector2.One;
+                    return true;
+                }
+            }
+
+            // building machine
+            if (location is BuildableGameLocation buildableLocation)
+            {
+                foreach (Building building in buildableLocation.buildings)
+                {
+                    Rectangle tileArea = new Rectangle(building.tileX, building.tileY, building.tilesWide, building.tilesHigh);
+                    if (tileArea.Contains((int)tile.X, (int)tile.Y))
+                    {
+                        machine = this.GetMachine(building);
+                        if (machine != null)
+                        {
+                            size = new Vector2(building.tilesWide, building.tilesHigh);
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            // map machines
+            if (this.TryGetTileMachine(location, tile, reflection, out machine, out size))
+                return true;
+
+            // none
+            machine = null;
+            return false;
+        }
+
         /// <param name="obj">The object for which to get a machine.</param>
         /// <param name="location">The location containing the machine.</param>
         /// <param name="tile">The machine's position in its location.</param>
@@ -233,53 +290,6 @@ namespace Pathoschild.Stardew.Automate
             machine = null;
             size = Vector2.Zero;
             return false;
-        }
-
-        /// <summary>Get all chests connected to the given machine.</summary>
-        /// <param name="location">The location to search.</param>
-        /// <param name="tile">The tile position for which to find connected tiles.</param>
-        private IEnumerable<IPipe> GetConnected(GameLocation location, Vector2 tile)
-        {
-            foreach (Vector2 connectedTile in Utility.getSurroundingTileLocationsArray(tile))
-            {
-                if (this.TryGetChest(location, connectedTile, out Chest chest))
-                    yield return new Pipe(new ChestStorage(chest, connectedTile));
-            }
-        }
-
-        /// <summary>Get all chests connected to the given machine.</summary>
-        /// <param name="location">The location to search.</param>
-        /// <param name="area">The tile area for which to find connected tiles.</param>
-        private IEnumerable<IPipe> GetConnected(GameLocation location, Rectangle area)
-        {
-            // get surrounding corner
-            int left = area.X - 1;
-            int top = area.Y - 1;
-            int right = left + area.Width + 1;
-            int bottom = top + area.Height + 1;
-
-            // get connected chests
-            for (int x = left; x <= right; x++)
-            {
-                Vector2 tile = new Vector2(x, top);
-                if (this.TryGetChest(location, tile, out Chest chest))
-                    yield return new Pipe(new ChestStorage(chest, tile));
-            }
-            for (int y = top + 1; y <= bottom - 1; y++)
-            {
-                Vector2 leftTile = new Vector2(left, y);
-                Vector2 rightTile = new Vector2(right, y);
-                if (this.TryGetChest(location, leftTile, out Chest leftChest))
-                    yield return new Pipe(new ChestStorage(leftChest, leftTile));
-                if (this.TryGetChest(location, rightTile, out Chest rightChest))
-                    yield return new Pipe(new ChestStorage(rightChest, rightTile));
-            }
-            for (int x = left; x <= right; x++)
-            {
-                Vector2 tile = new Vector2(x, bottom);
-                if (this.TryGetChest(location, tile, out Chest chest))
-                    yield return new Pipe(new ChestStorage(chest, tile));
-            }
         }
 
         /// <summary>Get the chest on a given tile, if any.</summary>

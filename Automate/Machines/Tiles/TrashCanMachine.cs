@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using StardewModdingAPI;
@@ -62,10 +62,10 @@ namespace Pathoschild.Stardew.Automate.Machines.Tiles
             return null;
         }
 
-        /// <summary>Pull items from the connected pipes.</summary>
-        /// <param name="pipes">The connected IO pipes.</param>
+        /// <summary>Provide input to the machine.</summary>
+        /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public bool Pull(IPipe[] pipes)
+        public bool SetInput(IStorage input)
         {
             return false; // no input
         }

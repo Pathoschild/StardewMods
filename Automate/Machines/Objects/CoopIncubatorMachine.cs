@@ -59,12 +59,12 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             return null;
         }
 
-        /// <summary>Pull items from the connected pipes.</summary>
-        /// <param name="pipes">The connected IO pipes.</param>
+        /// <summary>Provide input to the machine.</summary>
+        /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(IPipe[] pipes)
+        public override bool SetInput(IStorage input)
         {
-            bool started = this.GenericPullRecipe(pipes, this.Recipes);
+            bool started = this.GenericPullRecipe(input, this.Recipes);
             if (started)
             {
                 int eggID = this.Machine.heldObject.parentSheetIndex;

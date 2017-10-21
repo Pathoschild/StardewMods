@@ -6,7 +6,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.Automate.Framework
 {
     /// <summary>Provides and stores items for machines.</summary>
-    internal interface IStorage : IEnumerable<ITrackedStack>
+    internal interface IContainer : IEnumerable<ITrackedStack>
     {
         /*********
         ** Public methods

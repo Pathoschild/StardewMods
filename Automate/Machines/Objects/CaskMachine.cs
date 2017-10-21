@@ -56,22 +56,22 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             });
         }
 
-        /// <summary>Pull items from the connected pipes.</summary>
-        /// <param name="pipes">The connected IO pipes.</param>
+        /// <summary>Provide input to the machine.</summary>
+        /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(IPipe[] pipes)
+        public override bool SetInput(IStorage input)
         {
             Cask cask = this.Machine;
 
-            if (pipes.TryGetIngredient(match => (match.Sample as SObject)?.quality < 4 && this.AgingRates.ContainsKey(match.Sample.parentSheetIndex), 1, out Consumable consumable))
+            if (input.TryGetIngredient(match => (match.Sample as SObject)?.quality < 4 && this.AgingRates.ContainsKey(match.Sample.parentSheetIndex), 1, out Consumable consumable))
             {
-                SObject input = (SObject)consumable.Take();
+                SObject ingredient = (SObject)consumable.Take();
 
-                cask.heldObject = input;
-                cask.agingRate = this.AgingRates[input.parentSheetIndex];
+                cask.heldObject = ingredient;
+                cask.agingRate = this.AgingRates[ingredient.parentSheetIndex];
                 cask.daysToMature = 56;
                 cask.minutesUntilReady = 999999;
-                switch (input.quality)
+                switch (ingredient.quality)
                 {
                     case SObject.medQuality:
                         cask.daysToMature = 42;

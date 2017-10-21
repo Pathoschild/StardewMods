@@ -37,12 +37,12 @@ namespace Pathoschild.Stardew.Automate.Machines.Tiles
             return null; // no output
         }
 
-        /// <summary>Pull items from the connected pipes.</summary>
-        /// <param name="pipes">The connected IO pipes.</param>
+        /// <summary>Provide input to the machine.</summary>
+        /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public bool Pull(IPipe[] pipes)
+        public bool SetInput(IStorage input)
         {
-            ITrackedStack tracker = pipes.GetItems().Where(p => p.Sample is SObject obj && obj.canBeShipped()).Take(1).FirstOrDefault();
+            ITrackedStack tracker = input.GetItems().Where(p => p.Sample is SObject obj && obj.canBeShipped()).Take(1).FirstOrDefault();
             if (tracker != null)
             {
                 SObject item = (SObject)tracker.Take(tracker.Count);

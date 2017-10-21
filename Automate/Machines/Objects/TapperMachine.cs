@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -40,10 +40,10 @@ namespace Pathoschild.Stardew.Automate.Machines.Objects
             return new TrackedItem(this.Machine.heldObject.getOne(), onEmpty: this.Reset);
         }
 
-        /// <summary>Pull items from the connected pipes.</summary>
-        /// <param name="pipes">The connected IO pipes.</param>
+        /// <summary>Provide input to the machine.</summary>
+        /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public override bool Pull(IPipe[] pipes)
+        public override bool SetInput(IStorage input)
         {
             return false; // no input
         }

@@ -20,14 +20,11 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
-        /// <summary>The persistent player data.</summary>
-        private SaveData SaveData;
-
         /// <summary>Constructs machine instances.</summary>
         private readonly MachineFactory Factory = new MachineFactory();
 
         /// <summary>The machines to process.</summary>
-        private readonly IDictionary<GameLocation, MachineMetadata[]> Machines = new Dictionary<GameLocation, MachineMetadata[]>();
+        private readonly IDictionary<GameLocation, MachineGroup[]> MachineGroups = new Dictionary<GameLocation, MachineGroup[]>();
 
         /// <summary>The locations that should be reloaded on the next update tick.</summary>
         private readonly HashSet<GameLocation> ReloadQueue = new HashSet<GameLocation>();
@@ -48,7 +45,6 @@ namespace Pathoschild.Stardew.Automate
 
             // hook events
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-            SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
             LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
             LocationEvents.LocationObjectsChanged += this.LocationEvents_LocationObjectsChanged;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
@@ -76,18 +72,6 @@ namespace Pathoschild.Stardew.Automate
         {
             // reset automation interval
             this.AutomateCountdown = this.Config.AutomationInterval;
-
-            // load save data from file
-            this.SaveData = this.Helper.ReadJsonFile<SaveData>($"data/{Constants.SaveFolderName}.json") ?? new SaveData();
-        }
-
-        /// <summary>The event called before the game starts saving.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void SaveEvents_BeforeSave(object sender, EventArgs e)
-        {
-            // write save data to file
-            this.Helper.WriteJsonFile($"data/{Constants.SaveFolderName}.json", this.SaveData);
         }
 
         /// <summary>The method invoked when a location is added or removed.</summary>
@@ -99,7 +83,7 @@ namespace Pathoschild.Stardew.Automate
 
             try
             {
-                this.Machines.Clear();
+                this.MachineGroups.Clear();
                 foreach (GameLocation location in CommonHelper.GetLocations())
                     this.ReloadQueue.Add(location);
             }
@@ -148,7 +132,8 @@ namespace Pathoschild.Stardew.Automate
                 this.ReloadQueue.Clear();
 
                 // process machines
-                this.ProcessMachines(this.GetAllMachines());
+                foreach (MachineGroup group in this.GetAllMachineGroups())
+                    group.Automate();
             }
             catch (Exception ex)
             {
@@ -167,12 +152,7 @@ namespace Pathoschild.Stardew.Automate
                 if (this.Config.Controls.ToggleOverlay.Contains(e.Button))
                 {
                     if (Game1.activeClickableMenu == null)
-                    {
-                        Game1.activeClickableMenu = new OverlayMenu(
-                            this.Factory.GetAllMachinesIn(Game1.currentLocation, this.Helper.Reflection),
-                            this.SaveData.Groups
-                        );
-                    }
+                        Game1.activeClickableMenu = new OverlayMenu(this.Factory.GetMachineGroups(Game1.currentLocation, this.Helper.Reflection));
                     else if (Game1.activeClickableMenu is OverlayMenu menu)
                         menu.exitThisMenu();
                 }
@@ -186,13 +166,13 @@ namespace Pathoschild.Stardew.Automate
         /****
         ** Methods
         ****/
-        /// <summary>Get the machines in every location.</summary>
-        private IEnumerable<MachineMetadata> GetAllMachines()
+        /// <summary>Get the machine groups in every location.</summary>
+        private IEnumerable<MachineGroup> GetAllMachineGroups()
         {
-            foreach (KeyValuePair<GameLocation, MachineMetadata[]> group in this.Machines)
+            foreach (KeyValuePair<GameLocation, MachineGroup[]> group in this.MachineGroups)
             {
-                foreach (MachineMetadata machine in group.Value)
-                    yield return machine;
+                foreach (MachineGroup machineGroup in group.Value)
+                    yield return machineGroup;
             }
         }
 
@@ -202,41 +182,7 @@ namespace Pathoschild.Stardew.Automate
         {
             this.VerboseLog($"Reloading machines in {location.Name}...");
 
-            this.Machines[location] = this.Factory.GetConnectedMachinesIn(location, this.Helper.Reflection).ToArray();
-        }
-
-        /// <summary>Process a set of machines.</summary>
-        /// <param name="machines">The machines to process.</param>
-        private void ProcessMachines(IEnumerable<MachineMetadata> machines)
-        {
-            machines = machines.ToArray();
-
-            this.VerboseLog($"Automating {machines.Count()} machines...");
-            foreach (MachineMetadata metadata in machines)
-            {
-                IMachine machine = metadata.Machine;
-                string summary = $"Automating {metadata.Location.Name} > {machine.GetType().Name} ({metadata.Connected.Length} pipes)...";
-
-                MachineState state = machine.GetState();
-                switch (state)
-                {
-                    case MachineState.Empty:
-                        bool pulled = machine.Pull(metadata.Connected);
-                        summary += pulled ? " accepted new input." : " no input found.";
-                        break;
-
-                    case MachineState.Done:
-                        bool pushed = metadata.Connected.TryPush(machine.GetOutput());
-                        summary += pushed ? " pushed output." : " done, but no pipes can accept its output.";
-                        break;
-
-                    default:
-                        summary += $" machine is {state.ToString().ToLower()}.";
-                        break;
-                }
-
-                this.VerboseLog($"   {summary}");
-            }
+            this.MachineGroups[location] = this.Factory.GetActiveMachinesGroups(location, this.Helper.Reflection).ToArray();
         }
 
         /// <summary>Log an error and warn the user.</summary>

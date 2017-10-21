@@ -1,5 +1,5 @@
 **Automate** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you place a chest
-next to a machine (like a furnace, cheese press, bee house, etc), and the machine will
+next to machines (like a furnace, cheese press, bee house, etc), and the machines will
 automatically pull raw items from the chest and push processed items into it.
 
 ## Contents
@@ -16,8 +16,10 @@ automatically pull raw items from the chest and push processed items into it.
 
 ## Usage
 ### Basic automation
-Once installed, crafting machines adjacent to chests will push their output into the chests, and
-pull ingredients to process out of them. This can be used to automate...
+Once installed, crafting machines connected to a chest will push their output into it, and pull
+ingredients to process out of it.
+
+This can be used to automate...
 * [bee houses](http://stardewvalleywiki.com/Bee_House);
 * [casks](http://stardewvalleywiki.com/Cask) (including outside the cellar);
 * [charcoal kilns](http://stardewvalleywiki.com/Charcoal_Kiln);
@@ -48,26 +50,38 @@ pull ingredients to process out of them. This can be used to automate...
 * and [worm bins](http://stardewvalleywiki.com/Worm_Bin).
 
 ### Factories
-You can combine multiple machines with chests. Each chest can be connected to a maximum of eight
-machines (one in each direction), or seven machines so you can reach the chest.
+Each chest can be connected to any number of machines, and the machines don't all need to be of the
+same type. A chest will connect to any machine that's touching it, any machines touching those
+machines, etc.
 
 Here are a few examples:
 
 * **Automatic crab pots**  
-  A worm bin produces bait, which is fed into the crab pot, which harvests fish into the chest. Any
+  A worm bin produces bait, which is fed into the crab pots, which harvest fish into the chest. Any
   trash is automatically recycled. The final products are stored in the chest.
   ```
-           recycling
-            machine
-               ⇅
-   worm bin → chest ⇄ crab pot
+  ┌────────────┐ ┌────────────┐
+  │ recycling  │ │  crab pot  │
+  │  machine   │ │            │
+  └────────────┘ └────────────┘
+  ╔════════════╗ ┌────────────┐
+  ║   chest    ║ │  crab pot  │
+  ║            ║ │            │
+  ╚════════════╝ └────────────┘
+  ┌────────────┐ ┌────────────┐
+  │  worm bin  │ │  crab pot  │
+  │            │ │            │
+  └────────────┘ └────────────┘
   ```
 
 * **Automatic refined quartz factory**  
   A crystalarium produces quartz every seven hours, which is smelted into refined quartz, which is
   stored in the chest.
   ```
-  crystalarium (quartz) → chest (containing coal) ⇄ furnace
+  ┌────────────┐ ╔════════════╗ ┌────────────┐
+  │crystalarium│ ║   chest    ║ │  furnace   │
+  │            │ ║ (with coal)║ │            │
+  └────────────┘ ╚════════════╝ └────────────┘
   ```
 
 * **Automatic iridium mead factory**  
@@ -75,16 +89,24 @@ Here are a few examples:
   quality, which is stored in the chest. You can link up to five casks to the same chest to
   increase production.
   ```
-              cask
-               ⇅
-  bee hive → chest ⇄ keg
+                 ┌────────────┐
+                 │    cask    │
+                 │            │
+                 └────────────┘
+  ┌────────────┐ ╔════════════╗ ┌────────────┐
+  │  bee hive  │ ║   chest    ║ │    keg     │
+  │            │ ║            ║ │            │
+  └────────────┘ ╚════════════╝ └────────────┘
   ```
 
 * **Automatic iridium bar factory**  
   A statue of perfection produces iridium ore every day, which is smelted into bars, which are
   stored in the chest.
   ```
-   statue of perfection → chest (containing coal) ⇄ furnace
+  ┌────────────┐ ╔════════════╗ ┌────────────┐
+  │ statue of  │ ║   chest    ║ │  furnace   │
+  │ perfection │ ║ (with coal)║ │            │
+  └────────────┘ ╚════════════╝ └────────────┘
   ```
 
 * **Semi-automatic iridium cheese factory**  
@@ -92,7 +114,10 @@ Here are a few examples:
   which is stored in the chest. You can link up to six casks to the same chest to increase
   production.
   ```
-  cheese press ⇄ chest (containing milk) ⇄ cask
+  ┌────────────┐ ╔════════════╗ ┌────────────┐
+  │   cheese   │ ║   chest    ║ │    cask    │
+  │   press    │ ║ (with milk)║ │            │
+  └────────────┘ ╚════════════╝ └────────────┘
   ```
 
 ## Configuration

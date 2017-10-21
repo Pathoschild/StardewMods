@@ -41,20 +41,20 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AutomateMod.cs" />
-    <Compile Include="Framework\Pipe.cs" />
-    <Compile Include="Framework\Models\GroupData.cs" />
+    <Compile Include="Framework\IStorage2.cs" />
+    <Compile Include="Framework\MachineGroupBuilder.cs" />
+    <Compile Include="Framework\MachineGroup.cs" />
     <Compile Include="Framework\IStorage.cs" />
     <Compile Include="Framework\OverlayMenu.cs" />
     <Compile Include="Framework\Recipe.cs" />
+    <Compile Include="Framework\TileHelper.cs" />
     <Compile Include="Framework\TrackedItem.cs" />
     <Compile Include="Framework\Extensions.cs" />
     <Compile Include="Framework\GenericMachine.cs" />
     <Compile Include="Framework\TrackedItemCollection.cs" />
-    <Compile Include="Framework\IPipe.cs" />
     <Compile Include="Framework\IMachine.cs" />
     <Compile Include="Framework\ITrackedStack.cs" />
     <Compile Include="MachineFactory.cs" />
-    <Compile Include="Framework\MachineMetadata.cs" />
     <Compile Include="Framework\MachineState.cs" />
     <Compile Include="Framework\Models\ModConfig.cs" />
     <Compile Include="Framework\Consumable.cs" />
@@ -88,7 +88,6 @@
     <Compile Include="Machines\Objects\TapperMachine.cs" />
     <Compile Include="Machines\Objects\WormBinMachine.cs" />
     <Compile Include="Machines\TerrainFeatures\FruitTreeMachine.cs" />
-    <Compile Include="Framework\Models\SaveData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage\ChestStorage.cs" />
   </ItemGroup>
