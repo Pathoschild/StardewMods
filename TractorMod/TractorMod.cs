@@ -93,19 +93,13 @@ namespace Pathoschild.Stardew.TractorMod
                 new WateringCanAttachment()
             };
 
-            // spawn/unspawn tractor and garages
+            // hook events
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
-
-            // show debug info
             if (this.Config.HighlightRadius)
                 GraphicsEvents.OnPostRenderEvent += this.GraphicsEvents_OnPostRenderEvent;
-
-            // add blueprint to Robin's shop
             MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
-
-            // handle player interaction & tractor logic
-            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
+            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
 
@@ -185,10 +179,10 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The event called when the player presses a keyboard button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
         {
             // summon tractor
-            if (e.KeyPressed == this.Config.TractorKey)
+            if (this.Config.Controls.SummonTractor.Contains(e.Button))
                 this.Tractor?.SetLocation(Game1.currentLocation, Game1.player.getTileLocation());
         }
 

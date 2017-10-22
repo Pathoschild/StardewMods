@@ -4,6 +4,7 @@
 * Added option for axe to clear live crops.
 * Added support for seasonal textures.
 * Added support for the Seed Bag mod's seed bag.
+* Added support for controller & mouse bindings.
 * Added compatibility with Farm Expansion.
 * Added Portuguese translations by Fabilows and [@TaelFayre](https://github.com/taelfayre).
 * Switched to SMAPI update checks.

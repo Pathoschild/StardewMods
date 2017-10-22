@@ -236,12 +236,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         private bool IsEnabled()
         {
             // automatic mode
-            if (this.Config.HoldToActivateButton == null)
+            if (!this.Config.Controls.HoldToActivate.Any())
                 return true;
 
             // hold-to-activate mode
             KeyboardState state = Keyboard.GetState();
-            return state.IsKeyDown(this.Config.HoldToActivateButton.Value);
+            return this.Config.Controls.HoldToActivate.Any(button => button.TryGetKeyboard(out Keys key) && state.IsKeyDown(key));
         }
 
         /// <summary>Update all crops in a location to toggle between passable (regardless of trellis) or normal behaviour.</summary>
