@@ -5,6 +5,7 @@
 * Updated to SMAPI 2.0.
 * Unified controller + keyboard bindings in `config.json` and enabled mouse bindings.
 * Switched to SMAPI update checks.
+* Fixed errors in modded object data causing all lookups to fail.
 * Fixed basic bat kills not counted towards Adventure Quest goal.
 * Fixed `HideOnKeyUp` mode not returning to previous menu on close.
 * Improved translations thanks to Dorian/[@d0x7](https://github.com/d0x7) (German) and [@TaelFayre](https://github.com/TaelFayre) (Portuguese).

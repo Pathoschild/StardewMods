@@ -123,7 +123,7 @@ namespace Pathoschild.Stardew.LookupAnything
         private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
             // reset low-level cache once per game day (used for expensive queries that don't change within a day)
-            GameHelper.ResetCache(this.Metadata, this.Helper.Reflection, this.Helper.Translation);
+            GameHelper.ResetCache(this.Metadata, this.Helper.Reflection, this.Helper.Translation, this.Monitor);
         }
 
         /// <summary>The method invoked when the player presses a button.</summary>
