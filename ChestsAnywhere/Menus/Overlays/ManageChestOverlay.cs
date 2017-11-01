@@ -74,6 +74,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The default highlight function for the player inventory items.</summary>
         private readonly InventoryMenu.highlightThisItem DefaultInventoryHighlighter;
 
+        /// <summary>Whether the chest menu is ready to close.</summary>
+        private bool CanCloseChest => this.Menu.readyToClose();
+
+
         /****
         ** Access UI
         ****/
@@ -193,20 +197,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             // access mode
             if (!this.ActiveElement.HasFlag(Element.EditForm))
             {
+                float navOpacity = this.CanCloseChest ? 1f : 0.5f;
+
                 // tabs
-                this.ChestTab.Draw(batch);
-                this.GroupTab?.Draw(batch);
+                this.ChestTab.Draw(batch, navOpacity);
+                this.GroupTab?.Draw(batch, navOpacity);
 
                 // tab dropdowns
                 if (this.ActiveElement == Element.ChestList)
-                    this.ChestSelector.Draw(batch);
+                    this.ChestSelector.Draw(batch, navOpacity);
                 if (this.ActiveElement == Element.GroupList)
-                    this.GroupSelector.Draw(batch);
+                    this.GroupSelector.Draw(batch, navOpacity);
 
                 // edit button
                 if (this.Chest.Container.IsEditable)
-                    this.EditButton.draw(batch);
-                this.SortInventoryButton.draw(batch);
+                    this.EditButton.draw(batch, Color.White * navOpacity, 1f);
+                this.SortInventoryButton.draw(batch, Color.White * navOpacity, 1f);
             }
 
             // edit mode
@@ -302,24 +308,25 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             if (this.IsInitialising())
                 return false;
 
+            bool canNavigate = this.CanCloseChest;
             var controls = this.Config.Controls;
             switch (this.ActiveElement)
             {
                 case Element.Menu:
                     if (controls.Toggle.Contains(input) || input == SButton.Escape || input == SButton.ControllerB)
                     {
-                        if (this.Menu.readyToClose())
+                        if (canNavigate)
                             this.Exit();
                     }
-                    else if (controls.PrevChest.Contains(input))
+                    else if (controls.PrevChest.Contains(input) && canNavigate)
                         this.SelectPreviousChest();
-                    else if (controls.NextChest.Contains(input))
+                    else if (controls.NextChest.Contains(input) && canNavigate)
                         this.SelectNextChest();
-                    else if (controls.PrevCategory.Contains(input))
+                    else if (controls.PrevCategory.Contains(input) && canNavigate)
                         this.SelectPreviousCategory();
-                    else if (controls.NextCategory.Contains(input))
+                    else if (controls.NextCategory.Contains(input) && canNavigate)
                         this.SelectNextCategory();
-                    else if (controls.EditChest.Contains(input))
+                    else if (controls.EditChest.Contains(input) && canNavigate)
                         this.OpenEdit();
                     else if (controls.SortItems.Contains(input))
                         this.SortInventory();
@@ -437,13 +444,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
                 // buttons & dropdown
                 default:
-                    if (this.Chest.Container.IsEditable && this.EditButton.containsPoint(x, y))
+                    bool canNavigate = this.CanCloseChest;
+                    if (this.Chest.Container.IsEditable && this.EditButton.containsPoint(x, y) && canNavigate)
                         this.OpenEdit();
                     else if (this.SortInventoryButton.containsPoint(x, y))
                         this.SortInventory();
-                    else if (this.ChestTab.containsPoint(x, y))
+                    else if (this.ChestTab.containsPoint(x, y) && canNavigate)
                         this.ActiveElement = Element.ChestList;
-                    else if (this.GroupTab?.containsPoint(x, y) == true)
+                    else if (this.GroupTab?.containsPoint(x, y) == true && canNavigate)
                         this.ActiveElement = Element.GroupList;
                     else
                         return false;

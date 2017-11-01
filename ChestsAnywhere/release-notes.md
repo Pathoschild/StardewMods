@@ -9,7 +9,7 @@
 * Added warning when translation files are missing.
 * Unified controller + keyboard bindings in `config.json` and enabled mouse bindings.
 * Switched to SMAPI update checks.
-* Fixed being able to close the menu while holding an item, which makes that item disappear.
+* Fixed being able to close a chest while an item is held, causing the item to disappear.
 * Fixed typo in German translations.
 * Improved translations thanks to Dorian/[@d0x7](https://github.com/d0x7) (German) and yuwenlan (Chinese).
 
