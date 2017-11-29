@@ -39,6 +39,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Whether to enable chest-specific UI.</summary>
         public bool IsChest { get; } = false;
 
+        /// <summary>The container's original name.</summary>
+        public string DefaultName => null;
+
 
         /*********
         ** Public methods

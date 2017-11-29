@@ -14,6 +14,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>A regular expression which matches a group of tags in the chest name.</summary>
         private const string TagGroupPattern = @"\|([^\|]+)\|";
 
+        /// <summary>The default name to display if it hasn't been customised.</summary>
+        private readonly string DefaultName;
+
 
         /*********
         ** Accessors
@@ -54,33 +57,45 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             this.Container = container;
             this.LocationName = location;
             this.Tile = tile;
-            this.Name = !container.HasDefaultName() ? container.Name : defaultName;
+            this.DefaultName = defaultName;
 
-            // extract tags
-            foreach (Match match in Regex.Matches(this.Name, ManagedChest.TagGroupPattern))
+            // parse name
+            if (container.HasDefaultName() || string.IsNullOrWhiteSpace(container.Name))
+                this.Name = this.DefaultName;
+            else
             {
-                string tag = match.Groups[1].Value;
+                string name = !container.HasDefaultName() ? container.Name : defaultName;
 
-                // ignore
-                if (tag.ToLower() == "ignore")
+                // read |tags|
+                foreach (Match match in Regex.Matches(name, ManagedChest.TagGroupPattern))
                 {
-                    this.IsIgnored = true;
-                    continue;
+                    string tag = match.Groups[1].Value;
+
+                    // ignore
+                    if (tag.ToLower() == "ignore")
+                    {
+                        this.IsIgnored = true;
+                        continue;
+                    }
+
+                    // category
+                    if (tag.ToLower().StartsWith("cat:"))
+                    {
+                        this.Category = tag.Substring(4).Trim();
+                        continue;
+                    }
+
+                    // order
+                    if (int.TryParse(tag, out int order))
+                        this.Order = order;
                 }
 
-                // category
-                if (tag.ToLower().StartsWith("cat:"))
-                {
-                    this.Category = tag.Substring(4).Trim();
-                    continue;
-                }
-
-                // order
-                if (int.TryParse(tag, out int order))
-                    this.Order = order;
+                // read display name
+                name = Regex.Replace(name, ManagedChest.TagGroupPattern, "").Trim();
+                this.Name = !string.IsNullOrWhiteSpace(name) && name != this.Container.DefaultName
+                    ? name
+                    : this.DefaultName;
             }
-            this.Name = Regex.Replace(this.Name, ManagedChest.TagGroupPattern, "").Trim();
-
             // normalise
             if (this.Category == null)
                 this.Category = "";
@@ -101,12 +116,25 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="ignored">Whether the chest should be ignored.</param>
         public void Update(string name, string category, int? order, bool ignored)
         {
-            this.Name = !string.IsNullOrWhiteSpace(name) ? name.Trim() : this.Name;
+            // update high-level metadata
+            this.Name = !string.IsNullOrWhiteSpace(name) ? name.Trim() : this.DefaultName;
             this.Category = category?.Trim() ?? "";
             this.Order = order;
             this.IsIgnored = ignored;
 
-            this.Update();
+            // build internal name
+            string internalName = !this.HasDefaultName() ? this.Name : this.Container.DefaultName;
+            if (this.Order.HasValue)
+                internalName += $" |{this.Order}|";
+            if (this.IsIgnored)
+                internalName += " |ignore|";
+            if (!string.IsNullOrWhiteSpace(this.Category) && this.Category != this.LocationName)
+                internalName += $" |cat:{this.Category}|";
+
+            // update container
+            this.Container.Name = !string.IsNullOrWhiteSpace(internalName)
+                ? internalName
+                : this.Container.DefaultName;
         }
 
         /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
@@ -134,22 +162,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             return other != null && this.Container.Inventory == other.Container.Inventory;
         }
 
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Update the chest metadata.</summary>
-        private void Update()
+        /// <summary>Get whether the container has its default name.</summary>
+        public bool HasDefaultName()
         {
-            string name = this.Name;
-            if (this.Order.HasValue)
-                name += $" |{this.Order}|";
-            if (this.IsIgnored)
-                name += " |ignore|";
-            if (!string.IsNullOrWhiteSpace(this.Category))
-                name += $" |cat:{this.Category}|";
-
-            this.Container.Name = name;
+            return string.IsNullOrWhiteSpace(this.Name) || this.Name == this.DefaultName;
         }
     }
 }

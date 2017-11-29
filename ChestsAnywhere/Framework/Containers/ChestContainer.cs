@@ -35,6 +35,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Whether to enable chest-specific UI.</summary>
         public bool IsChest { get; }
 
+        /// <summary>The container's original name.</summary>
+        public string DefaultName => "Chest";
+
 
         /*********
         ** Public methods
@@ -59,7 +62,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Get whether the container has its default name.</summary>
         public bool HasDefaultName()
         {
-            return this.Name == "Chest";
+            return this.Name == this.DefaultName;
         }
 
         /// <summary>Get whether the inventory can accept the item type.</summary>
