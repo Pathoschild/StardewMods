@@ -143,7 +143,7 @@ namespace Pathoschild.Stardew.Common
         /// <param name="e">The event arguments.</param>
         private void OnButtonPressed(object sender, EventArgsInput e)
         {
-            bool handled = e.IsClick
+            bool handled = e.Button == SButton.MouseLeft || e.IsUseToolButton
                 ? this.ReceiveLeftClick(Game1.getMouseX(), Game1.getMouseY())
                 : this.ReceiveButtonPress(e.Button);
 
