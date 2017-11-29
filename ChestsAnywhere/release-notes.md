@@ -6,6 +6,7 @@
 * Added support for Junimo huts and the shipping bin.
 * Added Russian translations by vanja-san.
 * Added warning when translation files are missing.
+* Tooltips are no longer shown for unnamed chests.
 * Unified controller + keyboard bindings in `config.json` and enabled mouse bindings.
 * Switched to SMAPI update checks.
 * Fixed being able to close a chest while an item is held, causing the item to disappear.
