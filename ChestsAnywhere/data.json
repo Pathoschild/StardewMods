@@ -1,8 +1,9 @@
 {
   /**
-   * The predefined world areas for the CurrentWorldArea range. Constructed buildings are added
-   * automatically to the same world area as their parent location. Any other location not listed
-   * is considered its own separate world area.
+   * The predefined world areas for the CurrentWorldArea range. For areas not listed here:
+   *   - Constructed buildings are in the same world area as their parent location.
+   *   - The mines and Skull Cavern are their own world areas (determined in code).
+   *   - Any other location not listed is considered its own separate world area.
    */
   "WorldAreas": {
     "Beach": [
@@ -18,8 +19,7 @@
     "Desert": [
       "Club",
       "Desert",
-      "SandyHouse",
-      "SkullCave" // entrance only
+      "SandyHouse"
     ],
     "Farm": [
       "Cellar",
@@ -38,7 +38,6 @@
     ],
     "Mountain": [
       "AdventureGuild",
-      "Mine", // entrance only
       "Mountain",
       "ScienceHouse", // Robin
       "SebastianRoom", // Robin (downstairs)

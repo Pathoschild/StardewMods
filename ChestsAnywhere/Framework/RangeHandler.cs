@@ -74,6 +74,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                     return "*";
 
                 case ChestRange.CurrentWorldArea:
+                    if (location is MineShaft mine)
+                        return mine.mineLevel <= 120 ? "Mine" : "SkullCave"; // match entrance name
+
                     return this.WorldAreaZones.TryGetValue(location, out string zone)
                         ? zone
                         : location.Name;
