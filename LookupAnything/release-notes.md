@@ -1,9 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.17 (upcoming)
+## 1.17
 * Updated to SMAPI 2.0.
-* Unified controller + keyboard bindings in `config.json` and enabled mouse bindings.
+* Switched to SMAPI unified controller/keyboard/mouse bindings in `config.json`.
 * Switched to SMAPI update checks.
 * Fixed errors in modded object data causing all lookups to fail.
 * Fixed basic bat kills not counted towards Adventure Quest goal.

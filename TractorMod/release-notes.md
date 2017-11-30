@@ -1,6 +1,6 @@
 # Release notes
-## 4.2 (upcoming)
-* Updated to SMAPI 2.0.
+## 4.2
+* Updated to SMAPI 2.1.
 * Added support for axe clearing weeds (default) and live crops (optional).
 * Added support for seasonal textures.
 * Added compatibility with Farm Expansion and Seed Bag.

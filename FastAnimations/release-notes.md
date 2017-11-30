@@ -1,8 +1,8 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.4 (upcoming)
-* Updated to SMAPI 2.0.
+## 1.4
+* Updated to SMAPI 2.1.
 * Skipping the eat/drink confirmation is now optional and disabled by default.
 * Switched to SMAPI update checks.
 

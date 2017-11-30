@@ -1,10 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.7 (upcoming)
-* Updated to SMAPI 2.0.
+## 1.7
+* Updated to SMAPI 2.1.
 * Added warning when translation files are missing.
-* Unified controller + keyboard bindings in `config.json` and enabled mouse bindings.
+* Switched to SMAPI unified controller/keyboard/mouse bindings in `config.json`.
 * Switched to SMAPI update checks.
 
 ## 1.6.1

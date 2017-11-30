@@ -1,9 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.3 (upcoming)
-* Updated to SMAPI 2.0.
-* Unified controller + keyboard bindings in `config.json` and enabled mouse bindings.
+## 1.2.1
+* Updated to SMAPI 2.1.
+* Switched to SMAPI unified controller/keyboard/mouse bindings in `config.json`.
 * Switched to SMAPI update checks.
 
 ## 1.2

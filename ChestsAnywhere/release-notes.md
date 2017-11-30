@@ -1,18 +1,17 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.12 (upcoming)
-* Updated to SMAPI 2.0.
+## 1.12
+* Updated to SMAPI 2.1.
 * Added support for Junimo huts and the shipping bin.
-* Added Russian translations by vanja-san.
+* Added option to limit range, for players who want a more balanced mod.
 * Added warning when translation files are missing.
 * Tooltips are no longer shown for unnamed chests.
-* Unified controller + keyboard bindings in `config.json` and enabled mouse bindings.
+* Switched to SMAPI unified controller/keyboard/mouse bindings in `config.json`.
 * Switched to SMAPI update checks.
 * Fixed being able to close a chest while an item is held, causing the item to disappear.
-* Fixed typo in German translations.
 * Fixed not being able to reset a chest name to default after editing it.
-* Improved translations thanks to Dorian/[@d0x7](https://github.com/d0x7) (German) and yuwenlan (Chinese).
+* Improved translations thanks to Dorian/[@d0x7](https://github.com/d0x7) (German), vanja-san (Russian), and yuwenlan (Chinese).
 
 ## 1.11.1
 * Added Portuguese and Spanish translations by Fabilows and ThomasGabrielDelavault respectively.
