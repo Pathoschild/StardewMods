@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
+using StardewValley;
 using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
@@ -36,8 +37,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>The sort value (if any).</summary>
         public int? Order { get; private set; }
 
-        /// <summary>The name of the location or building which contains the chest.</summary>
-        public string LocationName { get; }
+        /// <summary>The location or building which contains the chest.</summary>
+        public GameLocation Location { get; }
 
         /// <summary>The chest's tile position within its location or building.</summary>
         public Vector2 Tile { get; }
@@ -48,14 +49,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="container">The storage container.</param>
-        /// <param name="location">The name of the location or building which contains the chest.</param>
+        /// <param name="location">The location or building which contains the chest.</param>
         /// <param name="tile">The chest's tile position within its location or building.</param>
         /// <param name="defaultName">The default name to display if it hasn't been customised.</param>
-        public ManagedChest(IContainer container, string location, Vector2 tile, string defaultName)
+        public ManagedChest(IContainer container, GameLocation location, Vector2 tile, string defaultName)
         {
             // save values
             this.Container = container;
-            this.LocationName = location;
+            this.Location = location;
             this.Tile = tile;
             this.DefaultName = defaultName;
 
@@ -106,7 +107,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         {
             return !string.IsNullOrWhiteSpace(this.Category)
                 ? this.Category
-                : this.LocationName;
+                : this.Location.Name;
         }
 
         /// <summary>Update the chest metadata.</summary>
@@ -128,7 +129,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 internalName += $" |{this.Order}|";
             if (this.IsIgnored)
                 internalName += " |ignore|";
-            if (!string.IsNullOrWhiteSpace(this.Category) && this.Category != this.LocationName)
+            if (!string.IsNullOrWhiteSpace(this.Category) && this.Category != this.Location.Name)
                 internalName += $" |cat:{this.Category}|";
 
             // update container

@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 
@@ -12,6 +13,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         *********/
         /// <summary>Whether to show the chest name in a tooltip when you point at a chest.</summary>
         public bool ShowHoverTooltips { get; set; } = true;
+
+        /// <summary>The range at which chests are accessible.</summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public ChestRange Range { get; set; } = ChestRange.Unlimited;
 
         /// <summary>The control bindings.</summary>
         public ModConfigControls Controls { get; set; } = new ModConfigControls();

@@ -1,0 +1,78 @@
+{
+  /**
+   * The predefined world areas for the CurrentWorldArea range. Constructed buildings are added
+   * automatically to the same world area as their parent location. Any other location not listed
+   * is considered its own separate world area.
+   */
+  "WorldAreas": {
+    "Beach": [
+      "Beach",
+      "ElliottHouse",
+      "FishShop"
+    ],
+    "Backwoods": [
+      "Backwoods",
+      "BusStop",
+      "Tunnel"
+    ],
+    "Desert": [
+      "Club",
+      "Desert",
+      "SandyHouse",
+      "SkullCave" // entrance only
+    ],
+    "Farm": [
+      "Cellar",
+      "Farm",
+      "FarmCave",
+      "FarmHouse",
+      "Greenhouse"
+    ],
+    "Forest": [
+      "AnimalShop",
+      "Forest",
+      "LeahHouse",
+      "WizardHouse",
+      "WizardHouseBasement",
+      "Woods"
+    ],
+    "Mountain": [
+      "AdventureGuild",
+      "Mine", // entrance only
+      "Mountain",
+      "ScienceHouse", // Robin
+      "SebastianRoom", // Robin (downstairs)
+      "Summit",
+      "Tent" // Linus
+    ],
+    "Railroad": [
+      "BathHouse_Entry",
+      "BathHouse_MensLocker",
+      "BathHouse_Pool",
+      "BathHouse_WomensLocker",
+      "RailRoad"
+    ],
+    "Town": [
+      "ArchaeologyHouse", // museum
+      "Blacksmith",
+      "CommunityCenter",
+      "HaleyHouse",
+      "HarveyRoom", // hospital (upstairs)
+      "Hospital",
+      "JojaMart",
+      "JoshHouse", // George & Evelyn
+      "ManorHouse", // Mayor Lewis
+      "Saloon",
+      "SamHouse",
+      "SeedShop", // Pierre's shop
+      "Sewer",
+      "Town",
+      "Trailer" // Penny
+    ],
+    "WitchSwamp": [
+      "WitchWarpCave",
+      "WitchHut",
+      "WitchSwamp"
+    ]
+  }
+}

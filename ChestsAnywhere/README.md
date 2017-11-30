@@ -33,10 +33,11 @@ This will show a form where you can...
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
 file if you want. These are the available settings:
 
-| setting           | what it affects
-| ----------------- | -------------------
-| `Controls`        | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `B` to toggle the chest UI, `Left`/`Right` to switch chests, and `Up`/`Down` to switch categories. The default controller bindings are the shoulder and trigger buttons to navigate chests while the menu is open.
-| `ShowHoverTooltips` | Default `true`. Whether to show the chest name in a tooltip when you point at a chest.
+setting             | what it affects
+------------------- | -------------------
+`Range`             | Default `Unlimited`. The range at which chests are accessible. The possible options are... <ul><li>Unlimited: all chests.</li><li>CurrentWorldArea: chests in the current world area, based on these areas: beach, bus stop, desert, farm, forest, mine, mountain, railroads, town, witch swamp.</li><li>CurrentLocation: chests in the current location.</li><li>Disabled: can't remotely access any chest.</li></ul>
+`Controls`          | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `B` to toggle the chest UI, `Left`/`Right` to switch chests, and `Up`/`Down` to switch categories. The default controller bindings are the shoulder and trigger buttons to navigate chests while the menu is open.
+`ShowHoverTooltips` | Default `true`. Whether to show the chest name in a tooltip when you point at a chest.
 
 ## Versions
 See [release notes](release-notes.md).

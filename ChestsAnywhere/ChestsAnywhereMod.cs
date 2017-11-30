@@ -22,6 +22,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
+        /// <summary>The internal mod settings.</summary>
+        private ModData Data;
+
         /// <summary>Encapsulates logic for finding chests.</summary>
         private ChestFactory ChestFactory;
 
@@ -45,6 +48,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             // initialise
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Data = helper.ReadJsonFile<ModData>("data.json") ?? new ModData();
             this.ChestFactory = new ChestFactory(helper.Translation, helper.Reflection);
 
             // hook UI
@@ -123,7 +127,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     Game1.activeClickableMenu = chest.OpenMenu();
 
                 // add overlay
-                ManagedChest[] chests = this.ChestFactory.GetChestsForDisplay(selected: chest.Container).ToArray();
+                RangeHandler range = new RangeHandler(this.Data.WorldAreas, this.Config.Range, Game1.currentLocation);
+                ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true, alwaysIncludeContainer: chest.Container).ToArray();
                 this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Translation);
                 this.ManageChestOverlay.OnChestSelected += selected =>
                 {
@@ -163,15 +168,24 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Open the menu UI.</summary>
         private void OpenMenu()
         {
+            if (this.Config.Range == ChestRange.None)
+                return;
+
             // get chests
-            ManagedChest[] chests = this.ChestFactory.GetChestsForDisplay().ToArray();
+            RangeHandler rangeHandler = new RangeHandler(this.Data.WorldAreas, this.Config.Range, Game1.currentLocation);
+            ManagedChest[] chests = this.ChestFactory.GetChests(rangeHandler, excludeHidden: true).ToArray();
             ManagedChest selectedChest = chests.FirstOrDefault(p => p.Container.Inventory == this.SelectedInventory) ?? chests.FirstOrDefault();
 
             // render menu
             if (selectedChest != null)
                 Game1.activeClickableMenu = selectedChest.OpenMenu();
             else
-                CommonHelper.ShowInfoMessage("You don't have any chests yet. :)", duration: 1000);
+            {
+                CommonHelper.ShowInfoMessage(
+                    "You don't have any chests " + (this.Config.Range == ChestRange.Unlimited ? "yet" : "in range") + ". :)",
+                    duration: 1000
+                );
+            }
         }
 
         /// <summary>Validate that the game versions match the minimum requirements, and return an appropriate error message if not.</summary>
