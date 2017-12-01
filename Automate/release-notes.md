@@ -3,8 +3,10 @@
 # Release notes
 ## 1.8
 * Updated to SMAPI 2.1.
-* Added machine chaining (chests now automate machines which are connected indirectly through other machines).
+* Added machine chaining. <small>(Chests now automate machines which are connected indirectly through other machines.)</small>
+* Added chest pooling. <small>(When multiple chests are connected to the same machines, they'll be combined into a single inventory.)</small>
 * Added overlay to visualise machine connections.
+* Fixed mushroom box not changing sprite when emptied.
 * Switched to SMAPI update checks.
 
 ## 1.7
