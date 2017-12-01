@@ -65,9 +65,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
             /// <summary>A button which activates the tractor when held, or none to activate automatically.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
-            public SButton[] HoldToActivate { get; set; } = null;
-
-
+            public SButton[] HoldToActivate { get; set; } = new SButton[0];
         }
     }
 }
