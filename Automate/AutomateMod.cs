@@ -166,8 +166,8 @@ namespace Pathoschild.Stardew.Automate
         {
             try
             {
-                // toggle menu
-                if (this.Config.Controls.ToggleOverlay.Contains(e.Button))
+                // toggle overlay
+                if (Context.IsPlayerFree && this.Config.Controls.ToggleOverlay.Contains(e.Button))
                 {
                     if (this.CurrentOverlay != null)
                         this.DisableOverlay();
