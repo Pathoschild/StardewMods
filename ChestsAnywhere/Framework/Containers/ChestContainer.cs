@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
-using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 {
@@ -38,6 +37,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The container's original name.</summary>
         public string DefaultName => "Chest";
 
+        /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
+        public ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory => this.Chest.grabItemFromInventory;
+
+        /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
+        public ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer => this.Chest.grabItemFromChest;
+
 
         /*********
         ** Public methods
@@ -70,22 +75,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         public bool CanAcceptItem(Item item)
         {
             return InventoryMenu.highlightAllItems(item);
-        }
-
-        /// <summary>Add an item to the container from the player inventory.</summary>
-        /// <param name="item">The item taken.</param>
-        /// <param name="player">The player taking the item.</param>
-        public void GrabItemFromInventory(Item item, SFarmer player)
-        {
-            this.Chest.grabItemFromInventory(item, player);
-        }
-
-        /// <summary>Add an item to the player inventory from the container.</summary>
-        /// <param name="item">The item taken.</param>
-        /// <param name="player">The player taking the item.</param>
-        public void GrabItemFromContainer(Item item, SFarmer player)
-        {
-            this.Chest.grabItemFromChest(item, player);
         }
     }
 }

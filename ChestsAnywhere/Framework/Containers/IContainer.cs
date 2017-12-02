@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using StardewValley;
-using SFarmer = StardewValley.Farmer;
+using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 {
@@ -25,6 +25,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The container's original name.</summary>
         string DefaultName { get; }
 
+        /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
+        ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory { get; }
+
+        /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
+        ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer { get; } // must be a delegate for compatibility with other mods which get `delegate.Target as Chest`
+
 
         /*********
         ** Public methods
@@ -38,15 +44,5 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Get whether the inventory can accept the item type.</summary>
         /// <param name="item">The item.</param>
         bool CanAcceptItem(Item item);
-
-        /// <summary>Add an item to the container from the player inventory.</summary>
-        /// <param name="item">The item taken.</param>
-        /// <param name="player">The player taking the item.</param>
-        void GrabItemFromInventory(Item item, SFarmer player);
-
-        /// <summary>Add an item to the player inventory from the container.</summary>
-        /// <param name="item">The item taken.</param>
-        /// <param name="player">The player taking the item.</param>
-        void GrabItemFromContainer(Item item, SFarmer player);
     }
 }

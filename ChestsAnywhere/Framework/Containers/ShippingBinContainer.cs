@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Menus;
 using StardewValley.Objects;
 using SFarmer = StardewValley.Farmer;
 
@@ -42,6 +43,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The container's original name.</summary>
         public string DefaultName => null;
 
+        /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
+        public ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory => this.GrabItemFromInventoryImpl;
+
+        /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
+        public ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer => this.GrabItemFromContainerImpl;
+
 
         /*********
         ** Public methods
@@ -76,10 +83,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             return Utility.highlightShippableObjects(item);
         }
 
+
+        /*********
+        ** Private methods
+        *********/
         /// <summary>Add an item to the container from the player inventory.</summary>
         /// <param name="item">The item taken.</param>
         /// <param name="player">The player taking the item.</param>
-        public void GrabItemFromInventory(Item item, SFarmer player)
+        private void GrabItemFromInventoryImpl(Item item, SFarmer player)
         {
             // note: we deliberately use the chest logic here instead of Farm::shipItem, which does
             // some weird things that don't work well with a full chest UI.
@@ -89,7 +100,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Add an item to the player inventory from the container.</summary>
         /// <param name="item">The item taken.</param>
         /// <param name="player">The player taking the item.</param>
-        public void GrabItemFromContainer(Item item, SFarmer player)
+        private void GrabItemFromContainerImpl(Item item, SFarmer player)
         {
             if (!player.couldInventoryAcceptThisItem(item))
                 return;
