@@ -27,12 +27,6 @@ setting           | default | what it affects
 `ShearSpeed` | 5× | How fast you use the shears.
 `TreeFallingSpeed` | 1× | How fast trees fall after you chop them down.
 
-Other available settings:
-
-setting           | what it affects
-:---------------- | :------------------
-`CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll see a message in the SMAPI console. This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
-
 ## Versions
 See [release notes](release-notes.md).
 

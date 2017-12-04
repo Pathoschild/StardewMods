@@ -1,4 +1,4 @@
-﻿namespace Pathoschild.Stardew.FastAnimations.Framework
+namespace Pathoschild.Stardew.FastAnimations.Framework
 {
     /// <summary>The mod configuration.</summary>
     internal class ModConfig
@@ -6,8 +6,8 @@
         /*********
         ** Accessors
         *********/
-        /// <summary>Whether to check for updates to the mod.</summary>
-        public bool CheckForUpdates { get; set; } = true;
+        /// <summary>Whether to disable the confirmation dialogue before eating or drinking.</summary>
+        public bool DisableEatAndDrinkConfirmation { get; set; } = false;
 
         /// <summary>The speed multiplier for eating and drinking.</summary>
         public int EatAndDrinkSpeed { get; set; } = 5;

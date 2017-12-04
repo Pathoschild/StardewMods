@@ -23,3 +23,6 @@ _ReSharper*/
 **/packages/*
 *.nuget.props
 *.nuget.targets
+
+# releases
+_releases

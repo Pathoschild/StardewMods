@@ -1,7 +1,9 @@
-﻿{
+{
   // default chest names
   "default-name.chest": "Chest #{{number}}",
   "default-name.fridge": "Fridge",
+  "default-name.junimo-hut": "Junimo hut #{{number}}",
+  "default-name.shipping-bin": "Shipping bin",
 
   // edit-chest labels
   "label.location": "Location",

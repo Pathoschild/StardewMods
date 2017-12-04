@@ -1,4 +1,6 @@
-using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
+using Pathoschild.Stardew.Common;
+using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
@@ -14,23 +16,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Whether the axe clears non-fruit trees.</summary>
         public bool AxeCutsTrees { get; set; } = false;
 
+        /// <summary>Whether the axe clears live crops.</summary>
+        public bool AxeClearsCrops { get; set; } = false;
+
         /// <summary>Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.</summary>
         public bool PickaxeClearsDirt { get; set; } = true;
 
         /// <summary>Whether the tractor can break paths and flooring when the pickaxe is selected.</summary>
         public bool PickaxeBreaksFlooring { get; set; } = false;
 
-        /// <summary>Whether to check for updates to the mod.</summary>
-        public bool CheckForUpdates { get; set; } = true;
-
         /// <summary>Whether to use the experimental feature which lets the tractor pass through trellis crops.</summary>
         public bool PassThroughTrellisCrops { get; set; }
-
-        /// <summary>The button which summons the tractor to your position.</summary>
-        public Keys TractorKey { get; set; } = Keys.B;
-
-        /// <summary>A button which activates the tractor when held, or <c>null</c> to activate automatically.</summary>
-        public Keys? HoldToActivateButton { get; set; } = null;
 
         /// <summary>The custom tools to allow. These must match the exact in-game tool names.</summary>
         public string[] CustomTools { get; set; } = new string[0];
@@ -52,5 +48,24 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>Whether to highlight the tractor radius when riding it.</summary>
         public bool HighlightRadius { get; set; }
+
+        /// <summary>The control bindings.</summary>
+        public ModConfigControls Controls { get; set; } = new ModConfigControls();
+
+
+        /*********
+        ** Nested models
+        *********/
+        /// <summary>A set of control bindings.</summary>
+        internal class ModConfigControls
+        {
+            /// <summary>The control which toggles the chest UI.</summary>
+            [JsonConverter(typeof(StringEnumArrayConverter))]
+            public SButton[] SummonTractor { get; set; } = { SButton.B };
+
+            /// <summary>A button which activates the tractor when held, or none to activate automatically.</summary>
+            [JsonConverter(typeof(StringEnumArrayConverter))]
+            public SButton[] HoldToActivate { get; set; } = new SButton[0];
+        }
     }
 }

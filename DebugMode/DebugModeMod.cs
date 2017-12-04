@@ -2,8 +2,6 @@ using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DebugMode.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -33,16 +31,16 @@ namespace Pathoschild.Stardew.DebugMode
         private readonly Lazy<Texture2D> Pixel = new Lazy<Texture2D>(DebugModeMod.CreatePixel);
 
         /// <summary>Keyboard keys which are mapped to a destructive action in debug mode. See <see cref="ModConfig.AllowDangerousCommands"/>.</summary>
-        private readonly Keys[] DestructiveKeys =
+        private readonly SButton[] DestructiveKeys =
         {
-            Keys.P, // ends current day
-            Keys.M, // ends current season
-            Keys.H, // randomises player's hat
-            Keys.I, // randomises player's hair
-            Keys.J, // randomises player's shirt and pants
-            Keys.L, // randomises player
-            Keys.U, // randomises farmhouse wallpaper and floors
-            Keys.F10 // tries to launch a multiplayer server and crashes
+            SButton.P, // ends current day
+            SButton.M, // ends current season
+            SButton.H, // randomises player's hat
+            SButton.I, // randomises player's hair
+            SButton.J, // randomises player's shirt and pants
+            SButton.L, // randomises player
+            SButton.U, // randomises farmhouse wallpaper and floors
+            SButton.F10 // tries to launch a multiplayer server and crashes
         };
 
 
@@ -54,18 +52,12 @@ namespace Pathoschild.Stardew.DebugMode
         public override void Entry(IModHelper helper)
         {
             // initialise
-            this.Config = helper.ReadConfig<RawModConfig>().GetParsed();
+            this.Config = helper.ReadConfig<ModConfig>();
 
             // hook events
-            SaveEvents.AfterLoad += this.ReceiveAfterLoad;
-            ControlEvents.KeyPressed += this.ReceiveKeyPress;
-            if (this.Config.Controller.HasAny())
-            {
-                ControlEvents.ControllerButtonPressed += this.ReceiveButtonPress;
-                ControlEvents.ControllerTriggerPressed += this.ReceiveTriggerPress;
-            }
-            LocationEvents.CurrentLocationChanged += this.ReceiveCurrentLocationChanged;
-            GraphicsEvents.OnPostRenderEvent += this.OnPostRenderEvent;
+            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
+            LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
+            GraphicsEvents.OnPostRenderEvent += this.GraphicsEvents_OnPostRenderEvent;
 
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
@@ -79,20 +71,10 @@ namespace Pathoschild.Stardew.DebugMode
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked after the player loads a saved game.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void ReceiveAfterLoad(object sender, EventArgs e)
-        {
-            // check for updates
-            if (this.Config.CheckForUpdates)
-                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "DebugMode");
-        }
-
         /// <summary>The event called by SMAPI when rendering to the screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        public void OnPostRenderEvent(object sender, EventArgs e)
+        public void GraphicsEvents_OnPostRenderEvent(object sender, EventArgs e)
         {
             if (this.DebugMode)
                 this.DrawOverlay(Game1.spriteBatch, Game1.smallFont, this.Pixel.Value);
@@ -101,36 +83,24 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>The method invoked when the player presses a keyboard button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void ReceiveKeyPress(object sender, EventArgsKeyPressed e)
+        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
         {
-            // handle hotkey
-            this.HandleInput(e.KeyPressed, this.Config.Keyboard);
+            // toggle debug menu
+            if (this.Config.Controls.ToggleDebug.Contains(e.Button))
+            {
+                Program.releaseBuild = !Program.releaseBuild;
+                this.DebugMode = !this.DebugMode;
+            }
 
             // suppress dangerous actions
-            if (this.DebugMode && !this.Config.AllowDangerousCommands)
-                this.SuppressKeyIfDangerous(e.KeyPressed);
-        }
-
-        /// <summary>The method invoked when the player presses a controller button.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ReceiveButtonPress(object sender, EventArgsControllerButtonPressed e)
-        {
-            this.HandleInput(e.ButtonPressed, this.Config.Controller);
-        }
-
-        /// <summary>The method invoked when the player presses a controller trigger button.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void ReceiveTriggerPress(object sender, EventArgsControllerTriggerPressed e)
-        {
-            this.HandleInput(e.ButtonPressed, this.Config.Controller);
+            if (this.DebugMode && !this.Config.AllowDangerousCommands && this.DestructiveKeys.Contains(e.Button))
+                e.SuppressButton();
         }
 
         /// <summary>The method invoked when the player warps into a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void ReceiveCurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
+        private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
         {
             if (this.DebugMode)
                 this.CorrectEntryPosition(e.NewLocation, Game1.player);
@@ -139,34 +109,6 @@ namespace Pathoschild.Stardew.DebugMode
         /****
         ** Methods
         ****/
-        /// <summary>Suppress the specified key if it's considered dangerous (see <see cref="ModConfig.AllowDangerousCommands"/>).</summary>
-        /// <param name="key">The pressed key to suppress.</param>
-        private void SuppressKeyIfDangerous(Keys key)
-        {
-            if (this.DestructiveKeys.Contains(key))
-            {
-                Keys[] pressedKeys = Game1.oldKBState.GetPressedKeys().Union(new[] { key }).ToArray();
-                Game1.oldKBState = new KeyboardState(pressedKeys);
-            }
-        }
-
-        /// <summary>The method invoked when the player presses an input button.</summary>
-        /// <typeparam name="TKey">The input type.</typeparam>
-        /// <param name="key">The pressed input.</param>
-        /// <param name="map">The configured input mapping.</param>
-        private void HandleInput<TKey>(TKey key, InputMapConfiguration<TKey> map)
-        {
-            if (!map.IsValidKey(key))
-                return;
-
-            // perform bound action, toggle debug menu
-            if (key.Equals(map.ToggleDebug))
-            {
-                Program.releaseBuild = !Program.releaseBuild;
-                this.DebugMode = !this.DebugMode;
-            }
-        }
-
         /// <summary>Correct the player's position when they warp into an area.</summary>
         /// <param name="location">The location the player entered.</param>
         /// <param name="player">The player who just warped.</param>

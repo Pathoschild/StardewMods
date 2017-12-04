@@ -5,6 +5,7 @@
 * [Install](#install)
 * [Use](#use)
 * [Configure](#configure)
+* [Custom textures](#custom-textures)
 * [Versions](#versions)
 * [See also](#see-also)
 
@@ -30,7 +31,7 @@ You can do these by default:
 
 hold item  | default effects | optional effects (disabled by default)
 ---------- | --------------- | --------------------------------------
-axe        | clear twigs; clear dead crops. | chop down trees.
+axe        | clear twigs; clear dead crops. | chop down trees; clear live crops.
 fertiliser | fertilise dirt. | —
 hoe        | till dirt. | —
 pickaxe    | break rocks; clear tilled dirt; clear dead crops. | break paths/flooring.
@@ -49,8 +50,7 @@ You can set some general options:
 
 setting | default | effect
 :------ | :------ | :-----
-`TractorKey` | `B` | The button which summons the tractor to your position (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
-`HoldToActivateKey` | (none) | If set, the tractor won't do anything unless you hold this key (see [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx)).
+`Controls` | | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `B` to summon the tractor. Available inputs:<ul><li>`SummonTractor`: warp the tractor to your position.</li><li>`HoldToActivate`: if specified, the tractor will only do something while you're holding this button. If nothing is specified, tractor will work automatically.</li></ul>
 `Distance` | 1 | The number of tiles on each side of the tractor to affect (in addition to the tile under it).
 `TractorSpeed` | -2 | The speed modifier when riding the tractor.
 `MagneticRadius` | 384 | The item magnetism amount (higher values attract items from father away).
@@ -76,9 +76,13 @@ And set some advanced options:
 
 setting | default | effect
 :------ | :------ | :-----
-`CheckForUpdates` | `true` | Whether the mod should check for a newer version when you load the game. If a new version is available, you'll see a small message at the bottom of the screen for a few seconds. This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
 `HighlightRadius` | `false` | Whether to highlight the tractor radius when riding it.
 `PassThroughTrellisCrops` | `false` | Whether the tractor can pass through trellis crops like grapes. This is an experimental feature.
+
+## Custom textures
+You can drop new PNGs into the `assets` folder to change the appearance of the tractor or garage.
+For a seasonal texture, just prefix the name with the season (like `spring_tractor.png`). The mod
+will load the seasonal texture if present, else it'll load the default name (like `tractor.png`).
 
 ## Versions
 See [release notes](release-notes.md).

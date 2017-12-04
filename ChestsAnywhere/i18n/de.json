@@ -1,7 +1,9 @@
-﻿{
+{
   // default chest names
   "default-name.chest": "Kiste #{{number}}",
   "default-name.fridge": "Kühlschrank",
+  "default-name.junimo-hut": "Junimo Hütte #{{number}}", // TODO: verify
+  "default-name.shipping-bin": "Shipping bin", // TODO
 
   // edit-chest labels
   "label.location": "Ort",
@@ -9,8 +11,8 @@
   "label.name": "Name",
   "label.category": "Kategorie",
   "label.order": "Reihenfolge",
-  "label.hide-chest": "Versteck die Kiste",
-  "label.hide-chest-hidden": "Versteck die Kiste (Du musst die Kiste finde um es rückgängig zu machen!)",
+  "label.hide-chest": "Kiste ausblenden",
+  "label.hide-chest-hidden": "Kiste ausblenden (Du musst die Kiste wiederfinden um es rückgängig zu machen!)",
 
   // button labels
   "button.edit-chest": "Bearbeite Kiste",

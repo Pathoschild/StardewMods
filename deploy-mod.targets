@@ -1,5 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <DeployModFolderName>$(TargetName)</DeployModFolderName>
+    <ModZipPath>$(SolutionDir)\_releases</ModZipPath>
   </PropertyGroup>
 </Project>

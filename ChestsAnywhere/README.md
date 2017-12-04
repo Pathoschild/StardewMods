@@ -1,6 +1,6 @@
 **Chests Anywhere** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you access
-your chests from anywhere and organise them your way. Transfer items without having to run around,
-from the comfort of your bed to the deepest mine level.
+your chests, fridge, Junimo huts, and shipping bin from anywhere and organise them your way.
+Transfer items without having to run around, from the comfort of your bed to the deepest mine level.
 
 ![](screenshots/animated-usage.gif)
 
@@ -17,8 +17,8 @@ from the comfort of your bed to the deepest mine level.
 4. Run the game using SMAPI.
 
 ## Usage
-**Access chests** by pressing `B`. This will show your chests (and fridge) grouped by category.
-Navigate by clicking the top dropdowns, or by pressing the `left` or `right` key.
+**Access chests** by pressing `B`. This will show your chests grouped by category. Navigate by
+clicking the top dropdowns, or by pressing the `left` or `right` key.
 
 **Edit chests** by clicking the edit icon after opening a chest ([see example](screenshots/animated-edit.gif)).
 This will show a form where you can...
@@ -33,12 +33,11 @@ This will show a form where you can...
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
 file if you want. These are the available settings:
 
-| setting           | what it affects
-| ----------------- | -------------------
-| `Keyboard`        | Set keyboard bindings. The default values are `B` to toggle the chest UI, `Left`/`Right` to switch chests, and `Up`/`Down` to switch categories. See [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx).
-| `Controller`      | Set controller bindings. The shoulder buttons are used to navigate chests when the menu is open, but there's no toggle by default. The toggle can be used from the inventory screen. See [valid buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.buttons.aspx).
-| `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll see a small message at the bottom of the screen for a few seconds. This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
-| `ShowHoverTooltips` | Default `true`. Whether to show the chest name in a tooltip when you point at a chest.
+setting             | what it affects
+------------------- | -------------------
+`Range`             | Default `Unlimited`. The range at which chests are accessible. The possible options are... <ul><li>Unlimited: all chests.</li><li>CurrentWorldArea: chests in the current world area, based on these areas: beach, bus stop, desert, farm, forest, mine, mountain, railroads, town, witch swamp.</li><li>CurrentLocation: chests in the current location.</li><li>Disabled: can't remotely access any chest.</li></ul>
+`Controls`          | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `B` to toggle the chest UI, `Left`/`Right` to switch chests, and `Up`/`Down` to switch categories. The default controller bindings are the shoulder and trigger buttons to navigate chests while the menu is open.
+`ShowHoverTooltips` | Default `true`. Whether to show the chest name in a tooltip when you point at a chest.
 
 ## Versions
 See [release notes](release-notes.md).

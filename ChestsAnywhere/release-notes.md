@@ -1,17 +1,26 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.11.2 (upcoming)
+## 1.12
+* Updated to SMAPI 2.1.
+* Added support for Junimo huts and the shipping bin.
+* Added option to limit range, for players who want a more balanced mod.
 * Added warning when translation files are missing.
+* Tooltips are no longer shown for unnamed chests.
+* Switched to SMAPI unified controller/keyboard/mouse bindings in `config.json`.
+* Switched to SMAPI update checks.
+* Fixed being able to close a chest while an item is held, causing the item to disappear.
+* Fixed not being able to reset a chest name to default after editing it.
+* Improved translations thanks to Dorian/[@d0x7](https://github.com/d0x7) (German), vanja-san (Russian), and yuwenlan (Chinese).
 
 ## 1.11.1
-* Added Portuguese and Spanish translations. (Thanks to Fabilows and ThomasGabrielDelavault respectively!)
+* Added Portuguese and Spanish translations by Fabilows and ThomasGabrielDelavault respectively.
 * Fixed double cursor when using a controller.
 
 ## 1.11
 * Updated to SMAPI 1.14.
 * Added translation support.
-* Added Chinese and German translations. (Thanks to yuwenlan and Sasara respectively!)
+* Added Chinese and German translations by yuwenlan and Sasara respectively.
 
 ## 1.10
 * Updated for Stardew Valley 1.2.

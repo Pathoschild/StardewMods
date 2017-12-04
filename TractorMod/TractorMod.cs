@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.TractorMod.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
+using Pathoschild.Stardew.TractorMod.Framework.ModAttachments;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -17,6 +18,7 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod
 {
+    /// <summary>The mod entry point.</summary>
     public class TractorMod : Mod
     {
         /*********
@@ -30,6 +32,9 @@ namespace Pathoschild.Stardew.TractorMod
 
         /// <summary>The full type name for the Pelican Fiber mod's construction menu.</summary>
         private readonly string PelicanFiberMenuFullName = "PelicanFiber.Framework.ConstructionMenu";
+
+        /// <summary>The full type name for the Farm Expansion mod's construction menu.</summary>
+        private readonly string FarmExpansionMenuFullName = "FarmExpansion.Menus.FECarpenterMenu";
 
         /// <summary>The number of days needed to build a tractor garage.</summary>
         private readonly int GarageConstructionDays = 3;
@@ -55,6 +60,12 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Whether the player has any tractor garages.</summary>
         private bool HasAnyGarages;
 
+        /// <summary>Whether the Pelican Fiber mod is loaded.</summary>
+        private bool IsPelicanFiberLoaded;
+
+        /// <summary>Whether the Farm Expansion mod is loaded.</summary>
+        private bool IsFarmExpansionLoaded;
+
 
         /*********
         ** Public methods
@@ -63,6 +74,10 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            // enable mod compatibility fixes
+            this.IsPelicanFiberLoaded = helper.ModRegistry.IsLoaded("jwdred.PelicanFiber");
+            this.IsFarmExpansionLoaded = helper.ModRegistry.IsLoaded("Advize.FarmExpansion") && helper.ModRegistry.Get("Advize.FarmExpansion").Version.IsNewerThan("3.0"); // fields added in 3.0.1
+
             // read config
             this.MigrateLegacySaveData(helper);
             this.Config = helper.ReadConfig<ModConfig>();
@@ -75,23 +90,17 @@ namespace Pathoschild.Stardew.TractorMod
                 new PickaxeAttachment(this.Config),
                 new ScytheAttachment(),
                 new SeedAttachment(),
+                new SeedBagAttachment(),
                 new WateringCanAttachment()
             };
 
-            // spawn/unspawn tractor and garages
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            // hook events
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
-
-            // show debug info
             if (this.Config.HighlightRadius)
                 GraphicsEvents.OnPostRenderEvent += this.GraphicsEvents_OnPostRenderEvent;
-
-            // add blueprint to Robin's shop
             MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
-
-            // handle player interaction & tractor logic
-            ControlEvents.KeyPressed += this.ControlEvents_KeyPressed;
+            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
 
@@ -107,16 +116,6 @@ namespace Pathoschild.Stardew.TractorMod
         /****
         ** Event handlers
         ****/
-        /// <summary>The event called when the player loads a save.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
-        {
-            // check for updates
-            if (this.Config.CheckForUpdates)
-                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "TractorMod");
-        }
-
         /// <summary>The event called when a new day begins.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -154,17 +153,26 @@ namespace Pathoschild.Stardew.TractorMod
             // add blueprint to carpenter menu
             if (Context.IsWorldReady && !this.HasAnyGarages)
             {
+                // default menu
                 if (e.NewMenu is CarpenterMenu)
                 {
                     this.Helper.Reflection
                         .GetPrivateValue<List<BluePrint>>(e.NewMenu, "blueprints")
                         .Add(this.GetBlueprint());
                 }
-                else if (e.NewMenu.GetType().FullName == this.PelicanFiberMenuFullName)
+
+                // modded menus
+                else if (this.IsPelicanFiberLoaded && e.NewMenu.GetType().FullName == this.PelicanFiberMenuFullName)
                 {
                     this.Helper.Reflection
                         .GetPrivateValue<List<BluePrint>>(e.NewMenu, "Blueprints")
                         .Add(this.GetBlueprint());
+                }
+                else if (this.IsFarmExpansionLoaded && e.NewMenu.GetType().FullName == this.FarmExpansionMenuFullName)
+                {
+                    this.Helper.Reflection
+                        .GetPrivateMethod(e.NewMenu, "AddFarmBluePrint")
+                        .Invoke(this.GetBlueprint());
                 }
             }
         }
@@ -172,10 +180,10 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The event called when the player presses a keyboard button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ControlEvents_KeyPressed(object sender, EventArgsKeyPressed e)
+        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
         {
             // summon tractor
-            if (e.KeyPressed == this.Config.TractorKey)
+            if (this.Config.Controls.SummonTractor.Contains(e.Button))
                 this.Tractor?.SetLocation(Game1.currentLocation, Game1.player.getTileLocation());
         }
 
@@ -239,7 +247,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="tileY">The tile Y position at which to spawn it.</param>
         private TractorManager SpawnTractor(BuildableGameLocation location, int tileX, int tileY)
         {
-            TractorManager tractor = new TractorManager(tileX, tileY, this.Config, this.Attachments, this.Helper.Content, this.Helper.Translation, this.Helper.Reflection);
+            TractorManager tractor = new TractorManager(tileX, tileY, this.Config, this.Attachments, this.GetTexture("tractor"), this.Helper.Translation, this.Helper.Reflection);
             tractor.SetLocation(location, new Vector2(tileX, tileY));
             tractor.SetPixelPosition(new Vector2(tractor.Current.Position.X + 20, tractor.Current.Position.Y));
             return tractor;
@@ -355,7 +363,7 @@ namespace Pathoschild.Stardew.TractorMod
                     foreach (LegacySaveData.LegacySaveEntry saveData in data.Saves)
                     {
                         saves[$"{saveData.FarmerName}_{saveData.SaveSeed}"] = new CustomSaveData(
-                            saveData.TractorHouse.Select(p => new CustomSaveBuilding(new Vector2(p.X, p.Y), this.GarageBuildingType, this.GetMapName(Game1.getFarm()), 0))
+                            saveData.TractorHouse.Select(p => new CustomSaveBuilding(new Vector2(p.X, p.Y), this.GarageBuildingType, "Farm", 0))
                         );
                     }
                 }
@@ -393,7 +401,7 @@ namespace Pathoschild.Stardew.TractorMod
             return new BluePrint(this.GarageBuildingType)
             {
                 name = this.GarageBuildingType,
-                texture = this.Helper.Content.Load<Texture2D>(@"assets\TractorHouse.png"),
+                texture = this.GetTexture("garage"),
                 humanDoor = new Point(-1, -1),
                 animalDoor = new Point(-2, -1),
                 mapToWarpTo = null,
@@ -412,6 +420,19 @@ namespace Pathoschild.Stardew.TractorMod
                     : new Dictionary<int, int>(),
                 namesOfOkayBuildingLocations = new List<string> { "Farm" }
             };
+        }
+
+        /// <summary>Get a texture from the assets folder (including seasonal logic if applicable).</summary>
+        /// <param name="key">The unique key without the path or extension (like 'tractor' or 'garage').</param>
+        private Texture2D GetTexture(string key)
+        {
+            // try seasonal texture
+            string seasonalKey = $"assets/{Game1.currentSeason}_{key}.png";
+            if (File.Exists(Path.Combine(this.Helper.DirectoryPath, seasonalKey)))
+                return this.Helper.Content.Load<Texture2D>(seasonalKey);
+
+            // default to single texture
+            return this.Helper.Content.Load<Texture2D>($"assets/{key}.png");
         }
 
         /// <summary>Get a unique map name for the given location.</summary>

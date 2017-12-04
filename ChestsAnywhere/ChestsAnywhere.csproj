@@ -34,9 +34,8 @@
     <GamePath>C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley</GamePath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,26 +50,34 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Framework\RangeHandler.cs" />
     <Compile Include="ChestFactory.cs" />
     <Compile Include="ChestsAnywhereMod.cs" />
+    <Compile Include="Framework\ChestRange.cs" />
+    <Compile Include="Framework\Containers\ChestContainer.cs" />
+    <Compile Include="Framework\Containers\IContainer.cs" />
+    <Compile Include="Framework\Containers\JunimoHutContainer.cs" />
+    <Compile Include="Framework\Containers\ShippingBinContainer.cs" />
+    <Compile Include="Framework\ModData.cs" />
     <Compile Include="Menus\Components\Checkbox.cs" />
     <Compile Include="Menus\Components\DropList.cs" />
     <Compile Include="Menus\Components\Sprites.cs" />
     <Compile Include="Menus\Components\ValidatedTextBox.cs" />
     <Compile Include="Framework\Constants.cs" />
     <Compile Include="Framework\ModConfig.cs" />
-    <Compile Include="Framework\RawModConfig.cs" />
     <Compile Include="Framework\DropListItem.cs" />
-    <Compile Include="Framework\InputMapConfiguration.cs" />
     <Compile Include="Framework\ManagedChest.cs" />
-    <Compile Include="Menus\Overlays\BaseOverlay.cs" />
     <Compile Include="Menus\Overlays\ManageChestOverlay.cs" />
     <Compile Include="Menus\Overlays\Element.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Menus\Components\Tab.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="data.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="i18n\de.json" />
+    <None Include="i18n\ru.json" />
     <None Include="i18n\es.json" />
     <None Include="i18n\pt.json" />
     <None Include="i18n\default.json" />
@@ -83,11 +90,11 @@
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\deploy-mod.targets" />
-  <Import Project="..\packages\Pathoschild.Stardew.ModBuildConfig.1.7.1\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.1.7.1\build\Pathoschild.Stardew.ModBuildConfig.targets')" />
+  <Import Project="..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.1\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.1\build\Pathoschild.Stardew.ModBuildConfig.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.1.7.1\build\Pathoschild.Stardew.ModBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Pathoschild.Stardew.ModBuildConfig.1.7.1\build\Pathoschild.Stardew.ModBuildConfig.targets'))" />
+    <Error Condition="!Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.1\build\Pathoschild.Stardew.ModBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.1\build\Pathoschild.Stardew.ModBuildConfig.targets'))" />
   </Target>
 </Project>

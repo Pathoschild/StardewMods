@@ -1,0 +1,21 @@
+{
+  // default chest names
+  "default-name.chest": "Сундук #{{number}}",
+  "default-name.fridge": "Холодильник",
+  "default-name.junimo-hut": "Юнимос #{{number}}", // TODO: verify
+  "default-name.shipping-bin": "Shipping bin", // TODO
+
+  // edit-chest labels
+  "label.location": "Расположение",
+  "label.location.tile": "тайл {{x}}, {{y}}",
+  "label.name": "Имя",
+  "label.category": "Категория",
+  "label.order": "Порядок",
+  "label.hide-chest": "Скрыть этот сундук",
+  "label.hide-chest-hidden": "Скрыть этот сундук (вам нужно найти сундук, чтобы отменить это!)",
+
+  // button labels
+  "button.edit-chest": "изменить сундук",
+  "button.sort-inventory": "сортировать инвентарь",
+  "button.ok": "OK"
+}

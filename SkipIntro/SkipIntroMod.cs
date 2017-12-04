@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.SkipIntro.Framework;
@@ -28,8 +28,7 @@ namespace Pathoschild.Stardew.SkipIntro
         {
             this.Config = helper.ReadConfig<ModConfig>();
 
-            SaveEvents.AfterLoad += this.ReceiveAfterLoad;
-            MenuEvents.MenuChanged += this.ReceiveMenuChanged;
+            MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
         }
 
 
@@ -39,29 +38,19 @@ namespace Pathoschild.Stardew.SkipIntro
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked after the player loads a saved game.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void ReceiveAfterLoad(object sender, EventArgs e)
-        {
-            // check for updates
-            if (this.Config.CheckForUpdates)
-                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "SkipIntro");
-        }
-
         /// <summary>The method called when the player returns to the title screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ReceiveMenuChanged(object sender, EventArgsClickableMenuChanged e)
+        private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
             if (e.NewMenu is TitleMenu)
-                GameEvents.UpdateTick += this.ReceiveUpdateTick;
+                GameEvents.UpdateTick += this.GameEvents_UpdateTick;
         }
 
         /// <summary>Receives an update tick.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ReceiveUpdateTick(object sender, EventArgs e)
+        private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
             try
             {
@@ -69,18 +58,18 @@ namespace Pathoschild.Stardew.SkipIntro
                 TitleMenu menu = Game1.activeClickableMenu as TitleMenu;
                 if (menu == null)
                 {
-                    GameEvents.UpdateTick -= this.ReceiveUpdateTick;
+                    GameEvents.UpdateTick -= this.GameEvents_UpdateTick;
                     return;
                 }
 
                 // skip intro
                 if (this.TrySkipIntro(menu))
-                    GameEvents.UpdateTick -= this.ReceiveUpdateTick;
+                    GameEvents.UpdateTick -= this.GameEvents_UpdateTick;
             }
             catch (Exception ex)
             {
                 this.Monitor.InterceptError(ex, "skipping the intro");
-                GameEvents.UpdateTick -= this.ReceiveUpdateTick;
+                GameEvents.UpdateTick -= this.GameEvents_UpdateTick;
             }
         }
 

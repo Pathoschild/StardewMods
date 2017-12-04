@@ -33,10 +33,10 @@ namespace Pathoschild.Stardew.Automate.Framework
             return new TrackedItem(this.Machine.heldObject, onEmpty: this.GenericReset);
         }
 
-        /// <summary>Pull items from the connected pipes.</summary>
-        /// <param name="pipes">The connected IO pipes.</param>
+        /// <summary>Provide input to the machine.</summary>
+        /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public abstract bool Pull(IPipe[] pipes);
+        public abstract bool SetInput(IStorage input);
 
 
         /*********
@@ -57,12 +57,12 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.Machine.readyForHarvest = false;
         }
 
-        /// <summary>Generic logic to pull items from connected pipes based on the given recipes.</summary>
-        /// <param name="pipes">The connected IO pipes.</param>
+        /// <summary>Generic logic to pull items from storage based on the given recipes.</summary>
+        /// <param name="storage">The available items.</param>
         /// <param name="recipes">The recipes to match.</param>
-        protected bool GenericPullRecipe(IPipe[] pipes, Recipe[] recipes)
+        protected bool GenericPullRecipe(IStorage storage, Recipe[] recipes)
         {
-            if (pipes.TryGetIngredient(recipes, out Consumable consumable, out Recipe recipe))
+            if (storage.TryGetIngredient(recipes, out IConsumable consumable, out Recipe recipe))
             {
                 this.Machine.heldObject = recipe.Output(consumable.Take());
                 this.Machine.minutesUntilReady = recipe.Minutes;

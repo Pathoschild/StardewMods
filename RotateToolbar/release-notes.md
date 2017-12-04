@@ -1,6 +1,11 @@
-﻿[← back to readme](README.md)
+[← back to readme](README.md)
 
 # Release notes
+## 1.2.1
+* Updated to SMAPI 2.1.
+* Switched to SMAPI unified controller/keyboard/mouse bindings in `config.json`.
+* Switched to SMAPI update checks.
+
 ## 1.2
 * Added option to deselect item on rotate.
 

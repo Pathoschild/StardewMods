@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json;
+using Pathoschild.Stardew.Common;
+using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.DataMaps.Framework
 {
@@ -8,10 +10,19 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The keyboard input map.</summary>
-        public InputMapConfiguration<Keys> Keyboard { get; set; }
+        /// <summary>The control bindings.</summary>
+        public ModConfigControls Controls { get; set; } = new ModConfigControls();
 
-        /// <summary>The controller input map.</summary>
-        public InputMapConfiguration<Buttons> Controller { get; set; }
+
+        /*********
+        ** Nested models
+        *********/
+        /// <summary>A set of control bindings.</summary>
+        internal class ModConfigControls
+        {
+            /// <summary>The control which toggles the lookup UI.</summary>
+            [JsonConverter(typeof(StringEnumArrayConverter))]
+            public SButton[] ToggleMap { get; set; } = { SButton.F2 };
+        }
     }
 }

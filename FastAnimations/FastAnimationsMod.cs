@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using Pathoschild.Stardew.FastAnimations.Handlers;
 using StardewModdingAPI;
@@ -33,9 +32,9 @@ namespace Pathoschild.Stardew.FastAnimations
             this.Config = helper.ReadConfig<ModConfig>();
             this.Handlers = this.GetHandlers(this.Config).ToArray();
 
-            SaveEvents.AfterLoad += this.ReceiveAfterLoad;
-            GameEvents.UpdateTick += this.ReceiveUpdateTick;
-            LocationEvents.CurrentLocationChanged += this.ReceiveLocationChanged;
+            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+            LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
         }
 
 
@@ -48,12 +47,8 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <summary>The method invoked after the player loads a saved game.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ReceiveAfterLoad(object sender, EventArgs e)
+        private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            // check for updates
-            if (this.Config.CheckForUpdates)
-                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "FastAnimations");
-
             // initialise handlers
             foreach (IAnimationHandler handler in this.Handlers)
                 handler.OnNewLocation(Game1.currentLocation);
@@ -62,7 +57,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <summary>The method invoked after the player warps to a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void ReceiveLocationChanged(object sender, EventArgsCurrentLocationChanged e)
+        private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
         {
             if (!Context.IsWorldReady || Game1.eventUp || !this.Handlers.Any())
                 return;
@@ -74,7 +69,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <summary>The method invoked when the player presses a keyboard button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void ReceiveUpdateTick(object sender, EventArgs e)
+        private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
             if (!Context.IsWorldReady || Game1.eventUp || !this.Handlers.Any())
                 return;
@@ -99,7 +94,7 @@ namespace Pathoschild.Stardew.FastAnimations
             if (config.BreakGeodeSpeed > 1)
                 yield return new BreakingGeodeHandler(config.BreakGeodeSpeed);
             if (config.EatAndDrinkSpeed > 1)
-                yield return new EatingHandler(this.Helper.Reflection, config.EatAndDrinkSpeed);
+                yield return new EatingHandler(this.Helper.Reflection, config.EatAndDrinkSpeed, config.DisableEatAndDrinkConfirmation);
             if (config.FishingSpeed > 1)
                 yield return new FishingHandler(config.FishingSpeed);
             if (config.MilkSpeed > 1)

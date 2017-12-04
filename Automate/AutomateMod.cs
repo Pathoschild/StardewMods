@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Pathoschild.Stardew.Automate.Framework;
+using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -23,13 +24,16 @@ namespace Pathoschild.Stardew.Automate
         private readonly MachineFactory Factory = new MachineFactory();
 
         /// <summary>The machines to process.</summary>
-        private readonly IDictionary<GameLocation, MachineMetadata[]> Machines = new Dictionary<GameLocation, MachineMetadata[]>();
+        private readonly IDictionary<GameLocation, MachineGroup[]> MachineGroups = new Dictionary<GameLocation, MachineGroup[]>();
 
         /// <summary>The locations that should be reloaded on the next update tick.</summary>
         private readonly HashSet<GameLocation> ReloadQueue = new HashSet<GameLocation>();
 
         /// <summary>The number of ticks until the next automation cycle.</summary>
         private int AutomateCountdown;
+
+        /// <summary>The current overlay being displayed, if any.</summary>
+        private OverlayMenu CurrentOverlay;
 
 
         /*********
@@ -44,9 +48,13 @@ namespace Pathoschild.Stardew.Automate
 
             // hook events
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
             LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
             LocationEvents.LocationObjectsChanged += this.LocationEvents_LocationObjectsChanged;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+
+            // handle player interaction
+            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
 
             // log info
             if (this.Config.VerboseLogging)
@@ -66,10 +74,17 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            // check for updates
+            // reset automation interval
             this.AutomateCountdown = this.Config.AutomationInterval;
-            if (this.Config.CheckForUpdates)
-                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "Automate");
+            this.DisableOverlay();
+        }
+
+        /// <summary>The method invoked when the player warps to a new location.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
+        {
+            this.ResetOverlayIfShown();
         }
 
         /// <summary>The method invoked when a location is added or removed.</summary>
@@ -81,7 +96,7 @@ namespace Pathoschild.Stardew.Automate
 
             try
             {
-                this.Machines.Clear();
+                this.MachineGroups.Clear();
                 foreach (GameLocation location in CommonHelper.GetLocations())
                     this.ReloadQueue.Add(location);
             }
@@ -125,12 +140,18 @@ namespace Pathoschild.Stardew.Automate
                 this.AutomateCountdown = this.Config.AutomationInterval;
 
                 // reload machines if needed
-                foreach (GameLocation location in this.ReloadQueue)
-                    this.ReloadMachinesIn(location);
-                this.ReloadQueue.Clear();
+                if (this.ReloadQueue.Any())
+                {
+                    foreach (GameLocation location in this.ReloadQueue)
+                        this.ReloadMachinesIn(location);
+                    this.ReloadQueue.Clear();
+
+                    this.ResetOverlayIfShown();
+                }
 
                 // process machines
-                this.ProcessMachines(this.GetAllMachines());
+                foreach (MachineGroup group in this.GetAllMachineGroups())
+                    group.Automate();
             }
             catch (Exception ex)
             {
@@ -138,16 +159,38 @@ namespace Pathoschild.Stardew.Automate
             }
         }
 
+        /// <summary>The method invoked when the player presses a button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
+        {
+            try
+            {
+                // toggle overlay
+                if (Context.IsPlayerFree && this.Config.Controls.ToggleOverlay.Contains(e.Button))
+                {
+                    if (this.CurrentOverlay != null)
+                        this.DisableOverlay();
+                    else
+                        this.EnableOverlay();
+                }
+            }
+            catch (Exception ex)
+            {
+                this.HandleError(ex, "handling key input");
+            }
+        }
+
         /****
         ** Methods
         ****/
-        /// <summary>Get the machines in every location.</summary>
-        private IEnumerable<MachineMetadata> GetAllMachines()
+        /// <summary>Get the machine groups in every location.</summary>
+        private IEnumerable<MachineGroup> GetAllMachineGroups()
         {
-            foreach (KeyValuePair<GameLocation, MachineMetadata[]> group in this.Machines)
+            foreach (KeyValuePair<GameLocation, MachineGroup[]> group in this.MachineGroups)
             {
-                foreach (MachineMetadata machine in group.Value)
-                    yield return machine;
+                foreach (MachineGroup machineGroup in group.Value)
+                    yield return machineGroup;
             }
         }
 
@@ -157,41 +200,7 @@ namespace Pathoschild.Stardew.Automate
         {
             this.VerboseLog($"Reloading machines in {location.Name}...");
 
-            this.Machines[location] = this.Factory.GetMachinesIn(location, this.Helper.Reflection).ToArray();
-        }
-
-        /// <summary>Process a set of machines.</summary>
-        /// <param name="machines">The machines to process.</param>
-        private void ProcessMachines(IEnumerable<MachineMetadata> machines)
-        {
-            machines = machines.ToArray();
-
-            this.VerboseLog($"Automating {machines.Count()} machines...");
-            foreach (MachineMetadata metadata in machines)
-            {
-                IMachine machine = metadata.Machine;
-                string summary = $"Automating {metadata.Location.Name} > {machine.GetType().Name} ({metadata.Connected.Length} pipes)...";
-
-                MachineState state = machine.GetState();
-                switch (state)
-                {
-                    case MachineState.Empty:
-                        bool pulled = machine.Pull(metadata.Connected);
-                        summary += pulled ? " accepted new input." : " no input found.";
-                        break;
-
-                    case MachineState.Done:
-                        bool pushed = metadata.Connected.TryPush(machine.GetOutput());
-                        summary += pushed ? " pushed output." : " done, but no pipes can accept its output.";
-                        break;
-
-                    default:
-                        summary += $" machine is {state.ToString().ToLower()}.";
-                        break;
-                }
-
-                this.VerboseLog($"   {summary}");
-            }
+            this.MachineGroups[location] = this.Factory.GetActiveMachinesGroups(location, this.Helper.Reflection).ToArray();
         }
 
         /// <summary>Log an error and warn the user.</summary>
@@ -209,6 +218,30 @@ namespace Pathoschild.Stardew.Automate
         {
             if (this.Config.VerboseLogging)
                 this.Monitor.Log(message, LogLevel.Trace);
+        }
+
+        /// <summary>Disable the overlay, if shown.</summary>
+        private void DisableOverlay()
+        {
+            this.CurrentOverlay?.Dispose();
+            this.CurrentOverlay = null;
+        }
+
+        /// <summary>Enable the overlay.</summary>
+        private void EnableOverlay()
+        {
+            if (this.CurrentOverlay == null)
+                this.CurrentOverlay = new OverlayMenu(this.Factory.GetMachineGroups(Game1.currentLocation, this.Helper.Reflection));
+        }
+
+        /// <summary>Reset the overlay if it's being shown.</summary>
+        private void ResetOverlayIfShown()
+        {
+            if (this.CurrentOverlay != null)
+            {
+                this.DisableOverlay();
+                this.EnableOverlay();
+            }
         }
     }
 }

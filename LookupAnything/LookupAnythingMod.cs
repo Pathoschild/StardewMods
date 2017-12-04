@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Components;
 using Pathoschild.Stardew.LookupAnything.Framework;
@@ -66,7 +65,7 @@ namespace Pathoschild.Stardew.LookupAnything
         public override void Entry(IModHelper helper)
         {
             // load config
-            this.Config = this.Helper.ReadConfig<RawModConfig>().GetParsed(this.Monitor);
+            this.Config = this.Helper.ReadConfig<ModConfig>();
 
             // load database
             this.LoadMetadata();
@@ -91,36 +90,12 @@ namespace Pathoschild.Stardew.LookupAnything
             this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config, this.Monitor);
 
             // hook up events
-            {
-                // reset low-level cache once per game day (used for expensive queries that don't change within a day)
-                SaveEvents.AfterLoad += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection, this.Helper.Translation);
-                SaveEvents.AfterSave += (sender, e) => GameHelper.ResetCache(this.Metadata, this.Helper.Reflection, this.Helper.Translation);
-
-                // hook up game events
-                SaveEvents.AfterLoad += this.ReceiveAfterLoad;
-                GraphicsEvents.OnPostRenderHudEvent += (sender, e) => this.ReceiveInterfaceRendering(Game1.spriteBatch);
-                MenuEvents.MenuClosed += (sender, e) => this.ReceiveMenuClosed(e.PriorMenu);
-
-                // hook up keyboard
-                if (this.Config.Keyboard.HasAny())
-                {
-                    ControlEvents.KeyPressed += (sender, e) => this.ReceiveKeyPress(e.KeyPressed, this.Config.Keyboard);
-                    if (this.Config.HideOnKeyUp)
-                        ControlEvents.KeyReleased += (sender, e) => this.ReceiveKeyRelease(e.KeyPressed, this.Config.Keyboard);
-                }
-
-                // hook up controller
-                if (this.Config.Controller.HasAny())
-                {
-                    ControlEvents.ControllerButtonPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-                    ControlEvents.ControllerTriggerPressed += (sender, e) => this.ReceiveKeyPress(e.ButtonPressed, this.Config.Controller);
-                    if (this.Config.HideOnKeyUp)
-                    {
-                        ControlEvents.ControllerButtonReleased += (sender, e) => this.ReceiveKeyRelease(e.ButtonReleased, this.Config.Controller);
-                        ControlEvents.ControllerTriggerReleased += (sender, e) => this.ReceiveKeyRelease(e.ButtonReleased, this.Config.Controller);
-                    }
-                }
-            }
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
+            GraphicsEvents.OnPostRenderHudEvent += this.GraphicsEvents_OnPostRenderHudEvent;
+            MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
+            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
+            if (this.Config.HideOnKeyUp)
+                InputEvents.ButtonReleased += this.InputEvents_ButtonReleased;
 
             // validate metadata
             this.IsDataValid = this.Metadata.LooksValid();
@@ -131,9 +106,10 @@ namespace Pathoschild.Stardew.LookupAnything
             }
 
             // validate translations
-            if(!helper.Translation.GetTranslations().Any())
+            if (!helper.Translation.GetTranslations().Any())
                 this.Monitor.Log("The translation files in this mod's i18n folder seem to be missing. The mod will still work, but you'll see 'missing translation' messages. Try reinstalling the mod to fix this.", LogLevel.Warn);
         }
+
 
         /*********
         ** Private methods
@@ -141,80 +117,74 @@ namespace Pathoschild.Stardew.LookupAnything
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked after the player loads a saved game.</summary>
+        /// <summary>The method invoked when a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void ReceiveAfterLoad(object sender, EventArgs e)
+        /// <param name="e">The event data.</param>
+        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
-            // check for updates
-            if (this.Config.CheckForUpdates)
-                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "LookupAnything");
+            // reset low-level cache once per game day (used for expensive queries that don't change within a day)
+            GameHelper.ResetCache(this.Metadata, this.Helper.Reflection, this.Helper.Translation, this.Monitor);
         }
 
-        /// <summary>The method invoked when the player presses an input button.</summary>
-        /// <typeparam name="TKey">The input type.</typeparam>
-        /// <param name="key">The pressed input.</param>
-        /// <param name="map">The configured input mapping.</param>
-        private void ReceiveKeyPress<TKey>(TKey key, InputMapConfiguration<TKey> map)
+        /// <summary>The method invoked when the player presses a button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
         {
-            if (!map.IsValidKey(key))
-                return;
-
             // perform bound action
-            this.Monitor.InterceptErrors("handling your input", $"handling input '{key}'", () =>
+            this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
             {
-                if (key.Equals(map.ToggleLookup))
+                var controls = this.Config.Controls;
+
+                if (controls.ToggleLookup.Contains(e.Button))
                     this.ToggleLookup(LookupMode.Cursor);
-                else if (key.Equals(map.ToggleLookupInFrontOfPlayer))
+                else if (controls.ToggleLookupInFrontOfPlayer.Contains(e.Button))
                     this.ToggleLookup(LookupMode.FacingPlayer);
-                else if (key.Equals(map.ScrollUp))
+                else if (controls.ScrollUp.Contains(e.Button))
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollUp();
-                else if (key.Equals(map.ScrollDown))
+                else if (controls.ScrollDown.Contains(e.Button))
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollDown();
-                else if (key.Equals(map.ToggleDebug))
+                else if (controls.ToggleDebug.Contains(e.Button))
                     this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
             });
         }
 
-        /// <summary>The method invoked when the player presses an input button.</summary>
-        /// <typeparam name="TKey">The input type.</typeparam>
-        /// <param name="key">The pressed input.</param>
-        /// <param name="map">The configured input mapping.</param>
-        private void ReceiveKeyRelease<TKey>(TKey key, InputMapConfiguration<TKey> map)
+        /// <summary>The method invoked when the player releases a button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void InputEvents_ButtonReleased(object sender, EventArgsInput e)
         {
-            if (!map.IsValidKey(key))
-                return;
-
             // perform bound action
-            this.Monitor.InterceptErrors("handling your input", $"handling input '{key}'", () =>
+            this.Monitor.InterceptErrors("handling your input", $"handling input release '{e.Button}'", () =>
             {
-                if (key.Equals(map.ToggleLookup) || key.Equals(map.ToggleLookupInFrontOfPlayer))
-                {
-                    this.PreviousMenus.Clear();
+                var controls = this.Config.Controls;
+
+                if (controls.ToggleLookup.Contains(e.Button) || controls.ToggleLookupInFrontOfPlayer.Contains(e.Button))
                     this.HideLookup();
-                }
             });
         }
 
         /// <summary>The method invoked when the player closes a displayed menu.</summary>
-        /// <param name="closedMenu">The menu which the player just closed.</param>
-        private void ReceiveMenuClosed(IClickableMenu closedMenu)
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void MenuEvents_MenuClosed(object sender, EventArgsClickableMenuClosed e)
         {
             // restore the previous menu if it was hidden to show the lookup UI
             this.Monitor.InterceptErrors("restoring the previous menu", () =>
             {
-                if (closedMenu is LookupMenu && this.PreviousMenus.Any())
+                if (e.PriorMenu is LookupMenu && this.PreviousMenus.Any())
                     Game1.activeClickableMenu = this.PreviousMenus.Pop();
             });
         }
 
         /// <summary>The method invoked when the interface is rendering.</summary>
-        /// <param name="spriteBatch">The sprite batch being drawn.</param>
-        private void ReceiveInterfaceRendering(SpriteBatch spriteBatch)
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void GraphicsEvents_OnPostRenderHudEvent(object sender, EventArgs e)
         {
             // render debug interface
             if (this.DebugInterface.Enabled)
-                this.DebugInterface.Draw(spriteBatch);
+                this.DebugInterface.Draw(Game1.spriteBatch);
         }
 
         /****
@@ -275,7 +245,10 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 this.Monitor.Log($"Showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.", LogLevel.Trace);
                 if (Game1.activeClickableMenu != null)
-                    this.PreviousMenus.Push(Game1.activeClickableMenu);
+                {
+                    if (!this.Config.HideOnKeyUp || !(Game1.activeClickableMenu is LookupMenu))
+                        this.PreviousMenus.Push(Game1.activeClickableMenu);
+                }
                 Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor);
             });
         }

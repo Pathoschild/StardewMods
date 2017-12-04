@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.LookupAnything
         ** Properties
         *********/
         /// <summary>The cached object data.</summary>
-        private static readonly Lazy<ObjectModel[]> Objects = new Lazy<ObjectModel[]>(() => DataParser.GetObjects().ToArray());
+        private static Lazy<ObjectModel[]> Objects;
 
         /// <summary>The cached villagers' gift tastes.</summary>
         private static Lazy<GiftTasteModel[]> GiftTastes;
@@ -44,8 +44,10 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public static void ResetCache(Metadata metadata, IReflectionHelper reflectionHelper, ITranslationHelper translations)
+        /// <param name="monitor">The monitor with which to log errors.</param>
+        public static void ResetCache(Metadata metadata, IReflectionHelper reflectionHelper, ITranslationHelper translations, IMonitor monitor)
         {
+            GameHelper.Objects = new Lazy<ObjectModel[]>(() => DataParser.GetObjects(monitor).ToArray());
             GameHelper.GiftTastes = new Lazy<GiftTasteModel[]>(() => DataParser.GetGiftTastes(GameHelper.Objects.Value).ToArray());
             GameHelper.Recipes = new Lazy<RecipeModel[]>(() => DataParser.GetRecipes(metadata, reflectionHelper, translations).ToArray());
         }

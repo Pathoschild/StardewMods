@@ -1,8 +1,8 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
 using Pathoschild.Stardew.Common;
@@ -73,6 +73,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
         /// <summary>The default highlight function for the player inventory items.</summary>
         private readonly InventoryMenu.highlightThisItem DefaultInventoryHighlighter;
+
+        /// <summary>Whether the chest menu is ready to close.</summary>
+        private bool CanCloseChest => this.Menu.readyToClose();
+
 
         /****
         ** Access UI
@@ -193,19 +197,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             // access mode
             if (!this.ActiveElement.HasFlag(Element.EditForm))
             {
+                float navOpacity = this.CanCloseChest ? 1f : 0.5f;
+
                 // tabs
-                this.ChestTab.Draw(batch);
-                this.GroupTab?.Draw(batch);
+                this.ChestTab.Draw(batch, navOpacity);
+                this.GroupTab?.Draw(batch, navOpacity);
 
                 // tab dropdowns
                 if (this.ActiveElement == Element.ChestList)
-                    this.ChestSelector.Draw(batch);
+                    this.ChestSelector.Draw(batch, navOpacity);
                 if (this.ActiveElement == Element.GroupList)
-                    this.GroupSelector.Draw(batch);
+                    this.GroupSelector.Draw(batch, navOpacity);
 
                 // edit button
-                this.EditButton.draw(batch);
-                this.SortInventoryButton.draw(batch);
+                if (this.Chest.Container.IsEditable)
+                    this.EditButton.draw(batch, Color.White * navOpacity, 1f);
+                this.SortInventoryButton.draw(batch, Color.White * navOpacity, 1f);
             }
 
             // edit mode
@@ -229,7 +236,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
                 // Location name
                 {
-                    string locationName = this.Chest.LocationName;
+                    string locationName = this.Chest.Location.Name;
                     if (this.Chest.Tile != Vector2.Zero)
                         locationName += " (" + this.Translations.Get("label.location.tile", new { x = this.Chest.Tile.X, y = this.Chest.Tile.Y }) + ")";
 
@@ -293,57 +300,35 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.ReinitialiseComponents();
         }
 
-        /// <summary>The method invoked when the player presses a key.</summary>
-        /// <param name="input">The key that was pressed.</param>
-        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
-        protected override bool ReceiveKeyPress(Keys input)
-        {
-            return this.ReceiveKey(input, this.Config.Keyboard);
-        }
-
-        /// <summary>The method invoked when the player presses a controller button.</summary>
+        /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="input">The button that was pressed.</param>
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
-        protected override bool ReceiveButtonPress(Buttons input)
+        protected override bool ReceiveButtonPress(SButton input)
         {
-            return this.ReceiveKey(input, this.Config.Controller);
-        }
-
-        /// <summary>The method invoked when the player presses a controller trigger.</summary>
-        /// <param name="input">The trigger that was pressed.</param>
-        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
-        protected override bool ReceiveTriggerPress(Buttons input)
-        {
-            return this.ReceiveKey(input, this.Config.Controller);
-        }
-
-        /// <summary>The method invoked when the player presses a key.</summary>
-        /// <typeparam name="T">The key type.</typeparam>
-        /// <param name="input">The key that was pressed.</param>
-        /// <param name="config">The input configuration.</param>
-        /// <returns>Whether the key has been handled and shouldn't be propagated further.</returns>
-        public bool ReceiveKey<T>(T input, InputMapConfiguration<T> config)
-        {
-            // ignore invalid input
-            if (this.IsInitialising() || !config.IsValidKey(input))
+            if (this.IsInitialising())
                 return false;
 
+            bool canNavigate = this.CanCloseChest;
+            var controls = this.Config.Controls;
             switch (this.ActiveElement)
             {
                 case Element.Menu:
-                    if (input.Equals(config.Toggle) || input.Equals(Keys.Escape) || input.Equals(Buttons.B))
-                        this.Exit();
-                    else if (input.Equals(config.PrevChest))
+                    if (controls.Toggle.Contains(input) || input == SButton.Escape || input == SButton.ControllerB)
+                    {
+                        if (canNavigate)
+                            this.Exit();
+                    }
+                    else if (controls.PrevChest.Contains(input) && canNavigate)
                         this.SelectPreviousChest();
-                    else if (input.Equals(config.NextChest))
+                    else if (controls.NextChest.Contains(input) && canNavigate)
                         this.SelectNextChest();
-                    else if (input.Equals(config.PrevCategory))
+                    else if (controls.PrevCategory.Contains(input) && canNavigate)
                         this.SelectPreviousCategory();
-                    else if (input.Equals(config.NextCategory))
+                    else if (controls.NextCategory.Contains(input) && canNavigate)
                         this.SelectNextCategory();
-                    else if (input.Equals(config.EditChest))
+                    else if (controls.EditChest.Contains(input) && canNavigate)
                         this.OpenEdit();
-                    else if (input.Equals(config.SortItems))
+                    else if (controls.SortItems.Contains(input))
                         this.SortInventory();
                     else
                         return false;
@@ -352,7 +337,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 case Element.ChestList:
                 case Element.GroupList:
                 case Element.EditForm:
-                    if (input.Equals(Keys.Escape) || input.Equals(Buttons.B))
+                    if (input == SButton.Escape || input == SButton.ControllerB)
                         this.ActiveElement = Element.Menu;
                     return true;
 
@@ -459,13 +444,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
                 // buttons & dropdown
                 default:
-                    if (this.EditButton.containsPoint(x, y))
+                    bool canNavigate = this.CanCloseChest;
+                    if (this.Chest.Container.IsEditable && this.EditButton.containsPoint(x, y) && canNavigate)
                         this.OpenEdit();
                     else if (this.SortInventoryButton.containsPoint(x, y))
                         this.SortInventory();
-                    else if (this.ChestTab.containsPoint(x, y))
+                    else if (this.ChestTab.containsPoint(x, y) && canNavigate)
                         this.ActiveElement = Element.ChestList;
-                    else if (this.GroupTab?.containsPoint(x, y) == true)
+                    else if (this.GroupTab?.containsPoint(x, y) == true && canNavigate)
                         this.ActiveElement = Element.GroupList;
                     else
                         return false;
@@ -482,7 +468,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             switch (this.ActiveElement)
             {
                 case Element.Menu:
-                    this.EditButton.tryHover(x, y);
+                    if (this.Chest.Container.IsEditable)
+                        this.EditButton.tryHover(x, y);
                     this.SortInventoryButton.tryHover(x, y);
                     return false;
 
@@ -531,6 +518,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             }
 
             // edit chest button overlay (based on chest dropdown position)
+            if (this.Chest.Container.IsEditable)
             {
                 Rectangle sprite = Sprites.Icons.SpeechBubble;
                 float zoom = Game1.pixelZoom / 2f;
@@ -582,11 +570,26 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.Menu.exitThisMenu();
         }
 
+        /// <summary>Get the index of a chest in the selected group.</summary>
+        /// <param name="chest">The chest to find.</param>
+        /// <param name="chests">The chests to search.</param>
+        private int GetChestIndex(ManagedChest chest, IEnumerable<ManagedChest> chests)
+        {
+            int i = 0;
+            foreach (ManagedChest cur in chests)
+            {
+                if (cur.ManagesSameInventoryAs(chest))
+                    return i;
+                i++;
+            }
+            return -1;
+        }
+
         /// <summary>Switch to the previous chest in the list.</summary>
         private void SelectPreviousChest()
         {
             ManagedChest[] chests = this.GetChestsFromCategory(this.SelectedGroup);
-            int curIndex = Array.IndexOf(chests, this.Chest);
+            int curIndex = this.GetChestIndex(this.Chest, chests);
             this.SelectChest(chests[curIndex != 0 ? curIndex - 1 : chests.Length - 1]);
         }
 
@@ -594,7 +597,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         private void SelectNextChest()
         {
             ManagedChest[] chests = this.GetChestsFromCategory(this.SelectedGroup);
-            int curIndex = Array.IndexOf(chests, this.Chest);
+            int curIndex = this.GetChestIndex(this.Chest, chests);
             this.SelectChest(chests[(curIndex + 1) % chests.Length]);
         }
 

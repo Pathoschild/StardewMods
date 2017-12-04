@@ -3,7 +3,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.Automate.Framework
 {
     /// <summary>An ingredient stack (or stacks) which can be consumed by a machine.</summary>
-    internal class Consumable
+    internal class Consumable : IConsumable
     {
         /*********
         ** Accessors

@@ -1,6 +1,11 @@
-﻿[← back to readme](README.md)
+[← back to readme](README.md)
 
 # Release notes
+## 1.4
+* Updated to SMAPI 2.1.
+* Skipping the eat/drink confirmation is now optional and disabled by default.
+* Switched to SMAPI update checks.
+
 ## 1.3
 * Added support for fishing and falling trees (both disabled by default).
 

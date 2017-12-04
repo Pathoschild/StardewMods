@@ -1,14 +1,10 @@
-﻿{
+{
   "Name": "Data Maps",
   "Author": "Pathoschild",
-  "Version": {
-    "MajorVersion": 1,
-    "MinorVersion": 0,
-    "PatchVersion": 0,
-    "Build": null
-  },
-  "MinimumApiVersion": "1.9",
+  "Version": "1.0",
+  "MinimumApiVersion": "2.1",
   "Description": "Overlays the world with metadata maps.",
   "UniqueID": "Pathoschild.DataMaps",
-  "EntryDll": "DataMaps.dll"
+  "EntryDll": "DataMaps.dll",
+  "UpdateKeys": [ ]
 }

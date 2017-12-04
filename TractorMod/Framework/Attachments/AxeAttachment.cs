@@ -21,6 +21,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>Whether to cut down fruit trees.</summary>
         private readonly bool CutFruitTrees;
 
+        /// <summary>Whether to clear live crops.</summary>
+        private readonly bool ClearCrops;
+
         /// <summary>The axe upgrade levels needed to break supported resource clumps.</summary>
         /// <remarks>Derived from <see cref="ResourceClump.performToolAction"/>.</remarks>
         private readonly IDictionary<int, int> ResourceUpgradeLevelsNeeded = new Dictionary<int, int>
@@ -39,6 +42,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         {
             this.CutTrees = config.AxeCutsTrees;
             this.CutFruitTrees = config.AxeCutsFruitTrees;
+            this.ClearCrops = config.AxeClearsCrops;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -61,8 +65,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            // clear twigs
-            if (tileObj?.Name == "Twig")
+            // clear twigs & weeds
+            if (tileObj?.Name == "Twig" || tileObj?.Name.ToLower().Contains("weed") == true)
                 return this.UseToolOnTile(tool, tile);
 
             // cut non-fruit tree
@@ -73,8 +77,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             if (tileFeature is FruitTree)
                 return this.CutFruitTrees && this.UseToolOnTile(tool, tile);
 
-            // clear dead crops
-            if (tileFeature is HoeDirt dirt && dirt.crop?.dead == true)
+            // clear crops
+            if (tileFeature is HoeDirt dirt && dirt.crop != null && (dirt.crop.dead || this.ClearCrops))
                 return this.UseToolOnTile(tool, tile);
 
             // clear stumps

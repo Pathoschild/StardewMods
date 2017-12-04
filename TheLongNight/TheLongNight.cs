@@ -1,7 +1,5 @@
-﻿using System;
+using System;
 using System.Linq;
-using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.TheLongNight.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -15,9 +13,6 @@ namespace Pathoschild.Stardew.TheLongNight
         /*********
         ** Accessors
         *********/
-        /// <summary>The mod configuration.</summary>
-        private ModConfig Config;
-
         /// <summary>Whether the mod just skipped a 10-minute interval.</summary>
         private bool JustSkipped;
 
@@ -29,9 +24,6 @@ namespace Pathoschild.Stardew.TheLongNight
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            this.Config = helper.ReadConfig<ModConfig>();
-
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
         }
 
@@ -39,16 +31,6 @@ namespace Pathoschild.Stardew.TheLongNight
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked after the player loads a saved game.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
-        {
-            // check for updates
-            if (this.Config.CheckForUpdates)
-                UpdateHelper.LogVersionCheckAsync(this.Monitor, this.ModManifest, "TheLongNight");
-        }
-
         /// <summary>The method invoked after the game updates (roughly 60 times per second).</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>

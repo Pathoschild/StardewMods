@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.TractorMod.Framework.ModAttachments;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -20,7 +21,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return tool is Hoe;
+            return tool is Hoe && tool.GetType().FullName != SeedBagAttachment.SeedBagTypeName;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
