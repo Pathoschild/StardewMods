@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.8.1
+* Fixed chests with the same name as a machine not being treated as chests.
+
 ## 1.8
 * Updated to SMAPI 2.1.
 * Added machine chaining. <small>(Chests now automate machines which are connected indirectly through other machines.)</small>

@@ -128,7 +128,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         private bool TryGetMachine(GameLocation location, Vector2 tile, IReflectionHelper reflection, out IMachine machine, out Vector2 size)
         {
             // object machine
-            if (location.objects.TryGetValue(tile, out SObject obj))
+            if (location.objects.TryGetValue(tile, out SObject obj) && !(obj is Chest))
             {
                 machine = this.GetMachine(obj, location, tile, reflection);
                 if (machine != null)
