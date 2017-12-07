@@ -11,6 +11,19 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
     internal class TraversableMap : IDataMap
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>The color for a passable tile.</summary>
+        private readonly Color ClearColor = Color.Green;
+
+        /// <summary>The color for a passable but occupied tile.</summary>
+        private readonly Color OccupiedColor = Color.Orange;
+
+        /// <summary>The color for an impassable tile.</summary>
+        private readonly Color ImpassableColor = Color.Red;
+
+
+        /*********
         ** Accessors
         *********/
         /// <summary>The map's display name.</summary>
@@ -31,9 +44,9 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         {
             return new[]
             {
-                new LegendEntry("Clear", Color.Green),
-                new LegendEntry("Occupied", Color.Orange),
-                new LegendEntry("Impassable", Color.Red)
+                new LegendEntry("Clear", this.ClearColor),
+                new LegendEntry("Occupied", this.OccupiedColor),
+                new LegendEntry("Impassable", this.ImpassableColor)
             };
         }
 
@@ -43,7 +56,13 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         public IEnumerable<TileGroup> Update(GameLocation location, IEnumerable<Vector2> visibleTiles)
         {
             TileData[] tiles = this.GetTiles(location, visibleTiles).ToArray();
-            yield return new TileGroup(tiles);
+
+            // passable tiles
+            TileData[] passableTiles = tiles.Where(p => p.Color == this.ClearColor).ToArray();
+            yield return new TileGroup(passableTiles, outerBorders: true);
+
+            // other tiles
+            yield return new TileGroup(tiles.Except(passableTiles).ToArray());
         }
 
 
@@ -62,11 +81,11 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
 
                 Color color;
                 if (isPassable && isClear)
-                    color = Color.Green;
+                    color = this.ClearColor;
                 else if (isPassable)
-                    color = Color.Orange;
+                    color = this.OccupiedColor;
                 else
-                    color = Color.Red;
+                    color = this.ImpassableColor;
 
                 yield return new TileData(tile, color);
             }

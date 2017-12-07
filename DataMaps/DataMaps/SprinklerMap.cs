@@ -13,6 +13,16 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
     internal class SprinklerMap : IDataMap
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>The color for sprinkled tiles.</summary>
+        private readonly Color WetColor = Color.Green;
+
+        /// <summary>The color for unsprinkled tiles.</summary>
+        private readonly Color DryColor = Color.Red;
+
+
+        /*********
         ** Accessors
         *********/
         /// <summary>The map's display name.</summary>
@@ -33,8 +43,8 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         {
             return new[]
             {
-                new LegendEntry("Coverage", Color.Green),
-                new LegendEntry("Dry Crop", Color.Red)
+                new LegendEntry("Coverage", this.WetColor),
+                new LegendEntry("Dry Crop", this.DryColor)
             };
         }
 
@@ -60,14 +70,14 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             HashSet<Vector2> covered = new HashSet<Vector2>();
             foreach (Object sprinkler in sprinklers)
             {
-                TileData[] tiles = this.GetCoverage(sprinkler).Select(pos => new TileData(pos, Color.Green)).ToArray();
+                TileData[] tiles = this.GetCoverage(sprinkler).Select(pos => new TileData(pos, this.WetColor)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
                 yield return new TileGroup(tiles, outerBorders: true);
             }
 
             // yield dry crops
-            TileData[] dryCrops = this.GetDryCrops(location, visibleTiles.ToArray(), covered).Select(pos => new TileData(pos, Color.Red)).ToArray();
+            TileData[] dryCrops = this.GetDryCrops(location, visibleTiles.ToArray(), covered).Select(pos => new TileData(pos, this.DryColor)).ToArray();
             yield return new TileGroup(dryCrops, outerBorders: true);
         }
 
