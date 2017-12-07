@@ -5,7 +5,7 @@ using StardewModdingAPI;
 namespace Pathoschild.Stardew.TestContentMod
 {
     /// <summary>The mod entry point.</summary>
-    public class TestContentMod : Mod, IAssetEditor, IAssetLoader
+    internal class ModEntry : Mod, IAssetEditor, IAssetLoader
     {
         /*********
         ** Public methods

@@ -9,7 +9,7 @@ using StardewModdingAPI.Events;
 namespace Pathoschild.Stardew.DataMaps
 {
     /// <summary>The mod entry point.</summary>
-    public class DataMapsMod : Mod
+    internal class ModEntry : Mod
     {
         /*********
         ** Properties

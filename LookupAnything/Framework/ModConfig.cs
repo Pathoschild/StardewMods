@@ -30,7 +30,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         ** Nested models
         *********/
         /// <summary>A set of control bindings.</summary>
-        public class ModConfigControls
+        internal class ModConfigControls
         {
             /// <summary>The control which toggles the lookup UI for something under the cursor.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]

@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
@@ -9,7 +9,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         public LegacySaveEntry[] Saves { get; set; }
 
         /// <summary>The model for one save's data.</summary>
-        public class LegacySaveEntry
+        internal class LegacySaveEntry
         {
             /// <summary>The player name.</summary>
             public string FarmerName { get; set; }

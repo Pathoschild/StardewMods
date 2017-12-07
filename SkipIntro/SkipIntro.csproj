@@ -41,7 +41,7 @@
     </Compile>
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SkipIntroMod.cs" />
+    <Compile Include="ModEntry.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />

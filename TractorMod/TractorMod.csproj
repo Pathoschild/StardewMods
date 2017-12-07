@@ -59,7 +59,7 @@
     <Compile Include="Framework\TractorMount.cs" />
     <Compile Include="Framework\TractorStatic.cs" />
     <Compile Include="Framework\TractorGarage.cs" />
-    <Compile Include="TractorMod.cs" />
+    <Compile Include="ModEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

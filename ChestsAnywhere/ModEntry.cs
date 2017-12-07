@@ -14,7 +14,7 @@ using StardewValley.Menus;
 namespace Pathoschild.Stardew.ChestsAnywhere
 {
     /// <summary>The mod entry point.</summary>
-    public class ChestsAnywhereMod : Mod
+    internal class ModEntry : Mod
     {
         /*********
         ** Properties

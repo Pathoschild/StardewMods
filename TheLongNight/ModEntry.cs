@@ -8,7 +8,7 @@ using SFarmer = StardewValley.Farmer;
 namespace Pathoschild.Stardew.TheLongNight
 {
     /// <summary>The mod entry point.</summary>
-    public class TheLongNight : Mod
+    internal class ModEntry : Mod
     {
         /*********
         ** Accessors

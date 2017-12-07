@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         ** Nested models
         *********/
         /// <summary>A set of control bindings.</summary>
-        public class ModConfigControls
+        internal class ModConfigControls
         {
             /// <summary>The button which toggles the automation overlay.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]

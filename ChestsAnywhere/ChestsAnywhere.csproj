@@ -52,7 +52,7 @@
     </Compile>
     <Compile Include="Framework\RangeHandler.cs" />
     <Compile Include="ChestFactory.cs" />
-    <Compile Include="ChestsAnywhereMod.cs" />
+    <Compile Include="ModEntry.cs" />
     <Compile Include="Framework\ChestRange.cs" />
     <Compile Include="Framework\Containers\ChestContainer.cs" />
     <Compile Include="Framework\Containers\IContainer.cs" />
