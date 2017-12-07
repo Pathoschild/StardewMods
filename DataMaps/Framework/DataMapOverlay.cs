@@ -15,8 +15,8 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /*********
         ** Properties
         *********/
-        /// <summary>The number of pixels between the color box and its label.</summary>
-        private readonly int LegendColorBoxPadding = 5;
+        /// <summary>The pixel padding between the color box and its label.</summary>
+        private readonly int LegendColorPadding = 5;
 
         /// <summary>The size of the margin around the displayed legend.</summary>
         private readonly int Margin = 30;
@@ -27,17 +27,11 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>The data map to render.</summary>
         private readonly IDataMap Map;
 
-        /// <summary>The UI bounds to draw.</summary>
-        private Rectangle Bounds;
+        /// <summary>The width of the top-left boxes.</summary>
+        private int BoxContentWidth;
 
-        /// <summary>The pixel size of a color box.</summary>
-        private int LegendColorBoxSize;
-
-        /// <summary>The maximum label width.</summary>
-        private int LegendContentWidth;
-
-        /// <summary>The combined height of the labels.</summary>
-        private int LegendContentHeight;
+        /// <summary>The pixel size of a color box in the legend.</summary>
+        private int LegendColorSize;
 
         /// <summary>The legend entries to show.</summary>
         private LegendEntry[] Legend;
@@ -93,40 +87,36 @@ namespace Pathoschild.Stardew.DataMaps.Framework
                 spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize), tile.Color * .3f);
             }
 
-            // draw legend
-            if (this.Legend.Any())
+            // draw top-left boxes
             {
                 // calculate dimensions
-                var bounds = this.Bounds;
-                int cornerWidth = Sprites.Legend.TopLeft.Width * Game1.pixelZoom;
-                int cornerHeight = Sprites.Legend.TopLeft.Height * Game1.pixelZoom;
-                int innerWidth = bounds.Width - cornerWidth * 2;
-                int innerHeight = bounds.Height - cornerHeight * 2;
+                int topOffset = this.Margin;
+                int leftOffset = this.Margin;
 
-                // draw scroll background
-                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Left + cornerWidth, bounds.Top + cornerHeight, innerWidth, innerHeight), Sprites.Legend.Background, Color.White);
-
-                // draw borders
-                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Left + cornerWidth, bounds.Top, innerWidth, cornerHeight), Sprites.Legend.Top, Color.White);
-                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Left + cornerWidth, bounds.Bottom - cornerHeight, innerWidth, cornerHeight), Sprites.Legend.Bottom, Color.White);
-                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Left, bounds.Top + cornerHeight, cornerWidth, innerHeight), Sprites.Legend.Left, Color.White);
-                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Right - cornerWidth, bounds.Top + cornerHeight, cornerWidth, innerHeight), Sprites.Legend.Right, Color.White);
-
-                // draw corners
-                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Left, bounds.Top, cornerWidth, cornerHeight), Sprites.Legend.TopLeft, Color.White);
-                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Left, bounds.Bottom - cornerHeight, cornerWidth, cornerHeight), Sprites.Legend.BottomLeft, Color.White);
-                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Right - cornerWidth, bounds.Top, cornerWidth, cornerHeight), Sprites.Legend.TopRight, Color.White);
-                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Right - cornerWidth, bounds.Bottom - cornerHeight, cornerWidth, cornerHeight), Sprites.Legend.BottomRight, Color.White);
-
-                // draw text
-                for (int i = 0; i < this.Legend.Length; i++)
+                // draw overlay label
                 {
-                    LegendEntry value = this.Legend[i];
-                    int leftOffset = bounds.X + cornerWidth + this.Padding;
-                    int topOffset = bounds.Y + cornerHeight + this.Padding + i * this.LegendColorBoxSize;
+                    Vector2 labelSize = Game1.smallFont.MeasureString(this.Map.Name);
+                    this.DrawScroll(spriteBatch, leftOffset, topOffset, this.BoxContentWidth, (int)labelSize.Y, out Vector2 contentPos, out Rectangle bounds);
 
-                    spriteBatch.DrawLine(leftOffset, topOffset, new Vector2(this.LegendColorBoxSize), value.Color);
-                    spriteBatch.DrawString(Game1.smallFont, value.Name, new Vector2(leftOffset + this.LegendColorBoxSize + this.LegendColorBoxPadding, topOffset + 2), Color.Black);
+                    contentPos = contentPos + new Vector2((this.BoxContentWidth - labelSize.X) / 2, 0); // center label in box
+                    spriteBatch.DrawString(Game1.smallFont, this.Map.Name, contentPos, Color.Black);
+
+                    topOffset += bounds.Height + this.Padding;
+                }
+
+                // draw legend
+                if (this.Legend.Any())
+                {
+                    this.DrawScroll(spriteBatch, leftOffset, topOffset, this.BoxContentWidth, this.Legend.Length * this.LegendColorSize, out Vector2 contentPos, out Rectangle bounds);
+                    for (int i = 0; i < this.Legend.Length; i++)
+                    {
+                        LegendEntry value = this.Legend[i];
+                        int legendX = (int)contentPos.X;
+                        int legendY = (int)(contentPos.Y + i * this.LegendColorSize);
+
+                        spriteBatch.DrawLine(legendX, legendY, new Vector2(this.LegendColorSize), value.Color);
+                        spriteBatch.DrawString(Game1.smallFont, value.Name, new Vector2(legendX + this.LegendColorSize + this.LegendColorPadding, legendY + 2), Color.Black);
+                    }
                 }
             }
         }
@@ -142,24 +132,52 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>Recalculate the component positions and dimensions.</summary>
         private void RecalculateDimensions()
         {
-            // get corner dimensions
-            var corner = Sprites.Legend.TopLeft;
+            // get content widths
+            float legendColorSize = Game1.smallFont.MeasureString("X").Y;
+            float labelWidth = Game1.smallFont.MeasureString(this.Map.Name).X;
+            float legendContentWidth = legendColorSize + this.LegendColorPadding + (int)this.Legend.Select(p => Game1.smallFont.MeasureString(p.Name).X).Max();
+
+            // cache values
+            this.LegendColorSize = (int)legendColorSize;
+            this.BoxContentWidth = (int)Math.Max(labelWidth, legendContentWidth);
+        }
+
+        /// <summary>Draw a scroll background.</summary>
+        /// <param name="spriteBatch">The sprite batch to which to draw.</param>
+        /// <param name="x">The top-left X pixel coordinate at which to draw the scroll.</param>
+        /// <param name="y">The top-left Y pixel coordinate at which to draw the scroll.</param>
+        /// <param name="contentWidth">The scroll content's pixel width.</param>
+        /// <param name="contentHeight">The scroll content's pixel height.</param>'
+        /// <param name="contentPos">The pixel position at which the content begins.</param>
+        /// <param name="bounds">The scroll's outer bounds.</param>
+        private void DrawScroll(SpriteBatch spriteBatch, int x, int y, int contentWidth, int contentHeight, out Vector2 contentPos, out Rectangle bounds)
+        {
+            Rectangle corner = Sprites.Legend.TopLeft;
             int cornerWidth = corner.Width * Game1.pixelZoom;
             int cornerHeight = corner.Height * Game1.pixelZoom;
+            int innerWidth = contentWidth + this.Padding * 2;
+            int innerHeight = contentHeight + this.Padding * 2;
+            int outerWidth = innerWidth + cornerWidth * 2;
+            int outerHeight = innerHeight + cornerHeight * 2;
 
-            // calculate legend dimensions
-            if (this.Legend.Any())
-            {
-                this.LegendColorBoxSize = (int)Game1.smallFont.MeasureString("X").Y;
-                this.LegendContentWidth = this.LegendColorBoxSize + this.LegendColorBoxPadding + (int)this.Legend.Select(p => Game1.smallFont.MeasureString(p.Name).X).Max();
-                this.LegendContentHeight = this.Legend.Length * this.LegendColorBoxSize;
-                this.Bounds = new Rectangle(
-                    x: this.Margin,
-                    y: this.Margin,
-                    width: this.LegendContentWidth + (cornerWidth + this.Padding) * 2,
-                    height: this.LegendContentHeight + (cornerHeight + this.Padding) * 2
-                );
-            }
+            // draw scroll background
+            spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(x + cornerWidth, y + cornerHeight, innerWidth, innerHeight), Sprites.Legend.Background, Color.White);
+
+            // draw borders
+            spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(x + cornerWidth, y, innerWidth, cornerHeight), Sprites.Legend.Top, Color.White);
+            spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(x + cornerWidth, y + cornerHeight + innerHeight, innerWidth, cornerHeight), Sprites.Legend.Bottom, Color.White);
+            spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(x, y + cornerHeight, cornerWidth, innerHeight), Sprites.Legend.Left, Color.White);
+            spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(x + cornerWidth + innerWidth, y + cornerHeight, cornerWidth, innerHeight), Sprites.Legend.Right, Color.White);
+
+            // draw corners
+            spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(x, y, cornerWidth, cornerHeight), Sprites.Legend.TopLeft, Color.White);
+            spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(x, y + cornerHeight + innerHeight, cornerWidth, cornerHeight), Sprites.Legend.BottomLeft, Color.White);
+            spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(x + cornerWidth + innerWidth, y, cornerWidth, cornerHeight), Sprites.Legend.TopRight, Color.White);
+            spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(x + cornerWidth + innerWidth, y + cornerHeight + innerHeight, cornerWidth, cornerHeight), Sprites.Legend.BottomRight, Color.White);
+
+            // set out params
+            contentPos = new Vector2(x + cornerWidth + this.Padding, y + cornerHeight + this.Padding);
+            bounds = new Rectangle(x, y, outerWidth, outerHeight);
         }
 
         /// <summary>Get all tiles currently visible to the player.</summary>

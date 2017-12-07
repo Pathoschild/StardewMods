@@ -10,8 +10,21 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
     internal class TraversableMap : IDataMap
     {
         /*********
+        ** Accessors
+        *********/
+        /// <summary>The map's display name.</summary>
+        public string Name { get; }
+
+
+        /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        public TraversableMap()
+        {
+            this.Name = "Accessibility";
+        }
+
         /// <summary>Get the legend entries to display.</summary>
         public IEnumerable<LegendEntry> GetLegendEntries()
         {

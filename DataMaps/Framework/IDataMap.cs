@@ -7,6 +7,16 @@ namespace Pathoschild.Stardew.DataMaps.Framework
     /// <summary>Provides metadata to display in the overlay.</summary>
     internal interface IDataMap
     {
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The map's display name.</summary>
+        string Name { get; }
+
+
+        /*********
+        ** Methods
+        *********/
         /// <summary>Get the legend entries to display.</summary>
         IEnumerable<LegendEntry> GetLegendEntries();
 
