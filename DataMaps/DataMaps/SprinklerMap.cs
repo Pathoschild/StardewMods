@@ -10,7 +10,7 @@ using Object = StardewValley.Object;
 namespace Pathoschild.Stardew.DataMaps.DataMaps
 {
     /// <summary>A data map which shows sprinkler coverage.</summary>
-    internal class SprinklerCoverageMap : IDataMap
+    internal class SprinklerMap : IDataMap
     {
         /*********
         ** Accessors
@@ -23,9 +23,9 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public SprinklerCoverageMap()
+        public SprinklerMap()
         {
-            this.Name = "Sprinkler Coverage";
+            this.Name = "Sprinklers";
         }
 
         /// <summary>Get the legend entries to display.</summary>
