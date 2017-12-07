@@ -21,7 +21,8 @@ These overlays are supported:
 
 overlay     | information shown
 ----------- | -----------------
-Sprinklers  | Shows sprinkler coverage, and highlights crops that aren't covered.
+Scarecrows  | Shows scarecrow coverage, and highlights unprotected crops.
+Sprinklers  | Shows sprinkler coverage, and highlights unsprinkled crops.
 Traversable | Shows where the player can walk; useful for finding hidden paths or nooks.
 
 ## Configuration

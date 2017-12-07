@@ -43,8 +43,8 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         {
             return new[]
             {
-                new LegendEntry("Coverage", this.WetColor),
-                new LegendEntry("Dry Crop", this.DryColor)
+                new LegendEntry("Covered", this.WetColor),
+                new LegendEntry("Dry Crops", this.DryColor)
             };
         }
 
@@ -95,6 +95,13 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
                 || obj.parentSheetIndex == 645; // iridium
         }
 
+        /// <summary>Get whether a map terrain feature is a crop.</summary>
+        /// <param name="terrain">The map terrain feature.</param>
+        private bool IsCrop(TerrainFeature terrain)
+        {
+            return terrain is HoeDirt dirt && dirt.crop != null;
+        }
+
         /// <summary>Get a sprinkler tile radius.</summary>
         /// <param name="sprinkler">The sprinkler whose radius to get.</param>
         /// <remarks>Derived from <see cref="Object.DayUpdate"/>.</remarks>
@@ -142,7 +149,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
                 if (coveredTiles.Contains(tile))
                     continue;
 
-                if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrain) && terrain is HoeDirt)
+                if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrain) && this.IsCrop(terrain))
                     yield return tile;
             }
         }
