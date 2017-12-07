@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using StardewValley;
 using xTile.Layers;
 
-namespace Pathoschild.Stardew.Automate.Framework
+namespace Pathoschild.Stardew.Common
 {
     /// <summary>Provides extension methods for working with tiles.</summary>
     internal static class TileHelper

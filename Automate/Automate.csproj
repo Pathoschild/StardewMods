@@ -48,7 +48,6 @@
     <Compile Include="IContainer.cs" />
     <Compile Include="Framework\OverlayMenu.cs" />
     <Compile Include="Recipe.cs" />
-    <Compile Include="Framework\TileHelper.cs" />
     <Compile Include="Framework\TrackedItem.cs" />
     <Compile Include="Framework\StorageManager.cs" />
     <Compile Include="Framework\GenericMachine.cs" />
