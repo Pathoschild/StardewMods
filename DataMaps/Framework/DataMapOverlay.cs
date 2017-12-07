@@ -15,11 +15,32 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /*********
         ** Properties
         *********/
-        /// <summary>The legend to display (if any).</summary>
-        private readonly LegendComponent Legend;
+        /// <summary>The number of pixels between the color box and its label.</summary>
+        private readonly int LegendColorBoxPadding = 5;
+
+        /// <summary>The size of the margin around the displayed legend.</summary>
+        private readonly int Margin = 30;
+
+        /// <summary>The padding between the border and content.</summary>
+        private readonly int Padding = 5;
 
         /// <summary>The data map to render.</summary>
         private readonly IDataMap Map;
+
+        /// <summary>The UI bounds to draw.</summary>
+        private Rectangle Bounds;
+
+        /// <summary>The pixel size of a color box.</summary>
+        private int LegendColorBoxSize;
+
+        /// <summary>The maximum label width.</summary>
+        private int LegendContentWidth;
+
+        /// <summary>The combined height of the labels.</summary>
+        private int LegendContentHeight;
+
+        /// <summary>The legend entries to show.</summary>
+        private LegendEntry[] Legend;
 
         /// <summary>The tiles to render.</summary>
         private TileData[] Tiles;
@@ -33,7 +54,9 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         public DataMapOverlay(IDataMap map)
         {
             this.Map = map;
-            this.Legend = new LegendComponent(map.GetLegendEntries().ToArray());
+            this.Legend = map.GetLegendEntries().ToArray();
+
+            this.RecalculateDimensions();
         }
 
         /// <summary>Update the overlay.</summary>
@@ -71,7 +94,41 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             }
 
             // draw legend
-            this.Legend?.Draw(spriteBatch);
+            if (this.Legend.Any())
+            {
+                // calculate dimensions
+                var bounds = this.Bounds;
+                int cornerWidth = Sprites.Legend.TopLeft.Width * Game1.pixelZoom;
+                int cornerHeight = Sprites.Legend.TopLeft.Height * Game1.pixelZoom;
+                int innerWidth = bounds.Width - cornerWidth * 2;
+                int innerHeight = bounds.Height - cornerHeight * 2;
+
+                // draw scroll background
+                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Left + cornerWidth, bounds.Top + cornerHeight, innerWidth, innerHeight), Sprites.Legend.Background, Color.White);
+
+                // draw borders
+                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Left + cornerWidth, bounds.Top, innerWidth, cornerHeight), Sprites.Legend.Top, Color.White);
+                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Left + cornerWidth, bounds.Bottom - cornerHeight, innerWidth, cornerHeight), Sprites.Legend.Bottom, Color.White);
+                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Left, bounds.Top + cornerHeight, cornerWidth, innerHeight), Sprites.Legend.Left, Color.White);
+                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Right - cornerWidth, bounds.Top + cornerHeight, cornerWidth, innerHeight), Sprites.Legend.Right, Color.White);
+
+                // draw corners
+                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Left, bounds.Top, cornerWidth, cornerHeight), Sprites.Legend.TopLeft, Color.White);
+                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Left, bounds.Bottom - cornerHeight, cornerWidth, cornerHeight), Sprites.Legend.BottomLeft, Color.White);
+                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Right - cornerWidth, bounds.Top, cornerWidth, cornerHeight), Sprites.Legend.TopRight, Color.White);
+                spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Right - cornerWidth, bounds.Bottom - cornerHeight, cornerWidth, cornerHeight), Sprites.Legend.BottomRight, Color.White);
+
+                // draw text
+                for (int i = 0; i < this.Legend.Length; i++)
+                {
+                    LegendEntry value = this.Legend[i];
+                    int leftOffset = bounds.X + cornerWidth + this.Padding;
+                    int topOffset = bounds.Y + cornerHeight + this.Padding + i * this.LegendColorBoxSize;
+
+                    spriteBatch.DrawLine(leftOffset, topOffset, new Vector2(this.LegendColorBoxSize), value.Color);
+                    spriteBatch.DrawString(Game1.smallFont, value.Name, new Vector2(leftOffset + this.LegendColorBoxSize + this.LegendColorBoxPadding, topOffset + 2), Color.Black);
+                }
+            }
         }
 
         /// <summary>The method invoked when the player resizes the game windoww.</summary>
@@ -79,7 +136,30 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <param name="newBounds">The new game window bounds.</param>
         protected override void ReceiveGameWindowResized(XRectangle oldBounds, XRectangle newBounds)
         {
-            this.Legend?.ReceiveWindowSizeChanged(oldBounds, newBounds);
+            this.RecalculateDimensions();
+        }
+
+        /// <summary>Recalculate the component positions and dimensions.</summary>
+        private void RecalculateDimensions()
+        {
+            // get corner dimensions
+            var corner = Sprites.Legend.TopLeft;
+            int cornerWidth = corner.Width * Game1.pixelZoom;
+            int cornerHeight = corner.Height * Game1.pixelZoom;
+
+            // calculate legend dimensions
+            if (this.Legend.Any())
+            {
+                this.LegendColorBoxSize = (int)Game1.smallFont.MeasureString("X").Y;
+                this.LegendContentWidth = this.LegendColorBoxSize + this.LegendColorBoxPadding + (int)this.Legend.Select(p => Game1.smallFont.MeasureString(p.Name).X).Max();
+                this.LegendContentHeight = this.Legend.Length * this.LegendColorBoxSize;
+                this.Bounds = new Rectangle(
+                    x: this.Margin,
+                    y: this.Margin,
+                    width: this.LegendContentWidth + (cornerWidth + this.Padding) * 2,
+                    height: this.LegendContentHeight + (cornerHeight + this.Padding) * 2
+                );
+            }
         }
 
         /// <summary>Get all tiles currently visible to the player.</summary>
