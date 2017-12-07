@@ -1,31 +1,32 @@
-﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataMaps.Framework;
 using StardewValley;
 using xTile.Dimensions;
 
-namespace Pathoschild.Stardew.DataMaps.Overlays
+namespace Pathoschild.Stardew.DataMaps.DataMaps
 {
-    /// <summary>An overlay which shows whether tiles are traversable by the player.</summary>
-    internal class TraversableOverlay : DataMapOverlay
+    /// <summary>A data map which shows whether tiles are traversable by the player.</summary>
+    internal class TraversableMap : IDataMap
     {
         /*********
         ** Public methods
         *********/
-        /// <summary>Construct an instance.</summary>
-        public TraversableOverlay()
-            : base(new LegendComponent(Tuple.Create(Color.Green, "Clear"), Tuple.Create(Color.Orange, "Occupied"), Tuple.Create(Color.Red, "Impassable")))
-        { }
+        /// <summary>Get the legend entries to display.</summary>
+        public IEnumerable<LegendEntry> GetLegendEntries()
+        {
+            return new[]
+            {
+                new LegendEntry("Clear", Color.Green),
+                new LegendEntry("Occupied", Color.Orange),
+                new LegendEntry("Impassable", Color.Red)
+            };
+        }
 
-
-        /*********
-        ** Protected methods
-        *********/
-        /// <summary>Get updated tile overlay data.</summary>
+        /// <summary>Get the updated data map tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
-        protected override IEnumerable<TileData> Update(GameLocation location, IEnumerable<Vector2> visibleTiles)
+        public IEnumerable<TileData> Update(GameLocation location, IEnumerable<Vector2> visibleTiles)
         {
             foreach (Vector2 tile in visibleTiles)
             {

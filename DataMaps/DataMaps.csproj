@@ -36,13 +36,15 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Framework\Sprites.cs" />
-    <Compile Include="Overlays\DataMapOverlay.cs" />
-    <Compile Include="Framework\TileData.cs" />
+    <Compile Include="DataMaps\TraversableMap.cs" />
+    <Compile Include="Framework\DataMapOverlay.cs" />
+    <Compile Include="Framework\IDataMap.cs" />
+    <Compile Include="Framework\LegendComponent.cs" />
+    <Compile Include="Framework\LegendEntry.cs" />
     <Compile Include="Framework\ModConfig.cs" />
+    <Compile Include="Framework\Sprites.cs" />
+    <Compile Include="Framework\TileData.cs" />
     <Compile Include="ModEntry.cs" />
-    <Compile Include="Overlays\LegendComponent.cs" />
-    <Compile Include="Overlays\TraversableOverlay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

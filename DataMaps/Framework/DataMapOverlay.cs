@@ -4,39 +4,36 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.DataMaps.Framework;
 using StardewValley;
 using XRectangle = xTile.Dimensions.Rectangle;
 
-namespace Pathoschild.Stardew.DataMaps.Overlays
+namespace Pathoschild.Stardew.DataMaps.Framework
 {
-    /// <summary>A generic data overlay.</summary>
-    internal abstract class DataMapOverlay : BaseOverlay
+    /// <summary>Renders a data map as an overlay over the world.</summary>
+    internal class DataMapOverlay : BaseOverlay
     {
         /*********
-        ** Accessors
+        ** Properties
         *********/
         /// <summary>The legend to display (if any).</summary>
-        public LegendComponent Legend { get; }
+        private readonly LegendComponent Legend;
+
+        /// <summary>The data map to render.</summary>
+        private readonly IDataMap Map;
 
         /// <summary>The tiles to render.</summary>
-        public TileData[] Tiles { get; protected set; }
+        private TileData[] Tiles;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        protected DataMapOverlay(LegendComponent legend)
+        /// <param name="map">The data map to render.</param>
+        public DataMapOverlay(IDataMap map)
         {
-            this.Legend = legend;
-        }
-
-        /// <summary>Construct an instance.</summary>
-        /// <param name="tiles">The tiles to render.</param>
-        protected DataMapOverlay(IEnumerable<TileData> tiles)
-        {
-            this.Tiles = tiles.ToArray();
+            this.Map = map;
+            this.Legend = new LegendComponent(map.GetLegendEntries().ToArray());
         }
 
         /// <summary>Update the overlay.</summary>
@@ -51,7 +48,7 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
 
             // get updated tiles
             GameLocation location = Game1.currentLocation;
-            this.Tiles = this.Update(location, this.GetVisibleTiles(location, Game1.viewport)).ToArray();
+            this.Tiles = this.Map.Update(location, this.GetVisibleTiles(location, Game1.viewport)).ToArray();
         }
 
 
@@ -84,11 +81,6 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
         {
             this.Legend?.ReceiveWindowSizeChanged(oldBounds, newBounds);
         }
-
-        /// <summary>Get updated tile overlay data.</summary>
-        /// <param name="location">The current location.</param>
-        /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
-        protected abstract IEnumerable<TileData> Update(GameLocation location, IEnumerable<Vector2> visibleTiles);
 
         /// <summary>Get all tiles currently visible to the player.</summary>
         /// <param name="location">The game location.</param>

@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.DataMaps.DataMaps;
 using Pathoschild.Stardew.DataMaps.Framework;
-using Pathoschild.Stardew.DataMaps.Overlays;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 
@@ -58,9 +58,7 @@ namespace Pathoschild.Stardew.DataMaps
                         this.CurrentOverlay = null;
                     }
                     else
-                        this.CurrentOverlay = new TraversableOverlay();
-
-                    this.Monitor.Log($"set overlay: {this.CurrentOverlay?.GetType().Name ?? "none"}", LogLevel.Trace);
+                        this.CurrentOverlay = new DataMapOverlay(new TraversableMap());
                 }
             });
         }

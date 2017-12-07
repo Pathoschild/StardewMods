@@ -1,13 +1,12 @@
-﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.DataMaps.Framework;
 using StardewValley;
 using XRectangle = xTile.Dimensions.Rectangle;
 
-namespace Pathoschild.Stardew.DataMaps.Overlays
+namespace Pathoschild.Stardew.DataMaps.Framework
 {
     /// <summary>An on-screen menu that shows a legend of color => label mappings.</summary>
     internal class LegendComponent
@@ -16,7 +15,7 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
         ** Properties
         *********/
         /// <summary>The values to show.</summary>
-        private readonly Tuple<Color, string>[] Values;
+        private readonly LegendEntry[] Entries;
 
         /// <summary>The UI bounds to draw.</summary>
         private Rectangle Bounds;
@@ -44,17 +43,17 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="values">The values to show.</param>
-        public LegendComponent(params Tuple<Color, string>[] values)
+        /// <param name="entries">The entries to show.</param>
+        public LegendComponent(IEnumerable<LegendEntry> entries)
         {
-            this.Values = values;
-            if (values.Any())
+            this.Entries = entries.ToArray();
+            if (this.Entries.Any())
             {
                 this.ColorBoxSize = (int)Game1.smallFont.MeasureString("X").Y;
-                this.ContentWidth = this.ColorBoxSize + this.ColorBoxPadding + (int)values.Select(p => Game1.smallFont.MeasureString(p.Item2).X).Max();
-                this.ContentHeight = values.Length * this.ColorBoxSize;
+                this.ContentWidth = this.ColorBoxSize + this.ColorBoxPadding + (int)this.Entries.Select(p => Game1.smallFont.MeasureString(p.Name).X).Max();
+                this.ContentHeight = this.Entries.Length * this.ColorBoxSize;
             }
-            this.RecalculateDimensions(values, Game1.smallFont);
+            this.RecalculateDimensions(this.Entries, Game1.smallFont);
         }
 
         /// <summary>The method called when the game window changes size.</summary>
@@ -62,14 +61,14 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
         /// <param name="newBounds">The new viewport.</param>
         public void ReceiveWindowSizeChanged(XRectangle oldBounds, XRectangle newBounds)
         {
-            this.RecalculateDimensions(this.Values, Game1.smallFont);
+            this.RecalculateDimensions(this.Entries, Game1.smallFont);
         }
 
         /// <summary>Render the UI.</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (!this.Values.Any())
+            if (!this.Entries.Any())
                 return;
 
             // calculate dimensions
@@ -95,14 +94,14 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
             spriteBatch.Draw(Sprites.Legend.Sheet, new Rectangle(bounds.Right - cornerWidth, bounds.Bottom - cornerHeight, cornerWidth, cornerHeight), Sprites.Legend.BottomRight, Color.White);
 
             // draw text
-            for (int i = 0; i < this.Values.Length; i++)
+            for (int i = 0; i < this.Entries.Length; i++)
             {
-                Tuple<Color, string> value = this.Values[i];
+                LegendEntry value = this.Entries[i];
                 int leftOffset = bounds.X + cornerWidth + this.Padding;
                 int topOffset = bounds.Y + cornerHeight + this.Padding + i * this.ColorBoxSize;
 
-                spriteBatch.DrawLine(leftOffset, topOffset, new Vector2(this.ColorBoxSize), value.Item1);
-                spriteBatch.DrawString(Game1.smallFont, value.Item2, new Vector2(leftOffset + this.ColorBoxSize + this.ColorBoxPadding, topOffset + 2), Color.Black);
+                spriteBatch.DrawLine(leftOffset, topOffset, new Vector2(this.ColorBoxSize), value.Color);
+                spriteBatch.DrawString(Game1.smallFont, value.Name, new Vector2(leftOffset + this.ColorBoxSize + this.ColorBoxPadding, topOffset + 2), Color.Black);
             }
         }
 
@@ -111,9 +110,9 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
         ** Protected methods
         *********/
         /// <summary>Recalculate the legend's position and dimensions.</summary>
-        /// <param name="values">The values to display in the legend.</param>
+        /// <param name="legendEntries">The values to display in the legend.</param>
         /// <param name="font">The font used to display text.</param>
-        private void RecalculateDimensions(Tuple<Color, string>[] values, SpriteFont font)
+        private void RecalculateDimensions(LegendEntry[] legendEntries, SpriteFont font)
         {
             // get corner dimensions
             var corner = Sprites.Legend.TopLeft;
@@ -122,8 +121,8 @@ namespace Pathoschild.Stardew.DataMaps.Overlays
 
             // calculate legend dimensions
             this.ColorBoxSize = (int)Game1.smallFont.MeasureString("X").Y;
-            this.ContentWidth = this.ColorBoxSize + this.ColorBoxPadding + (int)values.Select(p => font.MeasureString(p.Item2).X).Max();
-            this.ContentHeight = values.Length * this.ColorBoxSize;
+            this.ContentWidth = this.ColorBoxSize + this.ColorBoxPadding + (int)legendEntries.Select(p => font.MeasureString(p.Name).X).Max();
+            this.ContentHeight = legendEntries.Length * this.ColorBoxSize;
             this.Bounds = new Rectangle(
                 x: this.Margin,
                 y: this.Margin,
