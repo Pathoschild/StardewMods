@@ -20,6 +20,14 @@ namespace Pathoschild.Stardew.DataMaps
         /// <summary>The current overlay being displayed, if any.</summary>
         private DataMapOverlay CurrentOverlay;
 
+        /// <summary>Whether the overlay is currently visible.</summary>
+        private bool IsOverlayVisible => Context.IsPlayerFree && this.CurrentOverlay != null;
+
+        /// <summary>The available data maps.</summary>
+        private readonly IDataMap[] Maps = {
+            new TraversableMap()
+        };
+
 
         /*********
         ** Public methods
@@ -50,16 +58,23 @@ namespace Pathoschild.Stardew.DataMaps
             {
                 var controls = this.Config.Controls;
 
-                if (controls.ToggleMap.Contains(e.Button))
+                // toggle overlay
+                if (Context.IsPlayerFree && controls.ToggleMap.Contains(e.Button))
                 {
-                    if (this.CurrentOverlay != null)
+                    if (this.IsOverlayVisible)
                     {
                         this.CurrentOverlay.Dispose();
                         this.CurrentOverlay = null;
                     }
                     else
-                        this.CurrentOverlay = new DataMapOverlay(new TraversableMap());
+                        this.CurrentOverlay = new DataMapOverlay(this.Maps);
                 }
+
+                // cycle data maps
+                else if (this.IsOverlayVisible && controls.NextMap.Contains(e.Button))
+                    this.CurrentOverlay.NextMap();
+                else if (this.IsOverlayVisible && controls.PrevMap.Contains(e.Button))
+                    this.CurrentOverlay.PrevMap();
             });
         }
 

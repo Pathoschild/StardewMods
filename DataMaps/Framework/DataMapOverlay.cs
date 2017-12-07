@@ -24,8 +24,11 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>The padding between the border and content.</summary>
         private readonly int Padding = 5;
 
-        /// <summary>The data map to render.</summary>
-        private readonly IDataMap Map;
+        /// <summary>The available data maps.</summary>
+        private readonly IDataMap[] Maps;
+
+        /// <summary>The current data map to render.</summary>
+        private IDataMap CurrentMap;
 
         /// <summary>The width of the top-left boxes.</summary>
         private int BoxContentWidth;
@@ -44,20 +47,40 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="map">The data map to render.</param>
-        public DataMapOverlay(IDataMap map)
+        /// <param name="maps">The data maps to render.</param>
+        public DataMapOverlay(IDataMap[] maps)
         {
-            this.Map = map;
-            this.Legend = map.GetLegendEntries().ToArray();
+            if (!maps.Any())
+                throw new InvalidOperationException("Can't initialise the data maps overlay with no data maps.");
 
+            this.Maps = maps;
+            this.SetMap(maps.First());
             this.RecalculateDimensions();
+        }
+
+        /// <summary>Switch to the next data map.</summary>
+        public void NextMap()
+        {
+            int index = Array.IndexOf(this.Maps, this.CurrentMap) + 1;
+            if (index >= this.Maps.Length)
+                index = 0;
+            this.SetMap(this.Maps[index]);
+        }
+
+        /// <summary>Switch to the previous data map.</summary>
+        public void PrevMap()
+        {
+            int index = Array.IndexOf(this.Maps, this.CurrentMap) - 1;
+            if (index < 0)
+                index = this.Maps.Length - 1;
+            this.SetMap(this.Maps[index]);
         }
 
         /// <summary>Update the overlay.</summary>
         public void Update()
         {
             // no tiles to draw
-            if (Game1.currentLocation == null)
+            if (Game1.currentLocation == null || this.CurrentMap == null)
             {
                 this.Tiles = new TileData[0];
                 return;
@@ -65,7 +88,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
 
             // get updated tiles
             GameLocation location = Game1.currentLocation;
-            this.Tiles = this.Map.Update(location, this.GetVisibleTiles(location, Game1.viewport)).ToArray();
+            this.Tiles = this.CurrentMap.Update(location, this.GetVisibleTiles(location, Game1.viewport)).ToArray();
         }
 
 
@@ -76,9 +99,6 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <param name="spriteBatch">The sprite batch to which to draw.</param>
         protected override void Draw(SpriteBatch spriteBatch)
         {
-            if (this.Tiles == null || this.Tiles.Length == 0)
-                return;
-
             // draw tile overlay
             int tileSize = Game1.tileSize;
             foreach (TileData tile in this.Tiles.ToArray())
@@ -95,11 +115,11 @@ namespace Pathoschild.Stardew.DataMaps.Framework
 
                 // draw overlay label
                 {
-                    Vector2 labelSize = Game1.smallFont.MeasureString(this.Map.Name);
+                    Vector2 labelSize = Game1.smallFont.MeasureString(this.CurrentMap.Name);
                     this.DrawScroll(spriteBatch, leftOffset, topOffset, this.BoxContentWidth, (int)labelSize.Y, out Vector2 contentPos, out Rectangle bounds);
 
                     contentPos = contentPos + new Vector2((this.BoxContentWidth - labelSize.X) / 2, 0); // center label in box
-                    spriteBatch.DrawString(Game1.smallFont, this.Map.Name, contentPos, Color.Black);
+                    spriteBatch.DrawString(Game1.smallFont, this.CurrentMap.Name, contentPos, Color.Black);
 
                     topOffset += bounds.Height + this.Padding;
                 }
@@ -129,13 +149,21 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             this.RecalculateDimensions();
         }
 
+        /// <summary>Switch to the given data map.</summary>
+        /// <param name="map">The data map to select.</param>
+        private void SetMap(IDataMap map)
+        {
+            this.CurrentMap = map;
+            this.Legend = this.CurrentMap.GetLegendEntries().ToArray();
+        }
+
         /// <summary>Recalculate the component positions and dimensions.</summary>
         private void RecalculateDimensions()
         {
             // get content widths
             float legendColorSize = Game1.smallFont.MeasureString("X").Y;
-            float labelWidth = Game1.smallFont.MeasureString(this.Map.Name).X;
-            float legendContentWidth = legendColorSize + this.LegendColorPadding + (int)this.Legend.Select(p => Game1.smallFont.MeasureString(p.Name).X).Max();
+            float labelWidth = this.Maps.Select(map => Game1.smallFont.MeasureString(map.Name).X).Max();
+            float legendContentWidth = legendColorSize + this.LegendColorPadding + (int)this.Legend.Select(entry => Game1.smallFont.MeasureString(entry.Name).X).Max();
 
             // cache values
             this.LegendColorSize = (int)legendColorSize;
