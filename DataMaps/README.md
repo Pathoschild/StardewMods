@@ -6,7 +6,6 @@ metadata maps.
 ## Contents
 * [Install](#install)
 * [Use](#use)
-* [Examples](#examples)
 * [Configure](#configure)
 * [See also](#see-also)
 
@@ -16,18 +15,22 @@ metadata maps.
 3. Run the game using SMAPI.
 
 ## Use
-_TO DO_
+Press `F2` by default to show the data maps overlay, and then `Tab` to cycle between data maps.
 
-## Examples
-_TO DO_
+These overlays are supported:
+
+overlay     | information shown
+----------- | -----------------
+Sprinklers  | Shows sprinkler coverage, and highlights crops that aren't covered.
+Traversable | Shows where the player can walk; useful for finding hidden paths or nooks.
 
 ## Configuration
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
 file if you want. These are the available settings:
 
-setting           | what it affects
------------------ | -------------------
-`Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default value is `F2` to toggle the overlay.
+setting    | what it affects
+---------- | -------------------
+`Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default values are `F2` to toggle the overlay, `Tab` or right controller shoulder to see the next data map, and left controller shoulder to see the previous one.
 
 ## Versions
 _TO DO_
