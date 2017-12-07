@@ -40,7 +40,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         private LegendEntry[] Legend;
 
         /// <summary>The tiles to render.</summary>
-        private TileData[] Tiles;
+        private TileGroup[] TileGroups;
 
 
         /*********
@@ -82,13 +82,13 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             // no tiles to draw
             if (Game1.currentLocation == null || this.CurrentMap == null)
             {
-                this.Tiles = new TileData[0];
+                this.TileGroups = new TileGroup[0];
                 return;
             }
 
             // get updated tiles
             GameLocation location = Game1.currentLocation;
-            this.Tiles = this.CurrentMap.Update(location, this.GetVisibleTiles(location, Game1.viewport)).ToArray();
+            this.TileGroups = this.CurrentMap.Update(location, this.GetVisibleTiles(location, Game1.viewport)).ToArray();
         }
 
 
@@ -100,11 +100,44 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         protected override void Draw(SpriteBatch spriteBatch)
         {
             // draw tile overlay
-            int tileSize = Game1.tileSize;
-            foreach (TileData tile in this.Tiles.ToArray())
             {
-                Vector2 position = tile.TilePosition * tileSize - new Vector2(Game1.viewport.X, Game1.viewport.Y);
-                spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize), tile.Color * .3f);
+                int tileSize = Game1.tileSize;
+                foreach (TileGroup group in this.TileGroups.ToArray())
+                {
+                    HashSet<Vector2> tileHash = new HashSet<Vector2>(group.Tiles.Select(p => p.TilePosition));
+                    foreach (TileData tile in group.Tiles)
+                    {
+                        Vector2 position = tile.TilePosition * tileSize - new Vector2(Game1.viewport.X, Game1.viewport.Y);
+
+                        // draw tile overlay
+                        spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize), tile.Color * .3f);
+
+                        // draw borders
+                        if (group.OuterBorders)
+                        {
+                            const int borderSize = 4;
+                            Color borderColor = tile.Color * 0.9f;
+                            int x = (int)tile.TilePosition.X;
+                            int y = (int)tile.TilePosition.Y;
+
+                            // left
+                            if (!tileHash.Contains(new Vector2(x - 1, y)))
+                                spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)position.X, (int)position.Y, borderSize, tileSize), borderColor);
+
+                            // right
+                            if (!tileHash.Contains(new Vector2(x + 1, y)))
+                                spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)(position.X + tileSize - borderSize), (int)position.Y, borderSize, tileSize), borderColor);
+
+                            // top
+                            if (!tileHash.Contains(new Vector2(x, y - 1)))
+                                spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)position.X, (int)position.Y, tileSize, borderSize), borderColor);
+
+                            // bottom
+                            if (!tileHash.Contains(new Vector2(x, y + 1)))
+                                spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)position.X, (int)(position.Y + tileSize - borderSize), tileSize, borderSize), borderColor);
+                        }
+                    }
+                }
             }
 
             // draw top-left boxes
@@ -127,7 +160,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
                 // draw legend
                 if (this.Legend.Any())
                 {
-                    this.DrawScroll(spriteBatch, leftOffset, topOffset, this.BoxContentWidth, this.Legend.Length * this.LegendColorSize, out Vector2 contentPos, out Rectangle bounds);
+                    this.DrawScroll(spriteBatch, leftOffset, topOffset, this.BoxContentWidth, this.Legend.Length * this.LegendColorSize, out Vector2 contentPos, out Rectangle _);
                     for (int i = 0; i < this.Legend.Length; i++)
                     {
                         LegendEntry value = this.Legend[i];

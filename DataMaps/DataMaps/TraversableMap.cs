@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataMaps.Framework;
 using StardewValley;
@@ -39,7 +40,20 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>Get the updated data map tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
-        public IEnumerable<TileData> Update(GameLocation location, IEnumerable<Vector2> visibleTiles)
+        public IEnumerable<TileGroup> Update(GameLocation location, IEnumerable<Vector2> visibleTiles)
+        {
+            TileData[] tiles = this.GetTiles(location, visibleTiles).ToArray();
+            yield return new TileGroup(tiles);
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get the updated data map tiles.</summary>
+        /// <param name="location">The current location.</param>
+        /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
+        private IEnumerable<TileData> GetTiles(GameLocation location, IEnumerable<Vector2> visibleTiles)
         {
             foreach (Vector2 tile in visibleTiles)
             {

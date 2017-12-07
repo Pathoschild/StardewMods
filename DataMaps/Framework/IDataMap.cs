@@ -23,6 +23,6 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>Get the updated data map tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
-        IEnumerable<TileData> Update(GameLocation location, IEnumerable<Vector2> visibleTiles);
+        IEnumerable<TileGroup> Update(GameLocation location, IEnumerable<Vector2> visibleTiles);
     }
 }
