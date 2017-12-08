@@ -19,12 +19,12 @@ Press `F2` by default to show the data maps overlay, and then `Tab` to cycle bet
 
 These overlays are supported:
 
-overlay     | information shown
------------ | -----------------
-Junimo huts | Shows Junimo hut coverage, and highlights crops they won't reach.
-Scarecrows  | Shows scarecrow coverage, and highlights unprotected crops.
-Sprinklers  | Shows sprinkler coverage, and highlights unsprinkled crops.
-Traversable | Shows where the player can walk and warp tiles. Useful for finding hidden paths or nooks.
+overlay       | information shown
+------------- | -----------------
+Accessibility | Shows where the player can walk and warp tiles. Useful for finding hidden paths or nooks.
+Junimo huts   | Shows Junimo hut coverage, and highlights crops they won't reach.
+Scarecrows    | Shows scarecrow coverage, and highlights unprotected crops.
+Sprinklers    | Shows sprinkler coverage, and highlights unsprinkled crops.
 
 ## Configuration
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
@@ -35,7 +35,9 @@ setting    | what it affects
 `Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default values are `F2` to toggle the overlay, `Tab` or right controller shoulder to see the next data map, and left controller shoulder to see the previous one.
 
 ## Versions
-_TO DO_
+### 1.0
+* Initial version.
+* Added Junimo huts, scarecrows, sprinklers, and accessibility data maps.
 
 ## See also
 * <s>Nexus mod</s>
