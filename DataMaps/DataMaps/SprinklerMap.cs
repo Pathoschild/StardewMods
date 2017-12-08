@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using Object = StardewValley.Object;
@@ -32,23 +33,22 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>The map's display name.</summary>
         public string Name { get; }
 
+        /// <summary>The legend entries to display.</summary>
+        public LegendEntry[] Legend { get; }
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public SprinklerMap()
+        /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
+        public SprinklerMap(ITranslationHelper translations)
         {
-            this.Name = "Sprinklers";
-        }
-
-        /// <summary>Get the legend entries to display.</summary>
-        public IEnumerable<LegendEntry> GetLegendEntries()
-        {
-            return new[]
+            this.Name = translations.Get("maps.sprinklers.name");
+            this.Legend = new[]
             {
-                new LegendEntry("Covered", this.WetColor),
-                new LegendEntry("Dry Crops", this.DryColor)
+                new LegendEntry(translations.Get("maps.sprinklers.covered"), this.WetColor),
+                new LegendEntry(translations.Get("maps.sprinklers.dry-crops"), this.DryColor)
             };
         }
 

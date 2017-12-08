@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
@@ -32,23 +33,22 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>The map's display name.</summary>
         public string Name { get; }
 
+        /// <summary>The legend entries to display.</summary>
+        public LegendEntry[] Legend { get; }
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public JunimoHutMap()
+        /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
+        public JunimoHutMap(ITranslationHelper translations)
         {
-            this.Name = "Junimo Huts";
-        }
-
-        /// <summary>Get the legend entries to display.</summary>
-        public IEnumerable<LegendEntry> GetLegendEntries()
-        {
-            return new[]
+            this.Name = translations.Get("maps.junimo-huts.name");
+            this.Legend = new[]
             {
-                new LegendEntry("Can Harvest", this.Covered),
-                new LegendEntry("Can't Harvest", this.NotCovered)
+                new LegendEntry(translations.Get("maps.junimo-huts.can-harvest"), this.Covered),
+                new LegendEntry(translations.Get("maps.junimo-huts.cannot-harvest"), this.NotCovered)
             };
         }
 

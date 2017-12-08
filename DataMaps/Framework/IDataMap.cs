@@ -13,13 +13,13 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>The map's display name.</summary>
         string Name { get; }
 
+        /// <summary>The legend entries to display.</summary>
+        LegendEntry[] Legend { get; }
+
 
         /*********
         ** Methods
         *********/
-        /// <summary>Get the legend entries to display.</summary>
-        IEnumerable<LegendEntry> GetLegendEntries();
-
         /// <summary>Get the updated data map tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>

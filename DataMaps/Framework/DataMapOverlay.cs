@@ -184,7 +184,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         private void SetMap(IDataMap map)
         {
             this.CurrentMap = map;
-            this.Legend = this.CurrentMap.GetLegendEntries().ToArray();
+            this.Legend = this.CurrentMap.Legend.ToArray();
             this.TileGroups = new TileGroup[0];
         }
 
@@ -254,7 +254,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             float legendContentWidth =
                 (
                     from map in maps
-                    from entry in map.GetLegendEntries()
+                    from entry in map.Legend
                     select Game1.smallFont.MeasureString(entry.Name).X
                 )
                 .Max() + legendColorSize + this.LegendColorPadding;

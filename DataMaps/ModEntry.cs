@@ -24,12 +24,7 @@ namespace Pathoschild.Stardew.DataMaps
         private bool IsOverlayVisible => Context.IsPlayerFree && this.CurrentOverlay != null;
 
         /// <summary>The available data maps.</summary>
-        private readonly IDataMap[] Maps = {
-            new TraversableMap(),
-            new ScarecrowMap(),
-            new SprinklerMap(),
-            new JunimoHutMap()
-        };
+        private IDataMap[] Maps;
 
 
         /*********
@@ -41,6 +36,15 @@ namespace Pathoschild.Stardew.DataMaps
         {
             // load config
             this.Config = helper.ReadConfig<ModConfig>();
+
+            // load data maps
+            this.Maps = new IDataMap[]
+            {
+                new TraversableMap(helper.Translation),
+                new ScarecrowMap(helper.Translation),
+                new SprinklerMap(helper.Translation),
+                new JunimoHutMap(helper.Translation)
+            };
 
             // hook up events
             SaveEvents.AfterReturnToTitle += this.SaveEvents_AfterReturnToTitle;

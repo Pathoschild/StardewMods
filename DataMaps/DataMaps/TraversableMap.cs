@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
@@ -38,6 +39,9 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>The touch action tile property values which trigger a warp.</summary>
         private readonly HashSet<string> TouchWarpActions = new HashSet<string> { "Door", "MagicWarp" };
 
+        /// <summary>The legend entries to display.</summary>
+        public LegendEntry[] Legend { get; }
+
 
         /*********
         ** Accessors
@@ -50,20 +54,16 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public TraversableMap()
+        /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
+        public TraversableMap(ITranslationHelper translations)
         {
-            this.Name = "Accessibility";
-        }
-
-        /// <summary>Get the legend entries to display.</summary>
-        public IEnumerable<LegendEntry> GetLegendEntries()
-        {
-            return new[]
+            this.Name = translations.Get("maps.accessibility.name");
+            this.Legend = new[]
             {
-                new LegendEntry("Clear", this.ClearColor),
-                new LegendEntry("Occupied", this.OccupiedColor),
-                new LegendEntry("Impassable", this.ImpassableColor),
-                new LegendEntry("Warp", this.WarpColor)
+                new LegendEntry(translations.Get("maps.accessibility.clear"), this.ClearColor),
+                new LegendEntry(translations.Get("maps.accessibility.occupied"), this.OccupiedColor),
+                new LegendEntry(translations.Get("maps.accessibility.impassable"), this.ImpassableColor),
+                new LegendEntry(translations.Get("maps.accessibility.warp"), this.WarpColor)
             };
         }
 
