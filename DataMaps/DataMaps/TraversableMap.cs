@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
 using StardewValley;
+using StardewValley.Buildings;
+using StardewValley.Locations;
 using xTile.Dimensions;
 using xTile.ObjectModel;
 using xTile.Tiles;
@@ -32,6 +34,9 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>The action tile property values which trigger a warp.</summary>
         /// <remarks>See remarks on <see cref="IsWarp"/>.</remarks>
         private readonly HashSet<string> WarpActions = new HashSet<string> { "EnterSewer", "LockedDoorWarp", "Warp", "WarpCommunityCenter", "WarpGreenhouse", "WarpMensLocker", "WarpWomensLocker", "WizardHatch" };
+
+        /// <summary>The touch action tile property values which trigger a warp.</summary>
+        private readonly HashSet<string> TouchWarpActions = new HashSet<string> { "Door", "MagicWarp" };
 
 
         /*********
@@ -88,37 +93,42 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         {
             foreach (Vector2 tile in visibleTiles)
             {
+                // get pixel coordinates
+                Rectangle tilePixels = new Rectangle((int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), Game1.tileSize, Game1.tileSize);
+
+                // get color code
                 Color color;
-                if (this.IsWarp(location, tile))
+                if (this.IsWarp(location, tilePixels))
                     color = this.WarpColor;
-                else if (this.IsPassable(location, tile))
-                    color = this.IsOccupied(location, tile) ? this.OccupiedColor : this.ClearColor;
+                else if (this.IsPassable(location, tile, tilePixels))
+                    color = this.IsOccupied(location, tile, tilePixels) ? this.OccupiedColor : this.ClearColor;
                 else
                     color = this.ImpassableColor;
 
+                // yield
                 yield return new TileData(tile, color);
             }
         }
 
         /// <summary>Get whether there's a warp on the given tile.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="tile">The tile to check.</param>
-        /// <remarks>Derived from <see cref="GameLocation.isCollidingWithWarp"/> and <see cref="GameLocation.performAction"/>.</remarks>
-        private bool IsWarp(GameLocation location, Vector2 tile)
+        /// <param name="tilePixels">The tile area in pixels.</param>
+        /// <remarks>Derived from <see cref="GameLocation.isCollidingWithWarp"/>, <see cref="GameLocation.performAction"/>, and <see cref="GameLocation.performTouchAction"/>.</remarks>
+        private bool IsWarp(GameLocation location, Rectangle tilePixels)
         {
             // check map warps
-            {
-                Rectangle area = new Rectangle((int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), Game1.tileSize, Game1.tileSize);
-                if (location.isCollidingWithWarpOrDoor(area) != null)
-                    return true;
-            }
+            if (location.isCollidingWithWarpOrDoor(tilePixels) != null)
+                return true;
 
-            // check tile action
-            {
-                Tile mapTile = location.map.GetLayer("Buildings").PickTile(new Location((int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize)), Game1.viewport.Size);
-                if (mapTile != null && mapTile.Properties.TryGetValue("Action", out PropertyValue action) && this.WarpActions.Contains(action))
-                    return true;
-            }
+            // check tile actions
+            Tile buildingTile = location.map.GetLayer("Buildings").PickTile(new Location(tilePixels.X, tilePixels.Y), Game1.viewport.Size);
+            if (buildingTile != null && buildingTile.Properties.TryGetValue("Action", out PropertyValue action) && this.WarpActions.Contains(action.ToString().Split(' ')[0]))
+                return true;
+
+            // check tile touch actions
+            Tile backTile = location.map.GetLayer("Back").PickTile(new Location(tilePixels.X, tilePixels.Y), Game1.viewport.Size);
+            if (backTile != null && backTile.Properties.TryGetValue("TouchAction", out PropertyValue touchAction) && this.TouchWarpActions.Contains(touchAction.ToString().Split(' ')[0]))
+                return true;
 
             return false;
         }
@@ -126,12 +136,21 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>Get whether a tile is passable.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to check.</param>
-        /// <remarks>Derived from <see cref="Farmer.MovePosition"/> and <see cref="Fence"/>.</remarks>
-        private bool IsPassable(GameLocation location, Vector2 tile)
+        /// <param name="tilePixels">The tile area in pixels.</param>
+        /// <remarks>Derived from <see cref="Farmer.MovePosition"/>, <see cref="GameLocation.isCollidingPosition(Rectangle,xTile.Dimensions.Rectangle,bool)"/>, <see cref="GameLocation.isTilePassable(Location,xTile.Dimensions.Rectangle)"/>, and <see cref="Fence"/>.</remarks>
+        private bool IsPassable(GameLocation location, Vector2 tile, Rectangle tilePixels)
         {
-            // tile passable
+            // check layer properties
             if (location.isTilePassable(new Location((int)tile.X, (int)tile.Y), Game1.viewport))
                 return true;
+
+            // allow bridges
+            if (location.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Passable", "Buildings") != null)
+            {
+                Tile backTile = location.map.GetLayer("Back").PickTile(new Location(tilePixels.X, tilePixels.Y), Game1.viewport.Size);
+                if (backTile == null || !backTile.TileIndexProperties.TryGetValue("Passable", out PropertyValue value) || value != "F")
+                    return true;
+            }
 
             return false;
         }
@@ -139,10 +158,39 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>Get whether a tile is blocked due to something it contains.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to check.</param>
-        private bool IsOccupied(GameLocation location, Vector2 tile)
+        /// <param name="tilePixels">The tile area in pixels.</param>
+        /// <remarks>Derived from <see cref="GameLocation.isCollidingPosition(Rectangle,xTile.Dimensions.Rectangle,bool)"/> and <see cref="Farm.isCollidingPosition(Rectangle,xTile.Dimensions.Rectangle,bool,int,bool,Character,bool,bool,bool)"/>.</remarks>
+        private bool IsOccupied(GameLocation location, Vector2 tile, Rectangle tilePixels)
         {
+            // show open gate as passable
+            if (location.objects.TryGetValue(tile, out Object obj) && obj is Fence fence && fence.isGate && fence.gatePosition == Fence.gateOpenedPosition)
+                return false;
+
+            // check for objects, characters, or terrain features
             if (location.isTileOccupiedIgnoreFloors(tile))
                 return true;
+
+            // buildings
+            if (location is BuildableGameLocation buildableLocation)
+            {
+                foreach (Building building in buildableLocation.buildings)
+                {
+                    Rectangle buildingArea = new Rectangle(building.tileX, building.tileY, building.tilesWide, building.tilesHigh);
+                    if (buildingArea.Contains((int)tile.X, (int)tile.Y))
+                        return true;
+                }
+            }
+
+            // large terrain features
+            if (location.largeTerrainFeatures != null && location.largeTerrainFeatures.Any(p => p.getBoundingBox().Intersects(tilePixels)))
+                return true;
+
+            // resource clumps
+            if (location is Farm farm)
+            {
+                if (farm.resourceClumps.Any(p => p.getBoundingBox(p.tile).Intersects(tilePixels)))
+                    return true;
+            }
 
             return false;
         }
