@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -20,6 +21,9 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
 
         /// <summary>The color for unsprinkled tiles.</summary>
         private readonly Color DryColor = Color.Red;
+
+        /// <summary>The maximum number of tiles from the center a sprinkler can protect.</summary>
+        private readonly int MaxRadius = 2;
 
 
         /*********
@@ -50,15 +54,16 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
 
         /// <summary>Get the updated data map tiles.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
-        public IEnumerable<TileGroup> Update(GameLocation location, IEnumerable<Vector2> visibleTiles)
+        /// <param name="visibleArea">The tiles currently visible on the screen.</param>
+        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea)
         {
-            visibleTiles = visibleTiles.ToArray();
+            Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
 
             // get sprinklers
+            Vector2[] searchTiles = visibleArea.Expand(this.MaxRadius).GetTiles().ToArray();
             Object[] sprinklers =
                 (
-                    from Vector2 tile in visibleTiles
+                    from Vector2 tile in searchTiles
                     where location.objects.ContainsKey(tile)
                     let sprinkler = location.objects[tile]
                     where this.IsSprinkler(sprinkler)
@@ -77,7 +82,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             }
 
             // yield dry crops
-            TileData[] dryCrops = this.GetDryCrops(location, visibleTiles.ToArray(), covered).Select(pos => new TileData(pos, this.DryColor)).ToArray();
+            TileData[] dryCrops = this.GetDryCrops(location, visibleTiles, covered).Select(pos => new TileData(pos, this.DryColor)).ToArray();
             yield return new TileGroup(dryCrops, outerBorders: true);
         }
 
@@ -126,9 +131,9 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
 
                 // iridium sprinkler
                 case 645:
-                    for (int x = -2; x <= 2; x++)
+                    for (int x = -this.MaxRadius; x <= this.MaxRadius; x++)
                     {
-                        for (int y = -2; y <= 2; y++)
+                        for (int y = -this.MaxRadius; y <= this.MaxRadius; y++)
                             yield return new Vector2(origin.X + x, origin.Y + y);
                     }
                     break;

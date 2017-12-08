@@ -88,7 +88,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
 
             // get updated tiles
             GameLocation location = Game1.currentLocation;
-            this.TileGroups = this.CurrentMap.Update(location, this.GetVisibleTiles(location, Game1.viewport)).ToArray();
+            this.TileGroups = this.CurrentMap.Update(location, this.GetVisibleArea(location, Game1.viewport)).ToArray();
         }
 
 
@@ -241,25 +241,18 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             bounds = new Rectangle(x, y, outerWidth, outerHeight);
         }
 
-        /// <summary>Get all tiles currently visible to the player.</summary>
+        /// <summary>Get the tile area currently visible to the player.</summary>
         /// <param name="location">The game location.</param>
         /// <param name="viewport">The game viewport.</param>
-        protected IEnumerable<Vector2> GetVisibleTiles(GameLocation location, XRectangle viewport)
+        protected Rectangle GetVisibleArea(GameLocation location, XRectangle viewport)
         {
             int tileSize = Game1.tileSize;
             int left = viewport.X / tileSize;
             int top = viewport.Y / tileSize;
-            int right = (int)Math.Ceiling((viewport.X + viewport.Width) / (decimal)tileSize);
-            int bottom = (int)Math.Ceiling((viewport.Y + viewport.Height) / (decimal)tileSize);
+            int width = (int)Math.Ceiling(viewport.Width / (decimal)tileSize);
+            int height = (int)Math.Ceiling(viewport.Height / (decimal)tileSize);
 
-            for (int x = left; x < right; x++)
-            {
-                for (int y = top; y < bottom; y++)
-                {
-                    if (location.isTileOnMap(x, y))
-                        yield return new Vector2(x, y);
-                }
-            }
+            return new Rectangle(left, top, width, height);
         }
     }
 }

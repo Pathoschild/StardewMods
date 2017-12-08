@@ -11,6 +11,9 @@ namespace Pathoschild.Stardew.Common
         /*********
         ** Public methods
         *********/
+        /****
+        ** Location
+        ****/
         /// <summary>Get the tile coordinates in the game location.</summary>
         /// <param name="location">The game location to search.</param>
         public static IEnumerable<Vector2> GetTiles(this GameLocation location)
@@ -19,6 +22,9 @@ namespace Pathoschild.Stardew.Common
             return TileHelper.GetTiles(0, 0, layer.LayerWidth, layer.LayerHeight);
         }
 
+        /****
+        ** Rectangle
+        ****/
         /// <summary>Get the tile coordinates in the tile area.</summary>
         /// <param name="area">The tile area to search.</param>
         public static IEnumerable<Vector2> GetTiles(this Rectangle area)
@@ -26,6 +32,17 @@ namespace Pathoschild.Stardew.Common
             return TileHelper.GetTiles(area.X, area.Y, area.Width, area.Height);
         }
 
+        /// <summary>Expand a rectangle equally in all directions.</summary>
+        /// <param name="area">The rectangle to expand.</param>
+        /// <param name="distance">The number of tiles to add in each direction.</param>
+        public static Rectangle Expand(this Rectangle area, int distance)
+        {
+            return new Rectangle(area.X - distance, area.Y - distance, area.Width + distance * 2, area.Height + distance * 2);
+        }
+
+        /****
+        ** Tiles
+        ****/
         /// <summary>Get the eight tiles surrounding the given tile.</summary>
         /// <param name="tile">The center tile.</param>
         public static IEnumerable<Vector2> GetSurroundingTiles(this Vector2 tile)

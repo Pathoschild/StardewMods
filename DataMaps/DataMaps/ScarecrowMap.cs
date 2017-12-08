@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -19,6 +20,9 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
 
         /// <summary>The color for tiles not protected by a scarecrow.</summary>
         private readonly Color Exposed = Color.Red;
+
+        /// <summary>The maximum number of tiles from the center a scarecrow can protect.</summary>
+        private readonly int MaxRadius = 8;
 
 
         /*********
@@ -49,15 +53,16 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
 
         /// <summary>Get the updated data map tiles.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
-        public IEnumerable<TileGroup> Update(GameLocation location, IEnumerable<Vector2> visibleTiles)
+        /// <param name="visibleArea">The tiles currently visible on the screen.</param>
+        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea)
         {
-            visibleTiles = visibleTiles.ToArray();
+            Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
 
             // get scarecrows
+            Vector2[] searchTiles = visibleArea.Expand(this.MaxRadius).GetTiles().ToArray();
             Object[] scarecrows =
                 (
-                    from Vector2 tile in visibleTiles
+                    from Vector2 tile in searchTiles
                     where location.objects.ContainsKey(tile)
                     let scarecrow = location.objects[tile]
                     where this.IsScarecrow(scarecrow)
@@ -76,7 +81,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             }
 
             // yield exposed crops
-            TileData[] exposedCrops = this.GetExposedCrops(location, visibleTiles.ToArray(), covered).Select(pos => new TileData(pos, this.Exposed)).ToArray();
+            TileData[] exposedCrops = this.GetExposedCrops(location, visibleTiles, covered).Select(pos => new TileData(pos, this.Exposed)).ToArray();
             yield return new TileGroup(exposedCrops, outerBorders: true);
         }
 
@@ -106,12 +111,12 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         {
             Vector2 origin = scarecrow.TileLocation;
 
-            for (int x = (int)origin.X - 8; x <= origin.X + 8; x++)
+            for (int x = (int)origin.X - this.MaxRadius; x <= origin.X + this.MaxRadius; x++)
             {
-                for (int y = (int)origin.Y - 8; y <= origin.Y + 8; y++)
+                for (int y = (int)origin.Y - this.MaxRadius; y <= origin.Y + this.MaxRadius; y++)
                 {
                     Vector2 tile = new Vector2(x, y);
-                    if (Vector2.Distance(tile, origin) < 9)
+                    if (Vector2.Distance(tile, origin) < this.MaxRadius + 1)
                         yield return tile;
                 }
             }

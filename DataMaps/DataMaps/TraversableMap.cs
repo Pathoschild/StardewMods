@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
 using StardewValley;
 using xTile.Dimensions;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Pathoschild.Stardew.DataMaps.DataMaps
 {
@@ -52,10 +54,10 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
 
         /// <summary>Get the updated data map tiles.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
-        public IEnumerable<TileGroup> Update(GameLocation location, IEnumerable<Vector2> visibleTiles)
+        /// <param name="visibleArea">The tiles currently visible on the screen.</param>
+        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea)
         {
-            TileData[] tiles = this.GetTiles(location, visibleTiles).ToArray();
+            TileData[] tiles = this.GetTiles(location, visibleArea.GetTiles()).ToArray();
 
             // passable tiles
             TileData[] passableTiles = tiles.Where(p => p.Color == this.ClearColor).ToArray();
