@@ -39,7 +39,7 @@
     <Compile Include="DataMaps\JunimoHutMap.cs" />
     <Compile Include="DataMaps\ScarecrowMap.cs" />
     <Compile Include="DataMaps\SprinklerMap.cs" />
-    <Compile Include="DataMaps\TraversableMap.cs" />
+    <Compile Include="DataMaps\AccessibilityMap.cs" />
     <Compile Include="Framework\DataMapOverlay.cs" />
     <Compile Include="Framework\IDataMap.cs" />
     <Compile Include="Framework\LegendEntry.cs" />

@@ -15,7 +15,7 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 namespace Pathoschild.Stardew.DataMaps.DataMaps
 {
     /// <summary>A data map which shows whether tiles are traversable by the player.</summary>
-    internal class TraversableMap : IDataMap
+    internal class AccessibilityMap : IDataMap
     {
         /*********
         ** Properties
@@ -55,7 +55,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        public TraversableMap(ITranslationHelper translations)
+        public AccessibilityMap(ITranslationHelper translations)
         {
             this.Name = translations.Get("maps.accessibility.name");
             this.Legend = new[]

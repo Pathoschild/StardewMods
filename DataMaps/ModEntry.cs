@@ -40,7 +40,7 @@ namespace Pathoschild.Stardew.DataMaps
             // load data maps
             this.Maps = new IDataMap[]
             {
-                new TraversableMap(helper.Translation),
+                new AccessibilityMap(helper.Translation),
                 new ScarecrowMap(helper.Translation),
                 new SprinklerMap(helper.Translation),
                 new JunimoHutMap(helper.Translation)
