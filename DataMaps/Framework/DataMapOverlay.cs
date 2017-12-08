@@ -256,7 +256,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             int width = (int)Math.Ceiling(viewport.Width / (decimal)tileSize);
             int height = (int)Math.Ceiling(viewport.Height / (decimal)tileSize);
 
-            return new Rectangle(left, top, width, height);
+            return new Rectangle(left - 1, top - 1, width + 2, height + 2); // extend slightly off-screen to avoid tile pop-in at the edges
         }
     }
 }
