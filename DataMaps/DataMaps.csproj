@@ -36,6 +36,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataMaps\JunimoHutMap.cs" />
     <Compile Include="DataMaps\ScarecrowMap.cs" />
     <Compile Include="DataMaps\SprinklerMap.cs" />
     <Compile Include="DataMaps\TraversableMap.cs" />

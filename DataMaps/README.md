@@ -21,9 +21,10 @@ These overlays are supported:
 
 overlay     | information shown
 ----------- | -----------------
+Junimo huts | Shows Junimo hut coverage, and highlights crops they won't reach.
 Scarecrows  | Shows scarecrow coverage, and highlights unprotected crops.
 Sprinklers  | Shows sprinkler coverage, and highlights unsprinkled crops.
-Traversable | Shows where the player can walk; useful for finding hidden paths or nooks.
+Traversable | Shows where the player can walk and warp tiles. Useful for finding hidden paths or nooks.
 
 ## Configuration
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`

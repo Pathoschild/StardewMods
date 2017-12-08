@@ -27,7 +27,8 @@ namespace Pathoschild.Stardew.DataMaps
         private readonly IDataMap[] Maps = {
             new TraversableMap(),
             new ScarecrowMap(),
-            new SprinklerMap()
+            new SprinklerMap(),
+            new JunimoHutMap()
         };
 
 
