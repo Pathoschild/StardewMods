@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using StardewModdingAPI;
 using StardewValley;
 using XRectangle = xTile.Dimensions.Rectangle;
 
@@ -99,6 +100,9 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <param name="spriteBatch">The sprite batch to which to draw.</param>
         protected override void Draw(SpriteBatch spriteBatch)
         {
+            if (!Context.IsPlayerFree)
+                return;
+
             // draw tile overlay
             {
                 int tileSize = Game1.tileSize;

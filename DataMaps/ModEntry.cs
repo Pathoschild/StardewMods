@@ -42,6 +42,7 @@ namespace Pathoschild.Stardew.DataMaps
             this.Config = helper.ReadConfig<ModConfig>();
 
             // hook up events
+            SaveEvents.AfterReturnToTitle += this.SaveEvents_AfterReturnToTitle;
             GameEvents.SecondUpdateTick += this.GameEvents_SecondUpdateTick;
             InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
         }
@@ -50,6 +51,15 @@ namespace Pathoschild.Stardew.DataMaps
         /*********
         ** Private methods
         *********/
+        /// <summary>The method invoked when the player returns to the title screen.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void SaveEvents_AfterReturnToTitle(object sender, EventArgs e)
+        {
+            this.CurrentOverlay?.Dispose();
+            this.CurrentOverlay = null;
+        }
+
         /// <summary>The method invoked when the player presses an input button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
