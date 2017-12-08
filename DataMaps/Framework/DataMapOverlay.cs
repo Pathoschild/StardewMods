@@ -192,6 +192,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         {
             this.CurrentMap = map;
             this.Legend = this.CurrentMap.GetLegendEntries().ToArray();
+            this.TileGroups = new TileGroup[0];
         }
 
         /// <summary>Recalculate the component positions and dimensions.</summary>
