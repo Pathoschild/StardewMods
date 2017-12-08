@@ -25,17 +25,17 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>The padding between the border and content.</summary>
         private readonly int Padding = 5;
 
+        /// <summary>The pixel size of a color box in the legend.</summary>
+        private readonly int LegendColorSize;
+
+        /// <summary>The width of the top-left boxes.</summary>
+        private readonly int BoxContentWidth;
+
         /// <summary>The available data maps.</summary>
         private readonly IDataMap[] Maps;
 
         /// <summary>The current data map to render.</summary>
         private IDataMap CurrentMap;
-
-        /// <summary>The width of the top-left boxes.</summary>
-        private int BoxContentWidth;
-
-        /// <summary>The pixel size of a color box in the legend.</summary>
-        private int LegendColorSize;
 
         /// <summary>The legend entries to show.</summary>
         private LegendEntry[] Legend;
@@ -55,8 +55,9 @@ namespace Pathoschild.Stardew.DataMaps.Framework
                 throw new InvalidOperationException("Can't initialise the data maps overlay with no data maps.");
 
             this.Maps = maps;
+            this.LegendColorSize = (int)Game1.smallFont.MeasureString("X").Y;
+            this.BoxContentWidth = this.GetMaxContentWidth(maps, this.LegendColorSize);
             this.SetMap(maps.First());
-            this.RecalculateDimensions();
         }
 
         /// <summary>Switch to the next data map.</summary>
@@ -178,14 +179,6 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             }
         }
 
-        /// <summary>The method invoked when the player resizes the game windoww.</summary>
-        /// <param name="oldBounds">The previous game window bounds.</param>
-        /// <param name="newBounds">The new game window bounds.</param>
-        protected override void ReceiveGameWindowResized(XRectangle oldBounds, XRectangle newBounds)
-        {
-            this.RecalculateDimensions();
-        }
-
         /// <summary>Switch to the given data map.</summary>
         /// <param name="map">The data map to select.</param>
         private void SetMap(IDataMap map)
@@ -193,19 +186,6 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             this.CurrentMap = map;
             this.Legend = this.CurrentMap.GetLegendEntries().ToArray();
             this.TileGroups = new TileGroup[0];
-        }
-
-        /// <summary>Recalculate the component positions and dimensions.</summary>
-        private void RecalculateDimensions()
-        {
-            // get content widths
-            float legendColorSize = Game1.smallFont.MeasureString("X").Y;
-            float labelWidth = this.Maps.Select(map => Game1.smallFont.MeasureString(map.Name).X).Max();
-            float legendContentWidth = legendColorSize + this.LegendColorPadding + (int)this.Legend.Select(entry => Game1.smallFont.MeasureString(entry.Name).X).Max();
-
-            // cache values
-            this.LegendColorSize = (int)legendColorSize;
-            this.BoxContentWidth = (int)Math.Max(labelWidth, legendContentWidth);
         }
 
         /// <summary>Draw a scroll background.</summary>
@@ -258,6 +238,28 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             int height = (int)Math.Ceiling(viewport.Height / (decimal)tileSize);
 
             return new Rectangle(left - 1, top - 1, width + 2, height + 2); // extend slightly off-screen to avoid tile pop-in at the edges
+        }
+
+        /// <summary>Get the maximum content width needed to render the data map labels and legends.</summary>
+        /// <param name="maps">The data maps to render.</param>
+        /// <param name="legendColorSize">The pixel size of a color box in the legend.</param>
+        private int GetMaxContentWidth(IDataMap[] maps, int legendColorSize)
+        {
+            float labelWidth =
+                (
+                    from map in maps
+                    select Game1.smallFont.MeasureString(map.Name).X
+                )
+                .Max();
+            float legendContentWidth =
+                (
+                    from map in maps
+                    from entry in map.GetLegendEntries()
+                    select Game1.smallFont.MeasureString(entry.Name).X
+                )
+                .Max() + legendColorSize + this.LegendColorPadding;
+
+            return (int)Math.Max(labelWidth, legendContentWidth);
         }
     }
 }
