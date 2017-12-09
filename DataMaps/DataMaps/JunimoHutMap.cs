@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
+using Pathoschild.Stardew.DataMaps.Framework.Integrations;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
@@ -27,6 +28,9 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>The maximum number of tiles from the center a Junimo hut can harvest.</summary>
         private readonly int MaxRadius = JunimoHut.cropHarvestRadius;
 
+        /// <summary>Handles the logic for integrating with the Pelican Fiber mod.</summary>
+        private readonly PelicanFiberIntegration PelicanFiber;
+
 
         /*********
         ** Accessors
@@ -43,8 +47,11 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        public JunimoHutMap(ITranslationHelper translations)
+        /// <param name="pelicanFiber">Handles the logic for integrating with the Pelican Fiber mod.</param>
+        public JunimoHutMap(ITranslationHelper translations, PelicanFiberIntegration pelicanFiber)
         {
+            this.PelicanFiber = pelicanFiber;
+
             this.Name = translations.Get("maps.junimo-huts.name");
             this.Legend = new[]
             {
@@ -88,14 +95,11 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             yield return new TileGroup(unharvested, outerBorderColor: this.NotCoveredColor);
 
             // yield hut being placed in build menu
-            if (Game1.activeClickableMenu is CarpenterMenu carpenterMenu)
+            if (this.IsBuildingHut())
             {
-                if (carpenterMenu.CurrentBlueprint.name == "Junimo Hut")
-                {
-                    Vector2 tile = TileHelper.GetTileFromCursor();
-                    TileData[] tiles = this.GetCoverage((int)tile.X, (int)tile.Y).Select(pos => new TileData(pos, this.CoveredColor * 0.75f)).ToArray();
-                    yield return new TileGroup(tiles, outerBorderColor: this.CoveredColor);
-                }
+                Vector2 tile = TileHelper.GetTileFromCursor();
+                TileData[] tiles = this.GetCoverage((int)tile.X, (int)tile.Y).Select(pos => new TileData(pos, this.CoveredColor * 0.75f)).ToArray();
+                yield return new TileGroup(tiles, outerBorderColor: this.CoveredColor);
             }
         }
 
@@ -108,6 +112,20 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         private bool IsCrop(TerrainFeature terrain)
         {
             return terrain is HoeDirt dirt && dirt.crop != null;
+        }
+
+        /// <summary>Get whether the build menu is open with a Junimo hut selected.</summary>
+        private bool IsBuildingHut()
+        {
+            // vanilla menu
+            if (Game1.activeClickableMenu is CarpenterMenu carpenterMenu && carpenterMenu.CurrentBlueprint.name == "Junimo Hut")
+                return true;
+
+            // Pelican Fiber menu
+            if (this.PelicanFiber.GetBuildMenuBlueprint()?.name == "Junimo Hut")
+                return true;
+
+            return false;
         }
 
         /// <summary>Get a Junimo hut tile radius.</summary>

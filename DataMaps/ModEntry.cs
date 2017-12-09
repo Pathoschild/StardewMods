@@ -3,8 +3,11 @@ using System.Linq;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.DataMaps;
 using Pathoschild.Stardew.DataMaps.Framework;
+using Pathoschild.Stardew.DataMaps.Framework.Integrations;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewValley;
+using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.DataMaps
 {
@@ -23,6 +26,9 @@ namespace Pathoschild.Stardew.DataMaps
         /// <summary>The available data maps.</summary>
         private IDataMap[] Maps;
 
+        /// <summary>Handles the logic for integrating with the Pelican Fiber mod.</summary>
+        private PelicanFiberIntegration PelicanFiber;
+
 
         /*********
         ** Public methods
@@ -31,16 +37,15 @@ namespace Pathoschild.Stardew.DataMaps
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            // load config
+            // initialise
             this.Config = helper.ReadConfig<ModConfig>();
-
-            // load data maps
+            this.PelicanFiber = new PelicanFiberIntegration(helper.ModRegistry, helper.Reflection);
             this.Maps = new IDataMap[]
             {
                 new AccessibilityMap(helper.Translation),
                 new ScarecrowMap(helper.Translation),
                 new SprinklerMap(helper.Translation),
-                new JunimoHutMap(helper.Translation)
+                new JunimoHutMap(helper.Translation, this.PelicanFiber)
             };
 
             // hook up events
@@ -71,7 +76,7 @@ namespace Pathoschild.Stardew.DataMaps
             this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
             {
                 // check context
-                if (!DataMapOverlay.CanOverlayNow())
+                if (!this.CanOverlayNow())
                     return;
                 bool overlayVisible = this.CurrentOverlay != null;
                 var controls = this.Config.Controls;
@@ -85,7 +90,7 @@ namespace Pathoschild.Stardew.DataMaps
                         this.CurrentOverlay = null;
                     }
                     else
-                        this.CurrentOverlay = new DataMapOverlay(this.Maps);
+                        this.CurrentOverlay = new DataMapOverlay(this.Maps, this.CanOverlayNow);
                     e.SuppressButton();
                 }
 
@@ -109,6 +114,15 @@ namespace Pathoschild.Stardew.DataMaps
         private void GameEvents_SecondUpdateTick(object sender, EventArgs e)
         {
             this.CurrentOverlay?.Update();
+        }
+
+        /// <summary>Whether overlays are allowed in the current game context.</summary>
+        private bool CanOverlayNow()
+        {
+            return
+                Context.IsPlayerFree
+                || Game1.activeClickableMenu is CarpenterMenu
+                || this.PelicanFiber.IsBuildMenuOpen();
         }
     }
 }

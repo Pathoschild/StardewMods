@@ -4,9 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
-using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Menus;
 using XRectangle = xTile.Dimensions.Rectangle;
 
 namespace Pathoschild.Stardew.DataMaps.Framework
@@ -32,6 +30,9 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>The width of the top-left boxes.</summary>
         private readonly int BoxContentWidth;
 
+        /// <summary>Get whether the overlay should be drawn.</summary>
+        private readonly Func<bool> DrawOverlay;
+
         /// <summary>The available data maps.</summary>
         private readonly IDataMap[] Maps;
 
@@ -50,12 +51,14 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="maps">The data maps to render.</param>
-        public DataMapOverlay(IDataMap[] maps)
+        /// <param name="drawOverlay">Get whether the overlay should be drawn.</param>
+        public DataMapOverlay(IDataMap[] maps, Func<bool> drawOverlay)
         {
             if (!maps.Any())
                 throw new InvalidOperationException("Can't initialise the data maps overlay with no data maps.");
 
             this.Maps = maps;
+            this.DrawOverlay = drawOverlay;
             this.LegendColorSize = (int)Game1.smallFont.MeasureString("X").Y;
             this.BoxContentWidth = this.GetMaxContentWidth(maps, this.LegendColorSize);
             this.SetMap(maps.First());
@@ -94,15 +97,6 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             this.TileGroups = this.CurrentMap.Update(location, this.GetVisibleArea(location, Game1.viewport)).ToArray();
         }
 
-        /// <summary>Whether overlays are allowed in the current game context.</summary>
-        public static bool CanOverlayNow()
-        {
-            return
-                Context.IsPlayerFree
-                || Game1.activeClickableMenu is CarpenterMenu
-                || Game1.activeClickableMenu?.GetType().FullName == "PelicanFiber.Framework.ConstructionMenu"; // Pelican Fiber build screen
-        }
-
 
         /*********
         ** Protected methods
@@ -111,7 +105,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <param name="spriteBatch">The sprite batch to which to draw.</param>
         protected override void Draw(SpriteBatch spriteBatch)
         {
-            if (!DataMapOverlay.CanOverlayNow())
+            if (!this.DrawOverlay())
                 return;
 
             // draw tile overlay
