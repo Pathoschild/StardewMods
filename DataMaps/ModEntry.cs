@@ -123,10 +123,13 @@ namespace Pathoschild.Stardew.DataMaps
         /// <summary>Whether overlays are allowed in the current game context.</summary>
         private bool CanOverlayNow()
         {
+            if (!Context.IsWorldReady)
+                return false;
+
             return
-                Context.IsPlayerFree
-                || Game1.activeClickableMenu is CarpenterMenu
-                || this.PelicanFiber.IsBuildMenuOpen();
+                Context.IsPlayerFree // player is free to roam
+                || (Game1.activeClickableMenu is CarpenterMenu && this.Helper.Reflection.GetPrivateValue<bool>(Game1.activeClickableMenu, "onFarm")) // on Robin's or Wizard's build screen
+                || (this.PelicanFiber.IsBuildMenuOpen() && this.Helper.Reflection.GetPrivateValue<bool>(Game1.activeClickableMenu, "OnFarm")); // on Pelican Fiber's build screen
         }
     }
 }
