@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Menus;
 using XRectangle = xTile.Dimensions.Rectangle;
 
 namespace Pathoschild.Stardew.DataMaps.Framework
@@ -93,6 +94,15 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             this.TileGroups = this.CurrentMap.Update(location, this.GetVisibleArea(location, Game1.viewport)).ToArray();
         }
 
+        /// <summary>Whether overlays are allowed in the current game context.</summary>
+        public static bool CanOverlayNow()
+        {
+            return
+                Context.IsPlayerFree
+                || Game1.activeClickableMenu is CarpenterMenu
+                || Game1.activeClickableMenu?.GetType().FullName == "PelicanFiber.Framework.ConstructionMenu"; // Pelican Fiber build screen
+        }
+
 
         /*********
         ** Protected methods
@@ -101,7 +111,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <param name="spriteBatch">The sprite batch to which to draw.</param>
         protected override void Draw(SpriteBatch spriteBatch)
         {
-            if (!Context.IsPlayerFree)
+            if (!DataMapOverlay.CanOverlayNow())
                 return;
 
             // draw tile overlay

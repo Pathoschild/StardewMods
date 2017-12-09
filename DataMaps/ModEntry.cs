@@ -20,9 +20,6 @@ namespace Pathoschild.Stardew.DataMaps
         /// <summary>The current overlay being displayed, if any.</summary>
         private DataMapOverlay CurrentOverlay;
 
-        /// <summary>Whether the overlay is currently visible.</summary>
-        private bool IsOverlayVisible => Context.IsPlayerFree && this.CurrentOverlay != null;
-
         /// <summary>The available data maps.</summary>
         private IDataMap[] Maps;
 
@@ -73,12 +70,16 @@ namespace Pathoschild.Stardew.DataMaps
             // perform bound action
             this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
             {
+                // check context
+                if (!DataMapOverlay.CanOverlayNow())
+                    return;
+                bool overlayVisible = this.CurrentOverlay != null;
                 var controls = this.Config.Controls;
 
                 // toggle overlay
-                if (Context.IsPlayerFree && controls.ToggleMap.Contains(e.Button))
+                if (controls.ToggleMap.Contains(e.Button))
                 {
-                    if (this.IsOverlayVisible)
+                    if (overlayVisible)
                     {
                         this.CurrentOverlay.Dispose();
                         this.CurrentOverlay = null;
@@ -89,12 +90,12 @@ namespace Pathoschild.Stardew.DataMaps
                 }
 
                 // cycle data maps
-                else if (this.IsOverlayVisible && controls.NextMap.Contains(e.Button))
+                else if (overlayVisible && controls.NextMap.Contains(e.Button))
                 {
                     this.CurrentOverlay.NextMap();
                     e.SuppressButton();
                 }
-                else if (this.IsOverlayVisible && controls.PrevMap.Contains(e.Button))
+                else if (overlayVisible && controls.PrevMap.Contains(e.Button))
                 {
                     this.CurrentOverlay.PrevMap();
                     e.SuppressButton();
