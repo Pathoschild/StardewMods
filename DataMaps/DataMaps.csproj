@@ -57,6 +57,13 @@
     <None Include="manifest.json" />
     <None Include="packages.config" />
     <None Include="README.md" />
+    <None Include="release-notes.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="docs\screenshots\accessibility.png" />
+    <Content Include="docs\screenshots\junimo-huts.png" />
+    <Content Include="docs\screenshots\scarecrows.png" />
+    <Content Include="docs\screenshots\sprinklers.png" />
   </ItemGroup>
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
