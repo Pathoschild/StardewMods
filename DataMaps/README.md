@@ -32,7 +32,7 @@ file if you want. These are the available settings:
 
 setting    | what it affects
 ---------- | -------------------
-`Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default values are `F2` to toggle the overlay, `Tab` or right controller shoulder to see the next data map, and left controller shoulder to see the previous one.
+`Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default values are `F2` to toggle the overlay, left `CTRL` or left controller shoulder for the previous map, and right `CTRL` or right controller shoulder for the next one.
 
 ## Versions
 ### 1.0

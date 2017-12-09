@@ -26,11 +26,11 @@ namespace Pathoschild.Stardew.DataMaps.Framework
 
             /// <summary>The control which cycles foreward through data maps.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
-            public SButton[] NextMap { get; set; } = { SButton.Tab, SButton.RightShoulder };
+            public SButton[] PrevMap { get; set; } = { SButton.LeftControl, SButton.LeftShoulder };
 
             /// <summary>The control which cycles foreward through data maps.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
-            public SButton[] PrevMap { get; set; } = { SButton.LeftShoulder };
+            public SButton[] NextMap { get; set; } = { SButton.RightControl, SButton.RightShoulder };
         }
     }
 }

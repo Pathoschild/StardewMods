@@ -85,13 +85,20 @@ namespace Pathoschild.Stardew.DataMaps
                     }
                     else
                         this.CurrentOverlay = new DataMapOverlay(this.Maps);
+                    e.SuppressButton();
                 }
 
                 // cycle data maps
                 else if (this.IsOverlayVisible && controls.NextMap.Contains(e.Button))
+                {
                     this.CurrentOverlay.NextMap();
+                    e.SuppressButton();
+                }
                 else if (this.IsOverlayVisible && controls.PrevMap.Contains(e.Button))
+                {
                     this.CurrentOverlay.PrevMap();
+                    e.SuppressButton();
+                }
             });
         }
 
