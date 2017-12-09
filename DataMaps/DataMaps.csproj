@@ -42,6 +42,7 @@
     <Compile Include="DataMaps\AccessibilityMap.cs" />
     <Compile Include="Framework\DataMapOverlay.cs" />
     <Compile Include="Framework\IDataMap.cs" />
+    <Compile Include="Framework\Integrations\BetterSprinklersIntegrations.cs" />
     <Compile Include="Framework\Integrations\PelicanFiberIntegration.cs" />
     <Compile Include="Framework\LegendEntry.cs" />
     <Compile Include="Framework\ModConfig.cs" />

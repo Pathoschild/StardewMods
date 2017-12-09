@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
+using Pathoschild.Stardew.DataMaps.Framework.Integrations;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -26,6 +27,12 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>The maximum number of tiles from the center a sprinkler can protect.</summary>
         private readonly int MaxRadius = 2;
 
+        /// <summary>The default sprinkler tiles centered on (0, 0), indexed by sprinkler ID.</summary>
+        private IDictionary<int, Vector2[]> DefaultSprinklerTiles;
+
+        /// <summary>Handles the logic for integrating with the Better Sprinklers mod.</summary>
+        private readonly BetterSprinklersIntegrations BetterSprinklers;
+
 
         /*********
         ** Accessors
@@ -42,8 +49,14 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        public SprinklerMap(ITranslationHelper translations)
+        /// <param name="betterSprinklers">Handles the logic for integrating with the Better Sprinklers mod.</param>
+        public SprinklerMap(ITranslationHelper translations, BetterSprinklersIntegrations betterSprinklers)
         {
+            this.BetterSprinklers = betterSprinklers;
+            this.DefaultSprinklerTiles = this.GetDefaultSprinklerTiles();
+            if (betterSprinklers.IsLoaded)
+                this.MaxRadius = Math.Max(this.MaxRadius, betterSprinklers.MaxRadius);
+
             this.Name = translations.Get("maps.sprinklers.name");
             this.Legend = new[]
             {
@@ -71,11 +84,16 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
                 )
                 .ToArray();
 
+            // get radius
+            var radii = this.BetterSprinklers.IsLoaded
+                ? this.BetterSprinklers.GetSprinklerTiles()
+                : this.DefaultSprinklerTiles;
+
             // yield sprinkler coverage
             HashSet<Vector2> covered = new HashSet<Vector2>();
             foreach (Object sprinkler in sprinklers)
             {
-                TileData[] tiles = this.GetCoverage(sprinkler, sprinkler.TileLocation).Select(pos => new TileData(pos, this.WetColor)).ToArray();
+                TileData[] tiles = this.GetCoverage(sprinkler, sprinkler.TileLocation, radii).Select(pos => new TileData(pos, this.WetColor)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
                 yield return new TileGroup(tiles, outerBorderColor: this.WetColor);
@@ -90,7 +108,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             if (this.IsSprinkler(heldObj))
             {
                 Vector2 cursorTile = TileHelper.GetTileFromCursor();
-                TileData[] tiles = this.GetCoverage(heldObj, cursorTile).Select(pos => new TileData(pos, this.WetColor * 0.75f)).ToArray();
+                TileData[] tiles = this.GetCoverage(heldObj, cursorTile, radii).Select(pos => new TileData(pos, this.WetColor * 0.75f)).ToArray();
                 yield return new TileGroup(tiles, outerBorderColor: this.WetColor);
             }
         }
@@ -119,40 +137,44 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             return terrain is HoeDirt dirt && dirt.crop != null;
         }
 
+        /// <summary>Get the default sprinkler tiles centered on (0, 0).</summary>
+        private IDictionary<int, Vector2[]> GetDefaultSprinklerTiles()
+        {
+            Vector2 center = Vector2.Zero;
+            IDictionary<int, Vector2[]> tiles = new Dictionary<int, Vector2[]>();
+
+            // basic sprinkler
+            tiles[599] = Utility.getAdjacentTileLocationsArray(center).Concat(new[] { center }).ToArray();
+
+            // quality sprinkler
+            tiles[621] = Utility.getSurroundingTileLocationsArray(center).Concat(new[] { center }).ToArray();
+
+            // iridium sprinkler
+            List<Vector2> iridiumTiles = new List<Vector2>(4 * 4);
+            for (int x = -2; x <= 2; x++)
+            {
+                for (int y = -2; y <= 2; y++)
+                    iridiumTiles.Add(new Vector2(x, y));
+            }
+            tiles[645] = iridiumTiles.ToArray();
+
+            return tiles;
+        }
+
         /// <summary>Get a sprinkler tile radius.</summary>
         /// <param name="sprinkler">The sprinkler whose radius to get.</param>
         /// <param name="origin">The sprinkler's tile.</param>
+        /// <param name="radii">The sprinkler radii centered on (0, 0) indexed by sprinkler ID.</param>
         /// <remarks>Derived from <see cref="Object.DayUpdate"/>.</remarks>
-        private IEnumerable<Vector2> GetCoverage(Object sprinkler, Vector2 origin)
+        private IEnumerable<Vector2> GetCoverage(Object sprinkler, Vector2 origin, IDictionary<int, Vector2[]> radii)
         {
-            switch (sprinkler.parentSheetIndex)
-            {
-                // basic sprinkler
-                case 599:
-                    yield return origin;
-                    foreach (Vector2 tile in Utility.getAdjacentTileLocationsArray(origin))
-                        yield return tile;
-                    break;
+            // get relative tiles
+            if (!radii.TryGetValue(sprinkler.parentSheetIndex, out Vector2[] tiles))
+                throw new NotSupportedException($"Unknown sprinkler ID {sprinkler.parentSheetIndex}.");
 
-                // quality sprinkler
-                case 621:
-                    yield return origin;
-                    foreach (Vector2 tile in Utility.getSurroundingTileLocationsArray(origin))
-                        yield return tile;
-                    break;
-
-                // iridium sprinkler
-                case 645:
-                    for (int x = -this.MaxRadius; x <= this.MaxRadius; x++)
-                    {
-                        for (int y = -this.MaxRadius; y <= this.MaxRadius; y++)
-                            yield return new Vector2(origin.X + x, origin.Y + y);
-                    }
-                    break;
-
-                default:
-                    throw new NotSupportedException($"Unknown sprinkler ID {sprinkler.parentSheetIndex}");
-            }
+            // get tiles
+            foreach (Vector2 tile in tiles)
+                yield return origin + tile;
         }
 
         /// <summary>Get tiles containing crops not covered by a sprinkler.</summary>

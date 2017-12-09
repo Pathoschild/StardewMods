@@ -22,9 +22,9 @@ These overlays are supported:
 overlay       | information shown
 ------------- | -----------------
 Accessibility | Shows where the player can walk and warp tiles. Useful for finding hidden paths or nooks.
-Junimo huts   | Shows Junimo hut coverage, and highlights crops they won't reach. Also works when placing a Junimo hut from the Wizard's build menu or the Pelican Fiber mod.
+Junimo huts   | Shows Junimo hut coverage, and highlights crops they won't reach. Also works when placing a Junimo hut from the Wizard's build menu. Compatible with Pelican Fiber.
 Scarecrows    | Shows scarecrow coverage, and highlights unprotected crops. Also works on scarecrows being placed.
-Sprinklers    | Shows sprinkler coverage, and highlights unsprinkled crops. Also works on sprinklers being placed.
+Sprinklers    | Shows sprinkler coverage, and highlights unsprinkled crops. Also works on sprinklers being placed. Compatible with Better Sprinklers.
 
 ## Configuration
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
@@ -38,7 +38,7 @@ setting    | what it affects
 ### 1.0
 * Initial version.
 * Added Junimo huts, scarecrows, sprinklers, and accessibility data maps.
-* Added compatibility with Pelican Fiber.
+* Added compatibility with Better Sprinklers and Pelican Fiber.
 
 ## See also
 * <s>Nexus mod</s>

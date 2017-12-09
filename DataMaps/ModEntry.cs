@@ -29,6 +29,9 @@ namespace Pathoschild.Stardew.DataMaps
         /// <summary>Handles the logic for integrating with the Pelican Fiber mod.</summary>
         private PelicanFiberIntegration PelicanFiber;
 
+        /// <summary>Handles the logic for integrating with the Better Sprinklers mod.</summary>
+        private BetterSprinklersIntegrations BetterSprinklers;
+
 
         /*********
         ** Public methods
@@ -40,11 +43,12 @@ namespace Pathoschild.Stardew.DataMaps
             // initialise
             this.Config = helper.ReadConfig<ModConfig>();
             this.PelicanFiber = new PelicanFiberIntegration(helper.ModRegistry, helper.Reflection);
+            this.BetterSprinklers = new BetterSprinklersIntegrations(helper.ModRegistry, helper.Reflection, this.Monitor);
             this.Maps = new IDataMap[]
             {
                 new AccessibilityMap(helper.Translation),
                 new ScarecrowMap(helper.Translation),
-                new SprinklerMap(helper.Translation),
+                new SprinklerMap(helper.Translation, this.BetterSprinklers),
                 new JunimoHutMap(helper.Translation, this.PelicanFiber)
             };
 
