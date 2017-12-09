@@ -17,10 +17,10 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         ** Properties
         *********/
         /// <summary>The color for tiles protected by a scarecrow.</summary>
-        private readonly Color Covered = Color.Green;
+        private readonly Color CoveredColor = Color.Green;
 
         /// <summary>The color for tiles not protected by a scarecrow.</summary>
-        private readonly Color Exposed = Color.Red;
+        private readonly Color ExposedColor = Color.Red;
 
         /// <summary>The maximum number of tiles from the center a scarecrow can protect.</summary>
         private readonly int MaxRadius = 8;
@@ -46,8 +46,8 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             this.Name = translations.Get("maps.scarecrows.name");
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("maps.scarecrows.protected"), this.Covered),
-                new LegendEntry(translations.Get("maps.scarecrows.exposed"), this.Exposed)
+                new LegendEntry(translations.Get("maps.scarecrows.protected"), this.CoveredColor),
+                new LegendEntry(translations.Get("maps.scarecrows.exposed"), this.ExposedColor)
             };
         }
 
@@ -74,15 +74,15 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             HashSet<Vector2> covered = new HashSet<Vector2>();
             foreach (Object scarecrow in scarecrows)
             {
-                TileData[] tiles = this.GetCoverage(scarecrow).Select(pos => new TileData(pos, this.Covered)).ToArray();
+                TileData[] tiles = this.GetCoverage(scarecrow).Select(pos => new TileData(pos, this.CoveredColor)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
-                yield return new TileGroup(tiles, outerBorders: true);
+                yield return new TileGroup(tiles, outerBorderColor: this.CoveredColor);
             }
 
             // yield exposed crops
-            TileData[] exposedCrops = this.GetExposedCrops(location, visibleTiles, covered).Select(pos => new TileData(pos, this.Exposed)).ToArray();
-            yield return new TileGroup(exposedCrops, outerBorders: true);
+            TileData[] exposedCrops = this.GetExposedCrops(location, visibleTiles, covered).Select(pos => new TileData(pos, this.ExposedColor)).ToArray();
+            yield return new TileGroup(exposedCrops, outerBorderColor: this.ExposedColor);
         }
 
 

@@ -78,12 +78,12 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
                 TileData[] tiles = this.GetCoverage(sprinkler).Select(pos => new TileData(pos, this.WetColor)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
-                yield return new TileGroup(tiles, outerBorders: true);
+                yield return new TileGroup(tiles, outerBorderColor: this.WetColor);
             }
 
             // yield dry crops
             TileData[] dryCrops = this.GetDryCrops(location, visibleTiles, covered).Select(pos => new TileData(pos, this.DryColor)).ToArray();
-            yield return new TileGroup(dryCrops, outerBorders: true);
+            yield return new TileGroup(dryCrops, outerBorderColor: this.DryColor);
         }
 
 

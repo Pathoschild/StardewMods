@@ -18,10 +18,10 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         ** Properties
         *********/
         /// <summary>The color for tiles harvested by a Junimo hut.</summary>
-        private readonly Color Covered = Color.Green;
+        private readonly Color CoveredColor = Color.Green;
 
         /// <summary>The color for tiles not harvested by a Junimo hut.</summary>
-        private readonly Color NotCovered = Color.Red;
+        private readonly Color NotCoveredColor = Color.Red;
 
         /// <summary>The maximum number of tiles from the center a Junimo hut can harvest.</summary>
         private readonly int MaxRadius = JunimoHut.cropHarvestRadius;
@@ -47,8 +47,8 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             this.Name = translations.Get("maps.junimo-huts.name");
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("maps.junimo-huts.can-harvest"), this.Covered),
-                new LegendEntry(translations.Get("maps.junimo-huts.cannot-harvest"), this.NotCovered)
+                new LegendEntry(translations.Get("maps.junimo-huts.can-harvest"), this.CoveredColor),
+                new LegendEntry(translations.Get("maps.junimo-huts.cannot-harvest"), this.NotCoveredColor)
             };
         }
 
@@ -76,15 +76,15 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             HashSet<Vector2> covered = new HashSet<Vector2>();
             foreach (JunimoHut hut in huts)
             {
-                TileData[] tiles = this.GetCoverage(hut).Select(pos => new TileData(pos, this.Covered)).ToArray();
+                TileData[] tiles = this.GetCoverage(hut).Select(pos => new TileData(pos, this.CoveredColor)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
-                yield return new TileGroup(tiles, outerBorders: true);
+                yield return new TileGroup(tiles, outerBorderColor: this.CoveredColor);
             }
 
             // yield unharvested crops
-            TileData[] unharvested = this.GetUnharvestedCrops(location, visibleTiles, covered).Select(pos => new TileData(pos, this.NotCovered)).ToArray();
-            yield return new TileGroup(unharvested, outerBorders: true);
+            TileData[] unharvested = this.GetUnharvestedCrops(location, visibleTiles, covered).Select(pos => new TileData(pos, this.NotCoveredColor)).ToArray();
+            yield return new TileGroup(unharvested, outerBorderColor: this.NotCoveredColor);
         }
 
 

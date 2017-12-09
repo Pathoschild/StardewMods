@@ -118,10 +118,10 @@ namespace Pathoschild.Stardew.DataMaps.Framework
                         spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize), tile.Color * .3f);
 
                         // draw borders
-                        if (group.OuterBorders)
+                        if (group.OuterBorderColor != null)
                         {
                             const int borderSize = 4;
-                            Color borderColor = tile.Color * 0.9f;
+                            Color borderColor = group.OuterBorderColor.Value * 0.9f;
                             int x = (int)tile.TilePosition.X;
                             int y = (int)tile.TilePosition.Y;
 

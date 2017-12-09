@@ -76,7 +76,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
 
             // passable tiles
             TileData[] passableTiles = tiles.Where(p => p.Color == this.ClearColor).ToArray();
-            yield return new TileGroup(passableTiles, outerBorders: true);
+            yield return new TileGroup(passableTiles, outerBorderColor: this.ClearColor);
 
             // other tiles
             yield return new TileGroup(tiles.Except(passableTiles).ToArray());
