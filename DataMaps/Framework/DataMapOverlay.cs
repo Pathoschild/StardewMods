@@ -105,6 +105,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
                 return;
 
             // draw tile overlay
+            IDictionary<Vector2, HashSet<Color>> drawnColors = new Dictionary<Vector2, HashSet<Color>>();
             {
                 int tileSize = Game1.tileSize;
                 foreach (TileGroup group in this.TileGroups.ToArray())
@@ -114,8 +115,20 @@ namespace Pathoschild.Stardew.DataMaps.Framework
                     {
                         Vector2 position = tile.TilePosition * tileSize - new Vector2(Game1.viewport.X, Game1.viewport.Y);
 
+                        // should we draw this tile overlay?
+                        bool drawOverlay = true;
+                        if (drawnColors.TryGetValue(tile.TilePosition, out HashSet<Color> prevColors))
+                        {
+                            if (prevColors.Contains(tile.Color))
+                                drawOverlay = false;
+                            prevColors.Add(tile.Color);
+                        }
+                        else
+                            drawnColors[tile.TilePosition] = new HashSet<Color> { tile.Color };
+
                         // draw tile overlay
-                        spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize), tile.Color * .3f);
+                        if (drawOverlay)
+                            spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize), tile.Color * .3f);
 
                         // draw borders
                         if (group.OuterBorderColor != null)
