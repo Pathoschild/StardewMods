@@ -7,6 +7,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.DataMaps.DataMaps
@@ -76,7 +77,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             HashSet<Vector2> covered = new HashSet<Vector2>();
             foreach (JunimoHut hut in huts)
             {
-                TileData[] tiles = this.GetCoverage(hut).Select(pos => new TileData(pos, this.CoveredColor)).ToArray();
+                TileData[] tiles = this.GetCoverage(hut.tileX, hut.tileY).Select(pos => new TileData(pos, this.CoveredColor)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
                 yield return new TileGroup(tiles, outerBorderColor: this.CoveredColor);
@@ -85,6 +86,17 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             // yield unharvested crops
             TileData[] unharvested = this.GetUnharvestedCrops(location, visibleTiles, covered).Select(pos => new TileData(pos, this.NotCoveredColor)).ToArray();
             yield return new TileGroup(unharvested, outerBorderColor: this.NotCoveredColor);
+
+            // yield hut being placed in build menu
+            if (Game1.activeClickableMenu is CarpenterMenu carpenterMenu)
+            {
+                if (carpenterMenu.CurrentBlueprint.name == "Junimo Hut")
+                {
+                    Vector2 tile = TileHelper.GetTileFromCursor();
+                    TileData[] tiles = this.GetCoverage((int)tile.X, (int)tile.Y).Select(pos => new TileData(pos, this.CoveredColor * 0.75f)).ToArray();
+                    yield return new TileGroup(tiles, outerBorderColor: this.CoveredColor);
+                }
+            }
         }
 
 
@@ -99,11 +111,12 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         }
 
         /// <summary>Get a Junimo hut tile radius.</summary>
-        /// <param name="hut">The Junimo hut whose radius to get.</param>
+        /// <param name="tileX">The hut's tile X position.</param>
+        /// <param name="tileY">The hut's tile X position.</param>
         /// <remarks>Derived from <see cref="StardewValley.Characters.JunimoHarvester.pathFindToNewCrop_doWork"/>.</remarks>
-        private IEnumerable<Vector2> GetCoverage(JunimoHut hut)
+        private IEnumerable<Vector2> GetCoverage(int tileX, int tileY)
         {
-            Vector2 origin = new Vector2(hut.tileX + 1, hut.tileY + 1); // centered on hut door
+            Vector2 origin = new Vector2(tileX + 1, tileY + 1); // centered on hut door
             for (int x = (int)origin.X - this.MaxRadius; x <= (int)origin.X + this.MaxRadius; x++)
             {
                 for (int y = (int)origin.Y - this.MaxRadius; y <= (int)origin.Y + this.MaxRadius; y++)

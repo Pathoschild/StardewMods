@@ -77,8 +77,15 @@ namespace Pathoschild.Stardew.Common
         /// <summary>Get the tile under the player's cursor (not restricted to the player's grab tile range).</summary>
         public static Vector2 GetTileFromCursor()
         {
-            Vector2 screenPixels = new Vector2(Game1.getMouseX(), Game1.getMouseY());
-            return new Vector2((int)((Game1.viewport.X + screenPixels.X) / Game1.tileSize), (int)((Game1.viewport.Y + screenPixels.Y) / Game1.tileSize));
+            return TileHelper.GetTileFromScreenPosition(Game1.getMouseX(), Game1.getMouseY());
+        }
+
+        /// <summary>Get the tile at the pixel coordinate relative to the top-left corner of the screen.</summary>
+        /// <param name="x">The pixel X coordinate.</param>
+        /// <param name="y">The pixel Y coordinate.</param>
+        public static Vector2 GetTileFromScreenPosition(float x, float y)
+        {
+            return new Vector2((int)((Game1.viewport.X + x) / Game1.tileSize), (int)((Game1.viewport.Y + y) / Game1.tileSize));
         }
     }
 }
