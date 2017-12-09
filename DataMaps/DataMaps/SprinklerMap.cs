@@ -75,7 +75,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             HashSet<Vector2> covered = new HashSet<Vector2>();
             foreach (Object sprinkler in sprinklers)
             {
-                TileData[] tiles = this.GetCoverage(sprinkler).Select(pos => new TileData(pos, this.WetColor)).ToArray();
+                TileData[] tiles = this.GetCoverage(sprinkler, sprinkler.TileLocation).Select(pos => new TileData(pos, this.WetColor)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
                 yield return new TileGroup(tiles, outerBorderColor: this.WetColor);
@@ -84,6 +84,15 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             // yield dry crops
             TileData[] dryCrops = this.GetDryCrops(location, visibleTiles, covered).Select(pos => new TileData(pos, this.DryColor)).ToArray();
             yield return new TileGroup(dryCrops, outerBorderColor: this.DryColor);
+
+            // yield sprinkler being placed
+            Object heldObj = Game1.player.ActiveObject;
+            if (this.IsSprinkler(heldObj))
+            {
+                Vector2 cursorTile = TileHelper.GetTileFromCursor();
+                TileData[] tiles = this.GetCoverage(heldObj, cursorTile).Select(pos => new TileData(pos, this.WetColor * 0.75f)).ToArray();
+                yield return new TileGroup(tiles, outerBorderColor: this.WetColor);
+            }
         }
 
 
@@ -94,6 +103,9 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <param name="obj">The map object.</param>
         private bool IsSprinkler(Object obj)
         {
+            if (obj == null)
+                return false;
+
             return
                 obj.parentSheetIndex == 599 // basic sprinkler
                 || obj.parentSheetIndex == 621 // quality
@@ -109,10 +121,10 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
 
         /// <summary>Get a sprinkler tile radius.</summary>
         /// <param name="sprinkler">The sprinkler whose radius to get.</param>
+        /// <param name="origin">The sprinkler's tile.</param>
         /// <remarks>Derived from <see cref="Object.DayUpdate"/>.</remarks>
-        private IEnumerable<Vector2> GetCoverage(Object sprinkler)
+        private IEnumerable<Vector2> GetCoverage(Object sprinkler, Vector2 origin)
         {
-            Vector2 origin = sprinkler.TileLocation;
             switch (sprinkler.parentSheetIndex)
             {
                 // basic sprinkler

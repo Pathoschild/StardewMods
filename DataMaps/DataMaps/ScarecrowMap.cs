@@ -74,7 +74,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             HashSet<Vector2> covered = new HashSet<Vector2>();
             foreach (Object scarecrow in scarecrows)
             {
-                TileData[] tiles = this.GetCoverage(scarecrow).Select(pos => new TileData(pos, this.CoveredColor)).ToArray();
+                TileData[] tiles = this.GetCoverage(scarecrow.TileLocation).Select(pos => new TileData(pos, this.CoveredColor)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
                 yield return new TileGroup(tiles, outerBorderColor: this.CoveredColor);
@@ -83,6 +83,15 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             // yield exposed crops
             TileData[] exposedCrops = this.GetExposedCrops(location, visibleTiles, covered).Select(pos => new TileData(pos, this.ExposedColor)).ToArray();
             yield return new TileGroup(exposedCrops, outerBorderColor: this.ExposedColor);
+
+            // yield scarecrow being placed
+            Object heldObj = Game1.player.ActiveObject;
+            if (this.IsScarecrow(heldObj))
+            {
+                Vector2 cursorTile = TileHelper.GetTileFromCursor();
+                TileData[] tiles = this.GetCoverage(cursorTile).Select(pos => new TileData(pos, this.CoveredColor * 0.75f)).ToArray();
+                yield return new TileGroup(tiles, outerBorderColor: this.CoveredColor);
+            }
         }
 
 
@@ -94,7 +103,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <remarks>Derived from <see cref="Farm.addCrows"/>.</remarks>
         private bool IsScarecrow(Object obj)
         {
-            return obj.bigCraftable && obj.Name.Contains("arecrow");
+            return obj != null && obj.bigCraftable && obj.Name.Contains("arecrow");
         }
 
         /// <summary>Get whether a map terrain feature is a crop.</summary>
@@ -105,12 +114,10 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         }
 
         /// <summary>Get a scarecrow tile radius.</summary>
-        /// <param name="scarecrow">The scarecrow whose radius to get.</param>
+        /// <param name="origin">The scarecrow's tile.</param>
         /// <remarks>Derived from <see cref="Farm.addCrows"/>.</remarks>
-        private IEnumerable<Vector2> GetCoverage(Object scarecrow)
+        private IEnumerable<Vector2> GetCoverage(Vector2 origin)
         {
-            Vector2 origin = scarecrow.TileLocation;
-
             for (int x = (int)origin.X - this.MaxRadius; x <= origin.X + this.MaxRadius; x++)
             {
                 for (int y = (int)origin.Y - this.MaxRadius; y <= origin.Y + this.MaxRadius; y++)

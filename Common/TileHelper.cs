@@ -70,5 +70,15 @@ namespace Pathoschild.Stardew.Common
                     yield return new Vector2(curX, curY);
             }
         }
+
+        /****
+        ** Cursor
+        ****/
+        /// <summary>Get the tile under the player's cursor (not restricted to the player's grab tile range).</summary>
+        public static Vector2 GetTileFromCursor()
+        {
+            Vector2 screenPixels = new Vector2(Game1.getMouseX(), Game1.getMouseY());
+            return new Vector2((int)((Game1.viewport.X + screenPixels.X) / Game1.tileSize), (int)((Game1.viewport.Y + screenPixels.Y) / Game1.tileSize));
+        }
     }
 }
