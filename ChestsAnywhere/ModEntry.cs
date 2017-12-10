@@ -49,7 +49,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // initialise
             this.Config = helper.ReadConfig<ModConfig>();
             this.Data = helper.ReadJsonFile<ModData>("data.json") ?? new ModData();
-            this.ChestFactory = new ChestFactory(helper.Translation, helper.Reflection);
+            this.ChestFactory = new ChestFactory(helper.Translation, helper.Reflection, this.Config.EnableShippingBin);
 
             // hook UI
             GraphicsEvents.OnPostRenderHudEvent += this.GraphicsEvents_OnPostRenderHudEvent;
@@ -123,7 +123,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     return;
 
                 // reopen shipping box in standard chest UI
-                if (chest.Container is ShippingBinContainer && !chestMenu.showReceivingMenu)
+                if (this.Config.EnableShippingBin && chest.Container is ShippingBinContainer && !chestMenu.showReceivingMenu)
                     Game1.activeClickableMenu = chest.OpenMenu();
 
                 // add overlay

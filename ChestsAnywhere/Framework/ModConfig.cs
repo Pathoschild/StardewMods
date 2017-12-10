@@ -14,6 +14,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>Whether to show the chest name in a tooltip when you point at a chest.</summary>
         public bool ShowHoverTooltips { get; set; } = true;
 
+        /// <summary>Whether to enable access to the shipping bin.</summary>
+        public bool EnableShippingBin { get; set; } = true;
+
         /// <summary>The range at which chests are accessible.</summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public ChestRange Range { get; set; } = ChestRange.Unlimited;

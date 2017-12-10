@@ -3,6 +3,7 @@
 # Release notes
 ## 1.12.1
 * Updated to SMAPI 2.2.
+* Added option to disable the shipping bin features.
 
 ## 1.12
 * Updated to SMAPI 2.1.
