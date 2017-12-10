@@ -4,6 +4,7 @@
 ## 1.12.1
 * Updated to SMAPI 2.2.
 * Added option to disable the shipping bin features.
+* Fixed issue where shipping bin loses the filter on refresh.
 
 ## 1.12
 * Updated to SMAPI 2.1.
