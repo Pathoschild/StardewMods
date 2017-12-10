@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.12.1
+* Updated to SMAPI 2.2.
+
 ## 1.12
 * Updated to SMAPI 2.1.
 * Added support for Junimo huts and the shipping bin.
