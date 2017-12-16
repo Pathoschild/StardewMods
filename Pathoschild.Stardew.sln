@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LookupAnything", "LookupAnything\LookupAnything.csproj", "{2A9C0811-B2D2-474A-A84C-DDEB16206A62}"
 EndProject
@@ -12,7 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".metadata", ".metadata", "{
 		.gitignore = .gitignore
 		deploy-mod.targets = deploy-mod.targets
 		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
-		latest-versions.json = latest-versions.json
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
