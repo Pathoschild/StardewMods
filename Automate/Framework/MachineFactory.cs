@@ -6,6 +6,7 @@ using Pathoschild.Stardew.Automate.Framework.Machines.Objects;
 using Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures;
 using Pathoschild.Stardew.Automate.Framework.Machines.Tiles;
 using Pathoschild.Stardew.Automate.Framework.Storage;
+using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
