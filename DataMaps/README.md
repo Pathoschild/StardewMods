@@ -1,8 +1,6 @@
 **Data Maps** is a [Stardew Valley](http://stardewvalley.net/) mod that overlays the world with
 metadata maps.
 
-**This is a pre-release prototype.**
-
 ## Contents
 * [Install](#install)
 * [Use](#use)
@@ -11,7 +9,7 @@ metadata maps.
 
 ## Install
 1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
-2. <s>Install this mod from Nexus mods</s>.
+2. [Install this mod from Nexus mods](https://www.nexusmods.com/stardewvalley/mods/1691).
 3. Run the game using SMAPI.
 
 ## Use
@@ -48,5 +46,5 @@ setting    | what it affects
 See [release notes](release-notes.md).
 
 ## See also
-* <s>Nexus mod</s>
-* <s>Discussion thread</s>
+* [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1691)
+* [Discussion thread](https://community.playstarbound.com/threads/data-maps.139625/)
