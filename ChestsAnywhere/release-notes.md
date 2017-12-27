@@ -4,8 +4,8 @@
 ## 1.12.1
 * Updated to SMAPI 2.3.
 * Added option to disable the shipping bin features.
-* Fixed issue where shipping bin loses the filter on refresh.
-* Fixed dropdown clicks passing through and transferring items (via SMAPI 2.2).
+* Fixed shipping bin losing filter on refresh.
+* Fixed dropdown clicks transferring items underneath (via SMAPI 2.2).
 * Fixed overlay not being drawn when menu backgrounds are enabled (via SMAPI 2.3).
 
 ## 1.12
