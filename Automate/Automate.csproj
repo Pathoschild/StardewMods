@@ -40,7 +40,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AutomateMod.cs" />
+    <Compile Include="ModEntry.cs" />
     <Compile Include="IConsumable.cs" />
     <Compile Include="IStorage.cs" />
     <Compile Include="Framework\MachineGroupBuilder.cs" />
@@ -48,7 +48,6 @@
     <Compile Include="IContainer.cs" />
     <Compile Include="Framework\OverlayMenu.cs" />
     <Compile Include="Recipe.cs" />
-    <Compile Include="Framework\TileHelper.cs" />
     <Compile Include="Framework\TrackedItem.cs" />
     <Compile Include="Framework\StorageManager.cs" />
     <Compile Include="Framework\GenericMachine.cs" />

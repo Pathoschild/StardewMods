@@ -19,7 +19,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.TractorMod
 {
     /// <summary>The mod entry point.</summary>
-    public class TractorMod : Mod
+    internal class ModEntry : Mod
     {
         /*********
         ** Properties

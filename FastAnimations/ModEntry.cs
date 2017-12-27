@@ -10,7 +10,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.FastAnimations
 {
     /// <summary>The mod entry point.</summary>
-    public class FastAnimationsMod : Mod
+    internal class ModEntry : Mod
     {
         /*********
         ** Properties

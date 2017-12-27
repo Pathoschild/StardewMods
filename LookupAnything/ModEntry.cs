@@ -16,7 +16,7 @@ using StardewValley.Menus;
 namespace Pathoschild.Stardew.LookupAnything
 {
     /// <summary>The mod entry point.</summary>
-    public class LookupAnythingMod : Mod
+    internal class ModEntry : Mod
     {
         /*********
         ** Properties

@@ -1,6 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.12.1
+* Updated to SMAPI 2.3.
+* Added option to disable the shipping bin features.
+* Fixed shipping bin losing filter on refresh.
+* Fixed dropdown clicks transferring items underneath (via SMAPI 2.2).
+* Fixed overlay not being drawn when menu backgrounds are enabled (via SMAPI 2.3).
+
 ## 1.12
 * Updated to SMAPI 2.1.
 * Added support for Junimo huts and the shipping bin.

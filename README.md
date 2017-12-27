@@ -14,6 +14,9 @@ Active mods:
   _Access your chests from anywhere and organise them your way. Transfer items without having to
   run around, from the comfort of your bed to the deepest mine level._
 
+* **[Data Maps](https://www.nexusmods.com/stardewvalley/mods/1691)** <small>([source](DataMaps))</small>  
+  _Overlays the world with data maps to show accessibility, sprinkler coverage, etc._
+
 * **[Debug Mode](http://www.nexusmods.com/stardewvalley/mods/679)** <small>([source](DebugMode))</small>  
   _Press a button to view debug information and unlock the game's built-in debug commands
   (including teleportation and time manipulation)._
@@ -41,9 +44,6 @@ Active mods:
   _Lets you buy a tractor to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc._
 
 Inactive mods:
-* **Data Maps** <small>([source](DataMaps))</small>  
-  _(in development) Overlays the world with metadata maps._
-
 * **No Debug Mode** <small>([source](NoDebugMode))</small>  
   _(obsolete) Disables SMAPI's F2 debug mode, which can cause unintended effects like skipping an
   entire season or teleporting into walls._
@@ -54,14 +54,14 @@ use the right translations.
 
 (❑ = untranslated, ↻ = partly translated, ✓ = fully translated)
 
-&nbsp;     | Chests Anywhere | Debug Mode | Lookup Anything | Tractor Mod
----------- | :-------------- | :--------- | :-------------- | :----------
-Chinese    | ✓ [zh.json](ChestsAnywhere/i18n/zh.json) | ✓ [zh.json](DebugMode/i18n/zh.json) | ✓ [zh.json](LookupAnything/i18n/zh.json) | ✓ [zh.json](TractorMod/i18n/zh.json)
-German     | ↻ [de.json](ChestsAnywhere/i18n/de.json) | ✓ [de.json](DebugMode/i18n/de.json) | ✓ [de.json](LookupAnything/i18n/de.json) | ✓ [de.json](TractorMod/i18n/de.json)
-Japanese   | ❑ | ❑ | ❑ | ❑
-Portuguese | ✓ [pt.json](ChestsAnywhere/i18n/pt.json) | ✓ [pt.json](DebugMode/i18n/pt.json) | ✓ [pt.json](LookupAnything/i18n/pt.json) | ✓ [pt.json](TractorMod/i18n/pt.json)
-Russian    | ↻ [ru.json](ChestsAnywhere/i18n/ru.json) | ❑ | ✓ [ru.json](LookupAnything/i18n/ru.json) | ✓ [ru.json](TractorMod/i18n/ru.json)
-Spanish    | ↻ [es.json](ChestsAnywhere/i18n/es.json) | ✓ [es.json](DebugMode/i18n/es.json) | ✓ [es.json](LookupAnything/i18n/de.json) | ❑
+&nbsp;     | Chests Anywhere                          | Data Maps | Debug Mode                          | Lookup Anything                          | Tractor Mod
+---------- | :--------------------------------------- | :-------- | :---------------------------------- | :--------------------------------------- | :-----------------------------------
+Chinese    | ✓ [zh.json](ChestsAnywhere/i18n/zh.json) | ❑         | ✓ [zh.json](DebugMode/i18n/zh.json) | ✓ [zh.json](LookupAnything/i18n/zh.json) | ✓ [zh.json](TractorMod/i18n/zh.json)
+German     | ↻ [de.json](ChestsAnywhere/i18n/de.json) | ❑         | ✓ [de.json](DebugMode/i18n/de.json) | ✓ [de.json](LookupAnything/i18n/de.json) | ✓ [de.json](TractorMod/i18n/de.json)
+Japanese   | ❑                                        | ❑         | ❑                                   | ❑                                        | ❑
+Portuguese | ✓ [pt.json](ChestsAnywhere/i18n/pt.json) | ❑         | ✓ [pt.json](DebugMode/i18n/pt.json) | ✓ [pt.json](LookupAnything/i18n/pt.json) | ✓ [pt.json](TractorMod/i18n/pt.json)
+Russian    | ↻ [ru.json](ChestsAnywhere/i18n/ru.json) | ❑         | ❑                                   | ✓ [ru.json](LookupAnything/i18n/ru.json) | ✓ [ru.json](TractorMod/i18n/ru.json)
+Spanish    | ↻ [es.json](ChestsAnywhere/i18n/es.json) | ❑         | ✓ [es.json](DebugMode/i18n/es.json) | ✓ [es.json](LookupAnything/i18n/de.json) | ❑
 
 Here's how to translate one of my mods:
 

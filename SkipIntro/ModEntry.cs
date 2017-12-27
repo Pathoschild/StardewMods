@@ -10,7 +10,7 @@ using StardewValley.Menus;
 namespace Pathoschild.Stardew.SkipIntro
 {
     /// <summary>The mod entry point.</summary>
-    public class SkipIntroMod : Mod
+    internal class ModEntry : Mod
     {
         /*********
         ** Properties

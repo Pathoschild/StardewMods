@@ -25,6 +25,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Simplifies access to private game data.</summary>
         private readonly IReflectionHelper Reflection;
 
+        /// <summary>Whether to support access to the shipping bin.</summary>
+        private readonly bool EnableShippingBin;
+
 
         /*********
         ** Public methods
@@ -32,10 +35,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations stored in the mod's folder.</param>
         /// <param name="reflection">Simplifies access to private game data.</param>
-        public ChestFactory(ITranslationHelper translations, IReflectionHelper reflection)
+        /// <param name="enableShippingBin">Whether to support access to the shipping bin.</param>
+        public ChestFactory(ITranslationHelper translations, IReflectionHelper reflection, bool enableShippingBin)
         {
             this.Translations = translations;
             this.Reflection = reflection;
+            this.EnableShippingBin = enableShippingBin;
         }
 
         /// <summary>Get all player chests.</summary>
@@ -79,7 +84,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     }
 
                     // shipping bin
-                    if (location is Farm farm)
+                    if (this.EnableShippingBin && location is Farm farm)
                         yield return new ManagedChest(new ShippingBinContainer(farm, this.Reflection), farm, Vector2.Zero, this.Translations.Get("default-name.shipping-bin"));
                 }
             }

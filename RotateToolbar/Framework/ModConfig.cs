@@ -21,7 +21,7 @@ namespace Pathoschild.Stardew.RotateToolbar.Framework
         ** Nested models
         *********/
         /// <summary>A set of control bindings.</summary>
-        public class ModConfigControls
+        internal class ModConfigControls
         {
             /// <summary>The control which rotates the toolbar up (i.e. show the previous inventory row).</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]

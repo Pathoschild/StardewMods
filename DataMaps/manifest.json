@@ -2,9 +2,9 @@
   "Name": "Data Maps",
   "Author": "Pathoschild",
   "Version": "1.0",
-  "MinimumApiVersion": "2.1",
-  "Description": "Overlays the world with metadata maps.",
+  "MinimumApiVersion": "2.3",
+  "Description": "Overlays the world with data maps like accessibility, sprinkler range, etc.",
   "UniqueID": "Pathoschild.DataMaps",
   "EntryDll": "DataMaps.dll",
-  "UpdateKeys": [ ]
+  "UpdateKeys": [ "Nexus:1691" ]
 }

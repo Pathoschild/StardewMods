@@ -20,9 +20,17 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>A set of control bindings.</summary>
         internal class ModConfigControls
         {
-            /// <summary>The control which toggles the lookup UI.</summary>
+            /// <summary>The control which toggles the data map overlay.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
             public SButton[] ToggleMap { get; set; } = { SButton.F2 };
+
+            /// <summary>The control which cycles foreward through data maps.</summary>
+            [JsonConverter(typeof(StringEnumArrayConverter))]
+            public SButton[] PrevMap { get; set; } = { SButton.LeftControl, SButton.LeftShoulder };
+
+            /// <summary>The control which cycles foreward through data maps.</summary>
+            [JsonConverter(typeof(StringEnumArrayConverter))]
+            public SButton[] NextMap { get; set; } = { SButton.RightControl, SButton.RightShoulder };
         }
     }
 }

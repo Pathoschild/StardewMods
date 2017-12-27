@@ -41,7 +41,7 @@
     </Compile>
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RotateToolbarMod.cs" />
+    <Compile Include="ModEntry.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />

@@ -41,7 +41,7 @@
     </Compile>
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\PlayerDirection.cs" />
-    <Compile Include="DebugModeMod.cs" />
+    <Compile Include="ModEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

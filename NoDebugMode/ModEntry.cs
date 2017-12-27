@@ -1,11 +1,11 @@
-﻿using StardewModdingAPI;
+using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 
 namespace Pathoschild.Stardew.NoDebugMode
 {
     /// <summary>The mod entry point.</summary>
-    public class ModEntry : Mod
+    internal class ModEntry : Mod
     {
         /*********
         ** Public methods

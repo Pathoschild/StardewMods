@@ -8,7 +8,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.RotateToolbar
 {
     /// <summary>The mod entry point.</summary>
-    public class RotateToolbarMod : Mod
+    internal class ModEntry : Mod
     {
         /*********
         ** Properties

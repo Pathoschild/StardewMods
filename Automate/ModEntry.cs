@@ -12,7 +12,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.Automate
 {
     /// <summary>The mod entry point.</summary>
-    public class AutomateMod : Mod
+    internal class ModEntry : Mod
     {
         /*********
         ** Properties
