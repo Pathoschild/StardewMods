@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".metadata", ".metadata", "{
 		.gitignore = .gitignore
 		deploy-mod.targets = deploy-mod.targets
 		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
+		latest-versions.json = latest-versions.json
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
