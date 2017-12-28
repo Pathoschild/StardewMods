@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.8.1
+## 1.9
+* Added support for output chests. <small>(Add <em>output</em> to the chest name, and machines will push their output into that chest before others.)</small>
+* Added logic to push items into chests that already have an item of that type first.
 * Fixed chests with the same name as a machine not being treated as chests.
 
 ## 1.8

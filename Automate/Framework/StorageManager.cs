@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using StardewValley;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -143,14 +145,58 @@ namespace Pathoschild.Stardew.Automate.Framework
                 return false;
 
             int originalCount = item.Count;
+
+            // push into 'output' chests
             foreach (IContainer container in this.Containers)
             {
+                if (container.Name.IndexOf("output", StringComparison.InvariantCultureIgnoreCase) < 0)
+                    continue;
+
                 container.Store(item);
                 if (item.Count <= 0)
-                    break;
+                    return true;
+            }
+
+            // push into chests that already have this item
+            string itemKey = this.GetItemKey(item.Sample);
+            foreach (IContainer container in this.Containers)
+            {
+                if (container.All(p => this.GetItemKey(p.Sample) != itemKey))
+                    continue;
+
+                container.Store(item);
+                if (item.Count <= 0)
+                    return true;
+            }
+
+            // push into first available chest
+            if (item.Count >= 0)
+            {
+                foreach (IContainer container in this.Containers)
+                {
+                    container.Store(item);
+                    if (item.Count <= 0)
+                        return true;
+                }
             }
 
             return item.Count < originalCount;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get a key which uniquely identifies an item type.</summary>
+        /// <param name="item">The item to identify.</param>
+        private string GetItemKey(Item item)
+        {
+            string key = item.GetType().FullName;
+            if (item is SObject obj)
+                key += "_craftable:" + obj.bigCraftable;
+            key += "_id:" + item.parentSheetIndex;
+
+            return key;
         }
     }
 }

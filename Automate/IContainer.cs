@@ -8,6 +8,13 @@ namespace Pathoschild.Stardew.Automate
     internal interface IContainer : IEnumerable<ITrackedStack>
     {
         /*********
+        ** Accessors
+        *********/
+        /// <summary>The container name (if any).</summary>
+        string Name { get; }
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Find items in the pipe matching a predicate.</summary>
