@@ -10,6 +10,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A crab pot that accepts input and provides output.</summary>
+    /// <remarks>See the game's machine logic in <see cref="CrabPot.DayUpdate"/>.</remarks>
     internal class CrabPotMachine : GenericMachine<CrabPot>
     {
         /*********
