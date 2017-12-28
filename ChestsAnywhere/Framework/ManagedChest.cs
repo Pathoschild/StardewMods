@@ -140,7 +140,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 
         /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
-        public IClickableMenu OpenMenu()
+        public ItemGrabMenu OpenMenu()
         {
             return new ItemGrabMenu(
                 inventory: this.Container.Inventory,

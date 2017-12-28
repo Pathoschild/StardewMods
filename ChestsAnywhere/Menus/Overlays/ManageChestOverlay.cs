@@ -145,7 +145,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         {
             // menu
             this.Menu = menu;
-            this.MenuInventoryMenu = ((ItemGrabMenu)Game1.activeClickableMenu).ItemsToGrabMenu;
+            this.MenuInventoryMenu = menu.ItemsToGrabMenu;
             this.DefaultChestHighlighter = menu.inventory.highlightMethod;
             this.DefaultInventoryHighlighter = this.MenuInventoryMenu.highlightMethod;
 
