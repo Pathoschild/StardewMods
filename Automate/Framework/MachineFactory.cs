@@ -86,31 +86,27 @@ namespace Pathoschild.Stardew.Automate.Framework
 
                 // get machine or container on tile
                 Vector2 foundSize;
+                if (this.TryGetMachine(location, tile, reflection, out IMachine machine, out Vector2 size))
                 {
-                    if (this.TryGetMachine(location, tile, reflection, out IMachine machine, out Vector2 size))
-                    {
-                        group.Add(machine);
-                        foundSize = size;
-                    }
-                    else if (this.TryGetChest(location, tile, out Chest chest))
-                    {
-                        group.Add(new ChestContainer(chest));
-                        foundSize = Vector2.One;
-                    }
-                    else
-                        continue;
+                    group.Add(machine);
+                    foundSize = size;
                 }
+                else if (this.TryGetChest(location, tile, out Chest chest))
+                {
+                    group.Add(new ChestContainer(chest));
+                    foundSize = Vector2.One;
+                }
+                else
+                    continue;
 
                 // handle machine tiles
-                {
-                    Rectangle tileArea = new Rectangle((int)tile.X, (int)tile.Y, (int)foundSize.X, (int)foundSize.Y);
-                    group.Add(tileArea);
-                    foreach (Vector2 cur in tileArea.GetTiles())
-                        visited.Add(cur);
-                }
+                Rectangle tileArea = new Rectangle((int)tile.X, (int)tile.Y, (int)foundSize.X, (int)foundSize.Y);
+                group.Add(tileArea);
+                foreach (Vector2 cur in tileArea.GetTiles())
+                    visited.Add(cur);
 
                 // check surrounding tiles
-                foreach (Vector2 next in tile.GetSurroundingTiles())
+                foreach (Vector2 next in tileArea.GetSurroundingTiles())
                 {
                     if (!visited.Contains(next))
                         queue.Enqueue(next);

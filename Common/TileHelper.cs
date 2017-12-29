@@ -50,6 +50,20 @@ namespace Pathoschild.Stardew.Common
             return Utility.getSurroundingTileLocationsArray(tile);
         }
 
+        /// <summary>Get the tiles surrounding the given tile area.</summary>
+        /// <param name="area">The center tile area.</param>
+        public static IEnumerable<Vector2> GetSurroundingTiles(this Rectangle area)
+        {
+            for (int x = area.X - 1; x <= area.Right + 1; x++)
+            {
+                for (int y = area.Y - 1; y <= area.Bottom + 1; y++)
+                {
+                    if (!area.Contains(x, y))
+                        yield return new Vector2(x, y);
+                }
+            }
+        }
+
         /// <summary>Get the four tiles adjacent to the given tile.</summary>
         /// <param name="tile">The center tile.</param>
         public static IEnumerable<Vector2> GetAdjacentTiles(this Vector2 tile)

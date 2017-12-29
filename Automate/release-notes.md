@@ -6,6 +6,7 @@
 * Added support for output chests. <small>(Add <em>output</em> to the chest name, and machines will push their output into that chest before others.)</small>
 * Added logic to push items into chests that already have an item of that type first.
 * Fixed chests with the same name as a machine not being treated as chests.
+* Fixed large machines not connecting to adjacent machines/chests in some cases.
 
 ## 1.8
 * Updated to SMAPI 2.1.
