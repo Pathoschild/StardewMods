@@ -7,6 +7,7 @@
 * Added logic to push items into chests that already have an item of that type first.
 * Fixed chests with the same name as a machine not being treated as chests.
 * Fixed large machines not connecting to adjacent machines/chests in some cases.
+* Fixed some item prefixes disappearing when not playing in English (e.g. blueberry wine → wine).
 
 ## 1.8
 * Updated to SMAPI 2.1.
