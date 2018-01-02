@@ -18,6 +18,13 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
 
 
         /*********
+        ** Accessors
+        *********/
+        /// <summary>The container name (if any).</summary>
+        public string Name => this.Chest.Name;
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>

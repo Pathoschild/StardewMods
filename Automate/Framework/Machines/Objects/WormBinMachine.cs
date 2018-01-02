@@ -4,6 +4,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A tapper that accepts input and provides output.</summary>
+    /// <remarks>See the game's machine logic in <see cref="SObject.performDropDownAction"/> and <see cref="SObject.checkForAction"/>.</remarks>
     internal class WormBinMachine : GenericMachine
     {
         /*********

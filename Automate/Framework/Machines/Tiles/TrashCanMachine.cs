@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         public TrashCanMachine(Town town, Vector2 tile, int trashCanIndex, IReflectionHelper reflection)
         {
             this.Tile = tile;
-            this.TrashCansChecked = reflection.GetPrivateValue<bool[]>(town, "garbageChecked");
+            this.TrashCansChecked = reflection.GetField<bool[]>(town, "garbageChecked").GetValue();
             if (trashCanIndex > 0 && trashCanIndex < this.TrashCansChecked.Length)
                 this.TrashCanIndex = trashCanIndex;
         }

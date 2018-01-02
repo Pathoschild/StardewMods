@@ -16,8 +16,9 @@ automatically pull raw items from the chest and push processed items into it.
 
 ## Usage
 ### Basic automation
-Once installed, crafting machines connected to a chest will push their output into it, and pull
-ingredients to process out of it.
+Place a chest next to a crafting machine (in any direction including diagonal) to connect it.
+Machines connected to a chest will push their output into it, and pull ingredients to process out
+of it. 
 
 This can be used to automate...
 * [bee houses](http://stardewvalleywiki.com/Bee_House);
@@ -49,13 +50,20 @@ This can be used to automate...
 * [tappers](http://stardewvalleywiki.com/Tapper);
 * and [worm bins](http://stardewvalleywiki.com/Worm_Bin).
 
-### Factories
-You can connect chests to any number of machines, and they don't all need to be the same type. A
-chest will connect to any adjacent machine (i.e. one tile in every direction including
-diagonal), any machines adjacent to those machines, etc. You can press `U` (configurable) to see
-which machines are being automated.
+### Advanced automation
+A 'machine group' is any number of chests and machines connected together. Any chest or machine
+placed adjacent to a chest or machine that's already in the group will be added to the group. You
+can press `U` (configurable) to visualise machine groups.
 
-Here are a few example factories. You can increase production by just adding more machines.
+If you add multiple chests to the same machine group, they'll all be used in the automation. Input
+will be taken from all the chests, and output will be saved to chests in this order:
+1. chests with 'output' in the name;
+2. chests which already contain an item of the same type;
+3. any chest.
+
+### Factories
+A 'factory' is just a machine group which produces a certain output. Here are some example factories.
+You can increase production by just adding more machines.
 
 * **Automatic crab pots**  
   A worm bin produces bait, which is fed into the crab pots, which harvest fish and recycle trash.

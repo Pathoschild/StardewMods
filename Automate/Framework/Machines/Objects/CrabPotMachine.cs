@@ -10,6 +10,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A crab pot that accepts input and provides output.</summary>
+    /// <remarks>See the game's machine logic in <see cref="CrabPot.DayUpdate"/>.</remarks>
     internal class CrabPotMachine : GenericMachine<CrabPot>
     {
         /*********
@@ -96,10 +97,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             pot.heldObject = null;
             pot.tileIndexToShow = 710;
             pot.bait = null;
-            this.Reflection.GetPrivateField<bool>(pot, "lidFlapping").SetValue(true);
-            this.Reflection.GetPrivateField<float>(pot, "lidFlapTimer").SetValue(60f);
-            this.Reflection.GetPrivateField<Vector2>(pot, "shake").SetValue(Vector2.Zero);
-            this.Reflection.GetPrivateField<float>(pot, "shakeTimer").SetValue(0f);
+            this.Reflection.GetField<bool>(pot, "lidFlapping").SetValue(true);
+            this.Reflection.GetField<float>(pot, "lidFlapTimer").SetValue(60f);
+            this.Reflection.GetField<Vector2>(pot, "shake").SetValue(Vector2.Zero);
+            this.Reflection.GetField<float>(pot, "shakeTimer").SetValue(0f);
         }
     }
 }

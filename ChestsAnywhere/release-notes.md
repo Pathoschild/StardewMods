@@ -1,6 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.12.2
+* Fixed broken shipping bin UI.
+* Fixed deprecated API usage.
+
 ## 1.12.1
 * Updated to SMAPI 2.3.
 * Added option to disable the shipping bin features.

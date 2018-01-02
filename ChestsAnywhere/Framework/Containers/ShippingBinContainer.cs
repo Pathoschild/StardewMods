@@ -66,7 +66,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Get whether the in-game container is open.</summary>
         public bool IsOpen()
         {
-            TemporaryAnimatedSprite lid = this.Reflection.GetPrivateValue<TemporaryAnimatedSprite>(this.Farm, "shippingBinLid");
+            TemporaryAnimatedSprite lid = this.Reflection.GetField<TemporaryAnimatedSprite>(this.Farm, "shippingBinLid").GetValue();
             return lid != null && lid.currentParentTileIndex != lid.initialParentTileIndex;
         }
 

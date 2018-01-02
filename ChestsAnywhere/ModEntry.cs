@@ -126,8 +126,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 // This is called in two cases:
                 // - When the player opens the shipping bin directly, it opens the shipping bin view instead of the full chest view.
                 // - When the player changes the items in the chest view, it reopens itself but loses the constructor args (e.g. highlight function).
-                if (this.Config.EnableShippingBin && chest.Container is ShippingBinContainer && (!chestMenu.showReceivingMenu || chestMenu.inventory.highlightMethod != chest.Container.CanAcceptItem))
-                    Game1.activeClickableMenu = chest.OpenMenu();
+                if (this.Config.EnableShippingBin && chest.Container is ShippingBinContainer && (!chestMenu.showReceivingMenu || !(chestMenu.inventory.highlightMethod?.Target is ShippingBinContainer)))
+                {
+                    chestMenu = chest.OpenMenu();
+                    Game1.activeClickableMenu = chestMenu;
+                }
 
                 // add overlay
                 RangeHandler range = new RangeHandler(this.Data.WorldAreas, this.Config.Range, Game1.currentLocation);

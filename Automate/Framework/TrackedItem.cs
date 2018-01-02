@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using StardewValley;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -43,7 +44,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         public TrackedItem(Item item, Action<Item> onReduced = null, Action<Item> onEmpty = null)
         {
             this.Item = item;
-            this.Sample = item?.getOne();
+            this.Sample = this.GetNewStack(item);
             this.LastStackSize = item?.Stack ?? 0;
             this.OnReduced = onReduced;
             this.OnEmpty = onEmpty;
@@ -65,10 +66,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 return null;
 
             this.Reduce(count);
-            Item item = this.Item.getOne();
-            item.Stack = count;
-
-            return item;
+            return this.GetNewStack(this.Item, count);
         }
 
 
@@ -87,6 +85,30 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.OnReduced?.Invoke(this.Item);
             if (this.Item.Stack <= 0)
                 this.OnEmpty?.Invoke(this.Item);
+        }
+
+        /// <summary>Create a new stack of the given item.</summary>
+        /// <param name="original">The item stack to clone.</param>
+        /// <param name="stackSize">The new stack size.</param>
+        private Item GetNewStack(Item original, int stackSize = 1)
+        {
+            if (original == null)
+                return null;
+
+            Item stack = original.getOne();
+            stack.Stack = stackSize;
+
+            if (original is SObject originalObj && stack is SObject stackObj)
+            {
+                // fix some fields not copied by getOne()
+                stackObj.name = originalObj.name;
+                stackObj.DisplayName = originalObj.DisplayName;
+                stackObj.preserve = originalObj.preserve;
+                stackObj.preservedParentSheetIndex = originalObj.preservedParentSheetIndex;
+                stackObj.honeyType = originalObj.honeyType;
+            }
+
+            return stack;
         }
     }
 }
