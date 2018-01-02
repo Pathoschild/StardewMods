@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.12.2
-* Fixed shipping bin not being interactable.
+* Fixed broken shipping bin UI.
 * Fixed deprecated API usage.
 
 ## 1.12.1

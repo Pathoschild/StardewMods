@@ -3,9 +3,8 @@
 # Release notes
 ## 1.9
 * Updated to SMAPI 2.3.
-* Added support for output chests. <small>(Add <em>output</em> to the chest name, and machines will push their output into that chest before others.)</small>
-* Added logic to push items into chests that already have an item of that type first.
-* Fixed chests with the same name as a machine not being treated as chests.
+* Added a predictable order for chests receiving machine output. <small>(Items are now pushed into chests with `output` in the name first, then chests that already have that item type, then any other connected chest.)</small>
+* Fixed chests with certain names being treated as machines.
 * Fixed large machines not connecting to adjacent machines/chests in some cases.
 * Fixed some item prefixes disappearing when not playing in English (e.g. blueberry wine → wine).
 
