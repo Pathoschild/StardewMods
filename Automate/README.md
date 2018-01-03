@@ -50,6 +50,9 @@ This can be used to automate...
 * [tappers](http://stardewvalleywiki.com/Tapper);
 * and [worm bins](http://stardewvalleywiki.com/Worm_Bin).
 
+Automated machines will give you the same XP, achievements, and items you'd get for using them
+directly.
+
 ### Advanced automation
 A 'machine group' is any number of chests and machines connected together. Any chest or machine
 placed adjacent to a chest or machine that's already in the group will be added to the group. You
