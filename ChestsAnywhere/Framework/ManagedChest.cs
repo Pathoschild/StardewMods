@@ -156,13 +156,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             );
         }
 
-        /// <summary>Get whether the managed chest has the same inventory as another.</summary>
-        /// <param name="other">The other chest to compare.</param>
-        public bool ManagesSameInventoryAs(ManagedChest other)
-        {
-            return other != null && this.Container.Inventory == other.Container.Inventory;
-        }
-
         /// <summary>Get whether the container has its default name.</summary>
         public bool HasDefaultName()
         {

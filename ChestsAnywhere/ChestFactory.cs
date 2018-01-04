@@ -93,7 +93,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 from chest in Search()
                 orderby chest.Order ?? int.MaxValue, chest.Name
                 where
-                    chest.Container == alwaysIncludeContainer
+                    chest.Container.IsSameAs(alwaysIncludeContainer)
                     || (
                         (!excludeHidden || !chest.IsIgnored)
                         && range.IsInRange(chest.Location)
@@ -110,7 +110,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 return null;
 
             RangeHandler range = RangeHandler.CurrentLocation();
-            return this.GetChests(range).FirstOrDefault(p => p.Container.Inventory == chest.items);
+            return this.GetChests(range).FirstOrDefault(p => p.Container.IsSameAs(chest.items));
         }
 
         /// <summary>Get the player chest from the specified menu (if any).</summary>
@@ -125,7 +125,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 List<Item> inventory = (target as Chest)?.items ?? (target as IContainer)?.Inventory;
                 if (inventory != null)
                 {
-                    ManagedChest chest = this.GetChests(range).FirstOrDefault(p => p.Container.Inventory == inventory);
+                    ManagedChest chest = this.GetChests(range).FirstOrDefault(p => p.Container.IsSameAs(inventory));
                     if (chest != null)
                         return chest;
                 }

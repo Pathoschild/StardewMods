@@ -578,7 +578,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             int i = 0;
             foreach (ManagedChest cur in chests)
             {
-                if (cur.ManagesSameInventoryAs(chest))
+                if (cur.Container.IsSameAs(chest.Container))
                     return i;
                 i++;
             }

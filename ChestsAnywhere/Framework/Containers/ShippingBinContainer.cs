@@ -83,6 +83,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             return Utility.highlightShippableObjects(item);
         }
 
+        /// <summary>Get whether another instance wraps the same underlying container.</summary>
+        /// <param name="container">The other container.</param>
+        public bool IsSameAs(IContainer container)
+        {
+            return container != null && this.IsSameAs(container.Inventory);
+        }
+
+        /// <summary>Get whether another instance wraps the same underlying container.</summary>
+        /// <param name="inventory">The other container's inventory.</param>
+        public bool IsSameAs(List<Item> inventory)
+        {
+            return this.Inventory == inventory;
+        }
+
 
         /*********
         ** Private methods

@@ -44,5 +44,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Get whether the inventory can accept the item type.</summary>
         /// <param name="item">The item.</param>
         bool CanAcceptItem(Item item);
+
+        /// <summary>Get whether another instance wraps the same underlying container.</summary>
+        /// <param name="container">The other container.</param>
+        bool IsSameAs(IContainer container);
+
+        /// <summary>Get whether another instance wraps the same underlying container.</summary>
+        /// <param name="inventory">The other container's inventory.</param>
+        bool IsSameAs(List<Item> inventory);
     }
 }

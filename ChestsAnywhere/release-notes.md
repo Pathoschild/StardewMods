@@ -3,6 +3,7 @@
 # Release notes
 ## 1.12.3
 * Fixed shipping bin UI not allowing more than 36 items.
+* Fixed error when the range is set to `None` and a chest is opened directly.
 
 ## 1.12.2
 * Fixed broken shipping bin UI.

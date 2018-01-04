@@ -180,7 +180,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // get chests
             RangeHandler rangeHandler = new RangeHandler(this.Data.WorldAreas, this.Config.Range, Game1.currentLocation);
             ManagedChest[] chests = this.ChestFactory.GetChests(rangeHandler, excludeHidden: true).ToArray();
-            ManagedChest selectedChest = chests.FirstOrDefault(p => p.Container.Inventory == this.SelectedInventory) ?? chests.FirstOrDefault();
+            ManagedChest selectedChest = chests.FirstOrDefault(p => p.Container.IsSameAs(this.SelectedInventory)) ?? chests.FirstOrDefault();
 
             // render menu
             if (selectedChest != null)
