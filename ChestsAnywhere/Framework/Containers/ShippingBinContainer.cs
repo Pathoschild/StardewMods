@@ -90,11 +90,28 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Add an item to the container from the player inventory.</summary>
         /// <param name="item">The item taken.</param>
         /// <param name="player">The player taking the item.</param>
+        /// <remarks>This implementation replicates <see cref="Chest.grabItemFromInventory"/> without the slot limit, instead of using <c>Farm::shipItem</c> which does some weird things that don't work well with a full chest UI.</remarks>
         private void GrabItemFromInventoryImpl(Item item, SFarmer player)
         {
-            // note: we deliberately use the chest logic here instead of Farm::shipItem, which does
-            // some weird things that don't work well with a full chest UI.
-            this.FakeChest.grabItemFromInventory(item, player);
+            // normalise
+            if (item.Stack == 0)
+                item.Stack = 1;
+
+            // add to shipping bin
+            Item remaining = this.FakeChest.addItem(item);
+            if (remaining != null)
+                this.FakeChest.items.Add(remaining);
+
+            // replicate add-item logic
+            player.removeItemFromInventory(item);
+            this.FakeChest.clearNulls();
+            int id = Game1.activeClickableMenu.currentlySnappedComponent != null ? Game1.activeClickableMenu.currentlySnappedComponent.myID : -1;
+            Game1.activeClickableMenu = new ItemGrabMenu(this.FakeChest.items, false, true, InventoryMenu.highlightAllItems, this.FakeChest.grabItemFromInventory, null, this.FakeChest.grabItemFromChest, false, true, true, true, true, 1, this.FakeChest);
+            if (id != -1)
+            {
+                Game1.activeClickableMenu.currentlySnappedComponent = Game1.activeClickableMenu.getComponentWithID(id);
+                Game1.activeClickableMenu.snapCursorToCurrentSnappedComponent();
+            }
         }
 
         /// <summary>Add an item to the player inventory from the container.</summary>

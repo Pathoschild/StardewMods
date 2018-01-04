@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.12.3
+* Fixed shipping bin UI not allowing more than 36 items.
+
 ## 1.12.2
 * Fixed broken shipping bin UI.
 * Fixed deprecated API usage.

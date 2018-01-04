@@ -29,6 +29,10 @@ This will show a form where you can...
 
 **Point at a chest** in the world to see its name in a tooltip.
 
+**Open the shipping bin** to view the items in the shipping bin. This lets you retrieve items
+before they're shipped overnight. (You can ship any number of items, but only the first 36 will be
+visible in the UI.)
+
 ## Configuration
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
 file if you want. These are the available settings:
