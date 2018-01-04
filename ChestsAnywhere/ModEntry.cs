@@ -133,7 +133,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 }
 
                 // add overlay
-                RangeHandler range = new RangeHandler(this.Data.WorldAreas, this.Config.Range, Game1.currentLocation);
+                RangeHandler range = this.GetCurrentRange();
                 ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true, alwaysIncludeContainer: chest.Container).ToArray();
                 this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Translation);
                 this.ManageChestOverlay.OnChestSelected += selected =>
@@ -177,9 +177,17 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             if (this.Config.Range == ChestRange.None)
                 return;
 
+            // handle disabled location
+            if (this.IsDisabledLocation(Game1.currentLocation))
+            {
+                CommonHelper.ShowInfoMessage("Remote chest access is disabled here. :)", duration: 1000);
+                return;
+            }
+
+
             // get chests
-            RangeHandler rangeHandler = new RangeHandler(this.Data.WorldAreas, this.Config.Range, Game1.currentLocation);
-            ManagedChest[] chests = this.ChestFactory.GetChests(rangeHandler, excludeHidden: true).ToArray();
+            RangeHandler range = this.GetCurrentRange();
+            ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true).ToArray();
             ManagedChest selectedChest = chests.FirstOrDefault(p => p.Container.IsSameAs(this.SelectedInventory)) ?? chests.FirstOrDefault();
 
             // render menu
@@ -210,6 +218,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             this.Monitor.Log($"Something went wrong {verb}:\n{ex}", LogLevel.Error);
             CommonHelper.ShowErrorMessage($"Huh. Something went wrong {verb}. The error log has the technical details.");
+        }
+
+        /// <summary>Get whether remote access is disabled from the given location.</summary>
+        /// <param name="location">The game location.</param>
+        private bool IsDisabledLocation(GameLocation location)
+        {
+            return this.Config.DisabledInLocations != null && this.Config.DisabledInLocations.Contains(location.Name, StringComparer.InvariantCultureIgnoreCase);
+        }
+
+        /// <summary>Get the range for the current context.</summary>
+        private RangeHandler GetCurrentRange()
+        {
+            ChestRange range = this.IsDisabledLocation(Game1.currentLocation)
+                ? ChestRange.None
+                : this.Config.Range;
+            return new RangeHandler(this.Data.WorldAreas, range, Game1.currentLocation);
         }
     }
 }

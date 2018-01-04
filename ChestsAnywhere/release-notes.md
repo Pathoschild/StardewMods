@@ -2,6 +2,7 @@
 
 # Release notes
 ## 1.12.3
+* Added option to disable remote chest access from specific locations.
 * Fixed shipping bin UI not allowing more than 36 items.
 * Fixed error when the range is set to `None` and a chest is opened directly.
 

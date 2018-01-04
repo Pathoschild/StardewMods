@@ -43,6 +43,7 @@ setting             | what it affects
 `Controls`          | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `B` to toggle the chest UI, `Left`/`Right` to switch chests, and `Up`/`Down` to switch categories. The default controller bindings are the shoulder and trigger buttons to navigate chests while the menu is open.
 `ShowHoverTooltips` | Default `true`. Whether to show the chest name in a tooltip when you point at a chest.
 `EnableShippingBin` | Default `true`. Whether to allow access to the shipping bin through Chests Anywhere.
+`DisableInLocations`| The locations in which to disable remote chest lookups. You can use the [Debug Mode mod](https://www.nexusmods.com/stardewvalley/mods/679) to see the name of any in-game location, or get the location name for a chest from its edit screen.
 
 ## Versions
 See [release notes](release-notes.md).
