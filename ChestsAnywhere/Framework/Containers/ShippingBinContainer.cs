@@ -24,6 +24,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Simplifies access to private game data.</summary>
         private readonly IReflectionHelper Reflection;
 
+        /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
+        private ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory => this.GrabItemFromInventoryImpl;
+
+        /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
+        private ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer => this.GrabItemFromContainerImpl;
+
 
         /*********
         ** Accessors
@@ -42,12 +48,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 
         /// <summary>The container's original name.</summary>
         public string DefaultName => null;
-
-        /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
-        public ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory => this.GrabItemFromInventoryImpl;
-
-        /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
-        public ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer => this.GrabItemFromContainerImpl;
 
 
         /*********
@@ -97,6 +97,24 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             return this.Inventory == inventory;
         }
 
+        /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
+        public ItemGrabMenu OpenMenu()
+        {
+            return new ItemGrabMenu(
+                inventory: this.Inventory,
+                reverseGrab: false,
+                showReceivingMenu: true,
+                highlightFunction: this.CanAcceptItem,
+                behaviorOnItemSelectFunction: this.GrabItemFromInventory,
+                message: null,
+                behaviorOnItemGrab: this.GrabItemFromContainer,
+                canBeExitedWithKey: true,
+                showOrganizeButton: true,
+                source: ItemGrabMenu.source_none
+            );
+        }
+
 
         /*********
         ** Private methods
@@ -104,7 +122,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Add an item to the container from the player inventory.</summary>
         /// <param name="item">The item taken.</param>
         /// <param name="player">The player taking the item.</param>
-        /// <remarks>This implementation replicates <see cref="Chest.grabItemFromInventory"/> without the slot limit, instead of using <c>Farm::shipItem</c> which does some weird things that don't work well with a full chest UI.</remarks>
+        /// <remarks>This implementation replicates <see cref="Chest.grabItemFromInventory"/> without the slot limit (instead of using <c>Farm::shipItem</c> which does some weird things that don't work well with a full chest UI).</remarks>
         private void GrabItemFromInventoryImpl(Item item, SFarmer player)
         {
             // normalise
@@ -116,15 +134,18 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             if (remaining != null)
                 this.FakeChest.items.Add(remaining);
 
-            // replicate add-item logic
+            // add item
             player.removeItemFromInventory(item);
             this.FakeChest.clearNulls();
-            int id = Game1.activeClickableMenu.currentlySnappedComponent != null ? Game1.activeClickableMenu.currentlySnappedComponent.myID : -1;
-            Game1.activeClickableMenu = new ItemGrabMenu(this.FakeChest.items, false, true, InventoryMenu.highlightAllItems, this.FakeChest.grabItemFromInventory, null, this.FakeChest.grabItemFromChest, false, true, true, true, true, 1, this.FakeChest);
-            if (id != -1)
+
+            // reopen menu
+            IClickableMenu menu = Game1.activeClickableMenu;
+            int snappedComponentID = menu.currentlySnappedComponent?.myID ?? -1;
+            Game1.activeClickableMenu = menu = this.OpenMenu();
+            if (snappedComponentID != -1)
             {
-                Game1.activeClickableMenu.currentlySnappedComponent = Game1.activeClickableMenu.getComponentWithID(id);
-                Game1.activeClickableMenu.snapCursorToCurrentSnappedComponent();
+                menu.currentlySnappedComponent = menu.getComponentWithID(snappedComponentID);
+                menu.snapCursorToCurrentSnappedComponent();
             }
         }
 
