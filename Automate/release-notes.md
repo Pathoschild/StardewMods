@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.9.1
+* Fixed crab pots not changing sprite when baited automatically.
+
 ## 1.9
 * Updated to SMAPI 2.3.
 * Added a predictable order for chests receiving machine output. <small>(Items are now pushed into chests with `output` in the name first, then chests that already have that item type, then any other connected chest.)</small>
