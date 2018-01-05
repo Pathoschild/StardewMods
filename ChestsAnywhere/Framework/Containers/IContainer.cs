@@ -25,12 +25,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The container's original name.</summary>
         string DefaultName { get; }
 
-        /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
-        ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory { get; }
-
-        /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
-        ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer { get; } // must be a delegate for compatibility with other mods which get `delegate.Target as Chest`
-
 
         /*********
         ** Public methods
@@ -52,5 +46,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Get whether another instance wraps the same underlying container.</summary>
         /// <param name="inventory">The other container's inventory.</param>
         bool IsSameAs(List<Item> inventory);
+
+        /// <summary>Open a menu to transfer items between the player's inventory and this container.</summary>
+        ItemGrabMenu OpenMenu();
     }
 }
