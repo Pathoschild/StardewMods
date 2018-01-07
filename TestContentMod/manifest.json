@@ -1,7 +1,12 @@
 {
   "Name": "Test content mod",
   "Author": "Pathoschild",
-  "Version": "1.0",
+  "Version": {
+        "MajorVersion": 1,
+        "MinorVersion": 0,
+        "PatchVersion": 0,
+        "Build": null
+    },
   "MinimumApiVersion": "2.1",
   "Description": "A dev mod for testing content changes.",
   "UniqueID": "Pathoschild.TestContentMod",
