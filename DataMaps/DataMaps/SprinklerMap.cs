@@ -4,8 +4,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
-using Pathoschild.Stardew.DataMaps.Framework.Integrations;
 using Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers;
+using Pathoschild.Stardew.DataMaps.Framework.Integrations.Cobalt;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -26,12 +26,12 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         private readonly Color DryColor = Color.Red;
 
         /// <summary>The maximum number of tiles from the center a sprinkler can protect.</summary>
-        private readonly int MaxRadius = 2;
+        private readonly int MaxRadius;
 
-        /// <summary>The default sprinkler tiles centered on (0, 0), indexed by sprinkler ID.</summary>
-        private IDictionary<int, Vector2[]> DefaultSprinklerTiles;
+        /// <summary>The static sprinkler tiles centered on (0, 0), indexed by sprinkler ID.</summary>
+        private readonly IDictionary<int, Vector2[]> StaticTilesBySprinklerID;
 
-        /// <summary>Handles the logic for integrating with the Better Sprinklers mod.</summary>
+        /// <summary>Handles access to the Better Sprinklers mod.</summary>
         private readonly BetterSprinklersIntegration BetterSprinklers;
 
 
@@ -50,20 +50,28 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        /// <param name="betterSprinklers">Handles the logic for integrating with the Better Sprinklers mod.</param>
-        public SprinklerMap(ITranslationHelper translations, BetterSprinklersIntegration betterSprinklers)
+        /// <param name="betterSprinklers">Handles access to the Better Sprinklers mod.</param>
+        /// <param name="cobalt">Handles access to the Cobalt mod.</param>
+        public SprinklerMap(ITranslationHelper translations, BetterSprinklersIntegration betterSprinklers, CobaltIntegration cobalt)
         {
+            // init
             this.BetterSprinklers = betterSprinklers;
-            this.DefaultSprinklerTiles = this.GetDefaultSprinklerTiles();
-            if (betterSprinklers.IsLoaded)
-                this.MaxRadius = Math.Max(this.MaxRadius, betterSprinklers.MaxRadius);
-
             this.Name = translations.Get("maps.sprinklers.name");
             this.Legend = new[]
             {
                 new LegendEntry(translations.Get("maps.sprinklers.covered"), this.WetColor),
                 new LegendEntry(translations.Get("maps.sprinklers.dry-crops"), this.DryColor)
             };
+
+            // get static sprinkler coverage
+            this.StaticTilesBySprinklerID = this.GetDefaultSprinklerTiles();
+            if (cobalt.IsLoaded)
+                this.StaticTilesBySprinklerID[cobalt.GetSprinklerId()] = cobalt.GetSprinklerTiles().ToArray();
+
+            // get max sprinkler radius
+            this.MaxRadius = this.StaticTilesBySprinklerID.Max(p => this.GetMaxRadius(p.Value));
+            if (betterSprinklers.IsLoaded)
+                this.MaxRadius = Math.Max(this.MaxRadius, betterSprinklers.MaxRadius);
         }
 
         /// <summary>Get the updated data map tiles.</summary>
@@ -86,15 +94,13 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
                 .ToArray();
 
             // get radius
-            var radii = this.BetterSprinklers.IsLoaded
-                ? this.BetterSprinklers.GetSprinklerTiles()
-                : this.DefaultSprinklerTiles;
+            IDictionary<int, Vector2[]> coverageBySprinklerID = this.GetCurrentSprinklerTiles(this.StaticTilesBySprinklerID);
 
             // yield sprinkler coverage
             HashSet<Vector2> covered = new HashSet<Vector2>();
             foreach (Object sprinkler in sprinklers)
             {
-                TileData[] tiles = this.GetCoverage(sprinkler, sprinkler.TileLocation, radii).Select(pos => new TileData(pos, this.WetColor)).ToArray();
+                TileData[] tiles = this.GetCoverage(sprinkler, sprinkler.TileLocation, coverageBySprinklerID).Select(pos => new TileData(pos, this.WetColor)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
                 yield return new TileGroup(tiles, outerBorderColor: this.WetColor);
@@ -109,7 +115,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             if (this.IsSprinkler(heldObj))
             {
                 Vector2 cursorTile = TileHelper.GetTileFromCursor();
-                TileData[] tiles = this.GetCoverage(heldObj, cursorTile, radii).Select(pos => new TileData(pos, this.WetColor * 0.75f)).ToArray();
+                TileData[] tiles = this.GetCoverage(heldObj, cursorTile, coverageBySprinklerID).Select(pos => new TileData(pos, this.WetColor * 0.75f)).ToArray();
                 yield return new TileGroup(tiles, outerBorderColor: this.WetColor);
             }
         }
@@ -122,13 +128,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <param name="obj">The map object.</param>
         private bool IsSprinkler(Object obj)
         {
-            if (obj == null)
-                return false;
-
-            return
-                obj.parentSheetIndex == 599 // basic sprinkler
-                || obj.parentSheetIndex == 621 // quality
-                || obj.parentSheetIndex == 645; // iridium
+            return obj != null && this.StaticTilesBySprinklerID.ContainsKey(obj.parentSheetIndex);
         }
 
         /// <summary>Get whether a map terrain feature is a crop.</summary>
@@ -160,6 +160,34 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             tiles[645] = iridiumTiles.ToArray();
 
             return tiles;
+        }
+
+        /// <summary>Get the current sprinkler coverage, including any player customisations via mod.</summary>
+        /// <param name="defaultTiles">The default tiles if there are no mods which allow player customisation.</param>
+        private IDictionary<int, Vector2[]> GetCurrentSprinklerTiles(IDictionary<int, Vector2[]> defaultTiles)
+        {
+            // get static tiles
+            if (!this.BetterSprinklers.IsLoaded)
+                return defaultTiles;
+
+            // merge custom tiles
+            IDictionary<int, Vector2[]> tilesBySprinklerID = new Dictionary<int, Vector2[]>(defaultTiles);
+            if (this.BetterSprinklers.IsLoaded)
+            {
+                foreach (var pair in this.BetterSprinklers.GetSprinklerTiles())
+                    tilesBySprinklerID[pair.Key] = pair.Value;
+            }
+            return tilesBySprinklerID;
+        }
+
+        /// <summary>Get the maximum distance from the center for a sprinkler coverage.</summary>
+        /// <param name="tiles">The covered tiles.</param>
+        public int GetMaxRadius(IEnumerable<Vector2> tiles)
+        {
+            int maxRadius = 0;
+            foreach (Vector2 tile in tiles)
+                maxRadius = (int)Math.Max(Math.Max(maxRadius, Math.Abs(tile.X)), Math.Abs(tile.Y));
+            return maxRadius;
         }
 
         /// <summary>Get a sprinkler tile radius.</summary>

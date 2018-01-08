@@ -29,7 +29,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>The maximum number of tiles from the center a Junimo hut can harvest.</summary>
         private readonly int MaxRadius = JunimoHut.cropHarvestRadius;
 
-        /// <summary>Handles the logic for integrating with the Pelican Fiber mod.</summary>
+        /// <summary>Handles access to the Pelican Fiber mod.</summary>
         private readonly PelicanFiberIntegration PelicanFiber;
 
 
@@ -48,7 +48,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        /// <param name="pelicanFiber">Handles the logic for integrating with the Pelican Fiber mod.</param>
+        /// <param name="pelicanFiber">Handles access to the Pelican Fiber mod.</param>
         public JunimoHutMap(ITranslationHelper translations, PelicanFiberIntegration pelicanFiber)
         {
             this.PelicanFiber = pelicanFiber;

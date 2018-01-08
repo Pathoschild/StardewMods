@@ -44,6 +44,8 @@
     <Compile Include="Framework\IDataMap.cs" />
     <Compile Include="Framework\Integrations\BaseIntegration.cs" />
     <Compile Include="Framework\Integrations\BetterSprinklers\BetterSprinklersIntegration.cs" />
+    <Compile Include="Framework\Integrations\Cobalt\CobaltIntegration.cs" />
+    <Compile Include="Framework\Integrations\Cobalt\ICobaltApi.cs" />
     <Compile Include="Framework\Integrations\IModIntegration.cs" />
     <Compile Include="Framework\Integrations\PelicanFiber\PelicanFiberIntegration.cs" />
     <Compile Include="Framework\LegendEntry.cs" />

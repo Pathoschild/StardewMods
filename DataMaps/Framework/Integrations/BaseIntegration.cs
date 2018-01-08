@@ -8,8 +8,11 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations
         /*********
         ** Properties
         *********/
-        /// <summary>A human-readable name for the mod.</summary>
-        protected string Label { get; }
+        /// <summary>The mod's unique ID.</summary>
+        protected string ModID { get; }
+
+        /// <summary>An API for fetching metadata about loaded mods.</summary>
+        protected IModRegistry ModRegistry { get; }
 
         /// <summary>Encapsulates monitoring and logging.</summary>
         protected IMonitor Monitor { get; }
@@ -18,11 +21,8 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations
         /*********
         ** Accessors
         *********/
-        /// <summary>The mod's unique ID.</summary>
-        public string ModID { get; }
-
-        /// <summary>The minimum version of the mod that's supported.</summary>
-        public ISemanticVersion MinimumVersion { get; }
+        /// <summary>A human-readable name for the mod.</summary>
+        public string Label { get; }
 
         /// <summary>Whether the mod is available.</summary>
         public bool IsLoaded { get; protected set; }
@@ -42,19 +42,32 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations
             // init
             this.Label = label;
             this.ModID = modID;
-            this.MinimumVersion = new SemanticVersion(minVersion);
+            this.ModRegistry = modRegistry;
             this.Monitor = monitor;
 
             // validate mod
             IManifest manifest = modRegistry.Get(this.ModID);
             if (manifest == null)
                 return;
-            if (manifest.Version.IsOlderThan(this.MinimumVersion))
+            if (manifest.Version.IsOlderThan(minVersion))
             {
-                monitor.Log($"Detected {label} {manifest.Version}, but need {this.MinimumVersion} or later. Data from this mod won't be shown.", LogLevel.Warn);
+                monitor.Log($"Detected {label} {manifest.Version}, but need {minVersion} or later. Data from this mod won't be shown.", LogLevel.Warn);
                 return;
             }
             this.IsLoaded = true;
+        }
+
+        /// <summary>Get an API for the mod, and show a message if it can't be loaded.</summary>
+        /// <typeparam name="TInterface">The API type.</typeparam>
+        protected TInterface GetValidatedApi<TInterface>() where TInterface : class
+        {
+            TInterface api = this.ModRegistry.GetApi<TInterface>(this.ModID);
+            if (api == null)
+            {
+                this.Monitor.Log($"Detected {this.Label}, but couldn't fetch its API. Data from this mod may not be shown.", LogLevel.Warn);
+                return null;
+            }
+            return api;
         }
     }
 }
