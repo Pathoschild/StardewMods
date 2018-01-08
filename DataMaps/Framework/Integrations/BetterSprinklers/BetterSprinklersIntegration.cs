@@ -6,10 +6,10 @@ using System.Reflection;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 
-namespace Pathoschild.Stardew.DataMaps.Framework.Integrations
+namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers
 {
     /// <summary>Handles the logic for integrating with the Better Sprinklers mod.</summary>
-    internal class BetterSprinklersIntegrations
+    internal class BetterSprinklersIntegration
     {
         /*********
         ** Properties
@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations
         /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
         /// <param name="reflection">An API for accessing private code.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        public BetterSprinklersIntegrations(IModRegistry modRegistry, IReflectionHelper reflection, IMonitor monitor)
+        public BetterSprinklersIntegration(IModRegistry modRegistry, IReflectionHelper reflection, IMonitor monitor)
         {
             this.IsLoaded = modRegistry.IsLoaded(this.ModID);
             this.Reflection = reflection;

@@ -4,6 +4,8 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.DataMaps;
 using Pathoschild.Stardew.DataMaps.Framework;
 using Pathoschild.Stardew.DataMaps.Framework.Integrations;
+using Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers;
+using Pathoschild.Stardew.DataMaps.Framework.Integrations.PelicanFiber;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -30,7 +32,7 @@ namespace Pathoschild.Stardew.DataMaps
         private PelicanFiberIntegration PelicanFiber;
 
         /// <summary>Handles the logic for integrating with the Better Sprinklers mod.</summary>
-        private BetterSprinklersIntegrations BetterSprinklers;
+        private BetterSprinklersIntegration BetterSprinklers;
 
 
         /*********
@@ -43,7 +45,7 @@ namespace Pathoschild.Stardew.DataMaps
             // initialise
             this.Config = helper.ReadConfig<ModConfig>();
             this.PelicanFiber = new PelicanFiberIntegration(helper.ModRegistry, helper.Reflection);
-            this.BetterSprinklers = new BetterSprinklersIntegrations(helper.ModRegistry, helper.Reflection, this.Monitor);
+            this.BetterSprinklers = new BetterSprinklersIntegration(helper.ModRegistry, helper.Reflection, this.Monitor);
             this.Maps = new IDataMap[]
             {
                 new AccessibilityMap(helper.Translation),

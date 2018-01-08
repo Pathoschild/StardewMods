@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
 using Pathoschild.Stardew.DataMaps.Framework.Integrations;
+using Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -31,7 +32,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         private IDictionary<int, Vector2[]> DefaultSprinklerTiles;
 
         /// <summary>Handles the logic for integrating with the Better Sprinklers mod.</summary>
-        private readonly BetterSprinklersIntegrations BetterSprinklers;
+        private readonly BetterSprinklersIntegration BetterSprinklers;
 
 
         /*********
@@ -50,7 +51,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="betterSprinklers">Handles the logic for integrating with the Better Sprinklers mod.</param>
-        public SprinklerMap(ITranslationHelper translations, BetterSprinklersIntegrations betterSprinklers)
+        public SprinklerMap(ITranslationHelper translations, BetterSprinklersIntegration betterSprinklers)
         {
             this.BetterSprinklers = betterSprinklers;
             this.DefaultSprinklerTiles = this.GetDefaultSprinklerTiles();
