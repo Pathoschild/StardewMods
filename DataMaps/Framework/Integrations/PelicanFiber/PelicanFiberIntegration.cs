@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.PelicanFiber
             if (!this.IsBuildMenuOpen())
                 return null;
 
-            return this.Reflection.GetPrivateProperty<BluePrint>(Game1.activeClickableMenu, "CurrentBlueprint").GetValue();
+            return this.Reflection.GetProperty<BluePrint>(Game1.activeClickableMenu, "CurrentBlueprint").GetValue();
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers
             {
                 object modEntry = this.GetModEntry(modRegistry);
                 this.GetModConfig = this.GetModConfigDelegate(modEntry, reflection);
-                this.MaxRadius = reflection.GetPrivateValue<int>(modEntry, "MaxGridSize") / 2;
+                this.MaxRadius = reflection.GetField<int>(modEntry, "MaxGridSize").GetValue() / 2;
             }
             catch (Exception ex)
             {
@@ -111,7 +111,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers
         /// <param name="modEntry">The mod's entry class.</param>
         private Func<object> GetModConfigDelegate(object modEntry, IReflectionHelper reflection)
         {
-            IPrivateField<object> configField = reflection.GetPrivateField<object>(modEntry, "Config");
+            IReflectedField<object> configField = reflection.GetField<object>(modEntry, "Config");
             return () => configField.GetValue();
         }
 
@@ -126,7 +126,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers
                 throw new InvalidOperationException($"The Better Sprinklers config model is unexpectedly null.");
 
             // get sprinkler shapes
-            IDictionary<int, int[,]> sprinklerShapes = reflection.GetPrivateProperty<Dictionary<int, int[,]>>(configModel, "SprinklerShapes").GetValue();
+            IDictionary<int, int[,]> sprinklerShapes = reflection.GetProperty<Dictionary<int, int[,]>>(configModel, "SprinklerShapes").GetValue();
             if (sprinklerShapes == null)
                 throw new InvalidOperationException("The Better Sprinklers config model is unexpectedly null.");
 
