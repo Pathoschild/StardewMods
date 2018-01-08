@@ -2,6 +2,7 @@
 ### 1.1
 * Added support for...
   * Cobalt's sprinklers.
+* Updated Better Sprinklers support.
 * Fixed deprecated API usage.
 
 ### 1.0

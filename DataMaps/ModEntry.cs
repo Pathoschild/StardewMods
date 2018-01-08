@@ -67,7 +67,7 @@ namespace Pathoschild.Stardew.DataMaps
             IModHelper helper = this.Helper;
 
             this.PelicanFiber = new PelicanFiberIntegration(helper.ModRegistry, helper.Reflection, this.Monitor);
-            this.BetterSprinklers = new BetterSprinklersIntegration(helper.ModRegistry, helper.Reflection, this.Monitor);
+            this.BetterSprinklers = new BetterSprinklersIntegration(helper.ModRegistry, this.Monitor);
             this.Cobalt = new CobaltIntegration(helper.ModRegistry, this.Monitor);
             this.Maps = new IDataMap[]
             {
