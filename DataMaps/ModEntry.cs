@@ -3,7 +3,6 @@ using System.Linq;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.DataMaps;
 using Pathoschild.Stardew.DataMaps.Framework;
-using Pathoschild.Stardew.DataMaps.Framework.Integrations;
 using Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers;
 using Pathoschild.Stardew.DataMaps.Framework.Integrations.PelicanFiber;
 using StardewModdingAPI;
@@ -44,7 +43,7 @@ namespace Pathoschild.Stardew.DataMaps
         {
             // initialise
             this.Config = helper.ReadConfig<ModConfig>();
-            this.PelicanFiber = new PelicanFiberIntegration(helper.ModRegistry, helper.Reflection);
+            this.PelicanFiber = new PelicanFiberIntegration(helper.ModRegistry, helper.Reflection, this.Monitor);
             this.BetterSprinklers = new BetterSprinklersIntegration(helper.ModRegistry, helper.Reflection, this.Monitor);
             this.Maps = new IDataMap[]
             {

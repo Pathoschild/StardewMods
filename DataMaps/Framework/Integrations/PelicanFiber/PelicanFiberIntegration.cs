@@ -4,14 +4,11 @@ using StardewValley;
 namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.PelicanFiber
 {
     /// <summary>Handles the logic for integrating with the Pelican Fiber mod.</summary>
-    internal class PelicanFiberIntegration
+    internal class PelicanFiberIntegration : BaseIntegration
     {
         /*********
         ** Properties
         *********/
-        /// <summary>The Pelican Fiber mod's unique ID.</summary>
-        private readonly string ModID = "jwdred.PelicanFiber";
-
         /// <summary>The full type name of the Pelican Fiber mod's build menu.</summary>
         private readonly string MenuTypeName = "PelicanFiber.Framework.ConstructionMenu";
 
@@ -20,21 +17,15 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.PelicanFiber
 
 
         /*********
-        ** Accessors
-        *********/
-        /// <summary>Whether the mod is installed.</summary>
-        public bool IsLoaded { get; }
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
         /// <param name="reflection">An API for accessing private code.</param>
-        public PelicanFiberIntegration(IModRegistry modRegistry, IReflectionHelper reflection)
+        /// <param name="monitor">Encapsulates monitoring and logging.</param>
+        public PelicanFiberIntegration(IModRegistry modRegistry, IReflectionHelper reflection, IMonitor monitor)
+            : base("Pelican Fiber", "jwdred.PelicanFiber", "3.0.2", modRegistry, monitor)
         {
-            this.IsLoaded = modRegistry.IsLoaded(this.ModID);
             this.Reflection = reflection;
         }
 

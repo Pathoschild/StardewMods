@@ -9,14 +9,11 @@ using StardewModdingAPI;
 namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers
 {
     /// <summary>Handles the logic for integrating with the Better Sprinklers mod.</summary>
-    internal class BetterSprinklersIntegration
+    internal class BetterSprinklersIntegration : BaseIntegration
     {
         /*********
         ** Properties
         *********/
-        /// <summary>The Better Sprinkler mod's unique ID.</summary>
-        private readonly string ModID = "Speeder.BetterSprinklers";
-
         /// <summary>An API for accessing private code.</summary>
         private readonly IReflectionHelper Reflection;
 
@@ -27,9 +24,6 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers
         /*********
         ** Accessors
         *********/
-        /// <summary>Whether the mod is installed.</summary>
-        public bool IsLoaded { get; }
-
         /// <summary>The maximum possible sprinkler radius.</summary>
         public int MaxRadius { get; }
 
@@ -42,24 +36,23 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers
         /// <param name="reflection">An API for accessing private code.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         public BetterSprinklersIntegration(IModRegistry modRegistry, IReflectionHelper reflection, IMonitor monitor)
+            : base("Better Sprinklers", "Speeder.BetterSprinklers", "2.3.1-pathoschild-update.3", modRegistry, monitor)
         {
-            this.IsLoaded = modRegistry.IsLoaded(this.ModID);
             this.Reflection = reflection;
+            if (!this.IsLoaded)
+                return;
 
-            if (this.IsLoaded)
+            try
             {
-                try
-                {
-                    object modEntry = this.GetModEntry(modRegistry);
-                    this.GetModConfig = this.GetModConfigDelegate(modEntry, reflection);
-                    this.MaxRadius = reflection.GetPrivateValue<int>(modEntry, "MaxGridSize") / 2;
-                }
-                catch (Exception ex)
-                {
-                    monitor.Log("Detected Better Sprinklers, but couldn't integrate with it. Make sure you have the latest version of both mods.", LogLevel.Warn);
-                    monitor.Log(ex.ToString(), LogLevel.Trace);
-                    this.IsLoaded = false;
-                }
+                object modEntry = this.GetModEntry(modRegistry);
+                this.GetModConfig = this.GetModConfigDelegate(modEntry, reflection);
+                this.MaxRadius = reflection.GetPrivateValue<int>(modEntry, "MaxGridSize") / 2;
+            }
+            catch (Exception ex)
+            {
+                monitor.Log("Detected Better Sprinklers, but couldn't integrate with it. Make sure you have the latest version of both mods.", LogLevel.Warn);
+                monitor.Log(ex.ToString(), LogLevel.Trace);
+                this.IsLoaded = false;
             }
         }
 
