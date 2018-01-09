@@ -31,7 +31,7 @@ Shows scarecrow coverage, and highlights unprotected crops. Also works on scarec
 
 ### Sprinklers
 Shows sprinkler coverage, and highlights unsprinkled crops. Also works on sprinklers being placed.
-Compatible with custom sprinkler shapes using Better Sprinklers.
+Compatible with custom sprinkler coverage from Better Sprinklers, Cobalt, and Simple Sprinkler.
 > ![](docs/screenshots/sprinklers.png)
 
 ## Configuration

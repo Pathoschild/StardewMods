@@ -1,7 +1,8 @@
 # Release notes
 ### 1.1
 * Added support for...
-  * Cobalt's sprinklers.
+  * Cobalt's sprinkler;
+  * Simple Sprinkler's custom sprinkler areas.
 * Updated Better Sprinklers support.
 * Fixed deprecated API usage.
 

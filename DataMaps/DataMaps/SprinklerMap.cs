@@ -6,6 +6,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
 using Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers;
 using Pathoschild.Stardew.DataMaps.Framework.Integrations.Cobalt;
+using Pathoschild.Stardew.DataMaps.Framework.Integrations.SimpleSprinkler;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -52,7 +53,8 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="betterSprinklers">Handles access to the Better Sprinklers mod.</param>
         /// <param name="cobalt">Handles access to the Cobalt mod.</param>
-        public SprinklerMap(ITranslationHelper translations, BetterSprinklersIntegration betterSprinklers, CobaltIntegration cobalt)
+        /// <param name="simpleSprinkler">Handles access to the Simple Sprinkler mod.</param>
+        public SprinklerMap(ITranslationHelper translations, BetterSprinklersIntegration betterSprinklers, CobaltIntegration cobalt, SimpleSprinklerIntegration simpleSprinkler)
         {
             // init
             this.BetterSprinklers = betterSprinklers;
@@ -64,9 +66,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             };
 
             // get static sprinkler coverage
-            this.StaticTilesBySprinklerID = this.GetDefaultSprinklerTiles();
-            if (cobalt.IsLoaded)
-                this.StaticTilesBySprinklerID[cobalt.GetSprinklerId()] = cobalt.GetSprinklerTiles().ToArray();
+            this.StaticTilesBySprinklerID = this.GetStaticSprinklerTiles(cobalt, simpleSprinkler);
 
             // get max sprinkler radius
             this.MaxRadius = this.StaticTilesBySprinklerID.Max(p => this.GetMaxRadius(p.Value));
@@ -138,40 +138,60 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             return terrain is HoeDirt dirt && dirt.crop != null;
         }
 
-        /// <summary>Get the default sprinkler tiles centered on (0, 0).</summary>
-        private IDictionary<int, Vector2[]> GetDefaultSprinklerTiles()
+        /// <summary>Get the relative sprinkler tile coverage, including any mod customisations which don't change after launch.</summary>
+        /// <param name="cobalt">Handles access to the Cobalt mod.</param>
+        /// <param name="simpleSprinkler">Handles access to the Simple Sprinkler mod.</param>
+        private IDictionary<int, Vector2[]> GetStaticSprinklerTiles(CobaltIntegration cobalt, SimpleSprinklerIntegration simpleSprinkler)
         {
-            Vector2 center = Vector2.Zero;
             IDictionary<int, Vector2[]> tiles = new Dictionary<int, Vector2[]>();
 
-            // basic sprinkler
-            tiles[599] = Utility.getAdjacentTileLocationsArray(center).Concat(new[] { center }).ToArray();
-
-            // quality sprinkler
-            tiles[621] = Utility.getSurroundingTileLocationsArray(center).Concat(new[] { center }).ToArray();
-
-            // iridium sprinkler
-            List<Vector2> iridiumTiles = new List<Vector2>(4 * 4);
-            for (int x = -2; x <= 2; x++)
+            // vanilla coverage
             {
-                for (int y = -2; y <= 2; y++)
-                    iridiumTiles.Add(new Vector2(x, y));
+                Vector2 center = Vector2.Zero;
+
+                // basic sprinkler
+                tiles[599] = Utility.getAdjacentTileLocationsArray(center).Concat(new[] { center }).ToArray();
+
+                // quality sprinkler
+                tiles[621] = Utility.getSurroundingTileLocationsArray(center).Concat(new[] { center }).ToArray();
+
+                // iridium sprinkler
+                List<Vector2> iridiumTiles = new List<Vector2>(4 * 4);
+                for (int x = -2; x <= 2; x++)
+                {
+                    for (int y = -2; y <= 2; y++)
+                        iridiumTiles.Add(new Vector2(x, y));
+                }
+                tiles[645] = iridiumTiles.ToArray();
             }
-            tiles[645] = iridiumTiles.ToArray();
+
+            // Cobalt mod adds new sprinkler
+            if (cobalt.IsLoaded)
+                this.StaticTilesBySprinklerID[cobalt.GetSprinklerId()] = cobalt.GetSprinklerTiles().ToArray();
+
+            // Simple Sprinkler mod adds tiles to default coverage
+            foreach (var pair in simpleSprinkler.GetNewSprinklerTiles())
+            {
+                int sprinklerID = pair.Key;
+                if (tiles.TryGetValue(sprinklerID, out Vector2[] currentTiles))
+                    tiles[sprinklerID] = currentTiles.Union(pair.Value).ToArray();
+                else
+                    tiles[sprinklerID] = pair.Value;
+            }
 
             return tiles;
         }
 
-        /// <summary>Get the current sprinkler coverage, including any player customisations via mod.</summary>
-        /// <param name="defaultTiles">The default tiles if there are no mods which allow player customisation.</param>
-        private IDictionary<int, Vector2[]> GetCurrentSprinklerTiles(IDictionary<int, Vector2[]> defaultTiles)
+        /// <summary>Get the current relative sprinkler coverage, including any dynamic mod changes.</summary>
+        /// <param name="staticTiles">The static sprinkler coverage.</param>
+        private IDictionary<int, Vector2[]> GetCurrentSprinklerTiles(IDictionary<int, Vector2[]> staticTiles)
         {
             // get static tiles
             if (!this.BetterSprinklers.IsLoaded)
-                return defaultTiles;
+                return staticTiles;
 
             // merge custom tiles
-            IDictionary<int, Vector2[]> tilesBySprinklerID = new Dictionary<int, Vector2[]>(defaultTiles);
+            IDictionary<int, Vector2[]> tilesBySprinklerID = new Dictionary<int, Vector2[]>(staticTiles);
             if (this.BetterSprinklers.IsLoaded)
             {
                 foreach (var pair in this.BetterSprinklers.GetSprinklerTiles())

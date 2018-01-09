@@ -6,6 +6,7 @@ using Pathoschild.Stardew.DataMaps.Framework;
 using Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers;
 using Pathoschild.Stardew.DataMaps.Framework.Integrations.Cobalt;
 using Pathoschild.Stardew.DataMaps.Framework.Integrations.PelicanFiber;
+using Pathoschild.Stardew.DataMaps.Framework.Integrations.SimpleSprinkler;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -30,12 +31,6 @@ namespace Pathoschild.Stardew.DataMaps
 
         /// <summary>Handles access to the Pelican Fiber mod.</summary>
         private PelicanFiberIntegration PelicanFiber;
-
-        /// <summary>Handles access to the Better Sprinklers mod.</summary>
-        private BetterSprinklersIntegration BetterSprinklers;
-
-        /// <summary>Handles access to the Cobalt mod.</summary>
-        private CobaltIntegration Cobalt;
 
 
         /*********
@@ -67,13 +62,15 @@ namespace Pathoschild.Stardew.DataMaps
             IModHelper helper = this.Helper;
 
             this.PelicanFiber = new PelicanFiberIntegration(helper.ModRegistry, helper.Reflection, this.Monitor);
-            this.BetterSprinklers = new BetterSprinklersIntegration(helper.ModRegistry, this.Monitor);
-            this.Cobalt = new CobaltIntegration(helper.ModRegistry, this.Monitor);
+            var betterSprinklers = new BetterSprinklersIntegration(helper.ModRegistry, this.Monitor);
+            var cobalt = new CobaltIntegration(helper.ModRegistry, this.Monitor);
+            var simpleSprinklers = new SimpleSprinklerIntegration(helper.ModRegistry, this.Monitor);
+
             this.Maps = new IDataMap[]
             {
                 new AccessibilityMap(helper.Translation),
                 new ScarecrowMap(helper.Translation),
-                new SprinklerMap(helper.Translation, this.BetterSprinklers, this.Cobalt),
+                new SprinklerMap(helper.Translation, betterSprinklers, cobalt, simpleSprinklers),
                 new JunimoHutMap(helper.Translation, this.PelicanFiber)
             };
         }

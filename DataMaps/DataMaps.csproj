@@ -43,6 +43,8 @@
     <Compile Include="Framework\DataMapOverlay.cs" />
     <Compile Include="Framework\IDataMap.cs" />
     <Compile Include="Framework\Integrations\BaseIntegration.cs" />
+    <Compile Include="Framework\Integrations\SimpleSprinkler\SimpleSprinklerIntegration.cs" />
+    <Compile Include="Framework\Integrations\SimpleSprinkler\ISimplerSprinklerApi.cs" />
     <Compile Include="Framework\Integrations\BetterSprinklers\BetterSprinklersIntegration.cs" />
     <Compile Include="Framework\Integrations\BetterSprinklers\IBetterSprinklersApi.cs" />
     <Compile Include="Framework\Integrations\Cobalt\CobaltIntegration.cs" />
