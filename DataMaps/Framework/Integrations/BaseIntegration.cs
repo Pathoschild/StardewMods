@@ -1,3 +1,4 @@
+using System;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.DataMaps.Framework.Integrations
@@ -68,6 +69,14 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations
                 return null;
             }
             return api;
+        }
+
+        /// <summary>Assert that the integration is loaded.</summary>
+        /// <exception cref="InvalidOperationException">The integration isn't loaded.</exception>
+        protected void AssertLoaded()
+        {
+            if (!this.IsLoaded)
+                throw new InvalidOperationException($"The {this.Label} integration isn't loaded.");
         }
     }
 }

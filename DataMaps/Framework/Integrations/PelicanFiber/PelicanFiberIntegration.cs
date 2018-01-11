@@ -32,12 +32,14 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.PelicanFiber
         /// <summary>Get whether the Pelican Fiber build menu is open.</summary>
         public bool IsBuildMenuOpen()
         {
-            return this.IsLoaded && Game1.activeClickableMenu?.GetType().FullName == this.MenuTypeName;
+            this.AssertLoaded();
+            return Game1.activeClickableMenu?.GetType().FullName == this.MenuTypeName;
         }
 
         /// <summary>Get the selected blueprint from the Pelican Fiber build menu, if it's open.</summary>
         public BluePrint GetBuildMenuBlueprint()
         {
+            this.AssertLoaded();
             if (!this.IsBuildMenuOpen())
                 return null;
 

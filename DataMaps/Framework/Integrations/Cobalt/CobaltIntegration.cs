@@ -34,12 +34,14 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.Cobalt
         /// <summary>Get the cobalt sprinkler's object ID.</summary>
         public int GetSprinklerId()
         {
+            this.AssertLoaded();
             return this.ModApi.GetSprinklerId();
         }
 
         /// <summary>Get the configured Sprinkler tiles relative to (0, 0).</summary>
         public IEnumerable<Vector2> GetSprinklerTiles()
         {
+            this.AssertLoaded();
             return this.ModApi.GetSprinklerCoverage(Vector2.Zero);
         }
     }

@@ -170,13 +170,16 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
                 this.StaticTilesBySprinklerID[cobalt.GetSprinklerId()] = cobalt.GetSprinklerTiles().ToArray();
 
             // Simple Sprinkler mod adds tiles to default coverage
-            foreach (var pair in simpleSprinkler.GetNewSprinklerTiles())
+            if (simpleSprinkler.IsLoaded)
             {
-                int sprinklerID = pair.Key;
-                if (tiles.TryGetValue(sprinklerID, out Vector2[] currentTiles))
-                    tiles[sprinklerID] = currentTiles.Union(pair.Value).ToArray();
-                else
-                    tiles[sprinklerID] = pair.Value;
+                foreach (var pair in simpleSprinkler.GetNewSprinklerTiles())
+                {
+                    int sprinklerID = pair.Key;
+                    if (tiles.TryGetValue(sprinklerID, out Vector2[] currentTiles))
+                        tiles[sprinklerID] = currentTiles.Union(pair.Value).ToArray();
+                    else
+                        tiles[sprinklerID] = pair.Value;
+                }
             }
 
             return tiles;

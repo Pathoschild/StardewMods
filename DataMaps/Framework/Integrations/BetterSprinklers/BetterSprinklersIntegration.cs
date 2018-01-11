@@ -42,6 +42,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers
         /// <summary>Get the configured Sprinkler tiles relative to (0, 0).</summary>
         public IDictionary<int, Vector2[]> GetSprinklerTiles()
         {
+            this.AssertLoaded();
             return this.ModApi.GetSprinklerCoverage();
         }
     }

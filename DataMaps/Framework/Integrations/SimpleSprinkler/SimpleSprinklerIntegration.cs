@@ -34,6 +34,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.SimpleSprinkler
         /// <summary>Get the Sprinkler tiles relative to (0, 0), additive to the game's default sprinkler coverage.</summary>
         public IDictionary<int, Vector2[]> GetNewSprinklerTiles()
         {
+            this.AssertLoaded();
             return this.ModApi.GetNewSprinklerCoverage();
         }
     }
