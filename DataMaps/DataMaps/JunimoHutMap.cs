@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.Framework;
-using Pathoschild.Stardew.DataMaps.Framework.Integrations;
 using Pathoschild.Stardew.DataMaps.Framework.Integrations.PelicanFiber;
 using StardewModdingAPI;
 using StardewValley;

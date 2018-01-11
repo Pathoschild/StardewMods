@@ -20,6 +20,11 @@ Press `F2` to show the data maps overlay, and then left/right `CTRL` to cycle be
 Shows where you can walk and highlights warp tiles; useful for finding hidden paths and nooks.
 > ![](docs/screenshots/accessibility.png)
 
+### Bee houses
+Shows bee houses' flower search range. (The weird shape isn't a bug, that's the game's
+actual range.)
+> ![](docs/screenshots/bee-houses.png)
+
 ### Junimo huts
 Shows Junimo hut coverage, and highlights crops they won't reach. Also works when placing a Junimo
 hut from the Wizard's build menu. Compatible with Pelican Fiber.

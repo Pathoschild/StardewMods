@@ -1,14 +1,16 @@
 # Release notes
 ### 1.1
-* Added support for...
-  * Cobalt's sprinkler;
-  * Simple Sprinkler's custom sprinkler areas.
+* Added bee house coverage map.
+* Added support for Cobalt's sprinkler.
+* Added support for Simple Sprinkler's custom sprinkler range.
 * Updated Better Sprinklers support.
 * Fixed deprecated API usage.
 
 ### 1.0
 * Initial version.
-* Added Junimo huts, scarecrows, sprinklers, and accessibility data maps.
-* Added support for...
-  * Better Sprinklers' custom sprinklers;
-  * Pelican Fiber's custom build menu.
+* Added Junimo huts map.
+* Added scarecrow coverage map.
+* Added sprinkler coverage map.
+* Added accessibility map.
+* Added support for Better Sprinklers' custom sprinkler range.
+* Added support for Pelican Fiber's custom build menu.

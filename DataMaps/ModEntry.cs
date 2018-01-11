@@ -69,6 +69,7 @@ namespace Pathoschild.Stardew.DataMaps
             this.Maps = new IDataMap[]
             {
                 new AccessibilityMap(helper.Translation),
+                new BeeHouseMap(helper.Translation),
                 new ScarecrowMap(helper.Translation),
                 new SprinklerMap(helper.Translation, betterSprinklers, cobalt, simpleSprinklers),
                 new JunimoHutMap(helper.Translation, this.PelicanFiber)
