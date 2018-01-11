@@ -21,6 +21,9 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>The maximum number of tiles from the center a bee house can cover.</summary>
         private readonly int MaxRadius = 5;
 
+        /// <summary>The relative tile coordinates covered by a bee house.</summary>
+        private readonly Vector2[] RelativeRange = BeeHouseMap.GetRelativeCoverage().ToArray();
+
 
         /*********
         ** Accessors
@@ -103,9 +106,17 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             if (!(location is Farm))
                 yield break; // bee houses are hardcoded to only work on the farm
 
+            foreach (Vector2 relativeTile in this.RelativeRange)
+                yield return origin + relativeTile;
+        }
+
+        /// <summary>Get the relative tiles covered by a bee house.</summary>
+        /// <remarks>Derived from <see cref="Utility.findCloseFlower"/>.</remarks>
+        private static IEnumerable<Vector2> GetRelativeCoverage()
+        {
             Queue<Vector2> queue = new Queue<Vector2>();
             HashSet<Vector2> visited = new HashSet<Vector2>();
-            queue.Enqueue(origin);
+            queue.Enqueue(Vector2.Zero);
             for (int i = 0; i <= 150 && queue.Count > 0; ++i)
             {
                 Vector2 tile = queue.Dequeue();
