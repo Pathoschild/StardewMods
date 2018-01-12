@@ -5,6 +5,9 @@
   "maps.accessibility.impassable": "Impassable",
   "maps.accessibility.warp": "Warp",
 
+  "maps.bee-houses.name": "Bee Houses",
+  "maps.bee-houses.range": "Flower Range",
+
   "maps.junimo-huts.name": "Junimo Huts",
   "maps.junimo-huts.can-harvest": "Can Harvest",
   "maps.junimo-huts.cannot-harvest": "Can't Harvest",

@@ -14,6 +14,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The in-game chest.</summary>
         private readonly Chest Chest;
 
+        /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
+        private ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory => this.Chest.grabItemFromInventory;
+
+        /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
+        private ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer => this.Chest.grabItemFromChest;
+
 
         /*********
         ** Accessors
@@ -36,12 +42,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 
         /// <summary>The container's original name.</summary>
         public string DefaultName => "Chest";
-
-        /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
-        public ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory => this.Chest.grabItemFromInventory;
-
-        /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
-        public ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer => this.Chest.grabItemFromChest;
 
 
         /*********
@@ -75,6 +75,38 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         public bool CanAcceptItem(Item item)
         {
             return InventoryMenu.highlightAllItems(item);
+        }
+
+        /// <summary>Get whether another instance wraps the same underlying container.</summary>
+        /// <param name="container">The other container.</param>
+        public bool IsSameAs(IContainer container)
+        {
+            return container != null && this.IsSameAs(container.Inventory);
+        }
+
+        /// <summary>Get whether another instance wraps the same underlying container.</summary>
+        /// <param name="inventory">The other container's inventory.</param>
+        public bool IsSameAs(List<Item> inventory)
+        {
+            return this.Inventory == inventory;
+        }
+
+        /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
+        public ItemGrabMenu OpenMenu()
+        {
+            return new ItemGrabMenu(
+                inventory: this.Inventory,
+                reverseGrab: false,
+                showReceivingMenu: true,
+                highlightFunction: this.CanAcceptItem,
+                behaviorOnItemSelectFunction: this.GrabItemFromInventory,
+                message: null,
+                behaviorOnItemGrab: this.GrabItemFromContainer,
+                canBeExitedWithKey: true,
+                showOrganizeButton: true,
+                source: ItemGrabMenu.source_chest
+            );
         }
     }
 }

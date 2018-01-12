@@ -24,6 +24,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>The control bindings.</summary>
         public ModConfigControls Controls { get; set; } = new ModConfigControls();
 
+        /// <summary>The locations in which to disable remote chest lookups.</summary>
+        public string[] DisabledInLocations { get; set; } = new string[0];
+
 
         /*********
         ** Nested models

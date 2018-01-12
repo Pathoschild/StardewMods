@@ -3,7 +3,10 @@ using System.Linq;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataMaps.DataMaps;
 using Pathoschild.Stardew.DataMaps.Framework;
-using Pathoschild.Stardew.DataMaps.Framework.Integrations;
+using Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers;
+using Pathoschild.Stardew.DataMaps.Framework.Integrations.Cobalt;
+using Pathoschild.Stardew.DataMaps.Framework.Integrations.PelicanFiber;
+using Pathoschild.Stardew.DataMaps.Framework.Integrations.SimpleSprinkler;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -26,11 +29,8 @@ namespace Pathoschild.Stardew.DataMaps
         /// <summary>The available data maps.</summary>
         private IDataMap[] Maps;
 
-        /// <summary>Handles the logic for integrating with the Pelican Fiber mod.</summary>
+        /// <summary>Handles access to the Pelican Fiber mod.</summary>
         private PelicanFiberIntegration PelicanFiber;
-
-        /// <summary>Handles the logic for integrating with the Better Sprinklers mod.</summary>
-        private BetterSprinklersIntegrations BetterSprinklers;
 
 
         /*********
@@ -40,20 +40,12 @@ namespace Pathoschild.Stardew.DataMaps
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            // initialise
+            // read config
             this.Config = helper.ReadConfig<ModConfig>();
-            this.PelicanFiber = new PelicanFiberIntegration(helper.ModRegistry, helper.Reflection);
-            this.BetterSprinklers = new BetterSprinklersIntegrations(helper.ModRegistry, helper.Reflection, this.Monitor);
-            this.Maps = new IDataMap[]
-            {
-                new AccessibilityMap(helper.Translation),
-                new ScarecrowMap(helper.Translation),
-                new SprinklerMap(helper.Translation, this.BetterSprinklers),
-                new JunimoHutMap(helper.Translation, this.PelicanFiber)
-            };
 
             // hook up events
             SaveEvents.AfterReturnToTitle += this.SaveEvents_AfterReturnToTitle;
+            GameEvents.FirstUpdateTick += this.GameEvents_FirstUpdateTick;
             GameEvents.SecondUpdateTick += this.GameEvents_SecondUpdateTick;
             InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
         }
@@ -62,6 +54,28 @@ namespace Pathoschild.Stardew.DataMaps
         /*********
         ** Private methods
         *********/
+        /// <summary>The method invoked on the first game update tick.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void GameEvents_FirstUpdateTick(object sender, EventArgs e)
+        {
+            IModHelper helper = this.Helper;
+
+            this.PelicanFiber = new PelicanFiberIntegration(helper.ModRegistry, helper.Reflection, this.Monitor);
+            var betterSprinklers = new BetterSprinklersIntegration(helper.ModRegistry, this.Monitor);
+            var cobalt = new CobaltIntegration(helper.ModRegistry, this.Monitor);
+            var simpleSprinklers = new SimpleSprinklerIntegration(helper.ModRegistry, this.Monitor);
+
+            this.Maps = new IDataMap[]
+            {
+                new AccessibilityMap(helper.Translation),
+                new BeeHouseMap(helper.Translation),
+                new ScarecrowMap(helper.Translation),
+                new SprinklerMap(helper.Translation, betterSprinklers, cobalt, simpleSprinklers),
+                new JunimoHutMap(helper.Translation, this.PelicanFiber)
+            };
+        }
+
         /// <summary>The method invoked when the player returns to the title screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -128,8 +142,8 @@ namespace Pathoschild.Stardew.DataMaps
 
             return
                 Context.IsPlayerFree // player is free to roam
-                || (Game1.activeClickableMenu is CarpenterMenu && this.Helper.Reflection.GetPrivateValue<bool>(Game1.activeClickableMenu, "onFarm")) // on Robin's or Wizard's build screen
-                || (this.PelicanFiber.IsBuildMenuOpen() && this.Helper.Reflection.GetPrivateValue<bool>(Game1.activeClickableMenu, "OnFarm")); // on Pelican Fiber's build screen
+                || (Game1.activeClickableMenu is CarpenterMenu && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "onFarm").GetValue()) // on Robin's or Wizard's build screen
+                || (this.PelicanFiber.IsLoaded && this.PelicanFiber.IsBuildMenuOpen() && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "OnFarm").GetValue()); // on Pelican Fiber's build screen
         }
     }
 }

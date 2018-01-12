@@ -24,6 +24,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Simplifies access to private game data.</summary>
         private readonly IReflectionHelper Reflection;
 
+        /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
+        private ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory => this.GrabItemFromInventoryImpl;
+
+        /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
+        private ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer => this.GrabItemFromContainerImpl;
+
 
         /*********
         ** Accessors
@@ -42,12 +48,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 
         /// <summary>The container's original name.</summary>
         public string DefaultName => null;
-
-        /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
-        public ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory => this.GrabItemFromInventoryImpl;
-
-        /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
-        public ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer => this.GrabItemFromContainerImpl;
 
 
         /*********
@@ -83,6 +83,38 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             return Utility.highlightShippableObjects(item);
         }
 
+        /// <summary>Get whether another instance wraps the same underlying container.</summary>
+        /// <param name="container">The other container.</param>
+        public bool IsSameAs(IContainer container)
+        {
+            return container != null && this.IsSameAs(container.Inventory);
+        }
+
+        /// <summary>Get whether another instance wraps the same underlying container.</summary>
+        /// <param name="inventory">The other container's inventory.</param>
+        public bool IsSameAs(List<Item> inventory)
+        {
+            return this.Inventory == inventory;
+        }
+
+        /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
+        public ItemGrabMenu OpenMenu()
+        {
+            return new ItemGrabMenu(
+                inventory: this.Inventory,
+                reverseGrab: false,
+                showReceivingMenu: true,
+                highlightFunction: this.CanAcceptItem,
+                behaviorOnItemSelectFunction: this.GrabItemFromInventory,
+                message: null,
+                behaviorOnItemGrab: this.GrabItemFromContainer,
+                canBeExitedWithKey: true,
+                showOrganizeButton: true,
+                source: ItemGrabMenu.source_none
+            );
+        }
+
 
         /*********
         ** Private methods
@@ -90,11 +122,31 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Add an item to the container from the player inventory.</summary>
         /// <param name="item">The item taken.</param>
         /// <param name="player">The player taking the item.</param>
+        /// <remarks>This implementation replicates <see cref="Chest.grabItemFromInventory"/> without the slot limit (instead of using <c>Farm::shipItem</c> which does some weird things that don't work well with a full chest UI).</remarks>
         private void GrabItemFromInventoryImpl(Item item, SFarmer player)
         {
-            // note: we deliberately use the chest logic here instead of Farm::shipItem, which does
-            // some weird things that don't work well with a full chest UI.
-            this.FakeChest.grabItemFromInventory(item, player);
+            // normalise
+            if (item.Stack == 0)
+                item.Stack = 1;
+
+            // add to shipping bin
+            Item remaining = this.FakeChest.addItem(item);
+            if (remaining != null)
+                this.FakeChest.items.Add(remaining);
+
+            // add item
+            player.removeItemFromInventory(item);
+            this.FakeChest.clearNulls();
+
+            // reopen menu
+            IClickableMenu menu = Game1.activeClickableMenu;
+            int snappedComponentID = menu.currentlySnappedComponent?.myID ?? -1;
+            Game1.activeClickableMenu = menu = this.OpenMenu();
+            if (snappedComponentID != -1)
+            {
+                menu.currentlySnappedComponent = menu.getComponentWithID(snappedComponentID);
+                menu.snapCursorToCurrentSnappedComponent();
+            }
         }
 
         /// <summary>Add an item to the player inventory from the container.</summary>

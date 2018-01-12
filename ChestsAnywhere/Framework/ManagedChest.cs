@@ -139,28 +139,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         }
 
         /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
-        /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
         public ItemGrabMenu OpenMenu()
         {
-            return new ItemGrabMenu(
-                inventory: this.Container.Inventory,
-                reverseGrab: false,
-                showReceivingMenu: true,
-                highlightFunction: this.Container.CanAcceptItem,
-                behaviorOnItemSelectFunction: this.Container.GrabItemFromInventory,
-                message: null,
-                behaviorOnItemGrab: this.Container.GrabItemFromContainer,
-                canBeExitedWithKey: true,
-                showOrganizeButton: true,
-                source: this.Container.IsChest ? ItemGrabMenu.source_chest : ItemGrabMenu.source_none
-            );
-        }
-
-        /// <summary>Get whether the managed chest has the same inventory as another.</summary>
-        /// <param name="other">The other chest to compare.</param>
-        public bool ManagesSameInventoryAs(ManagedChest other)
-        {
-            return other != null && this.Container.Inventory == other.Container.Inventory;
+            return this.Container.OpenMenu();
         }
 
         /// <summary>Get whether the container has its default name.</summary>
