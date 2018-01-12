@@ -8,9 +8,6 @@
 
 ### 1.0
 * Initial version.
-* Added Junimo huts map.
-* Added scarecrow coverage map.
-* Added sprinkler coverage map.
-* Added accessibility map.
+* Added Junimo hut coverage, scarecrow coverage, sprinkler coverage, and accessibility maps.
 * Added support for Better Sprinklers' custom sprinkler range.
 * Added support for Pelican Fiber's custom build menu.
