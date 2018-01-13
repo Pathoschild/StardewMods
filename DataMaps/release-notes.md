@@ -1,5 +1,6 @@
 # Release notes
-### 1.1.1
+### 1.2
+* When two groups of the same color overlap, one border is now drawn around them instead of their borders crossing inside (configurable).
 * Fixed error in Junimo hut map when Pelican Fiber isn't installed.
 
 ### 1.1

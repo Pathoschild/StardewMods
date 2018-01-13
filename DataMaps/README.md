@@ -46,6 +46,7 @@ file if you want. These are the available settings:
 setting    | what it affects
 ---------- | -------------------
 `Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default values are `F2` to toggle the overlay, left `CTRL` or left controller shoulder for the previous map, and right `CTRL` or right controller shoulder for the next one.
+`CombineOverlappingBorders` | Default `true`. When two groups of the same color overlap, draw one border around their edges instead of their individual borders.
 
 ## Versions
 See [release notes](release-notes.md).
