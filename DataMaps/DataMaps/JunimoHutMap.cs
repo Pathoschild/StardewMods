@@ -25,6 +25,9 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>The color for tiles not harvested by a Junimo hut.</summary>
         private readonly Color NotCoveredColor = Color.Red;
 
+        /// <summary>The border color for the Junimo hut under the cursor.</summary>
+        private readonly Color SelectedColor = Color.Blue;
+
         /// <summary>The maximum number of tiles from the center a Junimo hut can harvest.</summary>
         private readonly int MaxRadius = JunimoHut.cropHarvestRadius;
 
@@ -63,7 +66,8 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>Get the updated data map tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
-        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea)
+        /// <param name="cursorTile">The tile position under the cursor.</param>
+        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
         {
             if (!(location is BuildableGameLocation buildableLocation))
                 yield break;
@@ -87,7 +91,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
                 TileData[] tiles = this.GetCoverage(hut.tileX, hut.tileY).Select(pos => new TileData(pos, this.CoveredColor)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
-                yield return new TileGroup(tiles, outerBorderColor: this.CoveredColor);
+                yield return new TileGroup(tiles, outerBorderColor: this.IntersectsTile(hut, cursorTile) ? this.SelectedColor : this.CoveredColor);
             }
 
             // yield unharvested crops
@@ -99,7 +103,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             {
                 Vector2 tile = TileHelper.GetTileFromCursor();
                 TileData[] tiles = this.GetCoverage((int)tile.X, (int)tile.Y).Select(pos => new TileData(pos, this.CoveredColor * 0.75f)).ToArray();
-                yield return new TileGroup(tiles, outerBorderColor: this.CoveredColor);
+                yield return new TileGroup(tiles, outerBorderColor: this.SelectedColor);
             }
         }
 
@@ -122,10 +126,18 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
                 return true;
 
             // Pelican Fiber menu
-            if (this.PelicanFiber.GetBuildMenuBlueprint()?.name == "Junimo Hut")
+            if (this.PelicanFiber.IsLoaded && this.PelicanFiber.GetBuildMenuBlueprint()?.name == "Junimo Hut")
                 return true;
 
             return false;
+        }
+
+        /// <summary>Get whether a hut's building covers the given tile.</summary>
+        /// <param name="hut">The Junimo hut.</param>
+        /// <param name="tile">The tile position.</param>
+        private bool IntersectsTile(JunimoHut hut, Vector2 tile)
+        {
+            return new Rectangle(hut.tileX, hut.tileY, hut.tilesWide, hut.tilesHigh).Contains((int)tile.X, (int)tile.Y);
         }
 
         /// <summary>Get a Junimo hut tile radius.</summary>

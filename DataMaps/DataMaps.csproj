@@ -56,6 +56,8 @@
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\Sprites.cs" />
     <Compile Include="Framework\TileData.cs" />
+    <Compile Include="Framework\TileDrawData.cs" />
+    <Compile Include="Framework\TileEdge.cs" />
     <Compile Include="Framework\TileGroup.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

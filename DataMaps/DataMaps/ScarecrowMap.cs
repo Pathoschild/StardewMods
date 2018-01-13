@@ -22,6 +22,9 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>The color for tiles not protected by a scarecrow.</summary>
         private readonly Color ExposedColor = Color.Red;
 
+        /// <summary>The border color for the scarecrow under the cursor.</summary>
+        private readonly Color SelectedColor = Color.Blue;
+
         /// <summary>The maximum number of tiles from the center a scarecrow can protect.</summary>
         private readonly int MaxRadius = 8;
 
@@ -54,7 +57,8 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>Get the updated data map tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
-        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea)
+        /// <param name="cursorTile">The tile position under the cursor.</param>
+        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
         {
             Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
 
@@ -77,7 +81,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
                 TileData[] tiles = this.GetCoverage(scarecrow.TileLocation).Select(pos => new TileData(pos, this.CoveredColor)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
-                yield return new TileGroup(tiles, outerBorderColor: this.CoveredColor);
+                yield return new TileGroup(tiles, outerBorderColor: scarecrow.TileLocation == cursorTile ? this.SelectedColor : this.CoveredColor);
             }
 
             // yield exposed crops
@@ -88,9 +92,8 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             Object heldObj = Game1.player.ActiveObject;
             if (this.IsScarecrow(heldObj))
             {
-                Vector2 cursorTile = TileHelper.GetTileFromCursor();
                 TileData[] tiles = this.GetCoverage(cursorTile).Select(pos => new TileData(pos, this.CoveredColor * 0.75f)).ToArray();
-                yield return new TileGroup(tiles, outerBorderColor: this.CoveredColor);
+                yield return new TileGroup(tiles, outerBorderColor: this.SelectedColor);
             }
         }
 

@@ -13,6 +13,9 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>The control bindings.</summary>
         public ModConfigControls Controls { get; set; } = new ModConfigControls();
 
+        /// <summary>When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</summary>
+        public bool CombineOverlappingBorders { get; set; } = true;
+
 
         /*********
         ** Nested models

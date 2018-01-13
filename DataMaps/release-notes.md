@@ -1,4 +1,9 @@
 # Release notes
+### 1.2
+* Added: point at a scarecrow/sprinkler/etc in its data map to highlight that one's range.
+* Added: two overlapping groups of the same color will now share one border (configurable).
+* Fixed error in Junimo hut map when Pelican Fiber isn't installed.
+
 ### 1.1
 * Added bee house coverage map.
 * Added support for Cobalt's sprinkler.

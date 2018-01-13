@@ -36,6 +36,9 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>The available data maps.</summary>
         private readonly IDataMap[] Maps;
 
+        /// <summary>When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</summary>
+        private readonly bool CombineOverlappingBorders;
+
         /// <summary>The current data map to render.</summary>
         private IDataMap CurrentMap;
 
@@ -52,7 +55,8 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="maps">The data maps to render.</param>
         /// <param name="drawOverlay">Get whether the overlay should be drawn.</param>
-        public DataMapOverlay(IDataMap[] maps, Func<bool> drawOverlay)
+        /// <param name="combineOverlappingBorders">When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</param>
+        public DataMapOverlay(IDataMap[] maps, Func<bool> drawOverlay, bool combineOverlappingBorders)
         {
             if (!maps.Any())
                 throw new InvalidOperationException("Can't initialise the data maps overlay with no data maps.");
@@ -61,6 +65,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             this.DrawOverlay = drawOverlay;
             this.LegendColorSize = (int)Game1.smallFont.MeasureString("X").Y;
             this.BoxContentWidth = this.GetMaxContentWidth(maps, this.LegendColorSize);
+            this.CombineOverlappingBorders = combineOverlappingBorders;
             this.SetMap(maps.First());
         }
 
@@ -94,7 +99,8 @@ namespace Pathoschild.Stardew.DataMaps.Framework
 
             // get updated tiles
             GameLocation location = Game1.currentLocation;
-            this.TileGroups = this.CurrentMap.Update(location, this.GetVisibleArea(location, Game1.viewport)).ToArray();
+            Vector2 cursorTile = TileHelper.GetTileFromCursor();
+            this.TileGroups = this.CurrentMap.Update(location, this.GetVisibleArea(location, Game1.viewport), cursorTile).ToArray();
         }
 
 
@@ -108,57 +114,32 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             if (!this.DrawOverlay())
                 return;
 
-            // draw tile overlay
-            IDictionary<Vector2, HashSet<Color>> drawnColors = new Dictionary<Vector2, HashSet<Color>>();
+            // collect tile details
+            TileDrawData[] tiles = this.AggregateTileData(this.TileGroups, this.CombineOverlappingBorders).ToArray();
+
+            // draw
+            int tileSize = Game1.tileSize;
+            const int borderSize = 4;
+            foreach (TileDrawData tile in tiles)
             {
-                int tileSize = Game1.tileSize;
-                foreach (TileGroup group in this.TileGroups.ToArray())
+                Vector2 pixelPosition = tile.TilePosition * tileSize - new Vector2(Game1.viewport.X, Game1.viewport.Y);
+
+                // overlay
+                foreach (Color color in tile.Colors)
+                    spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)pixelPosition.X, (int)pixelPosition.Y, tileSize, tileSize), color * .3f);
+
+                // borders
+                foreach (Color color in tile.BorderColors.Keys)
                 {
-                    HashSet<Vector2> tileHash = new HashSet<Vector2>(group.Tiles.Select(p => p.TilePosition));
-                    foreach (TileData tile in group.Tiles)
-                    {
-                        Vector2 position = tile.TilePosition * tileSize - new Vector2(Game1.viewport.X, Game1.viewport.Y);
-
-                        // should we draw this tile overlay?
-                        bool drawOverlay = true;
-                        if (drawnColors.TryGetValue(tile.TilePosition, out HashSet<Color> prevColors))
-                        {
-                            if (prevColors.Contains(tile.Color))
-                                drawOverlay = false;
-                            prevColors.Add(tile.Color);
-                        }
-                        else
-                            drawnColors[tile.TilePosition] = new HashSet<Color> { tile.Color };
-
-                        // draw tile overlay
-                        if (drawOverlay)
-                            spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize), tile.Color * .3f);
-
-                        // draw borders
-                        if (group.OuterBorderColor != null)
-                        {
-                            const int borderSize = 4;
-                            Color borderColor = group.OuterBorderColor.Value * 0.9f;
-                            int x = (int)tile.TilePosition.X;
-                            int y = (int)tile.TilePosition.Y;
-
-                            // left
-                            if (!tileHash.Contains(new Vector2(x - 1, y)))
-                                spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)position.X, (int)position.Y, borderSize, tileSize), borderColor);
-
-                            // right
-                            if (!tileHash.Contains(new Vector2(x + 1, y)))
-                                spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)(position.X + tileSize - borderSize), (int)position.Y, borderSize, tileSize), borderColor);
-
-                            // top
-                            if (!tileHash.Contains(new Vector2(x, y - 1)))
-                                spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)position.X, (int)position.Y, tileSize, borderSize), borderColor);
-
-                            // bottom
-                            if (!tileHash.Contains(new Vector2(x, y + 1)))
-                                spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)position.X, (int)(position.Y + tileSize - borderSize), tileSize, borderSize), borderColor);
-                        }
-                    }
+                    TileEdge edges = tile.BorderColors[color];
+                    if (edges.HasFlag(TileEdge.Left))
+                        spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)pixelPosition.X, (int)pixelPosition.Y, borderSize, tileSize), color);
+                    if (edges.HasFlag(TileEdge.Right))
+                        spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)(pixelPosition.X + tileSize - borderSize), (int)pixelPosition.Y, borderSize, tileSize), color);
+                    if (edges.HasFlag(TileEdge.Top))
+                        spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)pixelPosition.X, (int)pixelPosition.Y, tileSize, borderSize), color);
+                    if (edges.HasFlag(TileEdge.Bottom))
+                        spriteBatch.Draw(CommonHelper.Pixel, new Rectangle((int)pixelPosition.X, (int)(pixelPosition.Y + tileSize - borderSize), tileSize, borderSize), color);
                 }
             }
 
@@ -194,6 +175,86 @@ namespace Pathoschild.Stardew.DataMaps.Framework
                     }
                 }
             }
+        }
+
+        /// <summary>Aggregate tile data to draw.</summary>
+        /// <param name="groups">The tile groups to draw.</param>
+        /// <param name="combineOverlappingBorders">When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</param>
+        private IEnumerable<TileDrawData> AggregateTileData(IEnumerable<TileGroup> groups, bool combineOverlappingBorders)
+        {
+            // collect tile details
+            IDictionary<Vector2, TileDrawData> tiles = new Dictionary<Vector2, TileDrawData>();
+            foreach (TileGroup group in groups)
+            {
+                Lazy<HashSet<Vector2>> inGroupLazy = new Lazy<HashSet<Vector2>>(() => new HashSet<Vector2>(group.Tiles.Select(p => p.TilePosition)));
+                foreach (TileData groupTile in group.Tiles)
+                {
+                    // get tile data
+                    Vector2 position = groupTile.TilePosition;
+                    if (!tiles.TryGetValue(position, out TileDrawData data))
+                        data = tiles[position] = new TileDrawData(position);
+
+                    // update data
+                    data.Colors.Add(groupTile.Color);
+                    if (group.OuterBorderColor.HasValue && !data.BorderColors.ContainsKey(group.OuterBorderColor.Value))
+                        data.BorderColors[group.OuterBorderColor.Value] = TileEdge.None; // we'll detect combined borders next
+
+                    // detect borders (if not combined)
+                    if (!combineOverlappingBorders && group.OuterBorderColor.HasValue)
+                    {
+                        Color borderColor = group.OuterBorderColor.Value;
+                        int x = (int)groupTile.TilePosition.X;
+                        int y = (int)groupTile.TilePosition.Y;
+                        HashSet<Vector2> inGroup = inGroupLazy.Value;
+
+                        TileEdge edge = data.BorderColors[borderColor];
+                        if (!inGroup.Contains(new Vector2(x - 1, y)))
+                            edge |= TileEdge.Left;
+                        if (!inGroup.Contains(new Vector2(x + 1, y)))
+                            edge |= TileEdge.Right;
+                        if (!inGroup.Contains(new Vector2(x, y - 1)))
+                            edge |= TileEdge.Top;
+                        if (!inGroup.Contains(new Vector2(x, y + 1)))
+                            edge |= TileEdge.Bottom;
+                        data.BorderColors[borderColor] = edge;
+                    }
+                }
+            }
+
+            // detect color borders
+            if (combineOverlappingBorders)
+            {
+                foreach (Vector2 position in tiles.Keys)
+                {
+                    // get tile
+                    int x = (int)position.X;
+                    int y = (int)position.Y;
+                    TileDrawData data = tiles[position];
+                    if (!data.BorderColors.Any())
+                        continue;
+
+                    // get neighbours
+                    tiles.TryGetValue(new Vector2(x - 1, y), out TileDrawData left);
+                    tiles.TryGetValue(new Vector2(x + 1, y), out TileDrawData right);
+                    tiles.TryGetValue(new Vector2(x, y - 1), out TileDrawData top);
+                    tiles.TryGetValue(new Vector2(x, y + 1), out TileDrawData bottom);
+
+                    // detect edges
+                    foreach (Color color in data.BorderColors.Keys.ToArray())
+                    {
+                        if (left == null || !left.BorderColors.ContainsKey(color))
+                            data.BorderColors[color] |= TileEdge.Left;
+                        if (right == null || !right.BorderColors.ContainsKey(color))
+                            data.BorderColors[color] |= TileEdge.Right;
+                        if (top == null || !top.BorderColors.ContainsKey(color))
+                            data.BorderColors[color] |= TileEdge.Top;
+                        if (bottom == null || !bottom.BorderColors.ContainsKey(color))
+                            data.BorderColors[color] |= TileEdge.Bottom;
+                    }
+                }
+            }
+
+            return tiles.Values;
         }
 
         /// <summary>Switch to the given data map.</summary>
@@ -246,7 +307,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>Get the tile area currently visible to the player.</summary>
         /// <param name="location">The game location.</param>
         /// <param name="viewport">The game viewport.</param>
-        protected Rectangle GetVisibleArea(GameLocation location, XRectangle viewport)
+        private Rectangle GetVisibleArea(GameLocation location, XRectangle viewport)
         {
             int tileSize = Game1.tileSize;
             int left = viewport.X / tileSize;

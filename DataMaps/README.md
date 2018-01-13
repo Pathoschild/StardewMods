@@ -13,8 +13,13 @@ metadata maps.
 3. Run the game using SMAPI.
 
 ## Use
-Press `F2` to show the data maps overlay, and then left/right `CTRL` to cycle between data maps
-(buttons configurable). Below are the current data maps.
+Press `F2` to show the overlay, and then `left CTRL` and `right CTRL` to cycle between data maps
+(buttons configurable).
+
+For coverage maps (e.g. scarecrows or sprinklers), point at one with the cursor to see a blue
+border around that one's range and a green border around the coverage without it.
+
+Below are the current data maps.
 
 ### Accessibility
 Shows where you can walk and highlights warp tiles; useful for finding hidden paths and nooks.
@@ -46,6 +51,7 @@ file if you want. These are the available settings:
 setting    | what it affects
 ---------- | -------------------
 `Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default values are `F2` to toggle the overlay, left `CTRL` or left controller shoulder for the previous map, and right `CTRL` or right controller shoulder for the next one.
+`CombineOverlappingBorders` | Default `true`. When two groups of the same color overlap, draw one border around their edges instead of their individual borders.
 
 ## Versions
 See [release notes](release-notes.md).

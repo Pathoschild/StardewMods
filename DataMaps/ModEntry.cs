@@ -108,7 +108,7 @@ namespace Pathoschild.Stardew.DataMaps
                         this.CurrentOverlay = null;
                     }
                     else
-                        this.CurrentOverlay = new DataMapOverlay(this.Maps, this.CanOverlayNow);
+                        this.CurrentOverlay = new DataMapOverlay(this.Maps, this.CanOverlayNow, this.Config.CombineOverlappingBorders);
                     e.SuppressButton();
                 }
 
