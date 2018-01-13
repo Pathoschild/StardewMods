@@ -99,7 +99,8 @@ namespace Pathoschild.Stardew.DataMaps.Framework
 
             // get updated tiles
             GameLocation location = Game1.currentLocation;
-            this.TileGroups = this.CurrentMap.Update(location, this.GetVisibleArea(location, Game1.viewport)).ToArray();
+            Vector2 cursorTile = TileHelper.GetTileFromCursor();
+            this.TileGroups = this.CurrentMap.Update(location, this.GetVisibleArea(location, Game1.viewport), cursorTile).ToArray();
         }
 
 

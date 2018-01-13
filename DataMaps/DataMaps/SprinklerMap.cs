@@ -26,6 +26,9 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>The color for unsprinkled tiles.</summary>
         private readonly Color DryColor = Color.Red;
 
+        /// <summary>The border color for the sprinkler under the cursor.</summary>
+        private readonly Color SelectedColor = Color.Blue;
+
         /// <summary>The maximum number of tiles from the center a sprinkler can protect.</summary>
         private readonly int MaxRadius;
 
@@ -77,7 +80,8 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>Get the updated data map tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
-        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea)
+        /// <param name="cursorTile">The tile position under the cursor.</param>
+        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
         {
             Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
 
@@ -103,7 +107,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
                 TileData[] tiles = this.GetCoverage(sprinkler, sprinkler.TileLocation, coverageBySprinklerID).Select(pos => new TileData(pos, this.WetColor)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
-                yield return new TileGroup(tiles, outerBorderColor: this.WetColor);
+                yield return new TileGroup(tiles, outerBorderColor: sprinkler.TileLocation == cursorTile ? this.SelectedColor : this.WetColor);
             }
 
             // yield dry crops
@@ -114,9 +118,8 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             Object heldObj = Game1.player.ActiveObject;
             if (this.IsSprinkler(heldObj))
             {
-                Vector2 cursorTile = TileHelper.GetTileFromCursor();
                 TileData[] tiles = this.GetCoverage(heldObj, cursorTile, coverageBySprinklerID).Select(pos => new TileData(pos, this.WetColor * 0.75f)).ToArray();
-                yield return new TileGroup(tiles, outerBorderColor: this.WetColor);
+                yield return new TileGroup(tiles, outerBorderColor: this.SelectedColor);
             }
         }
 

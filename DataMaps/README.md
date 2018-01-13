@@ -13,8 +13,13 @@ metadata maps.
 3. Run the game using SMAPI.
 
 ## Use
-Press `F2` to show the data maps overlay, and then left/right `CTRL` to cycle between data maps
-(buttons configurable). Below are the current data maps.
+Press `F2` to show the overlay, and then `left CTRL` and `right CTRL` to cycle between data maps
+(buttons configurable).
+
+For coverage maps (e.g. scarecrows or sprinklers), point at one with the cursor to see a blue
+border around that one's range and a green border around the coverage without it.
+
+Below are the current data maps.
 
 ### Accessibility
 Shows where you can walk and highlights warp tiles; useful for finding hidden paths and nooks.

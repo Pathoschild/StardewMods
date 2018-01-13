@@ -70,7 +70,8 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>Get the updated data map tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
-        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea)
+        /// <param name="cursorTile">The tile position under the cursor.</param>
+        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
         {
             TileData[] tiles = this.GetTiles(location, visibleArea.GetTiles()).ToArray();
 
