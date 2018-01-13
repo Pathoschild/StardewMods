@@ -1,7 +1,7 @@
 # Release notes
 ### 1.2
-* Added: point at an object in a coverage map (e.g. scarecrows or sprinklers) to highlight that one's range.
-* Added: when two groups of the same color overlap, one border is now drawn around them instead of separate borders crossing inside (configurable).
+* Added: point at a scarecrow/sprinkler/etc in its data map to highlight that one's range.
+* Added: two overlapping groups of the same color will now share one border (configurable).
 * Fixed error in Junimo hut map when Pelican Fiber isn't installed.
 
 ### 1.1
