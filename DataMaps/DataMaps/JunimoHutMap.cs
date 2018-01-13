@@ -122,7 +122,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
                 return true;
 
             // Pelican Fiber menu
-            if (this.PelicanFiber.GetBuildMenuBlueprint()?.name == "Junimo Hut")
+            if (this.PelicanFiber.IsLoaded && this.PelicanFiber.GetBuildMenuBlueprint()?.name == "Junimo Hut")
                 return true;
 
             return false;

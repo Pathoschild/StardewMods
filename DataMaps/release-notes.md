@@ -1,4 +1,7 @@
 # Release notes
+### 1.1.1
+* Fixed error in Junimo hut map when Pelican Fiber isn't installed.
+
 ### 1.1
 * Added bee house coverage map.
 * Added support for Cobalt's sprinkler.
