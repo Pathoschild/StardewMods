@@ -1,0 +1,22 @@
+{
+  "maps.accessibility.name": "Accessibility",
+  "maps.accessibility.clear": "Clear",
+  "maps.accessibility.occupied": "Occupied",
+  "maps.accessibility.impassable": "Impassable",
+  "maps.accessibility.warp": "Warp",
+
+  "maps.bee-houses.name": "Bee Houses",
+  "maps.bee-houses.range": "Flower Range",
+
+  "maps.junimo-huts.name": "Junimo Huts",
+  "maps.junimo-huts.can-harvest": "Can Harvest",
+  "maps.junimo-huts.cannot-harvest": "Can't Harvest",
+
+  "maps.scarecrows.name": "Scarecrows",
+  "maps.scarecrows.protected": "Protected",
+  "maps.scarecrows.exposed": "Exposed",
+
+  "maps.sprinklers.name": "Sprinklers",
+  "maps.sprinklers.covered": "Covered",
+  "maps.sprinklers.dry-crops": "Dry Crops"
+}
