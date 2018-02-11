@@ -1,7 +1,7 @@
 {
   "Name": "Data Maps",
   "Author": "Pathoschild",
-  "Version": "1.2.0",
+  "Version": "1.2.1-irecinius-update",
   "MinimumApiVersion": "2.3",
   "Description": "Overlays the world with data maps like accessibility, sprinkler range, etc.",
   "UniqueID": "Pathoschild.DataMaps",
