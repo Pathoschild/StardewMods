@@ -18,5 +18,9 @@
 
   "maps.sprinklers.name": "Sprinklers",
   "maps.sprinklers.covered": "Covered",
-  "maps.sprinklers.dry-crops": "Dry Crops"
+  "maps.sprinklers.dry-crops": "Dry Crops",
+
+  "maps.needswatering.name": "Needs Watering",
+  "maps.needswatering.dry-crops": "Dry Crop"
+
 }
