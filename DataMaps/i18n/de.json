@@ -1,0 +1,22 @@
+{
+  "maps.accessibility.name": "Belegung",
+  "maps.accessibility.clear": "Frei",
+  "maps.accessibility.occupied": "Belegt",
+  "maps.accessibility.impassable": "Blockiert",
+  "maps.accessibility.warp": "Warp",
+
+  "maps.bee-houses.name": "Bienenhäuser",
+  "maps.bee-houses.range": "Blumenreichweite",
+
+  "maps.junimo-huts.name": "Junimo-Hütten",
+  "maps.junimo-huts.can-harvest": "Abbaubar",
+  "maps.junimo-huts.cannot-harvest": "Nicht abbaubar",
+
+  "maps.scarecrows.name": "Vogelscheuche",
+  "maps.scarecrows.protected": "Geschützt",
+  "maps.scarecrows.exposed": "Exponiert",
+
+  "maps.sprinklers.name": "Sprenkler",
+  "maps.sprinklers.covered": "Bewässert",
+  "maps.sprinklers.dry-crops": "Trocken"
+}
