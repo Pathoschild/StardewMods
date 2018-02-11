@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="DataMaps\JunimoHutMap.cs" />
     <Compile Include="DataMaps\BeeHouseMap.cs" />
+    <Compile Include="DataMaps\FertilizedMap.cs" />
     <Compile Include="DataMaps\ScarecrowMap.cs" />
     <Compile Include="DataMaps\NeedsWateringMap.cs" />
     <Compile Include="DataMaps\SprinklerMap.cs" />

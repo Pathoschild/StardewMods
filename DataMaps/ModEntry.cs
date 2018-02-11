@@ -72,8 +72,9 @@ namespace Pathoschild.Stardew.DataMaps
                 new BeeHouseMap(helper.Translation),
                 new ScarecrowMap(helper.Translation),
                 new SprinklerMap(helper.Translation, betterSprinklers, cobalt, simpleSprinklers),
+                new JunimoHutMap(helper.Translation, this.PelicanFiber),
                 new NeedsWateringMap(helper.Translation),
-                new JunimoHutMap(helper.Translation, this.PelicanFiber)
+                new FertilizerMap(helper.Translation)
             };
         }
 
