@@ -16,6 +16,8 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</summary>
         public bool CombineOverlappingBorders { get; set; } = true;
 
+        /// <summary>Disabe certain DataMaps</summary>
+        public string[] DisabledMaps { get; set; } = new string[0];
 
         /*********
         ** Nested models
@@ -26,6 +28,10 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             /// <summary>The control which toggles the data map overlay.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
             public SButton[] ToggleMap { get; set; } = { SButton.F2 };
+
+            /// <summary>The control which toggles disable of current data map overlay.</summary>
+            [JsonConverter(typeof(StringEnumArrayConverter))]
+            public SButton[] ToggleDisableOverlay { get; set; } = { SButton.F3 };
 
             /// <summary>The control which cycles foreward through data maps.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
