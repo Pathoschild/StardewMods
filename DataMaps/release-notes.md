@@ -1,4 +1,7 @@
 # Release notes
+## 1.2.1
+* Added German translations. (Thanks to Husky110!)
+
 ### 1.2
 * Added: point at a scarecrow/sprinkler/etc in its data map to highlight that one's range.
 * Added: two overlapping groups of the same color will now share one border (configurable).

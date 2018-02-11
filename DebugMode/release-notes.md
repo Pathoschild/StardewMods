@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.7.1
+* Improved German translations. (Thanks to Husky110!)
+
 ## 1.7
 * Updated to SMAPI 2.1.
 * Added warning when translation files are missing.

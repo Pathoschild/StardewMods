@@ -1,4 +1,7 @@
 # Release notes
+## 4.2.1
+* Improved German translations. (Thanks to Husky110!)
+
 ## 4.2
 * Updated to SMAPI 2.1.
 * Added support for axe clearing weeds (default) and live crops (optional).

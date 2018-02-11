@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.17.1
+* Improved German translations. (Thanks to Husky110!)
+
 ## 1.17
 * Updated to SMAPI 2.0.
 * Switched to SMAPI unified controller/keyboard/mouse bindings in `config.json`.
