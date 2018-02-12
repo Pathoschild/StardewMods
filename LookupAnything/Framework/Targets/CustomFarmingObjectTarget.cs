@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.LookupAnything.Framework.Integrations.CustomFarmingRedux;
+using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
 using StardewModdingAPI;
 using StardewValley;
 

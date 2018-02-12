@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Pathoschild.Stardew.LookupAnything.Framework.Integrations.CustomFarmingRedux
+namespace Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux
 {
     /// <summary>A custom object's sprite info.</summary>
     internal class CustomSprite

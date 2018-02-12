@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.Common.Integrations;
 using StardewModdingAPI;
 using SObject = StardewValley.Object;
 
-namespace Pathoschild.Stardew.LookupAnything.Framework.Integrations.CustomFarmingRedux
+namespace Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux
 {
     /// <summary>Handles the logic for integrating with the Custom Farming Redux mod.</summary>
     internal class CustomFarmingReduxIntegration : BaseIntegration

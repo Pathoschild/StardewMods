@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.BetterSprinklers;
+using Pathoschild.Stardew.Common.Integrations.Cobalt;
+using Pathoschild.Stardew.Common.Integrations.PelicanFiber;
+using Pathoschild.Stardew.Common.Integrations.SimpleSprinkler;
 using Pathoschild.Stardew.DataMaps.DataMaps;
 using Pathoschild.Stardew.DataMaps.Framework;
-using Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers;
-using Pathoschild.Stardew.DataMaps.Framework.Integrations.Cobalt;
-using Pathoschild.Stardew.DataMaps.Framework.Integrations.PelicanFiber;
-using Pathoschild.Stardew.DataMaps.Framework.Integrations.SimpleSprinkler;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
