@@ -170,7 +170,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
 
             // Cobalt mod adds new sprinkler
             if (cobalt.IsLoaded)
-                this.StaticTilesBySprinklerID[cobalt.GetSprinklerId()] = cobalt.GetSprinklerTiles().ToArray();
+                tiles[cobalt.GetSprinklerId()] = cobalt.GetSprinklerTiles().ToArray();
 
             // Simple Sprinkler mod adds tiles to default coverage
             if (simpleSprinkler.IsLoaded)

@@ -1,5 +1,6 @@
 # Release notes
 ## 1.2.1
+* Fixed error in the Cobalt integration.
 * Added German translations. (Thanks to Husky110!)
 
 ### 1.2
