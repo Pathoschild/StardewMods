@@ -7,6 +7,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Components;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Integrations.CustomFarmingRedux;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -86,7 +87,8 @@ namespace Pathoschild.Stardew.LookupAnything
 #endif
 
             // initialise functionality
-            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection);
+            var customFarming = new CustomFarmingReduxIntegration(this.Helper.ModRegistry, this.Monitor, this.Helper.Reflection);
+            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, customFarming);
             this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config, this.Monitor);
 
             // hook up events

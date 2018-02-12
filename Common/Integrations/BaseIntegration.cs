@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.Common.Integrations
                 return;
             if (manifest.Version.IsOlderThan(minVersion))
             {
-                monitor.Log($"Detected {label} {manifest.Version}, but need {minVersion} or later. Data from this mod won't be shown.", LogLevel.Warn);
+                monitor.Log($"Detected {label} {manifest.Version}, but need {minVersion} or later. Disabled integration with this mod.", LogLevel.Warn);
                 return;
             }
             this.IsLoaded = true;
@@ -65,7 +65,7 @@ namespace Pathoschild.Stardew.Common.Integrations
             TInterface api = this.ModRegistry.GetApi<TInterface>(this.ModID);
             if (api == null)
             {
-                this.Monitor.Log($"Detected {this.Label}, but couldn't fetch its API. Data from this mod may not be shown.", LogLevel.Warn);
+                this.Monitor.Log($"Detected {this.Label}, but couldn't fetch its API. Disabled integration with this mod.", LogLevel.Warn);
                 return null;
             }
             return api;

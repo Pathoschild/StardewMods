@@ -3,6 +3,7 @@
 # Release notes
 ## 1.17.1
 * Updated to SMAPI 2.4.
+* Added support for custom machines and objects from Custom Farming Redux.
 * Fixed typo in debug interface.
 * Improved German translations. (Thanks to Husky110!)
 

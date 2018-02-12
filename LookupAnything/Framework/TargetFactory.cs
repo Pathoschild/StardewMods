@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Integrations.CustomFarmingRedux;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using Pathoschild.Stardew.LookupAnything.Framework.Targets;
 using StardewModdingAPI;
@@ -32,6 +33,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Provides translations stored in the mod folder.</summary>
         private readonly ITranslationHelper Translations;
 
+        /// <summary>Handles the logic for integrating with the Custom Farming Redux mod.</summary>
+        private readonly CustomFarmingReduxIntegration CustomFarming;
+
 
         /*********
         ** Public methods
@@ -43,11 +47,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public TargetFactory(Metadata metadata, ITranslationHelper translations, IReflectionHelper reflection)
+        /// <param name="customFarming">Handles the logic for integrating with the Custom Farming Redux mod.</param>
+        public TargetFactory(Metadata metadata, ITranslationHelper translations, IReflectionHelper reflection, CustomFarmingReduxIntegration customFarming)
         {
             this.Metadata = metadata;
             this.Translations = translations;
             this.Reflection = reflection;
+            this.CustomFarming = customFarming;
         }
 
         /****
@@ -98,7 +104,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 if (!GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
                     continue;
 
-                yield return new ObjectTarget(obj, spriteTile, this.Reflection);
+                yield return this.CustomFarming.IsLoaded && this.CustomFarming.IsCustomObject(obj)
+                    ? new CustomFarmingObjectTarget(obj, spriteTile, this.Reflection, this.CustomFarming)
+                    : new ObjectTarget(obj, spriteTile, this.Reflection);
             }
 
             // terrain features
