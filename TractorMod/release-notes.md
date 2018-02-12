@@ -2,6 +2,7 @@
 ## 4.2.1
 * Updated to SMAPI 2.4.
 * Fixed summon key working when a menu is open.
+* Fixed seeds and fertiliser being placed under giant crops.
 * Improved German translations. (Thanks to Husky110!)
 
 ## 4.2

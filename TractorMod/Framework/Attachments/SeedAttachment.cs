@@ -36,8 +36,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return false;
 
             // get dirt
-            HoeDirt dirt = tileFeature as HoeDirt;
-            if (dirt == null || dirt.crop != null)
+            if (!(tileFeature is HoeDirt dirt) || dirt.crop != null)
+                return false;
+
+            // ignore if there's a giant crop, meteorite, etc covering the tile
+            if (this.GetResourceClumpCoveringTile(location, tile) != null)
                 return false;
 
             // sow seeds
