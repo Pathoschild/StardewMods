@@ -146,7 +146,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollUp();
                 else if (controls.ScrollDown.Contains(e.Button))
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollDown();
-                else if (controls.ToggleDebug.Contains(e.Button))
+                else if (controls.ToggleDebug.Contains(e.Button) && Context.IsPlayerFree)
                     this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
             });
         }
