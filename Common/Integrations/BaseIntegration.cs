@@ -1,7 +1,7 @@
 using System;
 using StardewModdingAPI;
 
-namespace Pathoschild.Stardew.DataMaps.Framework.Integrations
+namespace Pathoschild.Stardew.Common.Integrations
 {
     /// <summary>The base implementation for a mod integration.</summary>
     internal abstract class BaseIntegration : IModIntegration

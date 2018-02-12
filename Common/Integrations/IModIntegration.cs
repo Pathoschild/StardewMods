@@ -1,4 +1,4 @@
-namespace Pathoschild.Stardew.DataMaps.Framework.Integrations
+namespace Pathoschild.Stardew.Common.Integrations
 {
     /// <summary>Handles integration with a given mod.</summary>
     internal interface IModIntegration

@@ -1,3 +1,4 @@
+using Pathoschild.Stardew.Common.Integrations;
 using StardewModdingAPI;
 using StardewValley;
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common.Integrations;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers
