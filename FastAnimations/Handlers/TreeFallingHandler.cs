@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.FastAnimations.Framework;
@@ -88,7 +88,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         {
             foreach (var pair in this.Trees)
             {
-                bool isFalling = this.Reflection.GetPrivateValue<bool>(pair.Value, "falling");
+                bool isFalling = this.Reflection.GetField<bool>(pair.Value, "falling").GetValue();
                 if (isFalling)
                     yield return pair;
             }

@@ -157,7 +157,8 @@ namespace Pathoschild.Stardew.TractorMod
                 if (e.NewMenu is CarpenterMenu)
                 {
                     this.Helper.Reflection
-                        .GetPrivateValue<List<BluePrint>>(e.NewMenu, "blueprints")
+                        .GetField<List<BluePrint>>(e.NewMenu, "blueprints")
+                        .GetValue()
                         .Add(this.GetBlueprint());
                 }
 
@@ -165,13 +166,14 @@ namespace Pathoschild.Stardew.TractorMod
                 else if (this.IsPelicanFiberLoaded && e.NewMenu.GetType().FullName == this.PelicanFiberMenuFullName)
                 {
                     this.Helper.Reflection
-                        .GetPrivateValue<List<BluePrint>>(e.NewMenu, "Blueprints")
+                        .GetField<List<BluePrint>>(e.NewMenu, "Blueprints")
+                        .GetValue()
                         .Add(this.GetBlueprint());
                 }
                 else if (this.IsFarmExpansionLoaded && e.NewMenu.GetType().FullName == this.FarmExpansionMenuFullName)
                 {
                     this.Helper.Reflection
-                        .GetPrivateMethod(e.NewMenu, "AddFarmBluePrint")
+                        .GetMethod(e.NewMenu, "AddFarmBluePrint")
                         .Invoke(this.GetBlueprint());
                 }
             }
@@ -326,8 +328,8 @@ namespace Pathoschild.Stardew.TractorMod
                     {
                         new FarmerSprite.AnimationFrame(24, 75),
                         new FarmerSprite.AnimationFrame(25, 75),
-                        new FarmerSprite.AnimationFrame(26, 300, false, false, farmer => this.Helper.Reflection.GetPrivateMethod(robin,"robinHammerSound").Invoke(farmer)),
-                        new FarmerSprite.AnimationFrame(27, 1000, false, false, farmer => this.Helper.Reflection.GetPrivateMethod(robin,"robinVariablePause").Invoke(farmer))
+                        new FarmerSprite.AnimationFrame(26, 300, false, false, farmer => this.Helper.Reflection.GetMethod(robin,"robinHammerSound").Invoke(farmer)),
+                        new FarmerSprite.AnimationFrame(27, 1000, false, false, farmer => this.Helper.Reflection.GetMethod(robin,"robinVariablePause").Invoke(farmer))
                     });
                     robin.ignoreScheduleToday = true;
                     Game1.warpCharacter(robin, location.Name, new Vector2(garage.tileX + garage.tilesWide / 2, garage.tileY + garage.tilesHigh / 2), false, false);

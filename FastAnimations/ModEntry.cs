@@ -74,7 +74,7 @@ namespace Pathoschild.Stardew.FastAnimations
             if (!Context.IsWorldReady || Game1.eventUp || !this.Handlers.Any())
                 return;
 
-            int playerAnimationID = this.Helper.Reflection.GetPrivateValue<int>(Game1.player.FarmerSprite, "currentSingleAnimation");
+            int playerAnimationID = this.Helper.Reflection.GetField<int>(Game1.player.FarmerSprite, "currentSingleAnimation").GetValue();
             foreach (IAnimationHandler handler in this.Handlers)
             {
                 if (handler.IsEnabled(playerAnimationID))

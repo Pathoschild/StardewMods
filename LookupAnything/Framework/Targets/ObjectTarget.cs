@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             }
             else if (obj is Fence fence)
             {
-                spriteSheet = this.Reflection.GetPrivateValue<Texture2D>(obj, "fenceTexture");
+                spriteSheet = this.Reflection.GetField<Texture2D>(obj, "fenceTexture").GetValue();
                 sourceRectangle = this.GetSourceRectangle(fence, Game1.currentLocation);
             }
             else
@@ -117,7 +117,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
                     spriteID = Fence.fenceDrawGuide[index];
             }
 
-            Texture2D texture = this.Reflection.GetPrivateValue<Texture2D>(fence, "fenceTexture");
+            Texture2D texture = this.Reflection.GetField<Texture2D>(fence, "fenceTexture").GetValue();
             return new Rectangle(spriteID * Fence.fencePieceWidth % texture.Bounds.Width, spriteID * Fence.fencePieceWidth / texture.Bounds.Width * Fence.fencePieceHeight, Fence.fencePieceWidth, Fence.fencePieceHeight);
         }
     }

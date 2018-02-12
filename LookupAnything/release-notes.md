@@ -2,6 +2,7 @@
 
 # Release notes
 ## 1.17.1
+* Updated to SMAPI 2.4.
 * Improved German translations. (Thanks to Husky110!)
 
 ## 1.17

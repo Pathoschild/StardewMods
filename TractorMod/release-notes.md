@@ -1,5 +1,6 @@
 # Release notes
 ## 4.2.1
+* Updated to SMAPI 2.4.
 * Fixed summon key working when a menu is open.
 * Improved German translations. (Thanks to Husky110!)
 
