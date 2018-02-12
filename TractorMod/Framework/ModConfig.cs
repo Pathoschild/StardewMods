@@ -61,7 +61,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             /// <summary>The control which toggles the chest UI.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
-            public SButton[] SummonTractor { get; set; } = { SButton.B };
+            public SButton[] SummonTractor { get; set; } = { SButton.T };
 
             /// <summary>A button which activates the tractor when held, or none to activate automatically.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]

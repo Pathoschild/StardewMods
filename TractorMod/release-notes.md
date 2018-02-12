@@ -1,6 +1,7 @@
 # Release notes
 ## 4.2.1
 * Updated to SMAPI 2.4.
+* Changed default summon key to `T` (won't affect players with an existing `config.json`).
 * Fixed summon key working when a menu is open.
 * Fixed seeds and fertiliser being placed under giant crops.
 * Improved German translations. (Thanks to Husky110!)
