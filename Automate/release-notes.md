@@ -2,6 +2,7 @@
 
 # Release notes
 ## 1.9.1
+* Fixed bee houses in custom locations not using nearby flowers.
 * Fixed Jodi's trash can not being automated.
 
 ## 1.9
