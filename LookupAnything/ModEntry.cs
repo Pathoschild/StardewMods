@@ -34,11 +34,6 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>The name of the file containing data for the <see cref="Metadata"/> field.</summary>
         private readonly string DatabaseFileName = "data.json";
 
-#if TEST_BUILD
-        /// <summary>Reloads the <see cref="Metadata"/> when the underlying file changes.</summary>
-        private FileSystemWatcher OverrideFileWatcher;
-#endif
-
         /****
         ** Validation
         ****/
@@ -70,21 +65,6 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // load database
             this.LoadMetadata();
-#if TEST_BUILD
-                this.OverrideFileWatcher = new FileSystemWatcher(this.PathOnDisk, this.DatabaseFileName)
-                {
-                    EnableRaisingEvents = true
-                };
-                this.OverrideFileWatcher.Changed += (sender, e) =>
-                {
-                    this.LoadMetadata();
-                    this.TargetFactory = new TargetFactory(this.Metadata);
-                    this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config)
-                    {
-                        Enabled = this.DebugInterface.Enabled
-                    };
-                };
-#endif
 
             // initialise functionality
             var customFarming = new CustomFarmingReduxIntegration(this.Helper.ModRegistry, this.Monitor, this.Helper.Reflection);
