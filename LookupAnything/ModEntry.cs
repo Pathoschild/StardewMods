@@ -63,23 +63,8 @@ namespace Pathoschild.Stardew.LookupAnything
             // load config
             this.Config = this.Helper.ReadConfig<ModConfig>();
 
-            // load database
+            // load & validate database
             this.LoadMetadata();
-
-            // initialise functionality
-            var customFarming = new CustomFarmingReduxIntegration(this.Helper.ModRegistry, this.Monitor, this.Helper.Reflection);
-            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, customFarming);
-            this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config, this.Monitor);
-
-            // hook up events
-            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
-            GraphicsEvents.OnPostRenderHudEvent += this.GraphicsEvents_OnPostRenderHudEvent;
-            MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
-            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
-            if (this.Config.HideOnKeyUp)
-                InputEvents.ButtonReleased += this.InputEvents_ButtonReleased;
-
-            // validate metadata
             this.IsDataValid = this.Metadata.LooksValid();
             if (!this.IsDataValid)
             {
@@ -90,6 +75,9 @@ namespace Pathoschild.Stardew.LookupAnything
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
                 this.Monitor.Log("The translation files in this mod's i18n folder seem to be missing. The mod will still work, but you'll see 'missing translation' messages. Try reinstalling the mod to fix this.", LogLevel.Warn);
+
+            // hook up events
+            GameEvents.FirstUpdateTick += this.GameEvents_FirstUpdateTick;
         }
 
 
@@ -99,6 +87,28 @@ namespace Pathoschild.Stardew.LookupAnything
         /****
         ** Event handlers
         ****/
+        /// <summary>The method invoked on the first update tick, once all mods are initialised.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void GameEvents_FirstUpdateTick(object sender, EventArgs e)
+        {
+            if (!this.IsDataValid)
+                return;
+
+            // initialise functionality
+            var customFarming = new CustomFarmingReduxIntegration(this.Helper.ModRegistry, this.Monitor);
+            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, customFarming);
+            this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config, this.Monitor);
+
+            // hook up events
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
+            GraphicsEvents.OnPostRenderHudEvent += this.GraphicsEvents_OnPostRenderHudEvent;
+            MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
+            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
+            if (this.Config.HideOnKeyUp)
+                InputEvents.ButtonReleased += this.InputEvents_ButtonReleased;
+        }
+
         /// <summary>The method invoked when a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
