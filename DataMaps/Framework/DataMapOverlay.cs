@@ -40,7 +40,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         private readonly bool CombineOverlappingBorders;
 
         /// <summary>The current data map to render.</summary>
-        public IDataMap CurrentMap;
+        private IDataMap CurrentMap;
 
         /// <summary>The legend entries to show.</summary>
         private LegendEntry[] Legend;

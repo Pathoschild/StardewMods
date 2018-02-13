@@ -29,10 +29,6 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             [JsonConverter(typeof(StringEnumArrayConverter))]
             public SButton[] ToggleMap { get; set; } = { SButton.F2 };
 
-            /// <summary>The control which toggles disable of current data map overlay.</summary>
-            [JsonConverter(typeof(StringEnumArrayConverter))]
-            public SButton[] ToggleDisableOverlay { get; set; } = { SButton.F3 };
-
             /// <summary>The control which cycles foreward through data maps.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
             public SButton[] PrevMap { get; set; } = { SButton.LeftControl, SButton.LeftShoulder };
