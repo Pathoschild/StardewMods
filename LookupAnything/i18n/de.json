@@ -216,7 +216,7 @@
   "item.cask-schedule.now-partial": "{{quality}} jetzt (benutze die Spitzhacke um das Altern zu stoppen).",
   "item.cask-schedule.tomorrow": "{{quality}} morgen",
   "item.cask-schedule.in-x-days": "{{quality}} in {{count}} Tagen ({{date}})",
-  "item.contents.placed": "{{name}} platziert", // TODO
+  "item.contents.placed": "{{name}} platziert",
   "item.contents.ready": "{{name}} bereit",
   "item.contents.partial": "{{name}} in {{time}}",
   "item.needed-for.community-center": "Gemeindezentrum ({{bundles}})",
