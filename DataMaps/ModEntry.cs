@@ -72,7 +72,9 @@ namespace Pathoschild.Stardew.DataMaps
                 new BeeHouseMap(helper.Translation),
                 new ScarecrowMap(helper.Translation),
                 new SprinklerMap(helper.Translation, betterSprinklers, cobalt, simpleSprinklers),
-                new JunimoHutMap(helper.Translation, this.PelicanFiber)
+                new JunimoHutMap(helper.Translation, this.PelicanFiber),
+                new NeedsWateringMap(helper.Translation),
+                new FertilizerMap(helper.Translation)
             };
         }
 
@@ -83,6 +85,8 @@ namespace Pathoschild.Stardew.DataMaps
         {
             this.CurrentOverlay?.Dispose();
             this.CurrentOverlay = null;
+
+            this.GameEvents_FirstUpdateTick(sender, e);
         }
 
         /// <summary>The method invoked when the player presses an input button.</summary>
@@ -108,7 +112,27 @@ namespace Pathoschild.Stardew.DataMaps
                         this.CurrentOverlay = null;
                     }
                     else
-                        this.CurrentOverlay = new DataMapOverlay(this.Maps, this.CanOverlayNow, this.Config.CombineOverlappingBorders);
+                        if (this.Maps.Count() > 0)
+                            this.CurrentOverlay = new DataMapOverlay(this.Maps, this.CanOverlayNow, this.Config.CombineOverlappingBorders);
+                    e.SuppressButton();
+                }
+
+                // toggle disable data map overlay
+                else if (controls.ToggleDisableOverlay.Contains(e.Button))
+                {
+                    if (overlayVisible)
+                    {
+                        int index = Array.IndexOf(this.Maps, this.CurrentOverlay.CurrentMap);
+                        for (int a = index; a < this.Maps.Length - 1; a++)
+                        {
+                            this.Maps[a] = this.Maps[a + 1];
+                        }
+                        Array.Resize(ref this.Maps, this.Maps.Length - 1);
+                        this.CurrentOverlay.Dispose();
+                        this.CurrentOverlay = null;
+                        if (this.Maps.Count() > 0)
+                            this.CurrentOverlay = new DataMapOverlay(this.Maps, this.CanOverlayNow, this.Config.CombineOverlappingBorders);
+                    }
                     e.SuppressButton();
                 }
 
