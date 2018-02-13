@@ -85,6 +85,23 @@ namespace Pathoschild.Stardew.Common
             }
         }
 
+        /// <summary>Get all tiles which are on-screen.</summary>
+        public static IEnumerable<Vector2> GetVisibleTiles()
+        {
+            return TileHelper.GetVisibleArea().GetTiles();
+        }
+
+        /// <summary>Get the tile area visible on-screen.</summary>
+        public static Rectangle GetVisibleArea()
+        {
+            return new Rectangle(
+                x: Game1.viewport.X / Game1.tileSize,
+                y: Game1.viewport.Y / Game1.tileSize,
+                width: (int)(Game1.viewport.Width / (decimal)Game1.tileSize) + 2, // extend off-screen slightly to avoid edges popping in
+                height: (int)(Game1.viewport.Height / (decimal)Game1.tileSize) + 2
+            );
+        }
+
         /****
         ** Cursor
         ****/

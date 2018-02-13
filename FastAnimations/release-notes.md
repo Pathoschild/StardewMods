@@ -3,6 +3,7 @@
 # Release notes
 ## 1.4.1
 * Updated to SMAPI 2.4.
+* Improved fast tree falling performance.
 
 ## 1.4
 * Updated to SMAPI 2.1.
