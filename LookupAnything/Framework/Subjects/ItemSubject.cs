@@ -219,6 +219,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         yield return new GenericField(this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskSchedulePartial, new { quality = curQualityName }) + Environment.NewLine + scheduleStr);
                     }
                 }
+                else if (obj is Furniture)
+                {
+                    string summary = this.Translate(L10n.Item.ContentsPlaced, new { name = obj.heldObject.DisplayName });
+                    yield return new ItemIconField(this.Translate(L10n.Item.Contents), obj.heldObject, summary);
+                }
                 else
                 {
                     string summary = obj.minutesUntilReady <= 0

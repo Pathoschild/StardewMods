@@ -10,6 +10,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Targets;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
+using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
@@ -107,6 +108,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 yield return this.CustomFarming.IsLoaded && this.CustomFarming.IsCustomObject(obj)
                     ? new CustomFarmingObjectTarget(obj, spriteTile, this.Reflection, this.CustomFarming)
                     : new ObjectTarget(obj, spriteTile, this.Reflection);
+            }
+
+            // furniture
+            if (location is DecoratableLocation decoratableLocation)
+            {
+                foreach(var furniture in decoratableLocation.furniture)
+                    yield return new ObjectTarget(furniture, furniture.TileLocation, this.Reflection);
             }
 
             // terrain features

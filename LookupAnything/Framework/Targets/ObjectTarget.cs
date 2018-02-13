@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 {
@@ -33,6 +34,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         {
             Object obj = (Object)this.Value;
             Rectangle boundingBox = obj.getBoundingBox(this.GetTile());
+            if (obj is Furniture furniture)
+                return this.GetSpriteArea(boundingBox, furniture.sourceRect);
             if (obj.bigCraftable)
                 return this.GetSpriteArea(boundingBox, Object.getSourceRectForBigCraftable(obj.parentSheetIndex));
             if (obj is Fence fence)
@@ -52,15 +55,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             // get sprite data
             Texture2D spriteSheet;
             Rectangle sourceRectangle;
-            if (obj.bigCraftable)
+            if (obj is Furniture furniture)
             {
-                spriteSheet = Game1.bigCraftableSpriteSheet;
-                sourceRectangle = Object.getSourceRectForBigCraftable(obj.parentSheetIndex);
+                spriteSheet = Furniture.furnitureTexture;
+                sourceRectangle = furniture.sourceRect;
             }
             else if (obj is Fence fence)
             {
                 spriteSheet = this.Reflection.GetField<Texture2D>(obj, "fenceTexture").GetValue();
                 sourceRectangle = this.GetSourceRectangle(fence, Game1.currentLocation);
+            }
+            else if (obj.bigCraftable)
+            {
+                spriteSheet = Game1.bigCraftableSpriteSheet;
+                sourceRectangle = Object.getSourceRectForBigCraftable(obj.parentSheetIndex);
             }
             else
             {

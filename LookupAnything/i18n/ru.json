@@ -1,4 +1,4 @@
-﻿{
+{
   /*********
   ** Generic translations
   *********/
@@ -216,6 +216,7 @@
   "item.cask-schedule.now-partial": "{{quality}} сейчас (используйте кирку для остановки старения)",
   "item.cask-schedule.tomorrow": "{{quality}} завтра",
   "item.cask-schedule.in-x-days": "{{quality}} через {{count}} дн. ({{date}})",
+  "item.contents.placed": "{{name}} placed", // TODO
   "item.contents.ready": "{{name}} готов",
   "item.contents.partial": "{{name}} через {{time}}",
   "item.needed-for.community-center": "Общественный центр ({{bundles}})",
