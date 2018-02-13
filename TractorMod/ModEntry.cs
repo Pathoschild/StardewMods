@@ -86,6 +86,7 @@ namespace Pathoschild.Stardew.TractorMod
                 new CustomToolAttachment(this.Config), // should be first so it can override tools
                 new AxeAttachment(this.Config),
                 new FertilizerAttachment(),
+                new GrassStarterAttachment(),
                 new HoeAttachment(),
                 new PickaxeAttachment(this.Config),
                 new ScytheAttachment(),
