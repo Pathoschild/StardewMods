@@ -83,7 +83,7 @@ namespace Pathoschild.Stardew.TractorMod
             this.Config = helper.ReadConfig<ModConfig>();
             this.Attachments = new IAttachment[]
             {
-                new CustomToolAttachment(this.Config), // should be first so it can override tools
+                new CustomAttachment(this.Config), // should be first so it can override default attachments
                 new AxeAttachment(this.Config),
                 new FertilizerAttachment(),
                 new GrassStarterAttachment(),

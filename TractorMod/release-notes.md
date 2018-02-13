@@ -2,6 +2,7 @@
 ## 4.2.1
 * Updated to SMAPI 2.4.
 * Added support for grass starters.
+* Added option to enable any placeable items as tractor attachments (e.g. `Mega Bomb`).
 * Changed default summon key to `T` (won't affect players with an existing `config.json`).
 * Fixed summon key working when a menu is open.
 * Fixed seeds and fertiliser being placed under giant crops.

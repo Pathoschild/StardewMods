@@ -63,7 +63,7 @@ setting | default | effect
 `AxeCutsTrees` | `false` | Whether the axe chops down non-fruit trees.
 `PickaxeClearsDirt` | `true` | Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.
 `PickaxeBreaksFlooring` | `false` | Whether the tractor can break flooring and paths when the pickaxe is selected.
-`CustomTools` | _(empty)_ | The custom tools to apply. If you specify a tool that's already supported (like the axe), this will override all limitations on its use. These must match the exact in-game tool names. For example: `"CustomTools": ["Axe"]`
+`CustomAttachments` | _(empty)_ | The custom items or tools to apply. If you specify something that's already supported (like the axe), this will override all limitations on its use. These must match the exact internal item/tool names (not the translated display names). For example: `"CustomTools": ["Axe"]`
 
 And change how the tractor is sold:
 
