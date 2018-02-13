@@ -7,7 +7,7 @@
 * Added support for furniture.
 * Fixed debug key working when a menu is open.
 * Fixed typo in debug interface.
-* Improved German translations. (Thanks to Husky110!)
+* Improved Chinese and German translations. (Thanks to yuwenlan and Husky110!)
 
 ## 1.17
 * Updated to SMAPI 2.0.

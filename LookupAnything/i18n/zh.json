@@ -216,7 +216,7 @@
   "item.cask-schedule.now-partial": "目前{{quality}}(用搞停止陈酿)",
   "item.cask-schedule.tomorrow": "明天{{quality}}",
   "item.cask-schedule.in-x-days": "将在{{count}}天({{date}})后提升到{{quality}}",
-  "item.contents.placed": "{{name}} placed", // TODO
+  "item.contents.placed": "已放置{{name}}",
   "item.contents.ready": "目前{{name}}",
   "item.contents.partial": "{{name}} in {{time}}",
   "item.needed-for.community-center": "社区中心({{bundles}})",

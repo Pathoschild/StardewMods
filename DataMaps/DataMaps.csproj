@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="i18n\de.json" />
+    <None Include="i18n\zh.json" />
     <None Include="i18n\default.json" />
     <None Include="manifest.json" />
     <None Include="packages.config" />
