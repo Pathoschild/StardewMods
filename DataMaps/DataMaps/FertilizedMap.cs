@@ -90,41 +90,48 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         {
             foreach (Vector2 tile in visibleTiles)
             {
-                Color color;
-
                 if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrain))
                 {
-                    if(terrain is HoeDirt dirt)
+                    if (terrain is HoeDirt dirt)
                     {
+                        Color color;
                         switch (dirt.fertilizer)
                         {
-                            case (368):
+                            // basic fertilizer
+                            case 368:
                                 color = this.BasicFertilizerColor;
                                 break;
-                            //quality fertilizer
-                            case (369):
+
+                            // quality fertilizer
+                            case 369:
                                 color = this.QualityFertilizerColor;
                                 break;
-                            //basic retaining soil
-                            case (370):
+
+                            // basic retaining soil
+                            case 370:
                                 color = this.BasicRetainingSoilColor;
                                 break;
-                            //quality retaining soil
-                            case (371):
+
+                            // quality retaining soil
+                            case 371:
                                 color = this.QualityRetainingSoilColor;
                                 break;
-                            //speed gro
-                            case (465):
+
+                            // speed-gro
+                            case 465:
                                 color = this.SpeedGroColor;
                                 break;
-                            //delux speed gro
-                            case (466):
+
+                            // deluxe speed-gro
+                            case 466:
                                 color = this.DeluxeSpeedGroColor;
                                 break;
+
                             //no fertilizer, skip the loop
-                            case (0):
+                            case 0:
                                 continue;
-                            // a moded fertilizer..
+
+                            // modded fertilizer?
                             default:
                                 color = this.ModedFertilizerColor;
                                 break;
@@ -135,6 +142,5 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
                 }
             }
         }
-
     }
 }

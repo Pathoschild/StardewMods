@@ -16,7 +16,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</summary>
         public bool CombineOverlappingBorders { get; set; } = true;
 
-        /// <summary>Disabe certain DataMaps</summary>
+        /// <summary>The data maps to disable.</summary>
         public string[] DisabledMaps { get; set; } = new string[0];
 
         /*********

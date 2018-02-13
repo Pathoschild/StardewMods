@@ -37,10 +37,10 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         public NeedsWateringMap(ITranslationHelper translations)
         {
-            this.Name = translations.Get("maps.needswatering.name");
+            this.Name = translations.Get("maps.needs-watering.name");
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("maps.needswatering.dry-crops"), this.DryColor),
+                new LegendEntry(translations.Get("maps.needs-watering.dry-crops"), this.DryColor),
             };
         }
 
