@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -86,11 +87,15 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <summary>Get all trees in the current location which are currently falling.</summary>
         private IEnumerable<KeyValuePair<Vector2, TerrainFeature>> GetFallingTrees()
         {
-            foreach (var pair in this.Trees)
+            Rectangle visibleTiles = TileHelper.GetVisibleArea();
+            foreach (KeyValuePair<Vector2, TerrainFeature> pair in this.Trees)
             {
-                bool isFalling = this.Reflection.GetPrivateValue<bool>(pair.Value, "falling");
-                if (isFalling)
-                    yield return pair;
+                if (visibleTiles.Contains((int)pair.Key.X, (int)pair.Key.Y))
+                {
+                    bool isFalling = this.Reflection.GetField<bool>(pair.Value, "falling").GetValue();
+                    if (isFalling)
+                        yield return pair;
+                }
             }
         }
     }

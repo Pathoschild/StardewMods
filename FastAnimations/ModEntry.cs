@@ -74,7 +74,7 @@ namespace Pathoschild.Stardew.FastAnimations
             if (!Context.IsWorldReady || Game1.eventUp || !this.Handlers.Any())
                 return;
 
-            int playerAnimationID = this.Helper.Reflection.GetPrivateValue<int>(Game1.player.FarmerSprite, "currentSingleAnimation");
+            int playerAnimationID = this.Helper.Reflection.GetField<int>(Game1.player.FarmerSprite, "currentSingleAnimation").GetValue();
             foreach (IAnimationHandler handler in this.Handlers)
             {
                 if (handler.IsEnabled(playerAnimationID))
@@ -93,6 +93,8 @@ namespace Pathoschild.Stardew.FastAnimations
         {
             if (config.BreakGeodeSpeed > 1)
                 yield return new BreakingGeodeHandler(config.BreakGeodeSpeed);
+            if (config.CasinoSlotsSpeed > 1)
+                yield return new CasinoSlotsHandler(config.CasinoSlotsSpeed, this.Helper.Reflection);
             if (config.EatAndDrinkSpeed > 1)
                 yield return new EatingHandler(this.Helper.Reflection, config.EatAndDrinkSpeed, config.DisableEatAndDrinkConfirmation);
             if (config.FishingSpeed > 1)

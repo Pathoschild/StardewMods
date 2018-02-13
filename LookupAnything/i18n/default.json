@@ -1,4 +1,4 @@
-﻿{
+{
   /*********
   ** Generic translations
   *********/
@@ -216,6 +216,7 @@
   "item.cask-schedule.now-partial": "{{quality}} now (use pickaxe to stop aging)",
   "item.cask-schedule.tomorrow": "{{quality}} tomorrow",
   "item.cask-schedule.in-x-days": "{{quality}} in {{count}} days ({{date}})",
+  "item.contents.placed": "{{name}} placed",
   "item.contents.ready": "{{name}} ready",
   "item.contents.partial": "{{name}} in {{time}}",
   "item.needed-for.community-center": "community center ({{bundles}})",

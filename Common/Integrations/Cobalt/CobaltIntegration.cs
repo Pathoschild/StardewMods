@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 
-namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.Cobalt
+namespace Pathoschild.Stardew.Common.Integrations.Cobalt
 {
     /// <summary>Handles the logic for integrating with the Cobalt mod.</summary>
     internal class CobaltIntegration : BaseIntegration

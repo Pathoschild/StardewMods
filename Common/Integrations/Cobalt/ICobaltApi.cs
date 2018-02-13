@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.Cobalt
+namespace Pathoschild.Stardew.Common.Integrations.Cobalt
 {
     /// <summary>The API provided by the Cobalt mod.</summary>
     public interface ICobaltApi

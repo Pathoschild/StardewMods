@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
 using Pathoschild.Stardew.LookupAnything.Components;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
@@ -32,11 +33,6 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>The name of the file containing data for the <see cref="Metadata"/> field.</summary>
         private readonly string DatabaseFileName = "data.json";
-
-#if TEST_BUILD
-        /// <summary>Reloads the <see cref="Metadata"/> when the underlying file changes.</summary>
-        private FileSystemWatcher OverrideFileWatcher;
-#endif
 
         /****
         ** Validation
@@ -67,37 +63,8 @@ namespace Pathoschild.Stardew.LookupAnything
             // load config
             this.Config = this.Helper.ReadConfig<ModConfig>();
 
-            // load database
+            // load & validate database
             this.LoadMetadata();
-#if TEST_BUILD
-                this.OverrideFileWatcher = new FileSystemWatcher(this.PathOnDisk, this.DatabaseFileName)
-                {
-                    EnableRaisingEvents = true
-                };
-                this.OverrideFileWatcher.Changed += (sender, e) =>
-                {
-                    this.LoadMetadata();
-                    this.TargetFactory = new TargetFactory(this.Metadata);
-                    this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config)
-                    {
-                        Enabled = this.DebugInterface.Enabled
-                    };
-                };
-#endif
-
-            // initialise functionality
-            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection);
-            this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config, this.Monitor);
-
-            // hook up events
-            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
-            GraphicsEvents.OnPostRenderHudEvent += this.GraphicsEvents_OnPostRenderHudEvent;
-            MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
-            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
-            if (this.Config.HideOnKeyUp)
-                InputEvents.ButtonReleased += this.InputEvents_ButtonReleased;
-
-            // validate metadata
             this.IsDataValid = this.Metadata.LooksValid();
             if (!this.IsDataValid)
             {
@@ -108,6 +75,9 @@ namespace Pathoschild.Stardew.LookupAnything
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
                 this.Monitor.Log("The translation files in this mod's i18n folder seem to be missing. The mod will still work, but you'll see 'missing translation' messages. Try reinstalling the mod to fix this.", LogLevel.Warn);
+
+            // hook up events
+            GameEvents.FirstUpdateTick += this.GameEvents_FirstUpdateTick;
         }
 
 
@@ -117,6 +87,28 @@ namespace Pathoschild.Stardew.LookupAnything
         /****
         ** Event handlers
         ****/
+        /// <summary>The method invoked on the first update tick, once all mods are initialised.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void GameEvents_FirstUpdateTick(object sender, EventArgs e)
+        {
+            if (!this.IsDataValid)
+                return;
+
+            // initialise functionality
+            var customFarming = new CustomFarmingReduxIntegration(this.Helper.ModRegistry, this.Monitor);
+            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, customFarming);
+            this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config, this.Monitor);
+
+            // hook up events
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
+            GraphicsEvents.OnPostRenderHudEvent += this.GraphicsEvents_OnPostRenderHudEvent;
+            MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
+            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
+            if (this.Config.HideOnKeyUp)
+                InputEvents.ButtonReleased += this.InputEvents_ButtonReleased;
+        }
+
         /// <summary>The method invoked when a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
@@ -144,7 +136,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollUp();
                 else if (controls.ScrollDown.Contains(e.Button))
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollDown();
-                else if (controls.ToggleDebug.Contains(e.Button))
+                else if (controls.ToggleDebug.Contains(e.Button) && Context.IsPlayerFree)
                     this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
             });
         }

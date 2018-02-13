@@ -36,8 +36,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return false;
 
             // get dirt
-            HoeDirt dirt = tileFeature as HoeDirt;
-            if (dirt == null || dirt.fertilizer != HoeDirt.noFertilizer)
+            if (!(tileFeature is HoeDirt dirt) || dirt.fertilizer != HoeDirt.noFertilizer)
+                return false;
+
+            // ignore if there's a giant crop, meteorite, etc covering the tile
+            if (this.GetResourceClumpCoveringTile(location, tile) != null)
                 return false;
 
             // apply fertiliser

@@ -43,15 +43,6 @@
     <Compile Include="DataMaps\AccessibilityMap.cs" />
     <Compile Include="Framework\DataMapOverlay.cs" />
     <Compile Include="Framework\IDataMap.cs" />
-    <Compile Include="Framework\Integrations\BaseIntegration.cs" />
-    <Compile Include="Framework\Integrations\SimpleSprinkler\SimpleSprinklerIntegration.cs" />
-    <Compile Include="Framework\Integrations\SimpleSprinkler\ISimplerSprinklerApi.cs" />
-    <Compile Include="Framework\Integrations\BetterSprinklers\BetterSprinklersIntegration.cs" />
-    <Compile Include="Framework\Integrations\BetterSprinklers\IBetterSprinklersApi.cs" />
-    <Compile Include="Framework\Integrations\Cobalt\CobaltIntegration.cs" />
-    <Compile Include="Framework\Integrations\Cobalt\ICobaltApi.cs" />
-    <Compile Include="Framework\Integrations\IModIntegration.cs" />
-    <Compile Include="Framework\Integrations\PelicanFiber\PelicanFiberIntegration.cs" />
     <Compile Include="Framework\LegendEntry.cs" />
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\Sprites.cs" />
@@ -63,6 +54,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="i18n\de.json" />
+    <None Include="i18n\zh.json" />
     <None Include="i18n\default.json" />
     <None Include="manifest.json" />
     <None Include="packages.config" />

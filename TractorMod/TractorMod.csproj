@@ -41,8 +41,9 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Framework\Attachments\AxeAttachment.cs" />
-    <Compile Include="Framework\Attachments\CustomToolAttachment.cs" />
+    <Compile Include="Framework\Attachments\CustomAttachment.cs" />
     <Compile Include="Framework\Attachments\FertilizerAttachment.cs" />
+    <Compile Include="Framework\Attachments\GrassStarterAttachment.cs" />
     <Compile Include="Framework\Attachments\WateringCanAttachment.cs" />
     <Compile Include="Framework\Attachments\HoeAttachment.cs" />
     <Compile Include="Framework\Attachments\IAttachment.cs" />

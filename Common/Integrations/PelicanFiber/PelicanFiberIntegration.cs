@@ -1,7 +1,7 @@
 using StardewModdingAPI;
 using StardewValley;
 
-namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.PelicanFiber
+namespace Pathoschild.Stardew.Common.Integrations.PelicanFiber
 {
     /// <summary>Handles the logic for integrating with the Pelican Fiber mod.</summary>
     internal class PelicanFiberIntegration : BaseIntegration

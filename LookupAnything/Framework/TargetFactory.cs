@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
@@ -9,6 +10,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Targets;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
+using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
@@ -32,6 +34,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Provides translations stored in the mod folder.</summary>
         private readonly ITranslationHelper Translations;
 
+        /// <summary>Handles the logic for integrating with the Custom Farming Redux mod.</summary>
+        private readonly CustomFarmingReduxIntegration CustomFarming;
+
 
         /*********
         ** Public methods
@@ -43,11 +48,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public TargetFactory(Metadata metadata, ITranslationHelper translations, IReflectionHelper reflection)
+        /// <param name="customFarming">Handles the logic for integrating with the Custom Farming Redux mod.</param>
+        public TargetFactory(Metadata metadata, ITranslationHelper translations, IReflectionHelper reflection, CustomFarmingReduxIntegration customFarming)
         {
             this.Metadata = metadata;
             this.Translations = translations;
             this.Reflection = reflection;
+            this.CustomFarming = customFarming;
         }
 
         /****
@@ -98,7 +105,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 if (!GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
                     continue;
 
-                yield return new ObjectTarget(obj, spriteTile, this.Reflection);
+                yield return this.CustomFarming.IsLoaded && this.CustomFarming.IsCustomObject(obj)
+                    ? new CustomFarmingObjectTarget(obj, spriteTile, this.Reflection, this.CustomFarming)
+                    : new ObjectTarget(obj, spriteTile, this.Reflection);
+            }
+
+            // furniture
+            if (location is DecoratableLocation decoratableLocation)
+            {
+                foreach(var furniture in decoratableLocation.furniture)
+                    yield return new ObjectTarget(furniture, furniture.TileLocation, this.Reflection);
             }
 
             // terrain features
@@ -114,13 +130,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     yield return new CropTarget(feature, spriteTile, this.Reflection);
                 else if (feature is FruitTree fruitTree)
                 {
-                    if (this.Reflection.GetPrivateValue<float>(feature, "alpha") < 0.8f)
+                    if (this.Reflection.GetField<float>(feature, "alpha").GetValue() < 0.8f)
                         continue; // ignore when tree is faded out (so player can lookup things behind it)
                     yield return new FruitTreeTarget(fruitTree, spriteTile);
                 }
                 else if (feature is Tree wildTree)
                 {
-                    if (this.Reflection.GetPrivateValue<float>(feature, "alpha") < 0.8f)
+                    if (this.Reflection.GetField<float>(feature, "alpha").GetValue() < 0.8f)
                         continue; // ignore when tree is faded out (so player can lookup things behind it)
                     yield return new TreeTarget(wildTree, spriteTile, this.Reflection);
                 }
@@ -311,13 +327,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // inventory
                 case GameMenu gameMenu:
                     {
-                        List<IClickableMenu> tabs = this.Reflection.GetPrivateValue<List<IClickableMenu>>(gameMenu, "pages");
+                        List<IClickableMenu> tabs = this.Reflection.GetField<List<IClickableMenu>>(gameMenu, "pages").GetValue();
                         IClickableMenu curTab = tabs[gameMenu.currentTab];
                         switch (curTab)
                         {
                             case InventoryPage _:
                                 {
-                                    Item item = this.Reflection.GetPrivateValue<Item>(curTab, "hoveredItem");
+                                    Item item = this.Reflection.GetField<Item>(curTab, "hoveredItem").GetValue();
                                     if (item != null)
                                         return new ItemSubject(this.Translations, item, ObjectContext.Inventory, knownQuality: true);
                                 }
@@ -325,7 +341,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                             case CraftingPage _:
                                 {
-                                    Item item = this.Reflection.GetPrivateValue<Item>(curTab, "hoverItem");
+                                    Item item = this.Reflection.GetField<Item>(curTab, "hoverItem").GetValue();
                                     if (item != null)
                                         return new ItemSubject(this.Translations, item, ObjectContext.Inventory, knownQuality: true);
                                 }
@@ -334,9 +350,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             case SocialPage _:
                                 {
                                     // get villagers on current page
-                                    int scrollOffset = this.Reflection.GetPrivateValue<int>(curTab, "slotPosition");
+                                    int scrollOffset = this.Reflection.GetField<int>(curTab, "slotPosition").GetValue();
                                     ClickableTextureComponent[] entries = this.Reflection
-                                        .GetPrivateValue<List<ClickableTextureComponent>>(curTab, "friendNames")
+                                        .GetField<List<ClickableTextureComponent>>(curTab, "friendNames")
+                                        .GetValue()
                                         .Skip(scrollOffset)
                                         .ToArray();
 
@@ -359,7 +376,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     {
                         // hovered inventory item
                         {
-                            Item item = this.Reflection.GetPrivateValue<Item>(menu, "hoveredItem");
+                            Item item = this.Reflection.GetField<Item>(menu, "hoveredItem").GetValue();
                             if (item != null)
                                 return new ItemSubject(this.Translations, item.getOne(), ObjectContext.Inventory, knownQuality: true);
                         }
@@ -369,7 +386,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         {
                             if (bundleMenu.ingredientList[i].containsPoint((int)cursorPos.X, (int)cursorPos.Y))
                             {
-                                Bundle bundle = this.Reflection.GetPrivateValue<Bundle>(bundleMenu, "currentPageBundle");
+                                Bundle bundle = this.Reflection.GetField<Bundle>(bundleMenu, "currentPageBundle").GetValue();
                                 var ingredient = bundle.ingredients[i];
                                 var item = GameHelper.GetObjectBySpriteIndex(ingredient.index, ingredient.stack);
                                 item.quality = ingredient.quality;
@@ -389,7 +406,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // kitchen
                 case CraftingPage _:
                     {
-                        CraftingRecipe recipe = this.Reflection.GetPrivateValue<CraftingRecipe>(menu, "hoverRecipe");
+                        CraftingRecipe recipe = this.Reflection.GetField<CraftingRecipe>(menu, "hoverRecipe").GetValue();
                         if (recipe != null)
                             return new ItemSubject(this.Translations, recipe.createItem(), ObjectContext.Inventory, knownQuality: true);
                     }
@@ -399,7 +416,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // shop
                 case ShopMenu _:
                     {
-                        Item item = this.Reflection.GetPrivateValue<Item>(menu, "hoveredItem");
+                        Item item = this.Reflection.GetField<Item>(menu, "hoveredItem").GetValue();
                         if (item != null)
                             return new ItemSubject(this.Translations, item.getOne(), ObjectContext.Inventory, knownQuality: true);
                     }
@@ -409,7 +426,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case Toolbar _:
                     {
                         // find hovered slot
-                        List<ClickableComponent> slots = this.Reflection.GetPrivateValue<List<ClickableComponent>>(menu, "buttons");
+                        List<ClickableComponent> slots = this.Reflection.GetField<List<ClickableComponent>>(menu, "buttons").GetValue();
                         ClickableComponent hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
                         if (hoveredSlot == null)
                             return null;
@@ -429,7 +446,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // by convention (for mod support)
                 default:
                     {
-                        Item item = this.Reflection.GetPrivateValue<Item>(menu, "HoveredItem", required: false); // ChestsAnywhere
+                        Item item = this.Reflection.GetField<Item>(menu, "HoveredItem", required: false).GetValue(); // ChestsAnywhere
                         if (item != null)
                             return new ItemSubject(this.Translations, item, ObjectContext.Inventory, knownQuality: true);
                     }

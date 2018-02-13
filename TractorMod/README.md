@@ -50,7 +50,7 @@ You can set some general options:
 
 setting | default | effect
 :------ | :------ | :-----
-`Controls` | | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `B` to summon the tractor. Available inputs:<ul><li>`SummonTractor`: warp the tractor to your position.</li><li>`HoldToActivate`: if specified, the tractor will only do something while you're holding this button. If nothing is specified, tractor will work automatically.</li></ul>
+`Controls` | | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `T` to summon the tractor. Available inputs:<ul><li>`SummonTractor`: warp the tractor to your position.</li><li>`HoldToActivate`: if specified, the tractor will only do something while you're holding this button. If nothing is specified, tractor will work automatically.</li></ul>
 `Distance` | 1 | The number of tiles on each side of the tractor to affect (in addition to the tile under it).
 `TractorSpeed` | -2 | The speed modifier when riding the tractor.
 `MagneticRadius` | 384 | The item magnetism amount (higher values attract items from father away).
@@ -63,7 +63,7 @@ setting | default | effect
 `AxeCutsTrees` | `false` | Whether the axe chops down non-fruit trees.
 `PickaxeClearsDirt` | `true` | Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.
 `PickaxeBreaksFlooring` | `false` | Whether the tractor can break flooring and paths when the pickaxe is selected.
-`CustomTools` | _(empty)_ | The custom tools to apply. If you specify a tool that's already supported (like the axe), this will override all limitations on its use. These must match the exact in-game tool names. For example: `"CustomTools": ["Axe"]`
+`CustomAttachments` | _(empty)_ | The custom items or tools to apply. If you specify something that's already supported (like the axe), this will override all limitations on its use. These must match the exact internal item/tool names (not the translated display names). For example: `"CustomTools": ["Axe"]`
 
 And change how the tractor is sold:
 

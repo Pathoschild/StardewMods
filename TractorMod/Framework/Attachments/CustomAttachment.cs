@@ -9,13 +9,13 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 {
     /// <summary>An attachment for any configured custom tools.</summary>
-    internal class CustomToolAttachment : BaseAttachment
+    internal class CustomAttachment : BaseAttachment
     {
         /*********
         ** Properties
         *********/
-        /// <summary>The enabled custom tools.</summary>
-        private readonly HashSet<string> CustomTools;
+        /// <summary>The enabled custom tool or item names.</summary>
+        private readonly HashSet<string> CustomNames;
 
 
         /*********
@@ -23,9 +23,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod configuration.</param>
-        public CustomToolAttachment(ModConfig config)
+        public CustomAttachment(ModConfig config)
         {
-            this.CustomTools = new HashSet<string>(config.CustomTools, StringComparer.InvariantCultureIgnoreCase);
+            this.CustomNames = new HashSet<string>(config.CustomAttachments, StringComparer.InvariantCultureIgnoreCase);
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -35,7 +35,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return tool != null && this.CustomTools.Contains(tool.name);
+            return
+                (tool != null && this.CustomNames.Contains(tool.name))
+                || (item != null && this.CustomNames.Contains(item.Name));
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -48,7 +50,21 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return this.UseToolOnTile(tool, tile);
+            // apply tool
+            if (tool != null && this.CustomNames.Contains(tool.name))
+                return this.UseToolOnTile(tool, tile);
+
+            // apply item
+            if (item != null && this.CustomNames.Contains(item.Name))
+            {
+                if (item is SObject obj && obj.canBePlacedHere(location, tile) && obj.placementAction(location, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), player))
+                {
+                    this.ConsumeItem(player, item);
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

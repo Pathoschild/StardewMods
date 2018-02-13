@@ -1,4 +1,4 @@
-﻿{
+{
   /*********
   ** Generic translations
   *********/
@@ -216,6 +216,7 @@
   "item.cask-schedule.now-partial": "{{quality}} por agora (use a picareta para parar de envelhecer)",
   "item.cask-schedule.tomorrow": "{{quality}} amanhã",
   "item.cask-schedule.in-x-days": "{{quality}} em {{count}} dias ({{date}})",
+  "item.contents.placed": "{{name}} placed", // TODO
   "item.contents.ready": "{{name}} pronto",
   "item.contents.partial": "{{name}} em {{time}}",
   "item.needed-for.community-center": "Centro Comunitário ({{bundles}})",

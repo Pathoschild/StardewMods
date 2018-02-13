@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 
-namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers
+namespace Pathoschild.Stardew.Common.Integrations.BetterSprinklers
 {
     /// <summary>Handles the logic for integrating with the Better Sprinklers mod.</summary>
     internal class BetterSprinklersIntegration : BaseIntegration

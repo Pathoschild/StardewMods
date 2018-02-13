@@ -1,6 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.4.1
+* Updated to SMAPI 2.4.
+* Added support for casino slots.
+* Improved fast tree falling performance.
+
 ## 1.4
 * Updated to SMAPI 2.1.
 * Skipping the eat/drink confirmation is now optional and disabled by default.

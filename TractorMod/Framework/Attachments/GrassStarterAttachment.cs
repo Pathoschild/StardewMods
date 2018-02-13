@@ -6,8 +6,8 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 {
-    /// <summary>An attachment for seeds.</summary>
-    internal class SeedAttachment : BaseAttachment
+    /// <summary>An attachment for the grass starter item.</summary>
+    internal class GrassStarterAttachment : BaseAttachment
     {
         /*********
         ** Public methods
@@ -19,7 +19,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return item?.category == SObject.SeedsCategory;
+            return item?.parentSheetIndex == 297;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -32,22 +32,16 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            if (item == null || item.Stack <= 0)
+            if (!(item is SObject obj) || obj.Stack <= 0)
                 return false;
 
-            // get dirt
-            if (!(tileFeature is HoeDirt dirt) || dirt.crop != null)
-                return false;
-
-            // ignore if there's a giant crop, meteorite, etc covering the tile
-            if (this.GetResourceClumpCoveringTile(location, tile) != null)
-                return false;
-
-            // sow seeds
-            bool sowed = dirt.plant(item.parentSheetIndex, (int)tile.X, (int)tile.Y, player);
-            if (sowed)
+            if (obj.canBePlacedHere(location, tile) && obj.placementAction(location, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), player))
+            {
                 this.ConsumeItem(player, item);
-            return sowed;
+                return true;
+            }
+
+            return false;
         }
     }
 }
