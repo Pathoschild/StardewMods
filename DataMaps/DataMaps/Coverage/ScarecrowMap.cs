@@ -8,7 +8,7 @@ using StardewValley;
 using StardewValley.TerrainFeatures;
 using Object = StardewValley.Object;
 
-namespace Pathoschild.Stardew.DataMaps.DataMaps
+namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
 {
     /// <summary>A data map which shows scarecrow coverage.</summary>
     internal class ScarecrowMap : IDataMap

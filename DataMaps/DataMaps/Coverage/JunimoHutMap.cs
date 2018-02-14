@@ -11,7 +11,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.TerrainFeatures;
 
-namespace Pathoschild.Stardew.DataMaps.DataMaps
+namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
 {
     /// <summary>A data map which shows Junimo hut coverage.</summary>
     internal class JunimoHutMap : IDataMap

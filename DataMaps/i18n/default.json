@@ -1,33 +1,41 @@
 {
+  // accessibility
   "maps.accessibility.name": "Accessibility",
   "maps.accessibility.clear": "Clear",
   "maps.accessibility.occupied": "Occupied",
   "maps.accessibility.impassable": "Impassable",
   "maps.accessibility.warp": "Warp",
 
-  "maps.bee-houses.name": "Bee Houses",
+  // coverage: bee houses
+  "maps.bee-houses.name": "Coverage: Bee Houses",
   "maps.bee-houses.range": "Flower Range",
 
-  "maps.junimo-huts.name": "Junimo Huts",
+  // coverage: Junimo huts
+  "maps.junimo-huts.name": "Coverage: Junimo Huts",
   "maps.junimo-huts.can-harvest": "Can Harvest",
   "maps.junimo-huts.cannot-harvest": "Can't Harvest",
 
-  "maps.scarecrows.name": "Scarecrows",
+  // coverage: scarecrows
+  "maps.scarecrows.name": "Coverage: Scarecrows",
   "maps.scarecrows.protected": "Protected",
   "maps.scarecrows.exposed": "Exposed",
 
-  "maps.sprinklers.name": "Sprinklers",
+  // coverage: sprinklers
+  "maps.sprinklers.name": "Coverage: Sprinklers",
   "maps.sprinklers.covered": "Covered",
   "maps.sprinklers.dry-crops": "Dry Crops",
 
-  "maps.needs-watering.name": "Needs Watering",
-  "maps.needs-watering.dry-crops": "Dry Crop",
+  // crops: watered
+  "maps.crop-water.name": "Crops: Watered",
+  "maps.crop-water.watered": "Watered Crop",
+  "maps.crop-water.dry": "Dry Crop",
 
-  "maps.fertilizer.name": "Fertilized Soil",
-  "maps.fertilizer.basic-fertilizer": "Basic Fertilizer",
-  "maps.fertilizer.quality-fertilizer": "Quality Fertilizer",
-  "maps.fertilizer.basic-retaining-soil": "Basic Retaining Soil",
-  "maps.fertilizer.quality-retaining-soil": "Quality Retaining Soil",
-  "maps.fertilizer.speed-gro": "Speed-Gro",
-  "maps.fertilizer.delux-speed-gro": "Delux Speed-Gro"
+  // crops: fertilized
+  "maps.crop-fertilizer.name": "Crops: Fertilized",
+  "maps.crop-fertilizer.basic-fertilizer": "Basic Fertilizer",
+  "maps.crop-fertilizer.quality-fertilizer": "Quality Fertilizer",
+  "maps.crop-fertilizer.basic-retaining-soil": "Basic Retaining Soil",
+  "maps.crop-fertilizer.quality-retaining-soil": "Quality Retaining Soil",
+  "maps.crop-fertilizer.speed-gro": "Speed-Gro",
+  "maps.crop-fertilizer.delux-speed-gro": "Delux Speed-Gro"
 }

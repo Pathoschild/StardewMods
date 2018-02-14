@@ -8,16 +8,19 @@ using StardewValley;
 using StardewValley.TerrainFeatures;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
-namespace Pathoschild.Stardew.DataMaps.DataMaps
+namespace Pathoschild.Stardew.DataMaps.DataMaps.Crops
 {
     /// <summary>A data map which shows whether crops needs to be watered.</summary>
-    internal class NeedsWateringMap : IDataMap
+    internal class CropWaterMap : IDataMap
     {
         /*********
         ** Properties
         *********/
         /// <summary>The color for a dry crop.</summary>
         private readonly Color DryColor = Color.Red;
+
+        /// <summary>The color for a watered crop.</summary>
+        private readonly Color WateredColor = Color.Green;
 
         /// <summary>The legend entries to display.</summary>
         public LegendEntry[] Legend { get; }
@@ -35,12 +38,13 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        public NeedsWateringMap(ITranslationHelper translations)
+        public CropWaterMap(ITranslationHelper translations)
         {
-            this.Name = translations.Get("maps.needs-watering.name");
+            this.Name = translations.Get("maps.crop-water.name");
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("maps.needs-watering.dry-crops"), this.DryColor),
+                new LegendEntry(translations.Get("maps.crop-water.watered"), this.WateredColor),
+                new LegendEntry(translations.Get("maps.crop-water.dry"), this.DryColor)
             };
         }
 
@@ -52,31 +56,38 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         {
             Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
 
+            // yield watered crops
+            {
+                TileData[] crops = this.GetCropsByStatus(location, visibleTiles, HoeDirt.watered).Select(pos => new TileData(pos, this.WateredColor)).ToArray();
+                yield return new TileGroup(crops, outerBorderColor: this.WateredColor);
+            }
+
             // yield dry crops
-            TileData[] dryCrops = this.GetDryCrops(location, visibleTiles).Select(pos => new TileData(pos, this.DryColor)).ToArray();
-            yield return new TileGroup(dryCrops, outerBorderColor: this.DryColor);
+            {
+                TileData[] crops = this.GetCropsByStatus(location, visibleTiles, HoeDirt.dry).Select(pos => new TileData(pos, this.DryColor)).ToArray();
+                yield return new TileGroup(crops, outerBorderColor: this.DryColor);
+            }
         }
 
 
         /*********
         ** Private methods
         *********/
-
-        /// <summary>Get whether a map terrain feature is a dry-crop.</summary>
-        /// <param name="terrain">The map terrain feature.</param>
-        private bool IsDryCrop(TerrainFeature terrain)
-        {
-            return terrain is HoeDirt dirt && dirt.crop != null && dirt.state == 0;
-        }
-
         /// <summary>Get tiles containing crops not covered by a sprinkler.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
-        private IEnumerable<Vector2> GetDryCrops(GameLocation location, Vector2[] visibleTiles)
+        /// <param name="state">The watered state to match.</param>
+        private IEnumerable<Vector2> GetCropsByStatus(GameLocation location, Vector2[] visibleTiles, int state)
         {
             foreach (Vector2 tile in visibleTiles)
             {
-                if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrain) && this.IsDryCrop(terrain))
+                bool matchesState =
+                    location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrain)
+                    && terrain is HoeDirt dirt
+                    && dirt.crop != null
+                    && dirt.state == state;
+
+                if (matchesState)
                     yield return tile;
             }
         }

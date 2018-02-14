@@ -1,35 +1,43 @@
 {
+  // accessibility
   "maps.accessibility.name": "能否抵达",
   "maps.accessibility.clear": "可通过",
   "maps.accessibility.occupied": "被占用",
   "maps.accessibility.impassable": "不可通过",
   "maps.accessibility.warp": "传送点",
 
-  "maps.bee-houses.name": "蜂房",
+  // coverage: bee houses
+  "maps.bee-houses.name": "蜂房", // TODO: "Coverage: Bee Houses"
   "maps.bee-houses.range": "鲜花范围",
 
-  "maps.junimo-huts.name": "祝尼魔小屋",
+  // coverage: Junimo huts
+  "maps.junimo-huts.name": "祝尼魔小屋", // TODO: "Coverage: Junimo Huts"
   "maps.junimo-huts.can-harvest": "可自动收获",
   "maps.junimo-huts.cannot-harvest": "无法自动收获",
 
-  "maps.scarecrows.name": "稻草人",
+  // coverage: scarecrows
+  "maps.scarecrows.name": "稻草人",  // TODO: "Coverage: Scarecrows"
   "maps.scarecrows.protected": "受保护",
   "maps.scarecrows.exposed": "未收保护",
 
-  "maps.sprinklers.name": "洒水器",
+  // coverage: sprinklers
+  "maps.sprinklers.name": "洒水器",  // TODO: "Coverage: Sprinklers"
   "maps.sprinklers.covered": "已覆盖",
   "maps.sprinklers.dry-crops": "作物干燥",
 
+  // crops: watered
   // TODO
-  "maps.needs-watering.name": "Needs Watering",
-  "maps.needs-watering.dry-crops": "Dry Crop",
+  "maps.crop-water.name": "Crops: Water",
+  "maps.crop-water.watered": "Watered Crop",
+  "maps.crop-water.dry": "Dry Crop",
 
+  // crops: fertilized
   // TODO
-  "maps.fertilizer.name": "Fertilized Soil",
-  "maps.fertilizer.basic-fertilizer": "Basic Fertilizer",
-  "maps.fertilizer.quality-fertilizer": "Quality Fertilizer",
-  "maps.fertilizer.basic-retaining-soil": "Basic Retaining Soil",
-  "maps.fertilizer.quality-retaining-soil": "Quality Retaining Soil",
-  "maps.fertilizer.speed-gro": "Speed-Gro",
-  "maps.fertilizer.delux-speed-gro": "Delux Speed-Gro"
+  "maps.crop-fertilizer.name": "Crops: Fertilizer",
+  "maps.crop-fertilizer.basic-fertilizer": "Basic Fertilizer",
+  "maps.crop-fertilizer.quality-fertilizer": "Quality Fertilizer",
+  "maps.crop-fertilizer.basic-retaining-soil": "Basic Retaining Soil",
+  "maps.crop-fertilizer.quality-retaining-soil": "Quality Retaining Soil",
+  "maps.crop-fertilizer.speed-gro": "Speed-Gro",
+  "maps.crop-fertilizer.delux-speed-gro": "Delux Speed-Gro"
 }

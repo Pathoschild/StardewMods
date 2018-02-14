@@ -7,6 +7,8 @@ using Pathoschild.Stardew.Common.Integrations.Cobalt;
 using Pathoschild.Stardew.Common.Integrations.PelicanFiber;
 using Pathoschild.Stardew.Common.Integrations.SimpleSprinkler;
 using Pathoschild.Stardew.DataMaps.DataMaps;
+using Pathoschild.Stardew.DataMaps.DataMaps.Coverage;
+using Pathoschild.Stardew.DataMaps.DataMaps.Crops;
 using Pathoschild.Stardew.DataMaps.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -90,9 +92,9 @@ namespace Pathoschild.Stardew.DataMaps
             if (config.EnableMaps.JunimoHuts)
                 yield return new JunimoHutMap(translation, this.PelicanFiber);
             if (config.EnableMaps.NeedsWater)
-                yield return new NeedsWateringMap(translation);
+                yield return new CropWaterMap(translation);
             if (config.EnableMaps.Fertilizer)
-                yield return new FertilizerMap(translation);
+                yield return new CropFertilizerMap(translation);
         }
 
         /// <summary>The method invoked when the player returns to the title screen.</summary>

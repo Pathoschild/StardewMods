@@ -1,6 +1,7 @@
 # Release notes
 ## 1.2.1
 * Added options to hide individual data maps.
+* Improved data map consistency and sorted by name.
 * Fixed error in the Cobalt integration.
 * Added Chinese and German translations. (Thanks to yuwenlan and Husky110!)
 

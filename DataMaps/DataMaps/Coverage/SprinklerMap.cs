@@ -12,7 +12,7 @@ using StardewValley;
 using StardewValley.TerrainFeatures;
 using Object = StardewValley.Object;
 
-namespace Pathoschild.Stardew.DataMaps.DataMaps
+namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
 {
     /// <summary>A data map which shows sprinkler coverage.</summary>
     internal class SprinklerMap : IDataMap

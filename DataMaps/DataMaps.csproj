@@ -36,12 +36,12 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataMaps\JunimoHutMap.cs" />
-    <Compile Include="DataMaps\BeeHouseMap.cs" />
-    <Compile Include="DataMaps\FertilizedMap.cs" />
-    <Compile Include="DataMaps\ScarecrowMap.cs" />
-    <Compile Include="DataMaps\NeedsWateringMap.cs" />
-    <Compile Include="DataMaps\SprinklerMap.cs" />
+    <Compile Include="DataMaps\Coverage\JunimoHutMap.cs" />
+    <Compile Include="DataMaps\Coverage\BeeHouseMap.cs" />
+    <Compile Include="DataMaps\Crops\CropFertilizerMap.cs" />
+    <Compile Include="DataMaps\Coverage\ScarecrowMap.cs" />
+    <Compile Include="DataMaps\Crops\CropWaterMap.cs" />
+    <Compile Include="DataMaps\Coverage\SprinklerMap.cs" />
     <Compile Include="DataMaps\AccessibilityMap.cs" />
     <Compile Include="Framework\DataMapOverlay.cs" />
     <Compile Include="Framework\IDataMap.cs" />

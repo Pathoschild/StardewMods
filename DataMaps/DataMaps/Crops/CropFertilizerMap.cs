@@ -8,10 +8,10 @@ using StardewValley;
 using StardewValley.TerrainFeatures;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
-namespace Pathoschild.Stardew.DataMaps.DataMaps
+namespace Pathoschild.Stardew.DataMaps.DataMaps.Crops
 {
     /// <summary>A data map which shows whether crops needs to be watered.</summary>
-    internal class FertilizerMap : IDataMap
+    internal class CropFertilizerMap : IDataMap
     {
         /*********
         ** Properties
@@ -53,17 +53,17 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        public FertilizerMap(ITranslationHelper translations)
+        public CropFertilizerMap(ITranslationHelper translations)
         {
-            this.Name = translations.Get("maps.fertilizer.name");
+            this.Name = translations.Get("maps.crop-fertilizer.name");
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("maps.fertilizer.basic-fertilizer"), this.BasicFertilizerColor),
-                new LegendEntry(translations.Get("maps.fertilizer.quality-fertilizer"), this.QualityFertilizerColor),
-                new LegendEntry(translations.Get("maps.fertilizer.basic-retaining-soil"), this.BasicRetainingSoilColor),
-                new LegendEntry(translations.Get("maps.fertilizer.quality-retaining-soil"), this.QualityRetainingSoilColor),
-                new LegendEntry(translations.Get("maps.fertilizer.speed-gro"), this.SpeedGroColor),
-                new LegendEntry(translations.Get("maps.fertilizer.delux-speed-gro"), this.DeluxeSpeedGroColor)
+                new LegendEntry(translations.Get("maps.crop-fertilizer.basic-fertilizer"), this.BasicFertilizerColor),
+                new LegendEntry(translations.Get("maps.crop-fertilizer.quality-fertilizer"), this.QualityFertilizerColor),
+                new LegendEntry(translations.Get("maps.crop-fertilizer.basic-retaining-soil"), this.BasicRetainingSoilColor),
+                new LegendEntry(translations.Get("maps.crop-fertilizer.quality-retaining-soil"), this.QualityRetainingSoilColor),
+                new LegendEntry(translations.Get("maps.crop-fertilizer.speed-gro"), this.SpeedGroColor),
+                new LegendEntry(translations.Get("maps.crop-fertilizer.delux-speed-gro"), this.DeluxeSpeedGroColor)
             };
         }
 
