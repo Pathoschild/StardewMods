@@ -16,6 +16,9 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</summary>
         public bool CombineOverlappingBorders { get; set; } = true;
 
+        /// <summary>The data maps to enable.</summary>
+        public EnabledMaps EnableMaps { get; set; } = new EnabledMaps();
+
 
         /*********
         ** Nested models
@@ -34,6 +37,31 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             /// <summary>The control which cycles foreward through data maps.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
             public SButton[] NextMap { get; set; } = { SButton.RightControl, SButton.RightShoulder };
+        }
+
+        /// <summary>A set of data maps to enable.</summary>
+        internal class EnabledMaps
+        {
+            /// <summary>Whether to enable the accessibility map.</summary>
+            public bool Accessibility { get; set; } = true;
+
+            /// <summary>Whether to enable the bee house map.</summary>
+            public bool BeeHouses { get; set; } = true;
+
+            /// <summary>Whether to enable the fertilizer map.</summary>
+            public bool Fertilizer { get; set; } = true;
+
+            /// <summary>Whether to enable the Junimo hut map.</summary>
+            public bool JunimoHuts { get; set; } = true;
+
+            /// <summary>Whether to enable the crop water map.</summary>
+            public bool NeedsWater { get; set; } = true;
+
+            /// <summary>Whether to enable the scarecrow map.</summary>
+            public bool Scarecrow { get; set; } = true;
+
+            /// <summary>Whether to enable the sprinkler map.</summary>
+            public bool Sprinklers { get; set; } = true;
         }
     }
 }

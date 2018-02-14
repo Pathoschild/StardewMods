@@ -18,5 +18,16 @@
 
   "maps.sprinklers.name": "Sprinklers",
   "maps.sprinklers.covered": "Covered",
-  "maps.sprinklers.dry-crops": "Dry Crops"
+  "maps.sprinklers.dry-crops": "Dry Crops",
+
+  "maps.needs-watering.name": "Needs Watering",
+  "maps.needs-watering.dry-crops": "Dry Crop",
+
+  "maps.fertilizer.name": "Fertilized Soil",
+  "maps.fertilizer.basic-fertilizer": "Basic Fertilizer",
+  "maps.fertilizer.quality-fertilizer": "Quality Fertilizer",
+  "maps.fertilizer.basic-retaining-soil": "Basic Retaining Soil",
+  "maps.fertilizer.quality-retaining-soil": "Quality Retaining Soil",
+  "maps.fertilizer.speed-gro": "Speed-Gro",
+  "maps.fertilizer.delux-speed-gro": "Delux Speed-Gro"
 }

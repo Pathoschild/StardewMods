@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.BetterSprinklers;
@@ -66,14 +67,32 @@ namespace Pathoschild.Stardew.DataMaps
             var cobalt = new CobaltIntegration(helper.ModRegistry, this.Monitor);
             var simpleSprinklers = new SimpleSprinklerIntegration(helper.ModRegistry, this.Monitor);
 
-            this.Maps = new IDataMap[]
-            {
-                new AccessibilityMap(helper.Translation),
-                new BeeHouseMap(helper.Translation),
-                new ScarecrowMap(helper.Translation),
-                new SprinklerMap(helper.Translation, betterSprinklers, cobalt, simpleSprinklers),
-                new JunimoHutMap(helper.Translation, this.PelicanFiber)
-            };
+            this.Maps = this.GetDataMaps(this.Config, this.Helper.Translation, this.PelicanFiber, betterSprinklers, cobalt, simpleSprinklers).ToArray();
+        }
+
+        /// <summary>Get the enabled data maps.</summary>
+        /// <param name="config">The mod configuration.</param>
+        /// <param name="translation">Provides translations for the mod.</param>
+        /// <param name="pelicanFiber">Handles access to the Pelican Fiber mod.</param>
+        /// <param name="betterSprinklers">Handles access to the Better Sprinklers mod.</param>
+        /// <param name="cobalt">Handles access to the Cobalt mod.</param>
+        /// <param name="simpleSprinklers">Handles access to the Simple Sprinklers mod.</param>
+        private IEnumerable<IDataMap> GetDataMaps(ModConfig config, ITranslationHelper translation, PelicanFiberIntegration pelicanFiber, BetterSprinklersIntegration betterSprinklers, CobaltIntegration cobalt, SimpleSprinklerIntegration simpleSprinklers)
+        {
+            if (config.EnableMaps.Accessibility)
+                yield return new AccessibilityMap(translation);
+            if (config.EnableMaps.BeeHouses)
+                yield return new BeeHouseMap(translation);
+            if (config.EnableMaps.Scarecrow)
+                yield return new ScarecrowMap(translation);
+            if (config.EnableMaps.Sprinklers)
+                yield return new SprinklerMap(translation, betterSprinklers, cobalt, simpleSprinklers);
+            if (config.EnableMaps.JunimoHuts)
+                yield return new JunimoHutMap(translation, this.PelicanFiber);
+            if (config.EnableMaps.NeedsWater)
+                yield return new NeedsWateringMap(translation);
+            if (config.EnableMaps.Fertilizer)
+                yield return new FertilizerMap(translation);
         }
 
         /// <summary>The method invoked when the player returns to the title screen.</summary>
