@@ -26,13 +26,11 @@
   "maps.sprinklers.dry-crops": "Trocken",
 
   // crops: watered
-  // TODO
   "maps.crop-water.name": "Bewässerung",
   "maps.crop-water.watered": "Gegossen",
   "maps.crop-water.dry": "Trocken",
 
   // crops: fertilized
-  // TODO
   "maps.crop-fertilizer.name": "Düngemitteleinsatz",
   "maps.crop-fertilizer.fertilizer": "Dünger",
   "maps.crop-fertilizer.retaining-soil": "Hydrogel",
