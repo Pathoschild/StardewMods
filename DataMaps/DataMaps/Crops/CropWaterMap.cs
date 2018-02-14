@@ -56,23 +56,25 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Crops
         {
             Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
 
-            // yield watered crops
-            {
-                TileData[] crops = this.GetCropsByStatus(location, visibleTiles, HoeDirt.watered).Select(pos => new TileData(pos, this.WateredColor)).ToArray();
-                yield return new TileGroup(crops, outerBorderColor: this.WateredColor);
-            }
-
-            // yield dry crops
-            {
-                TileData[] crops = this.GetCropsByStatus(location, visibleTiles, HoeDirt.dry).Select(pos => new TileData(pos, this.DryColor)).ToArray();
-                yield return new TileGroup(crops, outerBorderColor: this.DryColor);
-            }
+            yield return this.GetGroup(location, visibleTiles, HoeDirt.watered, this.WateredColor);
+            yield return this.GetGroup(location, visibleTiles, HoeDirt.dry, this.DryColor);
         }
 
 
         /*********
         ** Private methods
         *********/
+        /// <summary>Get a tile group.</summary>
+        /// <param name="location">The current location.</param>
+        /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
+        /// <param name="state">The watered state to match.</param>
+        /// <param name="color">The overlay color.</param>
+        private TileGroup GetGroup(GameLocation location, Vector2[] visibleTiles, int state, Color color)
+        {
+            TileData[] crops = this.GetCropsByStatus(location, visibleTiles, state).Select(pos => new TileData(pos, color)).ToArray();
+            return new TileGroup(crops, outerBorderColor: color);
+        }
+
         /// <summary>Get tiles containing crops not covered by a sprinkler.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleTiles">The tiles currently visible on the screen.</param>

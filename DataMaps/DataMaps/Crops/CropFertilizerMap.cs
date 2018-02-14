@@ -16,26 +16,14 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Crops
         /*********
         ** Properties
         *********/
-        /// <summary>The color for basic fertilizer.</summary>
-        private readonly Color BasicFertilizerColor = Color.DarkOrange;
+        /// <summary>The color for fertilizer.</summary>
+        private readonly Color FertilizerColor = Color.Green;
 
-        /// <summary>The color for Quality Fertilizer.</summary>
-        private readonly Color QualityFertilizerColor = Color.Brown;
+        /// <summary>The color for retaining soil.</summary>
+        private readonly Color RetainingSoilColor = Color.Blue;
 
-        /// <summary>The color for Basic Retaining Soil.</summary>
-        private readonly Color BasicRetainingSoilColor = Color.DarkBlue;
-
-        /// <summary>The color for Quality Retaining Soil.</summary>
-        private readonly Color QualityRetainingSoilColor = Color.Blue;
-
-        /// <summary>The color for SpeedGro.</summary>
-        private readonly Color SpeedGroColor = Color.MediumPurple;
-
-        /// <summary>The color for DeluxeSpeedGro.</summary>
-        private readonly Color DeluxeSpeedGroColor = Color.DeepPink;
-
-        /// <summary>The color for DeluxeSpeedGro.</summary>
-        private readonly Color ModedFertilizerColor = Color.Green;
+        /// <summary>The color for speed-gro.</summary>
+        private readonly Color SpeedGroColor = Color.Magenta;
 
         /// <summary>The legend entries to display.</summary>
         public LegendEntry[] Legend { get; }
@@ -58,12 +46,9 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Crops
             this.Name = translations.Get("maps.crop-fertilizer.name");
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("maps.crop-fertilizer.basic-fertilizer"), this.BasicFertilizerColor),
-                new LegendEntry(translations.Get("maps.crop-fertilizer.quality-fertilizer"), this.QualityFertilizerColor),
-                new LegendEntry(translations.Get("maps.crop-fertilizer.basic-retaining-soil"), this.BasicRetainingSoilColor),
-                new LegendEntry(translations.Get("maps.crop-fertilizer.quality-retaining-soil"), this.QualityRetainingSoilColor),
-                new LegendEntry(translations.Get("maps.crop-fertilizer.speed-gro"), this.SpeedGroColor),
-                new LegendEntry(translations.Get("maps.crop-fertilizer.delux-speed-gro"), this.DeluxeSpeedGroColor)
+                new LegendEntry(translations.Get("maps.crop-fertilizer.fertilizer"), this.FertilizerColor),
+                new LegendEntry(translations.Get("maps.crop-fertilizer.retaining-soil"), this.RetainingSoilColor),
+                new LegendEntry(translations.Get("maps.crop-fertilizer.speed-gro"), this.SpeedGroColor)
             };
         }
 
@@ -73,73 +58,38 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Crops
         /// <param name="cursorTile">The tile position under the cursor.</param>
         public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
         {
-            TileData[] tiles = this.GetFertilizedSoil(location, visibleArea.GetTiles()).ToArray();
+            Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
 
-            //fertilized crops
-            yield return new TileGroup(tiles.ToArray());
+            yield return this.GetGroup(location, visibleTiles, this.FertilizerColor, HoeDirt.fertilizerLowQuality, HoeDirt.fertilizerHighQuality);
+            yield return this.GetGroup(location, visibleTiles, this.SpeedGroColor, HoeDirt.speedGro, HoeDirt.superSpeedGro);
+            yield return this.GetGroup(location, visibleTiles, this.RetainingSoilColor, HoeDirt.waterRetentionSoil, HoeDirt.waterRetentionSoilQUality);
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>Get titles with fertilizers.</summary>
+        /// <summary>Get a tile group.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
-        private IEnumerable<TileData> GetFertilizedSoil(GameLocation location, IEnumerable<Vector2> visibleTiles)
+        /// <param name="color">The overlay color.</param>
+        /// <param name="states">The fertilizer states to match.</param>
+        private TileGroup GetGroup(GameLocation location, Vector2[] visibleTiles, Color color, params int[] states)
+        {
+            TileData[] crops = this.GetSoilByState(location, visibleTiles, states).Select(pos => new TileData(pos, color)).ToArray();
+            return new TileGroup(crops, outerBorderColor: color);
+        }
+
+        /// <summary>Get tiles with the given fertilizer states.</summary>
+        /// <param name="location">The current location.</param>
+        /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
+        /// <param name="states">The fertilizer states to match.</param>
+        private IEnumerable<Vector2> GetSoilByState(GameLocation location, IEnumerable<Vector2> visibleTiles, int[] states)
         {
             foreach (Vector2 tile in visibleTiles)
             {
-                if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrain))
-                {
-                    if (terrain is HoeDirt dirt)
-                    {
-                        Color color;
-                        switch (dirt.fertilizer)
-                        {
-                            // basic fertilizer
-                            case 368:
-                                color = this.BasicFertilizerColor;
-                                break;
-
-                            // quality fertilizer
-                            case 369:
-                                color = this.QualityFertilizerColor;
-                                break;
-
-                            // basic retaining soil
-                            case 370:
-                                color = this.BasicRetainingSoilColor;
-                                break;
-
-                            // quality retaining soil
-                            case 371:
-                                color = this.QualityRetainingSoilColor;
-                                break;
-
-                            // speed-gro
-                            case 465:
-                                color = this.SpeedGroColor;
-                                break;
-
-                            // deluxe speed-gro
-                            case 466:
-                                color = this.DeluxeSpeedGroColor;
-                                break;
-
-                            //no fertilizer, skip the loop
-                            case 0:
-                                continue;
-
-                            // modded fertilizer?
-                            default:
-                                color = this.ModedFertilizerColor;
-                                break;
-                        }
-                        // yield
-                        yield return new TileData(tile, color);
-                    }
-                }
+                if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrain) && terrain is HoeDirt dirt && states.Contains(dirt.fertilizer))
+                    yield return tile;
             }
         }
     }

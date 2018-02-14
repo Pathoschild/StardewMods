@@ -33,11 +33,8 @@
 
   // crops: fertilized
   // TODO
-  "maps.crop-fertilizer.name": "Crops: Fertilizer",
-  "maps.crop-fertilizer.basic-fertilizer": "Basic Fertilizer",
-  "maps.crop-fertilizer.quality-fertilizer": "Quality Fertilizer",
-  "maps.crop-fertilizer.basic-retaining-soil": "Basic Retaining Soil",
-  "maps.crop-fertilizer.quality-retaining-soil": "Quality Retaining Soil",
-  "maps.crop-fertilizer.speed-gro": "Speed-Gro",
-  "maps.crop-fertilizer.delux-speed-gro": "Delux Speed-Gro"
+  "maps.crop-fertilizer.name": "Crops: Fertilized",
+  "maps.crop-fertilizer.fertilizer": "Fertilizer",
+  "maps.crop-fertilizer.retaining-soil": "Retaining Soil",
+  "maps.crop-fertilizer.speed-gro": "Speed-Gro"
 }
