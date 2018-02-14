@@ -7,34 +7,32 @@
   "maps.accessibility.warp": "传送点",
 
   // coverage: bee houses
-  "maps.bee-houses.name": "蜂房", // TODO: "Coverage: Bee Houses"
+  "maps.bee-houses.name": "覆盖范围：蜂房",
   "maps.bee-houses.range": "鲜花范围",
 
   // coverage: Junimo huts
-  "maps.junimo-huts.name": "祝尼魔小屋", // TODO: "Coverage: Junimo Huts"
+  "maps.junimo-huts.name": "覆盖范围：祝尼魔小屋",
   "maps.junimo-huts.can-harvest": "可自动收获",
   "maps.junimo-huts.cannot-harvest": "无法自动收获",
 
   // coverage: scarecrows
-  "maps.scarecrows.name": "稻草人",  // TODO: "Coverage: Scarecrows"
+  "maps.scarecrows.name": "覆盖范围：稻草人",
   "maps.scarecrows.protected": "受保护",
   "maps.scarecrows.exposed": "未收保护",
 
   // coverage: sprinklers
-  "maps.sprinklers.name": "洒水器",  // TODO: "Coverage: Sprinklers"
+  "maps.sprinklers.name": "覆盖范围：洒水器",
   "maps.sprinklers.covered": "已覆盖",
   "maps.sprinklers.dry-crops": "作物干燥",
 
   // crops: watered
-  // TODO
-  "maps.crop-water.name": "Crops: Water",
-  "maps.crop-water.watered": "Watered Crop",
-  "maps.crop-water.dry": "Dry Crop",
+  "maps.crop-water.name": "作物：浇水",
+  "maps.crop-water.watered": "已浇水",
+  "maps.crop-water.dry": "未浇水",
 
   // crops: fertilized
-  // TODO
-  "maps.crop-fertilizer.name": "Crops: Fertilized",
-  "maps.crop-fertilizer.fertilizer": "Fertilizer",
-  "maps.crop-fertilizer.retaining-soil": "Retaining Soil",
-  "maps.crop-fertilizer.speed-gro": "Speed-Gro"
+  "maps.crop-fertilizer.name": "作物：施肥",
+  "maps.crop-fertilizer.fertilizer": "肥料",
+  "maps.crop-fertilizer.retaining-soil": "保湿土壤",
+  "maps.crop-fertilizer.speed-gro": "生长激素"
 }

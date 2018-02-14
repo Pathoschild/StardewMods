@@ -56,7 +56,7 @@ use the right translations.
 
 &nbsp;     | Chests Anywhere                          | Data Maps                          | Debug Mode                     | Lookup Anything                          | Tractor Mod
 ---------- | :--------------------------------------- | :--------------------------------- | :----------------------------- | :--------------------------------------- | :------------------------------
-Chinese    | [✓](ChestsAnywhere/i18n/zh.json)        | ↻ [partial](DataMaps/i18n/zh.json) | [✓](DebugMode/i18n/zh.json)   | [✓](LookupAnything/i18n/zh.json)        | [✓](TractorMod/i18n/zh.json)
+Chinese    | [✓](ChestsAnywhere/i18n/zh.json)        | [✓](DataMaps/i18n/zh.json)        | [✓](DebugMode/i18n/zh.json)   | [✓](LookupAnything/i18n/zh.json)        | [✓](TractorMod/i18n/zh.json)
 German     | [✓](ChestsAnywhere/i18n/de.json)        | ↻ [partial](DataMaps/i18n/de.json) | [✓](DebugMode/i18n/de.json)   | [✓](LookupAnything/i18n/de.json)        | [✓](TractorMod/i18n/de.json)
 Japanese   | ❑ _none_                                | ❑ _none_                          | ❑ _none_                      | ❑ _none_                                | ❑ _none_
 Portuguese | [✓](ChestsAnywhere/i18n/pt.json)        | ❑ _none_                          | [✓](DebugMode/i18n/pt.json)   | ↻ [partial](LookupAnything/i18n/pt.json) | [✓](TractorMod/i18n/pt.json)
