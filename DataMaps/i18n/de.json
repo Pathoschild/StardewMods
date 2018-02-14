@@ -7,34 +7,34 @@
   "maps.accessibility.warp": "Warp",
 
   // coverage: bee houses
-  "maps.bee-houses.name": "Bienenhäuser", // TODO: "Coverage: Bee Houses"
+  "maps.bee-houses.name": "Abdeckung: Bienenhäuser",
   "maps.bee-houses.range": "Blumenreichweite",
 
   // coverage: Junimo huts
-  "maps.junimo-huts.name": "Junimo-Hütten", // TODO: "Coverage: Junimo Huts"
+  "maps.junimo-huts.name": "Abdeckung: Junimo-Hütten",
   "maps.junimo-huts.can-harvest": "Abbaubar",
   "maps.junimo-huts.cannot-harvest": "Nicht abbaubar",
 
   // coverage: scarecrows
-  "maps.scarecrows.name": "Vogelscheuche", // TODO: "Coverage: Scarecrows"
+  "maps.scarecrows.name": "Abdeckung: Vogelscheuchen",
   "maps.scarecrows.protected": "Geschützt",
   "maps.scarecrows.exposed": "Exponiert",
 
   // coverage: sprinklers
-  "maps.sprinklers.name": "Sprenkler", // TODO: "Coverage: Sprinklers"
+  "maps.sprinklers.name": "Abdeckung: Sprenkler",
   "maps.sprinklers.covered": "Bewässert",
   "maps.sprinklers.dry-crops": "Trocken",
 
   // crops: watered
   // TODO
-  "maps.crop-water.name": "Crops: Water",
-  "maps.crop-water.watered": "Watered Crop",
-  "maps.crop-water.dry": "Dry Crop",
+  "maps.crop-water.name": "Bewässerung",
+  "maps.crop-water.watered": "Gegossen",
+  "maps.crop-water.dry": "Trocken",
 
   // crops: fertilized
   // TODO
-  "maps.crop-fertilizer.name": "Crops: Fertilized",
-  "maps.crop-fertilizer.fertilizer": "Fertilizer",
-  "maps.crop-fertilizer.retaining-soil": "Retaining Soil",
-  "maps.crop-fertilizer.speed-gro": "Speed-Gro"
+  "maps.crop-fertilizer.name": "Düngemitteleinsatz",
+  "maps.crop-fertilizer.fertilizer": "Dünger",
+  "maps.crop-fertilizer.retaining-soil": "Hydrogel",
+  "maps.crop-fertilizer.speed-gro": "Geschwind-Wachs"
 }
