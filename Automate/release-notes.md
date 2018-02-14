@@ -5,6 +5,7 @@
 * Updated to SMAPI 2.4.
 * Fixed bee houses in custom locations not using nearby flowers.
 * Fixed Jodi's trash can not being automated.
+* Fixed crab pots not updating sprite when baited automatically.
 
 ## 1.9
 * Updated to SMAPI 2.3.
