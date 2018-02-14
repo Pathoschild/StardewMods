@@ -10,14 +10,14 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /*********
         ** Accessors
         *********/
+        /// <summary>When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</summary>
+        public bool CombineOverlappingBorders { get; set; } = true;
+
         /// <summary>The data maps to enable.</summary>
         public EnabledMaps EnableMaps { get; set; } = new EnabledMaps();
 
         /// <summary>The control bindings.</summary>
         public ModConfigControls Controls { get; set; } = new ModConfigControls();
-
-        /// <summary>When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</summary>
-        public bool CombineOverlappingBorders { get; set; } = true;
 
 
         /*********
@@ -46,22 +46,22 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             public bool Accessibility { get; set; } = true;
 
             /// <summary>Whether to enable the bee house map.</summary>
-            public bool BeeHouses { get; set; } = true;
-
-            /// <summary>Whether to enable the fertilizer map.</summary>
-            public bool Fertilizer { get; set; } = true;
+            public bool CoverageForBeeHouses { get; set; } = true;
 
             /// <summary>Whether to enable the Junimo hut map.</summary>
-            public bool JunimoHuts { get; set; } = true;
-
-            /// <summary>Whether to enable the crop water map.</summary>
-            public bool NeedsWater { get; set; } = true;
+            public bool CoverageForJunimoHuts { get; set; } = true;
 
             /// <summary>Whether to enable the scarecrow map.</summary>
-            public bool Scarecrow { get; set; } = true;
+            public bool CoverageForScarecrows { get; set; } = true;
 
             /// <summary>Whether to enable the sprinkler map.</summary>
-            public bool Sprinklers { get; set; } = true;
+            public bool CoverageForSprinklers { get; set; } = true;
+
+            /// <summary>Whether to enable the fertilizer map.</summary>
+            public bool CropFertilizer { get; set; } = true;
+
+            /// <summary>Whether to enable the crop water map.</summary>
+            public bool CropWater { get; set; } = true;
         }
     }
 }

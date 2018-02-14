@@ -83,17 +83,17 @@ namespace Pathoschild.Stardew.DataMaps
         {
             if (config.EnableMaps.Accessibility)
                 yield return new AccessibilityMap(translation);
-            if (config.EnableMaps.BeeHouses)
+            if (config.EnableMaps.CoverageForBeeHouses)
                 yield return new BeeHouseMap(translation);
-            if (config.EnableMaps.Scarecrow)
+            if (config.EnableMaps.CoverageForScarecrows)
                 yield return new ScarecrowMap(translation);
-            if (config.EnableMaps.Sprinklers)
+            if (config.EnableMaps.CoverageForSprinklers)
                 yield return new SprinklerMap(translation, betterSprinklers, cobalt, simpleSprinklers);
-            if (config.EnableMaps.JunimoHuts)
+            if (config.EnableMaps.CoverageForJunimoHuts)
                 yield return new JunimoHutMap(translation, this.PelicanFiber);
-            if (config.EnableMaps.NeedsWater)
+            if (config.EnableMaps.CropWater)
                 yield return new CropWaterMap(translation);
-            if (config.EnableMaps.Fertilizer)
+            if (config.EnableMaps.CropFertilizer)
                 yield return new CropFertilizerMap(translation);
         }
 
