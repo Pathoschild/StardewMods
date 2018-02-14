@@ -1,6 +1,6 @@
 ﻿{
   // labels shown on the debug screen
-  "label.tile": "tile",
-  "label.map": "map",
-  "label.menu": "menu"
+  "label.tile": "Tile",
+  "label.map": "Karte",
+  "label.menu": "Menü"
 }

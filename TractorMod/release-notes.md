@@ -1,4 +1,14 @@
 # Release notes
+## 4.3
+* Updated to SMAPI 2.4.
+* Added support for grass starters.
+* Added support for any placeable item in `config.json` (e.g. `Mega Bomb`).
+* Changed default summon key to `T`.
+* Fixed summon key working when a menu is open.
+* Fixed seeds and fertiliser being placed under giant crops.
+* Improved tractor and garage sprites. (Thanks to allanbachti!)
+* Improved German translations. (Thanks to Husky110!)
+
 ## 4.2
 * Updated to SMAPI 2.1.
 * Added support for axe clearing weeds (default) and live crops (optional).

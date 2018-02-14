@@ -2,8 +2,8 @@
   // default chest names
   "default-name.chest": "Kiste #{{number}}",
   "default-name.fridge": "Kühlschrank",
-  "default-name.junimo-hut": "Junimo Hütte #{{number}}", // TODO: verify
-  "default-name.shipping-bin": "Shipping bin", // TODO
+  "default-name.junimo-hut": "Junimo-Hütte #{{number}}",
+  "default-name.shipping-bin": "Versandbox",
 
   // edit-chest labels
   "label.location": "Ort",

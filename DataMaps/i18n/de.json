@@ -1,0 +1,38 @@
+{
+  // accessibility
+  "maps.accessibility.name": "Belegung",
+  "maps.accessibility.clear": "Frei",
+  "maps.accessibility.occupied": "Belegt",
+  "maps.accessibility.impassable": "Blockiert",
+  "maps.accessibility.warp": "Warp",
+
+  // coverage: bee houses
+  "maps.bee-houses.name": "Abdeckung: Bienenhäuser",
+  "maps.bee-houses.range": "Blumenreichweite",
+
+  // coverage: Junimo huts
+  "maps.junimo-huts.name": "Abdeckung: Junimo-Hütten",
+  "maps.junimo-huts.can-harvest": "Abbaubar",
+  "maps.junimo-huts.cannot-harvest": "Nicht abbaubar",
+
+  // coverage: scarecrows
+  "maps.scarecrows.name": "Abdeckung: Vogelscheuchen",
+  "maps.scarecrows.protected": "Geschützt",
+  "maps.scarecrows.exposed": "Exponiert",
+
+  // coverage: sprinklers
+  "maps.sprinklers.name": "Abdeckung: Sprenkler",
+  "maps.sprinklers.covered": "Bewässert",
+  "maps.sprinklers.dry-crops": "Trocken",
+
+  // crops: watered
+  "maps.crop-water.name": "Bewässerung",
+  "maps.crop-water.watered": "Gegossen",
+  "maps.crop-water.dry": "Trocken",
+
+  // crops: fertilized
+  "maps.crop-fertilizer.name": "Düngemitteleinsatz",
+  "maps.crop-fertilizer.fertilizer": "Dünger",
+  "maps.crop-fertilizer.retaining-soil": "Hydrogel",
+  "maps.crop-fertilizer.speed-gro": "Geschwind-Wachs"
+}

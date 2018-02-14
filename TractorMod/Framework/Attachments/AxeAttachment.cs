@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -85,18 +84,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // This needs to check if the axe upgrade level is high enough first, to avoid spamming
             // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
             {
-                Rectangle tileArea = this.GetAbsoluteTileArea(tile);
-                ResourceClump stump =
-                    (
-                        from clump in this.GetResourceClumps(location)
-                        where
-                            clump.getBoundingBox(clump.tile).Intersects(tileArea)
-                            && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex)
-                            && tool.upgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex]
-                        select clump
-                    )
-                    .FirstOrDefault();
-                if (stump != null)
+                ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile);
+                if (clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex) && tool.upgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex])
                     this.UseToolOnTile(tool, tile);
             }
 

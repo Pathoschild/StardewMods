@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
@@ -46,7 +46,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
                 yOrigin = boundingBox.Top - npc.sprite.spriteHeight * Game1.pixelZoom + (float)(System.Math.Sin(Game1.currentGameTime.TotalGameTime.Milliseconds / 1000.0 * (2.0 * System.Math.PI)) * 10.0);
             else if (npc is SquidKid squidKid)
             {
-                int yOffset = this.Reflection.GetPrivateValue<int>(squidKid, "yOffset");
+                int yOffset = this.Reflection.GetField<int>(squidKid, "yOffset").GetValue();
                 yOrigin = boundingBox.Bottom - npc.sprite.spriteHeight * Game1.pixelZoom + yOffset;
             }
             else

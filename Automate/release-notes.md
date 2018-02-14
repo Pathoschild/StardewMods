@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.9.1
+* Updated to SMAPI 2.4.
+* Fixed bee houses in custom locations not using nearby flowers.
+* Fixed Jodi's trash can not being automated.
+* Fixed crab pots not updating sprite when baited automatically.
+
 ## 1.9
 * Updated to SMAPI 2.3.
 * Added a predictable order for chests receiving machine output. <small>(Items are now pushed into chests with `output` in the name first, then chests that already have that item type, then any other connected chest.)</small>

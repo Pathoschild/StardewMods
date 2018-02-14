@@ -61,12 +61,12 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             if (!maps.Any())
                 throw new InvalidOperationException("Can't initialise the data maps overlay with no data maps.");
 
-            this.Maps = maps;
+            this.Maps = maps.OrderBy(p => p.Name).ToArray();
             this.DrawOverlay = drawOverlay;
             this.LegendColorSize = (int)Game1.smallFont.MeasureString("X").Y;
-            this.BoxContentWidth = this.GetMaxContentWidth(maps, this.LegendColorSize);
+            this.BoxContentWidth = this.GetMaxContentWidth(this.Maps, this.LegendColorSize);
             this.CombineOverlappingBorders = combineOverlappingBorders;
-            this.SetMap(maps.First());
+            this.SetMap(this.Maps.First());
         }
 
         /// <summary>Switch to the next data map.</summary>

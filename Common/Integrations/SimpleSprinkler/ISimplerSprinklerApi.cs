@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.SimpleSprinkler
+namespace Pathoschild.Stardew.Common.Integrations.SimpleSprinkler
 {
     /// <summary>The API provided by the Simple Sprinkler mod.</summary>
     public interface ISimplerSprinklerApi

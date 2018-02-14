@@ -1,0 +1,38 @@
+{
+  // accessibility
+  "maps.accessibility.name": "能否抵达",
+  "maps.accessibility.clear": "可通过",
+  "maps.accessibility.occupied": "被占用",
+  "maps.accessibility.impassable": "不可通过",
+  "maps.accessibility.warp": "传送点",
+
+  // coverage: bee houses
+  "maps.bee-houses.name": "覆盖范围：蜂房",
+  "maps.bee-houses.range": "鲜花范围",
+
+  // coverage: Junimo huts
+  "maps.junimo-huts.name": "覆盖范围：祝尼魔小屋",
+  "maps.junimo-huts.can-harvest": "可自动收获",
+  "maps.junimo-huts.cannot-harvest": "无法自动收获",
+
+  // coverage: scarecrows
+  "maps.scarecrows.name": "覆盖范围：稻草人",
+  "maps.scarecrows.protected": "受保护",
+  "maps.scarecrows.exposed": "未收保护",
+
+  // coverage: sprinklers
+  "maps.sprinklers.name": "覆盖范围：洒水器",
+  "maps.sprinklers.covered": "已覆盖",
+  "maps.sprinklers.dry-crops": "作物干燥",
+
+  // crops: watered
+  "maps.crop-water.name": "作物：浇水",
+  "maps.crop-water.watered": "已浇水",
+  "maps.crop-water.dry": "未浇水",
+
+  // crops: fertilized
+  "maps.crop-fertilizer.name": "作物：施肥",
+  "maps.crop-fertilizer.fertilizer": "肥料",
+  "maps.crop-fertilizer.retaining-soil": "保湿土壤",
+  "maps.crop-fertilizer.speed-gro": "生长激素"
+}

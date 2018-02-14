@@ -100,7 +100,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         private string GetSpiritLuckMessage()
         {
             TV tv = new TV();
-            return this.Reflection.GetPrivateMethod(tv, "getFortuneForecast").Invoke<string>();
+            return this.Reflection.GetMethod(tv, "getFortuneForecast").Invoke<string>();
         }
     }
 }

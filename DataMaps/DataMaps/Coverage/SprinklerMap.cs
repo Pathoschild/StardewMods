@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.BetterSprinklers;
+using Pathoschild.Stardew.Common.Integrations.Cobalt;
+using Pathoschild.Stardew.Common.Integrations.SimpleSprinkler;
 using Pathoschild.Stardew.DataMaps.Framework;
-using Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers;
-using Pathoschild.Stardew.DataMaps.Framework.Integrations.Cobalt;
-using Pathoschild.Stardew.DataMaps.Framework.Integrations.SimpleSprinkler;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using Object = StardewValley.Object;
 
-namespace Pathoschild.Stardew.DataMaps.DataMaps
+namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
 {
     /// <summary>A data map which shows sprinkler coverage.</summary>
     internal class SprinklerMap : IDataMap
@@ -170,7 +170,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
 
             // Cobalt mod adds new sprinkler
             if (cobalt.IsLoaded)
-                this.StaticTilesBySprinklerID[cobalt.GetSprinklerId()] = cobalt.GetSprinklerTiles().ToArray();
+                tiles[cobalt.GetSprinklerId()] = cobalt.GetSprinklerTiles().ToArray();
 
             // Simple Sprinkler mod adds tiles to default coverage
             if (simpleSprinkler.IsLoaded)

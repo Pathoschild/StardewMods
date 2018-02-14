@@ -147,13 +147,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 case TargetType.Pet:
                     Pet pet = (Pet)npc;
                     yield return new CharacterFriendshipField(this.Translate(L10n.Pet.Love), DataParser.GetFriendshipForPet(Game1.player, pet), this.Text);
-                    yield return new GenericField(this.Translate(L10n.Pet.PettedToday), this.Stringify(this.Reflection.GetPrivateValue<bool>(pet, "wasPetToday")));
+                    yield return new GenericField(this.Translate(L10n.Pet.PettedToday), this.Stringify(this.Reflection.GetField<bool>(pet, "wasPetToday").GetValue()));
                     break;
 
                 case TargetType.Monster:
                     // basic info
                     Monster monster = (Monster)npc;
-                    yield return new GenericField(this.Translate(L10n.Monster.Invincible), this.Translate(L10n.Generic.Seconds, new { count = this.Reflection.GetPrivateValue<int>(monster, "invincibleCountdown") }), hasValue: monster.isInvincible());
+                    yield return new GenericField(this.Translate(L10n.Monster.Invincible), this.Translate(L10n.Generic.Seconds, new { count = this.Reflection.GetField<int>(monster, "invincibleCountdown").GetValue() }), hasValue: monster.isInvincible());
                     yield return new PercentageBarField(this.Translate(L10n.Monster.Health), monster.health, monster.maxHealth, Color.Green, Color.Gray, this.Translate(L10n.Generic.PercentRatio, new { percent = Math.Round((monster.health / (monster.maxHealth * 1f) * 100)), value = monster.health, max = monster.maxHealth }));
                     yield return new ItemDropListField(this.Translate(L10n.Monster.Drops), this.GetMonsterDrops(monster), this.Text, defaultText: this.Translate(L10n.Monster.DropsNothing));
                     yield return new GenericField(this.Translate(L10n.Monster.Experience), this.Stringify(monster.experienceGained));

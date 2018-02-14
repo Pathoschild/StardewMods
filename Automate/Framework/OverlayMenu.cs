@@ -52,16 +52,8 @@ namespace Pathoschild.Stardew.Automate.Framework
             if (!Context.IsPlayerFree)
                 return;
 
-            // get on-screen tiles
-            IEnumerable<Vector2> visibleTiles = TileHelper.GetTiles(
-                x: Game1.viewport.X / Game1.tileSize,
-                y: Game1.viewport.Y / Game1.tileSize,
-                width: (int)(Game1.viewport.Width / (decimal)Game1.tileSize) + 2, // extend off-screen slightly to avoid overlay edges being visible
-                height: (int)(Game1.viewport.Height / (decimal)Game1.tileSize) + 2
-            );
-
             // draw each tile
-            foreach (Vector2 tile in visibleTiles)
+            foreach (Vector2 tile in TileHelper.GetVisibleTiles())
             {
                 // get tile's screen coordinates
                 float screenX = tile.X * Game1.tileSize - Game1.viewport.X;

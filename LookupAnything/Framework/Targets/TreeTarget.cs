@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewModdingAPI;
@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             WildTreeGrowthStage growth = (WildTreeGrowthStage)tree.growthStage;
 
             // get sprite data
-            Texture2D spriteSheet = this.Reflection.GetPrivateValue<Texture2D>(tree, "texture");
+            Texture2D spriteSheet = this.Reflection.GetField<Texture2D>(tree, "texture").GetValue();
             SpriteEffects spriteEffects = tree.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             // check tree sprite

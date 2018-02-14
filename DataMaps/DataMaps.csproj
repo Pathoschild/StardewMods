@@ -36,22 +36,15 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataMaps\JunimoHutMap.cs" />
-    <Compile Include="DataMaps\BeeHouseMap.cs" />
-    <Compile Include="DataMaps\ScarecrowMap.cs" />
-    <Compile Include="DataMaps\SprinklerMap.cs" />
+    <Compile Include="DataMaps\Coverage\JunimoHutMap.cs" />
+    <Compile Include="DataMaps\Coverage\BeeHouseMap.cs" />
+    <Compile Include="DataMaps\Crops\CropFertilizerMap.cs" />
+    <Compile Include="DataMaps\Coverage\ScarecrowMap.cs" />
+    <Compile Include="DataMaps\Crops\CropWaterMap.cs" />
+    <Compile Include="DataMaps\Coverage\SprinklerMap.cs" />
     <Compile Include="DataMaps\AccessibilityMap.cs" />
     <Compile Include="Framework\DataMapOverlay.cs" />
     <Compile Include="Framework\IDataMap.cs" />
-    <Compile Include="Framework\Integrations\BaseIntegration.cs" />
-    <Compile Include="Framework\Integrations\SimpleSprinkler\SimpleSprinklerIntegration.cs" />
-    <Compile Include="Framework\Integrations\SimpleSprinkler\ISimplerSprinklerApi.cs" />
-    <Compile Include="Framework\Integrations\BetterSprinklers\BetterSprinklersIntegration.cs" />
-    <Compile Include="Framework\Integrations\BetterSprinklers\IBetterSprinklersApi.cs" />
-    <Compile Include="Framework\Integrations\Cobalt\CobaltIntegration.cs" />
-    <Compile Include="Framework\Integrations\Cobalt\ICobaltApi.cs" />
-    <Compile Include="Framework\Integrations\IModIntegration.cs" />
-    <Compile Include="Framework\Integrations\PelicanFiber\PelicanFiberIntegration.cs" />
     <Compile Include="Framework\LegendEntry.cs" />
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\Sprites.cs" />
@@ -63,6 +56,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="i18n\de.json" />
+    <None Include="i18n\zh.json" />
     <None Include="i18n\default.json" />
     <None Include="manifest.json" />
     <None Include="packages.config" />
@@ -78,11 +73,11 @@
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\deploy-mod.targets" />
-  <Import Project="..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.1\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.1\build\Pathoschild.Stardew.ModBuildConfig.targets')" />
+  <Import Project="..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.2\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.2\build\Pathoschild.Stardew.ModBuildConfig.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.1\build\Pathoschild.Stardew.ModBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.1\build\Pathoschild.Stardew.ModBuildConfig.targets'))" />
+    <Error Condition="!Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.2\build\Pathoschild.Stardew.ModBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.2\build\Pathoschild.Stardew.ModBuildConfig.targets'))" />
   </Target>
 </Project>

@@ -8,7 +8,7 @@ using SFarmer = StardewValley.Farmer;
 namespace Pathoschild.Stardew.TheLongNight
 {
     /// <summary>The mod entry point.</summary>
-    internal class ModEntry : Mod
+    internal class ModEntry : Mod, IAssetEditor
     {
         /*********
         ** Accessors
@@ -25,6 +25,28 @@ namespace Pathoschild.Stardew.TheLongNight
         public override void Entry(IModHelper helper)
         {
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+        }
+
+        /// <summary>Get whether this instance can edit the given asset.</summary>
+        /// <param name="asset">Basic metadata about the asset being loaded.</param>
+        public bool CanEdit<T>(IAssetInfo asset)
+        {
+            return asset.AssetNameEquals("Data/Fish.xnb");
+        }
+
+        /// <summary>Edit a matched asset.</summary>
+        /// <param name="asset">A helper which encapsulates metadata about an asset and enables changes to it.</param>
+        public void Edit<T>(IAssetData asset)
+        {
+            // unlock any in-season fish after 2am
+            asset
+                .AsDictionary<int, string>()
+                .Set((key, value) =>
+                {
+                    string[] fields = value.Split('/');
+                    fields[5] = $"{fields[5]} 2600 {int.MaxValue}".Trim();
+                    return string.Join("/", fields);
+                });
         }
 
 

@@ -92,7 +92,7 @@ namespace Pathoschild.Stardew.SkipIntro
             // skip button transition
             if (!this.Config.SkipToLoadScreen)
             {
-                while (this.Helper.Reflection.GetPrivateValue<int>(menu, "buttonsToShow") < TitleMenu.numberOfButtons)
+                while (this.Helper.Reflection.GetField<int>(menu, "buttonsToShow").GetValue() < TitleMenu.numberOfButtons)
                     menu.update(Game1.currentGameTime);
             }
 

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 {
@@ -325,6 +325,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>{{quality}} in {{count}} days ({{date}})</c>.</summary>
             public const string CaskScheduleInXDays = "item.cask-schedule.in-x-days";
+
+            /// <summary>A value like <c>has {{name}}</c>.</summary>
+            public const string ContentsPlaced = "item.contents.placed";
 
             /// <summary>A value like <c>{{name}} ready</c>.</summary>
             public const string ContentsReady = "item.contents.ready";

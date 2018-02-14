@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace Pathoschild.Stardew.DataMaps.Framework.Integrations.BetterSprinklers
+namespace Pathoschild.Stardew.Common.Integrations.BetterSprinklers
 {
     /// <summary>The API provided by the Better Sprinklers mod.</summary>
     public interface IBetterSprinklersApi

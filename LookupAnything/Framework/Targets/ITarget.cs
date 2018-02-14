@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 {
@@ -22,7 +22,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         ** Public methods
         *********/
         /// <summary>Get the target's tile position, or throw an exception if it doesn't have one.</summary>
-        /// <exception cref="InvalidOperationException">The target doesn't have a tile position.</exception>
+        /// <exception cref="System.InvalidOperationException">The target doesn't have a tile position.</exception>
         Vector2 GetTile();
 
         /// <summary>Get whether the object is at the specified map tile position.</summary>

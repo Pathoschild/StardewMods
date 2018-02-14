@@ -28,8 +28,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Whether to use the experimental feature which lets the tractor pass through trellis crops.</summary>
         public bool PassThroughTrellisCrops { get; set; }
 
-        /// <summary>The custom tools to allow. These must match the exact in-game tool names.</summary>
-        public string[] CustomTools { get; set; } = new string[0];
+        /// <summary>The custom tools or items to allow. These must match the exact internal tool/item names (not the display names).</summary>
+        public string[] CustomAttachments { get; set; } = new string[0];
 
         /// <summary>The number of tiles on each side of the tractor to affect (in addition to the tile under it).</summary>
         public int Distance { get; set; } = 1;
@@ -61,7 +61,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             /// <summary>The control which toggles the chest UI.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
-            public SButton[] SummonTractor { get; set; } = { SButton.B };
+            public SButton[] SummonTractor { get; set; } = { SButton.T };
 
             /// <summary>A button which activates the tractor when held, or none to activate automatically.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]

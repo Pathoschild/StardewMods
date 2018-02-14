@@ -10,7 +10,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A crab pot that accepts input and provides output.</summary>
-    /// <remarks>See the game's machine logic in <see cref="CrabPot.DayUpdate"/>.</remarks>
+    /// <remarks>See the game's machine logic in <see cref="CrabPot.DayUpdate"/> and <see cref="CrabPot.performObjectDropInAction"/>.</remarks>
     internal class CrabPotMachine : GenericMachine<CrabPot>
     {
         /*********
@@ -62,6 +62,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             if (input.TryGetIngredient(SObject.baitCategory, 1, out IConsumable bait))
             {
                 this.Machine.bait = (SObject)bait.Take();
+                this.Reflection.GetField<bool>(this.Machine, "lidFlapping").SetValue(true);
+                this.Reflection.GetField<float>(this.Machine, "lidFlapTimer").SetValue(60);
                 return true;
             }
 

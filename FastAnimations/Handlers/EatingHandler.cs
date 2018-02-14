@@ -57,7 +57,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
             {
                 if (this.DisableConfirmation)
                 {
-                    Response yes = this.Reflection.GetPrivateValue<List<Response>>(eatMenu, "responses")[0];
+                    Response yes = this.Reflection.GetField<List<Response>>(eatMenu, "responses").GetValue()[0];
                     Game1.currentLocation.answerDialogue(yes);
                     eatMenu.closeDialogue();
                 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewModdingAPI;
@@ -47,7 +47,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             : this(
                 key: recipe.name,
                 displayType: translations.Get(recipe.isCookingRecipe ? L10n.RecipeTypes.Cooking : L10n.RecipeTypes.Crafting),
-                ingredients: reflectionHelper.GetPrivateField<Dictionary<int, int>>(recipe, "recipeList").GetValue(),
+                ingredients: reflectionHelper.GetField<Dictionary<int, int>>(recipe, "recipeList").GetValue(),
                 item: item => recipe.createItem(),
                 mustBeLearned: true
             )

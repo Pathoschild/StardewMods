@@ -88,5 +88,20 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 return woods.stumps;
             return new ResourceClump[0];
         }
+
+        /// <summary>Get the resource clump which covers a given tile, if any.</summary>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile to check.</param>
+        protected ResourceClump GetResourceClumpCoveringTile(GameLocation location, Vector2 tile)
+        {
+            Rectangle tileArea = this.GetAbsoluteTileArea(tile);
+            foreach (ResourceClump clump in this.GetResourceClumps(location))
+            {
+                if (clump.getBoundingBox(clump.tile).Intersects(tileArea))
+                    return clump;
+            }
+
+            return null;
+        }
     }
 }

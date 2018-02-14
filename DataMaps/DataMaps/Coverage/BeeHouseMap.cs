@@ -7,7 +7,7 @@ using StardewModdingAPI;
 using StardewValley;
 using Object = StardewValley.Object;
 
-namespace Pathoschild.Stardew.DataMaps.DataMaps
+namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
 {
     /// <summary>A data map which shows bee house coverage.</summary>
     internal class BeeHouseMap : IDataMap

@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.PelicanFiber;
 using Pathoschild.Stardew.DataMaps.Framework;
-using Pathoschild.Stardew.DataMaps.Framework.Integrations.PelicanFiber;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
@@ -11,7 +11,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.TerrainFeatures;
 
-namespace Pathoschild.Stardew.DataMaps.DataMaps
+namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
 {
     /// <summary>A data map which shows Junimo hut coverage.</summary>
     internal class JunimoHutMap : IDataMap

@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             this.Monitor = monitor;
 
             // generate warning text
-            this.WarningText = $"Debug info enabled; press {string.Join(" or ", config.Controls)} to disable.";
+            this.WarningText = $"Debug info enabled; press {string.Join(" or ", config.Controls.ToggleDebug)} to disable.";
         }
 
         /// <summary>Draw debug metadata to the screen.</summary>

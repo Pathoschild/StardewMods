@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
@@ -77,7 +77,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="crop">The crop.</param>
         private Rectangle GetSourceRectangle(Crop crop)
         {
-            return this.Reflection.GetPrivateMethod(crop, "getSourceRect").Invoke<Rectangle>(crop.rowInSpriteSheet);
+            return this.Reflection.GetMethod(crop, "getSourceRect").Invoke<Rectangle>(crop.rowInSpriteSheet);
         }
     }
 }
