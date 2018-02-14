@@ -12,8 +12,8 @@
 
   // coverage: Junimo huts
   "maps.junimo-huts.name": "Abdeckung: Junimo-Hütten",
-  "maps.junimo-huts.can-harvest": "Erreichbar",
-  "maps.junimo-huts.cannot-harvest": "Nicht erreichbar",
+  "maps.junimo-huts.can-harvest": "Abbaubar",
+  "maps.junimo-huts.cannot-harvest": "Nicht abbaubar",
 
   // coverage: scarecrows
   "maps.scarecrows.name": "Abdeckung: Vogelscheuchen",
