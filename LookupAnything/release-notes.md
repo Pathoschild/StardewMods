@@ -1,10 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.17.1
+## 1.18
 * Updated to SMAPI 2.4.
-* Added support for custom machines and objects from Custom Farming Redux 2.3.6+.
 * Added support for furniture.
+* Added support for custom machines and objects from Custom Farming Redux 2.3.6+.
 * Fixed debug key working when a menu is open.
 * Fixed typo in debug interface.
 * Improved Chinese and German translations. (Thanks to yuwenlan and Husky110!)

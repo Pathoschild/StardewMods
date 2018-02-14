@@ -1,10 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.4.1
+## 1.5
 * Updated to SMAPI 2.4.
 * Added support for casino slots.
-* Improved fast tree falling performance.
+* Fixed performance issue when fast tree falling is enabled.
 
 ## 1.4
 * Updated to SMAPI 2.1.

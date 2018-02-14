@@ -1,7 +1,8 @@
 # Release notes
-## 1.2.1
-* Added crops watered & fertilized maps.
-* Added options to hide individual maps.
+## 1.3
+* Updated to SMAPI 2.4.
+* Added _crops: fertilized_ and _crops: watered_ maps. (Thanks to irecinius!)
+* Added support for hiding individual maps in `config.json`.
 * Improved consistency and sorted by name.
 * Fixed error in the Cobalt integration.
 * Added Chinese and German translations. (Thanks to yuwenlan and Husky110!)

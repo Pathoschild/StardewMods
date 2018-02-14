@@ -2,6 +2,7 @@
 
 # Release notes
 ## 1.9.1
+* Updated to SMAPI 2.4.
 * Fixed bee houses in custom locations not using nearby flowers.
 * Fixed Jodi's trash can not being automated.
 

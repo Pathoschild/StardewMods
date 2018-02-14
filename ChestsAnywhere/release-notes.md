@@ -1,12 +1,15 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.12.4
+* Updated to SMAPI 2.4.
+* Improved German translations. (Thanks to Husky110!)
+
 ## 1.12.3
 * Added option to disable remote chest access from certain locations.
 * Fixed shipping bin UI not allowing more than 36 items.
 * Fixed shipping bin UI resetting gamepad cursor position on refresh.
 * Fixed error when the range is set to `None` and a chest is opened directly.
-* Improved German translations. (Thanks to Husky110!)
 
 ## 1.12.2
 * Fixed broken shipping bin UI.

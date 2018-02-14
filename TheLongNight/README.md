@@ -16,7 +16,8 @@ You just stay awake forever and the night never ends (until you go to bed).
 3. Run the game using SMAPI.
 
 ## Use
-The mod is automatic — just stay past 2am, as long as you want.
+The mod is automatic — just stay past 2am, as long as you want. All in-season fish come out after
+2am.
 
 ## Versions
 See [release notes](release-notes.md).

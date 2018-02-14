@@ -1,8 +1,8 @@
 {
   "Name": "The Long Night",
   "Author": "Pathoschild",
-  "Version": "1.0.2",
-  "MinimumApiVersion": "2.1",
+  "Version": "1.1.0",
+  "MinimumApiVersion": "2.4",
   "Description": "Disables collapsing. You just stay awake forever and the night never ends (until you go to bed).",
   "UniqueID": "Pathoschild.TheLongNight",
   "EntryDll": "TheLongNight.dll",
