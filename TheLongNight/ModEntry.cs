@@ -44,6 +44,9 @@ namespace Pathoschild.Stardew.TheLongNight
                 .Set((key, value) =>
                 {
                     string[] fields = value.Split('/');
+                    if (fields[1] == "trap")
+                        return value; // ignore non-fish entries
+
                     fields[5] = $"{fields[5]} 2600 {int.MaxValue}".Trim();
                     return string.Join("/", fields);
                 });
