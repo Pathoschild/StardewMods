@@ -15,6 +15,9 @@ namespace ContentPatcher.Framework
         /// <summary>The asset key to change.</summary>
         public string Target { get; set; }
 
+        /// <summary>The language code to patch (or <c>null</c> for any language).</summary>
+        public string Locale { get; set; }
+
         /// <summary>The local file to load.</summary>
         public string FromFile { get; set; }
 

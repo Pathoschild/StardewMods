@@ -112,6 +112,7 @@ Here are the supported changes:
   ---------- | -------
   `Action`   | The kind of change to make. Must be `Load`.
   `Target`   | The game asset you want to change. This is the filename without the `Content` path, file extension, or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`).
+  `Locale`   | _(optional)_ The language code of the game asset you want to replace. Omit to replace for any language.
   `FromFile` | The relative path to the file in your content pack folder to replace it with (like `assets/dinosaur.png`).
 
 * **Edit an image.**  
@@ -123,6 +124,7 @@ Here are the supported changes:
   ---------- | -------
   `Action`   | The kind of change to make. Must be `EditImage`.
   `Target`   | The game's image asset you want to change. This is the filename without the `Content` path, file extension, or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`).
+  `Locale`   | _(optional)_ The language code of the game asset you want to edit. Omit to edit for any language.
   `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`).
   `FromArea` | _(optional)_ The part of the source image to copy. This is specified as an object with the X and Y coordinates of the top-left corner, and the width and height of the area. For example, `{ "X": 256, "Y": 96, "Width": 16, "Height": 16 }`.
   `ToArea`   | _(optional)_ The part of the target image to replace. This is specified as an object with the X and Y coordinates of the top-left corner, and the width and height of the area. For example, `{ "X": 256, "Y": 96, "Width": 16, "Height": 16 }`.
@@ -135,6 +137,7 @@ Here are the supported changes:
   ---------- | -------
   `Action`   | The kind of change to make. Must be `EditData`.
   `Target`   | The game's data asset you want to change. This is the filename without the `Content` path, file extension, or language (like `Data/ObjectInformation` to edit `Content/Data/ObjectInformation.xnb`).
+  `Locale`   | _(optional)_ The language code of the game asset you want to edit. Omit to edit for any language.
   `Entries`  | _(optional)_ The entries in the data file you want to change. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. See example above.
   `Fields`   | _(optional)_ The individual fields you want to change for existing entries. See example above.
 

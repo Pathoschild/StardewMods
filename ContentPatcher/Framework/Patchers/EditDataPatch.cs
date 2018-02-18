@@ -32,6 +32,10 @@ namespace ContentPatcher.Framework.Patchers
         /// <summary>The normalised asset name to intercept.</summary>
         public string AssetName { get; }
 
+        /// <summary>The language code to patch (or <c>null</c> for any language).</summary>
+        /// <remarks>This is handled by the main logic.</remarks>
+        public string Locale { get; }
+
 
         /*********
         ** Public methods
@@ -39,14 +43,16 @@ namespace ContentPatcher.Framework.Patchers
         /// <summary>Construct an instance.</summary>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
+        /// <param name="locale">The language code to patch (or <c>null</c> for any language).</param>
         /// <param name="records">The data records to edit.</param>
         /// <param name="fields">The data fields to edit.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        public EditDataPatch(IContentPack contentPack, string assetName, IDictionary<string, string> records, IDictionary<string, IDictionary<int, string>> fields, IMonitor monitor)
+        public EditDataPatch(IContentPack contentPack, string assetName, string locale, IDictionary<string, string> records, IDictionary<string, IDictionary<int, string>> fields, IMonitor monitor)
         {
             // init
             this.ContentPack = contentPack;
             this.AssetName = assetName;
+            this.Locale = locale;
             this.Records = records;
             this.Fields = fields;
             this.Monitor = monitor;

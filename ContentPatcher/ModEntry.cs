@@ -17,7 +17,7 @@ namespace ContentPatcher
         private readonly string PatchFileName = "content.json";
 
         /// <summary>The asset loaders indexed by asset name.</summary>
-        private readonly IDictionary<string, LoadPatch> Loaders = new Dictionary<string, LoadPatch>();
+        private readonly IDictionary<string, IList<LoadPatch>> Loaders = new Dictionary<string, IList<LoadPatch>>();
 
         /// <summary>The asset patchers indexed by asset name.</summary>
         private readonly IDictionary<string, IList<IPatch>> Patchers = new Dictionary<string, IList<IPatch>>();
@@ -37,7 +37,9 @@ namespace ContentPatcher
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public bool CanLoad<T>(IAssetInfo asset)
         {
-            return this.Loaders.ContainsKey(asset.AssetName);
+            return
+                this.Loaders.TryGetValue(asset.AssetName, out IList<LoadPatch> loaders)
+                && loaders.Any(p => p.Locale == null || p.Locale.Equals(asset.Locale, StringComparison.InvariantCultureIgnoreCase));
         }
 
         /// <summary>Get whether this instance can edit the given asset.</summary>
@@ -51,10 +53,17 @@ namespace ContentPatcher
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public T Load<T>(IAssetInfo asset)
         {
-            if (!this.Loaders.TryGetValue(asset.AssetName, out LoadPatch patch))
+            if (!this.Loaders.TryGetValue(asset.AssetName, out IList<LoadPatch> loaders))
                 throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because there are no replacements registered for that key.");
 
-            return patch.ContentPack.LoadAsset<T>(patch.LocalAsset);
+            foreach (LoadPatch loader in loaders)
+            {
+                if (loader.Locale != null && !asset.Locale.Equals(loader.Locale, StringComparison.InvariantCultureIgnoreCase))
+                    continue;
+
+                return loader.ContentPack.LoadAsset<T>(loader.LocalAsset);
+            }
+            throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because there are no replacements registered for the selected locale.");
         }
 
         /// <summary>Edit a matched asset.</summary>
@@ -65,7 +74,12 @@ namespace ContentPatcher
                 throw new InvalidOperationException($"Can't edit asset key '{asset.AssetName}' because there are no patches registered for that key.");
 
             foreach (IPatch patch in patches)
+            {
+                if (patch.Locale != null && !asset.Locale.Equals(patch.Locale, StringComparison.InvariantCultureIgnoreCase))
+                    continue;
+
                 patch.Apply<T>(asset);
+            }
         }
 
 
@@ -122,20 +136,52 @@ namespace ContentPatcher
                             continue;
                         }
 
+                        // read locale
+                        string locale = !string.IsNullOrWhiteSpace(entry.Locale)
+                            ? entry.Locale.Trim().ToLower()
+                            : null;
+
                         // parse for type
                         switch (action)
                         {
                             // load asset
                             case "load":
-                                // make sure only one loader is set per file
-                                if (this.Loaders.TryGetValue(assetName, out LoadPatch prevPatch))
                                 {
-                                    LogSkip($"the {assetName} file is already being loaded by {(pack == prevPatch.ContentPack ? "this content pack" : $"the '{prevPatch.ContentPack.Manifest.Name}' content pack")}. Each file can only be loaded once.");
-                                    continue;
-                                }
+                                    // check for conflicting loaders
+                                    if (this.Loaders.TryGetValue(assetName, out IList<LoadPatch> loaders))
+                                    {
+                                        // can't add for all locales if any loaders already registered
+                                        if (locale == null)
+                                        {
+                                            string[] localesLoadedBy = loaders.Select(p => $"{p.ContentPack.Manifest.Name}").ToArray();
+                                            LogSkip($"the {assetName} file is already being loaded by '{string.Join("', '", localesLoadedBy)}'. Each file can only be loaded once.");
+                                            continue;
+                                        }
 
-                                // save
-                                this.Loaders.Add(assetName, new LoadPatch(pack, assetName, localAsset));
+                                        // can't add if already loaded for all locales
+                                        {
+                                            LoadPatch globalPatch = loaders.FirstOrDefault(p => p.Locale == null);
+                                            if (globalPatch != null)
+                                            {
+                                                LogSkip($"the {assetName} file is already being loaded by {(pack == globalPatch.ContentPack ? "this content pack" : $"the '{globalPatch.ContentPack.Manifest.Name}' content pack")}. Each file can only be loaded once.");
+                                                continue;
+                                            }
+                                        }
+
+                                        // can't add if already loaded for selected locale
+                                        {
+                                            LoadPatch localePatch = loaders.FirstOrDefault(p => p.Locale != null && p.Locale.Equals(locale, StringComparison.CurrentCultureIgnoreCase));
+                                            if (localePatch != null)
+                                            {
+                                                LogSkip($"the {assetName} file is already being loaded for the {locale} locale by {(pack == localePatch.ContentPack ? "this content pack" : $"the '{localePatch.ContentPack.Manifest.Name}' content pack")}. Each file can only be loaded once per locale.");
+                                                continue;
+                                            }
+                                        }
+                                    }
+
+                                    // add loader
+                                    this.AddLoaderOrPatcher(this.Loaders, assetName, new LoadPatch(pack, assetName, locale, localAsset));
+                                }
                                 break;
 
                             // edit data
@@ -157,12 +203,12 @@ namespace ContentPatcher
                                 }
 
                                 // save
-                                this.AddPatch(assetName, new EditDataPatch(pack, assetName, entry.Entries, entry.Fields, this.Monitor));
+                                this.AddLoaderOrPatcher(this.Patchers, assetName, new EditDataPatch(pack, assetName, locale, entry.Entries, entry.Fields, this.Monitor));
                                 break;
 
                             // edit image
                             case "editimage":
-                                this.AddPatch(assetName, new EditImagePatch(pack, assetName, localAsset, entry.FromArea, entry.ToArea, this.Monitor));
+                                this.AddLoaderOrPatcher(this.Patchers, assetName, new EditImagePatch(pack, assetName, locale, localAsset, entry.FromArea, entry.ToArea, this.Monitor));
                                 break;
 
                             default:
@@ -178,15 +224,16 @@ namespace ContentPatcher
             }
         }
 
-        /// <summary>Add a patcher to the <see cref="Patchers"/> list.</summary>
+        /// <summary>Add a loader or patcher to the list.</summary>
+        /// <param name="dict">The dictionary to update.</param>
         /// <param name="assetName">The normalised asset name.</param>
         /// <param name="patch">The patcher to apply.</param>
-        private void AddPatch(string assetName, IPatch patch)
+        private void AddLoaderOrPatcher<TPatcher>(IDictionary<string, IList<TPatcher>> dict, string assetName, TPatcher patch)
         {
-            if (this.Patchers.TryGetValue(assetName, out IList<IPatch> list))
+            if (dict.TryGetValue(assetName, out IList<TPatcher> list))
                 list.Add(patch);
             else
-                this.Patchers[assetName] = new List<IPatch> { patch };
+                dict[assetName] = new List<TPatcher> { patch };
         }
     }
 }

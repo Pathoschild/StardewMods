@@ -4,3 +4,4 @@
 ## 1.0
 * Initial release.
 * Added support for replacing assets, editing images, and editing data files.
+* Added support for locale-specific changes.

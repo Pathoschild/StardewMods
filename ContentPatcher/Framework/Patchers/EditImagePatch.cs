@@ -32,6 +32,9 @@ namespace ContentPatcher.Framework.Patchers
         /// <summary>The normalised asset name to intercept.</summary>
         public string AssetName { get; }
 
+        /// <summary>The language code to patch (or <c>null</c> for any language).</summary>
+        /// <remarks>This is handled by the main logic.</remarks>
+        public string Locale { get; }
 
 
         /*********
@@ -40,15 +43,17 @@ namespace ContentPatcher.Framework.Patchers
         /// <summary>Construct an instance.</summary>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
+        /// <param name="locale">The language code to patch (or <c>null</c> for any language).</param>
         /// <param name="fromLocalAsset">The asset key to load from the content pack instead.</param>
         /// <param name="fromArea">The sprite area from which to read an image.</param>
         /// <param name="toArea">The sprite area to overwrite.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        public EditImagePatch(IContentPack contentPack, string assetName, string fromLocalAsset, Rectangle fromArea, Rectangle toArea, IMonitor monitor)
+        public EditImagePatch(IContentPack contentPack, string assetName, string locale, string fromLocalAsset, Rectangle fromArea, Rectangle toArea, IMonitor monitor)
         {
             // init
             this.ContentPack = contentPack;
             this.AssetName = assetName;
+            this.Locale = locale;
             this.FromLocalAsset = fromLocalAsset;
             this.FromArea = fromArea != Rectangle.Empty ? fromArea : null as Rectangle?;
             this.ToArea = toArea != Rectangle.Empty ? toArea : null as Rectangle?;

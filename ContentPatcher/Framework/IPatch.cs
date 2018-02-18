@@ -14,6 +14,9 @@ namespace ContentPatcher.Framework
         /// <summary>The normalised asset name to intercept.</summary>
         string AssetName { get; }
 
+        /// <summary>The language code to patch (or <c>null</c> for any language).</summary>
+        string Locale { get; }
+
 
         /*********
         ** Public methods
