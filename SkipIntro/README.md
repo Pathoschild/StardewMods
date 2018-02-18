@@ -3,7 +3,7 @@ the title screen or load screen (configurable) when you start the game. It also 
 transitions, so starting the game is much faster.
 
 ## Install
-1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
+1. [Install the latest version of SMAPI](https://smapi.io/).
 2. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/533).
 3. Run the game using SMAPI.
 

@@ -10,7 +10,7 @@ automatically pull raw items from the chest and push processed items into it.
 * [See also](#see-also)
 
 ## Installation
-1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
+1. [Install the latest version of SMAPI](https://smapi.io/).
 3. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/1063).
 4. Run the game using SMAPI.
 
