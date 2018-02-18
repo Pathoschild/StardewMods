@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ContentPatcher.Framework;
 using ContentPatcher.Framework.Patchers;
 using StardewModdingAPI;
@@ -135,6 +136,28 @@ namespace ContentPatcher
 
                                 // save
                                 this.Loaders.Add(assetName, new LoadPatch(pack, assetName, localAsset));
+                                break;
+
+                            // edit data
+                            case "editdata":
+                                // validate
+                                if (entry.Entries == null && entry.Fields == null)
+                                {
+                                    LogSkip($"either {nameof(PatchConfig.Entries)} or {nameof(PatchConfig.Fields)} must be specified for a '{action}' change.");
+                                    continue;
+                                }
+                                if (entry.Entries != null && entry.Entries.Any(p => string.IsNullOrWhiteSpace(p.Value)))
+                                {
+                                    LogSkip($"the {nameof(PatchConfig.Entries)} can't contain empty values.");
+                                    continue;
+                                }
+                                if (entry.Fields != null && entry.Fields.Any(p => p.Value == null || p.Value.Any(n => n.Value == null)))
+                                {
+                                    LogSkip($"the {nameof(PatchConfig.Fields)} can't contain empty values.");
+                                }
+
+                                // save
+                                this.AddPatch(assetName, new EditDataPatch(pack, assetName, entry.Entries, entry.Fields, this.Monitor));
                                 break;
 
                             // edit image

@@ -13,6 +13,15 @@ namespace ContentPatcher.Framework.Patchers
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
+        /// <summary>The asset key to load from the content pack instead.</summary>
+        private readonly string FromLocalAsset;
+
+        /// <summary>The sprite area from which to read an image.</summary>
+        private readonly Rectangle? FromArea;
+
+        /// <summary>The sprite area to overwrite.</summary>
+        private readonly Rectangle? ToArea;
+
 
         /*********
         ** Accessors
@@ -22,15 +31,6 @@ namespace ContentPatcher.Framework.Patchers
 
         /// <summary>The normalised asset name to intercept.</summary>
         public string AssetName { get; }
-
-        /// <summary>The asset key to load from the content pack instead.</summary>
-        public string FromLocalAsset { get; }
-
-        /// <summary>The sprite area from which to read an image.</summary>
-        public Rectangle? FromArea { get; }
-
-        /// <summary>The sprite area to overwrite.</summary>
-        public Rectangle? ToArea { get; }
 
 
 

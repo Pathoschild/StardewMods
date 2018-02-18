@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace ContentPatcher.Framework
@@ -22,5 +23,11 @@ namespace ContentPatcher.Framework
 
         /// <summary>The sprite area to overwrite.</summary>
         public Rectangle ToArea { get; set; }
+
+        /// <summary>The data records to edit.</summary>
+        public IDictionary<string, string> Entries { get; set; }
+
+        /// <summary>The individual fields to edit in data records.</summary>
+        public IDictionary<string, IDictionary<int, string>> Fields { get; set; }
     }
 }
