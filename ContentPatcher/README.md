@@ -52,48 +52,51 @@ A content pack consists of a folder with these files:
 * a `content.json` which describes the changes you want to make;
 * and any images or maps you want to use.
 
-The `content.json` file contains a list of changes you want to make. Here's a quick example of each
-possible change (explanations below):
+The `content.json` file contains a format version (just use `1.0`) and a list of changes you want
+to make. Here's a quick example of each possible change (explanations below):
 
 ```js
-[
-   // replace entire file
-   {
-      "Action": "Load",
-      "Target": "Animals/Dinosaur",
-      "FromFile": "assets/dinosaur.png"
-   },
+{
+  "Format": "1.0",
+  "Changes": [
+       // replace entire file
+       {
+          "Action": "Load",
+          "Target": "Animals/Dinosaur",
+          "FromFile": "assets/dinosaur.png"
+       },
 
-   // edit one part of a image
-   {
-      "Action": "EditImage",
-      "Target": "Maps/springobjects",
-      "FromFile": "assets/fish-object.png",
-      "ToArea": { "X": 256, "Y": 96, "Width": 16, "Height": 16 }
-   },
+       // edit one part of a image
+       {
+          "Action": "EditImage",
+          "Target": "Maps/springobjects",
+          "FromFile": "assets/fish-object.png",
+          "ToArea": { "X": 256, "Y": 96, "Width": 16, "Height": 16 }
+       },
 
-   // replace entries in a data file
-   {
-      "Action": "EditData",
-      "Target": "Data/ObjectInformation",
-      "Entries": {
-         70: "Jade/200/-300/Minerals -2/Jade/A pale green ornamental stone.",
-         72: "Diamond/750/-300/Minerals -2/Diamond/A rare and valuable gem."
-      }
-   },
+       // replace entries in a data file
+       {
+          "Action": "EditData",
+          "Target": "Data/ObjectInformation",
+          "Entries": {
+             70: "Jade/200/-300/Minerals -2/Jade/A pale green ornamental stone.",
+             72: "Diamond/750/-300/Minerals -2/Diamond/A rare and valuable gem."
+          }
+       },
 
-   // edit fields for existing entries in a data file (zero-indexed)
-   {
-      "Action": "EditData",
-      "Target": "Data/ObjectInformation",
-      "Fields": {
-         70: {
-            0: "Jade",
-            5: "A pale green ornamental stone."
-         }
-      }
-   }
-]
+       // edit fields for existing entries in a data file (zero-indexed)
+       {
+          "Action": "EditData",
+          "Target": "Data/ObjectInformation",
+          "Fields": {
+             70: {
+                0: "Jade",
+                5: "A pale green ornamental stone."
+             }
+          }
+       }
+    ]
+}
 ```
 
 The file consists of a JSON array (the `[` and `]` at the top and bottom) containing one JSON

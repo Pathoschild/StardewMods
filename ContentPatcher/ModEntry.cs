@@ -92,16 +92,26 @@ namespace ContentPatcher
             foreach (IContentPack pack in this.Helper.GetContentPacks())
             {
                 // read config
-                PatchConfig[] config = pack.ReadJsonFile<PatchConfig[]>(this.PatchFileName);
+                ContentConfig config = pack.ReadJsonFile<ContentConfig>(this.PatchFileName);
                 if (config == null)
                 {
                     this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it has no {this.PatchFileName} file.", LogLevel.Warn);
                     continue;
                 }
+                if (config.Format == null || config.Changes == null)
+                {
+                    this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it doesn't specify the required {nameof(ContentConfig.Format)} or {nameof(ContentConfig.Changes)} fields.", LogLevel.Warn);
+                    continue;
+                }
+                if (config.Format.ToString() != "1.0")
+                {
+                    this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it uses unsupported format {config.Format} (supported version: 1.0).", LogLevel.Warn);
+                    continue;
+                }
 
                 // load patches
                 int i = 0;
-                foreach (PatchConfig entry in config)
+                foreach (PatchConfig entry in config.Changes)
                 {
                     i++;
                     void LogSkip(string reasonPhrase) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > entry #{i}: {reasonPhrase}", LogLevel.Warn);
