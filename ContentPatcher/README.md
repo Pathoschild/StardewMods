@@ -47,17 +47,20 @@ the best option if...
   * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) for custom items.
 
 ### Creating a content pack
+**NOTE:** Content Patcher isn't officially released. Feel free to try migrating XNB mods to this
+format, but you'll need to update them when Content Patcher releases.
+
 A content pack consists of a folder with these files:
 * a `manifest.json` for SMAPI to read (see [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki);
 * a `content.json` which describes the changes you want to make;
 * and any images or maps you want to use.
 
-The `content.json` file contains a format version (just use `1.0`) and a list of changes you want
-to make. Here's a quick example of each possible change (explanations below):
+The `content.json` file contains a format version (`0.1` for the beta) and a list of changes you
+want to make. Here's a quick example of each possible change (explanations below):
 
 ```js
 {
-  "Format": "1.0",
+  "Format": "0.1",
   "Changes": [
        // replace entire file
        {
