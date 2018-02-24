@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework;
 using ContentPatcher.Framework.Patchers;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 
 namespace ContentPatcher
@@ -21,6 +22,9 @@ namespace ContentPatcher
 
         /// <summary>The asset patchers indexed by asset name.</summary>
         private readonly IDictionary<string, IList<IPatch>> Patchers = new Dictionary<string, IList<IPatch>>();
+
+        /// <summary>Handles the logic around loading assets from content packs.</summary>
+        private readonly AssetLoader AssetLoader = new AssetLoader();
 
 
         /*********
@@ -61,7 +65,7 @@ namespace ContentPatcher
                 if (loader.Locale != null && !asset.Locale.Equals(loader.Locale, StringComparison.InvariantCultureIgnoreCase))
                     continue;
 
-                return loader.ContentPack.LoadAsset<T>(loader.LocalAsset);
+                return this.AssetLoader.Load<T>(loader.ContentPack, loader.LocalAsset);
             }
             throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because there are no replacements registered for the selected locale.");
         }
@@ -218,13 +222,17 @@ namespace ContentPatcher
 
                             // edit image
                             case "editimage":
-                                this.AddLoaderOrPatcher(this.Patchers, assetName, new EditImagePatch(pack, assetName, locale, localAsset, entry.FromArea, entry.ToArea, this.Monitor));
+                                this.AddLoaderOrPatcher(this.Patchers, assetName, new EditImagePatch(pack, assetName, locale, localAsset, entry.FromArea, entry.ToArea, this.Monitor, this.AssetLoader));
                                 break;
 
                             default:
                                 LogSkip($"unknown patch type '{action}'.");
                                 break;
                         }
+
+                        // preload PNG assets
+                        if (localAsset != null && localAsset.EndsWith(".png", StringComparison.InvariantCultureIgnoreCase))
+                            this.AssetLoader.PreloadIfNeeded<Texture2D>(pack, localAsset);
                     }
                     catch (Exception ex)
                     {
