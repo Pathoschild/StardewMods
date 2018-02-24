@@ -27,7 +27,7 @@ easy to install      | ✘ different for every mod      | ✓ drop into `Mods`  
 update checks        | ✘ no                           | ✓ via SMAPI            | ✓ via SMAPI
 compatibility checks | ✘ no                           | ✓ automated + SMAPI DB | ✓ SMAPI DB
 safe to update game  | ✘ high impact<br /><small>(any update to edited files breaks mod)</small> | ✓ SMAPI smooths impact        | ✓ reduced impact<br /><small>(only affected by changes to edited portions of file)</small>
-easy to troubleshoot | ✘ no record of changes         | ✓ SMAPI log, compile checks | ✓ SMAPI log, files validates on load
+easy to troubleshoot | ✘ no record of changes         | ✓ SMAPI log, compile checks | ✓ SMAPI log, files validated on load
 
 ### Why not use this?
 If you were going to create an XNB mod, Content Patcher is a much better choice! Otherwise it isn't
@@ -41,26 +41,24 @@ the best option if...
 
   These mods provide higher-level APIs for certain content, which can be easier to learn and may
   support features not possible through pure XNB edits:
+  * [Advanced Location Loader](https://community.playstarbound.com/resources/smapi-advanced-location-loader.3619/) for map edits and custom maps.
   * [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) for custom machines.
   * [Custom Furniture](https://www.nexusmods.com/stardewvalley/mods/1254) for custom furniture.
   * [CustomNPC](https://www.nexusmods.com/stardewvalley/mods/1607) for custom NPCs.
   * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) for custom items.
 
 ### Creating a content pack
-**NOTE:** Content Patcher isn't officially released. Feel free to try migrating XNB mods to this
-format, but you'll need to update them when Content Patcher releases.
-
 A content pack consists of a folder with these files:
 * a `manifest.json` for SMAPI to read (see [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki);
 * a `content.json` which describes the changes you want to make;
-* and any images or maps you want to use.
+* and any images or other files you want to use.
 
-The `content.json` file contains a format version (`0.1` for the beta) and a list of changes you
+The `content.json` file contains a format version (just use `1.0`) and a list of changes you
 want to make. Here's a quick example of each possible change (explanations below):
 
 ```js
 {
-  "Format": "0.1",
+  "Format": "1.0",
   "Changes": [
        // replace entire file
        {
@@ -117,19 +115,19 @@ Here are the supported changes:
   field      | purpose
   ---------- | -------
   `Action`   | The kind of change to make. Must be `Load`.
-  `Target`   | The game asset you want to change. This is the filename without the `Content` path, file extension, or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`).
+  `Target`   | The game asset you want to change. This is the file path without the `Content` part, file extension, or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`).
   `Locale`   | _(optional)_ The language code of the game asset you want to replace. Omit to replace for any language.
-  `FromFile` | The relative path to the file in your content pack folder to replace it with (like `assets/dinosaur.png`).
+  `FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`).
 
 * **Edit an image.**  
   Instead of replacing an entire spritesheet, you can replace just the part you need. For example,
-  you can edit an object image by changing only its sprite in the spritesheet. Any number of
+  you can change an item image by changing only its sprite in the spritesheet. Any number of
   content packs can edit the same file.
 
   field      | purpose
   ---------- | -------
   `Action`   | The kind of change to make. Must be `EditImage`.
-  `Target`   | The game's image asset you want to change. This is the filename without the `Content` path, file extension, or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`).
+  `Target`   | The game asset you want to change. This is the file path without the `Content` part, file extension, or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`).
   `Locale`   | _(optional)_ The language code of the game asset you want to edit. Omit to edit for any language.
   `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`).
   `FromArea` | _(optional)_ The part of the source image to copy. This is specified as an object with the X and Y coordinates of the top-left corner, and the width and height of the area. For example, `{ "X": 256, "Y": 96, "Width": 16, "Height": 16 }`.
@@ -142,7 +140,7 @@ Here are the supported changes:
   field      | purpose
   ---------- | -------
   `Action`   | The kind of change to make. Must be `EditData`.
-  `Target`   | The game's data asset you want to change. This is the filename without the `Content` path, file extension, or language (like `Data/ObjectInformation` to edit `Content/Data/ObjectInformation.xnb`).
+  `Target`   | The game asset you want to change. This is the file path without the `Content` part, file extension, or language (like `Data/ObjectInformation` to edit `Content/Data/ObjectInformation.xnb`).
   `Locale`   | _(optional)_ The language code of the game asset you want to edit. Omit to edit for any language.
   `Entries`  | _(optional)_ The entries in the data file you want to change. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. See example above.
   `Fields`   | _(optional)_ The individual fields you want to change for existing entries. See example above.

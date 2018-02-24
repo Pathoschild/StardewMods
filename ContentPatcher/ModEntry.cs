@@ -107,9 +107,9 @@ namespace ContentPatcher
                     this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it doesn't specify the required {nameof(ContentConfig.Format)} or {nameof(ContentConfig.Changes)} fields.", LogLevel.Warn);
                     continue;
                 }
-                if (config.Format.ToString() != "0.1")
+                if (config.Format.ToString() != "1.0")
                 {
-                    this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it uses unsupported format {config.Format} (supported version: 0.1).", LogLevel.Warn);
+                    this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it uses unsupported format {config.Format} (supported version: 1.0).", LogLevel.Warn);
                     continue;
                 }
 
