@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 
-namespace Pathoschild.Stardew.Common.Integrations.Cobalt
+namespace Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux
 {
     /// <summary>The API provided by the Custom Farming Redux mod.</summary>
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by the Custom Farming Redux mod.")]
