@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 
@@ -19,6 +20,14 @@ namespace ContentPatcher.Framework
         /*********
         ** Public methods
         *********/
+        /// <summary>Get whether the given asset key exists in the content pack files.</summary>
+        /// <param name="contentPack">The content pack.</param>
+        /// <param name="key">The asset key.</param>
+        public bool AssetExists(IContentPack contentPack, string key)
+        {
+            return File.Exists(Path.Combine(contentPack.DirectoryPath, key));
+        }
+
         /// <summary>Preload an asset from the content pack if necessary.</summary>
         /// <typeparam name="T">The asset type.</typeparam>
         /// <param name="contentPack">The content pack.</param>
