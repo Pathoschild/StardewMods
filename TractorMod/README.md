@@ -10,7 +10,7 @@
 * [See also](#see-also)
 
 ## Install
-1. [Install the latest version of SMAPI](https://github.com/Pathoschild/SMAPI/releases).
+1. [Install the latest version of SMAPI](https://smapi.io/).
 2. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/1401).
 3. Run the game using SMAPI.
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LookupAnything", "LookupAnything\LookupAnything.csproj", "{2A9C0811-B2D2-474A-A84C-DDEB16206A62}"
 EndProject
@@ -42,6 +42,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TractorMod", "TractorMod\TractorMod.csproj", "{0510E2AC-EC06-4211-B733-FAF9D3A069EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestContentMod", "TestContentMod\TestContentMod.csproj", "{91F894EE-6D23-49E8-A0AD-E6A976B8AA82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContentPatcher", "ContentPatcher\ContentPatcher.csproj", "{6B9D5445-E45C-431D-A5B8-40556E553F54}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -110,6 +112,10 @@ Global
 		{91F894EE-6D23-49E8-A0AD-E6A976B8AA82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91F894EE-6D23-49E8-A0AD-E6A976B8AA82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91F894EE-6D23-49E8-A0AD-E6A976B8AA82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B9D5445-E45C-431D-A5B8-40556E553F54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B9D5445-E45C-431D-A5B8-40556E553F54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B9D5445-E45C-431D-A5B8-40556E553F54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B9D5445-E45C-431D-A5B8-40556E553F54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

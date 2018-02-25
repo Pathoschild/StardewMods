@@ -1,0 +1,10 @@
+{
+  "Name": "ContentPatcher",
+  "Author": "Pathoschild",
+  "Version": "1.0.0",
+  "MinimumApiVersion": "2.5.2",
+  "Description": "Loads content packs which edit game data and images without changing the game files.",
+  "UniqueID": "Pathoschild.ContentPatcher",
+  "EntryDll": "ContentPatcher.dll",
+  "UpdateKeys": [ "Nexus:1915" ]
+}

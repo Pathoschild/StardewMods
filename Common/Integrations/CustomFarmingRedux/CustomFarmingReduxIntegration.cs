@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.Common.Integrations.Cobalt;
 using StardewModdingAPI;
 using SObject = StardewValley.Object;
 
