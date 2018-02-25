@@ -9,16 +9,18 @@ that change the game's images and data without replacing XNB files.
 
 ## Installation
 1. [Install the latest version of SMAPI](https://smapi.io/).
-2. Install ~~this mod from Nexus mods~~ (not released yet).
+2. Install [this mod from Nexus mods](https://www.nexusmods.com/stardewvalley/mods/1915).
 3. Unzip any Content Patcher content packs into `Mods` to install them.
 4. Run the game using SMAPI.
 
 ## For modders
 ### Why use this?
-There are two main alternatives for changing the game assets: editing XNB files (which have many
-limitations and problems) or creating a SMAPI mod (which requires programming). For any change
-possible by only editing XNB files, content packs for Content Patcher combine the best parts of
-both:
+Content Patcher is one of three main approaches to editing the game assets:
+1. create a SMAPI mod (requires programming);
+2. _or_ create an XNB mod (many limitations and issues);
+3. _or_ create a content pack for Content Patcher.
+
+Content Patcher combines the advantages of SMAPI and XNB mods:
 
 &nbsp;               | XNB mod                         | SMAPI mod               | Content Patcher
 -------------------- | ------------------------------- | ----------------------- | ---------------
@@ -26,21 +28,19 @@ easy to create       | ✘ need to unpack/repack files  | ✘ programming needed
 easy to install      | ✘ different for every mod      | ✓ drop into `Mods`     | ✓ drop into `Mods`
 update checks        | ✘ no                           | ✓ via SMAPI            | ✓ via SMAPI
 compatibility checks | ✘ no                           | ✓ automated + SMAPI DB | ✓ SMAPI DB
+mod compatibility    | ✘ poor<br /><small>(each file can only be changed by one mod)</small> | ✓ almost universal | ✓ pretty good<br /><small>(mods only conflict if they edit the same part of a file)</small>
 safe to update game  | ✘ high impact<br /><small>(any update to edited files breaks mod)</small> | ✓ SMAPI smooths impact        | ✓ reduced impact<br /><small>(only affected by changes to edited portions of file)</small>
 easy to troubleshoot | ✘ no record of changes         | ✓ SMAPI log, compile checks | ✓ SMAPI log, files validated on load
 
-### Why not use this?
-If you were going to create an XNB mod, Content Patcher is a much better choice! Otherwise it isn't
-the best option if...
+In some cases there may be a better option:
 
-* **If you're comfortable programming.** You can create a SMAPI mod and use SMAPI's content API
-  directly.
-* **If there's a higher-level mod available.** Content Patcher supports changes to all XNB files,
-  but it's a low-level API. You'll need to learn how the game files you want to edit are structured,
-  and you can't make changes that aren't possible through XNB edits.
-
-  These mods provide higher-level APIs for certain content, which can be easier to learn and may
-  support features not possible through pure XNB edits:
+* **If you're comfortable programming.**  
+  You can create a SMAPI mod and use SMAPI's content API directly instead.
+* **If there's a higher-level mod available.**  
+  Content Patcher is much better than editing XNB files directly, but you still need to learn how
+  they're structured and you can't make changes that aren't possible through XNB edits. Some mods
+  provide higher-level APIs for specific cases, which can be easier to learn and may support
+  features that aren't possible through pure XNB changes. For example:
   * [Advanced Location Loader](https://community.playstarbound.com/resources/smapi-advanced-location-loader.3619/) for map edits and custom maps.
   * [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) for custom machines.
   * [Custom Furniture](https://www.nexusmods.com/stardewvalley/mods/1254) for custom furniture.
@@ -150,5 +150,5 @@ Here are the supported changes:
 See [release notes](release-notes.md).
 
 ## See also
-* ~~Nexus mod~~ (not released yet)
-* ~~Discussion thread~~
+* [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1915)
+* [Discussion thread](https://community.playstarbound.com/threads/content-patcher.141420/)

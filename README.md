@@ -14,6 +14,11 @@ Active mods:
   _Access your chests from anywhere and organise them your way. Transfer items without having to
   run around, from the comfort of your bed to the deepest mine level._
 
+* **[Content Patcher](https://www.nexusmods.com/stardewvalley/mods/1915)** <small>([source](ContentPatcher))</small>  
+  _Load content packs that change the game's images and data without replacing XNB files. Unlike
+  XNB mods, these content packs get automatic update checks and compatibility checks, are easy to
+  install and uninstall, and are less likely to break due to game updates._
+
 * **[Data Maps](https://www.nexusmods.com/stardewvalley/mods/1691)** <small>([source](DataMaps))</small>  
   _Overlays the world with data maps to show accessibility, sprinkler coverage, etc._
 
@@ -90,8 +95,8 @@ Create an issue or pull request here with your translations, or send them to me 
 Installing stable releases from Nexus Mods is recommended for most users. If you really want to
 compile the mod yourself, read on.
 
-These mods use the [crossplatform build config](https://github.com/Pathoschild/Stardew.ModBuildConfig#readme)
-so they can be built on Linux, Mac, and Windows without changes. See [the build config documentation](https://github.com/Pathoschild/Stardew.ModBuildConfig#readme)
+These mods use the [crossplatform build config](https://www.nuget.org/packages/Pathoschild.Stardew.ModBuildConfig)
+so they can be built on Linux, Mac, and Windows without changes. See [the build config documentation](https://www.nuget.org/packages/Pathoschild.Stardew.ModBuildConfig)
 for troubleshooting.
 
 ### Compiling a mod for testing
