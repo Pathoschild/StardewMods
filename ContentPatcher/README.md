@@ -122,7 +122,8 @@ Here are the supported changes:
 * **Edit an image.**  
   Instead of replacing an entire spritesheet, you can replace just the part you need. For example,
   you can change an item image by changing only its sprite in the spritesheet. Any number of
-  content packs can edit the same file.
+  content packs can edit the same file. You can extend an image downwards by simply patching past
+  the bottom.
 
   field      | purpose
   ---------- | -------

@@ -1,6 +1,8 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
+using StardewValley;
 
 namespace ContentPatcher.Framework.Patchers
 {
@@ -77,11 +79,40 @@ namespace ContentPatcher.Framework.Patchers
                 return;
             }
 
-            // apply
+            // fetch data
             Texture2D source = this.AssetLoader.Load<Texture2D>(this.ContentPack, this.FromLocalAsset);
-            asset
-                .AsImage()
-                .PatchImage(source, this.FromArea, this.ToArea);
+            IAssetDataForImage editor = asset.AsImage();
+
+            // extend tilesheet if needed
+            Rectangle affectedArea = this.GetTargetArea(source, this.FromArea, this.ToArea);
+            if (affectedArea.Bottom > editor.Data.Height)
+            {
+                Texture2D original = editor.Data;
+                Texture2D texture = new Texture2D(Game1.graphics.GraphicsDevice, original.Width, affectedArea.Bottom);
+                editor.ReplaceWith(texture);
+                editor.PatchImage(original);
+            }
+
+            // apply source image
+            editor.PatchImage(source, this.FromArea, this.ToArea);
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get the area that will be affected by the patch.</summary>
+        /// <param name="source">The source texture.</param>
+        /// <param name="fromArea">The sprite area in the source asset from which to read an image.</param>
+        /// <param name="toArea">The sprite area to overwrite.</param>
+        private Rectangle GetTargetArea(Texture2D source, Rectangle? fromArea, Rectangle? toArea)
+        {
+            if (toArea.HasValue)
+                return toArea.Value;
+
+            return fromArea.HasValue
+                ? new Rectangle(0, 0, fromArea.Value.Width, fromArea.Value.Height)
+                : new Rectangle(0, 0, source.Width, source.Height);
         }
     }
 }
