@@ -159,6 +159,14 @@ namespace ContentPatcher
                         string locale = !string.IsNullOrWhiteSpace(entry.Locale)
                             ? entry.Locale.Trim().ToLower()
                             : null;
+                            
+                        // read enable
+                        bool enabled = entry.Enabled;
+                        if (!enabled)
+                        {
+                            this.Monitor.Log($"Ignored {localAsset}.", LogLevel.Info);
+                            continue;
+                        }
 
                         // parse for type
                         switch (action)
@@ -227,9 +235,14 @@ namespace ContentPatcher
 
                             // edit image
                             case "editimage":
-                                this.AddLoaderOrPatcher(this.Patchers, assetName, new EditImagePatch(pack, assetName, locale, localAsset, entry.FromArea, entry.ToArea, this.Monitor, this.AssetLoader));
-                                break;
-
+                                if (enabled)
+                                {
+                                    this.AddLoaderOrPatcher(this.Patchers, assetName, new EditImagePatch(pack, assetName, locale, localAsset, entry.FromArea, entry.ToArea, enabled, this.Monitor, this.AssetLoader));
+                                    break;
+                                }
+                                else
+                                    break;
+                                    
                             default:
                                 LogSkip($"unknown patch type '{action}'.");
                                 break;
