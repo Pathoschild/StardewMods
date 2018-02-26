@@ -146,6 +146,23 @@ Here are the supported changes:
   `Entries`  | _(optional)_ The entries in the data file you want to change. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. See example above.
   `Fields`   | _(optional)_ The individual fields you want to change for existing entries. See example above.
 
+### Releasing a content pack
+See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general
+info. Suggestions:
+
+1. Add specific install steps in your mod description to help players:
+   ```
+   [size=5]Install[/size]
+   [list=1]
+   [*][url=https://smapi.io]Install the latest version of SMAPI[/url].
+   [*][url=https://www.nexusmods.com/stardewvalley/mods/1915]Install Content Patcher[/url].
+   [*]Download this mod and unzip it into [font=Courier New]Stardew Valley/Mods[/font].
+   [*]Run the game using SMAPI.
+   [/list]
+   ```
+2. When editing the Nexus page, add Content Patcher under 'Requirements'. Besides reminding players
+   to install it first, it'll also add your content pack to the list on the Content Patcher page.
+
 ## Versions
 See [release notes](release-notes.md).
 
