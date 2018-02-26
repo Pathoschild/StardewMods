@@ -20,6 +20,9 @@ namespace ContentPatcher.Framework
 
         /// <summary>The local file to load.</summary>
         public string FromFile { get; set; }
+        
+        /// <summary>Determines if file should be loaded.</summary>
+        public bool Enabled { get; set; } = true;
 
         /// <summary>The sprite area from which to read an image.</summary>
         public Rectangle FromArea { get; set; }
