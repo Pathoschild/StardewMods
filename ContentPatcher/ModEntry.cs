@@ -122,6 +122,10 @@ namespace ContentPatcher
 
                     try
                     {
+                        // skip if disabled
+                        if (!entry.Enabled)
+                            continue;
+
                         // read action
                         string action = entry.Action?.Trim().ToLower();
                         if (string.IsNullOrWhiteSpace(action))
