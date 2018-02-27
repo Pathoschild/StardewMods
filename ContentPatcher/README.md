@@ -67,11 +67,12 @@ want to make. Here's a quick example of each possible change (explanations below
           "FromFile": "assets/dinosaur.png"
        },
 
-       // edit one part of a image
+       // edit one part of an image
        {
           "Action": "EditImage",
           "Target": "Maps/springobjects",
           "FromFile": "assets/fish-object.png",
+          "FromArea": { "X": 0, "Y": 0, "Width": 16, "Height": 16 }, // optional, defaults to entire FromFile
           "ToArea": { "X": 256, "Y": 96, "Width": 16, "Height": 16 }
        },
 
