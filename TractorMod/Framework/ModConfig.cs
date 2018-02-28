@@ -13,21 +13,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         public StandardAttachmentSet StandardAttachments { get; set; } = new ModConfig.StandardAttachmentSet();
 
-        /// <summary>Whether the axe clears fruit trees.</summary>
-        public bool AxeCutsFruitTrees { get; set; } = false;
-
-        /// <summary>Whether the axe clears non-fruit trees.</summary>
-        public bool AxeCutsTrees { get; set; } = false;
-
-        /// <summary>Whether the axe clears live crops.</summary>
-        public bool AxeClearsCrops { get; set; } = false;
-
-        /// <summary>Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.</summary>
-        public bool PickaxeClearsDirt { get; set; } = true;
-
-        /// <summary>Whether the tractor can break paths and flooring when the pickaxe is selected.</summary>
-        public bool PickaxeBreaksFlooring { get; set; } = false;
-
         /// <summary>Whether to use the experimental feature which lets the tractor pass through trellis crops.</summary>
         public bool PassThroughTrellisCrops { get; set; }
 
@@ -74,23 +59,32 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>A set of control bindings.</summary>
         internal class StandardAttachmentSet
         {
+            /// <summary>The Axe attachment.</summary>
             public AxeAttachments Axe = new AxeAttachments();
 
-            public FertilizerAttachments Fertilizer = new FertilizerAttachments();
+			/// <summary>The Fertilizer attachment.</summary>
+			public FertilizerAttachments Fertilizer = new FertilizerAttachments();
 
-            public GrassStarterAttachments GrassStarter = new GrassStarterAttachments();
+			/// <summary>The Grass Starter attachment.</summary>
+			public GrassStarterAttachments GrassStarter = new GrassStarterAttachments();
 
-            public HoeAttachments Hoe = new HoeAttachments();
+			/// <summary>The Hoe attachment.</summary>
+			public HoeAttachments Hoe = new HoeAttachments();
 
-            public PickAxeAttachments PickAxe = new PickAxeAttachments();
+			/// <summary>The PickAxe attachment.</summary>
+			public PickAxeAttachments PickAxe = new PickAxeAttachments();
 
-            public ScytheAttachments Scythe = new ScytheAttachments();
+			/// <summary>The Scythe attachment.</summary>
+			public ScytheAttachments Scythe = new ScytheAttachments();
 
-            public SeedsAttachment Seeds = new SeedsAttachment();
+			/// <summary>The Seeds attachment.</summary>
+			public SeedsAttachment Seeds = new SeedsAttachment();
 
-            public WateringCanAttachment WateringCan = new WateringCanAttachment();
+			/// <summary>The Watering Can attachment.</summary>
+			public WateringCanAttachment WateringCan = new WateringCanAttachment();
 
-            public SeedBagModAttachment SeedBag = new SeedBagModAttachment();
+			/// <summary>The SeedBag attachment.</summary>
+			public SeedBagModAttachment SeedBag = new SeedBagModAttachment();
         }
 
         /// <summary>A set of Axe attachments.</summary>
@@ -181,7 +175,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         internal class SeedsAttachment
         {
             /// <summary>Whether or not to plant Seeds.</summary>
-            //[JsonConverter(typeof(bool))]
             public bool Enable { get; set; } = true;
         }
 
@@ -189,7 +182,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         internal class WateringCanAttachment
         {
             /// <summary>Whether or not to water Crops.</summary>
-            //[JsonConverter(typeof(bool))]
             public bool Enable { get; set; } = true;
         }
 
@@ -197,7 +189,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         internal class SeedBagModAttachment
         {
             /// <summary>Whether or not to use the SeedBag.</summary>
-            //[JsonConverter(typeof(bool))]
             public bool Enable { get; set; } = true;
         }
     }
