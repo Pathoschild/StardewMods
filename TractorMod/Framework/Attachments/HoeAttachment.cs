@@ -14,17 +14,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /*********
         ** Properties
         *********/
-        /// <summary>Whether to cut down non-fruit trees.</summary>
-        private readonly bool TillDirt;
+        /// <summary>The config settings for the hoe attachment.</summary>
+        private readonly Config.HoeConfig config;
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod configuration.</param>
-        public HoeAttachment(ModConfig config)
+        public HoeAttachment(Config.HoeConfig config)
         {
-            this.TillDirt = config.StandardAttachments.Hoe.TillDirt;
+            this.config = config;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return this.TillDirt && tool is Hoe && tool.GetType().FullName != SeedBagAttachment.SeedBagTypeName;
+            return this.config.TillDirt && tool is Hoe && tool.GetType().FullName != SeedBagAttachment.SeedBagTypeName;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>

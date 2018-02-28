@@ -12,17 +12,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /*********
         ** Properties
         *********/
-        /// <summary>Whether to cut down non-fruit trees.</summary>
-        private readonly bool Enable;
+        /// <summary>The config settings for the seeds attachment.</summary>
+        private readonly Config.SeedsConfig config;
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod configuration.</param>
-        public SeedAttachment(ModConfig config)
+        public SeedAttachment(Config.SeedsConfig config)
         {
-            this.Enable = config.StandardAttachments.Seeds.Enable;
+            this.config = config;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -45,7 +45,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            if (!this.Enable)
+            if (!this.config.Enable)
                 return false;
 
             if (item == null || item.Stack <= 0)

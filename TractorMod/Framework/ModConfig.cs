@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         ** Accessors
         *********/
 
-        public StandardAttachmentSet StandardAttachments { get; set; } = new ModConfig.StandardAttachmentSet();
+        public Config.StandardAttachmentsConfig StandardAttachments { get; set; } = new Config.StandardAttachmentsConfig();
 
         /// <summary>Whether to use the experimental feature which lets the tractor pass through trellis crops.</summary>
         public bool PassThroughTrellisCrops { get; set; }
@@ -56,140 +56,20 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             public SButton[] HoldToActivate { get; set; } = new SButton[0];
         }
 
-        /// <summary>A set of control bindings.</summary>
-        internal class StandardAttachmentSet
-        {
-            /// <summary>The Axe attachment.</summary>
-            public AxeAttachments Axe = new AxeAttachments();
+        
 
-			/// <summary>The Fertilizer attachment.</summary>
-			public FertilizerAttachments Fertilizer = new FertilizerAttachments();
+        
 
-			/// <summary>The Grass Starter attachment.</summary>
-			public GrassStarterAttachments GrassStarter = new GrassStarterAttachments();
+        
 
-			/// <summary>The Hoe attachment.</summary>
-			public HoeAttachments Hoe = new HoeAttachments();
+        
 
-			/// <summary>The PickAxe attachment.</summary>
-			public PickAxeAttachments PickAxe = new PickAxeAttachments();
+        
 
-			/// <summary>The Scythe attachment.</summary>
-			public ScytheAttachments Scythe = new ScytheAttachments();
+        
 
-			/// <summary>The Seeds attachment.</summary>
-			public SeedsAttachment Seeds = new SeedsAttachment();
+        
 
-			/// <summary>The Watering Can attachment.</summary>
-			public WateringCanAttachment WateringCan = new WateringCanAttachment();
-
-			/// <summary>The SeedBag attachment.</summary>
-			public SeedBagModAttachment SeedBag = new SeedBagModAttachment();
-        }
-
-        /// <summary>A set of Axe attachments.</summary>
-        internal class AxeAttachments
-        {
-            /// <summary>Whether or not to cut down Fruit Trees.</summary>
-            public bool CutFruitTrees{ get; set; } = false;
-
-            /// <summary>Whether or not to cut down Tapped Trees.</summary>
-            public bool CutTappedTrees { get; set; } = false;
-
-            /// <summary>Whether or not to cut down Trees.</summary>
-            public bool CutTrees { get; set; } = false;
-
-            /// <summary>Whether or not to cut down Live Crops.</summary>
-            public bool ClearLiveCrops { get; set; } = false;
-
-            /// <summary>Whether or not to cut down Dead Crops.</summary>
-            public bool ClearDeadCrops { get; set; } = true;
-
-            /// <summary>Whether or not to clear Debris.</summary>
-            public bool ClearDebris { get; set; } = true;
-        }
-
-        /// <summary>A set of Fertilizer attachments.</summary>
-        internal class FertilizerAttachments
-        {
-           /// <summary>Whether or not to use Fertilizer.</summary>
-           public bool Enable { get; set; } = true;
-        }
-
-        /// <summary>A set of Grass Starter attachments.</summary>
-        internal class GrassStarterAttachments
-        {
-            /// <summary>Whether or not to plant Grass Staters.</summary>
-            public bool Enable { get; set; } = true;
-        }
-
-        /// <summary>A set of Hoe attachments.</summary>
-        internal class HoeAttachments
-        {
-            /// <summary>Whether or not to Till Dirt.</summary>
-            public bool TillDirt { get; set; } = true;
-        }
-
-        /// <summary>A set of PickAxe attachments.</summary>
-        internal class PickAxeAttachments
-        {
-            /// <summary>Whether or not to clear Debris.</summary>
-            public bool ClearDebris { get; set; } = true;
-
-            /// <summary>Whether or not to clear Dead Crops.</summary>
-            public bool ClearDeadCrops { get; set; } = true;
-
-            /// <summary>Whether or not to clear Tilled Dirt.</summary>
-            public bool ClearDirt { get; set; } = true;
-
-            /// <summary>Whether or not to clear Flooring.</summary>
-            public bool ClearFlooring { get; set; } = false;
-        }
-
-        /// <summary>A set of Scythe attachments.</summary>
-        internal class ScytheAttachments
-        {
-            /// <summary>Whether or not to harvest Forage.</summary>
-            public bool HarvestForage { get; set; } = true;
-
-            /// <summary>Whether or not to harvest Crops.</summary>
-            public bool HarvestCrops { get; set; } = true;
-
-            /// <summary>Whether or not to harvest Flowers.</summary>
-            public bool HarvestFlowers { get; set; } = true;
-
-            /// <summary>Whether or not to harvest Fruit Trees.</summary>
-            public bool HarvestFruitTrees { get; set; } = true;
-
-            /// <summary>Whether or not to cut down Grass.</summary>
-            public bool HarvestGrass { get; set; } = true;
-
-            /// <summary>Whether or not to clear Dead Crops.</summary>
-            public bool ClearDeadCrops { get; set; } = true;
-
-            /// <summary>Whether or not to clear Debris.</summary>
-            public bool ClearWeeds { get; set; } = true;
-        }
-
-        /// <summary>A set of Seed attachments.</summary>
-        internal class SeedsAttachment
-        {
-            /// <summary>Whether or not to plant Seeds.</summary>
-            public bool Enable { get; set; } = true;
-        }
-
-        /// <summary>A set of Watering Can attachments.</summary>
-        internal class WateringCanAttachment
-        {
-            /// <summary>Whether or not to water Crops.</summary>
-            public bool Enable { get; set; } = true;
-        }
-
-        /// <summary>A set of Seed Bag attachments.</summary>
-        internal class SeedBagModAttachment
-        {
-            /// <summary>Whether or not to use the SeedBag.</summary>
-            public bool Enable { get; set; } = true;
-        }
+        
     }
 }

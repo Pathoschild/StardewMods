@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         ** Properties
         *********/
         /// <summary>Whether to cut down non-fruit trees.</summary>
-        private readonly bool Enable;
+        private readonly Config.SeedBagModConfig config;
 
         /*********
         ** Accessors
@@ -27,9 +27,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod configuration.</param>
-        public SeedBagAttachment(ModConfig config)
+        public SeedBagAttachment(Config.SeedBagModConfig config)
         {
-            this.Enable = config.StandardAttachments.SeedBag.Enable;
+            this.config = config;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -39,7 +39,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return tool?.GetType().FullName == SeedBagAttachment.SeedBagTypeName;
+            return this.config.Enable && tool?.GetType().FullName == SeedBagAttachment.SeedBagTypeName;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            if (this.Enable)
+            if (this.config.Enable)
                 return false;
 
             // till plain dirt

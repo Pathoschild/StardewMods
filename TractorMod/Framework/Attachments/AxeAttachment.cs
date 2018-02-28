@@ -14,24 +14,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /*********
         ** Properties
         *********/
-        /// <summary>Whether to cut down non-fruit trees.</summary>
-        private readonly bool CutTrees;
-
-        /// <summary>Whether to cut down fruit trees.</summary>
-        private readonly bool CutFruitTrees;
-        
-        /// <summary>Whether to clear dead crops.</summary>
-        private readonly bool ClearDeadCrops;
-
-        /// <summary>Whether to clear live crops.</summary>
-        private readonly bool ClearLiveCrops;
-        
-        /// <summary>Whether to clear debris.</summary>
-        private readonly bool ClearDebris;
-
-        /// <summary>Whether to clear tapped trees.</summary>
-        private readonly bool CutTappedTrees;
-
+        /// <summary>The config settings for the axe attachment.</summary>
+        private readonly Config.AxeConfig config;
 
         /// <summary>The axe upgrade levels needed to break supported resource clumps.</summary>
         /// <remarks>Derived from <see cref="ResourceClump.performToolAction"/>.</remarks>
@@ -47,16 +31,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod configuration.</param>
-        public AxeAttachment(ModConfig config)
+        public AxeAttachment(Config.AxeConfig config)
         {
-            this.ClearDeadCrops = config.StandardAttachments.Axe.ClearDeadCrops;
-            this.ClearLiveCrops = config.StandardAttachments.Axe.ClearLiveCrops;
-
-            this.CutFruitTrees = config.StandardAttachments.Axe.CutFruitTrees;
-            this.CutTrees = config.StandardAttachments.Axe.CutTrees;
-            this.CutTappedTrees = config.StandardAttachments.Axe.CutTappedTrees;
-
-            this.ClearDebris = config.StandardAttachments.Axe.ClearDebris;
+            this.config = config;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -80,35 +57,37 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
             // clear twigs & weeds
-            if (tileObj?.Name == "Twig" || tileObj?.Name.ToLower().Contains("weed") == true)
-                return this.ClearDebris && this.UseToolOnTile(tool, tile);
+            if (this.config.ClearDebris && tileObj?.Name == "Twig" || tileObj?.Name.ToLower().Contains("weed") == true)
+                return this.UseToolOnTile(tool, tile);
 
             // cut non-fruit tree
-            if (tileFeature is Tree)
+            if (tileFeature is Tree tree)
             {
-                if ((tileFeature as Tree).tapped)
-                    return this.CutTappedTrees && this.UseToolOnTile(tool, tile);
+                if (tree.tapped)
+                    return this.config.CutTappedTrees && this.UseToolOnTile(tool, tile);
                 else
-                    return this.CutTrees && this.UseToolOnTile(tool, tile);
+                    return this.config.CutTrees && this.UseToolOnTile(tool, tile);
             }
 
             // cut fruit tree
             if (tileFeature is FruitTree)
-                return this.CutFruitTrees && this.UseToolOnTile(tool, tile);
+                return this.config.CutFruitTrees && this.UseToolOnTile(tool, tile);
 
             // clear dead crops
             if (tileFeature is HoeDirt dirt && dirt.crop != null)
-                if (dirt.crop.dead && this.ClearDeadCrops)
+            {
+                if (dirt.crop.dead && this.config.ClearDeadCrops)
                     return this.UseToolOnTile(tool, tile);
-                else if (!dirt.crop.dead && this.ClearLiveCrops)
+                else if (!dirt.crop.dead && this.config.ClearLiveCrops)
                     return this.UseToolOnTile(tool, tile);
+            }
 
             // clear stumps
             // This needs to check if the axe upgrade level is high enough first, to avoid spamming
             // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
             {
                 ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile);
-                if (clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex) && tool.upgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex] && this.ClearDebris)
+                if (this.config.ClearDebris && clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex) && tool.upgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex])
                     this.UseToolOnTile(tool, tile);
             }
             

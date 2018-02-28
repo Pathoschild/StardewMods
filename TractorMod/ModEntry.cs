@@ -84,15 +84,15 @@ namespace Pathoschild.Stardew.TractorMod
             this.Attachments = new IAttachment[]
             {
                 new CustomAttachment(this.Config), // should be first so it can override default attachments
-                new AxeAttachment(this.Config),
-                new FertilizerAttachment(this.Config),
-                new GrassStarterAttachment(this.Config),
-                new HoeAttachment(this.Config),
-                new PickaxeAttachment(this.Config),
-                new ScytheAttachment(this.Config),
-                new SeedAttachment(this.Config),
-                new SeedBagAttachment(this.Config),
-                new WateringCanAttachment(this.Config)
+                new AxeAttachment(this.Config.StandardAttachments.Axe),
+                new FertilizerAttachment(this.Config.StandardAttachments.Fertilizer),
+                new GrassStarterAttachment(this.Config.StandardAttachments.GrassStarter),
+                new HoeAttachment(this.Config.StandardAttachments.Hoe),
+                new PickaxeAttachment(this.Config.StandardAttachments.PickAxe),
+                new ScytheAttachment(this.Config.StandardAttachments.Scythe),
+                new SeedAttachment(this.Config.StandardAttachments.Seeds),
+                new SeedBagAttachment(this.Config.StandardAttachments.SeedBagMod),
+                new WateringCanAttachment(this.Config.StandardAttachments.WateringCan)
             };
 
             // hook events
