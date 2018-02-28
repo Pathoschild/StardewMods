@@ -14,6 +14,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /*********
         ** Properties
         *********/
+        /// <summary>Whether to clear debris.</summary>
+        private readonly bool ClearDebris;
+
+        /// <summary>Whether to clear dead crops.</summary>
+        private readonly bool ClearDeadCrops;
+
         /// <summary>Whether to destroy flooring and paths.</summary>
         private readonly bool BreakFlooring;
 
@@ -36,8 +42,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="config">The mod configuration.</param>
         public PickaxeAttachment(ModConfig config)
         {
-            this.BreakFlooring = config.PickaxeBreaksFlooring;
-            this.ClearDirt = config.PickaxeClearsDirt;
+            this.BreakFlooring = config.StandardAttachments.PickAxe.ClearFlooring;
+            this.ClearDirt = config.StandardAttachments.PickAxe.ClearDirt;
+            this.ClearDebris = config.StandardAttachments.PickAxe.ClearDebris;
+            this.ClearDeadCrops = config.StandardAttachments.PickAxe.ClearDeadCrops;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -62,7 +70,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         {
             // break stones
             if (tileObj?.Name == "Stone")
-                return this.UseToolOnTile(tool, tile);
+                return this.ClearDebris && this.UseToolOnTile(tool, tile);
 
             // break flooring & paths
             if (tileFeature is Flooring)
@@ -77,7 +85,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
                 // clear dead crops
                 if (dirt.crop?.dead == true)
-                    return this.UseToolOnTile(tool, tile);
+                    return this.ClearDeadCrops && this.UseToolOnTile(tool, tile);
             }
 
             // clear boulders / meteorites
@@ -85,7 +93,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
             {
                 ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile);
-                if (clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex) && tool.upgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex])
+                if (clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex) && tool.upgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex] && this.ClearDebris)
                     this.UseToolOnTile(tool, tile);
             }
 

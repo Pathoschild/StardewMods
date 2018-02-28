@@ -11,8 +11,21 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
     internal class WateringCanAttachment : BaseAttachment
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>Whether to cut down non-fruit trees.</summary>
+        private readonly bool Enable;
+
+        /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="config">The mod configuration.</param>
+        public WateringCanAttachment(ModConfig config)
+        {
+            this.Enable = config.StandardAttachments.WateringCan.Enable;
+        }
+
         /// <summary>Get whether the tool is currently enabled.</summary>
         /// <param name="player">The current player.</param>
         /// <param name="tool">The tool selected by the player (if any).</param>
@@ -33,6 +46,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
+            if (!this.Enable)
+                return false;
+
             if (!(tileFeature is HoeDirt dirt) || dirt.state == HoeDirt.watered)
                 return false;
 

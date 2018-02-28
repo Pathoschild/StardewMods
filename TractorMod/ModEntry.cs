@@ -85,14 +85,14 @@ namespace Pathoschild.Stardew.TractorMod
             {
                 new CustomAttachment(this.Config), // should be first so it can override default attachments
                 new AxeAttachment(this.Config),
-                new FertilizerAttachment(),
-                new GrassStarterAttachment(),
-                new HoeAttachment(),
+                new FertilizerAttachment(this.Config),
+                new GrassStarterAttachment(this.Config),
+                new HoeAttachment(this.Config),
                 new PickaxeAttachment(this.Config),
-                new ScytheAttachment(),
-                new SeedAttachment(),
-                new SeedBagAttachment(),
-                new WateringCanAttachment()
+                new ScytheAttachment(this.Config),
+                new SeedAttachment(this.Config),
+                new SeedBagAttachment(this.Config),
+                new WateringCanAttachment(this.Config)
             };
 
             // hook events

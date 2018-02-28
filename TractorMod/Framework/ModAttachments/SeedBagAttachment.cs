@@ -10,6 +10,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
     internal class SeedBagAttachment : BaseAttachment
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>Whether to cut down non-fruit trees.</summary>
+        private readonly bool Enable;
+
+        /*********
         ** Accessors
         *********/
         /// <summary>The <see cref="System.Type.FullName"/> value for the Seed Bag mod's seed bag.</summary>
@@ -19,6 +25,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="config">The mod configuration.</param>
+        public SeedBagAttachment(ModConfig config)
+        {
+            this.Enable = config.StandardAttachments.SeedBag.Enable;
+        }
+
         /// <summary>Get whether the tool is currently enabled.</summary>
         /// <param name="player">The current player.</param>
         /// <param name="tool">The tool selected by the player (if any).</param>
@@ -39,6 +52,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
+            if (this.Enable)
+                return false;
+
             // till plain dirt
             if (tileFeature is HoeDirt)
                 return this.UseToolOnTile(tool, tile);

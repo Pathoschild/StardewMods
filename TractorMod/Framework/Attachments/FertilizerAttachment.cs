@@ -10,8 +10,21 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
     internal class FertilizerAttachment : BaseAttachment
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>Whether to cut down non-fruit trees.</summary>
+        private readonly bool Enabled;
+
+        /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="config">The mod configuration.</param>
+        public FertilizerAttachment(ModConfig config)
+        {
+            this.Enabled = config.StandardAttachments.Fertilizer.Enable;
+        }
+
         /// <summary>Get whether the tool is currently enabled.</summary>
         /// <param name="player">The current player.</param>
         /// <param name="tool">The tool selected by the player (if any).</param>
@@ -19,7 +32,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return item?.category == SObject.fertilizerCategory;
+            return this.Enabled && item?.category == SObject.fertilizerCategory;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
