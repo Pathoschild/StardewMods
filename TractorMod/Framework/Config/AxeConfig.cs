@@ -1,30 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Pathoschild.Stardew.TractorMod.Framework.Config
 {
-    /// <summary>A set of Axe attachments.</summary>
+    /// <summary>Configuration for the axe attachment.</summary>
     internal class AxeConfig
     {
-        /// <summary>Whether or not to cut down Fruit Trees.</summary>
-        public bool CutFruitTrees { get; set; } = false;
+        /// <summary>Whether to chop down fruit trees.</summary>
+        public bool CutFruitTrees { get; set; }
 
-        /// <summary>Whether or not to cut down Tapped Trees.</summary>
-        public bool CutTappedTrees { get; set; } = false;
+        /// <summary>Whether to chop down trees which have a tapper.</summary>
+        public bool CutTappedTrees { get; set; }
 
-        /// <summary>Whether or not to cut down Trees.</summary>
-        public bool CutTrees { get; set; } = false;
+        /// <summary>Whether to chop down non-fruit trees.</summary>
+        public bool CutTrees { get; set; }
 
-        /// <summary>Whether or not to cut down Live Crops.</summary>
-        public bool ClearLiveCrops { get; set; } = false;
+        /// <summary>Whether to clear live crops.</summary>
+        public bool ClearLiveCrops { get; set; }
 
-        /// <summary>Whether or not to cut down Dead Crops.</summary>
+        /// <summary>Whether to clear dead crops.</summary>
         public bool ClearDeadCrops { get; set; } = true;
 
-        /// <summary>Whether or not to clear Debris.</summary>
+        /// <summary>Whether to clear debris.</summary>
         public bool ClearDebris { get; set; } = true;
     }
 }

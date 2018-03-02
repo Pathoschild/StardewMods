@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using SFarmer = StardewValley.Farmer;
@@ -12,17 +13,18 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /*********
         ** Properties
         *********/
-        /// <summary>The config settings for the fertilizer attachment.</summary>
-        private readonly Config.FertilizerConfig config;
+        /// <summary>The attachment settings.</summary>
+        private readonly FertilizerConfig Config;
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="config">The mod configuration.</param>
-        public FertilizerAttachment(Config.FertilizerConfig config)
+        /// <param name="config">The attachment settings.</param>
+        public FertilizerAttachment(FertilizerConfig config)
         {
-            this.config = config;
+            this.Config = config;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -32,7 +34,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return this.config.Enable && item?.category == SObject.fertilizerCategory;
+            return this.Config.Enable && item?.category == SObject.fertilizerCategory;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>

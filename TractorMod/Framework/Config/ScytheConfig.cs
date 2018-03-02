@@ -1,33 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Pathoschild.Stardew.TractorMod.Framework.Config
 {
-    /// <summary>A set of Scythe config.</summary>
+    /// <summary>Configuration for the scythe attachment.</summary>
     internal class ScytheConfig
     {
-        /// <summary>Whether or not to harvest Forage.</summary>
+        /// <summary>Whether to harvest forage.</summary>
         public bool HarvestForage { get; set; } = true;
 
-        /// <summary>Whether or not to harvest Crops.</summary>
+        /// <summary>Whether to harvest crops.</summary>
         public bool HarvestCrops { get; set; } = true;
 
-        /// <summary>Whether or not to harvest Flowers.</summary>
+        /// <summary>Whether to harvest flowers.</summary>
         public bool HarvestFlowers { get; set; } = true;
 
-        /// <summary>Whether or not to harvest Fruit Trees.</summary>
+        /// <summary>Whether to harvest fruit trees.</summary>
         public bool HarvestFruitTrees { get; set; } = true;
 
-        /// <summary>Whether or not to cut down Grass.</summary>
+        /// <summary>Whether to cut down grass.</summary>
         public bool HarvestGrass { get; set; } = true;
 
-        /// <summary>Whether or not to clear Dead Crops.</summary>
+        /// <summary>Whether to clear dead crops.</summary>
         public bool ClearDeadCrops { get; set; } = true;
 
-        /// <summary>Whether or not to clear Debris.</summary>
+        /// <summary>Whether to clear weeds.</summary>
         public bool ClearWeeds { get; set; } = true;
     }
 }

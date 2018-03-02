@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using SFarmer = StardewValley.Farmer;
@@ -12,17 +13,18 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /*********
         ** Properties
         *********/
-        /// <summary>The config settings for the seeds attachment.</summary>
-        private readonly Config.SeedsConfig config;
+        /// <summary>The attachment settings.</summary>
+        private readonly SeedsConfig Config;
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="config">The mod configuration.</param>
-        public SeedAttachment(Config.SeedsConfig config)
+        /// <param name="config">The attachment settings.</param>
+        public SeedAttachment(SeedsConfig config)
         {
-            this.config = config;
+            this.Config = config;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -32,7 +34,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return item?.category == SObject.SeedsCategory;
+            return this.Config.Enable && item?.category == SObject.SeedsCategory;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -45,9 +47,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            if (!this.config.Enable)
-                return false;
-
             if (item == null || item.Stack <= 0)
                 return false;
 

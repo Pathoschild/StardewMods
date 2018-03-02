@@ -1,39 +1,33 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Pathoschild.Stardew.TractorMod.Framework.Config
 {
-    /// <summary>A set of control bindings.</summary>
+    /// <summary>Configuration for the built-in tractor attachments.</summary>
     internal class StandardAttachmentsConfig
     {
-        /// <summary>The Axe attachment.</summary>
+        /// <summary>Configuration for the axe attachment.</summary>
         public AxeConfig Axe = new AxeConfig();
 
-        /// <summary>The Fertilizer attachment.</summary>
+        /// <summary>Configuration for the fertilizer attachment.</summary>
         public FertilizerConfig Fertilizer = new FertilizerConfig();
 
-        /// <summary>The Grass Starter attachment.</summary>
+        /// <summary>Configuration for the grass starter attachment.</summary>
         public GrassStarterConfig GrassStarter = new GrassStarterConfig();
 
-        /// <summary>The Hoe attachment.</summary>
+        /// <summary>Configuration for the hoe attachment.</summary>
         public HoeConfig Hoe = new HoeConfig();
 
-        /// <summary>The PickAxe attachment.</summary>
+        /// <summary>Configuration for the pickaxe attachment.</summary>
         public PickAxeConfig PickAxe = new PickAxeConfig();
 
-        /// <summary>The Scythe attachment.</summary>
+        /// <summary>Configuration for the scythe attachment.</summary>
         public ScytheConfig Scythe = new ScytheConfig();
 
-        /// <summary>The Seeds attachment.</summary>
+        /// <summary>Configuration for the seeds attachment.</summary>
         public SeedsConfig Seeds = new SeedsConfig();
 
-        /// <summary>The Watering Can attachment.</summary>
+        /// <summary>Configuration for the watering can attachment.</summary>
         public WateringCanConfig WateringCan = new WateringCanConfig();
 
-        /// <summary>The SeedBag attachment.</summary>
+        /// <summary>Configuration for the Seed Bag mod attachment.</summary>
         public SeedBagModConfig SeedBagMod = new SeedBagModConfig();
     }
 }

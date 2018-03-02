@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.TractorMod.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
+using Pathoschild.Stardew.TractorMod.Framework.Config;
 using Pathoschild.Stardew.TractorMod.Framework.ModAttachments;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -81,18 +82,21 @@ namespace Pathoschild.Stardew.TractorMod
             // read config
             this.MigrateLegacySaveData(helper);
             this.Config = helper.ReadConfig<ModConfig>();
+
+            // init attachments
+            StandardAttachmentsConfig attachmentConfig = this.Config.StandardAttachments;
             this.Attachments = new IAttachment[]
             {
-                new CustomAttachment(this.Config), // should be first so it can override default attachments
-                new AxeAttachment(this.Config.StandardAttachments.Axe),
-                new FertilizerAttachment(this.Config.StandardAttachments.Fertilizer),
-                new GrassStarterAttachment(this.Config.StandardAttachments.GrassStarter),
-                new HoeAttachment(this.Config.StandardAttachments.Hoe),
-                new PickaxeAttachment(this.Config.StandardAttachments.PickAxe),
-                new ScytheAttachment(this.Config.StandardAttachments.Scythe),
-                new SeedAttachment(this.Config.StandardAttachments.Seeds),
-                new SeedBagAttachment(this.Config.StandardAttachments.SeedBagMod),
-                new WateringCanAttachment(this.Config.StandardAttachments.WateringCan)
+                new CustomAttachment(this.Config.CustomAttachments), // should be first so it can override default attachments
+                new AxeAttachment(attachmentConfig.Axe),
+                new FertilizerAttachment(attachmentConfig.Fertilizer),
+                new GrassStarterAttachment(attachmentConfig.GrassStarter),
+                new HoeAttachment(attachmentConfig.Hoe),
+                new PickaxeAttachment(attachmentConfig.PickAxe),
+                new ScytheAttachment(attachmentConfig.Scythe),
+                new SeedAttachment(attachmentConfig.Seeds),
+                new SeedBagAttachment(attachmentConfig.SeedBagMod),
+                new WateringCanAttachment(attachmentConfig.WateringCan)
             };
 
             // hook events

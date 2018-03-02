@@ -1,27 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Pathoschild.Stardew.TractorMod.Framework.Config
 {
-    /// <summary>A set of PickAxe config.</summary>
+    /// <summary>Configuration for the pickaxe attachment.</summary>
     internal class PickAxeConfig
     {
-        /// <summary>Whether or not to clear Debris.</summary>
+        /// <summary>Whether to clear debris.</summary>
         public bool ClearDebris { get; set; } = true;
 
-        /// <summary>Whether or not to clear Dead Crops.</summary>
+        /// <summary>Whether to clear dead crops.</summary>
         public bool ClearDeadCrops { get; set; } = true;
 
-        /// <summary>Whether or not to clear Tilled Dirt.</summary>
+        /// <summary>Whether to clear tilled dirt.</summary>
         public bool ClearDirt { get; set; } = true;
 
-        /// <summary>Whether or not to clear Flooring.</summary>
+        /// <summary>Whether to clear flooring.</summary>
         public bool ClearFlooring { get; set; } = false;
 
-        /// <summary>Whether or not to clear Boulders / Meteorites.</summary>
-        public bool ClearBoulders { get; set; } = true;
+        /// <summary>Whether to clear boulders and meteorites.</summary>
+        public bool ClearBouldersAndMeteorites { get; set; } = true;
     }
 }

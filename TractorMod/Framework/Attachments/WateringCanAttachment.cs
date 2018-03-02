@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -13,17 +14,18 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /*********
         ** Properties
         *********/
-        /// <summary>The config settings for the watering can attachment.</summary>
-        private readonly Config.WateringCanConfig config;
+        /// <summary>The attachment settings.</summary>
+        private readonly WateringCanConfig Config;
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="config">The mod configuration.</param>
-        public WateringCanAttachment(Config.WateringCanConfig config)
+        /// <param name="config">The attachment settings.</param>
+        public WateringCanAttachment(WateringCanConfig config)
         {
-            this.config = config;
+            this.Config = config;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -33,7 +35,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return tool is WateringCan;
+            return this.Config.Enable && tool is WateringCan;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -46,9 +48,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            if (!this.config.Enable)
-                return false;
-
             if (!(tileFeature is HoeDirt dirt) || dirt.state == HoeDirt.watered)
                 return false;
 

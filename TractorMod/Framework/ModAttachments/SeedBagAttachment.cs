@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using SFarmer = StardewValley.Farmer;
@@ -12,8 +13,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /*********
         ** Properties
         *********/
-        /// <summary>Whether to cut down non-fruit trees.</summary>
-        private readonly Config.SeedBagModConfig config;
+        /// <summary>The attachment settings.</summary>
+        private readonly SeedBagModConfig Config;
+
 
         /*********
         ** Accessors
@@ -26,10 +28,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="config">The mod configuration.</param>
-        public SeedBagAttachment(Config.SeedBagModConfig config)
+        /// <param name="config">The attachment settings.</param>
+        public SeedBagAttachment(SeedBagModConfig config)
         {
-            this.config = config;
+            this.Config = config;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -39,7 +41,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return this.config.Enable && tool?.GetType().FullName == SeedBagAttachment.SeedBagTypeName;
+            return this.Config.Enable && tool?.GetType().FullName == SeedBagAttachment.SeedBagTypeName;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -52,10 +54,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            if (this.config.Enable)
-                return false;
-
-            // till plain dirt
+            // apply to plain dirt
             if (tileFeature is HoeDirt)
                 return this.UseToolOnTile(tool, tile);
 

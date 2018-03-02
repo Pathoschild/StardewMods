@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using SFarmer = StardewValley.Farmer;
@@ -12,17 +13,18 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /*********
         ** Properties
         *********/
-        /// <summary>The config settings for the grass starter attachment.</summary>
-        private readonly Config.GrassStarterConfig config;
+        /// <summary>The attachment settings.</summary>
+        private readonly GrassStarterConfig Config;
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="config">The mod configuration.</param>
-        public GrassStarterAttachment(Config.GrassStarterConfig config)
+        /// <param name="config">The attachment settings.</param>
+        public GrassStarterAttachment(GrassStarterConfig config)
         {
-            this.config = config;
+            this.Config = config;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -32,7 +34,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return this.config.Enable && item?.parentSheetIndex == 297;
+            return this.Config.Enable && item?.parentSheetIndex == 297;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>

@@ -22,10 +22,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="config">The mod configuration.</param>
-        public CustomAttachment(ModConfig config)
+        /// <param name="customAttachments">The enabled custom tool or item names.</param>
+        public CustomAttachment(string[] customAttachments)
         {
-            this.CustomNames = new HashSet<string>(config.CustomAttachments, StringComparer.InvariantCultureIgnoreCase);
+            this.CustomNames = new HashSet<string>(customAttachments, StringComparer.InvariantCultureIgnoreCase);
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>

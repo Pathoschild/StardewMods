@@ -1,4 +1,7 @@
 # Release notes
+## 4.4 (upcoming)
+* Added options to toggle all standard features (thanks to Fox536!).
+
 ## 4.3
 * Updated to SMAPI 2.4.
 * Added support for grass starters.

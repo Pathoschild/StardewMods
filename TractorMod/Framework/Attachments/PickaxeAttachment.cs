@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -14,8 +15,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /*********
         ** Properties
         *********/
-        /// <summary>The config settings for the pickaxe attachment.</summary>
-        private readonly Config.PickAxeConfig config;
+        /// <summary>The attachment settings.</summary>
+        private readonly PickAxeConfig Config;
 
         /// <summary>The axe upgrade levels needed to break supported resource clumps.</summary>
         /// <remarks>Derived from <see cref="ResourceClump.performToolAction"/>.</remarks>
@@ -30,10 +31,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="config">The mod configuration.</param>
-        public PickaxeAttachment(Config.PickAxeConfig config)
+        /// <param name="config">The attachment settings.</param>
+        public PickaxeAttachment(PickAxeConfig config)
         {
-            this.config = config;
+            this.Config = config;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -57,31 +58,32 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
             // break stones
-            if (tileObj?.Name == "Stone")
-                return this.config.ClearDebris && this.UseToolOnTile(tool, tile);
+            if (this.Config.ClearDebris && tileObj?.Name == "Stone")
+                return this.UseToolOnTile(tool, tile);
 
             // break flooring & paths
-            if (tileFeature is Flooring)
-                return this.config.ClearFlooring && this.UseToolOnTile(tool, tile);
+            if (this.Config.ClearFlooring && tileFeature is Flooring)
+                return this.UseToolOnTile(tool, tile);
 
             // handle dirt
             if (tileFeature is HoeDirt dirt)
             {
                 // clear tilled dirt
-                if (dirt.crop == null)
-                    return this.config.ClearDirt && this.UseToolOnTile(tool, tile);
+                if (this.Config.ClearDirt && dirt.crop == null)
+                    return this.UseToolOnTile(tool, tile);
 
                 // clear dead crops
-                if (dirt.crop?.dead == true)
-                    return this.config.ClearDeadCrops && this.UseToolOnTile(tool, tile);
+                if (this.Config.ClearDeadCrops && dirt.crop?.dead == true)
+                    return this.UseToolOnTile(tool, tile);
             }
 
             // clear boulders / meteorites
             // This needs to check if the axe upgrade level is high enough first, to avoid spamming
             // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
+            if (this.Config.ClearBouldersAndMeteorites)
             {
                 ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile);
-                if (this.config.ClearBoulders && clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex) && tool.upgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex])
+                if (clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex) && tool.upgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex])
                     this.UseToolOnTile(tool, tile);
             }
 

@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Pathoschild.Stardew.TractorMod.Framework.Config
 {
-    /// <summary>A set of Fertilizer config.</summary>
+    /// <summary>Configuration for the fertilizer attachment.</summary>
     internal class FertilizerConfig
     {
-        /// <summary>Whether or not to use Fertilizer.</summary>
+        /// <summary>Whether to apply fertilizer to tilled dirt.</summary>
         public bool Enable { get; set; } = true;
     }
 }

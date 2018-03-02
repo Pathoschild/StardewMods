@@ -66,6 +66,7 @@
     <Compile Include="Framework\ModAttachments\SeedBagAttachment.cs" />
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\BaseAttachment.cs" />
+    <Compile Include="Framework\Config\ModConfigControls.cs" />
     <Compile Include="Framework\TractorManager.cs" />
     <Compile Include="Framework\TractorMount.cs" />
     <Compile Include="Framework\TractorStatic.cs" />

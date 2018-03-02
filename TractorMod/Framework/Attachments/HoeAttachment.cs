@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.TractorMod.Framework.Config;
 using Pathoschild.Stardew.TractorMod.Framework.ModAttachments;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -14,17 +15,18 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /*********
         ** Properties
         *********/
-        /// <summary>The config settings for the hoe attachment.</summary>
-        private readonly Config.HoeConfig config;
+        /// <summary>The attachment settings.</summary>
+        private readonly HoeConfig Config;
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod configuration.</param>
-        public HoeAttachment(Config.HoeConfig config)
+        public HoeAttachment(HoeConfig config)
         {
-            this.config = config;
+            this.Config = config;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -34,7 +36,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return this.config.TillDirt && tool is Hoe && tool.GetType().FullName != SeedBagAttachment.SeedBagTypeName;
+            return this.Config.TillDirt && tool is Hoe && tool.GetType().FullName != SeedBagAttachment.SeedBagTypeName;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>

@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Pathoschild.Stardew.TractorMod.Framework.Config
 {
-    /// <summary>A set of Grass Starter config.</summary>
+    /// <summary>Configuration for the grass starter attachment.</summary>
     internal class GrassStarterConfig
     {
-        /// <summary>Whether or not to plant Grass Staters.</summary>
+        /// <summary>Whether to plant grass starters in tilled dirt.</summary>
         public bool Enable { get; set; } = true;
     }
 }
