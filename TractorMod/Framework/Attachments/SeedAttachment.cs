@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using SFarmer = StardewValley.Farmer;
@@ -10,8 +11,22 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
     internal class SeedAttachment : BaseAttachment
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>The attachment settings.</summary>
+        private readonly SeedsConfig Config;
+
+
+        /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="config">The attachment settings.</param>
+        public SeedAttachment(SeedsConfig config)
+        {
+            this.Config = config;
+        }
+
         /// <summary>Get whether the tool is currently enabled.</summary>
         /// <param name="player">The current player.</param>
         /// <param name="tool">The tool selected by the player (if any).</param>
@@ -19,7 +34,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return item?.category == SObject.SeedsCategory;
+            return this.Config.Enable && item?.category == SObject.SeedsCategory;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
