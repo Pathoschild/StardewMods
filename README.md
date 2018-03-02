@@ -49,9 +49,9 @@ Active mods:
   _Lets you buy a tractor to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc._
 
 Inactive mods:
-* **No Debug Mode** <small>([source](NoDebugMode))</small>  
-  _(obsolete) Disables SMAPI's F2 debug mode, which can cause unintended effects like skipping an
-  entire season or teleporting into walls._
+* ~~No Debug Mode~~  
+  _(deleted) Disables SMAPI's F2 debug mode, which can cause unintended effects like skipping an
+  entire season or teleporting into walls. No longer needed after SMAPI 1.0._
 
 ## Translating the mods
 The mods can be translated into any language supported by the game, and SMAPI will automatically
