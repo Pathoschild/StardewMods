@@ -50,12 +50,23 @@
     <Compile Include="Framework\Attachments\PickaxeAttachment.cs" />
     <Compile Include="Framework\Attachments\ScytheAttachment.cs" />
     <Compile Include="Framework\Attachments\SeedAttachment.cs" />
+    <Compile Include="Framework\Config\AxeConfig.cs" />
+    <Compile Include="Framework\Config\FertilizerConfig.cs" />
+    <Compile Include="Framework\Config\GrassStarterConfig.cs" />
+    <Compile Include="Framework\Config\HoeConfig.cs" />
+    <Compile Include="Framework\Config\PickAxeConfig.cs" />
+    <Compile Include="Framework\Config\ScytheConfig.cs" />
+    <Compile Include="Framework\Config\SeedBagConfig.cs" />
+    <Compile Include="Framework\Config\SeedsConfig.cs" />
+    <Compile Include="Framework\Config\StandardAttachmentConfig.cs" />
+    <Compile Include="Framework\Config\WateringCanConfig.cs" />
     <Compile Include="Framework\CustomSaveBuilding.cs" />
     <Compile Include="Framework\CustomSaveData.cs" />
     <Compile Include="Framework\LegacySaveData.cs" />
     <Compile Include="Framework\ModAttachments\SeedBagAttachment.cs" />
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\BaseAttachment.cs" />
+    <Compile Include="Framework\Config\ModConfigControls.cs" />
     <Compile Include="Framework\TractorManager.cs" />
     <Compile Include="Framework\TractorMount.cs" />
     <Compile Include="Framework\TractorStatic.cs" />
@@ -89,7 +100,6 @@
   </ItemGroup>
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\deploy-mod.targets" />
   <Import Project="..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.2\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.2\build\Pathoschild.Stardew.ModBuildConfig.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

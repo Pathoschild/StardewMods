@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ContentPatcher.Framework;
 using ContentPatcher.Framework.Patchers;
-using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 
 namespace ContentPatcher
@@ -122,6 +122,10 @@ namespace ContentPatcher
 
                     try
                     {
+                        // skip if disabled
+                        if (!entry.Enabled)
+                            continue;
+
                         // read action
                         string action = entry.Action?.Trim().ToLower();
                         if (string.IsNullOrWhiteSpace(action))
@@ -141,9 +145,7 @@ namespace ContentPatcher
                         }
 
                         // read source asset
-                        string localAsset = !string.IsNullOrWhiteSpace(entry.FromFile)
-                            ? this.Helper.Content.NormaliseAssetName(entry.FromFile)
-                            : null;
+                        string localAsset = this.NormaliseLocalAssetPath(pack, entry.FromFile);
                         if (localAsset == null && (action == "load" || action == "editimage"))
                         {
                             LogSkip($"must set the {nameof(PatchConfig.FromFile)} field for a '{action}' patch.");
@@ -235,9 +237,9 @@ namespace ContentPatcher
                                 break;
                         }
 
-                        // preload PNG assets
-                        if (localAsset != null && localAsset.EndsWith(".png", StringComparison.InvariantCultureIgnoreCase))
-                            this.AssetLoader.PreloadIfNeeded<Texture2D>(pack, localAsset);
+                        // preload PNG assets to avoid load-in-draw-loop error
+                        if (localAsset != null)
+                            this.AssetLoader.PreloadIfNeeded(pack, localAsset);
                     }
                     catch (Exception ex)
                     {
@@ -257,6 +259,27 @@ namespace ContentPatcher
                 list.Add(patch);
             else
                 dict[assetName] = new List<TPatcher> { patch };
+        }
+
+        /// <summary>Get a normalised file path relative to the content pack folder.</summary>
+        /// <param name="contentPack">The content pack.</param>
+        /// <param name="path">The relative asset path.</param>
+        private string NormaliseLocalAssetPath(IContentPack contentPack, string path)
+        {
+            // normalise asset name
+            if (string.IsNullOrWhiteSpace(path))
+                return null;
+            string newPath = this.Helper.Content.NormaliseAssetName(path);
+
+            // add .xnb extension if needed (it's stripped from asset names)
+            string fullPath = Path.Combine(contentPack.DirectoryPath, newPath);
+            if (!File.Exists(fullPath))
+            {
+                if (File.Exists($"{fullPath}.xnb") || Path.GetExtension(path) == ".xnb")
+                    newPath += ".xnb";
+            }
+
+            return newPath;
         }
     }
 }

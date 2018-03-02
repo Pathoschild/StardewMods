@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -14,14 +15,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /*********
         ** Properties
         *********/
-        /// <summary>Whether to cut down non-fruit trees.</summary>
-        private readonly bool CutTrees;
-
-        /// <summary>Whether to cut down fruit trees.</summary>
-        private readonly bool CutFruitTrees;
-
-        /// <summary>Whether to clear live crops.</summary>
-        private readonly bool ClearCrops;
+        /// <summary>The attachment settings.</summary>
+        private readonly AxeConfig Config;
 
         /// <summary>The axe upgrade levels needed to break supported resource clumps.</summary>
         /// <remarks>Derived from <see cref="ResourceClump.performToolAction"/>.</remarks>
@@ -36,12 +31,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="config">The mod configuration.</param>
-        public AxeAttachment(ModConfig config)
+        /// <param name="config">The attachment settings.</param>
+        public AxeAttachment(AxeConfig config)
         {
-            this.CutTrees = config.AxeCutsTrees;
-            this.CutFruitTrees = config.AxeCutsFruitTrees;
-            this.ClearCrops = config.AxeClearsCrops;
+            this.Config = config;
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -65,24 +58,37 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
             // clear twigs & weeds
-            if (tileObj?.Name == "Twig" || tileObj?.Name.ToLower().Contains("weed") == true)
+            if (this.Config.ClearDebris && (tileObj?.Name == "Twig" || tileObj?.Name.ToLower().Contains("weed") == true))
                 return this.UseToolOnTile(tool, tile);
 
-            // cut non-fruit tree
-            if (tileFeature is Tree)
-                return this.CutTrees && this.UseToolOnTile(tool, tile);
+            // check terrain feature
+            switch (tileFeature)
+            {
+                // cut non-fruit tree
+                case Tree tree:
+                    if (tree.tapped ? this.Config.CutTappedTrees : this.Config.CutTrees)
+                        return this.UseToolOnTile(tool, tile);
+                    break;
 
-            // cut fruit tree
-            if (tileFeature is FruitTree)
-                return this.CutFruitTrees && this.UseToolOnTile(tool, tile);
+                // cut fruit tree
+                case FruitTree _:
+                    if (this.Config.CutFruitTrees)
+                        return this.UseToolOnTile(tool, tile);
+                    break;
 
-            // clear crops
-            if (tileFeature is HoeDirt dirt && dirt.crop != null && (dirt.crop.dead || this.ClearCrops))
-                return this.UseToolOnTile(tool, tile);
+                // clear crops
+                case HoeDirt dirt when dirt.crop != null:
+                    if (this.Config.ClearDeadCrops && dirt.crop.dead)
+                        return this.UseToolOnTile(tool, tile);
+                    if (this.Config.ClearLiveCrops && !dirt.crop.dead)
+                        return this.UseToolOnTile(tool, tile);
+                    break;
+            }
 
             // clear stumps
             // This needs to check if the axe upgrade level is high enough first, to avoid spamming
             // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
+            if (this.Config.ClearDebris)
             {
                 ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile);
                 if (clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex) && tool.upgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex])
