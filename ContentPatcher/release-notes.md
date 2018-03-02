@@ -2,9 +2,9 @@
 
 # Release notes
 ## 1.1
-* Added `Enabled` field to easily disable individual patches (thanks to f4iTh!).
-* Fixed `FromFile` not accepting XNB files unless you remove the extension.
-* Fixed error when loading a local map which references PNG tilesheets.
+* Added `Enabled` field to disable individual patches (thanks to f4iTh!).
+* Added support for XNB files in `FromFile`.
+* Added support for maps in `FromFile` which reference unpacked PNG tilesheets.
 
 ## 1.0
 * Initial release.
