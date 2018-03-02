@@ -96,7 +96,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="tile">The tile coordinate in the given location.</param>
         public void SetLocation(GameLocation location, Vector2 tile)
         {
-            Game1.warpCharacter(this.Current, location.name, tile, false, true);
+            this.WarpCharacterToLocation(this.Current, location, tile);
         }
 
         /// <summary>Move the tractor to a specific pixel position within its current location.</summary>
@@ -327,24 +327,49 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="mount">Whether the player should be riding the tractor.</param>
         private void SetMounted(bool mount)
         {
-            // swap tractors
+            // get instances
             NPC newTractor = mount ? (NPC)this.Mount : this.Static;
             NPC oldTractor = mount ? (NPC)this.Static : this.Mount;
 
-            Game1.removeCharacterFromItsLocation(oldTractor.name);
-            Game1.removeCharacterFromItsLocation(newTractor.name);
-            Game1.currentLocation.addCharacter(newTractor);
-
+            // swap tractors
+            this.RemoveCharacterFromItsLocation(oldTractor);
+            this.WarpCharacterToLocation(newTractor, Game1.currentLocation, oldTractor.getTileLocation());
             newTractor.position = oldTractor.position;
-            newTractor.facingDirection = oldTractor.facingDirection;
-
-            // mount
             if (mount)
                 this.Mount.checkAction(Game1.player, Game1.currentLocation);
+            newTractor.facingDirection = oldTractor.facingDirection;
 
             // let tractor pass through trellises
             if (this.Config.PassThroughTrellisCrops)
                 this.SetCropPassthrough(Game1.currentLocation, passthrough: mount);
+        }
+
+        /// <summary>Remove an NPC from its current location.</summary>
+        /// <param name="character">The NPC to remove.</param>
+        /// <remarks>The default <see cref="Game1.removeCharacterFromItsLocation"/> logic doesn't work in the mines, so this method reimplements it with better logic.</remarks>
+        private void RemoveCharacterFromItsLocation(NPC character)
+        {
+            character.currentLocation?.characters.RemoveAll(p => p.name == character.name); // default logic doesn't support the mines (since they're not in Game1.locations)
+            character.currentLocation = null;
+        }
+
+        /// <summary>Move an NPC to the given location.</summary>
+        /// <param name="character">The NPC to add.</param>
+        /// <param name="location">The game location.</param>
+        /// <param name="tile">The tile coordinate in the given location.</param>
+        /// <remarks>The default <see cref="Game1.warpCharacter(StardewValley.NPC,string,Microsoft.Xna.Framework.Point,bool,bool)"/> logic doesn't work in the mines, so this method reimplements it with better logic.</remarks>
+        public void WarpCharacterToLocation(NPC character, GameLocation location, Vector2 tile)
+        {
+            this.RemoveCharacterFromItsLocation(character);
+            if (!location.characters.Contains(character))
+                location.addCharacter(character);
+            character.currentLocation = location;
+
+            character.isCharging = false;
+            character.speed = 2;
+            character.blockedInterval = 0;
+            character.position.X = tile.X * Game1.tileSize;
+            character.position.Y = tile.Y * Game1.tileSize;
         }
     }
 }

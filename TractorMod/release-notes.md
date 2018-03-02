@@ -1,5 +1,6 @@
 # Release notes
 ## 4.4 (upcoming)
+* Added support for using the tractor in the mines.
 * Added options to toggle all standard features (thanks to Fox536!).
 
 ## 4.3
