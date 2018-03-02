@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.FarmExpansion;
 using Pathoschild.Stardew.TractorMod.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
@@ -34,9 +35,6 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The full type name for the Pelican Fiber mod's construction menu.</summary>
         private readonly string PelicanFiberMenuFullName = "PelicanFiber.Framework.ConstructionMenu";
 
-        /// <summary>The full type name for the Farm Expansion mod's construction menu.</summary>
-        private readonly string FarmExpansionMenuFullName = "FarmExpansion.Menus.FECarpenterMenu";
-
         /// <summary>The number of days needed to build a tractor garage.</summary>
         private readonly int GarageConstructionDays = 3;
 
@@ -64,9 +62,6 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Whether the Pelican Fiber mod is loaded.</summary>
         private bool IsPelicanFiberLoaded;
 
-        /// <summary>Whether the Farm Expansion mod is loaded.</summary>
-        private bool IsFarmExpansionLoaded;
-
 
         /*********
         ** Public methods
@@ -77,7 +72,6 @@ namespace Pathoschild.Stardew.TractorMod
         {
             // enable mod compatibility fixes
             this.IsPelicanFiberLoaded = helper.ModRegistry.IsLoaded("jwdred.PelicanFiber");
-            this.IsFarmExpansionLoaded = helper.ModRegistry.IsLoaded("Advize.FarmExpansion") && helper.ModRegistry.Get("Advize.FarmExpansion").Version.IsNewerThan("3.0"); // fields added in 3.0.1
 
             // read config
             this.MigrateLegacySaveData(helper);
@@ -100,6 +94,7 @@ namespace Pathoschild.Stardew.TractorMod
             };
 
             // hook events
+            GameEvents.FirstUpdateTick += this.GameEvents_FirstUpdateTick;
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
             SaveEvents.BeforeSave += this.SaveEvents_BeforeSave;
             if (this.Config.HighlightRadius)
@@ -121,6 +116,20 @@ namespace Pathoschild.Stardew.TractorMod
         /****
         ** Event handlers
         ****/
+        /// <summary>The event called after the first game update, once all mods are loaded.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void GameEvents_FirstUpdateTick(object sender, EventArgs e)
+        {
+            // enable Farm Expansion integration
+            FarmExpansionIntegration farmExpansion = new FarmExpansionIntegration(this.Helper.ModRegistry, this.Monitor);
+            if (farmExpansion.IsLoaded)
+            {
+                farmExpansion.AddFarmBluePrint(this.GetBlueprint());
+                farmExpansion.AddExpansionBluePrint(this.GetBlueprint());
+            }
+        }
+
         /// <summary>The event called when a new day begins.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -174,12 +183,6 @@ namespace Pathoschild.Stardew.TractorMod
                         .GetField<List<BluePrint>>(e.NewMenu, "Blueprints")
                         .GetValue()
                         .Add(this.GetBlueprint());
-                }
-                else if (this.IsFarmExpansionLoaded && e.NewMenu.GetType().FullName == this.FarmExpansionMenuFullName)
-                {
-                    this.Helper.Reflection
-                        .GetMethod(e.NewMenu, "AddFarmBluePrint")
-                        .Invoke(this.GetBlueprint());
                 }
             }
         }

@@ -2,6 +2,7 @@
 ## 4.4 (upcoming)
 * Added support for using the tractor in the mines.
 * Added options to toggle all standard features (thanks to Fox536!).
+* Fixed issue where tractor doesn't appear in Farm Expansion's carpenter menu (requires Farm Expansion 3.3+).
 
 ## 4.3
 * Updated to SMAPI 2.4.
