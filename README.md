@@ -110,9 +110,6 @@ To compile a mod and add it to your game's `Mods` directory:
 ### Compiling a mod for release
 To package a mod for release:
 
-1. Delete the mod's directory in `Mods`.  
-   <small>(This ensures the package is clean and has default configuration.)</small>
+1. Switch to `Release` build configuration.
 2. Recompile the mod per the previous section.
-3. Launch the game through SMAPI to generate the default `config.json` (if any).
-4. Create a zip file of the mod's folder in the `Mods` folder. The zip name should include the
-   mod name and version (like `LookupAnything-1.0.zip`).
+3. Upload the generated `bin/Release/<mod name>-<version>.zip` file from the project folder.
