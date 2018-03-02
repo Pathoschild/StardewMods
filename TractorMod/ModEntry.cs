@@ -164,6 +164,19 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
+            // remove tractor from social menu
+            if (e.NewMenu is GameMenu gameMenu && !this.Tractor.IsRiding)
+            {
+                SocialPage socialPage = (SocialPage)this.Helper.Reflection.GetField<List<IClickableMenu>>(gameMenu, "pages").GetValue()[GameMenu.socialTab];
+                List<ClickableTextureComponent> friendNames = this.Helper.Reflection.GetField<List<ClickableTextureComponent>>(socialPage, "friendNames").GetValue();
+                IDictionary<string, string> npcNames = this.Helper.Reflection.GetField<Dictionary<string, string>>(socialPage, "npcNames").GetValue();
+
+                friendNames.RemoveAll(p => p.name == this.Tractor.Current.name);
+                npcNames.Remove(this.Tractor.Current.name);
+
+                socialPage.updateSlots();
+            }
+
             // add blueprint to carpenter menu
             if (Context.IsWorldReady && !this.HasAnyGarages)
             {
