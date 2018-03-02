@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using ContentPatcher.Framework;
 using ContentPatcher.Framework.Patchers;
-using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 
 namespace ContentPatcher
@@ -238,9 +237,9 @@ namespace ContentPatcher
                                 break;
                         }
 
-                        // preload PNG assets
-                        if (localAsset != null && localAsset.EndsWith(".png", StringComparison.InvariantCultureIgnoreCase))
-                            this.AssetLoader.PreloadIfNeeded<Texture2D>(pack, localAsset);
+                        // preload PNG assets to avoid load-in-draw-loop error
+                        if (localAsset != null)
+                            this.AssetLoader.PreloadIfNeeded(pack, localAsset);
                     }
                     catch (Exception ex)
                     {

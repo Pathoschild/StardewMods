@@ -4,6 +4,7 @@
 ## 1.1
 * Added `Enabled` field to easily disable individual patches.
 * Fixed `FromFile` not accepting XNB files unless you remove the extension.
+* Fixed error when loading a local map which references PNG tilesheets.
 
 ## 1.0
 * Initial release.
