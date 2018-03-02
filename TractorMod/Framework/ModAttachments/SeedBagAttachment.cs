@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using SFarmer = StardewValley.Farmer;
@@ -10,6 +11,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
     internal class SeedBagAttachment : BaseAttachment
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>The attachment settings.</summary>
+        private readonly SeedBagModConfig Config;
+
+
+        /*********
         ** Accessors
         *********/
         /// <summary>The <see cref="System.Type.FullName"/> value for the Seed Bag mod's seed bag.</summary>
@@ -19,6 +27,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="config">The attachment settings.</param>
+        public SeedBagAttachment(SeedBagModConfig config)
+        {
+            this.Config = config;
+        }
+
         /// <summary>Get whether the tool is currently enabled.</summary>
         /// <param name="player">The current player.</param>
         /// <param name="tool">The tool selected by the player (if any).</param>
@@ -26,7 +41,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return tool?.GetType().FullName == SeedBagAttachment.SeedBagTypeName;
+            return this.Config.Enable && tool?.GetType().FullName == SeedBagAttachment.SeedBagTypeName;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -39,7 +54,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            // till plain dirt
+            // apply to plain dirt
             if (tileFeature is HoeDirt)
                 return this.UseToolOnTile(tool, tile);
 

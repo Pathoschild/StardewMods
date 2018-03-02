@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -11,8 +12,22 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
     internal class WateringCanAttachment : BaseAttachment
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>The attachment settings.</summary>
+        private readonly WateringCanConfig Config;
+
+
+        /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="config">The attachment settings.</param>
+        public WateringCanAttachment(WateringCanConfig config)
+        {
+            this.Config = config;
+        }
+
         /// <summary>Get whether the tool is currently enabled.</summary>
         /// <param name="player">The current player.</param>
         /// <param name="tool">The tool selected by the player (if any).</param>
@@ -20,7 +35,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return tool is WateringCan;
+            return this.Config.Enable && tool is WateringCan;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>

@@ -51,24 +51,7 @@ You can set some general options:
 setting | default | effect
 :------ | :------ | :-----
 `Controls` | | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `T` to summon the tractor. Available inputs:<ul><li>`SummonTractor`: warp the tractor to your position.</li><li>`HoldToActivate`: if specified, the tractor will only do something while you're holding this button. If nothing is specified, tractor will work automatically.</li></ul>
-`Distance` | 1 | The number of tiles on each side of the tractor to affect (in addition to the tile under it).
-`TractorSpeed` | -2 | The speed modifier when riding the tractor.
-`MagneticRadius` | 384 | The item magnetism amount (higher values attract items from father away).
-
-And toggle some tool features:
-
-setting | default | effect
-:------ | :------ | :-----
-`AxeCutsFruitTrees` | `false` | Whether the axe chops down fruit trees.
-`AxeCutsTrees` | `false` | Whether the axe chops down non-fruit trees.
-`PickaxeClearsDirt` | `true` | Whether the tractor can clear hoed dirt tiles when the pickaxe is selected.
-`PickaxeBreaksFlooring` | `false` | Whether the tractor can break flooring and paths when the pickaxe is selected.
-`CustomAttachments` | _(empty)_ | The custom items or tools to apply. If you specify something that's already supported (like the axe), this will override all limitations on its use. These must match the exact internal item/tool names (not the translated display names). For example: `"CustomTools": ["Axe"]`
-
-And change how the tractor is sold:
-
-setting | default | effect
-:------ | :------ | :-----
+`StandardAttachments` |         | Toggle features for all built-in attachments.
 `BuildPrice` | 150000 | The gold price to buy a tractor garage.
 `BuildUsesResources` | `true` | Whether you need to provide resources to build a tractor garage.
 
@@ -76,8 +59,12 @@ And set some advanced options:
 
 setting | default | effect
 :------ | :------ | :-----
+`Distance` | 1 | The number of tiles on each side of the tractor to affect (in addition to the tile under it).
+`TractorSpeed` | -2 | The speed modifier when riding the tractor.
+`MagneticRadius` | 384 | The item magnetism amount (higher values attract items from father away).
 `HighlightRadius` | `false` | Whether to highlight the tractor radius when riding it.
 `PassThroughTrellisCrops` | `false` | Whether the tractor can pass through trellis crops like grapes. This is an experimental feature.
+`CustomAttachments` | _(empty)_ | The custom items or tools to apply. If you specify something that's already supported (like the axe), this will override all limitations on its use. These must match the exact internal item/tool names (not the translated display names). For example: `"CustomTools": ["Axe"]`
 
 ## Custom textures
 You can drop new PNGs into the `assets` folder to change the appearance of the tractor or garage.

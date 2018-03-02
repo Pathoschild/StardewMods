@@ -118,7 +118,7 @@ Here are the supported changes:
   `Action`   | The kind of change to make. Must be `Load`.
   `Target`   | The game asset you want to change. This is the file path without the `Content` part, file extension, or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`).
   `Locale`   | _(optional)_ The language code of the game asset you want to replace. Omit to replace for any language.
-  `FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`).
+  `FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.png`, `.tbin`, or `.xnb` file.
   `Enabled`  | _(optional)_ Whether to apply this patch (default `true`).
 
 * **Edit an image.**  
@@ -132,7 +132,7 @@ Here are the supported changes:
   `Action`   | The kind of change to make. Must be `EditImage`.
   `Target`   | The game asset you want to change. This is the file path without the `Content` part, file extension, or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`).
   `Locale`   | _(optional)_ The language code of the game asset you want to edit. Omit to edit for any language.
-  `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`).
+  `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file.
   `FromArea` | _(optional)_ The part of the source image to copy. This is specified as an object with the X and Y coordinates of the top-left corner, and the width and height of the area. For example, `{ "X": 256, "Y": 96, "Width": 16, "Height": 16 }`.
   `ToArea`   | _(optional)_ The part of the target image to replace. This is specified as an object with the X and Y coordinates of the top-left corner, and the width and height of the area. For example, `{ "X": 256, "Y": 96, "Width": 16, "Height": 16 }`.
   `Enabled`  | _(optional)_ Whether to apply this patch (default `true`).
