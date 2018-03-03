@@ -112,6 +112,11 @@ namespace ContentPatcher
                     this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it uses unsupported format {config.Format} (supported version: 1.0).", LogLevel.Warn);
                     continue;
                 }
+                if (!config.Enabled)
+                {
+                    this.Monitor.Log($"Content pack '{pack.Manifest.Name}' disabled.", LogLevel.Info);
+                    continue;
+                }
 
                 // load patches
                 int i = 0;
