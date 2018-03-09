@@ -141,8 +141,9 @@ field      | purpose
   ---------- | -------
   &nbsp;     | See _common fields_ above.
   `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file.
-  `FromArea` | _(optional)_ The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y coordinates of the top-left corner, and the width and height of the area. For example, `{ "X": 256, "Y": 96, "Width": 16, "Height": 16 }`.
-  `ToArea`   | _(optional)_ The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y coordinates of the top-left corner, and the width and height of the area. For example, `{ "X": 256, "Y": 96, "Width": 16, "Height": 16 }`.
+  `FromArea` | _(optional)_ The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y coordinates of the top-left corner, and the width and height of the area.  [See example](#example).
+  `ToArea`   | _(optional)_ The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y coordinates of the top-left corner, and the width and height of the area.  [See example](#example).
+  `PatchMode`| _(optional)_ How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace the target area with your source image.</li><li><code>Overlay</code>: draw your source image on top of what's already there, so the original image shows through transparent pixels.</li></ul>
 
 * **Edit a data file** (`"Action": "EditData"`).  
   Instead of replacing an entire data file, you can edit the individual entries or even fields you

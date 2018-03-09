@@ -26,6 +26,9 @@ namespace ContentPatcher.Framework.Patchers
         /// <summary>The sprite area to overwrite.</summary>
         private readonly Rectangle? ToArea;
 
+        /// <summary>Indicates how the image should be patched.</summary>
+        private readonly PatchMode PatchMode;
+
 
         /*********
         ** Accessors
@@ -51,9 +54,10 @@ namespace ContentPatcher.Framework.Patchers
         /// <param name="fromLocalAsset">The asset key to load from the content pack instead.</param>
         /// <param name="fromArea">The sprite area from which to read an image.</param>
         /// <param name="toArea">The sprite area to overwrite.</param>
+        /// <param name="patchMode">Indicates how the image should be patched.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="assetLoader">Handles the logic around loading assets from content packs.</param>
-        public EditImagePatch(IContentPack contentPack, string assetName, string locale, string fromLocalAsset, Rectangle fromArea, Rectangle toArea, IMonitor monitor, AssetLoader assetLoader)
+        public EditImagePatch(IContentPack contentPack, string assetName, string locale, string fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor, AssetLoader assetLoader)
         {
             // init
             this.ContentPack = contentPack;
@@ -62,6 +66,7 @@ namespace ContentPatcher.Framework.Patchers
             this.FromLocalAsset = fromLocalAsset;
             this.FromArea = fromArea != Rectangle.Empty ? fromArea : null as Rectangle?;
             this.ToArea = toArea != Rectangle.Empty ? toArea : null as Rectangle?;
+            this.PatchMode = patchMode;
             this.Monitor = monitor;
             this.AssetLoader = assetLoader;
         }
@@ -93,7 +98,7 @@ namespace ContentPatcher.Framework.Patchers
             }
 
             // apply source image
-            editor.PatchImage(source, this.FromArea, this.ToArea);
+            editor.PatchImage(source, this.FromArea, this.ToArea, this.PatchMode);
         }
 
 

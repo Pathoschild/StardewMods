@@ -274,7 +274,16 @@ namespace ContentPatcher
 
                             // edit image
                             case "editimage":
-                                this.AddLoaderOrPatcher(this.Patchers, assetName, new EditImagePatch(pack, assetName, locale, localAsset, entry.FromArea, entry.ToArea, this.Monitor, this.AssetLoader));
+                                // read patch mode
+                                PatchMode patchMode = PatchMode.Replace;
+                                if (!string.IsNullOrWhiteSpace(entry.PatchMode) && !Enum.TryParse(entry.PatchMode, true, out patchMode))
+                                {
+                                    LogSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}].");
+                                    continue;
+                                }
+
+                                // save
+                                this.AddLoaderOrPatcher(this.Patchers, assetName, new EditImagePatch(pack, assetName, locale, localAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.AssetLoader));
                                 break;
 
                             default:
