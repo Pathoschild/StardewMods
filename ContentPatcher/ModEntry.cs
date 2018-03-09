@@ -5,6 +5,7 @@ using System.Linq;
 using ContentPatcher.Framework;
 using ContentPatcher.Framework.Patchers;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 
 namespace ContentPatcher
 {
@@ -26,6 +27,12 @@ namespace ContentPatcher
         /// <summary>Handles the logic around loading assets from content packs.</summary>
         private readonly AssetLoader AssetLoader = new AssetLoader();
 
+        /// <summary>The mod configuration.</summary>
+        private ModConfig Config;
+
+        /// <summary>The debug overlay (if enabled).</summary>
+        private DebugOverlay DebugOverlay;
+
 
         /*********
         ** Public methods
@@ -34,7 +41,13 @@ namespace ContentPatcher
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            // initialise
+            this.Config = helper.ReadConfig<ModConfig>();
             this.LoadContentPacks();
+
+            // set up debug overlay
+            if (this.Config.EnableDebugFeatures)
+                InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
         }
 
         /// <summary>Get whether this instance can load the initial version of the given asset.</summary>
@@ -90,6 +103,37 @@ namespace ContentPatcher
         /*********
         ** Private methods
         *********/
+        /// <summary>The method invoked when the player presses a button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
+        {
+            if (this.Config.EnableDebugFeatures)
+            {
+                // toggle overlay
+                if (this.Config.Controls.ToggleDebug.Contains(e.Button))
+                {
+                    if (this.DebugOverlay == null)
+                        this.DebugOverlay = new DebugOverlay(this.Helper.Content);
+                    else
+                    {
+                        this.DebugOverlay.Dispose();
+                        this.DebugOverlay = null;
+                    }
+                    return;
+                }
+
+                // cycle textures
+                if (this.DebugOverlay != null)
+                {
+                    if (this.Config.Controls.DebugPrevTexture.Contains(e.Button))
+                        this.DebugOverlay.PrevTexture();
+                    if (this.Config.Controls.DebugNextTexture.Contains(e.Button))
+                        this.DebugOverlay.NextTexture();
+                }
+            }
+        }
+
         /// <summary>Load the loaders and patchers from all registered content packs.</summary>
         private void LoadContentPacks()
         {

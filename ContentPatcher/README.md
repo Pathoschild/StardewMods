@@ -171,6 +171,18 @@ info. Suggestions:
 2. When editing the Nexus page, add Content Patcher under 'Requirements'. Besides reminding players
    to install it first, it'll also add your content pack to the list on the Content Patcher page.
 
+### Debug mode
+Content Patcher has a debug mode for modders. This lets you view loaded textures directly with any
+changes applied, to help troubleshoot content packs. To enable it:
+
+1. Run the game once with Content Patcher installed.
+2. Edit the mod's `config.json` file in a text editor.
+3. Set `EnableDebugFeatures` to `true`.
+
+Once enabled, press `F3` to display textures and left/right `CTRL` to cycle textures. Close and
+reopen the debug UI to refresh the texture list.
+> ![](docs/screenshots/debug-mode.png)
+
 ## Versions
 See [release notes](release-notes.md).
 

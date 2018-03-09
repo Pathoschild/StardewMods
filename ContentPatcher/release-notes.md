@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.2
+* Added debug mode for modders (disabled by default).
+
 ## 1.1
 * Added `Enabled` field to disable individual patches (thanks to f4iTh!).
 * Added support for XNB files in `FromFile`.
