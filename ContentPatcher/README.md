@@ -112,7 +112,7 @@ All changes support these common fields:
 field      | purpose
 ---------- | -------
 `Action`   | The kind of change to make (`Load`, `EditImage`, or `EditData`). See below.
-`Target`   | The game asset you want to change. This is the path relative to your game's `Content` folder, without the `Content` part, file extension, or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`).
+`Target`   | The game asset you want to change. This is the path relative to your game's `Content` folder, without the `Content` part, file extension, or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`). Capitalisation doesn't matter.
 `Locale`   | _(optional)_ The language code of the game asset to affect (or leave it out for any language).
 
 ### Supported changes
@@ -127,7 +127,7 @@ field      | purpose
   field      | purpose
   ---------- | -------
   &nbsp;     | See _common fields_ above.
-  `FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.png`, `.tbin`, or `.xnb` file.
+  `FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.png`, `.tbin`, or `.xnb` file. Capitalisation doesn't matter.
 
 * **Edit an image** (`"Action": "EditImage"`).  
   Instead of replacing an entire spritesheet, you can replace just the part you need. For example,
@@ -140,7 +140,7 @@ field      | purpose
   field      | purpose
   ---------- | -------
   &nbsp;     | See _common fields_ above.
-  `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file.
+  `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file. Capitalisation doesn't matter.
   `FromArea` | _(optional)_ The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y coordinates of the top-left corner, and the width and height of the area.  [See example](#example).
   `ToArea`   | _(optional)_ The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y coordinates of the top-left corner, and the width and height of the area.  [See example](#example).
   `PatchMode`| _(optional)_ How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace the target area with your source image.</li><li><code>Overlay</code>: draw your source image on top of what's already there, so the original image shows through transparent pixels.</li></ul>

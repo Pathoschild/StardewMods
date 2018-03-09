@@ -195,10 +195,14 @@ namespace ContentPatcher
                             LogSkip($"must set the {nameof(PatchConfig.FromFile)} field for a '{action}' patch.");
                             continue;
                         }
-                        if (localAsset != null && !this.AssetLoader.AssetExists(pack, localAsset))
+                        if (localAsset != null)
                         {
-                            LogSkip($"the {nameof(PatchConfig.FromFile)} field specifies a file that doesn't exist: {localAsset}.");
-                            continue;
+                            localAsset = this.AssetLoader.GetActualPath(pack, localAsset);
+                            if (localAsset == null)
+                            {
+                                LogSkip($"the {nameof(PatchConfig.FromFile)} field specifies a file that doesn't exist: {entry.FromFile}.");
+                                continue;
+                            }
                         }
 
                         // read locale

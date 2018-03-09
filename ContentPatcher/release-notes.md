@@ -3,7 +3,7 @@
 # Release notes
 ## 1.2
 * Added debug mode for modders (disabled by default).
-* `Target` is now case-insensitive.
+* `FromFile`, `Target`, and map tilesheets are now case-insensitive.
 * Fixed null fields not being ignored after warning.
 
 ## 1.1
