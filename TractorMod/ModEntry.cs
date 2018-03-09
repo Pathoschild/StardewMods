@@ -165,7 +165,7 @@ namespace Pathoschild.Stardew.TractorMod
         private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
             // remove tractor from social menu
-            if (e.NewMenu is GameMenu gameMenu && !this.Tractor.IsRiding)
+            if (e.NewMenu is GameMenu gameMenu && this.Tractor != null && !this.Tractor.IsRiding)
             {
                 SocialPage socialPage = (SocialPage)this.Helper.Reflection.GetField<List<IClickableMenu>>(gameMenu, "pages").GetValue()[GameMenu.socialTab];
                 List<ClickableTextureComponent> friendNames = this.Helper.Reflection.GetField<List<ClickableTextureComponent>>(socialPage, "friendNames").GetValue();

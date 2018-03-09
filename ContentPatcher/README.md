@@ -48,13 +48,18 @@ In some cases there may be a better option:
   * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) for custom items.
 
 ### Creating a content pack
+#### Overview
 A content pack consists of a folder with these files:
 * a `manifest.json` for SMAPI to read (see [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki);
 * a `content.json` which describes the changes you want to make;
 * and any images or other files you want to use.
 
 The `content.json` file contains a format version (just use `1.0`) and a list of changes you
-want to make. Here's a quick example of each possible change (explanations below):
+want to make. Each change (technically called a _patch_) describes a specific action: replace one
+file, copy this image into the file, etc. You can list any number of changes.
+
+#### Example
+Here's a quick example of each possible change type (explanations below):
 
 ```js
 {
@@ -67,7 +72,7 @@ want to make. Here's a quick example of each possible change (explanations below
           "FromFile": "assets/dinosaur.png"
        },
 
-       // edit one part of an image
+       // edit part of an image
        {
           "Action": "EditImage",
           "Target": "Maps/springobjects",
@@ -101,54 +106,54 @@ want to make. Here's a quick example of each possible change (explanations below
 }
 ```
 
-The file consists of a JSON array (the `[` and `]` at the top and bottom) containing one JSON
-object (the `{` and `}` blocks) for each change you want to make. You can list any number of
-changes.
+### Common fields
+All changes support these common fields:
 
-Here are the supported changes:
+field      | purpose
+---------- | -------
+`Action`   | The kind of change to make (`Load`, `EditImage`, or `EditData`). See below.
+`Target`   | The game asset you want to change. This is the path relative to your game's `Content` folder, without the `Content` part, file extension, or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`). Capitalisation doesn't matter.
+`Locale`   | _(optional)_ The language code of the game asset to affect (or leave it out for any language).
 
-* **Replace an entire file.**  
-  When the game loads the file, it'll receive your file instead. That's
-  fine if you're changing the entire file, but avoid this if possible. Each file can only be
-  replaced once — your content pack won't be compatible with any other content pack that replaces
-  the same file. (It'll work fine with any content pack that only edits the file, though.)
+### Supported changes
+* **Replace an entire file** (`"Action": "Load"`).  
+  When the game loads the file, it'll receive your file instead. This is useful for mods which
+  change everything (like pet replacement mods).
+
+  Avoid this if you don't need to change the whole file though — each file can only be replaced
+  once, so your content pack won't be compatible with other content packs that replace the same
+  file. (It'll work fine with content packs that only edit the file, though.)
 
   field      | purpose
   ---------- | -------
-  `Action`   | The kind of change to make. Must be `Load`.
-  `Target`   | The game asset you want to change. This is the file path without the `Content` part, file extension, or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`).
-  `Locale`   | _(optional)_ The language code of the game asset you want to replace. Omit to replace for any language.
-  `FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.png`, `.tbin`, or `.xnb` file.
-  `Enabled`  | _(optional)_ Whether to apply this patch (default `true`).
+  &nbsp;     | See _common fields_ above.
+  `FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.png`, `.tbin`, or `.xnb` file. Capitalisation doesn't matter.
 
-* **Edit an image.**  
+* **Edit an image** (`"Action": "EditImage"`).  
   Instead of replacing an entire spritesheet, you can replace just the part you need. For example,
   you can change an item image by changing only its sprite in the spritesheet. Any number of
-  content packs can edit the same file. You can extend an image downwards by simply patching past
-  the bottom.
+  content packs can edit the same file.
+
+  You can extend an image downwards by just patching past the bottom. Content Patcher will
+  automatically expand the image to fit.
 
   field      | purpose
   ---------- | -------
-  `Action`   | The kind of change to make. Must be `EditImage`.
-  `Target`   | The game asset you want to change. This is the file path without the `Content` part, file extension, or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`).
-  `Locale`   | _(optional)_ The language code of the game asset you want to edit. Omit to edit for any language.
-  `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file.
-  `FromArea` | _(optional)_ The part of the source image to copy. This is specified as an object with the X and Y coordinates of the top-left corner, and the width and height of the area. For example, `{ "X": 256, "Y": 96, "Width": 16, "Height": 16 }`.
-  `ToArea`   | _(optional)_ The part of the target image to replace. This is specified as an object with the X and Y coordinates of the top-left corner, and the width and height of the area. For example, `{ "X": 256, "Y": 96, "Width": 16, "Height": 16 }`.
-  `Enabled`  | _(optional)_ Whether to apply this patch (default `true`).
+  &nbsp;     | See _common fields_ above.
+  `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file. Capitalisation doesn't matter.
+  `FromArea` | _(optional)_ The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y coordinates of the top-left corner, and the width and height of the area.  [See example](#example).
+  `ToArea`   | _(optional)_ The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y coordinates of the top-left corner, and the width and height of the area.  [See example](#example).
+  `PatchMode`| _(optional)_ How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace the target area with your source image.</li><li><code>Overlay</code>: draw your source image on top of what's already there, so the original image shows through transparent pixels.</li></ul>
 
-* **Edit a data file.**  
+* **Edit a data file** (`"Action": "EditData"`).  
   Instead of replacing an entire data file, you can edit the individual entries or even fields you
   need.
 
   field      | purpose
   ---------- | -------
-  `Action`   | The kind of change to make. Must be `EditData`.
-  `Target`   | The game asset you want to change. This is the file path without the `Content` part, file extension, or language (like `Data/ObjectInformation` to edit `Content/Data/ObjectInformation.xnb`).
-  `Locale`   | _(optional)_ The language code of the game asset you want to edit. Omit to edit for any language.
-  `Entries`  | _(optional)_ The entries in the data file you want to change. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. See example above.
-  `Fields`   | _(optional)_ The individual fields you want to change for existing entries. See example above.
-  `Enabled`  | _(optional)_ Whether to apply this patch (default `true`).
+  &nbsp;     | See _common fields_ above.
+  `Entries`  | _(optional)_ The entries in the data file you want to change. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. [See example](#example).
+  `Fields`   | _(optional)_ The individual fields you want to change for existing entries. [See example](#example).
 
 ### Releasing a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general
@@ -166,6 +171,18 @@ info. Suggestions:
    ```
 2. When editing the Nexus page, add Content Patcher under 'Requirements'. Besides reminding players
    to install it first, it'll also add your content pack to the list on the Content Patcher page.
+
+### Debug mode
+Content Patcher has a debug mode for modders. This lets you view loaded textures directly with any
+changes applied, to help troubleshoot content packs. To enable it:
+
+1. Run the game once with Content Patcher installed.
+2. Edit the mod's `config.json` file in a text editor.
+3. Set `EnableDebugFeatures` to `true`.
+
+Once enabled, press `F3` to display textures and left/right `CTRL` to cycle textures. Close and
+reopen the debug UI to refresh the texture list.
+> ![](docs/screenshots/debug-mode.png)
 
 ## Versions
 See [release notes](release-notes.md).

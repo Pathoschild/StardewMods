@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.2
+* Added support for overlaying images.
+* Added optional debug mode for modders.
+* `FromFile`, `Target`, and map tilesheets are now case-insensitive.
+* Fixed null fields not being ignored after warning.
+
 ## 1.1
 * Added `Enabled` field to disable individual patches (thanks to f4iTh!).
 * Added support for XNB files in `FromFile`.

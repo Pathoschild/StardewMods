@@ -35,5 +35,8 @@ namespace ContentPatcher.Framework
 
         /// <summary>The individual fields to edit in data records.</summary>
         public IDictionary<string, IDictionary<int, string>> Fields { get; set; }
+
+        /// <summary>Indicates how the image should be patched.</summary>
+        public string PatchMode { get; set; }
     }
 }

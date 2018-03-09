@@ -123,6 +123,10 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="e">The event data.</param>
         private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
         {
+            // disables input until a world has been loaded
+            if (!Context.IsWorldReady)
+                return;
+        
             // perform bound action
             this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
             {

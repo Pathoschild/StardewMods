@@ -5,6 +5,7 @@ using System.Linq;
 using ContentPatcher.Framework;
 using ContentPatcher.Framework.Patchers;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 
 namespace ContentPatcher
 {
@@ -18,13 +19,19 @@ namespace ContentPatcher
         private readonly string PatchFileName = "content.json";
 
         /// <summary>The asset loaders indexed by asset name.</summary>
-        private readonly IDictionary<string, IList<LoadPatch>> Loaders = new Dictionary<string, IList<LoadPatch>>();
+        private readonly IDictionary<string, IList<LoadPatch>> Loaders = new Dictionary<string, IList<LoadPatch>>(StringComparer.InvariantCultureIgnoreCase);
 
         /// <summary>The asset patchers indexed by asset name.</summary>
-        private readonly IDictionary<string, IList<IPatch>> Patchers = new Dictionary<string, IList<IPatch>>();
+        private readonly IDictionary<string, IList<IPatch>> Patchers = new Dictionary<string, IList<IPatch>>(StringComparer.InvariantCultureIgnoreCase);
 
         /// <summary>Handles the logic around loading assets from content packs.</summary>
         private readonly AssetLoader AssetLoader = new AssetLoader();
+
+        /// <summary>The mod configuration.</summary>
+        private ModConfig Config;
+
+        /// <summary>The debug overlay (if enabled).</summary>
+        private DebugOverlay DebugOverlay;
 
 
         /*********
@@ -34,7 +41,13 @@ namespace ContentPatcher
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            // initialise
+            this.Config = helper.ReadConfig<ModConfig>();
             this.LoadContentPacks();
+
+            // set up debug overlay
+            if (this.Config.EnableDebugFeatures)
+                InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
         }
 
         /// <summary>Get whether this instance can load the initial version of the given asset.</summary>
@@ -90,6 +103,37 @@ namespace ContentPatcher
         /*********
         ** Private methods
         *********/
+        /// <summary>The method invoked when the player presses a button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
+        {
+            if (this.Config.EnableDebugFeatures)
+            {
+                // toggle overlay
+                if (this.Config.Controls.ToggleDebug.Contains(e.Button))
+                {
+                    if (this.DebugOverlay == null)
+                        this.DebugOverlay = new DebugOverlay(this.Helper.Content);
+                    else
+                    {
+                        this.DebugOverlay.Dispose();
+                        this.DebugOverlay = null;
+                    }
+                    return;
+                }
+
+                // cycle textures
+                if (this.DebugOverlay != null)
+                {
+                    if (this.Config.Controls.DebugPrevTexture.Contains(e.Button))
+                        this.DebugOverlay.PrevTexture();
+                    if (this.Config.Controls.DebugNextTexture.Contains(e.Button))
+                        this.DebugOverlay.NextTexture();
+                }
+            }
+        }
+
         /// <summary>Load the loaders and patchers from all registered content packs.</summary>
         private void LoadContentPacks()
         {
@@ -151,10 +195,14 @@ namespace ContentPatcher
                             LogSkip($"must set the {nameof(PatchConfig.FromFile)} field for a '{action}' patch.");
                             continue;
                         }
-                        if (localAsset != null && !this.AssetLoader.AssetExists(pack, localAsset))
+                        if (localAsset != null)
                         {
-                            LogSkip($"the {nameof(PatchConfig.FromFile)} field specifies a file that doesn't exist: {localAsset}.");
-                            continue;
+                            localAsset = this.AssetLoader.GetActualPath(pack, localAsset);
+                            if (localAsset == null)
+                            {
+                                LogSkip($"the {nameof(PatchConfig.FromFile)} field specifies a file that doesn't exist: {entry.FromFile}.");
+                                continue;
+                            }
                         }
 
                         // read locale
@@ -221,6 +269,7 @@ namespace ContentPatcher
                                 if (entry.Fields != null && entry.Fields.Any(p => p.Value == null || p.Value.Any(n => n.Value == null)))
                                 {
                                     LogSkip($"the {nameof(PatchConfig.Fields)} can't contain empty values.");
+                                    continue;
                                 }
 
                                 // save
@@ -229,7 +278,16 @@ namespace ContentPatcher
 
                             // edit image
                             case "editimage":
-                                this.AddLoaderOrPatcher(this.Patchers, assetName, new EditImagePatch(pack, assetName, locale, localAsset, entry.FromArea, entry.ToArea, this.Monitor, this.AssetLoader));
+                                // read patch mode
+                                PatchMode patchMode = PatchMode.Replace;
+                                if (!string.IsNullOrWhiteSpace(entry.PatchMode) && !Enum.TryParse(entry.PatchMode, true, out patchMode))
+                                {
+                                    LogSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}].");
+                                    continue;
+                                }
+
+                                // save
+                                this.AddLoaderOrPatcher(this.Patchers, assetName, new EditImagePatch(pack, assetName, locale, localAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.AssetLoader));
                                 break;
 
                             default:

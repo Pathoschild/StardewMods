@@ -25,12 +25,23 @@ namespace ContentPatcher.Framework
         /*********
         ** Public methods
         *********/
-        /// <summary>Get whether the given asset key exists in the content pack files.</summary>
+        /// <summary>Get the actual relative path within the content pack for a folder, or <c>null</c> if not found.</summary>
         /// <param name="contentPack">The content pack.</param>
-        /// <param name="key">The asset key.</param>
-        public bool AssetExists(IContentPack contentPack, string key)
+        /// <param name="key">The case-insensitive asset key.</param>
+        public string GetActualPath(IContentPack contentPack, string key)
         {
-            return File.Exists(Path.Combine(contentPack.DirectoryPath, key));
+            // search for a case-insensitive file match (Linux/Mac are case-sensitive)
+            foreach (string path in Directory.EnumerateFiles(contentPack.DirectoryPath, "*", SearchOption.AllDirectories))
+            {
+                if (!path.StartsWith(contentPack.DirectoryPath))
+                    throw new InvalidOperationException("File search failed, contained files aren't in the searched folder (???).");
+
+                string relativePath = path.Substring(contentPack.DirectoryPath.Length + 1);
+                if (relativePath.Equals(key, StringComparison.InvariantCultureIgnoreCase))
+                    return relativePath;
+            }
+
+            return null;
         }
 
         /// <summary>Preload an asset from the content pack if necessary.</summary>
@@ -52,12 +63,18 @@ namespace ContentPatcher.Framework
                 string relativeRoot = contentPack.GetActualAssetKey(""); // warning: this depends on undocumented SMAPI implementation details
                 foreach (TileSheet tilesheet in map.TileSheets)
                 {
+                    // ignore if not a PNG in the content pack
                     if (!tilesheet.ImageSource.StartsWith(relativeRoot) || Path.GetExtension(tilesheet.ImageSource).Equals(".png", StringComparison.InvariantCultureIgnoreCase))
-                        continue; // not a content pack PNG
+                        continue;
 
-                    string relativePath = tilesheet.ImageSource.Substring(relativeRoot.Length + 1);
+                    // ignore if local file doesn't exist
+                    string relativePath = this.GetActualPath(contentPack, tilesheet.ImageSource.Substring(relativeRoot.Length + 1));
+                    if (relativePath == null)
+                        continue;
+
+                    // load asset
                     string actualAssetKey = contentPack.GetActualAssetKey(relativePath);
-                    if (!this.PngTextureCache.ContainsKey(actualAssetKey) && this.AssetExists(contentPack, relativePath))
+                    if (!this.PngTextureCache.ContainsKey(actualAssetKey))
                         this.PngTextureCache[actualAssetKey] = contentPack.LoadAsset<Texture2D>(relativePath);
                 }
             }
