@@ -19,10 +19,10 @@ namespace ContentPatcher
         private readonly string PatchFileName = "content.json";
 
         /// <summary>The asset loaders indexed by asset name.</summary>
-        private readonly IDictionary<string, IList<LoadPatch>> Loaders = new Dictionary<string, IList<LoadPatch>>();
+        private readonly IDictionary<string, IList<LoadPatch>> Loaders = new Dictionary<string, IList<LoadPatch>>(StringComparer.InvariantCultureIgnoreCase);
 
         /// <summary>The asset patchers indexed by asset name.</summary>
-        private readonly IDictionary<string, IList<IPatch>> Patchers = new Dictionary<string, IList<IPatch>>();
+        private readonly IDictionary<string, IList<IPatch>> Patchers = new Dictionary<string, IList<IPatch>>(StringComparer.InvariantCultureIgnoreCase);
 
         /// <summary>Handles the logic around loading assets from content packs.</summary>
         private readonly AssetLoader AssetLoader = new AssetLoader();
