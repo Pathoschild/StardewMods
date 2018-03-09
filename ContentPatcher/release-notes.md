@@ -2,7 +2,8 @@
 
 # Release notes
 ## 1.2
-* Added debug mode for modders (disabled by default).
+* Added support for overlaying images.
+* Added optional debug mode for modders.
 * `FromFile`, `Target`, and map tilesheets are now case-insensitive.
 * Fixed null fields not being ignored after warning.
 

@@ -1,6 +1,6 @@
 # Release notes
 ## 4.4.1
-* Fixed error opening the game menu if the tractor hasn't been bought yet.
+* Fixed error opening the game menu if the tractor hasn't been bought yet (thanks to f4iTh!).
 
 ## 4.4
 * Added support for using the tractor in the mines.

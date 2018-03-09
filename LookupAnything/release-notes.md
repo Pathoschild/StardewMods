@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.18.1
-* Fixed error when looking up something before the save is loaded.
+* Fixed error when looking up something before the save is loaded (thanks to f4iTh!).
 
 ## 1.18
 * Updated to SMAPI 2.4.
