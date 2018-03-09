@@ -3,6 +3,7 @@
 # Release notes
 ## 1.2
 * Added debug mode for modders (disabled by default).
+* Fixed null fields not being ignored after warning.
 
 ## 1.1
 * Added `Enabled` field to disable individual patches (thanks to f4iTh!).

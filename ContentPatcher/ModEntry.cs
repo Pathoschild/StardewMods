@@ -265,6 +265,7 @@ namespace ContentPatcher
                                 if (entry.Fields != null && entry.Fields.Any(p => p.Value == null || p.Value.Any(n => n.Value == null)))
                                 {
                                     LogSkip($"the {nameof(PatchConfig.Fields)} can't contain empty values.");
+                                    continue;
                                 }
 
                                 // save
