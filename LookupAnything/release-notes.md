@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.18.1
+* Fixed error when looking up something before the save is loaded.
+
 ## 1.18
 * Updated to SMAPI 2.4.
 * Added support for furniture.
