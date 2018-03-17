@@ -1,16 +1,18 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ContentPatcher.Framework;
-using ContentPatcher.Framework.Patchers;
+using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Patches;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher
 {
     /// <summary>The mod entry point.</summary>
-    internal class ModEntry : Mod, IAssetEditor, IAssetLoader
+    internal class ModEntry : Mod
     {
         /*********
         ** Properties
@@ -18,14 +20,11 @@ namespace ContentPatcher
         /// <summary>The name of the file which contains patch metadata.</summary>
         private readonly string PatchFileName = "content.json";
 
-        /// <summary>The asset loaders indexed by asset name.</summary>
-        private readonly IDictionary<string, IList<LoadPatch>> Loaders = new Dictionary<string, IList<LoadPatch>>(StringComparer.InvariantCultureIgnoreCase);
-
-        /// <summary>The asset patchers indexed by asset name.</summary>
-        private readonly IDictionary<string, IList<IPatch>> Patchers = new Dictionary<string, IList<IPatch>>(StringComparer.InvariantCultureIgnoreCase);
-
-        /// <summary>Handles the logic around loading assets from content packs.</summary>
+        /// <summary>Handles loading assets from content packs.</summary>
         private readonly AssetLoader AssetLoader = new AssetLoader();
+
+        /// <summary>Manages loaded patches.</summary>
+        private PatchManager PatchManager;
 
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
@@ -41,68 +40,29 @@ namespace ContentPatcher
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            // initialise
+            // init
             this.Config = helper.ReadConfig<ModConfig>();
+            this.PatchManager = new PatchManager(helper.Content.CurrentLocaleConstant);
             this.LoadContentPacks();
 
-            // set up debug overlay
+            // register patcher
+            helper.Content.AssetLoaders.Add(this.PatchManager);
+            helper.Content.AssetEditors.Add(this.PatchManager);
+
+            // set up events
             if (this.Config.EnableDebugFeatures)
                 InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
-        }
-
-        /// <summary>Get whether this instance can load the initial version of the given asset.</summary>
-        /// <param name="asset">Basic metadata about the asset being loaded.</param>
-        public bool CanLoad<T>(IAssetInfo asset)
-        {
-            return
-                this.Loaders.TryGetValue(asset.AssetName, out IList<LoadPatch> loaders)
-                && loaders.Any(p => p.Locale == null || p.Locale.Equals(asset.Locale, StringComparison.InvariantCultureIgnoreCase));
-        }
-
-        /// <summary>Get whether this instance can edit the given asset.</summary>
-        /// <param name="asset">Basic metadata about the asset being loaded.</param>
-        public bool CanEdit<T>(IAssetInfo asset)
-        {
-            return this.Patchers.ContainsKey(asset.AssetName);
-        }
-
-        /// <summary>Load a matched asset.</summary>
-        /// <param name="asset">Basic metadata about the asset being loaded.</param>
-        public T Load<T>(IAssetInfo asset)
-        {
-            if (!this.Loaders.TryGetValue(asset.AssetName, out IList<LoadPatch> loaders))
-                throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because there are no replacements registered for that key.");
-
-            foreach (LoadPatch loader in loaders)
-            {
-                if (loader.Locale != null && !asset.Locale.Equals(loader.Locale, StringComparison.InvariantCultureIgnoreCase))
-                    continue;
-
-                return this.AssetLoader.Load<T>(loader.ContentPack, loader.LocalAsset);
-            }
-            throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because there are no replacements registered for the selected locale.");
-        }
-
-        /// <summary>Edit a matched asset.</summary>
-        /// <param name="asset">A helper which encapsulates metadata about an asset and enables changes to it.</param>
-        public void Edit<T>(IAssetData asset)
-        {
-            if (!this.Patchers.TryGetValue(asset.AssetName, out IList<IPatch> patches))
-                throw new InvalidOperationException($"Can't edit asset key '{asset.AssetName}' because there are no patches registered for that key.");
-
-            foreach (IPatch patch in patches)
-            {
-                if (patch.Locale != null && !asset.Locale.Equals(patch.Locale, StringComparison.InvariantCultureIgnoreCase))
-                    continue;
-
-                patch.Apply<T>(asset);
-            }
+            SaveEvents.AfterReturnToTitle += this.SaveEvents_AfterReturnToTitle;
+            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
         }
 
 
         /*********
         ** Private methods
         *********/
+        /****
+        ** Event handlers
+        ****/
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
@@ -134,11 +94,32 @@ namespace ContentPatcher
             }
         }
 
-        /// <summary>Load the loaders and patchers from all registered content packs.</summary>
+        /// <summary>The method invoked when the player returns to the title screen.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void SaveEvents_AfterReturnToTitle(object sender, EventArgs e)
+        {
+            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null);
+        }
+
+        /// <summary>The method invoked when a new day starts.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
+        {
+            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, SDate.Now());
+        }
+
+        /****
+        ** Methods
+        ****/
+        /// <summary>Load the patches from all registered content packs.</summary>
         private void LoadContentPacks()
         {
             foreach (IContentPack pack in this.Helper.GetContentPacks())
             {
+                this.Monitor.Log($"Loading content pack '{pack.Manifest.Name}'...", LogLevel.Trace);
+
                 // read config
                 ContentConfig config = pack.ReadJsonFile<ContentConfig>(this.PatchFileName);
                 if (config == null)
@@ -170,15 +151,17 @@ namespace ContentPatcher
                         if (!entry.Enabled)
                             continue;
 
-                        // read action
-                        string action = entry.Action?.Trim().ToLower();
-                        if (string.IsNullOrWhiteSpace(action))
+                        // parse action
+                        if (!Enum.TryParse(entry.Action, out PatchType action))
                         {
-                            LogSkip($"must set the {nameof(PatchConfig.Action)} field.");
+                            LogSkip(string.IsNullOrWhiteSpace(entry.Action)
+                                ? $"must set the {nameof(PatchConfig.Action)} field."
+                                : $"invalid {nameof(PatchConfig.Action)} value '{entry.Action}', expected one of: {string.Join(", ", Enum.GetNames(typeof(PatchType)))}."
+                            );
                             continue;
                         }
 
-                        // read target asset
+                        // parse target asset
                         string assetName = !string.IsNullOrWhiteSpace(entry.Target)
                             ? this.Helper.Content.NormaliseAssetName(entry.Target)
                             : null;
@@ -188,11 +171,11 @@ namespace ContentPatcher
                             continue;
                         }
 
-                        // read source asset
+                        // parse source asset
                         string localAsset = this.NormaliseLocalAssetPath(pack, entry.FromFile);
-                        if (localAsset == null && (action == "load" || action == "editimage"))
+                        if (localAsset == null && (action == PatchType.Load || action == PatchType.EditImage))
                         {
-                            LogSkip($"must set the {nameof(PatchConfig.FromFile)} field for a '{action}' patch.");
+                            LogSkip($"must set the {nameof(PatchConfig.FromFile)} field for action '{action}'.");
                             continue;
                         }
                         if (localAsset != null)
@@ -205,79 +188,71 @@ namespace ContentPatcher
                             }
                         }
 
-                        // read locale
-                        string locale = !string.IsNullOrWhiteSpace(entry.Locale)
-                            ? entry.Locale.Trim().ToLower()
-                            : null;
+                        // parse conditions
+                        ConditionDictionary conditions;
+                        {
+                            if (!this.PatchManager.TryParseConditions(entry.When, out conditions, out string error))
+                            {
+                                LogSkip($"the {nameof(PatchConfig.When)} field is invalid: {error}.");
+                                continue;
+                            }
+                        }
 
-                        // parse for type
+                        // parse & save patch
                         switch (action)
                         {
                             // load asset
-                            case "load":
+                            case PatchType.Load:
                                 {
-                                    // check for conflicting loaders
-                                    if (this.Loaders.TryGetValue(assetName, out IList<LoadPatch> loaders))
+                                    // init patch
+                                    IPatch patch = new LoadPatch(this.AssetLoader, pack, assetName, conditions, localAsset);
+
+                                    // detect conflicting loaders
+                                    IPatch[] conflictingLoaders = this.PatchManager.GetConflictingLoaders(patch).ToArray();
+                                    if (conflictingLoaders.Any())
                                     {
-                                        // can't add for all locales if any loaders already registered
-                                        if (locale == null)
+                                        if (conflictingLoaders.Any(p => p.ContentPack == pack))
+                                            LogSkip($"the {assetName} file is already being loaded by this content pack in the same contexts. Each file can only be loaded once.");
+                                        else
                                         {
-                                            string[] localesLoadedBy = loaders.Select(p => $"{p.ContentPack.Manifest.Name}").ToArray();
-                                            LogSkip($"the {assetName} file is already being loaded by '{string.Join("', '", localesLoadedBy)}'. Each file can only be loaded once.");
-                                            continue;
+                                            string[] conflictingNames = conflictingLoaders.Select(p => p.ContentPack.Manifest.Name).Distinct().OrderBy(p => p).ToArray();
+                                            LogSkip($"the {assetName} file is already being loaded by other content packs in the same contexts ({string.Join(", ", conflictingNames)}). Each file can only be loaded once.");
                                         }
-
-                                        // can't add if already loaded for all locales
-                                        {
-                                            LoadPatch globalPatch = loaders.FirstOrDefault(p => p.Locale == null);
-                                            if (globalPatch != null)
-                                            {
-                                                LogSkip($"the {assetName} file is already being loaded by {(pack == globalPatch.ContentPack ? "this content pack" : $"the '{globalPatch.ContentPack.Manifest.Name}' content pack")}. Each file can only be loaded once.");
-                                                continue;
-                                            }
-                                        }
-
-                                        // can't add if already loaded for selected locale
-                                        {
-                                            LoadPatch localePatch = loaders.FirstOrDefault(p => p.Locale != null && p.Locale.Equals(locale, StringComparison.CurrentCultureIgnoreCase));
-                                            if (localePatch != null)
-                                            {
-                                                LogSkip($"the {assetName} file is already being loaded for the {locale} locale by {(pack == localePatch.ContentPack ? "this content pack" : $"the '{localePatch.ContentPack.Manifest.Name}' content pack")}. Each file can only be loaded once per locale.");
-                                                continue;
-                                            }
-                                        }
+                                        continue;
                                     }
 
-                                    // add loader
-                                    this.AddLoaderOrPatcher(this.Loaders, assetName, new LoadPatch(pack, assetName, locale, localAsset));
+                                    // add
+                                    this.PatchManager.Add(patch);
                                 }
                                 break;
 
                             // edit data
-                            case "editdata":
-                                // validate
-                                if (entry.Entries == null && entry.Fields == null)
+                            case PatchType.EditData:
                                 {
-                                    LogSkip($"either {nameof(PatchConfig.Entries)} or {nameof(PatchConfig.Fields)} must be specified for a '{action}' change.");
-                                    continue;
-                                }
-                                if (entry.Entries != null && entry.Entries.Any(p => string.IsNullOrWhiteSpace(p.Value)))
-                                {
-                                    LogSkip($"the {nameof(PatchConfig.Entries)} can't contain empty values.");
-                                    continue;
-                                }
-                                if (entry.Fields != null && entry.Fields.Any(p => p.Value == null || p.Value.Any(n => n.Value == null)))
-                                {
-                                    LogSkip($"the {nameof(PatchConfig.Fields)} can't contain empty values.");
-                                    continue;
-                                }
+                                    // validate
+                                    if (entry.Entries == null && entry.Fields == null)
+                                    {
+                                        LogSkip($"either {nameof(PatchConfig.Entries)} or {nameof(PatchConfig.Fields)} must be specified for a '{action}' change.");
+                                        continue;
+                                    }
+                                    if (entry.Entries != null && entry.Entries.Any(p => string.IsNullOrWhiteSpace(p.Value)))
+                                    {
+                                        LogSkip($"the {nameof(PatchConfig.Entries)} can't contain empty values.");
+                                        continue;
+                                    }
+                                    if (entry.Fields != null && entry.Fields.Any(p => p.Value == null || p.Value.Any(n => n.Value == null)))
+                                    {
+                                        LogSkip($"the {nameof(PatchConfig.Fields)} can't contain empty values.");
+                                        continue;
+                                    }
 
-                                // save
-                                this.AddLoaderOrPatcher(this.Patchers, assetName, new EditDataPatch(pack, assetName, locale, entry.Entries, entry.Fields, this.Monitor));
+                                    // save
+                                    this.PatchManager.Add(new EditDataPatch(this.AssetLoader, pack, assetName, conditions, entry.Entries, entry.Fields, this.Monitor));
+                                }
                                 break;
 
                             // edit image
-                            case "editimage":
+                            case PatchType.EditImage:
                                 // read patch mode
                                 PatchMode patchMode = PatchMode.Replace;
                                 if (!string.IsNullOrWhiteSpace(entry.PatchMode) && !Enum.TryParse(entry.PatchMode, true, out patchMode))
@@ -287,11 +262,11 @@ namespace ContentPatcher
                                 }
 
                                 // save
-                                this.AddLoaderOrPatcher(this.Patchers, assetName, new EditImagePatch(pack, assetName, locale, localAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.AssetLoader));
+                                this.PatchManager.Add(new EditImagePatch(this.AssetLoader, pack, assetName, conditions, localAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor));
                                 break;
 
                             default:
-                                LogSkip($"unknown patch type '{action}'.");
+                                LogSkip($"unsupported patch type '{action}'.");
                                 break;
                         }
 
@@ -305,18 +280,6 @@ namespace ContentPatcher
                     }
                 }
             }
-        }
-
-        /// <summary>Add a loader or patcher to the list.</summary>
-        /// <param name="dict">The dictionary to update.</param>
-        /// <param name="assetName">The normalised asset name.</param>
-        /// <param name="patch">The patcher to apply.</param>
-        private void AddLoaderOrPatcher<TPatcher>(IDictionary<string, IList<TPatcher>> dict, string assetName, TPatcher patch)
-        {
-            if (dict.TryGetValue(assetName, out IList<TPatcher> list))
-                list.Add(patch);
-            else
-                dict[assetName] = new List<TPatcher> { patch };
         }
 
         /// <summary>Get a normalised file path relative to the content pack folder.</summary>

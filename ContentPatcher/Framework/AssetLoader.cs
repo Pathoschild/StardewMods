@@ -8,7 +8,7 @@ using xTile.Tiles;
 
 namespace ContentPatcher.Framework
 {
-    /// <summary>Handles the logic around loading assets from content packs.</summary>
+    /// <summary>Handles loading assets from content packs.</summary>
     internal class AssetLoader
     {
         /*********
@@ -17,9 +17,6 @@ namespace ContentPatcher.Framework
         /// <summary>The textures provided by content packs.</summary>
         /// <remarks>This field is used to circumvent an issue where PNGs can't be loaded while a draw is in progress. Since we can't predict when the game will ask for a texture, we preload them ahead of time.</remarks>
         private readonly IDictionary<string, Texture2D> PngTextureCache = new Dictionary<string, Texture2D>();
-
-        ///// <summary>The maps provided by content packs.</summary>
-        //private readonly IDictionary<string, Map> MapCache = new Dictionary<string, Map>();
 
 
         /*********

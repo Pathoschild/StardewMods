@@ -1,6 +1,6 @@
 using StardewModdingAPI;
 
-namespace ContentPatcher.Framework
+namespace ContentPatcher.Framework.ConfigModels
 {
     /// <summary>The model for a content patch file.</summary>
     internal class ContentConfig

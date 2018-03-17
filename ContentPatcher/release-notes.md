@@ -1,6 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.3
+* Added support for patch conditions.
+* Added new conditions: season, day of month, day of week, and language.
+
 ## 1.2
 * Added support for overlaying images.
 * Added optional debug mode for modders.

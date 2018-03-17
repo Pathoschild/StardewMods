@@ -78,7 +78,7 @@ Here's a quick example of each possible change type (explanations below):
           "Target": "Maps/springobjects",
           "FromFile": "assets/fish-object.png",
           "FromArea": { "X": 0, "Y": 0, "Width": 16, "Height": 16 }, // optional, defaults to entire FromFile
-          "ToArea": { "X": 256, "Y": 96, "Width": 16, "Height": 16 }
+          "ToArea": { "X": 256, "Y": 96, "Width": 16, "Height": 16 } // optional, defaults to source size from top-left
        },
 
        // replace entries in a data file
@@ -113,7 +113,8 @@ field      | purpose
 ---------- | -------
 `Action`   | The kind of change to make (`Load`, `EditImage`, or `EditData`). See below.
 `Target`   | The game asset you want to change. This is the path relative to your game's `Content` folder, without the `Content` part, file extension, or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`). Capitalisation doesn't matter.
-`Locale`   | _(optional)_ The language code of the game asset to affect (or leave it out for any language).
+`Enabled`  | _(optional)_ Whether to apply this patch. Default true.
+`When`     | _(optional)_ Only apply the patch if the given conditions match (see [_conditions_ below](#conditions)).
 
 ### Supported changes
 * **Replace an entire file** (`"Action": "Load"`).  
@@ -154,6 +155,34 @@ field      | purpose
   &nbsp;     | See _common fields_ above.
   `Entries`  | _(optional)_ The entries in the data file you want to change. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. [See example](#example).
   `Fields`   | _(optional)_ The individual fields you want to change for existing entries. [See example](#example).
+
+### Conditions
+**(Content Patcher 1.3+)**
+You can make a patch conditional by adding a `When` field. The patch will be applied when all
+conditions match, and removed when they no longer match. Conditions are not case-sensitive, and you
+can specify multiple values as a comma-delimited list. You don't need to specify all conditions.
+
+For example:
+
+```js
+{
+    "Action": "EditImage",
+    "Target": "Building/houses",
+    "FromFile": "assets/green_house.png",
+    "When": {
+        "Season": "spring, summer"
+    }
+}
+```
+
+The possible conditions are:
+
+condition   | description
+----------- | -----------
+`Day`       | The day of month. Possible values: any integer from 1 through 28.
+`DayOfWeek` | The day of week. Possible values: `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, and `sunday`.
+`Language`  | The game's current language. Possible values: <table><tr><th>code</th><th>meaning</th></tr><tr><td>`de`</td><td>German</td></tr><tr><td>`en`</td><td>English</td></tr><tr><td>`es`</td><td>Spanish</td></tr><tr><td>`ja`</td><td>Japanese</td></tr><tr><td>`ru`</td><td>Russian</td></tr><tr><td>`pt`</td><td>Portuguese</td></tr><tr><td>`zh`</td><td>Chinese</td></tr></table></ul>
+`Season`    | The season name. Possible values: `spring`, `summer`, `fall`, and `winter`.
 
 ### Releasing a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general
