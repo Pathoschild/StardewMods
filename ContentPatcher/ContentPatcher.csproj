@@ -47,6 +47,7 @@
     <Compile Include="Framework\Conditions\Patch.cs" />
     <Compile Include="Framework\Conditions\ConditionContext.cs" />
     <Compile Include="Framework\Conditions\PatchType.cs" />
+    <Compile Include="Framework\Conditions\Weather.cs" />
     <Compile Include="Framework\ConfigModels\ContentConfig.cs" />
     <Compile Include="Framework\DebugOverlay.cs" />
     <Compile Include="Framework\ConfigModels\ModConfig.cs" />

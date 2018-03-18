@@ -13,6 +13,9 @@ namespace ContentPatcher.Framework.Conditions
         Language,
 
         /// <summary>The season name.</summary>
-        Season
+        Season,
+
+        /// <summary>The current weather.</summary>
+        Weather
     };
 }

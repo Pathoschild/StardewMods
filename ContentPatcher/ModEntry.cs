@@ -8,6 +8,7 @@ using ContentPatcher.Framework.Patches;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
+using StardewValley;
 
 namespace ContentPatcher
 {
@@ -99,7 +100,13 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void SaveEvents_AfterReturnToTitle(object sender, EventArgs e)
         {
-            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null);
+            // get context
+            IContentHelper contentHelper = this.Helper.Content;
+            LocalizedContentManager.LanguageCode language = contentHelper.CurrentLocaleConstant;
+
+            // update context
+            this.Monitor.Log($"Context: date=none, weather=none, locale={language}.");
+            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null);
         }
 
         /// <summary>The method invoked when a new day starts.</summary>
@@ -107,7 +114,15 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
-            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, SDate.Now());
+            // get context
+            IContentHelper contentHelper = this.Helper.Content;
+            LocalizedContentManager.LanguageCode language = contentHelper.CurrentLocaleConstant;
+            SDate date = SDate.Now();
+            Weather weather = this.GetCurrentWeather();
+
+            // update context
+            this.Monitor.Log($"Context: date={date.DayOfWeek} {date.Season} {date.Day}, weather={weather}, locale={language}.");
+            this.PatchManager.UpdateContext(contentHelper, language, date, weather);
         }
 
         /****
@@ -301,6 +316,20 @@ namespace ContentPatcher
             }
 
             return newPath;
+        }
+
+        /// <summary>Get the current weather from the game state.</summary>
+        private Weather GetCurrentWeather()
+        {
+            if (Utility.isFestivalDay(Game1.dayOfMonth, Game1.currentSeason) || Game1.weddingToday)
+                return Weather.Sun;
+
+            if (Game1.isSnowing)
+                return Weather.Snow;
+            if (Game1.isRaining)
+                return Game1.isLightning ? Weather.Storm : Weather.Rain;
+
+            return Weather.Sun;
         }
     }
 }

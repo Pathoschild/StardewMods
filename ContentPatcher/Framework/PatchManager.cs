@@ -16,6 +16,16 @@ namespace ContentPatcher.Framework
         /*********
         ** Properties
         *********/
+        /// <summary>The valid condition values.</summary>
+        private readonly IDictionary<ConditionKey, HashSet<string>> ValidValues = new Dictionary<ConditionKey, HashSet<string>>
+        {
+            [ConditionKey.Day] = new HashSet<string>(Enumerable.Range(1, 28).Select(p => p.ToString())),
+            [ConditionKey.DayOfWeek] = new HashSet<string>(Enum.GetNames(typeof(DayOfWeek)), StringComparer.InvariantCultureIgnoreCase),
+            [ConditionKey.Language] = new HashSet<string>(Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()), StringComparer.InvariantCultureIgnoreCase),
+            [ConditionKey.Season] = new HashSet<string>(new[] { "Spring", "Summer", "Fall", "Winter" }, StringComparer.InvariantCultureIgnoreCase),
+            [ConditionKey.Weather] = new HashSet<string>(Enum.GetNames(typeof(Weather)), StringComparer.InvariantCultureIgnoreCase)
+        };
+
         /// <summary>The patches to apply indexed by asset name.</summary>
         private readonly IDictionary<string, IList<IPatch>> Patches = new Dictionary<string, IList<IPatch>>(StringComparer.InvariantCultureIgnoreCase);
 
@@ -84,10 +94,11 @@ namespace ContentPatcher.Framework
         /// <param name="contentHelper">The content helper through which to invalidate assets.</param>
         /// <param name="language">The current language.</param>
         /// <param name="date">The current in-game date (if applicable).</param>
-        public void UpdateContext(IContentHelper contentHelper, LocalizedContentManager.LanguageCode language, SDate date)
+        /// <param name="weather">The current in-game weather (if applicable).</param>
+        public void UpdateContext(IContentHelper contentHelper, LocalizedContentManager.LanguageCode language, SDate date, Weather? weather)
         {
             // update context
-            this.ConditionContext.Update(language, date);
+            this.ConditionContext.Update(language, date, weather);
 
             // detect patches which changed conditional result
             HashSet<string> reloadAssetNames = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
@@ -183,7 +194,7 @@ namespace ContentPatcher.Framework
             // no conditions
             if (raw == null || !raw.Any())
             {
-                conditions = new ConditionDictionary();
+                conditions = new ConditionDictionary(this.ValidValues);
                 error = null;
                 return true;
             }
@@ -202,13 +213,13 @@ namespace ContentPatcher.Framework
             }
 
             // parse conditions
-            conditions = new ConditionDictionary();
+            conditions = new ConditionDictionary(this.ValidValues);
             foreach (KeyValuePair<string, string> pair in raw)
             {
                 // parse condition key
                 if (!Enum.TryParse(pair.Key, true, out ConditionKey key))
                 {
-                    error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", conditions.ValidValues.Keys)}";
+                    error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", this.ValidValues.Keys)}";
                     conditions = null;
                     return false;
                 }
@@ -224,10 +235,10 @@ namespace ContentPatcher.Framework
 
                 // restrict to allowed values
                 {
-                    string[] invalidValues = values.Except(conditions.ValidValues[key]).ToArray();
+                    string[] invalidValues = values.Except(this.ValidValues[key], StringComparer.InvariantCultureIgnoreCase).ToArray();
                     if (invalidValues.Any())
                     {
-                        error = $"invalid {key} values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", conditions.ValidValues[key])}";
+                        error = $"invalid {key} values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", this.ValidValues[key])}";
                         conditions = null;
                         return false;
                     }
@@ -261,7 +272,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get whether two sets of conditions can potentially both match in some contexts.</summary>
         /// <param name="left">The first set of conditions to compare.</param>
         /// <param name="right">The second set of conditions to compare.</param>
-        public bool CanConditionsOverlap(ConditionDictionary left, ConditionDictionary right)
+        private bool CanConditionsOverlap(ConditionDictionary left, ConditionDictionary right)
         {
             // no conflict if they edit different locales
             if (!left.GetImpliedValues(ConditionKey.Language).Intersect(right.GetImpliedValues(ConditionKey.Language)).Any())
@@ -271,9 +282,9 @@ namespace ContentPatcher.Framework
             return this.GetPotentialImpactsExcludingLocale(left).Intersect(this.GetPotentialImpactsExcludingLocale(right)).Any();
         }
 
-        /// <summary>Get all dates which the given conditions can potentially affect. This does not account for locale.</summary>
+        /// <summary>Get all dates which the given conditions can potentially affect. This does not account for locale (which is checked separately) and weather (which can affect any day anyway).</summary>
         /// <param name="conditions">The condition key.</param>
-        public IEnumerable<SDate> GetPotentialImpactsExcludingLocale(ConditionDictionary conditions)
+        private IEnumerable<SDate> GetPotentialImpactsExcludingLocale(ConditionDictionary conditions)
         {
             // get implied values
             HashSet<int> days = new HashSet<int>(conditions.GetImpliedValues(ConditionKey.Day).Select(int.Parse));
@@ -281,11 +292,11 @@ namespace ContentPatcher.Framework
             HashSet<DayOfWeek> daysOfWeek = new HashSet<DayOfWeek>(conditions.GetImpliedValues(ConditionKey.DayOfWeek).Select(name => (DayOfWeek)Enum.Parse(typeof(DayOfWeek), name, ignoreCase: true)));
 
             // get all potentially impacted dates
-            foreach (string season in conditions.ValidValues[ConditionKey.Season])
+            foreach (string season in this.ValidValues[ConditionKey.Season])
             {
-                foreach (int day in conditions.ValidValues[ConditionKey.Day].Select(int.Parse))
+                foreach (int day in this.ValidValues[ConditionKey.Day].Select(int.Parse))
                 {
-                    SDate date = new SDate(day, season);
+                    SDate date = new SDate(day, season.ToLower());
 
                     // matches any date
                     if (!conditions.Any())

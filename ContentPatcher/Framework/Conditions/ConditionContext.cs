@@ -24,13 +24,14 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="locale">The current language.</param>
         public ConditionContext(LocalizedContentManager.LanguageCode locale)
         {
-            this.Update(locale, null);
+            this.Update(locale, null, null);
         }
 
         /// <summary>Update the current context.</summary>
         /// <param name="language">The current language.</param>
         /// <param name="date">The current in-game date (if applicable).</param>
-        public void Update(LocalizedContentManager.LanguageCode language, SDate date)
+        /// <param name="weather">The current in-game weather (if applicable).</param>
+        public void Update(LocalizedContentManager.LanguageCode language, SDate date, Weather? weather)
         {
             // language
             this.Values[ConditionKey.Language] = language.ToString().ToLower();
@@ -39,6 +40,9 @@ namespace ContentPatcher.Framework.Conditions
             this.Values[ConditionKey.Day] = date?.Day.ToString(CultureInfo.InvariantCulture);
             this.Values[ConditionKey.DayOfWeek] = date?.DayOfWeek.ToString().ToLower();
             this.Values[ConditionKey.Season] = date?.Season.ToLower();
+
+            // weather
+            this.Values[ConditionKey.Weather] = weather?.ToString().ToLower();
         }
 
         /// <summary>Get a context value for comparison.</summary>

@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using StardewValley;
 
 namespace ContentPatcher.Framework.Conditions
 {
@@ -9,21 +6,22 @@ namespace ContentPatcher.Framework.Conditions
     internal class ConditionDictionary : Dictionary<ConditionKey, Condition>
     {
         /*********
-        ** Accessors
+        ** Properties
         *********/
         /// <summary>The valid condition values.</summary>
-        public readonly IDictionary<ConditionKey, HashSet<string>> ValidValues = new Dictionary<ConditionKey, HashSet<string>>
-        {
-            [ConditionKey.Day] = new HashSet<string>(Enumerable.Range(1, 28).Select(p => p.ToString())),
-            [ConditionKey.DayOfWeek] = new HashSet<string>((from string name in Enum.GetNames(typeof(DayOfWeek)) select name.ToLower()), StringComparer.InvariantCultureIgnoreCase),
-            [ConditionKey.Language] = new HashSet<string>((from string name in Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)) where name != LocalizedContentManager.LanguageCode.th.ToString() select name.ToLower()), StringComparer.InvariantCultureIgnoreCase),
-            [ConditionKey.Season] = new HashSet<string>(new[] { "spring", "summer", "fall", "winter" }, StringComparer.InvariantCultureIgnoreCase)
-        };
+        private readonly IDictionary<ConditionKey, HashSet<string>> ValidValues;
 
 
         /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="validValues">The valid condition values.</param>
+        public ConditionDictionary(IDictionary<ConditionKey, HashSet<string>> validValues)
+        {
+            this.ValidValues = validValues;
+        }
+
         /// <summary>Get the explicit values for a condition, or the implied range of values if not explicitly set.</summary>
         /// <param name="key">The condition key.</param>
         public IEnumerable<string> GetImpliedValues(ConditionKey key)
