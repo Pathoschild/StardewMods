@@ -44,10 +44,12 @@
     <Compile Include="Framework\Conditions\Condition.cs" />
     <Compile Include="Framework\Conditions\ConditionKey.cs" />
     <Compile Include="Framework\Conditions\ConditionDictionary.cs" />
+    <Compile Include="Framework\ConfigModels\ConfigFieldSchema.cs" />
     <Compile Include="Framework\Conditions\Patch.cs" />
     <Compile Include="Framework\Conditions\ConditionContext.cs" />
     <Compile Include="Framework\Conditions\PatchType.cs" />
     <Compile Include="Framework\Conditions\Weather.cs" />
+    <Compile Include="Framework\ConfigModels\ConfigSchemaFieldConfig.cs" />
     <Compile Include="Framework\ConfigModels\ContentConfig.cs" />
     <Compile Include="Framework\DebugOverlay.cs" />
     <Compile Include="Framework\ConfigModels\ModConfig.cs" />

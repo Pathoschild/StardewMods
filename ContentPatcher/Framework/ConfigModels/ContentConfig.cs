@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.ConfigModels
@@ -10,5 +11,8 @@ namespace ContentPatcher.Framework.ConfigModels
 
         /// <summary>The changes to make.</summary>
         public PatchConfig[] Changes { get; set; }
+
+        /// <summary>The schema for the <c>config.json</c> file (if any).</summary>
+        public IDictionary<string, ConfigSchemaFieldConfig> ConfigSchema { get; set; }
     }
 }

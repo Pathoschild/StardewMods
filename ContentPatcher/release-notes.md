@@ -2,8 +2,8 @@
 
 # Release notes
 ## 1.3
-* Added support for patch conditions.
-* Added new conditions: season, day of month, day of week, and language.
+* Added support for patch conditions, with initial support for season, day of month, day of week, and language.
+* Added support for player settings via `config.json`.
 * Added trace logs when a content pack loads or edits an asset.
 
 ## 1.2

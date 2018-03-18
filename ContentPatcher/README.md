@@ -199,6 +199,81 @@ Special note about `"Action": "Load"`:
   `day: 1`           | `dayOfWeek: "Tuesday"` | both are loaded correctly (1st day of month is never Tuesday).
   `day: 1`           | `weather: "Sun"`       | error: sun could happen on the first of a month.
 
+### Player configuration
+You can let players configure your mod using a `config.json` file. This requires a bit more upfront
+setup for the mod author, but once that's done it'll behave just like a SMAPI `config.json` for
+players. Content Patcher will automatically create and load the file, and you can use the config
+values in [the `When` field](#conditions). Config fields are not case-sensitive, and can only
+contain string and true/false values.
+
+For example: this `content.json` defines two config fields, `Material` and `Trim`, and then uses
+them to change which patches are applied. See below for more details.
+
+```js
+{
+    "Format": "1.0",
+    "ConfigSchema": {
+        "Material": {
+            "AllowValues": "Wood, Metal"
+        },
+        "Trim": {
+            "AllowValues": "Dark",
+            "Default": "" // disable by default
+        }
+    },
+    "Changes": [
+        // load material
+        {
+            "Action": "Load",
+            "Target": "LooseSprites/Billboard",
+            "FromFile": "assets/material_wood.png",
+            "When": {
+                "Material": "Wood"
+            }
+        },
+        {
+            "Action": "Load",
+            "Target": "LooseSprites/Billboard",
+            "FromFile": "assets/material_metal.png",
+            "When": {
+                "Material": "Metal"
+            }
+        },
+
+        // apply trim color
+        {
+            "Action": "EditImage",
+            "Target": "LooseSprites/Billboard",
+            "FromFile": "assets/trim_dark.png",
+            "When": {
+                "Trim": "Dark"
+            }
+        }
+    ]
+}
+```
+
+Here's how to do it:
+
+1. Add a `ConfigSchema` section to the `content.json`, which defines your config settings and
+   how to validate them. Available field for each setting:
+
+   field               | meaning
+   ------------------- | -------
+   `AllowValues`       | Required. The values the player can provide, as a comma-delimited string.<br />**Tip:** for a boolean flag, use `"true, false"`.
+   `Default`           | _(optional)_ The default values when the field is missing. Can contain multiple values (comma-delimited). If not set, defaults to the first value in `AllowValues`.
+   `AllowBlank`        | _(optional)_ Whether the field can be left blank. Behaviour: <ul><li>If false (default): missing and blank fields are filled in with the default value.</li><li>If true: missing fields are filled in with the default value; blank fields are left as-is.</li></ul>
+   `AllowMultiple`     | _(optional)_ Whether the player can specify multiple comma-delimited values. Default false.
+
+2. Use the config fields as [`When` conditions](#condition). The field names and values are not
+   case-sensitive.
+
+That's it! Content Patcher will automatically create the `config.json` when you run the game.
+
+**Note:** including the `config.json` in your release download is not recommended. That will cause
+players to lose their settings every time they update. Instead let it generate at first run, just
+like a SMAPI mod's `config.json`.
+
 ### Releasing a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general
 info. Suggestions:
