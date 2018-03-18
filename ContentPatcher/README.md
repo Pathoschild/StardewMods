@@ -58,6 +58,9 @@ The `content.json` file contains a format version (just use `1.0`) and a list of
 want to make. Each change (technically called a _patch_) describes a specific action: replace one
 file, copy this image into the file, etc. You can list any number of changes.
 
+Known limitations:
+* Content Patcher can't change festival textures yet (fixed in Stardew Valley 1.3).
+
 #### Example
 Here's a quick example of each possible change type (explanations below):
 
@@ -144,7 +147,7 @@ field      | purpose
   `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file. Capitalisation doesn't matter.
   `FromArea` | _(optional)_ The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. [See example](#example).
   `ToArea`   | _(optional)_ The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. [See example](#example).
-  `PatchMode`| _(optional)_ How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace the target area with your source image.</li><li><code>Overlay</code>: draw your source image on top of what's already there, so the original image shows through transparent pixels.</li></ul>
+  `PatchMode`| _(optional)_ How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace the target area with your source image.</li><li><code>Overlay</code>: draw your source image over the target, so the original image shows through transparent pixels. Note that semi-transparent pixels will replace the underlying pixels, they won't be combined.</li></ul>
 
 * **Edit a data file** (`"Action": "EditData"`).  
   Instead of replacing an entire data file, you can edit the individual entries or even fields you
@@ -185,10 +188,10 @@ condition   | description
 `Season`    | The season name. Possible values: `spring`, `summer`, `fall`, and `winter`.
 `Weather`   | The weather name. Possible values: `sun`, `rain`, `snow`, and `storm`.
 
-**Special note about `"Action": "Load"` only:**
-* Each file can only be loaded by one content pack. Content Patcher will allow multiple loaders for
-  one file if their conditions can never overlap. If there's any possibility two loaders will both
-  apply at the same time, Content Patcher will refuse to add the second one. For example:
+Special note about `"Action": "Load"`:
+* Each file can only be loaded by one content pack. Content Patcher will allow multiple loaders, so
+  long as their conditions can never overlap. If they can overlap, it will refuse to add the second
+  one. For example:
 
   loader A           | loader B               | result
   ------------------ | ---------------------- | ------
