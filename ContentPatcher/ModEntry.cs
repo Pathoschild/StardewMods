@@ -166,21 +166,24 @@ namespace ContentPatcher
                     }
 
                     // load config.json
-                    IDictionary<string, InvariantHashSet> config;
+                    IDictionary<string, ConfigField> config;
                     {
                         string configFilePath = Path.Combine(pack.DirectoryPath, this.ConfigFileName);
 
                         // read schema
-                        IDictionary<string, ConfigSchemaField> configSchema = this.LoadConfigSchema(content.ConfigSchema, logWarning: (field, reasonPhrase) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {nameof(ContentConfig.ConfigSchema)} field '{field}': {reasonPhrase}", LogLevel.Warn));
-                        if (!configSchema.Any() && File.Exists(configFilePath))
+                        config = this.LoadConfigSchema(content.ConfigSchema, logWarning: (field, reasonPhrase) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {nameof(ContentConfig.ConfigSchema)} field '{field}': {reasonPhrase}", LogLevel.Warn));
+                        if (!config.Any() && File.Exists(configFilePath))
                             this.Monitor.Log($"Ignored {pack.Manifest.Name} > config.json: this content pack doesn't support configuration.", LogLevel.Warn);
 
                         // read config
-                        config = this.LoadConfig(pack, configSchema, (field, reasonPhrase) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {this.ConfigFileName} field '{field}': {reasonPhrase}", LogLevel.Warn));
+                        this.LoadConfigValues(pack, config, (field, reasonPhrase) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {this.ConfigFileName} field '{field}': {reasonPhrase}", LogLevel.Warn));
 
                         // save normalised config
                         if (config.Any())
-                            this.Helper.WriteJsonFile(configFilePath, config.ToDictionary(p => p.Key, p => string.Join(", ", p.Value)));
+                        {
+                            IDictionary<string, string> data = config.ToDictionary(p => p.Key, p => string.Join(", ", p.Value.Value));
+                            this.Helper.WriteJsonFile(configFilePath, data);
+                        }
                     }
 
                     // load patches
@@ -201,9 +204,9 @@ namespace ContentPatcher
         /// <summary>Parse a raw config schema for a content pack.</summary>
         /// <param name="rawSchema">The raw config schema.</param>
         /// <param name="logWarning">The callback to invoke on each validation warning, passed the field name and reason respectively.</param>
-        private IDictionary<string, ConfigSchemaField> LoadConfigSchema(IDictionary<string, ConfigSchemaFieldConfig> rawSchema, Action<string, string> logWarning)
+        private IDictionary<string, ConfigField> LoadConfigSchema(IDictionary<string, ConfigSchemaFieldConfig> rawSchema, Action<string, string> logWarning)
         {
-            IDictionary<string, ConfigSchemaField> schema = new Dictionary<string, ConfigSchemaField>(StringComparer.InvariantCultureIgnoreCase);
+            IDictionary<string, ConfigField> schema = new Dictionary<string, ConfigField>(StringComparer.InvariantCultureIgnoreCase);
             if (rawSchema == null || !rawSchema.Any())
                 return schema;
 
@@ -250,77 +253,75 @@ namespace ContentPatcher
                 }
 
                 // add to schema
-                schema[key] = new ConfigSchemaField(allowValues, defaultValues, field.AllowBlank, field.AllowMultiple);
+                schema[key] = new ConfigField(allowValues, defaultValues, field.AllowBlank, field.AllowMultiple);
             }
 
             return schema;
         }
 
-        /// <summary>Load a config file from the content pack.</summary>
+        /// <summary>Load config values from the content pack.</summary>
         /// <param name="contentPack">The content pack whose config file to read.</param>
-        /// <param name="schema">The config schema.</param>
+        /// <param name="config">The config schema.</param>
         /// <param name="logWarning">The callback to invoke on each validation warning, passed the field name and reason respectively.</param>
-        private IDictionary<string, InvariantHashSet> LoadConfig(IContentPack contentPack, IDictionary<string, ConfigSchemaField> schema, Action<string, string> logWarning)
+        private void LoadConfigValues(IContentPack contentPack, IDictionary<string, ConfigField> config, Action<string, string> logWarning)
         {
-            if (schema == null || !schema.Any())
-                return new Dictionary<string, InvariantHashSet>(0, StringComparer.InvariantCultureIgnoreCase);
+            if (!config.Any())
+                return;
 
             // read raw config
-            IDictionary<string, InvariantHashSet> config =
+            IDictionary<string, InvariantHashSet> configValues =
                 (contentPack.ReadJsonFile<Dictionary<string, string>>(this.ConfigFileName) ?? new Dictionary<string, string>())
                 .ToDictionary(entry => entry.Key.Trim(), entry => this.PatchManager.ParseCommaDelimitedField(entry.Value), StringComparer.InvariantCultureIgnoreCase);
 
             // remove invalid values
-            foreach (string key in config.Keys)
+            foreach (string key in configValues.Keys)
             {
-                if (!schema.ContainsKey(key))
+                if (!config.ContainsKey(key))
                 {
                     logWarning(key, "no such field supported by this content pack.");
-                    config.Remove(key);
+                    configValues.Remove(key);
                 }
             }
 
             // inject default values
-            foreach (string key in schema.Keys)
+            foreach (string key in config.Keys)
             {
-                ConfigSchemaField fieldSchema = schema[key];
-                if (!config.TryGetValue(key, out InvariantHashSet values) || (!fieldSchema.AllowBlank && !values.Any()))
-                    config[key] = fieldSchema.DefaultValues;
+                ConfigField field = config[key];
+                if (!configValues.TryGetValue(key, out InvariantHashSet values) || (!field.AllowBlank && !values.Any()))
+                    configValues[key] = field.DefaultValues;
             }
 
             // parse each field
-            foreach (string key in schema.Keys)
+            foreach (string key in config.Keys)
             {
-                ConfigSchemaField schemaField = schema[key];
-                InvariantHashSet actualValues = config[key];
+                ConfigField field = config[key];
+                field.Value = configValues[key];
 
                 // validate allow-multiple
-                if (!schemaField.AllowMultiple && actualValues.Count > 1)
+                if (!field.AllowMultiple && field.Value.Count > 1)
                 {
                     logWarning(key, "field only allows a single value.");
-                    config[key] = schemaField.DefaultValues;
+                    field.Value = field.DefaultValues;
                     continue;
                 }
 
                 // validate allow-values
-                string[] invalidValues = actualValues.Except(schemaField.AllowValues).ToArray();
+                string[] invalidValues = field.Value.Except(field.AllowValues).ToArray();
                 if (invalidValues.Any())
                 {
-                    logWarning(key, $"found invalid values ({string.Join(", ", invalidValues)}), expected: {string.Join(", ", schemaField.AllowValues)}.");
-                    config[key] = schemaField.DefaultValues;
+                    logWarning(key, $"found invalid values ({string.Join(", ", invalidValues)}), expected: {string.Join(", ", field.AllowValues)}.");
+                    field.Value = field.DefaultValues;
                     continue;
                 }
             }
-
-            return config;
         }
 
         /// <summary>Load one patch from a content pack's <c>content.json</c> file.</summary>
         /// <param name="pack">The content pack being loaded.</param>
         /// <param name="entry">The change to load.</param>
-        /// <param name="config">The config values to apply.</param>
+        /// <param name="config">The content pack's config values.</param>
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
-        private void LoadPatch(IContentPack pack, PatchConfig entry, IDictionary<string, InvariantHashSet> config, Action<string> logSkip)
+        private void LoadPatch(IContentPack pack, PatchConfig entry, IDictionary<string, ConfigField> config, Action<string> logSkip)
         {
             try
             {
@@ -339,30 +340,11 @@ namespace ContentPatcher
                 }
 
                 // parse target asset
-                string assetName = !string.IsNullOrWhiteSpace(entry.Target)
-                    ? this.Helper.Content.NormaliseAssetName(entry.Target)
-                    : null;
+                string assetName = !string.IsNullOrWhiteSpace(entry.Target) ? this.Helper.Content.NormaliseAssetName(entry.Target) : null;
                 if (assetName == null)
                 {
                     logSkip($"must set the {nameof(PatchConfig.Target)} field.");
                     return;
-                }
-
-                // parse source asset
-                string localAsset = this.NormaliseLocalAssetPath(pack, entry.FromFile);
-                if (localAsset == null && (action == PatchType.Load || action == PatchType.EditImage))
-                {
-                    logSkip($"must set the {nameof(PatchConfig.FromFile)} field for action '{action}'.");
-                    return;
-                }
-                if (localAsset != null)
-                {
-                    localAsset = this.AssetLoader.GetActualPath(pack, localAsset);
-                    if (localAsset == null)
-                    {
-                        logSkip($"the {nameof(PatchConfig.FromFile)} field specifies a file that doesn't exist: {entry.FromFile}.");
-                        return;
-                    }
                 }
 
                 // apply config
@@ -371,7 +353,7 @@ namespace ContentPatcher
                     if (entry.When.TryGetValue(key, out string values))
                     {
                         InvariantHashSet expected = this.PatchManager.ParseCommaDelimitedField(values);
-                        if (!expected.Intersect(config[key]).Any())
+                        if (!expected.Intersect(config[key].Value).Any())
                             return;
 
                         entry.When.Remove(key);
@@ -395,7 +377,9 @@ namespace ContentPatcher
                     case PatchType.Load:
                         {
                             // init patch
-                            IPatch patch = new LoadPatch(this.AssetLoader, pack, assetName, conditions, localAsset);
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, logSkip, out TokenString fromAsset))
+                                return;
+                            IPatch patch = new LoadPatch(this.AssetLoader, pack, assetName, conditions, fromAsset);
 
                             // detect conflicting loaders
                             IPatch[] conflictingLoaders = this.PatchManager.GetConflictingLoaders(patch).ToArray();
@@ -443,31 +427,80 @@ namespace ContentPatcher
 
                     // edit image
                     case PatchType.EditImage:
-                        // read patch mode
-                        PatchMode patchMode = PatchMode.Replace;
-                        if (!string.IsNullOrWhiteSpace(entry.PatchMode) && !Enum.TryParse(entry.PatchMode, true, out patchMode))
                         {
-                            logSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}].");
-                            return;
-                        }
+                            // read patch mode
+                            PatchMode patchMode = PatchMode.Replace;
+                            if (!string.IsNullOrWhiteSpace(entry.PatchMode) && !Enum.TryParse(entry.PatchMode, true, out patchMode))
+                            {
+                                logSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}].");
+                                return;
+                            }
 
-                        // save
-                        this.PatchManager.Add(new EditImagePatch(this.AssetLoader, pack, assetName, conditions, localAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor));
+                            // save
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, logSkip, out TokenString fromAsset))
+                                return;
+                            this.PatchManager.Add(new EditImagePatch(this.AssetLoader, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor));
+                        }
                         break;
 
                     default:
                         logSkip($"unsupported patch type '{action}'.");
                         break;
                 }
-
-                // preload PNG assets to avoid load-in-draw-loop error
-                if (localAsset != null)
-                    this.AssetLoader.PreloadIfNeeded(pack, localAsset);
             }
             catch (Exception ex)
             {
                 logSkip($"error reading info. Technical details:\n{ex}");
             }
+        }
+
+        /// <summary>Prepare a local asset file for a patch to use.</summary>
+        /// <param name="pack">The content pack being loaded.</param>
+        /// <param name="path">The asset path in the content patch.</param>
+        /// <param name="config">The config values to apply.</param>
+        /// <param name="conditions">The conditions to apply.</param>
+        /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
+        /// <param name="tokenedPath">The parsed value.</param>
+        /// <returns>Returns whether the local asset was successfully prepared.</returns>
+        private bool TryPrepareLocalAsset(IContentPack pack, string path, IDictionary<string, ConfigField> config, ConditionDictionary conditions, Action<string> logSkip, out TokenString tokenedPath)
+        {
+            // normalise raw value
+            path = this.NormaliseLocalAssetPath(pack, path);
+            if (path == null)
+            {
+                logSkip($"must set the {nameof(PatchConfig.FromFile)} field for this action type.");
+                tokenedPath = null;
+                return false;
+            }
+
+            // tokenise
+            if (!TokenString.TryParse(path, config, out tokenedPath, out string error))
+            {
+                logSkip($"the {nameof(PatchConfig.FromFile)} is invalid: {error}");
+                tokenedPath = null;
+                return false;
+            }
+
+            // validate all possible files exist
+            // + preload PNG assets to avoid load-in-draw-loop error
+            string lastPermutation = null;
+            try
+            {
+                foreach (string permutation in this.PatchManager.GetPermutations(tokenedPath, conditions))
+                {
+                    lastPermutation = permutation;
+                    this.AssetLoader.PreloadIfNeeded(pack, permutation);
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                logSkip($"the {nameof(PatchConfig.FromFile)} field specifies a file that doesn't exist: {lastPermutation}.");
+                tokenedPath = null;
+                return false;
+            }
+
+            // looks OK
+            return true;
         }
 
         /// <summary>Get a normalised file path relative to the content pack folder.</summary>

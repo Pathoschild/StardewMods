@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
-using ContentPatcher.Framework.Patches;
+using ContentPatcher.Framework.Conditions;
 using StardewModdingAPI;
 
-namespace ContentPatcher.Framework.Conditions
+namespace ContentPatcher.Framework.Patches
 {
     /// <summary>Metadata for a conditional patch.</summary>
     internal abstract class Patch : IPatch
@@ -30,17 +30,21 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The conditions which determine whether this patch should be applied.</summary>
         public ConditionDictionary Conditions { get; }
 
+        /// <summary>Whether this patch should be applied in the latest context.</summary>
+        public bool MatchesContext { get; private set; }
+
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Get whether this patch should be applied.</summary>
+        /// <summary>Update the patch data when the context changes.</summary>
         /// <param name="context">The condition context.</param>
-        public bool IsMatch(ConditionContext context)
+        /// <returns>Returns whether the patch data changed.</returns>
+        public virtual bool UpdateContext(ConditionContext context)
         {
-            return
-                this.Conditions.Count == 0
-                || this.Conditions.Values.All(p => p.IsMatch(context));
+            bool wasMatch = this.MatchesContext;
+            this.MatchesContext = this.Conditions.Count == 0 || this.Conditions.Values.All(p => p.IsMatch(context));
+            return wasMatch != this.MatchesContext;
         }
 
         /// <summary>Load the initial version of the asset.</summary>

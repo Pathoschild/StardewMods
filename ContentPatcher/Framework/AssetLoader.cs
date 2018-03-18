@@ -22,30 +22,13 @@ namespace ContentPatcher.Framework
         /*********
         ** Public methods
         *********/
-        /// <summary>Get the actual relative path within the content pack for a folder, or <c>null</c> if not found.</summary>
-        /// <param name="contentPack">The content pack.</param>
-        /// <param name="key">The case-insensitive asset key.</param>
-        public string GetActualPath(IContentPack contentPack, string key)
-        {
-            // search for a case-insensitive file match (Linux/Mac are case-sensitive)
-            foreach (string path in Directory.EnumerateFiles(contentPack.DirectoryPath, "*", SearchOption.AllDirectories))
-            {
-                if (!path.StartsWith(contentPack.DirectoryPath))
-                    throw new InvalidOperationException("File search failed, contained files aren't in the searched folder (???).");
-
-                string relativePath = path.Substring(contentPack.DirectoryPath.Length + 1);
-                if (relativePath.Equals(key, StringComparison.InvariantCultureIgnoreCase))
-                    return relativePath;
-            }
-
-            return null;
-        }
-
         /// <summary>Preload an asset from the content pack if necessary.</summary>
         /// <param name="contentPack">The content pack.</param>
         /// <param name="key">The asset key.</param>
         public void PreloadIfNeeded(IContentPack contentPack, string key)
         {
+            key = this.GetRealPath(contentPack, key) ?? throw new FileNotFoundException($"The file '{key}' does not exist in the {contentPack.Manifest.Name} content patch folder.");
+
             // PNG asset
             if (this.IsPngPath(key))
             {
@@ -65,7 +48,7 @@ namespace ContentPatcher.Framework
                         continue;
 
                     // ignore if local file doesn't exist
-                    string relativePath = this.GetActualPath(contentPack, tilesheet.ImageSource.Substring(relativeRoot.Length + 1));
+                    string relativePath = this.GetRealPath(contentPack, tilesheet.ImageSource.Substring(relativeRoot.Length + 1));
                     if (relativePath == null)
                         continue;
 
@@ -83,6 +66,8 @@ namespace ContentPatcher.Framework
         /// <param name="key">The asset key.</param>
         public T Load<T>(IContentPack contentPack, string key)
         {
+            key = this.GetRealPath(contentPack, key) ?? throw new FileNotFoundException($"The file '{key}' does not exist in the {contentPack.Manifest.Name} content patch folder.");
+
             // load from PNG cache if applicable
             if (typeof(T) == typeof(Texture2D) && this.IsPngPath(key))
             {
@@ -99,6 +84,30 @@ namespace ContentPatcher.Framework
         /*********
         ** Private methods
         *********/
+        /// <summary>Get the actual relative path within the content pack for a file, matched case-insensitively, or <c>null</c> if not found.</summary>
+        /// <param name="contentPack">The content pack.</param>
+        /// <param name="key">The case-insensitive asset key.</param>
+        private string GetRealPath(IContentPack contentPack, string key)
+        {
+            // try file match first
+            var exactMatch = new FileInfo(Path.Combine(contentPack.DirectoryPath, key));
+            if (exactMatch.Exists)
+                return exactMatch.FullName.Substring(contentPack.DirectoryPath.Length + 1);
+
+            // search for a case-insensitive file match (Linux/Mac are case-sensitive)
+            foreach (string path in Directory.EnumerateFiles(contentPack.DirectoryPath, "*", SearchOption.AllDirectories))
+            {
+                if (!path.StartsWith(contentPack.DirectoryPath))
+                    throw new InvalidOperationException("File search failed, contained files aren't in the searched folder (???).");
+
+                string relativePath = path.Substring(contentPack.DirectoryPath.Length + 1);
+                if (relativePath.Equals(key, StringComparison.InvariantCultureIgnoreCase))
+                    return relativePath;
+            }
+
+            return null;
+        }
+
         /// <summary>Get whether an asset is a unpacked PNG file.</summary>
         /// <param name="key">The asset key in the content pack.</param>
         private bool IsPngPath(string key)

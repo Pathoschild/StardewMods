@@ -21,13 +21,17 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The conditions which determine whether this patch should be applied.</summary>
         ConditionDictionary Conditions { get; }
 
+        /// <summary>Whether this patch should be applied in the latest context.</summary>
+        bool MatchesContext { get; }
+
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Get whether this patch should be applied.</summary>
+        /// <summary>Update the patch data when the context changes.</summary>
         /// <param name="context">The condition context.</param>
-        bool IsMatch(ConditionContext context);
+        /// <returns>Returns whether the patch data changed.</returns>
+        bool UpdateContext(ConditionContext context);
 
         /// <summary>Load the initial version of the asset.</summary>
         /// <typeparam name="T">The asset type.</typeparam>

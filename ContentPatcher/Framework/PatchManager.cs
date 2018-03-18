@@ -33,9 +33,6 @@ namespace ContentPatcher.Framework
         /// <summary>The patches to apply indexed by asset name.</summary>
         private readonly IDictionary<string, IList<IPatch>> Patches = new Dictionary<string, IList<IPatch>>(StringComparer.InvariantCultureIgnoreCase);
 
-        /// <summary>The patches which were previously applied.</summary>
-        private readonly HashSet<IPatch> AppliedPatches = new HashSet<IPatch>();
-
         /// <summary>The current condition context.</summary>
         private readonly ConditionContext ConditionContext;
 
@@ -77,7 +74,6 @@ namespace ContentPatcher.Framework
             if (patch == null)
                 throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because no patches currently apply. This should never happen.");
 
-            this.AppliedPatches.Add(patch);
             this.Monitor.Log($"{patch.ContentPack.Manifest.Name} loaded {asset.AssetName}.", LogLevel.Trace);
             return patch.Load<T>(asset);
         }
@@ -93,7 +89,6 @@ namespace ContentPatcher.Framework
             InvariantHashSet loggedContentPacks = new InvariantHashSet();
             foreach (IPatch patch in patches)
             {
-                this.AppliedPatches.Add(patch);
                 if (loggedContentPacks.Add(patch.ContentPack.Manifest.Name))
                     this.Monitor.Log($"{patch.ContentPack.Manifest.Name} edited {asset.AssetName}.", LogLevel.Trace);
                 patch.Edit<T>(asset);
@@ -110,27 +105,24 @@ namespace ContentPatcher.Framework
             // update context
             this.ConditionContext.Update(language, date, weather);
 
-            // detect patches which changed conditional result
+            // update patches
             InvariantHashSet reloadAssetNames = new InvariantHashSet();
             foreach (string assetName in this.Patches.Keys)
             {
                 foreach (IPatch patch in this.Patches[assetName])
                 {
-                    bool shouldApply = patch.IsMatch(this.ConditionContext);
-                    if (shouldApply != this.AppliedPatches.Contains(patch))
-                    {
+                    bool wasApplied = patch.MatchesContext;
+                    bool changed = patch.UpdateContext(this.ConditionContext);
+                    bool shouldApply = patch.MatchesContext;
+
+                    if ((wasApplied && changed) || (!wasApplied && shouldApply))
                         reloadAssetNames.Add(assetName);
-                        break;
-                    }
                 }
             }
 
-            // reload assets if needed
+            // reload if needed
             if (reloadAssetNames.Any())
-            {
-                this.AppliedPatches.RemoveWhere(p => reloadAssetNames.Contains(p.AssetName));
                 contentHelper.InvalidateCache(asset => reloadAssetNames.Contains(asset.AssetName));
-            }
         }
 
 
@@ -167,7 +159,7 @@ namespace ContentPatcher.Framework
         {
             return this
                 .GetAll(asset.AssetName)
-                .Where(patch => patch.Type == PatchType.Load && patch.IsMatch(this.ConditionContext));
+                .Where(patch => patch.Type == PatchType.Load && patch.MatchesContext);
         }
 
         /// <summary>Get patches which edit the given asset in the current context.</summary>
@@ -180,7 +172,7 @@ namespace ContentPatcher.Framework
 
             return this
                 .GetAll(asset.AssetName)
-                .Where(patch => patch.Type == patchType && patch.IsMatch(this.ConditionContext));
+                .Where(patch => patch.Type == patchType && patch.MatchesContext);
         }
 
         /// <summary>Find any <see cref="PatchType.Load"/> patches which conflict with the given patch, taking conditions into account.</summary>
@@ -265,6 +257,15 @@ namespace ContentPatcher.Framework
             return new InvariantHashSet(values);
         }
 
+        /// <summary>Get all possible values of a tokenable string.</summary>
+        /// <param name="tokenable">The tokenable string.</param>
+        /// <param name="conditions">The conditions for which to filter permutations.</param>
+        public IEnumerable<string> GetPermutations(TokenString tokenable, ConditionDictionary conditions)
+        {
+            foreach (IDictionary<ConditionKey, string> permutation in this.GetConditionPermutations(tokenable.TokenKeys, conditions))
+                yield return tokenable.GetStringWithTokens(permutation);
+        }
+
 
         /*********
         ** Private methods
@@ -319,6 +320,36 @@ namespace ContentPatcher.Framework
                         yield return date;
                 }
             }
+        }
+
+        /// <summary>Get every permutation of the potential condition values.</summary>
+        /// <param name="keys">The condition keys to include.</param>
+        /// <param name="conditions">The conditions for which to filter permutations.</param>
+        private IEnumerable<IDictionary<ConditionKey, string>> GetConditionPermutations(HashSet<ConditionKey> keys, ConditionDictionary conditions)
+        {
+            // no permutations possible
+            if (!keys.Any())
+                return new Dictionary<ConditionKey, string>[0];
+
+            // recursively find permutations
+            IDictionary<ConditionKey, string> curPermutation = new Dictionary<ConditionKey, string>();
+            IEnumerable<IDictionary<ConditionKey, string>> GetPermutations(ConditionKey[] keyQueue)
+            {
+                if (!keyQueue.Any())
+                    yield return new Dictionary<ConditionKey, string>(curPermutation);
+
+                foreach (ConditionKey key in keyQueue)
+                {
+                    foreach (string value in conditions.GetImpliedValues(key))
+                    {
+                        curPermutation[key] = value;
+                        foreach (var permutation in GetPermutations(keyQueue.Skip(1).ToArray()))
+                            yield return permutation;
+                    }
+                }
+            }
+
+            return GetPermutations(keys.ToArray());
         }
     }
 }

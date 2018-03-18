@@ -2,8 +2,8 @@ using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.ConfigModels
 {
-    /// <summary>The parsed schema for a field in the <c>config.json</c> file.</summary>
-    internal class ConfigSchemaField
+    /// <summary>The parsed schema and value for a field in the <c>config.json</c> file.</summary>
+    internal class ConfigField
     {
         /*********
         ** Accessors
@@ -12,13 +12,16 @@ namespace ContentPatcher.Framework.ConfigModels
         public InvariantHashSet AllowValues { get; }
 
         /// <summary>The default values if the field is missing or (if <see cref="AllowBlank"/> is <c>false</c>) blank.</summary>
-        public InvariantHashSet DefaultValues { get; set; }
+        public InvariantHashSet DefaultValues { get; }
 
         /// <summary>Whether to allow blank values.</summary>
-        public bool AllowBlank { get; set; }
+        public bool AllowBlank { get; }
 
         /// <summary>Whether the player can specify multiple values for this field.</summary>
-        public bool AllowMultiple { get; set; }
+        public bool AllowMultiple { get; }
+
+        /// <summary>The value read from the player settings.</summary>
+        public InvariantHashSet Value { get; set; }
 
 
         /*********
@@ -29,7 +32,7 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <param name="defaultValues">The default values if the field is missing or (if <paramref name="allowBlank"/> is <c>false</c>) blank.</param>
         /// <param name="allowBlank">Whether to allow blank values.</param>
         /// <param name="allowMultiple">Whether the player can specify multiple values for this field.</param>
-        public ConfigSchemaField(InvariantHashSet allowValues, InvariantHashSet defaultValues, bool allowBlank, bool allowMultiple)
+        public ConfigField(InvariantHashSet allowValues, InvariantHashSet defaultValues, bool allowBlank, bool allowMultiple)
         {
             this.AllowValues = allowValues;
             this.DefaultValues = defaultValues;

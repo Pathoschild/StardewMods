@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -17,7 +16,7 @@ namespace ContentPatcher.Framework.Patches
         private readonly IMonitor Monitor;
 
         /// <summary>The asset key to load from the content pack instead.</summary>
-        private readonly string FromLocalAsset;
+        private readonly TokenString FromLocalAsset;
 
         /// <summary>The sprite area from which to read an image.</summary>
         private readonly Rectangle? FromArea;
@@ -42,7 +41,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="toArea">The sprite area to overwrite.</param>
         /// <param name="patchMode">Indicates how the image should be patched.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        public EditImagePatch(AssetLoader assetLoader, IContentPack contentPack, string assetName, ConditionDictionary conditions, string fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor)
+        public EditImagePatch(AssetLoader assetLoader, IContentPack contentPack, string assetName, ConditionDictionary conditions, TokenString fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor)
             : base(PatchType.EditImage, assetLoader, contentPack, assetName, conditions)
         {
             this.FromLocalAsset = fromLocalAsset;
@@ -50,6 +49,15 @@ namespace ContentPatcher.Framework.Patches
             this.ToArea = toArea != Rectangle.Empty ? toArea : null as Rectangle?;
             this.PatchMode = patchMode;
             this.Monitor = monitor;
+        }
+
+        /// <summary>Update the patch data when the context changes.</summary>
+        /// <param name="context">The condition context.</param>
+        /// <returns>Returns whether the patch data changed.</returns>
+        public override bool UpdateContext(ConditionContext context)
+        {
+            bool localAssetChanged = this.FromLocalAsset.UpdateContext(context);
+            return base.UpdateContext(context) || localAssetChanged;
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>
@@ -65,7 +73,7 @@ namespace ContentPatcher.Framework.Patches
             }
 
             // fetch data
-            Texture2D source = this.AssetLoader.Load<Texture2D>(this.ContentPack, this.FromLocalAsset);
+            Texture2D source = this.AssetLoader.Load<Texture2D>(this.ContentPack, this.FromLocalAsset.Value);
             IAssetDataForImage editor = asset.AsImage();
 
             // extend tilesheet if needed

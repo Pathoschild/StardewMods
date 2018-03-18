@@ -200,6 +200,7 @@ Special note about `"Action": "Load"`:
   `day: 1`           | `weather: "Sun"`       | error: sun could happen on the first of a month.
 
 ### Player configuration
+**(Content Patcher 1.3+)**
 You can let players configure your mod using a `config.json` file. This requires a bit more upfront
 setup for the mod author, but once that's done it'll behave just like a SMAPI `config.json` for
 players. Content Patcher will automatically create and load the file, and you can use the config
@@ -273,6 +274,30 @@ That's it! Content Patcher will automatically create the `config.json` when you 
 **Note:** including the `config.json` in your release download is not recommended. That will cause
 players to lose their settings every time they update. Instead let it generate at first run, just
 like a SMAPI mod's `config.json`.
+
+### `FromFile` content tokens
+**(Content Patcher 1.3+)**
+You can use [conditions](#condition) and [config values](#player-configuration) in the `FromFile`
+field in `content.json`. Just put the name of the condition or config field in two curly brackets:
+
+```js
+{
+    "Format": "1.0",
+    "Changes": [
+        {
+            "Action": "EditImage",
+            "Target": "Buildings/houses",
+            "FromFile": "assets/{{season}}.png"
+        }
+    ]
+}
+```
+
+Restrictions:
+* Only config fields with `"AllowMultiple": false` can be used as tokens.
+* All possible files must exist, subject to any conditions you set. For example, the above code
+  will require four files (one per season). If you add a `"Season": "spring, summer"` condition,
+  you'll only need two files.
 
 ### Releasing a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general

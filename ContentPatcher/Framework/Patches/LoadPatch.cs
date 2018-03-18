@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
 using StardewModdingAPI;
 
@@ -11,7 +10,7 @@ namespace ContentPatcher.Framework.Patches
         ** Properties
         *********/
         /// <summary>The asset key to load from the content pack instead.</summary>
-        public string LocalAsset { get; }
+        public TokenString LocalAsset { get; }
 
 
         /*********
@@ -23,17 +22,26 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="localAsset">The asset key to load from the content pack instead.</param>
-        public LoadPatch(AssetLoader assetLoader, IContentPack contentPack, string assetName, ConditionDictionary conditions, string localAsset)
+        public LoadPatch(AssetLoader assetLoader, IContentPack contentPack, string assetName, ConditionDictionary conditions, TokenString localAsset)
             : base(PatchType.Load, assetLoader, contentPack, assetName, conditions)
         {
             this.LocalAsset = localAsset;
+        }
+
+        /// <summary>Update the patch data when the context changes.</summary>
+        /// <param name="context">The condition context.</param>
+        /// <returns>Returns whether the patch data changed.</returns>
+        public override bool UpdateContext(ConditionContext context)
+        {
+            bool localAssetChanged = this.LocalAsset.UpdateContext(context);
+            return base.UpdateContext(context) || localAssetChanged;
         }
 
         /// <summary>Load the initial version of the asset.</summary>
         /// <param name="asset">The asset to load.</param>
         public override T Load<T>(IAssetInfo asset)
         {
-            return this.AssetLoader.Load<T>(this.ContentPack, this.LocalAsset);
+            return this.AssetLoader.Load<T>(this.ContentPack, this.LocalAsset.Value);
         }
     }
 }
