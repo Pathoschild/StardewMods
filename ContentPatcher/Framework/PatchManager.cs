@@ -26,6 +26,9 @@ namespace ContentPatcher.Framework
             [ConditionKey.Weather] = new HashSet<string>(Enum.GetNames(typeof(Weather)), StringComparer.InvariantCultureIgnoreCase)
         };
 
+        /// <summary>Encapsulates monitoring and logging.</summary>
+        private readonly IMonitor Monitor;
+
         /// <summary>The patches to apply indexed by asset name.</summary>
         private readonly IDictionary<string, IList<IPatch>> Patches = new Dictionary<string, IList<IPatch>>(StringComparer.InvariantCultureIgnoreCase);
 
@@ -40,9 +43,11 @@ namespace ContentPatcher.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="language">The current language.</param>
-        public PatchManager(LocalizedContentManager.LanguageCode language)
+        public PatchManager(IMonitor monitor, LocalizedContentManager.LanguageCode language)
         {
+            this.Monitor = monitor;
             this.ConditionContext = new ConditionContext(language);
         }
 
@@ -72,6 +77,7 @@ namespace ContentPatcher.Framework
                 throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because no patches currently apply. This should never happen.");
 
             this.AppliedPatches.Add(patch);
+            this.Monitor.Log($"{patch.ContentPack.Manifest.Name} loaded {asset.AssetName}.", LogLevel.Trace);
             return patch.Load<T>(asset);
         }
 
@@ -83,9 +89,12 @@ namespace ContentPatcher.Framework
             if (!patches.Any())
                 throw new InvalidOperationException($"Can't edit asset key '{asset.AssetName}' because no patches currently apply. This should never happen.");
 
+            HashSet<string> loggedContentPacks = new HashSet<string>();
             foreach (IPatch patch in patches)
             {
                 this.AppliedPatches.Add(patch);
+                if(loggedContentPacks.Add(patch.ContentPack.Manifest.Name))
+                    this.Monitor.Log($"{patch.ContentPack.Manifest.Name} edited {asset.AssetName}.", LogLevel.Trace);
                 patch.Edit<T>(asset);
             }
         }

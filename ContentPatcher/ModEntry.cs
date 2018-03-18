@@ -43,7 +43,7 @@ namespace ContentPatcher
         {
             // init
             this.Config = helper.ReadConfig<ModConfig>();
-            this.PatchManager = new PatchManager(helper.Content.CurrentLocaleConstant);
+            this.PatchManager = new PatchManager(this.Monitor, helper.Content.CurrentLocaleConstant);
             this.LoadContentPacks();
 
             // register patcher
@@ -105,7 +105,8 @@ namespace ContentPatcher
             LocalizedContentManager.LanguageCode language = contentHelper.CurrentLocaleConstant;
 
             // update context
-            this.Monitor.Log($"Context: date=none, weather=none, locale={language}.");
+            if (this.Config.VerboseLog)
+                this.Monitor.Log($"Context: date=none, weather=none, locale={language}.", LogLevel.Trace);
             this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null);
         }
 
@@ -121,7 +122,8 @@ namespace ContentPatcher
             Weather weather = this.GetCurrentWeather();
 
             // update context
-            this.Monitor.Log($"Context: date={date.DayOfWeek} {date.Season} {date.Day}, weather={weather}, locale={language}.");
+            if (this.Config.VerboseLog)
+                this.Monitor.Log($"Context: date={date.DayOfWeek} {date.Season} {date.Day}, weather={weather}, locale={language}.", LogLevel.Trace);
             this.PatchManager.UpdateContext(contentHelper, language, date, weather);
         }
 
@@ -133,7 +135,8 @@ namespace ContentPatcher
         {
             foreach (IContentPack pack in this.Helper.GetContentPacks())
             {
-                this.Monitor.Log($"Loading content pack '{pack.Manifest.Name}'...", LogLevel.Trace);
+                if (this.Config.VerboseLog)
+                    this.Monitor.Log($"Loading content pack '{pack.Manifest.Name}'...", LogLevel.Trace);
 
                 // read config
                 ContentConfig config = pack.ReadJsonFile<ContentConfig>(this.PatchFileName);
@@ -227,11 +230,11 @@ namespace ContentPatcher
                                     if (conflictingLoaders.Any())
                                     {
                                         if (conflictingLoaders.Any(p => p.ContentPack == pack))
-                                            LogSkip($"the {assetName} file is already being loaded by this content pack in the same contexts. Each file can only be loaded once.");
+                                            LogSkip($"the {assetName} file is already being loaded by this content pack. Each file can only be loaded once (unless their conditions can't overlap).");
                                         else
                                         {
                                             string[] conflictingNames = conflictingLoaders.Select(p => p.ContentPack.Manifest.Name).Distinct().OrderBy(p => p).ToArray();
-                                            LogSkip($"the {assetName} file is already being loaded by other content packs in the same contexts ({string.Join(", ", conflictingNames)}). Each file can only be loaded once.");
+                                            LogSkip($"the {assetName} file is already being loaded by {(conflictingNames.Length == 1 ? "another content pack" : "other content packs")} ({string.Join(", ", conflictingNames)}). Each file can only be loaded once (unless their conditions can't overlap).");
                                         }
                                         continue;
                                     }

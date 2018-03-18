@@ -4,6 +4,7 @@
 ## 1.3
 * Added support for patch conditions.
 * Added new conditions: season, day of month, day of week, and language.
+* Added trace logs when a content pack loads or edits an asset.
 
 ## 1.2
 * Added support for overlaying images.
