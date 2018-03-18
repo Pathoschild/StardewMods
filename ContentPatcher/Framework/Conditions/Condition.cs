@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Conditions
 {
@@ -12,7 +12,7 @@ namespace ContentPatcher.Framework.Conditions
         public ConditionKey Key { get; }
 
         /// <summary>The condition values for which this condition is valid.</summary>
-        public HashSet<string> Values { get; }
+        public InvariantHashSet Values { get; }
 
 
         /*********
@@ -21,10 +21,10 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Construct an instance.</summary>
         /// <param name="key">The condition key in the context.</param>
         /// <param name="values">The condition values for which this condition is valid.</param>
-        public Condition(ConditionKey key, IEnumerable<string> values)
+        public Condition(ConditionKey key, InvariantHashSet values)
         {
             this.Key = key;
-            this.Values = new HashSet<string>(values);
+            this.Values = values;
         }
 
         /// <summary>Whether the condition matches.</summary>

@@ -4,6 +4,7 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
@@ -17,13 +18,13 @@ namespace ContentPatcher.Framework
         ** Properties
         *********/
         /// <summary>The valid condition values.</summary>
-        private readonly IDictionary<ConditionKey, HashSet<string>> ValidValues = new Dictionary<ConditionKey, HashSet<string>>
+        private readonly IDictionary<ConditionKey, InvariantHashSet> ValidValues = new Dictionary<ConditionKey, InvariantHashSet>
         {
-            [ConditionKey.Day] = new HashSet<string>(Enumerable.Range(1, 28).Select(p => p.ToString())),
-            [ConditionKey.DayOfWeek] = new HashSet<string>(Enum.GetNames(typeof(DayOfWeek)), StringComparer.InvariantCultureIgnoreCase),
-            [ConditionKey.Language] = new HashSet<string>(Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()), StringComparer.InvariantCultureIgnoreCase),
-            [ConditionKey.Season] = new HashSet<string>(new[] { "Spring", "Summer", "Fall", "Winter" }, StringComparer.InvariantCultureIgnoreCase),
-            [ConditionKey.Weather] = new HashSet<string>(Enum.GetNames(typeof(Weather)), StringComparer.InvariantCultureIgnoreCase)
+            [ConditionKey.Day] = new InvariantHashSet(Enumerable.Range(1, 28).Select(p => p.ToString())),
+            [ConditionKey.DayOfWeek] = new InvariantHashSet(Enum.GetNames(typeof(DayOfWeek))),
+            [ConditionKey.Language] = new InvariantHashSet(Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString())),
+            [ConditionKey.Season] = new InvariantHashSet(new[] { "Spring", "Summer", "Fall", "Winter" }),
+            [ConditionKey.Weather] = new InvariantHashSet(Enum.GetNames(typeof(Weather)))
         };
 
         /// <summary>Encapsulates monitoring and logging.</summary>
@@ -89,11 +90,11 @@ namespace ContentPatcher.Framework
             if (!patches.Any())
                 throw new InvalidOperationException($"Can't edit asset key '{asset.AssetName}' because no patches currently apply. This should never happen.");
 
-            HashSet<string> loggedContentPacks = new HashSet<string>();
+            InvariantHashSet loggedContentPacks = new InvariantHashSet();
             foreach (IPatch patch in patches)
             {
                 this.AppliedPatches.Add(patch);
-                if(loggedContentPacks.Add(patch.ContentPack.Manifest.Name))
+                if (loggedContentPacks.Add(patch.ContentPack.Manifest.Name))
                     this.Monitor.Log($"{patch.ContentPack.Manifest.Name} edited {asset.AssetName}.", LogLevel.Trace);
                 patch.Edit<T>(asset);
             }
@@ -110,7 +111,7 @@ namespace ContentPatcher.Framework
             this.ConditionContext.Update(language, date, weather);
 
             // detect patches which changed conditional result
-            HashSet<string> reloadAssetNames = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+            InvariantHashSet reloadAssetNames = new InvariantHashSet();
             foreach (string assetName in this.Patches.Keys)
             {
                 foreach (IPatch patch in this.Patches[assetName])
@@ -208,19 +209,6 @@ namespace ContentPatcher.Framework
                 return true;
             }
 
-            // Split a comma-delimited set of condition values and normalise to lowercase.
-            string[] SplitAndNormalise(string values)
-            {
-                if (string.IsNullOrWhiteSpace(values))
-                    return new string[0];
-
-                return (
-                    from value in values.Split(',')
-                    where !string.IsNullOrWhiteSpace(value)
-                    select value.Trim().ToLower()
-                ).ToArray();
-            }
-
             // parse conditions
             conditions = new ConditionDictionary(this.ValidValues);
             foreach (KeyValuePair<string, string> pair in raw)
@@ -234,7 +222,7 @@ namespace ContentPatcher.Framework
                 }
 
                 // parse values
-                string[] values = SplitAndNormalise(pair.Value);
+                InvariantHashSet values = this.ParseCommaDelimitedField(pair.Value);
                 if (!values.Any())
                 {
                     error = $"{key} can't be empty";
@@ -260,6 +248,21 @@ namespace ContentPatcher.Framework
             // return parsed conditions
             error = null;
             return true;
+        }
+
+        /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>
+        /// <param name="field">The field value to parse.</param>
+        public InvariantHashSet ParseCommaDelimitedField(string field)
+        {
+            if (string.IsNullOrWhiteSpace(field))
+                return new InvariantHashSet();
+
+            IEnumerable<string> values = (
+                from value in field.Split(',')
+                where !string.IsNullOrWhiteSpace(value)
+                select value.Trim().ToLower()
+            );
+            return new InvariantHashSet(values);
         }
 
 
@@ -297,7 +300,7 @@ namespace ContentPatcher.Framework
         {
             // get implied values
             HashSet<int> days = new HashSet<int>(conditions.GetImpliedValues(ConditionKey.Day).Select(int.Parse));
-            HashSet<string> seasons = new HashSet<string>(conditions.GetImpliedValues(ConditionKey.Season), StringComparer.InvariantCultureIgnoreCase);
+            InvariantHashSet seasons = new InvariantHashSet(conditions.GetImpliedValues(ConditionKey.Season));
             HashSet<DayOfWeek> daysOfWeek = new HashSet<DayOfWeek>(conditions.GetImpliedValues(ConditionKey.DayOfWeek).Select(name => (DayOfWeek)Enum.Parse(typeof(DayOfWeek), name, ignoreCase: true)));
 
             // get all potentially impacted dates

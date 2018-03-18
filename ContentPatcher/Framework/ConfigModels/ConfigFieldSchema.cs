@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.ConfigModels
 {
@@ -9,10 +9,10 @@ namespace ContentPatcher.Framework.ConfigModels
         ** Accessors
         *********/
         /// <summary>The values to allow.</summary>
-        public HashSet<string> AllowValues { get; }
+        public InvariantHashSet AllowValues { get; }
 
         /// <summary>The default values if the field is missing or (if <see cref="AllowBlank"/> is <c>false</c>) blank.</summary>
-        public HashSet<string> DefaultValues { get; set; }
+        public InvariantHashSet DefaultValues { get; set; }
 
         /// <summary>Whether to allow blank values.</summary>
         public bool AllowBlank { get; set; }
@@ -29,7 +29,7 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <param name="defaultValues">The default values if the field is missing or (if <paramref name="allowBlank"/> is <c>false</c>) blank.</param>
         /// <param name="allowBlank">Whether to allow blank values.</param>
         /// <param name="allowMultiple">Whether the player can specify multiple values for this field.</param>
-        public ConfigSchemaField(HashSet<string> allowValues, HashSet<string> defaultValues, bool allowBlank, bool allowMultiple)
+        public ConfigSchemaField(InvariantHashSet allowValues, InvariantHashSet defaultValues, bool allowBlank, bool allowMultiple)
         {
             this.AllowValues = allowValues;
             this.DefaultValues = defaultValues;

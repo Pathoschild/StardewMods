@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Conditions
 {
@@ -9,7 +10,7 @@ namespace ContentPatcher.Framework.Conditions
         ** Properties
         *********/
         /// <summary>The valid condition values.</summary>
-        private readonly IDictionary<ConditionKey, HashSet<string>> ValidValues;
+        private readonly IDictionary<ConditionKey, InvariantHashSet> ValidValues;
 
 
         /*********
@@ -17,7 +18,7 @@ namespace ContentPatcher.Framework.Conditions
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="validValues">The valid condition values.</param>
-        public ConditionDictionary(IDictionary<ConditionKey, HashSet<string>> validValues)
+        public ConditionDictionary(IDictionary<ConditionKey, InvariantHashSet> validValues)
         {
             this.ValidValues = validValues;
         }

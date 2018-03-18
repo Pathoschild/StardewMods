@@ -7,6 +7,7 @@ using ContentPatcher.Framework;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Patches;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -165,7 +166,7 @@ namespace ContentPatcher
                     }
 
                     // load config.json
-                    IDictionary<string, HashSet<string>> config;
+                    IDictionary<string, InvariantHashSet> config;
                     {
                         string configFilePath = Path.Combine(pack.DirectoryPath, this.ConfigFileName);
 
@@ -218,7 +219,7 @@ namespace ContentPatcher
                 }
 
                 // read allowed values
-                HashSet<string> allowValues = this.ParseCommaDelimitedField(field.AllowValues);
+                InvariantHashSet allowValues = this.PatchManager.ParseCommaDelimitedField(field.AllowValues);
                 if (!allowValues.Any())
                 {
                     logWarning(key, $"no {nameof(ConfigSchemaFieldConfig.AllowValues)} specified.");
@@ -226,11 +227,11 @@ namespace ContentPatcher
                 }
 
                 // read default values
-                HashSet<string> defaultValues = this.ParseCommaDelimitedField(field.Default);
+                InvariantHashSet defaultValues = this.PatchManager.ParseCommaDelimitedField(field.Default);
                 {
                     // inject default
                     if (!defaultValues.Any() && !field.AllowBlank)
-                        defaultValues = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase) { allowValues.First() };
+                        defaultValues = new InvariantHashSet(allowValues.First());
 
                     // validate values
                     string[] invalidValues = defaultValues.Except(allowValues).ToArray();
@@ -259,15 +260,15 @@ namespace ContentPatcher
         /// <param name="contentPack">The content pack whose config file to read.</param>
         /// <param name="schema">The config schema.</param>
         /// <param name="logWarning">The callback to invoke on each validation warning, passed the field name and reason respectively.</param>
-        private IDictionary<string, HashSet<string>> LoadConfig(IContentPack contentPack, IDictionary<string, ConfigSchemaField> schema, Action<string, string> logWarning)
+        private IDictionary<string, InvariantHashSet> LoadConfig(IContentPack contentPack, IDictionary<string, ConfigSchemaField> schema, Action<string, string> logWarning)
         {
             if (schema == null || !schema.Any())
-                return new Dictionary<string, HashSet<string>>(0, StringComparer.InvariantCultureIgnoreCase);
+                return new Dictionary<string, InvariantHashSet>(0, StringComparer.InvariantCultureIgnoreCase);
 
             // read raw config
-            IDictionary<string, HashSet<string>> config =
+            IDictionary<string, InvariantHashSet> config =
                 (contentPack.ReadJsonFile<Dictionary<string, string>>(this.ConfigFileName) ?? new Dictionary<string, string>())
-                .ToDictionary(entry => entry.Key.Trim(), entry => this.ParseCommaDelimitedField(entry.Value), StringComparer.InvariantCultureIgnoreCase);
+                .ToDictionary(entry => entry.Key.Trim(), entry => this.PatchManager.ParseCommaDelimitedField(entry.Value), StringComparer.InvariantCultureIgnoreCase);
 
             // remove invalid values
             foreach (string key in config.Keys)
@@ -283,7 +284,7 @@ namespace ContentPatcher
             foreach (string key in schema.Keys)
             {
                 ConfigSchemaField fieldSchema = schema[key];
-                if (!config.TryGetValue(key, out HashSet<string> values) || (!fieldSchema.AllowBlank && !values.Any()))
+                if (!config.TryGetValue(key, out InvariantHashSet values) || (!fieldSchema.AllowBlank && !values.Any()))
                     config[key] = fieldSchema.DefaultValues;
             }
 
@@ -291,7 +292,7 @@ namespace ContentPatcher
             foreach (string key in schema.Keys)
             {
                 ConfigSchemaField schemaField = schema[key];
-                HashSet<string> actualValues = config[key];
+                InvariantHashSet actualValues = config[key];
 
                 // validate allow-multiple
                 if (!schemaField.AllowMultiple && actualValues.Count > 1)
@@ -319,7 +320,7 @@ namespace ContentPatcher
         /// <param name="entry">The change to load.</param>
         /// <param name="config">The config values to apply.</param>
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
-        private void LoadPatch(IContentPack pack, PatchConfig entry, IDictionary<string, HashSet<string>> config, Action<string> logSkip)
+        private void LoadPatch(IContentPack pack, PatchConfig entry, IDictionary<string, InvariantHashSet> config, Action<string> logSkip)
         {
             try
             {
@@ -369,7 +370,7 @@ namespace ContentPatcher
                 {
                     if (entry.When.TryGetValue(key, out string values))
                     {
-                        HashSet<string> expected = this.ParseCommaDelimitedField(values);
+                        InvariantHashSet expected = this.PatchManager.ParseCommaDelimitedField(values);
                         if (!expected.Intersect(config[key]).Any())
                             return;
 
@@ -502,21 +503,6 @@ namespace ContentPatcher
                 return Game1.isLightning ? Weather.Storm : Weather.Rain;
 
             return Weather.Sun;
-        }
-
-        /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>
-        /// <param name="field">The field value to parse.</param>
-        private HashSet<string> ParseCommaDelimitedField(string field)
-        {
-            if (string.IsNullOrWhiteSpace(field))
-                return new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
-
-            IEnumerable<string> values = (
-                from value in field.Split(',')
-                where !string.IsNullOrWhiteSpace(value)
-                select value.Trim().ToLower()
-            );
-            return new HashSet<string>(values, StringComparer.InvariantCultureIgnoreCase);
         }
     }
 }
