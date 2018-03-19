@@ -52,9 +52,9 @@ In some cases there may be a better option:
 A content pack consists of a folder with these files:
 * a `manifest.json` for SMAPI to read (see [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki);
 * a `content.json` which describes the changes you want to make;
-* and any images or other files you want to use.
+* and any images or files you want to use.
 
-The `content.json` file contains a format version (just use `1.0`) and a list of changes you
+The `content.json` file contains a format version (just use `1.3`) and a list of changes you
 want to make. Each change (technically called a _patch_) describes a specific action: replace one
 file, copy this image into the file, etc. You can list any number of changes.
 
@@ -66,7 +66,7 @@ Here's a quick example of each possible change type (explanations below):
 
 ```js
 {
-  "Format": "1.0",
+  "Format": "1.3",
   "Changes": [
        // replace entire file
        {
@@ -160,7 +160,8 @@ field      | purpose
   `Entries`  | _(optional)_ The entries in the data file you want to add or replace. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. [See example](#example).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
 
 ### Conditions
-**(Content Patcher 1.3+)**
+**(Requires format version: 1.3.)**
+
 You can make a patch conditional by adding a `When` field. The patch will be applied when all
 conditions match, and removed when they no longer match. Conditions are not case-sensitive, and you
 can specify multiple values as a comma-delimited list. You don't need to specify all conditions.
@@ -200,7 +201,8 @@ Special note about `"Action": "Load"`:
   `day: 1`           | `weather: "Sun"`       | error: sun could happen on the first of a month.
 
 ### Player configuration
-**(Content Patcher 1.3+)**
+**(Requires format version: 1.3.)**
+
 You can let players configure your mod using a `config.json` file. This requires a bit more upfront
 setup for the mod author, but once that's done it'll behave just like a SMAPI `config.json` for
 players. Content Patcher will automatically create and load the file, and you can use the config
@@ -212,7 +214,7 @@ them to change which patches are applied. See below for more details.
 
 ```js
 {
-    "Format": "1.0",
+    "Format": "1.3",
     "ConfigSchema": {
         "Material": {
             "AllowValues": "Wood, Metal"
@@ -276,13 +278,17 @@ players to lose their settings every time they update. Instead let it generate a
 like a SMAPI mod's `config.json`.
 
 ### `FromFile` content tokens
-**(Content Patcher 1.3+)**
+**(Requires format version: 1.3.)**
+
 You can use [conditions](#condition) and [config values](#player-configuration) in the `FromFile`
-field in `content.json`. Just put the name of the condition or config field in two curly brackets:
+field in `content.json`. Just put the name of the condition or config field in two curly brackets,
+and Content Patcher will automatically fill in the value.
+
+For example, this can be used for seasonal textures:
 
 ```js
 {
-    "Format": "1.0",
+    "Format": "1.3",
     "Changes": [
         {
             "Action": "EditImage",
@@ -293,10 +299,29 @@ field in `content.json`. Just put the name of the condition or config field in t
 }
 ```
 
+You can use multiple tokens and conditions for very specific changes:
+
+```js
+{
+    "Format": "1.3",
+    "Changes": [
+        {
+            "Action": "EditImage",
+            "Target": "Buildings/houses",
+            "FromFile": "assets/{{season}}_{{weather}}.png",
+            "When": {
+                "Weather": "sun, rain"
+            }
+        }
+    ]
+}
+```
+
 Restrictions:
-* Only config fields with `"AllowMultiple": false` can be used as tokens.
-* All possible files must exist, subject to any conditions you set. For example, the above code
-  will require four files (one per season). If you add a `"Season": "spring, summer"` condition,
+* Only valid in the `FromFile` field.
+* Config fields with `"AllowMultiple": true` can't be used as tokens.
+* All possible files must exist, subject to any conditions you set. In the first example above,
+  you'll need four files (one per season). If you add a `"Season": "spring, summer"` condition,
   you'll only need two files.
 
 ### Releasing a content pack

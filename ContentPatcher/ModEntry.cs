@@ -27,6 +27,9 @@ namespace ContentPatcher
         /// <summary>The name of the file which contains player settings.</summary>
         private readonly string ConfigFileName = "config.json";
 
+        /// <summary>The supported format versions.</summary>
+        private readonly string[] SupportedFormatVersions = { "1.0", "1.3" };
+
         /// <summary>Handles loading assets from content packs.</summary>
         private readonly AssetLoader AssetLoader = new AssetLoader();
 
@@ -152,23 +155,45 @@ namespace ContentPatcher
                     ContentConfig content = pack.ReadJsonFile<ContentConfig>(this.PatchFileName);
                     if (content == null)
                     {
-                        this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it has no {this.PatchFileName} file.", LogLevel.Warn);
+                        this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it has no {this.PatchFileName} file.", LogLevel.Error);
                         continue;
                     }
                     if (content.Format == null || content.Changes == null)
                     {
-                        this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it doesn't specify the required {nameof(ContentConfig.Format)} or {nameof(ContentConfig.Changes)} fields.", LogLevel.Warn);
+                        this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it doesn't specify the required {nameof(ContentConfig.Format)} or {nameof(ContentConfig.Changes)} fields.", LogLevel.Error);
                         continue;
                     }
-                    if (content.Format.ToString() != "1.0")
+
+                    // validate version
+                    if (!this.SupportedFormatVersions.Contains(content.Format.ToString()))
                     {
-                        this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it uses unsupported format {content.Format} (supported version: 1.0).", LogLevel.Warn);
+                        this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it uses unsupported format {content.Format} (supported version: {string.Join(", ", this.SupportedFormatVersions)}).", LogLevel.Error);
                         continue;
                     }
 
                     // load config.json
                     IDictionary<string, ConfigField> config = configFileHandler.Read(pack, content.ConfigSchema);
                     configFileHandler.Save(pack, config, this.Helper);
+
+                    // validate features
+                    if (content.Format.IsOlderThan("1.3"))
+                    {
+                        if (config.Any())
+                        {
+                            this.Monitor.Log($"Loading content pack '{pack.Manifest.Name}' failed. It specifies format version {content.Format}, but uses the {nameof(ContentConfig.ConfigSchema)} field added in 1.3.", LogLevel.Error);
+                            continue;
+                        }
+                        if (content.Changes.Any(p => p.FromFile != null && p.FromFile.Contains("{{")))
+                        {
+                            this.Monitor.Log($"Loading content pack '{pack.Manifest.Name}' failed. It specifies format version {content.Format}, but uses the {{{{token}}}} feature added in 1.3.", LogLevel.Error);
+                            continue;
+                        }
+                        if (content.Changes.Any(p => p.When != null && p.When.Any()))
+                        {
+                            this.Monitor.Log($"Loading content pack '{pack.Manifest.Name}' failed. It specifies format version {content.Format}, but uses the condition feature ({nameof(ContentConfig.Changes)}.{nameof(PatchConfig.When)} field) added in 1.3.", LogLevel.Error);
+                            continue;
+                        }
+                    }
 
                     // load patches
                     int i = 0;
