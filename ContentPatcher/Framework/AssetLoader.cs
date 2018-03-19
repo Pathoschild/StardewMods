@@ -25,16 +25,21 @@ namespace ContentPatcher.Framework
         /// <summary>Preload an asset from the content pack if necessary.</summary>
         /// <param name="contentPack">The content pack.</param>
         /// <param name="key">The asset key.</param>
-        public void PreloadIfNeeded(IContentPack contentPack, string key)
+        /// <returns>Returns whether any assets were preloaded.</returns>
+        public bool PreloadIfNeeded(IContentPack contentPack, string key)
         {
             key = this.GetRealPath(contentPack, key) ?? throw new FileNotFoundException($"The file '{key}' does not exist in the {contentPack.Manifest.Name} content patch folder.");
+            bool anyLoaded = false;
 
             // PNG asset
             if (this.IsPngPath(key))
             {
                 string actualAssetKey = contentPack.GetActualAssetKey(key);
                 if (!this.PngTextureCache.ContainsKey(actualAssetKey))
+                {
                     this.PngTextureCache[actualAssetKey] = contentPack.LoadAsset<Texture2D>(key);
+                    anyLoaded = true;
+                }
             }
 
             // map PNG tilesheets
@@ -55,9 +60,14 @@ namespace ContentPatcher.Framework
                     // load asset
                     string actualAssetKey = contentPack.GetActualAssetKey(relativePath);
                     if (!this.PngTextureCache.ContainsKey(actualAssetKey))
+                    {
                         this.PngTextureCache[actualAssetKey] = contentPack.LoadAsset<Texture2D>(relativePath);
+                        anyLoaded = true;
+                    }
                 }
             }
+
+            return anyLoaded;
         }
 
         /// <summary>Get an asset from the content pack of <see cref="PngTextureCache"/>.</summary>

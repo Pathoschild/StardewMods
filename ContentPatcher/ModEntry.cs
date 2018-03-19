@@ -387,7 +387,8 @@ namespace ContentPatcher
                 foreach (string permutation in this.PatchManager.GetPermutations(tokenedPath, conditions))
                 {
                     lastPermutation = permutation;
-                    this.AssetLoader.PreloadIfNeeded(pack, permutation);
+                    if (this.AssetLoader.PreloadIfNeeded(pack, permutation))
+                        this.VerboseLog($"      preloaded {permutation}.");
                 }
             }
             catch (FileNotFoundException)
