@@ -4,6 +4,7 @@
 ## 1.3
 * Added support for patch conditions, with initial support for season, day of month, day of week, and language.
 * Added support for player settings via `config.json`.
+* Added support for condition and config tokens in `content.json`.
 * Added trace logs when a content pack loads or edits an asset.
 
 ## 1.2
