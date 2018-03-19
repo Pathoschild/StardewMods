@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using StardewModdingAPI;
 
@@ -42,6 +44,12 @@ namespace ContentPatcher.Framework.Patches
         public override T Load<T>(IAssetInfo asset)
         {
             return this.AssetLoader.Load<T>(this.ContentPack, this.LocalAsset.Value);
+        }
+
+        /// <summary>Get the condition tokens used by this patch in its fields.</summary>
+        public override IEnumerable<ConditionKey> GetTokensUsed()
+        {
+            return base.GetTokensUsed().Union(this.LocalAsset.TokenKeys);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
 using StardewModdingAPI;
 
@@ -44,5 +45,8 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="asset">The asset to edit.</param>
         /// <exception cref="System.NotSupportedException">The current patch type doesn't support editing assets.</exception>
         void Edit<T>(IAssetData asset);
+
+        /// <summary>Get the condition tokens used by this patch in its fields.</summary>
+        IEnumerable<ConditionKey> GetTokensUsed();
     }
 }

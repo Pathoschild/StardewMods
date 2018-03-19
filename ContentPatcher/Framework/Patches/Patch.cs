@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using StardewModdingAPI;
@@ -63,6 +64,12 @@ namespace ContentPatcher.Framework.Patches
         public virtual void Edit<T>(IAssetData asset)
         {
             throw new NotSupportedException("This patch type doesn't support loading assets.");
+        }
+
+        /// <summary>Get the condition tokens used by this patch in its fields.</summary>
+        public virtual IEnumerable<ConditionKey> GetTokensUsed()
+        {
+            yield break;
         }
 
 

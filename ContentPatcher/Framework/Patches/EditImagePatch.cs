@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -90,6 +92,11 @@ namespace ContentPatcher.Framework.Patches
             editor.PatchImage(source, this.FromArea, this.ToArea, this.PatchMode);
         }
 
+        /// <summary>Get the condition tokens used by this patch in its fields.</summary>
+        public override IEnumerable<ConditionKey> GetTokensUsed()
+        {
+            return base.GetTokensUsed().Union(this.FromLocalAsset.TokenKeys);
+        }
 
         /*********
         ** Private methods

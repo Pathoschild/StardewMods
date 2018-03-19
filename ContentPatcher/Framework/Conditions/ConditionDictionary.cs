@@ -41,5 +41,12 @@ namespace ContentPatcher.Framework.Conditions
                     yield return value;
             }
         }
+
+        /// <summary>Get the possible values for a condition.</summary>
+        /// <param name="key">The condition key.</param>
+        public IEnumerable<string> GetValidValues(ConditionKey key)
+        {
+            return this.ValidValues[key];
+        }
     }
 }

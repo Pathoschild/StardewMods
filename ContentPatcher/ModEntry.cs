@@ -268,7 +268,8 @@ namespace ContentPatcher
                     }
                 }
 
-                // parse & save patch
+                // get patch instance
+                IPatch patch;
                 switch (action)
                 {
                     // load asset
@@ -277,7 +278,7 @@ namespace ContentPatcher
                             // init patch
                             if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, logSkip, out TokenString fromAsset))
                                 return;
-                            IPatch patch = new LoadPatch(this.AssetLoader, pack, assetName, conditions, fromAsset);
+                            patch = new LoadPatch(this.AssetLoader, pack, assetName, conditions, fromAsset);
 
                             // detect conflicting loaders
                             IPatch[] conflictingLoaders = this.PatchManager.GetConflictingLoaders(patch).ToArray();
@@ -292,9 +293,6 @@ namespace ContentPatcher
                                 }
                                 return;
                             }
-
-                            // add
-                            this.PatchManager.Add(patch);
                         }
                         break;
 
@@ -319,7 +317,7 @@ namespace ContentPatcher
                             }
 
                             // save
-                            this.PatchManager.Add(new EditDataPatch(this.AssetLoader, pack, assetName, conditions, entry.Entries, entry.Fields, this.Monitor));
+                            patch = new EditDataPatch(this.AssetLoader, pack, assetName, conditions, entry.Entries, entry.Fields, this.Monitor);
                         }
                         break;
 
@@ -337,14 +335,25 @@ namespace ContentPatcher
                             // save
                             if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, logSkip, out TokenString fromAsset))
                                 return;
-                            this.PatchManager.Add(new EditImagePatch(this.AssetLoader, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor));
+                            patch = new EditImagePatch(this.AssetLoader, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor);
                         }
                         break;
 
                     default:
                         logSkip($"unsupported patch type '{action}'.");
-                        break;
+                        return;
                 }
+
+                // only apply patch when its tokens are available
+                HashSet<ConditionKey> tokensUsed = new HashSet<ConditionKey>(patch.GetTokensUsed());
+                foreach (ConditionKey key in tokensUsed)
+                {
+                    if (!patch.Conditions.ContainsKey(key))
+                        patch.Conditions.Add(key, new Condition(key, new InvariantHashSet(patch.Conditions.GetValidValues(key))));
+                }
+
+                // save patch
+                this.PatchManager.Add(patch);
             }
             catch (Exception ex)
             {
