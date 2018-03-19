@@ -58,6 +58,7 @@ namespace ContentPatcher
             // register patcher
             helper.Content.AssetLoaders.Add(this.PatchManager);
             helper.Content.AssetEditors.Add(this.PatchManager);
+            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null);
 
             // set up events
             if (this.Config.EnableDebugFeatures)
