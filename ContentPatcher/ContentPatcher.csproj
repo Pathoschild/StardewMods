@@ -45,6 +45,7 @@
     <Compile Include="Framework\Conditions\ConditionKey.cs" />
     <Compile Include="Framework\Conditions\ConditionDictionary.cs" />
     <Compile Include="Framework\ConfigModels\ConfigField.cs" />
+    <Compile Include="Framework\ConfigFileHandler.cs" />
     <Compile Include="Framework\Patches\Patch.cs" />
     <Compile Include="Framework\Conditions\ConditionContext.cs" />
     <Compile Include="Framework\Conditions\PatchType.cs" />

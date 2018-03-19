@@ -140,6 +140,7 @@ namespace ContentPatcher
         [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "The value is used immediately, so this isn't an issue.")]
         private void LoadContentPacks()
         {
+            ConfigFileHandler configFileHandler = new ConfigFileHandler(this.ConfigFileName, this.PatchManager.ParseCommaDelimitedField, (pack, label, reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {label}: {reason}"));
             foreach (IContentPack pack in this.Helper.GetContentPacks())
             {
                 if (this.Config.VerboseLog)
@@ -166,25 +167,8 @@ namespace ContentPatcher
                     }
 
                     // load config.json
-                    IDictionary<string, ConfigField> config;
-                    {
-                        string configFilePath = Path.Combine(pack.DirectoryPath, this.ConfigFileName);
-
-                        // read schema
-                        config = this.LoadConfigSchema(content.ConfigSchema, logWarning: (field, reasonPhrase) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {nameof(ContentConfig.ConfigSchema)} field '{field}': {reasonPhrase}", LogLevel.Warn));
-                        if (!config.Any() && File.Exists(configFilePath))
-                            this.Monitor.Log($"Ignored {pack.Manifest.Name} > config.json: this content pack doesn't support configuration.", LogLevel.Warn);
-
-                        // read config
-                        this.LoadConfigValues(pack, config, (field, reasonPhrase) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {this.ConfigFileName} field '{field}': {reasonPhrase}", LogLevel.Warn));
-
-                        // save normalised config
-                        if (config.Any())
-                        {
-                            IDictionary<string, string> data = config.ToDictionary(p => p.Key, p => string.Join(", ", p.Value.Value));
-                            this.Helper.WriteJsonFile(configFilePath, data);
-                        }
-                    }
+                    IDictionary<string, ConfigField> config = configFileHandler.Read(pack, content.ConfigSchema);
+                    configFileHandler.Save(pack, config, this.Helper);
 
                     // load patches
                     int i = 0;
@@ -197,121 +181,6 @@ namespace ContentPatcher
                 catch (Exception ex)
                 {
                     this.Monitor.Log($"Error loading content pack '{pack.Manifest.Name}'. Technical details:\n{ex}", LogLevel.Error);
-                }
-            }
-        }
-
-        /// <summary>Parse a raw config schema for a content pack.</summary>
-        /// <param name="rawSchema">The raw config schema.</param>
-        /// <param name="logWarning">The callback to invoke on each validation warning, passed the field name and reason respectively.</param>
-        private IDictionary<string, ConfigField> LoadConfigSchema(IDictionary<string, ConfigSchemaFieldConfig> rawSchema, Action<string, string> logWarning)
-        {
-            IDictionary<string, ConfigField> schema = new Dictionary<string, ConfigField>(StringComparer.InvariantCultureIgnoreCase);
-            if (rawSchema == null || !rawSchema.Any())
-                return schema;
-
-            foreach (string key in rawSchema.Keys)
-            {
-                ConfigSchemaFieldConfig field = rawSchema[key];
-
-                // validate key
-                if (Enum.TryParse(key, true, out ConditionKey conditionKey))
-                {
-                    logWarning(key, $"can't use {conditionKey} as a config field, because it's a reserved condition name.");
-                    continue;
-                }
-
-                // read allowed values
-                InvariantHashSet allowValues = this.PatchManager.ParseCommaDelimitedField(field.AllowValues);
-                if (!allowValues.Any())
-                {
-                    logWarning(key, $"no {nameof(ConfigSchemaFieldConfig.AllowValues)} specified.");
-                    continue;
-                }
-
-                // read default values
-                InvariantHashSet defaultValues = this.PatchManager.ParseCommaDelimitedField(field.Default);
-                {
-                    // inject default
-                    if (!defaultValues.Any() && !field.AllowBlank)
-                        defaultValues = new InvariantHashSet(allowValues.First());
-
-                    // validate values
-                    string[] invalidValues = defaultValues.Except(allowValues).ToArray();
-                    if (invalidValues.Any())
-                    {
-                        logWarning(key, $"default values '{string.Join(", ", invalidValues)}' are not allowed according to {nameof(ConfigSchemaFieldConfig.AllowBlank)}.");
-                        continue;
-                    }
-
-                    // validate allow multiple
-                    if (!field.AllowMultiple && defaultValues.Count > 1)
-                    {
-                        logWarning(key, $"can't have multiple default values because {nameof(ConfigSchemaFieldConfig.AllowMultiple)} is false.");
-                        continue;
-                    }
-                }
-
-                // add to schema
-                schema[key] = new ConfigField(allowValues, defaultValues, field.AllowBlank, field.AllowMultiple);
-            }
-
-            return schema;
-        }
-
-        /// <summary>Load config values from the content pack.</summary>
-        /// <param name="contentPack">The content pack whose config file to read.</param>
-        /// <param name="config">The config schema.</param>
-        /// <param name="logWarning">The callback to invoke on each validation warning, passed the field name and reason respectively.</param>
-        private void LoadConfigValues(IContentPack contentPack, IDictionary<string, ConfigField> config, Action<string, string> logWarning)
-        {
-            if (!config.Any())
-                return;
-
-            // read raw config
-            IDictionary<string, InvariantHashSet> configValues =
-                (contentPack.ReadJsonFile<Dictionary<string, string>>(this.ConfigFileName) ?? new Dictionary<string, string>())
-                .ToDictionary(entry => entry.Key.Trim(), entry => this.PatchManager.ParseCommaDelimitedField(entry.Value), StringComparer.InvariantCultureIgnoreCase);
-
-            // remove invalid values
-            foreach (string key in configValues.Keys)
-            {
-                if (!config.ContainsKey(key))
-                {
-                    logWarning(key, "no such field supported by this content pack.");
-                    configValues.Remove(key);
-                }
-            }
-
-            // inject default values
-            foreach (string key in config.Keys)
-            {
-                ConfigField field = config[key];
-                if (!configValues.TryGetValue(key, out InvariantHashSet values) || (!field.AllowBlank && !values.Any()))
-                    configValues[key] = field.DefaultValues;
-            }
-
-            // parse each field
-            foreach (string key in config.Keys)
-            {
-                ConfigField field = config[key];
-                field.Value = configValues[key];
-
-                // validate allow-multiple
-                if (!field.AllowMultiple && field.Value.Count > 1)
-                {
-                    logWarning(key, "field only allows a single value.");
-                    field.Value = field.DefaultValues;
-                    continue;
-                }
-
-                // validate allow-values
-                string[] invalidValues = field.Value.Except(field.AllowValues).ToArray();
-                if (invalidValues.Any())
-                {
-                    logWarning(key, $"found invalid values ({string.Join(", ", invalidValues)}), expected: {string.Join(", ", field.AllowValues)}.");
-                    field.Value = field.DefaultValues;
-                    continue;
                 }
             }
         }
