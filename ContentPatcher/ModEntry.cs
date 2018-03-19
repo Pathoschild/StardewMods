@@ -224,7 +224,7 @@ namespace ContentPatcher
                     return;
 
                 // parse action
-                if (!Enum.TryParse(entry.Action, out PatchType action))
+                if (!Enum.TryParse(entry.Action, true, out PatchType action))
                 {
                     logSkip(string.IsNullOrWhiteSpace(entry.Action)
                         ? $"must set the {nameof(PatchConfig.Action)} field."
