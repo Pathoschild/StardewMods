@@ -52,7 +52,7 @@ namespace ContentPatcher
         {
             // init
             this.Config = helper.ReadConfig<ModConfig>();
-            this.PatchManager = new PatchManager(this.Monitor, helper.Content.CurrentLocaleConstant);
+            this.PatchManager = new PatchManager(this.Monitor, helper.Content.CurrentLocaleConstant, this.Config.VerboseLog);
             this.LoadContentPacks();
 
             // register patcher
@@ -114,8 +114,7 @@ namespace ContentPatcher
             LocalizedContentManager.LanguageCode language = contentHelper.CurrentLocaleConstant;
 
             // update context
-            if (this.Config.VerboseLog)
-                this.Monitor.Log($"Context: date=none, weather=none, locale={language}.", LogLevel.Trace);
+            this.VerboseLog($"Context: date=none, weather=none, locale={language}.");
             this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null);
         }
 
@@ -131,8 +130,7 @@ namespace ContentPatcher
             Weather weather = this.GetCurrentWeather();
 
             // update context
-            if (this.Config.VerboseLog)
-                this.Monitor.Log($"Context: date={date.DayOfWeek} {date.Season} {date.Day}, weather={weather}, locale={language}.", LogLevel.Trace);
+            this.VerboseLog($"Context: date={date.DayOfWeek} {date.Season} {date.Day}, weather={weather}, locale={language}.");
             this.PatchManager.UpdateContext(contentHelper, language, date, weather);
         }
 
@@ -146,8 +144,7 @@ namespace ContentPatcher
             ConfigFileHandler configFileHandler = new ConfigFileHandler(this.ConfigFileName, this.PatchManager.ParseCommaDelimitedField, (pack, label, reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {label}: {reason}"));
             foreach (IContentPack pack in this.Helper.GetContentPacks())
             {
-                if (this.Config.VerboseLog)
-                    this.Monitor.Log($"Loading content pack '{pack.Manifest.Name}'...", LogLevel.Trace);
+                this.VerboseLog($"Loading content pack '{pack.Manifest.Name}'...");
 
                 try
                 {
@@ -174,6 +171,8 @@ namespace ContentPatcher
                     // load config.json
                     IDictionary<string, ConfigField> config = configFileHandler.Read(pack, content.ConfigSchema);
                     configFileHandler.Save(pack, config, this.Helper);
+                    if (config.Any())
+                        this.VerboseLog($"   found config.json with {config.Count} fields...");
 
                     // validate features
                     if (content.Format.IsOlderThan("1.3"))
@@ -199,6 +198,7 @@ namespace ContentPatcher
                     int i = 0;
                     foreach (PatchConfig entry in content.Changes)
                     {
+                        this.VerboseLog($"   loading patch: {entry.Action} {entry.Target}...");
                         i++;
                         this.LoadPatch(pack, entry, config, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {pack.Manifest.Name} > entry #{i}: {reasonPhrase}", LogLevel.Warn));
                     }
@@ -221,7 +221,10 @@ namespace ContentPatcher
             {
                 // skip if disabled
                 if (!entry.Enabled)
+                {
+                    this.VerboseLog("      skipped: not enabled.");
                     return;
+                }
 
                 // parse action
                 if (!Enum.TryParse(entry.Action, true, out PatchType action))
@@ -430,6 +433,15 @@ namespace ContentPatcher
                 return Game1.isLightning ? Weather.Storm : Weather.Rain;
 
             return Weather.Sun;
+        }
+
+        /// <summary>Log a message if <see cref="ModConfig.VerboseLog"/> is enabled.</summary>
+        /// <param name="message">The message to log.</param>
+        /// <param name="level">The log level.</param>
+        private void VerboseLog(string message, LogLevel level = LogLevel.Trace)
+        {
+            if (this.Config.VerboseLog)
+                this.Monitor.Log(message, level);
         }
     }
 }

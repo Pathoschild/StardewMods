@@ -27,6 +27,9 @@ namespace ContentPatcher.Framework
             [ConditionKey.Weather] = new InvariantHashSet(Enum.GetNames(typeof(Weather)))
         };
 
+        /// <summary>Whether to enable verbose logging.</summary>
+        private readonly bool Verbose;
+
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
@@ -43,10 +46,12 @@ namespace ContentPatcher.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="language">The current language.</param>
-        public PatchManager(IMonitor monitor, LocalizedContentManager.LanguageCode language)
+        /// <param name="verboseLog">Whether to enable verbose logging.</param>
+        public PatchManager(IMonitor monitor, LocalizedContentManager.LanguageCode language, bool verboseLog)
         {
             this.Monitor = monitor;
             this.ConditionContext = new ConditionContext(language);
+            this.Verbose = verboseLog;
         }
 
         /****
@@ -56,14 +61,18 @@ namespace ContentPatcher.Framework
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public bool CanLoad<T>(IAssetInfo asset)
         {
-            return this.GetCurrentLoaders(asset).Any();
+            bool canLoad = this.GetCurrentLoaders(asset).Any();
+            this.VerboseLog($"Can load: {canLoad} ({asset.AssetName})");
+            return canLoad;
         }
 
         /// <summary>Get whether this instance can edit the given asset.</summary>
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public bool CanEdit<T>(IAssetInfo asset)
         {
-            return this.GetCurrentEditors(asset).Any();
+            bool canEdit = this.GetCurrentEditors(asset).Any();
+            this.VerboseLog($"Can edit: {canEdit} ({asset.AssetName})");
+            return canEdit;
         }
 
         /// <summary>Load a matched asset.</summary>
@@ -102,6 +111,8 @@ namespace ContentPatcher.Framework
         /// <param name="weather">The current in-game weather (if applicable).</param>
         public void UpdateContext(IContentHelper contentHelper, LocalizedContentManager.LanguageCode language, SDate date, Weather? weather)
         {
+            this.VerboseLog("Propagating context...");
+
             // update context
             this.ConditionContext.Update(language, date, weather);
 
@@ -114,15 +125,21 @@ namespace ContentPatcher.Framework
                     bool wasApplied = patch.MatchesContext;
                     bool changed = patch.UpdateContext(this.ConditionContext);
                     bool shouldApply = patch.MatchesContext;
+                    bool reload = (wasApplied && changed) || (!wasApplied && shouldApply);
 
-                    if ((wasApplied && changed) || (!wasApplied && shouldApply))
+                    this.VerboseLog($"   {patch.ContentPack.Manifest.Name} > {assetName}: should apply {wasApplied} => {shouldApply}, changed={changed}, will reload={reload}");
+
+                    if (reload)
                         reloadAssetNames.Add(assetName);
                 }
             }
 
             // reload if needed
             if (reloadAssetNames.Any())
+            {
+                this.VerboseLog($"   reloading {reloadAssetNames.Count} assets...");
                 contentHelper.InvalidateCache(asset => reloadAssetNames.Contains(asset.AssetName));
+            }
         }
 
 
@@ -138,6 +155,7 @@ namespace ContentPatcher.Framework
                 throw new InvalidOperationException($"Can't add {patch.Type} patch because it conflicts with an already-registered loader.");
 
             // add
+            this.VerboseLog($"      added {patch.Type} {patch.AssetName}.");
             if (this.Patches.TryGetValue(patch.AssetName, out IList<IPatch> patches))
                 patches.Add(patch);
             else
@@ -350,6 +368,15 @@ namespace ContentPatcher.Framework
             }
 
             return GetPermutations(keys.ToArray());
+        }
+
+        /// <summary>Log a message if <see cref="Verbose"/> is enabled.</summary>
+        /// <param name="message">The message to log.</param>
+        /// <param name="level">The log level.</param>
+        private void VerboseLog(string message, LogLevel level = LogLevel.Trace)
+        {
+            if (this.Verbose)
+                this.Monitor.Log(message, level);
         }
     }
 }
