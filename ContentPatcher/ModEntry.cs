@@ -227,6 +227,11 @@ namespace ContentPatcher
                     return;
                 }
 
+                // normalise conditions
+                entry.When = entry.When != null
+                    ? new Dictionary<string, string>(entry.When, StringComparer.InvariantCultureIgnoreCase)
+                    : new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+
                 // parse action
                 if (!Enum.TryParse(entry.Action, true, out PatchType action))
                 {
