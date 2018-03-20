@@ -88,6 +88,18 @@ namespace ContentPatcher.Framework.Patches
                 editor.PatchImage(original);
             }
 
+            // validate error conditions
+            if (affectedArea.Right > editor.Data.Width)
+            {
+                this.Monitor.Log($"Can't apply {this.Type} patch: target area (X:{affectedArea.X}, Y:{affectedArea.Y}, Width:{affectedArea.Width}, Height:{affectedArea.Height}) extends past the right edge of the image (Width:{editor.Data.Width}), which isn't supported. Patches can only extend the tilesheet downwards. Affected patch: {this.ContentPack.Manifest.Name} > {this.AssetName}.", LogLevel.Error);
+                return;
+            }
+            if (this.FromArea != null && (this.FromArea.Value.Width != affectedArea.Width || this.FromArea.Value.Height != affectedArea.Height))
+            {
+                this.Monitor.Log($"Can't apply {this.Type} patch: source image size (Width:{affectedArea.Width}, Height:{affectedArea.Height}) doesn't match the target area size (Width:{affectedArea.Width}, Height:{affectedArea.Height}). Affected patch: {this.ContentPack.Manifest.Name} > {this.AssetName}.", LogLevel.Error);
+                return;
+            }
+
             // apply source image
             editor.PatchImage(source, this.FromArea, this.ToArea, this.PatchMode);
         }

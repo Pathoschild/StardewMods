@@ -6,6 +6,8 @@
 * Added support for player settings via `config.json`.
 * Added support for condition and config tokens in `content.json`.
 * Added trace logs when a content pack loads or edits an asset.
+* Added optional verbose logs.
+* Fixed unhelpful error when a patch specifies an invalid source/target area.
 
 ## 1.2
 * Added support for overlaying images.
