@@ -366,6 +366,43 @@ namespace ContentPatcher
             }
         }
 
+        /// <summary>Parse a string which can contain tokens, and validate that it's valid.</summary>
+        /// <param name="rawValue">The raw string which may contain tokens.</param>
+        /// <param name="config">The player configuration.</param>
+        /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
+        /// <param name="parsed">The parsed value.</param>
+        private bool TryParseTokenString(string rawValue, IDictionary<string, ConfigField> config, out string error, out TokenString parsed)
+        {
+            // parse
+            TokenStringBuilder builder = new TokenStringBuilder(rawValue, config);
+
+            // validate unknown tokens
+            if (builder.InvalidTokens.Any())
+            {
+                parsed = null;
+                error = $"found unknown tokens: {string.Join(", ", builder.InvalidTokens.OrderBy(p => p))}";
+                return false;
+            }
+
+            // validate config tokens
+            foreach (string key in builder.ConfigTokens)
+            {
+                ConfigField field = config[key];
+                if (field.AllowMultiple)
+                {
+                    parsed = null;
+                    error = $"token {{{{{key}}}}} can't be used because that config field allows multiple values.";
+                    return false;
+                }
+            }
+
+            // build
+            parsed = builder.Build(applyConfigTokens: true);
+            error = null;
+            return true;
+        }
+
+
         /// <summary>Prepare a local asset file for a patch to use.</summary>
         /// <param name="pack">The content pack being loaded.</param>
         /// <param name="path">The asset path in the content patch.</param>
@@ -386,7 +423,7 @@ namespace ContentPatcher
             }
 
             // tokenise
-            if (!TokenString.TryParse(path, config, out tokenedPath, out string error))
+            if (!this.TryParseTokenString(path, config, out string error, out tokenedPath))
             {
                 logSkip($"the {nameof(PatchConfig.FromFile)} is invalid: {error}");
                 tokenedPath = null;

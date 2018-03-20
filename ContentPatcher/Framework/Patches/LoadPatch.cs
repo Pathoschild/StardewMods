@@ -49,7 +49,7 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Get the condition tokens used by this patch in its fields.</summary>
         public override IEnumerable<ConditionKey> GetTokensUsed()
         {
-            return base.GetTokensUsed().Union(this.LocalAsset.TokenKeys);
+            return base.GetTokensUsed().Union(this.LocalAsset.ConditionTokens);
         }
     }
 }

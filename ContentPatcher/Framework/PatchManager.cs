@@ -288,14 +288,14 @@ namespace ContentPatcher.Framework
         public IEnumerable<string> GetPermutations(TokenString tokenable, ConditionDictionary conditions)
         {
             // no tokens: return original string
-            if (!tokenable.TokenKeys.Any())
+            if (!tokenable.ConditionTokens.Any())
             {
                 yield return tokenable.Raw;
                 yield break;
             }
 
             // yield token permutations
-            foreach (IDictionary<ConditionKey, string> permutation in this.GetConditionPermutations(tokenable.TokenKeys, conditions))
+            foreach (IDictionary<ConditionKey, string> permutation in this.GetConditionPermutations(tokenable.ConditionTokens, conditions))
                 yield return tokenable.GetStringWithTokens(permutation);
         }
 
