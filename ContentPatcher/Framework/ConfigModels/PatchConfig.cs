@@ -12,6 +12,9 @@ namespace ContentPatcher.Framework.ConfigModels
         /****
         ** All actions
         ****/
+        /// <summary>A name for this patch shown in log messages.</summary>
+        public string LogName { get; set; }
+
         /// <summary>The patch type to apply.</summary>
         public string Action { get; set; }
 

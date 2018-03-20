@@ -83,7 +83,11 @@ namespace ContentPatcher.Framework
             if (patch == null)
                 throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because no patches currently apply. This should never happen.");
 
-            this.Monitor.Log($"{patch.ContentPack.Manifest.Name} loaded {asset.AssetName}.", LogLevel.Trace);
+            if (this.Verbose)
+                this.VerboseLog($"Patch \"{patch.LogName}\" loaded {asset.AssetName}.");
+            else
+                this.Monitor.Log($"{patch.ContentPack.Manifest.Name} loaded {asset.AssetName}.", LogLevel.Trace);
+
             return patch.Load<T>(asset);
         }
 
@@ -98,15 +102,18 @@ namespace ContentPatcher.Framework
             InvariantHashSet loggedContentPacks = new InvariantHashSet();
             foreach (IPatch patch in patches)
             {
-                if (loggedContentPacks.Add(patch.ContentPack.Manifest.Name))
+                if (this.Verbose)
+                    this.VerboseLog($"Applied patch \"{patch.LogName}\" to {asset.AssetName}.");
+                else if (loggedContentPacks.Add(patch.ContentPack.Manifest.Name))
                     this.Monitor.Log($"{patch.ContentPack.Manifest.Name} edited {asset.AssetName}.", LogLevel.Trace);
+
                 try
                 {
                     patch.Edit<T>(asset);
                 }
                 catch (Exception ex)
                 {
-                    this.Monitor.Log($"unhandled exception applying patch: {patch.ContentPack.Manifest.Name} > {patch.Type} {patch.AssetName}.\n{ex}", LogLevel.Error);
+                    this.Monitor.Log($"unhandled exception applying patch: {patch.LogName}.\n{ex}", LogLevel.Error);
                 }
             }
         }
@@ -134,7 +141,7 @@ namespace ContentPatcher.Framework
                     bool shouldApply = patch.MatchesContext;
                     bool reload = (wasApplied && changed) || (!wasApplied && shouldApply);
 
-                    this.VerboseLog($"   {patch.ContentPack.Manifest.Name} > {assetName}: should apply {wasApplied} => {shouldApply}, changed={changed}, will reload={reload}");
+                    this.VerboseLog($"   {patch.LogName}: should apply {wasApplied} => {shouldApply}, changed={changed}, will reload={reload}");
 
                     if (reload)
                         reloadAssetNames.Add(assetName);

@@ -19,6 +19,9 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Accessors
         *********/
+        /// <summary>A unique name for this patch shown in log messages.</summary>
+        public string LogName { get; }
+
         /// <summary>The patch type.</summary>
         public PatchType Type { get; }
 
@@ -77,13 +80,15 @@ namespace ContentPatcher.Framework.Patches
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="logName">A unique name for this patch shown in log messages.</param>
         /// <param name="type">The patch type.</param>
         /// <param name="assetLoader">Handles loading assets from content packs.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
-        protected Patch(PatchType type, AssetLoader assetLoader, IContentPack contentPack, string assetName, ConditionDictionary conditions)
+        protected Patch(string logName, PatchType type, AssetLoader assetLoader, IContentPack contentPack, string assetName, ConditionDictionary conditions)
         {
+            this.LogName = logName;
             this.Type = type;
             this.AssetLoader = assetLoader;
             this.ContentPack = contentPack;

@@ -10,6 +10,9 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Properties
         *********/
+        /// <summary>A unique name for this patch shown in log messages.</summary>
+        string LogName { get; }
+
         /// <summary>The patch type.</summary>
         PatchType Type { get; }
 

@@ -29,6 +29,7 @@ namespace ContentPatcher.Framework.Patches
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="logName">A unique name for this patch shown in log messages.</param>
         /// <param name="assetLoader">Handles loading assets from content packs.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
@@ -36,8 +37,8 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="records">The data records to edit.</param>
         /// <param name="fields">The data fields to edit.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        public EditDataPatch(AssetLoader assetLoader, IContentPack contentPack, string assetName, ConditionDictionary conditions, IDictionary<string, string> records, IDictionary<string, IDictionary<int, string>> fields, IMonitor monitor)
-            : base(PatchType.EditData, assetLoader, contentPack, assetName, conditions)
+        public EditDataPatch(string logName, AssetLoader assetLoader, IContentPack contentPack, string assetName, ConditionDictionary conditions, IDictionary<string, string> records, IDictionary<string, IDictionary<int, string>> fields, IMonitor monitor)
+            : base(logName, PatchType.EditData, assetLoader, contentPack, assetName, conditions)
         {
             this.Records = records;
             this.Fields = fields;
@@ -53,7 +54,7 @@ namespace ContentPatcher.Framework.Patches
             // validate
             if (!typeof(T).IsGenericType || typeof(T).GetGenericTypeDefinition() != typeof(Dictionary<,>))
             {
-                this.Monitor.Log($"Can't apply edit-data patch by {this.ContentPack.Manifest.Name} to {this.AssetName}: this file isn't a data file (found {(typeof(T) == typeof(Texture2D) ? "image" : typeof(T).Name)}).", LogLevel.Warn);
+                this.Monitor.Log($"Can't apply data patch \"{this.LogName}\" to {this.AssetName}: this file isn't a data file (found {(typeof(T) == typeof(Texture2D) ? "image" : typeof(T).Name)}).", LogLevel.Warn);
                 return;
             }
 
@@ -102,7 +103,7 @@ namespace ContentPatcher.Framework.Patches
                     TKey key = (TKey)Convert.ChangeType(record.Key, typeof(TKey));
                     if (!data.ContainsKey(key))
                     {
-                        this.Monitor.Log($"Can't apply data field patch by {this.ContentPack.Manifest.Name} to {this.AssetName}: there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.", LogLevel.Warn);
+                        this.Monitor.Log($"Can't apply data patch \"{this.LogName}\" to {this.AssetName}: there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.", LogLevel.Warn);
                         continue;
                     }
 
@@ -111,7 +112,7 @@ namespace ContentPatcher.Framework.Patches
                     {
                         if (field.Key < 0 || field.Key > actualFields.Length - 1)
                         {
-                            this.Monitor.Log($"Can't apply data field patch by {this.ContentPack.Manifest.Name} to {this.AssetName}: record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {field.Key} (must be 0 to {actualFields.Length - 1}).", LogLevel.Warn);
+                            this.Monitor.Log($"Can't apply data field \"{this.LogName}\" to {this.AssetName}: record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {field.Key} (must be 0 to {actualFields.Length - 1}).", LogLevel.Warn);
                             continue;
                         }
 

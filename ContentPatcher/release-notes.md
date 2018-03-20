@@ -7,6 +7,7 @@
 * Added support for condition and config tokens in `content.json`.
 * Added trace logs when a content pack loads or edits an asset.
 * Added optional verbose logs.
+* Added unique patch names (editable via `LogName`) to simplify troubleshooting.
 * Fixed unhelpful error when a patch specifies an invalid source/target area.
 * Fixed an exception in one patch preventing other patches from being applied.
 

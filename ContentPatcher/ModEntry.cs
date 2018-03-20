@@ -196,18 +196,50 @@ namespace ContentPatcher
                     }
 
                     // load patches
-                    int i = 0;
-                    foreach (PatchConfig entry in content.Changes)
+                    this.NamePatches(pack, content.Changes);
+                    foreach (PatchConfig patch in content.Changes)
                     {
-                        this.VerboseLog($"   loading patch: {entry.Action} {entry.Target}...");
-                        i++;
-                        this.LoadPatch(pack, entry, config, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {pack.Manifest.Name} > entry #{i}: {reasonPhrase}", LogLevel.Warn));
+                        this.VerboseLog($"   loading {patch.LogName}...");
+                        this.LoadPatch(pack, patch, config, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {patch.LogName}: {reasonPhrase}", LogLevel.Warn));
                     }
                 }
                 catch (Exception ex)
                 {
                     this.Monitor.Log($"Error loading content pack '{pack.Manifest.Name}'. Technical details:\n{ex}", LogLevel.Error);
                 }
+            }
+        }
+
+        /// <summary>Set a unique name for all patches in a content pack.</summary>
+        /// <param name="contentPack">The content pack.</param>
+        /// <param name="patches">The patches to name.</param>
+        private void NamePatches(IContentPack contentPack, PatchConfig[] patches)
+        {
+            // add default log names
+            foreach (PatchConfig patch in patches)
+            {
+                if (string.IsNullOrWhiteSpace(patch.LogName))
+                    patch.LogName = $"{patch.Action} {patch.Target}";
+            }
+
+            // detect duplicate names
+            InvariantHashSet duplicateNames = new InvariantHashSet(
+                from patch in patches
+                group patch by patch.LogName into nameGroup
+                where nameGroup.Count() > 1
+                select nameGroup.Key
+            );
+
+            // make names unique
+            int i = 0;
+            foreach (PatchConfig patch in patches)
+            {
+                i++;
+
+                if (duplicateNames.Contains(patch.LogName))
+                    patch.LogName = $"entry #{i} ({patch.LogName})";
+
+                patch.LogName = $"{contentPack.Manifest.Name} > {patch.LogName}";
             }
         }
 
@@ -220,7 +252,7 @@ namespace ContentPatcher
         {
             try
             {
-                // normalise conditions
+                // normalise patch fields
                 entry.When = entry.When != null
                     ? new Dictionary<string, string>(entry.When, StringComparer.InvariantCultureIgnoreCase)
                     : new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
@@ -286,7 +318,7 @@ namespace ContentPatcher
                             // init patch
                             if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, logSkip, out TokenString fromAsset, checkOnly: !enabled))
                                 return;
-                            patch = new LoadPatch(this.AssetLoader, pack, assetName, conditions, fromAsset);
+                            patch = new LoadPatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, fromAsset);
 
                             // detect conflicting loaders
                             IPatch[] conflictingLoaders = this.PatchManager.GetConflictingLoaders(patch).ToArray();
@@ -325,7 +357,7 @@ namespace ContentPatcher
                             }
 
                             // save
-                            patch = new EditDataPatch(this.AssetLoader, pack, assetName, conditions, entry.Entries, entry.Fields, this.Monitor);
+                            patch = new EditDataPatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, entry.Entries, entry.Fields, this.Monitor);
                         }
                         break;
 
@@ -343,7 +375,7 @@ namespace ContentPatcher
                             // save
                             if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, logSkip, out TokenString fromAsset, checkOnly: !enabled))
                                 return;
-                            patch = new EditImagePatch(this.AssetLoader, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor);
+                            patch = new EditImagePatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor);
                         }
                         break;
 

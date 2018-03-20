@@ -34,6 +34,7 @@ namespace ContentPatcher.Framework.Patches
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="logName">A unique name for this patch shown in log messages.</param>
         /// <param name="assetLoader">Handles loading assets from content packs.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
@@ -43,8 +44,8 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="toArea">The sprite area to overwrite.</param>
         /// <param name="patchMode">Indicates how the image should be patched.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        public EditImagePatch(AssetLoader assetLoader, IContentPack contentPack, string assetName, ConditionDictionary conditions, TokenString fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor)
-            : base(PatchType.EditImage, assetLoader, contentPack, assetName, conditions)
+        public EditImagePatch(string logName, AssetLoader assetLoader, IContentPack contentPack, string assetName, ConditionDictionary conditions, TokenString fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor)
+            : base(logName, PatchType.EditImage, assetLoader, contentPack, assetName, conditions)
         {
             this.FromLocalAsset = fromLocalAsset;
             this.FromArea = fromArea != Rectangle.Empty ? fromArea : null as Rectangle?;
@@ -70,7 +71,7 @@ namespace ContentPatcher.Framework.Patches
             // validate
             if (typeof(T) != typeof(Texture2D))
             {
-                this.Monitor.Log($"Can't apply edit-image patch by {this.ContentPack.Manifest.Name} to {this.AssetName}: this file isn't an image file (found {typeof(T)}).", LogLevel.Warn);
+                this.Monitor.Log($"Can't apply image patch \"{this.LogName}\" to {this.AssetName}: this file isn't an image file (found {typeof(T)}).", LogLevel.Warn);
                 return;
             }
 
@@ -91,12 +92,12 @@ namespace ContentPatcher.Framework.Patches
             // validate error conditions
             if (affectedArea.Right > editor.Data.Width)
             {
-                this.Monitor.Log($"Can't apply {this.Type} patch: target area (X:{affectedArea.X}, Y:{affectedArea.Y}, Width:{affectedArea.Width}, Height:{affectedArea.Height}) extends past the right edge of the image (Width:{editor.Data.Width}), which isn't supported. Patches can only extend the tilesheet downwards. Affected patch: {this.ContentPack.Manifest.Name} > {this.AssetName}.", LogLevel.Error);
+                this.Monitor.Log($"Can't apply image patch \"{this.LogName}\": target area (X:{affectedArea.X}, Y:{affectedArea.Y}, Width:{affectedArea.Width}, Height:{affectedArea.Height}) extends past the right edge of the image (Width:{editor.Data.Width}), which isn't supported. Patches can only extend the tilesheet downwards.", LogLevel.Error);
                 return;
             }
             if (this.FromArea != null && (this.FromArea.Value.Width != affectedArea.Width || this.FromArea.Value.Height != affectedArea.Height))
             {
-                this.Monitor.Log($"Can't apply {this.Type} patch: source image size (Width:{affectedArea.Width}, Height:{affectedArea.Height}) doesn't match the target area size (Width:{affectedArea.Width}, Height:{affectedArea.Height}). Affected patch: {this.ContentPack.Manifest.Name} > {this.AssetName}.", LogLevel.Error);
+                this.Monitor.Log($"Can't apply image patch \"{this.LogName}\": source image size (Width:{affectedArea.Width}, Height:{affectedArea.Height}) doesn't match the target area size (Width:{affectedArea.Width}, Height:{affectedArea.Height}).", LogLevel.Error);
                 return;
             }
 

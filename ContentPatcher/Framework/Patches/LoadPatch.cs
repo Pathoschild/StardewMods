@@ -19,13 +19,14 @@ namespace ContentPatcher.Framework.Patches
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="logName">A unique name for this patch shown in log messages.</param>
         /// <param name="assetLoader">Handles loading assets from content packs.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="localAsset">The asset key to load from the content pack instead.</param>
-        public LoadPatch(AssetLoader assetLoader, IContentPack contentPack, string assetName, ConditionDictionary conditions, TokenString localAsset)
-            : base(PatchType.Load, assetLoader, contentPack, assetName, conditions)
+        public LoadPatch(string logName, AssetLoader assetLoader, IContentPack contentPack, string assetName, ConditionDictionary conditions, TokenString localAsset)
+            : base(logName, PatchType.Load, assetLoader, contentPack, assetName, conditions)
         {
             this.LocalAsset = localAsset;
         }
