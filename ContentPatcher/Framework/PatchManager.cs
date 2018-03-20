@@ -100,7 +100,14 @@ namespace ContentPatcher.Framework
             {
                 if (loggedContentPacks.Add(patch.ContentPack.Manifest.Name))
                     this.Monitor.Log($"{patch.ContentPack.Manifest.Name} edited {asset.AssetName}.", LogLevel.Trace);
-                patch.Edit<T>(asset);
+                try
+                {
+                    patch.Edit<T>(asset);
+                }
+                catch (Exception ex)
+                {
+                    this.Monitor.Log($"unhandled exception applying patch: {patch.ContentPack.Manifest.Name} > {patch.Type} {patch.AssetName}.\n{ex}", LogLevel.Error);
+                }
             }
         }
 

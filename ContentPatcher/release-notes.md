@@ -8,6 +8,7 @@
 * Added trace logs when a content pack loads or edits an asset.
 * Added optional verbose logs.
 * Fixed unhelpful error when a patch specifies an invalid source/target area.
+* Fixed an exception in one patch preventing other patches from being applied.
 
 ## 1.2
 * Added support for overlaying images.
