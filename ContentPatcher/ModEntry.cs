@@ -220,17 +220,20 @@ namespace ContentPatcher
         {
             try
             {
-                // skip if disabled
-                if (!entry.Enabled)
-                {
-                    this.VerboseLog("      skipped: not enabled.");
-                    return;
-                }
-
                 // normalise conditions
                 entry.When = entry.When != null
                     ? new Dictionary<string, string>(entry.When, StringComparer.InvariantCultureIgnoreCase)
                     : new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+
+                // parse 'enabled'
+                bool enabled = true;
+                {
+                    if (entry.Enabled != null && !this.TryParseBoolean(entry.Enabled, config, out string error, out enabled))
+                    {
+                        logSkip($"invalid {nameof(PatchConfig.Enabled)} value '{entry.Enabled}': {error}");
+                        return;
+                    }
+                }
 
                 // parse action
                 if (!Enum.TryParse(entry.Action, true, out PatchType action))
@@ -281,7 +284,7 @@ namespace ContentPatcher
                     case PatchType.Load:
                         {
                             // init patch
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, logSkip, out TokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, logSkip, out TokenString fromAsset, checkOnly: !enabled))
                                 return;
                             patch = new LoadPatch(this.AssetLoader, pack, assetName, conditions, fromAsset);
 
@@ -338,7 +341,7 @@ namespace ContentPatcher
                             }
 
                             // save
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, logSkip, out TokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, logSkip, out TokenString fromAsset, checkOnly: !enabled))
                                 return;
                             patch = new EditImagePatch(this.AssetLoader, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor);
                         }
@@ -357,6 +360,14 @@ namespace ContentPatcher
                         patch.Conditions.Add(key, new Condition(key, new InvariantHashSet(patch.Conditions.GetValidValues(key))));
                 }
 
+                // skip if not enabled
+                // note: we process the patch even if it's disabled, so any errors are caught by the modder instead of only failing after the patch is enabled.
+                if (!enabled)
+                {
+                    this.VerboseLog($"    skipped: patch has {nameof(PatchConfig.Enabled)}: false.");
+                    return;
+                }
+
                 // save patch
                 this.PatchManager.Add(patch);
             }
@@ -366,12 +377,66 @@ namespace ContentPatcher
             }
         }
 
+        /// <summary>Parse a boolean value from a string which can contain tokens, and validate that it's valid.</summary>
+        /// <param name="rawValue">The raw string which may contain tokens.</param>
+        /// <param name="config">The player configuration.</param>
+        /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
+        /// <param name="parsed">The parsed value.</param>
+        private bool TryParseBoolean(string rawValue, IDictionary<string, ConfigField> config, out string error, out bool parsed)
+        {
+            parsed = false;
+
+            // parse tokens
+            if (!this.TryParseTokenString(rawValue, config, out error, out TokenStringBuilder builder))
+                return false;
+
+            // validate tokens
+            if (builder.HasAnyTokens)
+            {
+                // validate: no condition tokens allowed
+                if (builder.ConditionTokens.Any())
+                {
+                    error = $"can't use condition tokens in a boolean field ({string.Join(", ", builder.ConditionTokens.OrderBy(p => p))}).";
+                    return false;
+                }
+
+                // validate config tokens
+                if (builder.ConfigTokens.Any())
+                {
+                    // max one tokem
+                    if (builder.ConfigTokens.Count > 1)
+                    {
+                        error = "can't use multiple tokens.";
+                        return false;
+                    }
+
+                    // field isn't boolean
+                    string key = builder.ConfigTokens.First();
+                    ConfigField field = config[key];
+                    if (field.AllowValues.Except(new[] { "true", "false" }, StringComparer.InvariantCultureIgnoreCase).Any())
+                    {
+                        error = $"can't use {{{{{key}}}}} because that config field isn't restricted to 'true' or 'false'.";
+                        return false;
+                    }
+                }
+            }
+
+            // parse value
+            TokenString tokenString = builder.Build();
+            if (!bool.TryParse(tokenString.Raw, out parsed))
+            {
+                error = $"can't parse {tokenString.Raw} as a true/false value.";
+                return false;
+            }
+            return true;
+        }
+
         /// <summary>Parse a string which can contain tokens, and validate that it's valid.</summary>
         /// <param name="rawValue">The raw string which may contain tokens.</param>
         /// <param name="config">The player configuration.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseTokenString(string rawValue, IDictionary<string, ConfigField> config, out string error, out TokenString parsed)
+        private bool TryParseTokenString(string rawValue, IDictionary<string, ConfigField> config, out string error, out TokenStringBuilder parsed)
         {
             // parse
             TokenStringBuilder builder = new TokenStringBuilder(rawValue, config);
@@ -396,8 +461,8 @@ namespace ContentPatcher
                 }
             }
 
-            // build
-            parsed = builder.Build(applyConfigTokens: true);
+            // looks OK
+            parsed = builder;
             error = null;
             return true;
         }
@@ -410,8 +475,9 @@ namespace ContentPatcher
         /// <param name="conditions">The conditions to apply.</param>
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
         /// <param name="tokenedPath">The parsed value.</param>
+        /// <param name="checkOnly">Prepare the asset info and check if it's valid, but don't actually preload the asset.</param>
         /// <returns>Returns whether the local asset was successfully prepared.</returns>
-        private bool TryPrepareLocalAsset(IContentPack pack, string path, IDictionary<string, ConfigField> config, ConditionDictionary conditions, Action<string> logSkip, out TokenString tokenedPath)
+        private bool TryPrepareLocalAsset(IContentPack pack, string path, IDictionary<string, ConfigField> config, ConditionDictionary conditions, Action<string> logSkip, out TokenString tokenedPath, bool checkOnly)
         {
             // normalise raw value
             path = this.NormaliseLocalAssetPath(pack, path);
@@ -423,12 +489,13 @@ namespace ContentPatcher
             }
 
             // tokenise
-            if (!this.TryParseTokenString(path, config, out string error, out tokenedPath))
+            if (!this.TryParseTokenString(path, config, out string error, out TokenStringBuilder builder))
             {
                 logSkip($"the {nameof(PatchConfig.FromFile)} is invalid: {error}");
                 tokenedPath = null;
                 return false;
             }
+            tokenedPath = builder.Build();
 
             // validate all possible files exist
             // + preload PNG assets to avoid load-in-draw-loop error
@@ -438,7 +505,16 @@ namespace ContentPatcher
                 foreach (string permutation in this.PatchManager.GetPermutations(tokenedPath, conditions))
                 {
                     lastPermutation = permutation;
-                    if (this.AssetLoader.PreloadIfNeeded(pack, permutation))
+                    if (checkOnly)
+                    {
+                        if (!this.AssetLoader.FileExists(pack, permutation))
+                        {
+                            logSkip($"the {nameof(PatchConfig.FromFile)} field specifies a file that doesn't exist: {permutation}.");
+                            tokenedPath = null;
+                            return false;
+                        }
+                    }
+                    else if (this.AssetLoader.PreloadIfNeeded(pack, permutation))
                         this.VerboseLog($"      preloaded {permutation}.");
                 }
             }

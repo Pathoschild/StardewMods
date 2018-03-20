@@ -22,6 +22,14 @@ namespace ContentPatcher.Framework
         /*********
         ** Public methods
         *********/
+        /// <summary>Get whether a file exists in the content pack.</summary>
+        /// <param name="contentPack">The content pack.</param>
+        /// <param name="key">The asset key.</param>
+        public bool FileExists(IContentPack contentPack, string key)
+        {
+            return this.GetRealPath(contentPack, key) != null;
+        }
+
         /// <summary>Preload an asset from the content pack if necessary.</summary>
         /// <param name="contentPack">The content pack.</param>
         /// <param name="key">The asset key.</param>

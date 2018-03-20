@@ -34,6 +34,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The unrecognised tokens in the stirng.</summary>
         public InvariantHashSet InvalidTokens { get; } = new InvariantHashSet();
 
+        /// <summary>Whether the string contains any tokens (including invalid tokens).</summary>
+        public bool HasAnyTokens => this.ConditionTokens.Count > 0 || this.ConfigTokens.Count > 0 || this.InvalidTokens.Count > 0;
+
 
         /*********
         ** Public methods
@@ -58,17 +61,12 @@ namespace ContentPatcher.Framework.Conditions
             }
         }
 
-        /// <summary>Construct a token string.</summary>
-        /// <param name="applyConfigTokens">Whether to permanently apply config values.</param>
-        public TokenString Build(bool applyConfigTokens)
+        /// <summary>Construct a token string and permanently apply config values.</summary>
+        public TokenString Build()
         {
             TokenString tokenString = new TokenString(this.RawValue, this.ConditionTokens, TokenStringBuilder.TokenPattern);
-            if (applyConfigTokens)
-            {
-                IDictionary<string, string> configValues = this.Config.ToDictionary(p => p.Key, p => p.Value.Value.FirstOrDefault(), StringComparer.InvariantCultureIgnoreCase);
-                tokenString.ApplyPermanently(configValues);
-            }
-
+            IDictionary<string, string> configValues = this.Config.ToDictionary(p => p.Key, p => p.Value.Value.FirstOrDefault(), StringComparer.InvariantCultureIgnoreCase);
+            tokenString.ApplyPermanently(configValues);
             return tokenString;
         }
     }

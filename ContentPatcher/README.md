@@ -265,12 +265,12 @@ Here's how to do it:
 
 That's it! Content Patcher will automatically create the `config.json` when you run the game.
 
-### `FromFile` content tokens
+### Tokens
 **(Requires format version: 1.3.)**
 
 You can use [conditions](#condition) and [config values](#player-configuration) in the `FromFile`
-field in `content.json`. Just put the name of the condition or config field in two curly brackets,
-and Content Patcher will automatically fill in the value.
+and `Enabled` fields in `content.json`. Just put the name of the condition or config field in two
+curly brackets, and Content Patcher will automatically fill in the value.
 
 For example, this make the farmhouse seasonal:
 
@@ -305,12 +305,17 @@ You can use multiple tokens and conditions for more dynamic changes:
 }
 ```
 
-Restrictions:
-* Only valid in the `FromFile` field.
-* Config fields with `"AllowMultiple": true` can't be used as tokens.
-* All possible files must exist, subject to any conditions you set. In the first example above,
-  you'll need four files (one per season). If you add a `"Season": "spring, summer"` condition,
-  you'll only need two files.
+Tokens are subject to some restrictions:
+
+* `Enabled`:
+  * Max one token per field.
+  * Config fields can't have `"AllowMultiple": true`.
+  * Config fields must have `"AllowValues": "true, false"`.
+* `FromFile`:
+  * Can't use config fields with `"AllowMultiple": true`.
+  * All possible files must exist, subject to any conditions you set. In the first example above,
+    you'll need four files (one per season). If you add a `"Season": "spring, summer"` condition,
+    you'll only need two files.
 
 ### Releasing a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general

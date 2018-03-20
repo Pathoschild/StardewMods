@@ -19,7 +19,8 @@ namespace ContentPatcher.Framework.ConfigModels
         public string Target { get; set; }
 
         /// <summary>Whether to apply this patch.</summary>
-        public bool Enabled { get; set; } = true;
+        /// <remarks>This must be a string to support config tokens.</remarks>
+        public string Enabled { get; set; } = "true";
 
         /// <summary>The criteria to apply. See readme for valid values.</summary>
         public IDictionary<string, string> When { get; set; }
