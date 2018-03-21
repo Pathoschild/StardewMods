@@ -16,7 +16,7 @@ namespace ContentPatcher.Framework.Conditions
         private static readonly Regex TokenPattern = new Regex(@"{{([ \w\.\-]+)}}", RegexOptions.Compiled);
 
         /// <summary>The configuration to apply.</summary>
-        private readonly IDictionary<string, ConfigField> Config;
+        private readonly InvariantDictionary<ConfigField> Config;
 
 
         /*********
@@ -44,7 +44,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Construct an instance.</summary>
         /// <param name="rawValue">The raw string which may contain tokens.</param>
         /// <param name="config">The player configuration.</param>
-        public TokenStringBuilder(string rawValue, IDictionary<string, ConfigField> config)
+        public TokenStringBuilder(string rawValue, InvariantDictionary<ConfigField> config)
         {
             this.RawValue = rawValue;
             this.Config = config;
@@ -65,7 +65,7 @@ namespace ContentPatcher.Framework.Conditions
         public TokenString Build()
         {
             TokenString tokenString = new TokenString(this.RawValue, this.ConditionTokens, TokenStringBuilder.TokenPattern);
-            IDictionary<string, string> configValues = this.Config.ToDictionary(p => p.Key, p => p.Value.Value.FirstOrDefault(), StringComparer.InvariantCultureIgnoreCase);
+            InvariantDictionary<string> configValues = new InvariantDictionary<string>(this.Config.ToDictionary(p => p.Key, p => p.Value.Value.FirstOrDefault()));
             tokenString.ApplyPermanently(configValues);
             return tokenString;
         }

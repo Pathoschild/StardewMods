@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using xTile;
 using xTile.Tiles;
@@ -16,7 +16,7 @@ namespace ContentPatcher.Framework
         *********/
         /// <summary>The textures provided by content packs.</summary>
         /// <remarks>This field is used to circumvent an issue where PNGs can't be loaded while a draw is in progress. Since we can't predict when the game will ask for a texture, we preload them ahead of time.</remarks>
-        private readonly IDictionary<string, Texture2D> PngTextureCache = new Dictionary<string, Texture2D>();
+        private readonly InvariantDictionary<Texture2D> PngTextureCache = new InvariantDictionary<Texture2D>();
 
 
         /*********

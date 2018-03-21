@@ -170,7 +170,7 @@ namespace ContentPatcher
                     }
 
                     // load config.json
-                    IDictionary<string, ConfigField> config = configFileHandler.Read(pack, content.ConfigSchema);
+                    InvariantDictionary<ConfigField> config = configFileHandler.Read(pack, content.ConfigSchema);
                     configFileHandler.Save(pack, config, this.Helper);
                     if (config.Any())
                         this.VerboseLog($"   found config.json with {config.Count} fields...");
@@ -248,14 +248,13 @@ namespace ContentPatcher
         /// <param name="entry">The change to load.</param>
         /// <param name="config">The content pack's config values.</param>
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
-        private void LoadPatch(IContentPack pack, PatchConfig entry, IDictionary<string, ConfigField> config, Action<string> logSkip)
+        private void LoadPatch(IContentPack pack, PatchConfig entry, InvariantDictionary<ConfigField> config, Action<string> logSkip)
         {
             try
             {
                 // normalise patch fields
-                entry.When = entry.When != null
-                    ? new Dictionary<string, string>(entry.When, StringComparer.InvariantCultureIgnoreCase)
-                    : new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+                if (entry.When == null)
+                    entry.When = new InvariantDictionary<string>();
 
                 // parse 'enabled'
                 bool enabled = true;
@@ -414,7 +413,7 @@ namespace ContentPatcher
         /// <param name="config">The player configuration.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseBoolean(string rawValue, IDictionary<string, ConfigField> config, out string error, out bool parsed)
+        private bool TryParseBoolean(string rawValue, InvariantDictionary<ConfigField> config, out string error, out bool parsed)
         {
             parsed = false;
 
@@ -468,7 +467,7 @@ namespace ContentPatcher
         /// <param name="config">The player configuration.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseTokenString(string rawValue, IDictionary<string, ConfigField> config, out string error, out TokenStringBuilder parsed)
+        private bool TryParseTokenString(string rawValue, InvariantDictionary<ConfigField> config, out string error, out TokenStringBuilder parsed)
         {
             // parse
             TokenStringBuilder builder = new TokenStringBuilder(rawValue, config);
@@ -509,7 +508,7 @@ namespace ContentPatcher
         /// <param name="tokenedPath">The parsed value.</param>
         /// <param name="checkOnly">Prepare the asset info and check if it's valid, but don't actually preload the asset.</param>
         /// <returns>Returns whether the local asset was successfully prepared.</returns>
-        private bool TryPrepareLocalAsset(IContentPack pack, string path, IDictionary<string, ConfigField> config, ConditionDictionary conditions, Action<string> logSkip, out TokenString tokenedPath, bool checkOnly)
+        private bool TryPrepareLocalAsset(IContentPack pack, string path, InvariantDictionary<ConfigField> config, ConditionDictionary conditions, Action<string> logSkip, out TokenString tokenedPath, bool checkOnly)
         {
             // normalise raw value
             path = this.NormaliseLocalAssetPath(pack, path);

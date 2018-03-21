@@ -42,9 +42,9 @@ namespace ContentPatcher.Framework
         /// <summary>Read the configuration file for a content pack.</summary>
         /// <param name="contentPack">The content pack.</param>
         /// <param name="rawSchema">The raw config schema from the mod's <c>content.json</c>.</param>
-        public IDictionary<string, ConfigField> Read(IContentPack contentPack, IDictionary<string, ConfigSchemaFieldConfig> rawSchema)
+        public InvariantDictionary<ConfigField> Read(IContentPack contentPack, InvariantDictionary<ConfigSchemaFieldConfig> rawSchema)
         {
-            IDictionary<string, ConfigField> config = this.LoadConfigSchema(rawSchema, logWarning: (field, reason) => this.LogWarning(contentPack, $"{nameof(ContentConfig.ConfigSchema)} field '{field}'", reason));
+            InvariantDictionary<ConfigField> config = this.LoadConfigSchema(rawSchema, logWarning: (field, reason) => this.LogWarning(contentPack, $"{nameof(ContentConfig.ConfigSchema)} field '{field}'", reason));
             this.LoadConfigValues(contentPack, config, logWarning: (field, reason) => this.LogWarning(contentPack, $"{this.Filename} > {field}", reason));
             return config;
         }
@@ -53,14 +53,14 @@ namespace ContentPatcher.Framework
         /// <param name="contentPack">The content pack.</param>
         /// <param name="config">The configuration to save.</param>
         /// <param name="modHelper">The mod helper through which to save the file.</param>
-        public void Save(IContentPack contentPack, IDictionary<string, ConfigField> config, IModHelper modHelper)
+        public void Save(IContentPack contentPack, InvariantDictionary<ConfigField> config, IModHelper modHelper)
         {
             string configPath = Path.Combine(contentPack.DirectoryPath, this.Filename);
 
             // save if settings valid
             if (config.Any())
             {
-                IDictionary<string, string> data = config.ToDictionary(p => p.Key, p => string.Join(", ", p.Value.Value));
+                InvariantDictionary<string> data = new InvariantDictionary<string>(config.ToDictionary(p => p.Key, p => string.Join(", ", p.Value.Value)));
                 modHelper.WriteJsonFile(configPath, data);
             }
 
@@ -76,9 +76,9 @@ namespace ContentPatcher.Framework
         /// <summary>Parse a raw config schema for a content pack.</summary>
         /// <param name="rawSchema">The raw config schema.</param>
         /// <param name="logWarning">The callback to invoke on each validation warning, passed the field name and reason respectively.</param>
-        private IDictionary<string, ConfigField> LoadConfigSchema(IDictionary<string, ConfigSchemaFieldConfig> rawSchema, Action<string, string> logWarning)
+        private InvariantDictionary<ConfigField> LoadConfigSchema(InvariantDictionary<ConfigSchemaFieldConfig> rawSchema, Action<string, string> logWarning)
         {
-            IDictionary<string, ConfigField> schema = new Dictionary<string, ConfigField>(StringComparer.InvariantCultureIgnoreCase);
+            InvariantDictionary<ConfigField> schema = new InvariantDictionary<ConfigField>();
             if (rawSchema == null || !rawSchema.Any())
                 return schema;
 
@@ -135,15 +135,18 @@ namespace ContentPatcher.Framework
         /// <param name="contentPack">The content pack whose config file to read.</param>
         /// <param name="config">The config schema.</param>
         /// <param name="logWarning">The callback to invoke on each validation warning, passed the field name and reason respectively.</param>
-        private void LoadConfigValues(IContentPack contentPack, IDictionary<string, ConfigField> config, Action<string, string> logWarning)
+        private void LoadConfigValues(IContentPack contentPack, InvariantDictionary<ConfigField> config, Action<string, string> logWarning)
         {
             if (!config.Any())
                 return;
 
             // read raw config
-            IDictionary<string, InvariantHashSet> configValues =
-                (contentPack.ReadJsonFile<Dictionary<string, string>>(this.Filename) ?? new Dictionary<string, string>())
-                .ToDictionary(entry => entry.Key.Trim(), entry => this.ParseCommaDelimitedField(entry.Value), StringComparer.InvariantCultureIgnoreCase);
+            InvariantDictionary<InvariantHashSet> configValues = new InvariantDictionary<InvariantHashSet>(
+                from entry in (contentPack.ReadJsonFile<InvariantDictionary<string>>(this.Filename) ?? new InvariantDictionary<string>())
+                let key = entry.Key.Trim()
+                let value = this.ParseCommaDelimitedField(entry.Value)
+                select new KeyValuePair<string, InvariantHashSet>(key, value)
+            );
 
             // remove invalid values
             foreach (string key in configValues.Keys)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Conditions
 {
@@ -60,7 +61,7 @@ namespace ContentPatcher.Framework.Conditions
 
         /// <summary>Permanently apply the given token values to the string.</summary>
         /// <param name="values">The token values to apply.</param>
-        public void ApplyPermanently(IDictionary<string, string> values)
+        public void ApplyPermanently(InvariantDictionary<string> values)
         {
             this.Raw = this.Apply(this.Raw, values);
         }
@@ -86,7 +87,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Get a new string with tokens substituted.</summary>
         /// <param name="raw">The raw string before token substitution.</param>
         /// <param name="tokens">The token values to apply.</param>
-        private string Apply(string raw, IDictionary<string, string> tokens)
+        private string Apply(string raw, InvariantDictionary<string> tokens)
         {
             return this.TokenPattern.Replace(raw, match =>
             {

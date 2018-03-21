@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.ConfigModels
 {
@@ -26,7 +27,7 @@ namespace ContentPatcher.Framework.ConfigModels
         public string Enabled { get; set; } = "true";
 
         /// <summary>The criteria to apply. See readme for valid values.</summary>
-        public IDictionary<string, string> When { get; set; }
+        public InvariantDictionary<string> When { get; set; }
 
         /****
         ** Some actions

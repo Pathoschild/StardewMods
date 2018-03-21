@@ -27,7 +27,7 @@ namespace ContentPatcher.Framework
         private readonly IMonitor Monitor;
 
         /// <summary>The patches to apply indexed by asset name.</summary>
-        private readonly IDictionary<string, IList<IPatch>> Patches = new Dictionary<string, IList<IPatch>>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly InvariantDictionary<IList<IPatch>> Patches = new InvariantDictionary<IList<IPatch>>();
 
         /// <summary>The current condition context.</summary>
         private readonly ConditionContext ConditionContext;
@@ -216,7 +216,7 @@ namespace ContentPatcher.Framework
         /// <param name="raw">The raw condition values to normalise.</param>
         /// <param name="conditions">The normalised conditions.</param>
         /// <param name="error">An error message indicating why normalisation failed.</param>
-        public bool TryParseConditions(IDictionary<string, string> raw, out ConditionDictionary conditions, out string error)
+        public bool TryParseConditions(InvariantDictionary<string> raw, out ConditionDictionary conditions, out string error)
         {
             // no conditions
             if (raw == null || !raw.Any())
