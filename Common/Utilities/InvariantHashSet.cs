@@ -6,6 +6,9 @@ namespace Pathoschild.Stardew.Common.Utilities
     /// <summary>An implementation of <see cref="HashSet{T}"/> for strings which always uses <see cref="StringComparer.InvariantCultureIgnoreCase"/>.</summary>
     internal class InvariantHashSet : HashSet<string>
     {
+        /*********
+        ** Public methods
+        *********/
         /// <summary>Construct an instance.</summary>
         public InvariantHashSet()
             : base(StringComparer.InvariantCultureIgnoreCase) { }
