@@ -17,15 +17,8 @@ namespace ContentPatcher.Framework
         /*********
         ** Properties
         *********/
-        /// <summary>The valid condition values.</summary>
-        private readonly IDictionary<ConditionKey, InvariantHashSet> ValidValues = new Dictionary<ConditionKey, InvariantHashSet>
-        {
-            [ConditionKey.Day] = new InvariantHashSet(Enumerable.Range(1, 28).Select(p => p.ToString())),
-            [ConditionKey.DayOfWeek] = new InvariantHashSet(Enum.GetNames(typeof(DayOfWeek))),
-            [ConditionKey.Language] = new InvariantHashSet(Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString())),
-            [ConditionKey.Season] = new InvariantHashSet(new[] { "Spring", "Summer", "Fall", "Winter" }),
-            [ConditionKey.Weather] = new InvariantHashSet(Enum.GetNames(typeof(Weather)))
-        };
+        /// <summary>Handles constructing, permuting, and updating condition dictionaries.</summary>
+        private readonly ConditionFactory ConditionFactory = new ConditionFactory();
 
         /// <summary>Whether to enable verbose logging.</summary>
         private readonly bool Verbose;
@@ -228,19 +221,19 @@ namespace ContentPatcher.Framework
             // no conditions
             if (raw == null || !raw.Any())
             {
-                conditions = new ConditionDictionary(this.ValidValues);
+                conditions = this.ConditionFactory.BuildEmpty();
                 error = null;
                 return true;
             }
 
             // parse conditions
-            conditions = new ConditionDictionary(this.ValidValues);
+            conditions = this.ConditionFactory.BuildEmpty();
             foreach (KeyValuePair<string, string> pair in raw)
             {
                 // parse condition key
                 if (!Enum.TryParse(pair.Key, true, out ConditionKey key))
                 {
-                    error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", this.ValidValues.Keys)}";
+                    error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", this.ConditionFactory.GetValidConditions())}";
                     conditions = null;
                     return false;
                 }
@@ -255,11 +248,12 @@ namespace ContentPatcher.Framework
                 }
 
                 // restrict to allowed values
+                InvariantHashSet validValues = new InvariantHashSet(this.ConditionFactory.GetValidValues(key));
                 {
-                    string[] invalidValues = values.Except(this.ValidValues[key], StringComparer.InvariantCultureIgnoreCase).ToArray();
+                    string[] invalidValues = values.Except(validValues, StringComparer.InvariantCultureIgnoreCase).ToArray();
                     if (invalidValues.Any())
                     {
-                        error = $"invalid {key} values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", this.ValidValues[key])}";
+                        error = $"invalid {key} values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", validValues)}";
                         conditions = null;
                         return false;
                     }
@@ -302,7 +296,7 @@ namespace ContentPatcher.Framework
             }
 
             // yield token permutations
-            foreach (IDictionary<ConditionKey, string> permutation in this.GetConditionPermutations(tokenable.ConditionTokens, conditions))
+            foreach (IDictionary<ConditionKey, string> permutation in this.ConditionFactory.GetConditionPermutations(tokenable.ConditionTokens, conditions))
                 yield return tokenable.GetStringWithTokens(permutation);
         }
 
@@ -345,9 +339,9 @@ namespace ContentPatcher.Framework
             HashSet<DayOfWeek> daysOfWeek = new HashSet<DayOfWeek>(conditions.GetImpliedValues(ConditionKey.DayOfWeek).Select(name => (DayOfWeek)Enum.Parse(typeof(DayOfWeek), name, ignoreCase: true)));
 
             // get all potentially impacted dates
-            foreach (string season in this.ValidValues[ConditionKey.Season])
+            foreach (string season in this.ConditionFactory.GetValidValues(ConditionKey.Season))
             {
-                foreach (int day in this.ValidValues[ConditionKey.Day].Select(int.Parse))
+                foreach (int day in this.ConditionFactory.GetValidValues(ConditionKey.Day).Select(int.Parse))
                 {
                     SDate date = new SDate(day, season.ToLower());
 
@@ -360,36 +354,6 @@ namespace ContentPatcher.Framework
                         yield return date;
                 }
             }
-        }
-
-        /// <summary>Get every permutation of the potential condition values.</summary>
-        /// <param name="keys">The condition keys to include.</param>
-        /// <param name="conditions">The conditions for which to filter permutations.</param>
-        private IEnumerable<IDictionary<ConditionKey, string>> GetConditionPermutations(HashSet<ConditionKey> keys, ConditionDictionary conditions)
-        {
-            // no permutations possible
-            if (!keys.Any())
-                return new Dictionary<ConditionKey, string>[0];
-
-            // recursively find permutations
-            IDictionary<ConditionKey, string> curPermutation = new Dictionary<ConditionKey, string>();
-            IEnumerable<IDictionary<ConditionKey, string>> GetPermutations(ConditionKey[] keyQueue)
-            {
-                if (!keyQueue.Any())
-                    yield return new Dictionary<ConditionKey, string>(curPermutation);
-
-                foreach (ConditionKey key in keyQueue)
-                {
-                    foreach (string value in conditions.GetImpliedValues(key))
-                    {
-                        curPermutation[key] = value;
-                        foreach (var permutation in GetPermutations(keyQueue.Skip(1).ToArray()))
-                            yield return permutation;
-                    }
-                }
-            }
-
-            return GetPermutations(keys.ToArray());
         }
 
         /// <summary>Log a message if <see cref="Verbose"/> is enabled.</summary>

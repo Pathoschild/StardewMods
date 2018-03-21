@@ -48,11 +48,5 @@ namespace ContentPatcher.Framework.Conditions
         {
             return this.ValidValues[key];
         }
-
-        /// <summary>Construct an empty condition dictionary.</summary>
-        public static ConditionDictionary Empty()
-        {
-            return new ConditionDictionary(new Dictionary<ConditionKey, InvariantHashSet>());
-        }
     }
 }
