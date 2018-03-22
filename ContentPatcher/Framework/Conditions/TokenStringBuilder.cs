@@ -13,7 +13,8 @@ namespace ContentPatcher.Framework.Conditions
         ** Properties
         *********/
         /// <summary>The regex pattern matching a string token.</summary>
-        private static readonly Regex TokenPattern = new Regex(@"{{([ \w\.\-]+)}}", RegexOptions.Compiled);
+        /// <remarks>This field is only internal to support unit tests and shouldn't be used directly.</remarks>
+        internal static readonly Regex TokenPattern = new Regex(@"{{([ \w\.\-]+)}}", RegexOptions.Compiled);
 
         /// <summary>The configuration to apply.</summary>
         private readonly InvariantDictionary<ConfigField> Config;

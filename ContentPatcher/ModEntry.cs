@@ -33,6 +33,9 @@ namespace ContentPatcher
         /// <summary>Handles loading assets from content packs.</summary>
         private readonly AssetLoader AssetLoader = new AssetLoader();
 
+        /// <summary>Handles constructing, permuting, and updating conditions.</summary>
+        private readonly ConditionFactory ConditionFactory = new ConditionFactory();
+
         /// <summary>Manages loaded patches.</summary>
         private PatchManager PatchManager;
 
@@ -52,7 +55,7 @@ namespace ContentPatcher
         {
             // init
             this.Config = helper.ReadConfig<ModConfig>();
-            this.PatchManager = new PatchManager(this.Monitor, helper.Content.CurrentLocaleConstant, this.Config.VerboseLog);
+            this.PatchManager = new PatchManager(this.Monitor, this.ConditionFactory, helper.Content.CurrentLocaleConstant, this.Config.VerboseLog);
             this.LoadContentPacks();
 
             // register patcher
@@ -388,7 +391,7 @@ namespace ContentPatcher
                 foreach (ConditionKey key in tokensUsed)
                 {
                     if (!patch.Conditions.ContainsKey(key))
-                        patch.Conditions.Add(key, new Condition(key, new InvariantHashSet(patch.Conditions.GetValidValues(key))));
+                        patch.Conditions.Add(key, patch.Conditions.GetValidValues(key));
                 }
 
                 // skip if not enabled
@@ -533,7 +536,7 @@ namespace ContentPatcher
             string lastPermutation = null;
             try
             {
-                foreach (string permutation in this.PatchManager.GetPermutations(tokenedPath, conditions))
+                foreach (string permutation in this.ConditionFactory.GetPossibleStrings(tokenedPath, conditions))
                 {
                     lastPermutation = permutation;
                     if (checkOnly)

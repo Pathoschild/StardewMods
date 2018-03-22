@@ -17,8 +17,8 @@ namespace ContentPatcher.Framework
         /*********
         ** Properties
         *********/
-        /// <summary>Handles constructing, permuting, and updating condition dictionaries.</summary>
-        private readonly ConditionFactory ConditionFactory = new ConditionFactory();
+        /// <summary>Handles constructing, permuting, and updating conditions.</summary>
+        private readonly ConditionFactory ConditionFactory;
 
         /// <summary>Whether to enable verbose logging.</summary>
         private readonly bool Verbose;
@@ -38,11 +38,13 @@ namespace ContentPatcher.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
+        /// <param name="conditionFactory">Handles constructing, permuting, and updating conditions.</param>
         /// <param name="language">The current language.</param>
         /// <param name="verboseLog">Whether to enable verbose logging.</param>
-        public PatchManager(IMonitor monitor, LocalizedContentManager.LanguageCode language, bool verboseLog)
+        public PatchManager(IMonitor monitor, ConditionFactory conditionFactory, LocalizedContentManager.LanguageCode language, bool verboseLog)
         {
             this.Monitor = monitor;
+            this.ConditionFactory = conditionFactory;
             this.ConditionContext = new ConditionContext(language);
             this.Verbose = verboseLog;
         }
@@ -281,23 +283,6 @@ namespace ContentPatcher.Framework
                 select value.Trim().ToLower()
             );
             return new InvariantHashSet(values);
-        }
-
-        /// <summary>Get all possible values of a tokenable string.</summary>
-        /// <param name="tokenable">The tokenable string.</param>
-        /// <param name="conditions">The conditions for which to filter permutations.</param>
-        public IEnumerable<string> GetPermutations(TokenString tokenable, ConditionDictionary conditions)
-        {
-            // no tokens: return original string
-            if (!tokenable.ConditionTokens.Any())
-            {
-                yield return tokenable.Raw;
-                yield break;
-            }
-
-            // yield token permutations
-            foreach (IDictionary<ConditionKey, string> permutation in this.ConditionFactory.GetConditionPermutations(tokenable.ConditionTokens, conditions))
-                yield return tokenable.GetStringWithTokens(permutation);
         }
 
 

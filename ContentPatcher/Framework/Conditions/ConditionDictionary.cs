@@ -23,6 +23,14 @@ namespace ContentPatcher.Framework.Conditions
             this.ValidValues = validValues;
         }
 
+        /// <summary>Add an element with the given key and condition values.</summary>
+        /// <param name="key">The key to add.</param>
+        /// <param name="values">The values for the given condition.</param>
+        public void Add(ConditionKey key, IEnumerable<string> values)
+        {
+            this.Add(key, new Condition(key, new InvariantHashSet(values)));
+        }
+
         /// <summary>Get the explicit values for a condition, or the implied range of values if not explicitly set.</summary>
         /// <param name="key">The condition key.</param>
         public IEnumerable<string> GetImpliedValues(ConditionKey key)
