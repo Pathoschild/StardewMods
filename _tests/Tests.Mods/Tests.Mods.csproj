@@ -36,6 +36,7 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ContentPatcher\ConditionFactoryTests.cs" />
+    <Compile Include="ContentPatcher\TokenString_And_TokenStringBuilderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

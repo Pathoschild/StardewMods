@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
 {
     /// <summary>Unit tests for <see cref="ConditionFactory"/>.</summary>
     [TestFixture]
-    class ConditionFactoryTests
+    internal class ConditionFactoryTests
     {
         /*********
         ** Properties
