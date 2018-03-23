@@ -331,16 +331,12 @@ namespace ContentPatcher
                             patch = new LoadPatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
 
                             // detect conflicting loaders
-                            InvariantDictionary<IPatch> conflictingLoaders = this.PatchManager.GetConflictingLoaders(patch);
-                            if (conflictingLoaders.Any())
+                            InvariantDictionary<IPatch> conflicts = this.PatchManager.GetConflictingLoaders(patch);
+                            if (conflicts.Any())
                             {
-                                foreach (KeyValuePair<string, IPatch> conflict in conflictingLoaders)
-                                {
-                                    logSkip(conflict.Value.ContentPack == pack
-                                        ? $"the {conflict.Key} file is already being loaded by this content pack. Each file can only be loaded once (unless their conditions can't overlap)."
-                                        : $"the {conflict.Key} file is already being loaded by another content pack ({conflict.Value.ContentPack.Manifest.Name}). Each file can only be loaded once (unless their conditions can't overlap).");
-                                    return;
-                                }
+                                IEnumerable<string> conflictNames = (from conflict in conflicts orderby conflict.Key select $"'{conflict.Value.LogName}' already loads {conflict.Key}");
+                                logSkip($"{nameof(entry.Target)} '{patch.TokenableAssetName.Raw}' conflicts with other load patches ({string.Join(", ", conflictNames)}). Each file can only be loaded by one patch, unless their conditions can never overlap.");
+                                return;
                             }
                         }
                         break;
@@ -540,28 +536,34 @@ namespace ContentPatcher
 
             // validate all possible files exist
             // + preload PNG assets to avoid load-in-draw-loop error
-            string lastPermutation = null;
-            try
+            InvariantHashSet missingFiles = new InvariantHashSet();
+            foreach (string localKey in this.ConditionFactory.GetPossibleStrings(tokenedPath, conditions))
             {
-                foreach (string permutation in this.ConditionFactory.GetPossibleStrings(tokenedPath, conditions))
+                // check-only mode
+                if (checkOnly)
                 {
-                    lastPermutation = permutation;
-                    if (checkOnly)
-                    {
-                        if (!this.AssetLoader.FileExists(pack, permutation))
-                        {
-                            logSkip($"the {nameof(PatchConfig.FromFile)} field specifies a file that doesn't exist: {permutation}.");
-                            tokenedPath = null;
-                            return false;
-                        }
-                    }
-                    else if (this.AssetLoader.PreloadIfNeeded(pack, permutation))
-                        this.VerboseLog($"      preloaded {permutation}.");
+                    if (!this.AssetLoader.FileExists(pack, localKey))
+                        missingFiles.Add(localKey);
+                    continue;
+                }
+
+                // else preload
+                try
+                {
+                    if (this.AssetLoader.PreloadIfNeeded(pack, localKey))
+                        this.VerboseLog($"      preloaded {localKey}.");
+                }
+                catch (FileNotFoundException)
+                {
+                    missingFiles.Add(localKey);
                 }
             }
-            catch (FileNotFoundException)
+            if (missingFiles.Any())
             {
-                logSkip($"the {nameof(PatchConfig.FromFile)} field specifies a file that doesn't exist: {lastPermutation}.");
+                logSkip(tokenedPath.ConditionTokens.Any() || missingFiles.Count > 1
+                    ? $"{nameof(PatchConfig.FromFile)} '{path}' matches files which don't exist ({string.Join(", ", missingFiles.OrderBy(p => p))})."
+                    : $"{nameof(PatchConfig.FromFile)} '{path}' matches a file which doesn't exist."
+                );
                 tokenedPath = null;
                 return false;
             }
