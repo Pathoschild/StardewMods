@@ -269,11 +269,11 @@ That's it! Content Patcher will automatically create the `config.json` when you 
 ### Tokens
 **(Requires format version: 1.3.)**
 
-You can use [conditions](#condition) and [config values](#player-configuration) in the `FromFile`
-and `Enabled` fields in `content.json`. Just put the name of the condition or config field in two
-curly brackets, and Content Patcher will automatically fill in the value.
+You can use [conditions](#condition) and [config values](#player-configuration) in the `FromFile`,
+`Target`, and `Enabled` fields in `content.json`. Just put the name of the condition or config
+field in two curly brackets, and Content Patcher will automatically fill in the value.
 
-For example, this make the farmhouse seasonal:
+For example, this gives the farmhouse a different appearance in each season:
 
 ```js
 {
@@ -313,10 +313,12 @@ Tokens are subject to some restrictions:
   * Config fields can't have `"AllowMultiple": true`.
   * Config fields must have `"AllowValues": "true, false"`.
 * `FromFile`:
-  * Can't use config fields with `"AllowMultiple": true`.
+  * Config fields can't have `"AllowMultiple": true`.
   * All possible files must exist, subject to any conditions you set. In the first example above,
     you'll need four files (one per season). If you add a `"Season": "spring, summer"` condition,
     you'll only need two files.
+* `Target`:
+  * Config fields can't have `"AllowMultiple": true`.
 
 ### Releasing a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general

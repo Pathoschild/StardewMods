@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -44,8 +45,9 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="toArea">The sprite area to overwrite.</param>
         /// <param name="patchMode">Indicates how the image should be patched.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        public EditImagePatch(string logName, AssetLoader assetLoader, IContentPack contentPack, string assetName, ConditionDictionary conditions, TokenString fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor)
-            : base(logName, PatchType.EditImage, assetLoader, contentPack, assetName, conditions)
+        /// <param name="normaliseAssetName">Normalise an asset name.</param>
+        public EditImagePatch(string logName, AssetLoader assetLoader, IContentPack contentPack, TokenString assetName, ConditionDictionary conditions, TokenString fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor, Func<string, string> normaliseAssetName)
+            : base(logName, PatchType.EditImage, assetLoader, contentPack, assetName, conditions, normaliseAssetName)
         {
             this.FromLocalAsset = fromLocalAsset;
             this.FromArea = fromArea != Rectangle.Empty ? fromArea : null as Rectangle?;

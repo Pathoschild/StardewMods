@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -25,8 +26,9 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="localAsset">The asset key to load from the content pack instead.</param>
-        public LoadPatch(string logName, AssetLoader assetLoader, IContentPack contentPack, string assetName, ConditionDictionary conditions, TokenString localAsset)
-            : base(logName, PatchType.Load, assetLoader, contentPack, assetName, conditions)
+        /// <param name="normaliseAssetName">Normalise an asset name.</param>
+        public LoadPatch(string logName, AssetLoader assetLoader, IContentPack contentPack, TokenString assetName, ConditionDictionary conditions, TokenString localAsset, Func<string, string> normaliseAssetName)
+            : base(logName, PatchType.Load, assetLoader, contentPack, assetName, conditions, normaliseAssetName)
         {
             this.LocalAsset = localAsset;
         }

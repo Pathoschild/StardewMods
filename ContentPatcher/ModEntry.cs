@@ -280,11 +280,19 @@ namespace ContentPatcher
                 }
 
                 // parse target asset
-                string assetName = !string.IsNullOrWhiteSpace(entry.Target) ? this.Helper.Content.NormaliseAssetName(entry.Target) : null;
-                if (assetName == null)
+                TokenString assetName;
+                if (string.IsNullOrWhiteSpace(entry.Target))
                 {
                     logSkip($"must set the {nameof(PatchConfig.Target)} field.");
                     return;
+                }
+                {
+                    if (!this.TryParseTokenString(entry.Target, config, out string error, out TokenStringBuilder builder))
+                    {
+                        logSkip($"the {nameof(PatchConfig.Target)} is invalid: {error}");
+                        return;
+                    }
+                    assetName = builder.Build();
                 }
 
                 // apply config
@@ -320,7 +328,7 @@ namespace ContentPatcher
                             // init patch
                             if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, logSkip, out TokenString fromAsset, checkOnly: !enabled))
                                 return;
-                            patch = new LoadPatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, fromAsset);
+                            patch = new LoadPatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
 
                             // detect conflicting loaders
                             IPatch[] conflictingLoaders = this.PatchManager.GetConflictingLoaders(patch).ToArray();
@@ -359,7 +367,7 @@ namespace ContentPatcher
                             }
 
                             // save
-                            patch = new EditDataPatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, entry.Entries, entry.Fields, this.Monitor);
+                            patch = new EditDataPatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, entry.Entries, entry.Fields, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
                         break;
 
@@ -377,7 +385,7 @@ namespace ContentPatcher
                             // save
                             if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, logSkip, out TokenString fromAsset, checkOnly: !enabled))
                                 return;
-                            patch = new EditImagePatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor);
+                            patch = new EditImagePatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
                         break;
 

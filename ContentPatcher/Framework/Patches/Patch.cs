@@ -15,6 +15,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Handles loading assets from content packs.</summary>
         protected AssetLoader AssetLoader { get; }
 
+        /// <summary>Normalise an asset name.</summary>
+        private readonly Func<string, string> NormaliseAssetName;
+
 
         /*********
         ** Accessors
@@ -29,7 +32,10 @@ namespace ContentPatcher.Framework.Patches
         public IContentPack ContentPack { get; }
 
         /// <summary>The normalised asset name to intercept.</summary>
-        public string AssetName { get; }
+        public string AssetName { get; private set; }
+
+        /// <summary>The raw asset name to intercept, including tokens.</summary>
+        public TokenString TokenableAssetName { get; }
 
         /// <summary>The conditions which determine whether this patch should be applied.</summary>
         public ConditionDictionary Conditions { get; }
@@ -46,9 +52,19 @@ namespace ContentPatcher.Framework.Patches
         /// <returns>Returns whether the patch data changed.</returns>
         public virtual bool UpdateContext(ConditionContext context)
         {
-            bool wasMatch = this.MatchesContext;
-            this.MatchesContext = this.Conditions.Count == 0 || this.Conditions.Values.All(p => p.IsMatch(context));
-            return wasMatch != this.MatchesContext;
+            // update conditions
+            bool conditionsChanged;
+            {
+                bool wasMatch = this.MatchesContext;
+                this.MatchesContext = this.Conditions.Count == 0 || this.Conditions.Values.All(p => p.IsMatch(context));
+                conditionsChanged = wasMatch != this.MatchesContext;
+            }
+
+            // update asset name
+            bool targetChanged = this.TokenableAssetName.UpdateContext(context);
+            this.AssetName = this.NormaliseAssetName(this.TokenableAssetName.Value);
+
+            return conditionsChanged || targetChanged;
         }
 
         /// <summary>Load the initial version of the asset.</summary>
@@ -86,14 +102,16 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
-        protected Patch(string logName, PatchType type, AssetLoader assetLoader, IContentPack contentPack, string assetName, ConditionDictionary conditions)
+        /// <param name="normaliseAssetName">Normalise an asset name.</param>
+        protected Patch(string logName, PatchType type, AssetLoader assetLoader, IContentPack contentPack, TokenString assetName, ConditionDictionary conditions, Func<string, string> normaliseAssetName)
         {
             this.LogName = logName;
             this.Type = type;
             this.AssetLoader = assetLoader;
             this.ContentPack = contentPack;
-            this.AssetName = assetName;
+            this.TokenableAssetName = assetName;
             this.Conditions = conditions;
+            this.NormaliseAssetName = normaliseAssetName;
         }
     }
 }

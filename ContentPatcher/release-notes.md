@@ -10,6 +10,7 @@
 * Added unique patch names (editable via `LogName`) to simplify troubleshooting.
 * Fixed unhelpful error when a patch specifies an invalid source/target area.
 * Fixed an exception in one patch preventing other patches from being applied.
+* Fixed `Target` not being normalised.
 
 ## 1.2
 * Added support for overlaying images.

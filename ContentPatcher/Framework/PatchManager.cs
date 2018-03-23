@@ -26,8 +26,14 @@ namespace ContentPatcher.Framework
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
-        /// <summary>The patches to apply indexed by asset name.</summary>
-        private readonly InvariantDictionary<IList<IPatch>> Patches = new InvariantDictionary<IList<IPatch>>();
+        /// <summary>The patches to apply.</summary>
+        private readonly HashSet<IPatch> Patches = new HashSet<IPatch>();
+
+        /// <summary>The patches to apply, indexed by asset name.</summary>
+        private InvariantDictionary<HashSet<IPatch>> PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>();
+
+        /// <summary>A loader lookup by asset name, used to </summary>
+        private readonly InvariantDictionary<IPatch> LoaderCache = new InvariantDictionary<IPatch>();
 
         /// <summary>The current condition context.</summary>
         private readonly ConditionContext ConditionContext;
@@ -57,7 +63,7 @@ namespace ContentPatcher.Framework
         public bool CanLoad<T>(IAssetInfo asset)
         {
             bool canLoad = this.GetCurrentLoaders(asset).Any();
-            this.VerboseLog($"Can load: {canLoad} ({asset.AssetName})");
+            this.VerboseLog($"check: [{(canLoad ? "X" : " ")}] can load {asset.AssetName}");
             return canLoad;
         }
 
@@ -66,7 +72,7 @@ namespace ContentPatcher.Framework
         public bool CanEdit<T>(IAssetInfo asset)
         {
             bool canEdit = this.GetCurrentEditors(asset).Any();
-            this.VerboseLog($"Can edit: {canEdit} ({asset.AssetName})");
+            this.VerboseLog($"check: [{(canEdit ? "X" : " ")}] can edit {asset.AssetName}");
             return canEdit;
         }
 
@@ -127,30 +133,67 @@ namespace ContentPatcher.Framework
 
             // update patches
             InvariantHashSet reloadAssetNames = new InvariantHashSet();
-            foreach (string assetName in this.Patches.Keys)
+            string prevAssetName = null;
+            foreach (IPatch patch in this.Patches.OrderBy(p => p.AssetName).ThenBy(p => p.LogName))
             {
-                foreach (IPatch patch in this.Patches[assetName])
+                // log asset name
+                if (this.Verbose && prevAssetName != patch.AssetName)
                 {
-                    bool wasApplied = patch.MatchesContext;
-                    bool changed = patch.UpdateContext(this.ConditionContext);
-                    bool shouldApply = patch.MatchesContext;
-                    bool reload = (wasApplied && changed) || (!wasApplied && shouldApply);
+                    this.VerboseLog($"   {patch.AssetName}:");
+                    prevAssetName = patch.AssetName;
+                }
 
-                    this.VerboseLog($"   {patch.LogName}: should apply {wasApplied} => {shouldApply}, changed={changed}, will reload={reload}");
+                // track old values
+                string wasAssetName = patch.AssetName;
+                bool wasApplied = patch.MatchesContext;
 
-                    if (reload)
-                        reloadAssetNames.Add(assetName);
+                // update patch
+                bool changed = patch.UpdateContext(this.ConditionContext);
+                bool shouldApply = patch.MatchesContext;
+
+                // track patches to reload
+                bool reload = (wasApplied && changed) || (!wasApplied && shouldApply);
+                if (reload)
+                {
+                    if (wasApplied)
+                        reloadAssetNames.Add(wasAssetName);
+                    if (shouldApply)
+                        reloadAssetNames.Add(patch.AssetName);
+                }
+
+                // log change
+                if (this.Verbose)
+                {
+                    IList<string> changes = new List<string>();
+                    if (wasApplied != shouldApply)
+                        changes.Add(shouldApply ? "enabled" : "disabled");
+                    if (wasAssetName != patch.AssetName)
+                        changes.Add($"target: {wasAssetName} => {patch.AssetName}");
+                    string changesStr = string.Join(", ", changes);
+
+                    this.VerboseLog($"      [{(shouldApply ? "X" : " ")}] {patch.LogName}: {(changes.Any() ? changesStr : "OK")}");
                 }
             }
 
-            // reload if needed
+            // rebuild asset name lookup
+            this.PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>(
+                from patchGroup in this.Patches.GroupBy(p => p.AssetName, StringComparer.InvariantCultureIgnoreCase)
+                let key = patchGroup.Key
+                let value = new HashSet<IPatch>(patchGroup)
+                select new KeyValuePair<string, HashSet<IPatch>>(key, value)
+            );
+
+            // reload assets if needed
             if (reloadAssetNames.Any())
             {
-                this.VerboseLog($"   reloading {reloadAssetNames.Count} assets...");
-                contentHelper.InvalidateCache(asset => reloadAssetNames.Contains(asset.AssetName));
+                this.VerboseLog($"   reloading {reloadAssetNames.Count} assets: {string.Join(", ", reloadAssetNames.OrderBy(p => p))}");
+                contentHelper.InvalidateCache(asset =>
+                {
+                    this.VerboseLog($"      [{(reloadAssetNames.Contains(asset.AssetName) ? "X" : " ")}] reload {asset.AssetName}");
+                    return reloadAssetNames.Contains(asset.AssetName);
+                });
             }
         }
-
 
         /****
         ** Patches
@@ -159,25 +202,39 @@ namespace ContentPatcher.Framework
         /// <param name="patch">The patch to add.</param>
         public void Add(IPatch patch)
         {
-            // validate
-            if (patch.Type == PatchType.Load && this.GetConflictingLoaders(patch).Any())
-                throw new InvalidOperationException($"Can't add {patch.Type} patch because it conflicts with an already-registered loader.");
+            // set initial context
+            patch.UpdateContext(this.ConditionContext);
 
-            // add
+            // validate loader
+            if (patch.Type == PatchType.Load)
+            {
+                foreach (string assetName in this.ConditionFactory.GetPossibleStrings(patch.TokenableAssetName, patch.Conditions))
+                {
+                    if (this.LoaderCache.ContainsKey(assetName))
+                        throw new InvalidOperationException($"Can't add {patch.Type} patch because it conflicts with an already-registered loader.");
+
+                    this.LoaderCache.Add(assetName, patch);
+                }
+            }
+
+            // add to patch list
             this.VerboseLog($"      added {patch.Type} {patch.AssetName}.");
-            if (this.Patches.TryGetValue(patch.AssetName, out IList<IPatch> patches))
+            this.Patches.Add(patch);
+
+            // add to lookup cache
+            if (this.PatchesByCurrentTarget.TryGetValue(patch.AssetName, out HashSet<IPatch> patches))
                 patches.Add(patch);
             else
-                this.Patches[patch.AssetName] = new List<IPatch> { patch };
+                this.PatchesByCurrentTarget[patch.AssetName] = new HashSet<IPatch> { patch };
         }
 
         /// <summary>Get all patches regardless of context.</summary>
         /// <param name="assetName">The asset name for which to find patches.</param>
         public IEnumerable<IPatch> GetAll(string assetName)
         {
-            return this.Patches.TryGetValue(assetName, out IList<IPatch> patches)
-                ? patches
-                : new IPatch[0];
+            if (this.PatchesByCurrentTarget.TryGetValue(assetName, out HashSet<IPatch> patches))
+                return patches;
+            return new IPatch[0];
         }
 
         /// <summary>Get patches which load the given asset in the current context.</summary>
@@ -206,9 +263,14 @@ namespace ContentPatcher.Framework
         /// <param name="newPatch">The new patch to check.</param>
         public IEnumerable<IPatch> GetConflictingLoaders(IPatch newPatch)
         {
-            return this
-                .GetAll(newPatch.AssetName)
-                .Where(patch => patch.Type == PatchType.Load && this.CanConditionsOverlap(newPatch.Conditions, patch.Conditions));
+            if (newPatch.Type == PatchType.Load)
+            {
+                foreach (string assetName in this.ConditionFactory.GetPossibleStrings(newPatch.TokenableAssetName, newPatch.Conditions))
+                {
+                    if (this.LoaderCache.TryGetValue(assetName, out IPatch conflictingPatch))
+                        yield return conflictingPatch;
+                }
+            }
         }
 
         /****
@@ -299,46 +361,6 @@ namespace ContentPatcher.Framework
                 return PatchType.EditData;
 
             return null;
-        }
-
-        /// <summary>Get whether two sets of conditions can potentially both match in some contexts.</summary>
-        /// <param name="left">The first set of conditions to compare.</param>
-        /// <param name="right">The second set of conditions to compare.</param>
-        private bool CanConditionsOverlap(ConditionDictionary left, ConditionDictionary right)
-        {
-            // no conflict if they edit different locales
-            if (!left.GetImpliedValues(ConditionKey.Language).Intersect(right.GetImpliedValues(ConditionKey.Language)).Any())
-                return false;
-
-            // check for potential conflicts
-            return this.GetPotentialImpactsExcludingLocale(left).Intersect(this.GetPotentialImpactsExcludingLocale(right)).Any();
-        }
-
-        /// <summary>Get all dates which the given conditions can potentially affect. This does not account for locale (which is checked separately) and weather (which can affect any day anyway).</summary>
-        /// <param name="conditions">The condition key.</param>
-        private IEnumerable<SDate> GetPotentialImpactsExcludingLocale(ConditionDictionary conditions)
-        {
-            // get implied values
-            HashSet<int> days = new HashSet<int>(conditions.GetImpliedValues(ConditionKey.Day).Select(int.Parse));
-            InvariantHashSet seasons = new InvariantHashSet(conditions.GetImpliedValues(ConditionKey.Season));
-            HashSet<DayOfWeek> daysOfWeek = new HashSet<DayOfWeek>(conditions.GetImpliedValues(ConditionKey.DayOfWeek).Select(name => (DayOfWeek)Enum.Parse(typeof(DayOfWeek), name, ignoreCase: true)));
-
-            // get all potentially impacted dates
-            foreach (string season in this.ConditionFactory.GetValidValues(ConditionKey.Season))
-            {
-                foreach (int day in this.ConditionFactory.GetValidValues(ConditionKey.Day).Select(int.Parse))
-                {
-                    SDate date = new SDate(day, season.ToLower());
-
-                    // matches any date
-                    if (!conditions.Any())
-                        yield return date;
-
-                    // matches date
-                    else if (seasons.Contains(date.Season) && days.Contains(date.Day) && daysOfWeek.Contains(date.DayOfWeek))
-                        yield return date;
-                }
-            }
         }
 
         /// <summary>Log a message if <see cref="Verbose"/> is enabled.</summary>
