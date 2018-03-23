@@ -55,7 +55,7 @@ namespace ContentPatcher
         {
             // init
             this.Config = helper.ReadConfig<ModConfig>();
-            this.PatchManager = new PatchManager(this.Monitor, this.ConditionFactory, helper.Content.CurrentLocaleConstant, this.Config.VerboseLog);
+            this.PatchManager = new PatchManager(this.Monitor, this.ConditionFactory, helper.Content.CurrentLocaleConstant, this.Config.VerboseLog, helper.Content.NormaliseAssetName);
             this.LoadContentPacks();
 
             // register patcher
@@ -331,17 +331,16 @@ namespace ContentPatcher
                             patch = new LoadPatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
 
                             // detect conflicting loaders
-                            IPatch[] conflictingLoaders = this.PatchManager.GetConflictingLoaders(patch).ToArray();
+                            InvariantDictionary<IPatch> conflictingLoaders = this.PatchManager.GetConflictingLoaders(patch);
                             if (conflictingLoaders.Any())
                             {
-                                if (conflictingLoaders.Any(p => p.ContentPack == pack))
-                                    logSkip($"the {assetName} file is already being loaded by this content pack. Each file can only be loaded once (unless their conditions can't overlap).");
-                                else
+                                foreach (KeyValuePair<string, IPatch> conflict in conflictingLoaders)
                                 {
-                                    string[] conflictingNames = conflictingLoaders.Select(p => p.ContentPack.Manifest.Name).Distinct().OrderBy(p => p).ToArray();
-                                    logSkip($"the {assetName} file is already being loaded by {(conflictingNames.Length == 1 ? "another content pack" : "other content packs")} ({string.Join(", ", conflictingNames)}). Each file can only be loaded once (unless their conditions can't overlap).");
+                                    logSkip(conflict.Value.ContentPack == pack
+                                        ? $"the {conflict.Key} file is already being loaded by this content pack. Each file can only be loaded once (unless their conditions can't overlap)."
+                                        : $"the {conflict.Key} file is already being loaded by another content pack ({conflict.Value.ContentPack.Manifest.Name}). Each file can only be loaded once (unless their conditions can't overlap).");
+                                    return;
                                 }
-                                return;
                             }
                         }
                         break;

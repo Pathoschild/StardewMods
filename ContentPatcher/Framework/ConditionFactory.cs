@@ -22,12 +22,8 @@ namespace ContentPatcher.Framework
         /// <summary>The number of days in a week.</summary>
         private const int DaysPerWeek = 7;
 
-
-        /*********
-        ** Accessors
-        *********/
         /// <summary>The valid condition values.</summary>
-        public readonly IDictionary<ConditionKey, InvariantHashSet> ValidValues = new Dictionary<ConditionKey, InvariantHashSet>
+        private readonly IDictionary<ConditionKey, InvariantHashSet> ValidValues = new Dictionary<ConditionKey, InvariantHashSet>
         {
             [ConditionKey.Day] = new InvariantHashSet(Enumerable.Range(ConditionFactory.MinDay, ConditionFactory.MaxDay).Select(p => p.ToString())),
             [ConditionKey.DayOfWeek] = new InvariantHashSet(Enum.GetNames(typeof(DayOfWeek))),
@@ -157,6 +153,23 @@ namespace ContentPatcher.Framework
             }
 
             return values;
+        }
+
+        /// <summary>Get whether two sets of conditions can potentially both match in some contexts.</summary>
+        /// <param name="left">The first set of conditions to compare.</param>
+        /// <param name="right">The second set of conditions to compare.</param>
+        public bool CanConditionsOverlap(ConditionDictionary left, ConditionDictionary right)
+        {
+            IDictionary<ConditionKey, InvariantHashSet> leftValues = this.GetPossibleValues(left);
+            IDictionary<ConditionKey, InvariantHashSet> rightValues = this.GetPossibleValues(right);
+
+            foreach (ConditionKey key in this.GetValidConditions())
+            {
+                if (!leftValues[key].Intersect(rightValues[key]).Any())
+                    return false;
+            }
+
+            return true;
         }
 
         /// <summary>Get every permutation of the given values.</summary>

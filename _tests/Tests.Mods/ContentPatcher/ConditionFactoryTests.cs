@@ -216,6 +216,115 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         }
 
         /****
+        ** CanConditionsOverlap
+        ****/
+        /// <summary>Test that <see cref="ConditionFactory.CanConditionsOverlap"/> returns the expected values given only implied conditions.</summary>
+        [TestCase]
+        public void CanConditionsOverlap_WithImpliedConditions()
+        {
+            // arrange
+            ConditionFactory factory = new ConditionFactory();
+            ConditionDictionary left = factory.BuildEmpty();
+            ConditionDictionary right = factory.BuildEmpty();
+
+            // act
+            bool canOverlap = factory.CanConditionsOverlap(left, right);
+
+            // assert
+            canOverlap.Should().BeTrue();
+        }
+
+        /// <summary>Test that <see cref="ConditionFactory.CanConditionsOverlap"/> returns the expected values when the seasons overlap.</summary>
+        [TestCase]
+        public void CanConditionsOverlap_WhenSeasonsOverlap()
+        {
+            // arrange
+            ConditionFactory factory = new ConditionFactory();
+            ConditionDictionary left = factory.BuildEmpty();
+            ConditionDictionary right = factory.BuildEmpty();
+            left.Add(ConditionKey.Season, new[] { "Spring", "Summer" });
+            right.Add(ConditionKey.Season, new[] { "Summer", "Fall" });
+
+            // act
+            bool canOverlap = factory.CanConditionsOverlap(left, right);
+
+            // assert
+            canOverlap.Should().BeTrue();
+        }
+
+        /// <summary>Test that <see cref="ConditionFactory.CanConditionsOverlap"/> returns the expected values when the seasons do not overlap.</summary>
+        [TestCase]
+        public void CanConditionsOverlap_WhenSeasonsDistinct()
+        {
+            // arrange
+            ConditionFactory factory = new ConditionFactory();
+            ConditionDictionary left = factory.BuildEmpty();
+            ConditionDictionary right = factory.BuildEmpty();
+            left.Add(ConditionKey.Season, new[] { "Spring", "Summer" });
+            right.Add(ConditionKey.Season, new[] { "Fall", "Winter" });
+
+            // act
+            bool canOverlap = factory.CanConditionsOverlap(left, right);
+
+            // assert
+            canOverlap.Should().BeFalse();
+        }
+
+        /// <summary>Test that <see cref="ConditionFactory.CanConditionsOverlap"/> returns the expected values when the days from one overlap the days-of-week from the other.</summary>
+        [TestCase]
+        public void CanConditionsOverlap_WhenDaysAndDaysOfWeekOverlap()
+        {
+            // arrange
+            ConditionFactory factory = new ConditionFactory();
+            ConditionDictionary left = factory.BuildEmpty();
+            ConditionDictionary right = factory.BuildEmpty();
+            left.Add(ConditionKey.Day, new[] { "1", "2" });
+            right.Add(ConditionKey.DayOfWeek, new[] { DayOfWeek.Tuesday.ToString(), DayOfWeek.Wednesday.ToString() });
+
+            // act
+            bool canOverlap = factory.CanConditionsOverlap(left, right);
+
+            // assert
+            canOverlap.Should().BeTrue();
+        }
+
+        /// <summary>Test that <see cref="ConditionFactory.CanConditionsOverlap"/> returns the expected values when the days from one are distinct from the days-of-week of the other.</summary>
+        [TestCase]
+        public void CanConditionsOverlap_WhenDaysAndDaysOfWeekDistinct()
+        {
+            // arrange
+            ConditionFactory factory = new ConditionFactory();
+            ConditionDictionary left = factory.BuildEmpty();
+            ConditionDictionary right = factory.BuildEmpty();
+            left.Add(ConditionKey.Day, new[] { "1", "2" });
+            right.Add(ConditionKey.DayOfWeek, new[] { DayOfWeek.Wednesday.ToString(), DayOfWeek.Thursday.ToString() });
+
+            // act
+            bool canOverlap = factory.CanConditionsOverlap(left, right);
+
+            // assert
+            canOverlap.Should().BeFalse();
+        }
+
+        /// <summary>Test that <see cref="ConditionFactory.CanConditionsOverlap"/> returns the expected values when the weathers are distinct.</summary>
+        [TestCase]
+        public void CanConditionsOverlap_WhenWeathersDistinct()
+        {
+            // arrange
+            ConditionFactory factory = new ConditionFactory();
+            ConditionDictionary left = factory.BuildEmpty();
+            ConditionDictionary right = factory.BuildEmpty();
+            left.Add(ConditionKey.Weather, new[] { Weather.Rain.ToString(), Weather.Snow.ToString() });
+            right.Add(ConditionKey.Weather, new[] { Weather.Storm.ToString(), Weather.Sun.ToString() });
+
+            // act
+            bool canOverlap = factory.CanConditionsOverlap(left, right);
+
+            // assert
+            canOverlap.Should().BeFalse();
+        }
+
+        /****
         ** GetApplicablePermutationsForTheseConditions
         ****/
         /// <summary>Test that <see cref="ConditionFactory.GetApplicablePermutationsForTheseConditions"/> returns the expected values given only implied conditions.</summary>
