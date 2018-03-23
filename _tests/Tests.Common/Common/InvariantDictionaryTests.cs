@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.Tests.Common.Common
         {
             InvariantDictionary<bool> dict = new InvariantDictionary<bool>();
             foreach (string key in keys)
-                dict[key] =  true;
+                dict[key] = true;
             return dict.Count;
         }
 
