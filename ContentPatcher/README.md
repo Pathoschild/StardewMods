@@ -1,9 +1,22 @@
 **Content Patcher** is a [Stardew Valley](http://stardewvalley.net/) mod which loads content packs
 that change the game's images and data without replacing XNB files.
 
+**This documentation is for modders. If you're a player, see the [Nexus page](https://www.nexusmods.com/stardewvalley/mods/1915) instead.**
+
 ## Contents
 * [Install](#install)
-* [For modders](#for-modders)
+* [Introduction](#introduction)
+* [Basic features](#basic-features)
+  * [Overview](#overview)
+  * [Common fields](#common-fields)
+  * [Supported patches](#supported-patches)
+* [Advanced features](#advanced-features)
+  * [Conditions](#conditions)
+  * [Player configuration](#player-configuration)
+  * [Tokens](#tokens)
+* [Releasing a content pack](#releasing-a-content-pack)
+* [Troubleshooting](#troubleshooting)
+  * [Debug mode](#debug-mode)
 * [Versions](#versions)
 * [See also](#see-also)
 
@@ -13,9 +26,8 @@ that change the game's images and data without replacing XNB files.
 3. Unzip any Content Patcher content packs into `Mods` to install them.
 4. Run the game using SMAPI.
 
-## For modders
-### Introduction
-**What is Content Patcher?**  
+## Introduction
+### What is Content Patcher?
 Content Patcher lets you create a [standard content pack](https://stardewvalleywiki.com/Modding:Content_packs)
 which changes the game's data and images, no programming needed. Players can install it by
 unzipping it into `Mods`, just like a SMAPI mod.
@@ -24,7 +36,7 @@ Just by editing a JSON file, you can make very simple changes to the game (like 
 file), or more interesting changes (like things that look different in each season), or very
 specific changes (like coffee is more expensive in winter when it's snowing on the weekend).
 
-**Content Patcher vs XNB mods**  
+### Content Patcher vs XNB mods
 If you're familiar with creating XNB mods, Content Patcher supports everything XNB mods supported.
 Here's a quick comparison:
 
@@ -39,7 +51,7 @@ mod compatibility    | ✘ very poor<br /><small>(each file can only be changed 
 game compatibility   | ✘ break in most updates        | ✓ only affected if the part they edited changes
 easy to troubleshoot | ✘ no record of changes         | ✓ SMAPI log + Content Patcher validation
 
-**Content Patcher vs other mods**  
+### Content Patcher vs other mods
 Content Patcher supports all game assets with some very powerful features, but it's a generalist
 framework. More specialised frameworks might be better for specific things. You should consider
 whether one of these would work for you:
@@ -50,11 +62,11 @@ whether one of these would work for you:
   * [CustomNPC](https://www.nexusmods.com/stardewvalley/mods/1607) to add NPCs.
   * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add items and fruit trees.
 
-**Known limitations**  
+### Known limitations
 * Content Patcher can't change festival textures (fixed in Stardew Valley 1.3).
 
-### Creating a content pack
-#### Overview
+## Basic features
+### Overview
 A content pack is a folder with these files:
 * a `manifest.json` for SMAPI to read (see [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki);
 * a `content.json` which describes the changes you want to make;
@@ -68,7 +80,6 @@ field          | purpose
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
 `ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-configuration).
 
-#### Basic example
 Here's a quick example of each possible patch type (explanations below):
 
 ```js
@@ -167,9 +178,8 @@ field      | purpose
   `Fields`   | _(optional)_ The individual fields you want to change for existing entries. [See example](#example).
   `Entries`  | _(optional)_ The entries in the data file you want to add or replace. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. [See example](#example).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
 
+## Advanced features
 ### Conditions
-**(Requires format version: 1.3.)**
-
 You can make a patch conditional by adding a `When` field. The patch will be applied when all
 conditions match, and removed when they no longer match. Conditions are not case-sensitive, and you
 can specify multiple values as a comma-delimited list. You don't need to specify all conditions.
@@ -209,8 +219,6 @@ Special note about `"Action": "Load"`:
   `day: 1`           | `weather: "Sun"`       | error: sun could happen on the first of a month.
 
 ### Player configuration
-**(Requires format version: 1.3.)**
-
 You can let players configure your mod using a `config.json` file. This requires a bit more upfront
 setup for the mod author, but once that's done it'll behave just like a SMAPI `config.json` for
 players. Content Patcher will automatically create and load the file, and you can use the config
@@ -267,8 +275,6 @@ Here's how to do it:
 That's it! Content Patcher will automatically create the `config.json` when you run the game.
 
 ### Tokens
-**(Requires format version: 1.3.)**
-
 You can use [conditions](#condition) and [config values](#player-configuration) in the `FromFile`,
 `Target`, and `Enabled` fields in `content.json`. Just put the name of the condition or config
 field in two curly brackets, and Content Patcher will automatically fill in the value.
@@ -320,7 +326,7 @@ Tokens are subject to some restrictions:
 * `Target`:
   * Config fields can't have `"AllowMultiple": true`.
 
-### Releasing a content pack
+## Releasing a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general
 info. Suggestions:
 
@@ -340,7 +346,7 @@ info. Suggestions:
    cause players to lose their settings every time they update. Instead leave it out and it'll
    generate when the game is launched, just like a SMAPI mod's `content.json`.
 
-
+## Troubleshooting
 ### Debug mode
 Content Patcher has a debug mode for modders. This lets you view loaded textures directly with any
 changes applied, to help troubleshoot content packs. To enable it:
