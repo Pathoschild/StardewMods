@@ -17,6 +17,7 @@ that change the game's images and data without replacing XNB files.
 * [Releasing a content pack](#releasing-a-content-pack)
 * [Troubleshooting](#troubleshooting)
   * [Debug mode](#debug-mode)
+  * [Verbose log](#verbose-log)
 * [Versions](#versions)
 * [See also](#see-also)
 
@@ -348,16 +349,33 @@ info. Suggestions:
 
 ## Troubleshooting
 ### Debug mode
-Content Patcher has a debug mode for modders. This lets you view loaded textures directly with any
-changes applied, to help troubleshoot content packs. To enable it:
-
-1. Run the game once with Content Patcher installed.
-2. Edit the mod's `config.json` file in a text editor.
-3. Set `EnableDebugFeatures` to `true`.
+Content Patcher has a 'debug mode' which lets you view loaded textures directly in-game with any
+current changes. To enable it, open the mod's `config.json` file in a text editor and enable
+`EnableDebugFeatures`.
 
 Once enabled, press `F3` to display textures and left/right `CTRL` to cycle textures. Close and
 reopen the debug UI to refresh the texture list.
 > ![](docs/screenshots/debug-mode.png)
+
+### Verbose log
+Content Patcher doesn't log much info. You can change that by opening the mod's `config.json` file
+in a text editor and enable `VerboseLog`. **This may significantly slow down loading, and should
+normally be left disabled unless you need it.**
+
+Once enabled, it will log significantly more information at three points:
+1. when loading patches (e.g. whether each patch was enabled and which files were preloaded);
+2. when SMAPI checks if Content Patcher can load/edit an asset;
+3. and when the context changes (anytime the conditions change: different day, season, weather, etc).
+
+If your changes aren't appearing in game, make sure you set a `LogName` (see [common fields](#common-fields))
+and then search the SMAPI log file for that name. Particular questions to ask:
+* Did Content Patcher load the patch?  
+  _If it doesn't appear, check that your `content.json` is correct. If it says 'skipped', check your
+  `Enabled` value or `config.json`._
+* When the context is updated, is the box ticked next to the patch name?  
+  _If not, checked your `When` field._
+* When SMAPI checks if it can load/edit the asset name, is the box ticked?  
+  _If not, check your `When` and `Target` fields._
 
 ## Versions
 See [release notes](release-notes.md).
