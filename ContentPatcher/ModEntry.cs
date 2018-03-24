@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using ContentPatcher.Framework;
+using ContentPatcher.Framework.Commands;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Patches;
@@ -258,48 +259,46 @@ namespace ContentPatcher
         /// <param name="entry">The change to load.</param>
         /// <param name="config">The content pack's config values.</param>
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
-        private void LoadPatch(IContentPack pack, PatchConfig entry, InvariantDictionary<ConfigField> config, Action<string> logSkip)
+        private bool LoadPatch(IContentPack pack, PatchConfig entry, InvariantDictionary<ConfigField> config, Action<string> logSkip)
         {
+            bool TrackSkip(string reason, bool warn = true)
+            {
+                this.PatchManager.AddPermanentlyDisabled(new DisabledPatch(entry.LogName, entry.Action, entry.Target, pack, reason));
+                if (warn)
+                    logSkip(reason);
+                return false;
+            }
+
             try
             {
                 // normalise patch fields
                 if (entry.When == null)
                     entry.When = new InvariantDictionary<string>();
 
-                // parse 'enabled'
-                bool enabled = true;
-                {
-                    if (entry.Enabled != null && !this.TryParseBoolean(entry.Enabled, config, out string error, out enabled))
-                    {
-                        logSkip($"invalid {nameof(PatchConfig.Enabled)} value '{entry.Enabled}': {error}");
-                        return;
-                    }
-                }
-
                 // parse action
                 if (!Enum.TryParse(entry.Action, true, out PatchType action))
                 {
-                    logSkip(string.IsNullOrWhiteSpace(entry.Action)
+                    return TrackSkip(string.IsNullOrWhiteSpace(entry.Action)
                         ? $"must set the {nameof(PatchConfig.Action)} field."
                         : $"invalid {nameof(PatchConfig.Action)} value '{entry.Action}', expected one of: {string.Join(", ", Enum.GetNames(typeof(PatchType)))}."
                     );
-                    return;
                 }
 
                 // parse target asset
                 TokenString assetName;
-                if (string.IsNullOrWhiteSpace(entry.Target))
                 {
-                    logSkip($"must set the {nameof(PatchConfig.Target)} field.");
-                    return;
-                }
-                {
+                    if (string.IsNullOrWhiteSpace(entry.Target))
+                        return TrackSkip($"must set the {nameof(PatchConfig.Target)} field.");
                     if (!this.TryParseTokenString(entry.Target, config, out string error, out TokenStringBuilder builder))
-                    {
-                        logSkip($"the {nameof(PatchConfig.Target)} is invalid: {error}");
-                        return;
-                    }
+                        return TrackSkip($"the {nameof(PatchConfig.Target)} is invalid: {error}");
                     assetName = builder.Build();
+                }
+
+                // parse 'enabled'
+                bool enabled = true;
+                {
+                    if (entry.Enabled != null && !this.TryParseBoolean(entry.Enabled, config, out string error, out enabled))
+                        return TrackSkip($"invalid {nameof(PatchConfig.Enabled)} value '{entry.Enabled}': {error}");
                 }
 
                 // apply config
@@ -309,7 +308,7 @@ namespace ContentPatcher
                     {
                         InvariantHashSet expected = this.PatchManager.ParseCommaDelimitedField(values);
                         if (!expected.Intersect(config[key].Value).Any())
-                            return;
+                            return TrackSkip($"disabled: config '{key}' value '{string.Join(", ", config[key].Value)}' doesn't condition '{string.Join(", ", expected)}'", warn: false);
 
                         entry.When.Remove(key);
                     }
@@ -319,10 +318,7 @@ namespace ContentPatcher
                 ConditionDictionary conditions;
                 {
                     if (!this.PatchManager.TryParseConditions(entry.When, out conditions, out string error))
-                    {
-                        logSkip($"the {nameof(PatchConfig.When)} field is invalid: {error}.");
-                        return;
-                    }
+                        return TrackSkip($"the {nameof(PatchConfig.When)} field is invalid: {error}.");
                 }
 
                 // get patch instance
@@ -333,8 +329,8 @@ namespace ContentPatcher
                     case PatchType.Load:
                         {
                             // init patch
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, logSkip, out TokenString fromAsset, checkOnly: !enabled))
-                                return;
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, out string error, out TokenString fromAsset, checkOnly: !enabled))
+                                return TrackSkip(error);
                             patch = new LoadPatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
 
                             // detect conflicting loaders
@@ -342,8 +338,7 @@ namespace ContentPatcher
                             if (conflicts.Any())
                             {
                                 IEnumerable<string> conflictNames = (from conflict in conflicts orderby conflict.Key select $"'{conflict.Value.LogName}' already loads {conflict.Key}");
-                                logSkip($"{nameof(entry.Target)} '{patch.TokenableAssetName.Raw}' conflicts with other load patches ({string.Join(", ", conflictNames)}). Each file can only be loaded by one patch, unless their conditions can never overlap.");
-                                return;
+                                return TrackSkip($"{nameof(entry.Target)} '{patch.TokenableAssetName.Raw}' conflicts with other load patches ({string.Join(", ", conflictNames)}). Each file can only be loaded by one patch, unless their conditions can never overlap.");
                             }
                         }
                         break;
@@ -353,20 +348,11 @@ namespace ContentPatcher
                         {
                             // validate
                             if (entry.Entries == null && entry.Fields == null)
-                            {
-                                logSkip($"either {nameof(PatchConfig.Entries)} or {nameof(PatchConfig.Fields)} must be specified for a '{action}' change.");
-                                return;
-                            }
+                                return TrackSkip($"either {nameof(PatchConfig.Entries)} or {nameof(PatchConfig.Fields)} must be specified for a '{action}' change.");
                             if (entry.Entries != null && entry.Entries.Any(p => string.IsNullOrWhiteSpace(p.Value)))
-                            {
-                                logSkip($"the {nameof(PatchConfig.Entries)} can't contain empty values.");
-                                return;
-                            }
+                                return TrackSkip($"the {nameof(PatchConfig.Entries)} can't contain empty values.");
                             if (entry.Fields != null && entry.Fields.Any(p => p.Value == null || p.Value.Any(n => n.Value == null)))
-                            {
-                                logSkip($"the {nameof(PatchConfig.Fields)} can't contain empty values.");
-                                return;
-                            }
+                                return TrackSkip($"the {nameof(PatchConfig.Fields)} can't contain empty values.");
 
                             // save
                             patch = new EditDataPatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, entry.Entries, entry.Fields, this.Monitor, this.Helper.Content.NormaliseAssetName);
@@ -379,21 +365,17 @@ namespace ContentPatcher
                             // read patch mode
                             PatchMode patchMode = PatchMode.Replace;
                             if (!string.IsNullOrWhiteSpace(entry.PatchMode) && !Enum.TryParse(entry.PatchMode, true, out patchMode))
-                            {
-                                logSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}].");
-                                return;
-                            }
+                                return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}].");
 
                             // save
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, logSkip, out TokenString fromAsset, checkOnly: !enabled))
-                                return;
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, out string error, out TokenString fromAsset, checkOnly: !enabled))
+                                return TrackSkip(error);
                             patch = new EditImagePatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
                         break;
 
                     default:
-                        logSkip($"unsupported patch type '{action}'.");
-                        return;
+                        return TrackSkip($"unsupported patch type '{action}'.");
                 }
 
                 // only apply patch when its tokens are available
@@ -407,17 +389,15 @@ namespace ContentPatcher
                 // skip if not enabled
                 // note: we process the patch even if it's disabled, so any errors are caught by the modder instead of only failing after the patch is enabled.
                 if (!enabled)
-                {
-                    this.VerboseLog($"    skipped: patch has {nameof(PatchConfig.Enabled)}: false.");
-                    return;
-                }
+                    return TrackSkip($"{nameof(PatchConfig.Enabled)} is false.");
 
                 // save patch
                 this.PatchManager.Add(patch);
+                return true;
             }
             catch (Exception ex)
             {
-                logSkip($"error reading info. Technical details:\n{ex}");
+                return TrackSkip($"error reading info. Technical details:\n{ex}");
             }
         }
 
@@ -517,25 +497,25 @@ namespace ContentPatcher
         /// <param name="path">The asset path in the content patch.</param>
         /// <param name="config">The config values to apply.</param>
         /// <param name="conditions">The conditions to apply.</param>
-        /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
+        /// <param name="error">The error reason if preparing the asset fails.</param>
         /// <param name="tokenedPath">The parsed value.</param>
         /// <param name="checkOnly">Prepare the asset info and check if it's valid, but don't actually preload the asset.</param>
         /// <returns>Returns whether the local asset was successfully prepared.</returns>
-        private bool TryPrepareLocalAsset(IContentPack pack, string path, InvariantDictionary<ConfigField> config, ConditionDictionary conditions, Action<string> logSkip, out TokenString tokenedPath, bool checkOnly)
+        private bool TryPrepareLocalAsset(IContentPack pack, string path, InvariantDictionary<ConfigField> config, ConditionDictionary conditions, out string error, out TokenString tokenedPath, bool checkOnly)
         {
             // normalise raw value
             path = this.NormaliseLocalAssetPath(pack, path);
             if (path == null)
             {
-                logSkip($"must set the {nameof(PatchConfig.FromFile)} field for this action type.");
+                error = $"must set the {nameof(PatchConfig.FromFile)} field for this action type.";
                 tokenedPath = null;
                 return false;
             }
 
             // tokenise
-            if (!this.TryParseTokenString(path, config, out string error, out TokenStringBuilder builder))
+            if (!this.TryParseTokenString(path, config, out string tokenError, out TokenStringBuilder builder))
             {
-                logSkip($"the {nameof(PatchConfig.FromFile)} is invalid: {error}");
+                error = $"the {nameof(PatchConfig.FromFile)} is invalid: {tokenError}";
                 tokenedPath = null;
                 return false;
             }
@@ -567,15 +547,15 @@ namespace ContentPatcher
             }
             if (missingFiles.Any())
             {
-                logSkip(tokenedPath.ConditionTokens.Any() || missingFiles.Count > 1
+                error = tokenedPath.ConditionTokens.Any() || missingFiles.Count > 1
                     ? $"{nameof(PatchConfig.FromFile)} '{path}' matches files which don't exist ({string.Join(", ", missingFiles.OrderBy(p => p))})."
-                    : $"{nameof(PatchConfig.FromFile)} '{path}' matches a file which doesn't exist."
-                );
+                    : $"{nameof(PatchConfig.FromFile)} '{path}' matches a file which doesn't exist.";
                 tokenedPath = null;
                 return false;
             }
 
             // looks OK
+            error = null;
             return true;
         }
 

@@ -26,6 +26,9 @@ namespace ContentPatcher.Framework
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
+        /// <summary>The patches which are permanently disabled for this session.</summary>
+        private readonly IList<DisabledPatch> PermanentlyDisabledPatches = new List<DisabledPatch>();
+
         /// <summary>The patches to apply.</summary>
         private readonly HashSet<IPatch> Patches = new HashSet<IPatch>();
 
@@ -241,19 +244,32 @@ namespace ContentPatcher.Framework
                 this.PatchesByCurrentTarget[patch.AssetName] = new HashSet<IPatch> { patch };
         }
 
-        /// <summary>Get all patches regardless of context.</summary>
-        public IEnumerable<IPatch> GetAll()
+        /// <summary>Add a patch that's permanently disabled for this session.</summary>
+        /// <param name="patch">The patch to add.</param>
+        public void AddPermanentlyDisabled(DisabledPatch patch)
+        {
+            this.PermanentlyDisabledPatches.Add(patch);
+        }
+
+        /// <summary>Get valid patches regardless of context.</summary>
+        public IEnumerable<IPatch> GetPatches()
         {
             return this.Patches;
         }
 
-        /// <summary>Get all patches regardless of context.</summary>
+        /// <summary>Get valid patches regardless of context.</summary>
         /// <param name="assetName">The asset name for which to find patches.</param>
-        public IEnumerable<IPatch> GetAll(string assetName)
+        public IEnumerable<IPatch> GetPatches(string assetName)
         {
             if (this.PatchesByCurrentTarget.TryGetValue(assetName, out HashSet<IPatch> patches))
                 return patches;
             return new IPatch[0];
+        }
+
+        /// <summary>Get patches which are permanently disabled for this session, along with the reason they were.</summary>
+        public IEnumerable<DisabledPatch> GetPermanentlyDisabledPatches()
+        {
+            return this.PermanentlyDisabledPatches;
         }
 
         /// <summary>Get patches which load the given asset in the current context.</summary>
@@ -261,7 +277,7 @@ namespace ContentPatcher.Framework
         public IEnumerable<IPatch> GetCurrentLoaders(IAssetInfo asset)
         {
             return this
-                .GetAll(asset.AssetName)
+                .GetPatches(asset.AssetName)
                 .Where(patch => patch.Type == PatchType.Load && patch.MatchesContext);
         }
 
@@ -274,7 +290,7 @@ namespace ContentPatcher.Framework
                 return new IPatch[0];
 
             return this
-                .GetAll(asset.AssetName)
+                .GetPatches(asset.AssetName)
                 .Where(patch => patch.Type == patchType && patch.MatchesContext);
         }
 

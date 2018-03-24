@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ContentPatcher.Framework.Conditions;
@@ -5,7 +6,7 @@ using ContentPatcher.Framework.Patches;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
-namespace ContentPatcher.Framework
+namespace ContentPatcher.Framework.Commands
 {
     /// <summary>Handles the 'patch' console command.</summary>
     internal class CommandHandler
@@ -62,7 +63,7 @@ namespace ContentPatcher.Framework
                     return this.HandleSummary(subcommandArgs);
 
                 default:
-                    this.Monitor.Log($"The '{args[0]}' subcommand isn't valid. Type '{this.CommandName} help' for a list of valid subcommands.");
+                    this.Monitor.Log($"The '{this.CommandName} {args[0]}' command isn't valid. Type '{this.CommandName} help' for a list of valid commands.");
                     return false;
             }
         }
@@ -71,6 +72,9 @@ namespace ContentPatcher.Framework
         /*********
         ** Private methods
         *********/
+        /****
+        ** Commands
+        ****/
         /// <summary>Handle the 'patch help' command.</summary>
         /// <param name="args">The subcommand arguments.</param>
         /// <returns>Returns whether the command was handled.</returns>
@@ -79,7 +83,7 @@ namespace ContentPatcher.Framework
             // generate command info
             var helpEntries = new InvariantDictionary<string>
             {
-                ["help"] = $"{this.CommandName} help\n   Usage: {this.CommandName} help\n   Lists all available {this.CommandName} subcommands.\n\n   Usage: {this.CommandName} help <cmd>\n   Provides information for a specific {this.CommandName} subcommand.\n   - cmd: The {this.CommandName} subcommand name.",
+                ["help"] = $"{this.CommandName} help\n   Usage: {this.CommandName} help\n   Lists all available {this.CommandName} commands.\n\n   Usage: {this.CommandName} help <cmd>\n   Provides information for a specific {this.CommandName} command.\n   - cmd: The {this.CommandName} command name.",
                 ["summary"] = $"{this.CommandName} summary\n   Usage: {this.CommandName} summary\n   Shows a summary of the current conditions and loaded patches."
             };
 
@@ -88,9 +92,9 @@ namespace ContentPatcher.Framework
             if (!args.Any())
             {
                 help.AppendLine(
-                    $"The '{this.CommandName}' command is the entry point for Content Patcher subcommands. These are "
+                    $"The '{this.CommandName}' command is the entry point for Content Patcher commands. These are "
                     + "intended for troubleshooting and aren't intended for players. You use it by specifying a more "
-                    + $"specific subcommand (like 'help' in '{this.CommandName} help'). Here are the available subcommands:\n\n"
+                    + $"specific command (like 'help' in '{this.CommandName} help'). Here are the available commands:\n\n"
                 );
                 foreach (var entry in helpEntries.OrderBy(p => p.Key))
                 {
@@ -101,7 +105,7 @@ namespace ContentPatcher.Framework
             else if (helpEntries.TryGetValue(args[0], out string entry))
                 help.AppendLine(entry);
             else
-                help.AppendLine($"Unknown subcommand '{args[0]}'. Type '{this.CommandName} help' for available subcommands.");
+                help.AppendLine($"Unknown command '{this.CommandName} {args[0]}'. Type '{this.CommandName} help' for available commands.");
 
             // write output
             this.Monitor.Log(help.ToString());
@@ -125,39 +129,34 @@ namespace ContentPatcher.Framework
             output.AppendLine();
 
             // add patch summary
-            var patches = this.PatchManager
-                .GetAll()
+            var patches = this.GetAllPatches()
                 .GroupBy(p => p.ContentPack.Manifest.Name)
                 .OrderBy(p => p.Key);
 
             output.AppendLine("Patches by content pack ([X] means applied):");
-            foreach (IGrouping<string, IPatch> patchGroup in patches)
+            foreach (IGrouping<string, PatchInfo> patchGroup in patches)
             {
                 output.AppendLine($"   {patchGroup.Key}:");
-                foreach (IPatch patch in patchGroup.OrderBy(p => p.LogName))
+                foreach (PatchInfo patch in patchGroup.OrderBy(p => p.ShortName))
                 {
-                    // log 'applied' checkbox
-                    output.Append($"      [{(patch.MatchesContext ? "X" : " ")}] ");
+                    // log checkbox and patch name
+                    output.Append($"      [{(patch.IsApplied ? "X" : " ")}] {patch.ShortName}");
 
-                    // log patch name
-                    if (patch.LogName.StartsWith(patchGroup.Key + " > "))
-                        output.Append($"{patch.LogName.Substring((patchGroup.Key + " > ").Length)}");
-                    else
-                        output.Append($"{patch.LogName}");
+                    // log raw target (if not in name)
+                    if (!patch.ShortName.Contains($"{patch.Type} {patch.RawAssetName}"))
+                        output.Append($" | {patch.Type} {patch.RawAssetName}");
 
-                    // log target (if not in name)
-                    if (!patch.LogName.Contains($"{patch.Type} {patch.TokenableAssetName.Raw}"))
-                        output.Append($" | {patch.Type} {patch.TokenableAssetName.Raw}");
+                    // log parsed target if tokenised
+                    if (patch.IsApplied && patch.ParsedAssetName != null && patch.ParsedAssetName.ConditionTokens.Any())
+                        output.Append($" | => {patch.ParsedAssetName.Value}");
 
-                    // log target if tokenised
-                    if (patch.MatchesContext && patch.TokenableAssetName.ConditionTokens.Any())
-                        output.Append($" | => {patch.AssetName}");
-
-                    // log conditions
-                    if (!patch.MatchesContext)
+                    // log reason not applied
+                    if (!patch.IsLoaded)
+                        output.Append($" | not loaded: {patch.ReasonDisabled}");
+                    else if (!patch.IsApplied && patch.ParsedConditions != null)
                     {
                         string[] failedConditions = (
-                            from condition in patch.Conditions.Values
+                            from condition in patch.ParsedConditions.Values
                             orderby condition.Key.ToString()
                             where !condition.IsMatch(context)
                             select $"{condition.Key} ({string.Join(", ", condition.Values)})"
@@ -165,16 +164,32 @@ namespace ContentPatcher.Framework
 
                         output.Append(failedConditions.Any()
                             ? $" | failed conditions: {string.Join(", ", failedConditions)}"
-                            : " | disabled (reason unknown)."
+                            : " | disabled (reason unknown)"
                         );
                     }
-                    output.AppendLine(); // end line
+                    else if (!patch.IsApplied)
+                        output.Append(" | disabled (reason unknown)");
+
+                    // end line
+                    output.AppendLine();
                 }
                 output.AppendLine(); // blank line between groups
             }
 
             this.Monitor.Log(output.ToString());
             return true;
+        }
+
+        /****
+        ** Helpers
+        ****/
+        /// <summary>Get basic info about all patches, including those which couldn't be loaded.</summary>
+        public IEnumerable<PatchInfo> GetAllPatches()
+        {
+            foreach (IPatch patch in this.PatchManager.GetPatches())
+                yield return new PatchInfo(patch);
+            foreach (DisabledPatch patch in this.PatchManager.GetPermanentlyDisabledPatches())
+                yield return new PatchInfo(patch);
         }
     }
 }
