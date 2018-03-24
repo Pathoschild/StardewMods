@@ -16,6 +16,7 @@ that change the game's images and data without replacing XNB files.
   * [Tokens](#tokens)
 * [Releasing a content pack](#releasing-a-content-pack)
 * [Troubleshooting](#troubleshooting)
+  * [Patch commands](#patch-commands)
   * [Debug mode](#debug-mode)
   * [Verbose log](#verbose-log)
 * [Versions](#versions)
