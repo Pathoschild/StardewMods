@@ -35,11 +35,15 @@ namespace ContentPatcher.Framework
         /// <summary>A loader lookup by asset name, used to detect potential conflicts when adding loaders.</summary>
         private readonly InvariantDictionary<ISet<IPatch>> LoaderCache = new InvariantDictionary<ISet<IPatch>>();
 
-        /// <summary>The current condition context.</summary>
-        private readonly ConditionContext ConditionContext;
-
         /// <summary>Normalise an asset name.</summary>
         private readonly Func<string, string> NormaliseAssetName;
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The current condition context.</summary>
+        public ConditionContext ConditionContext { get; }
 
 
         /*********
@@ -235,6 +239,12 @@ namespace ContentPatcher.Framework
                 patches.Add(patch);
             else
                 this.PatchesByCurrentTarget[patch.AssetName] = new HashSet<IPatch> { patch };
+        }
+
+        /// <summary>Get all patches regardless of context.</summary>
+        public IEnumerable<IPatch> GetAll()
+        {
+            return this.Patches;
         }
 
         /// <summary>Get all patches regardless of context.</summary>

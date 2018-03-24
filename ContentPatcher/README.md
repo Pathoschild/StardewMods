@@ -352,6 +352,29 @@ info. Suggestions:
    generate when the game is launched, just like a SMAPI mod's `content.json`.
 
 ## Troubleshooting
+### Patch summary command
+Content Patcher adds a `patch summary` command which lists all the loaded patches, their current
+values, and (if applicable) the reasons they weren't applied.
+
+Example output:
+
+```
+Current conditions:
+   Day: 5
+   DayOfWeek: friday
+   Language: en
+   Season: spring
+   Weather: sun
+
+Patches by content pack ([X] means applied):
+   Sample Content Pack:
+      [X] Palm Trees | Load TerrainFeatures/tree_palm
+      [X] Bushes | Load TileSheets/bushes
+      [ ] Maple Trees | Load TerrainFeatures/tree2_{{season}} | failed conditions: Season (summer, fall, winter)
+      [ ] Oak Trees | Load TerrainFeatures/tree1_{{season}} | failed conditions: Season (summer, fall, winter)
+      [X] World Map | EditImage LooseSprites/map
+```
+
 ### Debug mode
 Content Patcher has a 'debug mode' which lets you view loaded textures directly in-game with any
 current changes. To enable it, open the mod's `config.json` file in a text editor and enable
