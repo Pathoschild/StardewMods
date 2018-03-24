@@ -64,7 +64,11 @@ whether one of these would work for you:
   * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add items and fruit trees.
 
 ### Known limitations
-* Content Patcher can't change festival textures (fixed in Stardew Valley 1.3).
+* Due to a SMAPI limitation (fixed in Stardew Valley 1.3), Content Patcher can't reliably change these yet:
+  * title menu textures;
+  * some special event and festival textures;
+  * some farmer character textures;
+  * mine maps (mine textures are fine).
 
 ## Basic features
 ### Overview
