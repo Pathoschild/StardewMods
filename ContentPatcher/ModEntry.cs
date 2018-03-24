@@ -36,6 +36,9 @@ namespace ContentPatcher
         /// <summary>Handles constructing, permuting, and updating conditions.</summary>
         private readonly ConditionFactory ConditionFactory = new ConditionFactory();
 
+        /// <summary>Handles the 'patch' console command.</summary>
+        private CommandHandler CommandHandler;
+
         /// <summary>Manages loaded patches.</summary>
         private PatchManager PatchManager;
 
@@ -68,6 +71,10 @@ namespace ContentPatcher
                 InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
             SaveEvents.AfterReturnToTitle += this.SaveEvents_AfterReturnToTitle;
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
+
+            // set up commands
+            this.CommandHandler = new CommandHandler(this.Monitor);
+            helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (name, args) => this.CommandHandler.Handle(args));
         }
 
 
