@@ -11,6 +11,7 @@
 * Fixed unhelpful error when a patch specifies an invalid source/target area.
 * Fixed an exception in one patch preventing other patches from being applied.
 * Fixed `Target` not being normalised.
+* Fixed errors using debug overlay on Linux/Mac.
 
 ## 1.2
 * Added support for overlaying images.

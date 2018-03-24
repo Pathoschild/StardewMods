@@ -75,11 +75,15 @@ namespace ContentPatcher.Framework
         protected override void Draw(SpriteBatch spriteBatch)
         {
             Vector2 labelSize = Game1.smallFont.MeasureString(this.CurrentName);
-            int contentWidth = (int)Math.Max(labelSize.X, this.CurrentTexture.Width);
+            int contentWidth = (int)Math.Max(labelSize.X, this.CurrentTexture?.Width ?? 0);
 
-            this.DrawScroll(spriteBatch, this.Margin, this.Margin, contentWidth, (int)labelSize.Y + this.Padding + this.CurrentTexture.Height, out Vector2 contentPos, out Rectangle scrollBounds);
+            this.DrawScroll(spriteBatch, this.Margin, this.Margin, contentWidth, (int)labelSize.Y + this.Padding + (this.CurrentTexture?.Height ?? (int)labelSize.Y), out Vector2 contentPos, out Rectangle scrollBounds);
             spriteBatch.DrawString(Game1.smallFont, this.CurrentName, new Vector2(contentPos.X + ((contentWidth - labelSize.X) / 2), contentPos.Y), Color.Black);
-            spriteBatch.Draw(this.CurrentTexture, contentPos + new Vector2(0, labelSize.Y + this.Padding), Color.White);
+
+            if (this.CurrentTexture != null)
+                spriteBatch.Draw(this.CurrentTexture, contentPos + new Vector2(0, labelSize.Y + this.Padding), Color.White);
+            else
+                spriteBatch.DrawString(Game1.smallFont, "(null)", contentPos + new Vector2(0, labelSize.Y + this.Padding), Color.Black);
         }
 
         /// <summary>Draw a scroll background.</summary>
@@ -128,7 +132,7 @@ namespace ContentPatcher.Framework
             IList<string> textureKeys = new List<string>();
             contentHelper.InvalidateCache(asset =>
             {
-                if (asset.DataType == typeof(Texture2D) && !asset.AssetName.Contains(".."))
+                if (asset.DataType == typeof(Texture2D) && !asset.AssetName.Contains("..") && !asset.AssetName.StartsWith(Constants.ExecutionPath))
                     textureKeys.Add(asset.AssetName);
                 return false;
             });
