@@ -352,28 +352,33 @@ info. Suggestions:
    generate when the game is launched, just like a SMAPI mod's `content.json`.
 
 ## Troubleshooting
-### Patch summary command
-Content Patcher adds a `patch summary` command which lists all the loaded patches, their current
-values, and (if applicable) the reasons they weren't applied.
+### Patch commands
+Content Patcher adds two patch commands for testing and troubleshooting.
 
-Example output:
+* `patch summary` lists all the loaded patches, their current values, and (if applicable) the
+  reasons they weren't applied.
 
-```
-Current conditions:
-   Day: 5
-   DayOfWeek: friday
-   Language: en
-   Season: spring
-   Weather: sun
+  Example output:
 
-Patches by content pack ([X] means applied):
-   Sample Content Pack:
-      [X] Palm Trees | Load TerrainFeatures/tree_palm
-      [X] Bushes | Load TileSheets/bushes
-      [ ] Maple Trees | Load TerrainFeatures/tree2_{{season}} | failed conditions: Season (summer, fall, winter)
-      [ ] Oak Trees | Load TerrainFeatures/tree1_{{season}} | failed conditions: Season (summer, fall, winter)
-      [X] World Map | EditImage LooseSprites/map
-```
+  ```
+  Current conditions:
+     Day: 5
+     DayOfWeek: friday
+     Language: en
+     Season: spring
+     Weather: sun
+
+  Patches by content pack ([X] means applied):
+     Sample Content Pack:
+        [X] Palm Trees | Load TerrainFeatures/tree_palm
+        [X] Bushes | Load TileSheets/bushes
+        [ ] Maple Trees | Load TerrainFeatures/tree2_{{season}} | failed conditions: Season (summer, fall, winter)
+        [ ] Oak Trees | Load TerrainFeatures/tree1_{{season}} | failed conditions: Season (summer, fall, winter)
+        [X] World Map | EditImage LooseSprites/map
+  ```
+* `patch update` immediately updates Content Patcher's condition context and rechecks all patches.
+  This is mainly useful if you change conditions through the console (like the date), and want to
+  update patches without going to bed.
 
 ### Debug mode
 Content Patcher has a 'debug mode' which lets you view loaded textures directly in-game with any

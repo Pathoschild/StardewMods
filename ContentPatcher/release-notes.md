@@ -5,7 +5,7 @@
 * Added support for patch conditions, with initial support for season, day of month, day of week, and language.
 * Added support for player settings via `config.json`.
 * Added support for condition and config tokens in `content.json`.
-* Added `patch summary` command to simplify troubleshooting.
+* Added `patch summary` and `patch update` commands to simplify troubleshooting.
 * Added trace logs when a content pack loads or edits an asset.
 * Added optional verbose logs.
 * Added unique patch names (editable via `LogName`) to simplify troubleshooting.

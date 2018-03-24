@@ -74,7 +74,7 @@ namespace ContentPatcher
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
 
             // set up commands
-            this.CommandHandler = new CommandHandler(this.PatchManager, this.ConditionFactory, this.Monitor);
+            this.CommandHandler = new CommandHandler(this.PatchManager, this.ConditionFactory, this.Monitor, this.UpdateContext);
             helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (name, args) => this.CommandHandler.Handle(args));
         }
 
@@ -121,13 +121,7 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void SaveEvents_AfterReturnToTitle(object sender, EventArgs e)
         {
-            // get context
-            IContentHelper contentHelper = this.Helper.Content;
-            LocalizedContentManager.LanguageCode language = contentHelper.CurrentLocaleConstant;
-
-            // update context
-            this.VerboseLog($"Context: date=none, weather=none, locale={language}.");
-            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null);
+            this.UpdateContext();
         }
 
         /// <summary>The method invoked when a new day starts.</summary>
@@ -135,20 +129,31 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
-            // get context
-            IContentHelper contentHelper = this.Helper.Content;
-            LocalizedContentManager.LanguageCode language = contentHelper.CurrentLocaleConstant;
-            SDate date = SDate.Now();
-            Weather weather = this.GetCurrentWeather();
-
-            // update context
-            this.VerboseLog($"Context: date={date.DayOfWeek} {date.Season} {date.Day}, weather={weather}, locale={language}.");
-            this.PatchManager.UpdateContext(contentHelper, language, date, weather);
+            this.UpdateContext();
         }
 
         /****
         ** Methods
         ****/
+        /// <summary>Update the current context.</summary>
+        private void UpdateContext()
+        {
+            // get context
+            IContentHelper contentHelper = this.Helper.Content;
+            LocalizedContentManager.LanguageCode language = contentHelper.CurrentLocaleConstant;
+            SDate date = null;
+            Weather? weather = null;
+            if (Context.IsWorldReady)
+            {
+                date = SDate.Now();
+                weather = this.GetCurrentWeather();
+            }
+
+            // update context
+            this.VerboseLog($"Context: date={(date != null ? $"{date.DayOfWeek} {date.Season} {date.Day}" : "none")}, weather={(weather != null ? weather.ToString() : "none")}, locale={language}.");
+            this.PatchManager.UpdateContext(contentHelper, language, date, weather);
+        }
+
         /// <summary>Load the patches from all registered content packs.</summary>
         [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "The value is used immediately, so this isn't an issue.")]
         private void LoadContentPacks()
@@ -308,7 +313,7 @@ namespace ContentPatcher
                     {
                         InvariantHashSet expected = this.PatchManager.ParseCommaDelimitedField(values);
                         if (!expected.Intersect(config[key].Value).Any())
-                            return TrackSkip($"disabled: config '{key}' value '{string.Join(", ", config[key].Value)}' doesn't condition '{string.Join(", ", expected)}'", warn: false);
+                            return TrackSkip($"disabled: config field '{key}' must have one of '{string.Join(", ", expected)}', but found '{string.Join(", ", config[key].Value)}'.", warn: false);
 
                         entry.When.Remove(key);
                     }

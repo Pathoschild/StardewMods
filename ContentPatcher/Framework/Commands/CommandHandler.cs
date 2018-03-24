@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,9 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>Handles constructing, permuting, and updating conditions.</summary>
         private readonly ConditionFactory ConditionFactory;
 
+        /// <summary>A callback which immediately updates the current condition context.</summary>
+        private readonly Action UpdateContext;
+
 
         /*********
         ** Accessors
@@ -38,11 +42,13 @@ namespace ContentPatcher.Framework.Commands
         /// <param name="patchManager">Manages loaded patches.</param>
         /// <param name="conditionFactory">Handles constructing, permuting, and updating conditions.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        public CommandHandler(PatchManager patchManager, ConditionFactory conditionFactory, IMonitor monitor)
+        /// <param name="updateContext">A callback which immediately updates the current condition context.</param>
+        public CommandHandler(PatchManager patchManager, ConditionFactory conditionFactory, IMonitor monitor, Action updateContext)
         {
             this.PatchManager = patchManager;
             this.ConditionFactory = conditionFactory;
             this.Monitor = monitor;
+            this.UpdateContext = updateContext;
         }
 
         /// <summary>Handle a console command.</summary>
@@ -61,6 +67,9 @@ namespace ContentPatcher.Framework.Commands
 
                 case "summary":
                     return this.HandleSummary(subcommandArgs);
+
+                case "update":
+                    return this.HandleUpdate(subcommandArgs);
 
                 default:
                     this.Monitor.Log($"The '{this.CommandName} {args[0]}' command isn't valid. Type '{this.CommandName} help' for a list of valid commands.");
@@ -84,7 +93,8 @@ namespace ContentPatcher.Framework.Commands
             var helpEntries = new InvariantDictionary<string>
             {
                 ["help"] = $"{this.CommandName} help\n   Usage: {this.CommandName} help\n   Lists all available {this.CommandName} commands.\n\n   Usage: {this.CommandName} help <cmd>\n   Provides information for a specific {this.CommandName} command.\n   - cmd: The {this.CommandName} command name.",
-                ["summary"] = $"{this.CommandName} summary\n   Usage: {this.CommandName} summary\n   Shows a summary of the current conditions and loaded patches."
+                ["summary"] = $"{this.CommandName} summary\n   Usage: {this.CommandName} summary\n   Shows a summary of the current conditions and loaded patches.",
+                ["update"] = $"{this.CommandName} update\n   Usage: {this.CommandName} update\n   Imediately refreshes the condition context and rechecks all patches."
             };
 
             // build output
@@ -179,6 +189,16 @@ namespace ContentPatcher.Framework.Commands
             this.Monitor.Log(output.ToString());
             return true;
         }
+
+        /// <summary>Handle the 'patch update' command.</summary>
+        /// <param name="args">The subcommand arguments.</param>
+        /// <returns>Returns whether the command was handled.</returns>
+        private bool HandleUpdate(string[] args)
+        {
+            this.UpdateContext();
+            return true;
+        }
+
 
         /****
         ** Helpers
