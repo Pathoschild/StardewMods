@@ -63,7 +63,6 @@
     <Compile Include="Framework\Patches\EditImagePatch.cs" />
     <Compile Include="Framework\Patches\IPatch.cs" />
     <Compile Include="Framework\PatchManager.cs" />
-    <Compile Include="Framework\Sprites.cs" />
     <Compile Include="Framework\Conditions\TokenString.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Framework\ConfigModels\PatchConfig.cs" />

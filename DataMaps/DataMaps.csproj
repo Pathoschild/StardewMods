@@ -47,7 +47,6 @@
     <Compile Include="Framework\IDataMap.cs" />
     <Compile Include="Framework\LegendEntry.cs" />
     <Compile Include="Framework\ModConfig.cs" />
-    <Compile Include="Framework\Sprites.cs" />
     <Compile Include="Framework\TileData.cs" />
     <Compile Include="Framework\TileDrawData.cs" />
     <Compile Include="Framework\TileEdge.cs" />

@@ -1,15 +1,15 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 
-namespace Pathoschild.Stardew.DataMaps.Framework
+namespace Pathoschild.Stardew.Common.UI
 {
     /// <summary>Simplifies access to the game's sprite sheets.</summary>
     /// <remarks>Each sprite is represented by a rectangle, which specifies the coordinates and dimensions of the image in the sprite sheet.</remarks>
-    internal static class Sprites
+    internal static class CommonSprites
     {
-        /// <summary>Sprites used to draw a legend box.</summary>
-        public static class Legend
+        /// <summary>Sprites used to draw a scroll.</summary>
+        public static class Scroll
         {
             /// <summary>The sprite sheet containing the icon sprites.</summary>
             public static Texture2D Sheet => Game1.mouseCursors;
