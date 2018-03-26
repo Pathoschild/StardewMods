@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DebugMode.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -185,7 +186,9 @@ namespace Pathoschild.Stardew.DebugMode
                 // draw text
                 string text = string.Join(Environment.NewLine, lines.Where(p => p != null));
                 Vector2 textSize = font.MeasureString(text);
-                batch.DrawString(font, text, new Vector2(position.X - textSize.X, position.Y), Color.Red);
+                const int scrollPadding = 5;
+                CommonHelper.DrawScroll(batch, new Vector2(position.X - textSize.X - (scrollPadding * 2) - (CommonHelper.ScrollEdgeSize.X * 2), position.Y), textSize, out Vector2 contentPos, out Rectangle _, padding: scrollPadding);
+                batch.DrawString(font, text, new Vector2(contentPos.X, contentPos.Y), Color.Black);
             }
 
             // draw cursor crosshairs

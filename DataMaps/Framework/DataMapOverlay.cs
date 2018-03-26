@@ -153,7 +153,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
                 // draw overlay label
                 {
                     Vector2 labelSize = Game1.smallFont.MeasureString(this.CurrentMap.Name);
-                    CommonHelper.DrawScroll(spriteBatch, leftOffset, topOffset, this.BoxContentWidth, (int)labelSize.Y, out Vector2 contentPos, out Rectangle bounds);
+                    CommonHelper.DrawScroll(spriteBatch, new Vector2(leftOffset, topOffset), new Vector2(this.BoxContentWidth, labelSize.Y), out Vector2 contentPos, out Rectangle bounds);
 
                     contentPos = contentPos + new Vector2((this.BoxContentWidth - labelSize.X) / 2, 0); // center label in box
                     spriteBatch.DrawString(Game1.smallFont, this.CurrentMap.Name, contentPos, Color.Black);
@@ -164,7 +164,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
                 // draw legend
                 if (this.Legend.Any())
                 {
-                    CommonHelper.DrawScroll(spriteBatch, leftOffset, topOffset, this.BoxContentWidth, this.Legend.Length * this.LegendColorSize, out Vector2 contentPos, out Rectangle _);
+                    CommonHelper.DrawScroll(spriteBatch, new Vector2(leftOffset, topOffset), new Vector2(this.BoxContentWidth, this.Legend.Length * this.LegendColorSize), out Vector2 contentPos, out Rectangle _);
                     for (int i = 0; i < this.Legend.Length; i++)
                     {
                         LegendEntry value = this.Legend[i];

@@ -3,6 +3,7 @@
 # Release notes
 ## 1.8
 * Added submenu to debug overlay.
+* Improved UI with scroll background.
 
 ## 1.7.1
 * Updated to SMAPI 2.4.

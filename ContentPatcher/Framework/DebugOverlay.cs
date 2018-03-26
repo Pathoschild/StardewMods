@@ -78,7 +78,7 @@ namespace ContentPatcher.Framework
             Vector2 labelSize = Game1.smallFont.MeasureString(this.CurrentName);
             int contentWidth = (int)Math.Max(labelSize.X, this.CurrentTexture?.Width ?? 0);
 
-            CommonHelper.DrawScroll(spriteBatch, this.Margin, this.Margin, contentWidth, (int)labelSize.Y + this.Padding + (this.CurrentTexture?.Height ?? (int)labelSize.Y), out Vector2 contentPos, out Rectangle _, padding: this.Padding);
+            CommonHelper.DrawScroll(spriteBatch, new Vector2(this.Margin), new Vector2(contentWidth, labelSize.Y + this.Padding + (this.CurrentTexture?.Height ?? (int)labelSize.Y)), out Vector2 contentPos, out Rectangle _, padding: this.Padding);
             spriteBatch.DrawString(Game1.smallFont, this.CurrentName, new Vector2(contentPos.X + ((contentWidth - labelSize.X) / 2), contentPos.Y), Color.Black);
 
             if (this.CurrentTexture != null)

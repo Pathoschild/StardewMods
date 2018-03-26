@@ -32,6 +32,9 @@ namespace Pathoschild.Stardew.Common
         /// <summary>A blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
         public static Texture2D Pixel => CommonHelper.LazyPixel.Value;
 
+        /// <summary>The width of the horizontal and vertical scroll edges (between the scroll origin position and start of content padding).</summary>
+        public static readonly Vector2 ScrollEdgeSize = new Vector2(CommonSprites.Scroll.TopLeft.Width * Game1.pixelZoom, CommonSprites.Scroll.TopLeft.Height * Game1.pixelZoom);
+
 
         /*********
         ** Public methods
@@ -83,22 +86,21 @@ namespace Pathoschild.Stardew.Common
 
         /// <summary>Draw a scroll background.</summary>
         /// <param name="spriteBatch">The sprite batch to which to draw.</param>
-        /// <param name="x">The top-left X pixel coordinate at which to draw the scroll.</param>
-        /// <param name="y">The top-left Y pixel coordinate at which to draw the scroll.</param>
-        /// <param name="contentWidth">The scroll content's pixel width.</param>
-        /// <param name="contentHeight">The scroll content's pixel height.</param>'
+        /// <param name="position">The top-left pixel coordinate at which to draw the scroll.</param>
+        /// <param name="contentSize">The scroll content's pixel size.</param>
         /// <param name="contentPos">The pixel position at which the content begins.</param>
         /// <param name="bounds">The scroll's outer bounds.</param>
         /// <param name="padding">The padding between the content and border.</param>
-        public static void DrawScroll(SpriteBatch spriteBatch, int x, int y, int contentWidth, int contentHeight, out Vector2 contentPos, out Rectangle bounds, int padding = 5)
+        public static void DrawScroll(SpriteBatch spriteBatch, Vector2 position, Vector2 contentSize, out Vector2 contentPos, out Rectangle bounds, int padding = 5)
         {
-            Rectangle corner = CommonSprites.Scroll.TopLeft;
-            int cornerWidth = corner.Width * Game1.pixelZoom;
-            int cornerHeight = corner.Height * Game1.pixelZoom;
-            int innerWidth = contentWidth + padding * 2;
-            int innerHeight = contentHeight + padding * 2;
+            int cornerWidth = (int)CommonHelper.ScrollEdgeSize.X;
+            int cornerHeight = (int)CommonHelper.ScrollEdgeSize.Y;
+            int innerWidth = (int)(contentSize.X + padding * 2);
+            int innerHeight = (int)(contentSize.Y + padding * 2);
             int outerWidth = innerWidth + cornerWidth * 2;
             int outerHeight = innerHeight + cornerHeight * 2;
+            int x = (int)position.X;
+            int y = (int)position.Y;
 
             // draw scroll background
             spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x + cornerWidth, y + cornerHeight, innerWidth, innerHeight), CommonSprites.Scroll.Background, Color.White);

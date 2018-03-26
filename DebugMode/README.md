@@ -1,5 +1,5 @@
 **Debug Mode** is an open-source [Stardew Valley](http://stardewvalley.net/) mod which lets you
-press `~` to view debug information and unlock the game's debug commands (including teleportation
+press `~` to view useful metadata and unlock the game's debug commands (including teleportation
 and time manipulation).
 
 ## Contents
@@ -17,9 +17,13 @@ and time manipulation).
 ## Use
 Press the `~` key (configurable) to enable or disable debug mode. This will...
 
-1. Show cursor crosshairs (with the current map name and tile position), and the game's built-in debug info:
+1. Show cursor crosshairs, the map name and tile position, and the game's built-in debug info:
 
-   ![screenshot](screenshots/debug-mode.png)
+   ![screenshot](screenshots/world.png)
+
+2. When a menu is open, it'll also show the menu name and (if applicable) submenu name:
+
+   ![screenshot](screenshots/menu.png)
 
 2. Unlock the game's built-in debug commands:
 
