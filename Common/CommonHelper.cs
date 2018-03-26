@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -30,6 +31,9 @@ namespace Pathoschild.Stardew.Common
         *********/
         /// <summary>A blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
         public static Texture2D Pixel => CommonHelper.LazyPixel.Value;
+
+        /// <summary>The width of the horizontal and vertical scroll edges (between the scroll origin position and start of content padding).</summary>
+        public static readonly Vector2 ScrollEdgeSize = new Vector2(CommonSprites.Scroll.TopLeft.Width * Game1.pixelZoom, CommonSprites.Scroll.TopLeft.Height * Game1.pixelZoom);
 
 
         /*********
@@ -78,6 +82,44 @@ namespace Pathoschild.Stardew.Common
             spriteBatch.DrawTextBlock(Game1.smallFont, label, position + new Vector2(gutterSize), wrapWidth); // draw again over texture box
 
             return labelSize + new Vector2(paddingSize);
+        }
+
+        /// <summary>Draw a scroll background.</summary>
+        /// <param name="spriteBatch">The sprite batch to which to draw.</param>
+        /// <param name="position">The top-left pixel coordinate at which to draw the scroll.</param>
+        /// <param name="contentSize">The scroll content's pixel size.</param>
+        /// <param name="contentPos">The pixel position at which the content begins.</param>
+        /// <param name="bounds">The scroll's outer bounds.</param>
+        /// <param name="padding">The padding between the content and border.</param>
+        public static void DrawScroll(SpriteBatch spriteBatch, Vector2 position, Vector2 contentSize, out Vector2 contentPos, out Rectangle bounds, int padding = 5)
+        {
+            int cornerWidth = (int)CommonHelper.ScrollEdgeSize.X;
+            int cornerHeight = (int)CommonHelper.ScrollEdgeSize.Y;
+            int innerWidth = (int)(contentSize.X + padding * 2);
+            int innerHeight = (int)(contentSize.Y + padding * 2);
+            int outerWidth = innerWidth + cornerWidth * 2;
+            int outerHeight = innerHeight + cornerHeight * 2;
+            int x = (int)position.X;
+            int y = (int)position.Y;
+
+            // draw scroll background
+            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x + cornerWidth, y + cornerHeight, innerWidth, innerHeight), CommonSprites.Scroll.Background, Color.White);
+
+            // draw borders
+            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x + cornerWidth, y, innerWidth, cornerHeight), CommonSprites.Scroll.Top, Color.White);
+            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x + cornerWidth, y + cornerHeight + innerHeight, innerWidth, cornerHeight), CommonSprites.Scroll.Bottom, Color.White);
+            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x, y + cornerHeight, cornerWidth, innerHeight), CommonSprites.Scroll.Left, Color.White);
+            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x + cornerWidth + innerWidth, y + cornerHeight, cornerWidth, innerHeight), CommonSprites.Scroll.Right, Color.White);
+
+            // draw corners
+            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x, y, cornerWidth, cornerHeight), CommonSprites.Scroll.TopLeft, Color.White);
+            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x, y + cornerHeight + innerHeight, cornerWidth, cornerHeight), CommonSprites.Scroll.BottomLeft, Color.White);
+            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x + cornerWidth + innerWidth, y, cornerWidth, cornerHeight), CommonSprites.Scroll.TopRight, Color.White);
+            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x + cornerWidth + innerWidth, y + cornerHeight + innerHeight, cornerWidth, cornerHeight), CommonSprites.Scroll.BottomRight, Color.White);
+
+            // set out params
+            contentPos = new Vector2(x + cornerWidth + padding, y + cornerHeight + padding);
+            bounds = new Rectangle(x, y, outerWidth, outerHeight);
         }
 
         /// <summary>Show an informational message to the player.</summary>

@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 
-namespace ContentPatcher.Framework
+namespace ContentPatcher.Framework.ConfigModels
 {
     /// <summary>The mod configuration.</summary>
     internal class ModConfig
@@ -10,8 +10,11 @@ namespace ContentPatcher.Framework
         /*********
         ** Accessors
         *********/
+        /// <summary>Whether to enable more verbose logging.</summary>
+        public bool VerboseLog { get; set; }
+
         /// <summary>Whether to enable debug features.</summary>
-        public bool EnableDebugFeatures { get; set; } = false;
+        public bool EnableDebugFeatures { get; set; }
 
         /// <summary>The control bindings.</summary>
         public ModConfigControls Controls { get; set; } = new ModConfigControls();

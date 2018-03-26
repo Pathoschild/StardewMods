@@ -1,6 +1,7 @@
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
-namespace ContentPatcher.Framework
+namespace ContentPatcher.Framework.ConfigModels
 {
     /// <summary>The model for a content patch file.</summary>
     internal class ContentConfig
@@ -10,5 +11,8 @@ namespace ContentPatcher.Framework
 
         /// <summary>The changes to make.</summary>
         public PatchConfig[] Changes { get; set; }
+
+        /// <summary>The schema for the <c>config.json</c> file (if any).</summary>
+        public InvariantDictionary<ConfigSchemaFieldConfig> ConfigSchema { get; set; }
     }
 }

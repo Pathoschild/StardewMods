@@ -1,12 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using ContentPatcher.Framework.Conditions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
 
-namespace ContentPatcher.Framework.Patchers
+namespace ContentPatcher.Framework.Patches
 {
     /// <summary>Metadata for an asset that should be patched with a new image.</summary>
-    internal class EditImagePatch : IPatch
+    internal class EditImagePatch : Patch
     {
         /*********
         ** Properties
@@ -14,11 +18,8 @@ namespace ContentPatcher.Framework.Patchers
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
-        /// <summary>Handles the logic around loading assets from content packs.</summary>
-        private readonly AssetLoader AssetLoader;
-
         /// <summary>The asset key to load from the content pack instead.</summary>
-        private readonly string FromLocalAsset;
+        private readonly TokenString FromLocalAsset;
 
         /// <summary>The sprite area from which to read an image.</summary>
         private readonly Rectangle? FromArea;
@@ -31,60 +32,53 @@ namespace ContentPatcher.Framework.Patchers
 
 
         /*********
-        ** Accessors
-        *********/
-        /// <summary>The content pack which requested the patch.</summary>
-        public IContentPack ContentPack { get; }
-
-        /// <summary>The normalised asset name to intercept.</summary>
-        public string AssetName { get; }
-
-        /// <summary>The language code to patch (or <c>null</c> for any language).</summary>
-        /// <remarks>This is handled by the main logic.</remarks>
-        public string Locale { get; }
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="logName">A unique name for this patch shown in log messages.</param>
+        /// <param name="assetLoader">Handles loading assets from content packs.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
-        /// <param name="locale">The language code to patch (or <c>null</c> for any language).</param>
+        /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="fromLocalAsset">The asset key to load from the content pack instead.</param>
         /// <param name="fromArea">The sprite area from which to read an image.</param>
         /// <param name="toArea">The sprite area to overwrite.</param>
         /// <param name="patchMode">Indicates how the image should be patched.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        /// <param name="assetLoader">Handles the logic around loading assets from content packs.</param>
-        public EditImagePatch(IContentPack contentPack, string assetName, string locale, string fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor, AssetLoader assetLoader)
+        /// <param name="normaliseAssetName">Normalise an asset name.</param>
+        public EditImagePatch(string logName, AssetLoader assetLoader, IContentPack contentPack, TokenString assetName, ConditionDictionary conditions, TokenString fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor, Func<string, string> normaliseAssetName)
+            : base(logName, PatchType.EditImage, assetLoader, contentPack, assetName, conditions, normaliseAssetName)
         {
-            // init
-            this.ContentPack = contentPack;
-            this.AssetName = assetName;
-            this.Locale = locale;
             this.FromLocalAsset = fromLocalAsset;
             this.FromArea = fromArea != Rectangle.Empty ? fromArea : null as Rectangle?;
             this.ToArea = toArea != Rectangle.Empty ? toArea : null as Rectangle?;
             this.PatchMode = patchMode;
             this.Monitor = monitor;
-            this.AssetLoader = assetLoader;
         }
 
-        /// <summary>Apply the patch to an asset.</summary>
+        /// <summary>Update the patch data when the context changes.</summary>
+        /// <param name="context">The condition context.</param>
+        /// <returns>Returns whether the patch data changed.</returns>
+        public override bool UpdateContext(ConditionContext context)
+        {
+            bool localAssetChanged = this.FromLocalAsset.UpdateContext(context);
+            return base.UpdateContext(context) || localAssetChanged;
+        }
+
+        /// <summary>Apply the patch to a loaded asset.</summary>
         /// <typeparam name="T">The asset type.</typeparam>
         /// <param name="asset">The asset to edit.</param>
-        public void Apply<T>(IAssetData asset)
+        public override void Edit<T>(IAssetData asset)
         {
             // validate
             if (typeof(T) != typeof(Texture2D))
             {
-                this.Monitor.Log($"Can't apply edit-image patch by {this.ContentPack.Manifest.Name} to {this.AssetName}: this file isn't an image file (found {typeof(T)}).", LogLevel.Warn);
+                this.Monitor.Log($"Can't apply image patch \"{this.LogName}\" to {this.AssetName}: this file isn't an image file (found {typeof(T)}).", LogLevel.Warn);
                 return;
             }
 
             // fetch data
-            Texture2D source = this.AssetLoader.Load<Texture2D>(this.ContentPack, this.FromLocalAsset);
+            Texture2D source = this.AssetLoader.Load<Texture2D>(this.ContentPack, this.FromLocalAsset.Value);
             IAssetDataForImage editor = asset.AsImage();
 
             // extend tilesheet if needed
@@ -97,10 +91,27 @@ namespace ContentPatcher.Framework.Patchers
                 editor.PatchImage(original);
             }
 
+            // validate error conditions
+            if (affectedArea.Right > editor.Data.Width)
+            {
+                this.Monitor.Log($"Can't apply image patch \"{this.LogName}\": target area (X:{affectedArea.X}, Y:{affectedArea.Y}, Width:{affectedArea.Width}, Height:{affectedArea.Height}) extends past the right edge of the image (Width:{editor.Data.Width}), which isn't supported. Patches can only extend the tilesheet downwards.", LogLevel.Error);
+                return;
+            }
+            if (this.FromArea != null && (this.FromArea.Value.Width != affectedArea.Width || this.FromArea.Value.Height != affectedArea.Height))
+            {
+                this.Monitor.Log($"Can't apply image patch \"{this.LogName}\": source image size (Width:{affectedArea.Width}, Height:{affectedArea.Height}) doesn't match the target area size (Width:{affectedArea.Width}, Height:{affectedArea.Height}).", LogLevel.Error);
+                return;
+            }
+
             // apply source image
             editor.PatchImage(source, this.FromArea, this.ToArea, this.PatchMode);
         }
 
+        /// <summary>Get the condition tokens used by this patch in its fields.</summary>
+        public override IEnumerable<ConditionKey> GetTokensUsed()
+        {
+            return base.GetTokensUsed().Union(this.FromLocalAsset.ConditionTokens);
+        }
 
         /*********
         ** Private methods

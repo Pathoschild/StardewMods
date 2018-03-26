@@ -2,13 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.ConfigModels;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 
-namespace ContentPatcher.Framework.Patchers
+namespace ContentPatcher.Framework.Patches
 {
     /// <summary>Metadata for a data to edit into a data file.</summary>
-    internal class EditDataPatch : IPatch
+    internal class EditDataPatch : Patch
     {
         /*********
         ** Properties
@@ -24,49 +26,36 @@ namespace ContentPatcher.Framework.Patchers
 
 
         /*********
-        ** Accessors
-        *********/
-        /// <summary>The content pack which requested the patch.</summary>
-        public IContentPack ContentPack { get; }
-
-        /// <summary>The normalised asset name to intercept.</summary>
-        public string AssetName { get; }
-
-        /// <summary>The language code to patch (or <c>null</c> for any language).</summary>
-        /// <remarks>This is handled by the main logic.</remarks>
-        public string Locale { get; }
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="logName">A unique name for this patch shown in log messages.</param>
+        /// <param name="assetLoader">Handles loading assets from content packs.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
-        /// <param name="locale">The language code to patch (or <c>null</c> for any language).</param>
+        /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="records">The data records to edit.</param>
         /// <param name="fields">The data fields to edit.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        public EditDataPatch(IContentPack contentPack, string assetName, string locale, IDictionary<string, string> records, IDictionary<string, IDictionary<int, string>> fields, IMonitor monitor)
+        /// <param name="normaliseAssetName">Normalise an asset name.</param>
+        public EditDataPatch(string logName, AssetLoader assetLoader, IContentPack contentPack, TokenString assetName, ConditionDictionary conditions, IDictionary<string, string> records, IDictionary<string, IDictionary<int, string>> fields, IMonitor monitor, Func<string, string> normaliseAssetName)
+            : base(logName, PatchType.EditData, assetLoader, contentPack, assetName, conditions, normaliseAssetName)
         {
-            // init
-            this.ContentPack = contentPack;
-            this.AssetName = assetName;
-            this.Locale = locale;
             this.Records = records;
             this.Fields = fields;
             this.Monitor = monitor;
         }
 
-        /// <summary>Apply the patch to an asset.</summary>
+        /// <summary>Apply the patch to a loaded asset.</summary>
         /// <typeparam name="T">The asset type.</typeparam>
         /// <param name="asset">The asset to edit.</param>
-        public void Apply<T>(IAssetData asset)
+        /// <exception cref="NotSupportedException">The current patch type doesn't support editing assets.</exception>
+        public override void Edit<T>(IAssetData asset)
         {
             // validate
             if (!typeof(T).IsGenericType || typeof(T).GetGenericTypeDefinition() != typeof(Dictionary<,>))
             {
-                this.Monitor.Log($"Can't apply edit-data patch by {this.ContentPack.Manifest.Name} to {this.AssetName}: this file isn't a data file (found {(typeof(T) == typeof(Texture2D) ? "image" : typeof(T).Name)}).", LogLevel.Warn);
+                this.Monitor.Log($"Can't apply data patch \"{this.LogName}\" to {this.AssetName}: this file isn't a data file (found {(typeof(T) == typeof(Texture2D) ? "image" : typeof(T).Name)}).", LogLevel.Warn);
                 return;
             }
 
@@ -115,7 +104,7 @@ namespace ContentPatcher.Framework.Patchers
                     TKey key = (TKey)Convert.ChangeType(record.Key, typeof(TKey));
                     if (!data.ContainsKey(key))
                     {
-                        this.Monitor.Log($"Can't apply data field patch by {this.ContentPack.Manifest.Name} to {this.AssetName}: there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.", LogLevel.Warn);
+                        this.Monitor.Log($"Can't apply data patch \"{this.LogName}\" to {this.AssetName}: there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.", LogLevel.Warn);
                         continue;
                     }
 
@@ -124,7 +113,7 @@ namespace ContentPatcher.Framework.Patchers
                     {
                         if (field.Key < 0 || field.Key > actualFields.Length - 1)
                         {
-                            this.Monitor.Log($"Can't apply data field patch by {this.ContentPack.Manifest.Name} to {this.AssetName}: record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {field.Key} (must be 0 to {actualFields.Length - 1}).", LogLevel.Warn);
+                            this.Monitor.Log($"Can't apply data field \"{this.LogName}\" to {this.AssetName}: record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {field.Key} (must be 0 to {actualFields.Length - 1}).", LogLevel.Warn);
                             continue;
                         }
 

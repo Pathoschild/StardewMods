@@ -1,6 +1,5 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using SFarmer = StardewValley.Farmer;
@@ -15,7 +14,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         ** Properties
         *********/
         /// <summary>The enabled custom tool or item names.</summary>
-        private readonly HashSet<string> CustomNames;
+        private readonly InvariantHashSet CustomNames;
 
 
         /*********
@@ -25,7 +24,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="customAttachments">The enabled custom tool or item names.</param>
         public CustomAttachment(string[] customAttachments)
         {
-            this.CustomNames = new HashSet<string>(customAttachments, StringComparer.InvariantCultureIgnoreCase);
+            this.CustomNames = new InvariantHashSet(customAttachments);
         }
 
         /// <summary>Get whether the tool is currently enabled.</summary>
