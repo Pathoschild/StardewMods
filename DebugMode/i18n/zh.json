@@ -3,5 +3,8 @@
   "label.tile": "地格",
   "label.map": "地图",
   "label.menu": "菜单",
-  "label.submenu": "submenu" // TODO
+  "label.submenu": "submenu", // TODO
+  "label.festival-name": "festival", // TODO
+  "label.event-id": "event ID", // TODO
+  "label.event-script": "event script" // TODO
 }

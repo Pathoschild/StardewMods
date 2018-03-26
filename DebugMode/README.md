@@ -25,7 +25,15 @@ Press the `~` key (configurable) to enable or disable debug mode. This will...
 
    ![screenshot](screenshots/menu.png)
 
-2. Unlock the game's built-in debug commands:
+3. When an event in progress, it'll also show the internal event ID and event command progress:
+
+   ![screenshot](screenshots/event.png)
+
+4. When a festival is in progress, it'll show the internal festival name:
+
+   ![screenshot](screenshots/festival.png)
+
+5. Unlock the game's built-in debug commands:
 
    hotkey | action
    :----- | :-----
@@ -46,7 +54,7 @@ Press the `~` key (configurable) to enable or disable debug mode. This will...
    `B`    | Shift the toolbar to show the next higher inventory row.
    `N`    | Shift the toolbar to show the next lower inventory row.
 
-3. If you set `AllowDangerousCommands: true` in the [configuration](#configuration) (disabled by
+6. If you set `AllowDangerousCommands: true` in the [configuration](#configuration) (disabled by
    default), also unlock these debug commands:
 
    hotkey | action

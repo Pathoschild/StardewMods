@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.8
-* Added submenu to debug overlay.
+* Added submenu, event, and festival info to overlay.
 * Improved UI with scroll background.
 
 ## 1.7.1

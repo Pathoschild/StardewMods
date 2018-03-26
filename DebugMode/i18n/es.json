@@ -3,5 +3,8 @@
   "label.tile": "tile",
   "label.map": "mapa",
   "label.menu": "menu",
-  "label.submenu": "submenu" // TODO
+  "label.submenu": "submenu", // TODO
+  "label.festival-name": "festival", // TODO
+  "label.event-id": "event ID", // TODO
+  "label.event-script": "event script" // TODO
 }

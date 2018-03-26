@@ -208,6 +208,25 @@ namespace Pathoschild.Stardew.DebugMode
                 if (submenuType != null)
                     yield return $"{this.Helper.Translation.Get("label.submenu")}: {(submenuType.Namespace == vanillaNamespace ? submenuType.Name : submenuType.FullName)}";
             }
+
+            // event
+            if (Game1.CurrentEvent != null)
+            {
+                Event @event = Game1.CurrentEvent;
+                int eventID = this.Helper.Reflection.GetField<int>(@event, "id").GetValue();
+                bool isFestival = @event.isFestival;
+                string festivalName = @event.FestivalName;
+                double progress = @event.CurrentCommand / (double)@event.eventCommands.Length;
+
+                if(isFestival)
+                    yield return $"{this.Helper.Translation.Get("label.festival-name")}: {festivalName}";
+                else
+                {
+                    yield return $"{this.Helper.Translation.Get("label.event-id")}: {eventID}";
+                    if(@event.CurrentCommand >= 0 && @event.CurrentCommand < @event.eventCommands.Length)
+                        yield return $"{this.Helper.Translation.Get("label.event-script")}: {@event.eventCommands[@event.CurrentCommand]} ({(int)(progress * 100)}%)";
+                }
+            }
         }
 
         /// <summary>Get the submenu for the current menu, if any.</summary>
