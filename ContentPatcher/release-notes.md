@@ -2,15 +2,15 @@
 
 # Release notes
 ## 1.3
-* Added support for patch conditions, with initial support for season, day of month, day of week, and language.
-* Added support for player settings via `config.json`.
-* Added support for condition and config tokens in `content.json`.
+* Added support for patch conditions (with initial support for season, day of month, day of week, and language).
+* Added support for content packs having `config.json`.
+* Added support for condition/config tokens in `content.json`.
 * Added `patch summary` and `patch update` commands to simplify troubleshooting.
-* Added trace logs when a content pack loads or edits an asset.
+* Added trace logs when a content pack loads/edits an asset.
 * Added optional verbose logs.
-* Added unique patch names (editable via `LogName`) to simplify troubleshooting.
-* Fixed unhelpful error when a patch specifies an invalid source/target area.
-* Fixed an exception in one patch preventing other patches from being applied.
+* Added unique patch names (editable via `LogName` field) to simplify troubleshooting.
+* Improved error when a patch specifies an invalid source/target area.
+* Fixed issue where an exception in one patch prevented other patches from being applied.
 * Fixed `Target` not being normalised.
 * Fixed errors using debug overlay on Linux/Mac.
 
