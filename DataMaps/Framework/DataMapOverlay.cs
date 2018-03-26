@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.UI;
 using StardewValley;
 using XRectangle = xTile.Dimensions.Rectangle;
 
@@ -100,7 +101,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             // get updated tiles
             GameLocation location = Game1.currentLocation;
             Vector2 cursorTile = TileHelper.GetTileFromCursor();
-            this.TileGroups = this.CurrentMap.Update(location, this.GetVisibleArea(location, Game1.viewport), cursorTile).ToArray();
+            this.TileGroups = this.CurrentMap.Update(location, this.GetVisibleArea(Game1.viewport), cursorTile).ToArray();
         }
 
 
@@ -305,9 +306,8 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         }
 
         /// <summary>Get the tile area currently visible to the player.</summary>
-        /// <param name="location">The game location.</param>
         /// <param name="viewport">The game viewport.</param>
-        private Rectangle GetVisibleArea(GameLocation location, XRectangle viewport)
+        private Rectangle GetVisibleArea(XRectangle viewport)
         {
             int tileSize = Game1.tileSize;
             int left = viewport.X / tileSize;

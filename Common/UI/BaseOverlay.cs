@@ -7,7 +7,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using Rectangle = xTile.Dimensions.Rectangle;
 
-namespace Pathoschild.Stardew.Common
+namespace Pathoschild.Stardew.Common.UI
 {
     /// <summary>An interface which supports user interaction and overlays the active menu (if any).</summary>
     internal abstract class BaseOverlay : IDisposable

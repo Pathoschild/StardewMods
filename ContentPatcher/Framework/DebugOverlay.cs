@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -77,7 +77,7 @@ namespace ContentPatcher.Framework
             Vector2 labelSize = Game1.smallFont.MeasureString(this.CurrentName);
             int contentWidth = (int)Math.Max(labelSize.X, this.CurrentTexture?.Width ?? 0);
 
-            this.DrawScroll(spriteBatch, this.Margin, this.Margin, contentWidth, (int)labelSize.Y + this.Padding + (this.CurrentTexture?.Height ?? (int)labelSize.Y), out Vector2 contentPos, out Rectangle scrollBounds);
+            this.DrawScroll(spriteBatch, this.Margin, this.Margin, contentWidth, (int)labelSize.Y + this.Padding + (this.CurrentTexture?.Height ?? (int)labelSize.Y), out Vector2 contentPos, out Rectangle _);
             spriteBatch.DrawString(Game1.smallFont, this.CurrentName, new Vector2(contentPos.X + ((contentWidth - labelSize.X) / 2), contentPos.Y), Color.Black);
 
             if (this.CurrentTexture != null)
