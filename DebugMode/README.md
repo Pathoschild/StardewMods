@@ -17,7 +17,7 @@ and time manipulation).
 ## Use
 Press the `~` key (configurable) to enable or disable debug mode. This will...
 
-1. Show cursor crosshairs, the map name and tile position, and the game's built-in debug info:
+1. Show cursor crosshairs, the map name and cursor's tile position, and the game's built-in debug info:
 
    ![screenshot](screenshots/world.png)
 
