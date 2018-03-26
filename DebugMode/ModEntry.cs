@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -171,10 +172,14 @@ namespace Pathoschild.Stardew.DebugMode
                 // generate debug text
                 GameLocation location = Game1.currentLocation;
                 Type menuType = Game1.activeClickableMenu?.GetType();
-                string[] lines = {
+                Type submenuType = this.GetSubmenu(Game1.activeClickableMenu)?.GetType();
+                string vanillaNamespace = typeof(TitleMenu).Namespace;
+                string[] lines =
+                {
                     location != null ? $"{this.Helper.Translation.Get("label.tile")}: {tile.X}, {tile.Y}" : null,
                     location != null ? $"{this.Helper.Translation.Get("label.map")}:  {location.Name}" : null,
-                    menuType != null ? $"{this.Helper.Translation.Get("label.menu")}: {(menuType.Namespace == typeof(TitleMenu).Namespace ? menuType.Name : menuType.FullName)}" : null
+                    menuType != null ? $"{this.Helper.Translation.Get("label.menu")}: {(menuType.Namespace == vanillaNamespace ? menuType.Name : menuType.FullName)}" : null,
+                    submenuType != null ? $"{this.Helper.Translation.Get("label.submenu")}: {(submenuType.Namespace == vanillaNamespace ? submenuType.Name : submenuType.FullName)}" : null
                 };
 
                 // draw text
@@ -186,6 +191,18 @@ namespace Pathoschild.Stardew.DebugMode
             // draw cursor crosshairs
             batch.Draw(pixel, new Rectangle(0, Game1.getOldMouseY() - 1, Game1.viewport.Width, 3), Color.Black * 0.5f);
             batch.Draw(pixel, new Rectangle(Game1.getOldMouseX() - 1, 0, 3, Game1.viewport.Height), Color.Black * 0.5f);
+        }
+
+        /// <summary>Get the submenu for the current menu, if any.</summary>
+        /// <param name="menu">The submenu.</param>
+        private IClickableMenu GetSubmenu(IClickableMenu menu)
+        {
+            if (menu is GameMenu gameMenu)
+                return this.Helper.Reflection.GetField<List<IClickableMenu>>(menu, "pages").GetValue()[gameMenu.currentTab];
+            if (menu is TitleMenu)
+                return TitleMenu.subMenu;
+
+            return null;
         }
     }
 }

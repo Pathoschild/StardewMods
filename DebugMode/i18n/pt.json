@@ -1,6 +1,7 @@
-﻿{
+{
   // labels shown on the debug screen
   "label.tile": "posição",
   "label.map": "mapa",
-  "label.menu": "menu"
+  "label.menu": "menu",
+  "label.submenu": "submenu" // TODO
 }

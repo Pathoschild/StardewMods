@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.8
+* Added submenu to debug overlay.
+
 ## 1.7.1
 * Updated to SMAPI 2.4.
 * Improved German translations. (Thanks to Husky110!)
