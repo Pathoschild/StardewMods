@@ -79,55 +79,51 @@ namespace ContentPatcher.Framework.Patches
 
             // fetch data
             Texture2D source = this.AssetLoader.Load<Texture2D>(this.ContentPack, this.FromLocalAsset.Value);
+            Rectangle sourceArea = this.FromArea ?? new Rectangle(0, 0, source.Width, source.Height);
+            Rectangle targetArea = this.ToArea ?? new Rectangle(0, 0, sourceArea.Width, sourceArea.Height);
             IAssetDataForImage editor = asset.AsImage();
+            
+            // validate error conditions
+            if (sourceArea.X < 0 || sourceArea.Y < 0 || sourceArea.Width < 0 || sourceArea.Height < 0)
+            {
+                this.Monitor.Log($"Can't apply image patch \"{this.LogName}\": source area (X:{sourceArea.X}, Y:{sourceArea.Y}, Width:{sourceArea.Width}, Height:{sourceArea.Height}) has negative values, which isn't valid.", LogLevel.Error);
+                return;
+            }
+            if (targetArea.X < 0 || targetArea.Y < 0 || targetArea.Width < 0 || targetArea.Height < 0)
+            {
+                this.Monitor.Log($"Can't apply image patch \"{this.LogName}\": target area (X:{targetArea.X}, Y:{targetArea.Y}, Width:{targetArea.Width}, Height:{targetArea.Height}) has negative values, which isn't valid.", LogLevel.Error);
+                return;
+            }
+            if (targetArea.Right > editor.Data.Width)
+            {
+                this.Monitor.Log($"Can't apply image patch \"{this.LogName}\": target area (X:{targetArea.X}, Y:{targetArea.Y}, Width:{targetArea.Width}, Height:{targetArea.Height}) extends past the right edge of the image (Width:{editor.Data.Width}), which isn't allowed. Patches can only extend the tilesheet downwards.", LogLevel.Error);
+                return;
+            }
+            if (sourceArea.Width != targetArea.Width || sourceArea.Height != targetArea.Height)
+            {
+                string sourceAreaLabel = this.FromArea.HasValue ? $"{nameof(this.FromArea)}" : "source image";
+                string targetAreaLabel = this.ToArea.HasValue ? $"{nameof(this.ToArea)}" : "target image";
+                this.Monitor.Log($"Can't apply image patch \"{this.LogName}\": {sourceAreaLabel} size (Width:{sourceArea.Width}, Height:{sourceArea.Height}) doesn't match {targetAreaLabel} size (Width:{targetArea.Width}, Height:{targetArea.Height}).", LogLevel.Error);
+                return;
+            }
 
             // extend tilesheet if needed
-            Rectangle affectedArea = this.GetTargetArea(source, this.FromArea, this.ToArea);
-            if (affectedArea.Bottom > editor.Data.Height)
+            if (targetArea.Bottom > editor.Data.Height)
             {
                 Texture2D original = editor.Data;
-                Texture2D texture = new Texture2D(Game1.graphics.GraphicsDevice, original.Width, affectedArea.Bottom);
+                Texture2D texture = new Texture2D(Game1.graphics.GraphicsDevice, original.Width, targetArea.Bottom);
                 editor.ReplaceWith(texture);
                 editor.PatchImage(original);
             }
 
-            // validate error conditions
-            if (affectedArea.Right > editor.Data.Width)
-            {
-                this.Monitor.Log($"Can't apply image patch \"{this.LogName}\": target area (X:{affectedArea.X}, Y:{affectedArea.Y}, Width:{affectedArea.Width}, Height:{affectedArea.Height}) extends past the right edge of the image (Width:{editor.Data.Width}), which isn't supported. Patches can only extend the tilesheet downwards.", LogLevel.Error);
-                return;
-            }
-            if (this.FromArea != null && (this.FromArea.Value.Width != affectedArea.Width || this.FromArea.Value.Height != affectedArea.Height))
-            {
-                this.Monitor.Log($"Can't apply image patch \"{this.LogName}\": source image size (Width:{affectedArea.Width}, Height:{affectedArea.Height}) doesn't match the target area size (Width:{affectedArea.Width}, Height:{affectedArea.Height}).", LogLevel.Error);
-                return;
-            }
-
             // apply source image
-            editor.PatchImage(source, this.FromArea, this.ToArea, this.PatchMode);
+            editor.PatchImage(source, sourceArea, this.ToArea, this.PatchMode);
         }
 
         /// <summary>Get the condition tokens used by this patch in its fields.</summary>
         public override IEnumerable<ConditionKey> GetTokensUsed()
         {
             return base.GetTokensUsed().Union(this.FromLocalAsset.ConditionTokens);
-        }
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Get the area that will be affected by the patch.</summary>
-        /// <param name="source">The source texture.</param>
-        /// <param name="fromArea">The sprite area in the source asset from which to read an image.</param>
-        /// <param name="toArea">The sprite area to overwrite.</param>
-        private Rectangle GetTargetArea(Texture2D source, Rectangle? fromArea, Rectangle? toArea)
-        {
-            if (toArea.HasValue)
-                return toArea.Value;
-
-            return fromArea.HasValue
-                ? new Rectangle(0, 0, fromArea.Value.Width, fromArea.Value.Height)
-                : new Rectangle(0, 0, source.Width, source.Height);
         }
     }
 }

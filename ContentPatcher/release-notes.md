@@ -2,6 +2,7 @@
 
 # Release notes
 ## 1.3.1
+* Improved error-handling when applying image edits.
 * Fixed unnecessary warnings when a patch has `Enabled: false`.
 
 ## 1.3
