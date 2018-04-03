@@ -68,6 +68,7 @@ whether one of these would work for you:
 * Due to a Stardew Valley <1.3 limitation, Content Patcher can't reliably change these yet:
   * title menu textures;
   * some special event and festival textures;
+  * special event maps;
   * some farmer character textures;
   * mine maps (mine textures are fine).
 * Due to a SMAPI limitation, assets may not refresh correctly when you switch language. Restarting
