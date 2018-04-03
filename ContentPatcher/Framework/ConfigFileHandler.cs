@@ -149,13 +149,10 @@ namespace ContentPatcher.Framework
             );
 
             // remove invalid values
-            foreach (string key in configValues.Keys)
+            foreach (string key in configValues.Keys.Except(config.Keys).ToArray())
             {
-                if (!config.ContainsKey(key))
-                {
-                    logWarning(key, "no such field supported by this content pack.");
-                    configValues.Remove(key);
-                }
+                logWarning(key, "no such field supported by this content pack.");
+                configValues.Remove(key);
             }
 
             // inject default values

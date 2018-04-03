@@ -4,6 +4,7 @@
 ## 1.3.1
 * Improved error-handling when applying image edits.
 * Fixed unnecessary warnings when a patch has `Enabled: false`.
+* Fixed error when a content pack's `config.json` has invalid keys.
 
 ## 1.3
 * Added support for patch conditions (with initial support for season, day of month, day of week, and language).
