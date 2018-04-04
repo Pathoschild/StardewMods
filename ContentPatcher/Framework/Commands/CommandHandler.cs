@@ -133,7 +133,9 @@ namespace ContentPatcher.Framework.Commands
 
             // add condition summary
             output.AppendLine();
-            output.AppendLine("Current conditions:");
+            output.AppendLine("========================");
+            output.AppendLine("== Current conditions ==");
+            output.AppendLine("========================");
             foreach (ConditionKey key in this.ConditionFactory.GetValidConditions())
                 output.AppendLine($"   {key}: {context.GetValue(key)}");
             output.AppendLine();
@@ -143,27 +145,39 @@ namespace ContentPatcher.Framework.Commands
                 .GroupBy(p => p.ContentPack.Manifest.Name)
                 .OrderBy(p => p.Key);
 
-            output.AppendLine("Patches by content pack ([X] means applied):");
+            output.AppendLine(
+                "========================\n"
+                + "==  Content patches   ==\n"
+                + "========================\n"
+                + "The following patches were loaded. For each patch:\n"
+                + "  - 'loaded' shows whether the patch is loaded and enabled (see details for the reason if not).\n"
+                + "  - 'conditions' shows whether the patch matches with the current conditions (see details for the reason if not). If this is unexpectedly false, check (a) the conditions above and (b) your Where field.\n"
+                + "  - 'applied' shows whether the target asset was loaded and patched. If you expected it to be loaded by this point but it's false, double-check (a) that the game has actually loaded the asset yet, and (b) your Targets field is correct.\n"
+                + "\n"
+            );
             foreach (IGrouping<string, PatchInfo> patchGroup in patches)
             {
-                output.AppendLine($"   {patchGroup.Key}:");
+                output.AppendLine($"{patchGroup.Key}:");
+                output.AppendLine();
+                output.AppendLine("   loaded  | conditions | applied | name + details");
+                output.AppendLine("   ------- | ---------- | ------- | --------------");
                 foreach (PatchInfo patch in patchGroup.OrderBy(p => p.ShortName))
                 {
                     // log checkbox and patch name
-                    output.Append($"      [{(patch.IsApplied ? "X" : " ")}] {patch.ShortName}");
+                    output.Append($"   [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {patch.ShortName}");
 
                     // log raw target (if not in name)
                     if (!patch.ShortName.Contains($"{patch.Type} {patch.RawAssetName}"))
                         output.Append($" | {patch.Type} {patch.RawAssetName}");
 
                     // log parsed target if tokenised
-                    if (patch.IsApplied && patch.ParsedAssetName != null && patch.ParsedAssetName.ConditionTokens.Any())
+                    if (patch.MatchesContext && patch.ParsedAssetName != null && patch.ParsedAssetName.ConditionTokens.Any())
                         output.Append($" | => {patch.ParsedAssetName.Value}");
 
                     // log reason not applied
                     if (!patch.IsLoaded)
                         output.Append($" | not loaded: {patch.ReasonDisabled}");
-                    else if (!patch.IsApplied && patch.ParsedConditions != null)
+                    else if (!patch.MatchesContext && patch.ParsedConditions != null)
                     {
                         string[] failedConditions = (
                             from condition in patch.ParsedConditions.Values
@@ -177,7 +191,7 @@ namespace ContentPatcher.Framework.Commands
                             : " | disabled (reason unknown)"
                         );
                     }
-                    else if (!patch.IsApplied)
+                    else if (!patch.IsLoaded)
                         output.Append(" | disabled (reason unknown)");
 
                     // end line

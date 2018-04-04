@@ -43,6 +43,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Whether this patch should be applied in the latest context.</summary>
         public bool MatchesContext { get; private set; }
 
+        /// <summary>Whether the patch is currently applied to the target asset.</summary>
+        public bool IsApplied { get; set; }
+
 
         /*********
         ** Public methods
