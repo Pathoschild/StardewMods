@@ -28,6 +28,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)StringEnumArrayConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\CommonSprites.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\ConstraintSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\InvariantDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\InvariantHashSet.cs" />
   </ItemGroup>
