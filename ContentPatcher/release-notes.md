@@ -1,10 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.4
-* Added more info to `patch summary` command.
-* Improved error-handling when applying image edits.
-* Fixed unnecessary warnings when a patch has `Enabled: false`.
+## 1.3.1
+* Added more detailed info to `patch summary` command.
+* Improved error handling for image edits.
+* Fixed unnecessary warnings when a patch is disabled.
 * Fixed error when a content pack's `config.json` has invalid keys.
 
 ## 1.3
