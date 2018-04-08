@@ -65,13 +65,12 @@ whether one of these would work for you:
   * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add items and fruit trees.
 
 ### Known limitations
-* Due to a Stardew Valley <1.3 limitation, Content Patcher can't reliably change these yet:
-  * title menu textures;
-  * some special event and festival textures;
-  * some farmer character textures;
-  * mine maps (mine textures are fine).
-* Due to a SMAPI limitation, assets may not refresh correctly when you switch language. Restarting
-  the game after you change language will avoid any issues.
+* Due to limitations in Stardew Valley 1.2 (fixed in 1.3):
+  * Content Patcher can't reliably change title menu textures, some special event and festival
+    textures, special event maps, some farmer character textures, and mine maps (mine textures are
+    fine).
+  * Assets may not refresh correctly when you switch language. Restarting the game after you change
+    language will avoid any issues.
 
 ## Basic features
 ### Overview

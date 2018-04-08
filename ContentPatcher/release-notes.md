@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.3.1
+* Added more detailed info to `patch summary` command.
+* Improved error handling for image edits.
+* Fixed unnecessary warnings when a patch is disabled.
+* Fixed error when a content pack's `config.json` has invalid keys.
+
 ## 1.3
 * Added support for patch conditions (with initial support for season, day of month, day of week, and language).
 * Added support for content packs having `config.json`.

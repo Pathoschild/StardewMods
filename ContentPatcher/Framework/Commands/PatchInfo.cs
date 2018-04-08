@@ -29,11 +29,14 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>The content pack which requested the patch.</summary>
         public IContentPack ContentPack { get; }
 
-        /// <summary>Whether the patch is applied in the current context.</summary>
-        public bool IsApplied { get; }
-
         /// <summary>Whether the patch is loaded.</summary>
         public bool IsLoaded { get; }
+
+        /// <summary>Whether the patch should be applied in the current context.</summary>
+        public bool MatchesContext { get; }
+
+        /// <summary>Whether the patch is currently applied.</summary>
+        public bool IsApplied { get; }
 
         /// <summary>The reason this patch is disabled (if applicable).</summary>
         public string ReasonDisabled { get; }
@@ -52,8 +55,9 @@ namespace ContentPatcher.Framework.Commands
             this.ParsedAssetName = null;
             this.ParsedConditions = null;
             this.ContentPack = patch.ContentPack;
-            this.IsApplied = false;
             this.IsLoaded = false;
+            this.MatchesContext = false;
+            this.IsApplied = false;
             this.ReasonDisabled = patch.ReasonDisabled;
         }
 
@@ -67,8 +71,9 @@ namespace ContentPatcher.Framework.Commands
             this.ParsedAssetName = patch.TokenableAssetName;
             this.ParsedConditions = patch.Conditions;
             this.ContentPack = patch.ContentPack;
-            this.IsApplied = patch.MatchesContext;
             this.IsLoaded = true;
+            this.MatchesContext = patch.MatchesContext;
+            this.IsApplied = patch.IsApplied;
         }
 
 

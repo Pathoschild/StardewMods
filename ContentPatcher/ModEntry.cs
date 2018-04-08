@@ -339,11 +339,17 @@ namespace ContentPatcher
                             patch = new LoadPatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
 
                             // detect conflicting loaders
-                            InvariantDictionary<IPatch> conflicts = this.PatchManager.GetConflictingLoaders(patch);
-                            if (conflicts.Any())
+                            if (enabled)
                             {
-                                IEnumerable<string> conflictNames = (from conflict in conflicts orderby conflict.Key select $"'{conflict.Value.LogName}' already loads {conflict.Key}");
-                                return TrackSkip($"{nameof(entry.Target)} '{patch.TokenableAssetName.Raw}' conflicts with other load patches ({string.Join(", ", conflictNames)}). Each file can only be loaded by one patch, unless their conditions can never overlap.");
+                                InvariantDictionary<IPatch> conflicts = this.PatchManager.GetConflictingLoaders(patch);
+                                if (conflicts.Any())
+                                {
+                                    IEnumerable<string> conflictNames = (from conflict in conflicts
+                                        orderby conflict.Key
+                                        select $"'{conflict.Value.LogName}' already loads {conflict.Key}");
+                                    return TrackSkip(
+                                        $"{nameof(entry.Target)} '{patch.TokenableAssetName.Raw}' conflicts with other load patches ({string.Join(", ", conflictNames)}). Each file can only be loaded by one patch, unless their conditions can never overlap.");
+                                }
                             }
                         }
                         break;
@@ -394,7 +400,7 @@ namespace ContentPatcher
                 // skip if not enabled
                 // note: we process the patch even if it's disabled, so any errors are caught by the modder instead of only failing after the patch is enabled.
                 if (!enabled)
-                    return TrackSkip($"{nameof(PatchConfig.Enabled)} is false.");
+                    return TrackSkip($"{nameof(PatchConfig.Enabled)} is false.", warn: false);
 
                 // save patch
                 this.PatchManager.Add(patch);

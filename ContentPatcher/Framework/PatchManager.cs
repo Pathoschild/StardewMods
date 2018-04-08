@@ -101,7 +101,9 @@ namespace ContentPatcher.Framework
             else
                 this.Monitor.Log($"{patch.ContentPack.Manifest.Name} loaded {asset.AssetName}.", LogLevel.Trace);
 
-            return patch.Load<T>(asset);
+            T data = patch.Load<T>(asset);
+            patch.IsApplied = true;
+            return data;
         }
 
         /// <summary>Edit a matched asset.</summary>
@@ -123,10 +125,12 @@ namespace ContentPatcher.Framework
                 try
                 {
                     patch.Edit<T>(asset);
+                    patch.IsApplied = true;
                 }
                 catch (Exception ex)
                 {
                     this.Monitor.Log($"unhandled exception applying patch: {patch.LogName}.\n{ex}", LogLevel.Error);
+                    patch.IsApplied = false;
                 }
             }
         }
@@ -167,6 +171,7 @@ namespace ContentPatcher.Framework
                 bool reload = (wasApplied && changed) || (!wasApplied && shouldApply);
                 if (reload)
                 {
+                    patch.IsApplied = false;
                     if (wasApplied)
                         reloadAssetNames.Add(wasAssetName);
                     if (shouldApply)
