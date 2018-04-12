@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.4
+* Updated for Stardew Valley 1.3.
+
 ## 1.3.1
 * Added more detailed info to `patch summary` command.
 * Improved error handling for image edits.

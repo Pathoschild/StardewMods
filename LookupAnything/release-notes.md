@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.19
+* Updated for Stardew Valley 1.3.
+
 ## 1.18.1
 * Fixed error when looking up something before the save is loaded (thanks to f4iTh!).
 

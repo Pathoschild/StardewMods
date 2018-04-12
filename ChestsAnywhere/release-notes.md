@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.13
+* Updated for Stardew Valley 1.3.
+
 ## 1.12.4
 * Updated to SMAPI 2.4.
 * Improved German translations. (Thanks to Husky110!)

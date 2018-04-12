@@ -1,4 +1,7 @@
 # Release notes
+## 1.4
+* Updated for Stardew Valley 1.3.
+
 ## 1.3
 * Updated to SMAPI 2.4.
 * Added _crops: fertilized_ and _crops: watered_ maps. (Thanks to irecinius!)

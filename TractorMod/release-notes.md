@@ -1,4 +1,7 @@
 # Release notes
+## 4.5
+* Updated for Stardew Valley 1.3.
+
 ## 4.4.1
 * Fixed error opening the game menu if the tractor hasn't been bought yet (thanks to f4iTh!).
 

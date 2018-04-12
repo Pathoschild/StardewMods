@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.9
+* Updated for Stardew Valley 1.3.
+
 ## 1.8
 * Added submenu, event, and festival info to overlay.
 * Improved UI with scroll background.
