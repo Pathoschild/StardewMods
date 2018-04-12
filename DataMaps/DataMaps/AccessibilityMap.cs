@@ -164,7 +164,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         private bool IsOccupied(GameLocation location, Vector2 tile, Rectangle tilePixels)
         {
             // show open gate as passable
-            if (location.objects.TryGetValue(tile, out Object obj) && obj is Fence fence && fence.isGate && fence.gatePosition == Fence.gateOpenedPosition)
+            if (location.objects.TryGetValue(tile, out Object obj) && obj is Fence fence && fence.isGate.Value && fence.gatePosition.Value == Fence.gateOpenedPosition)
                 return false;
 
             // check for objects, characters, or terrain features
@@ -183,7 +183,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             }
 
             // large terrain features
-            if (location.largeTerrainFeatures != null && location.largeTerrainFeatures.Any(p => p.getBoundingBox().Intersects(tilePixels)))
+            if (location.largeTerrainFeatures.Any(p => p.getBoundingBox().Intersects(tilePixels)))
                 return true;
 
             // resource clumps

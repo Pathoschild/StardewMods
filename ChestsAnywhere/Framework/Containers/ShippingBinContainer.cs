@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -35,7 +34,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         ** Accessors
         *********/
         /// <summary>The underlying inventory.</summary>
-        public List<Item> Inventory => this.Farm.shippingBin;
+        public IList<Item> Inventory => this.Farm.shippingBin;
 
         /// <summary>The container's name.</summary>
         public string Name { get; set; }
@@ -60,7 +59,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         {
             this.Farm = farm;
             this.Reflection = reflection;
-            this.FakeChest = new Chest(0, farm.shippingBin, Vector2.Zero);
+            this.FakeChest = new Chest();
+            this.FakeChest.items.Set(farm.shippingBin);
         }
 
         /// <summary>Get whether the in-game container is open.</summary>
@@ -92,13 +92,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 
         /// <summary>Get whether another instance wraps the same underlying container.</summary>
         /// <param name="inventory">The other container's inventory.</param>
-        public bool IsSameAs(List<Item> inventory)
+        public bool IsSameAs(IList<Item> inventory)
         {
-            return this.Inventory == inventory;
+            return object.ReferenceEquals(this.Inventory, inventory);
         }
 
         /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
-        /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
+        /// <remarks>Derived from <see cref="Chest.updateWhenCurrentLocation"/>.</remarks>
         public ItemGrabMenu OpenMenu()
         {
             return new ItemGrabMenu(
@@ -110,8 +110,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 message: null,
                 behaviorOnItemGrab: this.GrabItemFromContainer,
                 canBeExitedWithKey: true,
-                showOrganizeButton: true,
-                source: ItemGrabMenu.source_none
+                showOrganizeButton: true
             );
         }
 

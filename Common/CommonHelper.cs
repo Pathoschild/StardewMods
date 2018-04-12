@@ -49,8 +49,8 @@ namespace Pathoschild.Stardew.Common
                 .Concat(
                     from location in Game1.locations.OfType<BuildableGameLocation>()
                     from building in location.buildings
-                    where building.indoors != null
-                    select building.indoors
+                    where building.indoors.Value != null
+                    select building.indoors.Value
                 );
         }
 

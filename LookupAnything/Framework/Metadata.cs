@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewValley;
@@ -53,7 +53,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         {
             ItemSpriteType sheet = item.GetSpriteType();
             return this.Objects
-                .FirstOrDefault(obj => obj.SpriteSheet == sheet && obj.SpriteID.Contains(item.parentSheetIndex) && obj.Context.HasFlag(context));
+                .FirstOrDefault(obj => obj.SpriteSheet == sheet && obj.SpriteID.Contains(item.ParentSheetIndex) && obj.Context.HasFlag(context));
         }
 
         /// <summary>Get overrides for a game object.</summary>
@@ -62,7 +62,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public CharacterData GetCharacter(NPC character, TargetType type)
         {
             return
-                this.Characters?.FirstOrDefault(p => p.ID == $"{type}::{character.name}") // override by type + name
+                this.Characters?.FirstOrDefault(p => p.ID == $"{type}::{character.Name}") // override by type + name
                 ?? this.Characters?.FirstOrDefault(p => p.ID == type.ToString()); // override by type
         }
 

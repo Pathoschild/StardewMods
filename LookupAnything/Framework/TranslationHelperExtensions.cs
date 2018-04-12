@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Netcode;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
@@ -75,6 +76,32 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case null:
                     return null;
 
+                // net types
+                case NetBool net:
+                    return translations.Stringify(net.Value);
+                case NetByte net:
+                    return translations.Stringify(net.Value);
+                case NetColor net:
+                    return translations.Stringify(net.Value);
+                case NetDouble net:
+                    return translations.Stringify(net.Value);
+                case NetFloat net:
+                    return translations.Stringify(net.Value);
+                case NetGuid net:
+                    return translations.Stringify(net.Value);
+                case NetInt net:
+                    return translations.Stringify(net.Value);
+                case NetLong net:
+                    return translations.Stringify(net.Value);
+                case NetPoint net:
+                    return translations.Stringify(net.Value);
+                case NetRectangle net:
+                    return translations.Stringify(net.Value);
+                case NetString net:
+                    return translations.Stringify(net.Value);
+                case NetVector2 net:
+                    return translations.Stringify(net.Value);
+
                 // boolean
                 case bool boolean:
                     return translations.Get(boolean ? L10n.Generic.Yes : L10n.Generic.No);
@@ -122,6 +149,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         if (type.IsGenericType)
                         {
                             Type genericType = type.GetGenericTypeDefinition();
+                            if (genericType == typeof(NetDictionary<,,,,>))
+                            {
+                                object dict = type.GetProperty("FieldDict").GetValue(value);
+                                return translations.Stringify(dict);
+                            }
                             if (genericType == typeof(KeyValuePair<,>))
                             {
                                 string k = translations.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Key)).GetValue(value));

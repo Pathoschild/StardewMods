@@ -65,7 +65,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             Rectangle sourceRectangle = this.CustomSprite.SourceRectangle;
 
             // check pixel from sprite sheet
-            SpriteEffects spriteEffects = obj.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            SpriteEffects spriteEffects = obj.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             return this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, sourceRectangle, spriteEffects);
         }
     }

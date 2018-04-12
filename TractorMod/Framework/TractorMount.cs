@@ -19,16 +19,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="id">The unique ID for this horse.</param>
         /// <param name="name">The internal NPC name.</param>
         /// <param name="tileX">The initial tile X position.</param>
         /// <param name="tileY">The initial tile Y position.</param>
         /// <param name="sprite">The animated tractor sprite.</param>
         /// <param name="onDismount">The callback to invoke when the player dismounts the tractor.</param>
-        public TractorMount(string name, int tileX, int tileY, AnimatedSprite sprite, Action onDismount)
-            : base(tileX, tileY)
+        public TractorMount(Guid id, string name, int tileX, int tileY, AnimatedSprite sprite, Action onDismount)
+            : base(id, tileX, tileY)
         {
-            this.name = name;
-            this.sprite = sprite;
+            this.Name = name;
+            this.Sprite = sprite;
             this.OnDismount = onDismount;
         }
 

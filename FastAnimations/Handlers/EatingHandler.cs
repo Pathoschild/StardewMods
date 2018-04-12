@@ -9,7 +9,7 @@ using StardewValley.Menus;
 namespace Pathoschild.Stardew.FastAnimations.Handlers
 {
     /// <summary>Handles the eating animation.</summary>
-    /// <remarks>See game logic in <see cref="Game1.pressActionButton"/> (opens confirmation dialogue), <see cref="Farmer.showEatingItem"/> (main animation logic), <see cref="FarmerSprite"/>'s private <c>animateOnce(Gametime)</c> method (runs animation + some logic), and <see cref="Game1.doneEating"/> (eats item and ends animation).</remarks>
+    /// <remarks>See game logic in <see cref="Game1.pressActionButton"/> (opens confirmation dialogue), <see cref="Farmer.showEatingItem"/> (main animation logic), and <see cref="FarmerSprite"/>'s private <c>animateOnce(Gametime)</c> method (runs animation + some logic).</remarks>
     internal class EatingHandler : BaseAnimationHandler
     {
         /*********
@@ -43,7 +43,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override bool IsEnabled(int playerAnimationID)
         {
-            return Game1.isEating && Game1.player.Sprite.CurrentAnimation != null;
+            return Game1.player.isEating && Game1.player.Sprite.CurrentAnimation != null;
         }
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>
@@ -69,12 +69,12 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
             // held (at index 1) and the item being thrown into the air (at index 2). The drinking
             // animation only has one temporary animation (at index 1). This code runs after each
             // one is spawned, and adds it to the list of temporary animations to handle.
-            int indexInAnimation = Game1.player.FarmerSprite.indexInCurrentAnimation;
+            int indexInAnimation = Game1.player.FarmerSprite.currentAnimationIndex;
             if (indexInAnimation <= 1)
                 this.ItemAnimations.Clear();
-            if ((indexInAnimation == 1 || (indexInAnimation == 2 && playerAnimationID == FarmerSprite.eat)) && Game1.player.itemToEat is Object obj && obj.parentSheetIndex != Object.stardrop)
+            if ((indexInAnimation == 1 || (indexInAnimation == 2 && playerAnimationID == FarmerSprite.eat)) && Game1.player.itemToEat is Object obj && obj.ParentSheetIndex != Object.stardrop)
             {
-                Rectangle sourceRect = Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.parentSheetIndex, 16, 16);
+                Rectangle sourceRect = Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, 16, 16);
                 TemporaryAnimatedSprite tempAnimation = Game1.player.currentLocation.TemporarySprites.LastOrDefault(p => p.Texture == Game1.objectSpriteSheet && p.sourceRect == sourceRect);
                 if (tempAnimation != null)
                     this.ItemAnimations.Add(tempAnimation);

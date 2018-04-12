@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -107,7 +107,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="tree">The tree object.</param>
         private static string GetName(ITranslationHelper translations, Tree tree)
         {
-            TreeType type = (TreeType)tree.treeType;
+            TreeType type = (TreeType)tree.treeType.Value;
             switch (type)
             {
                 case TreeType.Maple:
@@ -135,7 +135,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 let otherTree = location.terrainFeatures.ContainsKey(adjacentTile)
                     ? location.terrainFeatures[adjacentTile] as Tree
                     : null
-                select otherTree != null && otherTree.growthStage >= (int)WildTreeGrowthStage.SmallTree
+                select otherTree != null && otherTree.growthStage.Value >= (int)WildTreeGrowthStage.SmallTree
             ).Any(p => p);
         }
     }

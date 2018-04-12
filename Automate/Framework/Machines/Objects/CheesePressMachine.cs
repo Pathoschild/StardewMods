@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 438,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 426, null, false, true, false, false) { quality = SObject.highQuality },
+                output: input => new SObject(Vector2.Zero, 426, null, false, true, false, false) { Quality = SObject.highQuality },
                 minutes: 200
             ),
 
@@ -40,7 +40,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 186,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 424, "Cheese (=)", false, true, false, false) { quality = SObject.highQuality },
+                output: input => new SObject(Vector2.Zero, 424, "Cheese (=)", false, true, false, false) { Quality = SObject.highQuality },
                 minutes: 200
             )
         };
@@ -61,8 +61,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             if (input.TryGetIngredient(this.Recipes, out IConsumable consumable, out Recipe recipe))
             {
-                this.Machine.heldObject = recipe.Output(consumable.Take());
-                this.Machine.minutesUntilReady = recipe.Minutes;
+                this.Machine.heldObject.Value = recipe.Output(consumable.Take());
+                this.Machine.MinutesUntilReady = recipe.Minutes;
                 return true;
             }
 

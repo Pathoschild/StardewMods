@@ -34,6 +34,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         public override Rectangle GetSpriteArea()
         {
             NPC npc = (NPC)this.Value;
+            AnimatedSprite sprite = npc.Sprite;
             var boundingBox = npc.GetBoundingBox(); // the 'occupied' area at the NPC's feet
 
             // calculate y origin
@@ -43,18 +44,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             else if (npc is Bat)
                 yOrigin = boundingBox.Center.Y;
             else if (npc is Bug)
-                yOrigin = boundingBox.Top - npc.sprite.spriteHeight * Game1.pixelZoom + (float)(System.Math.Sin(Game1.currentGameTime.TotalGameTime.Milliseconds / 1000.0 * (2.0 * System.Math.PI)) * 10.0);
+                yOrigin = boundingBox.Top - sprite.spriteHeight * Game1.pixelZoom + (float)(System.Math.Sin(Game1.currentGameTime.TotalGameTime.Milliseconds / 1000.0 * (2.0 * System.Math.PI)) * 10.0);
             else if (npc is SquidKid squidKid)
             {
                 int yOffset = this.Reflection.GetField<int>(squidKid, "yOffset").GetValue();
-                yOrigin = boundingBox.Bottom - npc.sprite.spriteHeight * Game1.pixelZoom + yOffset;
+                yOrigin = boundingBox.Bottom - sprite.spriteHeight * Game1.pixelZoom + yOffset;
             }
             else
                 yOrigin = boundingBox.Top;
 
             // get bounding box
-            int height = npc.sprite.spriteHeight * Game1.pixelZoom;
-            int width = npc.sprite.spriteWidth * Game1.pixelZoom;
+            int height = sprite.spriteHeight * Game1.pixelZoom;
+            int width = sprite.spriteWidth * Game1.pixelZoom;
             float x = boundingBox.Center.X - (width / 2);
             float y = yOrigin + boundingBox.Height - height + npc.yJumpOffset * 2;
 
@@ -68,6 +69,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         public override bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea)
         {
             NPC npc = (NPC)this.Value;
+            AnimatedSprite sprite = npc.Sprite;
 
             // allow any part of the sprite area for monsters
             // (Monsters have complicated and inconsistent sprite behaviour which isn't really
@@ -78,7 +80,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 
             // check sprite for non-monster NPCs
             SpriteEffects spriteEffects = npc.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            return this.SpriteIntersectsPixel(tile, position, spriteArea, npc.sprite.Texture, npc.sprite.sourceRect, spriteEffects);
+            return this.SpriteIntersectsPixel(tile, position, spriteArea, sprite.Texture, sprite.sourceRect, spriteEffects);
         }
     }
 }

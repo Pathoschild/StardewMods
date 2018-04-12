@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             FarmAnimal animal = this.Target;
 
             // calculate maturity
-            bool isFullyGrown = animal.age >= animal.ageWhenMature;
+            bool isFullyGrown = animal.age.Value >= animal.ageWhenMature.Value;
             int daysUntilGrown = 0;
             SDate dayOfMaturity = null;
             if (!isFullyGrown)
@@ -55,7 +55,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new PercentageBarField(this.Translate(L10n.Animal.Happiness), animal.happiness, byte.MaxValue, Color.Green, Color.Gray, this.Translate(L10n.Generic.Percent, new { percent = Math.Round(animal.happiness / (metadata.Constants.AnimalMaxHappiness * 1f) * 100) }));
             yield return new GenericField(this.Translate(L10n.Animal.Mood), animal.getMoodMessage());
             yield return new GenericField(this.Translate(L10n.Animal.Complaints), this.GetMoodReason(animal));
-            yield return new ItemIconField(this.Translate(L10n.Animal.ProduceReady), animal.currentProduce > 0 ? GameHelper.GetObjectBySpriteIndex(animal.currentProduce) : null);
+            yield return new ItemIconField(this.Translate(L10n.Animal.ProduceReady), animal.currentProduce.Value > 0 ? GameHelper.GetObjectBySpriteIndex(animal.currentProduce.Value) : null);
             if (!isFullyGrown)
                 yield return new GenericField(this.Translate(L10n.Animal.Growth), $"{this.Translate(L10n.Generic.Days, new { count = daysUntilGrown })} ({this.Stringify(dayOfMaturity)})");
             yield return new GenericField(this.Translate(L10n.Animal.SellsFor), GenericField.GetSaleValueString(animal.getSellPrice(), 1, this.Text));

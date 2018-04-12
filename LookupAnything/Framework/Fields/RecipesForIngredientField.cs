@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -64,7 +64,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                         Name = name,
                         Type = recipe.DisplayType,
                         IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
-                        NumberRequired = recipe.Ingredients.ContainsKey(ingredient.parentSheetIndex) ? recipe.Ingredients[ingredient.parentSheetIndex] : recipe.Ingredients[ingredient.category],
+                        NumberRequired = recipe.Ingredients.ContainsKey(ingredient.ParentSheetIndex) ? recipe.Ingredients[ingredient.ParentSheetIndex] : recipe.Ingredients[ingredient.Category],
                         Item = output
                     }
                 )

@@ -1,8 +1,10 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
+using Object = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 {
@@ -37,11 +39,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             if (obj is Furniture furniture)
                 return this.GetSpriteArea(boundingBox, furniture.sourceRect);
             if (obj.bigCraftable)
-                return this.GetSpriteArea(boundingBox, Object.getSourceRectForBigCraftable(obj.parentSheetIndex));
+                return this.GetSpriteArea(boundingBox, Object.getSourceRectForBigCraftable(obj.ParentSheetIndex));
             if (obj is Fence fence)
                 return this.GetSpriteArea(boundingBox, this.GetSourceRectangle(fence, Game1.currentLocation));
             else
-                return this.GetSpriteArea(boundingBox, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.parentSheetIndex, Object.spriteSheetTileSize, Object.spriteSheetTileSize));
+                return this.GetSpriteArea(boundingBox, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, Object.spriteSheetTileSize, Object.spriteSheetTileSize));
         }
 
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>
@@ -68,16 +70,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             else if (obj.bigCraftable)
             {
                 spriteSheet = Game1.bigCraftableSpriteSheet;
-                sourceRectangle = Object.getSourceRectForBigCraftable(obj.parentSheetIndex);
+                sourceRectangle = Object.getSourceRectForBigCraftable(obj.ParentSheetIndex);
             }
             else
             {
                 spriteSheet = Game1.objectSpriteSheet;
-                sourceRectangle = Game1.currentLocation.getSourceRectForObject(obj.ParentSheetIndex);
+                sourceRectangle = GameLocation.getSourceRectForObject(obj.ParentSheetIndex);
             }
 
             // check pixel from sprite sheet
-            SpriteEffects spriteEffects = obj.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            SpriteEffects spriteEffects = obj.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             return this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, sourceRectangle, spriteEffects);
         }
 
@@ -88,10 +90,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         private Rectangle GetSourceRectangle(Fence fence, GameLocation location)
         {
             int spriteID = 1;
-            if (fence.health > 1.0)
+            if (fence.health.Value > 1.0)
             {
                 int index = 0;
-                Vector2 tile = fence.tileLocation;
+                Vector2 tile = fence.TileLocation;
 
                 // connected to right fence
                 tile.X += 1;
@@ -116,16 +118,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
                 if (fence.isGate)
                 {
                     if (index == 110)
-                        return new Rectangle(fence.gatePosition == Fence.gateOpenedPosition ? 24 : 0, 128, 24, 32);
+                        return new Rectangle(fence.gatePosition.Value == Fence.gateOpenedPosition ? 24 : 0, 128, 24, 32);
                     if (index == 1500)
-                        return new Rectangle(fence.gatePosition == Fence.gateClosedPosition ? 16 : 0, 160, 16, 16);
+                        return new Rectangle(fence.gatePosition.Value == Fence.gateClosedPosition ? 16 : 0, 160, 16, 16);
                     spriteID = Fence.sourceRectForSoloGate;
                 }
                 else
                     spriteID = Fence.fenceDrawGuide[index];
             }
 
-            Texture2D texture = this.Reflection.GetField<Texture2D>(fence, "fenceTexture").GetValue();
+            Texture2D texture = this.Reflection.GetField<Lazy<Texture2D>>(fence, "fenceTexture").GetValue().Value;
             return new Rectangle(spriteID * Fence.fencePieceWidth % texture.Bounds.Width, spriteID * Fence.fencePieceWidth / texture.Bounds.Width * Fence.fencePieceHeight, Fence.fencePieceWidth, Fence.fencePieceHeight);
         }
     }

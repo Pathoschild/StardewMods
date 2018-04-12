@@ -61,10 +61,11 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
         /// <param name="player">The player.</param>
         /// <param name="npc">The NPC.</param>
+        /// <param name="friendship">The current friendship data.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static FriendshipModel GetFriendshipForVillager(SFarmer player, NPC npc, Metadata metadata)
+        public static FriendshipModel GetFriendshipForVillager(SFarmer player, NPC npc, Friendship friendship, Metadata metadata)
         {
-            return new FriendshipModel(player, npc, metadata.Constants);
+            return new FriendshipModel(player, npc, friendship, metadata.Constants);
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
@@ -238,7 +239,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <remarks>Derived from the <see cref="CraftingRecipe.createItem"/>.</remarks>
         public static IEnumerable<ObjectModel> GetObjects(IMonitor monitor)
         {
-            Dictionary<int, string> data = Game1.objectInformation;
+            IDictionary<int, string> data = Game1.objectInformation;
 
             foreach (var pair in data)
             {
@@ -317,14 +318,14 @@ namespace Pathoschild.Stardew.LookupAnything
             recipes.AddRange(
                 from entry in metadata.MachineRecipes
                 let machine = new SObject(Vector2.Zero, entry.MachineID)
-                select new RecipeModel(null, machine.DisplayName, entry.Ingredients, ingredient => DataParser.CreateRecipeItem(ingredient.parentSheetIndex, entry.Output), false, entry.ExceptIngredients)
+                select new RecipeModel(null, machine.DisplayName, entry.Ingredients, ingredient => DataParser.CreateRecipeItem(ingredient.ParentSheetIndex, entry.Output), false, entry.ExceptIngredients)
             );
 
             // building recipes
             recipes.AddRange(
                 from entry in metadata.BuildingRecipes
                 let building = new BluePrint(entry.BuildingKey)
-                select new RecipeModel(null, building.displayName, entry.Ingredients, ingredient => DataParser.CreateRecipeItem(ingredient.parentSheetIndex, entry.Output), false, entry.ExceptIngredients)
+                select new RecipeModel(null, building.displayName, entry.Ingredients, ingredient => DataParser.CreateRecipeItem(ingredient.ParentSheetIndex, entry.Output), false, entry.ExceptIngredients)
             );
 
             return recipes.ToArray();
@@ -342,20 +343,20 @@ namespace Pathoschild.Stardew.LookupAnything
             switch (outputID)
             {
                 case 342:
-                    item.preserve = SObject.PreserveType.Pickle;
-                    item.preservedParentSheetIndex = inputID;
+                    item.preserve.Value = SObject.PreserveType.Pickle;
+                    item.preservedParentSheetIndex.Value = inputID;
                     break;
                 case 344:
-                    item.preserve = SObject.PreserveType.Jelly;
-                    item.preservedParentSheetIndex = inputID;
+                    item.preserve.Value = SObject.PreserveType.Jelly;
+                    item.preservedParentSheetIndex.Value = inputID;
                     break;
                 case 348:
-                    item.preserve = SObject.PreserveType.Wine;
-                    item.preservedParentSheetIndex = inputID;
+                    item.preserve.Value = SObject.PreserveType.Wine;
+                    item.preservedParentSheetIndex.Value = inputID;
                     break;
                 case 350:
-                    item.preserve = SObject.PreserveType.Juice;
-                    item.preservedParentSheetIndex = inputID;
+                    item.preserve.Value = SObject.PreserveType.Juice;
+                    item.preservedParentSheetIndex.Value = inputID;
                     break;
             }
             return item;

@@ -39,6 +39,13 @@
   "quality.gold": "Oro",
   "quality.iridium": "Iridio",
 
+  // NPC friendship // TODO
+  "friendship-status.friendly": "Friendly",
+  "friendship-status.dating": "Dating",
+  "friendship-status.engaged": "Engaged",
+  "friendship-status.married": "Married",
+  "friendship-status.divorced": "Divorced",
+
   /*********
   ** Data translations
   *********/

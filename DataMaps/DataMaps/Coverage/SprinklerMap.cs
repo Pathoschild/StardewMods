@@ -131,7 +131,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         /// <param name="obj">The map object.</param>
         private bool IsSprinkler(Object obj)
         {
-            return obj != null && this.StaticTilesBySprinklerID.ContainsKey(obj.parentSheetIndex);
+            return obj != null && this.StaticTilesBySprinklerID.ContainsKey(obj.ParentSheetIndex);
         }
 
         /// <summary>Get whether a map terrain feature is a crop.</summary>
@@ -224,8 +224,8 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         private IEnumerable<Vector2> GetCoverage(Object sprinkler, Vector2 origin, IDictionary<int, Vector2[]> radii)
         {
             // get relative tiles
-            if (!radii.TryGetValue(sprinkler.parentSheetIndex, out Vector2[] tiles))
-                throw new NotSupportedException($"Unknown sprinkler ID {sprinkler.parentSheetIndex}.");
+            if (!radii.TryGetValue(sprinkler.ParentSheetIndex, out Vector2[] tiles))
+                throw new NotSupportedException($"Unknown sprinkler ID {sprinkler.ParentSheetIndex}.");
 
             // get tiles
             foreach (Vector2 tile in tiles)

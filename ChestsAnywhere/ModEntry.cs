@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         ** State
         ****/
         /// <summary>The selected in-game inventory.</summary>
-        private List<Item> SelectedInventory;
+        private IList<Item> SelectedInventory;
 
         /// <summary>The menu overlay which lets the player navigate and edit chests.</summary>
         private ManageChestOverlay ManageChestOverlay;

@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 {
@@ -652,6 +653,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
         public static string For(ItemQuality quality)
         {
             return $"quality.{quality.GetName()}";
+        }
+
+        /// <summary>Get a translation key for an enum value.</summary>
+        /// <param name="status">The friendship status.</param>
+        public static string For(FriendshipStatus status)
+        {
+            return $"friendship-status.{status.ToString().ToLower()}";
         }
 
         /// <summary>Get a translation key for an enum value.</summary>

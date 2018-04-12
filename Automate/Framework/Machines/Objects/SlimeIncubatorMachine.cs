@@ -61,7 +61,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <remarks>The slime incubator does not produce an output object, so it is never done.</remarks>
         public override MachineState GetState()
         {
-            return this.Machine.heldObject != null
+            return this.Machine.heldObject.Value != null
                 ? MachineState.Processing
                 : MachineState.Empty;
         }
@@ -80,7 +80,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             bool started = this.GenericPullRecipe(input, this.Recipes);
             if (started)
-                this.Machine.parentSheetIndex = 157;
+                this.Machine.ParentSheetIndex = 157;
             return started;
         }
     }

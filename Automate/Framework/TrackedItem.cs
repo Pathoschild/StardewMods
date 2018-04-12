@@ -103,9 +103,9 @@ namespace Pathoschild.Stardew.Automate.Framework
                 // fix some fields not copied by getOne()
                 stackObj.name = originalObj.name;
                 stackObj.DisplayName = originalObj.DisplayName;
-                stackObj.preserve = originalObj.preserve;
-                stackObj.preservedParentSheetIndex = originalObj.preservedParentSheetIndex;
-                stackObj.honeyType = originalObj.honeyType;
+                stackObj.preserve.Value = originalObj.preserve.Value;
+                stackObj.preservedParentSheetIndex.Value = originalObj.preservedParentSheetIndex.Value;
+                stackObj.honeyType.Value = originalObj.honeyType.Value;
             }
 
             return stack;

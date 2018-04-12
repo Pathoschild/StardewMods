@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
@@ -47,10 +48,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         {
             // get tree
             Tree tree = (Tree)this.Value;
-            WildTreeGrowthStage growth = (WildTreeGrowthStage)tree.growthStage;
+            WildTreeGrowthStage growth = (WildTreeGrowthStage)tree.growthStage.Value;
 
             // get sprite data
-            Texture2D spriteSheet = this.Reflection.GetField<Texture2D>(tree, "texture").GetValue();
+            Texture2D spriteSheet = this.Reflection.GetField<Lazy<Texture2D>>(tree, "texture").GetValue().Value;
             SpriteEffects spriteEffects = tree.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             // check tree sprite
@@ -81,9 +82,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
                 return Tree.stumpSourceRect;
 
             // growing tree
-            if (tree.growthStage < 5)
+            if (tree.growthStage.Value < 5)
             {
-                switch ((WildTreeGrowthStage)tree.growthStage)
+                switch ((WildTreeGrowthStage)tree.growthStage.Value)
                 {
                     case WildTreeGrowthStage.Seed:
                         return new Rectangle(32, 128, 16, 16);

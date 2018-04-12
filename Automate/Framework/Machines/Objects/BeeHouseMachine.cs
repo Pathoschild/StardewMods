@@ -79,12 +79,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             }
 
             // build object
-            SObject result = new SObject(output.parentSheetIndex, output.stack)
+            SObject result = new SObject(output.ParentSheetIndex, output.Stack)
             {
                 name = $"{prefix} Honey",
-                price = output.price + addedPrice,
-                honeyType = type
+                Price = output.Price + addedPrice
             };
+            result.honeyType.Value = type;
 
             // yield
             return new TrackedItem(result, onEmpty: this.Reset);
@@ -108,10 +108,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             SObject machine = this.Machine;
 
-            machine.heldObject = new SObject(Vector2.Zero, 340, null, false, true, false, false);
-            machine.minutesUntilReady = 2400 - Game1.timeOfDay + 4320;
-            machine.readyForHarvest = false;
-            machine.showNextIndex = false;
+            machine.heldObject.Value = new SObject(Vector2.Zero, 340, null, false, true, false, false);
+            machine.MinutesUntilReady = 2400 - Game1.timeOfDay + 4320;
+            machine.readyForHarvest.Value = false;
+            machine.showNextIndex.Value = false;
         }
 
         /// <summary>Get the closest flower within range of the given beehive.</summary>
@@ -133,7 +133,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 {
                     // check for fully-grown tile on the current tile
                     Vector2 curTile = queue.Dequeue();
-                    if (location.terrainFeatures.ContainsKey(curTile) && location.terrainFeatures[curTile] is HoeDirt dirt && dirt.crop != null && dirt.crop.programColored && dirt.crop.currentPhase >= dirt.crop.phaseDays.Count - 1 && !dirt.crop.dead)
+                    if (location.terrainFeatures.ContainsKey(curTile) && location.terrainFeatures[curTile] is HoeDirt dirt && dirt.crop != null && dirt.crop.programColored && dirt.crop.currentPhase.Value >= dirt.crop.phaseDays.Count - 1 && !dirt.crop.dead)
                         return dirt.crop;
 
                     // try surrounding tiles

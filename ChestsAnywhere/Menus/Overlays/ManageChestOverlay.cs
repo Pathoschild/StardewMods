@@ -166,7 +166,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>Sort the player's inventory.</summary>
         public void SortInventory()
         {
-            ItemGrabMenu.organizeItemsInList(Game1.player.items);
+            ItemGrabMenu.organizeItemsInList(Game1.player.Items);
             Game1.playSound("Ship");
         }
 

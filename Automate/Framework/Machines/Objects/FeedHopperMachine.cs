@@ -45,7 +45,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 
             // try to add hay (178) until full
             bool anyPulled = false;
-            foreach (ITrackedStack stack in input.GetItems().Where(p => p.Sample.parentSheetIndex == 178))
+            foreach (ITrackedStack stack in input.GetItems().Where(p => p.Sample.ParentSheetIndex == 178))
             {
                 // get free space
                 int space = this.GetFreeSpace(farm);

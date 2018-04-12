@@ -17,12 +17,16 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: SObject.FruitsCategory,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 344, input.Name + " Jelly", false, true, false, false)
+                output: input =>
                 {
-                    Price = 50 + ((SObject) input).Price * 2,
-                    name = input.Name + " Jelly",
-                    preserve = SObject.PreserveType.Jelly,
-                    preservedParentSheetIndex = input.parentSheetIndex
+                    SObject jelly = new SObject(Vector2.Zero, 344, input.Name + " Jelly", false, true, false, false)
+                    {
+                        Price = 50 + ((SObject) input).Price * 2,
+                        name = input.Name + " Jelly"
+                    };
+                    jelly.preserve.Value = SObject.PreserveType.Jelly;
+                    jelly.preservedParentSheetIndex.Value = input.ParentSheetIndex;
+                    return jelly;
                 },
                 minutes: 4000
             ),
@@ -31,12 +35,17 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: SObject.VegetableCategory,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 342, "Pickled " + input.Name, false, true, false, false)
+                output: input =>
                 {
-                    Price = 50 + ((SObject)input).Price * 2,
-                    name = "Pickled " + input.Name,
-                    preserve = SObject.PreserveType.Pickle,
-                    preservedParentSheetIndex = input.parentSheetIndex
+                    SObject item = new SObject(Vector2.Zero, 342, "Pickled " + input.Name, false, true, false, false)
+                    {
+                        Price = 50 + ((SObject) input).Price * 2,
+                        name = "Pickled " + input.Name
+                    };
+                    item.preserve.Value = SObject.PreserveType.Pickle;
+                    item.preservedParentSheetIndex.Value = input.ParentSheetIndex;
+                    return item;
+
                 },
                 minutes: 4000
             )

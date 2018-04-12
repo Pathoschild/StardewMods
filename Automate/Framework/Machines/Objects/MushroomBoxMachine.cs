@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
         {
-            return this.Machine.heldObject != null && this.Machine.readyForHarvest
+            return this.Machine.heldObject.Value != null && this.Machine.readyForHarvest
                 ? MachineState.Done
                 : MachineState.Processing;
         }
@@ -45,7 +45,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         private void Reset(Item item)
         {
             this.GenericReset(item);
-            this.Machine.showNextIndex = false;
+            this.Machine.showNextIndex.Value = false;
         }
     }
 }

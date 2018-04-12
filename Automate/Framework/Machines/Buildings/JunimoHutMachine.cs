@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 {
@@ -13,6 +14,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         *********/
         /// <summary>The underlying Junimo hut.</summary>
         private readonly JunimoHut Hut;
+
+        /// <summary>The Junimo hut's output chest.</summary>
+        private Chest Output => this.Hut.output.Value;
 
 
         /*********
@@ -28,7 +32,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Get the machine's processing state.</summary>
         public MachineState GetState()
         {
-            if (this.Hut.output.items.Any())
+            if (this.Output.items.Any())
                 return MachineState.Done;
             return MachineState.Processing;
         }
@@ -36,7 +40,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Get the machine output.</summary>
         public ITrackedStack GetOutput()
         {
-            List<Item> inventory = this.Hut.output.items;
+            IList<Item> inventory = this.Output.items;
             return new TrackedItem(inventory.FirstOrDefault(), onEmpty: item => inventory.Remove(item));
         }
 

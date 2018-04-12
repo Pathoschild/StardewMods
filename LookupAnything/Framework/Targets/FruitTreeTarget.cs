@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             int width = sprite.Width * Game1.pixelZoom;
             int height = sprite.Height * Game1.pixelZoom;
             int x, y;
-            if (tree.growthStage < 4)
+            if (tree.growthStage.Value < 4)
             {
                 // apply crazy offset logic for growing fruit trees
                 Vector2 tile = this.GetTile();
@@ -78,7 +78,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
                 return new Rectangle(384, tree.treeType * 5 * 16 + 48, 48, 32);
 
             // growing tree
-            if (tree.growthStage < 4)
+            if (tree.growthStage.Value < 4)
             {
                 switch (tree.growthStage)
                 {
@@ -94,7 +94,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             }
 
             // grown tree
-            return new Rectangle((12 + (tree.greenHouseTree ? 1 : Utility.getSeasonNumber(Game1.currentSeason)) * 3) * 16, tree.treeType * 5 * 16, 48, 16 + 64);
+            return new Rectangle((12 + (tree.GreenHouseTree ? 1 : Utility.getSeasonNumber(Game1.currentSeason)) * 3) * 16, tree.treeType * 5 * 16, 48, 16 + 64);
         }
     }
 }

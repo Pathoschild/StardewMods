@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return this.Config.Enable && item?.category == SObject.fertilizerCategory;
+            return this.Config.Enable && item?.Category == SObject.fertilizerCategory;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return false;
 
             // get dirt
-            if (!(tileFeature is HoeDirt dirt) || dirt.fertilizer != HoeDirt.noFertilizer)
+            if (!(tileFeature is HoeDirt dirt) || dirt.fertilizer.Value != HoeDirt.noFertilizer)
                 return false;
 
             // ignore if there's a giant crop, meteorite, etc covering the tile
@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return false;
 
             // apply fertiliser
-            dirt.fertilizer = item.parentSheetIndex;
+            dirt.fertilizer.Value = item.ParentSheetIndex;
             this.ConsumeItem(player, item);
             return true;
         }

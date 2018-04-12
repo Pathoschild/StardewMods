@@ -73,7 +73,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                     return this.UseToolOnTile(tool, tile);
 
                 // clear dead crops
-                if (this.Config.ClearDeadCrops && dirt.crop?.dead == true)
+                if (this.Config.ClearDeadCrops && dirt.crop != null && dirt.crop.dead.Value)
                     return this.UseToolOnTile(tool, tile);
             }
 
@@ -83,7 +83,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             if (this.Config.ClearBouldersAndMeteorites)
             {
                 ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile);
-                if (clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex) && tool.upgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex])
+                if (clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex) && tool.UpgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex])
                     this.UseToolOnTile(tool, tile);
             }
 

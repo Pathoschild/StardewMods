@@ -14,6 +14,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The callback to invoke when the player mounts the tractor.</summary>
         private readonly Action OnMount;
 
+        /// <summary>Whether the tractor can appear in social contexts.</summary>
+        public override bool CanSocialize => false;
+
 
         /*********
         ** Public methods
@@ -27,16 +30,16 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         public TractorStatic(string name, int tileX, int tileY, AnimatedSprite sprite, Action onMount)
         {
             // set basic info
-            this.name = name;
+            this.Name = name;
             this.setTilePosition(tileX, tileY);
-            this.sprite = sprite;
+            this.Sprite = sprite;
             this.OnMount = onMount;
 
             // configure NPC to match horse
-            this.breather = false;
+            this.Breather = false;
             this.willDestroyObjectsUnderfoot = false;
-            this.hideShadow = true;
-            this.drawOffset = new Vector2(-Game1.tileSize / 4, 0.0f);
+            this.HideShadow = true;
+            this.drawOffset.Value = new Vector2(-Game1.tileSize / 4, 0.0f);
             this.faceDirection(3);
         }
 

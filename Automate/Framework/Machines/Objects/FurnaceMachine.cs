@@ -78,7 +78,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             {
                 coal.Reduce();
                 this.Machine.initializeLightSource(this.Tile);
-                this.Machine.showNextIndex = true;
+                this.Machine.showNextIndex.Value = true;
                 return true;
             }
             return false;

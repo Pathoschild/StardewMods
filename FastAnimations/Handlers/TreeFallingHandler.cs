@@ -41,23 +41,23 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         {
             this.Trees =
                 (
-                    from pair in location.terrainFeatures
-                    let tree = pair.Value as Tree
-                    let fruitTree = pair.Value as FruitTree
+                    from pair in location.terrainFeatures.FieldDict
+                    let tree = pair.Value.Value as Tree
+                    let fruitTree = pair.Value.Value as FruitTree
                     where
                         (
                             tree != null
                             && !tree.stump
-                            && tree.growthStage > Tree.bushStage
+                            && tree.growthStage.Value > Tree.bushStage
                         )
                         || (
                             fruitTree != null
                             && !fruitTree.stump
-                            && fruitTree.growthStage > FruitTree.bushStage
+                            && fruitTree.growthStage.Value > FruitTree.bushStage
                         )
                     select pair
                 )
-                .ToDictionary(p => p.Key, p => p.Value);
+                .ToDictionary(p => p.Key, p => p.Value.Value);
         }
 
         /// <summary>Get whether the animation is currently active.</summary>
@@ -76,7 +76,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
                 // speed up animation
                 GameTime gameTime = Game1.currentGameTime;
                 for (int i = 1; i < this.Multiplier; i++)
-                    pair.Value.tickUpdate(gameTime, pair.Key);
+                    pair.Value.tickUpdate(gameTime, pair.Key, Game1.currentLocation);
             }
         }
 

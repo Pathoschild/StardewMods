@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return this.Config.Enable && item?.category == SObject.SeedsCategory;
+            return this.Config.Enable && item?.Category == SObject.SeedsCategory;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return false;
 
             // sow seeds
-            bool sowed = dirt.plant(item.parentSheetIndex, (int)tile.X, (int)tile.Y, player);
+            bool sowed = dirt.plant(item.ParentSheetIndex, (int)tile.X, (int)tile.Y, player, false, location);
             if (sowed)
                 this.ConsumeItem(player, item);
             return sowed;

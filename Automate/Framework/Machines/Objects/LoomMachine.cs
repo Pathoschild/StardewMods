@@ -36,9 +36,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             SObject machine = this.Machine;
             return new TrackedItem(machine.heldObject, item =>
             {
-                machine.heldObject = null;
-                machine.readyForHarvest = false;
-                machine.showNextIndex = false;
+                machine.heldObject.Value = null;
+                machine.readyForHarvest.Value = false;
+                machine.showNextIndex.Value = false;
             });
         }
 

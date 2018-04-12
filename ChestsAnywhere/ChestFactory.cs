@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Netcode;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using Pathoschild.Stardew.Common;
@@ -10,6 +11,7 @@ using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.ChestsAnywhere
 {
@@ -56,11 +58,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     // chests in location
                     {
                         int namelessChests = 0;
-                        foreach (KeyValuePair<Vector2, Object> pair in location.Objects)
+                        foreach (KeyValuePair<Vector2, NetRef<Object>> pair in location.Objects.FieldDict)
                         {
                             Vector2 tile = pair.Key;
-                            if (pair.Value is Chest chest && chest.playerChest)
-                                yield return new ManagedChest(new ChestContainer(chest), location, tile, this.Translations.Get("default-name.chest", new { number = ++namelessChests }));
+                            SObject obj = pair.Value;
+                            if (obj is Chest chest && chest.playerChest)
+                                yield return new ManagedChest(new ChestContainer(chest, this.Reflection), location, tile, this.Translations.Get("default-name.chest", new { number = ++namelessChests }));
                         }
                     }
 
@@ -69,7 +72,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     {
                         Chest fridge = house.fridge;
                         if (fridge != null)
-                            yield return new ManagedChest(new ChestContainer(fridge), location, Vector2.Zero, this.Translations.Get("default-name.fridge"));
+                            yield return new ManagedChest(new ChestContainer(fridge, this.Reflection), location, Vector2.Zero, this.Translations.Get("default-name.fridge"));
                     }
 
                     // buildings
@@ -79,7 +82,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         foreach (Building building in buildableLocation.buildings)
                         {
                             if (building is JunimoHut hut)
-                                yield return new ManagedChest(new JunimoHutContainer(hut), location, new Vector2(hut.tileX, hut.tileY), this.Translations.Get("default-name.junimo-hut", new { number = ++namelessHuts }));
+                                yield return new ManagedChest(new JunimoHutContainer(hut, this.Reflection), location, new Vector2(hut.tileX, hut.tileY), this.Translations.Get("default-name.junimo-hut", new { number = ++namelessHuts }));
                         }
                     }
 
@@ -122,7 +125,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // get from opened inventory
             {
                 object target = menu.behaviorOnItemGrab?.Target;
-                List<Item> inventory = (target as Chest)?.items ?? (target as IContainer)?.Inventory;
+                IList<Item> inventory = (target as Chest)?.items ?? (target as IContainer)?.Inventory;
                 if (inventory != null)
                 {
                     ManagedChest chest = this.GetChests(range).FirstOrDefault(p => p.Container.IsSameAs(inventory));

@@ -19,7 +19,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Get the machine's processing state.</summary>
         public virtual MachineState GetState()
         {
-            if (this.Machine.heldObject == null)
+            if (this.Machine.heldObject.Value == null)
                 return MachineState.Empty;
 
             return this.Machine.readyForHarvest
@@ -53,8 +53,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="item">The output item that was taken.</param>
         protected void GenericReset(Item item)
         {
-            this.Machine.heldObject = null;
-            this.Machine.readyForHarvest = false;
+            this.Machine.heldObject.Value = null;
+            this.Machine.readyForHarvest.Value = false;
         }
 
         /// <summary>Generic logic to pull items from storage based on the given recipes.</summary>
@@ -64,8 +64,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             if (storage.TryGetIngredient(recipes, out IConsumable consumable, out Recipe recipe))
             {
-                this.Machine.heldObject = recipe.Output(consumable.Take());
-                this.Machine.minutesUntilReady = recipe.Minutes;
+                this.Machine.heldObject.Value = recipe.Output(consumable.Take());
+                this.Machine.MinutesUntilReady = recipe.Minutes;
                 return true;
             }
             return false;

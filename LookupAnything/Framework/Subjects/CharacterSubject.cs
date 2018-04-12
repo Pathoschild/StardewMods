@@ -75,7 +75,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 case TargetType.Villager:
                     // special NPCs like Gunther
-                    if (metadata.Constants.AsocialVillagers.Contains(npc.name))
+                    if (metadata.Constants.AsocialVillagers.Contains(npc.Name))
                     {
                         // no data
                     }
@@ -89,7 +89,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                         // age
                         {
-                            ChildAge stage = (ChildAge)child.age;
+                            ChildAge stage = (ChildAge)child.Age;
                             int daysOld = child.daysOld;
                             int daysToNext = this.GetDaysToNextChildGrowth(stage, daysOld);
                             bool isGrown = daysToNext == -1;
@@ -105,11 +105,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         }
 
                         // friendship
-                        if (Game1.player.friendships.ContainsKey(child.name))
+                        if (Game1.player.friendshipData.ContainsKey(child.Name))
                         {
-                            FriendshipModel friendship = DataParser.GetFriendshipForVillager(Game1.player, child, metadata);
+                            FriendshipModel friendship = DataParser.GetFriendshipForVillager(Game1.player, child, Game1.player.friendshipData[child.Name], metadata);
                             yield return new CharacterFriendshipField(this.Translate(L10n.Npc.Friendship), friendship, this.Text);
-                            yield return new GenericField(this.Translate(L10n.Npc.TalkedToday), this.Stringify(Game1.player.friendships[child.name][2] == 1));
+                            yield return new GenericField(this.Translate(L10n.Npc.TalkedToday), this.Stringify(Game1.player.friendshipData[child.Name].TalkedToToday));
                         }
                     }
 
@@ -117,22 +117,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     else
                     {
                         // birthday
-                        if (npc.birthday_Season != null)
+                        if (npc.Birthday_Season != null)
                         {
-                            SDate birthday = new SDate(npc.birthday_Day, npc.birthday_Season);
+                            SDate birthday = new SDate(npc.Birthday_Day, npc.Birthday_Season);
                             yield return new GenericField(this.Text.Get(L10n.Npc.Birthday), this.Text.Stringify(birthday));
                         }
 
                         // friendship
-                        if (Game1.player.friendships.ContainsKey(npc.name))
+                        if (Game1.player.friendshipData.ContainsKey(npc.Name))
                         {
-                            FriendshipModel friendship = DataParser.GetFriendshipForVillager(Game1.player, npc, metadata);
-                            yield return new GenericField(this.Translate(L10n.Npc.CanRomance), friendship.IsSpouse ? this.Translate(L10n.Npc.CanRomanceMarried) : this.Stringify(npc.datable));
+                            FriendshipModel friendship = DataParser.GetFriendshipForVillager(Game1.player, npc, Game1.player.friendshipData[npc.Name], metadata);
+                            yield return new GenericField(this.Translate(L10n.Npc.CanRomance), friendship.IsSpouse ? this.Translate(L10n.Npc.CanRomanceMarried) : this.Stringify(friendship.CanDate));
                             yield return new CharacterFriendshipField(this.Translate(L10n.Npc.Friendship), friendship, this.Text);
-                            yield return new GenericField(this.Translate(L10n.Npc.TalkedToday), this.Stringify(Game1.player.friendships[npc.name][2] == 1));
-                            yield return new GenericField(this.Translate(L10n.Npc.GiftedToday), this.Stringify(Game1.player.friendships[npc.name][3] > 0));
+                            yield return new GenericField(this.Translate(L10n.Npc.TalkedToday), this.Stringify(friendship.TalkedToday));
+                            yield return new GenericField(this.Translate(L10n.Npc.GiftedToday), this.Stringify(friendship.GiftsToday > 0));
                             if (!friendship.IsSpouse)
-                                yield return new GenericField(this.Translate(L10n.Npc.GiftedThisWeek), this.Translate(L10n.Generic.Ratio, new { value = Game1.player.friendships[npc.name][1], max = NPC.maxGiftsPerWeek }));
+                                yield return new GenericField(this.Translate(L10n.Npc.GiftedThisWeek), this.Translate(L10n.Generic.Ratio, new { value = friendship.GiftsThisWeek, max = NPC.maxGiftsPerWeek }));
                         }
                         else
                             yield return new GenericField(this.Translate(L10n.Npc.Friendship), this.Translate(L10n.Npc.FriendshipNotMet));
@@ -154,14 +154,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     // basic info
                     Monster monster = (Monster)npc;
                     yield return new GenericField(this.Translate(L10n.Monster.Invincible), this.Translate(L10n.Generic.Seconds, new { count = this.Reflection.GetField<int>(monster, "invincibleCountdown").GetValue() }), hasValue: monster.isInvincible());
-                    yield return new PercentageBarField(this.Translate(L10n.Monster.Health), monster.health, monster.maxHealth, Color.Green, Color.Gray, this.Translate(L10n.Generic.PercentRatio, new { percent = Math.Round((monster.health / (monster.maxHealth * 1f) * 100)), value = monster.health, max = monster.maxHealth }));
+                    yield return new PercentageBarField(this.Translate(L10n.Monster.Health), monster.Health, monster.MaxHealth, Color.Green, Color.Gray, this.Translate(L10n.Generic.PercentRatio, new { percent = Math.Round((monster.Health / (monster.MaxHealth * 1f) * 100)), value = monster.Health, max = monster.MaxHealth }));
                     yield return new ItemDropListField(this.Translate(L10n.Monster.Drops), this.GetMonsterDrops(monster), this.Text, defaultText: this.Translate(L10n.Monster.DropsNothing));
-                    yield return new GenericField(this.Translate(L10n.Monster.Experience), this.Stringify(monster.experienceGained));
+                    yield return new GenericField(this.Translate(L10n.Monster.Experience), this.Stringify(monster.ExperienceGained));
                     yield return new GenericField(this.Translate(L10n.Monster.Defence), this.Stringify(monster.resilience));
-                    yield return new GenericField(this.Translate(L10n.Monster.Attack), this.Stringify(monster.damageToFarmer));
+                    yield return new GenericField(this.Translate(L10n.Monster.Attack), this.Stringify(monster.DamageToFarmer));
 
                     // Adventure Guild quest
-                    AdventureGuildQuestData adventureGuildQuest = metadata.GetAdventurerGuildQuest(monster.name);
+                    AdventureGuildQuestData adventureGuildQuest = metadata.GetAdventurerGuildQuest(monster.Name);
                     if (adventureGuildQuest != null)
                     {
                         int kills = adventureGuildQuest.Targets.Select(p => Game1.stats.getMonstersKilled(p)).Sum();
@@ -181,9 +181,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // pinned fields
             yield return new GenericDebugField("facing direction", this.Stringify((FacingDirection)target.FacingDirection), pinned: true);
             yield return new GenericDebugField("walking towards player", this.Stringify(target.IsWalkingTowardPlayer), pinned: true);
-            if (Game1.player.friendships.ContainsKey(target.name))
+            if (Game1.player.friendshipData.ContainsKey(target.Name))
             {
-                FriendshipModel friendship = DataParser.GetFriendshipForVillager(Game1.player, target, metadata);
+                FriendshipModel friendship = DataParser.GetFriendshipForVillager(Game1.player, target, Game1.player.friendshipData[target.Name], metadata);
                 yield return new GenericDebugField("friendship", $"{friendship.Points} (max {friendship.MaxPoints})", pinned: true);
             }
             if (pet != null)
@@ -199,7 +199,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         private IEnumerable<ItemDropData> GetMonsterDrops(Monster monster)
         {
             int[] drops = monster.objectsToDrop.ToArray();
-            ItemDropData[] possibleDrops = DataParser.GetMonsters().First(p => p.Name == monster.name).Drops;
+            ItemDropData[] possibleDrops = DataParser.GetMonsters().First(p => p.Name == monster.Name).Drops;
 
             return (
                 from possibleDrop in possibleDrops

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -48,9 +48,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             FruitTree tree = this.Target;
 
             // get basic info
-            bool isMature = tree.daysUntilMature <= 0;
+            bool isMature = tree.daysUntilMature.Value <= 0;
             bool isDead = tree.stump;
-            bool isStruckByLightning = tree.struckByLightningCountdown > 0;
+            bool isStruckByLightning = tree.struckByLightningCountdown.Value > 0;
 
             // show next fruit
             if (isMature && !isDead)
@@ -58,9 +58,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 string label = this.Translate(L10n.FruitTree.NextFruit);
                 if (isStruckByLightning)
                     yield return new GenericField(label, this.Translate(L10n.FruitTree.NextFruitStruckByLightning, new { count = tree.struckByLightningCountdown }));
-                else if (Game1.currentSeason != tree.fruitSeason && !tree.greenHouseTree)
+                else if (Game1.currentSeason != tree.fruitSeason.Value && !tree.GreenHouseTree)
                     yield return new GenericField(label, this.Translate(L10n.FruitTree.NextFruitOutOfSeason));
-                else if (tree.fruitsOnTree == FruitTree.maxFruitsOnTrees)
+                else if (tree.fruitsOnTree.Value == FruitTree.maxFruitsOnTrees)
                     yield return new GenericField(label, this.Translate(L10n.FruitTree.NextFruitMaxFruit));
                 else
                     yield return new GenericField(label, this.Translate(L10n.Generic.Tomorrow));
@@ -196,7 +196,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="daysPerQuality">The number of days before the tree begins producing a higher quality.</param>
         private IEnumerable<KeyValuePair<ItemQuality, int>> GetQualitySchedule(FruitTree tree, ItemQuality currentQuality, int daysPerQuality)
         {
-            if (tree.daysUntilMature > 0)
+            if (tree.daysUntilMature.Value > 0)
                 yield break; // not mature yet
 
             // yield current

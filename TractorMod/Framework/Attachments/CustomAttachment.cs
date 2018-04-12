@@ -35,7 +35,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
             return
-                (tool != null && this.CustomNames.Contains(tool.name))
+                (tool != null && this.CustomNames.Contains(tool.Name))
                 || (item != null && this.CustomNames.Contains(item.Name));
         }
 
@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
             // apply tool
-            if (tool != null && this.CustomNames.Contains(tool.name))
+            if (tool != null && this.CustomNames.Contains(tool.Name))
                 return this.UseToolOnTile(tool, tile);
 
             // apply item

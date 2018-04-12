@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 
@@ -30,8 +30,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         public override bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea)
         {
             FarmAnimal animal = (FarmAnimal)this.Value;
+            AnimatedSprite sprite = animal.Sprite;
+
             SpriteEffects spriteEffects = animal.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            return this.SpriteIntersectsPixel(tile, position, spriteArea, animal.sprite.Texture, animal.sprite.sourceRect, spriteEffects);
+            return this.SpriteIntersectsPixel(tile, position, spriteArea, sprite.Texture, sprite.sourceRect, spriteEffects);
         }
     }
 }

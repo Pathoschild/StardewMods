@@ -43,7 +43,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="stack">The item to check.</param>
         public bool AcceptsInput(ITrackedStack stack)
         {
-            return stack.Sample.parentSheetIndex == this.InputID || stack.Sample.category == this.InputID;
+            return stack.Sample.ParentSheetIndex == this.InputID || stack.Sample.Category == this.InputID;
         }
     }
 }

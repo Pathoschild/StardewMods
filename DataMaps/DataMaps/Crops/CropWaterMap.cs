@@ -87,7 +87,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Crops
                     location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrain)
                     && terrain is HoeDirt dirt
                     && dirt.crop != null
-                    && dirt.state == state;
+                    && dirt.state.Value == state;
 
                 if (matchesState)
                     yield return tile;

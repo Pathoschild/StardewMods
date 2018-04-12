@@ -106,7 +106,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     else if (item.bigCraftable)
                     {
                         items.Add(item);
-                        if (item.minutesUntilReady == 0)
+                        if (item.MinutesUntilReady == 0)
                             items.Add(item.heldObject);
                     }
                     else if (!item.IsSpawnedObject)
@@ -132,15 +132,15 @@ namespace Pathoschild.Stardew.LookupAnything
                     foreach (var building in farm.buildings)
                     {
                         if (building is Mill mill)
-                            items.AddRange(mill.output.items);
+                            items.AddRange(mill.output.Value.items);
                         else if (building is JunimoHut hut)
-                            items.AddRange(hut.output.items);
+                            items.AddRange(hut.output.Value.items);
                     }
                 }
 
                 // farmhouse fridge
                 if (location is FarmHouse house)
-                    items.AddRange(house.fridge.items);
+                    items.AddRange(house.fridge.Value.items);
             }
 
             return items.Where(p => p != null);
@@ -149,9 +149,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get all NPCs currently in the world.</summary>
         public static IEnumerable<NPC> GetAllCharacters()
         {
-            return Utility
-                .getAllCharacters()
-                .Distinct(); // fix rare issue where the game duplicates an NPC (seems to happen when the player's child is born)
+            List<NPC> characters = new List<NPC>();
+            Utility.getAllCharacters(characters);
+            return characters.Distinct(); // fix rare issue where the game duplicates an NPC (seems to happen when the player's child is born)
         }
 
         /// <summary>Count how many of an item the player owns.</summary>
@@ -174,8 +174,8 @@ namespace Pathoschild.Stardew.LookupAnything
             return
                 // same generic item type
                 a.GetType() == b.GetType()
-                && a.category == b.category
-                && a.parentSheetIndex == b.parentSheetIndex
+                && a.Category == b.Category
+                && a.ParentSheetIndex == b.ParentSheetIndex
 
                 // same discriminators
                 && a.GetSpriteType() == b.GetSpriteType()
@@ -195,7 +195,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public static bool IsSocialVillager(NPC npc, Metadata metadata)
         {
-            return npc.isVillager() && !metadata.Constants.AsocialVillagers.Contains(npc.name);
+            return npc.isVillager() && !metadata.Constants.AsocialVillagers.Contains(npc.Name);
         }
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
@@ -258,8 +258,8 @@ namespace Pathoschild.Stardew.LookupAnything
             return (
                 from recipe in GameHelper.GetRecipes()
                 where
-                    (recipe.Ingredients.ContainsKey(item.parentSheetIndex) || recipe.Ingredients.ContainsKey(item.category))
-                    && recipe.ExceptIngredients?.Contains(item.parentSheetIndex) != true
+                    (recipe.Ingredients.ContainsKey(item.ParentSheetIndex) || recipe.Ingredients.ContainsKey(item.Category))
+                    && recipe.ExceptIngredients?.Contains(item.ParentSheetIndex) != true
                 select recipe
             );
         }

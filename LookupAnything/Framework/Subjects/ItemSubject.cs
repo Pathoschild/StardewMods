@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             this.DisplayItem = this.GetMenuItem(item);
             this.FromCrop = fromCrop;
             if ((item as SObject)?.Type == "Seeds")
-                this.SeedForCrop = new Crop(item.parentSheetIndex, 0, 0);
+                this.SeedForCrop = new Crop(item.ParentSheetIndex, 0, 0);
             this.Context = context;
             this.KnownQuality = knownQuality;
             this.Initialise(this.DisplayItem.DisplayName, this.GetDescription(this.DisplayItem), this.GetTypeValue(this.DisplayItem));
@@ -75,8 +75,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             bool isObject = obj != null;
             bool isCrop = this.FromCrop != null;
             bool isSeed = this.SeedForCrop != null;
-            bool isDeadCrop = this.FromCrop?.dead == true;
-            bool canSell = obj?.canBeShipped() == true || metadata.Shops.Any(shop => shop.BuysCategories.Contains(item.category));
+            bool isDeadCrop = this.FromCrop?.dead.Value == true;
+            bool canSell = obj?.canBeShipped() == true || metadata.Shops.Any(shop => shop.BuysCategories.Contains(item.Category));
 
             // get overrides
             bool showInventoryFields = true;
@@ -106,7 +106,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                 // get harvest schedule
                 int harvestablePhase = crop.phaseDays.Count - 1;
-                bool canHarvestNow = (crop.currentPhase >= harvestablePhase) && (!crop.fullyGrown || crop.dayOfCurrentPhase <= 0);
+                bool canHarvestNow = (crop.currentPhase.Value >= harvestablePhase) && (!crop.fullyGrown || crop.dayOfCurrentPhase.Value <= 0);
                 int daysToFirstHarvest = crop.phaseDays.Take(crop.phaseDays.Count - 1).Sum(); // ignore harvestable phase
 
                 // add next-harvest field
@@ -118,14 +118,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     if (!canHarvestNow)
                     {
                         // calculate days until next harvest
-                        int daysUntilLastPhase = daysToFirstHarvest - crop.dayOfCurrentPhase - crop.phaseDays.Take(crop.currentPhase).Sum();
+                        int daysUntilLastPhase = daysToFirstHarvest - crop.dayOfCurrentPhase.Value - crop.phaseDays.Take(crop.currentPhase.Value).Sum();
                         {
                             // growing: days until next harvest
                             if (!crop.fullyGrown)
                                 daysToNextHarvest = daysUntilLastPhase;
 
                             // regrowable crop harvested today
-                            else if (crop.dayOfCurrentPhase >= crop.regrowAfterHarvest)
+                            else if (crop.dayOfCurrentPhase.Value >= crop.regrowAfterHarvest.Value)
                                 daysToNextHarvest = crop.regrowAfterHarvest;
 
                             // regrowable crop
@@ -152,7 +152,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     List<string> summary = new List<string>();
 
                     // harvest
-                    summary.Add(crop.regrowAfterHarvest == -1
+                    summary.Add(crop.regrowAfterHarvest.Value == -1
                         ? this.Translate(L10n.Crop.SummaryHarvestOnce, new { daysToFirstHarvest = daysToFirstHarvest })
                         : this.Translate(L10n.Crop.SummaryHarvestMulti, new { daysToFirstHarvest = daysToFirstHarvest, daysToNextHarvests = crop.regrowAfterHarvest })
                     );
@@ -161,9 +161,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     summary.Add(this.Translate(L10n.Crop.SummarySeasons, new { seasons = string.Join(", ", this.Text.GetSeasonNames(crop.seasonsToGrowIn)) }));
 
                     // drops
-                    if (crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops > 0)
+                    if (crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops.Value > 0)
                         summary.Add(this.Translate(L10n.Crop.SummaryDropsXToY, new { min = crop.minHarvest, max = crop.maxHarvest, percent = Math.Round(crop.chanceForExtraCrops * 100, 2) }));
-                    else if (crop.minHarvest > 1)
+                    else if (crop.minHarvest.Value > 1)
                         summary.Add(this.Translate(L10n.Crop.SummaryDropsX, new { count = crop.minHarvest }));
 
                     // crop sale price
@@ -176,13 +176,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // crafting
-            if (obj?.heldObject != null)
+            if (obj?.heldObject?.Value != null)
             {
                 if (obj is Cask cask)
                 {
                     // get cask data
                     SObject agingObj = cask.heldObject;
-                    ItemQuality curQuality = (ItemQuality)agingObj.quality;
+                    ItemQuality curQuality = (ItemQuality)agingObj.Quality;
                     string curQualityName = this.Translate(L10n.For(curQuality));
 
                     // calculate aging schedule
@@ -206,7 +206,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                     // display fields
                     yield return new ItemIconField(this.Translate(L10n.Item.Contents), obj.heldObject);
-                    if (cask.minutesUntilReady <= 0 || !schedule.Any())
+                    if (cask.MinutesUntilReady <= 0 || !schedule.Any())
                         yield return new GenericField(this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskScheduleNow, new { quality = curQualityName }));
                     else
                     {
@@ -221,14 +221,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 }
                 else if (obj is Furniture)
                 {
-                    string summary = this.Translate(L10n.Item.ContentsPlaced, new { name = obj.heldObject.DisplayName });
+                    string summary = this.Translate(L10n.Item.ContentsPlaced, new { name = obj.heldObject.Value.DisplayName });
                     yield return new ItemIconField(this.Translate(L10n.Item.Contents), obj.heldObject, summary);
                 }
                 else
                 {
-                    string summary = obj.minutesUntilReady <= 0
-                        ? this.Translate(L10n.Item.ContentsReady, new { name = obj.heldObject.DisplayName })
-                        : this.Translate(L10n.Item.ContentsPartial, new { name = obj.heldObject.DisplayName, time = this.Stringify(TimeSpan.FromMinutes(obj.minutesUntilReady)) });
+                    string summary = obj.MinutesUntilReady <= 0
+                        ? this.Translate(L10n.Item.ContentsReady, new { name = obj.heldObject.Value.DisplayName })
+                        : this.Translate(L10n.Item.ContentsPartial, new { name = obj.heldObject.Value.DisplayName, time = this.Stringify(TimeSpan.FromMinutes(obj.MinutesUntilReady)) });
                     yield return new ItemIconField(this.Translate(L10n.Item.Contents), obj.heldObject, summary);
                 }
             }
@@ -283,7 +283,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         buyers.Add(this.Translate(L10n.Item.SellsToShippingBox));
                     buyers.AddRange(
                         from shop in metadata.Shops
-                        where shop.BuysCategories.Contains(item.category)
+                        where shop.BuysCategories.Contains(item.Category)
                         let name = this.Translate(shop.DisplayKey).ToString()
                         orderby name
                         select name
@@ -330,9 +330,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // see also crop
             bool seeAlsoCrop =
                 isSeed
-                && item.parentSheetIndex != this.SeedForCrop.indexOfHarvest // skip seeds which produce themselves (e.g. coffee beans)
-                && !(item.parentSheetIndex >= 495 && item.parentSheetIndex <= 497) // skip random seasonal seeds
-                && item.parentSheetIndex != 770; // skip mixed seeds
+                && item.ParentSheetIndex != this.SeedForCrop.indexOfHarvest.Value // skip seeds which produce themselves (e.g. coffee beans)
+                && !(item.ParentSheetIndex >= 495 && item.ParentSheetIndex <= 497) // skip random seasonal seeds
+                && item.ParentSheetIndex != 770; // skip mixed seeds
             if (seeAlsoCrop)
             {
                 Item drop = GameHelper.GetObjectBySpriteIndex(this.SeedForCrop.indexOfHarvest);
@@ -349,8 +349,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             Crop crop = this.FromCrop ?? this.SeedForCrop;
 
             // pinned fields
-            yield return new GenericDebugField("item ID", target.parentSheetIndex, pinned: true);
-            yield return new GenericDebugField("category", $"{target.category} ({target.getCategoryName()})", pinned: true);
+            yield return new GenericDebugField("item ID", target.ParentSheetIndex, pinned: true);
+            yield return new GenericDebugField("category", $"{target.Category} ({target.getCategoryName()})", pinned: true);
             if (obj != null)
             {
                 yield return new GenericDebugField("edibility", obj.Edibility, pinned: true);
@@ -382,10 +382,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             Item item = this.DisplayItem;
 
             // draw stackable object
-            if ((item as SObject)?.stack > 1)
+            if ((item as SObject)?.Stack > 1)
             {
+                // remove stack number (doesn't play well with clipped content)
                 SObject obj = (SObject)item;
-                obj = new SObject(obj.parentSheetIndex, 1, obj.isRecipe, obj.price, obj.quality) { bigCraftable = obj.bigCraftable }; // remove stack number (doesn't play well with clipped content)
+                obj = new SObject(obj.ParentSheetIndex, 1, obj.IsRecipe, obj.Price, obj.Quality);
+                obj.bigCraftable.Value = obj.bigCraftable;
                 obj.drawInMenu(spriteBatch, position, 1);
                 return true;
             }
@@ -407,7 +409,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (item is Fence fence)
             {
                 // get equivalent object's sprite ID
-                FenceType fenceType = (FenceType)fence.whichType;
+                FenceType fenceType = (FenceType)fence.whichType.Value;
                 int? spriteID = null;
                 if (fence.isGate)
                     spriteID = 325;
@@ -477,7 +479,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         continue;
 
                     // get ingredient
-                    BundleIngredientModel ingredient = bundle.Ingredients.FirstOrDefault(p => p.ItemID == item.parentSheetIndex && p.Quality <= (ItemQuality)item.quality);
+                    BundleIngredientModel ingredient = bundle.Ingredients.FirstOrDefault(p => p.ItemID == item.ParentSheetIndex && p.Quality <= (ItemQuality)item.Quality);
                     if (ingredient == null)
                         continue;
 
@@ -529,7 +531,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (!GameHelper.CanHaveQuality(item) || qualityIsKnown)
             {
                 ItemQuality quality = qualityIsKnown && item is SObject obj
-                    ? (ItemQuality)obj.quality
+                    ? (ItemQuality)obj.Quality
                     : ItemQuality.Normal;
 
                 return new Dictionary<ItemQuality, int> { [quality] = GetPrice(item) };
@@ -539,12 +541,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             int[] iridiumItems = metadata.Constants.ItemsWithIridiumQuality;
             var prices = new Dictionary<ItemQuality, int>
             {
-                [ItemQuality.Normal] = GetPrice(new SObject(item.parentSheetIndex, 1)),
-                [ItemQuality.Silver] = GetPrice(new SObject(item.parentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
-                [ItemQuality.Gold] = GetPrice(new SObject(item.parentSheetIndex, 1, quality: (int)ItemQuality.Gold))
+                [ItemQuality.Normal] = GetPrice(new SObject(item.ParentSheetIndex, 1)),
+                [ItemQuality.Silver] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
+                [ItemQuality.Gold] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Gold))
             };
-            if (item.GetSpriteType() == ItemSpriteType.Object && (iridiumItems.Contains(item.category) || iridiumItems.Contains(item.parentSheetIndex)))
-                prices[ItemQuality.Iridium] = GetPrice(new SObject(item.parentSheetIndex, 1, quality: (int)ItemQuality.Iridium));
+            if (item.GetSpriteType() == ItemSpriteType.Object && (iridiumItems.Contains(item.Category) || iridiumItems.Contains(item.ParentSheetIndex)))
+                prices[ItemQuality.Iridium] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Iridium));
             return prices;
         }
 

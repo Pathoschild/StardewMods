@@ -55,10 +55,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
                 return true;
 
             // crop in last phase (may have fruit, be identical to base crop, or be blank)
-            if (!crop.tintColor.Equals(Color.White) && crop.currentPhase == crop.phaseDays.Count - 1 && !crop.dead)
+            if (!crop.tintColor.Equals(Color.White) && crop.currentPhase.Value == crop.phaseDays.Count - 1 && !crop.dead)
             {
                 var sourceRectangle = new Rectangle(
-                    x: (crop.fullyGrown ? (crop.dayOfCurrentPhase <= 0 ? 6 : 7) : crop.currentPhase + 1 + 1) * 16 + (crop.rowInSpriteSheet % 2 != 0 ? 128 : 0),
+                    x: (crop.fullyGrown ? (crop.dayOfCurrentPhase.Value <= 0 ? 6 : 7) : crop.currentPhase + 1 + 1) * 16 + (crop.rowInSpriteSheet % 2 != 0 ? 128 : 0),
                     y: crop.rowInSpriteSheet / 2 * 16 * 2,
                     width: 16,
                     height: 32
@@ -77,7 +77,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="crop">The crop.</param>
         private Rectangle GetSourceRectangle(Crop crop)
         {
-            return this.Reflection.GetMethod(crop, "getSourceRect").Invoke<Rectangle>(crop.rowInSpriteSheet);
+            return this.Reflection.GetMethod(crop, "getSourceRect").Invoke<Rectangle>(crop.rowInSpriteSheet.Value);
         }
     }
 }

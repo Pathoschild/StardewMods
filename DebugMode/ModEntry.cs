@@ -145,7 +145,7 @@ namespace Pathoschild.Stardew.DebugMode
             if (player.getTileX() == (int)fromTile.X && player.getTileY() == (int)fromTile.Y)
             {
                 player.Position = new Vector2(toTile.X * Game1.tileSize, toTile.Y * Game1.tileSize);
-                player.facingDirection = (int)facingDirection;
+                player.FacingDirection = (int)facingDirection;
                 player.setMovingInFacingDirection();
             }
         }

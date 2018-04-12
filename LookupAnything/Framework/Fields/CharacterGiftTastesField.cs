@@ -33,12 +33,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
             // get item data
             Item[] ownedItems = GameHelper.GetAllOwnedItems().ToArray();
-            Item[] inventory = Game1.player.items.Where(p => p != null).ToArray();
+            Item[] inventory = Game1.player.Items.Where(p => p != null).ToArray();
             var items =
                 (
                     from item in giftTastes[showTaste]
-                    let isInventory = inventory.Any(p => p.parentSheetIndex == item.parentSheetIndex && p.category == item.category)
-                    let isOwned = ownedItems.Any(p => p.parentSheetIndex == item.parentSheetIndex && p.category == item.category)
+                    let isInventory = inventory.Any(p => p.ParentSheetIndex == item.ParentSheetIndex && p.Category == item.Category)
+                    let isOwned = ownedItems.Any(p => p.ParentSheetIndex == item.ParentSheetIndex && p.Category == item.Category)
                     orderby isInventory descending, isOwned descending, item.DisplayName
                     select new { Item = item, IsInventory = isInventory, IsOwned = isOwned }
                 )

@@ -248,7 +248,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 return new JunimoHutMachine(hut);
             if (building is Mill mill)
                 return new MillMachine(mill);
-            if (building.buildingType == "Silo")
+            if (building.buildingType.Value == "Silo")
                 return new FeedHopperMachine();
             return null;
         }

@@ -68,23 +68,24 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="tractorID">The tractor's unique horse ID.</param>
         /// <param name="tileX">The initial tile X position.</param>
         /// <param name="tileY">The initial tile Y position.</param>
         /// <param name="config">The mod settings.</param>
         /// <param name="attachments">The tractor attachments to apply.</param>
-        /// <param name="spritesheet">The content helper with which to load the tractor sprite.</param>
+        /// <param name="textureName">The texture asset name to load.</param>
         /// <param name="translation">Provides translations from the mod's i18n folder.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public TractorManager(int tileX, int tileY, ModConfig config, IEnumerable<IAttachment> attachments, Texture2D spritesheet, ITranslationHelper translation, IReflectionHelper reflection)
+        public TractorManager(Guid tractorID, int tileX, int tileY, ModConfig config, IEnumerable<IAttachment> attachments, string textureName, ITranslationHelper translation, IReflectionHelper reflection)
         {
-            AnimatedSprite sprite = new AnimatedSprite(spritesheet, 0, 32, 32)
+            AnimatedSprite sprite = new AnimatedSprite(textureName, 0, 32, 32)
             {
                 textureUsesFlippedRightForLeft = true,
                 loop = true
             };
 
             this.Static = new TractorStatic(typeof(TractorStatic).Name, tileX, tileY, sprite, () => this.SetMounted(true));
-            this.Mount = new TractorMount(typeof(TractorMount).Name, tileX, tileY, sprite, () => this.SetMounted(false));
+            this.Mount = new TractorMount(tractorID, typeof(TractorMount).Name, tileX, tileY, sprite, () => this.SetMounted(false));
             this.Config = config;
             this.Attachments = attachments.ToArray();
             this.Translation = translation;
@@ -111,7 +112,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             // remove tractors
             foreach (GameLocation location in CommonHelper.GetLocations())
-                location.characters.RemoveAll(p => p is TractorStatic || p is TractorMount);
+                location.characters.Filter(p => p is TractorStatic || p is TractorMount);
         }
 
         /// <summary>Update tractor effects and actions in the game.</summary>
@@ -217,8 +218,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 foreach (Vector2 tile in grid)
                 {
                     // face tile to avoid game skipping interaction
-                    player.position = new Vector2(tile.X - 1, tile.Y) * Game1.tileSize;
-                    player.facingDirection = 1;
+                    player.Position = new Vector2(tile.X - 1, tile.Y) * Game1.tileSize;
+                    player.FacingDirection = 1;
 
                     // apply attachment effects
                     location.objects.TryGetValue(tile, out SObject tileObj);
@@ -262,7 +263,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     this.RaisedSeedCrops.Add(dirt.crop.indexOfHarvest);
 
                 // update passthrough
-                dirt.crop.raisedSeeds = !passthrough && this.RaisedSeedCrops.Contains(dirt.crop.indexOfHarvest);
+                dirt.crop.raisedSeeds.Value = !passthrough && this.RaisedSeedCrops.Contains(dirt.crop.indexOfHarvest.Value);
             }
         }
 
@@ -287,7 +288,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
             // move mount out of the way
             mountField.SetValue(null);
-            this.Current.position = new Vector2(-5, -5);
+            this.Current.Position = new Vector2(-5, -5);
 
             // perform action
             try
@@ -297,15 +298,15 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             finally
             {
                 // move mount back
-                this.Current.position = mountPosition;
+                this.Current.Position = mountPosition;
                 mountField.SetValue(mount);
 
                 // restore previous state
                 if (wateringCan != null)
                     wateringCan.WaterLeft = waterInCan;
                 player.stamina = stamina;
-                player.position = position;
-                player.facingDirection = facingDirection;
+                player.Position = position;
+                player.FacingDirection = facingDirection;
                 player.CurrentToolIndex = currentToolIndex;
                 Game1.player.canMove = canMove;
             }
@@ -334,10 +335,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             // swap tractors
             this.RemoveCharacterFromItsLocation(oldTractor);
             this.WarpCharacterToLocation(newTractor, Game1.currentLocation, oldTractor.getTileLocation());
-            newTractor.position = oldTractor.position;
+            newTractor.Position = oldTractor.position;
             if (mount)
                 this.Mount.checkAction(Game1.player, Game1.currentLocation);
-            newTractor.facingDirection = oldTractor.facingDirection;
+            newTractor.FacingDirection = oldTractor.facingDirection;
 
             // let tractor pass through trellises
             if (this.Config.PassThroughTrellisCrops)
@@ -349,7 +350,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <remarks>The default <see cref="Game1.removeCharacterFromItsLocation"/> logic doesn't work in the mines, so this method reimplements it with better logic.</remarks>
         private void RemoveCharacterFromItsLocation(NPC character)
         {
-            character.currentLocation?.characters.RemoveAll(p => p.name == character.name); // default logic doesn't support the mines (since they're not in Game1.locations)
+            character.currentLocation?.characters.Filter(p => p.Name == character.Name); // default logic doesn't support the mines (since they're not in Game1.locations)
             character.currentLocation = null;
         }
 

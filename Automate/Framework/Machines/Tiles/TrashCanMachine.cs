@@ -134,7 +134,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
                     random.Next(1, 5);
                 }
                 if (index == 5 && random.NextDouble() < 0.2 + Game1.dailyLuck && Game1.dishOfTheDay != null)
-                    parentSheetIndex = Game1.dishOfTheDay.parentSheetIndex != 217 ? Game1.dishOfTheDay.parentSheetIndex : 216;
+                    parentSheetIndex = Game1.dishOfTheDay.ParentSheetIndex != 217 ? Game1.dishOfTheDay.ParentSheetIndex : 216;
                 if (index == 6 && random.NextDouble() < 0.2 + Game1.dailyLuck)
                     parentSheetIndex = 223;
 

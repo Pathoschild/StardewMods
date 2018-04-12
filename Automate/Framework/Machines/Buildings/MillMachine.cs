@@ -17,6 +17,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>The underlying mill.</summary>
         private readonly Mill Mill;
 
+        /// <summary>The mill's input chest.</summary>
+        private Chest Input => this.Mill.input.Value;
+
+        /// <summary>The mill's output chest.</summary>
+        private Chest Output => this.Mill.output.Value;
+
         /// <summary>The maximum stack size to allow for accepted items.</summary>
         private readonly IDictionary<int, int> MaxStackSize;
 
@@ -39,7 +45,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Get the machine's processing state.</summary>
         public MachineState GetState()
         {
-            if (this.Mill.output.items.Any())
+            if (this.Output.items.Any())
                 return MachineState.Done;
             return this.InputFull()
                 ? MachineState.Processing
@@ -49,7 +55,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Get the output item.</summary>
         public ITrackedStack GetOutput()
         {
-            List<Item> inventory = this.Mill.output.items;
+            IList<Item> inventory = this.Output.items;
             return new TrackedItem(inventory.FirstOrDefault(), onEmpty: item => inventory.Remove(item));
         }
 
@@ -63,7 +69,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 
             // fill input with wheat (262) and beets (284)
             bool anyPulled = false;
-            foreach (ITrackedStack stack in input.GetItems().Where(i => i.Sample.parentSheetIndex == 262 || i.Sample.parentSheetIndex == 284))
+            foreach (ITrackedStack stack in input.GetItems().Where(i => i.Sample.ParentSheetIndex == 262 || i.Sample.ParentSheetIndex == 284))
             {
                 // add item
                 bool anyAdded = this.TryAddInput(stack);
@@ -93,12 +99,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
                 return false;
 
             // clean up input bin
-            this.Mill.input.clearNulls();
+            this.Input.clearNulls();
 
             // try adding to input
             int originalSize = item.Count;
-            List<Item> slots = this.Mill.input.items;
-            int maxStackSize = this.MaxStackSize[item.Sample.parentSheetIndex];
+            IList<Item> slots = this.Input.items;
+            int maxStackSize = this.MaxStackSize[item.Sample.ParentSheetIndex];
             for (int i = 0; i < Chest.capacity; i++)
             {
                 // done
@@ -128,7 +134,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Get whether the mill's input bin is full.</summary>
         private bool InputFull()
         {
-            var slots = this.Mill.input.items;
+            var slots = this.Input.items;
 
             // free slots
             if (slots.Count < Chest.capacity)
@@ -137,7 +143,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
             // free space in stacks
             foreach (Item slot in slots)
             {
-                if (slot == null || slot.Stack < this.MaxStackSize[slot.parentSheetIndex])
+                if (slot == null || slot.Stack < this.MaxStackSize[slot.ParentSheetIndex])
                     return false;
             }
             return true;
