@@ -67,9 +67,7 @@
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\BaseAttachment.cs" />
     <Compile Include="Framework\Config\ModConfigControls.cs" />
-    <Compile Include="Framework\TractorManager.cs" />
-    <Compile Include="Framework\TractorMount.cs" />
-    <Compile Include="Framework\TractorStatic.cs" />
+    <Compile Include="Framework\Tractor.cs" />
     <Compile Include="Framework\TractorGarage.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

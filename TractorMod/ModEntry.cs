@@ -48,7 +48,7 @@ namespace Pathoschild.Stardew.TractorMod
         private IAttachment[] Attachments;
 
         /// <summary>Manages the tractor instance.</summary>
-        private TractorManager Tractor;
+        private Tractor Tractor;
 
         /// <summary>Whether Robin is busy constructing a garage.</summary>
         private bool IsRobinBusy;
@@ -288,12 +288,20 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="tractorID">The tractor's unique horse ID.</param>
         /// <param name="tileX">The tile X position at which to spawn it.</param>
         /// <param name="tileY">The tile Y position at which to spawn it.</param>
-        private TractorManager SpawnTractor(Guid tractorID, BuildableGameLocation location, int tileX, int tileY)
+        private Tractor SpawnTractor(Guid tractorID, BuildableGameLocation location, int tileX, int tileY)
         {
-            TractorManager tractor = new TractorManager(tractorID, tileX, tileY, this.Config, this.Attachments, this.Helper.Content.GetActualAssetKey(this.GetTextureKey("tractor")), this.Helper.Translation, this.Helper.Reflection);
+            Tractor tractor = new Tractor(tractorID, tileX, tileY, this.Config, this.Attachments, this.Helper.Content.GetActualAssetKey(this.GetTextureKey("tractor")), this.Helper.Translation, this.Helper.Reflection);
             tractor.SetLocation(location, new Vector2(tileX, tileY));
-            tractor.SetPixelPosition(new Vector2(tractor.Current.Position.X + 20, tractor.Current.Position.Y));
+            tractor.SetPixelPosition(new Vector2(tractor.Position.X + 20, tractor.Position.Y));
             return tractor;
+        }
+
+        /// <summary>Remove all tractors from the game.</summary>
+        public void RemoveTractors()
+        {
+            // remove tractors
+            foreach (GameLocation location in CommonHelper.GetLocations())
+                location.characters.Filter(p => p is Tractor);
         }
 
 
@@ -318,7 +326,7 @@ namespace Pathoschild.Stardew.TractorMod
             // remove tractors + buildings
             foreach (var garage in garages)
                 garage.Location.destroyStructure(garage.Building);
-            this.Tractor?.RemoveTractors();
+            this.RemoveTractors();
 
             // reset Robin construction
             if (this.IsRobinBusy)

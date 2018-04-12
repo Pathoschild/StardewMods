@@ -16,8 +16,8 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
-    /// <summary>Manages a spawned tractor.</summary>
-    internal class TractorManager
+    /// <summary>The in-game tractor that can be ridden by the player.</summary>
+    internal sealed class Tractor : Horse
     {
         /*********
         ** Properties
@@ -50,18 +50,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>A static tractor NPC for display in the world.</summary>
-        /// <remarks>This is deliberately separate to avoid conflicting with logic for summoning or managing the player horse.</remarks>
-        public TractorStatic Static { get; }
-
-        /// <summary>A tractor horse for riding.</summary>
-        public TractorMount Mount { get; }
-
-        /// <summary>The currently active tractor instance.</summary>
-        public NPC Current => this.IsRiding ? (NPC)this.Mount : this.Static;
-
         /// <summary>Whether the player is currently riding the tractor.</summary>
-        public bool IsRiding => this.Mount?.rider == Game1.player;
+        public bool IsRiding => this.rider == Game1.player;
 
 
         /*********
@@ -76,43 +66,57 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="textureName">The texture asset name to load.</param>
         /// <param name="translation">Provides translations from the mod's i18n folder.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public TractorManager(Guid tractorID, int tileX, int tileY, ModConfig config, IEnumerable<IAttachment> attachments, string textureName, ITranslationHelper translation, IReflectionHelper reflection)
+        public Tractor(Guid tractorID, int tileX, int tileY, ModConfig config, IEnumerable<IAttachment> attachments, string textureName, ITranslationHelper translation, IReflectionHelper reflection)
+            : base(tractorID, tileX, tileY)
         {
-            AnimatedSprite sprite = new AnimatedSprite(textureName, 0, 32, 32)
+            this.Name = typeof(Tractor).Name;
+            this.Sprite = new AnimatedSprite(textureName, 0, 32, 32)
             {
                 textureUsesFlippedRightForLeft = true,
                 loop = true
             };
-
-            this.Static = new TractorStatic(typeof(TractorStatic).Name, tileX, tileY, sprite, () => this.SetMounted(true));
-            this.Mount = new TractorMount(tractorID, typeof(TractorMount).Name, tileX, tileY, sprite, () => this.SetMounted(false));
             this.Config = config;
             this.Attachments = attachments.ToArray();
             this.Translation = translation;
             this.Reflection = reflection;
         }
 
-        /// <summary>Move the tractor to the given location.</summary>
-        /// <param name="location">The game location.</param>
-        /// <param name="tile">The tile coordinate in the given location.</param>
-        public void SetLocation(GameLocation location, Vector2 tile)
+        /// <summary>Set whether the player should be riding the tractor.</summary>
+        /// <param name="mount">Whether the player should be riding the tractor.</param>
+        public void SetMounted(bool mount)
         {
-            this.WarpCharacterToLocation(this.Current, location, tile);
+            // mount
+            if (!this.IsRiding)
+                this.checkAction(Game1.player, Game1.currentLocation);
+
+            // let tractor pass through trellises
+            if (this.Config.PassThroughTrellisCrops)
+                this.SetCropPassthrough(Game1.currentLocation, passthrough: mount);
         }
 
         /// <summary>Move the tractor to a specific pixel position within its current location.</summary>
         /// <param name="position">The pixel coordinate in the current location.</param>
         public void SetPixelPosition(Vector2 position)
         {
-            this.Current.Position = position;
+            this.Position = position;
         }
 
-        /// <summary>Remove all tractors from the game.</summary>
-        public void RemoveTractors()
+        /// <summary>Move the tractor to the given location.</summary>
+        /// <param name="location">The game location.</param>
+        /// <param name="tile">The tile coordinate in the given location.</param>
+        /// <remarks>The default <see cref="Game1.warpCharacter(StardewValley.NPC,string,Microsoft.Xna.Framework.Point,bool,bool)"/> logic doesn't work in the mines, so this method reimplements it with better logic.</remarks>
+        public void SetLocation(GameLocation location, Vector2 tile)
         {
-            // remove tractors
-            foreach (GameLocation location in CommonHelper.GetLocations())
-                location.characters.Filter(p => p is TractorStatic || p is TractorMount);
+            this.RemoveFromLocation();
+            if (!location.characters.Contains(this))
+                location.addCharacter(this);
+            this.currentLocation = location;
+
+            this.isCharging = false;
+            this.speed = 2;
+            this.blockedInterval = 0;
+            this.position.X = tile.X * Game1.tileSize;
+            this.position.Y = tile.Y * Game1.tileSize;
         }
 
         /// <summary>Update tractor effects and actions in the game.</summary>
@@ -135,7 +139,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 this.SetCropPassthrough(oldLocation, false);
         }
 
-        /// <summary>Draw anything needed to the screen.</summary>
+        /// <summary>Draw a radius around the player.</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>
         public void DrawRadius(SpriteBatch spriteBatch)
         {
@@ -166,6 +170,21 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /*********
         ** Private methods
         *********/
+        /// <summary>Get whether the tractor is toggled on by the player.</summary>
+        private bool IsEnabled()
+        {
+            if (!this.IsRiding)
+                return false;
+
+            // automatic mode
+            if (!this.Config.Controls.HoldToActivate.Any())
+                return true;
+
+            // hold-to-activate mode
+            KeyboardState state = Keyboard.GetState();
+            return this.Config.Controls.HoldToActivate.Any(button => button.TryGetKeyboard(out Keys key) && state.IsKeyDown(key));
+        }
+
         /// <summary>Apply the tractor buff to the current player.</summary>
         private void UpdateBuff()
         {
@@ -233,16 +252,24 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             });
         }
 
-        /// <summary>Get whether the tractor is toggled on by the player.</summary>
-        private bool IsEnabled()
+        /// <summary>Get a grid of tiles.</summary>
+        /// <param name="origin">The center of the grid.</param>
+        /// <param name="distance">The number of tiles in each direction to include.</param>
+        private IEnumerable<Vector2> GetTileGrid(Vector2 origin, int distance)
         {
-            // automatic mode
-            if (!this.Config.Controls.HoldToActivate.Any())
-                return true;
+            for (int x = -distance; x <= distance; x++)
+            {
+                for (int y = -distance; y <= distance; y++)
+                    yield return new Vector2(origin.X + x, origin.Y + y);
+            }
+        }
 
-            // hold-to-activate mode
-            KeyboardState state = Keyboard.GetState();
-            return this.Config.Controls.HoldToActivate.Any(button => button.TryGetKeyboard(out Keys key) && state.IsKeyDown(key));
+        /// <summary>Remove an NPC from its current location.</summary>
+        /// <remarks>The default <see cref="Game1.removeCharacterFromItsLocation"/> logic doesn't work in the mines, so this method reimplements it with better logic.</remarks>
+        private void RemoveFromLocation()
+        {
+            this.currentLocation?.characters.Filter(p => p.Name == this.Name); // default logic doesn't support the mines (since they're not in Game1.locations)
+            this.currentLocation = null;
         }
 
         /// <summary>Update all crops in a location to toggle between passable (regardless of trellis) or normal behaviour.</summary>
@@ -277,18 +304,18 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
             // save current state
             Horse mount = mountField.GetValue();
-            Vector2 mountPosition = this.Current.position;
+            Vector2 mountPosition = this.Position;
             WateringCan wateringCan = player.CurrentTool as WateringCan;
             int waterInCan = wateringCan?.WaterLeft ?? 0;
             float stamina = player.stamina;
-            Vector2 position = player.position;
-            int facingDirection = player.facingDirection;
+            Vector2 position = player.Position;
+            int facingDirection = player.FacingDirection;
             int currentToolIndex = player.CurrentToolIndex;
             bool canMove = Game1.player.canMove; // fix player frozen due to animations when performing an action
 
             // move mount out of the way
             mountField.SetValue(null);
-            this.Current.Position = new Vector2(-5, -5);
+            this.Position = new Vector2(-5, -5);
 
             // perform action
             try
@@ -298,7 +325,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             finally
             {
                 // move mount back
-                this.Current.Position = mountPosition;
+                this.Position = mountPosition;
                 mountField.SetValue(mount);
 
                 // restore previous state
@@ -310,67 +337,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 player.CurrentToolIndex = currentToolIndex;
                 Game1.player.canMove = canMove;
             }
-        }
-
-        /// <summary>Get a grid of tiles.</summary>
-        /// <param name="origin">The center of the grid.</param>
-        /// <param name="distance">The number of tiles in each direction to include.</param>
-        private IEnumerable<Vector2> GetTileGrid(Vector2 origin, int distance)
-        {
-            for (int x = -distance; x <= distance; x++)
-            {
-                for (int y = -distance; y <= distance; y++)
-                    yield return new Vector2(origin.X + x, origin.Y + y);
-            }
-        }
-
-        /// <summary>Set whether the player should be riding the tractor.</summary>
-        /// <param name="mount">Whether the player should be riding the tractor.</param>
-        private void SetMounted(bool mount)
-        {
-            // get instances
-            NPC newTractor = mount ? (NPC)this.Mount : this.Static;
-            NPC oldTractor = mount ? (NPC)this.Static : this.Mount;
-
-            // swap tractors
-            this.RemoveCharacterFromItsLocation(oldTractor);
-            this.WarpCharacterToLocation(newTractor, Game1.currentLocation, oldTractor.getTileLocation());
-            newTractor.Position = oldTractor.position;
-            if (mount)
-                this.Mount.checkAction(Game1.player, Game1.currentLocation);
-            newTractor.FacingDirection = oldTractor.facingDirection;
-
-            // let tractor pass through trellises
-            if (this.Config.PassThroughTrellisCrops)
-                this.SetCropPassthrough(Game1.currentLocation, passthrough: mount);
-        }
-
-        /// <summary>Remove an NPC from its current location.</summary>
-        /// <param name="character">The NPC to remove.</param>
-        /// <remarks>The default <see cref="Game1.removeCharacterFromItsLocation"/> logic doesn't work in the mines, so this method reimplements it with better logic.</remarks>
-        private void RemoveCharacterFromItsLocation(NPC character)
-        {
-            character.currentLocation?.characters.Filter(p => p.Name == character.Name); // default logic doesn't support the mines (since they're not in Game1.locations)
-            character.currentLocation = null;
-        }
-
-        /// <summary>Move an NPC to the given location.</summary>
-        /// <param name="character">The NPC to add.</param>
-        /// <param name="location">The game location.</param>
-        /// <param name="tile">The tile coordinate in the given location.</param>
-        /// <remarks>The default <see cref="Game1.warpCharacter(StardewValley.NPC,string,Microsoft.Xna.Framework.Point,bool,bool)"/> logic doesn't work in the mines, so this method reimplements it with better logic.</remarks>
-        public void WarpCharacterToLocation(NPC character, GameLocation location, Vector2 tile)
-        {
-            this.RemoveCharacterFromItsLocation(character);
-            if (!location.characters.Contains(character))
-                location.addCharacter(character);
-            character.currentLocation = location;
-
-            character.isCharging = false;
-            character.speed = 2;
-            character.blockedInterval = 0;
-            character.position.X = tile.X * Game1.tileSize;
-            character.position.Y = tile.Y * Game1.tileSize;
         }
     }
 }
