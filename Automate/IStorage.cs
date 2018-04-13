@@ -5,7 +5,7 @@ using Pathoschild.Stardew.Automate.Framework;
 namespace Pathoschild.Stardew.Automate
 {
     /// <summary>Manages access to items in the underlying containers.</summary>
-    internal interface IStorage
+    public interface IStorage
     {
         /*********
         ** Public methods

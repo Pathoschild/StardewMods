@@ -4,7 +4,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.Automate.Framework
 {
     /// <summary>A collection of machines and storage which work as one unit.</summary>
-    internal class MachineGroup
+    public class MachineGroup
     {
         /*********
         ** Accessors

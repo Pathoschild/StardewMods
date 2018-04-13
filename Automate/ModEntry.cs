@@ -62,6 +62,10 @@ namespace Pathoschild.Stardew.Automate
             this.VerboseLog($"Initialised with automation every {this.Config.AutomationInterval} ticks.");
         }
 
+        public override object GetApi()
+        {
+            return new AutomateAPI();
+        }
 
         /*********
         ** Private methods
@@ -201,6 +205,7 @@ namespace Pathoschild.Stardew.Automate
             this.VerboseLog($"Reloading machines in {location.Name}...");
 
             this.MachineGroups[location] = this.Factory.GetActiveMachinesGroups(location, this.Helper.Reflection).ToArray();
+            AutomateAPI.OnLocationMachinesChanged(this, location, this.MachineGroups[location]);
         }
 
         /// <summary>Log an error and warn the user.</summary>

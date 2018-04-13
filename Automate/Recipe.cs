@@ -5,7 +5,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate
 {
     /// <summary>Describes a generic recipe based on item input and output.</summary>
-    internal class Recipe
+    public class Recipe
     {
         /*********
         ** Accessors

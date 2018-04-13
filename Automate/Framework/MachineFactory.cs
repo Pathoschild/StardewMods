@@ -26,7 +26,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The tile area on the farm matching the shipping bin.</summary>
         private readonly Rectangle ShippingBinArea = new Rectangle(71, 14, 2, 1);
 
-
         /*********
         ** Public methods
         *********/
@@ -91,10 +90,10 @@ namespace Pathoschild.Stardew.Automate.Framework
                     group.Add(machine);
                     foundSize = size;
                 }
-                else if (this.TryGetChest(location, tile, out Chest chest))
+                else if (this.TryGetContainer(location, tile, out IContainer container, out size))
                 {
-                    group.Add(new ChestContainer(chest));
-                    foundSize = Vector2.One;
+                    group.Add(container);
+                    foundSize = size;
                 }
                 else
                     continue;
@@ -167,7 +166,15 @@ namespace Pathoschild.Stardew.Automate.Framework
             if (this.TryGetTileMachine(location, tile, reflection, out machine, out size))
                 return true;
 
+            foreach (GetMachineHook getMachine in AutomateAPI.GetMachineHooks)
+            {
+                machine = getMachine(location, tile, out size);
+                if (machine != null)
+                    return true;
+            }
+
             // none
+            size = Vector2.Zero;
             machine = null;
             return false;
         }
@@ -288,19 +295,29 @@ namespace Pathoschild.Stardew.Automate.Framework
             return false;
         }
 
-        /// <summary>Get the chest on a given tile, if any.</summary>
+        /// <summary>Get the container on a given tile, if any.</summary>
         /// <param name="location">The location to search.</param>
         /// <param name="tile">The tile to search.</param>
-        /// <param name="chest">The chest found on the tile.</param>
-        private bool TryGetChest(GameLocation location, Vector2 tile, out Chest chest)
+        /// <param name="container">The container found on the tile.</param>
+        /// <param name="size">The tile size of the container found on the tile.</param>
+        private bool TryGetContainer(GameLocation location, Vector2 tile, out IContainer container, out Vector2 size)
         {
-            if (location.objects.TryGetValue(tile, out SObject obj))
+            if (location.objects.TryGetValue(tile, out SObject obj) && obj is Chest chest)
             {
-                chest = obj as Chest;
-                return chest != null;
+                container = new ChestContainer(chest);
+                size = Vector2.One;
+                return true;
             }
 
-            chest = null;
+            foreach (GetContainerHook getContainer in AutomateAPI.GetContainerHooks)
+            {
+                container = getContainer(location, tile, out size);
+                if (container != null)
+                    return true;
+            }
+
+            container = null;
+            size = Vector2.Zero;
             return false;
         }
     }
