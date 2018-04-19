@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewValley;
-using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
@@ -67,7 +66,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             int addedPrice = 0;
             if (this.Location is Farm)
             {
-                Crop flower = this.FindCloseFlower(this.Location, this.Tile);
+                Crop flower = Utility.findCloseFlower(this.Location, this.Tile);
                 if (flower != null)
                 {
                     string[] flowerData = Game1.objectInformation[flower.indexOfHarvest].Split('/');
@@ -112,40 +111,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             machine.MinutesUntilReady = 2400 - Game1.timeOfDay + 4320;
             machine.readyForHarvest.Value = false;
             machine.showNextIndex.Value = false;
-        }
-
-        /// <summary>Get the closest flower within range of the given beehive.</summary>
-        /// <param name="location">The bee hive's location.</param>
-        /// <param name="tile">The bee hive's tile coordinate.</param>
-        /// <remarks>This logic is duplicated from <see cref="Utility.findCloseFlower"/>, but allows for any location instead of being hardcoded to the farm.</remarks>
-        private Crop FindCloseFlower(GameLocation location, Vector2 tile)
-        {
-            // use default game logic if possible
-            if (location is Farm)
-                return Utility.findCloseFlower(tile);
-
-            // handle flowers in custom locations (e.g. Farm Expansion)
-            {
-                Queue<Vector2> queue = new Queue<Vector2>();
-                HashSet<Vector2> visited = new HashSet<Vector2>();
-                queue.Enqueue(tile);
-                for (int i = 0; i <= 150 && queue.Count > 0; i++)
-                {
-                    // check for fully-grown tile on the current tile
-                    Vector2 curTile = queue.Dequeue();
-                    if (location.terrainFeatures.ContainsKey(curTile) && location.terrainFeatures[curTile] is HoeDirt dirt && dirt.crop != null && dirt.crop.programColored && dirt.crop.currentPhase.Value >= dirt.crop.phaseDays.Count - 1 && !dirt.crop.dead)
-                        return dirt.crop;
-
-                    // try surrounding tiles
-                    foreach (Vector2 nextTile in Utility.getAdjacentTileLocations(curTile))
-                    {
-                        if (!visited.Contains(nextTile))
-                            queue.Enqueue(nextTile);
-                    }
-                    visited.Add(curTile);
-                }
-                return null;
-            }
         }
     }
 }
