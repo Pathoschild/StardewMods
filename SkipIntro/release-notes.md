@@ -3,6 +3,7 @@
 # Release notes
 ## 1.8
 * Updated for Stardew Valley 1.3.
+* Added support for skipping to the co-op join or host screen.
 
 ## 1.7.2
 * Updated to SMAPI 2.4.

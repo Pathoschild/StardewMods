@@ -55,8 +55,7 @@ namespace Pathoschild.Stardew.SkipIntro
             try
             {
                 // get open title screen
-                TitleMenu menu = Game1.activeClickableMenu as TitleMenu;
-                if (menu == null)
+                if (!(Game1.activeClickableMenu is TitleMenu menu))
                 {
                     GameEvents.UpdateTick -= this.GameEvents_UpdateTick;
                     return;
@@ -89,19 +88,36 @@ namespace Pathoschild.Stardew.SkipIntro
             menu.receiveKeyPress(Keys.Escape);
             menu.update(Game1.currentGameTime);
 
-            // skip button transition
-            if (!this.Config.SkipToLoadScreen)
+            // skip to other screen
+            switch (this.Config.SkipTo)
             {
-                while (this.Helper.Reflection.GetField<int>(menu, "buttonsToShow").GetValue() < TitleMenu.numberOfButtons)
-                    menu.update(Game1.currentGameTime);
-            }
+                case Screen.Title:
+                    // skip button transition
+                    while (this.Helper.Reflection.GetField<int>(menu, "buttonsToShow").GetValue() < TitleMenu.numberOfButtons)
+                        menu.update(Game1.currentGameTime);
+                    break;
 
-            // skip to load screen
-            if (this.Config.SkipToLoadScreen)
-            {
-                menu.performButtonAction("Load");
-                while (TitleMenu.subMenu == null)
-                    menu.update(Game1.currentGameTime);
+                case Screen.Load:
+                    // skip to load screen
+                    menu.performButtonAction("Load");
+                    while (TitleMenu.subMenu == null)
+                        menu.update(Game1.currentGameTime);
+                    break;
+
+                case Screen.JoinCoop:
+                case Screen.HostCoop:
+                    // skip to co-op screen
+                    menu.performButtonAction("Co-op");
+                    while (TitleMenu.subMenu == null)
+                        menu.update(Game1.currentGameTime);
+
+                    // skip to host tab
+                    if (this.Config.SkipTo == Screen.HostCoop && TitleMenu.subMenu is CoopMenu submenu)
+                    {
+                        ClickableComponent hostTab = submenu.hostTab;
+                        submenu.receiveLeftClick(hostTab.bounds.X, hostTab.bounds.Y, playSound: false);
+                    }
+                    break;
             }
 
             return true;

@@ -1,6 +1,7 @@
 **Skip Intro** is a minimal [Stardew Valley](http://stardewvalley.net/) mod that skips straight to
-the title screen or load screen (configurable) when you start the game. It also skips the screen
-transitions, so starting the game is much faster.
+the load screen when you start the game. You can optionally skip to the title screen, co-op join
+screen, or co-op host screen instead. It also skips the screen transitions, so starting the game is
+much faster.
 
 Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
 
@@ -13,9 +14,9 @@ Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
 file if you want. These are the available settings:
 
-| setting           | what it affects
-| ----------------- | -------------------
-| `SkipToLoadScreen` | Default `true`. Whether to skip straight to the load-save screen (instead of the title screen).
+| setting  | what it affects
+| -------- | -------------------
+| `SkipTo` | Default `Load`. Which screen to skip to; can be `Title`, `Load`, `JoinCoop`, `HostCoop`.
 
 ## Versions
 See [release notes](release-notes.md).
