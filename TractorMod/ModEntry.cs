@@ -296,15 +296,6 @@ namespace Pathoschild.Stardew.TractorMod
             return tractor;
         }
 
-        /// <summary>Remove all tractors from the game.</summary>
-        public void RemoveTractors()
-        {
-            // remove tractors
-            foreach (GameLocation location in CommonHelper.GetLocations())
-                location.characters.Filter(p => p is Tractor);
-        }
-
-
         /****
         ** Save methods
         ****/
@@ -326,7 +317,8 @@ namespace Pathoschild.Stardew.TractorMod
             // remove tractors + buildings
             foreach (var garage in garages)
                 garage.Location.destroyStructure(garage.Building);
-            this.RemoveTractors();
+            foreach (GameLocation location in CommonHelper.GetLocations())
+                location.characters.Filter(p => !(p is Tractor));
 
             // reset Robin construction
             if (this.IsRobinBusy)

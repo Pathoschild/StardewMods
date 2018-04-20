@@ -268,7 +268,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <remarks>The default <see cref="Game1.removeCharacterFromItsLocation"/> logic doesn't work in the mines, so this method reimplements it with better logic.</remarks>
         private void RemoveFromLocation()
         {
-            this.currentLocation?.characters.Filter(p => p.Name == this.Name); // default logic doesn't support the mines (since they're not in Game1.locations)
+            this.currentLocation?.characters.Remove(this); // default logic doesn't support the mines (since they're not in Game1.locations)
             this.currentLocation = null;
         }
 
