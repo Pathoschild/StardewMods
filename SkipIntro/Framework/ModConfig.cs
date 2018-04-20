@@ -11,6 +11,6 @@ namespace Pathoschild.Stardew.SkipIntro.Framework
         *********/
         /// <summary>The screen to which to skip.</summary>
         [JsonConverter(typeof(StringEnumConverter))]
-        public Screen SkipTo { get; set; } = Screen.Load;
+        public Screen SkipTo { get; set; } = Screen.Title;
     }
 }
