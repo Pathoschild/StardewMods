@@ -1,13 +1,15 @@
 **Tractor Mod** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you buy a tractor
 (and tractor garage) to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc.
 
-Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
+Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, single-player only. See
+[_compatibility_](#compatibility) for details.
 
 ## Contents
 * [Install](#install)
 * [Use](#use)
 * [Configure](#configure)
 * [Custom textures](#custom-textures)
+* [Compatibility](#compatibility)
 * [Versions](#versions)
 * [See also](#see-also)
 
@@ -72,6 +74,12 @@ setting | default | effect
 You can drop new PNGs into the `assets` folder to change the appearance of the tractor or garage.
 For a seasonal texture, just prefix the name with the season (like `spring_tractor.png`). The mod
 will load the seasonal texture if present, else it'll load the default name (like `tractor.png`).
+
+## Compatibility
+Tractor Mod is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, in single-player mode only.
+The mod will disable itself in multiplayer mode, so it's safe to keep it installed. If you load a
+save in multiplayer and later switch back to single-player, any garages you had previously built
+will reappear where they were before.
 
 ## Versions
 See [release notes](release-notes.md).

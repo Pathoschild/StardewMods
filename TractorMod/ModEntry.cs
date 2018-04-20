@@ -47,6 +47,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The tractor attachments to apply.</summary>
         private IAttachment[] Attachments;
 
+        /// <summary>Whether the mod is enabled.</summary>
+        private bool IsEnabled = true;
+
         /// <summary>Manages the tractor instance.</summary>
         private Tractor Tractor;
 
@@ -158,6 +161,14 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
+            // disable in multiplayer mode
+            this.IsEnabled = !Context.IsMultiplayer;
+            if (!this.IsEnabled)
+            {
+                this.Monitor.Log("Disabled mod; not compatible with multiplayer mode yet.", LogLevel.Warn);
+                return;
+            }
+
             // set textures
             if (this.GarageTexture == null || this.TractorTexture == null || this.TextureSeason != Game1.Date.Season)
             {
@@ -178,6 +189,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
+            if (!this.IsEnabled)
+                return;
+
             this.StashCustomData();
         }
 
@@ -186,6 +200,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void GraphicsEvents_OnPostRenderEvent(object sender, EventArgs e)
         {
+            if (!this.IsEnabled)
+                return;
+
             if (Context.IsWorldReady && Game1.activeClickableMenu == null && this.Config.HighlightRadius && this.Tractor?.IsRiding == true)
                 this.Tractor?.DrawRadius(Game1.spriteBatch);
         }
@@ -195,6 +212,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
+            if (!this.IsEnabled)
+                return;
+
             // add blueprint to carpenter menu
             if (Context.IsWorldReady && !this.HasAnyGarages)
             {
@@ -223,6 +243,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
         {
+            if (!this.IsEnabled)
+                return;
+
             // summon tractor
             if (Context.IsPlayerFree && this.Config.Controls.SummonTractor.Contains(e.Button))
                 this.Tractor?.SetLocation(Game1.currentLocation, Game1.player.getTileLocation());
@@ -233,6 +256,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
+            if (!this.IsEnabled)
+                return;
+
             if (Game1.activeClickableMenu is CarpenterMenu || Game1.activeClickableMenu?.GetType().FullName == this.PelicanFiberMenuFullName)
                 this.ProcessNewConstruction();
             if (Context.IsPlayerFree)
@@ -244,6 +270,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
         {
+            if (!this.IsEnabled)
+                return;
+
             this.Tractor?.UpdateForNewLocation(e.PriorLocation, e.NewLocation);
         }
 
