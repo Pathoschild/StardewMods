@@ -4,6 +4,8 @@ Transfer items without having to run around, from the comfort of your bed to the
 
 ![](screenshots/animated-usage.gif)
 
+Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
+
 ## Contents
 * [Installation](#installation)
 * [Usage](#usage)

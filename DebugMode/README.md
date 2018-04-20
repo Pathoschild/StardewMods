@@ -2,6 +2,8 @@
 press `~` to view useful metadata and unlock the game's debug commands (including teleportation
 and time manipulation).
 
+Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
+
 ## Contents
 * [Install](#install)
 * [Use](#use)

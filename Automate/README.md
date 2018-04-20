@@ -2,6 +2,8 @@
 next to machines (like a furnace, cheese press, bee house, etc), and the machines will
 automatically pull raw items from the chest and push processed items into it.
 
+Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
+
 ## Contents
 * [Installation](#installation)
 * [Usage](#usage)

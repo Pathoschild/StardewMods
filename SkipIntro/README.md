@@ -2,6 +2,8 @@
 the title screen or load screen (configurable) when you start the game. It also skips the screen
 transitions, so starting the game is much faster.
 
+Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
+
 ## Install
 1. [Install the latest version of SMAPI](https://smapi.io/).
 2. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/533).

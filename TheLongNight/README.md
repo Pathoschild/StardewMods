@@ -3,6 +3,8 @@ You just stay awake forever and the night never ends (until you go to bed).
 
 > ![](screenshots/clock.png)
 
+Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
+
 ## Contents
 * [Install](#install)
 * [Use](#use)

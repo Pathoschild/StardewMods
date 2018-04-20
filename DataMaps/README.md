@@ -1,6 +1,8 @@
 **Data Maps** is a [Stardew Valley](http://stardewvalley.net/) mod that overlays the world with
 metadata maps.
 
+Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
+
 ## Contents
 * [Install](#install)
 * [Use](#use)

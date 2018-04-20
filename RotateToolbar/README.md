@@ -2,6 +2,8 @@
 inventory row for the toolbar by pressing `Tab` (configurable):  
 ![](example.gif)
 
+Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
+
 ## Contents
 * [Install](#install)
 * [Configure](#configure)

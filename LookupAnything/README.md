@@ -7,6 +7,8 @@ what the game is doing.
 
 ![](screenshots/animated.gif)
 
+Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
+
 ## Contents
 * [Install](#install)
 * [Use](#use)

@@ -1,6 +1,8 @@
 **Tractor Mod** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you buy a tractor
 (and tractor garage) to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc.
 
+Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
+
 ## Contents
 * [Install](#install)
 * [Use](#use)

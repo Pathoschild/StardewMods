@@ -1,6 +1,8 @@
 **Content Patcher** is a [Stardew Valley](http://stardewvalley.net/) mod which loads content packs
 that change the game's images and data without replacing XNB files.
 
+Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
+
 **This documentation is for modders. If you're a player, see the [Nexus page](https://www.nexusmods.com/stardewvalley/mods/1915) instead.**
 
 ## Contents
