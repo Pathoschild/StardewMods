@@ -10,7 +10,6 @@ Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, single-player only. Se
 * [Configure](#configure)
 * [Custom textures](#custom-textures)
 * [Compatibility](#compatibility)
-* [Versions](#versions)
 * [See also](#see-also)
 
 ## Install
@@ -81,10 +80,8 @@ The mod will disable itself in multiplayer mode, so it's safe to keep it install
 save in multiplayer and later switch back to single-player, any garages you had previously built
 will reappear where they were before.
 
-## Versions
-See [release notes](release-notes.md).
-
 ## See also
+* [Release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1401)
 * [Discussion thread](http://community.playstarbound.com/threads/tractor-mod.136649/)
 * Derived from [TractorMod](https://github.com/lambui/StardewValleyMod_TractorMod) by PhthaloBlue (@lambui), rewritten with their permission.

@@ -16,6 +16,7 @@ using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod
@@ -307,7 +308,7 @@ namespace Pathoschild.Stardew.TractorMod
                     location.destroyStructure(garage);
                     location.buildings.Add(new TractorGarage(tractorID, this.GetBlueprint(), new Vector2(garage.tileX, garage.tileY), 0));
                     if (this.Tractor == null)
-                        this.Tractor = this.SpawnTractor(tractorID, location, garage.tileX + 1, garage.tileY + 1);
+                        this.Tractor = this.SpawnTractor(tractorID, location, garage.tileX + 1, garage.tileY + 1, metadata.SaveData.TractorHatID);
                 }
             }
         }
@@ -317,11 +318,14 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="tractorID">The tractor's unique horse ID.</param>
         /// <param name="tileX">The tile X position at which to spawn it.</param>
         /// <param name="tileY">The tile Y position at which to spawn it.</param>
-        private Tractor SpawnTractor(Guid tractorID, BuildableGameLocation location, int tileX, int tileY)
+        /// <param name="hatID">The tractor's hat ID.</param>
+        private Tractor SpawnTractor(Guid tractorID, BuildableGameLocation location, int tileX, int tileY, int? hatID)
         {
             Tractor tractor = new Tractor(tractorID, tileX, tileY, this.Config, this.Attachments, this.Helper.Content.GetActualAssetKey(this.GetTextureKey("tractor")), this.Helper.Translation, this.Helper.Reflection);
             tractor.SetLocation(location, new Vector2(tileX, tileY));
             tractor.SetPixelPosition(new Vector2(tractor.Position.X + 20, tractor.Position.Y));
+            if (hatID.HasValue)
+                tractor.hat.Value = new Hat(hatID.Value);
             return tractor;
         }
 
@@ -338,13 +342,13 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Stash all tractor and garage data to a separate file to avoid breaking the save file.</summary>
         private void StashCustomData()
         {
-            // back up garages
+            // stash data
             GarageMetadata[] garages = this.GetGarages().ToArray();
             CustomSaveData saveData = new CustomSaveData(garages.Select(p => p.SaveData));
             this.Helper.WriteJsonFile(this.GetDataPath(Constants.SaveFolderName), saveData);
 
             // remove tractors + buildings
-            foreach (var garage in garages)
+            foreach (GarageMetadata garage in garages)
                 garage.Location.destroyStructure(garage.Building);
             foreach (GameLocation location in CommonHelper.GetLocations())
                 location.characters.Filter(p => !(p is Tractor));
@@ -410,7 +414,7 @@ namespace Pathoschild.Stardew.TractorMod
 
                 // spawn tractor
                 if (this.Tractor == null && !garage.isUnderConstruction())
-                    this.Tractor = this.SpawnTractor(garageData.TractorID, location, garage.tileX + 1, garage.tileY + 1);
+                    this.Tractor = this.SpawnTractor(garageData.TractorID, location, garage.tileX + 1, garage.tileY + 1, garageData.TractorHatID);
             }
         }
 
@@ -434,7 +438,7 @@ namespace Pathoschild.Stardew.TractorMod
                     foreach (LegacySaveData.LegacySaveEntry saveData in data.Saves)
                     {
                         saves[$"{saveData.FarmerName}_{saveData.SaveSeed}"] = new CustomSaveData(
-                            saveData.TractorHouse.Select(p => new CustomSaveBuilding(new Vector2(p.X, p.Y), Guid.NewGuid(), this.GarageBuildingType, "Farm", 0))
+                            saveData.TractorHouse.Select(p => new CustomSaveBuilding(new Vector2(p.X, p.Y), Guid.NewGuid(), null, this.GarageBuildingType, "Farm", 0))
                         );
                     }
                 }
@@ -457,13 +461,20 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Get garages in the given location to save.</summary>
         private IEnumerable<GarageMetadata> GetGarages()
         {
-            return
-                (
-                    from location in CommonHelper.GetLocations().OfType<BuildableGameLocation>()
-                    from building in location.buildings.OfType<Stable>()
-                    where building.buildingType.Value == this.GarageBuildingType
-                    select new GarageMetadata(location, building, new CustomSaveBuilding(new Vector2(building.tileX, building.tileY), building.HorseId, this.GarageBuildingType, this.GetMapName(location), building.daysOfConstructionLeft))
-                );
+            foreach (BuildableGameLocation location in CommonHelper.GetLocations().OfType<BuildableGameLocation>())
+            {
+                foreach (Stable stable in location.buildings.OfType<Stable>())
+                {
+                    if (stable.buildingType.Value != this.GarageBuildingType)
+                        continue;
+
+                    Tractor tractor = Utility.findHorse(stable.HorseId) as Tractor;
+                    int? tractorHatID = tractor?.hat.Value?.which;
+                    var saveData = new CustomSaveBuilding(new Vector2(stable.tileX, stable.tileY), stable.HorseId, tractorHatID, this.GarageBuildingType, this.GetMapName(location), stable.daysOfConstructionLeft);
+
+                    yield return new GarageMetadata(location, stable, tractor, saveData);
+                }
+            }
         }
 
         /// <summary>Get a blueprint to construct the tractor garage.</summary>
@@ -534,6 +545,9 @@ namespace Pathoschild.Stardew.TractorMod
             /// <summary>The garage building.</summary>
             public Building Building { get; }
 
+            /// <summary>The tractor for this garage (if found).</summary>
+            public Tractor Tractor { get; }
+
             /// <summary>The garage save data.</summary>
             public CustomSaveBuilding SaveData { get; }
 
@@ -544,11 +558,13 @@ namespace Pathoschild.Stardew.TractorMod
             /// <summary>Construct an instance.</summary>
             /// <param name="location">The location containing the garage.</param>
             /// <param name="building">The garage building.</param>
+            /// <param name="tractor">The tractor for this garage (if found).</param>
             /// <param name="saveData">The garage save data.</param>
-            public GarageMetadata(BuildableGameLocation location, Building building, CustomSaveBuilding saveData)
+            public GarageMetadata(BuildableGameLocation location, Building building, Tractor tractor, CustomSaveBuilding saveData)
             {
                 this.Location = location;
                 this.Building = building;
+                this.Tractor = tractor;
                 this.SaveData = saveData;
             }
         }
