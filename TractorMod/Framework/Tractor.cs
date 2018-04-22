@@ -300,7 +300,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             // get references
             SFarmer player = Game1.player;
-            IReflectedField<Horse> mountField = this.Reflection.GetField<Horse>(Game1.player, "mount");
+            IReflectedProperty<Horse> mountField = this.Reflection.GetProperty<Horse>(Game1.player, "mount");
 
             // save current state
             Horse mount = mountField.GetValue();
