@@ -29,5 +29,8 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
 
         /// <summary>The speed multiplier for falling trees.</summary>
         public int TreeFallSpeed { get; set; } = 1;
+
+        /// <summary>The speed multiplier for title menu transitions.</summary>
+        public int TitleMenuTransitionSpeed { get; set; } = 10;
     }
 }

@@ -71,7 +71,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <param name="e">The event data.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (!Context.IsWorldReady || Game1.eventUp || !this.Handlers.Any())
+            if (Game1.eventUp || !this.Handlers.Any())
                 return;
 
             int playerAnimationID = this.Helper.Reflection.GetField<int>(Game1.player.FarmerSprite, "currentSingleAnimation").GetValue();
@@ -105,6 +105,8 @@ namespace Pathoschild.Stardew.FastAnimations
                 yield return new ShearingHandler(config.ShearSpeed);
             if (config.TreeFallSpeed > 1)
                 yield return new TreeFallingHandler(config.TreeFallSpeed, this.Helper.Reflection);
+            if (config.TitleMenuTransitionSpeed > 1)
+                yield return new TitleMenuHandler(config.TitleMenuTransitionSpeed, this.Helper.Reflection);
         }
     }
 }

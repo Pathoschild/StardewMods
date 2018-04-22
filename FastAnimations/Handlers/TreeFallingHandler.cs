@@ -64,7 +64,9 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override bool IsEnabled(int playerAnimationID)
         {
-            return this.GetFallingTrees().Any();
+            return
+                Context.IsWorldReady
+                && this.GetFallingTrees().Any();
         }
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>

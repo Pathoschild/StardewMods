@@ -43,7 +43,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override bool IsEnabled(int playerAnimationID)
         {
-            return Game1.player.isEating && Game1.player.Sprite.CurrentAnimation != null;
+            return Context.IsWorldReady && Game1.player.isEating && Game1.player.Sprite.CurrentAnimation != null;
         }
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>

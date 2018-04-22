@@ -1,4 +1,5 @@
-﻿using Pathoschild.Stardew.FastAnimations.Framework;
+using Pathoschild.Stardew.FastAnimations.Framework;
+using StardewModdingAPI;
 using StardewValley;
 
 namespace Pathoschild.Stardew.FastAnimations.Handlers
@@ -20,7 +21,8 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         public override bool IsEnabled(int playerAnimationID)
         {
             return
-                Game1.player.Sprite.CurrentAnimation != null
+                Context.IsWorldReady
+                && Game1.player.Sprite.CurrentAnimation != null
                 && (
                     playerAnimationID == FarmerSprite.shearDown
                     || playerAnimationID == FarmerSprite.shearLeft
