@@ -1,11 +1,10 @@
 **Fast Animations** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you selectively
 speed up many animations (currently eating, drinking, milking, shearing, and breaking geodes).
 
-Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
-
 ## Contents
 * [Install](#install)
 * [Configure](#configure)
+* [Compatibility](#compatibility)
 * [See also](#see-also)
 
 ## Install
@@ -37,9 +36,15 @@ setting              | default | what it affects
 :------------------- | :------ | :------------------
 `DisableEatAndDrinkConfirmation` | `false` | If `true`, the confirmation prompt before eating or drinking won't be shown.
 
-## Versions
-See [release notes](release-notes.md).
+## Compatibility
+Fast Animations is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+multiplayer.
+
+Multiplayer notes:
+* Animations will be sped up smoothly for you, but other players may see them skip frames.
+* If multiple players have it installed, some animation speeds may stack.
 
 ## See also
+* [Release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1089/)
 * [Discussion thread](http://community.playstarbound.com/threads/smapi-fast-animations.132074/)

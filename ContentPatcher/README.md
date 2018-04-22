@@ -1,8 +1,6 @@
 **Content Patcher** is a [Stardew Valley](http://stardewvalley.net/) mod which loads content packs
 that change the game's images and data without replacing XNB files.
 
-Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
-
 **This documentation is for modders. If you're a player, see the [Nexus page](https://www.nexusmods.com/stardewvalley/mods/1915) instead.**
 
 ## Contents
@@ -21,7 +19,7 @@ Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
   * [Patch commands](#patch-commands)
   * [Debug mode](#debug-mode)
   * [Verbose log](#verbose-log)
-* [Versions](#versions)
+* [Compatibility](#compatibility)
 * [See also](#see-also)
 
 ## Install
@@ -65,14 +63,6 @@ whether one of these would work for you:
   * [Custom Furniture](https://www.nexusmods.com/stardewvalley/mods/1254) to add furniture.
   * [CustomNPC](https://www.nexusmods.com/stardewvalley/mods/1607) to add NPCs.
   * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add items and fruit trees.
-
-### Known limitations
-* Due to limitations in Stardew Valley 1.2 (fixed in 1.3):
-  * Content Patcher can't reliably change title menu textures, some special event and festival
-    textures, special event maps, some farmer character textures, and mine maps (mine textures are
-    fine).
-  * Assets may not refresh correctly when you switch language. Restarting the game after you change
-    language will avoid any issues.
 
 ## Basic features
 ### Overview
@@ -413,9 +403,20 @@ and then search the SMAPI log file for that name. Particular questions to ask:
 * When SMAPI checks if it can load/edit the asset name, is the box ticked?  
   _If not, check your `When` and `Target` fields._
 
-## Versions
-See [release notes](release-notes.md).
+## Compatibility
+Content Patcher is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+multiplayer.
+
+It's best if all players have the same content packs, though it's not required. Effects if some
+players don't have a content pack installed:
+
+patch type | effect
+---------- | ------
+visual     | Only visible to players that have it installed.
+maps       | Only visible to players that have it installed. Players without the custom map will see the normal map and will be subject to the normal bounds (e.g. they may see other players walk through walls, but they won't be able to follow).
+data       | Only directly affects players that have it installed, but can indirectly affect other players. For example, if a content pack changes `Data/ObjectInformation` and you create a new object, other player will see that object's custom values even if their `Data/ObjectInformation` doesn't have those changes.
 
 ## See also
+* [Release notes](release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1915)
 * [Discussion thread](https://community.playstarbound.com/threads/content-patcher.141420/)

@@ -23,6 +23,9 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Constructs machine instances.</summary>
         private readonly MachineFactory Factory = new MachineFactory();
 
+        /// <summary>Whether to enable automation for the current save.</summary>
+        private bool EnableAutomation => Context.IsMainPlayer;
+
         /// <summary>The machines to process.</summary>
         private readonly IDictionary<GameLocation, MachineGroup[]> MachineGroups = new Dictionary<GameLocation, MachineGroup[]>();
 
@@ -74,6 +77,10 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
+            // disable if secondary player
+            if (!this.EnableAutomation)
+                this.Monitor.Log("Disabled automation (only the main player can automate machines in multiplayer mode).", LogLevel.Warn);
+
             // reset automation interval
             this.AutomateCountdown = this.Config.AutomationInterval;
             this.DisableOverlay();
@@ -92,6 +99,9 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void LocationEvents_LocationsChanged(object sender, EventArgsGameLocationsChanged e)
         {
+            if (!this.EnableAutomation)
+                return;
+
             this.VerboseLog("Location list changed, reloading all machines.");
 
             try
@@ -111,6 +121,9 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void LocationEvents_LocationObjectsChanged(object sender, EventArgsLocationObjectsChanged e)
         {
+            if (!this.EnableAutomation)
+                return;
+
             this.VerboseLog("Object list changed, reloading machines in current location.");
 
             try
@@ -128,7 +141,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (!Context.IsWorldReady)
+            if (!Context.IsWorldReady || !this.EnableAutomation)
                 return;
 
             try

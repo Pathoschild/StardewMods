@@ -1,12 +1,11 @@
 **Data Maps** is a [Stardew Valley](http://stardewvalley.net/) mod that overlays the world with
 metadata maps.
 
-Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
-
 ## Contents
 * [Install](#install)
 * [Use](#use)
 * [Configure](#configure)
+* [Compatibility](#compatibility)
 * [See also](#see-also)
 
 ## Install
@@ -54,7 +53,7 @@ Shows which crops have been watered today.
 Shows which crops have fertiliser applied.
 > ![](docs/screenshots/crops-fertilized.png)
 
-## Configuration
+## Configure
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
 file if you want. These are the available settings:
 
@@ -64,9 +63,18 @@ setting    | what it affects
 `EnabledMaps` | Choose which maps you want to appear in-game. All maps are enabled by default.
 `CombineOverlappingBorders` | Default `true`. When two groups of the same color overlap, draw one border around their edges instead of their individual borders.
 
-## Versions
-See [release notes](release-notes.md).
+## Compatibility
+Data Maps is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+multiplayer. There are no known issues in multiplayer (even if other players don't have it
+installed).
+
+Data Maps will automatically show data from these mods if you have them installed:
+* Better Sprinklers
+* Cobalt
+* Pelican Fiber
+* Simple Sprinkler
 
 ## See also
+* [Release notes](release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1691)
 * [Discussion thread](https://community.playstarbound.com/threads/data-maps.139625/)

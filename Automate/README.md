@@ -2,21 +2,19 @@
 next to machines (like a furnace, cheese press, bee house, etc), and the machines will
 automatically pull raw items from the chest and push processed items into it.
 
-Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
-
 ## Contents
-* [Installation](#installation)
-* [Usage](#usage)
-* [Configuration](#configuration)
-* [Versions](#versions)
+* [Install](#install)
+* [Use](#use)
+* [Configure](#configure)
+* [Compatibility](#compatibility)
 * [See also](#see-also)
 
-## Installation
+## Install
 1. [Install the latest version of SMAPI](https://smapi.io/).
 3. Install [this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/1063).
 4. Run the game using SMAPI.
 
-## Usage
+## Use
 ### Basic automation
 Place a chest next to a crafting machine (in any direction including diagonal) to connect it.
 Machines connected to a chest will push their output into it, and pull ingredients to process out
@@ -95,7 +93,7 @@ You can increase production by just adding more machines.
   put back in the chest.
   > ![](screenshots/iridium-cheese-factory.png)
 
-## Configuration
+## Configure
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
 file if you want. These are the available settings:
 
@@ -105,9 +103,15 @@ setting           | what it affects
 `AutomationInterval` | Default `60`. The number of update ticks between each automation cycle (one second is ≈60 ticks).
 `VerboseLogging` | Default `false`. Whether to write more detailed information about what the mod is doing to the log file. This is useful for troubleshooting, but may impact performance and should generally be disabled.
 
-## Versions
-See [release notes](release-notes.md).
+## Compatibility
+Automate is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+multiplayer. In multiplayer mode, only the main player can automate machines; other players can
+keep it installed and use the overlay, their mod just won't automate anything.
+
+Automate can be used with custom machine mods, but only the standard machines will currently be
+automated.
 
 ## See also
+* [Release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1063)
 * [Discussion thread](http://community.playstarbound.com/threads/automate.131913)

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Netcode;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using StardewModdingAPI;
@@ -94,7 +95,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
             {
                 if (visibleTiles.Contains((int)pair.Key.X, (int)pair.Key.Y))
                 {
-                    bool isFalling = this.Reflection.GetField<bool>(pair.Value, "falling").GetValue();
+                    bool isFalling = this.Reflection.GetField<NetBool>(pair.Value, "falling").GetValue().Value;
                     if (isFalling)
                         yield return pair;
                 }

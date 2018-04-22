@@ -2,12 +2,10 @@
 inventory row for the toolbar by pressing `Tab` (configurable):  
 ![](example.gif)
 
-Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
-
 ## Contents
 * [Install](#install)
 * [Configure](#configure)
-* [Versions](#versions)
+* [Compatibility](#compatibility)
 * [See also](#see-also)
 
 ## Install
@@ -23,9 +21,11 @@ setting    | what it affects
 ---------- | -------------------
 `Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default values are `Tab` to show the next row. Available inputs:<ul><li>`ShiftToPrevious`: show the previous inventory row.</li><li>`ShiftToNext`: show the next inventory row.</li></ul>
 
-## Versions
-See [release notes](release-notes.md).
+## Compatibility
+Rotate Toolbar is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+multiplayer. There are no known issues in multiplayer (even if other players don't have it installed).
 
 ## See also
+* [Release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1100)
 * [Discussion thread](http://community.playstarbound.com/threads/rotate-toolbar.132264)
