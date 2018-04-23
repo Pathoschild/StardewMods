@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.6
-* Updated for Stardew Valley 1.3.
+* Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added support for title menu transitions.
 
 ## 1.5

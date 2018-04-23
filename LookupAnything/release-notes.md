@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.19
-* Updated for Stardew Valley 1.3.
+* Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added support for looking up other players.
 * Added support for new friendship data.
 

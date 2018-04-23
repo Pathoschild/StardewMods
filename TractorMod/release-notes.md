@@ -1,6 +1,6 @@
 # Release notes
 ## 4.5
-* Updated for Stardew Valley 1.3.
+* Updated for Stardew Valley 1.3 (disabled in multiplayer mode).
 * Tractor can now wear hats.
 
 ## 4.4.1

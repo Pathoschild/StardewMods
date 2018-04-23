@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.13
-* Updated for Stardew Valley 1.3.
+* Updated for Stardew Valley 1.3 (including multiplayer support).
 
 ## 1.12.4
 * Updated to SMAPI 2.4.

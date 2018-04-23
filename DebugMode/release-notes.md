@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.9
-* Updated for Stardew Valley 1.3.
+* Updated for Stardew Valley 1.3 (including multiplayer support).
 
 ## 1.8
 * Added submenu, event, and festival info to overlay.

@@ -1,7 +1,7 @@
 {
   "Name": "The Long Night",
   "Author": "Pathoschild",
-  "Version": "1.2.0",
+  "Version": "1.2.0-alpha",
   "MinimumApiVersion": "2.6-alpha",
   "Description": "Disables collapsing. You just stay awake forever and the night never ends (until you go to bed).",
   "UniqueID": "Pathoschild.TheLongNight",
