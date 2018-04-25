@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     // chests in location
                     {
                         int namelessChests = 0;
-                        foreach (KeyValuePair<Vector2, NetRef<Object>> pair in location.Objects.FieldDict)
+                        foreach (KeyValuePair<Vector2, SObject> pair in location.Objects.Pairs)
                         {
                             Vector2 tile = pair.Key;
                             SObject obj = pair.Value;

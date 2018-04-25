@@ -97,7 +97,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             }
 
             // map objects
-            foreach (var pair in location.objects.FieldDict)
+            foreach (KeyValuePair<Vector2, SObject> pair in location.objects.Pairs)
             {
                 Vector2 spriteTile = pair.Key;
                 SObject obj = pair.Value;
