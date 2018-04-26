@@ -83,7 +83,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             if (this.Config.ClearBouldersAndMeteorites)
             {
                 ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile);
-                if (clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex) && tool.UpgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex])
+                if (clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex.Value) && tool.UpgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex.Value])
                     this.UseToolOnTile(tool, tile);
             }
 

@@ -43,7 +43,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
 
             // if struck by lightning => coal
             if (tree.struckByLightningCountdown.Value > 0)
-                return new TrackedItem(new SObject(382, tree.fruitsOnTree), onReduced: this.OnOutputReduced);
+                return new TrackedItem(new SObject(382, tree.fruitsOnTree.Value), onReduced: this.OnOutputReduced);
 
             // else => fruit
             int quality = SObject.lowQuality;
@@ -53,7 +53,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
                 quality = SObject.highQuality;
             if (tree.daysUntilMature.Value <= -336)
                 quality = SObject.bestQuality;
-            return new TrackedItem(new SObject(tree.indexOfFruit, tree.fruitsOnTree, quality: quality), onReduced: this.OnOutputReduced);
+            return new TrackedItem(new SObject(tree.indexOfFruit.Value, tree.fruitsOnTree.Value, quality: quality), onReduced: this.OnOutputReduced);
         }
 
         /// <summary>Provide input to the machine.</summary>

@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
         {
-            SObject heldObject = this.Machine.heldObject;
+            SObject heldObject = this.Machine.heldObject.Value;
             if (heldObject == null)
                 return MachineState.Empty;
 
@@ -46,7 +46,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public override ITrackedStack GetOutput()
         {
             Cask cask = this.Machine;
-            SObject heldObject = this.Machine.heldObject;
+            SObject heldObject = this.Machine.heldObject.Value;
             return new TrackedItem(heldObject.getOne(), item =>
             {
                 cask.heldObject.Value = null;

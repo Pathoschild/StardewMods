@@ -82,7 +82,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public static FriendshipModel GetFriendshipForAnimal(SFarmer player, FarmAnimal animal, Metadata metadata)
         {
-            return new FriendshipModel(animal.friendshipTowardFarmer, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints);
+            return new FriendshipModel(animal.friendshipTowardFarmer.Value, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints);
         }
 
         /// <summary>Get the raw gift tastes from the underlying data.</summary>

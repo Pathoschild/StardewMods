@@ -157,7 +157,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     yield return new PercentageBarField(this.Translate(L10n.Monster.Health), monster.Health, monster.MaxHealth, Color.Green, Color.Gray, this.Translate(L10n.Generic.PercentRatio, new { percent = Math.Round((monster.Health / (monster.MaxHealth * 1f) * 100)), value = monster.Health, max = monster.MaxHealth }));
                     yield return new ItemDropListField(this.Translate(L10n.Monster.Drops), this.GetMonsterDrops(monster), this.Text, defaultText: this.Translate(L10n.Monster.DropsNothing));
                     yield return new GenericField(this.Translate(L10n.Monster.Experience), this.Stringify(monster.ExperienceGained));
-                    yield return new GenericField(this.Translate(L10n.Monster.Defence), this.Stringify(monster.resilience));
+                    yield return new GenericField(this.Translate(L10n.Monster.Defence), this.Stringify(monster.resilience.Value));
                     yield return new GenericField(this.Translate(L10n.Monster.Attack), this.Stringify(monster.DamageToFarmer));
 
                     // Adventure Guild quest

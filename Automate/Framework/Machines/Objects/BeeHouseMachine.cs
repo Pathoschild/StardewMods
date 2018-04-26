@@ -56,7 +56,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public override ITrackedStack GetOutput()
         {
             // get raw output
-            SObject output = this.Machine.heldObject;
+            SObject output = this.Machine.heldObject.Value;
             if (output == null)
                 return null;
 
@@ -69,10 +69,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 Crop flower = Utility.findCloseFlower(this.Location, this.Tile);
                 if (flower != null)
                 {
-                    string[] flowerData = Game1.objectInformation[flower.indexOfHarvest].Split('/');
+                    string[] flowerData = Game1.objectInformation[flower.indexOfHarvest.Value].Split('/');
                     prefix = flowerData[0];
                     addedPrice = Convert.ToInt32(flowerData[1]) * 2;
-                    if (!this.HoneyTypes.TryGetValue(flower.indexOfHarvest, out type))
+                    if (!this.HoneyTypes.TryGetValue(flower.indexOfHarvest.Value, out type))
                         type = SObject.HoneyType.Wild;
                 }
             }

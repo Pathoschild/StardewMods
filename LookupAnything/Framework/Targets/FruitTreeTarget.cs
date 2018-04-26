@@ -61,7 +61,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             Rectangle sourceRectangle = this.GetSourceRectangle(tree);
 
             // check sprite
-            SpriteEffects spriteEffects = tree.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            SpriteEffects spriteEffects = tree.flipped.Value ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             return this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, sourceRectangle, spriteEffects);
         }
 
@@ -74,27 +74,26 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         private Rectangle GetSourceRectangle(FruitTree tree)
         {
             // stump
-            if (tree.stump)
-                return new Rectangle(384, tree.treeType * 5 * 16 + 48, 48, 32);
+            if (tree.stump.Value)
+                return new Rectangle(384, tree.treeType.Value * 5 * 16 + 48, 48, 32);
 
             // growing tree
             if (tree.growthStage.Value < 4)
             {
-                switch (tree.growthStage)
+                switch (tree.growthStage.Value)
                 {
                     case 0:
-                        return new Rectangle(0, tree.treeType * 5 * 16, 48, 80);
                     case 1:
-                        return new Rectangle(48, tree.treeType * 5 * 16, 48, 80);
                     case 2:
-                        return new Rectangle(96, tree.treeType * 5 * 16, 48, 80);
+                        return new Rectangle(tree.growthStage.Value * 48, tree.treeType.Value * 5 * 16, 48, 80);
+
                     default:
-                        return new Rectangle(144, tree.treeType * 5 * 16, 48, 80);
+                        return new Rectangle(144, tree.treeType.Value * 5 * 16, 48, 80);
                 }
             }
 
             // grown tree
-            return new Rectangle((12 + (tree.GreenHouseTree ? 1 : Utility.getSeasonNumber(Game1.currentSeason)) * 3) * 16, tree.treeType * 5 * 16, 48, 16 + 64);
+            return new Rectangle((12 + (tree.GreenHouseTree ? 1 : Utility.getSeasonNumber(Game1.currentSeason)) * 3) * 16, tree.treeType.Value * 5 * 16, 48, 16 + 64);
         }
     }
 }

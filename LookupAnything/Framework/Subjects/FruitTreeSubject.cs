@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="tile">The tree's tile position.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         public FruitTreeSubject(FruitTree tree, Vector2 tile, ITranslationHelper translations)
-            : base(translations.Get(L10n.FruitTree.Name, new { fruitName = GameHelper.GetObjectBySpriteIndex(tree.indexOfFruit).DisplayName }), null, translations.Get(L10n.Types.FruitTree), translations)
+            : base(translations.Get(L10n.FruitTree.Name, new { fruitName = GameHelper.GetObjectBySpriteIndex(tree.indexOfFruit.Value).DisplayName }), null, translations.Get(L10n.Types.FruitTree), translations)
         {
             this.Target = tree;
             this.Tile = tile;
@@ -49,7 +49,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             // get basic info
             bool isMature = tree.daysUntilMature.Value <= 0;
-            bool isDead = tree.stump;
+            bool isDead = tree.stump.Value;
             bool isStruckByLightning = tree.struckByLightningCountdown.Value > 0;
 
             // show next fruit
@@ -69,9 +69,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // show growth data
             if (!isMature)
             {
-                SDate dayOfMaturity = SDate.Now().AddDays(tree.daysUntilMature);
+                SDate dayOfMaturity = SDate.Now().AddDays(tree.daysUntilMature.Value);
                 string grownOnDateText = this.Translate(L10n.FruitTree.GrowthSummary, new { date = this.Stringify(dayOfMaturity) });
-                string daysUntilGrownText = this.Text.GetPlural(tree.daysUntilMature, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = tree.daysUntilMature });
+                string daysUntilGrownText = this.Text.GetPlural(tree.daysUntilMature.Value, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = tree.daysUntilMature });
                 string growthText = $"{grownOnDateText} ({daysUntilGrownText})";
 
                 yield return new GenericField(this.Translate(L10n.FruitTree.NextFruit), this.Translate(L10n.FruitTree.NextFruitTooYoung));
@@ -122,7 +122,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // show season
-            yield return new GenericField(this.Translate(L10n.FruitTree.Season), this.Translate(L10n.FruitTree.SeasonSummary, new { season = this.Text.GetSeasonName(tree.fruitSeason) }));
+            yield return new GenericField(this.Translate(L10n.FruitTree.Season), this.Translate(L10n.FruitTree.SeasonSummary, new { season = this.Text.GetSeasonName(tree.fruitSeason.Value) }));
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
@@ -133,8 +133,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             // pinned fields
             yield return new GenericDebugField("mature in", $"{target.daysUntilMature} days", pinned: true);
-            yield return new GenericDebugField("growth stage", target.growthStage, pinned: true);
-            yield return new GenericDebugField("health", target.health, pinned: true);
+            yield return new GenericDebugField("growth stage", target.growthStage.Value, pinned: true);
+            yield return new GenericDebugField("health", target.health.Value, pinned: true);
 
             // raw fields
             foreach (IDebugField field in this.GetDebugFieldsFrom(target))
@@ -174,7 +174,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="daysPerQuality">The number of days before the tree begins producing a higher quality.</param>
         private ItemQuality GetCurrentQuality(FruitTree tree, int daysPerQuality)
         {
-            int maturityLevel = Math.Max(0, Math.Min(3, -tree.daysUntilMature / daysPerQuality));
+            int maturityLevel = Math.Max(0, Math.Min(3, -tree.daysUntilMature.Value / daysPerQuality));
             switch (maturityLevel)
             {
                 case 0:
@@ -203,7 +203,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new KeyValuePair<ItemQuality, int>(currentQuality, 0);
 
             // yield future qualities
-            int dayOffset = daysPerQuality - Math.Abs(tree.daysUntilMature % daysPerQuality);
+            int dayOffset = daysPerQuality - Math.Abs(tree.daysUntilMature.Value % daysPerQuality);
             foreach (ItemQuality futureQuality in new[] { ItemQuality.Silver, ItemQuality.Gold, ItemQuality.Iridium })
             {
                 if (currentQuality >= futureQuality)

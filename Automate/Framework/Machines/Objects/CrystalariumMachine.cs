@@ -31,7 +31,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             if (this.Machine.heldObject.Value == null)
                 return MachineState.Disabled;
 
-            return this.Machine.readyForHarvest
+            return this.Machine.readyForHarvest.Value
                 ? MachineState.Done
                 : MachineState.Processing;
         }
@@ -40,7 +40,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public override ITrackedStack GetOutput()
         {
             SObject machine = this.Machine;
-            SObject heldObject = machine.heldObject;
+            SObject heldObject = machine.heldObject.Value;
             return new TrackedItem(heldObject.getOne(), item =>
             {
                 machine.MinutesUntilReady = this.Reflection.GetMethod(machine, "getMinutesForCrystalarium").Invoke<int>(heldObject.ParentSheetIndex);

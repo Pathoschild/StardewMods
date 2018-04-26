@@ -29,7 +29,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <remarks>Reverse engineered from <see cref="FarmAnimal"/>.</remarks>
         public FarmAnimalSubject(FarmAnimal animal, ITranslationHelper translations)
-            : base(animal.displayName, null, animal.type, translations)
+            : base(animal.displayName, null, animal.type.Value, translations)
         {
             this.Target = animal;
         }
@@ -46,13 +46,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             SDate dayOfMaturity = null;
             if (!isFullyGrown)
             {
-                daysUntilGrown = animal.ageWhenMature - animal.age;
+                daysUntilGrown = animal.ageWhenMature.Value - animal.age.Value;
                 dayOfMaturity = SDate.Now().AddDays(daysUntilGrown);
             }
 
             // yield fields
             yield return new CharacterFriendshipField(this.Translate(L10n.Animal.Love), DataParser.GetFriendshipForAnimal(Game1.player, animal, metadata), this.Text);
-            yield return new PercentageBarField(this.Translate(L10n.Animal.Happiness), animal.happiness, byte.MaxValue, Color.Green, Color.Gray, this.Translate(L10n.Generic.Percent, new { percent = Math.Round(animal.happiness / (metadata.Constants.AnimalMaxHappiness * 1f) * 100) }));
+            yield return new PercentageBarField(this.Translate(L10n.Animal.Happiness), animal.happiness.Value, byte.MaxValue, Color.Green, Color.Gray, this.Translate(L10n.Generic.Percent, new { percent = Math.Round(animal.happiness.Value / (metadata.Constants.AnimalMaxHappiness * 1f) * 100) }));
             yield return new GenericField(this.Translate(L10n.Animal.Mood), animal.getMoodMessage());
             yield return new GenericField(this.Translate(L10n.Animal.Complaints), this.GetMoodReason(animal));
             yield return new ItemIconField(this.Translate(L10n.Animal.ProduceReady), animal.currentProduce.Value > 0 ? GameHelper.GetObjectBySpriteIndex(animal.currentProduce.Value) : null);
@@ -70,8 +70,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // pinned fields
             yield return new GenericDebugField("age", $"{target.age} days", pinned: true);
             yield return new GenericDebugField("friendship", $"{target.friendshipTowardFarmer} (max {metadata.Constants.AnimalMaxHappiness})", pinned: true);
-            yield return new GenericDebugField("fullness", this.Stringify(target.fullness), pinned: true);
-            yield return new GenericDebugField("happiness", this.Stringify(target.happiness), pinned: true);
+            yield return new GenericDebugField("fullness", this.Stringify(target.fullness.Value), pinned: true);
+            yield return new GenericDebugField("happiness", this.Stringify(target.happiness.Value), pinned: true);
 
             // raw fields
             foreach (IDebugField field in this.GetDebugFieldsFrom(target))
@@ -105,7 +105,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 factors.Add(this.Translate(L10n.Animal.ComplaintsNoHeater));
 
             // mood
-            switch (animal.moodMessage)
+            switch (animal.moodMessage.Value)
             {
                 case FarmAnimal.newHome:
                     factors.Add(this.Translate(L10n.Animal.ComplaintsNewHome));
@@ -122,7 +122,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // not pet
-            if (!animal.wasPet)
+            if (!animal.wasPet.Value)
                 factors.Add(this.Translate(L10n.Animal.ComplaintsNotPetted));
 
             // return factors

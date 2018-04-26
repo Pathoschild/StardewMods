@@ -79,7 +79,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
             JunimoHut[] huts =
                 (
                     from JunimoHut hut in buildableLocation.buildings.OfType<JunimoHut>()
-                    where searchArea.Contains(hut.tileX, hut.tileY)
+                    where searchArea.Contains(hut.tileX.Value, hut.tileY.Value)
                     select hut
                 )
                 .ToArray();
@@ -88,7 +88,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
             HashSet<Vector2> covered = new HashSet<Vector2>();
             foreach (JunimoHut hut in huts)
             {
-                TileData[] tiles = this.GetCoverage(hut.tileX, hut.tileY).Select(pos => new TileData(pos, this.CoveredColor)).ToArray();
+                TileData[] tiles = this.GetCoverage(hut.tileX.Value, hut.tileY.Value).Select(pos => new TileData(pos, this.CoveredColor)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
                 yield return new TileGroup(tiles, outerBorderColor: this.IntersectsTile(hut, cursorTile) ? this.SelectedColor : this.CoveredColor);
@@ -137,7 +137,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         /// <param name="tile">The tile position.</param>
         private bool IntersectsTile(JunimoHut hut, Vector2 tile)
         {
-            return new Rectangle(hut.tileX, hut.tileY, hut.tilesWide, hut.tilesHigh).Contains((int)tile.X, (int)tile.Y);
+            return new Rectangle(hut.tileX.Value, hut.tileY.Value, hut.tilesWide.Value, hut.tilesHigh.Value).Contains((int)tile.X, (int)tile.Y);
         }
 
         /// <summary>Get a Junimo hut tile radius.</summary>

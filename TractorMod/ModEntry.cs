@@ -306,9 +306,9 @@ namespace Pathoschild.Stardew.TractorMod
                     Guid tractorID = Guid.NewGuid();
                     this.GaragesStartedToday.Remove(garage);
                     location.destroyStructure(garage);
-                    location.buildings.Add(new TractorGarage(tractorID, this.GetBlueprint(), new Vector2(garage.tileX, garage.tileY), 0));
+                    location.buildings.Add(new TractorGarage(tractorID, this.GetBlueprint(), new Vector2(garage.tileX.Value, garage.tileY.Value), 0));
                     if (this.Tractor == null)
-                        this.Tractor = this.SpawnTractor(tractorID, location, garage.tileX + 1, garage.tileY + 1, metadata.SaveData.TractorHatID);
+                        this.Tractor = this.SpawnTractor(tractorID, location, garage.tileX.Value + 1, garage.tileY.Value + 1, metadata.SaveData.TractorHatID);
                 }
             }
         }
@@ -405,7 +405,7 @@ namespace Pathoschild.Stardew.TractorMod
                         new FarmerSprite.AnimationFrame(27, 1000, false, false, farmer => this.Helper.Reflection.GetMethod(robin,"robinVariablePause").Invoke(farmer))
                     });
                     robin.ignoreScheduleToday = true;
-                    Game1.warpCharacter(robin, location, new Vector2(garage.tileX + garage.tilesWide / 2, garage.tileY + garage.tilesHigh / 2));
+                    Game1.warpCharacter(robin, location, new Vector2(garage.tileX.Value + garage.tilesWide.Value / 2, garage.tileY.Value + garage.tilesHigh.Value / 2));
                     robin.position.X += Game1.tileSize / 4;
                     robin.position.Y -= Game1.tileSize / 2;
                     robin.CurrentDialogue.Clear();
@@ -414,7 +414,7 @@ namespace Pathoschild.Stardew.TractorMod
 
                 // spawn tractor
                 if (this.Tractor == null && !garage.isUnderConstruction())
-                    this.Tractor = this.SpawnTractor(garageData.TractorID, location, garage.tileX + 1, garage.tileY + 1, garageData.TractorHatID);
+                    this.Tractor = this.SpawnTractor(garageData.TractorID, location, garage.tileX.Value + 1, garage.tileY.Value + 1, garageData.TractorHatID);
             }
         }
 
@@ -470,7 +470,7 @@ namespace Pathoschild.Stardew.TractorMod
 
                     Tractor tractor = Utility.findHorse(stable.HorseId) as Tractor;
                     int? tractorHatID = tractor?.hat.Value?.which;
-                    var saveData = new CustomSaveBuilding(new Vector2(stable.tileX, stable.tileY), stable.HorseId, tractorHatID, this.GarageBuildingType, this.GetMapName(location), stable.daysOfConstructionLeft);
+                    var saveData = new CustomSaveBuilding(new Vector2(stable.tileX.Value, stable.tileY.Value), stable.HorseId, tractorHatID, this.GarageBuildingType, this.GetMapName(location), stable.daysOfConstructionLeft.Value);
 
                     yield return new GarageMetadata(location, stable, tractor, saveData);
                 }
@@ -525,7 +525,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Get a unique map name for the given location.</summary>
         private string GetMapName(GameLocation location)
         {
-            string uniqueName = location.uniqueName;
+            string uniqueName = location.uniqueName.Value;
             return uniqueName ?? location.Name;
         }
 

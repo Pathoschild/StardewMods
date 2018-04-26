@@ -118,7 +118,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             }
 
             // terrain features
-            foreach (var pair in location.terrainFeatures.FieldDict)
+            foreach (KeyValuePair<Vector2, TerrainFeature> pair in location.terrainFeatures.Pairs)
             {
                 Vector2 spriteTile = pair.Key;
                 TerrainFeature feature = pair.Value;
@@ -263,7 +263,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // crop
                 case TargetType.Crop:
                     Crop crop = target.GetValue<HoeDirt>().crop;
-                    return new ItemSubject(this.Translations, GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest), ObjectContext.World, knownQuality: false, fromCrop: crop);
+                    return new ItemSubject(this.Translations, GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest.Value), ObjectContext.World, knownQuality: false, fromCrop: crop);
 
                 // tree
                 case TargetType.FruitTree:

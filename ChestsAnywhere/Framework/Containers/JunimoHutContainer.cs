@@ -13,6 +13,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <param name="junimoHut">The in-game junimo hut.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
         public JunimoHutContainer(JunimoHut junimoHut, IReflectionHelper reflection)
-            : base(junimoHut.output, reflection, isChest: false) { }
+            : base(junimoHut.output.Value, reflection, isChest: false) { }
     }
 }

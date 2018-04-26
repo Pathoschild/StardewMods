@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 
             // get sprite data
             Texture2D spriteSheet = this.Reflection.GetField<Lazy<Texture2D>>(tree, "texture").GetValue().Value;
-            SpriteEffects spriteEffects = tree.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            SpriteEffects spriteEffects = tree.flipped.Value ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             // check tree sprite
             if (this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, this.GetSourceRectangle(tree), spriteEffects))
@@ -78,7 +78,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         private Rectangle GetSourceRectangle(Tree tree)
         {
             // stump
-            if (tree.stump)
+            if (tree.stump.Value)
                 return Tree.stumpSourceRect;
 
             // growing tree

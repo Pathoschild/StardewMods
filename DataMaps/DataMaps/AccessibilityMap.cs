@@ -176,7 +176,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             {
                 foreach (Building building in buildableLocation.buildings)
                 {
-                    Rectangle buildingArea = new Rectangle(building.tileX, building.tileY, building.tilesWide, building.tilesHigh);
+                    Rectangle buildingArea = new Rectangle(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
                     if (buildingArea.Contains((int)tile.X, (int)tile.Y))
                         return true;
                 }
@@ -189,7 +189,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
             // resource clumps
             if (location is Farm farm)
             {
-                if (farm.resourceClumps.Any(p => p.getBoundingBox(p.tile).Intersects(tilePixels)))
+                if (farm.resourceClumps.Any(p => p.getBoundingBox(p.tile.Value).Intersects(tilePixels)))
                     return true;
             }
 

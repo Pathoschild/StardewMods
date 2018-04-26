@@ -97,7 +97,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             Rectangle tileArea = this.GetAbsoluteTileArea(tile);
             foreach (ResourceClump clump in this.GetResourceClumps(location))
             {
-                if (clump.getBoundingBox(clump.tile).Intersects(tileArea))
+                if (clump.getBoundingBox(clump.tile.Value).Intersects(tileArea))
                     return clump;
             }
 

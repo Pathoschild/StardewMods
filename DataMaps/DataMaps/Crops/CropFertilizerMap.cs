@@ -88,7 +88,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Crops
         {
             foreach (Vector2 tile in visibleTiles)
             {
-                if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrain) && terrain is HoeDirt dirt && states.Contains(dirt.fertilizer))
+                if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrain) && terrain is HoeDirt dirt && states.Contains(dirt.fertilizer.Value))
                     yield return tile;
             }
         }

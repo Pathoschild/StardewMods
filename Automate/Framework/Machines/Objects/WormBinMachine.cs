@@ -19,7 +19,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public override ITrackedStack GetOutput()
         {
             SObject bin = this.Machine;
-            return new TrackedItem(bin.heldObject, item =>
+            return new TrackedItem(bin.heldObject.Value, item =>
             {
                 bin.heldObject.Value = new SObject(685, Game1.random.Next(2, 6));
                 bin.MinutesUntilReady = 2600 - Game1.timeOfDay;

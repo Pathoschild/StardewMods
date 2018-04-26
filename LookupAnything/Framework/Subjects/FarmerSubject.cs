@@ -50,8 +50,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             string luckSummary = this.Translate(L10n.Player.LuckSummary, new { percent = (Game1.dailyLuck >= 0 ? "+" : "") + (Game1.dailyLuck * 100) });
 
             yield return new GenericField(this.Translate(L10n.Player.Gender), this.Translate(farmer.IsMale ? L10n.Player.GenderMale : L10n.Player.GenderFemale));
-            yield return new GenericField(this.Translate(L10n.Player.FarmName), farmer.farmName);
-            yield return new GenericField(this.Translate(L10n.Player.FavoriteThing), farmer.favoriteThing);
+            yield return new GenericField(this.Translate(L10n.Player.FarmName), farmer.farmName.Value);
+            yield return new GenericField(this.Translate(L10n.Player.FavoriteThing), farmer.favoriteThing.Value);
             yield return new GenericField(this.Translate(L10n.Player.Spouse), farmer.isMarried() ? Game1.getCharacterFromName(farmer.spouse).displayName : null);
             yield return new SkillBarField(this.Translate(L10n.Player.FarmingSkill), farmer.experiencePoints[SFarmer.farmingSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
             yield return new SkillBarField(this.Translate(L10n.Player.MiningSkill), farmer.experiencePoints[SFarmer.miningSkill], maxSkillPoints, skillPointsPerLevel, this.Text);

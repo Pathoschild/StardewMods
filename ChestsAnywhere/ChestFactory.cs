@@ -62,7 +62,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         {
                             Vector2 tile = pair.Key;
                             SObject obj = pair.Value;
-                            if (obj is Chest chest && chest.playerChest)
+                            if (obj is Chest chest && chest.playerChest.Value)
                                 yield return new ManagedChest(new ChestContainer(chest, this.Reflection), location, tile, this.Translations.Get("default-name.chest", new { number = ++namelessChests }));
                         }
                     }
@@ -70,7 +70,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     // farmhouse containers
                     if (location is FarmHouse house && Game1.player.HouseUpgradeLevel > 0)
                     {
-                        Chest fridge = house.fridge;
+                        Chest fridge = house.fridge.Value;
                         if (fridge != null)
                             yield return new ManagedChest(new ChestContainer(fridge, this.Reflection), location, Vector2.Zero, this.Translations.Get("default-name.fridge"));
                     }
@@ -82,7 +82,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         foreach (Building building in buildableLocation.buildings)
                         {
                             if (building is JunimoHut hut)
-                                yield return new ManagedChest(new JunimoHutContainer(hut, this.Reflection), location, new Vector2(hut.tileX, hut.tileY), this.Translations.Get("default-name.junimo-hut", new { number = ++namelessHuts }));
+                                yield return new ManagedChest(new JunimoHutContainer(hut, this.Reflection), location, new Vector2(hut.tileX.Value, hut.tileY.Value), this.Translations.Get("default-name.junimo-hut", new { number = ++namelessHuts }));
                         }
                     }
 

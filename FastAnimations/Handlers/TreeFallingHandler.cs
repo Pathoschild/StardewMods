@@ -48,12 +48,12 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
                     where
                         (
                             tree != null
-                            && !tree.stump
+                            && !tree.stump.Value
                             && tree.growthStage.Value > Tree.bushStage
                         )
                         || (
                             fruitTree != null
-                            && !fruitTree.stump
+                            && !fruitTree.stump.Value
                             && fruitTree.growthStage.Value > FruitTree.bushStage
                         )
                     select pair

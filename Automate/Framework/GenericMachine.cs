@@ -22,7 +22,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             if (this.Machine.heldObject.Value == null)
                 return MachineState.Empty;
 
-            return this.Machine.readyForHarvest
+            return this.Machine.readyForHarvest.Value
                 ? MachineState.Done
                 : MachineState.Processing;
         }
@@ -30,7 +30,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Get the output item.</summary>
         public virtual ITrackedStack GetOutput()
         {
-            return new TrackedItem(this.Machine.heldObject, onEmpty: this.GenericReset);
+            return new TrackedItem(this.Machine.heldObject.Value, onEmpty: this.GenericReset);
         }
 
         /// <summary>Provide input to the machine.</summary>

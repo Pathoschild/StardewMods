@@ -97,7 +97,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         /// <param name="obj">The map object.</param>
         private bool IsBeeHouse(Object obj)
         {
-            return obj != null && obj.bigCraftable && obj.Name == "Bee House";
+            return obj != null && obj.bigCraftable.Value && obj.Name == "Bee House";
         }
 
         /// <summary>Get a bee house tile radius.</summary>

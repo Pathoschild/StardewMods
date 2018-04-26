@@ -286,8 +286,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     continue;
 
                 // track which crops have trellises
-                if (dirt.crop.raisedSeeds)
-                    this.RaisedSeedCrops.Add(dirt.crop.indexOfHarvest);
+                if (dirt.crop.raisedSeeds.Value)
+                    this.RaisedSeedCrops.Add(dirt.crop.indexOfHarvest.Value);
 
                 // update passthrough
                 dirt.crop.raisedSeeds.Value = !passthrough && this.RaisedSeedCrops.Contains(dirt.crop.indexOfHarvest.Value);

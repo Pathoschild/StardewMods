@@ -61,7 +61,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 if (dirt.crop == null)
                     return false;
 
-                if (this.Config.ClearDeadCrops && dirt.crop.dead)
+                if (this.Config.ClearDeadCrops && dirt.crop.dead.Value)
                 {
                     this.UseToolOnTile(new Pickaxe(), tile); // clear dead crop
                     return true;

@@ -92,7 +92,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 {
                     if (item is Chest chest)
                     {
-                        if (chest.playerChest)
+                        if (chest.playerChest.Value)
                         {
                             items.Add(chest);
                             items.AddRange(chest.items);
@@ -101,18 +101,18 @@ namespace Pathoschild.Stardew.LookupAnything
                     else if (item is Cask)
                     {
                         items.Add(item);
-                        items.Add(item.heldObject); // cask contents can be retrieved anytime
+                        items.Add(item.heldObject.Value); // cask contents can be retrieved anytime
                     }
-                    else if (item.bigCraftable)
+                    else if (item.bigCraftable.Value)
                     {
                         items.Add(item);
                         if (item.MinutesUntilReady == 0)
-                            items.Add(item.heldObject);
+                            items.Add(item.heldObject.Value);
                     }
                     else if (!item.IsSpawnedObject)
                     {
                         items.Add(item);
-                        items.Add(item.heldObject);
+                        items.Add(item.heldObject.Value);
                     }
                 }
 
@@ -122,7 +122,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     foreach (Furniture furniture in decorableLocation.furniture)
                     {
                         items.Add(furniture);
-                        items.Add(furniture.heldObject);
+                        items.Add(furniture.heldObject.Value);
                     }
                 }
 
@@ -180,13 +180,13 @@ namespace Pathoschild.Stardew.LookupAnything
                 // same discriminators
                 && a.GetSpriteType() == b.GetSpriteType()
                 && (a as Boots)?.indexInTileSheet == (b as Boots)?.indexInTileSheet
-                && (a as BreakableContainer)?.type == (b as BreakableContainer)?.type
+                && (a as BreakableContainer)?.Type == (b as BreakableContainer)?.Type
                 && (a as Fence)?.isGate == (b as Fence)?.isGate
                 && (a as Fence)?.whichType == (b as Fence)?.whichType
                 && (a as Hat)?.which == (b as Hat)?.which
                 && (a as MeleeWeapon)?.type == (b as MeleeWeapon)?.type
                 && (a as Ring)?.indexInTileSheet == (b as Ring)?.indexInTileSheet
-                && (a as Tool)?.initialParentTileIndex == (b as Tool)?.initialParentTileIndex
+                && (a as Tool)?.InitialParentTileIndex == (b as Tool)?.InitialParentTileIndex
                 && (a as Tool)?.CurrentParentTileIndex == (b as Tool)?.CurrentParentTileIndex;
         }
 
@@ -282,7 +282,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     return ItemSpriteType.Furniture;
                 if (obj is Wallpaper)
                     return ItemSpriteType.Wallpaper;
-                return obj.bigCraftable
+                return obj.bigCraftable.Value
                     ? ItemSpriteType.BigCraftable
                     : ItemSpriteType.Object;
             }
@@ -415,7 +415,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // standard object
             if (item is SObject obj)
             {
-                return obj.bigCraftable
+                return obj.bigCraftable.Value
                     ? Tuple.Create(Game1.bigCraftableSpriteSheet, SObject.getSourceRectForBigCraftable(obj.ParentSheetIndex))
                     : Tuple.Create(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
             }

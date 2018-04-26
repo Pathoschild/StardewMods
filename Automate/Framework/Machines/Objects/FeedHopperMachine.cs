@@ -72,7 +72,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <remarks>Derived from <see cref="Farm.tryToAddHay"/>.</remarks>
         private int GetFreeSpace(Farm farm)
         {
-            return Utility.numSilos() * 240 - farm.piecesOfHay;
+            return Utility.numSilos() * 240 - farm.piecesOfHay.Value;
         }
     }
 }

@@ -150,13 +150,13 @@ namespace Pathoschild.Stardew.Automate.Framework
             {
                 foreach (Building building in buildableLocation.buildings)
                 {
-                    Rectangle tileArea = new Rectangle(building.tileX, building.tileY, building.tilesWide, building.tilesHigh);
+                    Rectangle tileArea = new Rectangle(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
                     if (tileArea.Contains((int)tile.X, (int)tile.Y))
                     {
                         machine = this.GetMachine(building);
                         if (machine != null)
                         {
-                            size = new Vector2(building.tilesWide, building.tilesHigh);
+                            size = new Vector2(building.tilesWide.Value, building.tilesHigh.Value);
                             return true;
                         }
                     }

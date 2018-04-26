@@ -37,8 +37,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             Object obj = (Object)this.Value;
             Rectangle boundingBox = obj.getBoundingBox(this.GetTile());
             if (obj is Furniture furniture)
-                return this.GetSpriteArea(boundingBox, furniture.sourceRect);
-            if (obj.bigCraftable)
+                return this.GetSpriteArea(boundingBox, furniture.sourceRect.Value);
+            if (obj.bigCraftable.Value)
                 return this.GetSpriteArea(boundingBox, Object.getSourceRectForBigCraftable(obj.ParentSheetIndex));
             if (obj is Fence fence)
                 return this.GetSpriteArea(boundingBox, this.GetSourceRectangle(fence, Game1.currentLocation));
@@ -60,14 +60,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             if (obj is Furniture furniture)
             {
                 spriteSheet = Furniture.furnitureTexture;
-                sourceRectangle = furniture.sourceRect;
+                sourceRectangle = furniture.sourceRect.Value;
             }
             else if (obj is Fence fence)
             {
                 spriteSheet = this.Reflection.GetField<Texture2D>(obj, "fenceTexture").GetValue();
                 sourceRectangle = this.GetSourceRectangle(fence, Game1.currentLocation);
             }
-            else if (obj.bigCraftable)
+            else if (obj.bigCraftable.Value)
             {
                 spriteSheet = Game1.bigCraftableSpriteSheet;
                 sourceRectangle = Object.getSourceRectForBigCraftable(obj.ParentSheetIndex);
@@ -97,25 +97,25 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 
                 // connected to right fence
                 tile.X += 1;
-                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType))
+                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType.Value))
                     index += 100;
 
                 // connected to left fence
                 tile.X -= 2;
-                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType))
+                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType.Value))
                     index += 10;
 
                 // connected to top fence
                 tile.X += 1;
                 tile.Y += 1;
-                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType))
+                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType.Value))
                     index += 500;
 
                 // connected to bottom fence
                 tile.Y -= 2;
-                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType))
+                if (location.objects.ContainsKey(tile) && location.objects[tile] is Fence && ((Fence)location.objects[tile]).countsForDrawing(fence.whichType.Value))
                     index += 1000;
-                if (fence.isGate)
+                if (fence.isGate.Value)
                 {
                     if (index == 110)
                         return new Rectangle(fence.gatePosition.Value == Fence.gateOpenedPosition ? 24 : 0, 128, 24, 32);

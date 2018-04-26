@@ -47,7 +47,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             Tree tree = this.Target;
 
             // get growth stage
-            WildTreeGrowthStage stage = (WildTreeGrowthStage)Math.Min(tree.growthStage, (int)WildTreeGrowthStage.Tree);
+            WildTreeGrowthStage stage = (WildTreeGrowthStage)Math.Min(tree.growthStage.Value, (int)WildTreeGrowthStage.Tree);
             bool isFullyGrown = stage == WildTreeGrowthStage.Tree;
             yield return new GenericField(this.Translate(L10n.Tree.Stage), isFullyGrown
                 ? this.Translate(L10n.Tree.StageDone)
@@ -68,7 +68,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             // get seed
             if (isFullyGrown)
-                yield return new GenericField(this.Translate(L10n.Tree.HasSeed), this.Stringify(tree.hasSeed));
+                yield return new GenericField(this.Translate(L10n.Tree.HasSeed), this.Stringify(tree.hasSeed.Value));
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -78,9 +78,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             Tree target = this.Target;
 
             // pinned fields
-            yield return new GenericDebugField("has seed", this.Stringify(target.hasSeed), pinned: true);
-            yield return new GenericDebugField("growth stage", target.growthStage, pinned: true);
-            yield return new GenericDebugField("health", target.health, pinned: true);
+            yield return new GenericDebugField("has seed", this.Stringify(target.hasSeed.Value), pinned: true);
+            yield return new GenericDebugField("growth stage", target.growthStage.Value, pinned: true);
+            yield return new GenericDebugField("health", target.health.Value, pinned: true);
 
             // raw fields
             foreach (IDebugField field in this.GetDebugFieldsFrom(target))

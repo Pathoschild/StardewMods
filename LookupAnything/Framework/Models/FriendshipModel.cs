@@ -80,7 +80,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         public FriendshipModel(SFarmer player, NPC npc, Friendship friendship, ConstantData constants)
         {
             // flags
-            this.CanDate = npc.datable;
+            this.CanDate = npc.datable.Value;
             this.IsDating = friendship.IsDating();
             this.IsSpouse = friendship.IsMarried();
             this.Status = friendship.Status;

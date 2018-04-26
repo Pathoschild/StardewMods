@@ -193,7 +193,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             string key = item.GetType().FullName;
             if (item is SObject obj)
-                key += "_craftable:" + obj.bigCraftable;
+                key += "_craftable:" + obj.bigCraftable.Value;
             key += "_id:" + item.ParentSheetIndex;
 
             return key;

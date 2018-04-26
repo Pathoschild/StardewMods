@@ -106,7 +106,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                 // get harvest schedule
                 int harvestablePhase = crop.phaseDays.Count - 1;
-                bool canHarvestNow = (crop.currentPhase.Value >= harvestablePhase) && (!crop.fullyGrown || crop.dayOfCurrentPhase.Value <= 0);
+                bool canHarvestNow = (crop.currentPhase.Value >= harvestablePhase) && (!crop.fullyGrown.Value || crop.dayOfCurrentPhase.Value <= 0);
                 int daysToFirstHarvest = crop.phaseDays.Take(crop.phaseDays.Count - 1).Sum(); // ignore harvestable phase
 
                 // add next-harvest field
@@ -121,16 +121,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         int daysUntilLastPhase = daysToFirstHarvest - crop.dayOfCurrentPhase.Value - crop.phaseDays.Take(crop.currentPhase.Value).Sum();
                         {
                             // growing: days until next harvest
-                            if (!crop.fullyGrown)
+                            if (!crop.fullyGrown.Value)
                                 daysToNextHarvest = daysUntilLastPhase;
 
                             // regrowable crop harvested today
                             else if (crop.dayOfCurrentPhase.Value >= crop.regrowAfterHarvest.Value)
-                                daysToNextHarvest = crop.regrowAfterHarvest;
+                                daysToNextHarvest = crop.regrowAfterHarvest.Value;
 
                             // regrowable crop
                             else
-                                daysToNextHarvest = crop.dayOfCurrentPhase; // dayOfCurrentPhase decreases to 0 when fully grown, where <=0 is harvestable
+                                daysToNextHarvest = crop.dayOfCurrentPhase.Value; // dayOfCurrentPhase decreases to 0 when fully grown, where <=0 is harvestable
                         }
                         dayOfNextHarvest = SDate.Now().AddDays(daysToNextHarvest);
                     }
@@ -162,12 +162,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                     // drops
                     if (crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops.Value > 0)
-                        summary.Add(this.Translate(L10n.Crop.SummaryDropsXToY, new { min = crop.minHarvest, max = crop.maxHarvest, percent = Math.Round(crop.chanceForExtraCrops * 100, 2) }));
+                        summary.Add(this.Translate(L10n.Crop.SummaryDropsXToY, new { min = crop.minHarvest, max = crop.maxHarvest, percent = Math.Round(crop.chanceForExtraCrops.Value * 100, 2) }));
                     else if (crop.minHarvest.Value > 1)
                         summary.Add(this.Translate(L10n.Crop.SummaryDropsX, new { count = crop.minHarvest }));
 
                     // crop sale price
-                    Item drop = GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest);
+                    Item drop = GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest.Value);
                     summary.Add(this.Translate(L10n.Crop.SummarySellsFor, new { price = GenericField.GetSaleValueString(this.GetSaleValue(drop, false, metadata), 1, this.Text) }));
 
                     // generate field
@@ -181,12 +181,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 if (obj is Cask cask)
                 {
                     // get cask data
-                    SObject agingObj = cask.heldObject;
+                    SObject agingObj = cask.heldObject.Value;
                     ItemQuality curQuality = (ItemQuality)agingObj.Quality;
                     string curQualityName = this.Translate(L10n.For(curQuality));
 
                     // calculate aging schedule
-                    float effectiveAge = metadata.Constants.CaskAgeSchedule.Values.Max() - cask.daysToMature;
+                    float effectiveAge = metadata.Constants.CaskAgeSchedule.Values.Max() - cask.daysToMature.Value;
                     var schedule =
                         (
                             from entry in metadata.Constants.CaskAgeSchedule
@@ -194,7 +194,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                             let baseDays = entry.Value
                             where baseDays > effectiveAge
                             orderby baseDays ascending
-                            let daysLeft = (int)Math.Ceiling((baseDays - effectiveAge) / cask.agingRate)
+                            let daysLeft = (int)Math.Ceiling((baseDays - effectiveAge) / cask.agingRate.Value)
                             select new
                             {
                                 Quality = quality,
@@ -205,7 +205,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         .ToArray();
 
                     // display fields
-                    yield return new ItemIconField(this.Translate(L10n.Item.Contents), obj.heldObject);
+                    yield return new ItemIconField(this.Translate(L10n.Item.Contents), obj.heldObject.Value);
                     if (cask.MinutesUntilReady <= 0 || !schedule.Any())
                         yield return new GenericField(this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskScheduleNow, new { quality = curQualityName }));
                     else
@@ -222,14 +222,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 else if (obj is Furniture)
                 {
                     string summary = this.Translate(L10n.Item.ContentsPlaced, new { name = obj.heldObject.Value.DisplayName });
-                    yield return new ItemIconField(this.Translate(L10n.Item.Contents), obj.heldObject, summary);
+                    yield return new ItemIconField(this.Translate(L10n.Item.Contents), obj.heldObject.Value, summary);
                 }
                 else
                 {
                     string summary = obj.MinutesUntilReady <= 0
                         ? this.Translate(L10n.Item.ContentsReady, new { name = obj.heldObject.Value.DisplayName })
                         : this.Translate(L10n.Item.ContentsPartial, new { name = obj.heldObject.Value.DisplayName, time = this.Stringify(TimeSpan.FromMinutes(obj.MinutesUntilReady)) });
-                    yield return new ItemIconField(this.Translate(L10n.Item.Contents), obj.heldObject, summary);
+                    yield return new ItemIconField(this.Translate(L10n.Item.Contents), obj.heldObject.Value, summary);
                 }
             }
 
@@ -307,9 +307,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     yield return new GenericField(healthLabel, this.Translate(L10n.Item.FenceHealthGoldClock));
                 else
                 {
-                    float maxHealth = fence.isGate ? fence.maxHealth * 2 : fence.maxHealth;
-                    float health = fence.health / maxHealth;
-                    double daysLeft = Math.Round(fence.health * metadata.Constants.FenceDecayRate / 60 / 24);
+                    float maxHealth = fence.isGate.Value ? fence.maxHealth.Value * 2 : fence.maxHealth.Value;
+                    float health = fence.health.Value / maxHealth;
+                    double daysLeft = Math.Round(fence.health.Value * metadata.Constants.FenceDecayRate / 60 / 24);
                     double percent = Math.Round(health * 100);
                     yield return new PercentageBarField(healthLabel, (int)fence.health, (int)maxHealth, Color.Green, Color.Red, this.Translate(L10n.Item.FenceHealthSummary, new { percent = percent, count = daysLeft }));
                 }
@@ -335,7 +335,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 && item.ParentSheetIndex != 770; // skip mixed seeds
             if (seeAlsoCrop)
             {
-                Item drop = GameHelper.GetObjectBySpriteIndex(this.SeedForCrop.indexOfHarvest);
+                Item drop = GameHelper.GetObjectBySpriteIndex(this.SeedForCrop.indexOfHarvest.Value);
                 yield return new LinkField(this.Translate(L10n.Item.SeeAlso), drop.DisplayName, () => new ItemSubject(this.Text, drop, ObjectContext.Inventory, false, this.SeedForCrop));
             }
         }
@@ -358,7 +358,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
             if (crop != null)
             {
-                yield return new GenericDebugField("crop fully grown", this.Stringify(crop.fullyGrown), pinned: true);
+                yield return new GenericDebugField("crop fully grown", this.Stringify(crop.fullyGrown.Value), pinned: true);
                 yield return new GenericDebugField("crop phase", $"{crop.currentPhase} (day {crop.dayOfCurrentPhase} in phase)", pinned: true);
             }
 
@@ -387,7 +387,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 // remove stack number (doesn't play well with clipped content)
                 SObject obj = (SObject)item;
                 obj = new SObject(obj.ParentSheetIndex, 1, obj.IsRecipe, obj.Price, obj.Quality);
-                obj.bigCraftable.Value = obj.bigCraftable;
+                obj.bigCraftable.Value = obj.bigCraftable.Value;
                 obj.drawInMenu(spriteBatch, position, 1);
                 return true;
             }
@@ -411,7 +411,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 // get equivalent object's sprite ID
                 FenceType fenceType = (FenceType)fence.whichType.Value;
                 int? spriteID = null;
-                if (fence.isGate)
+                if (fence.isGate.Value)
                     spriteID = 325;
                 else if (fenceType == FenceType.Wood)
                     spriteID = 322;
@@ -470,7 +470,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 yield break;
 
             // get bundles
-            if (item.GetType() == typeof(SObject) && !item.bigCraftable) // avoid false positives with hats, furniture, etc
+            if (item.GetType() == typeof(SObject) && !item.bigCraftable.Value) // avoid false positives with hats, furniture, etc
             {
                 foreach (BundleModel bundle in DataParser.GetBundles())
                 {

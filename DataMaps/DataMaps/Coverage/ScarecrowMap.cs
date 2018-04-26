@@ -106,7 +106,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         /// <remarks>Derived from <see cref="Farm.addCrows"/>.</remarks>
         private bool IsScarecrow(Object obj)
         {
-            return obj != null && obj.bigCraftable && obj.Name.Contains("arecrow");
+            return obj != null && obj.bigCraftable.Value && obj.Name.Contains("arecrow");
         }
 
         /// <summary>Get whether a map terrain feature is a crop.</summary>
