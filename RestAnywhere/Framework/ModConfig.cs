@@ -13,14 +13,8 @@ namespace RestAnywhere.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The number of seconds the player should stop doing anything before they're considered to be resting.</summary>
-        public double RestDelay { get; set; } = 2;
-
-        /// <summary>The number of seconds to accumulate regen before applying it.</summary>
-        public double RegenDelay { get; set; } = 1;
-
         /// <summary>The health regeneration per second.</summary>
-        public RegenConfig HealthRegen { get; set; } = new RegenConfig
+        public RegenConfig HealthRegenPerSecond { get; set; } = new RegenConfig
         {
             Rest = 6,
             Walk = 0,
@@ -28,13 +22,18 @@ namespace RestAnywhere.Framework
         };
 
         /// <summary>The stamina regeneration per second.</summary>
-        public RegenConfig StaminaRegen { get; set; } = new RegenConfig
+        public RegenConfig StaminaRegenPerSecond { get; set; } = new RegenConfig
         {
             Rest = 6,
             Walk = -0.25f,
             Run = -1
         };
 
+        /// <summary>The number of seconds the player should stop doing anything before they're considered to be resting.</summary>
+        public double RestDelay { get; set; } = 2;
+
+        /// <summary>The number of seconds to accumulate regen before applying it.</summary>
+        public double RegenDelay { get; set; } = 1;
 
         /*********
         ** Public methods
@@ -46,7 +45,7 @@ namespace RestAnywhere.Framework
             {
                 this.RestDelay /= 1000;
                 this.RegenDelay /= 1000;
-                foreach (RegenConfig regen in new[] { this.HealthRegen, this.StaminaRegen })
+                foreach (RegenConfig regen in new[] { this.HealthRegenPerSecond, this.StaminaRegenPerSecond })
                 {
                     regen.Rest /= 1000;
                     regen.Run /= 1000;

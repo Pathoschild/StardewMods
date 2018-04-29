@@ -105,9 +105,10 @@ namespace RestAnywhere
         /// <param name="config">The mod configuration.</param>
         private IEnumerable<RegenRule> GetRules(ModConfig config)
         {
-            yield return new RegenRule(config.HealthRegen.Rest, config.StaminaRegen.Rest, applies: context => Context.IsPlayerFree && context.IsResting);
-            yield return new RegenRule(config.HealthRegen.Walk, config.StaminaRegen.Walk, applies: context => Context.IsPlayerFree && context.IsWalking);
-            yield return new RegenRule(config.HealthRegen.Run, config.StaminaRegen.Run, applies: context => Context.IsPlayerFree && context.IsRunning);
+            // note: regen is converted to milliseconds at this point
+            yield return new RegenRule(config.HealthRegenPerSecond.Rest, config.StaminaRegenPerSecond.Rest, applies: context => Context.IsPlayerFree && context.IsResting);
+            yield return new RegenRule(config.HealthRegenPerSecond.Walk, config.StaminaRegenPerSecond.Walk, applies: context => Context.IsPlayerFree && context.IsWalking);
+            yield return new RegenRule(config.HealthRegenPerSecond.Run, config.StaminaRegenPerSecond.Run, applies: context => Context.IsPlayerFree && context.IsRunning);
         }
     }
 }
