@@ -16,6 +16,9 @@ namespace RestAnywhere.Framework
         /// <summary>The number of seconds the player should stop doing anything before they're considered to be resting.</summary>
         public double RestDelay { get; set; } = 2;
 
+        /// <summary>The number of seconds to accumulate regen before applying it.</summary>
+        public double RegenDelay { get; set; } = 1;
+
         /// <summary>The health regeneration per second.</summary>
         public RegenConfig HealthRegen { get; set; } = new RegenConfig
         {
@@ -40,6 +43,7 @@ namespace RestAnywhere.Framework
             if (!this.IsMilliseconds)
             {
                 this.RestDelay /= 1000;
+                this.RegenDelay /= 1000;
                 foreach (RegenConfig regen in new[] { this.HealthRegen, this.StaminaRegen })
                 {
                     regen.Rest /= 1000;

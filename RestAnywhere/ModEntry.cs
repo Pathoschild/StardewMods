@@ -15,9 +15,6 @@ namespace RestAnywhere
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
-        /// <summary>The number of milliseconds to accumulate regen before applying it.</summary>
-        private readonly double ApplyDelay = 1000;
-
         /****
         ** Accumulators
         ****/
@@ -90,7 +87,7 @@ namespace RestAnywhere
             }
 
             // apply regen
-            if (this.TimeSinceApplied >= this.ApplyDelay)
+            if (this.TimeSinceApplied >= this.Config.RegenDelay)
             {
                 Farmer player = Game1.player;
                 if ((int)this.AccumulatedHealth != 0)
