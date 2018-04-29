@@ -39,8 +39,10 @@
     </Compile>
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\RegenConfig.cs" />
+    <Compile Include="Framework\RegenContext.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Framework\RegenRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />

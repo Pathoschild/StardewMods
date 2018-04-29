@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using RestAnywhere.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -15,20 +17,20 @@ namespace RestAnywhere
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
-        /****
-        ** Accumulators
-        ****/
+        /// <summary>The current regen context.</summary>
+        private readonly RegenContext RegenContext = new RegenContext();
+
         /// <summary>When the regen was last applied.</summary>
         private double TimeSinceApplied;
-
-        /// <summary>When the player last moved.</summary>
-        private double TimeSinceMoved;
 
         /// <summary>The accumulated health regen to apply.</summary>
         private double AccumulatedHealth;
 
         /// <summary>The accumulated stamina regen to apply.</summary>
         private double AccumulatedStamina;
+
+        /// <summary>The stamina rules to apply.</summary>
+        private RegenRule[] Rules;
 
 
         /*********
@@ -43,6 +45,9 @@ namespace RestAnywhere
             config.ConvertToMilliseconds();
             this.Config = config;
 
+            // init rules
+            this.Rules = this.GetRules(config).ToArray();
+
             // hook events
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
         }
@@ -56,47 +61,30 @@ namespace RestAnywhere
         /// <param name="e">The event arguments.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
+            // update context
+            var context = this.RegenContext;
             if (!Context.IsPlayerFree)
             {
-                this.TimeSinceApplied = 0;
-                this.TimeSinceMoved = 0;
+                context.ResetTimers();
+                return;
             }
-
-            // collect info
-            double elapsed = this.GetTimeSinceLastTick();
-            bool isDoingSomething = this.IsPlayerDoingSomething();
-            bool isResting = !isDoingSomething && this.TimeSinceMoved >= this.Config.RestDelay;
-            bool isMoving = Context.IsPlayerFree && Game1.player.isMoving();
-            bool isRunning = isMoving && Game1.player.running;
-            bool isWalking = isMoving && !isRunning;
-
-            // update move timer
-            if (isDoingSomething)
-                this.TimeSinceMoved = 0;
-            else
-                this.TimeSinceMoved += elapsed;
+            context.Tick(this.Config.RestDelay);
 
             // accumulate regen
-            if (isWalking)
+            double elapsed = context.TickTime;
+            foreach (RegenRule rule in this.Rules)
             {
-                this.AccumulatedHealth += this.Config.HealthRegen.Walk * elapsed;
-                this.AccumulatedStamina += this.Config.StaminaRegen.Walk * elapsed;
-            }
-            if (isRunning)
-            {
-                this.AccumulatedHealth += this.Config.HealthRegen.Run * elapsed;
-                this.AccumulatedStamina += this.Config.StaminaRegen.Run * elapsed;
-            }
-            if (isResting)
-            {
-                this.AccumulatedHealth += this.Config.HealthRegen.Rest * elapsed;
-                this.AccumulatedStamina += this.Config.StaminaRegen.Rest * elapsed;
+                if (rule.Applies(this.RegenContext))
+                {
+                    this.AccumulatedHealth += rule.HealthRegen * elapsed;
+                    this.AccumulatedStamina += rule.StaminaRegen * elapsed;
+                }
             }
 
             // apply regen
             if (this.TimeSinceApplied >= this.Config.RegenDelay)
             {
-                Farmer player = Game1.player;
+                Farmer player = context.Player;
                 if ((int)this.AccumulatedHealth != 0)
                 {
                     player.health = (int)Math.Min(player.maxHealth, player.health + this.AccumulatedHealth);
@@ -113,23 +101,13 @@ namespace RestAnywhere
                 this.TimeSinceApplied += elapsed;
         }
 
-        /// <summary>Get the number of milliseconds elapsed since the last update tick.</summary>
-        private double GetTimeSinceLastTick()
+        /// <summary>Get the regen rules to apply.</summary>
+        /// <param name="config">The mod configuration.</param>
+        private IEnumerable<RegenRule> GetRules(ModConfig config)
         {
-            return Game1.currentGameTime != null
-                ? Game1.currentGameTime.ElapsedGameTime.TotalMilliseconds
-                : 0;
-        }
-
-        /// <summary>Get whether the player is currently doing something.</summary>
-        private bool IsPlayerDoingSomething()
-        {
-            return
-                !Context.CanPlayerMove
-                || Game1.player.isMoving()
-                || Game1.player.isEating
-                || Game1.player.UsingTool
-                || Game1.player.temporarilyInvincible; // took damage
+            yield return new RegenRule(config.HealthRegen.Rest, config.StaminaRegen.Rest, applies: context => Context.IsPlayerFree && context.IsResting);
+            yield return new RegenRule(config.HealthRegen.Walk, config.StaminaRegen.Walk, applies: context => Context.IsPlayerFree && context.IsWalking);
+            yield return new RegenRule(config.HealthRegen.Run, config.StaminaRegen.Run, applies: context => Context.IsPlayerFree && context.IsRunning);
         }
     }
 }
