@@ -66,7 +66,9 @@ namespace RestAnywhere
             double elapsed = this.GetTimeSinceLastTick();
             bool isDoingSomething = this.IsPlayerDoingSomething();
             bool isResting = !isDoingSomething && this.TimeSinceMoved >= this.Config.RestDelay;
-            bool isRunning = Context.IsPlayerFree && Game1.player.isMoving() && Game1.player.running;
+            bool isMoving = Context.IsPlayerFree && Game1.player.isMoving();
+            bool isRunning = isMoving && Game1.player.running;
+            bool isWalking = isMoving && !isRunning;
 
             // update move timer
             if (isDoingSomething)
@@ -75,6 +77,11 @@ namespace RestAnywhere
                 this.TimeSinceMoved += elapsed;
 
             // accumulate regen
+            if (isWalking)
+            {
+                this.AccumulatedHealth += this.Config.HealthRegen.Walk * elapsed;
+                this.AccumulatedStamina += this.Config.StaminaRegen.Walk * elapsed;
+            }
             if (isRunning)
             {
                 this.AccumulatedHealth += this.Config.HealthRegen.Run * elapsed;

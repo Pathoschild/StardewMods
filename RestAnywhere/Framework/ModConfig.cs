@@ -23,6 +23,7 @@ namespace RestAnywhere.Framework
         public RegenConfig HealthRegen { get; set; } = new RegenConfig
         {
             Rest = 6,
+            Walk = 0,
             Run = 0
         };
 
@@ -30,6 +31,7 @@ namespace RestAnywhere.Framework
         public RegenConfig StaminaRegen { get; set; } = new RegenConfig
         {
             Rest = 6,
+            Walk = -0.25f,
             Run = -1
         };
 

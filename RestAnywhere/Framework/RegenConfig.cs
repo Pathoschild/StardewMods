@@ -10,6 +10,9 @@ namespace RestAnywhere.Framework
         public float Rest { get; set; }
 
         /// <summary>The regeneration per time when running.</summary>
+        public float Walk { get; set; }
+
+        /// <summary>The regeneration per time when running.</summary>
         public float Run { get; set; }
     }
 }
