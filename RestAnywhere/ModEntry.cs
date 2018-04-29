@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using RestAnywhere.Framework;
 using StardewModdingAPI;
@@ -38,15 +39,16 @@ namespace RestAnywhere
         *********/
         /// <summary>The mod entry point, called after the mod is first loaded.</summary>
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
+        [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator", Justification = "Float comparison is good enough for comparing to zero.")]
         public override void Entry(IModHelper helper)
         {
             // read config
-            ModConfig config = helper.ReadConfig<ModConfig>();
-            config.ConvertToMilliseconds();
-            this.Config = config;
-
-            // init rules
-            this.Rules = this.GetRules(config).ToArray();
+            this.Config = helper.ReadConfig<ModConfig>();
+            this.Config.ConvertToMilliseconds();
+            this.Rules = this
+                .GetRules(this.Config)
+                .Where(p => p.HealthRegen != 0 || p.StaminaRegen != 0)
+                .ToArray();
 
             // hook events
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
