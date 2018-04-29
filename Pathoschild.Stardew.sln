@@ -46,6 +46,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Common", "_tests\Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Mods", "_tests\Tests.Mods\Tests.Mods.csproj", "{3A8B43BC-B3BB-49F1-A2E5-B17CFA94A3C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestAnywhere", "RestAnywhere\RestAnywhere.csproj", "{C9251A94-5226-432D-B3DF-7A7D4EEA6FDB}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Common\Common.projitems*{0510e2ac-ec06-4211-b733-faf9d3a069ea}*SharedItemsImports = 4
@@ -123,6 +125,10 @@ Global
 		{3A8B43BC-B3BB-49F1-A2E5-B17CFA94A3C1}.Debug|x86.Build.0 = Debug|x86
 		{3A8B43BC-B3BB-49F1-A2E5-B17CFA94A3C1}.Release|x86.ActiveCfg = Release|x86
 		{3A8B43BC-B3BB-49F1-A2E5-B17CFA94A3C1}.Release|x86.Build.0 = Release|x86
+		{C9251A94-5226-432D-B3DF-7A7D4EEA6FDB}.Debug|x86.ActiveCfg = Debug|x86
+		{C9251A94-5226-432D-B3DF-7A7D4EEA6FDB}.Debug|x86.Build.0 = Debug|x86
+		{C9251A94-5226-432D-B3DF-7A7D4EEA6FDB}.Release|x86.ActiveCfg = Release|x86
+		{C9251A94-5226-432D-B3DF-7A7D4EEA6FDB}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

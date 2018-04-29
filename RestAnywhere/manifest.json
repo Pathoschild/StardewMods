@@ -1,0 +1,10 @@
+{
+  "Name": "Rest Anywhere",
+  "Author": "Pathoschild",
+  "Version": "1.0.0-beta",
+  "MinimumApiVersion": "2.6-beta",
+  "Description": "Take a break anywhere to slowly recover health and stamina.",
+  "UniqueID": "Pathoschild.RestAnywhere",
+  "EntryDll": "RestAnywhere.dll",
+  "UpdateKeys": []
+}
