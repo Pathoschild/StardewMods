@@ -133,9 +133,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             if (remaining != null)
                 this.FakeChest.items.Add(remaining);
 
-            // add item
+            // remove from player inventory
             player.removeItemFromInventory(item);
             this.FakeChest.clearNulls();
+
+            // sync fake chest to shipping bin
+            this.Farm.shippingBin.Set(this.FakeChest.items);
 
             // reopen menu
             IClickableMenu menu = Game1.activeClickableMenu;
@@ -157,6 +160,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 return;
 
             this.FakeChest.grabItemFromChest(item, player);
+
+            // sync fake chest to shipping bin
+            this.Farm.shippingBin.Set(this.FakeChest.items);
+
             if (item == this.Farm.lastItemShipped)
                 this.Farm.lastItemShipped = this.Farm.shippingBin.LastOrDefault();
         }
