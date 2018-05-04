@@ -311,7 +311,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     float health = fence.health.Value / maxHealth;
                     double daysLeft = Math.Round(fence.health.Value * metadata.Constants.FenceDecayRate / 60 / 24);
                     double percent = Math.Round(health * 100);
-                    yield return new PercentageBarField(healthLabel, (int)fence.health, (int)maxHealth, Color.Green, Color.Red, this.Translate(L10n.Item.FenceHealthSummary, new { percent = percent, count = daysLeft }));
+                    yield return new PercentageBarField(healthLabel, (int)fence.health.Value, (int)maxHealth, Color.Green, Color.Red, this.Translate(L10n.Item.FenceHealthSummary, new { percent = percent, count = daysLeft }));
                 }
             }
 

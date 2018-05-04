@@ -64,7 +64,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             }
             else if (obj is Fence fence)
             {
-                spriteSheet = this.Reflection.GetField<Texture2D>(obj, "fenceTexture").GetValue();
+                spriteSheet = this.Reflection.GetField<Lazy<Texture2D>>(obj, "fenceTexture").GetValue().Value;
                 sourceRectangle = this.GetSourceRectangle(fence, Game1.currentLocation);
             }
             else if (obj.bigCraftable.Value)
