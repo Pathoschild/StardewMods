@@ -81,9 +81,12 @@ namespace Pathoschild.Stardew.Automate
             if (!this.EnableAutomation)
                 this.Monitor.Log("Disabled automation (only the main player can automate machines in multiplayer mode).", LogLevel.Warn);
 
-            // reset automation interval
+            // reset
+            this.MachineGroups.Clear();
             this.AutomateCountdown = this.Config.AutomationInterval;
             this.DisableOverlay();
+            foreach (GameLocation location in CommonHelper.GetLocations())
+                this.ReloadQueue.Add(location);
         }
 
         /// <summary>The method invoked when the player warps to a new location.</summary>
