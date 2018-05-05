@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.FastAnimations
 
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
+            PlayerEvents.Warped += this.PlayerEvents_Warped;
         }
 
 
@@ -57,7 +57,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <summary>The method invoked after the player warps to a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
+        private void PlayerEvents_Warped(object sender, EventArgsPlayerWarped e)
         {
             if (!Context.IsWorldReady || Game1.eventUp || !this.Handlers.Any())
                 return;

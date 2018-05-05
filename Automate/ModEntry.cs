@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.Automate
 
             // hook events
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-            LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
+            PlayerEvents.Warped += this.PlayerEvents_Warped;
             LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
             LocationEvents.ObjectsChanged += this.LocationEvents_ObjectsChanged;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
@@ -92,7 +92,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when the player warps to a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
+        private void PlayerEvents_Warped(object sender, EventArgsPlayerWarped e)
         {
             this.ResetOverlayIfShown();
         }
@@ -100,7 +100,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when a location is added or removed.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void LocationEvents_LocationsChanged(object sender, EventArgsGameLocationsChanged e)
+        private void LocationEvents_LocationsChanged(object sender, EventArgsLocationsChanged e)
         {
             if (!this.EnableAutomation)
                 return;
