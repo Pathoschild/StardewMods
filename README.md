@@ -63,7 +63,7 @@ Chinese    | [✓](ChestsAnywhere/i18n/zh.json)        | [✓](DataMaps/i18n/zh.
 German     | [✓](ChestsAnywhere/i18n/de.json)        | [✓](DataMaps/i18n/de.json) | ↻ [partial](DebugMode/i18n/de.json) | [✓](LookupAnything/i18n/de.json)        | [✓](TractorMod/i18n/de.json)
 Japanese   | ❑ _none_                                | ❑ _none_                   | ❑ _none_                           | ❑ _none_                                | ❑ _none_
 Portuguese | [✓](ChestsAnywhere/i18n/pt.json)        | ❑ _none_                   | ↻ [partial](DebugMode/i18n/pt.json) | ↻ [partial](LookupAnything/i18n/pt.json) | [✓](TractorMod/i18n/pt.json)
-Russian    | ↻ [partial](ChestsAnywhere/i18n/ru.json) | ❑ _none_                   | ❑ _none_                           | ↻ [partial](LookupAnything/i18n/ru.json) | [✓](TractorMod/i18n/ru.json)
+Russian    | [✓](ChestsAnywhere/i18n/ru.json)        | [✓](DataMaps/i18n/ru.json) | [✓](DebugMode/i18n/pt.json)        | ↻ [partial](LookupAnything/i18n/ru.json) | [✓](TractorMod/i18n/ru.json)
 Spanish    | ↻ [partial](ChestsAnywhere/i18n/es.json) | ❑ _none_                   | ↻ [partial](DebugMode/i18n/es.json) | ↻ [partial](LookupAnything/i18n/de.json) | ❑ _none_
 
 Here's how to translate one of my mods:

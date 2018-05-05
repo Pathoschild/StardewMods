@@ -5,6 +5,7 @@
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added support for looking up other players.
 * Added support for new friendship data.
+* Improved Russian translations. (Thanks to fadedDexofan!)
 
 ## 1.18.1
 * Fixed error when looking up something before the save is loaded (thanks to f4iTh!).

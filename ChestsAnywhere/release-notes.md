@@ -3,6 +3,7 @@
 # Release notes
 ## 1.13
 * Updated for Stardew Valley 1.3 (including multiplayer support).
+* Improved Russian translations. (Thanks to fadedDexofan!)
 
 ## 1.12.4
 * Updated to SMAPI 2.4.

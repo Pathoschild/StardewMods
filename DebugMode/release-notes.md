@@ -3,6 +3,7 @@
 # Release notes
 ## 1.9
 * Updated for Stardew Valley 1.3 (including multiplayer support).
+* Added Russian translations. (Thanks to fadedDexofan!)
 
 ## 1.8
 * Added submenu, event, and festival info to overlay.

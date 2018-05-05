@@ -39,7 +39,7 @@
   "quality.gold": "золото",
   "quality.iridium": "иридиум",
 
-  // NPC friendship // TODO
+  // NPC friendship
   "friendship-status.friendly": "Друг",
   "friendship-status.dating": "Пара",
   "friendship-status.engaged": "Помолвлены",
@@ -231,7 +231,7 @@
   "item.needed-for.polyculture": "достижения Севооборот ({{count}}шт. или больше)",
   "item.needed-for.full-collection": "достижения Полная коллекция (пожертвовать музею)",
   "item.sells-to.shipping-box": "Ящик отгрузки",
-  "item.fence-health.gold-clock": "no decay with Gold Clock",
+  "item.fence-health.gold-clock": "no decay with Gold Clock", // TODO
   "item.fence-health.summary": "{{percent}}% (сломается через {{count}} дн.)",
   "item.recipes.entry": "{{name}} ({{count}}шт.)",
   "item.number-owned.summary": "вам принадлежит {{count}} шт.",
