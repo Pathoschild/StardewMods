@@ -2,7 +2,7 @@
   // default chest names
   "default-name.chest": "Сундук #{{number}}",
   "default-name.fridge": "Холодильник",
-  "default-name.junimo-hut": "Джунимо #{{number}}",
+  "default-name.junimo-hut": "Домик Джунимо #{{number}}",
   "default-name.shipping-bin": "Отгрузочный ящик",
 
   // edit-chest labels
