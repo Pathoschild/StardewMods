@@ -3,6 +3,7 @@
 # Release notes
 ## 1.10
 * Updated for Stardew Valley 1.3 (including multiplayer support).
+* Added support for auto-grabbers.
 
 ## 1.9.1
 * Updated to SMAPI 2.4.

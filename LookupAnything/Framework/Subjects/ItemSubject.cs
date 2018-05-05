@@ -224,6 +224,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     string summary = this.Translate(L10n.Item.ContentsPlaced, new { name = obj.heldObject.Value.DisplayName });
                     yield return new ItemIconField(this.Translate(L10n.Item.Contents), obj.heldObject.Value, summary);
                 }
+                else if (obj.ParentSheetIndex == Constant.ObjectIndexes.AutoGrabber)
+                {
+                    string readyText = this.Text.Stringify(obj.heldObject.Value is Chest output && output.items.Any());
+                    yield return new GenericField(this.Translate(L10n.Item.Contents), readyText);
+                }
                 else
                 {
                     string summary = obj.MinutesUntilReady <= 0

@@ -40,6 +40,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Framework\Machines\Objects\AutoGrabberMachine.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="IConsumable.cs" />
     <Compile Include="IStorage.cs" />

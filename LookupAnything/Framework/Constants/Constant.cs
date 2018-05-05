@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
@@ -62,6 +62,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
         {
             /// <summary>The internal name for the Gold Clock.</summary>
             public static string GoldClock = "Gold Clock";
+        }
+
+        /// <summary>The parent sheet indexes referenced by the mod.</summary>
+        public static class ObjectIndexes
+        {
+            /// <summary>The parent sheet index for the auto-grabber.</summary>
+            public static int AutoGrabber = 165;
         }
     }
 }

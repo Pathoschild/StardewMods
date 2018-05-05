@@ -178,6 +178,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="reflection">Simplifies access to private game code.</param>
         private IMachine GetMachine(SObject obj, GameLocation location, Vector2 tile, IReflectionHelper reflection)
         {
+            if (obj.ParentSheetIndex == 165)
+                return new AutoGrabberMachine(obj);
             if (obj.name == "Bee House")
                 return new BeeHouseMachine(obj, location, tile);
             if (obj is Cask cask)
