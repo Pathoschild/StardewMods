@@ -1,0 +1,38 @@
+{
+  // accessibility
+  "maps.accessibility.name": "Доступность",
+  "maps.accessibility.clear": "Доступно",
+  "maps.accessibility.occupied": "Занято",
+  "maps.accessibility.impassable": "Недоступно",
+  "maps.accessibility.warp": "Смена локации",
+
+  // coverage: bee houses
+  "maps.bee-houses.name": "Покрытие: Ульи",
+  "maps.bee-houses.range": "Цветочный радиус",
+
+  // coverage: Junimo huts
+  "maps.junimo-huts.name": "Покрытие: Домик Джунимо",
+  "maps.junimo-huts.can-harvest": "Могут собрать",
+  "maps.junimo-huts.cannot-harvest": "Не могут собрать",
+
+  // coverage: scarecrows
+  "maps.scarecrows.name": "Покрытие: Пугало",
+  "maps.scarecrows.protected": "Защищено",
+  "maps.scarecrows.exposed": "Уязвимо",
+
+  // coverage: sprinklers
+  "maps.sprinklers.name": "Покрытие: Спринклеры",
+  "maps.sprinklers.covered": "Покрыто",
+  "maps.sprinklers.dry-crops": "Не поливается",
+
+  // crops: watered
+  "maps.crop-water.name": "Покрытие: Увлажнение",
+  "maps.crop-water.watered": "Увлажнено",
+  "maps.crop-water.dry": "Сухо",
+
+  // crops: fertilized
+  "maps.crop-fertilizer.name": "Покрытие: Удобрения",
+  "maps.crop-fertilizer.fertilizer": "Удобрения",
+  "maps.crop-fertilizer.retaining-soil": "Увлажненнная почва",
+  "maps.crop-fertilizer.speed-gro": "СкороРост"
+}
