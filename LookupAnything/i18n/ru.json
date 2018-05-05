@@ -40,11 +40,11 @@
   "quality.iridium": "иридиум",
 
   // NPC friendship // TODO
-  "friendship-status.friendly": "Friendly",
-  "friendship-status.dating": "Dating",
-  "friendship-status.engaged": "Engaged",
-  "friendship-status.married": "Married",
-  "friendship-status.divorced": "Divorced",
+  "friendship-status.friendly": "Дружат",
+  "friendship-status.dating": "Встречаются",
+  "friendship-status.engaged": "Помолвлены",
+  "friendship-status.married": "Женаты",
+  "friendship-status.divorced": "Разведены",
 
   /*********
   ** Data translations
@@ -302,17 +302,17 @@
   "player.skill.progress-last": "ур. {{level}}",
 
   // tile lookup labels
-  "tile.description": "A tile position on the map. This is displayed because you enabled tile lookups in the configuration.",
-  "tile.map-name": "Map name",
-  "tile.tile": "Tile",
-  "tile.tile-index": "{{layerName}}: tile index",
+  "tile.description": "Позиция тайла на карте. Это отображается, потому что вы включили просмотр тайлов в настройках.",
+  "tile.map-name": "Название локации",
+  "tile.tile": "Тайл",
+  "tile.tile-index": "{{layerName}}: индекс тайла",
   "tile.tilesheet": "{{layerName}}: tilesheet",
-  "tile.blend-mode": "{{layerName}}: blend mode",
+  "tile.blend-mode": "{{layerName}}: режим перекрытия",
   "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
   "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
 
   // tile lookup values
-  "tile.tile.none-here": "no tile here",
+  "tile.tile.none-here": "здесь нет тайла",
 
   // tree lookup labels
   "tree.stage": "Стадия роста",
