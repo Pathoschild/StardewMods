@@ -53,7 +53,7 @@ namespace Pathoschild.Stardew.Automate
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
             LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
-            LocationEvents.LocationObjectsChanged += this.LocationEvents_LocationObjectsChanged;
+            LocationEvents.ObjectsChanged += this.LocationEvents_ObjectsChanged;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
 
             // handle player interaction
@@ -122,16 +122,16 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when an object is added or removed to a location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void LocationEvents_LocationObjectsChanged(object sender, EventArgsLocationObjectsChanged e)
+        private void LocationEvents_ObjectsChanged(object sender, EventArgsLocationObjectsChanged e)
         {
             if (!this.EnableAutomation)
                 return;
 
-            this.VerboseLog("Object list changed, reloading machines in current location.");
+            this.VerboseLog($"Object list changed in {e.Location.Name}, reloading machines in current location.");
 
             try
             {
-                this.ReloadQueue.Add(Game1.currentLocation);
+                this.ReloadQueue.Add(e.Location);
             }
             catch (Exception ex)
             {
