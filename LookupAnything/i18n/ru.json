@@ -40,10 +40,10 @@
   "quality.iridium": "иридиум",
 
   // NPC friendship // TODO
-  "friendship-status.friendly": "Дружат",
-  "friendship-status.dating": "Встречаются",
+  "friendship-status.friendly": "Друг",
+  "friendship-status.dating": "Пара",
   "friendship-status.engaged": "Помолвлены",
-  "friendship-status.married": "Женаты",
+  "friendship-status.married": "В браке",
   "friendship-status.divorced": "Разведены",
 
   /*********
