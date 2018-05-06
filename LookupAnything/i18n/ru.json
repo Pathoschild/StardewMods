@@ -11,7 +11,7 @@
   "generic.percent-chance-of": "{{percent}}% шанс для {{label}}",
   "generic.percent-ratio": "{{percent}}% ({{value}} из {{max}})",
   "generic.ratio": "{{value}} из {{max}}",
-  "generic.range": "{{min}} to {{max}}",
+  "generic.range": "С {{min}} по {{max}}",
   "generic.yes": "да",
   "generic.no": "нет",
   "generic.seconds": "{{count}} сек.",
@@ -26,7 +26,7 @@
 
   // types
   "type.fruit-tree": "Фруктовое дерево",
-  "type.map-tile": "Map tile",
+  "type.map-tile": "Тайл",
   "type.monster": "Монстр",
   "type.player": "Игрок",
   "type.tree": "Дерево",
@@ -223,17 +223,17 @@
   "item.cask-schedule.now-partial": "{{quality}} сейчас (используйте кирку для остановки старения)",
   "item.cask-schedule.tomorrow": "{{quality}} завтра",
   "item.cask-schedule.in-x-days": "{{quality}} через {{count}} дн. ({{date}})",
-  "item.contents.placed": "{{name}} placed", // TODO
+  "item.contents.placed": "содержит {{name}}",
   "item.contents.ready": "{{name}} готов",
   "item.contents.partial": "{{name}} через {{time}}",
   "item.needed-for.community-center": "Общественный центр ({{bundles}})",
   "item.needed-for.full-shipment": "достижения Мастер-груз (1 шт.)",
-  "item.needed-for.polyculture": "достижения Севооборот ({{count}}шт. или больше)",
+  "item.needed-for.polyculture": "достижения Севооборот ({{count}} шт. или больше)",
   "item.needed-for.full-collection": "достижения Полная коллекция (пожертвовать музею)",
   "item.sells-to.shipping-box": "Ящик отгрузки",
-  "item.fence-health.gold-clock": "no decay with Gold Clock", // TODO
+  "item.fence-health.gold-clock": "не разрушается (Золотые часы)",
   "item.fence-health.summary": "{{percent}}% (сломается через {{count}} дн.)",
-  "item.recipes.entry": "{{name}} ({{count}}шт.)",
+  "item.recipes.entry": "{{name}} ({{count}} шт.)",
   "item.number-owned.summary": "вам принадлежит {{count}} шт.",
 
   // monster lookup labels
@@ -306,10 +306,10 @@
   "tile.map-name": "Название локации",
   "tile.tile": "Тайл",
   "tile.tile-index": "{{layerName}}: индекс тайла",
-  "tile.tilesheet": "{{layerName}}: tilesheet",
+  "tile.tilesheet": "{{layerName}}: тайлсет",
   "tile.blend-mode": "{{layerName}}: режим перекрытия",
-  "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
-  "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
+  "tile.index-property": "{{layerName}}: ix свойства: {{propertyName}}",
+  "tile.tile-property": "{{layerName}}: свойства: {{propertyName}}",
 
   // tile lookup values
   "tile.tile.none-here": "здесь нет тайла",
