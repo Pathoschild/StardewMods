@@ -153,7 +153,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                     Rectangle tileArea = new Rectangle(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
                     if (tileArea.Contains((int)tile.X, (int)tile.Y))
                     {
-                        machine = this.GetMachine(building);
+                        machine = this.GetMachine(building, buildableLocation);
                         if (machine != null)
                         {
                             size = new Vector2(building.tilesWide.Value, building.tilesHigh.Value);
@@ -244,12 +244,15 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         /// <summary>Get a machine for the given building, if applicable.</summary>
         /// <param name="building">The building for which to get a machine.</param>
-        private IMachine GetMachine(Building building)
+        /// <param name="location">The location containing the machine.</param>
+        private IMachine GetMachine(Building building, BuildableGameLocation location)
         {
             if (building is JunimoHut hut)
                 return new JunimoHutMachine(hut);
             if (building is Mill mill)
                 return new MillMachine(mill);
+            if (location is Farm farm && building is ShippingBin)
+                return new ShippingBinMachine(farm);
             if (building.buildingType.Value == "Silo")
                 return new FeedHopperMachine();
             return null;

@@ -84,7 +84,7 @@
     <Compile Include="Framework\Machines\Objects\SodaMachine.cs" />
     <Compile Include="Framework\Machines\Objects\StatueOfEndlessFortuneMachine.cs" />
     <Compile Include="Framework\Machines\Objects\StatueOfPerfectionMachine.cs" />
-    <Compile Include="Framework\Machines\Tiles\ShippingBinMachine.cs" />
+    <Compile Include="Framework\Machines\Buildings\ShippingBinMachine.cs" />
     <Compile Include="Framework\Machines\Tiles\TrashCanMachine.cs" />
     <Compile Include="Framework\Machines\Objects\TapperMachine.cs" />
     <Compile Include="Framework\Machines\Objects\WormBinMachine.cs" />

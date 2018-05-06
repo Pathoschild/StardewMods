@@ -2,7 +2,7 @@ using System.Linq;
 using StardewValley;
 using SObject = StardewValley.Object;
 
-namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
+namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 {
     /// <summary>A shipping bin that accepts input and provides output.</summary>
     internal class ShippingBinMachine : IMachine
