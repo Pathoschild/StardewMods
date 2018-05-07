@@ -1,6 +1,7 @@
 # Release notes
 ## 1.4
 * Updated for Stardew Valley 1.3 (including multiplayer support).
+* Added support for garden pots to crop overlays.
 * Added Russian translations. (Thanks to fadedDexofan!)
 
 ## 1.3
