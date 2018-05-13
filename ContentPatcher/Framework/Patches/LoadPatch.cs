@@ -4,7 +4,6 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
-using StardewValley;
 
 namespace ContentPatcher.Framework.Patches
 {
@@ -64,15 +63,18 @@ namespace ContentPatcher.Framework.Patches
         ** Private methods
         *********/
         /// <summary>Clone a texture.</summary>
-        /// <param name="texture">The texture to clone.</param>
+        /// <param name="source">The texture to clone.</param>
         /// <returns>Cloning a texture is necessary when loading to avoid having it shared between different content managers, which can lead to undesirable effects like two players having synchronised texture changes.</returns>
-        private Texture2D CloneTexture(Texture2D texture)
+        private Texture2D CloneTexture(Texture2D source)
         {
-            Texture2D clone = new Texture2D(Game1.graphics.GraphicsDevice, texture.Width, texture.Height);
-            byte[] data = new byte[texture.Width * texture.Height];
-            texture.GetData(data);
-            clone.SetData(data);
-            return clone;
+            // get data
+            int[] pixels = new int[source.Width * source.Height];
+            source.GetData(pixels);
+
+            // create clone
+            Texture2D target = new Texture2D(source.GraphicsDevice, source.Width, source.Height);
+            target.SetData(pixels);
+            return target;
         }
     }
 }
