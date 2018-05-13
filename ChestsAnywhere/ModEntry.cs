@@ -9,6 +9,7 @@ using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Locations;
 using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.ChestsAnywhere
@@ -224,7 +225,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="location">The game location.</param>
         private bool IsDisabledLocation(GameLocation location)
         {
-            return this.Config.DisabledInLocations != null && this.Config.DisabledInLocations.Contains(location.Name, StringComparer.InvariantCultureIgnoreCase);
+            if (this.Config.DisabledInLocations == null)
+                return false;
+
+            return
+                this.Config.DisabledInLocations.Contains(location.Name)
+                || (location is MineShaft && location.Name.StartsWith("UndergroundMine") && this.Config.DisabledInLocations.Contains("UndergroundMine"));
         }
 
         /// <summary>Get the range for the current context.</summary>

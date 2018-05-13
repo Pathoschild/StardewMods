@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
@@ -25,7 +26,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         public ModConfigControls Controls { get; set; } = new ModConfigControls();
 
         /// <summary>The locations in which to disable remote chest lookups.</summary>
-        public string[] DisabledInLocations { get; set; } = new string[0];
+        public InvariantHashSet DisabledInLocations { get; set; } = new InvariantHashSet();
 
 
         /*********
