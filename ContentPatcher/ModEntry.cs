@@ -331,7 +331,7 @@ namespace ContentPatcher
                     case PatchType.Load:
                         {
                             // init patch
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, out string error, out TokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, out string error, out TokenString fromAsset, shouldPreload: true))
                                 return TrackSkip(error);
                             patch = new LoadPatch(entry.LogName, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
 
@@ -378,7 +378,7 @@ namespace ContentPatcher
                                 return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}].");
 
                             // save
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, out string error, out TokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, out string error, out TokenString fromAsset, shouldPreload: true))
                                 return TrackSkip(error);
                             patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
@@ -509,8 +509,9 @@ namespace ContentPatcher
         /// <param name="conditions">The conditions to apply.</param>
         /// <param name="error">The error reason if preparing the asset fails.</param>
         /// <param name="tokenedPath">The parsed value.</param>
+        /// <param name="shouldPreload">Whether to preload assets if needed.</param>
         /// <returns>Returns whether the local asset was successfully prepared.</returns>
-        private bool TryPrepareLocalAsset(ManagedContentPack pack, string path, InvariantDictionary<ConfigField> config, ConditionDictionary conditions, out string error, out TokenString tokenedPath)
+        private bool TryPrepareLocalAsset(ManagedContentPack pack, string path, InvariantDictionary<ConfigField> config, ConditionDictionary conditions, out string error, out TokenString tokenedPath, bool shouldPreload)
         {
             // normalise raw value
             path = this.NormaliseLocalAssetPath(pack, path);
@@ -530,12 +531,15 @@ namespace ContentPatcher
             }
             tokenedPath = builder.Build();
 
-            // validate all possible files exist
-            InvariantHashSet missingFiles = new InvariantHashSet(
-                from localKey in this.ConditionFactory.GetPossibleStrings(tokenedPath, conditions)
-                where !pack.FileExists(localKey)
-                select localKey
-            );
+            // preload & validate possible file paths
+            InvariantHashSet missingFiles = new InvariantHashSet();
+            foreach (string localKey in this.ConditionFactory.GetPossibleStrings(tokenedPath, conditions))
+            {
+                if (!pack.FileExists(localKey))
+                    missingFiles.Add(localKey);
+                else if (shouldPreload)
+                    pack.PreloadIfNeeded(localKey);
+            }
             if (missingFiles.Any())
             {
                 error = tokenedPath.ConditionTokens.Any() || missingFiles.Count > 1

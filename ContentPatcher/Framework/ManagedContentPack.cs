@@ -1,12 +1,25 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
+using xTile;
+using xTile.Tiles;
 
 namespace ContentPatcher.Framework
 {
     /// <summary>Handles loading assets from content packs.</summary>
     internal class ManagedContentPack
     {
+        /*********
+        ** Properties
+        *********/
+        /// <summary>A cache of PNG textures needed by the mod.</summary>
+        /// <remarks>This is needed to avoid errors when a texture is loaded during the draw loop (e.g. farmhouse textures).</remarks>
+        private readonly IDictionary<string, Texture2D> PngCache = new InvariantDictionary<Texture2D>();
+
+
         /*********
         ** Accessors
         *********/
@@ -40,6 +53,10 @@ namespace ContentPatcher.Framework
         public T Load<T>(string key)
         {
             key = this.GetRealPath(key) ?? throw new FileNotFoundException($"The file '{key}' does not exist in the {this.Pack.Manifest.Name} content patch folder.");
+
+            if (typeof(T) == typeof(Texture2D) && this.PngCache.TryGetValue(key, out Texture2D texture))
+                return (T)(object)texture;
+
             return this.Pack.LoadAsset<T>(key);
         }
 
@@ -59,9 +76,81 @@ namespace ContentPatcher.Framework
             return Path.Combine(this.Pack.DirectoryPath, relativePath);
         }
 
+        /// <summary>Preload a texture if needed to avoid errors later.</summary>
+        /// <param name="relativePath">The path relative to the content pack folder.</param>
+        public void PreloadIfNeeded(string relativePath)
+        {
+            string key = this.GetRealPath(relativePath) ?? throw new FileNotFoundException($"The file '{relativePath}' does not exist in the {this.Manifest.Name} content pack folder.");
+
+            // PNG asset
+            if (this.IsPngPath(key))
+            {
+                string actualAssetKey = this.Pack.GetActualAssetKey(key);
+                if (!this.PngCache.ContainsKey(actualAssetKey))
+                    this.PngCache[actualAssetKey] = this.Pack.LoadAsset<Texture2D>(key);
+                return;
+            }
+
+            // map PNG tilesheets
+            if (this.TryLoadMap(key, out Map map))
+            {
+                string relativeRoot = this.Pack.GetActualAssetKey(""); // warning: this depends on undocumented SMAPI implementation details
+                foreach (TileSheet tilesheet in map.TileSheets)
+                {
+                    // ignore if not a PNG in the content pack
+                    if (!tilesheet.ImageSource.StartsWith(relativeRoot) || Path.GetExtension(tilesheet.ImageSource).Equals(".png", StringComparison.InvariantCultureIgnoreCase))
+                        continue;
+
+                    // ignore if local file doesn't exist
+                    string relativeImageSource = this.GetRealPath(tilesheet.ImageSource.Substring(relativeRoot.Length + 1));
+                    if (relativeImageSource == null)
+                        continue;
+
+                    // load asset
+                    string actualAssetKey = this.Pack.GetActualAssetKey(relativeImageSource);
+                    if (!this.PngCache.ContainsKey(actualAssetKey))
+                        this.PngCache[actualAssetKey] = this.Pack.LoadAsset<Texture2D>(relativeImageSource);
+                }
+            }
+        }
+
+
         /*********
         ** Private methods
         *********/
+        /// <summary>Get whether an asset is a unpacked PNG file.</summary>
+        /// <param name="key">The asset key in the content pack.</param>
+        private bool IsPngPath(string key)
+        {
+            return key.EndsWith(".png", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        /// <summary>Try to load an asset key as a map file.</summary>
+        /// <param name="key">The asset key in the content pack.</param>
+        /// <param name="map">The loaded map.</param>
+        /// <returns>Returns whether the map was successfully loaded.</returns>
+        private bool TryLoadMap(string key, out Map map)
+        {
+            // ignore if we know it's not a map
+            if (!key.EndsWith(".tbin", StringComparison.InvariantCultureIgnoreCase) && !key.EndsWith(".xnb", StringComparison.InvariantCultureIgnoreCase))
+            {
+                map = null;
+                return false;
+            }
+
+            // try to load map
+            try
+            {
+                map = this.Pack.LoadAsset<Map>(key);
+                return true;
+            }
+            catch
+            {
+                map = null;
+                return false;
+            }
+        }
+
         /// <summary>Get the actual relative path within the content pack for a file, matched case-insensitively, or <c>null</c> if not found.</summary>
         /// <param name="key">The case-insensitive asset key.</param>
         private string GetRealPath(string key)
