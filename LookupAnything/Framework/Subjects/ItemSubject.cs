@@ -243,11 +243,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     // bundles
                     if (isObject)
                     {
-                        string[] bundles = (from bundle in this.GetUnfinishedBundles(obj) orderby bundle.Area, bundle.DisplayName select $"{this.GetAmountDisplayText(bundle, obj)}{this.GetTranslatedBundleArea(bundle)}: {bundle.DisplayName}").ToArray();
+                        string[] bundles = (
+                            from bundle in this.GetUnfinishedBundles(obj)
+                            orderby bundle.Area, bundle.DisplayName
+                            let countNeeded = this.GetIngredientCountNeeded(bundle, obj)
+                            select countNeeded > 1
+                                ? $"{this.GetTranslatedBundleArea(bundle)}: {bundle.DisplayName} x {countNeeded}"
+                                : $"{this.GetTranslatedBundleArea(bundle)}: {bundle.DisplayName}"
+                        ).ToArray();
                         if (bundles.Any())
                             neededFor.Add(this.Translate(L10n.Item.NeededForCommunityCenter, new { bundles = string.Join(", ", bundles) }));
-
-                        //string[] bundles1 = this.GetUnfinishedBundles(obj).GroupBy(b => b.)
                     }
 
                     // polyculture achievement
@@ -478,20 +483,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     if (communityCenter.isBundleComplete(bundle.ID))
                         continue;
 
-                    //// get ingredient
-                    //BundleIngredientModel ingredient = bundle.Ingredients.FirstOrDefault(p => p.ItemID == item.parentSheetIndex && p.Quality <= (ItemQuality)item.quality);
-                    //if (ingredient == null)
-                    //    continue;
-
-                    //// yield if missing
-                    //if (!communityCenter.bundles[bundle.ID][ingredient.Index])
-                    //    yield return bundle;
-
-                    bool isMissing = GetIngredientsFromBundle(bundle, item).Any(p => IngredientIsStillMissing(bundle, p)); // get missing
-
-                    if (isMissing) {
+                    bool isMissing = this.GetIngredientsFromBundle(bundle, item).Any(p => this.IsIngredientNeeded(bundle, p));
+                    if (isMissing)
                         yield return bundle;
-                    }
                 }
             }
         }
@@ -566,46 +560,33 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 .ToDictionary(p => p.Key, p => p.Distinct().ToArray());
         }
 
-        /// <summary>
-        /// Get matching ingerdients from bundle. If no match the enumerable will be empty (not null).
-        /// </summary>
-        /// <param name="bundle"></param>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        private IEnumerable<BundleIngredientModel> GetIngredientsFromBundle(BundleModel bundle, SObject item) {
+        /// <summary>Get bundle ingredients matching the given item.</summary>
+        /// <param name="bundle">The bundle to search.</param>
+        /// <param name="item">The item to match.</param>
+        private IEnumerable<BundleIngredientModel> GetIngredientsFromBundle(BundleModel bundle, SObject item)
+        {
             return bundle.Ingredients
-                .Where(p => p.ItemID == item.parentSheetIndex && p.Quality <= (ItemQuality) item.quality); // get ingredients
+                .Where(p => p.ItemID == item.parentSheetIndex && p.Quality <= (ItemQuality)item.quality); // get ingredients
         }
 
-        /// <summary>
-        /// Check if the ingredient is missing in the bundle and must still be provided by the player.
-        /// </summary>
-        /// <param name="bundle"></param>
-        /// <param name="ingridient"></param>
-        /// <returns></returns>
-        private bool IngredientIsStillMissing(BundleModel bundle, BundleIngredientModel ingridient) {
+        /// <summary>Get whether an ingredient is still needed for a bundle.</summary>
+        /// <param name="bundle">The bundle to check.</param>
+        /// <param name="ingredient">The ingredient to check.</param>
+        private bool IsIngredientNeeded(BundleModel bundle, BundleIngredientModel ingredient)
+        {
             CommunityCenter communityCenter = Game1.locations.OfType<CommunityCenter>().First();
 
-            return !communityCenter.bundles[bundle.ID][ingridient.Index];
+            return !communityCenter.bundles[bundle.ID][ingredient.Index];
         }
 
-        /// <summary>
-        /// Creates a user friendly display text.
-        /// </summary>
-        /// <param name="bundle"></param>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        private string GetAmountDisplayText(BundleModel bundle, SObject item) {
-
-            int amountOfIngriedientsNeeded = GetIngredientsFromBundle(bundle, item)
-                .Where(p => IngredientIsStillMissing(bundle, p))
+        /// <summary>Get the number of an ingredient needed for a bundle.</summary>
+        /// <param name="bundle">The bundle to check.</param>
+        /// <param name="item">The ingredient to check.</param>
+        private int GetIngredientCountNeeded(BundleModel bundle, SObject item)
+        {
+            return this.GetIngredientsFromBundle(bundle, item)
+                .Where(p => this.IsIngredientNeeded(bundle, p))
                 .Sum(p => p.Stack);
-
-            if (amountOfIngriedientsNeeded <= 1) {
-                return "";
-            }
-
-            return amountOfIngriedientsNeeded + "x ";
         }
     }
 }
