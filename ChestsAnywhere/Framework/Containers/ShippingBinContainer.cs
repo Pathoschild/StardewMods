@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using Netcode;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
-using StardewValley.Objects;
 using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
@@ -17,11 +17,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The farm containing the shipping bin.</summary>
         private readonly Farm Farm;
 
-        /// <summary>A fake chest wrapped around the shipping bin to use chest behaviour.</summary>
-        private readonly Chest FakeChest;
-
         /// <summary>Simplifies access to private game data.</summary>
         private readonly IReflectionHelper Reflection;
+
+        /// <summary>The underlying shipping bin.</summary>
+        private readonly NetCollection<Item> ShippingBin;
 
         /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
         private ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory => this.GrabItemFromInventoryImpl;
@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         ** Accessors
         *********/
         /// <summary>The underlying inventory.</summary>
-        public IList<Item> Inventory => this.Farm.shippingBin;
+        public IList<Item> Inventory => this.ShippingBin;
 
         /// <summary>The container's name.</summary>
         public string Name { get; set; }
@@ -58,9 +58,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         public ShippingBinContainer(Farm farm, IReflectionHelper reflection)
         {
             this.Farm = farm;
+            this.ShippingBin = farm.shippingBin;
             this.Reflection = reflection;
-            this.FakeChest = new Chest();
-            this.FakeChest.items.Set(farm.shippingBin);
         }
 
         /// <summary>Get whether the in-game container is open.</summary>
@@ -98,7 +97,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         }
 
         /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
-        /// <remarks>Derived from <see cref="Chest.updateWhenCurrentLocation"/>.</remarks>
+        /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
         public ItemGrabMenu OpenMenu()
         {
             return new ItemGrabMenu(
@@ -121,7 +120,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Add an item to the container from the player inventory.</summary>
         /// <param name="item">The item taken.</param>
         /// <param name="player">The player taking the item.</param>
-        /// <remarks>This implementation replicates <see cref="Chest.grabItemFromInventory"/> without the slot limit (instead of using <c>Farm::shipItem</c> which does some weird things that don't work well with a full chest UI).</remarks>
+        /// <remarks>This implementation replicates <see cref="StardewValley.Objects.Chest.grabItemFromInventory"/> without the slot limit (instead of using <c>Farm::shipItem</c> which does some weird things that don't work well with a full chest UI).</remarks>
         private void GrabItemFromInventoryImpl(Item item, SFarmer player)
         {
             // normalise
@@ -129,16 +128,21 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 item.Stack = 1;
 
             // add to shipping bin
-            Item remaining = this.FakeChest.addItem(item);
-            if (remaining != null)
-                this.FakeChest.items.Add(remaining);
+            this.ShippingBin.Filter(p => p != null);
+            foreach (Item slot in this.Inventory)
+            {
+                if (!slot.canStackWith(item))
+                    continue;
+
+                item.Stack = slot.addToStack(item.Stack);
+                if (item.Stack <= 0)
+                    break;
+            }
+            if (item.Stack > 0)
+                this.ShippingBin.Add(item);
 
             // remove from player inventory
             player.removeItemFromInventory(item);
-            this.FakeChest.clearNulls();
-
-            // sync fake chest to shipping bin
-            this.Farm.shippingBin.Set(this.FakeChest.items);
 
             // reopen menu
             IClickableMenu menu = Game1.activeClickableMenu;
@@ -156,14 +160,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <param name="player">The player taking the item.</param>
         private void GrabItemFromContainerImpl(Item item, SFarmer player)
         {
-            if (!player.couldInventoryAcceptThisItem(item))
+            if (!player.addItemToInventoryBool(item))
                 return;
 
-            this.FakeChest.grabItemFromChest(item, player);
-
-            // sync fake chest to shipping bin
-            this.Farm.shippingBin.Set(this.FakeChest.items);
-
+            this.ShippingBin.Remove(item);
             if (item == this.Farm.lastItemShipped)
                 this.Farm.lastItemShipped = this.Farm.shippingBin.LastOrDefault();
         }
