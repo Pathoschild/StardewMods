@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
+using StardewValley;
 
 namespace ContentPatcher.Framework.Patches
 {
@@ -45,13 +47,32 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="asset">The asset to load.</param>
         public override T Load<T>(IAssetInfo asset)
         {
-            return this.ContentPack.Load<T>(this.LocalAsset.Value);
+            T data = this.ContentPack.Load<T>(this.LocalAsset.Value);
+            return (data as object) is Texture2D texture
+                ? (T)(object)this.CloneTexture(texture)
+                : data;
         }
 
         /// <summary>Get the condition tokens used by this patch in its fields.</summary>
         public override IEnumerable<ConditionKey> GetTokensUsed()
         {
             return base.GetTokensUsed().Union(this.LocalAsset.ConditionTokens);
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Clone a texture.</summary>
+        /// <param name="texture">The texture to clone.</param>
+        /// <returns>Cloning a texture is necessary when loading to avoid having it shared between different content managers, which can lead to undesirable effects like two players having synchronised texture changes.</returns>
+        private Texture2D CloneTexture(Texture2D texture)
+        {
+            Texture2D clone = new Texture2D(Game1.graphics.GraphicsDevice, texture.Width, texture.Height);
+            byte[] data = new byte[texture.Width * texture.Height];
+            texture.GetData(data);
+            clone.SetData(data);
+            return clone;
         }
     }
 }
