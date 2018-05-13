@@ -12,9 +12,6 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Properties
         *********/
-        /// <summary>Handles loading assets from content packs.</summary>
-        protected AssetLoader AssetLoader { get; }
-
         /// <summary>Normalise an asset name.</summary>
         private readonly Func<string, string> NormaliseAssetName;
 
@@ -29,7 +26,7 @@ namespace ContentPatcher.Framework.Patches
         public PatchType Type { get; }
 
         /// <summary>The content pack which requested the patch.</summary>
-        public IContentPack ContentPack { get; }
+        public ManagedContentPack ContentPack { get; }
 
         /// <summary>The normalised asset name to intercept.</summary>
         public string AssetName { get; private set; }
@@ -101,16 +98,14 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Construct an instance.</summary>
         /// <param name="logName">A unique name for this patch shown in log messages.</param>
         /// <param name="type">The patch type.</param>
-        /// <param name="assetLoader">Handles loading assets from content packs.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        protected Patch(string logName, PatchType type, AssetLoader assetLoader, IContentPack contentPack, TokenString assetName, ConditionDictionary conditions, Func<string, string> normaliseAssetName)
+        protected Patch(string logName, PatchType type, ManagedContentPack contentPack, TokenString assetName, ConditionDictionary conditions, Func<string, string> normaliseAssetName)
         {
             this.LogName = logName;
             this.Type = type;
-            this.AssetLoader = assetLoader;
             this.ContentPack = contentPack;
             this.TokenableAssetName = assetName;
             this.Conditions = conditions;

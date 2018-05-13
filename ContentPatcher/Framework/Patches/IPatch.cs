@@ -17,7 +17,7 @@ namespace ContentPatcher.Framework.Patches
         PatchType Type { get; }
 
         /// <summary>The content pack which requested the patch.</summary>
-        IContentPack ContentPack { get; }
+        ManagedContentPack ContentPack { get; }
 
         /// <summary>The normalised asset name to intercept.</summary>
         string AssetName { get; }

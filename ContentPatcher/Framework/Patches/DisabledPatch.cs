@@ -1,5 +1,3 @@
-using StardewModdingAPI;
-
 namespace ContentPatcher.Framework.Patches
 {
     /// <summary>An invalid patch that couldn't be loaded.</summary>
@@ -18,7 +16,7 @@ namespace ContentPatcher.Framework.Patches
         public string AssetName { get; }
 
         /// <summary>The content pack which requested the patch.</summary>
-        public IContentPack ContentPack { get; }
+        public ManagedContentPack ContentPack { get; }
 
         /// <summary>The reason this patch is disabled.</summary>
         public string ReasonDisabled { get; }
@@ -32,7 +30,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="assetName">The raw asset name to intercept.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="reasonDisabled">The reason this patch is disabled.</param>
-        public DisabledPatch(string logName, string type, string assetName, IContentPack contentPack, string reasonDisabled)
+        public DisabledPatch(string logName, string type, string assetName, ManagedContentPack contentPack, string reasonDisabled)
         {
             this.LogName = logName;
             this.Type = type;

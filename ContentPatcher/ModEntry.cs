@@ -31,9 +31,6 @@ namespace ContentPatcher
         /// <summary>The supported format versions.</summary>
         private readonly string[] SupportedFormatVersions = { "1.0", "1.3" };
 
-        /// <summary>Handles loading assets from content packs.</summary>
-        private readonly AssetLoader AssetLoader = new AssetLoader();
-
         /// <summary>Handles constructing, permuting, and updating conditions.</summary>
         private readonly ConditionFactory ConditionFactory = new ConditionFactory();
 
@@ -159,7 +156,7 @@ namespace ContentPatcher
         private void LoadContentPacks()
         {
             ConfigFileHandler configFileHandler = new ConfigFileHandler(this.ConfigFileName, this.PatchManager.ParseCommaDelimitedField, (pack, label, reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {label}: {reason}"));
-            foreach (IContentPack pack in this.Helper.GetContentPacks())
+            foreach (ManagedContentPack pack in this.Helper.GetContentPacks().Select(p => new ManagedContentPack(p)))
             {
                 this.VerboseLog($"Loading content pack '{pack.Manifest.Name}'...");
 
@@ -229,7 +226,7 @@ namespace ContentPatcher
         /// <summary>Set a unique name for all patches in a content pack.</summary>
         /// <param name="contentPack">The content pack.</param>
         /// <param name="patches">The patches to name.</param>
-        private void NamePatches(IContentPack contentPack, PatchConfig[] patches)
+        private void NamePatches(ManagedContentPack contentPack, PatchConfig[] patches)
         {
             // add default log names
             foreach (PatchConfig patch in patches)
@@ -264,7 +261,7 @@ namespace ContentPatcher
         /// <param name="entry">The change to load.</param>
         /// <param name="config">The content pack's config values.</param>
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
-        private bool LoadPatch(IContentPack pack, PatchConfig entry, InvariantDictionary<ConfigField> config, Action<string> logSkip)
+        private bool LoadPatch(ManagedContentPack pack, PatchConfig entry, InvariantDictionary<ConfigField> config, Action<string> logSkip)
         {
             bool TrackSkip(string reason, bool warn = true)
             {
@@ -334,9 +331,9 @@ namespace ContentPatcher
                     case PatchType.Load:
                         {
                             // init patch
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, out string error, out TokenString fromAsset, checkOnly: !enabled))
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, out string error, out TokenString fromAsset))
                                 return TrackSkip(error);
-                            patch = new LoadPatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
+                            patch = new LoadPatch(entry.LogName, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
 
                             // detect conflicting loaders
                             if (enabled)
@@ -344,9 +341,11 @@ namespace ContentPatcher
                                 InvariantDictionary<IPatch> conflicts = this.PatchManager.GetConflictingLoaders(patch);
                                 if (conflicts.Any())
                                 {
-                                    IEnumerable<string> conflictNames = (from conflict in conflicts
+                                    IEnumerable<string> conflictNames = (
+                                        from conflict in conflicts
                                         orderby conflict.Key
-                                        select $"'{conflict.Value.LogName}' already loads {conflict.Key}");
+                                        select $"'{conflict.Value.LogName}' already loads {conflict.Key}"
+                                    );
                                     return TrackSkip(
                                         $"{nameof(entry.Target)} '{patch.TokenableAssetName.Raw}' conflicts with other load patches ({string.Join(", ", conflictNames)}). Each file can only be loaded by one patch, unless their conditions can never overlap.");
                                 }
@@ -366,7 +365,7 @@ namespace ContentPatcher
                                 return TrackSkip($"the {nameof(PatchConfig.Fields)} can't contain empty values.");
 
                             // save
-                            patch = new EditDataPatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, entry.Entries, entry.Fields, this.Monitor, this.Helper.Content.NormaliseAssetName);
+                            patch = new EditDataPatch(entry.LogName, pack, assetName, conditions, entry.Entries, entry.Fields, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
                         break;
 
@@ -379,9 +378,9 @@ namespace ContentPatcher
                                 return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}].");
 
                             // save
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, out string error, out TokenString fromAsset, checkOnly: !enabled))
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, out string error, out TokenString fromAsset))
                                 return TrackSkip(error);
-                            patch = new EditImagePatch(entry.LogName, this.AssetLoader, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormaliseAssetName);
+                            patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
                         break;
 
@@ -510,9 +509,8 @@ namespace ContentPatcher
         /// <param name="conditions">The conditions to apply.</param>
         /// <param name="error">The error reason if preparing the asset fails.</param>
         /// <param name="tokenedPath">The parsed value.</param>
-        /// <param name="checkOnly">Prepare the asset info and check if it's valid, but don't actually preload the asset.</param>
         /// <returns>Returns whether the local asset was successfully prepared.</returns>
-        private bool TryPrepareLocalAsset(IContentPack pack, string path, InvariantDictionary<ConfigField> config, ConditionDictionary conditions, out string error, out TokenString tokenedPath, bool checkOnly)
+        private bool TryPrepareLocalAsset(ManagedContentPack pack, string path, InvariantDictionary<ConfigField> config, ConditionDictionary conditions, out string error, out TokenString tokenedPath)
         {
             // normalise raw value
             path = this.NormaliseLocalAssetPath(pack, path);
@@ -533,29 +531,11 @@ namespace ContentPatcher
             tokenedPath = builder.Build();
 
             // validate all possible files exist
-            // + preload PNG assets to avoid load-in-draw-loop error
-            InvariantHashSet missingFiles = new InvariantHashSet();
-            foreach (string localKey in this.ConditionFactory.GetPossibleStrings(tokenedPath, conditions))
-            {
-                // check-only mode
-                if (checkOnly)
-                {
-                    if (!this.AssetLoader.FileExists(pack, localKey))
-                        missingFiles.Add(localKey);
-                    continue;
-                }
-
-                // else preload
-                try
-                {
-                    if (this.AssetLoader.PreloadIfNeeded(pack, localKey))
-                        this.VerboseLog($"      preloaded {localKey}.");
-                }
-                catch (FileNotFoundException)
-                {
-                    missingFiles.Add(localKey);
-                }
-            }
+            InvariantHashSet missingFiles = new InvariantHashSet(
+                from localKey in this.ConditionFactory.GetPossibleStrings(tokenedPath, conditions)
+                where !pack.FileExists(localKey)
+                select localKey
+            );
             if (missingFiles.Any())
             {
                 error = tokenedPath.ConditionTokens.Any() || missingFiles.Count > 1
@@ -573,7 +553,7 @@ namespace ContentPatcher
         /// <summary>Get a normalised file path relative to the content pack folder.</summary>
         /// <param name="contentPack">The content pack.</param>
         /// <param name="path">The relative asset path.</param>
-        private string NormaliseLocalAssetPath(IContentPack contentPack, string path)
+        private string NormaliseLocalAssetPath(ManagedContentPack contentPack, string path)
         {
             // normalise asset name
             if (string.IsNullOrWhiteSpace(path))
@@ -581,7 +561,7 @@ namespace ContentPatcher
             string newPath = this.Helper.Content.NormaliseAssetName(path);
 
             // add .xnb extension if needed (it's stripped from asset names)
-            string fullPath = Path.Combine(contentPack.DirectoryPath, newPath);
+            string fullPath = contentPack.GetFullPath(newPath);
             if (!File.Exists(fullPath))
             {
                 if (File.Exists($"{fullPath}.xnb") || Path.GetExtension(path) == ".xnb")

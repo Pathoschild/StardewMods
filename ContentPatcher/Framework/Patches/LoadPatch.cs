@@ -21,14 +21,13 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="logName">A unique name for this patch shown in log messages.</param>
-        /// <param name="assetLoader">Handles loading assets from content packs.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="localAsset">The asset key to load from the content pack instead.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public LoadPatch(string logName, AssetLoader assetLoader, IContentPack contentPack, TokenString assetName, ConditionDictionary conditions, TokenString localAsset, Func<string, string> normaliseAssetName)
-            : base(logName, PatchType.Load, assetLoader, contentPack, assetName, conditions, normaliseAssetName)
+        public LoadPatch(string logName, ManagedContentPack contentPack, TokenString assetName, ConditionDictionary conditions, TokenString localAsset, Func<string, string> normaliseAssetName)
+            : base(logName, PatchType.Load, contentPack, assetName, conditions, normaliseAssetName)
         {
             this.LocalAsset = localAsset;
         }
@@ -46,7 +45,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="asset">The asset to load.</param>
         public override T Load<T>(IAssetInfo asset)
         {
-            return this.AssetLoader.Load<T>(this.ContentPack, this.LocalAsset.Value);
+            return this.ContentPack.Load<T>(this.LocalAsset.Value);
         }
 
         /// <summary>Get the condition tokens used by this patch in its fields.</summary>

@@ -1,7 +1,5 @@
-using System.Security.Permissions;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
-using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Commands
 {
@@ -27,7 +25,7 @@ namespace ContentPatcher.Framework.Commands
         public ConditionDictionary ParsedConditions { get; }
 
         /// <summary>The content pack which requested the patch.</summary>
-        public IContentPack ContentPack { get; }
+        public ManagedContentPack ContentPack { get; }
 
         /// <summary>Whether the patch is loaded.</summary>
         public bool IsLoaded { get; }
@@ -83,7 +81,7 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>Get the patch name shown in log messages, without the content pack prefix.</summary>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="logName">The unique patch name shown in log messages.</param>
-        private string GetShortName(IContentPack contentPack, string logName)
+        private string GetShortName(ManagedContentPack contentPack, string logName)
         {
             string prefix = contentPack.Manifest.Name + " > ";
             return logName.StartsWith(prefix)

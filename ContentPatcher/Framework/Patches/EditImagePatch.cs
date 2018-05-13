@@ -36,7 +36,6 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="logName">A unique name for this patch shown in log messages.</param>
-        /// <param name="assetLoader">Handles loading assets from content packs.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
@@ -46,8 +45,8 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="patchMode">Indicates how the image should be patched.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditImagePatch(string logName, AssetLoader assetLoader, IContentPack contentPack, TokenString assetName, ConditionDictionary conditions, TokenString fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor, Func<string, string> normaliseAssetName)
-            : base(logName, PatchType.EditImage, assetLoader, contentPack, assetName, conditions, normaliseAssetName)
+        public EditImagePatch(string logName, ManagedContentPack contentPack, TokenString assetName, ConditionDictionary conditions, TokenString fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor, Func<string, string> normaliseAssetName)
+            : base(logName, PatchType.EditImage, contentPack, assetName, conditions, normaliseAssetName)
         {
             this.FromLocalAsset = fromLocalAsset;
             this.FromArea = fromArea != Rectangle.Empty ? fromArea : null as Rectangle?;
@@ -78,11 +77,11 @@ namespace ContentPatcher.Framework.Patches
             }
 
             // fetch data
-            Texture2D source = this.AssetLoader.Load<Texture2D>(this.ContentPack, this.FromLocalAsset.Value);
+            Texture2D source = this.ContentPack.Load<Texture2D>(this.FromLocalAsset.Value);
             Rectangle sourceArea = this.FromArea ?? new Rectangle(0, 0, source.Width, source.Height);
             Rectangle targetArea = this.ToArea ?? new Rectangle(0, 0, sourceArea.Width, sourceArea.Height);
             IAssetDataForImage editor = asset.AsImage();
-            
+
             // validate error conditions
             if (sourceArea.X < 0 || sourceArea.Y < 0 || sourceArea.Width < 0 || sourceArea.Height < 0)
             {
