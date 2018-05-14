@@ -13,6 +13,8 @@
   "label.order": "Reihenfolge",
   "label.hide-chest": "Kiste ausblenden",
   "label.hide-chest-hidden": "Kiste ausblenden (Du musst die Kiste wiederfinden um es rückgängig zu machen!)",
+  "label.automate-prefer-output": "(Automate) Put items in this chest first", // TODO
+  "label.automate-ignore": "(Automate) Don't use this chest for automation", // TODO
 
   // button labels
   "button.edit-chest": "Bearbeite Kiste",

@@ -136,7 +136,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 // add overlay
                 RangeHandler range = this.GetCurrentRange();
                 ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true, alwaysIncludeContainer: chest.Container).ToArray();
-                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Translation);
+                bool isAutomateInstalled = this.Helper.ModRegistry.IsLoaded("Pathoschild.Automate");
+                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Translation, showAutomateOptions: isAutomateInstalled);
                 this.ManageChestOverlay.OnChestSelected += selected =>
                 {
                     this.SelectedInventory = selected.Container.Inventory;
