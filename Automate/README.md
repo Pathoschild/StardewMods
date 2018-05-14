@@ -64,6 +64,10 @@ will be taken from all the chests, and output will be saved to chests in this or
 2. chests which already contain an item of the same type;
 3. any chest.
 
+If you add `|automate:ignore|` to the chest name, Automate will ignore this chest when setting up
+automation. (You'll need to place an object to trigger a location update after editing the chest
+name.)
+
 ### Factories
 A 'factory' is just a machine group which produces a certain output. Here are some example factories.
 You can increase production by just adding more machines.
