@@ -3,6 +3,7 @@
 # Release notes
 ## 1.13
 * Updated for Stardew Valley 1.3 (including multiplayer support).
+* Added Automate options to edit-chest screen if it's installed.
 * Improved Russian translations. (Thanks to fadedDexofan!)
 
 ## 1.12.4

@@ -7,6 +7,7 @@ automatically pull raw items from the chest and push processed items into it.
 * [Use](#use)
 * [Configure](#configure)
 * [Compatibility](#compatibility)
+* [FAQs](#faqs)
 * [See also](#see-also)
 
 ## Install
@@ -21,6 +22,7 @@ Machines connected to a chest will push their output into it, and pull ingredien
 of it. 
 
 This can be used to automate...
+* auto-grabbers;
 * [bee houses](http://stardewvalleywiki.com/Bee_House);
 * [casks](http://stardewvalleywiki.com/Cask) (including outside the cellar);
 * [charcoal kilns](http://stardewvalleywiki.com/Charcoal_Kiln);
@@ -43,7 +45,7 @@ This can be used to automate...
 * [preserves jars](http://stardewvalleywiki.com/Preserves_Jar);
 * [recycling machines](http://stardewvalleywiki.com/Recycling_Machine);
 * [seed makers](http://stardewvalleywiki.com/Seed_Maker);
-* shipping bin;
+* shipping bins;
 * [silos](http://stardewvalleywiki.com/Silo);
 * [slime egg-presses](http://stardewvalleywiki.com/Slime_Egg);
 * [slime incubators](https://stardewvalleywiki.com/Slime_Incubator);
@@ -51,22 +53,14 @@ This can be used to automate...
 * and [worm bins](http://stardewvalleywiki.com/Worm_Bin).
 
 Automated machines will give you the same XP, achievements, and items you'd get for using them
-directly.
-
-### Advanced automation
-A 'machine group' is any number of chests and machines connected together. Any chest or machine
-placed adjacent to a chest or machine that's already in the group will be added to the group. You
-can press `U` (configurable) to visualise machine groups.
-
-If you add multiple chests to the same machine group, they'll all be used in the automation. Input
+directly. If multiple chests are part of a group, they'll all be used in the automation. Input
 will be taken from all the chests, and output will be saved to chests in this order:
-1. chests with `|automate:output|` in the name;
+1. chests marked as output chests (see _[Configure](#configure));
 2. chests which already contain an item of the same type;
 3. any chest.
 
-If you add `|automate:ignore|` to the chest name, Automate will ignore this chest when setting up
-automation. (You'll need to place an object to trigger a location update after editing the chest
-name.)
+You can combine any number of chests and machines by placing them adjacent to each other, and you
+can press `U` (configurable) to highlight connected machines.
 
 ### Factories
 A 'factory' is just a machine group which produces a certain output. Here are some example factories.
@@ -107,6 +101,20 @@ setting           | what it affects
 `AutomationInterval` | Default `60`. The number of update ticks between each automation cycle (one second is ≈60 ticks).
 `VerboseLogging` | Default `false`. Whether to write more detailed information about what the mod is doing to the log file. This is useful for troubleshooting, but may impact performance and should generally be disabled.
 
+Installing [Chests Anywhere](https://www.nexusmods.com/stardewvalley/mods/518) too lets you set
+per-chest options directly in-game:
+> ![](screenshots/chests-anywhere-config.png)
+
+This adds two options for automate:
+* **Put items in this chest first:** when choosing a chest to place processed items, put them in
+  this chest before any others (until it's full).
+* **Don't use this chest for automation:** Automate will completely ignore the chest, so it won't
+  be connected to any machines.
+
+If you don't have Chests Anywhere installed, you can edit the chest names a different way and use
+these substrings: `|automate:output|` (put items in this chest first) or `|automate:ignore|` (don't
+use this chest in automation).
+
 ## Compatibility
 Automate is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
 multiplayer. In multiplayer mode, only the main player can automate machines; other players can
@@ -114,6 +122,27 @@ keep it installed and use the overlay, their mod just won't automate anything.
 
 Automate can be used with custom machine mods, but only the standard machines will currently be
 automated.
+
+## FAQs
+### What's the input/output order?
+If multiple chests are connected to the same machine group, they'll all be used in the automation.
+**This section is informational only; the order may change in future releases.**
+
+Input is not easily predictable. Automate groups connected chests into one inventory and takes
+required items from that, so items may be taken from multiple chests simultaneously.
+
+Output will be pushed into chests in this order:
+1. chests with the "Put items in this chest first" option (see _customisation_);
+2. chests which already contain an item of the same type;
+3. any chest.
+
+### Is there a limit to how many machines can be connected?
+Automate optimises machine connections internally, so there's no upper limit. The most I've tried is
+[630 machines in one group](https://community.playstarbound.com/threads/automate.131913/page-11#post-3238142);
+that didn't cause any issues, so you can just keep adding more if you want.
+
+### What if I don't want a specific chest to be connected?
+See _[Configuration](#configuration)_.
 
 ## See also
 * [Release notes](release-notes.md)
