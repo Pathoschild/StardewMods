@@ -149,7 +149,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             // push into 'output' chests
             foreach (IContainer container in this.Containers)
             {
-                if (container.Name.IndexOf("output", StringComparison.InvariantCultureIgnoreCase) < 0)
+                if (container.Name.IndexOf("|automate:output|", StringComparison.InvariantCultureIgnoreCase) < 0)
                     continue;
 
                 container.Store(item);

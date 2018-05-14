@@ -4,6 +4,7 @@
 ## 1.10
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added support for auto-grabbers and buildable shipping bins.
+* **Breaking change:** to prefer a chest for output, add `|automate:output|` to the chest name instead of just `output`.
 
 ## 1.9.1
 * Updated to SMAPI 2.4.

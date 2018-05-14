@@ -60,7 +60,7 @@ can press `U` (configurable) to visualise machine groups.
 
 If you add multiple chests to the same machine group, they'll all be used in the automation. Input
 will be taken from all the chests, and output will be saved to chests in this order:
-1. chests with 'output' in the name;
+1. chests with `|automate:output|` in the name;
 2. chests which already contain an item of the same type;
 3. any chest.
 
