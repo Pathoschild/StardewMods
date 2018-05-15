@@ -92,7 +92,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                     group.Add(machine);
                     foundSize = size;
                 }
-                else if (this.TryGetChest(location, tile, out Chest chest) && chest.Name.IndexOf("|automate:ignore|", StringComparison.InvariantCultureIgnoreCase) >= 0)
+                else if (this.TryGetChest(location, tile, out Chest chest) && chest.Name.IndexOf("|automate:ignore|", StringComparison.InvariantCultureIgnoreCase) == -1)
                 {
                     group.Add(new ChestContainer(chest));
                     foundSize = Vector2.One;
