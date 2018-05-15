@@ -7,6 +7,7 @@
 * Added support for new friendship data.
 * Added number of item needed in bundle list. (Thanks to StefanOssendorf!)
 * Improved Russian translations. (Thanks to fadedDexofan!)
+* Fixed issue where a bundle that needs two stacks of an item won't be listed on the item lookup if one stack is filled. (Thanks to StefanOssendorf!)
 
 ## 1.18.1
 * Fixed error when looking up something before the save is loaded (thanks to f4iTh!).
