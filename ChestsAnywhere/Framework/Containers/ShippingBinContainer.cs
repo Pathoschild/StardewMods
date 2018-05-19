@@ -160,7 +160,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <param name="player">The player taking the item.</param>
         private void GrabItemFromContainerImpl(Item item, SFarmer player)
         {
-            if (!player.addItemToInventoryBool(item))
+            if (!player.couldInventoryAcceptThisItem(item))
                 return;
 
             this.ShippingBin.Remove(item);
