@@ -2,7 +2,7 @@
 ## 1.4
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added support for garden pots to crop overlays.
-* Added Russian translations. (Thanks to fadedDexofan!)
+* Added Russian and Spanish translations. (Thanks to fadedDexofan and alca259!)
 
 ## 1.3
 * Updated to SMAPI 2.4.

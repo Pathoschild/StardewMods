@@ -4,7 +4,7 @@
 ## 1.13
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added Automate options to edit-chest screen if it's installed.
-* Improved Russian translations. (Thanks to fadedDexofan!)
+* Improved Russian and Spanish translations. (Thanks to fadedDexofan and alca259!)
 
 ## 1.12.4
 * Updated to SMAPI 2.4.

@@ -2,6 +2,7 @@
 ## 4.5
 * Updated for Stardew Valley 1.3 (disabled in multiplayer mode).
 * Tractor can now wear hats.
+* Added Spanish translations. (Thanks to alca259!)
 
 ## 4.4.1
 * Fixed error opening the game menu if the tractor hasn't been bought yet (thanks to f4iTh!).
