@@ -5,21 +5,24 @@ that change the game's images and data without replacing XNB files.
 
 ## Contents
 * [Install](#install)
-* [Introduction](#introduction)
-* [Basic features](#basic-features)
+* [Intro](#intro)
+* [Create a content pack](#create-a-content-pack)
   * [Overview](#overview)
   * [Common fields](#common-fields)
   * [Supported patches](#supported-patches)
-* [Advanced features](#advanced-features)
   * [Conditions](#conditions)
   * [Player configuration](#player-configuration)
   * [Tokens](#tokens)
-* [Releasing a content pack](#releasing-a-content-pack)
-* [Troubleshooting](#troubleshooting)
+* [Release a content pack](#release-a-content-pack)
+* [Troubleshoot](#troubleshoot)
   * [Patch commands](#patch-commands)
   * [Debug mode](#debug-mode)
   * [Verbose log](#verbose-log)
-* [Compatibility](#compatibility)
+* [FAQs](#faqs)
+  * [Compatibility](#compatibility)
+  * [Multiplayer](#multiplayer)
+  * [Patch order](#patch-order)
+  * [Special cases](#special-cases)
 * [See also](#see-also)
 
 ## Install
@@ -28,7 +31,7 @@ that change the game's images and data without replacing XNB files.
 3. Unzip any Content Patcher content packs into `Mods` to install them.
 4. Run the game using SMAPI.
 
-## Introduction
+## Intro
 ### What is Content Patcher?
 Content Patcher lets you create a [standard content pack](https://stardewvalleywiki.com/Modding:Content_packs)
 which changes the game's data and images, no programming needed. Players can install it by
@@ -64,7 +67,7 @@ whether one of these would work for you:
   * [CustomNPC](https://www.nexusmods.com/stardewvalley/mods/1607) to add NPCs.
   * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add items and fruit trees.
 
-## Basic features
+## Create a content pack
 ### Overview
 A content pack is a folder with these files:
 * a `manifest.json` for SMAPI to read (see [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki);
@@ -177,7 +180,6 @@ field      | purpose
   `Fields`   | _(optional)_ The individual fields you want to change for existing entries. [See example](#example).
   `Entries`  | _(optional)_ The entries in the data file you want to add or replace. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. [See example](#example).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
 
-## Advanced features
 ### Conditions
 You can make a patch conditional by adding a `When` field. The patch will be applied when all
 conditions match, and removed when they no longer match. Conditions are not case-sensitive, and you
@@ -325,7 +327,7 @@ Tokens are subject to some restrictions:
 * `Target`:
   * Config fields can't have `"AllowMultiple": true`.
 
-## Releasing a content pack
+## Release a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general
 info. Suggestions:
 
@@ -345,7 +347,7 @@ info. Suggestions:
    cause players to lose their settings every time they update. Instead leave it out and it'll
    generate when the game is launched, just like a SMAPI mod's `content.json`.
 
-## Troubleshooting
+## Troubleshoot
 ### Patch commands
 Content Patcher adds two patch commands for testing and troubleshooting.
 
@@ -403,18 +405,39 @@ and then search the SMAPI log file for that name. Particular questions to ask:
 * When SMAPI checks if it can load/edit the asset name, is the box ticked?  
   _If not, check your `When` and `Target` fields._
 
-## Compatibility
+## FAQs
+### Compatibility
 Content Patcher is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
 multiplayer.
 
-It's best if all players have the same content packs, though it's not required. Effects if some
-players don't have a content pack installed:
+### Multiplayer
+Content Patcher works fine in multiplayer. It's best if all players have the same content packs,
+but not required. Here are the effects if some players don't have a content pack installed:
 
 patch type | effect
 ---------- | ------
 visual     | Only visible to players that have it installed.
 maps       | Only visible to players that have it installed. Players without the custom map will see the normal map and will be subject to the normal bounds (e.g. they may see other players walk through walls, but they won't be able to follow).
 data       | Only directly affects players that have it installed, but can indirectly affect other players. For example, if a content pack changes `Data/ObjectInformation` and you create a new object, other player will see that object's custom values even if their `Data/ObjectInformation` doesn't have those changes.
+
+### Patch order
+Your `content.json` can have multiple patches for the same file. `Action: Load` always happens
+before other action types, but otherwise each patch is applied in the order you list them. This
+patch order within a content pack is by design and unlikely to change.
+
+The patch order between different content packs is currently **undocumented and not guaranteed**.
+The only guarantee is that `Action: Load` will happen before other patch types (even across content
+packs). Otherwise don't depend on your patches being applied in a certain order relative to those
+in a different content pack.
+
+### Special cases
+Some game assets have special logic. This isn't specific to Content Patcher, but they're documented
+here for convenience.
+
+asset | notes
+----- | -----
+`Characters/Farmer/accessories` | The number of accessories is hardcoded, so custom accessories need to replace an existing one.
+`Characters/Farmer/skinColors` | The number of skin colors is hardcoded, so custom colors need to replace an existing one.
 
 ## See also
 * [Release notes](release-notes.md)
