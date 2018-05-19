@@ -53,6 +53,7 @@ namespace ContentPatcher.Framework
         public T Load<T>(string key)
         {
             key = this.GetRealPath(key) ?? throw new FileNotFoundException($"The file '{key}' does not exist in the {this.Pack.Manifest.Name} content patch folder.");
+            key = this.Pack.GetActualAssetKey(key);
 
             if (typeof(T) == typeof(Texture2D) && this.PngCache.TryGetValue(key, out Texture2D texture))
                 return (T)(object)texture;
