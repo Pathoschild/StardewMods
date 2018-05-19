@@ -169,6 +169,9 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             {
                 // calculate dimensions
                 int topOffset = this.Margin;
+                if (Game1.HostPaused)
+                    topOffset += 96; // don't cover the 'paused' message (which has a hardcoded size)
+
                 int leftOffset = this.Margin;
 
                 // draw overlay label
