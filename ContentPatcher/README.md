@@ -166,8 +166,8 @@ field      | purpose
   ---------- | -------
   &nbsp;     | See _common fields_ above.
   `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file. Capitalisation doesn't matter.
-  `FromArea` | _(optional)_ The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. [See example](#example).
-  `ToArea`   | _(optional)_ The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. [See example](#example).
+  `FromArea` | _(optional)_ The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. [See example in overview](#overview).
+  `ToArea`   | _(optional)_ The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. [See example in overview](#overview).
   `PatchMode`| _(optional)_ How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace the target area with your source image.</li><li><code>Overlay</code>: draw your source image over the target, so the original image shows through transparent pixels. Note that semi-transparent pixels will replace the underlying pixels, they won't be combined.</li></ul>
 
 * **Edit a data file** (`"Action": "EditData"`).  
@@ -177,8 +177,8 @@ field      | purpose
   field      | purpose
   ---------- | -------
   &nbsp;     | See _common fields_ above.
-  `Fields`   | _(optional)_ The individual fields you want to change for existing entries. [See example](#example).
-  `Entries`  | _(optional)_ The entries in the data file you want to add or replace. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. [See example](#example).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
+  `Fields`   | _(optional)_ The individual fields you want to change for existing entries. [See example in overview](#overview).
+  `Entries`  | _(optional)_ The entries in the data file you want to add or replace. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. [See example in overview](#overview).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
 
 ### Conditions
 You can make a patch conditional by adding a `When` field. The patch will be applied when all
@@ -270,13 +270,13 @@ Here's how to do it:
    `AllowMultiple`     | _(optional)_ Whether the player can specify multiple comma-delimited values. Default false.
    `Default`           | _(optional)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If not set, defaults to the first value in `AllowValues`.
 
-2. Use the config fields as [`When` conditions](#condition). The field names and values are not
+2. Use the config fields as [`When` conditions](#conditions). The field names and values are not
    case-sensitive.
 
 That's it! Content Patcher will automatically create the `config.json` when you run the game.
 
 ### Tokens
-You can use [conditions](#condition) and [config values](#player-configuration) in the `FromFile`,
+You can use [conditions](#conditions) and [config values](#player-configuration) in the `FromFile`,
 `Target`, and `Enabled` fields in `content.json`. Just put the name of the condition or config
 field in two curly brackets, and Content Patcher will automatically fill in the value.
 
