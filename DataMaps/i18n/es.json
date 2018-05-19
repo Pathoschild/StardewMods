@@ -1,0 +1,38 @@
+{
+  // accessibility
+  "maps.accessibility.name": "Accesibilidad",
+  "maps.accessibility.clear": "Limpio",
+  "maps.accessibility.occupied": "Ocupado",
+  "maps.accessibility.impassable": "Bloqueado",
+  "maps.accessibility.warp": "Portal",
+
+  // coverage: bee houses
+  "maps.bee-houses.name": "Cobertura: Colmenas",
+  "maps.bee-houses.range": "Rango flores",
+
+  // coverage: Junimo huts
+  "maps.junimo-huts.name": "Cobertura: Cabaña Junimo",
+  "maps.junimo-huts.can-harvest": "Puede cosechar",
+  "maps.junimo-huts.cannot-harvest": "No puede cosechar",
+
+  // coverage: scarecrows
+  "maps.scarecrows.name": "Cobertura: Espantapájaros",
+  "maps.scarecrows.protected": "Protegido",
+  "maps.scarecrows.exposed": "Expuesto",
+
+  // coverage: sprinklers
+  "maps.sprinklers.name": "Cobertura: Aspersores",
+  "maps.sprinklers.covered": "Cubierto",
+  "maps.sprinklers.dry-crops": "Cosechas secas",
+
+  // crops: watered
+  "maps.crop-water.name": "Cosechas: Irrigación",
+  "maps.crop-water.watered": "Cosecha regada",
+  "maps.crop-water.dry": "Cosecha seca",
+
+  // crops: fertilized
+  "maps.crop-fertilizer.name": "Cosechas: Fertilizado",
+  "maps.crop-fertilizer.fertilizer": "Fertilizante",
+  "maps.crop-fertilizer.retaining-soil": "Retiene agua", //TODO: I don't have a correct word in spanish for describe this
+  "maps.crop-fertilizer.speed-gro": "Fertilizante rápido"
+}
