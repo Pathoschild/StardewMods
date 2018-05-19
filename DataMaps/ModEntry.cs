@@ -49,7 +49,7 @@ namespace Pathoschild.Stardew.DataMaps
             // hook up events
             SaveEvents.AfterReturnToTitle += this.SaveEvents_AfterReturnToTitle;
             GameEvents.FirstUpdateTick += this.GameEvents_FirstUpdateTick;
-            GameEvents.SecondUpdateTick += this.GameEvents_SecondUpdateTick;
+            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
         }
 
@@ -81,20 +81,22 @@ namespace Pathoschild.Stardew.DataMaps
         /// <param name="simpleSprinklers">Handles access to the Simple Sprinklers mod.</param>
         private IEnumerable<IDataMap> GetDataMaps(ModConfig config, ITranslationHelper translation, PelicanFiberIntegration pelicanFiber, BetterSprinklersIntegration betterSprinklers, CobaltIntegration cobalt, SimpleSprinklerIntegration simpleSprinklers)
         {
-            if (config.EnableMaps.Accessibility)
-                yield return new AccessibilityMap(translation);
-            if (config.EnableMaps.CoverageForBeeHouses)
-                yield return new BeeHouseMap(translation);
-            if (config.EnableMaps.CoverageForScarecrows)
-                yield return new ScarecrowMap(translation);
-            if (config.EnableMaps.CoverageForSprinklers)
-                yield return new SprinklerMap(translation, betterSprinklers, cobalt, simpleSprinklers);
-            if (config.EnableMaps.CoverageForJunimoHuts)
-                yield return new JunimoHutMap(translation, this.PelicanFiber);
-            if (config.EnableMaps.CropWater)
-                yield return new CropWaterMap(translation);
-            if (config.EnableMaps.CropFertilizer)
-                yield return new CropFertilizerMap(translation);
+            var maps = config.DataMaps;
+
+            if (maps.Accessibility.IsEnabled())
+                yield return new AccessibilityMap(translation, maps.Accessibility);
+            if (maps.CoverageForBeeHouses.IsEnabled())
+                yield return new BeeHouseMap(translation, maps.CoverageForBeeHouses);
+            if (maps.CoverageForScarecrows.IsEnabled())
+                yield return new ScarecrowMap(translation, maps.CoverageForScarecrows);
+            if (maps.CoverageForSprinklers.IsEnabled())
+                yield return new SprinklerMap(translation, maps.CoverageForSprinklers, betterSprinklers, cobalt, simpleSprinklers);
+            if (maps.CoverageForJunimoHuts.IsEnabled())
+                yield return new JunimoHutMap(translation, maps.CoverageForJunimoHuts, this.PelicanFiber);
+            if (maps.CropWater.IsEnabled())
+                yield return new CropWaterMap(translation, maps.CropWater);
+            if (maps.CropFertilizer.IsEnabled())
+                yield return new CropFertilizerMap(translation, maps.CropFertilizer);
         }
 
         /// <summary>The method invoked when the player returns to the title screen.</summary>
@@ -150,7 +152,7 @@ namespace Pathoschild.Stardew.DataMaps
         /// <summary>Receive an update tick.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void GameEvents_SecondUpdateTick(object sender, EventArgs e)
+        private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
             this.CurrentOverlay?.Update();
         }

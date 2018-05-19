@@ -36,6 +36,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataMaps\BaseDataMap.cs" />
     <Compile Include="DataMaps\Coverage\JunimoHutMap.cs" />
     <Compile Include="DataMaps\Coverage\BeeHouseMap.cs" />
     <Compile Include="DataMaps\Crops\CropFertilizerMap.cs" />
@@ -46,6 +47,7 @@
     <Compile Include="Framework\DataMapOverlay.cs" />
     <Compile Include="Framework\IDataMap.cs" />
     <Compile Include="Framework\LegendEntry.cs" />
+    <Compile Include="Framework\MapConfig.cs" />
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\TileData.cs" />
     <Compile Include="Framework\TileDrawData.cs" />

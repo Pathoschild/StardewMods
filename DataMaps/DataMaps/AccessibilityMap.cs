@@ -15,7 +15,7 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 namespace Pathoschild.Stardew.DataMaps.DataMaps
 {
     /// <summary>A data map which shows whether tiles are traversable by the player.</summary>
-    internal class AccessibilityMap : IDataMap
+    internal class AccessibilityMap : BaseDataMap
     {
         /*********
         ** Properties
@@ -39,25 +39,16 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <summary>The touch action tile property values which trigger a warp.</summary>
         private readonly HashSet<string> TouchWarpActions = new HashSet<string> { "Door", "MagicWarp" };
 
-        /// <summary>The legend entries to display.</summary>
-        public LegendEntry[] Legend { get; }
-
-
-        /*********
-        ** Accessors
-        *********/
-        /// <summary>The map's display name.</summary>
-        public string Name { get; }
-
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        public AccessibilityMap(ITranslationHelper translations)
+        /// <param name="config">The data map settings.</param>
+        public AccessibilityMap(ITranslationHelper translations, MapConfig config)
+            : base(translations.Get("maps.accessibility.name"), config)
         {
-            this.Name = translations.Get("maps.accessibility.name");
             this.Legend = new[]
             {
                 new LegendEntry(translations.Get("maps.accessibility.clear"), this.ClearColor),
@@ -71,7 +62,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
-        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
+        public override IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
         {
             TileData[] tiles = this.GetTiles(location, visibleArea.GetTiles()).ToArray();
 

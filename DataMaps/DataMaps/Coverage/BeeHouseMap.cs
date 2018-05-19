@@ -10,7 +10,7 @@ using Object = StardewValley.Object;
 namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
 {
     /// <summary>A data map which shows bee house coverage.</summary>
-    internal class BeeHouseMap : IDataMap
+    internal class BeeHouseMap : BaseDataMap
     {
         /*********
         ** Properties
@@ -29,23 +29,14 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
 
 
         /*********
-        ** Accessors
-        *********/
-        /// <summary>The map's display name.</summary>
-        public string Name { get; }
-
-        /// <summary>The legend entries to display.</summary>
-        public LegendEntry[] Legend { get; }
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        public BeeHouseMap(ITranslationHelper translations)
+        /// <param name="config">The data map settings.</param>
+        public BeeHouseMap(ITranslationHelper translations, MapConfig config)
+            : base(translations.Get("maps.bee-houses.name"), config)
         {
-            this.Name = translations.Get("maps.bee-houses.name");
             this.Legend = new[]
             {
                 new LegendEntry(translations.Get("maps.bee-houses.range"), this.CoveredColor)
@@ -56,7 +47,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
-        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
+        public override IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
         {
             // get bee houses
             Vector2[] searchTiles = visibleArea.Expand(this.MaxRadius).GetTiles().ToArray();

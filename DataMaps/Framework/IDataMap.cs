@@ -13,6 +13,12 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>The map's display name.</summary>
         string Name { get; }
 
+        /// <summary>The number of ticks between each update.</summary>
+        int UpdateTickRate { get; }
+
+        /// <summary>Whether to update the map when the set of visible tiles changes.</summary>
+        bool UpdateWhenVisibleTilesChange { get; }
+
         /// <summary>The legend entries to display.</summary>
         LegendEntry[] Legend { get; }
 

@@ -14,7 +14,7 @@ using StardewValley.TerrainFeatures;
 namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
 {
     /// <summary>A data map which shows Junimo hut coverage.</summary>
-    internal class JunimoHutMap : IDataMap
+    internal class JunimoHutMap : BaseDataMap
     {
         /*********
         ** Properties
@@ -36,26 +36,16 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
 
 
         /*********
-        ** Accessors
-        *********/
-        /// <summary>The map's display name.</summary>
-        public string Name { get; }
-
-        /// <summary>The legend entries to display.</summary>
-        public LegendEntry[] Legend { get; }
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
+        /// <param name="config">The data map settings.</param>
         /// <param name="pelicanFiber">Handles access to the Pelican Fiber mod.</param>
-        public JunimoHutMap(ITranslationHelper translations, PelicanFiberIntegration pelicanFiber)
+        public JunimoHutMap(ITranslationHelper translations, MapConfig config, PelicanFiberIntegration pelicanFiber)
+            : base(translations.Get("maps.junimo-huts.name"), config)
         {
             this.PelicanFiber = pelicanFiber;
-
-            this.Name = translations.Get("maps.junimo-huts.name");
             this.Legend = new[]
             {
                 new LegendEntry(translations.Get("maps.junimo-huts.can-harvest"), this.CoveredColor),
@@ -67,7 +57,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
-        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
+        public override IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
         {
             if (!(location is BuildableGameLocation buildableLocation))
                 yield break;

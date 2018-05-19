@@ -11,7 +11,7 @@ using Object = StardewValley.Object;
 namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
 {
     /// <summary>A data map which shows scarecrow coverage.</summary>
-    internal class ScarecrowMap : IDataMap
+    internal class ScarecrowMap : BaseDataMap
     {
         /*********
         ** Properties
@@ -30,23 +30,14 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
 
 
         /*********
-        ** Accessors
-        *********/
-        /// <summary>The map's display name.</summary>
-        public string Name { get; }
-
-        /// <summary>The legend entries to display.</summary>
-        public LegendEntry[] Legend { get; }
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        public ScarecrowMap(ITranslationHelper translations)
+        /// <param name="config">The data map settings.</param>
+        public ScarecrowMap(ITranslationHelper translations, MapConfig config)
+            : base(translations.Get("maps.scarecrows.name"), config)
         {
-            this.Name = translations.Get("maps.scarecrows.name");
             this.Legend = new[]
             {
                 new LegendEntry(translations.Get("maps.scarecrows.protected"), this.CoveredColor),
@@ -58,7 +49,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
-        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
+        public override IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
         {
             Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
 

@@ -12,7 +12,7 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 namespace Pathoschild.Stardew.DataMaps.DataMaps.Crops
 {
     /// <summary>A data map which shows whether crops needs to be watered.</summary>
-    internal class CropFertilizerMap : IDataMap
+    internal class CropFertilizerMap : BaseDataMap
     {
         /*********
         ** Properties
@@ -26,25 +26,16 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Crops
         /// <summary>The color for speed-gro.</summary>
         private readonly Color SpeedGroColor = Color.Magenta;
 
-        /// <summary>The legend entries to display.</summary>
-        public LegendEntry[] Legend { get; }
-
-
-        /*********
-        ** Accessors
-        *********/
-        /// <summary>The map's display name.</summary>
-        public string Name { get; }
-
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        public CropFertilizerMap(ITranslationHelper translations)
+        /// <param name="config">The data map settings.</param>
+        public CropFertilizerMap(ITranslationHelper translations, MapConfig config)
+            : base(translations.Get("maps.crop-fertilizer.name"), config)
         {
-            this.Name = translations.Get("maps.crop-fertilizer.name");
             this.Legend = new[]
             {
                 new LegendEntry(translations.Get("maps.crop-fertilizer.fertilizer"), this.FertilizerColor),
@@ -57,7 +48,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Crops
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
-        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
+        public override IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
         {
             Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
 

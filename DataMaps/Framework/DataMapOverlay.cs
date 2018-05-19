@@ -16,6 +16,9 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /*********
         ** Properties
         *********/
+        /*****
+        ** Constants and config
+        *****/
         /// <summary>The pixel padding between the color box and its label.</summary>
         private readonly int LegendColorPadding = 5;
 
@@ -34,11 +37,17 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>Get whether the overlay should be drawn.</summary>
         private readonly Func<bool> DrawOverlay;
 
+        /*****
+        ** State
+        *****/
         /// <summary>The available data maps.</summary>
         private readonly IDataMap[] Maps;
 
         /// <summary>When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</summary>
         private readonly bool CombineOverlappingBorders;
+
+        /// <summary>An empty set of tile groups.</summary>
+        private readonly TileGroup[] EmptyTileGroups = new TileGroup[0];
 
         /// <summary>The current data map to render.</summary>
         private IDataMap CurrentMap;
@@ -48,6 +57,12 @@ namespace Pathoschild.Stardew.DataMaps.Framework
 
         /// <summary>The tiles to render.</summary>
         private TileGroup[] TileGroups;
+
+        /// <summary>The tick countdown until the next map update.</summary>
+        private int UpdateCountdown;
+
+        /// <summary>The last visible area.</summary>
+        private Rectangle LastVisibleArea;
 
 
         /*********
@@ -94,14 +109,20 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             // no tiles to draw
             if (Game1.currentLocation == null || this.CurrentMap == null)
             {
-                this.TileGroups = new TileGroup[0];
+                this.TileGroups = this.EmptyTileGroups;
                 return;
             }
 
             // get updated tiles
-            GameLocation location = Game1.currentLocation;
-            Vector2 cursorTile = TileHelper.GetTileFromCursor();
-            this.TileGroups = this.CurrentMap.Update(location, this.GetVisibleArea(Game1.viewport), cursorTile).ToArray();
+            Rectangle visibleArea = this.GetVisibleTileArea(Game1.viewport);
+            if (--this.UpdateCountdown <= 0 || (this.CurrentMap.UpdateWhenVisibleTilesChange && visibleArea != this.LastVisibleArea))
+            {
+                GameLocation location = Game1.currentLocation;
+                Vector2 cursorTile = TileHelper.GetTileFromCursor();
+                this.TileGroups = this.CurrentMap.Update(location, visibleArea, cursorTile).ToArray();
+                this.LastVisibleArea = visibleArea;
+                this.UpdateCountdown = this.CurrentMap.UpdateTickRate;
+            }
         }
 
 
@@ -264,12 +285,13 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         {
             this.CurrentMap = map;
             this.Legend = this.CurrentMap.Legend.ToArray();
-            this.TileGroups = new TileGroup[0];
+            this.TileGroups = this.EmptyTileGroups;
+            this.UpdateCountdown = 0;
         }
 
         /// <summary>Get the tile area currently visible to the player.</summary>
         /// <param name="viewport">The game viewport.</param>
-        private Rectangle GetVisibleArea(XRectangle viewport)
+        private Rectangle GetVisibleTileArea(XRectangle viewport)
         {
             int tileSize = Game1.tileSize;
             int left = viewport.X / tileSize;

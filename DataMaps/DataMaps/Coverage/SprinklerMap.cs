@@ -15,7 +15,7 @@ using Object = StardewValley.Object;
 namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
 {
     /// <summary>A data map which shows sprinkler coverage.</summary>
-    internal class SprinklerMap : IDataMap
+    internal class SprinklerMap : BaseDataMap
     {
         /*********
         ** Properties
@@ -40,28 +40,19 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
 
 
         /*********
-        ** Accessors
-        *********/
-        /// <summary>The map's display name.</summary>
-        public string Name { get; }
-
-        /// <summary>The legend entries to display.</summary>
-        public LegendEntry[] Legend { get; }
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
+        /// <param name="config">The data map settings.</param>
         /// <param name="betterSprinklers">Handles access to the Better Sprinklers mod.</param>
         /// <param name="cobalt">Handles access to the Cobalt mod.</param>
         /// <param name="simpleSprinkler">Handles access to the Simple Sprinkler mod.</param>
-        public SprinklerMap(ITranslationHelper translations, BetterSprinklersIntegration betterSprinklers, CobaltIntegration cobalt, SimpleSprinklerIntegration simpleSprinkler)
+        public SprinklerMap(ITranslationHelper translations, MapConfig config, BetterSprinklersIntegration betterSprinklers, CobaltIntegration cobalt, SimpleSprinklerIntegration simpleSprinkler)
+            : base(translations.Get("maps.sprinklers.name"), config)
         {
             // init
             this.BetterSprinklers = betterSprinklers;
-            this.Name = translations.Get("maps.sprinklers.name");
             this.Legend = new[]
             {
                 new LegendEntry(translations.Get("maps.sprinklers.covered"), this.WetColor),
@@ -81,7 +72,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
-        public IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
+        public override IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
         {
             Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
 
