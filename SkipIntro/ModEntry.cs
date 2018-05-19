@@ -89,6 +89,10 @@ namespace Pathoschild.Stardew.SkipIntro
             if (Game1.currentGameTime == null)
                 return currentStage;
 
+            // do nothing if a confirmation box is on-screen (e.g. multiplayer disconnect error)
+            if (TitleMenu.subMenu is ConfirmationDialog)
+                return Stage.None;
+
             // main skip logic
             if (currentStage == Stage.SkipIntro)
             {
