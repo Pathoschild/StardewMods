@@ -43,6 +43,7 @@
     <Compile Include="Framework\Screen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ModEntry.cs" />
+    <Compile Include="Framework\Stage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />
