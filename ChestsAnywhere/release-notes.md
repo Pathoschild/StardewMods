@@ -4,6 +4,7 @@
 ## 1.13
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added Automate options to edit-chest screen if it's installed.
+* Fixed 'ok' button not closing menu in rare cases.
 * Improved Russian and Spanish translations. (Thanks to fadedDexofan and alca259!)
 
 ## 1.12.4

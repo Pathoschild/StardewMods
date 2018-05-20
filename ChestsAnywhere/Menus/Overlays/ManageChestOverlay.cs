@@ -458,7 +458,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 // buttons & dropdown
                 default:
                     bool canNavigate = this.CanCloseChest;
-                    if (this.Chest.Container.IsEditable && this.EditButton.containsPoint(x, y) && canNavigate)
+                    if (this.Menu.okButton.containsPoint(x, y) && canNavigate)
+                        this.Exit(); // in some cases the game won't handle this correctly (e.g. Stardew Valley Fair fishing minigame)
+                    else if (this.Chest.Container.IsEditable && this.EditButton.containsPoint(x, y) && canNavigate)
                         this.OpenEdit();
                     else if (this.SortInventoryButton.containsPoint(x, y))
                         this.SortInventory();
