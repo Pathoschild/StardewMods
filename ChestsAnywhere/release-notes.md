@@ -5,6 +5,7 @@
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added Automate options to edit-chest screen if it's installed.
 * Fixed 'ok' button not closing menu in rare cases.
+* Fixed issue where opening the chest UI from the inventory screen while holding an item destroys the item.
 * Improved Russian and Spanish translations. (Thanks to fadedDexofan and alca259!)
 
 ## 1.12.4

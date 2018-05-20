@@ -164,8 +164,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 var controls = this.Config.Controls;
 
                 // open menu
-                if (controls.Toggle.Contains(e.Button) && (Game1.activeClickableMenu == null || (Game1.activeClickableMenu as GameMenu)?.currentTab == 0))
-                    this.OpenMenu();
+                if (controls.Toggle.Contains(e.Button))
+                {
+                    // open if no conflict
+                    if (Game1.activeClickableMenu == null)
+                        this.OpenMenu();
+
+                    // open from inventory if it's safe to close the inventory screen
+                    else if (Game1.activeClickableMenu is GameMenu gameMenu && gameMenu.currentTab == GameMenu.inventoryTab)
+                    {
+                        IClickableMenu inventoryPage = this.Helper.Reflection.GetField<List<IClickableMenu>>(gameMenu, "pages").GetValue()[GameMenu.inventoryTab];
+                        if (inventoryPage.readyToClose())
+                            this.OpenMenu();
+                    }
+                }
             }
             catch (Exception ex)
             {
