@@ -3,8 +3,10 @@
 # Release notes
 ## 1.19
 * Updated for Stardew Valley 1.3 (including multiplayer support).
-* Added support for looking up other players.
-* Added support for new friendship data.
+* Added support for...
+  * garden pots and their crops;
+  * other players;
+  * new friendship data.
 * Added number of item needed in bundle list. (Thanks to StefanOssendorf!)
 * Improved Russian and Spanish translations. (Thanks to fadedDexofan and alca259!)
 * Fixed issue where a bundle that needs two stacks of an item won't be listed on the item lookup if one stack is filled. (Thanks to StefanOssendorf!)

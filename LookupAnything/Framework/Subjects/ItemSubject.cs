@@ -175,7 +175,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 }
             }
 
-            // crafting
+            // indoor pot crop
+            if (obj is IndoorPot pot)
+            {
+                Crop potCrop = pot.hoeDirt.Value.crop;
+                if (potCrop != null)
+                {
+                    Item drop = GameHelper.GetObjectBySpriteIndex(potCrop.indexOfHarvest.Value);
+                    yield return new LinkField(this.Translate(L10n.Item.Contents), drop.DisplayName, () => new ItemSubject(this.Text, GameHelper.GetObjectBySpriteIndex(potCrop.indexOfHarvest.Value), ObjectContext.World, knownQuality: false, fromCrop: potCrop));
+                }
+            }
+
+            // held object
             if (obj?.heldObject?.Value != null)
             {
                 if (obj is Cask cask)
