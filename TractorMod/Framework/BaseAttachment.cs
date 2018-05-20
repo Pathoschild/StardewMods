@@ -59,6 +59,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             return location.checkAction(new Location((int)tile.X, (int)tile.Y), Game1.viewport, player);
         }
 
+        /// <summary>Get whether a given object is a weed.</summary>
+        /// <param name="obj">The world object.</param>
+        protected bool IsWeed(SObject obj)
+        {
+            return obj?.Name.ToLower().Contains("weed") == true;
+        }
+
         /// <summary>Remove the specified items from the player inventory.</summary>
         /// <param name="player">The player whose inventory to edit.</param>
         /// <param name="item">The item instance to deduct.</param>

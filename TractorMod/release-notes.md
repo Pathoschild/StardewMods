@@ -1,6 +1,7 @@
 # Release notes
 ## 4.5
 * Updated for Stardew Valley 1.3 (disabled in multiplayer mode).
+* Added support for hoe and pickaxe clearing weeds.
 * Tractor can now wear hats.
 * Added Spanish translations. (Thanks to alca259!)
 

@@ -95,7 +95,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             }
 
             // weeds
-            if (this.Config.ClearWeeds && tileObj?.Name.ToLower().Contains("weed") == true)
+            if (this.Config.ClearWeeds && this.IsWeed(tileObj))
             {
                 this.UseToolOnTile(tool, tile); // doesn't do anything to the weed, but sets up for the tool action (e.g. sets last user)
                 tileObj.performToolAction(tool, location); // triggers weed drops, but doesn't remove weed

@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
             // clear twigs & weeds
-            if (this.Config.ClearDebris && (tileObj?.Name == "Twig" || tileObj?.Name.ToLower().Contains("weed") == true))
+            if (this.Config.ClearDebris && (tileObj?.Name == "Twig" || this.IsWeed(tileObj)))
                 return this.UseToolOnTile(tool, tile);
 
             // check terrain feature

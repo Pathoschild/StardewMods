@@ -65,6 +65,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             if (this.Config.ClearFlooring && tileFeature is Flooring)
                 return this.UseToolOnTile(tool, tile);
 
+            // clear twigs & weeds
+            if (this.Config.ClearWeeds && this.IsWeed(tileObj))
+                return this.UseToolOnTile(tool, tile);
+
             // handle dirt
             if (tileFeature is HoeDirt dirt)
             {
