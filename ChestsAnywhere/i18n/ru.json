@@ -13,8 +13,8 @@
   "label.order": "Порядок",
   "label.hide-chest": "Скрыть этот сундук",
   "label.hide-chest-hidden": "Скрыть этот сундук (вам нужно найти сундук, чтобы отменить это!)",
-  "label.automate-prefer-output": "(Automate) Put items in this chest first", // TODO
-  "label.automate-ignore": "(Automate) Don't use this chest for automation", // TODO
+  "label.automate-prefer-output": "(Automate) Отправлять предметы в этот сундук в первую очередь", // TODO
+  "label.automate-ignore": "(Automate) Не использовать этот сундук для автоматизации", // TODO
 
   // button labels
   "button.edit-chest": "изменить сундук",
