@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             IEnumerable<ManagedChest> Search()
             {
-                foreach (GameLocation location in CommonHelper.GetLocations())
+                foreach (GameLocation location in this.GetAccessibleLocations())
                 {
                     // chests in location
                     {
@@ -135,6 +135,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
             // fallback to open chest
             return this.GetChests(range).FirstOrDefault(p => p.Container.IsOpen());
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get the locations which are accessible to the current player (regardless of settings).</summary>
+        private IEnumerable<GameLocation> GetAccessibleLocations()
+        {
+            // main player can access chests in any location
+            if (Context.IsMainPlayer)
+                return CommonHelper.GetLocations();
+
+            // secondary player can only safely access chests in their current location
+            // (changes to other locations aren't synced to the other players)
+            return new[] { Game1.player.currentLocation };
         }
     }
 }

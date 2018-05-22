@@ -84,6 +84,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 this.Monitor.Log(versionError, LogLevel.Error);
                 CommonHelper.ShowErrorMessage(versionError);
             }
+
+            // show multiplayer limitations warning
+            if (!Context.IsMainPlayer)
+                this.Monitor.Log("Multiplayer limitations: you can only access chests in your current location (since you're not the main player). This is due to limitations in the game's sync logic.", LogLevel.Info);
         }
 
         /// <summary>The method invoked when the interface has finished rendering.</summary>

@@ -47,8 +47,11 @@ setting             | what it affects
 
 ## Compatibility
 Chests Anywhere is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
-multiplayer. There are no known issues in multiplayer (even if other players don't have it
-installed).
+multiplayer.
+
+Multiplayer notes:
+* There's no problem with some players not having the mod.
+* If you're not the main player, you can only access chests in your current location. (This is due to limitations in how the game syncs data.)
 
 ## See also
 * [Release notes](release-notes.md)
