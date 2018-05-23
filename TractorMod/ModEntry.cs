@@ -473,7 +473,7 @@ namespace Pathoschild.Stardew.TractorMod
                 foreach (TractorGarage garage in location.buildings.OfType<TractorGarage>())
                 {
                     Tractor tractor = Utility.findHorse(garage.HorseId) as Tractor;
-                    int? tractorHatID = tractor?.hat.Value?.which;
+                    int? tractorHatID = tractor?.hat.Value?.which.Value;
                     var saveData = new CustomSaveBuilding(new Vector2(garage.tileX.Value, garage.tileY.Value), garage.HorseId, tractorHatID, this.GarageBuildingType, this.GetMapName(location), garage.daysOfConstructionLeft.Value);
 
                     yield return new GarageMetadata(location, garage, saveData);
