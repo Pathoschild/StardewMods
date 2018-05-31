@@ -91,7 +91,15 @@ You can increase production by just adding more machines.
   put back in the chest.
   > ![](screenshots/iridium-cheese-factory.png)
 
+### Connectors
+Connectors are placed objects or flooring which connect adjacent machines together. Automate doesn't
+have any connectors by default, but you can edit the `config.json` to specify what should be treated
+as connectors (see _[custom connectors](#custom-connectors)_ below).
+
+> ![](screenshots/connectors.png)
+
 ## Configure
+### Overview
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
 file if you want. These are the available settings:
 
@@ -99,8 +107,31 @@ setting           | what it affects
 ----------------- | -------------------
 `Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default value is `U` to toggle the automation overlay.
 `AutomationInterval` | Default `60`. The number of update ticks between each automation cycle (one second is ≈60 ticks).
+`Connectors` | Default empty. A list of world object to treat as [connectors](#connectors).
 `VerboseLogging` | Default `false`. Whether to write more detailed information about what the mod is doing to the log file. This is useful for troubleshooting, but may impact performance and should generally be disabled.
 
+### Custom connectors
+[Connectors](#connectors) are placed objects or flooring which connect adjacent machines
+together. Automate has no connectors by default, but you can edit the `Connectors` field in the
+`config.json` file to configure any object, craftable, or floor as a connector. Each one should be
+specified with a type (one of `Floor`, `BigCraftable`, or `Object`) and ID.
+
+For example, this adds the Wood and Crystal Paths as connectors:
+```js
+"Connectors": [
+   { "Type": "Floor", "ID": 6 },
+   { "Type": "Floor", "ID": 7 }
+]
+```
+
+Valid IDs:
+* [list of object IDs](https://stardewvalleywiki.com/Modding:Object_data#Raw_data);
+* [list of craftable IDs](https://stardewvalleywiki.com/Modding:Big_Craftables_data#Raw_data);
+* floor IDs: 0 (Wood Floor), 1 (Stone Floor), 2 (Weathered Floor), 3 (Crystal Floor), 4 (Straw
+  Floor), 5 (Gravel Path), 6 (Wood Path), 7 (Crystal Path), 8 (Cobblestone Path), and 9 (Stepping
+  Stone Path).
+
+### In-game settings
 Installing [Chests Anywhere](https://www.nexusmods.com/stardewvalley/mods/518) too lets you set
 per-chest options directly in-game:
 > ![](screenshots/chests-anywhere-config.png)

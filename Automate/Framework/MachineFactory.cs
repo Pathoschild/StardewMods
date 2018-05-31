@@ -6,6 +6,7 @@ using Pathoschild.Stardew.Automate.Framework.Machines.Buildings;
 using Pathoschild.Stardew.Automate.Framework.Machines.Objects;
 using Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures;
 using Pathoschild.Stardew.Automate.Framework.Machines.Tiles;
+using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Automate.Framework.Storage;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
@@ -24,6 +25,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Properties
         *********/
+        /// <summary>The object IDs through which machines can connect, but which have no other automation properties.</summary>
+        private readonly IDictionary<ObjectType, HashSet<int>> Connectors;
+
         /// <summary>The tile area on the farm matching the shipping bin.</summary>
         private readonly Rectangle ShippingBinArea = new Rectangle(71, 14, 2, 1);
 
@@ -31,6 +35,15 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="connectors">The objects through which machines can connect, but which have no other automation properties.</param>
+        public MachineFactory(ModConfigObject[] connectors)
+        {
+            this.Connectors = connectors
+                .GroupBy(connector => connector.Type)
+                .ToDictionary(group => group.Key, group => new HashSet<int>(group.Select(p => p.ID)));
+        }
+
         /// <summary>Get all machine groups in a location.</summary>
         /// <param name="location">The location to search.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
@@ -85,7 +98,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 if (!visited.Add(tile))
                     continue;
 
-                // get machine or container on tile
+                // check for a machine, container, or connector
                 Vector2 foundSize;
                 if (this.TryGetMachine(location, tile, reflection, out IMachine machine, out Vector2 size))
                 {
@@ -97,10 +110,12 @@ namespace Pathoschild.Stardew.Automate.Framework
                     group.Add(new ChestContainer(chest));
                     foundSize = Vector2.One;
                 }
+                else if (this.TryGetConnector(location, tile))
+                    foundSize = Vector2.One;
                 else
                     continue;
 
-                // handle machine tiles
+                // mark tiles visited
                 Rectangle tileArea = new Rectangle((int)tile.X, (int)tile.Y, (int)foundSize.X, (int)foundSize.Y);
                 group.Add(tileArea);
                 foreach (Vector2 cur in tileArea.GetTiles())
@@ -308,6 +323,29 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             chest = null;
             return false;
+        }
+
+        /// <summary>Get a connector from the given tile, if any.</summary>
+        /// <param name="location">The location to search.</param>
+        /// <param name="tile">The tile to search.</param>
+        private bool TryGetConnector(GameLocation location, Vector2 tile)
+        {
+            if (location.Objects.TryGetValue(tile, out SObject obj))
+                return this.IsConnector(obj.bigCraftable.Value ? ObjectType.BigCraftable : ObjectType.Object, obj.ParentSheetIndex);
+            if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrainFeature) && terrainFeature is Flooring floor)
+                return this.IsConnector(ObjectType.Floor, floor.whichFloor.Value);
+            return false;
+        }
+
+        /// <summary>Get whether a given object should be treated as a connector.</summary>
+        /// <param name="type">The object type.</param>
+        /// <param name="id">The object iD.</param>
+        private bool IsConnector(ObjectType type, int id)
+        {
+            if (this.Connectors.Count == 0)
+                return false;
+
+            return this.Connectors.TryGetValue(type, out HashSet<int> ids) && ids.Contains(id);
         }
     }
 }

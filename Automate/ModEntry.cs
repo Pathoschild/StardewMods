@@ -21,7 +21,7 @@ namespace Pathoschild.Stardew.Automate
         private ModConfig Config;
 
         /// <summary>Constructs machine instances.</summary>
-        private readonly MachineFactory Factory = new MachineFactory();
+        private MachineFactory Factory;
 
         /// <summary>Whether to enable automation for the current save.</summary>
         private bool EnableAutomation => Context.IsMainPlayer;
@@ -46,8 +46,9 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            // read config
+            // init
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Factory = new MachineFactory(this.Config.Connectors);
 
             // hook events
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;

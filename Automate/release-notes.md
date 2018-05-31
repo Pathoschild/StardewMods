@@ -3,6 +3,7 @@
 # Release notes
 ## 1.10
 * Updated for Stardew Valley 1.3 (including multiplayer support).
+* Added optional connectors (e.g. connect machines using paths).
 * Added support for auto-grabbers and buildable shipping bins.
 * Added support for ignoring specific chests.
 * **Breaking change:** to prefer a chest for output, add `|automate:output|` to the chest name instead of just `output`.
