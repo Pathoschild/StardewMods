@@ -39,6 +39,7 @@
     <Compile Include="Handlers\CasinoSlotsHandler.cs" />
     <Compile Include="Handlers\BreakingGeodeHandler.cs" />
     <Compile Include="Handlers\FishingHandler.cs" />
+    <Compile Include="Handlers\LoadGameMenuHandler.cs" />
     <Compile Include="Handlers\TitleMenuHandler.cs" />
     <Compile Include="Handlers\TreeFallingHandler.cs" />
     <Compile Include="Handlers\ShearingHandler.cs" />
