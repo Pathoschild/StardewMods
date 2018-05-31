@@ -359,7 +359,7 @@ namespace ContentPatcher
                             // validate
                             if (entry.Entries == null && entry.Fields == null)
                                 return TrackSkip($"either {nameof(PatchConfig.Entries)} or {nameof(PatchConfig.Fields)} must be specified for a '{action}' change.");
-                            if (entry.Entries != null && entry.Entries.Any(p => string.IsNullOrWhiteSpace(p.Value)))
+                            if (entry.Entries != null && entry.Entries.Any(p => p.Value != null && p.Value.Trim() == ""))
                                 return TrackSkip($"the {nameof(PatchConfig.Entries)} can't contain empty values.");
                             if (entry.Fields != null && entry.Fields.Any(p => p.Value == null || p.Value.Any(n => n.Value == null)))
                                 return TrackSkip($"the {nameof(PatchConfig.Fields)} can't contain empty values.");

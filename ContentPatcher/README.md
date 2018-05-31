@@ -178,7 +178,7 @@ field      | purpose
   ---------- | -------
   &nbsp;     | See _common fields_ above.
   `Fields`   | _(optional)_ The individual fields you want to change for existing entries. [See example in overview](#overview).
-  `Entries`  | _(optional)_ The entries in the data file you want to add or replace. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. [See example in overview](#overview).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
+  `Entries`  | _(optional)_ The entries in the data file you want to add, replace, or (if set to `null`) delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. [See example in overview](#overview).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
 
 ### Conditions
 You can make a patch conditional by adding a `When` field. The patch will be applied when all

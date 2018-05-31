@@ -91,7 +91,10 @@ namespace ContentPatcher.Framework.Patches
                 foreach (KeyValuePair<string, string> record in this.Records)
                 {
                     TKey key = (TKey)Convert.ChangeType(record.Key, typeof(TKey));
-                    data[key] = record.Value;
+                    if (record.Value != null)
+                        data[key] = record.Value;
+                    else
+                        data.Remove(key);
                 }
             }
 
