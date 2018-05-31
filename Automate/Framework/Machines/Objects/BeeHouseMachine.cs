@@ -64,17 +64,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             SObject.HoneyType type = SObject.HoneyType.Wild;
             string prefix = type.ToString();
             int addedPrice = 0;
-            if (this.Location is Farm)
+            Crop flower = Utility.findCloseFlower(this.Location, this.Tile);
+            if (flower != null)
             {
-                Crop flower = Utility.findCloseFlower(this.Location, this.Tile);
-                if (flower != null)
-                {
-                    string[] flowerData = Game1.objectInformation[flower.indexOfHarvest.Value].Split('/');
-                    prefix = flowerData[0];
-                    addedPrice = Convert.ToInt32(flowerData[1]) * 2;
-                    if (!this.HoneyTypes.TryGetValue(flower.indexOfHarvest.Value, out type))
-                        type = SObject.HoneyType.Wild;
-                }
+                string[] flowerData = Game1.objectInformation[flower.indexOfHarvest.Value].Split('/');
+                prefix = flowerData[0];
+                addedPrice = Convert.ToInt32(flowerData[1]) * 2;
+                if (!this.HoneyTypes.TryGetValue(flower.indexOfHarvest.Value, out type))
+                    type = SObject.HoneyType.Wild;
             }
 
             // build object
