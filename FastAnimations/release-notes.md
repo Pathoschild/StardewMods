@@ -1,10 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.7
+## 1.6
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added support for title menu transitions.
-* Added support for the blinking-slot delay after you click a load-save slot.
+* Added support for the blinking-slot delay after you click a load-save slot. (Thanks to Cat!)
 
 ## 1.5
 * Updated to SMAPI 2.4.
