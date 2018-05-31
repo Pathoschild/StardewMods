@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Netcode;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
 using StardewModdingAPI;
@@ -81,30 +82,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             this.Reflection = reflection;
         }
 
-        /// <summary>Set whether the player should be riding the tractor.</summary>
-        /// <param name="mount">Whether the player should be riding the tractor.</param>
-        public void SetMounted(bool mount)
-        {
-            // mount
-            if (!this.IsRiding)
-                this.checkAction(Game1.player, Game1.currentLocation);
-
-            // let tractor pass through trellises
-            if (this.Config.PassThroughTrellisCrops)
-                this.SetCropPassthrough(Game1.currentLocation, passthrough: mount);
-        }
-
-        /// <summary>Move the tractor to a specific pixel position within its current location.</summary>
-        /// <param name="position">The pixel coordinate in the current location.</param>
-        public void SetPixelPosition(Vector2 position)
-        {
-            this.Position = position;
-        }
-
         /// <summary>Move the tractor to the given location.</summary>
         /// <param name="location">The game location.</param>
         /// <param name="tile">The tile coordinate in the given location.</param>
-        /// <remarks>The default <see cref="Game1.warpCharacter(StardewValley.NPC,string,Microsoft.Xna.Framework.Point,bool,bool)"/> logic doesn't work in the mines, so this method reimplements it with better logic.</remarks>
+        /// <remarks>The default <see cref="Game1.warpCharacter(NPC,GameLocation,Vector2)"/> logic doesn't work in the mines, so this method reimplements it with better logic.</remarks>
         public void SetLocation(GameLocation location, Vector2 tile)
         {
             this.RemoveFromLocation();
@@ -300,10 +281,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             // get references
             SFarmer player = Game1.player;
-            IReflectedProperty<Horse> mountField = this.Reflection.GetProperty<Horse>(Game1.player, "mount");
+            NetRef<Horse> mountField = this.Reflection.GetField<NetRef<Horse>>(Game1.player, "netMount").GetValue(); // change value directly to bypass the game's on-dismount logic
 
             // save current state
-            Horse mount = mountField.GetValue();
+            Horse mount = mountField.Value;
             Vector2 mountPosition = this.Position;
             WateringCan wateringCan = player.CurrentTool as WateringCan;
             int waterInCan = wateringCan?.WaterLeft ?? 0;
@@ -314,7 +295,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             bool canMove = Game1.player.canMove; // fix player frozen due to animations when performing an action
 
             // move mount out of the way
-            mountField.SetValue(null);
+            mountField.Value = null;
             this.Position = new Vector2(-5, -5);
 
             // perform action
@@ -326,7 +307,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             {
                 // move mount back
                 this.Position = mountPosition;
-                mountField.SetValue(mount);
+                mountField.Value = mount;
 
                 // restore previous state
                 if (wateringCan != null)
