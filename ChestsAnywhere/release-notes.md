@@ -6,7 +6,7 @@
 * Added Automate options to edit-chest screen if it's installed.
 * Fixed 'ok' button not closing menu in rare cases.
 * Fixed issue where opening the chest UI from the inventory screen while holding an item destroys the item.
-* Improved Russian and Spanish translations. (Thanks to fadedDexofan and alca259!)
+* Improved German, Russian, and Spanish translations. (Thanks to dezqo, fadedDexofan & heiwaon, and alca259!)
 
 ## 1.12.4
 * Updated to SMAPI 2.4.

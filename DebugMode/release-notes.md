@@ -4,6 +4,7 @@
 ## 1.9
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added Russian and Spanish translations. (Thanks to fadedDexofan and alca259!)
+* Improved German translations. (Thanks to dezqo!)
 
 ## 1.8
 * Added submenu, event, and festival info to overlay.
