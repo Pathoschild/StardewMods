@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /// <summary>The speed multiplier for title menu transitions.</summary>
         public int TitleMenuTransitionSpeed { get; set; } = 10;
 
-        /// <summary>The speed multiplier for loading a game.</summary>
-        public int LoadGameMenuSlotBlinkSpeed { get; set; } = 2;
+        /// <summary>The speed multiplier for the blinking-slot delay after clicking a load slot.</summary>
+        public int LoadGameBlinkSpeed { get; set; } = 2;
     }
 }

@@ -107,8 +107,8 @@ namespace Pathoschild.Stardew.FastAnimations
                 yield return new TreeFallingHandler(config.TreeFallSpeed, this.Helper.Reflection);
             if (config.TitleMenuTransitionSpeed > 1)
                 yield return new TitleMenuHandler(config.TitleMenuTransitionSpeed, this.Helper.Reflection);
-            if(config.LoadGameMenuSlotBlinkSpeed > 1)
-                yield return new LoadGameMenuHandler(config.LoadGameMenuSlotBlinkSpeed, this.Helper.Reflection);
+            if(config.LoadGameBlinkSpeed > 1)
+                yield return new LoadGameMenuHandler(config.LoadGameBlinkSpeed, this.Helper.Reflection);
         }
     }
 }

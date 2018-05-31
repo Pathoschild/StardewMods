@@ -27,7 +27,7 @@ setting              | default | what it affects
 `MilkSpeed`          | 5×      | How fast you use the milk pail.
 `ShearSpeed`         | 5×      | How fast you use the shears.
 `TitleMenuTransitionSpeed` | 10× | How fast the title menu transitions between screens.
-`LoadGameMenuSlotBlinkSpeed` | 2× | How fast the game loads when you click a save slot.
+`LoadGameBlinkSpeed` | 2×      | How fast the blinking-slot delay happens after you click a load-save slot.
 `FishingSpeed`       | 1×      | How fast you cast and reel when fishing (doesn't affect the minigame).<br /><small>(Suggested value: 2×.)</small>
 `TreeFallingSpeed`   | 1×      | How fast trees fall after you chop them down.<br /><small>(Suggested value: 3×.)</small>
 

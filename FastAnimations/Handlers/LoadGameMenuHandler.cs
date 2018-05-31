@@ -5,9 +5,9 @@ using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.FastAnimations.Handlers
 {
-    /// <summary>Handles loading slot delay.</summary>
+    /// <summary>Handles the load game menu animations.</summary>
     /// <remarks>See game logic in <see cref="LoadGameMenu"/>.</remarks>
-    class LoadGameMenuHandler : BaseAnimationHandler
+    internal class LoadGameMenuHandler : BaseAnimationHandler
     {
         /*********
         ** Properties
@@ -42,11 +42,10 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override void Update(int playerAnimationID)
         {
-            LoadGameMenu loadGameMenu =
-                (LoadGameMenu)this.Reflection.GetField<IClickableMenu>(typeof(TitleMenu), "_subMenu").GetValue();
-            var timerToLoad = this.GetTimerToLoad(loadGameMenu);
+            LoadGameMenu menu = (LoadGameMenu)this.Reflection.GetField<IClickableMenu>(typeof(TitleMenu), "_subMenu").GetValue();
+            IReflectedField<int> timerToLoad = this.GetTimerToLoad(menu);
             for (int i = 1; i < this.Multiplier && timerToLoad.GetValue() > 0; i++)
-                loadGameMenu.update(Game1.currentGameTime);
+                menu.update(Game1.currentGameTime);
         }
 
 
