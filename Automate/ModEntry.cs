@@ -51,14 +51,14 @@ namespace Pathoschild.Stardew.Automate
             this.Factory = new MachineFactory(this.Config.Connectors);
 
             // hook events
+            IModEvents events = this.Helper.Events;
+
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             PlayerEvents.Warped += this.PlayerEvents_Warped;
-            LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
-            LocationEvents.ObjectsChanged += this.LocationEvents_ObjectsChanged;
+            events.World.LocationListChanged += this.World_LocationListChanged;
+            events.World.ObjectListChanged += this.World_ObjectListChanged;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-
-            // handle player interaction
-            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
+            events.Input.ButtonPressed += this.Input_ButtonPressed;
 
             // log info
             if (this.Config.VerboseLogging)
@@ -101,7 +101,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when a location is added or removed.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void LocationEvents_LocationsChanged(object sender, EventArgsLocationsChanged e)
+        private void World_LocationListChanged(object sender, WorldLocationListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
                 return;
@@ -123,7 +123,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when an object is added or removed to a location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void LocationEvents_ObjectsChanged(object sender, EventArgsLocationObjectsChanged e)
+        private void World_ObjectListChanged(object sender, WorldObjectListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
                 return;
@@ -171,7 +171,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
+        private void Input_ButtonPressed(object sender, InputButtonPressedArgsInput e)
         {
             try
             {
