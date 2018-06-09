@@ -330,6 +330,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="tile">The tile to search.</param>
         private bool TryGetConnector(GameLocation location, Vector2 tile)
         {
+            // no connectors
+            if (this.Connectors.Count == 0)
+                return false;
+
+            // check for possible connectors
             if (location.Objects.TryGetValue(tile, out SObject obj))
                 return this.IsConnector(obj.bigCraftable.Value ? ObjectType.BigCraftable : ObjectType.Object, obj.ParentSheetIndex);
             if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrainFeature) && terrainFeature is Flooring floor)

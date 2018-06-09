@@ -129,15 +129,7 @@ namespace Pathoschild.Stardew.Automate
                 return;
 
             this.VerboseLog($"Object list changed in {e.Location.Name}, reloading machines in current location.");
-
-            try
-            {
-                this.ReloadQueue.Add(e.Location);
-            }
-            catch (Exception ex)
-            {
-                this.HandleError(ex, "updating the current location");
-            }
+            this.ReloadQueue.Add(e.Location);
         }
 
         /// <summary>The method invoked when the in-game clock time changes.</summary>
@@ -218,6 +210,8 @@ namespace Pathoschild.Stardew.Automate
             this.VerboseLog($"Reloading machines in {location.Name}...");
 
             this.MachineGroups[location] = this.Factory.GetActiveMachinesGroups(location, this.Helper.Reflection).ToArray();
+            if (!this.MachineGroups[location].Any())
+                this.MachineGroups.Remove(location);
         }
 
         /// <summary>Log an error and warn the user.</summary>
