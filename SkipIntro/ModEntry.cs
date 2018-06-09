@@ -18,8 +18,11 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
+        /// <summary>Whether the game has launched.</summary>
+        private bool IsLaunched;
+
         /// <summary>The current step in the mod logic.</summary>
-        private Stage CurrentStage;
+        private Stage CurrentStage = Stage.None;
 
 
         /*********
@@ -32,6 +35,7 @@ namespace Pathoschild.Stardew.SkipIntro
             this.Config = helper.ReadConfig<ModConfig>();
 
             MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
+            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
         }
 
 
@@ -47,10 +51,7 @@ namespace Pathoschild.Stardew.SkipIntro
         private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
             if (e.NewMenu is TitleMenu)
-            {
                 this.CurrentStage = Stage.SkipIntro;
-                GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            }
         }
 
         /// <summary>Receives an update tick.</summary>
@@ -60,14 +61,20 @@ namespace Pathoschild.Stardew.SkipIntro
         {
             try
             {
+                // start intro skip on game launch
+                if (!this.IsLaunched)
+                {
+                    if (!(Game1.activeClickableMenu is TitleMenu))
+                        return;
+
+                    this.IsLaunched = true;
+                    this.CurrentStage = Stage.SkipIntro;
+                }
+
                 // apply skip logic
                 this.CurrentStage = Game1.activeClickableMenu is TitleMenu menu
                     ? this.Skip(menu, this.CurrentStage)
                     : Stage.None;
-
-                // unhook when done
-                if (this.CurrentStage == Stage.None)
-                    GameEvents.UpdateTick -= this.GameEvents_UpdateTick;
             }
             catch (Exception ex)
             {
