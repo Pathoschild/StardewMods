@@ -60,6 +60,9 @@ namespace Pathoschild.Stardew.Automate
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
             events.Input.ButtonPressed += this.Input_ButtonPressed;
 
+            if (this.Config.Connectors.Any(p => p.Type == ObjectType.Floor))
+                events.World.TerrainFeatureListChanged += this.World_TerrainFeatureListChanged;
+
             // log info
             if (this.Config.VerboseLogging)
                 this.Monitor.Log($"Verbose logging is enabled. This is useful when troubleshooting but can impact performance. It should be disabled if you don't explicitly need it. You can delete {Path.Combine(this.Helper.DirectoryPath, "config.json")} and restart the game to disable it.", LogLevel.Warn);
@@ -129,6 +132,18 @@ namespace Pathoschild.Stardew.Automate
                 return;
 
             this.VerboseLog($"Object list changed in {e.Location.Name}, reloading machines in current location.");
+            this.ReloadQueue.Add(e.Location);
+        }
+
+        /// <summary>The method invoked when a terrain feature is added or removed to a location.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void World_TerrainFeatureListChanged(object sender, WorldTerrainFeatureListChangedEventArgs e)
+        {
+            if (!this.EnableAutomation)
+                return;
+
+            this.VerboseLog($"Terrain feature list changed in {e.Location.Name}, reloading machines in current location.");
             this.ReloadQueue.Add(e.Location);
         }
 
