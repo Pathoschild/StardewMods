@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new GenericField(this.Translate(L10n.Player.Gender), this.Translate(farmer.IsMale ? L10n.Player.GenderMale : L10n.Player.GenderFemale));
             yield return new GenericField(this.Translate(L10n.Player.FarmName), farmer.farmName.Value);
             yield return new GenericField(this.Translate(L10n.Player.FavoriteThing), farmer.favoriteThing.Value);
-            yield return new GenericField(this.Translate(L10n.Player.Spouse), farmer.isMarried() ? Game1.getCharacterFromName(farmer.spouse).displayName : null);
+            yield return new GenericField(this.Translate(L10n.Player.Spouse), this.GetSpouse(farmer)?.displayName);
             yield return new SkillBarField(this.Translate(L10n.Player.FarmingSkill), farmer.experiencePoints[SFarmer.farmingSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
             yield return new SkillBarField(this.Translate(L10n.Player.MiningSkill), farmer.experiencePoints[SFarmer.miningSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
             yield return new SkillBarField(this.Translate(L10n.Player.ForagingSkill), farmer.experiencePoints[SFarmer.foragingSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
@@ -101,6 +101,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         {
             TV tv = new TV();
             return this.Reflection.GetMethod(tv, "getFortuneForecast").Invoke<string>();
+        }
+
+        /// <summary>Get the player's spouse, if they're married.</summary>
+        /// <param name="farmer">The farmer whose spouse to find.</param>
+        /// <returns>Returns the spouse player or NPC, or <c>null</c> if they're not married.</returns>
+        private Character GetSpouse(SFarmer farmer)
+        {
+            long? spousePlayerID = farmer.team.GetSpouse(farmer.UniqueMultiplayerID);
+            SFarmer spousePlayer = spousePlayerID.HasValue ? Game1.getFarmerMaybeOffline(spousePlayerID.Value) : null;
+
+            if (spousePlayer != null)
+                return spousePlayer;
+            return Game1.player.getSpouse();
         }
     }
 }
