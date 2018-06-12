@@ -2,12 +2,13 @@
 ## 4.5
 * Updated for Stardew Valley 1.3 (disabled in multiplayer mode).
 * Player is now invincible while riding tractor (configurable).
-* Added...
-  * melee weapons: attack monsters (optional), clear dead crops (disabled by default).
+* Added more attachment features:
+  * melee weapons: clear dead crops, attack monsters (disabled by default).
   * slingshot: fires one projectile/tile/second in the aimed direction (disabled by default).
   * hoe: clear weeds.
   * pickaxe: clear weeds.
-* Tractor can now wear hats.
+* Added support for tractor hats.
+* Fixed pickaxe not breaking boulders in the mines.
 * Added Spanish translations. (Thanks to alca259!)
 
 ## 4.4.1

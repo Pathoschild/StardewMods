@@ -107,6 +107,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 return farm.resourceClumps;
             if (location is Woods woods)
                 return woods.stumps;
+            if (location is MineShaft mineshaft)
+                return mineshaft.resourceClumps;
             return new ResourceClump[0];
         }
 
