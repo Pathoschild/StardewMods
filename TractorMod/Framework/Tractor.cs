@@ -50,6 +50,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The trellis crop IDs.</summary>
         private readonly HashSet<int> RaisedSeedCrops = new HashSet<int>();
 
+        /// <summary>Whether the player was riding the tractor during the last tick.</summary>
+        private bool WasRiding;
+
+        /// <summary>The rider health to maintain if they're invincible.</summary>
+        private int RiderHealth;
+
 
         /*********
         ** Accessors
@@ -107,9 +113,32 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Update tractor effects and actions in the game.</summary>
         public void Update()
         {
+            // track health for invincibility
+            if (this.Config.InvincibleOnTractor && this.IsRiding != this.WasRiding)
+            {
+                if (this.IsRiding)
+                    this.RiderHealth = Game1.player.health;
+                this.WasRiding = this.IsRiding;
+            }
+
+            // apply riding effects
             if (this.IsRiding && Game1.activeClickableMenu == null)
             {
+                // apply invincibility
+                if (this.Config.InvincibleOnTractor)
+                {
+                    if (Game1.player.health > this.RiderHealth)
+                        this.RiderHealth = Game1.player.health;
+                    else
+                        Game1.player.health = this.RiderHealth;
+                    Game1.player.temporarilyInvincible = false; // disable damage blink effect
+                    Game1.player.temporaryInvincibilityTimer = 0;
+                }
+
+                // apply tractor buff
                 this.UpdateBuff();
+
+                // apply tools
                 if (this.UpdateCooldown() && this.IsEnabled())
                     this.UpdateAttachmentEffects();
             }

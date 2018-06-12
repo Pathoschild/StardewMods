@@ -37,5 +37,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>The custom tools or items to allow. These must match the exact internal tool/item names (not the display names).</summary>
         public string[] CustomAttachments { get; set; } = new string[0];
+
+        /// <summary>Whether the player should be invincible while they're on the tractor.</summary>
+        public bool InvincibleOnTractor { get; set; } = true;
     }
 }

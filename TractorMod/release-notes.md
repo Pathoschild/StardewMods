@@ -1,6 +1,7 @@
 # Release notes
 ## 4.5
 * Updated for Stardew Valley 1.3 (disabled in multiplayer mode).
+* Player is now invincible while riding tractor (configurable).
 * Added...
   * melee weapons: attack monsters (optional), clear dead crops (disabled by default).
   * slingshot: fires one projectile/tile/second in the aimed direction (disabled by default).
