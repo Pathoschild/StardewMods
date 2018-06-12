@@ -164,6 +164,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 return;
 
             this.ShippingBin.Remove(item);
+            this.ShippingBin.Filter(p => p != null);
             if (item == this.Farm.lastItemShipped)
                 this.Farm.lastItemShipped = this.Farm.shippingBin.LastOrDefault();
         }
