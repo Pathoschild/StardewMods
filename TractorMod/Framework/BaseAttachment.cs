@@ -15,6 +15,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
     internal abstract class BaseAttachment : IAttachment
     {
         /*********
+        ** Accessors
+        *********/
+        /// <summary>The minimum number of ticks between each update.</summary>
+        public int RateLimit { get; }
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -38,6 +45,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /*********
         ** Protected methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="rateLimit">The minimum number of ticks between each update.</param>
+        protected BaseAttachment(int rateLimit = 0)
+        {
+            this.RateLimit = rateLimit;
+        }
+
         /// <summary>Use a tool on a tile.</summary>
         /// <param name="tool">The tool to use.</param>
         /// <param name="tile">The tile to affect.</param>

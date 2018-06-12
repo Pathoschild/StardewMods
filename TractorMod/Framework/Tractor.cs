@@ -38,6 +38,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The tractor attachments to apply.</summary>
         private readonly IAttachment[] Attachments;
 
+        /// <summary>The attachment cooldowns in ticks for each rate-limited attachment.</summary>
+        private readonly IDictionary<IAttachment, int> AttachmentCooldowns;
+
         /// <summary>The mod settings.</summary>
         private readonly ModConfig Config;
 
@@ -78,6 +81,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             };
             this.Config = config;
             this.Attachments = attachments.ToArray();
+            this.AttachmentCooldowns = this.Attachments.Where(p => p.RateLimit > this.TicksPerAction).ToDictionary(p => p, p => 0);
             this.Translation = translation;
             this.Reflection = reflection;
         }
@@ -201,9 +205,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             Item item = player.CurrentItem;
 
             // get active attachments
-            IAttachment[] attachments = this.Attachments
-                .Where(attachment => attachment.IsEnabled(player, tool, item, location))
-                .ToArray();
+            IAttachment[] attachments = this.GetApplicableAttachmentsAfterCooldown(player, tool, item, location).ToArray();
             if (!attachments.Any())
                 return;
 
@@ -227,10 +229,47 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     foreach (IAttachment attachment in attachments)
                     {
                         if (attachment.Apply(tile, tileObj, tileFeature, Game1.player, tool, item, Game1.currentLocation))
+                        {
+                            this.ResetCooldown(attachment);
                             break;
+                        }
                     }
                 }
             });
+        }
+
+        /// <summary>Get the attachments which are ready and can be applied to the given tile, after applying cooldown.</summary>
+        /// <param name="player">The current player.</param>
+        /// <param name="tool">The tool selected by the player (if any).</param>
+        /// <param name="item">The item selected by the player (if any).</param>
+        /// <param name="location">The current location.</param>
+        private IEnumerable<IAttachment> GetApplicableAttachmentsAfterCooldown(SFarmer player, Tool tool, Item item, GameLocation location)
+        {
+            foreach (IAttachment attachment in this.Attachments)
+            {
+                // run cooldown
+                if (attachment.RateLimit > this.TicksPerAction)
+                {
+                    int cooldown = this.AttachmentCooldowns[attachment];
+                    if (cooldown > this.TicksPerAction)
+                    {
+                        this.AttachmentCooldowns[attachment] -= this.TicksPerAction;
+                        continue;
+                    }
+                }
+
+                // yield attachment
+                if (attachment.IsEnabled(player, tool, item, location))
+                    yield return attachment;
+            }
+        }
+
+        /// <summary>Reset the cooldown for an attachment.</summary>
+        /// <param name="attachment">The attachment to reset.</param>
+        private void ResetCooldown(IAttachment attachment)
+        {
+            if (attachment.RateLimit > 0)
+                this.AttachmentCooldowns[attachment] = attachment.RateLimit;
         }
 
         /// <summary>Get a grid of tiles.</summary>
