@@ -1,7 +1,10 @@
 # Release notes
 ## 4.5
 * Updated for Stardew Valley 1.3 (disabled in multiplayer mode).
-* Added support for hoe and pickaxe clearing weeds.
+* Added...
+  * melee weapons: attack monsters (optional), clear dead crops (disabled by default).
+  * hoe: clear weeds.
+  * pickaxe: clear weeds.
 * Tractor can now wear hats.
 * Added Spanish translations. (Thanks to alca259!)
 

@@ -97,6 +97,7 @@ namespace Pathoschild.Stardew.TractorMod
                 new FertilizerAttachment(attachmentConfig.Fertilizer),
                 new GrassStarterAttachment(attachmentConfig.GrassStarter),
                 new HoeAttachment(attachmentConfig.Hoe),
+                new MeleeWeaponAttachment(attachmentConfig.MeleeWeapon),
                 new PickaxeAttachment(attachmentConfig.PickAxe),
                 new ScytheAttachment(attachmentConfig.Scythe),
                 new SeedAttachment(attachmentConfig.Seeds),
