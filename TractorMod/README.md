@@ -41,6 +41,7 @@ melee weapon | clear dead crops. | attack monsters.
 pickaxe    | break rocks; clear tilled dirt; clear dead crops. | break paths/flooring.
 seeds      | plant seeds in dirt. | —
 scythe     | harvest crops, fruit trees, or forage; clear weeds and dead crops. | —
+slingshot  | — | shoot one projectile/tile/second in the aimed direction.
 watering can | water crops. | —
 
 The tractor uses no stamina when using tools, and the watering can won't run out of water. It will
