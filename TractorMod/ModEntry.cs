@@ -102,6 +102,7 @@ namespace Pathoschild.Stardew.TractorMod
                 new ScytheAttachment(attachmentConfig.Scythe),
                 new SeedAttachment(attachmentConfig.Seeds),
                 new SeedBagAttachment(attachmentConfig.SeedBagMod),
+                new SlingshotAttachment(attachmentConfig.Slingshot, this.Helper.Reflection),
                 new WateringCanAttachment(attachmentConfig.WateringCan)
             };
 

@@ -3,6 +3,7 @@
 * Updated for Stardew Valley 1.3 (disabled in multiplayer mode).
 * Added...
   * melee weapons: attack monsters (optional), clear dead crops (disabled by default).
+  * slingshot: fires one projectile/tile/second in the aimed direction (disabled by default).
   * hoe: clear weeds.
   * pickaxe: clear weeds.
 * Tractor can now wear hats.

@@ -7,6 +7,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         public bool ClearDeadCrops { get; set; } = true;
 
         /// <summary>Whether to attack monsters.</summary>
-        public bool AttackMonsters { get; set; } = true;
+        public bool AttackMonsters { get; set; } = false;
     }
 }

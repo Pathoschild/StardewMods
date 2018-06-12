@@ -27,6 +27,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         /// <summary>Configuration for the seeds attachment.</summary>
         public SeedsConfig Seeds = new SeedsConfig();
 
+        /// <summary>Configuration for the slingshot attachment.</summary>
+        public SlingshotConfig Slingshot = new SlingshotConfig();
+
         /// <summary>Configuration for the watering can attachment.</summary>
         public WateringCanConfig WateringCan = new WateringCanConfig();
 
