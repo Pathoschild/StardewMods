@@ -10,6 +10,7 @@
 * Added number of item needed in bundle list. (Thanks to StefanOssendorf!)
 * Improved Russian and Spanish translations. (Thanks to fadedDexofan and alca259!)
 * Fixed issue where a bundle that needs two stacks of an item won't be listed on the item lookup if one stack is filled. (Thanks to StefanOssendorf!)
+* Fixed Custom Farming Redux machines not drawn correctly when listing recipes.
 
 ## 1.18.1
 * Fixed error when looking up something before the save is loaded (thanks to f4iTh!).
