@@ -1,10 +1,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux
+namespace Pathoschild.Stardew.Common
 {
-    /// <summary>A custom object's sprite info.</summary>
-    internal class CustomSprite
+    /// <summary>Represents a single sprite in a spritesheet.</summary>
+    internal class SpriteInfo
     {
         /*********
         ** Accessors
@@ -22,7 +22,7 @@ namespace Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux
         /// <summary>Construct an instance.</summary>
         /// <param name="spritesheet">The spritesheet texture.</param>
         /// <param name="sourceRectangle">The area in the spritesheet containing the sprite.</param>
-        public CustomSprite(Texture2D spritesheet, Rectangle sourceRectangle)
+        public SpriteInfo(Texture2D spritesheet, Rectangle sourceRectangle)
         {
             this.Spritesheet = spritesheet;
             this.SourceRectangle = sourceRectangle;

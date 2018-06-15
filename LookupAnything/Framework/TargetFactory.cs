@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
@@ -14,7 +13,6 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
-using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
@@ -37,9 +35,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         private readonly GameHelper GameHelper;
 
-        /// <summary>Handles the logic for integrating with the Custom Farming Redux mod.</summary>
-        private readonly CustomFarmingReduxIntegration CustomFarming;
-
 
         /*********
         ** Public methods
@@ -52,14 +47,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-        /// <param name="customFarming">Handles the logic for integrating with the Custom Farming Redux mod.</param>
-        public TargetFactory(Metadata metadata, ITranslationHelper translations, IReflectionHelper reflection, GameHelper gameHelper, CustomFarmingReduxIntegration customFarming)
+        public TargetFactory(Metadata metadata, ITranslationHelper translations, IReflectionHelper reflection, GameHelper gameHelper)
         {
             this.Metadata = metadata;
             this.Translations = translations;
             this.Reflection = reflection;
             this.GameHelper = gameHelper;
-            this.CustomFarming = customFarming;
         }
 
         /****
@@ -110,9 +103,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 if (!this.GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
                     continue;
 
-                yield return this.CustomFarming.IsLoaded && this.CustomFarming.IsCustomObject(obj)
-                    ? new CustomFarmingObjectTarget(this.GameHelper, obj, spriteTile, this.Reflection, this.CustomFarming)
-                    : new ObjectTarget(this.GameHelper, obj, spriteTile, this.Reflection);
+                yield return new ObjectTarget(this.GameHelper, obj, spriteTile, this.Reflection);
             }
 
             // furniture
@@ -216,7 +207,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="location">The current location.</param>
         /// <param name="lookupMode">The lookup target mode.</param>
         /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
-        public ISubject GetSubjectFrom(SFarmer player, GameLocation location, LookupMode lookupMode, bool includeMapTile)
+        public ISubject GetSubjectFrom(Farmer player, GameLocation location, LookupMode lookupMode, bool includeMapTile)
         {
             // get target
             ITarget target;
@@ -259,7 +250,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                 // player
                 case TargetType.Farmer:
-                    return new FarmerSubject(this.GameHelper, target.GetValue<SFarmer>(), this.Translations, this.Reflection);
+                    return new FarmerSubject(this.GameHelper, target.GetValue<Farmer>(), this.Translations, this.Reflection);
 
                 // animal
                 case TargetType.FarmAnimal:
@@ -370,7 +361,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                                         object socialID = this.Reflection.GetField<List<object>>(curTab, "names").GetValue()[index];
                                         if (socialID is long playerID)
                                         {
-                                            SFarmer player = Game1.getFarmer(playerID);
+                                            Farmer player = Game1.getFarmer(playerID);
                                             return new FarmerSubject(this.GameHelper, player, this.Translations, this.Reflection);
                                         }
                                         else if (socialID is string villagerName)
@@ -477,7 +468,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         *********/
         /// <summary>Get the tile the player is facing.</summary>
         /// <param name="player">The player to check.</param>
-        private Vector2 GetFacingTile(SFarmer player)
+        private Vector2 GetFacingTile(Farmer player)
         {
             Vector2 tile = player.getTileLocation();
             FacingDirection direction = (FacingDirection)player.FacingDirection;

@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
@@ -10,8 +11,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /*********
         ** Properties
         *********/
-        /// <summary>The item for which to display an icon.</summary>
-        private readonly Item Item;
+        /// <summary>The item icon to draw.</summary>
+        private readonly SpriteInfo Sprite;
 
 
         /*********
@@ -25,7 +26,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         public ItemIconField(GameHelper gameHelper, string label, Item item, string text = null)
             : base(gameHelper, label, hasValue: item != null)
         {
-            this.Item = item;
+            this.Sprite = gameHelper.GetSprite(item);
             if (item != null)
             {
                 this.Value = !string.IsNullOrWhiteSpace(text)
@@ -47,7 +48,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             Vector2 iconSize = new Vector2(textHeight);
 
             // draw icon & text
-            spriteBatch.DrawIcon(this.GameHelper, this.Item, position.X, position.Y, iconSize);
+            spriteBatch.DrawSpriteWithin(this.Sprite, position.X, position.Y, iconSize);
             Vector2 textSize = spriteBatch.DrawTextBlock(font, this.Value, position + new Vector2(iconSize.X + 5, 5), wrapWidth);
 
             // return size

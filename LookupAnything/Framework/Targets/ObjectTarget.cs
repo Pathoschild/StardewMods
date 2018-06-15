@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
@@ -17,6 +18,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
 
+        /// <summary>The item sprite.</summary>
+        private readonly SpriteInfo CustomSprite;
+
 
         /*********
         ** Public methods
@@ -30,13 +34,29 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             : base(gameHelper, TargetType.Object, obj, tilePosition)
         {
             this.Reflection = reflection;
+            this.CustomSprite = gameHelper.HasCustomSprite(obj)
+                ? gameHelper.GetSprite(obj) // only get sprite if it's custom; else we'll use contextual logic (e.g. for fence direction)
+                : null;
         }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         public override Rectangle GetSpriteArea()
         {
+            // get object info
             Object obj = (Object)this.Value;
             Rectangle boundingBox = obj.getBoundingBox(this.GetTile());
+
+            // get sprite area
+            if (this.CustomSprite != null)
+            {
+                Rectangle spriteArea = this.GetSpriteArea(boundingBox, this.CustomSprite.SourceRectangle);
+                return new Rectangle(
+                    x: spriteArea.X,
+                    y: spriteArea.Y - (spriteArea.Height / 2), // custom sprite areas are offset from game logic
+                    width: spriteArea.Width,
+                    height: spriteArea.Height
+                );
+            }
             if (obj is Furniture furniture)
                 return this.GetSpriteArea(boundingBox, furniture.sourceRect.Value);
             if (obj.bigCraftable.Value)
@@ -58,7 +78,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             // get sprite data
             Texture2D spriteSheet;
             Rectangle sourceRectangle;
-            if (obj is Furniture furniture)
+            if (this.CustomSprite != null)
+            {
+                spriteSheet = this.CustomSprite.Spritesheet;
+                sourceRectangle = this.CustomSprite.SourceRectangle;
+            }
+            else if (obj is Furniture furniture)
             {
                 spriteSheet = Furniture.furnitureTexture;
                 sourceRectangle = furniture.sourceRect.Value;

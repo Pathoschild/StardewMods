@@ -19,12 +19,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Cobalt\CobaltIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Cobalt\ICobaltApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\CustomFarmingReduxIntegration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\CustomSprite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\ICustomFarmingApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\IModIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\PelicanFiber\PelicanFiberIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\SimpleSprinkler\ISimplerSprinklerApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\SimpleSprinkler\SimpleSprinklerIntegration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SpriteInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StringEnumArrayConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\CommonSprites.cs" />

@@ -44,7 +44,7 @@ namespace Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux
 
         /// <summary>Get the sprite info for a custom object, or <c>null</c> if the object isn't custom.</summary>
         /// <param name="obj">The custom object.</param>
-        public CustomSprite GetTexture(SObject obj)
+        public SpriteInfo GetTexture(SObject obj)
         {
             this.AssertLoaded();
 
@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux
             if (sourceRectangle == null)
                 throw new InvalidOperationException($"Custom Farming Redux says object '{obj.Name}' is a custom object or machine, but returned a null sprite source rectangle for it.");
 
-            return new CustomSprite(texture, sourceRectangle.Value);
+            return new SpriteInfo(texture, sourceRectangle.Value);
         }
     }
 }

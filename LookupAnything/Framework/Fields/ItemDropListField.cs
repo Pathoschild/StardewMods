@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewModdingAPI;
@@ -19,7 +20,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Properties
         *********/
         /// <summary>The possible drops.</summary>
-        private readonly Tuple<ItemDropData, SObject>[] Drops;
+        private readonly Tuple<ItemDropData, SObject, SpriteInfo>[] Drops;
 
         /// <summary>The text to display if there are no items.</summary>
         private readonly string DefaultText;
@@ -40,13 +41,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         public ItemDropListField(GameHelper gameHelper, string label, IEnumerable<ItemDropData> drops, ITranslationHelper translations, string defaultText = null)
             : base(gameHelper, label)
         {
-            this.Drops =
-                (
-                    from drop in drops
-                    let item = gameHelper.GetObjectBySpriteIndex(drop.ItemID)
-                    orderby drop.Probability descending, item.Name ascending
-                    select Tuple.Create(drop, item)
-                )
+            this.Drops = this
+                .GetEntries(drops, gameHelper)
+                .OrderByDescending(p => p.Item1.Probability)
+                .ThenBy(p => p.Item2.DisplayName)
                 .ToArray();
             this.DefaultText = defaultText;
             this.HasValue = defaultText != null || this.Drops.Any();
@@ -75,10 +73,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 // get data
                 ItemDropData drop = entry.Item1;
                 SObject item = entry.Item2;
+                SpriteInfo sprite = entry.Item3;
                 bool isGuaranteed = drop.Probability > .99f;
 
                 // draw icon
-                spriteBatch.DrawIcon(this.GameHelper, item, position.X, position.Y + height, iconSize, isGuaranteed ? Color.White : Color.White * 0.5f);
+                spriteBatch.DrawSpriteWithin(sprite, position.X, position.Y + height, iconSize, isGuaranteed ? Color.White : Color.White * 0.5f);
 
                 // draw text
                 string text = isGuaranteed ? item.DisplayName : this.Translations.Get(L10n.Generic.PercentChanceOf, new { percent = Math.Round(drop.Probability, 4) * 100, label = item.DisplayName });
@@ -95,6 +94,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
             // return size
             return new Vector2(wrapWidth, height);
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get the internal drop list entries.</summary>
+        /// <param name="drops">The possible drops.</param>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+        private IEnumerable<Tuple<ItemDropData, SObject, SpriteInfo>> GetEntries(IEnumerable<ItemDropData> drops, GameHelper gameHelper)
+        {
+            foreach (ItemDropData drop in drops)
+            {
+                SObject item = this.GameHelper.GetObjectBySpriteIndex(drop.ItemID);
+                SpriteInfo sprite = gameHelper.GetSprite(item);
+                yield return Tuple.Create(drop, item, sprite);
+            }
         }
     }
 }

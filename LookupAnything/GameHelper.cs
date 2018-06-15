@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
@@ -34,6 +35,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>The cached recipes.</summary>
         private Lazy<RecipeModel[]> Recipes;
 
+        /// <summary>The Custom Farming Redux integration.</summary>
+        private readonly CustomFarmingReduxIntegration CustomFarmingRedux;
+
         /// <summary>Parses the raw game data into usable models.</summary>
         private readonly DataParser DataParser;
 
@@ -42,9 +46,11 @@ namespace Pathoschild.Stardew.LookupAnything
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public GameHelper()
+        /// <param name="customFarmingRedux">The Custom Farming Redux integration.</param>
+        public GameHelper(CustomFarmingReduxIntegration customFarmingRedux)
         {
             this.DataParser = new DataParser(this);
+            this.CustomFarmingRedux = customFarmingRedux;
         }
 
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
@@ -411,24 +417,38 @@ namespace Pathoschild.Stardew.LookupAnything
             return pixels[spriteIndex];
         }
 
+        /// <summary>Get whether the item has a custom sprite.</summary>
+        /// <param name="item">The item.</param>
+        public bool HasCustomSprite(Item item)
+        {
+            // Custom Farming Redux
+            return item is SObject obj && this.CustomFarmingRedux.IsLoaded && this.CustomFarmingRedux.IsCustomObject(obj);
+        }
+
         /// <summary>Get the sprite for an item.</summary>
         /// <param name="item">The item.</param>
         /// <returns>Returns a tuple containing the sprite sheet and the sprite's position and dimensions within the sheet.</returns>
-        public Tuple<Texture2D, Rectangle> GetSprite(Item item)
+        public SpriteInfo GetSprite(Item item)
         {
+            SObject obj = item as SObject;
+
+            // Custom Farming Redux
+            if (obj != null && this.CustomFarmingRedux.IsLoaded && this.CustomFarmingRedux.IsCustomObject(obj))
+                return this.CustomFarmingRedux.GetTexture(obj);
+
             // standard object
-            if (item is SObject obj)
+            if (obj != null)
             {
                 return obj.bigCraftable.Value
-                    ? Tuple.Create(Game1.bigCraftableSpriteSheet, SObject.getSourceRectForBigCraftable(obj.ParentSheetIndex))
-                    : Tuple.Create(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
+                    ? new SpriteInfo(Game1.bigCraftableSpriteSheet, SObject.getSourceRectForBigCraftable(obj.ParentSheetIndex))
+                    : new SpriteInfo(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
             }
 
             // boots or ring
             if (item is Boots || item is Ring)
             {
                 int indexInTileSheet = (item as Boots)?.indexInTileSheet ?? ((Ring)item).indexInTileSheet;
-                return Tuple.Create(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, indexInTileSheet, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
+                return new SpriteInfo(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, indexInTileSheet, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
             }
 
             // unknown item
