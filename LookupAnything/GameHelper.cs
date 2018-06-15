@@ -417,24 +417,24 @@ namespace Pathoschild.Stardew.LookupAnything
             return pixels[spriteIndex];
         }
 
-        /// <summary>Get whether the item has a custom sprite.</summary>
-        /// <param name="item">The item.</param>
-        public bool HasCustomSprite(Item item)
-        {
-            // Custom Farming Redux
-            return item is SObject obj && this.CustomFarmingRedux.IsLoaded && this.CustomFarmingRedux.IsCustomObject(obj);
-        }
-
         /// <summary>Get the sprite for an item.</summary>
         /// <param name="item">The item.</param>
+        /// <param name="onlyCustom">Only return the sprite info if it's custom.</param>
         /// <returns>Returns a tuple containing the sprite sheet and the sprite's position and dimensions within the sheet.</returns>
-        public SpriteInfo GetSprite(Item item)
+        public SpriteInfo GetSprite(Item item, bool onlyCustom = false)
         {
             SObject obj = item as SObject;
 
             // Custom Farming Redux
-            if (obj != null && this.CustomFarmingRedux.IsLoaded && this.CustomFarmingRedux.IsCustomObject(obj))
-                return this.CustomFarmingRedux.GetTexture(obj);
+            if (obj != null && this.CustomFarmingRedux.IsLoaded)
+            {
+                SpriteInfo data = this.CustomFarmingRedux.GetSprite(obj);
+                if (data != null)
+                    return data;
+            }
+
+            if (onlyCustom)
+                return null;
 
             // standard object
             if (obj != null)

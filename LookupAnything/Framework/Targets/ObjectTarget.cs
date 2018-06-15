@@ -34,9 +34,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             : base(gameHelper, TargetType.Object, obj, tilePosition)
         {
             this.Reflection = reflection;
-            this.CustomSprite = gameHelper.HasCustomSprite(obj)
-                ? gameHelper.GetSprite(obj) // only get sprite if it's custom; else we'll use contextual logic (e.g. for fence direction)
-                : null;
+            this.CustomSprite = gameHelper.GetSprite(obj, onlyCustom: true); // only get sprite if it's custom; else we'll use contextual logic (e.g. for fence direction)
         }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
