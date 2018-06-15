@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 
@@ -18,11 +18,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="item">The item for which to display an icon.</param>
         /// <param name="text">The text to display (if not the item name).</param>
-        public ItemIconField(string label, Item item, string text = null)
-            : base(label, hasValue: item != null)
+        public ItemIconField(GameHelper gameHelper, string label, Item item, string text = null)
+            : base(gameHelper, label, hasValue: item != null)
         {
             this.Item = item;
             if (item != null)
@@ -46,7 +47,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             Vector2 iconSize = new Vector2(textHeight);
 
             // draw icon & text
-            spriteBatch.DrawIcon(this.Item, position.X, position.Y, iconSize);
+            spriteBatch.DrawIcon(this.GameHelper, this.Item, position.X, position.Y, iconSize);
             Vector2 textSize = spriteBatch.DrawTextBlock(font, this.Value, position + new Vector2(iconSize.X + 5, 5), wrapWidth);
 
             // return size

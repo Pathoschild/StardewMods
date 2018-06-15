@@ -13,26 +13,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="giftTastes">The items by how much this NPC likes receiving them.</param>
         /// <param name="showTaste">The gift taste to show.</param>
-        public CharacterGiftTastesField(string label, IDictionary<GiftTaste, Item[]> giftTastes, GiftTaste showTaste)
-            : base(label, CharacterGiftTastesField.GetText(giftTastes, showTaste)) { }
+        public CharacterGiftTastesField(GameHelper gameHelper, string label, IDictionary<GiftTaste, Item[]> giftTastes, GiftTaste showTaste)
+            : base(gameHelper, label, CharacterGiftTastesField.GetText(gameHelper, giftTastes, showTaste)) { }
 
 
         /*********
         ** Private methods
         *********/
         /// <summary>Get the text to display.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="giftTastes">The items by how much this NPC likes receiving them.</param>
         /// <param name="showTaste">The gift taste to show.</param>
-        private static IEnumerable<IFormattedText> GetText(IDictionary<GiftTaste, Item[]> giftTastes, GiftTaste showTaste)
+        private static IEnumerable<IFormattedText> GetText(GameHelper gameHelper, IDictionary<GiftTaste, Item[]> giftTastes, GiftTaste showTaste)
         {
             if (!giftTastes.ContainsKey(showTaste))
                 yield break;
 
             // get item data
-            Item[] ownedItems = GameHelper.GetAllOwnedItems().ToArray();
+            Item[] ownedItems = gameHelper.GetAllOwnedItems().ToArray();
             Item[] inventory = Game1.player.Items.Where(p => p != null).ToArray();
             var items =
                 (

@@ -22,11 +22,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="obj">The underlying in-game object.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public TreeTarget(Tree obj, Vector2? tilePosition, IReflectionHelper reflectionHelper)
-            : base(TargetType.WildTree, obj, tilePosition)
+        public TreeTarget(GameHelper gameHelper, Tree obj, Vector2? tilePosition, IReflectionHelper reflectionHelper)
+            : base(gameHelper, TargetType.WildTree, obj, tilePosition)
         {
             this.Reflection = reflectionHelper;
         }

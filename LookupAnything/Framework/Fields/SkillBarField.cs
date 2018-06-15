@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,13 +25,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="experience">The current progress value.</param>
         /// <param name="maxSkillPoints">The maximum experience points for a skill.</param>
         /// <param name="skillPointsPerLevel">The experience points needed for each skill level.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public SkillBarField(string label, int experience, int maxSkillPoints, int[] skillPointsPerLevel, ITranslationHelper translations)
-            : base(label, experience, maxSkillPoints, Color.Green, Color.Gray, null)
+        public SkillBarField(GameHelper gameHelper, string label, int experience, int maxSkillPoints, int[] skillPointsPerLevel, ITranslationHelper translations)
+            : base(gameHelper, label, experience, maxSkillPoints, Color.Green, Color.Gray, null)
         {
             this.SkillPointsPerLevel = skillPointsPerLevel;
             this.Translations = translations;

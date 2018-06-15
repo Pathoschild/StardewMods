@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -32,17 +32,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="drops">The possible drops.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="defaultText">The text to display if there are no items (or <c>null</c> to hide the field).</param>
-        public ItemDropListField(string label, IEnumerable<ItemDropData> drops, ITranslationHelper translations, string defaultText = null)
-            : base(label)
+        public ItemDropListField(GameHelper gameHelper, string label, IEnumerable<ItemDropData> drops, ITranslationHelper translations, string defaultText = null)
+            : base(gameHelper, label)
         {
             this.Drops =
                 (
                     from drop in drops
-                    let item = GameHelper.GetObjectBySpriteIndex(drop.ItemID)
+                    let item = gameHelper.GetObjectBySpriteIndex(drop.ItemID)
                     orderby drop.Probability descending, item.Name ascending
                     select Tuple.Create(drop, item)
                 )
@@ -77,7 +78,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 bool isGuaranteed = drop.Probability > .99f;
 
                 // draw icon
-                spriteBatch.DrawIcon(item, position.X, position.Y + height, iconSize, isGuaranteed ? Color.White : Color.White * 0.5f);
+                spriteBatch.DrawIcon(this.GameHelper, item, position.X, position.Y + height, iconSize, isGuaranteed ? Color.White : Color.White * 0.5f);
 
                 // draw text
                 string text = isGuaranteed ? item.DisplayName : this.Translations.Get(L10n.Generic.PercentChanceOf, new { percent = Math.Round(drop.Probability, 4) * 100, label = item.DisplayName });

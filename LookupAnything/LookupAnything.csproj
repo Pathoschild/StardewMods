@@ -63,6 +63,7 @@
     <Compile Include="Framework\Fields\LinkField.cs" />
     <Compile Include="Framework\FormattedText.cs" />
     <Compile Include="Framework\IFormattedText.cs" />
+    <Compile Include="Framework\InternalExtensions.cs" />
     <Compile Include="Framework\Models\BundleIngredientModel.cs" />
     <Compile Include="Framework\Models\BundleModel.cs" />
     <Compile Include="Framework\Models\FriendshipModel.cs" />

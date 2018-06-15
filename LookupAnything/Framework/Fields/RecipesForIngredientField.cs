@@ -45,12 +45,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="ingredient">The ingredient item.</param>
         /// <param name="recipes">The recipe to list.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public RecipesForIngredientField(string label, Item ingredient, RecipeModel[] recipes, ITranslationHelper translations)
-            : base(label, hasValue: true)
+        public RecipesForIngredientField(GameHelper gameHelper, string label, Item ingredient, RecipeModel[] recipes, ITranslationHelper translations)
+            : base(gameHelper, label, hasValue: true)
         {
             this.Translations = translations;
             this.Recipes =
@@ -99,7 +100,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
                 // draw icon
                 Color iconColor = entry.IsKnown ? Color.White : Color.White * .5f;
-                spriteBatch.DrawIcon(entry.Item, position.X + leftIndent, position.Y + height, iconSize, iconColor);
+                spriteBatch.DrawIcon(this.GameHelper, entry.Item, position.X + leftIndent, position.Y + height, iconSize, iconColor);
 
                 // draw text
                 Color color = entry.IsKnown ? Color.Black : Color.Gray;

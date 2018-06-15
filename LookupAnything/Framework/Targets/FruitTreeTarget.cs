@@ -13,10 +13,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="obj">The underlying in-game object.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        public FruitTreeTarget(FruitTree obj, Vector2? tilePosition = null)
-            : base(TargetType.FruitTree, obj, tilePosition) { }
+        public FruitTreeTarget(GameHelper gameHelper, FruitTree obj, Vector2? tilePosition = null)
+            : base(gameHelper, TargetType.FruitTree, obj, tilePosition) { }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         /// <remarks>Reverse-engineered from <see cref="FruitTree.draw"/>.</remarks>

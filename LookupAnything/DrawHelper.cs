@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -63,14 +63,15 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Draw an item icon to the screen scaled and centered to fit the given dimensions.</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="item">The item for which to draw an icon.</param>
         /// <param name="x">The X-position at which to draw the sprite.</param>
         /// <param name="y">The X-position at which to draw the sprite.</param>
         /// <param name="size">The size to draw.</param>
         /// <param name="color">The color to tint the sprite.</param>
-        public static void DrawIcon(this SpriteBatch spriteBatch, Item item, float x, float y, Vector2 size, Color? color = null)
+        public static void DrawIcon(this SpriteBatch spriteBatch, GameHelper gameHelper, Item item, float x, float y, Vector2 size, Color? color = null)
         {
-            Tuple<Texture2D, Rectangle> spriteData = GameHelper.GetSprite(item);
+            Tuple<Texture2D, Rectangle> spriteData = gameHelper.GetSprite(item);
             if (spriteData != null)
                 spriteBatch.DrawSpriteWithin(spriteData.Item1, spriteData.Item2, x, y, size, color ?? Color.White);
         }

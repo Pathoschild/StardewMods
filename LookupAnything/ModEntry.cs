@@ -46,6 +46,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>The previous menus shown before the current lookup UI was opened.</summary>
         private readonly Stack<IClickableMenu> PreviousMenus = new Stack<IClickableMenu>();
 
+        /// <summary>Provides utility methods for interacting with the game code.</summary>
+        private GameHelper GameHelper;
+
         /// <summary>Finds and analyses lookup targets in the world.</summary>
         private TargetFactory TargetFactory;
 
@@ -97,8 +100,9 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // initialise functionality
             var customFarming = new CustomFarmingReduxIntegration(this.Helper.ModRegistry, this.Monitor);
-            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, customFarming);
-            this.DebugInterface = new DebugInterface(this.TargetFactory, this.Config, this.Monitor);
+            this.GameHelper = new GameHelper();
+            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, this.GameHelper, customFarming);
+            this.DebugInterface = new DebugInterface(this.GameHelper, this.TargetFactory, this.Config, this.Monitor);
 
             // hook up events
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
@@ -115,7 +119,7 @@ namespace Pathoschild.Stardew.LookupAnything
         private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
             // reset low-level cache once per game day (used for expensive queries that don't change within a day)
-            GameHelper.ResetCache(this.Metadata, this.Helper.Reflection, this.Helper.Translation, this.Monitor);
+            this.GameHelper.ResetCache(this.Metadata, this.Helper.Reflection, this.Helper.Translation, this.Monitor);
         }
 
         /// <summary>The method invoked when the player presses a button.</summary>
@@ -126,7 +130,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // disables input until a world has been loaded
             if (!Context.IsWorldReady)
                 return;
-        
+
             // perform bound action
             this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
             {
@@ -203,7 +207,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // disable lookups if metadata is invalid
             if (!this.IsDataValid)
             {
-                GameHelper.ShowErrorMessage("The mod doesn't seem to be installed correctly: its data.json file is missing or corrupt.");
+                this.GameHelper.ShowErrorMessage("The mod doesn't seem to be installed correctly: its data.json file is missing or corrupt.");
                 return;
             }
 
@@ -245,7 +249,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     if (!this.Config.HideOnKeyUp || !(Game1.activeClickableMenu is LookupMenu))
                         this.PreviousMenus.Push(Game1.activeClickableMenu);
                 }
-                Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor);
+                Game1.activeClickableMenu = new LookupMenu(this.GameHelper, subject, this.Metadata, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor);
             });
         }
 
@@ -257,7 +261,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // menu under cursor
             if (lookupMode == LookupMode.Cursor)
             {
-                Vector2 cursorPos = GameHelper.GetScreenCoordinatesFromCursor();
+                Vector2 cursorPos = this.GameHelper.GetScreenCoordinatesFromCursor();
 
                 // try menu
                 if (Game1.activeClickableMenu != null)

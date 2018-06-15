@@ -29,11 +29,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public TreeSubject(Tree tree, Vector2 tile, ITranslationHelper translations)
-            : base(TreeSubject.GetName(translations, tree), null, translations.Get(L10n.Types.Tree), translations)
+        public TreeSubject(GameHelper gameHelper, Tree tree, Vector2 tile, ITranslationHelper translations)
+            : base(gameHelper, TreeSubject.GetName(translations, tree), null, translations.Get(L10n.Types.Tree), translations)
         {
             this.Target = tree;
             this.Tile = tile;
@@ -49,7 +50,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // get growth stage
             WildTreeGrowthStage stage = (WildTreeGrowthStage)Math.Min(tree.growthStage.Value, (int)WildTreeGrowthStage.Tree);
             bool isFullyGrown = stage == WildTreeGrowthStage.Tree;
-            yield return new GenericField(this.Translate(L10n.Tree.Stage), isFullyGrown
+            yield return new GenericField(this.GameHelper, this.Translate(L10n.Tree.Stage), isFullyGrown
                 ? this.Translate(L10n.Tree.StageDone)
                 : this.Translate(L10n.Tree.StagePartial, new { stageName = this.Translate(L10n.For(stage)), step = (int)stage, max = (int)WildTreeGrowthStage.Tree })
             );
@@ -59,16 +60,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 string label = this.Translate(L10n.Tree.NextGrowth);
                 if (Game1.IsWinter && Game1.currentLocation.Name != Constant.LocationNames.Greenhouse)
-                    yield return new GenericField(label, this.Translate(L10n.Tree.NextGrowthWinter));
+                    yield return new GenericField(this.GameHelper, label, this.Translate(L10n.Tree.NextGrowthWinter));
                 else if (stage == WildTreeGrowthStage.SmallTree && this.HasAdjacentTrees(this.Tile))
-                    yield return new GenericField(label, this.Translate(L10n.Tree.NextGrowthAdjacentTrees));
+                    yield return new GenericField(this.GameHelper, label, this.Translate(L10n.Tree.NextGrowthAdjacentTrees));
                 else
-                    yield return new GenericField(label, this.Translate(L10n.Tree.NextGrowthRandom, new { stage = this.Translate(L10n.For(stage + 1)) }));
+                    yield return new GenericField(this.GameHelper, label, this.Translate(L10n.Tree.NextGrowthRandom, new { stage = this.Translate(L10n.For(stage + 1)) }));
             }
 
             // get seed
             if (isFullyGrown)
-                yield return new GenericField(this.Translate(L10n.Tree.HasSeed), this.Stringify(tree.hasSeed.Value));
+                yield return new GenericField(this.GameHelper, this.Translate(L10n.Tree.HasSeed), this.Stringify(tree.hasSeed.Value));
         }
 
         /// <summary>Get the data to display for this subject.</summary>

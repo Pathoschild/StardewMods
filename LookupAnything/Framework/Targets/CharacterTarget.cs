@@ -20,12 +20,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="type">The target type.</param>
         /// <param name="obj">The underlying in-game object.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public CharacterTarget(TargetType type, NPC obj, Vector2? tilePosition, IReflectionHelper reflectionHelper)
-            : base(type, obj, tilePosition)
+        public CharacterTarget(GameHelper gameHelper, TargetType type, NPC obj, Vector2? tilePosition, IReflectionHelper reflectionHelper)
+            : base(gameHelper, type, obj, tilePosition)
         {
             this.Reflection = reflectionHelper;
         }
