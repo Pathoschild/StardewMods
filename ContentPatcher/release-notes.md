@@ -3,6 +3,7 @@
 # Release notes
 ## 1.4
 * Updated for Stardew Valley 1.3 (including multiplayer support).
+* Added `HasMod` condition to enable automatic compatibility patches.
 * Added support for deleting entries via `EditData`.
 
 ## 1.3.1

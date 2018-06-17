@@ -207,6 +207,7 @@ condition   | description
 `Language`  | The game's current language. Possible values: <table><tr><th>code</th><th>meaning</th></tr><tr><td>`de`</td><td>German</td></tr><tr><td>`en`</td><td>English</td></tr><tr><td>`es`</td><td>Spanish</td></tr><tr><td>`ja`</td><td>Japanese</td></tr><tr><td>`ru`</td><td>Russian</td></tr><tr><td>`pt`</td><td>Portuguese</td></tr><tr><td>`zh`</td><td>Chinese</td></tr></table></ul>
 `Season`    | The season name. Possible values: `spring`, `summer`, `fall`, and `winter`.
 `Weather`   | The weather name. Possible values: `sun`, `rain`, `snow`, and `storm`.
+`HasMod`    | The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
 
 Special note about `"Action": "Load"`:
 * Each file can only be loaded by one patch. Content Patcher will allow multiple loaders, so
@@ -218,6 +219,7 @@ Special note about `"Action": "Load"`:
   `season: "Spring"` | `season: "Summer"`     | both are loaded correctly (seasons never overlap).
   `day: 1`           | `dayOfWeek: "Tuesday"` | both are loaded correctly (1st day of month is never Tuesday).
   `day: 1`           | `weather: "Sun"`       | error: sun could happen on the first of a month.
+* The following conditions **cannot** be used: `HasMod`.
 
 ### Player configuration
 You can let players configure your mod using a `config.json` file. This requires a bit more upfront

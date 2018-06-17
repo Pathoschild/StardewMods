@@ -29,7 +29,8 @@ namespace ContentPatcher.Framework
             [ConditionKey.DayOfWeek] = new InvariantHashSet(Enum.GetNames(typeof(DayOfWeek))),
             [ConditionKey.Language] = new InvariantHashSet(Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString())),
             [ConditionKey.Season] = new InvariantHashSet(new[] { "Spring", "Summer", "Fall", "Winter" }),
-            [ConditionKey.Weather] = new InvariantHashSet(Enum.GetNames(typeof(Weather)))
+            [ConditionKey.Weather] = new InvariantHashSet(Enum.GetNames(typeof(Weather))),
+            [ConditionKey.HasMod] = null // no restrictions
         };
 
         /// <summary>Condition keys which are guaranteed to only have one value and can be used in conditions.</summary>

@@ -135,6 +135,13 @@ namespace ContentPatcher.Framework
             }
         }
 
+        /// <summary>Set the initial context values that aren't expected to change.</summary>
+        /// <param name="installedMods">The installed mod IDs.</param>
+        public void SetInitialContext(string[] installedMods)
+        {
+            this.ConditionContext.Set(ConditionKey.HasMod, installedMods);
+        }
+
         /// <summary>Update the current context.</summary>
         /// <param name="contentHelper">The content helper through which to invalidate assets.</param>
         /// <param name="language">The current language.</param>

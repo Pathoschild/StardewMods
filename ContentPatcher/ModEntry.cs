@@ -57,11 +57,14 @@ namespace ContentPatcher
             // init
             this.Config = helper.ReadConfig<ModConfig>();
             this.PatchManager = new PatchManager(this.Monitor, this.ConditionFactory, this.Config.VerboseLog, helper.Content.NormaliseAssetName, helper.Content.CurrentLocaleConstant);
-            this.LoadContentPacks();
+            string[] contentPackIDs = this.LoadContentPacks().ToArray();
 
             // register patcher
             helper.Content.AssetLoaders.Add(this.PatchManager);
             helper.Content.AssetEditors.Add(this.PatchManager);
+            this.PatchManager.SetInitialContext(
+                installedMods: contentPackIDs.Concat(helper.ModRegistry.GetAll().Select(p => p.UniqueID)).ToArray()
+            );
             this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null);
 
             // set up events
@@ -152,8 +155,9 @@ namespace ContentPatcher
         }
 
         /// <summary>Load the patches from all registered content packs.</summary>
+        /// <returns>Returns the loaded content pack IDs.</returns>
         [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "The value is used immediately, so this isn't an issue.")]
-        private void LoadContentPacks()
+        private IEnumerable<string> LoadContentPacks()
         {
             ConfigFileHandler configFileHandler = new ConfigFileHandler(this.ConfigFileName, this.PatchManager.ParseCommaDelimitedField, (pack, label, reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {label}: {reason}"));
             foreach (ManagedContentPack pack in this.Helper.GetContentPacks().Select(p => new ManagedContentPack(p)))
@@ -219,7 +223,10 @@ namespace ContentPatcher
                 catch (Exception ex)
                 {
                     this.Monitor.Log($"Error loading content pack '{pack.Manifest.Name}'. Technical details:\n{ex}", LogLevel.Error);
+                    continue;
                 }
+
+                yield return pack.Manifest.UniqueID;
             }
         }
 

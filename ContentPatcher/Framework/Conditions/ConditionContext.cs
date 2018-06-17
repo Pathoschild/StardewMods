@@ -30,7 +30,10 @@ namespace ContentPatcher.Framework.Conditions
         public ConditionContext(LocalizedContentManager.LanguageCode locale, HashSet<ConditionKey> singleValueConditions)
         {
             this.SingleValueConditions = singleValueConditions;
+
+            // set defaults
             this.Set(locale, null, null);
+            this.Set(ConditionKey.HasMod, new string[0]);
         }
 
         /// <summary>Update the current context.</summary>

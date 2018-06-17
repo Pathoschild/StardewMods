@@ -16,6 +16,9 @@ namespace ContentPatcher.Framework.Conditions
         Season,
 
         /// <summary>The current weather.</summary>
-        Weather
+        Weather,
+
+        /// <summary>An installed mod ID.</summary>
+        HasMod
     };
 }
