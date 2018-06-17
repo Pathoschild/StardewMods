@@ -43,12 +43,12 @@ namespace ContentPatcher.Framework.Conditions
         }
 
         /// <summary>Update the <see cref="Value"/> with the given tokens.</summary>
-        /// <param name="context">The condition context.</param>
+        /// <param name="tokenisableConditions">The conditions which can be used in tokens.</param>
         /// <returns>Returns whether the value changed.</returns>
-        public bool UpdateContext(ConditionContext context)
+        public bool UpdateContext(IDictionary<ConditionKey, string> tokenisableConditions)
         {
             string prevValue = this.Value;
-            this.Value = this.Apply(this.Raw, context.Values);
+            this.Value = this.Apply(this.Raw, tokenisableConditions);
             return this.Value != prevValue;
         }
 

@@ -40,8 +40,9 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Update the patch data when the context changes.</summary>
         /// <param name="context">The condition context.</param>
+        /// <param name="tokenisableConditions">The conditions which can be used in tokens.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        bool UpdateContext(ConditionContext context);
+        bool UpdateContext(ConditionContext context, IDictionary<ConditionKey, string> tokenisableConditions);
 
         /// <summary>Load the initial version of the asset.</summary>
         /// <typeparam name="T">The asset type.</typeparam>

@@ -56,7 +56,7 @@ namespace ContentPatcher
         {
             // init
             this.Config = helper.ReadConfig<ModConfig>();
-            this.PatchManager = new PatchManager(this.Monitor, this.ConditionFactory, helper.Content.CurrentLocaleConstant, this.Config.VerboseLog, helper.Content.NormaliseAssetName);
+            this.PatchManager = new PatchManager(this.Monitor, this.ConditionFactory, this.Config.VerboseLog, helper.Content.NormaliseAssetName, helper.Content.CurrentLocaleConstant);
             this.LoadContentPacks();
 
             // register patcher
@@ -321,6 +321,15 @@ namespace ContentPatcher
                 {
                     if (!this.PatchManager.TryParseConditions(entry.When, out conditions, out string error))
                         return TrackSkip($"the {nameof(PatchConfig.When)} field is invalid: {error}.");
+                }
+
+                // validate conditions
+                if (action == PatchType.Load)
+                {
+                    ConditionKey[] tokenisable = this.ConditionFactory.GetTokenisableConditions().ToArray();
+                    ConditionKey[] invalid = conditions.Keys.Except(tokenisable).ToArray();
+                    if (invalid.Any())
+                        return TrackSkip($"disabled: can't use these conditions with {nameof(PatchConfig.Action)} {PatchType.Load}: [{string.Join(", ", invalid)}]");
                 }
 
                 // get patch instance

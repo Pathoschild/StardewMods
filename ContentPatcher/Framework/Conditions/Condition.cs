@@ -31,8 +31,12 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="context">The condition context.</param>
         public bool IsMatch(ConditionContext context)
         {
-            string contextValue = context.GetValue(this.Key);
-            return this.Values.Contains(contextValue);
+            foreach (string conditionValue in context.GetValues(this.Key))
+            {
+                if (this.Values.Contains(conditionValue))
+                    return true;
+            }
+            return false;
         }
     }
 }

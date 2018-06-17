@@ -32,6 +32,15 @@ namespace ContentPatcher.Framework
             [ConditionKey.Weather] = new InvariantHashSet(Enum.GetNames(typeof(Weather)))
         };
 
+        /// <summary>Condition keys which are guaranteed to only have one value and can be used in conditions.</summary>
+        private readonly HashSet<ConditionKey> TokenisableConditions = new HashSet<ConditionKey>(new[] {
+            ConditionKey.Day,
+            ConditionKey.DayOfWeek,
+            ConditionKey.Language,
+            ConditionKey.Season,
+            ConditionKey.Weather
+        });
+
 
         /*********
         ** Public methods
@@ -42,11 +51,24 @@ namespace ContentPatcher.Framework
             return new ConditionDictionary(this.ValidValues);
         }
 
+        /// <summary>Construct a condition context.</summary>
+        /// <param name="locale">The current language.</param>
+        public ConditionContext BuildContext(LocalizedContentManager.LanguageCode locale)
+        {
+            return new ConditionContext(locale, this.TokenisableConditions);
+        }
+
         /// <summary>Get all valid condition keys.</summary>
         public IEnumerable<ConditionKey> GetValidConditions()
         {
             foreach (ConditionKey key in Enum.GetValues(typeof(ConditionKey)))
                 yield return key;
+        }
+
+        /// <summary>Get all valid condition keys which can be used in tokens.</summary>
+        public IEnumerable<ConditionKey> GetTokenisableConditions()
+        {
+            return this.TokenisableConditions;
         }
 
         /// <summary>Get the valid values for a condition key.</summary>
@@ -81,7 +103,7 @@ namespace ContentPatcher.Framework
         public IEnumerable<IDictionary<ConditionKey, string>> GetApplicablePermutationsForTheseConditions(ISet<ConditionKey> keys, ConditionDictionary conditions)
         {
             // get possible values for given conditions
-            IDictionary<ConditionKey, InvariantHashSet> possibleValues = this.GetPossibleValues(conditions);
+            IDictionary<ConditionKey, InvariantHashSet> possibleValues = this.GetPossibleTokenisableValues(conditions);
 
             // restrict permutations to relevant keys
             foreach (ConditionKey key in possibleValues.Keys.ToArray())
@@ -114,11 +136,11 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get all possible values of the given conditions, taking into account the interactions between them (e.g. day one isn't possible without mondays).</summary>
         /// <param name="conditions">The conditions to check.</param>
-        public IDictionary<ConditionKey, InvariantHashSet> GetPossibleValues(ConditionDictionary conditions)
+        public IDictionary<ConditionKey, InvariantHashSet> GetPossibleTokenisableValues(ConditionDictionary conditions)
         {
             // get applicable values
             IDictionary<ConditionKey, InvariantHashSet> values = new Dictionary<ConditionKey, InvariantHashSet>();
-            foreach (ConditionKey key in this.GetValidConditions())
+            foreach (ConditionKey key in this.GetTokenisableConditions())
                 values[key] = new InvariantHashSet(conditions.GetImpliedValues(key));
 
             // filter days per days-of-week
@@ -160,10 +182,10 @@ namespace ContentPatcher.Framework
         /// <param name="right">The second set of conditions to compare.</param>
         public bool CanConditionsOverlap(ConditionDictionary left, ConditionDictionary right)
         {
-            IDictionary<ConditionKey, InvariantHashSet> leftValues = this.GetPossibleValues(left);
-            IDictionary<ConditionKey, InvariantHashSet> rightValues = this.GetPossibleValues(right);
+            IDictionary<ConditionKey, InvariantHashSet> leftValues = this.GetPossibleTokenisableValues(left);
+            IDictionary<ConditionKey, InvariantHashSet> rightValues = this.GetPossibleTokenisableValues(right);
 
-            foreach (ConditionKey key in this.GetValidConditions())
+            foreach (ConditionKey key in this.GetTokenisableConditions())
             {
                 if (!leftValues[key].Intersect(rightValues[key]).Any())
                     return false;

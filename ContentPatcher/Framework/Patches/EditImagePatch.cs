@@ -57,11 +57,12 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>Update the patch data when the context changes.</summary>
         /// <param name="context">The condition context.</param>
+        /// <param name="tokenisableConditions">The conditions which can be used in tokens.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        public override bool UpdateContext(ConditionContext context)
+        public override bool UpdateContext(ConditionContext context, IDictionary<ConditionKey, string> tokenisableConditions)
         {
-            bool localAssetChanged = this.FromLocalAsset.UpdateContext(context);
-            return base.UpdateContext(context) || localAssetChanged;
+            bool localAssetChanged = this.FromLocalAsset.UpdateContext(tokenisableConditions);
+            return base.UpdateContext(context, tokenisableConditions) || localAssetChanged;
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>

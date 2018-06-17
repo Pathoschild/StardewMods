@@ -49,8 +49,9 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Update the patch data when the context changes.</summary>
         /// <param name="context">The condition context.</param>
+        /// <param name="tokenisableConditions">The conditions which can be used in tokens.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        public virtual bool UpdateContext(ConditionContext context)
+        public virtual bool UpdateContext(ConditionContext context, IDictionary<ConditionKey, string> tokenisableConditions)
         {
             // update conditions
             bool conditionsChanged;
@@ -61,7 +62,7 @@ namespace ContentPatcher.Framework.Patches
             }
 
             // update asset name
-            bool targetChanged = this.TokenableAssetName.UpdateContext(context);
+            bool targetChanged = this.TokenableAssetName.UpdateContext(tokenisableConditions);
             this.AssetName = this.NormaliseAssetName(this.TokenableAssetName.Value);
 
             return conditionsChanged || targetChanged;

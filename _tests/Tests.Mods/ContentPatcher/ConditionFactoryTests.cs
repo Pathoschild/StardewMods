@@ -27,6 +27,9 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             [ConditionKey.Weather] = $"{Weather.Rain}, {Weather.Snow}, {Weather.Storm}, {Weather.Sun}"
         };
 
+        /// <summary>Condition keys which are guaranteed to only have one value and can be used in conditions.</summary>
+        private readonly IEnumerable<ConditionKey> TokenisableConditions = new[] { ConditionKey.Day, ConditionKey.DayOfWeek, ConditionKey.Language, ConditionKey.Season, ConditionKey.Weather };
+
         /// <summary>The valid days of week.</summary>
         private readonly IEnumerable<DayOfWeek> DaysOfWeek = (from DayOfWeek value in Enum.GetValues(typeof(DayOfWeek)) select value).ToArray();
 
@@ -116,7 +119,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         /****
         ** GetPossibleValues
         ****/
-        /// <summary>Test that <see cref="ConditionFactory.GetPossibleValues"/> returns the expected values given only implied conditions.</summary>
+        /// <summary>Test that <see cref="ConditionFactory.GetPossibleTokenisableValues"/> returns the expected values given only implied conditions.</summary>
         [TestCase]
         public void GetPossibleValues_WithOnlyImpliedConditions()
         {
@@ -125,14 +128,14 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             ConditionDictionary conditions = factory.BuildEmpty();
 
             // act
-            IDictionary<ConditionKey, InvariantHashSet> possibleValues = factory.GetPossibleValues(conditions);
+            IDictionary<ConditionKey, InvariantHashSet> possibleValues = factory.GetPossibleTokenisableValues(conditions);
 
             // assert
-            foreach(ConditionKey key in Enum.GetValues(typeof(ConditionKey)))
+            foreach (ConditionKey key in this.TokenisableConditions)
                 this.SortAndCommaDelimit(possibleValues[key]).Should().Be(this.CommaDelimitedValues[key], $"should match for {key}");
         }
 
-        /// <summary>Test that <see cref="ConditionFactory.GetPossibleValues"/> returns the expected values given only implied conditions and restricted days of week.</summary>
+        /// <summary>Test that <see cref="ConditionFactory.GetPossibleTokenisableValues"/> returns the expected values given only implied conditions and restricted days of week.</summary>
         [TestCase]
         public void GetPossibleValues_WithImpliedConditionsAndRestrictedDaysOfWeek()
         {
@@ -142,7 +145,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             conditions.Add(ConditionKey.DayOfWeek, new[] { DayOfWeek.Tuesday.ToString(), DayOfWeek.Wednesday.ToString() });
 
             // act
-            IDictionary<ConditionKey, InvariantHashSet> possibleValues = factory.GetPossibleValues(conditions);
+            IDictionary<ConditionKey, InvariantHashSet> possibleValues = factory.GetPossibleTokenisableValues(conditions);
 
             // assert
             this.SortAndCommaDelimit(possibleValues[ConditionKey.Day]).Should().Be("10, 16, 17, 2, 23, 24, 3, 9", $"should match for {ConditionKey.Day}");
@@ -152,7 +155,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             this.SortAndCommaDelimit(possibleValues[ConditionKey.Weather]).Should().Be(this.CommaDelimitedValues[ConditionKey.Weather], $"should match for {ConditionKey.Weather}");
         }
 
-        /// <summary>Test that <see cref="ConditionFactory.GetPossibleValues"/> returns the expected values given a subset of each condition's possible values.</summary>
+        /// <summary>Test that <see cref="ConditionFactory.GetPossibleTokenisableValues"/> returns the expected values given a subset of each condition's possible values.</summary>
         [TestCase]
         public void GetPossibleValues_WithSubsetForEachCondition()
         {
@@ -166,7 +169,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             conditions.Add(ConditionKey.Weather, new InvariantHashSet { Weather.Rain.ToString(), Weather.Sun.ToString() });
 
             // act
-            IDictionary<ConditionKey, InvariantHashSet> possibleValues = factory.GetPossibleValues(conditions);
+            IDictionary<ConditionKey, InvariantHashSet> possibleValues = factory.GetPossibleTokenisableValues(conditions);
 
             // assert
             this.SortAndCommaDelimit(possibleValues[ConditionKey.Day]).Should().Be("1, 28", $"should match for {ConditionKey.Day}");

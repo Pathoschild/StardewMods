@@ -55,14 +55,14 @@ namespace ContentPatcher.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="conditionFactory">Handles constructing, permuting, and updating conditions.</param>
-        /// <param name="language">The current language.</param>
         /// <param name="verboseLog">Whether to enable verbose logging.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public PatchManager(IMonitor monitor, ConditionFactory conditionFactory, LocalizedContentManager.LanguageCode language, bool verboseLog, Func<string, string> normaliseAssetName)
+        /// <param name="language">The current language.</param>
+        public PatchManager(IMonitor monitor, ConditionFactory conditionFactory, bool verboseLog, Func<string, string> normaliseAssetName, LocalizedContentManager.LanguageCode language)
         {
             this.Monitor = monitor;
             this.ConditionFactory = conditionFactory;
-            this.ConditionContext = new ConditionContext(language);
+            this.ConditionContext = conditionFactory.BuildContext(language);
             this.Verbose = verboseLog;
             this.NormaliseAssetName = normaliseAssetName;
         }
@@ -145,7 +145,8 @@ namespace ContentPatcher.Framework
             this.VerboseLog("Propagating context...");
 
             // update context
-            this.ConditionContext.Update(language, date, weather);
+            this.ConditionContext.Set(language, date, weather);
+            IDictionary<ConditionKey, string> tokenisableConditions = this.ConditionContext.GetSingleValueConditions();
 
             // update patches
             InvariantHashSet reloadAssetNames = new InvariantHashSet();
@@ -164,7 +165,7 @@ namespace ContentPatcher.Framework
                 bool wasApplied = patch.MatchesContext;
 
                 // update patch
-                bool changed = patch.UpdateContext(this.ConditionContext);
+                bool changed = patch.UpdateContext(this.ConditionContext, tokenisableConditions);
                 bool shouldApply = patch.MatchesContext;
 
                 // track patches to reload
@@ -220,7 +221,7 @@ namespace ContentPatcher.Framework
         public void Add(IPatch patch)
         {
             // set initial context
-            patch.UpdateContext(this.ConditionContext);
+            patch.UpdateContext(this.ConditionContext, this.ConditionContext.GetSingleValueConditions());
 
             // validate loader
             if (patch.Type == PatchType.Load)
@@ -365,14 +366,18 @@ namespace ContentPatcher.Framework
                 }
 
                 // restrict to allowed values
-                InvariantHashSet validValues = new InvariantHashSet(this.ConditionFactory.GetValidValues(key));
+                string[] rawValidValues = this.ConditionFactory.GetValidValues(key)?.ToArray();
+                if (rawValidValues?.Any() == true)
                 {
-                    string[] invalidValues = values.Except(validValues, StringComparer.InvariantCultureIgnoreCase).ToArray();
-                    if (invalidValues.Any())
+                    InvariantHashSet validValues = new InvariantHashSet(rawValidValues);
                     {
-                        error = $"invalid {key} values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", validValues)}";
-                        conditions = null;
-                        return false;
+                        string[] invalidValues = values.Except(validValues, StringComparer.InvariantCultureIgnoreCase).ToArray();
+                        if (invalidValues.Any())
+                        {
+                            error = $"invalid {key} values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", validValues)}";
+                            conditions = null;
+                            return false;
+                        }
                     }
                 }
 
