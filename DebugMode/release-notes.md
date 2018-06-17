@@ -3,8 +3,7 @@
 # Release notes
 ## 1.9
 * Updated for Stardew Valley 1.3 (including multiplayer support).
-* Added Russian and Spanish translations. (Thanks to fadedDexofan and alca259!)
-* Improved German translations. (Thanks to dezqo!)
+* Improved translations. Thanks to alca259 (added Spanish), dezqo (German), and fadedDexofan (added Russian)!
 
 ## 1.8
 * Added submenu, event, and festival info to overlay.
@@ -12,7 +11,7 @@
 
 ## 1.7.1
 * Updated to SMAPI 2.4.
-* Improved German translations. (Thanks to Husky110!)
+* Improved translations. Thanks to Husky110 (German)!
 
 ## 1.7
 * Updated to SMAPI 2.1.
@@ -21,13 +20,13 @@
 * Switched to SMAPI update checks.
 
 ## 1.6.1
-* Added Portuguese and Spanish translations. (Thanks to Fabilows and ThomasGabrielDelavault respectively!)
+* Improved translations. Thanks to Fabilows (added Portuguese) and ThomasGabrielDelavault (added Spanish)!
 
 ## 1.6
 * Updated to SMAPI 1.14.
 * Added translation support.
-* Added Chinese and German translations. (Thanks to yuwenlan and Sasara respectively!)
 * `F8` now shows the game's debug command input in debug mode.
+* Improved translations. Thanks to Sasara (added German) and yuwenlan (added Chinese)!
 
 ## 1.5
 * Updated for Stardew Valley 1.2.

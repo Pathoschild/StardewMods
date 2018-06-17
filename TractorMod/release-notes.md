@@ -9,7 +9,7 @@
   * pickaxe: clear weeds.
 * Added support for tractor hats.
 * Fixed pickaxe not breaking boulders in the mines.
-* Added Spanish translations. (Thanks to alca259!)
+* Improved translations. Thanks to alca259 (added Spanish)!
 
 ## 4.4.1
 * Fixed error opening the game menu if the tractor hasn't been bought yet (thanks to f4iTh!).
@@ -28,7 +28,7 @@
 * Fixed summon key working when a menu is open.
 * Fixed seeds and fertiliser being placed under giant crops.
 * Improved tractor and garage sprites. (Thanks to allanbachti!)
-* Improved German translations. (Thanks to Husky110!)
+* Improved translations. Thanks to Husky110 (German)!
 
 ## 4.2
 * Updated to SMAPI 2.1.
@@ -36,8 +36,8 @@
 * Added support for seasonal textures.
 * Added compatibility with Farm Expansion and Seed Bag.
 * Added support for controller & mouse bindings.
-* Added Portuguese translations by Fabilows and [@TaelFayre](https://github.com/taelfayre).
 * Switched to SMAPI update checks.
+* Improved translations. Thanks to Fabilows & TaelFayre (added Portuguese)!
 
 ## 4.1
 New features:
@@ -59,8 +59,8 @@ Feature changes:
 * Pickaxe no longer breaks boulders if your pickaxe isn't upgraded enough.
 * Scythe now clears dead crops.
 * Hoe now digs up artifact spots.
-* Added Chinese and Russian translations by yuwenlan and Ereb respectively.
 * Added warning when translation files are missing.
+* Improved translations. Thanks to Ereb (added Russian) and yuwenlan (added Chinese)!
 
 Fixes:
 * Fixed tractor letting you phase through objects in some cases.
@@ -83,13 +83,13 @@ This is a rewrite of the original TractorMod by PhthaloBlue (@lambui).
 * Simplified the `config.json`.
 * Added support for clearing dirt and breaking rocks with the pickaxe.
 * Added translation support.
-* Added German translations by Sasara.
 * Removed summon-horse key (but kept summon-tractor key).
 * Removed tractor mode activated by holding mouse button (now only when riding the tractor).
 * Overhauled data saving (previous data will be migrated automatically).
 * Fixed hoe destroying objects.
 * Fixed tractor being summonable before a tractor garage is built.
 * Fixed tractor speed debuff lasting a second after you dismount tractor.
+* Improved translations. Thanks to Sasara (added German)!
 
 ## 3.2.1 (lambui)
 * Fixed initialisation errors.

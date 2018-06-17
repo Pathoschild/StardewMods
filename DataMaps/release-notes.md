@@ -3,7 +3,7 @@
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added support for garden pots to crop overlays.
 * Improved performance with more nuanced update rate.
-* Added Russian and Spanish translations. (Thanks to fadedDexofan and alca259!)
+* Improved translations. Thanks to alca259 (added Spanish) and fadedDexofan (added Russian)!
 
 ## 1.3
 * Updated to SMAPI 2.4.
@@ -11,7 +11,7 @@
 * Added support for hiding individual maps in `config.json`.
 * Improved consistency and sorted by name.
 * Fixed error in the Cobalt integration.
-* Added Chinese and German translations. (Thanks to yuwenlan and Husky110!)
+* Improved translations. Thanks to Husky110 (added German) and yuwenlan (added Chinese)!
 
 ### 1.2
 * Added: point at a scarecrow/sprinkler/etc in its data map to highlight that one's range.
