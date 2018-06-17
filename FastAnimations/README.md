@@ -16,26 +16,39 @@ speed up many animations (currently eating, drinking, milking, shearing, and bre
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
 file if you want.
 
-You can choose how fast each animation runs. Each value is a multiple of the original speed (e.g. `1` for
-normal speed or `2` for double speed):
+* You can choose how fast each animation runs. Each value is a multiple of the original speed (e.g. `1` for
+normal speed or `2` for double speed).
 
-setting              | default | what it affects
-:------------------- | :------ | :------------------
-`BreakGeodeSpeed`    | 20×     | How fast the blacksmiths breaks geodes for you.
-`CasinoSlotsSpeed`   | 8×      | How fast the casino slots turn.
-`EatAndDrinkSpeed`   | 10×     | How fast you eat and drink.
-`MilkSpeed`          | 5×      | How fast you use the milk pail.
-`ShearSpeed`         | 5×      | How fast you use the shears.
-`TitleMenuTransitionSpeed` | 10× | How fast the title menu transitions between screens.
-`LoadGameBlinkSpeed` | 2×      | How fast the blinking-slot delay happens after you click a load-save slot.
-`FishingSpeed`       | 1×      | How fast you cast and reel when fishing (doesn't affect the minigame).<br /><small>(Suggested value: 2×.)</small>
-`TreeFallingSpeed`   | 1×      | How fast trees fall after you chop them down.<br /><small>(Suggested value: 3×.)</small>
+  Player animations:
 
-Other options:
+  setting              | default | what it affects
+  :------------------- | :------ | :------------------
+  `EatAndDrinkSpeed`   | 10×     | How fast you eat and drink.
+  `FishingSpeed`       | 1×      | How fast you cast and reel when fishing (doesn't affect the minigame).<br /><small>(Suggested value: 2×.)</small>
+  `MilkSpeed`          | 5×      | How fast you use the milk pail.
+  `ShearSpeed`         | 5×      | How fast you use the shears.
 
-setting              | default | what it affects
-:------------------- | :------ | :------------------
-`DisableEatAndDrinkConfirmation` | `false` | If `true`, the confirmation prompt before eating or drinking won't be shown.
+  World animations:
+
+  setting              | default | what it affects
+  :------------------- | :------ | :------------------
+  `BreakGeodeSpeed`    | 20×     | How fast the blacksmiths breaks geodes for you.
+  `CasinoSlotsSpeed`   | 8×      | How fast the casino slots turn.
+  `PamBusSpeed`        | 6×      | How fast Pam drives her bus to and from the desert.
+  `TreeFallingSpeed`   | 1×      | How fast trees fall after you chop them down.<br /><small>(Suggested value: 3×.)</small>
+
+  UI animations:
+
+  setting              | default | what it affects
+  :------------------- | :------ | :------------------
+  `TitleMenuTransitionSpeed` | 10× | How fast the title menu transitions between screens.
+  `LoadGameBlinkSpeed` | 2×      | How fast the blinking-slot delay happens after you click a load-save slot.
+
+* Other options:
+
+  setting              | default | what it affects
+  :------------------- | :------ | :------------------
+  `DisableEatAndDrinkConfirmation` | `false` | If `true`, the confirmation prompt before eating or drinking won't be shown.
 
 ## Compatibility
 Fast Animations is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and

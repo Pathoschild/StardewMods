@@ -91,10 +91,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <summary>Get the enabled animation handlers.</summary>
         private IEnumerable<IAnimationHandler> GetHandlers(ModConfig config)
         {
-            if (config.BreakGeodeSpeed > 1)
-                yield return new BreakingGeodeHandler(config.BreakGeodeSpeed);
-            if (config.CasinoSlotsSpeed > 1)
-                yield return new CasinoSlotsHandler(config.CasinoSlotsSpeed, this.Helper.Reflection);
+            // player animations
             if (config.EatAndDrinkSpeed > 1)
                 yield return new EatingHandler(this.Helper.Reflection, config.EatAndDrinkSpeed, config.DisableEatAndDrinkConfirmation);
             if (config.FishingSpeed > 1)
@@ -103,11 +100,21 @@ namespace Pathoschild.Stardew.FastAnimations
                 yield return new MilkingHandler(config.MilkSpeed);
             if (config.ShearSpeed > 1)
                 yield return new ShearingHandler(config.ShearSpeed);
+
+            // world animations
+            if (config.BreakGeodeSpeed > 1)
+                yield return new BreakingGeodeHandler(config.BreakGeodeSpeed);
+            if (config.CasinoSlotsSpeed > 1)
+                yield return new CasinoSlotsHandler(config.CasinoSlotsSpeed, this.Helper.Reflection);
+            if (config.PamBusSpeed > 1)
+                yield return new PamBusHandler(config.PamBusSpeed);
             if (config.TreeFallSpeed > 1)
                 yield return new TreeFallingHandler(config.TreeFallSpeed, this.Helper.Reflection);
+
+            // UI animations
             if (config.TitleMenuTransitionSpeed > 1)
                 yield return new TitleMenuHandler(config.TitleMenuTransitionSpeed, this.Helper.Reflection);
-            if(config.LoadGameBlinkSpeed > 1)
+            if (config.LoadGameBlinkSpeed > 1)
                 yield return new LoadGameMenuHandler(config.LoadGameBlinkSpeed, this.Helper.Reflection);
         }
     }

@@ -36,6 +36,7 @@
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\IAnimationHandler.cs" />
     <Compile Include="Framework\BaseAnimationHandler.cs" />
+    <Compile Include="Handlers\PamBusHandler.cs" />
     <Compile Include="Handlers\CasinoSlotsHandler.cs" />
     <Compile Include="Handlers\BreakingGeodeHandler.cs" />
     <Compile Include="Handlers\FishingHandler.cs" />

@@ -3,8 +3,10 @@
 # Release notes
 ## 1.6
 * Updated for Stardew Valley 1.3 (including multiplayer support).
-* Added support for title menu transitions.
-* Added support for the blinking-slot delay after you click a load-save slot. (Thanks to Cat!)
+* Added support for...
+  * Pam's bus when driving to/from desert;
+  * title menu transitions;
+  * blinking-slot delay after you click a load-save slot (thanks to Cat!).
 
 ## 1.5
 * Updated to SMAPI 2.4.
