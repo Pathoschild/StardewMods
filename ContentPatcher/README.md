@@ -79,7 +79,7 @@ The `content.json` file has three main fields:
 
 field          | purpose
 -------------- | -------
-`Format`       | The format version (just use `1.3`).
+`Format`       | The format version (just use `1.4`).
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
 `ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-configuration).
 
@@ -87,7 +87,7 @@ Here's a quick example of each possible patch type (explanations below):
 
 ```js
 {
-  "Format": "1.3",
+  "Format": "1.4",
   "Changes": [
        // replace an entire file
        {
@@ -361,7 +361,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-    "Format": "1.3",
+    "Format": "1.4",
     "ConfigSchema": {
         "Material": {
             "AllowValues": "Wood, Metal"
@@ -414,7 +414,7 @@ For example, this gives the farmhouse a different appearance in each season:
 
 ```js
 {
-    "Format": "1.3",
+    "Format": "1.4",
     "Changes": [
         {
             "Action": "EditImage",
@@ -429,7 +429,7 @@ You can use multiple tokens and conditions for more dynamic changes:
 
 ```js
 {
-    "Format": "1.3",
+    "Format": "1.4",
     "Changes": [
         {
             "Action": "EditImage",

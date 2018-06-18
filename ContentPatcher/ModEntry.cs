@@ -29,7 +29,7 @@ namespace ContentPatcher
         private readonly string ConfigFileName = "config.json";
 
         /// <summary>The supported format versions.</summary>
-        private readonly string[] SupportedFormatVersions = { "1.0", "1.3" };
+        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4" };
 
         /// <summary>Handles constructing, permuting, and updating conditions.</summary>
         private readonly ConditionFactory ConditionFactory = new ConditionFactory();
@@ -170,6 +170,7 @@ namespace ContentPatcher
         [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "The value is used immediately, so this isn't an issue.")]
         private IEnumerable<string> LoadContentPacks()
         {
+            ISemanticVersion latestFormatVersion = new SemanticVersion(this.SupportedFormatVersions.Last());
             ConfigFileHandler configFileHandler = new ConfigFileHandler(this.ConfigFileName, this.PatchManager.ParseCommaDelimitedField, (pack, label, reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {label}: {reason}"));
             foreach (ManagedContentPack pack in this.Helper.GetContentPacks().Select(p => new ManagedContentPack(p)))
             {
@@ -228,7 +229,7 @@ namespace ContentPatcher
                     foreach (PatchConfig patch in content.Changes)
                     {
                         this.VerboseLog($"   loading {patch.LogName}...");
-                        this.LoadPatch(pack, patch, config, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {patch.LogName}: {reasonPhrase}", LogLevel.Warn));
+                        this.LoadPatch(pack, content, patch, config, latestFormatVersion, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {patch.LogName}: {reasonPhrase}", LogLevel.Warn));
                     }
                 }
                 catch (Exception ex)
@@ -276,10 +277,12 @@ namespace ContentPatcher
 
         /// <summary>Load one patch from a content pack's <c>content.json</c> file.</summary>
         /// <param name="pack">The content pack being loaded.</param>
+        /// <param name="contentConfig">The content pack's config.</param>
         /// <param name="entry">The change to load.</param>
         /// <param name="config">The content pack's config values.</param>
+        /// <param name="latestFormatVersion">The latest format version.</param>
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
-        private bool LoadPatch(ManagedContentPack pack, PatchConfig entry, InvariantDictionary<ConfigField> config, Action<string> logSkip)
+        private bool LoadPatch(ManagedContentPack pack, ContentConfig contentConfig, PatchConfig entry, InvariantDictionary<ConfigField> config, ISemanticVersion latestFormatVersion, Action<string> logSkip)
         {
             bool TrackSkip(string reason, bool warn = true)
             {
@@ -337,7 +340,7 @@ namespace ContentPatcher
                 // parse conditions
                 ConditionDictionary conditions;
                 {
-                    if (!this.PatchManager.TryParseConditions(entry.When, out conditions, out string error))
+                    if (!this.PatchManager.TryParseConditions(entry.When, contentConfig.Format, latestFormatVersion, out conditions, out string error))
                         return TrackSkip($"the {nameof(PatchConfig.When)} field is invalid: {error}.");
                 }
 

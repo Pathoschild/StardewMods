@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Patches;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Utilities;
@@ -343,9 +344,11 @@ namespace ContentPatcher.Framework
         ****/
         /// <summary>Normalise and parse the given condition values.</summary>
         /// <param name="raw">The raw condition values to normalise.</param>
+        /// <param name="formatVersion">The format version specified by the content pack.</param>
+        /// <param name="latestFormatVersion">The latest format version.</param>
         /// <param name="conditions">The normalised conditions.</param>
         /// <param name="error">An error message indicating why normalisation failed.</param>
-        public bool TryParseConditions(InvariantDictionary<string> raw, out ConditionDictionary conditions, out string error)
+        public bool TryParseConditions(InvariantDictionary<string> raw, ISemanticVersion formatVersion, ISemanticVersion latestFormatVersion, out ConditionDictionary conditions, out string error)
         {
             // no conditions
             if (raw == null || !raw.Any())
@@ -365,6 +368,17 @@ namespace ContentPatcher.Framework
                     error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", this.ConditionFactory.GetValidConditions())}";
                     conditions = null;
                     return false;
+                }
+
+                // check compatibility
+                if (formatVersion.IsOlderThan("1.4"))
+                {
+                    if (key == ConditionKey.DayEvent || key == ConditionKey.HasFlag || key == ConditionKey.HasSeenEvent || key == ConditionKey.Spouse)
+                    {
+                        error = $"{key} isn't available with format version {formatVersion} (change the {nameof(ContentConfig.Format)} field to {latestFormatVersion} to use newer features)";
+                        conditions = null;
+                        return false;
+                    }
                 }
 
                 // parse values
