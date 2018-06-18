@@ -25,12 +25,16 @@ namespace ContentPatcher.Framework
         /// <summary>The valid condition values.</summary>
         private readonly IDictionary<ConditionKey, InvariantHashSet> ValidValues = new Dictionary<ConditionKey, InvariantHashSet>
         {
+            // tokenisable conditions
             [ConditionKey.Day] = new InvariantHashSet(Enumerable.Range(ConditionFactory.MinDay, ConditionFactory.MaxDay).Select(p => p.ToString())),
             [ConditionKey.DayOfWeek] = new InvariantHashSet(Enum.GetNames(typeof(DayOfWeek))),
             [ConditionKey.Language] = new InvariantHashSet(Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString())),
             [ConditionKey.Season] = new InvariantHashSet(new[] { "Spring", "Summer", "Fall", "Winter" }),
             [ConditionKey.Weather] = new InvariantHashSet(Enum.GetNames(typeof(Weather))),
-            [ConditionKey.HasMod] = null // no restrictions
+
+            // other conditions
+            [ConditionKey.HasMod] = null,
+            [ConditionKey.Spouse] = null
         };
 
         /// <summary>Condition keys which are guaranteed to only have one value and can be used in conditions.</summary>

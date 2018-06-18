@@ -147,12 +147,13 @@ namespace ContentPatcher.Framework
         /// <param name="language">The current language.</param>
         /// <param name="date">The current in-game date (if applicable).</param>
         /// <param name="weather">The current in-game weather (if applicable).</param>
-        public void UpdateContext(IContentHelper contentHelper, LocalizedContentManager.LanguageCode language, SDate date, Weather? weather)
+        /// <param name="spouse">The current player's internal spouse name (if applicable).</param>
+        public void UpdateContext(IContentHelper contentHelper, LocalizedContentManager.LanguageCode language, SDate date, Weather? weather, string spouse)
         {
             this.VerboseLog("Propagating context...");
 
             // update context
-            this.ConditionContext.Set(language, date, weather);
+            this.ConditionContext.Set(language, date, weather, spouse);
             IDictionary<ConditionKey, string> tokenisableConditions = this.ConditionContext.GetSingleValueConditions();
 
             // update patches

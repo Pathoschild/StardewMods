@@ -65,7 +65,7 @@ namespace ContentPatcher
             this.PatchManager.SetInitialContext(
                 installedMods: contentPackIDs.Concat(helper.ModRegistry.GetAll().Select(p => p.UniqueID)).ToArray()
             );
-            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null);
+            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null, null);
 
             // set up events
             if (this.Config.EnableDebugFeatures)
@@ -143,15 +143,17 @@ namespace ContentPatcher
             LocalizedContentManager.LanguageCode language = contentHelper.CurrentLocaleConstant;
             SDate date = null;
             Weather? weather = null;
+            string spouse = null;
             if (Context.IsWorldReady)
             {
                 date = SDate.Now();
                 weather = this.GetCurrentWeather();
+                spouse = Game1.player?.spouse;
             }
 
             // update context
             this.VerboseLog($"Context: date={(date != null ? $"{date.DayOfWeek} {date.Season} {date.Day}" : "none")}, weather={(weather != null ? weather.ToString() : "none")}, locale={language}.");
-            this.PatchManager.UpdateContext(contentHelper, language, date, weather);
+            this.PatchManager.UpdateContext(contentHelper, language, date, weather, spouse);
         }
 
         /// <summary>Load the patches from all registered content packs.</summary>

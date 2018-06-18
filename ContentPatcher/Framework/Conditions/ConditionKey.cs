@@ -3,6 +3,9 @@ namespace ContentPatcher.Framework.Conditions
     /// <summary>The conditions that can be checked.</summary>
     public enum ConditionKey
     {
+        /****
+        ** Tokenisable conditions
+        ****/
         /// <summary>The day of month.</summary>
         Day,
 
@@ -18,7 +21,13 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The current weather.</summary>
         Weather,
 
+        /****
+        ** Other conditions
+        ****/
         /// <summary>An installed mod ID.</summary>
-        HasMod
+        HasMod,
+
+        /// <summary>The current player's internal spouse name (if any).</summary>
+        Spouse
     };
 }
