@@ -22,20 +22,14 @@ namespace ContentPatcher.Framework
         /// <summary>The number of days in a week.</summary>
         private const int DaysPerWeek = 7;
 
-        /// <summary>The valid condition values.</summary>
+        /// <summary>The valid condition values for tokenisable conditions.</summary>
         private readonly IDictionary<ConditionKey, InvariantHashSet> ValidValues = new Dictionary<ConditionKey, InvariantHashSet>
         {
-            // tokenisable conditions
             [ConditionKey.Day] = new InvariantHashSet(Enumerable.Range(ConditionFactory.MinDay, ConditionFactory.MaxDay).Select(p => p.ToString())),
             [ConditionKey.DayOfWeek] = new InvariantHashSet(Enum.GetNames(typeof(DayOfWeek))),
             [ConditionKey.Language] = new InvariantHashSet(Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString())),
             [ConditionKey.Season] = new InvariantHashSet(new[] { "Spring", "Summer", "Fall", "Winter" }),
-            [ConditionKey.Weather] = new InvariantHashSet(Enum.GetNames(typeof(Weather))),
-
-            // other conditions
-            [ConditionKey.DayEvent] = null,
-            [ConditionKey.HasMod] = null,
-            [ConditionKey.Spouse] = null
+            [ConditionKey.Weather] = new InvariantHashSet(Enum.GetNames(typeof(Weather)))
         };
 
         /// <summary>Condition keys which are guaranteed to only have one value and can be used in conditions.</summary>
@@ -81,9 +75,9 @@ namespace ContentPatcher.Framework
         /// <param name="key">The condition keys.</param>
         public IEnumerable<string> GetValidValues(ConditionKey key)
         {
-            if (!this.ValidValues.TryGetValue(key, out InvariantHashSet values))
-                throw new KeyNotFoundException($"No valid values defined for condition key {key}.");
-            return values;
+            return this.ValidValues.TryGetValue(key, out InvariantHashSet values)
+                ? values
+                : null;
         }
 
         /// <summary>Get all possible values of a tokenable string.</summary>

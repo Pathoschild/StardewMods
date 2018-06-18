@@ -63,9 +63,12 @@ namespace ContentPatcher
             helper.Content.AssetLoaders.Add(this.PatchManager);
             helper.Content.AssetEditors.Add(this.PatchManager);
             this.PatchManager.SetInitialContext(
-                installedMods: contentPackIDs.Concat(helper.ModRegistry.GetAll().Select(p => p.UniqueID)).ToArray()
+                installedMods: contentPackIDs
+                    .Concat(helper.ModRegistry.GetAll().Select(p => p.UniqueID))
+                    .OrderBy(p => p, StringComparer.InvariantCultureIgnoreCase)
+                    .ToArray()
             );
-            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null, null, null);
+            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null, null, null, null);
 
             // set up events
             if (this.Config.EnableDebugFeatures)
@@ -145,17 +148,19 @@ namespace ContentPatcher
             Weather? weather = null;
             string spouse = null;
             string dayEvent = null;
+            int[] seenEvents = null;
             if (Context.IsWorldReady)
             {
                 date = SDate.Now();
                 weather = this.GetCurrentWeather();
                 spouse = Game1.player?.spouse;
                 dayEvent = this.GetDayEvent();
+                seenEvents = Game1.player?.eventsSeen.OrderBy(p => p).ToArray();
             }
 
             // update context
             this.VerboseLog($"Context: date={(date != null ? $"{date.DayOfWeek} {date.Season} {date.Day}" : "none")}, weather={(weather != null ? weather.ToString() : "none")}, locale={language}.");
-            this.PatchManager.UpdateContext(contentHelper: contentHelper, language: language, date: date, weather: weather, dayEvent: dayEvent, spouse: spouse);
+            this.PatchManager.UpdateContext(contentHelper: contentHelper, language: language, date: date, weather: weather, dayEvent: dayEvent, spouse: spouse, seenEvents: seenEvents);
         }
 
         /// <summary>Load the patches from all registered content packs.</summary>

@@ -32,7 +32,7 @@ namespace ContentPatcher.Framework.Conditions
             this.SingleValueConditions = singleValueConditions;
 
             // set defaults
-            this.Set(locale, null, null, null, null);
+            this.Set(locale, null, null, null, null, null);
             this.Set(ConditionKey.HasMod);
         }
 
@@ -42,7 +42,8 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="weather">The current in-game weather (if applicable).</param>
         /// <param name="dayEvent">The day event (e.g. wedding or festival) occurring today (if applicable).</param>
         /// <param name="spouse">The current player's internal spouse name (if applicable).</param>
-        public void Set(LocalizedContentManager.LanguageCode language, SDate date, Weather? weather, string dayEvent, string spouse)
+        /// <param name="seenEvents">The event IDs which the player has seen.</param>
+        public void Set(LocalizedContentManager.LanguageCode language, SDate date, Weather? weather, string dayEvent, string spouse, int[] seenEvents)
         {
             // optional date
             if (date != null)
@@ -60,6 +61,7 @@ namespace ContentPatcher.Framework.Conditions
 
             // other conditions
             this.Set(ConditionKey.DayEvent, dayEvent);
+            this.Set(ConditionKey.HasSeenEvent, seenEvents?.Select(p => p.ToString()).ToArray());
             this.Set(ConditionKey.Language, language.ToString().ToLower());
             this.Set(ConditionKey.Spouse, spouse);
             this.Set(ConditionKey.Weather, weather?.ToString().ToLower());
@@ -70,9 +72,10 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="values">The current values.</param>
         public void Set(ConditionKey key, params string[] values)
         {
+            // normalise
+            values = values?.Where(p => p != null).ToArray() ?? new string[0];
+
             // validate
-            if (values == null)
-                throw new ArgumentNullException(nameof(values));
             if (this.SingleValueConditions.Contains(key) && values.Length > 1)
                 throw new InvalidOperationException($"Can't set multiple values for condition {key}.");
 

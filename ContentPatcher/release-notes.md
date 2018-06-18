@@ -6,6 +6,7 @@
 * Added new conditions:
   * `DayEvent` (check if there's a festival or wedding today);
   * `HasMod` (check if another mod is installed, e.g. for automatic compatibility patches);
+  * `HasSeenEvent` (check if the player has seen a given event ID);
   * `Spouse` (check if the current player is married to a given NPC or farmer).
 * Added support for deleting entries via `EditData`.
 

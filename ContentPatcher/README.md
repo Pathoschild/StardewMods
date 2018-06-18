@@ -215,9 +215,10 @@ be used as a condition for any other patch type.
 
 condition   | description
 ----------- | -----------
-`DayEvent`  | The event occurring today. Possible values: <ul><li>`wedding` (current player is getting married);</li><li>`dance of the moonlight jellies`;</li><li>`egg festival`;</li><li>`feast of the winter star`;</li><li>`festival of ice`;</li><li>`flower dance`;</li><li>`luau`;</li><li>`stardew valley fair`;</li><li>`spirit's eve`;</li><li>a custom festival name.</li></ul> **Not usable with `"Action": "Load"`.**
-`HasMod`    | The installed mod IDs (matching the `UniqueID` field in their `manifest.json`). **Not usable with `"Action": "Load"`.**
-`Spouse`    | The current player's spouse name (using their English name regardless of translations). **Not usable with `"Action": "Load"`.**
+`DayEvent`  | The festival or wedding happening today. Possible values: <ul><li>`wedding` (current player is getting married);</li><li>`dance of the moonlight jellies`;</li><li>`egg festival`;</li><li>`feast of the winter star`;</li><li>`festival of ice`;</li><li>`flower dance`;</li><li>`luau`;</li><li>`stardew valley fair`;</li><li>`spirit's eve`;</li><li>a custom festival name.</li></ul>
+`HasMod`    | The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
+`HasSeenEvent` | The event IDs the player has seen, matching IDs in the `Data\Events` files. (You can use [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.)
+`Spouse`    | The current player's spouse name (using their English name regardless of translations).
 
 #### Special note about `"Action": "Load"`
 * Each file can only be loaded by one patch. Content Patcher will allow multiple loaders, so

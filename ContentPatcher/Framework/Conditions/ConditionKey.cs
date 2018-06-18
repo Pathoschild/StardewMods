@@ -31,6 +31,9 @@ namespace ContentPatcher.Framework.Conditions
         HasMod,
 
         /// <summary>The current player's internal spouse name (if any).</summary>
-        Spouse
+        Spouse,
+
+        /// <summary>An event ID the player saw.</summary>
+        HasSeenEvent
     };
 }
