@@ -24,6 +24,9 @@ namespace ContentPatcher.Framework.Conditions
         /****
         ** Other conditions
         ****/
+        /// <summary>The name of today's festival (if any), or 'wedding' if the current player is getting married.</summary>
+        DayEvent,
+
         /// <summary>An installed mod ID.</summary>
         HasMod,
 

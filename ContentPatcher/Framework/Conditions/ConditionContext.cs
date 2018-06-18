@@ -32,17 +32,17 @@ namespace ContentPatcher.Framework.Conditions
             this.SingleValueConditions = singleValueConditions;
 
             // set defaults
-            this.Set(locale, null, null, null);
+            this.Set(locale, null, null, null, null);
             this.Set(ConditionKey.HasMod);
-            this.Set(ConditionKey.Spouse);
         }
 
         /// <summary>Update the current context.</summary>
         /// <param name="language">The current language.</param>
         /// <param name="date">The current in-game date (if applicable).</param>
         /// <param name="weather">The current in-game weather (if applicable).</param>
+        /// <param name="dayEvent">The day event (e.g. wedding or festival) occurring today (if applicable).</param>
         /// <param name="spouse">The current player's internal spouse name (if applicable).</param>
-        public void Set(LocalizedContentManager.LanguageCode language, SDate date, Weather? weather, string spouse)
+        public void Set(LocalizedContentManager.LanguageCode language, SDate date, Weather? weather, string dayEvent, string spouse)
         {
             // optional date
             if (date != null)
@@ -59,9 +59,10 @@ namespace ContentPatcher.Framework.Conditions
             }
 
             // other conditions
+            this.Set(ConditionKey.DayEvent, dayEvent);
             this.Set(ConditionKey.Language, language.ToString().ToLower());
-            this.Set(ConditionKey.Weather, weather?.ToString().ToLower());
             this.Set(ConditionKey.Spouse, spouse);
+            this.Set(ConditionKey.Weather, weather?.ToString().ToLower());
         }
 
         /// <summary>Update the current context.</summary>

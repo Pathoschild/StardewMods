@@ -65,7 +65,7 @@ namespace ContentPatcher
             this.PatchManager.SetInitialContext(
                 installedMods: contentPackIDs.Concat(helper.ModRegistry.GetAll().Select(p => p.UniqueID)).ToArray()
             );
-            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null, null);
+            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null, null, null);
 
             // set up events
             if (this.Config.EnableDebugFeatures)
@@ -144,16 +144,18 @@ namespace ContentPatcher
             SDate date = null;
             Weather? weather = null;
             string spouse = null;
+            string dayEvent = null;
             if (Context.IsWorldReady)
             {
                 date = SDate.Now();
                 weather = this.GetCurrentWeather();
                 spouse = Game1.player?.spouse;
+                dayEvent = this.GetDayEvent();
             }
 
             // update context
             this.VerboseLog($"Context: date={(date != null ? $"{date.DayOfWeek} {date.Season} {date.Day}" : "none")}, weather={(weather != null ? weather.ToString() : "none")}, locale={language}.");
-            this.PatchManager.UpdateContext(contentHelper, language, date, weather, spouse);
+            this.PatchManager.UpdateContext(contentHelper: contentHelper, language: language, date: date, weather: weather, dayEvent: dayEvent, spouse: spouse);
         }
 
         /// <summary>Load the patches from all registered content packs.</summary>
@@ -605,6 +607,21 @@ namespace ContentPatcher
                 return Game1.isLightning ? Weather.Storm : Weather.Rain;
 
             return Weather.Sun;
+        }
+
+        /// <summary>Get the name for today's day event (e.g. wedding or festival) from the game data.</summary>
+        private string GetDayEvent()
+        {
+            // marriage
+            if (Game1.weddingToday)
+                return "wedding";
+
+            // festival
+            IDictionary<string, string> festivalDates = this.Helper.Content.Load<Dictionary<string, string>>("Data\\Festivals\\FestivalDates", ContentSource.GameContent);
+            if (festivalDates.TryGetValue($"{Game1.currentSeason}{Game1.dayOfMonth}", out string festivalName))
+                return festivalName;
+
+            return null;
         }
 
         /// <summary>Log a message if <see cref="ModConfig.VerboseLog"/> is enabled.</summary>

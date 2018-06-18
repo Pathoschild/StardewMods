@@ -4,6 +4,7 @@
 ## 1.4
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added new conditions:
+  * `DayEvent` (check if there's a festival or wedding today);
   * `HasMod` (check if another mod is installed, e.g. for automatic compatibility patches);
   * `Spouse` (check if the current player is married to a given NPC or farmer).
 * Added support for deleting entries via `EditData`.

@@ -33,6 +33,7 @@ namespace ContentPatcher.Framework
             [ConditionKey.Weather] = new InvariantHashSet(Enum.GetNames(typeof(Weather))),
 
             // other conditions
+            [ConditionKey.DayEvent] = null,
             [ConditionKey.HasMod] = null,
             [ConditionKey.Spouse] = null
         };

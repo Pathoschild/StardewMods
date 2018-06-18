@@ -198,19 +198,28 @@ For example, this changes the house texture only in Spring or Summer.
 }
 ```
 
-The possible conditions are:
+#### Main conditions
+These can be used as conditions and [tokens](#tokens) for any patch.
 
 condition   | description
 ----------- | -----------
 `Day`       | The day of month. Possible values: any integer from 1 through 28.
 `DayOfWeek` | The day of week. Possible values: `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, and `sunday`.
-`HasMod`    | The installed mod IDs (matching the `UniqueID` field in their `manifest.json`). **Not usable with `"Action": "Load"`.**
 `Language`  | The game's current language. Possible values: <table><tr><th>code</th><th>meaning</th></tr><tr><td>`de`</td><td>German</td></tr><tr><td>`en`</td><td>English</td></tr><tr><td>`es`</td><td>Spanish</td></tr><tr><td>`ja`</td><td>Japanese</td></tr><tr><td>`ru`</td><td>Russian</td></tr><tr><td>`pt`</td><td>Portuguese</td></tr><tr><td>`zh`</td><td>Chinese</td></tr></table></ul>
 `Season`    | The season name. Possible values: `spring`, `summer`, `fall`, and `winter`.
-`Spouse`    | The current player's spouse name (using their English name regardless of translations). **Not usable with `"Action": "Load"`.**
 `Weather`   | The weather name. Possible values: `sun`, `rain`, `snow`, and `storm`.
 
-Special note about `"Action": "Load"`:
+#### Secondary conditions
+These conditions **cannot** be used as [tokens](#tokens) or by an `"Action": "Load"` patch. They can
+be used as a condition for any other patch type.
+
+condition   | description
+----------- | -----------
+`DayEvent`  | The event occurring today. Possible values: <ul><li>`wedding` (current player is getting married);</li><li>`dance of the moonlight jellies`;</li><li>`egg festival`;</li><li>`feast of the winter star`;</li><li>`festival of ice`;</li><li>`flower dance`;</li><li>`luau`;</li><li>`stardew valley fair`;</li><li>`spirit's eve`;</li><li>a custom festival name.</li></ul> **Not usable with `"Action": "Load"`.**
+`HasMod`    | The installed mod IDs (matching the `UniqueID` field in their `manifest.json`). **Not usable with `"Action": "Load"`.**
+`Spouse`    | The current player's spouse name (using their English name regardless of translations). **Not usable with `"Action": "Load"`.**
+
+#### Special note about `"Action": "Load"`
 * Each file can only be loaded by one patch. Content Patcher will allow multiple loaders, so
   long as their conditions can never overlap. If they can overlap, it will refuse to add the second
   one. For example:
@@ -220,7 +229,6 @@ Special note about `"Action": "Load"`:
   `season: "Spring"` | `season: "Summer"`     | both are loaded correctly (seasons never overlap).
   `day: 1`           | `dayOfWeek: "Tuesday"` | both are loaded correctly (1st day of month is never Tuesday).
   `day: 1`           | `weather: "Sun"`       | error: sun could happen on the first of a month.
-* The following conditions **cannot** be used: `HasMod`, `Spouse`.
 
 ### Player configuration
 You can let players configure your mod using a `config.json` file. This requires a bit more upfront
