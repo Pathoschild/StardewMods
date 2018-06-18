@@ -201,24 +201,89 @@ For example, this changes the house texture only in Spring or Summer.
 #### Main conditions
 These can be used as conditions and [tokens](#tokens) for any patch.
 
-condition   | description
------------ | -----------
-`Day`       | The day of month. Possible values: any integer from 1 through 28.
-`DayOfWeek` | The day of week. Possible values: `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, and `sunday`.
-`Language`  | The game's current language. Possible values: <table><tr><th>code</th><th>meaning</th></tr><tr><td>`de`</td><td>German</td></tr><tr><td>`en`</td><td>English</td></tr><tr><td>`es`</td><td>Spanish</td></tr><tr><td>`ja`</td><td>Japanese</td></tr><tr><td>`ru`</td><td>Russian</td></tr><tr><td>`pt`</td><td>Portuguese</td></tr><tr><td>`zh`</td><td>Chinese</td></tr></table></ul>
-`Season`    | The season name. Possible values: `spring`, `summer`, `fall`, and `winter`.
-`Weather`   | The weather name. Possible values: `sun`, `rain`, `snow`, and `storm`.
+<dl>
+<dt>Day</td>
+<dd>The day of month. Possible values: any integer from 1 through 28.</dd>
+
+<dt>DayOfWeek</td>
+<dd>
+
+The day of week. Possible values: `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, and `sunday`.
+
+</dd>
+
+<dt>Language</dt>
+<dd>
+
+The game's current language. Possible values:
+
+code | meaning
+---- | -------
+`de` | German
+`en` | English
+`es` | Spanish
+`ja` | Japanese
+`ru` | Russian
+`pt` | Portuguese
+`zh` | Chinese
+
+</dd>
+
+<dt>Season</dt>
+<dd>
+
+The season name. Possible values: `spring`, `summer`, `fall`, and `winter`.
+
+</dd>
+
+<dt>Weather</dt>
+<dd>
+
+The weather name. Possible values: `sun`, `rain`, `snow`, and `storm`.
+
+</dd>
+</dl>
 
 #### Secondary conditions
 These conditions **cannot** be used as [tokens](#tokens) or by an `"Action": "Load"` patch. They can
 be used as a condition for any other patch type.
 
-condition   | description
------------ | -----------
-`DayEvent`  | The festival or wedding happening today. Possible values: <ul><li>`wedding` (current player is getting married);</li><li>`dance of the moonlight jellies`;</li><li>`egg festival`;</li><li>`feast of the winter star`;</li><li>`festival of ice`;</li><li>`flower dance`;</li><li>`luau`;</li><li>`stardew valley fair`;</li><li>`spirit's eve`;</li><li>a custom festival name.</li></ul>
-`HasMod`    | The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
-`HasSeenEvent` | The event IDs the player has seen, matching IDs in the `Data\Events` files. (You can use [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.)
-`Spouse`    | The current player's spouse name (using their English name regardless of translations).
+<dl>
+<dt>DayEvent</dt>
+<dd>
+
+The festival or wedding happening today. Possible values:
+* `wedding` (current player is getting married);
+* `dance of the moonlight jellies`;
+* `egg festival`;
+* `feast of the winter star`;
+* `festival of ice`;
+* `flower dance`;
+* `luau`;
+* `stardew valley fair`;
+* `spirit's eve`;
+* a custom festival name.
+
+</dd>
+
+<dt>HasMod</dt>
+<dd>
+
+The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
+
+</dd>
+
+<dt>HasSeenEvent</dt>
+<dd>
+
+The event IDs the player has seen, matching IDs in the `Data\Events` files. (You can use
+[Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.)
+
+</dd>
+
+<dt>Spouse</dt>
+<dd> The current player's spouse name (using their English name regardless of translations).</dd>
+</dl>
 
 #### Special note about `"Action": "Load"`
 * Each file can only be loaded by one patch. Content Patcher will allow multiple loaders, so
