@@ -312,7 +312,7 @@ flag | meaning
 </td>
 </tr>
 
-<tr>
+<tr valign="top">
 <td>HasMod</td>
 <td>
 
@@ -321,7 +321,7 @@ The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
 </td>
 </tr>
 
-<tr>
+<tr valign="top">
 <td>HasSeenEvent</td>
 <td>
 
@@ -331,7 +331,7 @@ The event IDs the player has seen, matching IDs in the `Data\Events` files. (You
 </td>
 </tr>
 
-<tr>
+<tr valign="top">
 <td>Spouse</td>
 <td>The current player's spouse name (using their English name regardless of translations).</td>
 </tr>
