@@ -5,6 +5,7 @@
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added new conditions:
   * `DayEvent` (check if there's a festival or wedding today);
+  * `HasFlag` (check if the player has received a letter by ID or has a mail flag set);
   * `HasMod` (check if another mod is installed, e.g. for automatic compatibility patches);
   * `HasSeenEvent` (check if the player has seen a given event ID);
   * `Spouse` (check if the current player is married to a given NPC or farmer).

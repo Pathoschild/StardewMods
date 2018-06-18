@@ -32,7 +32,7 @@ namespace ContentPatcher.Framework.Conditions
             this.SingleValueConditions = singleValueConditions;
 
             // set defaults
-            this.Set(locale, null, null, null, null, null);
+            this.Set(locale, null, null, null, null, null, null);
             this.Set(ConditionKey.HasMod);
         }
 
@@ -43,7 +43,8 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="dayEvent">The day event (e.g. wedding or festival) occurring today (if applicable).</param>
         /// <param name="spouse">The current player's internal spouse name (if applicable).</param>
         /// <param name="seenEvents">The event IDs which the player has seen.</param>
-        public void Set(LocalizedContentManager.LanguageCode language, SDate date, Weather? weather, string dayEvent, string spouse, int[] seenEvents)
+        /// <param name="mailFlags">The mail flags set for the player.</param>
+        public void Set(LocalizedContentManager.LanguageCode language, SDate date, Weather? weather, string dayEvent, string spouse, int[] seenEvents, string[] mailFlags)
         {
             // optional date
             if (date != null)
@@ -61,6 +62,7 @@ namespace ContentPatcher.Framework.Conditions
 
             // other conditions
             this.Set(ConditionKey.DayEvent, dayEvent);
+            this.Set(ConditionKey.HasFlag, mailFlags);
             this.Set(ConditionKey.HasSeenEvent, seenEvents?.Select(p => p.ToString()).ToArray());
             this.Set(ConditionKey.Language, language.ToString().ToLower());
             this.Set(ConditionKey.Spouse, spouse);

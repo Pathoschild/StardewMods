@@ -150,12 +150,13 @@ namespace ContentPatcher.Framework
         /// <param name="spouse">The current player's internal spouse name (if applicable).</param>
         /// <param name="dayEvent">The day event (e.g. wedding or festival) occurring today (if applicable).</param>
         /// <param name="seenEvents">The event IDs which the player has seen.</param>
-        public void UpdateContext(IContentHelper contentHelper, LocalizedContentManager.LanguageCode language, SDate date, Weather? weather, string dayEvent, string spouse, int[] seenEvents)
+        /// <param name="mailFlags">The mail flags set for the player.</param>
+        public void UpdateContext(IContentHelper contentHelper, LocalizedContentManager.LanguageCode language, SDate date, Weather? weather, string dayEvent, string spouse, int[] seenEvents, string[] mailFlags)
         {
             this.VerboseLog("Propagating context...");
 
             // update context
-            this.ConditionContext.Set(language: language, date: date, weather: weather, dayEvent: dayEvent, spouse: spouse, seenEvents: seenEvents);
+            this.ConditionContext.Set(language: language, date: date, weather: weather, dayEvent: dayEvent, spouse: spouse, seenEvents: seenEvents, mailFlags: mailFlags);
             IDictionary<ConditionKey, string> tokenisableConditions = this.ConditionContext.GetSingleValueConditions();
 
             // update patches

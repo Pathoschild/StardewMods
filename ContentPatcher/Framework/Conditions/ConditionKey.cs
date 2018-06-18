@@ -27,13 +27,16 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The name of today's festival (if any), or 'wedding' if the current player is getting married.</summary>
         DayEvent,
 
+        /// <summary>A letter ID or mail flag set for the player.</summary>
+        HasFlag,
+
         /// <summary>An installed mod ID.</summary>
         HasMod,
 
-        /// <summary>The current player's internal spouse name (if any).</summary>
-        Spouse,
-
         /// <summary>An event ID the player saw.</summary>
-        HasSeenEvent
+        HasSeenEvent,
+
+        /// <summary>The current player's internal spouse name (if any).</summary>
+        Spouse
     };
 }

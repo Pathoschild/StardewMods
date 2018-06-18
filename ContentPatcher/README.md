@@ -198,22 +198,30 @@ For example, this changes the house texture only in Spring or Summer.
 }
 ```
 
-#### Main conditions
-These can be used as conditions and [tokens](#tokens) for any patch.
+These conditions can be used as conditions and [tokens](#tokens) for any patch:
 
-<dl>
-<dt>Day</td>
-<dd>The day of month. Possible values: any integer from 1 through 28.</dd>
+<table>
+<tr>
+<th>condition</th>
+<th>purpose</th>
 
-<dt>DayOfWeek</td>
-<dd>
+<tr valign="top">
+<td>Day</td>
+<td>The day of month. Possible values: any integer from 1 through 28.</td>
+</tr>
+
+<tr valign="top">
+<td>DayOfWeek</td>
+<td>
 
 The day of week. Possible values: `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, and `sunday`.
 
-</dd>
+</td>
+</tr>
 
-<dt>Language</dt>
-<dd>
+<tr valign="top">
+<td>Language</td>
+<td>
 
 The game's current language. Possible values:
 
@@ -227,30 +235,39 @@ code | meaning
 `pt` | Portuguese
 `zh` | Chinese
 
-</dd>
+</td>
+</tr>
 
-<dt>Season</dt>
-<dd>
+<tr valign="top">
+<td>Season</td>
+<td>
 
 The season name. Possible values: `spring`, `summer`, `fall`, and `winter`.
 
-</dd>
+</td>
+</tr>
 
-<dt>Weather</dt>
-<dd>
+<tr valign="top">
+<td>Weather</td>
+<td>
 
 The weather name. Possible values: `sun`, `rain`, `snow`, and `storm`.
 
-</dd>
-</dl>
+</td>
+</tr>
+</table>
 
-#### Secondary conditions
-These conditions **cannot** be used as [tokens](#tokens) or by an `"Action": "Load"` patch. They can
-be used as a condition for any other patch type.
+These conditions **cannot** be used as [tokens](#tokens) or by an `"Action": "Load"` patch (but can
+be used as a condition for any other patch type):
 
-<dl>
-<dt>DayEvent</dt>
-<dd>
+<table>
+<tr>
+<th>condition</th>
+<th>purpose</th>
+
+<tr valign="top">
+<td>DayEvent</td>
+<td>
 
 The festival or wedding happening today. Possible values:
 * `wedding` (current player is getting married);
@@ -264,37 +281,72 @@ The festival or wedding happening today. Possible values:
 * `spirit's eve`;
 * a custom festival name.
 
-</dd>
+</td>
+</tr>
 
-<dt>HasMod</dt>
-<dd>
+<tr valign="top">
+<td>HasFlag</td>
+<td>
+
+The letter IDs received by the player. The game also uses this to store some useful flags. For
+example:
+
+flag | meaning
+---- | -------
+`artifactFound` | The player has found at least one artifact.
+`Beat_PK` | The player has beaten the Prairie King arcade game.
+`beenToWoods` | The player has entered the Secret Woods at least once.
+`canReadJunimoText` | The player can read the language of Junimos (i.e. the plaques in the Community Center).
+`ccIsComplete` | The player has completed the Community Center. See also flags for specific sections: `ccBoilerRoom`, `ccCraftsRoom`, `ccFishTank`, `ccPantry`, and `ccVault`.
+`doorUnlockAbigail` | The player has unlocked access to Abigail's room. See also flags for other NPCs: `doorUnlockAlex`, `doorUnlockCaroline`, `doorUnlockEmily`, `doorUnlockHaley`, `doorUnlockHarvey`, `doorUnlockJas`, `doorUnlockJodi`, `doorUnlockMarnie`, `doorUnlockMaru`, `doorUnlockPenny`, `doorUnlockPierre`, `doorUnlockRobin`, `doorUnlockSam`, `doorUnlockSebastian`, `doorUnlockVincent`.
+`galaxySword` | The player has acquired the Galaxy Sword.
+`geodeFound` | The player has found at least one geode.
+`guildMember` | The player is a member of the Adventurer's Guild.
+`jojaMember` | The player bought a Joja membership.
+`JunimoKart` | The player has beaten the Junimo Kart arcade game.
+`landslideDone` | The landside blocking access to the mines has been cleared.
+`museumComplete` | The player has completed the Museum artifact collection.
+`openedSewer` | The player has unlocked the sewers.
+`qiChallengeComplete` | The player completed the Qi's Challenge quest by reaching level 25 in the Skull Cavern.
+
+</td>
+</tr>
+
+<tr>
+<td>HasMod</td>
+<td>
 
 The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
 
-</dd>
+</td>
+</tr>
 
-<dt>HasSeenEvent</dt>
-<dd>
+<tr>
+<td>HasSeenEvent</td>
+<td>
 
 The event IDs the player has seen, matching IDs in the `Data\Events` files. (You can use
 [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.)
 
-</dd>
+</td>
+</tr>
 
-<dt>Spouse</dt>
-<dd> The current player's spouse name (using their English name regardless of translations).</dd>
-</dl>
+<tr>
+<td>Spouse</td>
+<td>The current player's spouse name (using their English name regardless of translations).</td>
+</tr>
+</table>
 
-#### Special note about `"Action": "Load"`
-* Each file can only be loaded by one patch. Content Patcher will allow multiple loaders, so
-  long as their conditions can never overlap. If they can overlap, it will refuse to add the second
-  one. For example:
+**Special note about `"Action": "Load"`:**  
+Each file can only be loaded by one patch. Content Patcher will allow multiple loaders, so
+long as their conditions can never overlap. If they can overlap, it will refuse to add the second
+one. For example:
 
-  loader A           | loader B               | result
-  ------------------ | ---------------------- | ------
-  `season: "Spring"` | `season: "Summer"`     | both are loaded correctly (seasons never overlap).
-  `day: 1`           | `dayOfWeek: "Tuesday"` | both are loaded correctly (1st day of month is never Tuesday).
-  `day: 1`           | `weather: "Sun"`       | error: sun could happen on the first of a month.
+loader A           | loader B               | result
+------------------ | ---------------------- | ------
+`season: "Spring"` | `season: "Summer"`     | both are loaded correctly (seasons never overlap).
+`day: 1`           | `dayOfWeek: "Tuesday"` | both are loaded correctly (1st day of month is never Tuesday).
+`day: 1`           | `weather: "Sun"`       | error: sun could happen on the first of a month.
 
 ### Player configuration
 You can let players configure your mod using a `config.json` file. This requires a bit more upfront

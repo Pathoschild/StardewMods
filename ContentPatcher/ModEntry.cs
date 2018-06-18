@@ -68,7 +68,7 @@ namespace ContentPatcher
                     .OrderBy(p => p, StringComparer.InvariantCultureIgnoreCase)
                     .ToArray()
             );
-            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null, null, null, null);
+            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null, null, null, null, null);
 
             // set up events
             if (this.Config.EnableDebugFeatures)
@@ -149,6 +149,7 @@ namespace ContentPatcher
             string spouse = null;
             string dayEvent = null;
             int[] seenEvents = null;
+            string[] mailFlags = null;
             if (Context.IsWorldReady)
             {
                 date = SDate.Now();
@@ -156,11 +157,12 @@ namespace ContentPatcher
                 spouse = Game1.player?.spouse;
                 dayEvent = this.GetDayEvent();
                 seenEvents = Game1.player?.eventsSeen.OrderBy(p => p).ToArray();
+                mailFlags = this.GetMailFlags().OrderBy(p => p).ToArray();
             }
 
             // update context
             this.VerboseLog($"Context: date={(date != null ? $"{date.DayOfWeek} {date.Season} {date.Day}" : "none")}, weather={(weather != null ? weather.ToString() : "none")}, locale={language}.");
-            this.PatchManager.UpdateContext(contentHelper: contentHelper, language: language, date: date, weather: weather, dayEvent: dayEvent, spouse: spouse, seenEvents: seenEvents);
+            this.PatchManager.UpdateContext(contentHelper: contentHelper, language: language, date: date, weather: weather, dayEvent: dayEvent, spouse: spouse, seenEvents: seenEvents, mailFlags: mailFlags);
         }
 
         /// <summary>Load the patches from all registered content packs.</summary>
@@ -612,6 +614,20 @@ namespace ContentPatcher
                 return Game1.isLightning ? Weather.Storm : Weather.Rain;
 
             return Weather.Sun;
+        }
+
+        /// <summary>Get the letter IDs and mail flags set for the player.</summary>
+        /// <remarks>See game logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
+        private IEnumerable<string> GetMailFlags()
+        {
+            Farmer player = Game1.player;
+            if (player == null)
+                return new string[0];
+
+            return player
+                .mailReceived
+                .Union(player.mailForTomorrow)
+                .Union(player.mailbox);
         }
 
         /// <summary>Get the name for today's day event (e.g. wedding or festival) from the game data.</summary>
