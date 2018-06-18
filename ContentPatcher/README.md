@@ -65,6 +65,7 @@ whether one of these would work for you:
   * [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) to add machines.
   * [Custom Furniture](https://www.nexusmods.com/stardewvalley/mods/1254) to add furniture.
   * [CustomNPC](https://www.nexusmods.com/stardewvalley/mods/1607) to add NPCs.
+  * [Custom Shirts](https://www.nexusmods.com/stardewvalley/mods/2416) to add shirts.
   * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add items and fruit trees.
 
 ## Create a content pack
