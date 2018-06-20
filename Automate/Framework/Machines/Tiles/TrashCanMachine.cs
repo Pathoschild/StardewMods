@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -16,7 +17,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         private readonly Vector2 Tile;
 
         /// <summary>The game's list of trash cans the player has already checked.</summary>
-        private readonly bool[] TrashCansChecked;
+        private readonly IList<bool> TrashCansChecked;
 
         /// <summary>The trash can index (or -1 if not a valid trash can).</summary>
         private readonly int TrashCanIndex = -1;
@@ -33,8 +34,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         public TrashCanMachine(Town town, Vector2 tile, int trashCanIndex, IReflectionHelper reflection)
         {
             this.Tile = tile;
-            this.TrashCansChecked = reflection.GetField<bool[]>(town, "garbageChecked").GetValue();
-            if (trashCanIndex >= 0 && trashCanIndex < this.TrashCansChecked.Length)
+            this.TrashCansChecked = reflection.GetField<IList<bool>>(town, "garbageChecked").GetValue();
+            if (trashCanIndex >= 0 && trashCanIndex < this.TrashCansChecked.Count)
                 this.TrashCanIndex = trashCanIndex;
         }
 
