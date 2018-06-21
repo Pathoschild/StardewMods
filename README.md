@@ -40,9 +40,6 @@ Active mods:
   _Skip straight to the title screen or load screen (configurable) when you start the game. It also
   skips the screen transitions, so starting the game is much faster._
 
-* **[The Long Night](http://www.nexusmods.com/stardewvalley/mods/1369)** <small>([source](LongNight))</small>  
-  _Disables collapsing. You just stay awake forever and the night never ends (until you go to bed)._
-
 * **[Tractor Mod](http://www.nexusmods.com/stardewvalley/mods/1401)** <small>([source](TractorMod))</small>  
   _Lets you buy a tractor to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc._
 
@@ -50,6 +47,10 @@ Inactive mods:
 * ~~No Debug Mode~~  
   _(deleted) Disables SMAPI's F2 debug mode, which can cause unintended effects like skipping an
   entire season or teleporting into walls. No longer needed after SMAPI 1.0._
+
+* ~~[The Long Night](http://www.nexusmods.com/stardewvalley/mods/1369)~~ <small>([source](LongNight))</small>  
+  _Disables collapsing. You just stay awake forever and the night never ends (until you go to bed).
+  Broke permanently in Stardew Valley 1.3.20._
 
 ## Translating the mods
 The mods can be translated into any language supported by the game, and SMAPI will automatically
