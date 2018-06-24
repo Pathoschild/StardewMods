@@ -63,6 +63,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>Whether to show the group tab.</summary>
         private bool ShowGroupTab => this.Groups.Length > 1;
 
+        /// <summary> Provides access to current modifier status </summary>
+        private ScrollModifierController ScrollModifier;
+
         /****
         ** Menu management
         ****/
@@ -80,7 +83,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
         /// <summary>Whether the chest menu is ready to close.</summary>
         private bool CanCloseChest => this.Menu.readyToClose();
-
 
         /****
         ** Access UI
@@ -151,7 +153,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="config">The mod configuration.</param>
         /// <param name="translations">Provides translations stored in the mod's folder.</param>
         /// <param name="showAutomateOptions">Whether to show Automate options.</param>
-        public ManageChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ITranslationHelper translations, bool showAutomateOptions)
+        public ManageChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ITranslationHelper translations, bool showAutomateOptions, ScrollModifierController scrollModifierController)
             : base(keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
         {
             this.ShowAutomateOptions = showAutomateOptions;
@@ -173,6 +175,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
             // components
             this.ReinitialiseComponents();
+
+            this.ScrollModifier = scrollModifierController;
         }
 
         /// <summary>Sort the player's inventory.</summary>
@@ -363,13 +367,26 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             switch (this.ActiveElement)
             {
                 case Element.Menu:
-                    // Scroll control of chest and category selection
+                    // Scroll navigation of of chest and category
+                    if (!this.Config.EnableScrollNavigation)
+                        return false;
+
                     bool scrollNext = amount > 0;
 
-                    if (scrollNext)
-                        this.SelectNextChest();
+                    if (this.ScrollModifier.ScrollCategory)
+                    {
+                        if (scrollNext)
+                            this.SelectNextCategory();
+                        else
+                            this.SelectPreviousCategory();
+                    }
                     else
-                        this.SelectPreviousChest();
+                    {
+                        if (scrollNext)
+                            this.SelectNextChest();
+                        else
+                            this.SelectPreviousChest();
+                    }
                     return true;
                 case Element.ChestList:
                     this.ChestSelector.ReceiveScrollWheelAction(amount);
