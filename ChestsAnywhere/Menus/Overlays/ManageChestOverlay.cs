@@ -362,6 +362,15 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         {
             switch (this.ActiveElement)
             {
+                case Element.Menu:
+                    // Scroll control of chest and category selection
+                    bool scrollNext = amount > 0;
+
+                    if (scrollNext)
+                        this.SelectNextChest();
+                    else
+                        this.SelectPreviousChest();
+                    return true;
                 case Element.ChestList:
                     this.ChestSelector.ReceiveScrollWheelAction(amount);
                     return true;
