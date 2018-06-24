@@ -13,9 +13,8 @@ namespace Pathoschild.Stardew.TheLongNight
         /*********
         ** Accessors
         *********/
-        /// <summary>Whether the mod just skipped a 10-minute interval.</summary>
-        private bool JustSkipped;
-
+        /// <summary>The time at which the game clock will stop and all fish will become unlocked.</summary>
+        private readonly int GameTimeLimit = 2550;
 
         /*********
         ** Public methods
@@ -47,7 +46,7 @@ namespace Pathoschild.Stardew.TheLongNight
                     if (fields[1] == "trap")
                         return value; // ignore non-fish entries
 
-                    fields[5] = $"{fields[5]} 2600 {int.MaxValue}".Trim();
+                    fields[5] = $"{fields[5]} {this.GameTimeLimit} {int.MaxValue}".Trim();
                     return string.Join("/", fields);
                 });
         }
@@ -72,67 +71,10 @@ namespace Pathoschild.Stardew.TheLongNight
         /// </remarks>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (!Context.IsWorldReady || Game1.timeOfDay < 2550)
+            if (!Context.IsWorldReady || Game1.timeOfDay < this.GameTimeLimit)
                 return;
 
-            // get clock details
-            bool clockWillChangeNextTick = this.WillClockChangeNextTick();
-
-            // 1. Right before the clock changes, freeze the player for interval + 1. That's too fast for the player to
-            //    notice, but long enough to bypass the farmerShouldPassOut check (which skips if the player is frozen).
-            Game1.farmerShouldPassOut = false;
-            if (clockWillChangeNextTick)
-            {
-                Game1.player.freezePause = Game1.currentGameTime.ElapsedGameTime.Milliseconds + 1;
-                this.Monitor.Log($"Adding freeze for {this.GetNextTime(Game1.timeOfDay)} next tick ({Game1.player.freezePause}ms).", LogLevel.Trace);
-            }
-
-            // 2. Right before the game updates the clock to 2600/2800, change it to the upcoming time. The game will then
-            //    update to 2610/2810 instead, which has no special logic. Immediately afterwards, change the clock back to
-            //    2600/2800. This happens faster than the player can see.
-            if (clockWillChangeNextTick && (Game1.timeOfDay == 2550 || Game1.timeOfDay == 2750))
-            {
-                Game1.timeOfDay += 50;
-                this.Monitor.Log($"Skipping {Game1.timeOfDay} next tick.", LogLevel.Trace);
-                this.JustSkipped = true;
-            }
-            else if (this.JustSkipped)
-            {
-                Game1.timeOfDay -= 10;
-                this.Monitor.Log($"Skip done, reset time to {Game1.timeOfDay}.", LogLevel.Trace);
-                this.JustSkipped = false;
-            }
-
-            // 3. As a failsafe, if the collapse animation starts immediately remove it. This prevents the attached
-            //    Farmer.passOutFromTired callback from being called.
-            FarmerSprite sprite = (FarmerSprite)Game1.player.Sprite;
-            var animation = sprite.CurrentAnimation;
-            if (animation != null && animation.Any(frame => frame.frameBehavior == SFarmer.passOutFromTired))
-            {
-                this.Monitor.Log("Cancelling player collapse.", LogLevel.Trace);
-                Game1.player.freezePause = 0;
-                Game1.player.canMove = true;
-                sprite.PauseForSingleAnimation = false;
-                sprite.StopAnimation();
-            }
-        }
-
-        /// <summary>Get whether the clock will change on the next update tick.</summary>
-        /// <remarks>Derived from <see cref="Game1.performTenMinuteClockUpdate"/>.</remarks>
-        private bool WillClockChangeNextTick()
-        {
-            return (Game1.gameTimeInterval + Game1.currentGameTime.ElapsedGameTime.Milliseconds) > 7000 + Game1.currentLocation.getExtraMillisecondsPerInGameMinuteForThisLocation();
-        }
-
-        /// <summary>Get the clock time that comes after the given value.</summary>
-        /// <param name="current">The current time.</param>
-        /// <remarks>Derived from <see cref="Game1.performTenMinuteClockUpdate"/>.</remarks>
-        private int GetNextTime(int current)
-        {
-            int next = current + 10;
-            if (next % 100 >= 60)
-                next = next - (next % 100) + 100;
-            return next;
+            Game1.gameTimeInterval = 0;
         }
     }
 }
