@@ -12,13 +12,15 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 charset = utf-8
 
-[*.json]
+[*.{csproj,json,nuspec,targets}]
 indent_size = 2
+
+[*.csproj]
+insert_final_newline = false
 
 ##########
 ## C# formatting
 ## documentation: https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
-## some undocumented settings from: https://github.com/dotnet/roslyn/blob/master/.editorconfig
 ##########
 [*.cs]
 
@@ -47,6 +49,7 @@ dotnet_style_explicit_tuple_names = true:suggestion
 csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
 csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
 csharp_style_conditional_delegate_call = true:suggestion
+csharp_prefer_simple_default_expression = true:suggestion
 
 # prefer method block bodies
 csharp_style_expression_bodied_methods = false:suggestion
@@ -59,3 +62,6 @@ csharp_style_expression_bodied_accessors = true:suggestion
 
 # prefer inline out variables
 csharp_style_inlined_variable_declaration = true:warning
+
+# avoid superfluous braces
+csharp_prefer_braces = false:suggestion
