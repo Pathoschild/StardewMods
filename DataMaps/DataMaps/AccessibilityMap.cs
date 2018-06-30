@@ -83,6 +83,18 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
         /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
         private IEnumerable<TileData> GetTiles(GameLocation location, IEnumerable<Vector2> visibleTiles)
         {
+            // get building warps
+            HashSet<Vector2> buildingDoors = new HashSet<Vector2>();
+            if (location is BuildableGameLocation buildableLocation)
+            {
+                foreach (Building building in buildableLocation.buildings)
+                {
+                    buildingDoors.Add(new Vector2(building.humanDoor.X + building.tileX.Value, building.humanDoor.Y + building.tileY.Value));
+                    buildingDoors.Add(new Vector2(building.humanDoor.X + building.tileX.Value, building.humanDoor.Y + building.tileY.Value - 1));
+                }
+            }
+
+            // get tile data
             foreach (Vector2 tile in visibleTiles)
             {
                 // get pixel coordinates
@@ -90,7 +102,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
 
                 // get color code
                 Color color;
-                if (this.IsWarp(location, tilePixels))
+                if (this.IsWarp(location, tile, tilePixels, buildingDoors))
                     color = this.WarpColor;
                 else if (this.IsPassable(location, tile, tilePixels))
                     color = this.IsOccupied(location, tile, tilePixels) ? this.OccupiedColor : this.ClearColor;
@@ -104,10 +116,16 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps
 
         /// <summary>Get whether there's a warp on the given tile.</summary>
         /// <param name="location">The current location.</param>
+        /// <param name="tile">The tile to check.</param>
         /// <param name="tilePixels">The tile area in pixels.</param>
+        /// <param name="buildingDoors">The tile positions for farm building doors in the current location.</param>
         /// <remarks>Derived from <see cref="GameLocation.isCollidingWithWarp"/>, <see cref="GameLocation.performAction"/>, and <see cref="GameLocation.performTouchAction"/>.</remarks>
-        private bool IsWarp(GameLocation location, Rectangle tilePixels)
+        private bool IsWarp(GameLocation location, Vector2 tile, Rectangle tilePixels, HashSet<Vector2> buildingDoors)
         {
+            // check farm building doors
+            if (buildingDoors.Contains(tile))
+                return true;
+
             // check map warps
             if (location.isCollidingWithWarpOrDoor(tilePixels) != null)
                 return true;

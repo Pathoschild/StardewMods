@@ -2,6 +2,7 @@
 ## 1.4
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added support for garden pots to crop overlays.
+* Added farm building door warps to accessibility map.
 * Improved performance with more nuanced update rate.
 * Improved translations. Thanks to alca259 (added Spanish) and fadedDexofan (added Russian)!
 
