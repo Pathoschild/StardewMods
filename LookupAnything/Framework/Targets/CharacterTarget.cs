@@ -45,18 +45,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             else if (npc is Bat)
                 yOrigin = boundingBox.Center.Y;
             else if (npc is Bug)
-                yOrigin = boundingBox.Top - sprite.spriteHeight.Value * Game1.pixelZoom + (float)(System.Math.Sin(Game1.currentGameTime.TotalGameTime.Milliseconds / 1000.0 * (2.0 * System.Math.PI)) * 10.0);
+                yOrigin = boundingBox.Top - sprite.SpriteHeight * Game1.pixelZoom + (float)(System.Math.Sin(Game1.currentGameTime.TotalGameTime.Milliseconds / 1000.0 * (2.0 * System.Math.PI)) * 10.0);
             else if (npc is SquidKid squidKid)
             {
                 int yOffset = this.Reflection.GetField<int>(squidKid, "yOffset").GetValue();
-                yOrigin = boundingBox.Bottom - sprite.spriteHeight.Value * Game1.pixelZoom + yOffset;
+                yOrigin = boundingBox.Bottom - sprite.SpriteHeight * Game1.pixelZoom + yOffset;
             }
             else
                 yOrigin = boundingBox.Top;
 
             // get bounding box
-            int height = sprite.spriteHeight.Value * Game1.pixelZoom;
-            int width = sprite.spriteWidth.Value * Game1.pixelZoom;
+            int height = sprite.SpriteHeight * Game1.pixelZoom;
+            int width = sprite.SpriteWidth * Game1.pixelZoom;
             float x = boundingBox.Center.X - (width / 2);
             float y = yOrigin + boundingBox.Height - height + npc.yJumpOffset * 2;
 
