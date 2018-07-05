@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Integrations.PelicanFiber;
 using Pathoschild.Stardew.DataMaps.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -31,8 +30,8 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         /// <summary>The maximum number of tiles from the center a Junimo hut can harvest.</summary>
         private readonly int MaxRadius = JunimoHut.cropHarvestRadius;
 
-        /// <summary>Handles access to the Pelican Fiber mod.</summary>
-        private readonly PelicanFiberIntegration PelicanFiber;
+        /// <summary>Handles access to the supported mod integrations.</summary>
+        private readonly ModIntegrations Mods;
 
 
         /*********
@@ -41,11 +40,11 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data map settings.</param>
-        /// <param name="pelicanFiber">Handles access to the Pelican Fiber mod.</param>
-        public JunimoHutMap(ITranslationHelper translations, MapConfig config, PelicanFiberIntegration pelicanFiber)
+        /// <param name="mods">Handles access to the supported mod integrations.</param>
+        public JunimoHutMap(ITranslationHelper translations, MapConfig config, ModIntegrations mods)
             : base(translations.Get("maps.junimo-huts.name"), config)
         {
-            this.PelicanFiber = pelicanFiber;
+            this.Mods = mods;
             this.Legend = new[]
             {
                 new LegendEntry(translations.Get("maps.junimo-huts.can-harvest"), this.CoveredColor),
@@ -116,7 +115,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
                 return true;
 
             // Pelican Fiber menu
-            if (this.PelicanFiber.IsLoaded && this.PelicanFiber.GetBuildMenuBlueprint()?.name == "Junimo Hut")
+            if (this.Mods.PelicanFiber.IsLoaded && this.Mods.PelicanFiber.GetBuildMenuBlueprint()?.name == "Junimo Hut")
                 return true;
 
             return false;

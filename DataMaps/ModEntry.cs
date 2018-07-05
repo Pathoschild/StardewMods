@@ -2,10 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Integrations.BetterSprinklers;
-using Pathoschild.Stardew.Common.Integrations.Cobalt;
-using Pathoschild.Stardew.Common.Integrations.PelicanFiber;
-using Pathoschild.Stardew.Common.Integrations.SimpleSprinkler;
 using Pathoschild.Stardew.DataMaps.DataMaps;
 using Pathoschild.Stardew.DataMaps.DataMaps.Coverage;
 using Pathoschild.Stardew.DataMaps.DataMaps.Crops;
@@ -32,8 +28,8 @@ namespace Pathoschild.Stardew.DataMaps
         /// <summary>The available data maps.</summary>
         private IDataMap[] Maps;
 
-        /// <summary>Handles access to the Pelican Fiber mod.</summary>
-        private PelicanFiberIntegration PelicanFiber;
+        /// <summary>Handles access to the supported mod integrations.</summary>
+        private ModIntegrations Mods;
 
 
         /*********
@@ -64,22 +60,15 @@ namespace Pathoschild.Stardew.DataMaps
         {
             IModHelper helper = this.Helper;
 
-            this.PelicanFiber = new PelicanFiberIntegration(helper.ModRegistry, helper.Reflection, this.Monitor);
-            var betterSprinklers = new BetterSprinklersIntegration(helper.ModRegistry, this.Monitor);
-            var cobalt = new CobaltIntegration(helper.ModRegistry, this.Monitor);
-            var simpleSprinklers = new SimpleSprinklerIntegration(helper.ModRegistry, this.Monitor);
-
-            this.Maps = this.GetDataMaps(this.Config, this.Helper.Translation, this.PelicanFiber, betterSprinklers, cobalt, simpleSprinklers).ToArray();
+            this.Mods = new ModIntegrations(this.Monitor, helper.ModRegistry, helper.Reflection);
+            this.Maps = this.GetDataMaps(this.Config, this.Helper.Translation, this.Mods).ToArray();
         }
 
         /// <summary>Get the enabled data maps.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="translation">Provides translations for the mod.</param>
-        /// <param name="pelicanFiber">Handles access to the Pelican Fiber mod.</param>
-        /// <param name="betterSprinklers">Handles access to the Better Sprinklers mod.</param>
-        /// <param name="cobalt">Handles access to the Cobalt mod.</param>
-        /// <param name="simpleSprinklers">Handles access to the Simple Sprinklers mod.</param>
-        private IEnumerable<IDataMap> GetDataMaps(ModConfig config, ITranslationHelper translation, PelicanFiberIntegration pelicanFiber, BetterSprinklersIntegration betterSprinklers, CobaltIntegration cobalt, SimpleSprinklerIntegration simpleSprinklers)
+        /// <param name="mods">Handles access to the supported mod integrations.</param>
+        private IEnumerable<IDataMap> GetDataMaps(ModConfig config, ITranslationHelper translation, ModIntegrations mods)
         {
             var maps = config.DataMaps;
 
@@ -90,9 +79,9 @@ namespace Pathoschild.Stardew.DataMaps
             if (maps.CoverageForScarecrows.IsEnabled())
                 yield return new ScarecrowMap(translation, maps.CoverageForScarecrows);
             if (maps.CoverageForSprinklers.IsEnabled())
-                yield return new SprinklerMap(translation, maps.CoverageForSprinklers, betterSprinklers, cobalt, simpleSprinklers);
+                yield return new SprinklerMap(translation, maps.CoverageForSprinklers, mods);
             if (maps.CoverageForJunimoHuts.IsEnabled())
-                yield return new JunimoHutMap(translation, maps.CoverageForJunimoHuts, this.PelicanFiber);
+                yield return new JunimoHutMap(translation, maps.CoverageForJunimoHuts, mods);
             if (maps.CropWater.IsEnabled())
                 yield return new CropWaterMap(translation, maps.CropWater);
             if (maps.CropFertilizer.IsEnabled())
@@ -166,7 +155,7 @@ namespace Pathoschild.Stardew.DataMaps
             return
                 Context.IsPlayerFree // player is free to roam
                 || (Game1.activeClickableMenu is CarpenterMenu && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "onFarm").GetValue()) // on Robin's or Wizard's build screen
-                || (this.PelicanFiber.IsLoaded && this.PelicanFiber.IsBuildMenuOpen() && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "OnFarm").GetValue()); // on Pelican Fiber's build screen
+                || (this.Mods.PelicanFiber.IsLoaded && this.Mods.PelicanFiber.IsBuildMenuOpen() && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "OnFarm").GetValue()); // on Pelican Fiber's build screen
         }
     }
 }

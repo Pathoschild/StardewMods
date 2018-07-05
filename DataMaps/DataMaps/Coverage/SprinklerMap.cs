@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Integrations.BetterSprinklers;
-using Pathoschild.Stardew.Common.Integrations.Cobalt;
-using Pathoschild.Stardew.Common.Integrations.SimpleSprinkler;
 using Pathoschild.Stardew.DataMaps.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -35,8 +32,8 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         /// <summary>The static sprinkler tiles centered on (0, 0), indexed by sprinkler ID.</summary>
         private readonly IDictionary<int, Vector2[]> StaticTilesBySprinklerID;
 
-        /// <summary>Handles access to the Better Sprinklers mod.</summary>
-        private readonly BetterSprinklersIntegration BetterSprinklers;
+        /// <summary>Handles access to the supported mod integrations.</summary>
+        private readonly ModIntegrations Mods;
 
 
         /*********
@@ -45,14 +42,12 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data map settings.</param>
-        /// <param name="betterSprinklers">Handles access to the Better Sprinklers mod.</param>
-        /// <param name="cobalt">Handles access to the Cobalt mod.</param>
-        /// <param name="simpleSprinkler">Handles access to the Simple Sprinkler mod.</param>
-        public SprinklerMap(ITranslationHelper translations, MapConfig config, BetterSprinklersIntegration betterSprinklers, CobaltIntegration cobalt, SimpleSprinklerIntegration simpleSprinkler)
+        /// <param name="mods">Handles access to the supported mod integrations.</param>
+        public SprinklerMap(ITranslationHelper translations, MapConfig config, ModIntegrations mods)
             : base(translations.Get("maps.sprinklers.name"), config)
         {
             // init
-            this.BetterSprinklers = betterSprinklers;
+            this.Mods = mods;
             this.Legend = new[]
             {
                 new LegendEntry(translations.Get("maps.sprinklers.covered"), this.WetColor),
@@ -60,12 +55,12 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
             };
 
             // get static sprinkler coverage
-            this.StaticTilesBySprinklerID = this.GetStaticSprinklerTiles(cobalt, simpleSprinkler);
+            this.StaticTilesBySprinklerID = this.GetStaticSprinklerTiles(mods);
 
             // get max sprinkler radius
             this.MaxRadius = this.StaticTilesBySprinklerID.Max(p => this.GetMaxRadius(p.Value));
-            if (betterSprinklers.IsLoaded)
-                this.MaxRadius = Math.Max(this.MaxRadius, betterSprinklers.MaxRadius);
+            if (mods.BetterSprinklers.IsLoaded)
+                this.MaxRadius = Math.Max(this.MaxRadius, mods.BetterSprinklers.MaxRadius);
         }
 
         /// <summary>Get the updated data map tiles.</summary>
@@ -133,9 +128,8 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         }
 
         /// <summary>Get the relative sprinkler tile coverage, including any mod customisations which don't change after launch.</summary>
-        /// <param name="cobalt">Handles access to the Cobalt mod.</param>
-        /// <param name="simpleSprinkler">Handles access to the Simple Sprinkler mod.</param>
-        private IDictionary<int, Vector2[]> GetStaticSprinklerTiles(CobaltIntegration cobalt, SimpleSprinklerIntegration simpleSprinkler)
+        /// <param name="mods">Handles access to the supported mod integrations.</param>
+        private IDictionary<int, Vector2[]> GetStaticSprinklerTiles(ModIntegrations mods)
         {
             IDictionary<int, Vector2[]> tiles = new Dictionary<int, Vector2[]>();
 
@@ -160,13 +154,13 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
             }
 
             // Cobalt mod adds new sprinkler
-            if (cobalt.IsLoaded)
-                tiles[cobalt.GetSprinklerId()] = cobalt.GetSprinklerTiles().ToArray();
+            if (mods.Cobalt.IsLoaded)
+                tiles[mods.Cobalt.GetSprinklerId()] = mods.Cobalt.GetSprinklerTiles().ToArray();
 
             // Simple Sprinkler mod adds tiles to default coverage
-            if (simpleSprinkler.IsLoaded)
+            if (mods.SimpleSprinkler.IsLoaded)
             {
-                foreach (var pair in simpleSprinkler.GetNewSprinklerTiles())
+                foreach (var pair in mods.SimpleSprinkler.GetNewSprinklerTiles())
                 {
                     int sprinklerID = pair.Key;
                     if (tiles.TryGetValue(sprinklerID, out Vector2[] currentTiles))
@@ -184,14 +178,14 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         private IDictionary<int, Vector2[]> GetCurrentSprinklerTiles(IDictionary<int, Vector2[]> staticTiles)
         {
             // get static tiles
-            if (!this.BetterSprinklers.IsLoaded)
+            if (!this.Mods.BetterSprinklers.IsLoaded)
                 return staticTiles;
 
             // merge custom tiles
             IDictionary<int, Vector2[]> tilesBySprinklerID = new Dictionary<int, Vector2[]>(staticTiles);
-            if (this.BetterSprinklers.IsLoaded)
+            if (this.Mods.BetterSprinklers.IsLoaded)
             {
-                foreach (var pair in this.BetterSprinklers.GetSprinklerTiles())
+                foreach (var pair in this.Mods.BetterSprinklers.GetSprinklerTiles())
                     tilesBySprinklerID[pair.Key] = pair.Value;
             }
             return tilesBySprinklerID;
