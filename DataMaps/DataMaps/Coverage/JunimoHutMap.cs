@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         private readonly Color SelectedColor = Color.Blue;
 
         /// <summary>The maximum number of tiles from the center a Junimo hut can harvest.</summary>
-        private readonly int MaxRadius = JunimoHut.cropHarvestRadius;
+        private readonly int MaxRadius;
 
         /// <summary>Handles access to the supported mod integrations.</summary>
         private readonly ModIntegrations Mods;
@@ -44,12 +44,18 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
         public JunimoHutMap(ITranslationHelper translations, MapConfig config, ModIntegrations mods)
             : base(translations.Get("maps.junimo-huts.name"), config)
         {
+            // init
             this.Mods = mods;
             this.Legend = new[]
             {
                 new LegendEntry(translations.Get("maps.junimo-huts.can-harvest"), this.CoveredColor),
                 new LegendEntry(translations.Get("maps.junimo-huts.cannot-harvest"), this.NotCoveredColor)
             };
+
+            // set max radius
+            this.MaxRadius = mods.BetterJunimos.IsLoaded
+                ? mods.BetterJunimos.MaxRadius
+                : JunimoHut.cropHarvestRadius;
         }
 
         /// <summary>Get the updated data map tiles.</summary>

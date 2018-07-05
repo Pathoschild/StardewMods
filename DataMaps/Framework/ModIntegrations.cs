@@ -12,14 +12,17 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>Handles access to the Pelican Fiber mod.</summary>
-        public PelicanFiberIntegration PelicanFiber { get; }
+        /// <summary>Handles access to the Better Junimos mod.</summary>
+        public BetterJunimosIntegration BetterJunimos { get; }
 
         /// <summary>Handles access to the Better Sprinklers mod.</summary>
         public BetterSprinklersIntegration BetterSprinklers { get; }
 
         /// <summary>Handles access to the Cobalt mod.</summary>
         public CobaltIntegration Cobalt { get; }
+
+        /// <summary>Handles access to the Pelican Fiber mod.</summary>
+        public PelicanFiberIntegration PelicanFiber { get; }
 
         /// <summary>Handles access to the Cobalt mod.</summary>
         public SimpleSprinklerIntegration SimpleSprinkler;
@@ -34,9 +37,10 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <param name="reflection">An API for accessing private code.</param>
         public ModIntegrations(IMonitor monitor, IModRegistry modRegistry, IReflectionHelper reflection)
         {
-            this.PelicanFiber = new PelicanFiberIntegration(modRegistry, reflection, monitor);
+            this.BetterJunimos = new BetterJunimosIntegration(modRegistry, monitor);
             this.BetterSprinklers = new BetterSprinklersIntegration(modRegistry, monitor);
             this.Cobalt = new CobaltIntegration(modRegistry, monitor);
+            this.PelicanFiber = new PelicanFiberIntegration(modRegistry, reflection, monitor);
             this.SimpleSprinkler = new SimpleSprinklerIntegration(modRegistry, monitor);
         }
     }

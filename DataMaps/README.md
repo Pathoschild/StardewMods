@@ -1,5 +1,5 @@
 **Data Maps** is a [Stardew Valley](http://stardewvalley.net/) mod that overlays the world with
-metadata maps.
+metadata maps. Automatically accounts for other mods if installed.
 
 ## Contents
 * [Install](#install)
@@ -33,7 +33,7 @@ actual range.)
 
 ### Coverage: Junimo huts
 Shows Junimo hut coverage, and highlights crops they won't reach. Also works when placing a Junimo
-hut from the Wizard's build menu. Compatible with Pelican Fiber.
+hut from the Wizard's build menu.
 > ![](docs/screenshots/junimo-huts.png)
 
 ### Coverage: scarecrows
@@ -42,7 +42,6 @@ Shows scarecrow coverage, and highlights unprotected crops. Also works on scarec
 
 ### Coverage: sprinklers
 Shows sprinkler coverage, and highlights unsprinkled crops. Also works on sprinklers being placed.
-Compatible with custom sprinkler coverage from Better Sprinklers, Cobalt, and Simple Sprinkler.
 > ![](docs/screenshots/sprinklers.png)
 
 ### Crops: watered
@@ -68,11 +67,15 @@ Data Maps is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both sing
 multiplayer. There are no known issues in multiplayer (even if other players don't have it
 installed).
 
-Data Maps will automatically show data from these mods if you have them installed:
-* Better Sprinklers
-* Cobalt
-* Pelican Fiber
-* Simple Sprinkler
+Data Maps will automatically integrate with these mods if you they're installed:
+
+mod installed     | effects
+----------------- | ----------
+Better Junimos    | Shows custom Junimo hut range.
+Better Sprinklers | Shows custom sprinkler range.
+Cobalt            | Shows custom sprinkler range.
+Pelican Fiber     | Shows coverage when building a Junimo hut or sprinkler through Pelican Fiber's menu.
+Simple Sprinkler  | Shows custom sprinkler range.
 
 ## See also
 * [Release notes](release-notes.md)
