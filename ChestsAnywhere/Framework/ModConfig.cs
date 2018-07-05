@@ -62,6 +62,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             /// <summary>The control which sorts items in the chest.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
             public SButton[] SortItems { get; set; } = new SButton[0];
+
+            /// <summary>The control which, when held, enables scrolling the chest dropdown with the mouse scroll wheel.</summary>
+            [JsonConverter(typeof(StringEnumArrayConverter))]
+            public SButton[] HoldToMouseWheelScrollChests { get; set; } = { SButton.LeftControl };
+
+            /// <summary>The control which, when held, enables scrolling the category dropdown with the mouse scroll wheel.</summary>
+            [JsonConverter(typeof(StringEnumArrayConverter))]
+            public SButton[] HoldToMouseWheelScrollCategories { get; set; } = { SButton.LeftAlt };
         }
     }
 }
