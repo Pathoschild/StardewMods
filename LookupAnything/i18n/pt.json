@@ -39,7 +39,7 @@
   "quality.gold": "ouro",
   "quality.iridium": "irídio",
 
-  // NPC friendship // TODO
+  // NPC friendship
   "friendship-status.friendly": "Amigável",
   "friendship-status.dating": "Namorando",
   "friendship-status.engaged": "Noivos",

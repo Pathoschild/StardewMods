@@ -13,8 +13,8 @@
   "label.order": "Ordem",
   "label.hide-chest": "Esconder esse baú",
   "label.hide-chest-hidden": "Esconder esse baú (Você terá que achar o baú para desfazer isso!)",
-  "label.automate-prefer-output": "(Automate) Primeiro coloque itens nesse baú", // TODO
-  "label.automate-ignore": "(Automate) Não use este baú para automação, // TODO
+  "label.automate-prefer-output": "(Automate) Primeiro coloque itens nesse baú",
+  "label.automate-ignore": "(Automate) Não use este baú para automação",
 
   // button labels
   "button.edit-chest": "editar baú",
