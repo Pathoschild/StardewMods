@@ -18,9 +18,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>Whether to enable access to the shipping bin.</summary>
         public bool EnableShippingBin { get; set; } = true;
 
-        /// <summary>Whether to enable scroll navigation through chests and categories.</summary>
-        public bool EnableScrollNavigation { get; set; } = true;
-
         /// <summary>The range at which chests are accessible.</summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public ChestRange Range { get; set; } = ChestRange.Unlimited;
@@ -66,9 +63,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             [JsonConverter(typeof(StringEnumArrayConverter))]
             public SButton[] SortItems { get; set; } = new SButton[0];
 
-            /// <summary>The control which makes scroll navigate categories.</summary>
+            /// <summary>The control which, when held, enables scrolling the chest dropdown with the mouse scroll wheel.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
-            public SButton[] CategoryScrollModifier { get; set; } = { SButton.LeftShift, SButton.RightShift};
+            public SButton[] HoldToMouseWheelScrollChests { get; set; } = { SButton.LeftControl };
+
+            /// <summary>The control which, when held, enables scrolling the category dropdown with the mouse scroll wheel.</summary>
+            [JsonConverter(typeof(StringEnumArrayConverter))]
+            public SButton[] HoldToMouseWheelScrollCategories { get; set; } = { SButton.LeftAlt };
         }
     }
 }

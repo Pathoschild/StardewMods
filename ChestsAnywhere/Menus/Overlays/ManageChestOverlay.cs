@@ -25,6 +25,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>Provides translations stored in the mod's folder.</summary>
         private readonly ITranslationHelper Translations;
 
+        /// <summary>An API for checking and changing input state.</summary>
+        private readonly IInputHelper Input;
+
         /// <summary>The available chests.</summary>
         private readonly ManagedChest[] Chests;
 
@@ -62,9 +65,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
         /// <summary>Whether to show the group tab.</summary>
         private bool ShowGroupTab => this.Groups.Length > 1;
-
-        /// <summary> Provides access to current modifier status </summary>
-        private ScrollModifierController ScrollModifier;
 
         /****
         ** Menu management
@@ -133,7 +133,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         private ClickableTextureComponent EditSaveButton;
 
         /// <summary>The top-right button which closes the edit form.</summary>
-        public ClickableTextureComponent EditExitButton;
+        private ClickableTextureComponent EditExitButton;
 
 
         /*********
@@ -151,12 +151,17 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="chest">The selected chest.</param>
         /// <param name="chests">The available chests.</param>
         /// <param name="config">The mod configuration.</param>
+        /// <param name="input">An API for checking and changing input state.</param>
         /// <param name="translations">Provides translations stored in the mod's folder.</param>
         /// <param name="showAutomateOptions">Whether to show Automate options.</param>
-        public ManageChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ITranslationHelper translations, bool showAutomateOptions, ScrollModifierController scrollModifierController)
+        public ManageChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, IInputHelper input, ITranslationHelper translations, bool showAutomateOptions)
             : base(keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
         {
             this.ShowAutomateOptions = showAutomateOptions;
+
+            // helpers
+            this.Input = input;
+            this.Translations = translations;
 
             // menu
             this.Menu = menu;
@@ -170,13 +175,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.Groups = chests.Select(p => p.GetGroup()).Distinct().OrderBy(p => p).ToArray();
             this.Config = config;
 
-            // translations
-            this.Translations = translations;
-
             // components
             this.ReinitialiseComponents();
-
-            this.ScrollModifier = scrollModifierController;
         }
 
         /// <summary>Sort the player's inventory.</summary>
@@ -367,27 +367,26 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             switch (this.ActiveElement)
             {
                 case Element.Menu:
-                    // Scroll navigation of of chest and category
-                    if (!this.Config.EnableScrollNavigation)
-                        return false;
-
                     bool scrollNext = amount > 0;
 
-                    if (this.ScrollModifier.ScrollCategory)
+                    // scroll dropdowns
+                    if (this.Config.Controls.HoldToMouseWheelScrollCategories.Any(p => this.Input.IsDown(p)))
                     {
                         if (scrollNext)
                             this.SelectNextCategory();
                         else
                             this.SelectPreviousCategory();
+                        return true;
                     }
-                    else
+                    if (this.Config.Controls.HoldToMouseWheelScrollChests.Any(p => this.Input.IsDown(p)))
                     {
                         if (scrollNext)
                             this.SelectNextChest();
                         else
                             this.SelectPreviousChest();
                     }
-                    return true;
+                    return false;
+
                 case Element.ChestList:
                     this.ChestSelector.ReceiveScrollWheelAction(amount);
                     return true;

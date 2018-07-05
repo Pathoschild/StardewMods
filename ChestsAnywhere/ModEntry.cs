@@ -29,9 +29,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Encapsulates logic for finding chests.</summary>
         private ChestFactory ChestFactory;
 
-        /// <summary>Encapsulates logic for tracking the scroll modifier.</summary>
-        private ScrollModifierController ScrollModifierController;
-
 
         /****
         ** State
@@ -54,7 +51,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             this.Config = helper.ReadConfig<ModConfig>();
             this.Data = helper.ReadJsonFile<ModData>("data.json") ?? new ModData();
             this.ChestFactory = new ChestFactory(helper.Translation, helper.Reflection, this.Config.EnableShippingBin);
-            this.ScrollModifierController = new ScrollModifierController(this.Config);
 
             // hook UI
             GraphicsEvents.OnPostRenderHudEvent += this.GraphicsEvents_OnPostRenderHudEvent;
@@ -145,7 +141,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 RangeHandler range = this.GetCurrentRange();
                 ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true, alwaysIncludeContainer: chest.Container).ToArray();
                 bool isAutomateInstalled = this.Helper.ModRegistry.IsLoaded("Pathoschild.Automate");
-                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Translation, showAutomateOptions: isAutomateInstalled, scrollModifierController: this.ScrollModifierController);
+                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Input, this.Helper.Translation, showAutomateOptions: isAutomateInstalled);
                 this.ManageChestOverlay.OnChestSelected += selected =>
                 {
                     this.SelectedInventory = selected.Container.Inventory;
