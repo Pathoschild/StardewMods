@@ -40,11 +40,11 @@
   "quality.iridium": "irídio",
 
   // NPC friendship // TODO
-  "friendship-status.friendly": "Friendly",
-  "friendship-status.dating": "Dating",
-  "friendship-status.engaged": "Engaged",
-  "friendship-status.married": "Married",
-  "friendship-status.divorced": "Divorced",
+  "friendship-status.friendly": "Amigável",
+  "friendship-status.dating": "Namorando",
+  "friendship-status.engaged": "Noivos",
+  "friendship-status.married": "Casados",
+  "friendship-status.divorced": "Divorciados",
 
   /*********
   ** Data translations
@@ -144,7 +144,7 @@
   "data.item.mine-stone.description": "Quebre para obter preda.",
 
   // mine containers
-  "data.item.barrel.name": "Barril",
+  "data.item.barrel.name": "Barríl",
   "data.item.barrel.description": "Quebre pra receber bens diversos.",
   "data.item.box.name": "Caixa",
   "data.item.box.description": "Quebre para receber bens diversos.",
