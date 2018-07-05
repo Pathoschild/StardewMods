@@ -5,6 +5,6 @@
   "label.menu": "menu",
   "label.submenu": "submenu", // TODO
   "label.festival-name": "festival", // TODO
-  "label.event-id": "event ID", // TODO
-  "label.event-script": "event script" // TODO
+  "label.event-id": "ID do evento", // TODO
+  "label.event-script": "script do evento " // TODO
 }
