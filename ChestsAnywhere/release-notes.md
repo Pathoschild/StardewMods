@@ -4,7 +4,7 @@
 ## 1.13
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added Automate options to edit-chest screen if it's installed.
-* Added support for scrolling chest/category dropdowns with the mouse wheel when holding left shift/alt (configurable).
+* Added support for scrolling chest/category dropdowns with the mouse wheel. (Thanks to mattfeldman!)
 * Fixed 'ok' button not closing menu in rare cases.
 * Fixed issue where opening the chest UI from the inventory screen while holding an item destroys the item.
 * Improved translations. Thanks to alca259 (Spanish), changbowen (Chinese), dezqo (German), fadedDexofan (Russian), heiwaon (Russian), and TaelFayre (Portuguese)!
