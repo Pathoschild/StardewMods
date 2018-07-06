@@ -17,7 +17,7 @@ Active mods:
   XNB mods, these content packs get automatic update checks and compatibility checks, are easy to
   install and uninstall, and are less likely to break due to game updates._
 
-* **[Data Layers](https://www.nexusmods.com/stardewvalley/mods/1691)** <small>([source](DataMaps))</small>  
+* **[Data Layers](https://www.nexusmods.com/stardewvalley/mods/1691)** <small>([source](DataLayers))</small>  
   _Overlays the world with overlays the world with visual data like accessibility,
   bee/Junimo/scarecrow/sprinkler coverage, etc. It automatically includes data from other mods if
   applicable._
@@ -60,14 +60,14 @@ use the right translations.
 
 (❑ = untranslated, ↻ = partly translated, ✓ = fully translated)
 
-&nbsp;     | Chests Anywhere                   | Data Maps                   | Debug Mode                          | Lookup Anything                          | Tractor Mod
----------- | :-------------------------------- | :-------------------------- | :---------------------------------- | :--------------------------------------- | :------------------------------
-Chinese    | [✓](ChestsAnywhere/i18n/zh.json) | [✓](DataMaps/i18n/zh.json) | [✓](DebugMode/i18n/zh.json)        | [✓](LookupAnything/i18n/zh.json)        | [✓](TractorMod/i18n/zh.json)
-German     | [✓](ChestsAnywhere/i18n/de.json) | [✓](DataMaps/i18n/de.json) | [✓](DebugMode/i18n/de.json)        | [✓](LookupAnything/i18n/de.json)        | [✓](TractorMod/i18n/de.json)
-Japanese   | ❑ _none_                         | ❑ _none_                   | ❑ _none_                           | ❑ _none_                                | ❑ _none_
-Portuguese | [✓](ChestsAnywhere/i18n/pt.json) | ❑ _none_                   | ✓ [](DebugMode/i18n/pt.json)       | ↻ [partial](LookupAnything/i18n/pt.json) | [✓](TractorMod/i18n/pt.json)
-Russian    | [✓](ChestsAnywhere/i18n/ru.json) | [✓](DataMaps/i18n/ru.json) | ↻ [partial](DebugMode/i18n/ru.json) | [✓](LookupAnything/i18n/ru.json)        | [✓](TractorMod/i18n/ru.json)
-Spanish    | [✓](ChestsAnywhere/i18n/es.json) | [✓](DataMaps/i18n/es.json) | [✓](DebugMode/i18n/es.json)        | [✓](LookupAnything/i18n/es.json)        | [✓](TractorMod/i18n/es.json)
+&nbsp;     | Chests Anywhere                   | Data Layers                   | Debug Mode                          | Lookup Anything                          | Tractor Mod
+---------- | :-------------------------------- | :---------------------------- | :---------------------------------- | :--------------------------------------- | :------------------------------
+Chinese    | [✓](ChestsAnywhere/i18n/zh.json) | [✓](DataLayers/i18n/zh.json) | [✓](DebugMode/i18n/zh.json)        | [✓](LookupAnything/i18n/zh.json)        | [✓](TractorMod/i18n/zh.json)
+German     | [✓](ChestsAnywhere/i18n/de.json) | [✓](DataLayers/i18n/de.json) | [✓](DebugMode/i18n/de.json)        | [✓](LookupAnything/i18n/de.json)        | [✓](TractorMod/i18n/de.json)
+Japanese   | ❑ _none_                         | ❑ _none_                     | ❑ _none_                           | ❑ _none_                                | ❑ _none_
+Portuguese | [✓](ChestsAnywhere/i18n/pt.json) | ❑ _none_                     | ✓ [](DebugMode/i18n/pt.json)       | ↻ [partial](LookupAnything/i18n/pt.json) | [✓](TractorMod/i18n/pt.json)
+Russian    | [✓](ChestsAnywhere/i18n/ru.json) | [✓](DataLayers/i18n/ru.json) | ↻ [partial](DebugMode/i18n/ru.json) | [✓](LookupAnything/i18n/ru.json)        | [✓](TractorMod/i18n/ru.json)
+Spanish    | [✓](ChestsAnywhere/i18n/es.json) | [✓](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json)        | [✓](LookupAnything/i18n/es.json)        | [✓](TractorMod/i18n/es.json)
 
 Here's how to translate one of my mods:
 
