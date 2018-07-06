@@ -6,7 +6,7 @@
 * Added garden pots in crop overlays.
 * Added support for Better Junimos and Prismatic Tools.
 * Improved performance with more nuanced update rate.
-* Improved translations. Thanks to alca259 (added Spanish) and fadedDexofan (added Russian)!
+* Improved translations. Thanks to alca259 (added Spanish), fadedDexofan (added Russian), and TaelFayre (added Portuguese)!
 
 ## 1.3
 * Updated to SMAPI 2.4.
