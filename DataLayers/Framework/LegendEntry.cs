@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace Pathoschild.Stardew.DataMaps.Framework
+namespace Pathoschild.Stardew.DataLayers.Framework
 {
     /// <summary>An entry to display in the overlay legend.</summary>
     internal struct LegendEntry

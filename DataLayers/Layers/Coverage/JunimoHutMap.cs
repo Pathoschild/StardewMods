@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.DataMaps.Framework;
+using Pathoschild.Stardew.DataLayers.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
@@ -10,7 +10,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.TerrainFeatures;
 
-namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
+namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 {
     /// <summary>A data map which shows Junimo hut coverage.</summary>
     internal class JunimoHutMap : BaseDataMap

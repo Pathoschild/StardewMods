@@ -8,7 +8,7 @@ using Pathoschild.Stardew.Common.UI;
 using StardewValley;
 using XRectangle = xTile.Dimensions.Rectangle;
 
-namespace Pathoschild.Stardew.DataMaps.Framework
+namespace Pathoschild.Stardew.DataLayers.Framework
 {
     /// <summary>Renders a data map as an overlay over the world.</summary>
     internal class DataMapOverlay : BaseOverlay

@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.DataMaps.DataMaps;
-using Pathoschild.Stardew.DataMaps.DataMaps.Coverage;
-using Pathoschild.Stardew.DataMaps.DataMaps.Crops;
-using Pathoschild.Stardew.DataMaps.Framework;
+using Pathoschild.Stardew.DataLayers.Framework;
+using Pathoschild.Stardew.DataLayers.Layers;
+using Pathoschild.Stardew.DataLayers.Layers.Coverage;
+using Pathoschild.Stardew.DataLayers.Layers.Crops;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Pathoschild.Stardew.DataMaps
+namespace Pathoschild.Stardew.DataLayers
 {
     /// <summary>The mod entry point.</summary>
     internal class ModEntry : Mod

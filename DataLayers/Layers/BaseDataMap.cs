@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Pathoschild.Stardew.DataMaps.Framework;
+using Pathoschild.Stardew.DataLayers.Framework;
 using StardewValley;
 
-namespace Pathoschild.Stardew.DataMaps.DataMaps
+namespace Pathoschild.Stardew.DataLayers.Layers
 {
     /// <summary>The base implementation for a data map.</summary>
     internal abstract class BaseDataMap : IDataMap

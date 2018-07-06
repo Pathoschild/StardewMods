@@ -1,6 +1,6 @@
 using System;
 
-namespace Pathoschild.Stardew.DataMaps.Framework
+namespace Pathoschild.Stardew.DataLayers.Framework
 {
     /// <summary>A tile edge direction.</summary>
     [Flags]

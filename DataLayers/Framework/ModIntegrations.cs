@@ -4,7 +4,7 @@ using Pathoschild.Stardew.Common.Integrations.PelicanFiber;
 using Pathoschild.Stardew.Common.Integrations.SimpleSprinkler;
 using StardewModdingAPI;
 
-namespace Pathoschild.Stardew.DataMaps.Framework
+namespace Pathoschild.Stardew.DataLayers.Framework
 {
     /// <summary>A container for the supported mod integrations.</summary>
     internal class ModIntegrations

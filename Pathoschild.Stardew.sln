@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkipIntro", "SkipIntro\Skip
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebugMode", "DebugMode\DebugMode.csproj", "{F3E43047-A0EF-4240-A75C-49CF01952F32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMaps", "DataMaps\DataMaps.csproj", "{CDEEF8AF-15CB-4955-8163-E446F212C2F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayers", "DataLayers\DataLayers.csproj", "{CDEEF8AF-15CB-4955-8163-E446F212C2F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastAnimations", "FastAnimations\FastAnimations.csproj", "{EA68E967-BE31-4231-A75B-2C9BE8E91D9F}"
 EndProject

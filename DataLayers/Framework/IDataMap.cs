@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewValley;
 
-namespace Pathoschild.Stardew.DataMaps.Framework
+namespace Pathoschild.Stardew.DataLayers.Framework
 {
     /// <summary>Provides metadata to display in the overlay.</summary>
     internal interface IDataMap

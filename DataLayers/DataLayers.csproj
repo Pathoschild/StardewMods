@@ -7,8 +7,8 @@
     <ProjectGuid>{CDEEF8AF-15CB-4955-8163-E446F212C2F4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pathoschild.Stardew.DataMaps</RootNamespace>
-    <AssemblyName>DataMaps</AssemblyName>
+    <RootNamespace>Pathoschild.Stardew.DataLayers</RootNamespace>
+    <AssemblyName>DataLayers</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -36,14 +36,14 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataMaps\BaseDataMap.cs" />
-    <Compile Include="DataMaps\Coverage\JunimoHutMap.cs" />
-    <Compile Include="DataMaps\Coverage\BeeHouseMap.cs" />
-    <Compile Include="DataMaps\Crops\CropFertilizerMap.cs" />
-    <Compile Include="DataMaps\Coverage\ScarecrowMap.cs" />
-    <Compile Include="DataMaps\Crops\CropWaterMap.cs" />
-    <Compile Include="DataMaps\Coverage\SprinklerMap.cs" />
-    <Compile Include="DataMaps\AccessibilityMap.cs" />
+    <Compile Include="Layers\BaseDataMap.cs" />
+    <Compile Include="Layers\Coverage\JunimoHutMap.cs" />
+    <Compile Include="Layers\Coverage\BeeHouseMap.cs" />
+    <Compile Include="Layers\Crops\CropFertilizerMap.cs" />
+    <Compile Include="Layers\Coverage\ScarecrowMap.cs" />
+    <Compile Include="Layers\Crops\CropWaterMap.cs" />
+    <Compile Include="Layers\Coverage\SprinklerMap.cs" />
+    <Compile Include="Layers\AccessibilityMap.cs" />
     <Compile Include="Framework\DataMapOverlay.cs" />
     <Compile Include="Framework\IDataMap.cs" />
     <Compile Include="Framework\ModIntegrations.cs" />

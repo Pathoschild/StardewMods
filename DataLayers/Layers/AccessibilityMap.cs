@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.DataMaps.Framework;
+using Pathoschild.Stardew.DataLayers.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
@@ -12,7 +12,7 @@ using xTile.ObjectModel;
 using xTile.Tiles;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
-namespace Pathoschild.Stardew.DataMaps.DataMaps
+namespace Pathoschild.Stardew.DataLayers.Layers
 {
     /// <summary>A data map which shows whether tiles are traversable by the player.</summary>
     internal class AccessibilityMap : BaseDataMap

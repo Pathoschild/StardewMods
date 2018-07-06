@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.DataMaps.Framework;
+using Pathoschild.Stardew.DataLayers.Framework;
+using Pathoschild.Stardew.DataLayers.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using Object = StardewValley.Object;
 
-namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
+namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 {
     /// <summary>A data map which shows bee house coverage.</summary>
     internal class BeeHouseMap : BaseDataMap

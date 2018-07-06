@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.DataMaps.Framework;
+using Pathoschild.Stardew.DataLayers.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
-namespace Pathoschild.Stardew.DataMaps.DataMaps.Crops
+namespace Pathoschild.Stardew.DataLayers.Layers.Crops
 {
     /// <summary>A data map which shows whether crops needs to be watered.</summary>
     internal class CropWaterMap : BaseDataMap

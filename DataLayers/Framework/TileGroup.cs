@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace Pathoschild.Stardew.DataMaps.Framework
+namespace Pathoschild.Stardew.DataLayers.Framework
 {
     /// <summary>A group of tiles.</summary>
     internal class TileGroup

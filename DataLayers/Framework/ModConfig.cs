@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 
-namespace Pathoschild.Stardew.DataMaps.Framework
+namespace Pathoschild.Stardew.DataLayers.Framework
 {
     /// <summary>The parsed mod configuration.</summary>
     internal class ModConfig

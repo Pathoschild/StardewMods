@@ -1,4 +1,4 @@
-namespace Pathoschild.Stardew.DataMaps.Framework
+namespace Pathoschild.Stardew.DataLayers.Framework
 {
     /// <summary>Configures the settings for a data map.</summary>
     internal class MapConfig
