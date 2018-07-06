@@ -1,9 +1,9 @@
 # Release notes
 ## 1.4
 * Updated for Stardew Valley 1.3 (including multiplayer support).
-* Added support for garden pots to crop overlays.
-* Added support for Better Junimos mod.
-* Added farm building door warps to accessibility map.
+* Added farm building door warps in accessibility map.
+* Added garden pots in crop overlays.
+* Added support for Better Junimos and Prismatic Tools.
 * Improved performance with more nuanced update rate.
 * Improved translations. Thanks to alca259 (added Spanish) and fadedDexofan (added Russian)!
 

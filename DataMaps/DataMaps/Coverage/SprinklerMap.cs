@@ -153,9 +153,13 @@ namespace Pathoschild.Stardew.DataMaps.DataMaps.Coverage
                 tiles[645] = iridiumTiles.ToArray();
             }
 
-            // Cobalt mod adds new sprinkler
+            // Cobalt sprinkler
             if (mods.Cobalt.IsLoaded)
                 tiles[mods.Cobalt.GetSprinklerId()] = mods.Cobalt.GetSprinklerTiles().ToArray();
+
+            // Prismatic Sprinkler
+            if (mods.PrismaticTools.IsLoaded)
+                tiles[mods.PrismaticTools.GetSprinklerID()] = mods.PrismaticTools.GetSprinklerCoverage().ToArray();
 
             // Simple Sprinkler mod adds tiles to default coverage
             if (mods.SimpleSprinkler.IsLoaded)

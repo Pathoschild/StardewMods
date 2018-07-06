@@ -24,6 +24,9 @@ namespace Pathoschild.Stardew.DataMaps.Framework
         /// <summary>Handles access to the Pelican Fiber mod.</summary>
         public PelicanFiberIntegration PelicanFiber { get; }
 
+        /// <summary>Handles access to the Prismatic Tools mod.</summary>
+        public PrismaticToolsIntegration PrismaticTools { get; }
+
         /// <summary>Handles access to the Cobalt mod.</summary>
         public SimpleSprinklerIntegration SimpleSprinkler;
 
@@ -41,6 +44,7 @@ namespace Pathoschild.Stardew.DataMaps.Framework
             this.BetterSprinklers = new BetterSprinklersIntegration(modRegistry, monitor);
             this.Cobalt = new CobaltIntegration(modRegistry, monitor);
             this.PelicanFiber = new PelicanFiberIntegration(modRegistry, reflection, monitor);
+            this.PrismaticTools = new PrismaticToolsIntegration(modRegistry, monitor);
             this.SimpleSprinkler = new SimpleSprinklerIntegration(modRegistry, monitor);
         }
     }

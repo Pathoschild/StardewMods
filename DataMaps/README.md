@@ -73,8 +73,9 @@ mod installed     | effects
 ----------------- | ----------
 Better Junimos    | Shows custom Junimo hut range.
 Better Sprinklers | Shows custom sprinkler range.
-Cobalt            | Shows custom sprinkler range.
+Cobalt            | Shows cobalt sprinkler range.
 Pelican Fiber     | Shows coverage when building a Junimo hut or sprinkler through Pelican Fiber's menu.
+Prismatic Tools   | Shows prismatic sprinkler range.
 Simple Sprinkler  | Shows custom sprinkler range.
 
 ## See also
