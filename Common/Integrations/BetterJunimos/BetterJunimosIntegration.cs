@@ -1,6 +1,6 @@
 using StardewModdingAPI;
 
-namespace Pathoschild.Stardew.Common.Integrations.BetterSprinklers
+namespace Pathoschild.Stardew.Common.Integrations.BetterJunimos
 {
     /// <summary>Handles the logic for integrating with the Better Junimos mod.</summary>
     internal class BetterJunimosIntegration : BaseIntegration

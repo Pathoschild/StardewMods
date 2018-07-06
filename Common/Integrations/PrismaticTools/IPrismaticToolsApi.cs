@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace Pathoschild.Stardew.Common.Integrations.BetterSprinklers
+namespace Pathoschild.Stardew.Common.Integrations.PrismaticTools
 {
     /// <summary>The API provided by the Prismatic Tools mod.</summary>
     public interface IPrismaticToolsApi
