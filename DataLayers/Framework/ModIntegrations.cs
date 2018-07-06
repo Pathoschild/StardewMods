@@ -27,7 +27,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>Handles access to the Prismatic Tools mod.</summary>
         public PrismaticToolsIntegration PrismaticTools { get; }
 
-        /// <summary>Handles access to the Cobalt mod.</summary>
+        /// <summary>Handles access to the Simple Sprinkler mod.</summary>
         public SimpleSprinklerIntegration SimpleSprinkler;
 
 
