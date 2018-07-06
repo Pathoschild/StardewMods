@@ -23,10 +23,10 @@ namespace Pathoschild.Stardew.DataLayers
         private ModConfig Config;
 
         /// <summary>The current overlay being displayed, if any.</summary>
-        private DataMapOverlay CurrentOverlay;
+        private DataLayerOverlay CurrentOverlay;
 
-        /// <summary>The available data maps.</summary>
-        private IDataMap[] Maps;
+        /// <summary>The available data layers.</summary>
+        private ILayer[] Layers;
 
         /// <summary>Handles access to the supported mod integrations.</summary>
         private ModIntegrations Mods;
@@ -61,31 +61,31 @@ namespace Pathoschild.Stardew.DataLayers
             IModHelper helper = this.Helper;
 
             this.Mods = new ModIntegrations(this.Monitor, helper.ModRegistry, helper.Reflection);
-            this.Maps = this.GetDataMaps(this.Config, this.Helper.Translation, this.Mods).ToArray();
+            this.Layers = this.GetLayers(this.Config, this.Helper.Translation, this.Mods).ToArray();
         }
 
-        /// <summary>Get the enabled data maps.</summary>
+        /// <summary>Get the enabled data layers.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="translation">Provides translations for the mod.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
-        private IEnumerable<IDataMap> GetDataMaps(ModConfig config, ITranslationHelper translation, ModIntegrations mods)
+        private IEnumerable<ILayer> GetLayers(ModConfig config, ITranslationHelper translation, ModIntegrations mods)
         {
-            var maps = config.DataMaps;
+            ModConfig.LayerConfigs layers = config.Layers;
 
-            if (maps.Accessibility.IsEnabled())
-                yield return new AccessibilityMap(translation, maps.Accessibility);
-            if (maps.CoverageForBeeHouses.IsEnabled())
-                yield return new BeeHouseMap(translation, maps.CoverageForBeeHouses);
-            if (maps.CoverageForScarecrows.IsEnabled())
-                yield return new ScarecrowMap(translation, maps.CoverageForScarecrows);
-            if (maps.CoverageForSprinklers.IsEnabled())
-                yield return new SprinklerMap(translation, maps.CoverageForSprinklers, mods);
-            if (maps.CoverageForJunimoHuts.IsEnabled())
-                yield return new JunimoHutMap(translation, maps.CoverageForJunimoHuts, mods);
-            if (maps.CropWater.IsEnabled())
-                yield return new CropWaterMap(translation, maps.CropWater);
-            if (maps.CropFertilizer.IsEnabled())
-                yield return new CropFertilizerMap(translation, maps.CropFertilizer);
+            if (layers.Accessibility.IsEnabled())
+                yield return new AccessibilityLayer(translation, layers.Accessibility);
+            if (layers.CoverageForBeeHouses.IsEnabled())
+                yield return new BeeHouseLayer(translation, layers.CoverageForBeeHouses);
+            if (layers.CoverageForScarecrows.IsEnabled())
+                yield return new ScarecrowLayer(translation, layers.CoverageForScarecrows);
+            if (layers.CoverageForSprinklers.IsEnabled())
+                yield return new SprinklerLayer(translation, layers.CoverageForSprinklers, mods);
+            if (layers.CoverageForJunimoHuts.IsEnabled())
+                yield return new JunimoHutLayer(translation, layers.CoverageForJunimoHuts, mods);
+            if (layers.CropWater.IsEnabled())
+                yield return new CropWaterLayer(translation, layers.CropWater);
+            if (layers.CropFertilizer.IsEnabled())
+                yield return new CropFertilizerLayer(translation, layers.CropFertilizer);
         }
 
         /// <summary>The method invoked when the player returns to the title screen.</summary>
@@ -112,7 +112,7 @@ namespace Pathoschild.Stardew.DataLayers
                 var controls = this.Config.Controls;
 
                 // toggle overlay
-                if (controls.ToggleMap.Contains(e.Button))
+                if (controls.ToggleLayer.Contains(e.Button))
                 {
                     if (overlayVisible)
                     {
@@ -120,19 +120,19 @@ namespace Pathoschild.Stardew.DataLayers
                         this.CurrentOverlay = null;
                     }
                     else
-                        this.CurrentOverlay = new DataMapOverlay(this.Maps, this.CanOverlayNow, this.Config.CombineOverlappingBorders);
+                        this.CurrentOverlay = new DataLayerOverlay(this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders);
                     e.SuppressButton();
                 }
 
-                // cycle data maps
-                else if (overlayVisible && controls.NextMap.Contains(e.Button))
+                // cycle layers
+                else if (overlayVisible && controls.NextLayer.Contains(e.Button))
                 {
-                    this.CurrentOverlay.NextMap();
+                    this.CurrentOverlay.NextLayer();
                     e.SuppressButton();
                 }
-                else if (overlayVisible && controls.PrevMap.Contains(e.Button))
+                else if (overlayVisible && controls.PrevLayer.Contains(e.Button))
                 {
-                    this.CurrentOverlay.PrevMap();
+                    this.CurrentOverlay.PrevLayer();
                     e.SuppressButton();
                 }
             });

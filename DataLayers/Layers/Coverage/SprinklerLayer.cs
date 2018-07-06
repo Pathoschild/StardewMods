@@ -11,8 +11,8 @@ using Object = StardewValley.Object;
 
 namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 {
-    /// <summary>A data map which shows sprinkler coverage.</summary>
-    internal class SprinklerMap : BaseDataMap
+    /// <summary>A data layer which shows sprinkler coverage.</summary>
+    internal class SprinklerLayer : BaseLayer
     {
         /*********
         ** Properties
@@ -41,17 +41,17 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        /// <param name="config">The data map settings.</param>
+        /// <param name="config">The data layer settings.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
-        public SprinklerMap(ITranslationHelper translations, MapConfig config, ModIntegrations mods)
-            : base(translations.Get("maps.sprinklers.name"), config)
+        public SprinklerLayer(ITranslationHelper translations, LayerConfig config, ModIntegrations mods)
+            : base(translations.Get("sprinklers.name"), config)
         {
             // init
             this.Mods = mods;
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("maps.sprinklers.covered"), this.WetColor),
-                new LegendEntry(translations.Get("maps.sprinklers.dry-crops"), this.DryColor)
+                new LegendEntry(translations.Get("sprinklers.covered"), this.WetColor),
+                new LegendEntry(translations.Get("sprinklers.dry-crops"), this.DryColor)
             };
 
             // get static sprinkler coverage
@@ -63,7 +63,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                 this.MaxRadius = Math.Max(this.MaxRadius, mods.BetterSprinklers.MaxRadius);
         }
 
-        /// <summary>Get the updated data map tiles.</summary>
+        /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>

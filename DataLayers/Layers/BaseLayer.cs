@@ -5,19 +5,19 @@ using StardewValley;
 
 namespace Pathoschild.Stardew.DataLayers.Layers
 {
-    /// <summary>The base implementation for a data map.</summary>
-    internal abstract class BaseDataMap : IDataMap
+    /// <summary>The base implementation for a data layer.</summary>
+    internal abstract class BaseLayer : ILayer
     {
         /*********
         ** Accessors
         *********/
-        /// <summary>The map's display name.</summary>
+        /// <summary>The layer's display name.</summary>
         public string Name { get; }
 
         /// <summary>The number of ticks between each update.</summary>
         public int UpdateTickRate { get; }
 
-        /// <summary>Whether to update the map when the set of visible tiles changes.</summary>
+        /// <summary>Whether to update the layer when the set of visible tiles changes.</summary>
         public bool UpdateWhenVisibleTilesChange { get; }
 
         /// <summary>The legend entries to display.</summary>
@@ -27,7 +27,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /*********
         ** Public methods
         *********/
-        /// <summary>Get the updated data map tiles.</summary>
+        /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
@@ -38,9 +38,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="name">The data map name.</param>
-        /// <param name="config">The data map settings.</param>
-        protected BaseDataMap(string name, MapConfig config)
+        /// <param name="name">The data layer name.</param>
+        /// <param name="config">The data layers settings.</param>
+        protected BaseLayer(string name, LayerConfig config)
         {
             this.Name = name;
             this.UpdateTickRate = (int)(60 / config.UpdatesPerSecond);

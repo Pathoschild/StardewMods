@@ -12,8 +12,8 @@ using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 {
-    /// <summary>A data map which shows Junimo hut coverage.</summary>
-    internal class JunimoHutMap : BaseDataMap
+    /// <summary>A data layer which shows Junimo hut coverage.</summary>
+    internal class JunimoHutLayer : BaseLayer
     {
         /*********
         ** Properties
@@ -39,17 +39,17 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        /// <param name="config">The data map settings.</param>
+        /// <param name="config">The data layer settings.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
-        public JunimoHutMap(ITranslationHelper translations, MapConfig config, ModIntegrations mods)
-            : base(translations.Get("maps.junimo-huts.name"), config)
+        public JunimoHutLayer(ITranslationHelper translations, LayerConfig config, ModIntegrations mods)
+            : base(translations.Get("junimo-huts.name"), config)
         {
             // init
             this.Mods = mods;
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("maps.junimo-huts.can-harvest"), this.CoveredColor),
-                new LegendEntry(translations.Get("maps.junimo-huts.cannot-harvest"), this.NotCoveredColor)
+                new LegendEntry(translations.Get("junimo-huts.can-harvest"), this.CoveredColor),
+                new LegendEntry(translations.Get("junimo-huts.cannot-harvest"), this.NotCoveredColor)
             };
 
             // set max radius
@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                 : JunimoHut.cropHarvestRadius;
         }
 
-        /// <summary>Get the updated data map tiles.</summary>
+        /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>

@@ -36,19 +36,19 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Layers\BaseDataMap.cs" />
-    <Compile Include="Layers\Coverage\JunimoHutMap.cs" />
-    <Compile Include="Layers\Coverage\BeeHouseMap.cs" />
-    <Compile Include="Layers\Crops\CropFertilizerMap.cs" />
-    <Compile Include="Layers\Coverage\ScarecrowMap.cs" />
-    <Compile Include="Layers\Crops\CropWaterMap.cs" />
-    <Compile Include="Layers\Coverage\SprinklerMap.cs" />
-    <Compile Include="Layers\AccessibilityMap.cs" />
-    <Compile Include="Framework\DataMapOverlay.cs" />
-    <Compile Include="Framework\IDataMap.cs" />
+    <Compile Include="Layers\BaseLayer.cs" />
+    <Compile Include="Layers\Coverage\JunimoHutLayer.cs" />
+    <Compile Include="Layers\Coverage\BeeHouseLayer.cs" />
+    <Compile Include="Layers\Crops\CropFertilizerLayer.cs" />
+    <Compile Include="Layers\Coverage\ScarecrowLayer.cs" />
+    <Compile Include="Layers\Crops\CropWaterLayer.cs" />
+    <Compile Include="Layers\Coverage\SprinklerLayer.cs" />
+    <Compile Include="Layers\AccessibilityLayer.cs" />
+    <Compile Include="Framework\DataLayerOverlay.cs" />
+    <Compile Include="Framework\ILayer.cs" />
     <Compile Include="Framework\ModIntegrations.cs" />
     <Compile Include="Framework\LegendEntry.cs" />
-    <Compile Include="Framework\MapConfig.cs" />
+    <Compile Include="Framework\LayerConfig.cs" />
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\TileData.cs" />
     <Compile Include="Framework\TileDrawData.cs" />

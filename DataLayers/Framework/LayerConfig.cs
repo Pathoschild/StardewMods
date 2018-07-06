@@ -1,25 +1,25 @@
 namespace Pathoschild.Stardew.DataLayers.Framework
 {
-    /// <summary>Configures the settings for a data map.</summary>
-    internal class MapConfig
+    /// <summary>Configures the settings for a data layer.</summary>
+    internal class LayerConfig
     {
         /*********
         ** Accessors
         *********/
-        /// <summary>Whether to enable this data map.</summary>
+        /// <summary>Whether to enable this data layer.</summary>
         public bool Enabled { get; set; } = true;
 
-        /// <summary>The number of updates per second for each map.</summary>
+        /// <summary>The number of updates needed per second.</summary>
         public decimal UpdatesPerSecond { get; set; } = 60;
 
-        /// <summary>Whether to update the map when the player's tile view changes.</summary>
+        /// <summary>Whether to update the layer when the player's tile view changes.</summary>
         public bool UpdateWhenViewChange { get; set; } = true;
 
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Whether the data map should be enabled.</summary>
+        /// <summary>Whether the data layer should be enabled.</summary>
         public bool IsEnabled()
         {
             return this.Enabled && this.UpdatesPerSecond > 0;

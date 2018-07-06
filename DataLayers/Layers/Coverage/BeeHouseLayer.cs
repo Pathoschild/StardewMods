@@ -3,15 +3,14 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
-using Pathoschild.Stardew.DataLayers.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using Object = StardewValley.Object;
 
 namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 {
-    /// <summary>A data map which shows bee house coverage.</summary>
-    internal class BeeHouseMap : BaseDataMap
+    /// <summary>A data layer which shows bee house coverage.</summary>
+    internal class BeeHouseLayer : BaseLayer
     {
         /*********
         ** Properties
@@ -26,7 +25,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         private readonly int MaxRadius = 5;
 
         /// <summary>The relative tile coordinates covered by a bee house.</summary>
-        private readonly Vector2[] RelativeRange = BeeHouseMap.GetRelativeCoverage().ToArray();
+        private readonly Vector2[] RelativeRange = BeeHouseLayer.GetRelativeCoverage().ToArray();
 
 
         /*********
@@ -34,17 +33,17 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        /// <param name="config">The data map settings.</param>
-        public BeeHouseMap(ITranslationHelper translations, MapConfig config)
-            : base(translations.Get("maps.bee-houses.name"), config)
+        /// <param name="config">The data layer settings.</param>
+        public BeeHouseLayer(ITranslationHelper translations, LayerConfig config)
+            : base(translations.Get("bee-houses.name"), config)
         {
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("maps.bee-houses.range"), this.CoveredColor)
+                new LegendEntry(translations.Get("bee-houses.range"), this.CoveredColor)
             };
         }
 
-        /// <summary>Get the updated data map tiles.</summary>
+        /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>

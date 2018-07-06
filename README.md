@@ -17,8 +17,10 @@ Active mods:
   XNB mods, these content packs get automatic update checks and compatibility checks, are easy to
   install and uninstall, and are less likely to break due to game updates._
 
-* **[Data Maps](https://www.nexusmods.com/stardewvalley/mods/1691)** <small>([source](DataMaps))</small>  
-  _Overlays the world with data maps to show accessibility, sprinkler coverage, etc._
+* **[Data Layers](https://www.nexusmods.com/stardewvalley/mods/1691)** <small>([source](DataMaps))</small>  
+  _Overlays the world with overlays the world with visual data like accessibility,
+  bee/Junimo/scarecrow/sprinkler coverage, etc. It automatically includes data from other mods if
+  applicable._
 
 * **[Debug Mode](http://www.nexusmods.com/stardewvalley/mods/679)** <small>([source](DebugMode))</small>  
   _Press a button to view debug information and unlock the game's built-in debug commands

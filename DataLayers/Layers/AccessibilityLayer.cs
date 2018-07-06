@@ -14,8 +14,8 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Pathoschild.Stardew.DataLayers.Layers
 {
-    /// <summary>A data map which shows whether tiles are traversable by the player.</summary>
-    internal class AccessibilityMap : BaseDataMap
+    /// <summary>A data layer which shows whether tiles are traversable by the player.</summary>
+    internal class AccessibilityLayer : BaseLayer
     {
         /*********
         ** Properties
@@ -45,20 +45,20 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        /// <param name="config">The data map settings.</param>
-        public AccessibilityMap(ITranslationHelper translations, MapConfig config)
-            : base(translations.Get("maps.accessibility.name"), config)
+        /// <param name="config">The data layer settings.</param>
+        public AccessibilityLayer(ITranslationHelper translations, LayerConfig config)
+            : base(translations.Get("accessibility.name"), config)
         {
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("maps.accessibility.clear"), this.ClearColor),
-                new LegendEntry(translations.Get("maps.accessibility.occupied"), this.OccupiedColor),
-                new LegendEntry(translations.Get("maps.accessibility.impassable"), this.ImpassableColor),
-                new LegendEntry(translations.Get("maps.accessibility.warp"), this.WarpColor)
+                new LegendEntry(translations.Get("accessibility.clear"), this.ClearColor),
+                new LegendEntry(translations.Get("accessibility.occupied"), this.OccupiedColor),
+                new LegendEntry(translations.Get("accessibility.impassable"), this.ImpassableColor),
+                new LegendEntry(translations.Get("accessibility.warp"), this.WarpColor)
             };
         }
 
-        /// <summary>Get the updated data map tiles.</summary>
+        /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
@@ -78,7 +78,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /*********
         ** Private methods
         *********/
-        /// <summary>Get the updated data map tiles.</summary>
+        /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
         private IEnumerable<TileData> GetTiles(GameLocation location, IEnumerable<Vector2> visibleTiles)

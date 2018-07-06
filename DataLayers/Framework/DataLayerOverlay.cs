@@ -10,8 +10,8 @@ using XRectangle = xTile.Dimensions.Rectangle;
 
 namespace Pathoschild.Stardew.DataLayers.Framework
 {
-    /// <summary>Renders a data map as an overlay over the world.</summary>
-    internal class DataMapOverlay : BaseOverlay
+    /// <summary>Renders a data layer over the world.</summary>
+    internal class DataLayerOverlay : BaseOverlay
     {
         /*********
         ** Properties
@@ -40,8 +40,8 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /*****
         ** State
         *****/
-        /// <summary>The available data maps.</summary>
-        private readonly IDataMap[] Maps;
+        /// <summary>The available data layers.</summary>
+        private readonly ILayer[] Layers;
 
         /// <summary>When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</summary>
         private readonly bool CombineOverlappingBorders;
@@ -49,8 +49,8 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>An empty set of tile groups.</summary>
         private readonly TileGroup[] EmptyTileGroups = new TileGroup[0];
 
-        /// <summary>The current data map to render.</summary>
-        private IDataMap CurrentMap;
+        /// <summary>The current layer to render.</summary>
+        private ILayer CurrentLayer;
 
         /// <summary>The legend entries to show.</summary>
         private LegendEntry[] Legend;
@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>The tiles to render.</summary>
         private TileGroup[] TileGroups;
 
-        /// <summary>The tick countdown until the next map update.</summary>
+        /// <summary>The tick countdown until the next layer update.</summary>
         private int UpdateCountdown;
 
         /// <summary>The last visible area.</summary>
@@ -69,45 +69,45 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="maps">The data maps to render.</param>
+        /// <param name="layers">The data layers to render.</param>
         /// <param name="drawOverlay">Get whether the overlay should be drawn.</param>
         /// <param name="combineOverlappingBorders">When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</param>
-        public DataMapOverlay(IDataMap[] maps, Func<bool> drawOverlay, bool combineOverlappingBorders)
+        public DataLayerOverlay(ILayer[] layers, Func<bool> drawOverlay, bool combineOverlappingBorders)
         {
-            if (!maps.Any())
-                throw new InvalidOperationException("Can't initialise the data maps overlay with no data maps.");
+            if (!layers.Any())
+                throw new InvalidOperationException("Can't initialise the data layers overlay with no data layers.");
 
-            this.Maps = maps.OrderBy(p => p.Name).ToArray();
+            this.Layers = layers.OrderBy(p => p.Name).ToArray();
             this.DrawOverlay = drawOverlay;
             this.LegendColorSize = (int)Game1.smallFont.MeasureString("X").Y;
-            this.BoxContentWidth = this.GetMaxContentWidth(this.Maps, this.LegendColorSize);
+            this.BoxContentWidth = this.GetMaxContentWidth(this.Layers, this.LegendColorSize);
             this.CombineOverlappingBorders = combineOverlappingBorders;
-            this.SetMap(this.Maps.First());
+            this.SetLayer(this.Layers.First());
         }
 
-        /// <summary>Switch to the next data map.</summary>
-        public void NextMap()
+        /// <summary>Switch to the next data layer.</summary>
+        public void NextLayer()
         {
-            int index = Array.IndexOf(this.Maps, this.CurrentMap) + 1;
-            if (index >= this.Maps.Length)
+            int index = Array.IndexOf(this.Layers, this.CurrentLayer) + 1;
+            if (index >= this.Layers.Length)
                 index = 0;
-            this.SetMap(this.Maps[index]);
+            this.SetLayer(this.Layers[index]);
         }
 
-        /// <summary>Switch to the previous data map.</summary>
-        public void PrevMap()
+        /// <summary>Switch to the previous data layer.</summary>
+        public void PrevLayer()
         {
-            int index = Array.IndexOf(this.Maps, this.CurrentMap) - 1;
+            int index = Array.IndexOf(this.Layers, this.CurrentLayer) - 1;
             if (index < 0)
-                index = this.Maps.Length - 1;
-            this.SetMap(this.Maps[index]);
+                index = this.Layers.Length - 1;
+            this.SetLayer(this.Layers[index]);
         }
 
         /// <summary>Update the overlay.</summary>
         public void Update()
         {
             // no tiles to draw
-            if (Game1.currentLocation == null || this.CurrentMap == null)
+            if (Game1.currentLocation == null || this.CurrentLayer == null)
             {
                 this.TileGroups = this.EmptyTileGroups;
                 return;
@@ -115,13 +115,13 @@ namespace Pathoschild.Stardew.DataLayers.Framework
 
             // get updated tiles
             Rectangle visibleArea = this.GetVisibleTileArea(Game1.viewport);
-            if (--this.UpdateCountdown <= 0 || (this.CurrentMap.UpdateWhenVisibleTilesChange && visibleArea != this.LastVisibleArea))
+            if (--this.UpdateCountdown <= 0 || (this.CurrentLayer.UpdateWhenVisibleTilesChange && visibleArea != this.LastVisibleArea))
             {
                 GameLocation location = Game1.currentLocation;
                 Vector2 cursorTile = TileHelper.GetTileFromCursor();
-                this.TileGroups = this.CurrentMap.Update(location, visibleArea, cursorTile).ToArray();
+                this.TileGroups = this.CurrentLayer.Update(location, visibleArea, cursorTile).ToArray();
                 this.LastVisibleArea = visibleArea;
-                this.UpdateCountdown = this.CurrentMap.UpdateTickRate;
+                this.UpdateCountdown = this.CurrentLayer.UpdateTickRate;
             }
         }
 
@@ -176,11 +176,11 @@ namespace Pathoschild.Stardew.DataLayers.Framework
 
                 // draw overlay label
                 {
-                    Vector2 labelSize = Game1.smallFont.MeasureString(this.CurrentMap.Name);
+                    Vector2 labelSize = Game1.smallFont.MeasureString(this.CurrentLayer.Name);
                     CommonHelper.DrawScroll(spriteBatch, new Vector2(leftOffset, topOffset), new Vector2(this.BoxContentWidth, labelSize.Y), out Vector2 contentPos, out Rectangle bounds);
 
                     contentPos = contentPos + new Vector2((this.BoxContentWidth - labelSize.X) / 2, 0); // center label in box
-                    spriteBatch.DrawString(Game1.smallFont, this.CurrentMap.Name, contentPos, Color.Black);
+                    spriteBatch.DrawString(Game1.smallFont, this.CurrentLayer.Name, contentPos, Color.Black);
 
                     topOffset += bounds.Height + this.Padding;
                 }
@@ -282,12 +282,12 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             return tiles.Values;
         }
 
-        /// <summary>Switch to the given data map.</summary>
-        /// <param name="map">The data map to select.</param>
-        private void SetMap(IDataMap map)
+        /// <summary>Switch to the given data layer.</summary>
+        /// <param name="layer">The data layer to select.</param>
+        private void SetLayer(ILayer layer)
         {
-            this.CurrentMap = map;
-            this.Legend = this.CurrentMap.Legend.ToArray();
+            this.CurrentLayer = layer;
+            this.Legend = this.CurrentLayer.Legend.ToArray();
             this.TileGroups = this.EmptyTileGroups;
             this.UpdateCountdown = 0;
         }
@@ -305,21 +305,21 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             return new Rectangle(left - 1, top - 1, width + 2, height + 2); // extend slightly off-screen to avoid tile pop-in at the edges
         }
 
-        /// <summary>Get the maximum content width needed to render the data map labels and legends.</summary>
-        /// <param name="maps">The data maps to render.</param>
+        /// <summary>Get the maximum content width needed to render the layer labels and legends.</summary>
+        /// <param name="layers">The data layers to render.</param>
         /// <param name="legendColorSize">The pixel size of a color box in the legend.</param>
-        private int GetMaxContentWidth(IDataMap[] maps, int legendColorSize)
+        private int GetMaxContentWidth(ILayer[] layers, int legendColorSize)
         {
             float labelWidth =
                 (
-                    from map in maps
-                    select Game1.smallFont.MeasureString(map.Name).X
+                    from layer in layers
+                    select Game1.smallFont.MeasureString(layer.Name).X
                 )
                 .Max();
             float legendContentWidth =
                 (
-                    from map in maps
-                    from entry in map.Legend
+                    from layer in layers
+                    from entry in layer.Legend
                     select Game1.smallFont.MeasureString(entry.Name).X
                 )
                 .Max() + legendColorSize + this.LegendColorPadding;

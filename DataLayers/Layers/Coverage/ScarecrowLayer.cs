@@ -10,8 +10,8 @@ using Object = StardewValley.Object;
 
 namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 {
-    /// <summary>A data map which shows scarecrow coverage.</summary>
-    internal class ScarecrowMap : BaseDataMap
+    /// <summary>A data layer which shows scarecrow coverage.</summary>
+    internal class ScarecrowLayer : BaseLayer
     {
         /*********
         ** Properties
@@ -34,18 +34,18 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
-        /// <param name="config">The data map settings.</param>
-        public ScarecrowMap(ITranslationHelper translations, MapConfig config)
-            : base(translations.Get("maps.scarecrows.name"), config)
+        /// <param name="config">The data layer settings.</param>
+        public ScarecrowLayer(ITranslationHelper translations, LayerConfig config)
+            : base(translations.Get("scarecrows.name"), config)
         {
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("maps.scarecrows.protected"), this.CoveredColor),
-                new LegendEntry(translations.Get("maps.scarecrows.exposed"), this.ExposedColor)
+                new LegendEntry(translations.Get("scarecrows.protected"), this.CoveredColor),
+                new LegendEntry(translations.Get("scarecrows.exposed"), this.ExposedColor)
             };
         }
 
-        /// <summary>Get the updated data map tiles.</summary>
+        /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleArea">The tiles currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>

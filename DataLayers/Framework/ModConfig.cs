@@ -16,52 +16,52 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>The control bindings.</summary>
         public ModConfigControls Controls { get; set; } = new ModConfigControls();
 
-        /// <summary>The number of updates per second for each map.</summary>
-        public MapConfigs DataMaps { get; set; } = new MapConfigs();
+        /// <summary>The generic settings for each layer.</summary>
+        public LayerConfigs Layers { get; set; } = new LayerConfigs();
 
 
         /*********
         ** Nested models
         *********/
-        /// <summary>Configures the settings for each data map.</summary>
-        internal class MapConfigs
+        /// <summary>Configures the settings for each data layer.</summary>
+        internal class LayerConfigs
         {
-            /// <summary>The accessibility map config.</summary>
-            public MapConfig Accessibility { get; set; } = new MapConfig { UpdatesPerSecond = 2 };
+            /// <summary>The accessibility layer config.</summary>
+            public LayerConfig Accessibility { get; set; } = new LayerConfig { UpdatesPerSecond = 2 };
 
-            /// <summary>The bee house map.</summary>
-            public MapConfig CoverageForBeeHouses { get; set; } = new MapConfig { UpdatesPerSecond = 60 };
+            /// <summary>The bee house layer.</summary>
+            public LayerConfig CoverageForBeeHouses { get; set; } = new LayerConfig { UpdatesPerSecond = 60 };
 
-            /// <summary>The Junimo hut map.</summary>
-            public MapConfig CoverageForJunimoHuts { get; set; } = new MapConfig { UpdatesPerSecond = 60 };
+            /// <summary>The Junimo hut layer.</summary>
+            public LayerConfig CoverageForJunimoHuts { get; set; } = new LayerConfig { UpdatesPerSecond = 60 };
 
-            /// <summary>The scarecrow map.</summary>
-            public MapConfig CoverageForScarecrows { get; set; } = new MapConfig { UpdatesPerSecond = 60 };
+            /// <summary>The scarecrow layer.</summary>
+            public LayerConfig CoverageForScarecrows { get; set; } = new LayerConfig { UpdatesPerSecond = 60 };
 
-            /// <summary>The sprinkler map.</summary>
-            public MapConfig CoverageForSprinklers { get; set; } = new MapConfig { UpdatesPerSecond = 60 };
+            /// <summary>The sprinkler layer.</summary>
+            public LayerConfig CoverageForSprinklers { get; set; } = new LayerConfig { UpdatesPerSecond = 60 };
 
-            /// <summary>The fertilizer map.</summary>
-            public MapConfig CropFertilizer { get; set; } = new MapConfig { UpdatesPerSecond = 30 };
+            /// <summary>The fertilizer layer.</summary>
+            public LayerConfig CropFertilizer { get; set; } = new LayerConfig { UpdatesPerSecond = 30 };
 
-            /// <summary>The crop water map.</summary>
-            public MapConfig CropWater { get; set; } = new MapConfig { UpdatesPerSecond = 30 };
+            /// <summary>The crop water layer.</summary>
+            public LayerConfig CropWater { get; set; } = new LayerConfig { UpdatesPerSecond = 30 };
         }
 
         /// <summary>A set of control bindings.</summary>
         internal class ModConfigControls
         {
-            /// <summary>The control which toggles the data map overlay.</summary>
+            /// <summary>The control which toggles the data layer overlay.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
-            public SButton[] ToggleMap { get; set; } = { SButton.F2 };
+            public SButton[] ToggleLayer { get; set; } = { SButton.F2 };
 
-            /// <summary>The control which cycles foreward through data maps.</summary>
+            /// <summary>The control which cycles foreward through data layers.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
-            public SButton[] PrevMap { get; set; } = { SButton.LeftControl, SButton.LeftShoulder };
+            public SButton[] PrevLayer { get; set; } = { SButton.LeftControl, SButton.LeftShoulder };
 
-            /// <summary>The control which cycles foreward through data maps.</summary>
+            /// <summary>The control which cycles foreward through data layers.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
-            public SButton[] NextMap { get; set; } = { SButton.RightControl, SButton.RightShoulder };
+            public SButton[] NextLayer { get; set; } = { SButton.RightControl, SButton.RightShoulder };
         }
     }
 }

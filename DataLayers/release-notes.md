@@ -1,7 +1,8 @@
 # Release notes
 ## 1.4
+* **Renamed to Data Layers due to common confusion about the name Data Maps.**
 * Updated for Stardew Valley 1.3 (including multiplayer support).
-* Added farm building door warps in accessibility map.
+* Added farm building door warps in accessibility layer.
 * Added garden pots in crop overlays.
 * Added support for Better Junimos and Prismatic Tools.
 * Improved performance with more nuanced update rate.
