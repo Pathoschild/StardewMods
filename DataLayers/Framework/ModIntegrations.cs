@@ -1,6 +1,8 @@
+using Pathoschild.Stardew.Common.Integrations.BetterJunimos;
 using Pathoschild.Stardew.Common.Integrations.BetterSprinklers;
 using Pathoschild.Stardew.Common.Integrations.Cobalt;
 using Pathoschild.Stardew.Common.Integrations.PelicanFiber;
+using Pathoschild.Stardew.Common.Integrations.PrismaticTools;
 using Pathoschild.Stardew.Common.Integrations.SimpleSprinkler;
 using StardewModdingAPI;
 
