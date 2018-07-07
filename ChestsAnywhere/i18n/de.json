@@ -1,5 +1,6 @@
 {
   // default chest names
+  "default-name.auto-grabber": "Auto-grabber #{{number}}", // TODO
   "default-name.chest": "Kiste #{{number}}",
   "default-name.fridge": "Kühlschrank",
   "default-name.junimo-hut": "Junimo-Hütte #{{number}}",

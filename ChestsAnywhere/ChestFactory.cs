@@ -57,12 +57,19 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     // chests in location
                     {
                         int namelessChests = 0;
+                        int namelessGrabbers = 0;
                         foreach (KeyValuePair<Vector2, SObject> pair in location.Objects.Pairs)
                         {
                             Vector2 tile = pair.Key;
                             SObject obj = pair.Value;
+
+                            // chests
                             if (obj is Chest chest && chest.playerChest.Value)
                                 yield return new ManagedChest(new ChestContainer(chest, this.Reflection), location, tile, this.Translations.Get("default-name.chest", new { number = ++namelessChests }));
+
+                            // auto-grabbers
+                            else if (obj.ParentSheetIndex == 165 && obj.heldObject.Value is Chest grabberChest)
+                                yield return new ManagedChest(new ChestContainer(grabberChest, this.Reflection), location, tile, this.Translations.Get("default-name.auto-grabber", new { number = ++namelessGrabbers }));
                         }
                     }
 

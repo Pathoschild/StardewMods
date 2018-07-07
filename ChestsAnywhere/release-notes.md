@@ -3,6 +3,7 @@
 # Release notes
 ## 1.13
 * Updated for Stardew Valley 1.3 (including multiplayer support).
+* Added support for auto-grabbers.
 * Added Automate options to edit-chest screen if it's installed.
 * Added support for scrolling chest/category dropdowns with the mouse wheel. (Thanks to mattfeldman!)
 * Fixed 'ok' button not closing menu in rare cases.
