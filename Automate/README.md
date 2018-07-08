@@ -155,15 +155,39 @@ Automate can be used with custom machine mods, but only the standard machines wi
 automated.
 
 ## FAQs
-### What's the input/output order?
-If multiple chests are connected to the same machine group, they'll all be used in the automation.
-**This section is informational only; the order may change in future releases.**
+### What's the order of processed machines?
+The order that machines are processed is essentially unpredictable for players. It depends on the
+internal algorithm for finding machines, which is subject to change.
 
-Input is not easily predictable. Automate groups connected chests into one inventory and takes
-required items from that, so items may be taken from multiple chests simultaneously.
+### What's the order of items taken from chests?
+For each machine, the available chests are combined into one inventory (so items may be taken from
+multiple chests simultaneously) and then scanned until Automate finds enough items to fill a recipe
+for that machine. The order is difficult to predict with multiple chests, but fairly easy if there's
+only one connected chest.
 
-Output will be pushed into chests in this order:
-1. chests with the "Put items in this chest first" option (see _customisation_);
+For example, let's say you only have one chest with these item slots:
+
+1. [1 coal]
+2. [3 copper ore]
+3. [3 iron ore]
+4. [2 copper ore]
+5. [2 iron ore]
+
+A furnace has two recipes with those ingredients: [1 coal + 5 copper ore] = copper bar, and
+[1 coal + 5 iron ore] = iron bar. Automate will scan the items from left to right and top to bottom,
+and collect items until it has a complete recipe. In this case, the furnace will start producing a
+copper bar:
+
+1. [❑ 1 coal + 0 copper ore] [❑ 1 coal + 0 iron ore]
+2. [❑ 1 coal + 3 copper ore] [❑ 1 coal + 0 iron ore]
+3. [❑ 1 coal + 3 copper ore] [❑ 1 coal + 3 iron ore]
+4. [✓ 1 coal + 5 copper ore]
+
+### Which chest will machine output go into?
+The available chests are sorted by discovery order (which isn't predictable), then prioritised in
+this order:
+
+1. chests with the "Put items in this chest first" option (see _[In-game settings](#in-game-settings)_);
 2. chests which already contain an item of the same type;
 3. any chest.
 
@@ -173,7 +197,7 @@ Automate optimises machine connections internally, so there's no upper limit. Th
 that didn't cause any issues, so you can just keep adding more if you want.
 
 ### What if I don't want a specific chest to be connected?
-See _[Configuration](#configuration)_.
+See _[In-game settings](#in-game-settings)_.
 
 ## See also
 * [Release notes](release-notes.md)
