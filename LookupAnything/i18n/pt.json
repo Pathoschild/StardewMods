@@ -208,9 +208,9 @@
   "item.cask-contents": "Conteúdos",
   "item.cask-schedule": "Envelhecimento",
 
-  "item.crabpot-bait": "Isca", // TODO
-  "item.crabpot-bait-needed": "Requer isca!", // TODO
-  "item.crabpot-bait-not-needed": "Não é necessaria devido a habilidade Mestre da isca", // TODO
+  "item.crabpot-bait": "Isca",
+  "item.crabpot-bait-needed": "Requer isca!",
+  "item.crabpot-bait-not-needed": "Não é necessaria devido a habilidade Mestre da isca",
 
   "item.fence-health": "Saúde",
 
