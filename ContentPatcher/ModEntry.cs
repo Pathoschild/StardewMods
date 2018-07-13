@@ -330,7 +330,7 @@ namespace ContentPatcher
                     if (entry.When.TryGetValue(key, out string values))
                     {
                         InvariantHashSet expected = this.PatchManager.ParseCommaDelimitedField(values);
-                        if (!expected.Intersect(config[key].Value).Any())
+                        if (!expected.Intersect(config[key].Value, StringComparer.InvariantCultureIgnoreCase).Any())
                             return TrackSkip($"disabled: config field '{key}' must have one of '{string.Join(", ", expected)}', but found '{string.Join(", ", config[key].Value)}'.", warn: false);
 
                         entry.When.Remove(key);

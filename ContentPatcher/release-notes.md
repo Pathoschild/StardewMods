@@ -10,6 +10,7 @@
   * `HasSeenEvent` (check if the player has seen a given event ID);
   * `Spouse` (check if the current player is married to a given NPC or farmer).
 * Added support for deleting entries via `EditData`.
+* Fixed case sensitivity issues in some cases.
 
 ## 1.3.1
 * Added more detailed info to `patch summary` command.

@@ -245,7 +245,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             ConditionFactory factory = new ConditionFactory();
             ConditionDictionary left = factory.BuildEmpty();
             ConditionDictionary right = factory.BuildEmpty();
-            left.Add(ConditionKey.Season, new[] { "Spring", "Summer" });
+            left.Add(ConditionKey.Season, new[] { "Spring", "SUMMer" }); // should match case-insensitively
             right.Add(ConditionKey.Season, new[] { "Summer", "Fall" });
 
             // act

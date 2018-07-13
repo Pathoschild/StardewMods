@@ -115,7 +115,7 @@ namespace ContentPatcher.Framework
             // get permutations
             var rawValues = new InvariantDictionary<InvariantHashSet>(possibleValues.ToDictionary(p => p.Key.ToString(), p => p.Value));
             foreach (var permutation in this.GetPermutations(rawValues))
-                yield return permutation.ToDictionary(p => (ConditionKey)Enum.Parse(typeof(ConditionKey), p.Key), p => p.Value);
+                yield return permutation.ToDictionary(p => (ConditionKey)Enum.Parse(typeof(ConditionKey), p.Key, ignoreCase: true), p => p.Value);
         }
 
         /// <summary>Get all days possible for the given day of week.</summary>
@@ -150,7 +150,7 @@ namespace ContentPatcher.Framework
                 HashSet<string> possibleDays = new HashSet<string>();
                 foreach (string str in values[ConditionKey.DayOfWeek])
                 {
-                    DayOfWeek dayOfWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), str);
+                    DayOfWeek dayOfWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), str, ignoreCase: true);
                     foreach (int day in this.GetDaysFor(dayOfWeek))
                         possibleDays.Add(day.ToString());
                 }
@@ -187,7 +187,7 @@ namespace ContentPatcher.Framework
 
             foreach (ConditionKey key in this.GetTokenisableConditions())
             {
-                if (!leftValues[key].Intersect(rightValues[key]).Any())
+                if (!leftValues[key].Intersect(rightValues[key], StringComparer.InvariantCultureIgnoreCase).Any())
                     return false;
             }
 
