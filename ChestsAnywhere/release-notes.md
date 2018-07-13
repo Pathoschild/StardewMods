@@ -6,6 +6,7 @@
 * Added support for auto-grabbers.
 * Added Automate options to edit-chest screen if it's installed.
 * Added support for scrolling chest/category dropdowns with the mouse wheel. (Thanks to mattfeldman!)
+* Improved message when no chests are accessible.
 * Fixed 'ok' button not closing menu in rare cases.
 * Fixed issue where opening the chest UI from the inventory screen while holding an item destroys the item.
 * Improved translations. Thanks to alca259 (Spanish), changbowen (Chinese), dezqo (German), fadedDexofan (Russian), heiwaon (Russian), and TaelFayre (Portuguese)!

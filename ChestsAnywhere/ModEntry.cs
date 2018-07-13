@@ -198,26 +198,25 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // handle disabled location
             if (this.IsDisabledLocation(Game1.currentLocation))
             {
-                CommonHelper.ShowInfoMessage("Remote chest access is disabled here. :)", duration: 1000);
+                CommonHelper.ShowInfoMessage(this.Helper.Translation.Get("errors.disabled-from-here"), duration: 1000);
                 return;
             }
-
 
             // get chests
             RangeHandler range = this.GetCurrentRange();
             ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true).ToArray();
             ManagedChest selectedChest = chests.FirstOrDefault(p => p.Container.IsSameAs(this.SelectedInventory)) ?? chests.FirstOrDefault();
 
-            // render menu
-            if (selectedChest != null)
-                Game1.activeClickableMenu = selectedChest.OpenMenu();
-            else
+            // show error
+            if (selectedChest == null)
             {
-                CommonHelper.ShowInfoMessage(
-                    "You don't have any chests " + (this.Config.Range == ChestRange.Unlimited ? "yet" : "in range") + ". :)",
-                    duration: 1000
-                );
+                string translationKey = this.GetNoChestsFoundErrorKey();
+                CommonHelper.ShowInfoMessage(this.Helper.Translation.Get(translationKey), duration: 1000);
+                return;
             }
+
+            // render menu
+            Game1.activeClickableMenu = selectedChest.OpenMenu();
         }
 
         /// <summary>Validate that the game versions match the minimum requirements, and return an appropriate error message if not.</summary>
@@ -257,6 +256,18 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 ? ChestRange.None
                 : this.Config.Range;
             return new RangeHandler(this.Data.WorldAreas, range, Game1.currentLocation);
+        }
+
+        /// <summary>Get the error translation key to show if no chests were found.</summary>
+        private string GetNoChestsFoundErrorKey()
+        {
+            if (this.Config.Range == ChestRange.CurrentLocation || !Context.IsMainPlayer)
+                return "errors.no-chests-in-location";
+
+            if (this.Config.Range != ChestRange.Unlimited)
+                return "errors.no-chests-in-range";
+
+            return "errors.no-chests";
         }
     }
 }

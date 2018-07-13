@@ -20,5 +20,11 @@
   // button labels
   "button.edit-chest": "edit chest",
   "button.sort-inventory": "sort inventory",
-  "button.ok": "OK"
+  "button.ok": "OK",
+
+  // errors
+  "errors.disabled-from-here": "You can't access chests from here.",
+  "errors.no-chests": "You don't have any chests yet.",
+  "errors.no-chests-in-location": "You don't have any chests in this area.",
+  "errors.no-chests-in-range": "You don't have any chests in range."
 }
