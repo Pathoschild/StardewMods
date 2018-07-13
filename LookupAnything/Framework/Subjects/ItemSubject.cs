@@ -404,42 +404,45 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // cask
             if (machine is Cask cask)
             {
-                // get cask data
-                ItemQuality curQuality = (ItemQuality)heldObj.Quality;
-                string curQualityName = this.Translate(L10n.For(curQuality));
-
-                // calculate aging schedule
-                float effectiveAge = metadata.Constants.CaskAgeSchedule.Values.Max() - cask.daysToMature.Value;
-                var schedule =
-                    (
-                        from entry in metadata.Constants.CaskAgeSchedule
-                        let quality = entry.Key
-                        let baseDays = entry.Value
-                        where baseDays > effectiveAge
-                        orderby baseDays ascending
-                        let daysLeft = (int)Math.Ceiling((baseDays - effectiveAge) / cask.agingRate.Value)
-                        select new
-                        {
-                            Quality = quality,
-                            DaysLeft = daysLeft,
-                            HarvestDate = SDate.Now().AddDays(daysLeft)
-                        }
-                    )
-                    .ToArray();
-
-                // display fields
-                yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), heldObj);
-                if (minutesLeft <= 0 || !schedule.Any())
-                    yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskScheduleNow, new { quality = curQualityName }));
-                else
+                // output item
+                if (heldObj != null)
                 {
-                    string scheduleStr = string.Join(Environment.NewLine, (
-                        from entry in schedule
-                        let tokens = new { quality = this.Translate(L10n.For(entry.Quality)), count = entry.DaysLeft, date = entry.HarvestDate }
-                        let str = this.Text.GetPlural(entry.DaysLeft, L10n.Item.CaskScheduleTomorrow, L10n.Item.CaskScheduleInXDays).Tokens(tokens)
-                        select $"-{str}"
-                    ));
-                    yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskSchedulePartial, new { quality = curQualityName }) + Environment.NewLine + scheduleStr);
+                    ItemQuality curQuality = (ItemQuality)heldObj.Quality;
+                    string curQualityName = this.Translate(L10n.For(curQuality));
+
+                    // calculate aging schedule
+                    float effectiveAge = metadata.Constants.CaskAgeSchedule.Values.Max() - cask.daysToMature.Value;
+                    var schedule =
+                        (
+                            from entry in metadata.Constants.CaskAgeSchedule
+                            let quality = entry.Key
+                            let baseDays = entry.Value
+                            where baseDays > effectiveAge
+                            orderby baseDays ascending
+                            let daysLeft = (int)Math.Ceiling((baseDays - effectiveAge) / cask.agingRate.Value)
+                            select new
+                            {
+                                Quality = quality,
+                                DaysLeft = daysLeft,
+                                HarvestDate = SDate.Now().AddDays(daysLeft)
+                            }
+                        )
+                        .ToArray();
+
+                    // display fields
+                    yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), heldObj);
+                    if (minutesLeft <= 0 || !schedule.Any())
+                        yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskScheduleNow, new { quality = curQualityName }));
+                    else
+                    {
+                        string scheduleStr = string.Join(Environment.NewLine, (
+                            from entry in schedule
+                            let tokens = new { quality = this.Translate(L10n.For(entry.Quality)), count = entry.DaysLeft, date = entry.HarvestDate }
+                            let str = this.Text.GetPlural(entry.DaysLeft, L10n.Item.CaskScheduleTomorrow, L10n.Item.CaskScheduleInXDays).Tokens(tokens)
+                            select $"-{str}"
+                        ));
+                        yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskSchedulePartial, new { quality = curQualityName }) + Environment.NewLine + scheduleStr);
+                    }
                 }
             }
 
@@ -457,7 +460,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.CrabpotBait), this.Translate(L10n.Item.CrabpotBaitNeeded));
                 }
 
-                // held item
+                // output item
                 if (heldObj != null)
                 {
                     string summary = this.Translate(L10n.Item.ContentsReady, new { name = heldObj.DisplayName });
@@ -468,8 +471,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // furniture
             else if (machine is Furniture)
             {
-                string summary = this.Translate(L10n.Item.ContentsPlaced, new { name = heldObj.DisplayName });
-                yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), heldObj, summary);
+                // displayed item
+                if (heldObj != null)
+                {
+                    string summary = this.Translate(L10n.Item.ContentsPlaced, new { name = heldObj.DisplayName });
+                    yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), heldObj, summary);
+                }
             }
 
             // auto-grabber
@@ -482,10 +489,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // generic machine
             else
             {
-                string summary = minutesLeft <= 0
+                // output item
+                if (heldObj != null)
+                {
+
+                    string summary = minutesLeft <= 0
                     ? this.Translate(L10n.Item.ContentsReady, new { name = heldObj.DisplayName })
                     : this.Translate(L10n.Item.ContentsPartial, new { name = heldObj.DisplayName, time = this.Stringify(TimeSpan.FromMinutes(minutesLeft)) });
-                yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), heldObj, summary);
+                    yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), heldObj, summary);
+                }
             }
         }
 
