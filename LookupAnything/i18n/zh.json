@@ -207,16 +207,22 @@
   // item lookup labels
   "item.cask-contents": "内容",
   "item.cask-schedule": "陈酿中",
+
+  "item.crabpot-bait": "Bait", // TODO
+  "item.crabpot-bait-needed": "Needs bait!", // TODO
+  "item.crabpot-bait-not-needed": "Not needed due to Luremaster profession.", // TODO
+
+  "item.fence-health": "耐久",
+
   "item.contents": "内容",
-  "item.needed-for": "用于",
-  "item.sells-for": "售价为",
-  "item.sells-to": "卖给",
   "item.likes-this": "喜欢",
   "item.loves-this": "最爱",
-  "item.fence-health": "耐久",
-  "item.recipes": "配方",
+  "item.needed-for": "用于",
   "item.number-owned": "拥有",
+  "item.recipes": "配方",
   "item.see-also": "另请参阅",
+  "item.sells-for": "售价为",
+  "item.sells-to": "卖给",
 
   // item lookup values
   "item.cask-schedule.now": "目前{{quality}}",

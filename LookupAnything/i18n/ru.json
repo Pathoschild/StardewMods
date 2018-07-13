@@ -207,16 +207,22 @@
   // item lookup labels
   "item.cask-contents": "Содержит",
   "item.cask-schedule": "Старение",
+
+  "item.crabpot-bait": "Bait", // TODO
+  "item.crabpot-bait-needed": "Needs bait!", // TODO
+  "item.crabpot-bait-not-needed": "Not needed due to Luremaster profession.", // TODO
+
+  "item.fence-health": "Здоровье",
+
   "item.contents": "Содержит",
-  "item.needed-for": "Нужно для",
-  "item.sells-for": "Продать за",
-  "item.sells-to": "Место продажи",
   "item.likes-this": "Это нравится",
   "item.loves-this": "Это любят",
-  "item.fence-health": "Здоровье",
-  "item.recipes": "Рецепты",
+  "item.needed-for": "Нужно для",
   "item.number-owned": "Принадлежит",
+  "item.recipes": "Рецепты",
   "item.see-also": "Также смотрите",
+  "item.sells-for": "Продать за",
+  "item.sells-to": "Место продажи",
 
   // item lookup values
   "item.cask-schedule.now": "{{quality}} готово сейчас",

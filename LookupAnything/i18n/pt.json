@@ -207,16 +207,22 @@
   // item lookup labels
   "item.cask-contents": "Conteúdos",
   "item.cask-schedule": "Envelhecimento",
+
+  "item.crabpot-bait": "Bait", // TODO
+  "item.crabpot-bait-needed": "Needs bait!", // TODO
+  "item.crabpot-bait-not-needed": "Not needed due to Luremaster profession.", // TODO
+
+  "item.fence-health": "Saúde",
+
   "item.contents": "Conteúdos",
-  "item.needed-for": "Preciso para",
-  "item.sells-for": "vende por",
-  "item.sells-to": "Vende por",
   "item.likes-this": "Gosta disso",
   "item.loves-this": "Ama isso",
-  "item.fence-health": "Saúde",
-  "item.recipes": "Receitas",
+  "item.needed-for": "Preciso para",
   "item.number-owned": "Possui",
+  "item.recipes": "Receitas",
   "item.see-also": "Veja também",
+  "item.sells-for": "vende por",
+  "item.sells-to": "Vende por",
 
   // item lookup values
   "item.cask-schedule.now": "{{quality}} está pronto agora",

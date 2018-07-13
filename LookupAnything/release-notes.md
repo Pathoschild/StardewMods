@@ -6,7 +6,8 @@
 * Added support for...
   * garden pots and their crops;
   * other players;
-  * new friendship data.
+  * new friendship data;
+  * crab pot bait.
 * Added number of item needed in bundle list. (Thanks to StefanOssendorf!)
 * Fixed issue where a bundle that needs two stacks of an item won't be listed on the item lookup if one stack is filled. (Thanks to StefanOssendorf!)
 * Fixed Custom Farming Redux machines not drawn correctly in some cases.

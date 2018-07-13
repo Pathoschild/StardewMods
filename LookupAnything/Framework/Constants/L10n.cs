@@ -282,6 +282,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Aging</c>.</summary>
             public const string CaskSchedule = "item.cask-schedule";
 
+            /// <summary>A value like <c>Bait</c>.</summary>
+            public const string CrabpotBait = "item.crabpot-bait";
+
+            /// <summary>A value like <c>Needs bait!</c>.</summary>
+            public const string CrabpotBaitNeeded = "item.crabpot-bait-needed";
+
+            /// <summary>A value like <c>Not needed due to Luremaster profession.</c>.</summary>
+            public const string CrabpotBaitNotNeeded = "item.crabpot-bait-not-needed";
+
             /// <summary>A value like <c>Contents</c>.</summary>
             public const string Contents = "item.contents";
 

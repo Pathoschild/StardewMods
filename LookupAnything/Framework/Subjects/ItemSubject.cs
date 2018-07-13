@@ -391,19 +391,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get the custom fields for machine output.</summary>
-        /// <param name="obj">The machine whose output to represent.</param>
+        /// <param name="machine">The machine whose output to represent.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        private IEnumerable<ICustomField> GetMachineOutputFields(SObject obj, Metadata metadata)
+        private IEnumerable<ICustomField> GetMachineOutputFields(SObject machine, Metadata metadata)
         {
-            if (obj?.heldObject?.Value == null)
+            if (machine == null)
                 yield break;
 
+            SObject heldObj = machine.heldObject.Value;
+            int minutesLeft = machine.MinutesUntilReady;
+
             // cask
-            if (obj is Cask cask)
+            if (machine is Cask cask)
             {
                 // get cask data
-                SObject agingObj = cask.heldObject.Value;
-                ItemQuality curQuality = (ItemQuality)agingObj.Quality;
+                ItemQuality curQuality = (ItemQuality)heldObj.Quality;
                 string curQualityName = this.Translate(L10n.For(curQuality));
 
                 // calculate aging schedule
@@ -426,8 +428,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     .ToArray();
 
                 // display fields
-                yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), obj.heldObject.Value);
-                if (cask.MinutesUntilReady <= 0 || !schedule.Any())
+                yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), heldObj);
+                if (minutesLeft <= 0 || !schedule.Any())
                     yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskScheduleNow, new { quality = curQualityName }));
                 else
                 {
@@ -441,27 +443,49 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 }
             }
 
-            // furniture
-            else if (obj is Furniture)
+            // crab pot
+            else if (machine is CrabPot pot)
             {
-                string summary = this.Translate(L10n.Item.ContentsPlaced, new { name = obj.heldObject.Value.DisplayName });
-                yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), obj.heldObject.Value, summary);
+                // bait
+                if (heldObj == null)
+                {
+                    if (pot.bait.Value != null)
+                        yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.CrabpotBait), pot.bait.Value);
+                    else if (Game1.player.professions.Contains(11)) // no bait needed if luremaster
+                        yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.CrabpotBait), this.Translate(L10n.Item.CrabpotBaitNotNeeded));
+                    else
+                        yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.CrabpotBait), this.Translate(L10n.Item.CrabpotBaitNeeded));
+                }
+
+                // held item
+                if (heldObj != null)
+                {
+                    string summary = this.Translate(L10n.Item.ContentsReady, new { name = heldObj.DisplayName });
+                    yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), heldObj, summary);
+                }
+            }
+
+            // furniture
+            else if (machine is Furniture)
+            {
+                string summary = this.Translate(L10n.Item.ContentsPlaced, new { name = heldObj.DisplayName });
+                yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), heldObj, summary);
             }
 
             // auto-grabber
-            else if (obj.ParentSheetIndex == Constant.ObjectIndexes.AutoGrabber)
+            else if (machine.ParentSheetIndex == Constant.ObjectIndexes.AutoGrabber)
             {
-                string readyText = this.Text.Stringify(obj.heldObject.Value is Chest output && output.items.Any());
+                string readyText = this.Text.Stringify(heldObj is Chest output && output.items.Any());
                 yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.Contents), readyText);
             }
 
             // generic machine
             else
             {
-                string summary = obj.MinutesUntilReady <= 0
-                    ? this.Translate(L10n.Item.ContentsReady, new { name = obj.heldObject.Value.DisplayName })
-                    : this.Translate(L10n.Item.ContentsPartial, new { name = obj.heldObject.Value.DisplayName, time = this.Stringify(TimeSpan.FromMinutes(obj.MinutesUntilReady)) });
-                yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), obj.heldObject.Value, summary);
+                string summary = minutesLeft <= 0
+                    ? this.Translate(L10n.Item.ContentsReady, new { name = heldObj.DisplayName })
+                    : this.Translate(L10n.Item.ContentsPartial, new { name = heldObj.DisplayName, time = this.Stringify(TimeSpan.FromMinutes(minutesLeft)) });
+                yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), heldObj, summary);
             }
         }
 
