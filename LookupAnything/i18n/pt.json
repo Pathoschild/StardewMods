@@ -10,8 +10,8 @@
   "generic.percent": "{{percent}}%",
   "generic.percent-chance-of": "{{percent}}% de chance de {{label}}",
   "generic.percent-ratio": "{{percent}}% ({{value}} de {{max}})",
-  "generic.ratio": "{{value}} of {{max}}",
-  "generic.range": "{{min}} to {{max}}",
+  "generic.ratio": "{{value}} de {{max}}",
+  "generic.range": "{{min}} para {{max}}",
   "generic.yes": "sim",
   "generic.no": "não",
   "generic.seconds": "{{count}} segundos",
@@ -208,9 +208,9 @@
   "item.cask-contents": "Conteúdos",
   "item.cask-schedule": "Envelhecimento",
 
-  "item.crabpot-bait": "Bait", // TODO
-  "item.crabpot-bait-needed": "Needs bait!", // TODO
-  "item.crabpot-bait-not-needed": "Not needed due to Luremaster profession.", // TODO
+  "item.crabpot-bait": "Isca", // TODO
+  "item.crabpot-bait-needed": "Requer isca!", // TODO
+  "item.crabpot-bait-not-needed": "Não é necessaria devido a habilidade Mestre da isca", // TODO
 
   "item.fence-health": "Saúde",
 
