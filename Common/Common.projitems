@@ -9,6 +9,7 @@
     <Import_RootNamespace>Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)DataParsers\CropDataParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BaseIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\PrismaticTools\PrismaticToolsIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\PrismaticTools\IPrismaticToolsApi.cs" />

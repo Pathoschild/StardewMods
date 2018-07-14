@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common.DataParsers;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
@@ -319,45 +320,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (crop == null)
                 yield break;
 
-            // get harvest schedule
-            int harvestablePhase = crop.phaseDays.Count - 1;
-            bool canHarvestNow = (crop.currentPhase.Value >= harvestablePhase) && (!crop.fullyGrown.Value || crop.dayOfCurrentPhase.Value <= 0);
-            int daysToFirstHarvest = crop.phaseDays.Take(crop.phaseDays.Count - 1).Sum(); // ignore harvestable phase
+            var data = new CropDataParser(crop);
 
             // add next-harvest field
             if (!isSeed)
             {
-                // calculate next harvest
-                int daysToNextHarvest = 0;
-                SDate dayOfNextHarvest = null;
-                if (!canHarvestNow)
-                {
-                    // calculate days until next harvest
-                    int daysUntilLastPhase = daysToFirstHarvest - crop.dayOfCurrentPhase.Value - crop.phaseDays.Take(crop.currentPhase.Value).Sum();
-                    {
-                        // growing: days until next harvest
-                        if (!crop.fullyGrown.Value)
-                            daysToNextHarvest = daysUntilLastPhase;
-
-                        // regrowable crop harvested today
-                        else if (crop.dayOfCurrentPhase.Value >= crop.regrowAfterHarvest.Value)
-                            daysToNextHarvest = crop.regrowAfterHarvest.Value;
-
-                        // regrowable crop
-                        else
-                            daysToNextHarvest = crop.dayOfCurrentPhase.Value; // dayOfCurrentPhase decreases to 0 when fully grown, where <=0 is harvestable
-                    }
-                    dayOfNextHarvest = SDate.Now().AddDays(daysToNextHarvest);
-                }
+                // get next harvest
+                SDate nextHarvest = data.GetNextHarvest();
+                int daysToNextHarvest = nextHarvest.DaysSinceStart - SDate.Now().DaysSinceStart;
 
                 // generate field
                 string summary;
-                if (canHarvestNow)
+                if (data.CanHarvestNow)
                     summary = this.Translate(L10n.Crop.HarvestNow);
-                else if (!Game1.currentLocation.IsGreenhouse && !crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Season))
-                    summary = this.Translate(L10n.Crop.HarvestTooLate, new { date = this.Stringify(dayOfNextHarvest) });
+                else if (!Game1.currentLocation.IsGreenhouse && !data.Seasons.Contains(nextHarvest.Season))
+                    summary = this.Translate(L10n.Crop.HarvestTooLate, new { date = this.Stringify(nextHarvest) });
                 else
-                    summary = $"{this.Stringify(dayOfNextHarvest)} ({this.Text.GetPlural(daysToNextHarvest, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = daysToNextHarvest })})";
+                    summary = $"{this.Stringify(nextHarvest)} ({this.Text.GetPlural(daysToNextHarvest, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = daysToNextHarvest })})";
 
                 yield return new GenericField(this.GameHelper, this.Translate(L10n.Crop.Harvest), summary);
             }
@@ -367,13 +346,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 List<string> summary = new List<string>();
 
                 // harvest
-                summary.Add(crop.regrowAfterHarvest.Value == -1
-                    ? this.Translate(L10n.Crop.SummaryHarvestOnce, new { daysToFirstHarvest = daysToFirstHarvest })
-                    : this.Translate(L10n.Crop.SummaryHarvestMulti, new { daysToFirstHarvest = daysToFirstHarvest, daysToNextHarvests = crop.regrowAfterHarvest })
+                summary.Add(data.HasMultipleHarvests
+                    ? this.Translate(L10n.Crop.SummaryHarvestOnce, new { daysToFirstHarvest = data.DaysToFirstHarvest })
+                    : this.Translate(L10n.Crop.SummaryHarvestMulti, new { daysToFirstHarvest = data.DaysToFirstHarvest, daysToNextHarvests = data.DaysToSubsequentHarvest })
                 );
 
                 // seasons
-                summary.Add(this.Translate(L10n.Crop.SummarySeasons, new { seasons = string.Join(", ", this.Text.GetSeasonNames(crop.seasonsToGrowIn)) }));
+                summary.Add(this.Translate(L10n.Crop.SummarySeasons, new { seasons = string.Join(", ", this.Text.GetSeasonNames(data.Seasons)) }));
 
                 // drops
                 if (crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops.Value > 0)
@@ -382,7 +361,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     summary.Add(this.Translate(L10n.Crop.SummaryDropsX, new { count = crop.minHarvest }));
 
                 // crop sale price
-                Item drop = this.GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest.Value);
+                Item drop = data.GetSampleDrop();
                 summary.Add(this.Translate(L10n.Crop.SummarySellsFor, new { price = GenericField.GetSaleValueString(this.GetSaleValue(drop, false, metadata), 1, this.Text) }));
 
                 // generate field
