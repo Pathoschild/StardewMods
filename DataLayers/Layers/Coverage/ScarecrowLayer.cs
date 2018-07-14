@@ -28,6 +28,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <summary>The maximum number of tiles from the center a scarecrow can protect.</summary>
         private readonly int MaxRadius = 8;
 
+        /// <summary>Object IDs for custom mod scarecrows not covered by the default logic.</summary>
+        private readonly int[] ModObjectIds;
+
 
         /*********
         ** Public methods
@@ -35,7 +38,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
-        public ScarecrowLayer(ITranslationHelper translations, LayerConfig config)
+        /// <param name="mods">Handles access to the supported mod integrations.</param>
+        public ScarecrowLayer(ITranslationHelper translations, LayerConfig config, ModIntegrations mods)
             : base(translations.Get("scarecrows.name"), config)
         {
             this.Legend = new[]
@@ -43,6 +47,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                 new LegendEntry(translations.Get("scarecrows.protected"), this.CoveredColor),
                 new LegendEntry(translations.Get("scarecrows.exposed"), this.ExposedColor)
             };
+            this.ModObjectIds = this.GetModScarecrowIDs(mods).ToArray();
         }
 
         /// <summary>Get the updated data layer tiles.</summary>
@@ -92,12 +97,31 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /*********
         ** Private methods
         *********/
+        /// <summary>Get the object IDs for known mod scarecrows.</summary>
+        /// <param name="mods">Handles access to the supported mod integrations.</param>
+        private IEnumerable<int> GetModScarecrowIDs(ModIntegrations mods)
+        {
+            if (mods.PrismaticTools.IsLoaded && mods.PrismaticTools.ArePrismaticSprinklersScarecrows())
+                yield return mods.PrismaticTools.GetSprinklerID();
+        }
+
         /// <summary>Get whether a map object is a scarecrow.</summary>
         /// <param name="obj">The map object.</param>
         /// <remarks>Derived from <see cref="Farm.addCrows"/>.</remarks>
         private bool IsScarecrow(Object obj)
         {
-            return obj != null && obj.bigCraftable.Value && obj.Name.Contains("arecrow");
+            if (obj == null)
+                return false;
+
+            // vanilla sprinkler
+            if (obj.bigCraftable.Value && obj.Name.Contains("arecrow"))
+                return true;
+
+            // mod sprinkler
+            if (!obj.bigCraftable.Value && this.ModObjectIds.Contains(obj.ParentSheetIndex))
+                return true;
+
+            return false;
         }
 
         /// <summary>Get whether a map terrain feature is a crop.</summary>

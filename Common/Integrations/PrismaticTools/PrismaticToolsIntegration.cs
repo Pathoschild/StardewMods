@@ -21,7 +21,7 @@ namespace Pathoschild.Stardew.Common.Integrations.PrismaticTools
         /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         public PrismaticToolsIntegration(IModRegistry modRegistry, IMonitor monitor)
-            : base("Prismatic Tools", "stokastic.PrismaticTools", "1.2.1", modRegistry, monitor)
+            : base("Prismatic Tools", "stokastic.PrismaticTools", "1.3.0", modRegistry, monitor)
         {
             if (!this.IsLoaded)
                 return;
@@ -29,6 +29,13 @@ namespace Pathoschild.Stardew.Common.Integrations.PrismaticTools
             // get mod API
             this.ModApi = this.GetValidatedApi<IPrismaticToolsApi>();
             this.IsLoaded = this.ModApi != null;
+        }
+
+        /// <summary>Get whether prismatic sprinklers also act as scarecrows.</summary>
+        public bool ArePrismaticSprinklersScarecrows()
+        {
+            this.AssertLoaded();
+            return this.ModApi.ArePrismaticSprinklersScarecrows;
         }
 
         /// <summary>Get the prismatic sprinkler object ID.</summary>
