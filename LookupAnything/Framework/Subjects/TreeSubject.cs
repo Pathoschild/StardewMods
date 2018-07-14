@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (!isFullyGrown)
             {
                 string label = this.Translate(L10n.Tree.NextGrowth);
-                if (Game1.IsWinter && Game1.currentLocation.Name != Constant.LocationNames.Greenhouse)
+                if (Game1.IsWinter && !Game1.currentLocation.IsGreenhouse)
                     yield return new GenericField(this.GameHelper, label, this.Translate(L10n.Tree.NextGrowthWinter));
                 else if (stage == WildTreeGrowthStage.SmallTree && this.HasAdjacentTrees(this.Tile))
                     yield return new GenericField(this.GameHelper, label, this.Translate(L10n.Tree.NextGrowthAdjacentTrees));
