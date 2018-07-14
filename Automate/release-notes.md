@@ -6,6 +6,7 @@
 * Added optional connectors (e.g. connect machines using paths).
 * Added support for auto-grabbers and buildable shipping bins.
 * Added support for ignoring specific chests.
+* Fixed various bugs related to multi-tile machines (e.g. buildings).
 * **Breaking change:** to prefer a chest for output, add `|automate:output|` to the chest name instead of just `output`.
 
 ## 1.9.1

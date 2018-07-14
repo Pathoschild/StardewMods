@@ -99,8 +99,9 @@ namespace Pathoschild.Stardew.Automate.Framework
                     continue;
 
                 // check for a machine, container, or connector
+                Vector2 foundOrigin = tile;
                 Vector2 foundSize;
-                if (this.TryGetMachine(location, tile, reflection, out IMachine machine, out Vector2 size))
+                if (this.TryGetMachine(location, tile, reflection, out IMachine machine, out foundOrigin, out Vector2 size))
                 {
                     group.Add(machine);
                     foundSize = size;
@@ -116,7 +117,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                     continue;
 
                 // mark tiles visited
-                Rectangle tileArea = new Rectangle((int)tile.X, (int)tile.Y, (int)foundSize.X, (int)foundSize.Y);
+                Rectangle tileArea = new Rectangle((int)foundOrigin.X, (int)foundOrigin.Y, (int)foundSize.X, (int)foundSize.Y);
                 group.Add(tileArea);
                 foreach (Vector2 cur in tileArea.GetTiles())
                     visited.Add(cur);
@@ -135,10 +136,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="tile">The tile to search.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="machine">The machine found on the tile.</param>
+        /// <param name="origin">The machine's top-left position. This may be different from <paramref name="tile"/> for machines that take up multiple tiles.</param>
         /// <param name="size">The tile size of the machine found on the tile.</param>
         /// <returns>Returns whether a machine was found on the tile.</returns>
-        private bool TryGetMachine(GameLocation location, Vector2 tile, IReflectionHelper reflection, out IMachine machine, out Vector2 size)
+        private bool TryGetMachine(GameLocation location, Vector2 tile, IReflectionHelper reflection, out IMachine machine, out Vector2 origin, out Vector2 size)
         {
+            origin = tile;
+
             // object machine
             if (location.objects.TryGetValue(tile, out SObject obj) && !(obj is Chest))
             {
@@ -172,6 +176,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                         machine = this.GetMachine(building, buildableLocation);
                         if (machine != null)
                         {
+                            origin = new Vector2(building.tileX.Value, building.tileY.Value);
                             size = new Vector2(building.tilesWide.Value, building.tilesHigh.Value);
                             return true;
                         }
@@ -184,6 +189,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 return true;
 
             // none
+            size = Vector2.Zero;
             machine = null;
             return false;
         }
