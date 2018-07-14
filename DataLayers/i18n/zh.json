@@ -25,6 +25,13 @@
   "sprinklers.covered": "已覆盖",
   "sprinklers.dry-crops": "作物干燥",
 
+  // crops: harvest
+  // TODO
+  "crop-harvest.name": "Crops: Ready to Harvest",
+  "crop-harvest.ready": "Ready",
+  "crop-harvest.not-ready": "Not Ready",
+  "crop-harvest.not-enough-time": "Not Enough Time",
+
   // crops: watered
   "crop-water.name": "作物：浇水",
   "crop-water.watered": "已浇水",

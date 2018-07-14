@@ -150,6 +150,8 @@ namespace Pathoschild.Stardew.DataLayers
                 yield return new CropWaterLayer(translation, layers.CropWater);
             if (layers.CropFertilizer.IsEnabled())
                 yield return new CropFertilizerLayer(translation, layers.CropFertilizer);
+            if (layers.CropHarvest.IsEnabled())
+                yield return new CropHarvestLayer(translation, layers.CropHarvest);
         }
 
         /// <summary>The method invoked when the player returns to the title screen.</summary>

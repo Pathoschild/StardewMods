@@ -39,6 +39,7 @@
     <Compile Include="Layers\BaseLayer.cs" />
     <Compile Include="Layers\Coverage\JunimoHutLayer.cs" />
     <Compile Include="Layers\Coverage\BeeHouseLayer.cs" />
+    <Compile Include="Layers\Crops\CropHarvestLayer.cs" />
     <Compile Include="Layers\Crops\CropFertilizerLayer.cs" />
     <Compile Include="Layers\Coverage\ScarecrowLayer.cs" />
     <Compile Include="Layers\Crops\CropWaterLayer.cs" />

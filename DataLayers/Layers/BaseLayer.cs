@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewValley;
+using StardewValley.Objects;
+using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.DataLayers.Layers
 {
@@ -45,6 +47,19 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             this.Name = name;
             this.UpdateTickRate = (int)(60 / config.UpdatesPerSecond);
             this.UpdateWhenVisibleTilesChange = config.UpdateWhenViewChange;
+        }
+
+        /// <summary>Get the dirt instance for a tile, if any.</summary>
+        /// <param name="location">The current location.</param>
+        /// <param name="tile">The tile to check.</param>
+        protected HoeDirt GetDirt(GameLocation location, Vector2 tile)
+        {
+            if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrain) && terrain is HoeDirt dirt)
+                return dirt;
+            if (location.objects.TryGetValue(tile, out Object obj) && obj is IndoorPot pot)
+                return pot.hoeDirt.Value;
+
+            return null;
         }
     }
 }

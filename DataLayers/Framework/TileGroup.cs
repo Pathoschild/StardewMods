@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace Pathoschild.Stardew.DataLayers.Framework
@@ -21,9 +23,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="tiles">The tiles in the group.</param>
         /// <param name="outerBorderColor">A border color to draw along edges that aren't touching another tile in the group (if any).</param>
-        public TileGroup(TileData[] tiles, Color? outerBorderColor = null)
+        public TileGroup(IEnumerable<TileData> tiles, Color? outerBorderColor = null)
         {
-            this.Tiles = tiles;
+            this.Tiles = tiles.ToArray();
             this.OuterBorderColor = outerBorderColor;
         }
     }

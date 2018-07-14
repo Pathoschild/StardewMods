@@ -44,6 +44,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             /// <summary>The fertilizer layer.</summary>
             public LayerConfig CropFertilizer { get; set; } = new LayerConfig { UpdatesPerSecond = 30 };
 
+            /// <summary>The crop harvest layer.</summary>
+            public LayerConfig CropHarvest { get; set; } = new LayerConfig { UpdatesPerSecond = 2 };
+
             /// <summary>The crop water layer.</summary>
             public LayerConfig CropWater { get; set; } = new LayerConfig { UpdatesPerSecond = 30 };
         }

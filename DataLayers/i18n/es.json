@@ -25,6 +25,13 @@
   "sprinklers.covered": "Cubierto",
   "sprinklers.dry-crops": "Cosechas secas",
 
+  // crops: harvest
+  // TODO
+  "crop-harvest.name": "Crops: Ready to Harvest",
+  "crop-harvest.ready": "Ready",
+  "crop-harvest.not-ready": "Not Ready",
+  "crop-harvest.not-enough-time": "Not Enough Time",
+
   // crops: watered
   "crop-water.name": "Cosechas: Irrigación",
   "crop-water.watered": "Cosecha regada",

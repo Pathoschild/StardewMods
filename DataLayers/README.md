@@ -45,13 +45,19 @@ Shows scarecrow coverage, and highlights unprotected crops. Also works on scarec
 Shows sprinkler coverage, and highlights unsprinkled crops. Also works on sprinklers being placed.
 > ![](docs/screenshots/sprinklers.png)
 
-### Crops: watered
-Shows which crops have been watered today.
-> ![](docs/screenshots/crops-watered.png)
+### Crops: ready for harvest
+Shows which crops are ready to harvest, or which won't be ready before they die due to a season
+change.
+> ![](docs/screenshots/crops-harvest.png)
+
 
 ### Crops: fertilised
 Shows which crops have fertiliser applied.
 > ![](docs/screenshots/crops-fertilized.png)
+
+### Crops: watered
+Shows which crops have been watered today.
+> ![](docs/screenshots/crops-watered.png)
 
 ## Configure
 The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
