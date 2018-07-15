@@ -2,9 +2,12 @@
 
 # Release notes
 ## 1.10
-* Updated for Stardew Valley 1.3 (including multiplayer support).
+* Updated for Stardew Valley 1.3, including...
+  * multiplayer support;
+  * support for auto-grabbers;
+  * support for buildable shipping bins;
+  * new fire quartz in furnace recipe.
 * Added optional connectors (e.g. connect machines using paths).
-* Added support for auto-grabbers and buildable shipping bins.
 * Added support for ignoring specific chests.
 * Fixed various bugs related to multi-tile machines (e.g. buildings).
 * **Breaking change:** to prefer a chest for output, add `|automate:output|` to the chest name instead of just `output`.
