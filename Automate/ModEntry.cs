@@ -186,7 +186,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void Input_ButtonPressed(object sender, InputButtonPressedArgsInput e)
+        private void Input_ButtonPressed(object sender, InputButtonPressedEventArgs e)
         {
             try
             {
