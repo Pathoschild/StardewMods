@@ -27,10 +27,10 @@
 
   // crops: harvest
   // TODO
-  "crop-harvest.name": "Crops: Ready to Harvest",
-  "crop-harvest.ready": "Ready",
-  "crop-harvest.not-ready": "Not Ready",
-  "crop-harvest.not-enough-time": "Not Enough Time",
+  "crop-harvest.name": "Plantas: Pronto para colher",
+  "crop-harvest.ready": "Pronto",
+  "crop-harvest.not-ready": "Não está pronto",
+  "crop-harvest.not-enough-time": "Sem tempo suficiente",
 
   // crops: watered
   "crop-water.name": "Plantas: Irrigado",
