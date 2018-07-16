@@ -65,7 +65,7 @@ use the right translations.
 Chinese    | [↻ partial](ChestsAnywhere/i18n/zh.json) | [↻ partial](DataLayers/i18n/zh.json) | [✓](DebugMode/i18n/zh.json)        | [↻ partial](LookupAnything/i18n/zh.json) | [✓](TractorMod/i18n/zh.json)
 German     | [↻ partial](ChestsAnywhere/i18n/de.json) | [↻ partial](DataLayers/i18n/de.json) | [✓](DebugMode/i18n/de.json)        | [↻ partial](LookupAnything/i18n/de.json) | [✓](TractorMod/i18n/de.json)
 Japanese   | ❑ _none_                                | ❑ _none_                            | ❑ _none_                           | ❑ _none_                                | ❑ _none_
-Portuguese | [✓](ChestsAnywhere/i18n/pt.json)        | [↻ partial](DataLayers/i18n/pt.json) | [✓](DebugMode/i18n/pt.json)        | [✓](LookupAnything/i18n/pt.json)        | [✓](TractorMod/i18n/pt.json)
+Portuguese | [✓](ChestsAnywhere/i18n/pt.json)        | [✓](DataLayers/i18n/pt.json)        | [✓](DebugMode/i18n/pt.json)        | [✓](LookupAnything/i18n/pt.json)        | [✓](TractorMod/i18n/pt.json)
 Russian    | [↻ partial](ChestsAnywhere/i18n/ru.json) | [↻ partial](DataLayers/i18n/ru.json) | ↻ [partial](DebugMode/i18n/ru.json) | [↻ partial](LookupAnything/i18n/ru.json) | [✓](TractorMod/i18n/ru.json)
 Spanish    | [↻ partial](ChestsAnywhere/i18n/es.json) | [↻ partial](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json)        | [↻ partial](LookupAnything/i18n/es.json) | [✓](TractorMod/i18n/es.json)
 

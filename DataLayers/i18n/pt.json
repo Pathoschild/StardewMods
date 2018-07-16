@@ -26,7 +26,6 @@
   "sprinklers.dry-crops": "Plantas Secas",
 
   // crops: harvest
-  // TODO
   "crop-harvest.name": "Plantas: Pronto para colher",
   "crop-harvest.ready": "Pronto",
   "crop-harvest.not-ready": "Não está pronto",
