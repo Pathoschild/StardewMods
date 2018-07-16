@@ -1,6 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 
 namespace Pathoschild.Stardew.TestContentMod
 {
@@ -8,11 +12,21 @@ namespace Pathoschild.Stardew.TestContentMod
     internal class ModEntry : Mod, IAssetEditor, IAssetLoader
     {
         /*********
+        ** Accessors
+        *********/
+        /// <summary>The unique assets for which <see cref="IAssetLoader.CanLoad{T}"/> was called.</summary>
+        private readonly HashSet<string> LoadedAssets = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>The mod entry point, called after the mod is first loaded.</summary>
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
-        public override void Entry(IModHelper helper) { }
+        public override void Entry(IModHelper helper)
+        {
+            helper.Events.Input.ButtonPressed += this.Input_ButtonPressed;
+        }
 
         /****
         ** Edit
@@ -42,6 +56,7 @@ namespace Pathoschild.Stardew.TestContentMod
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public bool CanLoad<T>(IAssetInfo asset)
         {
+            this.LoadedAssets.Add(asset.AssetName);
             return false;
         }
 
@@ -56,6 +71,19 @@ namespace Pathoschild.Stardew.TestContentMod
         /*********
         ** Private methods
         *********/
+        /// <summary>The method invoked when the player presses a button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void Input_ButtonPressed(object sender, InputButtonPressedEventArgs e)
+        {
+            // print list of loaded assets
+            if (e.Button == SButton.F12)
+            {
+                string[] assets = this.LoadedAssets.OrderBy(p => p).ToArray();
+                this.Monitor.Log($"CanLoad<T> was called for these assets:\n   {string.Join("\n   ", assets)}", LogLevel.Info);
+            }
+        }
+
         /// <summary>Create a copy of a texture with inverted colors.</summary>
         /// <param name="source">The original texture to copy.</param>
         private Texture2D InvertColors(Texture2D source)
