@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: SObject.quartzIndex,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 338),
+                output: input => new SObject(Vector2.Zero, 338, 1),
                 minutes: 90
             ),
 
