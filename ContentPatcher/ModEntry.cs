@@ -75,7 +75,7 @@ namespace ContentPatcher
             TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
 
             // set up commands
-            this.CommandHandler = new CommandHandler(this.PatchManager, this.ConditionFactory, this.Monitor, this.UpdateContext);
+            this.CommandHandler = new CommandHandler(this.PatchManager, this.Monitor, this.UpdateContext);
             helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (name, args) => this.CommandHandler.Handle(args));
         }
 

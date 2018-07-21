@@ -21,11 +21,25 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>Manages loaded patches.</summary>
         private readonly PatchManager PatchManager;
 
-        /// <summary>Handles constructing, permuting, and updating conditions.</summary>
-        private readonly ConditionFactory ConditionFactory;
-
         /// <summary>A callback which immediately updates the current condition context.</summary>
         private readonly Action UpdateContext;
+
+        /// <summary>The order in which condition types should be listed by <c>patch summary</c>.</summary>
+        private readonly ConditionType[] DisplayOrder = {
+            // general
+            ConditionType.Season,
+            ConditionType.DayOfWeek,
+            ConditionType.Day,
+            ConditionType.DayEvent,
+            ConditionType.Language,
+            ConditionType.Spouse,
+            ConditionType.Weather,
+
+            // lookups
+            ConditionType.HasFlag,
+            ConditionType.HasMod,
+            ConditionType.HasSeenEvent
+        };
 
 
         /*********
@@ -40,13 +54,11 @@ namespace ContentPatcher.Framework.Commands
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="patchManager">Manages loaded patches.</param>
-        /// <param name="conditionFactory">Handles constructing, permuting, and updating conditions.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="updateContext">A callback which immediately updates the current condition context.</param>
-        public CommandHandler(PatchManager patchManager, ConditionFactory conditionFactory, IMonitor monitor, Action updateContext)
+        public CommandHandler(PatchManager patchManager, IMonitor monitor, Action updateContext)
         {
             this.PatchManager = patchManager;
-            this.ConditionFactory = conditionFactory;
             this.Monitor = monitor;
             this.UpdateContext = updateContext;
         }
@@ -66,10 +78,10 @@ namespace ContentPatcher.Framework.Commands
                     return this.HandleHelp(subcommandArgs);
 
                 case "summary":
-                    return this.HandleSummary(subcommandArgs);
+                    return this.HandleSummary();
 
                 case "update":
-                    return this.HandleUpdate(subcommandArgs);
+                    return this.HandleUpdate();
 
                 default:
                     this.Monitor.Log($"The '{this.CommandName} {args[0]}' command isn't valid. Type '{this.CommandName} help' for a list of valid commands.");
@@ -124,9 +136,8 @@ namespace ContentPatcher.Framework.Commands
         }
 
         /// <summary>Handle the 'patch summary' command.</summary>
-        /// <param name="args">The subcommand arguments.</param>
         /// <returns>Returns whether the command was handled.</returns>
-        private bool HandleSummary(string[] args)
+        private bool HandleSummary()
         {
             ConditionContext context = this.PatchManager.ConditionContext;
             StringBuilder output = new StringBuilder();
@@ -136,7 +147,7 @@ namespace ContentPatcher.Framework.Commands
             output.AppendLine("========================");
             output.AppendLine("== Current conditions ==");
             output.AppendLine("========================");
-            foreach (KeyValuePair<ConditionKey, IEnumerable<string>> pair in context.GetValues())
+            foreach (var pair in context.GetValues().OrderBy(p => this.GetDisplayOrder(p.Key)).ThenBy(p => p.Key.ForID))
                 output.AppendLine($"   {pair.Key}: {string.Join(", ", pair.Value)}");
             output.AppendLine();
 
@@ -205,9 +216,8 @@ namespace ContentPatcher.Framework.Commands
         }
 
         /// <summary>Handle the 'patch update' command.</summary>
-        /// <param name="args">The subcommand arguments.</param>
         /// <returns>Returns whether the command was handled.</returns>
-        private bool HandleUpdate(string[] args)
+        private bool HandleUpdate()
         {
             this.UpdateContext();
             return true;
@@ -224,6 +234,16 @@ namespace ContentPatcher.Framework.Commands
                 yield return new PatchInfo(patch);
             foreach (DisabledPatch patch in this.PatchManager.GetPermanentlyDisabledPatches())
                 yield return new PatchInfo(patch);
+        }
+
+        /// <summary>Get the display order for a condition in <c>patch summary</c> output.</summary>
+        /// <param name="key">The condition key.</param>
+        private int GetDisplayOrder(ConditionKey key)
+        {
+            int index = Array.IndexOf(this.DisplayOrder, key.Type);
+            return index != -1
+                ? index
+                : this.DisplayOrder.Length;
         }
     }
 }
