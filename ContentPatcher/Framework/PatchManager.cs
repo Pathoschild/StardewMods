@@ -144,7 +144,39 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Update the current context.</summary>
-        /// <param name="contentHelper">The content helper through which to invalidate assets.</param>
+        /// <param name="contentHelper">The content helper which manages game assets.</param>
+        public void UpdateContext(IContentHelper contentHelper)
+        {
+            if (Context.IsWorldReady)
+            {
+                this.UpdateContext(
+                    contentHelper: contentHelper,
+                    language: contentHelper.CurrentLocaleConstant,
+                    date: SDate.Now(),
+                    weather: this.GetCurrentWeather(),
+                    dayEvent: this.GetDayEvent(contentHelper),
+                    spouse: Game1.player?.spouse,
+                    seenEvents: Game1.player?.eventsSeen.OrderBy(p => p).ToArray(),
+                    mailFlags: this.GetMailFlags().OrderBy(p => p).ToArray()
+                );
+            }
+            else
+            {
+                this.UpdateContext(
+                    contentHelper: contentHelper,
+                    language: contentHelper.CurrentLocaleConstant,
+                    date: null,
+                    weather: null,
+                    dayEvent: null,
+                    spouse: null,
+                    seenEvents: null,
+                    mailFlags: null
+                );
+            }
+        }
+
+        /// <summary>Update the current context.</summary>
+        /// <param name="contentHelper">The content helper which manages game assets.</param>
         /// <param name="language">The current language.</param>
         /// <param name="date">The current in-game date (if applicable).</param>
         /// <param name="weather">The current in-game weather (if applicable).</param>
@@ -434,6 +466,50 @@ namespace ContentPatcher.Framework
         /*********
         ** Private methods
         *********/
+        /// <summary>Get the current weather from the game state.</summary>
+        private Weather GetCurrentWeather()
+        {
+            if (Utility.isFestivalDay(Game1.dayOfMonth, Game1.currentSeason) || Game1.weddingToday)
+                return Weather.Sun;
+
+            if (Game1.isSnowing)
+                return Weather.Snow;
+            if (Game1.isRaining)
+                return Game1.isLightning ? Weather.Storm : Weather.Rain;
+
+            return Weather.Sun;
+        }
+
+        /// <summary>Get the letter IDs and mail flags set for the player.</summary>
+        /// <remarks>See game logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
+        private IEnumerable<string> GetMailFlags()
+        {
+            Farmer player = Game1.player;
+            if (player == null)
+                return new string[0];
+
+            return player
+                .mailReceived
+                .Union(player.mailForTomorrow)
+                .Union(player.mailbox);
+        }
+
+        /// <summary>Get the name for today's day event (e.g. wedding or festival) from the game data.</summary>
+        /// <param name="contentHelper">The content helper from which to load festival data.</param>
+        private string GetDayEvent(IContentHelper contentHelper)
+        {
+            // marriage
+            if (Game1.weddingToday)
+                return "wedding";
+
+            // festival
+            IDictionary<string, string> festivalDates = contentHelper.Load<Dictionary<string, string>>("Data\\Festivals\\FestivalDates", ContentSource.GameContent);
+            if (festivalDates.TryGetValue($"{Game1.currentSeason}{Game1.dayOfMonth}", out string festivalName))
+                return festivalName;
+
+            return null;
+        }
+
         /// <summary>Get all possible normalised <see cref="IPatch.AssetName"/> values for a patch.</summary>
         /// <param name="patch">The patch to check.</param>
         private IEnumerable<string> GetPossibleAssetNames(IPatch patch)

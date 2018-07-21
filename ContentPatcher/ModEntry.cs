@@ -11,8 +11,6 @@ using ContentPatcher.Framework.Patches;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
-using StardewModdingAPI.Utilities;
-using StardewValley;
 
 namespace ContentPatcher
 {
@@ -141,28 +139,7 @@ namespace ContentPatcher
         /// <summary>Update the current context.</summary>
         private void UpdateContext()
         {
-            // get context
-            IContentHelper contentHelper = this.Helper.Content;
-            LocalizedContentManager.LanguageCode language = contentHelper.CurrentLocaleConstant;
-            SDate date = null;
-            Weather? weather = null;
-            string spouse = null;
-            string dayEvent = null;
-            int[] seenEvents = null;
-            string[] mailFlags = null;
-            if (Context.IsWorldReady)
-            {
-                date = SDate.Now();
-                weather = this.GetCurrentWeather();
-                spouse = Game1.player?.spouse;
-                dayEvent = this.GetDayEvent();
-                seenEvents = Game1.player?.eventsSeen.OrderBy(p => p).ToArray();
-                mailFlags = this.GetMailFlags().OrderBy(p => p).ToArray();
-            }
-
-            // update context
-            this.VerboseLog($"Context: date={(date != null ? $"{date.DayOfWeek} {date.Season} {date.Day}" : "none")}, weather={(weather != null ? weather.ToString() : "none")}, locale={language}.");
-            this.PatchManager.UpdateContext(contentHelper: contentHelper, language: language, date: date, weather: weather, dayEvent: dayEvent, spouse: spouse, seenEvents: seenEvents, mailFlags: mailFlags);
+            this.PatchManager.UpdateContext(this.Helper.Content);
         }
 
         /// <summary>Load the patches from all registered content packs.</summary>
@@ -603,49 +580,6 @@ namespace ContentPatcher
             }
 
             return newPath;
-        }
-
-        /// <summary>Get the current weather from the game state.</summary>
-        private Weather GetCurrentWeather()
-        {
-            if (Utility.isFestivalDay(Game1.dayOfMonth, Game1.currentSeason) || Game1.weddingToday)
-                return Weather.Sun;
-
-            if (Game1.isSnowing)
-                return Weather.Snow;
-            if (Game1.isRaining)
-                return Game1.isLightning ? Weather.Storm : Weather.Rain;
-
-            return Weather.Sun;
-        }
-
-        /// <summary>Get the letter IDs and mail flags set for the player.</summary>
-        /// <remarks>See game logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
-        private IEnumerable<string> GetMailFlags()
-        {
-            Farmer player = Game1.player;
-            if (player == null)
-                return new string[0];
-
-            return player
-                .mailReceived
-                .Union(player.mailForTomorrow)
-                .Union(player.mailbox);
-        }
-
-        /// <summary>Get the name for today's day event (e.g. wedding or festival) from the game data.</summary>
-        private string GetDayEvent()
-        {
-            // marriage
-            if (Game1.weddingToday)
-                return "wedding";
-
-            // festival
-            IDictionary<string, string> festivalDates = this.Helper.Content.Load<Dictionary<string, string>>("Data\\Festivals\\FestivalDates", ContentSource.GameContent);
-            if (festivalDates.TryGetValue($"{Game1.currentSeason}{Game1.dayOfMonth}", out string festivalName))
-                return festivalName;
-
-            return null;
         }
 
         /// <summary>Log a message if <see cref="ModConfig.VerboseLog"/> is enabled.</summary>

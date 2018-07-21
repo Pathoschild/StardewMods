@@ -218,12 +218,12 @@ namespace Pathoschild.Stardew.DebugMode
                 string festivalName = @event.FestivalName;
                 double progress = @event.CurrentCommand / (double)@event.eventCommands.Length;
 
-                if(isFestival)
+                if (isFestival)
                     yield return $"{this.Helper.Translation.Get("label.festival-name")}: {festivalName}";
                 else
                 {
                     yield return $"{this.Helper.Translation.Get("label.event-id")}: {eventID}";
-                    if(@event.CurrentCommand >= 0 && @event.CurrentCommand < @event.eventCommands.Length)
+                    if (@event.CurrentCommand >= 0 && @event.CurrentCommand < @event.eventCommands.Length)
                         yield return $"{this.Helper.Translation.Get("label.event-script")}: {@event.eventCommands[@event.CurrentCommand]} ({(int)(progress * 100)}%)";
                 }
             }
