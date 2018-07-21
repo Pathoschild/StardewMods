@@ -336,6 +336,22 @@ The event IDs the player has seen, matching IDs in the `Data\Events` files. (You
 </tr>
 
 <tr valign="top">
+<td>Hearts</td>
+<td>
+
+The player's heart level with a given NPC. You must specify the character name as part of the key
+(using their English name regardless of translations), like this:
+
+```json
+"When": {
+   "Hearts:Abigail": "10, 11, 12, 13"
+}
+```
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>Relationship</td>
 <td>
 

@@ -70,11 +70,14 @@ namespace ContentPatcher.Framework.Conditions
             this.Set(ConditionKey.Weather, weather?.ToString().ToLower());
 
             // NPC friendship conditions
-            this.RemoveAll(ConditionType.Relationship);
+            this.RemoveAll(ConditionType.Hearts, ConditionType.Relationship);
             if (friendships != null)
             {
                 foreach (KeyValuePair<string, Friendship> friendship in friendships)
+                {
+                    this.Set(new ConditionKey(ConditionType.Hearts, friendship.Key), (friendship.Value.Points / NPC.friendshipPointsPerHeartLevel).ToString());
                     this.Set(new ConditionKey(ConditionType.Relationship, friendship.Key), friendship.Value.Status.ToString());
+                }
             }
         }
 
@@ -153,10 +156,10 @@ namespace ContentPatcher.Framework.Conditions
         ** Private methods
         *********/
         /// <summary>Remove all values matching a given condition type.</summary>
-        /// <param name="type">The condition type to remove.</param>
-        private void RemoveAll(ConditionType type)
+        /// <param name="types">The condition types to remove.</param>
+        private void RemoveAll(params ConditionType[] types)
         {
-            this.RemoveAll(key => key.Type == type);
+            this.RemoveAll(key => types.Contains(key.Type));
         }
 
         /// <summary>Remove all values matching a given lambda.</summary>

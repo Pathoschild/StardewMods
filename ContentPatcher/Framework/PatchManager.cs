@@ -18,6 +18,33 @@ namespace ContentPatcher.Framework
         /*********
         ** Properties
         *********/
+        /****
+        ** Constants
+        ****/
+        /// <summary>The condition types which require a <see cref="ConditionKey.ForID"/> value.</summary>
+        private readonly HashSet<ConditionType> TypesRequireID = new HashSet<ConditionType>
+        {
+            ConditionType.Hearts,
+            ConditionType.Relationship
+        };
+
+        /// <summary>The minimum format versions for newer condition types.</summary>
+        private readonly IDictionary<string, HashSet<ConditionType>> MinimumVersions = new Dictionary<string, HashSet<ConditionType>>
+        {
+            ["1.4"] = new HashSet<ConditionType>
+            {
+                ConditionType.DayEvent,
+                ConditionType.HasFlag,
+                ConditionType.HasSeenEvent,
+                ConditionType.Hearts,
+                ConditionType.Relationship,
+                ConditionType.Spouse
+            }
+        };
+
+        /****
+        ** State
+        ****/
         /// <summary>Handles constructing, permuting, and updating conditions.</summary>
         private readonly ConditionFactory ConditionFactory;
 
@@ -406,7 +433,7 @@ namespace ContentPatcher.Framework
                 }
 
                 // validate types which require an ID
-                if (key.Type == ConditionType.Relationship && string.IsNullOrWhiteSpace(key.ForID))
+                if (this.TypesRequireID.Contains(key.Type) && string.IsNullOrWhiteSpace(key.ForID))
                 {
                     error = $"{key.Type} conditions must specify a separate ID (see readme for usage)";
                     conditions = null;
@@ -414,9 +441,9 @@ namespace ContentPatcher.Framework
                 }
 
                 // check compatibility
-                if (formatVersion.IsOlderThan("1.4"))
+                foreach (var versionPair in this.MinimumVersions)
                 {
-                    if (key.Type == ConditionType.DayEvent || key.Type == ConditionType.HasFlag || key.Type == ConditionType.HasSeenEvent || key.Type == ConditionType.Relationship || key.Type == ConditionType.Spouse)
+                    if (formatVersion.IsOlderThan(versionPair.Key) && versionPair.Value.Contains(key.Type))
                     {
                         error = $"{key} isn't available with format version {formatVersion} (change the {nameof(ContentConfig.Format)} field to {latestFormatVersion} to use newer features)";
                         conditions = null;

@@ -32,9 +32,6 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>A predefined condition key for <see cref="ConditionType.Language"/>.</summary>
         public static ConditionKey Language { get; } = new ConditionKey(ConditionType.Language);
 
-        /// <summary>A predefined condition key for <see cref="ConditionType.Relationship"/>.</summary>
-        public static ConditionKey Relationship { get; } = new ConditionKey(ConditionType.Relationship);
-
         /// <summary>A predefined condition key for <see cref="ConditionType.Season"/>.</summary>
         public static ConditionKey Season { get; } = new ConditionKey(ConditionType.Season);
 

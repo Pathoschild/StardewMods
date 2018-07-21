@@ -42,6 +42,10 @@ namespace ContentPatcher.Framework.Conditions
         /****
         ** Multi-part conditions
         ****/
+        /// <summary>The current player's number of hearts with the character.</summary>
+        Hearts,
+
+        /// <summary>The current player's relationship status with the character (matching <see cref="StardewValley.FriendshipStatus"/>)</summary>
         Relationship
     };
 }

@@ -36,6 +36,7 @@ namespace ContentPatcher.Framework.Commands
             ConditionType.Weather,
 
             // NPCs
+            ConditionType.Hearts,
             ConditionType.Relationship,
 
             // lookups
