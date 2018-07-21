@@ -27,7 +27,7 @@ namespace ContentPatcher.Framework.Conditions
         public string RawValue { get; }
 
         /// <summary>The condition tokens in the string.</summary>
-        public HashSet<ConditionKey> ConditionTokens { get; } = new HashSet<ConditionKey>();
+        public HashSet<ConditionType> ConditionTokens { get; } = new HashSet<ConditionType>();
 
         /// <summary>The config tokens in the string.</summary>
         public InvariantHashSet ConfigTokens { get; } = new InvariantHashSet();
@@ -53,7 +53,7 @@ namespace ContentPatcher.Framework.Conditions
             foreach (Match match in TokenStringBuilder.TokenPattern.Matches(rawValue))
             {
                 string key = match.Groups[1].Value.Trim();
-                if (Enum.TryParse(key, true, out ConditionKey conditionKey))
+                if (Enum.TryParse(key, true, out ConditionType conditionKey))
                     this.ConditionTokens.Add(conditionKey);
                 else if (config.ContainsKey(key))
                     this.ConfigTokens.Add(key);

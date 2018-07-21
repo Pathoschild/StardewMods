@@ -18,17 +18,17 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         ** Properties
         *********/
         /// <summary>All possible values for each condition as a sorted and comma-delimited string.</summary>
-        private readonly IDictionary<ConditionKey, string> CommaDelimitedValues = new Dictionary<ConditionKey, string>
+        private readonly IDictionary<ConditionType, string> CommaDelimitedValues = new Dictionary<ConditionType, string>
         {
-            [ConditionKey.Day] = "1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 20, 21, 22, 23, 24, 25, 26, 27, 28, 3, 4, 5, 6, 7, 8, 9",
-            [ConditionKey.DayOfWeek] = $"{DayOfWeek.Friday}, {DayOfWeek.Monday}, {DayOfWeek.Saturday}, {DayOfWeek.Sunday}, {DayOfWeek.Thursday}, {DayOfWeek.Tuesday}, {DayOfWeek.Wednesday}",
-            [ConditionKey.Language] = $"{LocalizedContentManager.LanguageCode.de}, {LocalizedContentManager.LanguageCode.en}, {LocalizedContentManager.LanguageCode.es}, {LocalizedContentManager.LanguageCode.ja}, {LocalizedContentManager.LanguageCode.pt}, {LocalizedContentManager.LanguageCode.ru}, {LocalizedContentManager.LanguageCode.zh}",
-            [ConditionKey.Season] = "Fall, Spring, Summer, Winter",
-            [ConditionKey.Weather] = $"{Weather.Rain}, {Weather.Snow}, {Weather.Storm}, {Weather.Sun}"
+            [ConditionType.Day] = "1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 20, 21, 22, 23, 24, 25, 26, 27, 28, 3, 4, 5, 6, 7, 8, 9",
+            [ConditionType.DayOfWeek] = $"{DayOfWeek.Friday}, {DayOfWeek.Monday}, {DayOfWeek.Saturday}, {DayOfWeek.Sunday}, {DayOfWeek.Thursday}, {DayOfWeek.Tuesday}, {DayOfWeek.Wednesday}",
+            [ConditionType.Language] = $"{LocalizedContentManager.LanguageCode.de}, {LocalizedContentManager.LanguageCode.en}, {LocalizedContentManager.LanguageCode.es}, {LocalizedContentManager.LanguageCode.ja}, {LocalizedContentManager.LanguageCode.pt}, {LocalizedContentManager.LanguageCode.ru}, {LocalizedContentManager.LanguageCode.zh}",
+            [ConditionType.Season] = "Fall, Spring, Summer, Winter",
+            [ConditionType.Weather] = $"{Weather.Rain}, {Weather.Snow}, {Weather.Storm}, {Weather.Sun}"
         };
 
         /// <summary>Condition keys which are guaranteed to only have one value and can be used in conditions.</summary>
-        private readonly IEnumerable<ConditionKey> TokenisableConditions = new[] { ConditionKey.Day, ConditionKey.DayOfWeek, ConditionKey.Language, ConditionKey.Season, ConditionKey.Weather };
+        private readonly IEnumerable<ConditionType> TokenisableConditions = new[] { ConditionType.Day, ConditionType.DayOfWeek, ConditionType.Language, ConditionType.Season, ConditionType.Weather };
 
         /// <summary>The valid days of week.</summary>
         private readonly IEnumerable<DayOfWeek> DaysOfWeek = (from DayOfWeek value in Enum.GetValues(typeof(DayOfWeek)) select value).ToArray();
@@ -48,22 +48,22 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         public void GetValidConditions()
         {
             // act
-            IEnumerable<ConditionKey> conditions = new ConditionFactory().GetValidConditions();
+            IEnumerable<ConditionType> conditions = new ConditionFactory().GetValidConditions();
 
             // assert
-            this.SortAndCommaDelimit(conditions).Should().Be(this.SortAndCommaDelimit(Enum.GetValues(typeof(ConditionKey)).Cast<ConditionKey>()));
+            this.SortAndCommaDelimit(conditions).Should().Be(this.SortAndCommaDelimit(Enum.GetValues(typeof(ConditionType)).Cast<ConditionType>()));
         }
 
         /****
         ** GetValidValues
         ****/
         /// <summary>Test that <see cref="ConditionFactory.GetValidValues"/> returns the expected values.</summary>
-        [TestCase(ConditionKey.Day)]
-        [TestCase(ConditionKey.DayOfWeek)]
-        [TestCase(ConditionKey.Language)]
-        [TestCase(ConditionKey.Season)]
-        [TestCase(ConditionKey.Weather)]
-        public void GetValidValues(ConditionKey condition)
+        [TestCase(ConditionType.Day)]
+        [TestCase(ConditionType.DayOfWeek)]
+        [TestCase(ConditionType.Language)]
+        [TestCase(ConditionType.Season)]
+        [TestCase(ConditionType.Weather)]
+        public void GetValidValues(ConditionType condition)
         {
             // act
             IEnumerable<string> values = new ConditionFactory().GetValidValues(condition);
@@ -128,10 +128,10 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             ConditionDictionary conditions = factory.BuildEmpty();
 
             // act
-            IDictionary<ConditionKey, InvariantHashSet> possibleValues = factory.GetPossibleTokenisableValues(conditions);
+            IDictionary<ConditionType, InvariantHashSet> possibleValues = factory.GetPossibleTokenisableValues(conditions);
 
             // assert
-            foreach (ConditionKey key in this.TokenisableConditions)
+            foreach (ConditionType key in this.TokenisableConditions)
                 this.SortAndCommaDelimit(possibleValues[key]).Should().Be(this.CommaDelimitedValues[key], $"should match for {key}");
         }
 
@@ -142,17 +142,17 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             // arrange
             ConditionFactory factory = new ConditionFactory();
             ConditionDictionary conditions = factory.BuildEmpty();
-            conditions.Add(ConditionKey.DayOfWeek, new[] { DayOfWeek.Tuesday.ToString(), DayOfWeek.Wednesday.ToString() });
+            conditions.Add(ConditionType.DayOfWeek, new[] { DayOfWeek.Tuesday.ToString(), DayOfWeek.Wednesday.ToString() });
 
             // act
-            IDictionary<ConditionKey, InvariantHashSet> possibleValues = factory.GetPossibleTokenisableValues(conditions);
+            IDictionary<ConditionType, InvariantHashSet> possibleValues = factory.GetPossibleTokenisableValues(conditions);
 
             // assert
-            this.SortAndCommaDelimit(possibleValues[ConditionKey.Day]).Should().Be("10, 16, 17, 2, 23, 24, 3, 9", $"should match for {ConditionKey.Day}");
-            this.SortAndCommaDelimit(possibleValues[ConditionKey.DayOfWeek]).Should().Be($"{DayOfWeek.Tuesday}, {DayOfWeek.Wednesday}", $"should match for {ConditionKey.DayOfWeek}");
-            this.SortAndCommaDelimit(possibleValues[ConditionKey.Language]).Should().Be(this.CommaDelimitedValues[ConditionKey.Language], $"should match for {ConditionKey.Language}");
-            this.SortAndCommaDelimit(possibleValues[ConditionKey.Season]).Should().Be(this.CommaDelimitedValues[ConditionKey.Season], $"should match for {ConditionKey.Season}");
-            this.SortAndCommaDelimit(possibleValues[ConditionKey.Weather]).Should().Be(this.CommaDelimitedValues[ConditionKey.Weather], $"should match for {ConditionKey.Weather}");
+            this.SortAndCommaDelimit(possibleValues[ConditionType.Day]).Should().Be("10, 16, 17, 2, 23, 24, 3, 9", $"should match for {ConditionType.Day}");
+            this.SortAndCommaDelimit(possibleValues[ConditionType.DayOfWeek]).Should().Be($"{DayOfWeek.Tuesday}, {DayOfWeek.Wednesday}", $"should match for {ConditionType.DayOfWeek}");
+            this.SortAndCommaDelimit(possibleValues[ConditionType.Language]).Should().Be(this.CommaDelimitedValues[ConditionType.Language], $"should match for {ConditionType.Language}");
+            this.SortAndCommaDelimit(possibleValues[ConditionType.Season]).Should().Be(this.CommaDelimitedValues[ConditionType.Season], $"should match for {ConditionType.Season}");
+            this.SortAndCommaDelimit(possibleValues[ConditionType.Weather]).Should().Be(this.CommaDelimitedValues[ConditionType.Weather], $"should match for {ConditionType.Weather}");
         }
 
         /// <summary>Test that <see cref="ConditionFactory.GetPossibleTokenisableValues"/> returns the expected values given a subset of each condition's possible values.</summary>
@@ -162,37 +162,37 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             // arrange
             ConditionFactory factory = new ConditionFactory();
             ConditionDictionary conditions = factory.BuildEmpty();
-            conditions.Add(ConditionKey.Day, new[] { "1"/*Monday*/, "2"/*Tuesday*/, "17"/*Wednesday*/, "26"/*Friday*/, "28"/*Sunday*/ });
-            conditions.Add(ConditionKey.DayOfWeek, new[] { DayOfWeek.Monday.ToString(), DayOfWeek.Thursday.ToString(), DayOfWeek.Saturday.ToString(), DayOfWeek.Sunday.ToString() });
-            conditions.Add(ConditionKey.Language, new[] { LocalizedContentManager.LanguageCode.en.ToString(), LocalizedContentManager.LanguageCode.pt.ToString() });
-            conditions.Add(ConditionKey.Season, new[] { "Spring", "Fall" });
-            conditions.Add(ConditionKey.Weather, new InvariantHashSet { Weather.Rain.ToString(), Weather.Sun.ToString() });
+            conditions.Add(ConditionType.Day, new[] { "1"/*Monday*/, "2"/*Tuesday*/, "17"/*Wednesday*/, "26"/*Friday*/, "28"/*Sunday*/ });
+            conditions.Add(ConditionType.DayOfWeek, new[] { DayOfWeek.Monday.ToString(), DayOfWeek.Thursday.ToString(), DayOfWeek.Saturday.ToString(), DayOfWeek.Sunday.ToString() });
+            conditions.Add(ConditionType.Language, new[] { LocalizedContentManager.LanguageCode.en.ToString(), LocalizedContentManager.LanguageCode.pt.ToString() });
+            conditions.Add(ConditionType.Season, new[] { "Spring", "Fall" });
+            conditions.Add(ConditionType.Weather, new InvariantHashSet { Weather.Rain.ToString(), Weather.Sun.ToString() });
 
             // act
-            IDictionary<ConditionKey, InvariantHashSet> possibleValues = factory.GetPossibleTokenisableValues(conditions);
+            IDictionary<ConditionType, InvariantHashSet> possibleValues = factory.GetPossibleTokenisableValues(conditions);
 
             // assert
-            this.SortAndCommaDelimit(possibleValues[ConditionKey.Day]).Should().Be("1, 28", $"should match for {ConditionKey.Day}");
-            this.SortAndCommaDelimit(possibleValues[ConditionKey.DayOfWeek]).Should().Be($"{DayOfWeek.Monday}, {DayOfWeek.Sunday}", $"should match for {ConditionKey.DayOfWeek}");
-            this.SortAndCommaDelimit(possibleValues[ConditionKey.Language]).Should().Be($"{LocalizedContentManager.LanguageCode.en}, {LocalizedContentManager.LanguageCode.pt}", $"should match for {ConditionKey.Language}");
-            this.SortAndCommaDelimit(possibleValues[ConditionKey.Season]).Should().Be("Fall, Spring", $"should match for {ConditionKey.Season}");
-            this.SortAndCommaDelimit(possibleValues[ConditionKey.Weather]).Should().Be($"{Weather.Rain}, {Weather.Sun}", $"should match for {ConditionKey.Weather}");
+            this.SortAndCommaDelimit(possibleValues[ConditionType.Day]).Should().Be("1, 28", $"should match for {ConditionType.Day}");
+            this.SortAndCommaDelimit(possibleValues[ConditionType.DayOfWeek]).Should().Be($"{DayOfWeek.Monday}, {DayOfWeek.Sunday}", $"should match for {ConditionType.DayOfWeek}");
+            this.SortAndCommaDelimit(possibleValues[ConditionType.Language]).Should().Be($"{LocalizedContentManager.LanguageCode.en}, {LocalizedContentManager.LanguageCode.pt}", $"should match for {ConditionType.Language}");
+            this.SortAndCommaDelimit(possibleValues[ConditionType.Season]).Should().Be("Fall, Spring", $"should match for {ConditionType.Season}");
+            this.SortAndCommaDelimit(possibleValues[ConditionType.Weather]).Should().Be($"{Weather.Rain}, {Weather.Sun}", $"should match for {ConditionType.Weather}");
         }
 
         /****
         ** GetPossibleStrings
         ****/
         /// <summary>Test that <see cref="ConditionFactory.GetPossibleStrings"/> returns the expected values given a single token with no conditins.</summary>
-        [TestCase(ConditionKey.Day)]
-        [TestCase(ConditionKey.DayOfWeek)]
-        [TestCase(ConditionKey.Language)]
-        [TestCase(ConditionKey.Season)]
-        [TestCase(ConditionKey.Weather)]
-        public void GetPossibleStrings_WithOneToken(ConditionKey condition)
+        [TestCase(ConditionType.Day)]
+        [TestCase(ConditionType.DayOfWeek)]
+        [TestCase(ConditionType.Language)]
+        [TestCase(ConditionType.Season)]
+        [TestCase(ConditionType.Weather)]
+        public void GetPossibleStrings_WithOneToken(ConditionType condition)
         {
             // arrange
             ConditionFactory factory = new ConditionFactory();
-            TokenString tokenStr = new TokenString("{{" + condition + "}}", new HashSet<ConditionKey> { condition }, TokenStringBuilder.TokenPattern);
+            TokenString tokenStr = new TokenString("{{" + condition + "}}", new HashSet<ConditionType> { condition }, TokenStringBuilder.TokenPattern);
             ConditionDictionary conditions = factory.BuildEmpty();
 
             // act
@@ -203,12 +203,12 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         }
 
         /// <summary>Test that <see cref="ConditionFactory.GetPossibleStrings"/> returns the expected values given only implied conditions.</summary>
-        [TestCase("{{season}}_{{weather}}", ConditionKey.Season, ConditionKey.Weather, ExpectedResult = "Fall_Rain, Fall_Snow, Fall_Storm, Fall_Sun, Spring_Rain, Spring_Snow, Spring_Storm, Spring_Sun, Summer_Rain, Summer_Snow, Summer_Storm, Summer_Sun, Winter_Rain, Winter_Snow, Winter_Storm, Winter_Sun")]
-        public string GetPossibleStrings_WithMultipleTokens(string raw, params ConditionKey[] conditionKeys)
+        [TestCase("{{season}}_{{weather}}", ConditionType.Season, ConditionType.Weather, ExpectedResult = "Fall_Rain, Fall_Snow, Fall_Storm, Fall_Sun, Spring_Rain, Spring_Snow, Spring_Storm, Spring_Sun, Summer_Rain, Summer_Snow, Summer_Storm, Summer_Sun, Winter_Rain, Winter_Snow, Winter_Storm, Winter_Sun")]
+        public string GetPossibleStrings_WithMultipleTokens(string raw, params ConditionType[] conditionKeys)
         {
             // arrange
             ConditionFactory factory = new ConditionFactory();
-            TokenString tokenStr = new TokenString(raw, new HashSet<ConditionKey>(conditionKeys), TokenStringBuilder.TokenPattern);
+            TokenString tokenStr = new TokenString(raw, new HashSet<ConditionType>(conditionKeys), TokenStringBuilder.TokenPattern);
             ConditionDictionary conditions = factory.BuildEmpty();
 
             // act
@@ -245,8 +245,8 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             ConditionFactory factory = new ConditionFactory();
             ConditionDictionary left = factory.BuildEmpty();
             ConditionDictionary right = factory.BuildEmpty();
-            left.Add(ConditionKey.Season, new[] { "Spring", "SUMMer" }); // should match case-insensitively
-            right.Add(ConditionKey.Season, new[] { "Summer", "Fall" });
+            left.Add(ConditionType.Season, new[] { "Spring", "SUMMer" }); // should match case-insensitively
+            right.Add(ConditionType.Season, new[] { "Summer", "Fall" });
 
             // act
             bool canOverlap = factory.CanConditionsOverlap(left, right);
@@ -263,8 +263,8 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             ConditionFactory factory = new ConditionFactory();
             ConditionDictionary left = factory.BuildEmpty();
             ConditionDictionary right = factory.BuildEmpty();
-            left.Add(ConditionKey.Season, new[] { "Spring", "Summer" });
-            right.Add(ConditionKey.Season, new[] { "Fall", "Winter" });
+            left.Add(ConditionType.Season, new[] { "Spring", "Summer" });
+            right.Add(ConditionType.Season, new[] { "Fall", "Winter" });
 
             // act
             bool canOverlap = factory.CanConditionsOverlap(left, right);
@@ -281,8 +281,8 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             ConditionFactory factory = new ConditionFactory();
             ConditionDictionary left = factory.BuildEmpty();
             ConditionDictionary right = factory.BuildEmpty();
-            left.Add(ConditionKey.Day, new[] { "1", "2" });
-            right.Add(ConditionKey.DayOfWeek, new[] { DayOfWeek.Tuesday.ToString(), DayOfWeek.Wednesday.ToString() });
+            left.Add(ConditionType.Day, new[] { "1", "2" });
+            right.Add(ConditionType.DayOfWeek, new[] { DayOfWeek.Tuesday.ToString(), DayOfWeek.Wednesday.ToString() });
 
             // act
             bool canOverlap = factory.CanConditionsOverlap(left, right);
@@ -299,8 +299,8 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             ConditionFactory factory = new ConditionFactory();
             ConditionDictionary left = factory.BuildEmpty();
             ConditionDictionary right = factory.BuildEmpty();
-            left.Add(ConditionKey.Day, new[] { "1", "2" });
-            right.Add(ConditionKey.DayOfWeek, new[] { DayOfWeek.Wednesday.ToString(), DayOfWeek.Thursday.ToString() });
+            left.Add(ConditionType.Day, new[] { "1", "2" });
+            right.Add(ConditionType.DayOfWeek, new[] { DayOfWeek.Wednesday.ToString(), DayOfWeek.Thursday.ToString() });
 
             // act
             bool canOverlap = factory.CanConditionsOverlap(left, right);
@@ -317,8 +317,8 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             ConditionFactory factory = new ConditionFactory();
             ConditionDictionary left = factory.BuildEmpty();
             ConditionDictionary right = factory.BuildEmpty();
-            left.Add(ConditionKey.Weather, new[] { Weather.Rain.ToString(), Weather.Snow.ToString() });
-            right.Add(ConditionKey.Weather, new[] { Weather.Storm.ToString(), Weather.Sun.ToString() });
+            left.Add(ConditionType.Weather, new[] { Weather.Rain.ToString(), Weather.Snow.ToString() });
+            right.Add(ConditionType.Weather, new[] { Weather.Storm.ToString(), Weather.Sun.ToString() });
 
             // act
             bool canOverlap = factory.CanConditionsOverlap(left, right);
@@ -336,11 +336,11 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         {
             // arrange
             ConditionFactory factory = new ConditionFactory();
-            HashSet<ConditionKey> keys = new HashSet<ConditionKey> { ConditionKey.DayOfWeek, ConditionKey.Season };
+            HashSet<ConditionType> keys = new HashSet<ConditionType> { ConditionType.DayOfWeek, ConditionType.Season };
             ConditionDictionary conditions = factory.BuildEmpty();
 
             // act
-            IEnumerable<IDictionary<ConditionKey, string>> permutations = factory.GetApplicablePermutationsForTheseConditions(keys, conditions);
+            IEnumerable<IDictionary<ConditionType, string>> permutations = factory.GetApplicablePermutationsForTheseConditions(keys, conditions);
 
             // assert
             IEnumerable<string> actual = permutations.Select(permutation => "(" + this.SortAndCommaDelimit(permutation.Select(p => $"{p.Key}:{p.Value}")) + ")");
@@ -348,7 +348,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             foreach (DayOfWeek dayOfWeek in this.DaysOfWeek)
             {
                 foreach (string season in this.Seasons)
-                    expected.Add($"({ConditionKey.DayOfWeek}:{dayOfWeek}, {ConditionKey.Season}:{season})");
+                    expected.Add($"({ConditionType.DayOfWeek}:{dayOfWeek}, {ConditionType.Season}:{season})");
             }
 
             this.SortAndCommaDelimit(actual).Should().Be(this.SortAndCommaDelimit(expected));

@@ -87,7 +87,7 @@ namespace ContentPatcher.Framework
                 ConfigSchemaFieldConfig field = rawSchema[key];
 
                 // validate key
-                if (Enum.TryParse(key, true, out ConditionKey conditionKey))
+                if (Enum.TryParse(key, true, out ConditionType conditionKey))
                 {
                     logWarning(key, $"can't use {conditionKey} as a config field, because it's a reserved condition name.");
                     continue;

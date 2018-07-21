@@ -45,7 +45,7 @@
     <Compile Include="Framework\Commands\PatchInfo.cs" />
     <Compile Include="Framework\ConditionFactory.cs" />
     <Compile Include="Framework\Conditions\Condition.cs" />
-    <Compile Include="Framework\Conditions\ConditionKey.cs" />
+    <Compile Include="Framework\Conditions\ConditionType.cs" />
     <Compile Include="Framework\Conditions\ConditionDictionary.cs" />
     <Compile Include="Framework\Conditions\TokenStringBuilder.cs" />
     <Compile Include="Framework\ConfigModels\ConfigField.cs" />

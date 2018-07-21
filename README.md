@@ -114,3 +114,25 @@ To package a mod for release:
 1. Switch to `Release` build configuration.
 2. Recompile the mod per the previous section.
 3. Upload the generated `bin/Release/<mod name>-<version>.zip` file from the project folder.
+
+
+Automate 1.10-beta.10:
+* 
+
+Chests Anywhere 1.13.0-beta.8:
+* Added support for auto-grabbers.
+* Improved message when no chests are accessible.
+* Update Portuguese translations. (Thanks to TaelFayre!)
+
+Content Patcher 1.4-beta.7:
+* Fixed case sensitivity issues in some cases.
+
+Data Layers 1.4-beta.5:
+* Added _crops: ready to harvest_ layer.
+* _coverage: sprinklers_ now shows Prismatic Tools sprinklers in scarecrow mode.
+* Added Portuguese translations. (Thanks to TaelFayre!)
+
+Lookup Anything 1.19-beta.9:
+* Added support for crab pot bait.
+* Added support custom greenhouse locations.
+* Improved translations. Thanks to TaelFayre (Portuguese)!

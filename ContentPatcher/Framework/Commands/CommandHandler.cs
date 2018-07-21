@@ -136,7 +136,7 @@ namespace ContentPatcher.Framework.Commands
             output.AppendLine("========================");
             output.AppendLine("== Current conditions ==");
             output.AppendLine("========================");
-            foreach (ConditionKey key in this.ConditionFactory.GetValidConditions())
+            foreach (ConditionType key in this.ConditionFactory.GetValidConditions())
                 output.AppendLine($"   {key}: {string.Join(", ", context.GetValues(key))}");
             output.AppendLine();
 

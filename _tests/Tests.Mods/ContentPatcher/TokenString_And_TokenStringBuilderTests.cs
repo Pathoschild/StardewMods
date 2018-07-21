@@ -55,14 +55,14 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
 
             // assert builder
             builder.RawValue.Should().Be(raw);
-            builder.ConditionTokens.Should().HaveCount(1).And.BeEquivalentTo(ConditionKey.Season);
+            builder.ConditionTokens.Should().HaveCount(1).And.BeEquivalentTo(ConditionType.Season);
             builder.ConfigTokens.Should().HaveCount(1).And.BeEquivalentTo(configKey);
             builder.InvalidTokens.Should().HaveCount(1).And.BeEquivalentTo("invalid");
             builder.HasAnyTokens.Should().BeTrue();
 
             // assert token string
             tokenStr.Raw.Should().Be(raw.Replace("{{" + configKey + "}}", configValue), $"the config token should be substituted when the {nameof(TokenString)} is built");
-            tokenStr.ConditionTokens.Should().HaveCount(1).And.BeEquivalentTo(ConditionKey.Season);
+            tokenStr.ConditionTokens.Should().HaveCount(1).And.BeEquivalentTo(ConditionType.Season);
         }
     }
 }

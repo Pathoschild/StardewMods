@@ -1,7 +1,7 @@
 namespace ContentPatcher.Framework.Conditions
 {
-    /// <summary>The conditions that can be checked.</summary>
-    public enum ConditionKey
+    /// <summary>The condition types that can be checked.</summary>
+    public enum ConditionType
     {
         /****
         ** Tokenisable conditions

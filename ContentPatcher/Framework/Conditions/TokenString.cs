@@ -22,7 +22,7 @@ namespace ContentPatcher.Framework.Conditions
         public string Raw { get; private set; }
 
         /// <summary>The condition tokens in the string.</summary>
-        public HashSet<ConditionKey> ConditionTokens { get; }
+        public HashSet<ConditionType> ConditionTokens { get; }
 
         /// <summary>The string with tokens substituted for the last context update.</summary>
         public string Value { get; private set; }
@@ -35,7 +35,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="raw">The raw string before token substitution.</param>
         /// <param name="conditionTokens">The condition tokens in the string.</param>
         /// <param name="tokenPattern">The regex pattern matching tokens, where the first group is the token key.</param>
-        public TokenString(string raw, HashSet<ConditionKey> conditionTokens, Regex tokenPattern)
+        public TokenString(string raw, HashSet<ConditionType> conditionTokens, Regex tokenPattern)
         {
             this.Raw = raw;
             this.TokenPattern = tokenPattern;
@@ -45,7 +45,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Update the <see cref="Value"/> with the given tokens.</summary>
         /// <param name="tokenisableConditions">The conditions which can be used in tokens.</param>
         /// <returns>Returns whether the value changed.</returns>
-        public bool UpdateContext(IDictionary<ConditionKey, string> tokenisableConditions)
+        public bool UpdateContext(IDictionary<ConditionType, string> tokenisableConditions)
         {
             string prevValue = this.Value;
             this.Value = this.Apply(this.Raw, tokenisableConditions);
@@ -54,7 +54,7 @@ namespace ContentPatcher.Framework.Conditions
 
         /// <summary>Get a copy of the tokenable string with the given tokens applied.</summary>
         /// <param name="tokens">The tokens to apply.</param>
-        public string GetStringWithTokens(IDictionary<ConditionKey, string> tokens)
+        public string GetStringWithTokens(IDictionary<ConditionType, string> tokens)
         {
             return this.Apply(this.Raw, tokens);
         }
@@ -73,12 +73,12 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Get a new string with tokens substituted.</summary>
         /// <param name="raw">The raw string before token substitution.</param>
         /// <param name="tokens">The token values to apply.</param>
-        private string Apply(string raw, IDictionary<ConditionKey, string> tokens)
+        private string Apply(string raw, IDictionary<ConditionType, string> tokens)
         {
             return this.TokenPattern.Replace(raw, match =>
             {
                 string key = match.Groups[1].Value.Trim();
-                return Enum.TryParse(key, true, out ConditionKey conditionKey) && tokens.TryGetValue(conditionKey, out string value)
+                return Enum.TryParse(key, true, out ConditionType conditionKey) && tokens.TryGetValue(conditionKey, out string value)
                     ? value
                     : match.Value;
             });
