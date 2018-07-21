@@ -66,7 +66,7 @@ namespace ContentPatcher
                     .OrderBy(p => p, StringComparer.InvariantCultureIgnoreCase)
                     .ToArray()
             );
-            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null, null, null, null, null);
+            this.PatchManager.UpdateContext(this.Helper.Content, this.Helper.Content.CurrentLocaleConstant, null, null, null, null, null, null, null);
 
             // set up events
             if (this.Config.EnableDebugFeatures)

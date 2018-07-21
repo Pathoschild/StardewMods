@@ -32,6 +32,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>A predefined condition key for <see cref="ConditionType.Language"/>.</summary>
         public static ConditionKey Language { get; } = new ConditionKey(ConditionType.Language);
 
+        /// <summary>A predefined condition key for <see cref="ConditionType.Relationship"/>.</summary>
+        public static ConditionKey Relationship { get; } = new ConditionKey(ConditionType.Relationship);
+
         /// <summary>A predefined condition key for <see cref="ConditionType.Season"/>.</summary>
         public static ConditionKey Season { get; } = new ConditionKey(ConditionType.Season);
 
@@ -47,21 +50,28 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The condition type.</summary>
         public ConditionType Type { get; }
 
+        /// <summary>A unique key indicating which in-game object the condition type applies to. For example, the NPC name when <see cref="Type"/> is <see cref="ConditionType.Relationship"/>.</summary>
+        public string ForID { get; }
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="type">The condition type.</param>
-        public ConditionKey(ConditionType type)
+        /// <param name="forID">A unique key indicating which in-game object the condition type applies to. For example, the NPC name when <paramref name="type"/> is <see cref="ConditionType.Relationship"/>.</param>
+        public ConditionKey(ConditionType type, string forID = null)
         {
             this.Type = type;
+            this.ForID = forID;
         }
 
         /// <summary>Get a string representation for this instance.</summary>
         public override string ToString()
         {
-            return this.Type.ToString();
+            return this.ForID != null
+                ? $"{this.Type}:{this.ForID}"
+                : this.Type.ToString();
         }
 
         /****
@@ -71,7 +81,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(ConditionKey other)
         {
-            return this.Type == other.Type;
+            return
+                this.Type == other.Type
+                && this.ForID == other.ForID;
         }
 
         /// <summary>Get whether this instance and a specified object are equal.</summary>
@@ -84,7 +96,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Get the hash code for this instance.</summary>
         public override int GetHashCode()
         {
-            return this.Type.GetHashCode();
+            return this.ToString().GetHashCode();
         }
 
         /****
@@ -95,10 +107,21 @@ namespace ContentPatcher.Framework.Conditions
         /// <returns>Returns true if <paramref name="raw"/> was successfully parsed, else false.</returns>
         public static ConditionKey Parse(string raw)
         {
-            if (Enum.TryParse(raw, true, out ConditionType type))
-                return new ConditionKey(type);
+            if (string.IsNullOrWhiteSpace(raw))
+                throw new ArgumentNullException(nameof(raw));
 
-            throw new FormatException($"Can't parse string '{raw}' as a {nameof(ConditionKey)} value.");
+            // extract parts
+            ConditionType type;
+            string forID;
+            {
+                string[] parts = raw.Trim().Split(new[] { ':' }, 2);
+                if (!Enum.TryParse(parts[0], true, out type))
+                    throw new FormatException($"Can't parse string '{parts[0]}' as a {nameof(ConditionKey)} value.");
+                forID = parts.Length == 2 ? parts[1] : null;
+            }
+
+            // create instance
+            return new ConditionKey(type, forID);
         }
 
         /// <summary>Parse a raw string into a condition key if it's valid.</summary>

@@ -8,7 +8,8 @@
   * `HasFlag` (check if the player has received a letter by ID or has a mail flag set);
   * `HasMod` (check if another mod is installed, e.g. for automatic compatibility patches);
   * `HasSeenEvent` (check if the player has seen a given event ID);
-  * `Spouse` (check if the current player is married to a given NPC or farmer).
+  * `Relationship` (check the relationship type for a specific NPC);
+  * `Spouse` (check if the current player's spouse name).
 * Added support for deleting entries via `EditData`.
 * Fixed case sensitivity issues in some cases.
 

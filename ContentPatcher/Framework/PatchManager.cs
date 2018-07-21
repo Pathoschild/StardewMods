@@ -157,7 +157,8 @@ namespace ContentPatcher.Framework
                     dayEvent: this.GetDayEvent(contentHelper),
                     spouse: Game1.player?.spouse,
                     seenEvents: Game1.player?.eventsSeen.OrderBy(p => p).ToArray(),
-                    mailFlags: this.GetMailFlags().OrderBy(p => p).ToArray()
+                    mailFlags: this.GetMailFlags().OrderBy(p => p).ToArray(),
+                    friendships: Game1.player?.friendshipData.Pairs
                 );
             }
             else
@@ -170,7 +171,8 @@ namespace ContentPatcher.Framework
                     dayEvent: null,
                     spouse: null,
                     seenEvents: null,
-                    mailFlags: null
+                    mailFlags: null,
+                    friendships: null
                 );
             }
         }
@@ -184,12 +186,13 @@ namespace ContentPatcher.Framework
         /// <param name="dayEvent">The day event (e.g. wedding or festival) occurring today (if applicable).</param>
         /// <param name="seenEvents">The event IDs which the player has seen.</param>
         /// <param name="mailFlags">The mail flags set for the player.</param>
-        public void UpdateContext(IContentHelper contentHelper, LocalizedContentManager.LanguageCode language, SDate date, Weather? weather, string dayEvent, string spouse, int[] seenEvents, string[] mailFlags)
+        /// <param name="friendships">The current player's friendship details.</param>
+        public void UpdateContext(IContentHelper contentHelper, LocalizedContentManager.LanguageCode language, SDate date, Weather? weather, string dayEvent, string spouse, int[] seenEvents, string[] mailFlags, IEnumerable<KeyValuePair<string, Friendship>> friendships)
         {
             this.VerboseLog("Propagating context...");
 
             // update context
-            this.ConditionContext.Set(language: language, date: date, weather: weather, dayEvent: dayEvent, spouse: spouse, seenEvents: seenEvents, mailFlags: mailFlags);
+            this.ConditionContext.Set(language: language, date: date, weather: weather, dayEvent: dayEvent, spouse: spouse, seenEvents: seenEvents, mailFlags: mailFlags, friendships: friendships);
             IDictionary<ConditionKey, string> tokenisableConditions = this.ConditionContext.GetSingleValueConditions();
 
             // update patches
@@ -402,10 +405,18 @@ namespace ContentPatcher.Framework
                     return false;
                 }
 
+                // validate types which require an ID
+                if (key.Type == ConditionType.Relationship && string.IsNullOrWhiteSpace(key.ForID))
+                {
+                    error = $"{key.Type} conditions must specify a separate ID (see readme for usage)";
+                    conditions = null;
+                    return false;
+                }
+
                 // check compatibility
                 if (formatVersion.IsOlderThan("1.4"))
                 {
-                    if (key.Type == ConditionType.DayEvent || key.Type == ConditionType.HasFlag || key.Type == ConditionType.HasSeenEvent || key.Type == ConditionType.Spouse)
+                    if (key.Type == ConditionType.DayEvent || key.Type == ConditionType.HasFlag || key.Type == ConditionType.HasSeenEvent || key.Type == ConditionType.Relationship || key.Type == ConditionType.Spouse)
                     {
                         error = $"{key} isn't available with format version {formatVersion} (change the {nameof(ContentConfig.Format)} field to {latestFormatVersion} to use newer features)";
                         conditions = null;

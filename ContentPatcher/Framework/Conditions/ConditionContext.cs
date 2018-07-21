@@ -32,7 +32,7 @@ namespace ContentPatcher.Framework.Conditions
             this.SingleValueConditions = singleValueConditions;
 
             // set defaults
-            this.Set(locale, null, null, null, null, null, null);
+            this.Set(locale, null, null, null, null, null, null, null);
             this.Set(ConditionKey.HasMod);
         }
 
@@ -44,7 +44,8 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="spouse">The current player's internal spouse name (if applicable).</param>
         /// <param name="seenEvents">The event IDs which the player has seen.</param>
         /// <param name="mailFlags">The mail flags set for the player.</param>
-        public void Set(LocalizedContentManager.LanguageCode language, SDate date, Weather? weather, string dayEvent, string spouse, int[] seenEvents, string[] mailFlags)
+        /// <param name="friendships">The current player's friendship details.</param>
+        public void Set(LocalizedContentManager.LanguageCode language, SDate date, Weather? weather, string dayEvent, string spouse, int[] seenEvents, string[] mailFlags, IEnumerable<KeyValuePair<string, Friendship>> friendships)
         {
             // optional date
             if (date != null)
@@ -60,13 +61,21 @@ namespace ContentPatcher.Framework.Conditions
                 this.Set(ConditionKey.Season);
             }
 
-            // other conditions
+            // other basic conditions
             this.Set(ConditionKey.DayEvent, dayEvent);
             this.Set(ConditionKey.HasFlag, mailFlags);
             this.Set(ConditionKey.HasSeenEvent, seenEvents?.Select(p => p.ToString()).ToArray());
             this.Set(ConditionKey.Language, language.ToString().ToLower());
             this.Set(ConditionKey.Spouse, spouse);
             this.Set(ConditionKey.Weather, weather?.ToString().ToLower());
+
+            // NPC friendship conditions
+            this.RemoveAll(ConditionType.Relationship);
+            if (friendships != null)
+            {
+                foreach (KeyValuePair<string, Friendship> friendship in friendships)
+                    this.Set(new ConditionKey(ConditionType.Relationship, friendship.Key), friendship.Value.Status.ToString());
+            }
         }
 
         /// <summary>Update the current context.</summary>
@@ -120,10 +129,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="key">The context key.</param>
         public IEnumerable<string> GetValues(ConditionKey key)
         {
-            if (!this.Values.TryGetValue(key, out InvariantHashSet values))
-                throw new NotSupportedException($"Unknown condition key '{key}'.");
-
-            return values;
+            if (this.Values.TryGetValue(key, out InvariantHashSet values))
+                return values;
+            return Enumerable.Empty<string>();
         }
 
         /// <summary>Get the current values for conditions guaranteed to have a single value.</summary>
@@ -138,6 +146,25 @@ namespace ContentPatcher.Framework.Conditions
             }
 
             return data;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Remove all values matching a given condition type.</summary>
+        /// <param name="type">The condition type to remove.</param>
+        private void RemoveAll(ConditionType type)
+        {
+            this.RemoveAll(key => key.Type == type);
+        }
+
+        /// <summary>Remove all values matching a given lambda.</summary>
+        /// <param name="keySelector">A lambda which returns whether a given key should be removed.</param>
+        private void RemoveAll(Func<ConditionKey, bool> keySelector)
+        {
+            foreach (ConditionKey key in this.Values.Keys.Where(keySelector).ToArray())
+                this.Values.Remove(key);
         }
     }
 }

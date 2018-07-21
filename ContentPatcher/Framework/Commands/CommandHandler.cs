@@ -35,6 +35,9 @@ namespace ContentPatcher.Framework.Commands
             ConditionType.Spouse,
             ConditionType.Weather,
 
+            // NPCs
+            ConditionType.Relationship,
+
             // lookups
             ConditionType.HasFlag,
             ConditionType.HasMod,

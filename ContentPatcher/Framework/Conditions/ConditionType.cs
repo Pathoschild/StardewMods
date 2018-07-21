@@ -4,7 +4,7 @@ namespace ContentPatcher.Framework.Conditions
     internal enum ConditionType
     {
         /****
-        ** Tokenisable conditions
+        ** Tokenisable basic conditions
         ****/
         /// <summary>The day of month.</summary>
         Day,
@@ -22,7 +22,7 @@ namespace ContentPatcher.Framework.Conditions
         Weather,
 
         /****
-        ** Other conditions
+        ** Other basic conditions
         ****/
         /// <summary>The name of today's festival (if any), or 'wedding' if the current player is getting married.</summary>
         DayEvent,
@@ -37,6 +37,11 @@ namespace ContentPatcher.Framework.Conditions
         HasSeenEvent,
 
         /// <summary>The current player's internal spouse name (if any).</summary>
-        Spouse
+        Spouse,
+
+        /****
+        ** Multi-part conditions
+        ****/
+        Relationship
     };
 }

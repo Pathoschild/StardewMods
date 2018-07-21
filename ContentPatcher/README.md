@@ -336,6 +336,32 @@ The event IDs the player has seen, matching IDs in the `Data\Events` files. (You
 </tr>
 
 <tr valign="top">
+<td>Relationship</td>
+<td>
+
+The player's relationship with a given NPC or player. You must specify the character name as part
+of the key (using their English name regardless of translations), like this:
+
+```json
+"When": {
+   "Relationship:Abigail": "Married"
+}
+```
+
+The valid relationship types are...
+
+value    | meaning
+-------- | -------
+Friendly | The default if no other applies.
+Dating   | The player gave them a bouquet.
+Engaged  | The player gave them a mermaid's pendant, but the marriage hasn't happened yet.
+Married  | The player married them.
+Divorced | The player married and then divorced them.
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>Spouse</td>
 <td>The current player's spouse name (using their English name regardless of translations).</td>
 </tr>
