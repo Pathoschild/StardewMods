@@ -15,10 +15,10 @@ namespace ContentPatcher.Framework.Conditions
         ** Properties
         *********/
         /// <summary>The condition values.</summary>
-        private readonly IDictionary<ConditionType, InvariantHashSet> Values = new Dictionary<ConditionType, InvariantHashSet>();
+        private readonly IDictionary<ConditionKey, InvariantHashSet> Values = new Dictionary<ConditionKey, InvariantHashSet>();
 
         /// <summary>Condition keys which are guaranteed to only have one value.</summary>
-        private readonly HashSet<ConditionType> SingleValueConditions;
+        private readonly HashSet<ConditionKey> SingleValueConditions;
 
 
         /*********
@@ -27,13 +27,13 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Construct an instance.</summary>
         /// <param name="locale">The current language.</param>
         /// <param name="singleValueConditions">Condition keys which are guaranteed to only have one value.</param>
-        public ConditionContext(LocalizedContentManager.LanguageCode locale, HashSet<ConditionType> singleValueConditions)
+        public ConditionContext(LocalizedContentManager.LanguageCode locale, HashSet<ConditionKey> singleValueConditions)
         {
             this.SingleValueConditions = singleValueConditions;
 
             // set defaults
             this.Set(locale, null, null, null, null, null, null);
-            this.Set(ConditionType.HasMod);
+            this.Set(ConditionKey.HasMod);
         }
 
         /// <summary>Update the current context.</summary>
@@ -49,30 +49,30 @@ namespace ContentPatcher.Framework.Conditions
             // optional date
             if (date != null)
             {
-                this.Set(ConditionType.Day, date.Day.ToString(CultureInfo.InvariantCulture));
-                this.Set(ConditionType.DayOfWeek, date.DayOfWeek.ToString().ToLower());
-                this.Set(ConditionType.Season, date.Season.ToLower());
+                this.Set(ConditionKey.Day, date.Day.ToString(CultureInfo.InvariantCulture));
+                this.Set(ConditionKey.DayOfWeek, date.DayOfWeek.ToString().ToLower());
+                this.Set(ConditionKey.Season, date.Season.ToLower());
             }
             else
             {
-                this.Set(ConditionType.Day);
-                this.Set(ConditionType.DayOfWeek);
-                this.Set(ConditionType.Season);
+                this.Set(ConditionKey.Day);
+                this.Set(ConditionKey.DayOfWeek);
+                this.Set(ConditionKey.Season);
             }
 
             // other conditions
-            this.Set(ConditionType.DayEvent, dayEvent);
-            this.Set(ConditionType.HasFlag, mailFlags);
-            this.Set(ConditionType.HasSeenEvent, seenEvents?.Select(p => p.ToString()).ToArray());
-            this.Set(ConditionType.Language, language.ToString().ToLower());
-            this.Set(ConditionType.Spouse, spouse);
-            this.Set(ConditionType.Weather, weather?.ToString().ToLower());
+            this.Set(ConditionKey.DayEvent, dayEvent);
+            this.Set(ConditionKey.HasFlag, mailFlags);
+            this.Set(ConditionKey.HasSeenEvent, seenEvents?.Select(p => p.ToString()).ToArray());
+            this.Set(ConditionKey.Language, language.ToString().ToLower());
+            this.Set(ConditionKey.Spouse, spouse);
+            this.Set(ConditionKey.Weather, weather?.ToString().ToLower());
         }
 
         /// <summary>Update the current context.</summary>
         /// <param name="key">The condition key to update.</param>
         /// <param name="values">The current values.</param>
-        public void Set(ConditionType key, params string[] values)
+        public void Set(ConditionKey key, params string[] values)
         {
             // normalise
             values = values?.Where(p => p != null).ToArray() ?? new string[0];
@@ -96,7 +96,7 @@ namespace ContentPatcher.Framework.Conditions
 
         /// <summary>Get a context value for comparison.</summary>
         /// <param name="key">The context key.</param>
-        public string GetValue(ConditionType key)
+        public string GetValue(ConditionKey key)
         {
             // validate
             if (!this.SingleValueConditions.Contains(key))
@@ -109,9 +109,16 @@ namespace ContentPatcher.Framework.Conditions
             return values.FirstOrDefault();
         }
 
+        /// <summary>Get all context values.</summary>
+        public IDictionary<ConditionKey, IEnumerable<string>> GetValues()
+        {
+            return this.Values
+                .ToDictionary(p => p.Key, p => (IEnumerable<string>)p.Value);
+        }
+
         /// <summary>Get the context values for comparison.</summary>
         /// <param name="key">The context key.</param>
-        public IEnumerable<string> GetValues(ConditionType key)
+        public IEnumerable<string> GetValues(ConditionKey key)
         {
             if (!this.Values.TryGetValue(key, out InvariantHashSet values))
                 throw new NotSupportedException($"Unknown condition key '{key}'.");
@@ -120,11 +127,11 @@ namespace ContentPatcher.Framework.Conditions
         }
 
         /// <summary>Get the current values for conditions guaranteed to have a single value.</summary>
-        public IDictionary<ConditionType, string> GetSingleValueConditions()
+        public IDictionary<ConditionKey, string> GetSingleValueConditions()
         {
-            IDictionary<ConditionType, string> data = new Dictionary<ConditionType, string>();
+            IDictionary<ConditionKey, string> data = new Dictionary<ConditionKey, string>();
 
-            foreach (KeyValuePair<ConditionType, InvariantHashSet> pair in this.Values)
+            foreach (KeyValuePair<ConditionKey, InvariantHashSet> pair in this.Values)
             {
                 if (this.SingleValueConditions.Contains(pair.Key))
                     data.Add(pair.Key, pair.Value.FirstOrDefault());

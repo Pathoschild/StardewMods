@@ -324,8 +324,8 @@ namespace ContentPatcher
                 // validate conditions
                 if (action == PatchType.Load)
                 {
-                    ConditionType[] tokenisable = this.ConditionFactory.GetTokenisableConditions().ToArray();
-                    ConditionType[] invalid = conditions.Keys.Except(tokenisable).ToArray();
+                    ConditionKey[] tokenisable = this.ConditionFactory.GetTokenisableConditions().ToArray();
+                    ConditionKey[] invalid = conditions.Keys.Except(tokenisable).ToArray();
                     if (invalid.Any())
                         return TrackSkip($"disabled: can't use these conditions with {nameof(PatchConfig.Action)} {PatchType.Load}: [{string.Join(", ", invalid)}]");
                 }
@@ -396,8 +396,8 @@ namespace ContentPatcher
                 }
 
                 // only apply patch when its tokens are available
-                HashSet<ConditionType> tokensUsed = new HashSet<ConditionType>(patch.GetTokensUsed());
-                foreach (ConditionType key in tokensUsed)
+                HashSet<ConditionKey> tokensUsed = new HashSet<ConditionKey>(patch.GetTokensUsed());
+                foreach (ConditionKey key in tokensUsed)
                 {
                     if (!patch.Conditions.ContainsKey(key))
                         patch.Conditions.Add(key, patch.Conditions.GetValidValues(key));

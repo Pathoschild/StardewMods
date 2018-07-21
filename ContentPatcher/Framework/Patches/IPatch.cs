@@ -42,7 +42,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="context">The condition context.</param>
         /// <param name="tokenisableConditions">The conditions which can be used in tokens.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        bool UpdateContext(ConditionContext context, IDictionary<ConditionType, string> tokenisableConditions);
+        bool UpdateContext(ConditionContext context, IDictionary<ConditionKey, string> tokenisableConditions);
 
         /// <summary>Load the initial version of the asset.</summary>
         /// <typeparam name="T">The asset type.</typeparam>
@@ -57,6 +57,6 @@ namespace ContentPatcher.Framework.Patches
         void Edit<T>(IAssetData asset);
 
         /// <summary>Get the condition tokens used by this patch in its fields.</summary>
-        IEnumerable<ConditionType> GetTokensUsed();
+        IEnumerable<ConditionKey> GetTokensUsed();
     }
 }

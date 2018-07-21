@@ -51,7 +51,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="context">The condition context.</param>
         /// <param name="tokenisableConditions">The conditions which can be used in tokens.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        public virtual bool UpdateContext(ConditionContext context, IDictionary<ConditionType, string> tokenisableConditions)
+        public virtual bool UpdateContext(ConditionContext context, IDictionary<ConditionKey, string> tokenisableConditions)
         {
             // update conditions
             bool conditionsChanged;
@@ -87,7 +87,7 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <summary>Get the condition tokens used by this patch in its fields.</summary>
-        public virtual IEnumerable<ConditionType> GetTokensUsed()
+        public virtual IEnumerable<ConditionKey> GetTokensUsed()
         {
             yield break;
         }

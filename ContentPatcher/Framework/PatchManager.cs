@@ -140,7 +140,7 @@ namespace ContentPatcher.Framework
         /// <param name="installedMods">The installed mod IDs.</param>
         public void SetInitialContext(string[] installedMods)
         {
-            this.ConditionContext.Set(ConditionType.HasMod, installedMods);
+            this.ConditionContext.Set(ConditionKey.HasMod, installedMods);
         }
 
         /// <summary>Update the current context.</summary>
@@ -190,7 +190,7 @@ namespace ContentPatcher.Framework
 
             // update context
             this.ConditionContext.Set(language: language, date: date, weather: weather, dayEvent: dayEvent, spouse: spouse, seenEvents: seenEvents, mailFlags: mailFlags);
-            IDictionary<ConditionType, string> tokenisableConditions = this.ConditionContext.GetSingleValueConditions();
+            IDictionary<ConditionKey, string> tokenisableConditions = this.ConditionContext.GetSingleValueConditions();
 
             // update patches
             InvariantHashSet reloadAssetNames = new InvariantHashSet();
@@ -395,9 +395,9 @@ namespace ContentPatcher.Framework
             foreach (KeyValuePair<string, string> pair in raw)
             {
                 // parse condition key
-                if (!Enum.TryParse(pair.Key, true, out ConditionType key))
+                if (!ConditionKey.TryParse(pair.Key, out ConditionKey key))
                 {
-                    error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", this.ConditionFactory.GetValidConditions())}";
+                    error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", Enum.GetValues(typeof(ConditionType)))}";
                     conditions = null;
                     return false;
                 }
@@ -405,7 +405,7 @@ namespace ContentPatcher.Framework
                 // check compatibility
                 if (formatVersion.IsOlderThan("1.4"))
                 {
-                    if (key == ConditionType.DayEvent || key == ConditionType.HasFlag || key == ConditionType.HasSeenEvent || key == ConditionType.Spouse)
+                    if (key.Type == ConditionType.DayEvent || key.Type == ConditionType.HasFlag || key.Type == ConditionType.HasSeenEvent || key.Type == ConditionType.Spouse)
                     {
                         error = $"{key} isn't available with format version {formatVersion} (change the {nameof(ContentConfig.Format)} field to {latestFormatVersion} to use newer features)";
                         conditions = null;

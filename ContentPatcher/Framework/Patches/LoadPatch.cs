@@ -37,7 +37,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="context">The condition context.</param>
         /// <param name="tokenisableConditions">The conditions which can be used in tokens.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        public override bool UpdateContext(ConditionContext context, IDictionary<ConditionType, string> tokenisableConditions)
+        public override bool UpdateContext(ConditionContext context, IDictionary<ConditionKey, string> tokenisableConditions)
         {
             bool localAssetChanged = this.LocalAsset.UpdateContext(tokenisableConditions);
             return base.UpdateContext(context, tokenisableConditions) || localAssetChanged;
@@ -54,7 +54,7 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <summary>Get the condition tokens used by this patch in its fields.</summary>
-        public override IEnumerable<ConditionType> GetTokensUsed()
+        public override IEnumerable<ConditionKey> GetTokensUsed()
         {
             return base.GetTokensUsed().Union(this.LocalAsset.ConditionTokens);
         }

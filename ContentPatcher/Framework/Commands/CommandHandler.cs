@@ -136,8 +136,8 @@ namespace ContentPatcher.Framework.Commands
             output.AppendLine("========================");
             output.AppendLine("== Current conditions ==");
             output.AppendLine("========================");
-            foreach (ConditionType key in this.ConditionFactory.GetValidConditions())
-                output.AppendLine($"   {key}: {string.Join(", ", context.GetValues(key))}");
+            foreach (KeyValuePair<ConditionKey, IEnumerable<string>> pair in context.GetValues())
+                output.AppendLine($"   {pair.Key}: {string.Join(", ", pair.Value)}");
             output.AppendLine();
 
             // add patch summary

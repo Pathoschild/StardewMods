@@ -4,13 +4,13 @@ using Pathoschild.Stardew.Common.Utilities;
 namespace ContentPatcher.Framework.Conditions
 {
     /// <summary>A set of conditions that can be checked against the context.</summary>
-    internal class ConditionDictionary : Dictionary<ConditionType, Condition>
+    internal class ConditionDictionary : Dictionary<ConditionKey, Condition>
     {
         /*********
         ** Properties
         *********/
         /// <summary>The valid condition values.</summary>
-        private readonly IDictionary<ConditionType, InvariantHashSet> ValidValues;
+        private readonly IDictionary<ConditionKey, InvariantHashSet> ValidValues;
 
 
         /*********
@@ -18,7 +18,7 @@ namespace ContentPatcher.Framework.Conditions
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="validValues">The valid condition values.</param>
-        public ConditionDictionary(IDictionary<ConditionType, InvariantHashSet> validValues)
+        public ConditionDictionary(IDictionary<ConditionKey, InvariantHashSet> validValues)
         {
             this.ValidValues = validValues;
         }
@@ -26,14 +26,14 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Add an element with the given key and condition values.</summary>
         /// <param name="key">The key to add.</param>
         /// <param name="values">The values for the given condition.</param>
-        public void Add(ConditionType key, IEnumerable<string> values)
+        public void Add(ConditionKey key, IEnumerable<string> values)
         {
             this.Add(key, new Condition(key, new InvariantHashSet(values)));
         }
 
         /// <summary>Get the explicit values for a condition, or the implied range of values if not explicitly set.</summary>
         /// <param name="key">The condition key.</param>
-        public IEnumerable<string> GetImpliedValues(ConditionType key)
+        public IEnumerable<string> GetImpliedValues(ConditionKey key)
         {
             // explicit values
             if (this.TryGetValue(key, out Condition condition))
@@ -52,7 +52,7 @@ namespace ContentPatcher.Framework.Conditions
 
         /// <summary>Get the possible values for a condition.</summary>
         /// <param name="key">The condition key.</param>
-        public IEnumerable<string> GetValidValues(ConditionType key)
+        public IEnumerable<string> GetValidValues(ConditionKey key)
         {
             return this.ValidValues[key];
         }

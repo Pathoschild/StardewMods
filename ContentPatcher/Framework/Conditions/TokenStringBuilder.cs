@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -27,7 +26,7 @@ namespace ContentPatcher.Framework.Conditions
         public string RawValue { get; }
 
         /// <summary>The condition tokens in the string.</summary>
-        public HashSet<ConditionType> ConditionTokens { get; } = new HashSet<ConditionType>();
+        public HashSet<ConditionKey> ConditionTokens { get; } = new HashSet<ConditionKey>();
 
         /// <summary>The config tokens in the string.</summary>
         public InvariantHashSet ConfigTokens { get; } = new InvariantHashSet();
@@ -53,7 +52,7 @@ namespace ContentPatcher.Framework.Conditions
             foreach (Match match in TokenStringBuilder.TokenPattern.Matches(rawValue))
             {
                 string key = match.Groups[1].Value.Trim();
-                if (Enum.TryParse(key, true, out ConditionType conditionKey))
+                if (ConditionKey.TryParse(key, out ConditionKey conditionKey))
                     this.ConditionTokens.Add(conditionKey);
                 else if (config.ContainsKey(key))
                     this.ConfigTokens.Add(key);

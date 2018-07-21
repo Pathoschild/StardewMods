@@ -10,7 +10,7 @@ namespace ContentPatcher.Framework.Conditions
         ** Accessors
         *********/
         /// <summary>The condition key in the context.</summary>
-        public ConditionType Key { get; }
+        public ConditionKey Key { get; }
 
         /// <summary>The condition values for which this condition is valid.</summary>
         public InvariantHashSet Values { get; }
@@ -22,7 +22,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Construct an instance.</summary>
         /// <param name="key">The condition key in the context.</param>
         /// <param name="values">The condition values for which this condition is valid.</param>
-        public Condition(ConditionType key, InvariantHashSet values)
+        public Condition(ConditionKey key, InvariantHashSet values)
         {
             this.Key = key;
             this.Values = values;
