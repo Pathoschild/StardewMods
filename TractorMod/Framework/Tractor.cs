@@ -131,8 +131,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                         this.RiderHealth = Game1.player.health;
                     else
                         Game1.player.health = this.RiderHealth;
-                    Game1.player.temporarilyInvincible = false; // disable damage blink effect
-                    Game1.player.temporaryInvincibilityTimer = 0;
                 }
 
                 // apply tractor buff
