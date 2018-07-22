@@ -48,7 +48,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             int maxSkillPoints = metadata.Constants.PlayerMaxSkillPoints;
             int[] skillPointsPerLevel = metadata.Constants.PlayerSkillPointsPerLevel;
-            string luckSummary = this.Translate(L10n.Player.LuckSummary, new { percent = (Game1.dailyLuck >= 0 ? "+" : "") + (Game1.dailyLuck * 100) });
+            string luckSummary = this.Translate(L10n.Player.LuckSummary, new { percent = (Game1.dailyLuck >= 0 ? "+" : "") + Math.Round(Game1.dailyLuck * 100, 2) });
 
             yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.Gender), this.Translate(farmer.IsMale ? L10n.Player.GenderMale : L10n.Player.GenderFemale));
             yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.FarmName), farmer.farmName.Value);
