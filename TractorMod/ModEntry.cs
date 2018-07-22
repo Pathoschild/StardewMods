@@ -273,7 +273,7 @@ namespace Pathoschild.Stardew.TractorMod
                 return;
 
             // summon tractor
-            if (Context.IsPlayerFree && this.Config.Controls.SummonTractor.Contains(e.Button))
+            if (Context.IsPlayerFree && this.Config.Controls.SummonTractor.Contains(e.Button) && !Game1.player.isRidingHorse())
                 this.Tractor?.SetLocation(Game1.currentLocation, Game1.player.getTileLocation());
         }
 

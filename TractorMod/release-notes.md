@@ -9,6 +9,7 @@
   * pickaxe: clear weeds.
 * Added support for tractor hats.
 * Fixed pickaxe not breaking boulders in the mines.
+* Fixed summon key working while riding a horse.
 * Improved translations. Thanks to alca259 (added Spanish)!
 
 ## 4.4.1
