@@ -103,6 +103,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 // map objects
                 foreach (SObject item in location.objects.Values)
                 {
+                    // chest
                     if (item is Chest chest)
                     {
                         if (chest.playerChest.Value)
@@ -111,17 +112,30 @@ namespace Pathoschild.Stardew.LookupAnything
                             items.AddRange(chest.items);
                         }
                     }
+
+                    // auto-grabber
+                    else if (item.ParentSheetIndex == 165 && item.heldObject.Value is Chest grabberChest)
+                    {
+                        items.Add(item);
+                        items.AddRange(grabberChest.items);
+                    }
+
+                    // cask
                     else if (item is Cask)
                     {
                         items.Add(item);
                         items.Add(item.heldObject.Value); // cask contents can be retrieved anytime
                     }
+
+                    // craftable
                     else if (item.bigCraftable.Value)
                     {
                         items.Add(item);
                         if (item.MinutesUntilReady == 0)
                             items.Add(item.heldObject.Value);
                     }
+
+                    // anything else
                     else if (!item.IsSpawnedObject)
                     {
                         items.Add(item);

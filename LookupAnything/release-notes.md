@@ -4,6 +4,7 @@
 ## 1.19
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added support for...
+  * auto-grabbers;
   * garden pots and their crops;
   * other players;
   * new friendship data;
