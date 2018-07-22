@@ -112,9 +112,15 @@ namespace ContentPatcher.Framework.Conditions
             string forID;
             {
                 string[] parts = raw.Trim().Split(new[] { ':' }, 2);
+
+                // condition type
                 if (!Enum.TryParse(parts[0], true, out type))
                     throw new FormatException($"Can't parse string '{parts[0]}' as a {nameof(ConditionKey)} value.");
-                forID = parts.Length == 2 ? parts[1] : null;
+
+                // for ID
+                forID = parts.Length == 2 ? parts[1].Trim() : null;
+                if (forID == "")
+                    forID = null;
             }
 
             // create instance
