@@ -10,6 +10,7 @@
 * Added support for tractor hats.
 * Fixed pickaxe not breaking boulders in the mines.
 * Fixed summon key working while riding a horse.
+* Removed experimental 'pass through trellis' option; consider using a mod like [Walk Through Trellis](https://www.nexusmods.com/stardewvalley/mods/1958) instead.
 * Improved translations. Thanks to alca259 (added Spanish)!
 
 ## 4.4.1

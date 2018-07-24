@@ -115,7 +115,6 @@ namespace Pathoschild.Stardew.TractorMod
             MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
             InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            PlayerEvents.Warped += this.PlayerEvents_Warped;
             LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
             LocationEvents.BuildingsChanged += this.LocationEvents_BuildingsChanged;
 
@@ -287,17 +286,6 @@ namespace Pathoschild.Stardew.TractorMod
 
             if (Context.IsPlayerFree)
                 this.Tractor?.Update();
-        }
-
-        /// <summary>The event called when the player warps to a new location.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void PlayerEvents_Warped(object sender, EventArgsPlayerWarped e)
-        {
-            if (!this.IsEnabled)
-                return;
-
-            this.Tractor?.UpdateForNewLocation(e.PriorLocation, e.NewLocation);
         }
 
         /****

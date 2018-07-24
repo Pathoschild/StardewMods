@@ -68,7 +68,6 @@ setting | default | effect
 `TractorSpeed` | -2 | The speed modifier when riding the tractor.
 `MagneticRadius` | 384 | The item magnetism amount (higher values attract items from father away).
 `HighlightRadius` | `false` | Whether to highlight the tractor radius when riding it.
-`PassThroughTrellisCrops` | `false` | Whether the tractor can pass through trellis crops like grapes. This is an experimental feature.
 `CustomAttachments` | _(empty)_ | The custom items or tools to apply. If you specify something that's already supported (like the axe), this will override all limitations on its use. These must match the exact internal item/tool names (not the translated display names). For example: `"CustomTools": ["Axe"]`
 
 ## Custom textures

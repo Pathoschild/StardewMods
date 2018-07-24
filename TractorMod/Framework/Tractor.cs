@@ -47,9 +47,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The number of ticks since the tractor last checked for an action to perform.</summary>
         private int SkippedActionTicks;
 
-        /// <summary>The trellis crop IDs.</summary>
-        private readonly HashSet<int> RaisedSeedCrops = new HashSet<int>();
-
         /// <summary>Whether the player was riding the tractor during the last tick.</summary>
         private bool WasRiding;
 
@@ -140,15 +137,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 if (this.UpdateCooldown() && this.IsEnabled())
                     this.UpdateAttachmentEffects();
             }
-        }
-
-        /// <summary>Update tractor logic when the player warps to a new location.</summary>
-        /// <param name="oldLocation">The former location.</param>
-        /// <param name="newLocation">The new location.</param>
-        public void UpdateForNewLocation(GameLocation oldLocation, GameLocation newLocation)
-        {
-            if (this.Config.PassThroughTrellisCrops && this.IsRiding)
-                this.SetCropPassthrough(oldLocation, false);
         }
 
         /// <summary>Draw a radius around the player.</summary>
@@ -317,28 +305,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             this.currentLocation?.characters.Remove(this); // default logic doesn't support the mines (since they're not in Game1.locations)
             this.currentLocation = null;
-        }
-
-        /// <summary>Update all crops in a location to toggle between passable (regardless of trellis) or normal behaviour.</summary>
-        /// <param name="location">The location whose crops to update.</param>
-        /// <param name="passthrough">Whether to override crop passability.</param>
-        private void SetCropPassthrough(GameLocation location, bool passthrough)
-        {
-            if (location == null)
-                return;
-
-            foreach (HoeDirt dirt in location.terrainFeatures.Values.OfType<HoeDirt>())
-            {
-                if (dirt.crop == null)
-                    continue;
-
-                // track which crops have trellises
-                if (dirt.crop.raisedSeeds.Value)
-                    this.RaisedSeedCrops.Add(dirt.crop.indexOfHarvest.Value);
-
-                // update passthrough
-                dirt.crop.raisedSeeds.Value = !passthrough && this.RaisedSeedCrops.Contains(dirt.crop.indexOfHarvest.Value);
-            }
         }
 
         /// <summary>Temporarily dismount and set up the player to interact with a tile, then return it to the previous state afterwards.</summary>

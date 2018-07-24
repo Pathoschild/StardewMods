@@ -8,9 +8,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>Whether to use the experimental feature which lets the tractor pass through trellis crops.</summary>
-        public bool PassThroughTrellisCrops { get; set; }
-
         /// <summary>The number of tiles on each side of the tractor to affect (in addition to the tile under it).</summary>
         public int Distance { get; set; } = 1;
 
