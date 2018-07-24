@@ -100,7 +100,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // crop fields
-            foreach (ICustomField field in this.GetCropFields(this.FromCrop ?? this.SeedForCrop, isCrop, metadata))
+            foreach (ICustomField field in this.GetCropFields(this.FromCrop ?? this.SeedForCrop, isSeed, metadata))
                 yield return field;
 
             // indoor pot crop
