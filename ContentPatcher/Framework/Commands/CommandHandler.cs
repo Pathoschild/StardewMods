@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
 using Pathoschild.Stardew.Common.Utilities;
@@ -44,6 +45,12 @@ namespace ContentPatcher.Framework.Commands
             ConditionType.HasMod,
             ConditionType.HasSeenEvent
         };
+
+        /// <summary>A regex pattern matching asset names which incorrectly include the Content folder or .xnb extension.</summary>
+        private readonly Regex InvalidAssetNamePattern = new Regex(@"^Content[/\\]|\.xnb$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>A regex pattern matching asset names which incorrectly include the language code.</summary>
+        private readonly Regex InvalidAssetNameWithLanguageCodePattern = new Regex(@"^\.(?:de-DE|es-ES|ja-JP|pt-BR|ru-RU|zh-CN)(?:\.xnb)?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
 
         /*********
@@ -190,8 +197,12 @@ namespace ContentPatcher.Framework.Commands
                         output.Append($" | => {patch.ParsedAssetName.Value}");
 
                     // log reason not applied
+                    bool hasErrorReason = false;
                     if (!patch.IsLoaded)
+                    {
                         output.Append($" | not loaded: {patch.ReasonDisabled}");
+                        hasErrorReason = true;
+                    }
                     else if (!patch.MatchesContext && patch.ParsedConditions != null)
                     {
                         string[] failedConditions = (
@@ -205,9 +216,22 @@ namespace ContentPatcher.Framework.Commands
                             ? $" | failed conditions: {string.Join(", ", failedConditions)}"
                             : " | disabled (reason unknown)"
                         );
+                        hasErrorReason = true;
                     }
                     else if (!patch.IsLoaded)
+                    {
                         output.Append(" | disabled (reason unknown)");
+                        hasErrorReason = true;
+                    }
+
+                    // log hints
+                    if (!hasErrorReason && patch.IsLoaded && !patch.IsApplied && patch.ParsedAssetName?.Value != null)
+                    {
+                        if (this.InvalidAssetNamePattern.IsMatch(patch.ParsedAssetName.Value))
+                            output.Append(" | NOTE: asset name seems to be invalid (shouldn't include 'Content/' or the '.xnb' extension).");
+                        else if (this.InvalidAssetNameWithLanguageCodePattern.IsMatch(patch.ParsedAssetName.Value))
+                            output.Append(" | NOTE: asset name seems to be invalid (shouldn't contain language code; use conditions instead).");
+                    }
 
                     // end line
                     output.AppendLine();
