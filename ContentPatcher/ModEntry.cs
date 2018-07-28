@@ -308,7 +308,7 @@ namespace ContentPatcher
                     {
                         InvariantHashSet expected = this.PatchManager.ParseCommaDelimitedField(values);
                         if (!expected.Intersect(config[key].Value, StringComparer.InvariantCultureIgnoreCase).Any())
-                            return TrackSkip($"disabled: config field '{key}' must have one of '{string.Join(", ", expected)}', but found '{string.Join(", ", config[key].Value)}'.", warn: false);
+                            return TrackSkip($"disabled by config {key} (needs '{string.Join(", ", expected)}', found '{string.Join(", ", config[key].Value)}').", warn: false);
 
                         entry.When.Remove(key);
                     }
@@ -327,7 +327,7 @@ namespace ContentPatcher
                     ConditionKey[] tokenisable = this.ConditionFactory.GetTokenisableConditions().ToArray();
                     ConditionKey[] invalid = conditions.Keys.Except(tokenisable).ToArray();
                     if (invalid.Any())
-                        return TrackSkip($"disabled: can't use these conditions with {nameof(PatchConfig.Action)} {PatchType.Load}: [{string.Join(", ", invalid)}]");
+                        return TrackSkip($"can't use these conditions with {nameof(PatchConfig.Action)} {PatchType.Load} ({string.Join(", ", invalid)})");
                 }
 
                 // get patch instance

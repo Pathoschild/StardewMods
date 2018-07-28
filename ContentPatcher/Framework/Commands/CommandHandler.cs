@@ -46,11 +46,14 @@ namespace ContentPatcher.Framework.Commands
             ConditionType.HasSeenEvent
         };
 
-        /// <summary>A regex pattern matching asset names which incorrectly include the Content folder or .xnb extension.</summary>
-        private readonly Regex InvalidAssetNamePattern = new Regex(@"^Content[/\\]|\.xnb$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        /// <summary>A regex pattern matching asset names which incorrectly include the Content folder.</summary>
+        private readonly Regex AssetNameWithContentPattern = new Regex(@"^Content[/\\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        /// <summary>A regex pattern matching asset names which incorrectly include the language code.</summary>
-        private readonly Regex InvalidAssetNameWithLanguageCodePattern = new Regex(@"^\.(?:de-DE|es-ES|ja-JP|pt-BR|ru-RU|zh-CN)(?:\.xnb)?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        /// <summary>A regex pattern matching asset names which incorrectly include the .xnb extension.</summary>
+        private readonly Regex AssetNameWithXnbExtensionPattern = new Regex(@"\.xnb$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>A regex pattern matching asset names which incorrectly include the locale code.</summary>
+        private readonly Regex AssetNameWithLocalePattern = new Regex(@"^\.(?:de-DE|es-ES|ja-JP|pt-BR|ru-RU|zh-CN)(?:\.xnb)?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
 
         /*********
@@ -224,13 +227,21 @@ namespace ContentPatcher.Framework.Commands
                         hasErrorReason = true;
                     }
 
-                    // log hints
+                    // log common issues
                     if (!hasErrorReason && patch.IsLoaded && !patch.IsApplied && patch.ParsedAssetName?.Value != null)
                     {
-                        if (this.InvalidAssetNamePattern.IsMatch(patch.ParsedAssetName.Value))
-                            output.Append(" | NOTE: asset name seems to be invalid (shouldn't include 'Content/' or the '.xnb' extension).");
-                        else if (this.InvalidAssetNameWithLanguageCodePattern.IsMatch(patch.ParsedAssetName.Value))
-                            output.Append(" | NOTE: asset name seems to be invalid (shouldn't contain language code; use conditions instead).");
+                        string assetName = patch.ParsedAssetName.Value;
+
+                        List<string> issues = new List<string>();
+                        if (this.AssetNameWithContentPattern.IsMatch(assetName))
+                            issues.Add("shouldn't include 'Content/' prefix");
+                        if (this.AssetNameWithXnbExtensionPattern.IsMatch(assetName))
+                            issues.Add("shouldn't include '.xnb' extension");
+                        if (this.AssetNameWithLocalePattern.IsMatch(assetName))
+                            issues.Add("shouldn't include language code (use conditions instead)");
+
+                        if (issues.Any())
+                            output.Append($" | NOTE: asset name may be incorrect ({string.Join("; ", issues)}).");
                     }
 
                     // end line
