@@ -68,7 +68,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\packages\Pathoschild.Stardew.ModBuildConfig.2.1.0-beta-20180630\analyzers\dotnet\cs\StardewModdingAPI.ModBuildConfig.Analyzer.dll" />
+    <Analyzer Include="..\..\packages\Pathoschild.Stardew.ModBuildConfig.2.1.0\analyzers\dotnet\cs\StardewModdingAPI.ModBuildConfig.Analyzer.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -76,7 +76,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\NUnit.3.10.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit.3.10.1\build\NUnit.props'))" />
-    <Error Condition="!Exists('..\..\packages\Pathoschild.Stardew.ModBuildConfig.2.1.0-beta-20180630\build\Pathoschild.Stardew.ModBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Pathoschild.Stardew.ModBuildConfig.2.1.0-beta-20180630\build\Pathoschild.Stardew.ModBuildConfig.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Pathoschild.Stardew.ModBuildConfig.2.1.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Pathoschild.Stardew.ModBuildConfig.2.1.0\build\Pathoschild.Stardew.ModBuildConfig.targets'))" />
   </Target>
-  <Import Project="..\..\packages\Pathoschild.Stardew.ModBuildConfig.2.1.0-beta-20180630\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('..\..\packages\Pathoschild.Stardew.ModBuildConfig.2.1.0-beta-20180630\build\Pathoschild.Stardew.ModBuildConfig.targets')" />
+  <Import Project="..\..\packages\Pathoschild.Stardew.ModBuildConfig.2.1.0\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('..\..\packages\Pathoschild.Stardew.ModBuildConfig.2.1.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" />
 </Project>
