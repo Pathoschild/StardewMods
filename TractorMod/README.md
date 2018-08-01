@@ -1,12 +1,15 @@
 **Tractor Mod** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you buy a tractor
 (and tractor garage) to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc.
 
+Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, single-player only. See
+[_compatibility_](#compatibility) for details.
+
 ## Contents
 * [Install](#install)
 * [Use](#use)
 * [Configure](#configure)
 * [Custom textures](#custom-textures)
-* [Versions](#versions)
+* [Compatibility](#compatibility)
 * [See also](#see-also)
 
 ## Install
@@ -34,9 +37,11 @@ hold item  | default effects | optional effects (disabled by default)
 axe        | clear twigs; clear dead crops. | chop down trees; clear live crops.
 fertiliser | fertilise dirt. | —
 hoe        | till dirt. | —
+melee weapon | clear dead crops. | attack monsters.
 pickaxe    | break rocks; clear tilled dirt; clear dead crops. | break paths/flooring.
 seeds      | plant seeds in dirt. | —
 scythe     | harvest crops, fruit trees, or forage; clear weeds and dead crops. | —
+slingshot  | — | shoot one projectile/tile/second in the aimed direction.
 watering can | water crops. | —
 
 The tractor uses no stamina when using tools, and the watering can won't run out of water. It will
@@ -63,7 +68,6 @@ setting | default | effect
 `TractorSpeed` | -2 | The speed modifier when riding the tractor.
 `MagneticRadius` | 384 | The item magnetism amount (higher values attract items from father away).
 `HighlightRadius` | `false` | Whether to highlight the tractor radius when riding it.
-`PassThroughTrellisCrops` | `false` | Whether the tractor can pass through trellis crops like grapes. This is an experimental feature.
 `CustomAttachments` | _(empty)_ | The custom items or tools to apply. If you specify something that's already supported (like the axe), this will override all limitations on its use. These must match the exact internal item/tool names (not the translated display names). For example: `"CustomTools": ["Axe"]`
 
 ## Custom textures
@@ -71,10 +75,14 @@ You can drop new PNGs into the `assets` folder to change the appearance of the t
 For a seasonal texture, just prefix the name with the season (like `spring_tractor.png`). The mod
 will load the seasonal texture if present, else it'll load the default name (like `tractor.png`).
 
-## Versions
-See [release notes](release-notes.md).
+## Compatibility
+Tractor Mod is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, in single-player mode only.
+The mod will disable itself in multiplayer mode, so it's safe to keep it installed. If you load a
+save in multiplayer and later switch back to single-player, any garages you had previously built
+will reappear where they were before.
 
 ## See also
+* [Release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1401)
 * [Discussion thread](http://community.playstarbound.com/threads/tractor-mod.136649/)
 * Derived from [TractorMod](https://github.com/lambui/StardewValleyMod_TractorMod) by PhthaloBlue (@lambui), rewritten with their permission.

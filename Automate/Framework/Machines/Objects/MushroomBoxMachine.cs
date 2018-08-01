@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
         {
-            return this.Machine.heldObject != null && this.Machine.readyForHarvest
+            return this.Machine.heldObject.Value != null && this.Machine.readyForHarvest.Value
                 ? MachineState.Done
                 : MachineState.Processing;
         }
@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Get the output item.</summary>
         public override ITrackedStack GetOutput()
         {
-            return new TrackedItem(this.Machine.heldObject, onEmpty: this.Reset);
+            return new TrackedItem(this.Machine.heldObject.Value, onEmpty: this.Reset);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -45,7 +45,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         private void Reset(Item item)
         {
             this.GenericReset(item);
-            this.Machine.showNextIndex = false;
+            this.Machine.showNextIndex.Value = false;
         }
     }
 }

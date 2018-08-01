@@ -1,4 +1,4 @@
-﻿using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewValley;
 using SFarmer = StardewValley.Farmer;
 
@@ -24,6 +24,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 
         /// <summary>Whether the NPC has a stardrop to give to the player once they reach enough points.</summary>
         public bool HasStardrop { get; set; }
+
+        /// <summary>Whether the player talked to them today.</summary>
+        public bool TalkedToday { get; set; }
+
+        /// <summary>The number of gifts the player gave the NPC today.</summary>
+        public int GiftsToday { get; set; }
+
+        /// <summary>The number of gifts the player gave the NPC this week.</summary>
+        public int GiftsThisWeek { get; set; }
+
+        /// <summary>The current friendship status.</summary>
+        public FriendshipStatus Status { get; set; }
 
         /****
         ** Points
@@ -64,16 +76,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="player">The player.</param>
         /// <param name="npc">The NPC.</param>
         /// <param name="constants">The constant assumptions.</param>
-        public FriendshipModel(SFarmer player, NPC npc, ConstantData constants)
+        /// <param name="friendship">The current friendship data.</param>
+        public FriendshipModel(SFarmer player, NPC npc, Friendship friendship, ConstantData constants)
         {
             // flags
-            this.CanDate = npc.datable;
-            this.IsDating = npc.datingFarmer;
-            this.IsSpouse = player.spouse == npc.name;
+            this.CanDate = npc.datable.Value;
+            this.IsDating = friendship.IsDating();
+            this.IsSpouse = friendship.IsMarried();
+            this.Status = friendship.Status;
+            this.TalkedToday = friendship.TalkedToToday;
+            this.GiftsToday = friendship.GiftsToday;
+            this.GiftsThisWeek = friendship.GiftsThisWeek;
 
             // points
             this.MaxPoints = this.IsSpouse ? constants.SpouseMaxFriendship : NPC.maxFriendshipPoints;
-            this.Points = player.friendships[npc.name][0];
+            this.Points = friendship.Points;
             this.PointsPerLevel = NPC.friendshipPointsPerHeartLevel;
             this.FilledHearts = this.Points / NPC.friendshipPointsPerHeartLevel;
             this.LockedHearts = this.CanDate && !this.IsDating ? constants.DatingHearts : 0;

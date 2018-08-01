@@ -28,10 +28,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         /// <summary>Get the machine's processing state.</summary>
         public MachineState GetState()
         {
-            if (this.Tree.growthStage < FruitTree.treeStage)
+            if (this.Tree.growthStage.Value < FruitTree.treeStage)
                 return MachineState.Disabled;
 
-            return this.Tree.fruitsOnTree > 0
+            return this.Tree.fruitsOnTree.Value > 0
                 ? MachineState.Done
                 : MachineState.Processing;
         }
@@ -42,18 +42,18 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
             FruitTree tree = this.Tree;
 
             // if struck by lightning => coal
-            if (tree.struckByLightningCountdown > 0)
-                return new TrackedItem(new SObject(382, tree.fruitsOnTree), onReduced: this.OnOutputReduced);
+            if (tree.struckByLightningCountdown.Value > 0)
+                return new TrackedItem(new SObject(382, tree.fruitsOnTree.Value), onReduced: this.OnOutputReduced);
 
             // else => fruit
             int quality = SObject.lowQuality;
-            if (tree.daysUntilMature <= -112)
+            if (tree.daysUntilMature.Value <= -112)
                 quality = SObject.medQuality;
-            if (tree.daysUntilMature <= -224)
+            if (tree.daysUntilMature.Value <= -224)
                 quality = SObject.highQuality;
-            if (tree.daysUntilMature <= -336)
+            if (tree.daysUntilMature.Value <= -336)
                 quality = SObject.bestQuality;
-            return new TrackedItem(new SObject(tree.indexOfFruit, tree.fruitsOnTree, quality: quality), onReduced: this.OnOutputReduced);
+            return new TrackedItem(new SObject(tree.indexOfFruit.Value, tree.fruitsOnTree.Value, quality: quality), onReduced: this.OnOutputReduced);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -72,7 +72,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         /// <param name="item">The output item that was taken.</param>
         private void OnOutputReduced(Item item)
         {
-            this.Tree.fruitsOnTree = item.Stack;
+            this.Tree.fruitsOnTree.Value = item.Stack;
         }
     }
 }

@@ -12,7 +12,7 @@ what the game is doing.
 * [Use](#use)
 * [Configure](#configure)
 * [Showcase](#showcase)
-* [Versions](#versions)
+* [Compatibility](#compatibility)
 * [See also](#see-also)
 
 ## Install
@@ -100,10 +100,12 @@ full dynamic dump of the raw data:
 Enable tile lookups to see information about map tiles:
 > ![](screenshots/map-tile.png)
 
-## Versions
-See [release notes](release-notes.md).
+## Compatibility
+Lookup Anything is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+multiplayer. There are no known issues in multiplayer (even if other players don't have it installed).
 
 ## See also
+* [Release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/518)
 * [Discussion thread](http://community.playstarbound.com/threads/smapi-lookup-anything.122929/)
 * Useful tools when working on this mod:

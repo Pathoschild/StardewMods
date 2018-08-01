@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.DebugMode
 
             // hook events
             InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
-            LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
+            PlayerEvents.Warped += this.PlayerEvents_Warped;
             GraphicsEvents.OnPostRenderEvent += this.GraphicsEvents_OnPostRenderEvent;
 
             // validate translations
@@ -102,7 +102,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>The method invoked when the player warps into a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
+        private void PlayerEvents_Warped(object sender, EventArgsPlayerWarped e)
         {
             if (this.DebugMode)
                 this.CorrectEntryPosition(e.NewLocation, Game1.player);
@@ -145,7 +145,7 @@ namespace Pathoschild.Stardew.DebugMode
             if (player.getTileX() == (int)fromTile.X && player.getTileY() == (int)fromTile.Y)
             {
                 player.Position = new Vector2(toTile.X * Game1.tileSize, toTile.Y * Game1.tileSize);
-                player.facingDirection = (int)facingDirection;
+                player.FacingDirection = (int)facingDirection;
                 player.setMovingInFacingDirection();
             }
         }
@@ -218,12 +218,12 @@ namespace Pathoschild.Stardew.DebugMode
                 string festivalName = @event.FestivalName;
                 double progress = @event.CurrentCommand / (double)@event.eventCommands.Length;
 
-                if(isFestival)
+                if (isFestival)
                     yield return $"{this.Helper.Translation.Get("label.festival-name")}: {festivalName}";
                 else
                 {
                     yield return $"{this.Helper.Translation.Get("label.event-id")}: {eventID}";
-                    if(@event.CurrentCommand >= 0 && @event.CurrentCommand < @event.eventCommands.Length)
+                    if (@event.CurrentCommand >= 0 && @event.CurrentCommand < @event.eventCommands.Length)
                         yield return $"{this.Helper.Translation.Get("label.event-script")}: {@event.eventCommands[@event.CurrentCommand]} ({(int)(progress * 100)}%)";
                 }
             }

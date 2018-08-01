@@ -1,0 +1,10 @@
+{
+  "Name": "Data Layers",
+  "Author": "Pathoschild",
+  "Version": "1.4.0",
+  "MinimumApiVersion": "2.6.0",
+  "Description": "Overlays the world with visual data like accessibility, bee/Junimo/scarecrow/sprinkler coverage, etc.",
+  "UniqueID": "Pathoschild.DataLayers",
+  "EntryDll": "DataLayers.dll",
+  "UpdateKeys": [ "Nexus:1691" ]
+}

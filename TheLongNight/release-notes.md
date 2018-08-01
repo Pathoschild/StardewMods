@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.2
+* Updated for Stardew Valley 1.3 (including multiplayer support).
+
 ## 1.1.1
 * Fixed crabpot error in 1.1.
 

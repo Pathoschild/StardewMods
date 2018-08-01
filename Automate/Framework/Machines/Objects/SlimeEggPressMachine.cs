@@ -17,7 +17,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Get the output item.</summary>
         public override ITrackedStack GetOutput()
         {
-            return new TrackedItem(this.Machine.heldObject.getOne(), this.GenericReset);
+            SObject heldObject = this.Machine.heldObject.Value;
+            return new TrackedItem(heldObject.getOne(), this.GenericReset);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -35,8 +36,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                     parentSheetIndex = 437;
                 else if (Game1.random.NextDouble() < 0.25)
                     parentSheetIndex = 413;
-                this.Machine.heldObject = new SObject(parentSheetIndex, 1);
-                this.Machine.minutesUntilReady = 1200;
+                this.Machine.heldObject.Value = new SObject(parentSheetIndex, 1);
+                this.Machine.MinutesUntilReady = 1200;
                 return true;
             }
 

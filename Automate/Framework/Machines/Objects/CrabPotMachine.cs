@@ -35,14 +35,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
         {
-            if (this.Machine.heldObject == null)
+            if (this.Machine.heldObject.Value == null)
             {
-                bool hasBait = this.Machine.bait != null || Game1.player.professions.Contains(11); // no bait needed if luremaster
+                bool hasBait = this.Machine.bait.Value != null || Game1.player.professions.Contains(11); // no bait needed if luremaster
                 return hasBait
                     ? MachineState.Processing
                     : MachineState.Empty;
             }
-            return this.Machine.readyForHarvest
+            return this.Machine.readyForHarvest.Value
                 ? MachineState.Done
                 : MachineState.Processing;
         }
@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Get the output item.</summary>
         public override ITrackedStack GetOutput()
         {
-            return new TrackedItem(this.Machine.heldObject, onEmpty: this.Reset);
+            return new TrackedItem(this.Machine.heldObject.Value, onEmpty: this.Reset);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -61,7 +61,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             // get bait
             if (input.TryGetIngredient(SObject.baitCategory, 1, out IConsumable bait))
             {
-                this.Machine.bait = (SObject)bait.Take();
+                this.Machine.bait.Value = (SObject)bait.Take();
                 this.Reflection.GetField<bool>(this.Machine, "lidFlapping").SetValue(true);
                 this.Reflection.GetField<float>(this.Machine, "lidFlapTimer").SetValue(60);
                 return true;
@@ -86,19 +86,19 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 
             // mark fish caught for achievements and stats
             IDictionary<int, string> fishData = Game1.content.Load<Dictionary<int, string>>("Data\\Fish");
-            if (fishData.ContainsKey(item.parentSheetIndex))
+            if (fishData.ContainsKey(item.ParentSheetIndex))
             {
-                string[] fields = fishData[item.parentSheetIndex].Split('/');
+                string[] fields = fishData[item.ParentSheetIndex].Split('/');
                 int lowerSize = fields.Length > 5 ? Convert.ToInt32(fields[5]) : 1;
                 int upperSize = fields.Length > 5 ? Convert.ToInt32(fields[6]) : 10;
-                Game1.player.caughtFish(item.parentSheetIndex, Game1.random.Next(lowerSize, upperSize + 1));
+                Game1.player.caughtFish(item.ParentSheetIndex, Game1.random.Next(lowerSize, upperSize + 1));
             }
 
             // reset pot
-            pot.readyForHarvest = false;
-            pot.heldObject = null;
+            pot.readyForHarvest.Value = false;
+            pot.heldObject.Value = null;
             pot.tileIndexToShow = 710;
-            pot.bait = null;
+            pot.bait.Value = null;
             this.Reflection.GetField<bool>(pot, "lidFlapping").SetValue(true);
             this.Reflection.GetField<float>(pot, "lidFlapTimer").SetValue(60f);
             this.Reflection.GetField<Vector2>(pot, "shake").SetValue(Vector2.Zero);

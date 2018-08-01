@@ -1,0 +1,44 @@
+{
+  // accessibility
+  "accessibility.name": "Acessibilidade",
+  "accessibility.clear": "Limpo",
+  "accessibility.occupied": "Ocupado",
+  "accessibility.impassable": "Intransitável",
+  "accessibility.warp": "Passagem",
+
+  // coverage: bee houses
+  "bee-houses.name": "Cobertura: Casas de Abelhas",
+  "bee-houses.range": "Alcance das Flores",
+
+  // coverage: Junimo huts
+  "junimo-huts.name": "Cobertura: Cabana dos Junimos",
+  "junimo-huts.can-harvest": "Pode Colher",
+  "junimo-huts.cannot-harvest": "Não pode Colher",
+
+  // coverage: scarecrows
+  "scarecrows.name": "Cobertura: Espantalhos",
+  "scarecrows.protected": "Protegido",
+  "scarecrows.exposed": "Exposto",
+
+  // coverage: sprinklers
+  "sprinklers.name": "Cobertura: Aspersores",
+  "sprinklers.covered": "Coberto",
+  "sprinklers.dry-crops": "Plantas Secas",
+
+  // crops: harvest
+  "crop-harvest.name": "Plantas: Pronto para colher",
+  "crop-harvest.ready": "Pronto",
+  "crop-harvest.not-ready": "Não está pronto",
+  "crop-harvest.not-enough-time": "Sem tempo suficiente",
+
+  // crops: watered
+  "crop-water.name": "Plantas: Irrigado",
+  "crop-water.watered": "Planta Irrigada",
+  "crop-water.dry": "Planta Seca",
+
+  // crops: fertilized
+  "crop-fertilizer.name": "Plantas: Ferilizadas",
+  "crop-fertilizer.fertilizer": "Fertilizante",
+  "crop-fertilizer.retaining-soil": "Solo Retentor",
+  "crop-fertilizer.speed-gro": "Solo Foliar"
+}

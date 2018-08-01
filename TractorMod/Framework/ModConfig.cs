@@ -8,9 +8,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>Whether to use the experimental feature which lets the tractor pass through trellis crops.</summary>
-        public bool PassThroughTrellisCrops { get; set; }
-
         /// <summary>The number of tiles on each side of the tractor to affect (in addition to the tile under it).</summary>
         public int Distance { get; set; } = 1;
 
@@ -37,5 +34,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>The custom tools or items to allow. These must match the exact internal tool/item names (not the display names).</summary>
         public string[] CustomAttachments { get; set; } = new string[0];
+
+        /// <summary>Whether the player should be invincible while they're on the tractor.</summary>
+        public bool InvincibleOnTractor { get; set; } = true;
     }
 }

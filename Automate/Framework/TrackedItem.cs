@@ -1,6 +1,5 @@
 using System;
 using StardewValley;
-using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -97,17 +96,6 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             Item stack = original.getOne();
             stack.Stack = stackSize;
-
-            if (original is SObject originalObj && stack is SObject stackObj)
-            {
-                // fix some fields not copied by getOne()
-                stackObj.name = originalObj.name;
-                stackObj.DisplayName = originalObj.DisplayName;
-                stackObj.preserve = originalObj.preserve;
-                stackObj.preservedParentSheetIndex = originalObj.preservedParentSheetIndex;
-                stackObj.honeyType = originalObj.honeyType;
-            }
-
             return stack;
         }
     }

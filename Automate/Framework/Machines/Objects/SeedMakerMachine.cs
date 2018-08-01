@@ -34,15 +34,15 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             if (input.TryGetIngredient(this.IsValidCrop, 1, out IConsumable crop))
             {
                 crop.Reduce();
-                int seedID = SeedMakerMachine.CropSeedIDs[crop.Sample.parentSheetIndex];
+                int seedID = SeedMakerMachine.CropSeedIDs[crop.Sample.ParentSheetIndex];
 
-                Random random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + (int)machine.tileLocation.X + (int)machine.tileLocation.Y * 77 + Game1.timeOfDay);
-                machine.heldObject = new SObject(seedID, random.Next(1, 4));
+                Random random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + (int)machine.TileLocation.X + (int)machine.TileLocation.Y * 77 + Game1.timeOfDay);
+                machine.heldObject.Value = new SObject(seedID, random.Next(1, 4));
                 if (random.NextDouble() < 0.005)
-                    machine.heldObject = new SObject(499, 1);
+                    machine.heldObject.Value = new SObject(499, 1);
                 else if (random.NextDouble() < 0.02)
-                    machine.heldObject = new SObject(770, random.Next(1, 5));
-                machine.minutesUntilReady = 20;
+                    machine.heldObject.Value = new SObject(770, random.Next(1, 5));
+                machine.MinutesUntilReady = 20;
                 return true;
             }
 
@@ -58,8 +58,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public bool IsValidCrop(ITrackedStack item)
         {
             return
-                item.Sample.parentSheetIndex != 433 // seed maker doesn't allow coffee beans
-                && SeedMakerMachine.CropSeedIDs.ContainsKey(item.Sample.parentSheetIndex);
+                item.Sample.ParentSheetIndex != 433 // seed maker doesn't allow coffee beans
+                && SeedMakerMachine.CropSeedIDs.ContainsKey(item.Sample.ParentSheetIndex);
         }
 
         /// <summary>Get a crop ID => seed ID lookup.</summary>

@@ -1,5 +1,6 @@
 {
   // default chest names
+  "default-name.auto-grabber": "Auto-Agarrador #{{number}}",
   "default-name.chest": "Baú #{{number}}",
   "default-name.fridge": "Geladeira",
   "default-name.junimo-hut": "Cabana dos junimos #{{number}}",
@@ -13,9 +14,17 @@
   "label.order": "Ordem",
   "label.hide-chest": "Esconder esse baú",
   "label.hide-chest-hidden": "Esconder esse baú (Você terá que achar o baú para desfazer isso!)",
+  "label.automate-prefer-output": "(Automate) Primeiro coloque itens nesse baú",
+  "label.automate-ignore": "(Automate) Não use este baú para automação",
 
   // button labels
   "button.edit-chest": "editar baú",
   "button.sort-inventory": "arrumar inventário",
-  "button.ok": "OK"
+  "button.ok": "OK",
+
+  // errors
+  "errors.disabled-from-here": "Você não pode acessar baús daqui.",
+  "errors.no-chests": "Você não possui baús ainda.",
+  "errors.no-chests-in-location": "Você não possui nenhum baú nesta área.",
+  "errors.no-chests-in-range": "Você não possui baús ao seu alcance."
 }

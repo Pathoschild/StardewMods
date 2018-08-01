@@ -3,7 +3,7 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{0510E2AC-EC06-4211-B733-FAF9D3A069EA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -21,7 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,8 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -40,6 +40,8 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Framework\Attachments\SlingshotAttachment.cs" />
+    <Compile Include="Framework\Attachments\MeleeWeaponAttachment.cs" />
     <Compile Include="Framework\Attachments\AxeAttachment.cs" />
     <Compile Include="Framework\Attachments\CustomAttachment.cs" />
     <Compile Include="Framework\Attachments\FertilizerAttachment.cs" />
@@ -50,6 +52,8 @@
     <Compile Include="Framework\Attachments\PickaxeAttachment.cs" />
     <Compile Include="Framework\Attachments\ScytheAttachment.cs" />
     <Compile Include="Framework\Attachments\SeedAttachment.cs" />
+    <Compile Include="Framework\Config\SlingshotConfig.cs" />
+    <Compile Include="Framework\Config\MeleeWeaponConfig.cs" />
     <Compile Include="Framework\Config\AxeConfig.cs" />
     <Compile Include="Framework\Config\FertilizerConfig.cs" />
     <Compile Include="Framework\Config\GrassStarterConfig.cs" />
@@ -67,15 +71,14 @@
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\BaseAttachment.cs" />
     <Compile Include="Framework\Config\ModConfigControls.cs" />
-    <Compile Include="Framework\TractorManager.cs" />
-    <Compile Include="Framework\TractorMount.cs" />
-    <Compile Include="Framework\TractorStatic.cs" />
+    <Compile Include="Framework\Tractor.cs" />
     <Compile Include="Framework\TractorGarage.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="i18n\de.json" />
+    <None Include="i18n\es.json" />
     <None Include="i18n\pt.json" />
     <None Include="i18n\zh.json" />
     <None Include="i18n\ru.json" />
@@ -98,13 +101,16 @@
     <Content Include="screenshots\final-garage.png" />
     <Content Include="screenshots\tractor.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Pathoschild.Stardew.ModBuildConfig.2.1.0\analyzers\dotnet\cs\StardewModdingAPI.ModBuildConfig.Analyzer.dll" />
+  </ItemGroup>
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.3-alpha20180325\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.3-alpha20180325\build\Pathoschild.Stardew.ModBuildConfig.targets')" />
+  <Import Project="..\packages\Pathoschild.Stardew.ModBuildConfig.2.1.0\build\Pathoschild.Stardew.ModBuildConfig.targets" Condition="Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.2.1.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.3-alpha20180325\build\Pathoschild.Stardew.ModBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Pathoschild.Stardew.ModBuildConfig.2.0.3-alpha20180325\build\Pathoschild.Stardew.ModBuildConfig.targets'))" />
+    <Error Condition="!Exists('..\packages\Pathoschild.Stardew.ModBuildConfig.2.1.0\build\Pathoschild.Stardew.ModBuildConfig.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Pathoschild.Stardew.ModBuildConfig.2.1.0\build\Pathoschild.Stardew.ModBuildConfig.targets'))" />
   </Target>
 </Project>

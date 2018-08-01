@@ -4,7 +4,7 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
-    // <summary>A cask that accepts input and provides output.</summary>
+    /// <summary>A cask that accepts input and provides output.</summary>
     internal class CaskMachine : GenericMachine<Cask>
     {
         /*********
@@ -33,10 +33,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
         {
-            if (this.Machine.heldObject == null)
+            SObject heldObject = this.Machine.heldObject.Value;
+            if (heldObject == null)
                 return MachineState.Empty;
 
-            return this.Machine.heldObject.quality >= 4
+            return heldObject.Quality >= 4
                 ? MachineState.Done
                 : MachineState.Processing;
         }
@@ -45,13 +46,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public override ITrackedStack GetOutput()
         {
             Cask cask = this.Machine;
-            return new TrackedItem(cask.heldObject.getOne(), item =>
+            SObject heldObject = this.Machine.heldObject.Value;
+            return new TrackedItem(heldObject.getOne(), item =>
             {
-                cask.heldObject = null;
-                cask.minutesUntilReady = 0;
-                cask.readyForHarvest = false;
-                cask.agingRate = 0;
-                cask.daysToMature = 0;
+                cask.heldObject.Value = null;
+                cask.MinutesUntilReady = 0;
+                cask.readyForHarvest.Value = false;
+                cask.agingRate.Value = 0;
+                cask.daysToMature.Value = 0;
             });
         }
 
@@ -62,25 +64,25 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             Cask cask = this.Machine;
 
-            if (input.TryGetIngredient(match => (match.Sample as SObject)?.quality < 4 && this.AgingRates.ContainsKey(match.Sample.parentSheetIndex), 1, out IConsumable consumable))
+            if (input.TryGetIngredient(match => (match.Sample as SObject)?.Quality < 4 && this.AgingRates.ContainsKey(match.Sample.ParentSheetIndex), 1, out IConsumable consumable))
             {
                 SObject ingredient = (SObject)consumable.Take();
 
-                cask.heldObject = ingredient;
-                cask.agingRate = this.AgingRates[ingredient.parentSheetIndex];
-                cask.daysToMature = 56;
-                cask.minutesUntilReady = 999999;
-                switch (ingredient.quality)
+                cask.heldObject.Value = ingredient;
+                cask.agingRate.Value = this.AgingRates[ingredient.ParentSheetIndex];
+                cask.daysToMature.Value = 56;
+                cask.MinutesUntilReady = 999999;
+                switch (ingredient.Quality)
                 {
                     case SObject.medQuality:
-                        cask.daysToMature = 42;
+                        cask.daysToMature.Value = 42;
                         break;
                     case SObject.highQuality:
-                        cask.daysToMature = 28;
+                        cask.daysToMature.Value = 28;
                         break;
                     case SObject.bestQuality:
-                        cask.daysToMature = 0;
-                        cask.minutesUntilReady = 1;
+                        cask.daysToMature.Value = 0;
+                        cask.MinutesUntilReady = 1;
                         break;
                 }
 

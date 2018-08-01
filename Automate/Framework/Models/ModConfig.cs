@@ -19,6 +19,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /// <summary>The control bindings.</summary>
         public ModConfigControls Controls { get; set; } = new ModConfigControls();
 
+        /// <summary>The in-game objects through which machines can connect.</summary>
+        public ModConfigObject[] Connectors { get; set; } = new ModConfigObject[0];
+
 
         /*********
         ** Nested models

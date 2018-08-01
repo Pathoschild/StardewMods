@@ -10,6 +10,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
     internal interface IAttachment
     {
         /*********
+        ** Accessors
+        *********/
+        /// <summary>The minimum number of ticks between each update.</summary>
+        int RateLimit { get; }
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Get whether the tool is currently enabled.</summary>

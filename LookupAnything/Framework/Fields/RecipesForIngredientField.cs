@@ -1,7 +1,9 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI;
@@ -30,8 +32,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             /// <summary>The number of the item required for the recipe.</summary>
             public int NumberRequired;
 
-            /// <summary>The resulting item.</summary>
-            public Item Item;
+            /// <summary>The sprite to display.</summary>
+            public SpriteInfo Sprite;
         }
 
         /// <summary>The recipe data to list (type => recipe => {player knows recipe, number required for recipe}).</summary>
@@ -45,30 +47,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="ingredient">The ingredient item.</param>
         /// <param name="recipes">The recipe to list.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public RecipesForIngredientField(string label, Item ingredient, RecipeModel[] recipes, ITranslationHelper translations)
-            : base(label, hasValue: true)
+        public RecipesForIngredientField(GameHelper gameHelper, string label, Item ingredient, RecipeModel[] recipes, ITranslationHelper translations)
+            : base(gameHelper, label, hasValue: true)
         {
             this.Translations = translations;
-            this.Recipes =
-                (
-                    from recipe in recipes
-                    let output = recipe.CreateItem(ingredient)
-                    let name = output.DisplayName
-                    orderby recipe.DisplayType, name
-                    select new Entry
-                    {
-                        Name = name,
-                        Type = recipe.DisplayType,
-                        IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
-                        NumberRequired = recipe.Ingredients.ContainsKey(ingredient.parentSheetIndex) ? recipe.Ingredients[ingredient.parentSheetIndex] : recipe.Ingredients[ingredient.category],
-                        Item = output
-                    }
-                )
-                .ToArray();
+            this.Recipes = this.GetRecipeEntries(this.GameHelper, ingredient, recipes).OrderBy(p => p.Type).ThenBy(p => p.Name).ToArray();
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
@@ -99,7 +87,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
                 // draw icon
                 Color iconColor = entry.IsKnown ? Color.White : Color.White * .5f;
-                spriteBatch.DrawIcon(entry.Item, position.X + leftIndent, position.Y + height, iconSize, iconColor);
+                spriteBatch.DrawSpriteWithin(entry.Sprite, position.X + leftIndent, position.Y + height, iconSize, iconColor);
 
                 // draw text
                 Color color = entry.IsKnown ? Color.Black : Color.Gray;
@@ -109,6 +97,31 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             }
 
             return new Vector2(wrapWidth, height);
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get the recipe entries.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+        /// <param name="ingredient">The ingredient item.</param>
+        /// <param name="recipes">The recipe to list.</param>
+        private IEnumerable<Entry> GetRecipeEntries(GameHelper gameHelper, Item ingredient, IEnumerable<RecipeModel> recipes)
+        {
+            foreach (RecipeModel recipe in recipes)
+            {
+                Item output = recipe.CreateItem(ingredient);
+                SpriteInfo customSprite = gameHelper.GetSprite(output);
+                yield return new Entry
+                {
+                    Name = output.DisplayName,
+                    Type = recipe.DisplayType,
+                    IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
+                    NumberRequired = recipe.Ingredients.ContainsKey(ingredient.ParentSheetIndex) ? recipe.Ingredients[ingredient.ParentSheetIndex] : recipe.Ingredients[ingredient.Category],
+                    Sprite = customSprite
+                };
+            }
         }
     }
 }

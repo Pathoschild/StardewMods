@@ -34,11 +34,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public override ITrackedStack GetOutput()
         {
             SObject machine = this.Machine;
-            return new TrackedItem(machine.heldObject, item =>
+            return new TrackedItem(machine.heldObject.Value, item =>
             {
-                machine.heldObject = null;
-                machine.readyForHarvest = false;
-                machine.showNextIndex = false;
+                machine.heldObject.Value = null;
+                machine.readyForHarvest.Value = false;
+                machine.showNextIndex.Value = false;
             });
         }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,16 +13,8 @@ namespace Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux
         /*********
         ** Public methods
         *********/
-        /// <summary>Get whether a given item is a custom object or machine from Custom Farming Redux.</summary>
-        /// <param name="item">The item instance.</param>
-        bool isCustom(Item item);
-
-        /// <summary>Get the spritesheet texture for a custom object or machine (if applicable).</summary>
-        /// <param name="item">The item instance.</param>
-        Texture2D getSpritesheet(Item item);
-
-        /// <summary>Get the spritesheet source area for a custom object or machine (if applicable).</summary>
-        /// <param name="item">The item instance.</param>
-        Rectangle? getSpriteSourceArea(Item item);
+        /// <summary>Get metadata for a custom machine and draw metadata for an object.</summary>
+        /// <param name="dummy">The item that would be replaced by the custom item.</param>
+        Tuple<Item, Texture2D, Rectangle, Color> getRealItemAndTexture(StardewValley.Object dummy);
     }
 }

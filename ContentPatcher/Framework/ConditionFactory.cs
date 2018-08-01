@@ -22,7 +22,7 @@ namespace ContentPatcher.Framework
         /// <summary>The number of days in a week.</summary>
         private const int DaysPerWeek = 7;
 
-        /// <summary>The valid condition values.</summary>
+        /// <summary>The valid condition values for tokenisable conditions.</summary>
         private readonly IDictionary<ConditionKey, InvariantHashSet> ValidValues = new Dictionary<ConditionKey, InvariantHashSet>
         {
             [ConditionKey.Day] = new InvariantHashSet(Enumerable.Range(ConditionFactory.MinDay, ConditionFactory.MaxDay).Select(p => p.ToString())),
@@ -31,6 +31,16 @@ namespace ContentPatcher.Framework
             [ConditionKey.Season] = new InvariantHashSet(new[] { "Spring", "Summer", "Fall", "Winter" }),
             [ConditionKey.Weather] = new InvariantHashSet(Enum.GetNames(typeof(Weather)))
         };
+
+        /// <summary>Condition keys which are guaranteed to only have one value and can be used in conditions.</summary>
+        private readonly HashSet<ConditionKey> TokenisableConditions = new HashSet<ConditionKey>(new[]
+        {
+            ConditionKey.Day,
+            ConditionKey.DayOfWeek,
+            ConditionKey.Language,
+            ConditionKey.Season,
+            ConditionKey.Weather
+        });
 
 
         /*********
@@ -42,20 +52,26 @@ namespace ContentPatcher.Framework
             return new ConditionDictionary(this.ValidValues);
         }
 
-        /// <summary>Get all valid condition keys.</summary>
-        public IEnumerable<ConditionKey> GetValidConditions()
+        /// <summary>Construct a condition context.</summary>
+        /// <param name="locale">The current language.</param>
+        public ConditionContext BuildContext(LocalizedContentManager.LanguageCode locale)
         {
-            foreach (ConditionKey key in Enum.GetValues(typeof(ConditionKey)))
-                yield return key;
+            return new ConditionContext(locale, this.TokenisableConditions);
+        }
+
+        /// <summary>Get all valid condition keys which can be used in tokens.</summary>
+        public IEnumerable<ConditionKey> GetTokenisableConditions()
+        {
+            return this.TokenisableConditions;
         }
 
         /// <summary>Get the valid values for a condition key.</summary>
         /// <param name="key">The condition keys.</param>
         public IEnumerable<string> GetValidValues(ConditionKey key)
         {
-            if (!this.ValidValues.TryGetValue(key, out InvariantHashSet values))
-                throw new KeyNotFoundException($"No valid values defined for condition key {key}.");
-            return values;
+            return this.ValidValues.TryGetValue(key, out InvariantHashSet values)
+                ? values
+                : null;
         }
 
         /// <summary>Get all possible values of a tokenable string.</summary>
@@ -81,7 +97,7 @@ namespace ContentPatcher.Framework
         public IEnumerable<IDictionary<ConditionKey, string>> GetApplicablePermutationsForTheseConditions(ISet<ConditionKey> keys, ConditionDictionary conditions)
         {
             // get possible values for given conditions
-            IDictionary<ConditionKey, InvariantHashSet> possibleValues = this.GetPossibleValues(conditions);
+            IDictionary<ConditionKey, InvariantHashSet> possibleValues = this.GetPossibleTokenisableValues(conditions);
 
             // restrict permutations to relevant keys
             foreach (ConditionKey key in possibleValues.Keys.ToArray())
@@ -92,8 +108,8 @@ namespace ContentPatcher.Framework
 
             // get permutations
             var rawValues = new InvariantDictionary<InvariantHashSet>(possibleValues.ToDictionary(p => p.Key.ToString(), p => p.Value));
-            foreach (var permutation in this.GetPermutations(rawValues))
-                yield return permutation.ToDictionary(p => (ConditionKey)Enum.Parse(typeof(ConditionKey), p.Key), p => p.Value);
+            foreach (InvariantDictionary<string> permutation in this.GetPermutations(rawValues))
+                yield return permutation.ToDictionary(p => ConditionKey.Parse(p.Key), p => p.Value);
         }
 
         /// <summary>Get all days possible for the given day of week.</summary>
@@ -114,11 +130,11 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get all possible values of the given conditions, taking into account the interactions between them (e.g. day one isn't possible without mondays).</summary>
         /// <param name="conditions">The conditions to check.</param>
-        public IDictionary<ConditionKey, InvariantHashSet> GetPossibleValues(ConditionDictionary conditions)
+        public IDictionary<ConditionKey, InvariantHashSet> GetPossibleTokenisableValues(ConditionDictionary conditions)
         {
             // get applicable values
             IDictionary<ConditionKey, InvariantHashSet> values = new Dictionary<ConditionKey, InvariantHashSet>();
-            foreach (ConditionKey key in this.GetValidConditions())
+            foreach (ConditionKey key in this.GetTokenisableConditions())
                 values[key] = new InvariantHashSet(conditions.GetImpliedValues(key));
 
             // filter days per days-of-week
@@ -128,7 +144,7 @@ namespace ContentPatcher.Framework
                 HashSet<string> possibleDays = new HashSet<string>();
                 foreach (string str in values[ConditionKey.DayOfWeek])
                 {
-                    DayOfWeek dayOfWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), str);
+                    DayOfWeek dayOfWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), str, ignoreCase: true);
                     foreach (int day in this.GetDaysFor(dayOfWeek))
                         possibleDays.Add(day.ToString());
                 }
@@ -160,12 +176,12 @@ namespace ContentPatcher.Framework
         /// <param name="right">The second set of conditions to compare.</param>
         public bool CanConditionsOverlap(ConditionDictionary left, ConditionDictionary right)
         {
-            IDictionary<ConditionKey, InvariantHashSet> leftValues = this.GetPossibleValues(left);
-            IDictionary<ConditionKey, InvariantHashSet> rightValues = this.GetPossibleValues(right);
+            IDictionary<ConditionKey, InvariantHashSet> leftValues = this.GetPossibleTokenisableValues(left);
+            IDictionary<ConditionKey, InvariantHashSet> rightValues = this.GetPossibleTokenisableValues(right);
 
-            foreach (ConditionKey key in this.GetValidConditions())
+            foreach (ConditionKey key in this.GetTokenisableConditions())
             {
-                if (!leftValues[key].Intersect(rightValues[key]).Any())
+                if (!leftValues[key].Intersect(rightValues[key], StringComparer.InvariantCultureIgnoreCase).Any())
                     return false;
             }
 

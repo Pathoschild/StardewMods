@@ -1,0 +1,45 @@
+{
+  // accessibility
+  "accessibility.name": "能否抵达",
+  "accessibility.clear": "可通过",
+  "accessibility.occupied": "被占用",
+  "accessibility.impassable": "不可通过",
+  "accessibility.warp": "传送点",
+
+  // coverage: bee houses
+  "bee-houses.name": "覆盖范围：蜂房",
+  "bee-houses.range": "鲜花范围",
+
+  // coverage: Junimo huts
+  "junimo-huts.name": "覆盖范围：祝尼魔小屋",
+  "junimo-huts.can-harvest": "可自动收获",
+  "junimo-huts.cannot-harvest": "无法自动收获",
+
+  // coverage: scarecrows
+  "scarecrows.name": "覆盖范围：稻草人",
+  "scarecrows.protected": "受保护",
+  "scarecrows.exposed": "未收保护",
+
+  // coverage: sprinklers
+  "sprinklers.name": "覆盖范围：洒水器",
+  "sprinklers.covered": "已覆盖",
+  "sprinklers.dry-crops": "作物干燥",
+
+  // crops: harvest
+  // TODO
+  "crop-harvest.name": "Crops: Ready to Harvest",
+  "crop-harvest.ready": "Ready",
+  "crop-harvest.not-ready": "Not Ready",
+  "crop-harvest.not-enough-time": "Not Enough Time",
+
+  // crops: watered
+  "crop-water.name": "作物：浇水",
+  "crop-water.watered": "已浇水",
+  "crop-water.dry": "未浇水",
+
+  // crops: fertilized
+  "crop-fertilizer.name": "作物：施肥",
+  "crop-fertilizer.fertilizer": "肥料",
+  "crop-fertilizer.retaining-soil": "保湿土壤",
+  "crop-fertilizer.speed-gro": "生长激素"
+}

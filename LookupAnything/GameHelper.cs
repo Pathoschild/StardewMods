@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.Tools;
@@ -19,37 +21,48 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.LookupAnything
 {
     /// <summary>Provides utility methods for interacting with the game code.</summary>
-    internal static class GameHelper
+    internal class GameHelper
     {
         /*********
         ** Properties
         *********/
         /// <summary>The cached object data.</summary>
-        private static Lazy<ObjectModel[]> Objects;
+        private Lazy<ObjectModel[]> Objects;
 
         /// <summary>The cached villagers' gift tastes.</summary>
-        private static Lazy<GiftTasteModel[]> GiftTastes;
+        private Lazy<GiftTasteModel[]> GiftTastes;
 
         /// <summary>The cached recipes.</summary>
-        private static Lazy<RecipeModel[]> Recipes;
+        private Lazy<RecipeModel[]> Recipes;
+
+        /// <summary>The Custom Farming Redux integration.</summary>
+        private readonly CustomFarmingReduxIntegration CustomFarmingRedux;
+
+        /// <summary>Parses the raw game data into usable models.</summary>
+        private readonly DataParser DataParser;
 
 
         /*********
         ** Public methods
         *********/
-        /****
-        ** State
-        ****/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="customFarmingRedux">The Custom Farming Redux integration.</param>
+        public GameHelper(CustomFarmingReduxIntegration customFarmingRedux)
+        {
+            this.DataParser = new DataParser(this);
+            this.CustomFarmingRedux = customFarmingRedux;
+        }
+
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="monitor">The monitor with which to log errors.</param>
-        public static void ResetCache(Metadata metadata, IReflectionHelper reflectionHelper, ITranslationHelper translations, IMonitor monitor)
+        public void ResetCache(Metadata metadata, IReflectionHelper reflectionHelper, ITranslationHelper translations, IMonitor monitor)
         {
-            GameHelper.Objects = new Lazy<ObjectModel[]>(() => DataParser.GetObjects(monitor).ToArray());
-            GameHelper.GiftTastes = new Lazy<GiftTasteModel[]>(() => DataParser.GetGiftTastes(GameHelper.Objects.Value).ToArray());
-            GameHelper.Recipes = new Lazy<RecipeModel[]>(() => DataParser.GetRecipes(metadata, reflectionHelper, translations).ToArray());
+            this.Objects = new Lazy<ObjectModel[]>(() => this.DataParser.GetObjects(monitor).ToArray());
+            this.GiftTastes = new Lazy<GiftTasteModel[]>(() => this.DataParser.GetGiftTastes(this.Objects.Value).ToArray());
+            this.Recipes = new Lazy<RecipeModel[]>(() => this.DataParser.GetRecipes(metadata, reflectionHelper, translations).ToArray());
         }
 
         /****
@@ -57,7 +70,7 @@ namespace Pathoschild.Stardew.LookupAnything
         ****/
         /// <summary>Get the number of times the player has shipped a given item.</summary>
         /// <param name="itemID">The item's parent sprite index.</param>
-        public static int GetShipped(int itemID)
+        public int GetShipped(int itemID)
         {
             return Game1.player.basicShipped.ContainsKey(itemID)
                 ? Game1.player.basicShipped[itemID]
@@ -66,10 +79,10 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get all shippable items.</summary>
         /// <remarks>Derived from <see cref="Utility.hasFarmerShippedAllItems"/>.</remarks>
-        public static IEnumerable<KeyValuePair<int, bool>> GetFullShipmentAchievementItems()
+        public IEnumerable<KeyValuePair<int, bool>> GetFullShipmentAchievementItems()
         {
             return (
-                from obj in GameHelper.Objects.Value
+                from obj in this.Objects.Value
                 where obj.Type != "Arch" && obj.Type != "Fish" && obj.Type != "Mineral" && obj.Type != "Cooking" && SObject.isPotentialBasicShippedCategory(obj.ParentSpriteIndex, obj.Category.ToString())
                 select new KeyValuePair<int, bool>(obj.ParentSpriteIndex, Game1.player.basicShipped.ContainsKey(obj.ParentSpriteIndex))
             );
@@ -77,7 +90,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get all items owned by the player.</summary>
         /// <remarks>Derived from <see cref="Utility.doesItemWithThisIndexExistAnywhere"/>.</remarks>
-        public static IEnumerable<Item> GetAllOwnedItems()
+        public IEnumerable<Item> GetAllOwnedItems()
         {
             List<Item> items = new List<Item>();
 
@@ -90,29 +103,43 @@ namespace Pathoschild.Stardew.LookupAnything
                 // map objects
                 foreach (SObject item in location.objects.Values)
                 {
+                    // chest
                     if (item is Chest chest)
                     {
-                        if (chest.playerChest)
+                        if (chest.playerChest.Value)
                         {
                             items.Add(chest);
                             items.AddRange(chest.items);
                         }
                     }
+
+                    // auto-grabber
+                    else if (item.ParentSheetIndex == 165 && item.heldObject.Value is Chest grabberChest)
+                    {
+                        items.Add(item);
+                        items.AddRange(grabberChest.items);
+                    }
+
+                    // cask
                     else if (item is Cask)
                     {
                         items.Add(item);
-                        items.Add(item.heldObject); // cask contents can be retrieved anytime
+                        items.Add(item.heldObject.Value); // cask contents can be retrieved anytime
                     }
-                    else if (item.bigCraftable)
+
+                    // craftable
+                    else if (item.bigCraftable.Value)
                     {
                         items.Add(item);
-                        if (item.minutesUntilReady == 0)
-                            items.Add(item.heldObject);
+                        if (item.MinutesUntilReady == 0)
+                            items.Add(item.heldObject.Value);
                     }
+
+                    // anything else
                     else if (!item.IsSpawnedObject)
                     {
                         items.Add(item);
-                        items.Add(item.heldObject);
+                        items.Add(item.heldObject.Value);
                     }
                 }
 
@@ -122,7 +149,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     foreach (Furniture furniture in decorableLocation.furniture)
                     {
                         items.Add(furniture);
-                        items.Add(furniture.heldObject);
+                        items.Add(furniture.heldObject.Value);
                     }
                 }
 
@@ -132,35 +159,35 @@ namespace Pathoschild.Stardew.LookupAnything
                     foreach (var building in farm.buildings)
                     {
                         if (building is Mill mill)
-                            items.AddRange(mill.output.items);
+                            items.AddRange(mill.output.Value.items);
                         else if (building is JunimoHut hut)
-                            items.AddRange(hut.output.items);
+                            items.AddRange(hut.output.Value.items);
                     }
                 }
 
                 // farmhouse fridge
                 if (location is FarmHouse house)
-                    items.AddRange(house.fridge.items);
+                    items.AddRange(house.fridge.Value.items);
             }
 
             return items.Where(p => p != null);
         }
 
         /// <summary>Get all NPCs currently in the world.</summary>
-        public static IEnumerable<NPC> GetAllCharacters()
+        public IEnumerable<NPC> GetAllCharacters()
         {
-            return Utility
-                .getAllCharacters()
-                .Distinct(); // fix rare issue where the game duplicates an NPC (seems to happen when the player's child is born)
+            List<NPC> characters = new List<NPC>();
+            Utility.getAllCharacters(characters);
+            return characters.Distinct(); // fix rare issue where the game duplicates an NPC (seems to happen when the player's child is born)
         }
 
         /// <summary>Count how many of an item the player owns.</summary>
         /// <param name="item">The item to count.</param>
-        public static int CountOwnedItems(Item item)
+        public int CountOwnedItems(Item item)
         {
             return (
-                from worldItem in GameHelper.GetAllOwnedItems()
-                where GameHelper.AreEquivalent(worldItem, item)
+                from worldItem in this.GetAllOwnedItems()
+                where this.AreEquivalent(worldItem, item)
                 let canStack = worldItem.canStackWith(worldItem)
                 select canStack ? Math.Max(1, worldItem.Stack) : 1
             ).Sum();
@@ -169,49 +196,49 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get whether two items are the same type (ignoring flavour text like 'blueberry wine' vs 'cranberry wine').</summary>
         /// <param name="a">The first item to compare.</param>
         /// <param name="b">The second item to compare.</param>
-        private static bool AreEquivalent(Item a, Item b)
+        private bool AreEquivalent(Item a, Item b)
         {
             return
                 // same generic item type
                 a.GetType() == b.GetType()
-                && a.category == b.category
-                && a.parentSheetIndex == b.parentSheetIndex
+                && a.Category == b.Category
+                && a.ParentSheetIndex == b.ParentSheetIndex
 
                 // same discriminators
                 && a.GetSpriteType() == b.GetSpriteType()
                 && (a as Boots)?.indexInTileSheet == (b as Boots)?.indexInTileSheet
-                && (a as BreakableContainer)?.type == (b as BreakableContainer)?.type
+                && (a as BreakableContainer)?.Type == (b as BreakableContainer)?.Type
                 && (a as Fence)?.isGate == (b as Fence)?.isGate
                 && (a as Fence)?.whichType == (b as Fence)?.whichType
                 && (a as Hat)?.which == (b as Hat)?.which
                 && (a as MeleeWeapon)?.type == (b as MeleeWeapon)?.type
                 && (a as Ring)?.indexInTileSheet == (b as Ring)?.indexInTileSheet
-                && (a as Tool)?.initialParentTileIndex == (b as Tool)?.initialParentTileIndex
+                && (a as Tool)?.InitialParentTileIndex == (b as Tool)?.InitialParentTileIndex
                 && (a as Tool)?.CurrentParentTileIndex == (b as Tool)?.CurrentParentTileIndex;
         }
 
         /// <summary>Get whether the specified NPC has social data like a birthday and gift tastes.</summary>
         /// <param name="npc">The NPC to check.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static bool IsSocialVillager(NPC npc, Metadata metadata)
+        public bool IsSocialVillager(NPC npc, Metadata metadata)
         {
-            return npc.isVillager() && !metadata.Constants.AsocialVillagers.Contains(npc.name);
+            return npc.isVillager() && !metadata.Constants.AsocialVillagers.Contains(npc.Name);
         }
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
         /// <param name="item">The item to check.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static IEnumerable<KeyValuePair<NPC, GiftTaste>> GetGiftTastes(Item item, Metadata metadata)
+        public IEnumerable<KeyValuePair<NPC, GiftTaste>> GetGiftTastes(Item item, Metadata metadata)
         {
             if (!item.canBeGivenAsGift())
                 yield break;
 
-            foreach (NPC npc in GameHelper.GetAllCharacters())
+            foreach (NPC npc in this.GetAllCharacters())
             {
-                if (!GameHelper.IsSocialVillager(npc, metadata))
+                if (!this.IsSocialVillager(npc, metadata))
                     continue;
 
-                GiftTaste? taste = GameHelper.GetGiftTaste(npc, item);
+                GiftTaste? taste = this.GetGiftTaste(npc, item);
                 if (taste.HasValue)
                     yield return new KeyValuePair<NPC, GiftTaste>(npc, taste.Value);
             }
@@ -220,15 +247,15 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get the items a specified NPC can receive.</summary>
         /// <param name="npc">The NPC to check.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static IDictionary<SObject, GiftTaste> GetGiftTastes(NPC npc, Metadata metadata)
+        public IDictionary<SObject, GiftTaste> GetGiftTastes(NPC npc, Metadata metadata)
         {
-            if (!GameHelper.IsSocialVillager(npc, metadata))
+            if (!this.IsSocialVillager(npc, metadata))
                 return new Dictionary<SObject, GiftTaste>();
 
             // get giftable items
             HashSet<int> giftableItemIDs = new HashSet<int>(
-                from int refID in GameHelper.GiftTastes.Value.Select(p => p.RefID)
-                from ObjectModel obj in GameHelper.Objects.Value
+                from int refID in this.GiftTastes.Value.Select(p => p.RefID)
+                from ObjectModel obj in this.Objects.Value
                 where obj.ParentSpriteIndex == refID || obj.Category == refID
                 select obj.ParentSpriteIndex
             );
@@ -237,29 +264,68 @@ namespace Pathoschild.Stardew.LookupAnything
             return
                 (
                     from int itemID in giftableItemIDs
-                    let item = GameHelper.GetObjectBySpriteIndex(itemID)
-                    let taste = GameHelper.GetGiftTaste(npc, item)
+                    let item = this.GetObjectBySpriteIndex(itemID)
+                    let taste = this.GetGiftTaste(npc, item)
                     where taste.HasValue
                     select new { Item = item, Taste = taste.Value }
                 )
                 .ToDictionary(p => p.Item, p => p.Taste);
         }
 
-        /// <summary>Get the recipes for which an item is needed.</summary>
-        public static IEnumerable<RecipeModel> GetRecipes()
+        /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
+        /// <param name="player">The player.</param>
+        /// <param name="npc">The NPC.</param>
+        /// <param name="friendship">The current friendship data.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public FriendshipModel GetFriendshipForVillager(Farmer player, NPC npc, Friendship friendship, Metadata metadata)
         {
-            return GameHelper.Recipes.Value;
+            return this.DataParser.GetFriendshipForVillager(player, npc, friendship, metadata);
+        }
+
+        /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
+        /// <param name="player">The player.</param>
+        /// <param name="pet">The pet.</param>
+        public FriendshipModel GetFriendshipForPet(Farmer player, Pet pet)
+        {
+            return this.DataParser.GetFriendshipForPet(player, pet);
+        }
+
+        /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
+        /// <param name="player">The player.</param>
+        /// <param name="animal">The farm animal.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public FriendshipModel GetFriendshipForAnimal(Farmer player, FarmAnimal animal, Metadata metadata)
+        {
+            return this.DataParser.GetFriendshipForAnimal(player, animal, metadata);
+        }
+
+        /// <summary>Parse monster data.</summary>
+        public IEnumerable<MonsterData> GetMonsterData()
+        {
+            return this.DataParser.GetMonsters();
+        }
+
+        /// <summary>Read parsed data about the Community Center bundles.</summary>
+        public IEnumerable<BundleModel> GetBundleData()
+        {
+            return this.DataParser.GetBundles();
+        }
+
+        /// <summary>Get the recipes for which an item is needed.</summary>
+        public IEnumerable<RecipeModel> GetRecipes()
+        {
+            return this.Recipes.Value;
         }
 
         /// <summary>Get the recipes for which an item is needed.</summary>
         /// <param name="item">The item.</param>
-        public static IEnumerable<RecipeModel> GetRecipesForIngredient(Item item)
+        public IEnumerable<RecipeModel> GetRecipesForIngredient(Item item)
         {
             return (
-                from recipe in GameHelper.GetRecipes()
+                from recipe in this.GetRecipes()
                 where
-                    (recipe.Ingredients.ContainsKey(item.parentSheetIndex) || recipe.Ingredients.ContainsKey(item.category))
-                    && recipe.ExceptIngredients?.Contains(item.parentSheetIndex) != true
+                    (recipe.Ingredients.ContainsKey(item.ParentSheetIndex) || recipe.Ingredients.ContainsKey(item.Category))
+                    && recipe.ExceptIngredients?.Contains(item.ParentSheetIndex) != true
                 select recipe
             );
         }
@@ -267,56 +333,14 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get an object by its parent sprite index.</summary>
         /// <param name="index">The parent sprite index.</param>
         /// <param name="stack">The number of items in the stack.</param>
-        public static SObject GetObjectBySpriteIndex(int index, int stack = 1)
+        public SObject GetObjectBySpriteIndex(int index, int stack = 1)
         {
             return new SObject(index, stack);
         }
 
-        /// <summary>Get the sprite sheet to which the item's <see cref="Item.parentSheetIndex"/> refers.</summary>
-        /// <param name="item">The item to check.</param>
-        public static ItemSpriteType GetSpriteType(this Item item)
-        {
-            if (item is SObject obj)
-            {
-                if (obj is Furniture)
-                    return ItemSpriteType.Furniture;
-                if (obj is Wallpaper)
-                    return ItemSpriteType.Wallpaper;
-                return obj.bigCraftable
-                    ? ItemSpriteType.BigCraftable
-                    : ItemSpriteType.Object;
-            }
-            if (item is Boots)
-                return ItemSpriteType.Boots;
-            if (item is Hat)
-                return ItemSpriteType.Hat;
-            if (item is Tool)
-                return ItemSpriteType.Tool;
-
-            return ItemSpriteType.Unknown;
-        }
-
-        /// <summary>Get all objects matching the reference ID.</summary>
-        /// <param name="refID">The reference ID. This can be a category (negative value) or parent sprite index (positive value).</param>
-        public static IEnumerable<SObject> GetObjectsByReferenceID(int refID)
-        {
-            // category
-            if (refID < 0)
-            {
-                return (
-                    from pair in Game1.objectInformation
-                    where Regex.IsMatch(pair.Value, $"\b{refID}\b")
-                    select GameHelper.GetObjectBySpriteIndex(pair.Key)
-                );
-            }
-
-            // parent sprite index
-            return new[] { GameHelper.GetObjectBySpriteIndex(refID) };
-        }
-
         /// <summary>Get whether an item can have a quality (which increases its sale price).</summary>
         /// <param name="item">The item.</param>
-        public static bool CanHaveQuality(Item item)
+        public bool CanHaveQuality(Item item)
         {
             // check category
             if (new[] { "Artifact", "Trash", "Crafting", "Seed", "Decor", "Resource", "Fertilizer", "Bait", "Fishing Tackle" }.Contains(item.getCategoryName()))
@@ -333,30 +357,30 @@ namespace Pathoschild.Stardew.LookupAnything
         ** Coordinates
         ****/
         /// <summary>Get the viewport coordinates from the current cursor position.</summary>
-        public static Vector2 GetScreenCoordinatesFromCursor()
+        public Vector2 GetScreenCoordinatesFromCursor()
         {
             return new Vector2(Game1.getOldMouseX(), Game1.getOldMouseY());
         }
 
         /// <summary>Get the viewport coordinates represented by a tile position.</summary>
         /// <param name="coordinates">The absolute coordinates.</param>
-        public static Vector2 GetScreenCoordinatesFromAbsolute(Vector2 coordinates)
+        public Vector2 GetScreenCoordinatesFromAbsolute(Vector2 coordinates)
         {
             return coordinates - new Vector2(Game1.viewport.X, Game1.viewport.Y);
         }
 
         /// <summary>Get the viewport coordinates represented by a tile position.</summary>
         /// <param name="tile">The tile position.</param>
-        public static Rectangle GetScreenCoordinatesFromTile(Vector2 tile)
+        public Rectangle GetScreenCoordinatesFromTile(Vector2 tile)
         {
-            Vector2 position = GameHelper.GetScreenCoordinatesFromAbsolute(tile * new Vector2(Game1.tileSize));
+            Vector2 position = this.GetScreenCoordinatesFromAbsolute(tile * new Vector2(Game1.tileSize));
             return new Rectangle((int)position.X, (int)position.Y, Game1.tileSize, Game1.tileSize);
         }
 
         /// <summary>Get whether a sprite on a given tile could occlude a specified tile position.</summary>
         /// <param name="spriteTile">The tile of the possible sprite.</param>
         /// <param name="occludeTile">The tile to check for possible occlusion.</param>
-        public static bool CouldSpriteOccludeTile(Vector2 spriteTile, Vector2 occludeTile)
+        public bool CouldSpriteOccludeTile(Vector2 spriteTile, Vector2 occludeTile)
         {
             Vector2 spriteSize = Constant.MaxTargetSpriteSize;
             return
@@ -370,7 +394,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="worldRectangle">The sprite rectangle in the world.</param>
         /// <param name="spriteRectangle">The sprite rectangle in the sprite sheet.</param>
         /// <param name="spriteEffects">The transformation to apply on the sprite.</param>
-        public static Vector2 GetSpriteSheetCoordinates(Vector2 worldPosition, Rectangle worldRectangle, Rectangle spriteRectangle, SpriteEffects spriteEffects = SpriteEffects.None)
+        public Vector2 GetSpriteSheetCoordinates(Vector2 worldPosition, Rectangle worldRectangle, Rectangle spriteRectangle, SpriteEffects spriteEffects = SpriteEffects.None)
         {
             // get position within sprite rectangle
             float x = (worldPosition.X - worldRectangle.X) / Game1.pixelZoom;
@@ -394,7 +418,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <typeparam name="TPixel">The pixel value type.</typeparam>
         /// <param name="spriteSheet">The sprite sheet.</param>
         /// <param name="position">The position of the pixel within the sprite sheet.</param>
-        public static TPixel GetSpriteSheetPixel<TPixel>(Texture2D spriteSheet, Vector2 position) where TPixel : struct
+        public TPixel GetSpriteSheetPixel<TPixel>(Texture2D spriteSheet, Vector2 position) where TPixel : struct
         {
             // get pixel index
             int x = (int)position.X;
@@ -409,22 +433,36 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get the sprite for an item.</summary>
         /// <param name="item">The item.</param>
+        /// <param name="onlyCustom">Only return the sprite info if it's custom.</param>
         /// <returns>Returns a tuple containing the sprite sheet and the sprite's position and dimensions within the sheet.</returns>
-        public static Tuple<Texture2D, Rectangle> GetSprite(Item item)
+        public SpriteInfo GetSprite(Item item, bool onlyCustom = false)
         {
-            // standard object
-            if (item is SObject obj)
+            SObject obj = item as SObject;
+
+            // Custom Farming Redux
+            if (obj != null && this.CustomFarmingRedux.IsLoaded)
             {
-                return obj.bigCraftable
-                    ? Tuple.Create(Game1.bigCraftableSpriteSheet, SObject.getSourceRectForBigCraftable(obj.ParentSheetIndex))
-                    : Tuple.Create(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
+                SpriteInfo data = this.CustomFarmingRedux.GetSprite(obj);
+                if (data != null)
+                    return data;
+            }
+
+            if (onlyCustom)
+                return null;
+
+            // standard object
+            if (obj != null)
+            {
+                return obj.bigCraftable.Value
+                    ? new SpriteInfo(Game1.bigCraftableSpriteSheet, SObject.getSourceRectForBigCraftable(obj.ParentSheetIndex))
+                    : new SpriteInfo(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
             }
 
             // boots or ring
             if (item is Boots || item is Ring)
             {
                 int indexInTileSheet = (item as Boots)?.indexInTileSheet ?? ((Ring)item).indexInTileSheet;
-                return Tuple.Create(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, indexInTileSheet, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
+                return new SpriteInfo(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, indexInTileSheet, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
             }
 
             // unknown item
@@ -440,21 +478,21 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="label">The text to display.</param>
         /// <param name="position">The position at which to draw the text.</param>
         /// <param name="wrapWidth">The maximum width to display.</param>
-        public static Vector2 DrawHoverBox(SpriteBatch spriteBatch, string label, Vector2 position, float wrapWidth)
+        public Vector2 DrawHoverBox(SpriteBatch spriteBatch, string label, Vector2 position, float wrapWidth)
         {
             return CommonHelper.DrawHoverBox(spriteBatch, label, position, wrapWidth);
         }
 
         /// <summary>Show an informational message to the player.</summary>
         /// <param name="message">The message to show.</param>
-        public static void ShowInfoMessage(string message)
+        public void ShowInfoMessage(string message)
         {
             CommonHelper.ShowInfoMessage(message);
         }
 
         /// <summary>Show an error message to the player.</summary>
         /// <param name="message">The message to show.</param>
-        public static void ShowErrorMessage(string message)
+        public void ShowErrorMessage(string message)
         {
             CommonHelper.ShowErrorMessage(message);
         }
@@ -467,7 +505,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="npc">The NPC whose gift taste to get.</param>
         /// <param name="item">The item to check.</param>
         /// <returns>Returns the NPC's gift taste if applicable, else <c>null</c>.</returns>
-        private static GiftTaste? GetGiftTaste(NPC npc, Item item)
+        private GiftTaste? GetGiftTaste(NPC npc, Item item)
         {
             try
             {

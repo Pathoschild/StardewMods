@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
@@ -25,7 +26,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         public ModConfigControls Controls { get; set; } = new ModConfigControls();
 
         /// <summary>The locations in which to disable remote chest lookups.</summary>
-        public string[] DisabledInLocations { get; set; } = new string[0];
+        public InvariantHashSet DisabledInLocations { get; set; } = new InvariantHashSet();
 
 
         /*********
@@ -61,6 +62,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             /// <summary>The control which sorts items in the chest.</summary>
             [JsonConverter(typeof(StringEnumArrayConverter))]
             public SButton[] SortItems { get; set; } = new SButton[0];
+
+            /// <summary>The control which, when held, enables scrolling the chest dropdown with the mouse scroll wheel.</summary>
+            [JsonConverter(typeof(StringEnumArrayConverter))]
+            public SButton[] HoldToMouseWheelScrollChests { get; set; } = { SButton.LeftControl };
+
+            /// <summary>The control which, when held, enables scrolling the category dropdown with the mouse scroll wheel.</summary>
+            [JsonConverter(typeof(StringEnumArrayConverter))]
+            public SButton[] HoldToMouseWheelScrollCategories { get; set; } = { SButton.LeftAlt };
         }
     }
 }

@@ -1,5 +1,6 @@
 {
   // default chest names
+  "default-name.auto-grabber": "Auto-grabber #{{number}}",
   "default-name.chest": "Chest #{{number}}",
   "default-name.fridge": "Fridge",
   "default-name.junimo-hut": "Junimo hut #{{number}}",
@@ -13,9 +14,17 @@
   "label.order": "Order",
   "label.hide-chest": "Hide this chest",
   "label.hide-chest-hidden": "Hide this chest (you'll need to find the chest to undo this!)",
+  "label.automate-prefer-output": "(Automate) Put items in this chest first",
+  "label.automate-ignore": "(Automate) Don't use this chest for automation",
 
   // button labels
   "button.edit-chest": "edit chest",
   "button.sort-inventory": "sort inventory",
-  "button.ok": "OK"
+  "button.ok": "OK",
+
+  // errors
+  "errors.disabled-from-here": "You can't access chests from here.",
+  "errors.no-chests": "You don't have any chests yet.",
+  "errors.no-chests-in-location": "You don't have any chests in this area.",
+  "errors.no-chests-in-range": "You don't have any chests in range."
 }

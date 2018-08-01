@@ -18,6 +18,12 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
+        /// <summary>Whether the game has launched.</summary>
+        private bool IsLaunched;
+
+        /// <summary>The current step in the mod logic.</summary>
+        private Stage CurrentStage = Stage.None;
+
 
         /*********
         ** Public methods
@@ -29,6 +35,7 @@ namespace Pathoschild.Stardew.SkipIntro
             this.Config = helper.ReadConfig<ModConfig>();
 
             MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
+            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
         }
 
 
@@ -44,7 +51,7 @@ namespace Pathoschild.Stardew.SkipIntro
         private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
             if (e.NewMenu is TitleMenu)
-                GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+                this.CurrentStage = Stage.SkipIntro;
         }
 
         /// <summary>Receives an update tick.</summary>
@@ -54,17 +61,20 @@ namespace Pathoschild.Stardew.SkipIntro
         {
             try
             {
-                // get open title screen
-                TitleMenu menu = Game1.activeClickableMenu as TitleMenu;
-                if (menu == null)
+                // start intro skip on game launch
+                if (!this.IsLaunched)
                 {
-                    GameEvents.UpdateTick -= this.GameEvents_UpdateTick;
-                    return;
+                    if (!(Game1.activeClickableMenu is TitleMenu))
+                        return;
+
+                    this.IsLaunched = true;
+                    this.CurrentStage = Stage.SkipIntro;
                 }
 
-                // skip intro
-                if (this.TrySkipIntro(menu))
-                    GameEvents.UpdateTick -= this.GameEvents_UpdateTick;
+                // apply skip logic
+                this.CurrentStage = Game1.activeClickableMenu is TitleMenu menu
+                    ? this.Skip(menu, this.CurrentStage)
+                    : Stage.None;
             }
             catch (Exception ex)
             {
@@ -78,33 +88,71 @@ namespace Pathoschild.Stardew.SkipIntro
         ****/
         /// <summary>Skip the intro if the game is ready.</summary>
         /// <param name="menu">The title menu whose intro to skip.</param>
-        /// <returns>Returns whether the intro was skipped successfully.</returns>
-        private bool TrySkipIntro(TitleMenu menu)
+        /// <param name="currentStage">The current step in the mod logic.</param>
+        /// <returns>Returns the next step in the skip logic.</returns>
+        private Stage Skip(TitleMenu menu, Stage currentStage)
         {
             // wait until the game is ready
             if (Game1.currentGameTime == null)
-                return false;
+                return currentStage;
 
-            // skip to title screen
-            menu.receiveKeyPress(Keys.Escape);
-            menu.update(Game1.currentGameTime);
+            // do nothing if a confirmation box is on-screen (e.g. multiplayer disconnect error)
+            if (TitleMenu.subMenu is ConfirmationDialog)
+                return Stage.None;
 
-            // skip button transition
-            if (!this.Config.SkipToLoadScreen)
+            // main skip logic
+            if (currentStage == Stage.SkipIntro)
             {
-                while (this.Helper.Reflection.GetField<int>(menu, "buttonsToShow").GetValue() < TitleMenu.numberOfButtons)
-                    menu.update(Game1.currentGameTime);
+                // skip to title screen
+                menu.receiveKeyPress(Keys.Escape);
+                menu.update(Game1.currentGameTime);
+
+                // skip to other screen
+                switch (this.Config.SkipTo)
+                {
+                    case Screen.Title:
+                        // skip button transition
+                        while (this.Helper.Reflection.GetField<int>(menu, "buttonsToShow").GetValue() < TitleMenu.numberOfButtons)
+                            menu.update(Game1.currentGameTime);
+                        return Stage.None;
+
+                    case Screen.Load:
+                        // skip to load screen
+                        menu.performButtonAction("Load");
+                        while (TitleMenu.subMenu == null)
+                            menu.update(Game1.currentGameTime);
+                        return Stage.None;
+
+                    case Screen.JoinCoop:
+                    case Screen.HostCoop:
+                        // skip to co-op screen
+                        menu.performButtonAction("Co-op");
+                        while (TitleMenu.subMenu == null)
+                            menu.update(Game1.currentGameTime);
+
+                        return this.Config.SkipTo == Screen.JoinCoop
+                            ? Stage.None
+                            : Stage.WaitingForConnection;
+                }
             }
 
-            // skip to load screen
-            if (this.Config.SkipToLoadScreen)
+            // skip to host tab after connection is established
+            if (currentStage == Stage.WaitingForConnection)
             {
-                menu.performButtonAction("Load");
-                while (TitleMenu.subMenu == null)
-                    menu.update(Game1.currentGameTime);
+                // not applicable
+                if (this.Config.SkipTo != Screen.HostCoop || !(TitleMenu.subMenu is CoopMenu submenu))
+                    return Stage.None;
+
+                // not connected yet
+                if (submenu.hostTab == null)
+                    return currentStage;
+
+                // select host tab
+                submenu.receiveLeftClick(submenu.hostTab.bounds.X, submenu.hostTab.bounds.Y, playSound: false);
             }
 
-            return true;
+            // ???
+            return Stage.None;
         }
     }
 }

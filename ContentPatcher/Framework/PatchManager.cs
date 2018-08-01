@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Patches;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Utilities;
@@ -17,6 +18,33 @@ namespace ContentPatcher.Framework
         /*********
         ** Properties
         *********/
+        /****
+        ** Constants
+        ****/
+        /// <summary>The condition types which require a <see cref="ConditionKey.ForID"/> value.</summary>
+        private readonly HashSet<ConditionType> TypesRequireID = new HashSet<ConditionType>
+        {
+            ConditionType.Hearts,
+            ConditionType.Relationship
+        };
+
+        /// <summary>The minimum format versions for newer condition types.</summary>
+        private readonly IDictionary<string, HashSet<ConditionType>> MinimumVersions = new Dictionary<string, HashSet<ConditionType>>
+        {
+            ["1.4"] = new HashSet<ConditionType>
+            {
+                ConditionType.DayEvent,
+                ConditionType.HasFlag,
+                ConditionType.HasSeenEvent,
+                ConditionType.Hearts,
+                ConditionType.Relationship,
+                ConditionType.Spouse
+            }
+        };
+
+        /****
+        ** State
+        ****/
         /// <summary>Handles constructing, permuting, and updating conditions.</summary>
         private readonly ConditionFactory ConditionFactory;
 
@@ -55,14 +83,14 @@ namespace ContentPatcher.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="conditionFactory">Handles constructing, permuting, and updating conditions.</param>
-        /// <param name="language">The current language.</param>
         /// <param name="verboseLog">Whether to enable verbose logging.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public PatchManager(IMonitor monitor, ConditionFactory conditionFactory, LocalizedContentManager.LanguageCode language, bool verboseLog, Func<string, string> normaliseAssetName)
+        /// <param name="language">The current language.</param>
+        public PatchManager(IMonitor monitor, ConditionFactory conditionFactory, bool verboseLog, Func<string, string> normaliseAssetName, LocalizedContentManager.LanguageCode language)
         {
             this.Monitor = monitor;
             this.ConditionFactory = conditionFactory;
-            this.ConditionContext = new ConditionContext(language);
+            this.ConditionContext = conditionFactory.BuildContext(language);
             this.Verbose = verboseLog;
             this.NormaliseAssetName = normaliseAssetName;
         }
@@ -135,17 +163,64 @@ namespace ContentPatcher.Framework
             }
         }
 
+        /// <summary>Set the initial context values that aren't expected to change.</summary>
+        /// <param name="installedMods">The installed mod IDs.</param>
+        public void SetInitialContext(string[] installedMods)
+        {
+            this.ConditionContext.Set(ConditionKey.HasMod, installedMods);
+        }
+
         /// <summary>Update the current context.</summary>
-        /// <param name="contentHelper">The content helper through which to invalidate assets.</param>
+        /// <param name="contentHelper">The content helper which manages game assets.</param>
+        public void UpdateContext(IContentHelper contentHelper)
+        {
+            if (Context.IsWorldReady)
+            {
+                this.UpdateContext(
+                    contentHelper: contentHelper,
+                    language: contentHelper.CurrentLocaleConstant,
+                    date: SDate.Now(),
+                    weather: this.GetCurrentWeather(),
+                    dayEvent: this.GetDayEvent(contentHelper),
+                    spouse: Game1.player?.spouse,
+                    seenEvents: Game1.player?.eventsSeen.OrderBy(p => p).ToArray(),
+                    mailFlags: this.GetMailFlags().OrderBy(p => p).ToArray(),
+                    friendships: Game1.player?.friendshipData.Pairs
+                );
+            }
+            else
+            {
+                this.UpdateContext(
+                    contentHelper: contentHelper,
+                    language: contentHelper.CurrentLocaleConstant,
+                    date: null,
+                    weather: null,
+                    dayEvent: null,
+                    spouse: null,
+                    seenEvents: null,
+                    mailFlags: null,
+                    friendships: null
+                );
+            }
+        }
+
+        /// <summary>Update the current context.</summary>
+        /// <param name="contentHelper">The content helper which manages game assets.</param>
         /// <param name="language">The current language.</param>
         /// <param name="date">The current in-game date (if applicable).</param>
         /// <param name="weather">The current in-game weather (if applicable).</param>
-        public void UpdateContext(IContentHelper contentHelper, LocalizedContentManager.LanguageCode language, SDate date, Weather? weather)
+        /// <param name="spouse">The current player's internal spouse name (if applicable).</param>
+        /// <param name="dayEvent">The day event (e.g. wedding or festival) occurring today (if applicable).</param>
+        /// <param name="seenEvents">The event IDs which the player has seen.</param>
+        /// <param name="mailFlags">The mail flags set for the player.</param>
+        /// <param name="friendships">The current player's friendship details.</param>
+        public void UpdateContext(IContentHelper contentHelper, LocalizedContentManager.LanguageCode language, SDate date, Weather? weather, string dayEvent, string spouse, int[] seenEvents, string[] mailFlags, IEnumerable<KeyValuePair<string, Friendship>> friendships)
         {
             this.VerboseLog("Propagating context...");
 
             // update context
-            this.ConditionContext.Update(language, date, weather);
+            this.ConditionContext.Set(language: language, date: date, weather: weather, dayEvent: dayEvent, spouse: spouse, seenEvents: seenEvents, mailFlags: mailFlags, friendships: friendships);
+            IDictionary<ConditionKey, string> tokenisableConditions = this.ConditionContext.GetSingleValueConditions();
 
             // update patches
             InvariantHashSet reloadAssetNames = new InvariantHashSet();
@@ -164,7 +239,7 @@ namespace ContentPatcher.Framework
                 bool wasApplied = patch.MatchesContext;
 
                 // update patch
-                bool changed = patch.UpdateContext(this.ConditionContext);
+                bool changed = patch.UpdateContext(this.ConditionContext, tokenisableConditions);
                 bool shouldApply = patch.MatchesContext;
 
                 // track patches to reload
@@ -220,7 +295,7 @@ namespace ContentPatcher.Framework
         public void Add(IPatch patch)
         {
             // set initial context
-            patch.UpdateContext(this.ConditionContext);
+            patch.UpdateContext(this.ConditionContext, this.ConditionContext.GetSingleValueConditions());
 
             // validate loader
             if (patch.Type == PatchType.Load)
@@ -331,9 +406,11 @@ namespace ContentPatcher.Framework
         ****/
         /// <summary>Normalise and parse the given condition values.</summary>
         /// <param name="raw">The raw condition values to normalise.</param>
+        /// <param name="formatVersion">The format version specified by the content pack.</param>
+        /// <param name="latestFormatVersion">The latest format version.</param>
         /// <param name="conditions">The normalised conditions.</param>
         /// <param name="error">An error message indicating why normalisation failed.</param>
-        public bool TryParseConditions(InvariantDictionary<string> raw, out ConditionDictionary conditions, out string error)
+        public bool TryParseConditions(InvariantDictionary<string> raw, ISemanticVersion formatVersion, ISemanticVersion latestFormatVersion, out ConditionDictionary conditions, out string error)
         {
             // no conditions
             if (raw == null || !raw.Any())
@@ -348,11 +425,30 @@ namespace ContentPatcher.Framework
             foreach (KeyValuePair<string, string> pair in raw)
             {
                 // parse condition key
-                if (!Enum.TryParse(pair.Key, true, out ConditionKey key))
+                if (!ConditionKey.TryParse(pair.Key, out ConditionKey key))
                 {
-                    error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", this.ConditionFactory.GetValidConditions())}";
+                    error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", Enum.GetValues(typeof(ConditionType)))}";
                     conditions = null;
                     return false;
+                }
+
+                // validate types which require an ID
+                if (this.TypesRequireID.Contains(key.Type) && string.IsNullOrWhiteSpace(key.ForID))
+                {
+                    error = $"{key.Type} conditions must specify a separate ID (see readme for usage)";
+                    conditions = null;
+                    return false;
+                }
+
+                // check compatibility
+                foreach (var versionPair in this.MinimumVersions)
+                {
+                    if (formatVersion.IsOlderThan(versionPair.Key) && versionPair.Value.Contains(key.Type))
+                    {
+                        error = $"{key} isn't available with format version {formatVersion} (change the {nameof(ContentConfig.Format)} field to {latestFormatVersion} to use newer features)";
+                        conditions = null;
+                        return false;
+                    }
                 }
 
                 // parse values
@@ -365,14 +461,18 @@ namespace ContentPatcher.Framework
                 }
 
                 // restrict to allowed values
-                InvariantHashSet validValues = new InvariantHashSet(this.ConditionFactory.GetValidValues(key));
+                string[] rawValidValues = this.ConditionFactory.GetValidValues(key)?.ToArray();
+                if (rawValidValues?.Any() == true)
                 {
-                    string[] invalidValues = values.Except(validValues, StringComparer.InvariantCultureIgnoreCase).ToArray();
-                    if (invalidValues.Any())
+                    InvariantHashSet validValues = new InvariantHashSet(rawValidValues);
                     {
-                        error = $"invalid {key} values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", validValues)}";
-                        conditions = null;
-                        return false;
+                        string[] invalidValues = values.Except(validValues, StringComparer.InvariantCultureIgnoreCase).ToArray();
+                        if (invalidValues.Any())
+                        {
+                            error = $"invalid {key} values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", validValues)}";
+                            conditions = null;
+                            return false;
+                        }
                     }
                 }
 
@@ -404,6 +504,50 @@ namespace ContentPatcher.Framework
         /*********
         ** Private methods
         *********/
+        /// <summary>Get the current weather from the game state.</summary>
+        private Weather GetCurrentWeather()
+        {
+            if (Utility.isFestivalDay(Game1.dayOfMonth, Game1.currentSeason) || Game1.weddingToday)
+                return Weather.Sun;
+
+            if (Game1.isSnowing)
+                return Weather.Snow;
+            if (Game1.isRaining)
+                return Game1.isLightning ? Weather.Storm : Weather.Rain;
+
+            return Weather.Sun;
+        }
+
+        /// <summary>Get the letter IDs and mail flags set for the player.</summary>
+        /// <remarks>See game logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
+        private IEnumerable<string> GetMailFlags()
+        {
+            Farmer player = Game1.player;
+            if (player == null)
+                return new string[0];
+
+            return player
+                .mailReceived
+                .Union(player.mailForTomorrow)
+                .Union(player.mailbox);
+        }
+
+        /// <summary>Get the name for today's day event (e.g. wedding or festival) from the game data.</summary>
+        /// <param name="contentHelper">The content helper from which to load festival data.</param>
+        private string GetDayEvent(IContentHelper contentHelper)
+        {
+            // marriage
+            if (Game1.weddingToday)
+                return "wedding";
+
+            // festival
+            IDictionary<string, string> festivalDates = contentHelper.Load<Dictionary<string, string>>("Data\\Festivals\\FestivalDates", ContentSource.GameContent);
+            if (festivalDates.TryGetValue($"{Game1.currentSeason}{Game1.dayOfMonth}", out string festivalName))
+                return festivalName;
+
+            return null;
+        }
+
         /// <summary>Get all possible normalised <see cref="IPatch.AssetName"/> values for a patch.</summary>
         /// <param name="patch">The patch to check.</param>
         private IEnumerable<string> GetPossibleAssetNames(IPatch patch)

@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
@@ -21,11 +22,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="obj">The underlying in-game object.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public TreeTarget(Tree obj, Vector2? tilePosition, IReflectionHelper reflectionHelper)
-            : base(TargetType.WildTree, obj, tilePosition)
+        public TreeTarget(GameHelper gameHelper, Tree obj, Vector2? tilePosition, IReflectionHelper reflectionHelper)
+            : base(gameHelper, TargetType.WildTree, obj, tilePosition)
         {
             this.Reflection = reflectionHelper;
         }
@@ -47,11 +49,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         {
             // get tree
             Tree tree = (Tree)this.Value;
-            WildTreeGrowthStage growth = (WildTreeGrowthStage)tree.growthStage;
+            WildTreeGrowthStage growth = (WildTreeGrowthStage)tree.growthStage.Value;
 
             // get sprite data
-            Texture2D spriteSheet = this.Reflection.GetField<Texture2D>(tree, "texture").GetValue();
-            SpriteEffects spriteEffects = tree.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            Texture2D spriteSheet = this.Reflection.GetField<Lazy<Texture2D>>(tree, "texture").GetValue().Value;
+            SpriteEffects spriteEffects = tree.flipped.Value ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             // check tree sprite
             if (this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, this.GetSourceRectangle(tree), spriteEffects))
@@ -77,13 +79,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         private Rectangle GetSourceRectangle(Tree tree)
         {
             // stump
-            if (tree.stump)
+            if (tree.stump.Value)
                 return Tree.stumpSourceRect;
 
             // growing tree
-            if (tree.growthStage < 5)
+            if (tree.growthStage.Value < 5)
             {
-                switch ((WildTreeGrowthStage)tree.growthStage)
+                switch ((WildTreeGrowthStage)tree.growthStage.Value)
                 {
                     case WildTreeGrowthStage.Seed:
                         return new Rectangle(32, 128, 16, 16);

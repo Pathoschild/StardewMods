@@ -34,6 +34,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>Whether the chest should be ignored.</summary>
         public bool IsIgnored { get; private set; }
 
+        /// <summary>Whether Automate should ignore this chest.</summary>
+        public bool ShouldAutomateIgnore { get; private set; }
+
+        /// <summary>Whether Automate should prefer this chest for output.</summary>
+        public bool ShouldAutomatePreferForOutput { get; private set; }
+
         /// <summary>The sort value (if any).</summary>
         public int? Order { get; private set; }
 
@@ -89,6 +95,18 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                     // order
                     if (int.TryParse(tag, out int order))
                         this.Order = order;
+
+                    // Automate options
+                    if (tag.ToLower() == "automate:ignore")
+                    {
+                        this.ShouldAutomateIgnore = true;
+                        continue;
+                    }
+                    if (tag.ToLower() == "automate:output")
+                    {
+                        this.ShouldAutomatePreferForOutput = true;
+                        continue;
+                    }
                 }
 
                 // read display name
@@ -115,13 +133,17 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="category">The category name (if any).</param>
         /// <param name="order">The sort value (if any).</param>
         /// <param name="ignored">Whether the chest should be ignored.</param>
-        public void Update(string name, string category, int? order, bool ignored)
+        /// <param name="shouldAutomateIgnore">Whether Automate should ignore this chest.</param>
+        /// <param name="shouldAutomatePreferForOutput">Whether Automate should prefer this chest for output.</param>
+        public void Update(string name, string category, int? order, bool ignored, bool shouldAutomateIgnore, bool shouldAutomatePreferForOutput)
         {
             // update high-level metadata
             this.Name = !string.IsNullOrWhiteSpace(name) ? name.Trim() : this.DefaultName;
             this.Category = category?.Trim() ?? "";
             this.Order = order;
             this.IsIgnored = ignored;
+            this.ShouldAutomateIgnore = shouldAutomateIgnore;
+            this.ShouldAutomatePreferForOutput = shouldAutomatePreferForOutput;
 
             // build internal name
             string internalName = !this.HasDefaultName() ? this.Name : this.Container.DefaultName;
@@ -131,6 +153,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 internalName += " |ignore|";
             if (!string.IsNullOrWhiteSpace(this.Category) && this.Category != this.Location.Name)
                 internalName += $" |cat:{this.Category}|";
+            if (this.ShouldAutomateIgnore)
+                internalName += " |automate:ignore|";
+            if (this.ShouldAutomatePreferForOutput)
+                internalName += " |automate:output|";
 
             // update container
             this.Container.Name = !string.IsNullOrWhiteSpace(internalName)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
 using Pathoschild.Stardew.Common.Utilities;
@@ -21,11 +22,38 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>Manages loaded patches.</summary>
         private readonly PatchManager PatchManager;
 
-        /// <summary>Handles constructing, permuting, and updating conditions.</summary>
-        private readonly ConditionFactory ConditionFactory;
-
         /// <summary>A callback which immediately updates the current condition context.</summary>
         private readonly Action UpdateContext;
+
+        /// <summary>The order in which condition types should be listed by <c>patch summary</c>.</summary>
+        private readonly ConditionType[] DisplayOrder = {
+            // general
+            ConditionType.Season,
+            ConditionType.DayOfWeek,
+            ConditionType.Day,
+            ConditionType.DayEvent,
+            ConditionType.Language,
+            ConditionType.Spouse,
+            ConditionType.Weather,
+
+            // NPCs
+            ConditionType.Hearts,
+            ConditionType.Relationship,
+
+            // lookups
+            ConditionType.HasFlag,
+            ConditionType.HasMod,
+            ConditionType.HasSeenEvent
+        };
+
+        /// <summary>A regex pattern matching asset names which incorrectly include the Content folder.</summary>
+        private readonly Regex AssetNameWithContentPattern = new Regex(@"^Content[/\\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>A regex pattern matching asset names which incorrectly include the .xnb extension.</summary>
+        private readonly Regex AssetNameWithXnbExtensionPattern = new Regex(@"\.xnb$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>A regex pattern matching asset names which incorrectly include the locale code.</summary>
+        private readonly Regex AssetNameWithLocalePattern = new Regex(@"^\.(?:de-DE|es-ES|ja-JP|pt-BR|ru-RU|zh-CN)(?:\.xnb)?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
 
         /*********
@@ -40,13 +68,11 @@ namespace ContentPatcher.Framework.Commands
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="patchManager">Manages loaded patches.</param>
-        /// <param name="conditionFactory">Handles constructing, permuting, and updating conditions.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="updateContext">A callback which immediately updates the current condition context.</param>
-        public CommandHandler(PatchManager patchManager, ConditionFactory conditionFactory, IMonitor monitor, Action updateContext)
+        public CommandHandler(PatchManager patchManager, IMonitor monitor, Action updateContext)
         {
             this.PatchManager = patchManager;
-            this.ConditionFactory = conditionFactory;
             this.Monitor = monitor;
             this.UpdateContext = updateContext;
         }
@@ -66,10 +92,10 @@ namespace ContentPatcher.Framework.Commands
                     return this.HandleHelp(subcommandArgs);
 
                 case "summary":
-                    return this.HandleSummary(subcommandArgs);
+                    return this.HandleSummary();
 
                 case "update":
-                    return this.HandleUpdate(subcommandArgs);
+                    return this.HandleUpdate();
 
                 default:
                     this.Monitor.Log($"The '{this.CommandName} {args[0]}' command isn't valid. Type '{this.CommandName} help' for a list of valid commands.");
@@ -124,9 +150,8 @@ namespace ContentPatcher.Framework.Commands
         }
 
         /// <summary>Handle the 'patch summary' command.</summary>
-        /// <param name="args">The subcommand arguments.</param>
         /// <returns>Returns whether the command was handled.</returns>
-        private bool HandleSummary(string[] args)
+        private bool HandleSummary()
         {
             ConditionContext context = this.PatchManager.ConditionContext;
             StringBuilder output = new StringBuilder();
@@ -136,8 +161,8 @@ namespace ContentPatcher.Framework.Commands
             output.AppendLine("========================");
             output.AppendLine("== Current conditions ==");
             output.AppendLine("========================");
-            foreach (ConditionKey key in this.ConditionFactory.GetValidConditions())
-                output.AppendLine($"   {key}: {context.GetValue(key)}");
+            foreach (var pair in context.GetValues().OrderBy(p => this.GetDisplayOrder(p.Key)).ThenBy(p => p.Key.ForID))
+                output.AppendLine($"   {pair.Key}: {string.Join(", ", pair.Value)}");
             output.AppendLine();
 
             // add patch summary
@@ -175,8 +200,12 @@ namespace ContentPatcher.Framework.Commands
                         output.Append($" | => {patch.ParsedAssetName.Value}");
 
                     // log reason not applied
+                    bool hasErrorReason = false;
                     if (!patch.IsLoaded)
+                    {
                         output.Append($" | not loaded: {patch.ReasonDisabled}");
+                        hasErrorReason = true;
+                    }
                     else if (!patch.MatchesContext && patch.ParsedConditions != null)
                     {
                         string[] failedConditions = (
@@ -190,9 +219,30 @@ namespace ContentPatcher.Framework.Commands
                             ? $" | failed conditions: {string.Join(", ", failedConditions)}"
                             : " | disabled (reason unknown)"
                         );
+                        hasErrorReason = true;
                     }
                     else if (!patch.IsLoaded)
+                    {
                         output.Append(" | disabled (reason unknown)");
+                        hasErrorReason = true;
+                    }
+
+                    // log common issues
+                    if (!hasErrorReason && patch.IsLoaded && !patch.IsApplied && patch.ParsedAssetName?.Value != null)
+                    {
+                        string assetName = patch.ParsedAssetName.Value;
+
+                        List<string> issues = new List<string>();
+                        if (this.AssetNameWithContentPattern.IsMatch(assetName))
+                            issues.Add("shouldn't include 'Content/' prefix");
+                        if (this.AssetNameWithXnbExtensionPattern.IsMatch(assetName))
+                            issues.Add("shouldn't include '.xnb' extension");
+                        if (this.AssetNameWithLocalePattern.IsMatch(assetName))
+                            issues.Add("shouldn't include language code (use conditions instead)");
+
+                        if (issues.Any())
+                            output.Append($" | NOTE: asset name may be incorrect ({string.Join("; ", issues)}).");
+                    }
 
                     // end line
                     output.AppendLine();
@@ -205,9 +255,8 @@ namespace ContentPatcher.Framework.Commands
         }
 
         /// <summary>Handle the 'patch update' command.</summary>
-        /// <param name="args">The subcommand arguments.</param>
         /// <returns>Returns whether the command was handled.</returns>
-        private bool HandleUpdate(string[] args)
+        private bool HandleUpdate()
         {
             this.UpdateContext();
             return true;
@@ -224,6 +273,16 @@ namespace ContentPatcher.Framework.Commands
                 yield return new PatchInfo(patch);
             foreach (DisabledPatch patch in this.PatchManager.GetPermanentlyDisabledPatches())
                 yield return new PatchInfo(patch);
+        }
+
+        /// <summary>Get the display order for a condition in <c>patch summary</c> output.</summary>
+        /// <param name="key">The condition key.</param>
+        private int GetDisplayOrder(ConditionKey key)
+        {
+            int index = Array.IndexOf(this.DisplayOrder, key.Type);
+            return index != -1
+                ? index
+                : this.DisplayOrder.Length;
         }
     }
 }

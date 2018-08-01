@@ -1,8 +1,8 @@
 {
   "Name": "Rotate Toolbar",
   "Author": "Pathoschild",
-  "Version": "1.2.1",
-  "MinimumApiVersion": "2.1",
+  "Version": "1.3.0",
+  "MinimumApiVersion": "2.6.0",
   "Description": "Rotate the toolbar by pressing a button.",
   "UniqueID": "Pathoschild.RotateToolbar",
   "EntryDll": "RotateToolbar.dll",

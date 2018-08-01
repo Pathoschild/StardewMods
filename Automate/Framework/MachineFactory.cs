@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -5,6 +6,7 @@ using Pathoschild.Stardew.Automate.Framework.Machines.Buildings;
 using Pathoschild.Stardew.Automate.Framework.Machines.Objects;
 using Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures;
 using Pathoschild.Stardew.Automate.Framework.Machines.Tiles;
+using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Automate.Framework.Storage;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
@@ -23,6 +25,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Properties
         *********/
+        /// <summary>The object IDs through which machines can connect, but which have no other automation properties.</summary>
+        private readonly IDictionary<ObjectType, HashSet<int>> Connectors;
+
         /// <summary>The tile area on the farm matching the shipping bin.</summary>
         private readonly Rectangle ShippingBinArea = new Rectangle(71, 14, 2, 1);
 
@@ -30,6 +35,15 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="connectors">The objects through which machines can connect, but which have no other automation properties.</param>
+        public MachineFactory(ModConfigObject[] connectors)
+        {
+            this.Connectors = connectors
+                .GroupBy(connector => connector.Type)
+                .ToDictionary(group => group.Key, group => new HashSet<int>(group.Select(p => p.ID)));
+        }
+
         /// <summary>Get all machine groups in a location.</summary>
         /// <param name="location">The location to search.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
@@ -84,23 +98,26 @@ namespace Pathoschild.Stardew.Automate.Framework
                 if (!visited.Add(tile))
                     continue;
 
-                // get machine or container on tile
+                // check for a machine, container, or connector
+                Vector2 foundOrigin = tile;
                 Vector2 foundSize;
-                if (this.TryGetMachine(location, tile, reflection, out IMachine machine, out Vector2 size))
+                if (this.TryGetMachine(location, tile, reflection, out IMachine machine, out foundOrigin, out Vector2 size))
                 {
                     group.Add(machine);
                     foundSize = size;
                 }
-                else if (this.TryGetChest(location, tile, out Chest chest))
+                else if (this.TryGetChest(location, tile, out Chest chest) && chest.Name.IndexOf("|automate:ignore|", StringComparison.InvariantCultureIgnoreCase) == -1)
                 {
                     group.Add(new ChestContainer(chest));
                     foundSize = Vector2.One;
                 }
+                else if (this.TryGetConnector(location, tile))
+                    foundSize = Vector2.One;
                 else
                     continue;
 
-                // handle machine tiles
-                Rectangle tileArea = new Rectangle((int)tile.X, (int)tile.Y, (int)foundSize.X, (int)foundSize.Y);
+                // mark tiles visited
+                Rectangle tileArea = new Rectangle((int)foundOrigin.X, (int)foundOrigin.Y, (int)foundSize.X, (int)foundSize.Y);
                 group.Add(tileArea);
                 foreach (Vector2 cur in tileArea.GetTiles())
                     visited.Add(cur);
@@ -119,10 +136,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="tile">The tile to search.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="machine">The machine found on the tile.</param>
+        /// <param name="origin">The machine's top-left position. This may be different from <paramref name="tile"/> for machines that take up multiple tiles.</param>
         /// <param name="size">The tile size of the machine found on the tile.</param>
         /// <returns>Returns whether a machine was found on the tile.</returns>
-        private bool TryGetMachine(GameLocation location, Vector2 tile, IReflectionHelper reflection, out IMachine machine, out Vector2 size)
+        private bool TryGetMachine(GameLocation location, Vector2 tile, IReflectionHelper reflection, out IMachine machine, out Vector2 origin, out Vector2 size)
         {
+            origin = tile;
+
             // object machine
             if (location.objects.TryGetValue(tile, out SObject obj) && !(obj is Chest))
             {
@@ -150,13 +170,14 @@ namespace Pathoschild.Stardew.Automate.Framework
             {
                 foreach (Building building in buildableLocation.buildings)
                 {
-                    Rectangle tileArea = new Rectangle(building.tileX, building.tileY, building.tilesWide, building.tilesHigh);
+                    Rectangle tileArea = new Rectangle(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
                     if (tileArea.Contains((int)tile.X, (int)tile.Y))
                     {
-                        machine = this.GetMachine(building);
+                        machine = this.GetMachine(building, buildableLocation);
                         if (machine != null)
                         {
-                            size = new Vector2(building.tilesWide, building.tilesHigh);
+                            origin = new Vector2(building.tileX.Value, building.tileY.Value);
+                            size = new Vector2(building.tilesWide.Value, building.tilesHigh.Value);
                             return true;
                         }
                     }
@@ -168,6 +189,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 return true;
 
             // none
+            size = Vector2.Zero;
             machine = null;
             return false;
         }
@@ -178,6 +200,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="reflection">Simplifies access to private game code.</param>
         private IMachine GetMachine(SObject obj, GameLocation location, Vector2 tile, IReflectionHelper reflection)
         {
+            if (obj.ParentSheetIndex == 165)
+                return new AutoGrabberMachine(obj);
             if (obj.name == "Bee House")
                 return new BeeHouseMachine(obj, location, tile);
             if (obj is Cask cask)
@@ -242,13 +266,16 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         /// <summary>Get a machine for the given building, if applicable.</summary>
         /// <param name="building">The building for which to get a machine.</param>
-        private IMachine GetMachine(Building building)
+        /// <param name="location">The location containing the machine.</param>
+        private IMachine GetMachine(Building building, BuildableGameLocation location)
         {
             if (building is JunimoHut hut)
                 return new JunimoHutMachine(hut);
             if (building is Mill mill)
                 return new MillMachine(mill);
-            if (building.buildingType == "Silo")
+            if (location is Farm farm && building is ShippingBin)
+                return new ShippingBinMachine(farm);
+            if (building.buildingType.Value == "Silo")
                 return new FeedHopperMachine();
             return null;
         }
@@ -302,6 +329,34 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             chest = null;
             return false;
+        }
+
+        /// <summary>Get a connector from the given tile, if any.</summary>
+        /// <param name="location">The location to search.</param>
+        /// <param name="tile">The tile to search.</param>
+        private bool TryGetConnector(GameLocation location, Vector2 tile)
+        {
+            // no connectors
+            if (this.Connectors.Count == 0)
+                return false;
+
+            // check for possible connectors
+            if (location.Objects.TryGetValue(tile, out SObject obj))
+                return this.IsConnector(obj.bigCraftable.Value ? ObjectType.BigCraftable : ObjectType.Object, obj.ParentSheetIndex);
+            if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrainFeature) && terrainFeature is Flooring floor)
+                return this.IsConnector(ObjectType.Floor, floor.whichFloor.Value);
+            return false;
+        }
+
+        /// <summary>Get whether a given object should be treated as a connector.</summary>
+        /// <param name="type">The object type.</param>
+        /// <param name="id">The object iD.</param>
+        private bool IsConnector(ObjectType type, int id)
+        {
+            if (this.Connectors.Count == 0)
+                return false;
+
+            return this.Connectors.TryGetValue(type, out HashSet<int> ids) && ids.Contains(id);
         }
     }
 }

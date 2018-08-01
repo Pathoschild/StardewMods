@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
@@ -13,10 +13,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="obj">The underlying in-game object.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        public FruitTreeTarget(FruitTree obj, Vector2? tilePosition = null)
-            : base(TargetType.FruitTree, obj, tilePosition) { }
+        public FruitTreeTarget(GameHelper gameHelper, FruitTree obj, Vector2? tilePosition = null)
+            : base(gameHelper, TargetType.FruitTree, obj, tilePosition) { }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         /// <remarks>Reverse-engineered from <see cref="FruitTree.draw"/>.</remarks>
@@ -28,7 +29,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             int width = sprite.Width * Game1.pixelZoom;
             int height = sprite.Height * Game1.pixelZoom;
             int x, y;
-            if (tree.growthStage < 4)
+            if (tree.growthStage.Value < 4)
             {
                 // apply crazy offset logic for growing fruit trees
                 Vector2 tile = this.GetTile();
@@ -61,7 +62,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             Rectangle sourceRectangle = this.GetSourceRectangle(tree);
 
             // check sprite
-            SpriteEffects spriteEffects = tree.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            SpriteEffects spriteEffects = tree.flipped.Value ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             return this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, sourceRectangle, spriteEffects);
         }
 
@@ -74,27 +75,26 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         private Rectangle GetSourceRectangle(FruitTree tree)
         {
             // stump
-            if (tree.stump)
-                return new Rectangle(384, tree.treeType * 5 * 16 + 48, 48, 32);
+            if (tree.stump.Value)
+                return new Rectangle(384, tree.treeType.Value * 5 * 16 + 48, 48, 32);
 
             // growing tree
-            if (tree.growthStage < 4)
+            if (tree.growthStage.Value < 4)
             {
-                switch (tree.growthStage)
+                switch (tree.growthStage.Value)
                 {
                     case 0:
-                        return new Rectangle(0, tree.treeType * 5 * 16, 48, 80);
                     case 1:
-                        return new Rectangle(48, tree.treeType * 5 * 16, 48, 80);
                     case 2:
-                        return new Rectangle(96, tree.treeType * 5 * 16, 48, 80);
+                        return new Rectangle(tree.growthStage.Value * 48, tree.treeType.Value * 5 * 16, 48, 80);
+
                     default:
-                        return new Rectangle(144, tree.treeType * 5 * 16, 48, 80);
+                        return new Rectangle(144, tree.treeType.Value * 5 * 16, 48, 80);
                 }
             }
 
             // grown tree
-            return new Rectangle((12 + (tree.greenHouseTree ? 1 : Utility.getSeasonNumber(Game1.currentSeason)) * 3) * 16, tree.treeType * 5 * 16, 48, 16 + 64);
+            return new Rectangle((12 + (tree.GreenHouseTree ? 1 : Utility.getSeasonNumber(Game1.currentSeason)) * 3) * 16, tree.treeType.Value * 5 * 16, 48, 16 + 64);
         }
     }
 }

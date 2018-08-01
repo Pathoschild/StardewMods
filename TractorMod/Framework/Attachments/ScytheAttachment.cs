@@ -35,7 +35,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return tool is MeleeWeapon && tool.name.ToLower().Contains("scythe");
+            return tool is MeleeWeapon && tool.Name.ToLower().Contains("scythe");
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -49,7 +49,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
             // spawned forage
-            if (this.Config.HarvestForage && tileObj?.isSpawnedObject == true)
+            if (this.Config.HarvestForage && tileObj?.IsSpawnedObject == true)
             {
                 this.CheckTileAction(location, tile, player);
                 return true;
@@ -61,7 +61,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 if (dirt.crop == null)
                     return false;
 
-                if (this.Config.ClearDeadCrops && dirt.crop.dead)
+                if (this.Config.ClearDeadCrops && dirt.crop.dead.Value)
                 {
                     this.UseToolOnTile(new Pickaxe(), tile); // clear dead crop
                     return true;
@@ -69,7 +69,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
                 if (this.Config.HarvestCrops)
                 {
-                    if (dirt.crop.harvestMethod == Crop.sickleHarvest)
+                    if (dirt.crop.harvestMethod.Value == Crop.sickleHarvest)
                         return dirt.performToolAction(tool, 0, tile, location);
                     else
                         this.CheckTileAction(location, tile, player);
@@ -81,7 +81,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // fruit tree
             if (this.Config.HarvestFruitTrees && tileFeature is FruitTree tree)
             {
-                tree.performUseAction(tile);
+                tree.performUseAction(tile, location);
                 return true;
             }
 
@@ -95,10 +95,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             }
 
             // weeds
-            if (this.Config.ClearWeeds && tileObj?.Name.ToLower().Contains("weed") == true)
+            if (this.Config.ClearWeeds && this.IsWeed(tileObj))
             {
                 this.UseToolOnTile(tool, tile); // doesn't do anything to the weed, but sets up for the tool action (e.g. sets last user)
-                tileObj.performToolAction(tool);    // triggers weed drops, but doesn't remove weed
+                tileObj.performToolAction(tool, location); // triggers weed drops, but doesn't remove weed
                 location.removeObject(tile, false);
                 return true;
             }

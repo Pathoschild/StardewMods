@@ -3,11 +3,13 @@ You just stay awake forever and the night never ends (until you go to bed).
 
 > ![](screenshots/clock.png)
 
+Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and multiplayer.
+
 ## Contents
 * [Install](#install)
 * [Use](#use)
 * [Configure](#configure)
-* [Versions](#versions)
+* [Compatibility](#Compatibility)
 * [See also](#see-also)
 
 ## Install
@@ -16,12 +18,19 @@ You just stay awake forever and the night never ends (until you go to bed).
 3. Run the game using SMAPI.
 
 ## Use
-The mod is automatic — just stay past 2am, as long as you want. All in-season fish come out after
+The mod is automatic — just stay up past 2am, as long as you want. All in-season fish come out after
 2am.
 
-## Versions
-See [release notes](release-notes.md).
+## Compatibility
+The Long Night is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+multiplayer.
+
+In multiplayer mode, any player with The Long Night installed can stay up past 2am. Players without
+it will collapse at 2am like usual, and will need to wait for the other players to finish. If the
+main player doesn't have it installed, they'll collapse at 2am which will force other players to
+end their day too (which will take effect when they change location).
 
 ## See also
+* [release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1369)
 * [Discussion thread](http://community.playstarbound.com/threads/the-long-night.136228)

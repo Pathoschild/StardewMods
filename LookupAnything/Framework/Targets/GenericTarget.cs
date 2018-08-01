@@ -9,6 +9,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
     internal abstract class GenericTarget : ITarget
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>Provides utility methods for interacting with the game code.</summary>
+        private readonly GameHelper GameHelper;
+
+
+        /*********
         ** Accessors
         *********/
         /// <summary>The target type.</summary>
@@ -50,7 +57,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         public virtual Rectangle GetSpriteArea()
         {
-            return GameHelper.GetScreenCoordinatesFromTile(this.GetTile());
+            return this.GameHelper.GetScreenCoordinatesFromTile(this.GetTile());
         }
 
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>
@@ -67,11 +74,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="type">The target type.</param>
         /// <param name="obj">The underlying in-game object.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        protected GenericTarget(TargetType type, object obj, Vector2? tilePosition = null)
+        protected GenericTarget(GameHelper gameHelper, TargetType type, object obj, Vector2? tilePosition = null)
         {
+            this.GameHelper = gameHelper;
             this.Type = type;
             this.Value = obj;
             this.Tile = tilePosition;
@@ -99,12 +108,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         protected bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea, Texture2D spriteSheet, Rectangle spriteSourceRectangle, SpriteEffects spriteEffects = SpriteEffects.None)
         {
             // get sprite sheet coordinate
-            Vector2 spriteSheetPosition = GameHelper.GetSpriteSheetCoordinates(position, spriteArea, spriteSourceRectangle, spriteEffects);
+            Vector2 spriteSheetPosition = this.GameHelper.GetSpriteSheetCoordinates(position, spriteArea, spriteSourceRectangle, spriteEffects);
             if (!spriteSourceRectangle.Contains((int)spriteSheetPosition.X, (int)spriteSheetPosition.Y))
                 return false;
 
             // check pixel
-            Color pixel = GameHelper.GetSpriteSheetPixel<Color>(spriteSheet, spriteSheetPosition);
+            Color pixel = this.GameHelper.GetSpriteSheetPixel<Color>(spriteSheet, spriteSheetPosition);
             return pixel.A != 0; // pixel not transparent
         }
     }

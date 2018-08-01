@@ -1,5 +1,6 @@
 {
   // default chest names
+  "default-name.auto-grabber": "Auto-grabber #{{number}}", // TODO
   "default-name.chest": "Kiste #{{number}}",
   "default-name.fridge": "Kühlschrank",
   "default-name.junimo-hut": "Junimo-Hütte #{{number}}",
@@ -12,10 +13,19 @@
   "label.category": "Kategorie",
   "label.order": "Reihenfolge",
   "label.hide-chest": "Kiste ausblenden",
-  "label.hide-chest-hidden": "Kiste ausblenden (Du musst die Kiste wiederfinden um es rückgängig zu machen!)",
+  "label.hide-chest-hidden": "Kiste ausblenden (Du musst die Kiste wieder finden um es rückgängig zu machen!)",
+  "label.automate-prefer-output": "(Automatisieren) Lege zuerst Gegenstände in diese Kiste",
+  "label.automate-ignore": "(Automatisieren) Diese Kiste ist nicht für die Automatisierung geeignet",
 
   // button labels
   "button.edit-chest": "Bearbeite Kiste",
   "button.sort-inventory": "sortiere Inventar",
-  "button.ok": "OK"
+  "button.ok": "OK",
+
+  // errors
+  // TODO
+  "errors.disabled-from-here": "You can't access chests from here.",
+  "errors.no-chests": "You don't have any chests yet.",
+  "errors.no-chests-in-location": "You don't have any chests in this area.",
+  "errors.no-chests-in-range": "You don't have any chests in range."
 }

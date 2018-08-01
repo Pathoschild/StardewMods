@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 {
@@ -280,6 +281,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
         {
             /// <summary>A value like <c>Aging</c>.</summary>
             public const string CaskSchedule = "item.cask-schedule";
+
+            /// <summary>A value like <c>Bait</c>.</summary>
+            public const string CrabpotBait = "item.crabpot-bait";
+
+            /// <summary>A value like <c>Needs bait!</c>.</summary>
+            public const string CrabpotBaitNeeded = "item.crabpot-bait-needed";
+
+            /// <summary>A value like <c>Not needed due to Luremaster profession.</c>.</summary>
+            public const string CrabpotBaitNotNeeded = "item.crabpot-bait-not-needed";
 
             /// <summary>A value like <c>Contents</c>.</summary>
             public const string Contents = "item.contents";
@@ -652,6 +662,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
         public static string For(ItemQuality quality)
         {
             return $"quality.{quality.GetName()}";
+        }
+
+        /// <summary>Get a translation key for an enum value.</summary>
+        /// <param name="status">The friendship status.</param>
+        public static string For(FriendshipStatus status)
+        {
+            return $"friendship-status.{status.ToString().ToLower()}";
         }
 
         /// <summary>Get a translation key for an enum value.</summary>

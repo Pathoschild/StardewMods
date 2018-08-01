@@ -1,0 +1,45 @@
+{
+  // accessibility
+  "accessibility.name": "Доступность",
+  "accessibility.clear": "Доступно",
+  "accessibility.occupied": "Занято",
+  "accessibility.impassable": "Недоступно",
+  "accessibility.warp": "Смена локации",
+
+  // coverage: bee houses
+  "bee-houses.name": "Покрытие: Ульи",
+  "bee-houses.range": "Цветочный радиус",
+
+  // coverage: Junimo huts
+  "junimo-huts.name": "Покрытие: Домик Джунимо",
+  "junimo-huts.can-harvest": "Могут собрать",
+  "junimo-huts.cannot-harvest": "Не могут собрать",
+
+  // coverage: scarecrows
+  "scarecrows.name": "Покрытие: Пугало",
+  "scarecrows.protected": "Защищено",
+  "scarecrows.exposed": "Уязвимо",
+
+  // coverage: sprinklers
+  "sprinklers.name": "Покрытие: Спринклеры",
+  "sprinklers.covered": "Покрыто",
+  "sprinklers.dry-crops": "Не поливается",
+
+  // crops: harvest
+  // TODO
+  "crop-harvest.name": "Crops: Ready to Harvest",
+  "crop-harvest.ready": "Ready",
+  "crop-harvest.not-ready": "Not Ready",
+  "crop-harvest.not-enough-time": "Not Enough Time",
+
+  // crops: watered
+  "crop-water.name": "Покрытие: Увлажнение",
+  "crop-water.watered": "Увлажнено",
+  "crop-water.dry": "Сухо",
+
+  // crops: fertilized
+  "crop-fertilizer.name": "Покрытие: Удобрения",
+  "crop-fertilizer.fertilizer": "Удобрения",
+  "crop-fertilizer.retaining-soil": "Увлажненнная почва",
+  "crop-fertilizer.speed-gro": "СкороРост"
+}

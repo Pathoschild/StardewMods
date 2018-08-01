@@ -10,6 +10,7 @@ using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.ChestsAnywhere
 {
@@ -51,25 +52,33 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             IEnumerable<ManagedChest> Search()
             {
-                foreach (GameLocation location in CommonHelper.GetLocations())
+                foreach (GameLocation location in this.GetAccessibleLocations())
                 {
                     // chests in location
                     {
                         int namelessChests = 0;
-                        foreach (KeyValuePair<Vector2, Object> pair in location.Objects)
+                        int namelessGrabbers = 0;
+                        foreach (KeyValuePair<Vector2, SObject> pair in location.Objects.Pairs)
                         {
                             Vector2 tile = pair.Key;
-                            if (pair.Value is Chest chest && chest.playerChest)
-                                yield return new ManagedChest(new ChestContainer(chest), location, tile, this.Translations.Get("default-name.chest", new { number = ++namelessChests }));
+                            SObject obj = pair.Value;
+
+                            // chests
+                            if (obj is Chest chest && chest.playerChest.Value)
+                                yield return new ManagedChest(new ChestContainer(chest, this.Reflection), location, tile, this.Translations.Get("default-name.chest", new { number = ++namelessChests }));
+
+                            // auto-grabbers
+                            else if (obj.ParentSheetIndex == 165 && obj.heldObject.Value is Chest grabberChest)
+                                yield return new ManagedChest(new ChestContainer(grabberChest, this.Reflection), location, tile, this.Translations.Get("default-name.auto-grabber", new { number = ++namelessGrabbers }));
                         }
                     }
 
                     // farmhouse containers
                     if (location is FarmHouse house && Game1.player.HouseUpgradeLevel > 0)
                     {
-                        Chest fridge = house.fridge;
+                        Chest fridge = house.fridge.Value;
                         if (fridge != null)
-                            yield return new ManagedChest(new ChestContainer(fridge), location, Vector2.Zero, this.Translations.Get("default-name.fridge"));
+                            yield return new ManagedChest(new ChestContainer(fridge, this.Reflection), location, Vector2.Zero, this.Translations.Get("default-name.fridge"));
                     }
 
                     // buildings
@@ -79,7 +88,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         foreach (Building building in buildableLocation.buildings)
                         {
                             if (building is JunimoHut hut)
-                                yield return new ManagedChest(new JunimoHutContainer(hut), location, new Vector2(hut.tileX, hut.tileY), this.Translations.Get("default-name.junimo-hut", new { number = ++namelessHuts }));
+                                yield return new ManagedChest(new JunimoHutContainer(hut, this.Reflection), location, new Vector2(hut.tileX.Value, hut.tileY.Value), this.Translations.Get("default-name.junimo-hut", new { number = ++namelessHuts }));
                         }
                     }
 
@@ -122,7 +131,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // get from opened inventory
             {
                 object target = menu.behaviorOnItemGrab?.Target;
-                List<Item> inventory = (target as Chest)?.items ?? (target as IContainer)?.Inventory;
+                IList<Item> inventory = (target as Chest)?.items ?? (target as IContainer)?.Inventory;
                 if (inventory != null)
                 {
                     ManagedChest chest = this.GetChests(range).FirstOrDefault(p => p.Container.IsSameAs(inventory));
@@ -133,6 +142,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
             // fallback to open chest
             return this.GetChests(range).FirstOrDefault(p => p.Container.IsOpen());
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get the locations which are accessible to the current player (regardless of settings).</summary>
+        private IEnumerable<GameLocation> GetAccessibleLocations()
+        {
+            // main player can access chests in any location
+            if (Context.IsMainPlayer)
+                return CommonHelper.GetLocations();
+
+            // secondary player can only safely access chests in their current location
+            // (changes to other locations aren't synced to the other players)
+            return new[] { Game1.player.currentLocation };
         }
     }
 }

@@ -72,7 +72,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <returns>Returns whether the requirement is met.</returns>
         public bool TryGetIngredient(int id, int count, out IConsumable consumable)
         {
-            return this.TryGetIngredient(item => item.Sample.parentSheetIndex == id || item.Sample.category == id, count, out consumable);
+            return this.TryGetIngredient(item => item.Sample.ParentSheetIndex == id || item.Sample.Category == id, count, out consumable);
         }
 
         /// <summary>Get an ingredient needed for a recipe.</summary>
@@ -131,7 +131,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <returns>Returns whether the item was consumed.</returns>
         public bool TryConsume(int itemID, int count)
         {
-            return this.TryConsume(item => item.Sample.parentSheetIndex == itemID, count);
+            return this.TryConsume(item => item.Sample.ParentSheetIndex == itemID, count);
         }
 
         /****
@@ -149,7 +149,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             // push into 'output' chests
             foreach (IContainer container in this.Containers)
             {
-                if (container.Name.IndexOf("output", StringComparison.InvariantCultureIgnoreCase) < 0)
+                if (container.Name.IndexOf("|automate:output|", StringComparison.InvariantCultureIgnoreCase) < 0)
                     continue;
 
                 container.Store(item);
@@ -193,8 +193,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             string key = item.GetType().FullName;
             if (item is SObject obj)
-                key += "_craftable:" + obj.bigCraftable;
-            key += "_id:" + item.parentSheetIndex;
+                key += "_craftable:" + obj.bigCraftable.Value;
+            key += "_id:" + item.ParentSheetIndex;
 
             return key;
         }

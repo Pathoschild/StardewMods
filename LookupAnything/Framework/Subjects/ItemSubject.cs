@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common.DataParsers;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
@@ -47,19 +48,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="item">The underlying target.</param>
         /// <param name="context">The context of the object being looked up.</param>
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
         /// <param name="fromCrop">The crop associated with the item (if applicable).</param>
-        public ItemSubject(ITranslationHelper translations, Item item, ObjectContext context, bool knownQuality, Crop fromCrop = null)
-            : base(translations)
+        public ItemSubject(GameHelper gameHelper, ITranslationHelper translations, Item item, ObjectContext context, bool knownQuality, Crop fromCrop = null)
+            : base(gameHelper, translations)
         {
             this.Target = item;
             this.DisplayItem = this.GetMenuItem(item);
             this.FromCrop = fromCrop;
             if ((item as SObject)?.Type == "Seeds")
-                this.SeedForCrop = new Crop(item.parentSheetIndex, 0, 0);
+                this.SeedForCrop = new Crop(item.ParentSheetIndex, 0, 0);
             this.Context = context;
             this.KnownQuality = knownQuality;
             this.Initialise(this.DisplayItem.DisplayName, this.GetDescription(this.DisplayItem), this.GetTypeValue(this.DisplayItem));
@@ -72,11 +74,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // get data
             Item item = this.Target;
             SObject obj = item as SObject;
-            bool isObject = obj != null;
             bool isCrop = this.FromCrop != null;
             bool isSeed = this.SeedForCrop != null;
-            bool isDeadCrop = this.FromCrop?.dead == true;
-            bool canSell = obj?.canBeShipped() == true || metadata.Shops.Any(shop => shop.BuysCategories.Contains(item.category));
+            bool isDeadCrop = this.FromCrop?.dead.Value == true;
+            bool canSell = obj?.canBeShipped() == true || metadata.Shops.Any(shop => shop.BuysCategories.Contains(item.Category));
 
             // get overrides
             bool showInventoryFields = true;
@@ -94,188 +95,42 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // don't show data for dead crop
             if (isDeadCrop)
             {
-                yield return new GenericField(this.Translate(L10n.Crop.Summary), this.Translate(L10n.Crop.SummaryDead));
+                yield return new GenericField(this.GameHelper, this.Translate(L10n.Crop.Summary), this.Translate(L10n.Crop.SummaryDead));
                 yield break;
             }
 
             // crop fields
-            if (isCrop || isSeed)
+            foreach (ICustomField field in this.GetCropFields(this.FromCrop ?? this.SeedForCrop, isSeed, metadata))
+                yield return field;
+
+            // indoor pot crop
+            if (obj is IndoorPot pot)
             {
-                // get crop
-                Crop crop = this.FromCrop ?? this.SeedForCrop;
-
-                // get harvest schedule
-                int harvestablePhase = crop.phaseDays.Count - 1;
-                bool canHarvestNow = (crop.currentPhase >= harvestablePhase) && (!crop.fullyGrown || crop.dayOfCurrentPhase <= 0);
-                int daysToFirstHarvest = crop.phaseDays.Take(crop.phaseDays.Count - 1).Sum(); // ignore harvestable phase
-
-                // add next-harvest field
-                if (isCrop)
+                Crop potCrop = pot.hoeDirt.Value.crop;
+                if (potCrop != null)
                 {
-                    // calculate next harvest
-                    int daysToNextHarvest = 0;
-                    SDate dayOfNextHarvest = null;
-                    if (!canHarvestNow)
-                    {
-                        // calculate days until next harvest
-                        int daysUntilLastPhase = daysToFirstHarvest - crop.dayOfCurrentPhase - crop.phaseDays.Take(crop.currentPhase).Sum();
-                        {
-                            // growing: days until next harvest
-                            if (!crop.fullyGrown)
-                                daysToNextHarvest = daysUntilLastPhase;
-
-                            // regrowable crop harvested today
-                            else if (crop.dayOfCurrentPhase >= crop.regrowAfterHarvest)
-                                daysToNextHarvest = crop.regrowAfterHarvest;
-
-                            // regrowable crop
-                            else
-                                daysToNextHarvest = crop.dayOfCurrentPhase; // dayOfCurrentPhase decreases to 0 when fully grown, where <=0 is harvestable
-                        }
-                        dayOfNextHarvest = SDate.Now().AddDays(daysToNextHarvest);
-                    }
-
-                    // generate field
-                    string summary;
-                    if (canHarvestNow)
-                        summary = this.Translate(L10n.Crop.HarvestNow);
-                    else if (Game1.currentLocation.Name != Constant.LocationNames.Greenhouse && !crop.seasonsToGrowIn.Contains(dayOfNextHarvest.Season))
-                        summary = this.Translate(L10n.Crop.HarvestTooLate, new { date = this.Stringify(dayOfNextHarvest) });
-                    else
-                        summary = $"{this.Stringify(dayOfNextHarvest)} ({this.Text.GetPlural(daysToNextHarvest, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = daysToNextHarvest })})";
-
-                    yield return new GenericField(this.Translate(L10n.Crop.Harvest), summary);
-                }
-
-                // crop summary
-                {
-                    List<string> summary = new List<string>();
-
-                    // harvest
-                    summary.Add(crop.regrowAfterHarvest == -1
-                        ? this.Translate(L10n.Crop.SummaryHarvestOnce, new { daysToFirstHarvest = daysToFirstHarvest })
-                        : this.Translate(L10n.Crop.SummaryHarvestMulti, new { daysToFirstHarvest = daysToFirstHarvest, daysToNextHarvests = crop.regrowAfterHarvest })
-                    );
-
-                    // seasons
-                    summary.Add(this.Translate(L10n.Crop.SummarySeasons, new { seasons = string.Join(", ", this.Text.GetSeasonNames(crop.seasonsToGrowIn)) }));
-
-                    // drops
-                    if (crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops > 0)
-                        summary.Add(this.Translate(L10n.Crop.SummaryDropsXToY, new { min = crop.minHarvest, max = crop.maxHarvest, percent = Math.Round(crop.chanceForExtraCrops * 100, 2) }));
-                    else if (crop.minHarvest > 1)
-                        summary.Add(this.Translate(L10n.Crop.SummaryDropsX, new { count = crop.minHarvest }));
-
-                    // crop sale price
-                    Item drop = GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest);
-                    summary.Add(this.Translate(L10n.Crop.SummarySellsFor, new { price = GenericField.GetSaleValueString(this.GetSaleValue(drop, false, metadata), 1, this.Text) }));
-
-                    // generate field
-                    yield return new GenericField(this.Translate(L10n.Crop.Summary), "-" + string.Join($"{Environment.NewLine}-", summary));
+                    Item drop = this.GameHelper.GetObjectBySpriteIndex(potCrop.indexOfHarvest.Value);
+                    yield return new LinkField(this.GameHelper, this.Translate(L10n.Item.Contents), drop.DisplayName, () => new ItemSubject(this.GameHelper, this.Text, this.GameHelper.GetObjectBySpriteIndex(potCrop.indexOfHarvest.Value), ObjectContext.World, knownQuality: false, fromCrop: potCrop));
                 }
             }
 
-            // crafting
-            if (obj?.heldObject != null)
-            {
-                if (obj is Cask cask)
-                {
-                    // get cask data
-                    SObject agingObj = cask.heldObject;
-                    ItemQuality curQuality = (ItemQuality)agingObj.quality;
-                    string curQualityName = this.Translate(L10n.For(curQuality));
-
-                    // calculate aging schedule
-                    float effectiveAge = metadata.Constants.CaskAgeSchedule.Values.Max() - cask.daysToMature;
-                    var schedule =
-                        (
-                            from entry in metadata.Constants.CaskAgeSchedule
-                            let quality = entry.Key
-                            let baseDays = entry.Value
-                            where baseDays > effectiveAge
-                            orderby baseDays ascending
-                            let daysLeft = (int)Math.Ceiling((baseDays - effectiveAge) / cask.agingRate)
-                            select new
-                            {
-                                Quality = quality,
-                                DaysLeft = daysLeft,
-                                HarvestDate = SDate.Now().AddDays(daysLeft)
-                            }
-                        )
-                        .ToArray();
-
-                    // display fields
-                    yield return new ItemIconField(this.Translate(L10n.Item.Contents), obj.heldObject);
-                    if (cask.minutesUntilReady <= 0 || !schedule.Any())
-                        yield return new GenericField(this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskScheduleNow, new { quality = curQualityName }));
-                    else
-                    {
-                        string scheduleStr = string.Join(Environment.NewLine, (
-                            from entry in schedule
-                            let tokens = new { quality = this.Translate(L10n.For(entry.Quality)), count = entry.DaysLeft, date = entry.HarvestDate }
-                            let str = this.Text.GetPlural(entry.DaysLeft, L10n.Item.CaskScheduleTomorrow, L10n.Item.CaskScheduleInXDays).Tokens(tokens)
-                            select $"-{str}"
-                        ));
-                        yield return new GenericField(this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskSchedulePartial, new { quality = curQualityName }) + Environment.NewLine + scheduleStr);
-                    }
-                }
-                else if (obj is Furniture)
-                {
-                    string summary = this.Translate(L10n.Item.ContentsPlaced, new { name = obj.heldObject.DisplayName });
-                    yield return new ItemIconField(this.Translate(L10n.Item.Contents), obj.heldObject, summary);
-                }
-                else
-                {
-                    string summary = obj.minutesUntilReady <= 0
-                        ? this.Translate(L10n.Item.ContentsReady, new { name = obj.heldObject.DisplayName })
-                        : this.Translate(L10n.Item.ContentsPartial, new { name = obj.heldObject.DisplayName, time = this.Stringify(TimeSpan.FromMinutes(obj.minutesUntilReady)) });
-                    yield return new ItemIconField(this.Translate(L10n.Item.Contents), obj.heldObject, summary);
-                }
-            }
+            // machine output
+            foreach (ICustomField field in this.GetMachineOutputFields(obj, metadata))
+                yield return field;
 
             // item
             if (showInventoryFields)
             {
                 // needed for
-                {
-                    List<string> neededFor = new List<string>();
-
-                    // bundles
-                    if (isObject)
-                    {
-                        string[] bundles = (from bundle in this.GetUnfinishedBundles(obj) orderby bundle.Area, bundle.DisplayName select $"{this.GetTranslatedBundleArea(bundle)}: {bundle.DisplayName}").ToArray();
-                        if (bundles.Any())
-                            neededFor.Add(this.Translate(L10n.Item.NeededForCommunityCenter, new { bundles = string.Join(", ", bundles) }));
-                    }
-
-                    // polyculture achievement
-                    if (isObject && metadata.Constants.PolycultureCrops.Contains(obj.ParentSheetIndex))
-                    {
-                        int needed = metadata.Constants.PolycultureCount - GameHelper.GetShipped(obj.ParentSheetIndex);
-                        if (needed > 0)
-                            neededFor.Add(this.Translate(L10n.Item.NeededForPolyculture, new { count = needed }));
-                    }
-
-                    // full shipment achievement
-                    if (isObject && GameHelper.GetFullShipmentAchievementItems().Any(p => p.Key == obj.ParentSheetIndex && !p.Value))
-                        neededFor.Add(this.Translate(L10n.Item.NeededForFullShipment));
-
-                    // a full collection achievement
-                    LibraryMuseum museum = Game1.locations.OfType<LibraryMuseum>().FirstOrDefault();
-                    if (museum != null && museum.isItemSuitableForDonation(obj))
-                        neededFor.Add(this.Translate(L10n.Item.NeededForFullCollection));
-
-                    // yield
-                    if (neededFor.Any())
-                        yield return new GenericField(this.Translate(L10n.Item.NeededFor), string.Join(", ", neededFor));
-                }
+                foreach (ICustomField field in this.GetNeededForFields(obj, metadata))
+                    yield return field;
 
                 // sale data
                 if (canSell && !isCrop)
                 {
                     // sale price
                     string saleValueSummary = GenericField.GetSaleValueString(this.GetSaleValue(item, this.KnownQuality, metadata), item.Stack, this.Text);
-                    yield return new GenericField(this.Translate(L10n.Item.SellsFor), saleValueSummary);
+                    yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.SellsFor), saleValueSummary);
 
                     // sell to
                     List<string> buyers = new List<string>();
@@ -283,18 +138,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         buyers.Add(this.Translate(L10n.Item.SellsToShippingBox));
                     buyers.AddRange(
                         from shop in metadata.Shops
-                        where shop.BuysCategories.Contains(item.category)
+                        where shop.BuysCategories.Contains(item.Category)
                         let name = this.Translate(shop.DisplayKey).ToString()
                         orderby name
                         select name
                     );
-                    yield return new GenericField(this.Translate(L10n.Item.SellsTo), string.Join(", ", buyers));
+                    yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.SellsTo), string.Join(", ", buyers));
                 }
 
                 // gift tastes
                 var giftTastes = this.GetGiftTastes(item, metadata);
-                yield return new ItemGiftTastesField(this.Translate(L10n.Item.LovesThis), giftTastes, GiftTaste.Love);
-                yield return new ItemGiftTastesField(this.Translate(L10n.Item.LikesThis), giftTastes, GiftTaste.Like);
+                yield return new ItemGiftTastesField(this.GameHelper, this.Translate(L10n.Item.LovesThis), giftTastes, GiftTaste.Love);
+                yield return new ItemGiftTastesField(this.GameHelper, this.Translate(L10n.Item.LikesThis), giftTastes, GiftTaste.Like);
             }
 
             // fence
@@ -304,39 +159,39 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                 // health
                 if (Game1.getFarm().isBuildingConstructed(Constant.BuildingNames.GoldClock))
-                    yield return new GenericField(healthLabel, this.Translate(L10n.Item.FenceHealthGoldClock));
+                    yield return new GenericField(this.GameHelper, healthLabel, this.Translate(L10n.Item.FenceHealthGoldClock));
                 else
                 {
-                    float maxHealth = fence.isGate ? fence.maxHealth * 2 : fence.maxHealth;
-                    float health = fence.health / maxHealth;
-                    double daysLeft = Math.Round(fence.health * metadata.Constants.FenceDecayRate / 60 / 24);
+                    float maxHealth = fence.isGate.Value ? fence.maxHealth.Value * 2 : fence.maxHealth.Value;
+                    float health = fence.health.Value / maxHealth;
+                    double daysLeft = Math.Round(fence.health.Value * metadata.Constants.FenceDecayRate / 60 / 24);
                     double percent = Math.Round(health * 100);
-                    yield return new PercentageBarField(healthLabel, (int)fence.health, (int)maxHealth, Color.Green, Color.Red, this.Translate(L10n.Item.FenceHealthSummary, new { percent = percent, count = daysLeft }));
+                    yield return new PercentageBarField(this.GameHelper, healthLabel, (int)fence.health.Value, (int)maxHealth, Color.Green, Color.Red, this.Translate(L10n.Item.FenceHealthSummary, new { percent = percent, count = daysLeft }));
                 }
             }
 
             // recipes
             if (item.GetSpriteType() == ItemSpriteType.Object)
             {
-                RecipeModel[] recipes = GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
+                RecipeModel[] recipes = this.GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
                 if (recipes.Any())
-                    yield return new RecipesForIngredientField(this.Translate(L10n.Item.Recipes), item, recipes, this.Text);
+                    yield return new RecipesForIngredientField(this.GameHelper, this.Translate(L10n.Item.Recipes), item, recipes, this.Text);
             }
 
             // owned
             if (showInventoryFields && !isCrop && !(item is Tool))
-                yield return new GenericField(this.Translate(L10n.Item.Owned), this.Translate(L10n.Item.OwnedSummary, new { count = GameHelper.CountOwnedItems(item) }));
+                yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.Owned), this.Translate(L10n.Item.OwnedSummary, new { count = this.GameHelper.CountOwnedItems(item) }));
 
             // see also crop
             bool seeAlsoCrop =
                 isSeed
-                && item.parentSheetIndex != this.SeedForCrop.indexOfHarvest // skip seeds which produce themselves (e.g. coffee beans)
-                && !(item.parentSheetIndex >= 495 && item.parentSheetIndex <= 497) // skip random seasonal seeds
-                && item.parentSheetIndex != 770; // skip mixed seeds
+                && item.ParentSheetIndex != this.SeedForCrop.indexOfHarvest.Value // skip seeds which produce themselves (e.g. coffee beans)
+                && !(item.ParentSheetIndex >= 495 && item.ParentSheetIndex <= 497) // skip random seasonal seeds
+                && item.ParentSheetIndex != 770; // skip mixed seeds
             if (seeAlsoCrop)
             {
-                Item drop = GameHelper.GetObjectBySpriteIndex(this.SeedForCrop.indexOfHarvest);
-                yield return new LinkField(this.Translate(L10n.Item.SeeAlso), drop.DisplayName, () => new ItemSubject(this.Text, drop, ObjectContext.Inventory, false, this.SeedForCrop));
+                Item drop = this.GameHelper.GetObjectBySpriteIndex(this.SeedForCrop.indexOfHarvest.Value);
+                yield return new LinkField(this.GameHelper, this.Translate(L10n.Item.SeeAlso), drop.DisplayName, () => new ItemSubject(this.GameHelper, this.Text, drop, ObjectContext.Inventory, false, this.SeedForCrop));
             }
         }
 
@@ -349,8 +204,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             Crop crop = this.FromCrop ?? this.SeedForCrop;
 
             // pinned fields
-            yield return new GenericDebugField("item ID", target.parentSheetIndex, pinned: true);
-            yield return new GenericDebugField("category", $"{target.category} ({target.getCategoryName()})", pinned: true);
+            yield return new GenericDebugField("item ID", target.ParentSheetIndex, pinned: true);
+            yield return new GenericDebugField("category", $"{target.Category} ({target.getCategoryName()})", pinned: true);
             if (obj != null)
             {
                 yield return new GenericDebugField("edibility", obj.Edibility, pinned: true);
@@ -358,7 +213,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
             if (crop != null)
             {
-                yield return new GenericDebugField("crop fully grown", this.Stringify(crop.fullyGrown), pinned: true);
+                yield return new GenericDebugField("crop fully grown", this.Stringify(crop.fullyGrown.Value), pinned: true);
                 yield return new GenericDebugField("crop phase", $"{crop.currentPhase} (day {crop.dayOfCurrentPhase} in phase)", pinned: true);
             }
 
@@ -382,10 +237,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             Item item = this.DisplayItem;
 
             // draw stackable object
-            if ((item as SObject)?.stack > 1)
+            if ((item as SObject)?.Stack > 1)
             {
+                // remove stack number (doesn't play well with clipped content)
                 SObject obj = (SObject)item;
-                obj = new SObject(obj.parentSheetIndex, 1, obj.isRecipe, obj.price, obj.quality) { bigCraftable = obj.bigCraftable }; // remove stack number (doesn't play well with clipped content)
+                obj = new SObject(obj.ParentSheetIndex, 1, obj.IsRecipe, obj.Price, obj.Quality);
+                obj.bigCraftable.Value = obj.bigCraftable.Value;
                 obj.drawInMenu(spriteBatch, position, 1);
                 return true;
             }
@@ -407,9 +264,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (item is Fence fence)
             {
                 // get equivalent object's sprite ID
-                FenceType fenceType = (FenceType)fence.whichType;
+                FenceType fenceType = (FenceType)fence.whichType.Value;
                 int? spriteID = null;
-                if (fence.isGate)
+                if (fence.isGate.Value)
                     spriteID = 325;
                 else if (fenceType == FenceType.Wood)
                     spriteID = 322;
@@ -454,6 +311,221 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 : this.Translate(L10n.Types.Other);
         }
 
+        /// <summary>Get the custom fields for a crop.</summary>
+        /// <param name="crop">The crop to represent.</param>
+        /// <param name="isSeed">Whether the crop being displayed is for an unplanted seed.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        private IEnumerable<ICustomField> GetCropFields(Crop crop, bool isSeed, Metadata metadata)
+        {
+            if (crop == null)
+                yield break;
+
+            var data = new CropDataParser(crop);
+
+            // add next-harvest field
+            if (!isSeed)
+            {
+                // get next harvest
+                SDate nextHarvest = data.GetNextHarvest();
+                int daysToNextHarvest = nextHarvest.DaysSinceStart - SDate.Now().DaysSinceStart;
+
+                // generate field
+                string summary;
+                if (data.CanHarvestNow)
+                    summary = this.Translate(L10n.Crop.HarvestNow);
+                else if (!Game1.currentLocation.IsGreenhouse && !data.Seasons.Contains(nextHarvest.Season))
+                    summary = this.Translate(L10n.Crop.HarvestTooLate, new { date = this.Stringify(nextHarvest) });
+                else
+                    summary = $"{this.Stringify(nextHarvest)} ({this.Text.GetPlural(daysToNextHarvest, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = daysToNextHarvest })})";
+
+                yield return new GenericField(this.GameHelper, this.Translate(L10n.Crop.Harvest), summary);
+            }
+
+            // crop summary
+            {
+                List<string> summary = new List<string>();
+
+                // harvest
+                summary.Add(data.HasMultipleHarvests
+                    ? this.Translate(L10n.Crop.SummaryHarvestOnce, new { daysToFirstHarvest = data.DaysToFirstHarvest })
+                    : this.Translate(L10n.Crop.SummaryHarvestMulti, new { daysToFirstHarvest = data.DaysToFirstHarvest, daysToNextHarvests = data.DaysToSubsequentHarvest })
+                );
+
+                // seasons
+                summary.Add(this.Translate(L10n.Crop.SummarySeasons, new { seasons = string.Join(", ", this.Text.GetSeasonNames(data.Seasons)) }));
+
+                // drops
+                if (crop.minHarvest != crop.maxHarvest && crop.chanceForExtraCrops.Value > 0)
+                    summary.Add(this.Translate(L10n.Crop.SummaryDropsXToY, new { min = crop.minHarvest, max = crop.maxHarvest, percent = Math.Round(crop.chanceForExtraCrops.Value * 100, 2) }));
+                else if (crop.minHarvest.Value > 1)
+                    summary.Add(this.Translate(L10n.Crop.SummaryDropsX, new { count = crop.minHarvest }));
+
+                // crop sale price
+                Item drop = data.GetSampleDrop();
+                summary.Add(this.Translate(L10n.Crop.SummarySellsFor, new { price = GenericField.GetSaleValueString(this.GetSaleValue(drop, false, metadata), 1, this.Text) }));
+
+                // generate field
+                yield return new GenericField(this.GameHelper, this.Translate(L10n.Crop.Summary), "-" + string.Join($"{Environment.NewLine}-", summary));
+            }
+        }
+
+        /// <summary>Get the custom fields for machine output.</summary>
+        /// <param name="machine">The machine whose output to represent.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        private IEnumerable<ICustomField> GetMachineOutputFields(SObject machine, Metadata metadata)
+        {
+            if (machine == null)
+                yield break;
+
+            SObject heldObj = machine.heldObject.Value;
+            int minutesLeft = machine.MinutesUntilReady;
+
+            // cask
+            if (machine is Cask cask)
+            {
+                // output item
+                if (heldObj != null)
+                {
+                    ItemQuality curQuality = (ItemQuality)heldObj.Quality;
+                    string curQualityName = this.Translate(L10n.For(curQuality));
+
+                    // calculate aging schedule
+                    float effectiveAge = metadata.Constants.CaskAgeSchedule.Values.Max() - cask.daysToMature.Value;
+                    var schedule =
+                        (
+                            from entry in metadata.Constants.CaskAgeSchedule
+                            let quality = entry.Key
+                            let baseDays = entry.Value
+                            where baseDays > effectiveAge
+                            orderby baseDays ascending
+                            let daysLeft = (int)Math.Ceiling((baseDays - effectiveAge) / cask.agingRate.Value)
+                            select new
+                            {
+                                Quality = quality,
+                                DaysLeft = daysLeft,
+                                HarvestDate = SDate.Now().AddDays(daysLeft)
+                            }
+                        )
+                        .ToArray();
+
+                    // display fields
+                    yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), heldObj);
+                    if (minutesLeft <= 0 || !schedule.Any())
+                        yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskScheduleNow, new { quality = curQualityName }));
+                    else
+                    {
+                        string scheduleStr = string.Join(Environment.NewLine, (
+                            from entry in schedule
+                            let tokens = new { quality = this.Translate(L10n.For(entry.Quality)), count = entry.DaysLeft, date = entry.HarvestDate }
+                            let str = this.Text.GetPlural(entry.DaysLeft, L10n.Item.CaskScheduleTomorrow, L10n.Item.CaskScheduleInXDays).Tokens(tokens)
+                            select $"-{str}"
+                        ));
+                        yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.CaskSchedule), this.Translate(L10n.Item.CaskSchedulePartial, new { quality = curQualityName }) + Environment.NewLine + scheduleStr);
+                    }
+                }
+            }
+
+            // crab pot
+            else if (machine is CrabPot pot)
+            {
+                // bait
+                if (heldObj == null)
+                {
+                    if (pot.bait.Value != null)
+                        yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.CrabpotBait), pot.bait.Value);
+                    else if (Game1.player.professions.Contains(11)) // no bait needed if luremaster
+                        yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.CrabpotBait), this.Translate(L10n.Item.CrabpotBaitNotNeeded));
+                    else
+                        yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.CrabpotBait), this.Translate(L10n.Item.CrabpotBaitNeeded));
+                }
+
+                // output item
+                if (heldObj != null)
+                {
+                    string summary = this.Translate(L10n.Item.ContentsReady, new { name = heldObj.DisplayName });
+                    yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), heldObj, summary);
+                }
+            }
+
+            // furniture
+            else if (machine is Furniture)
+            {
+                // displayed item
+                if (heldObj != null)
+                {
+                    string summary = this.Translate(L10n.Item.ContentsPlaced, new { name = heldObj.DisplayName });
+                    yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), heldObj, summary);
+                }
+            }
+
+            // auto-grabber
+            else if (machine.ParentSheetIndex == Constant.ObjectIndexes.AutoGrabber)
+            {
+                string readyText = this.Text.Stringify(heldObj is Chest output && output.items.Any());
+                yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.Contents), readyText);
+            }
+
+            // generic machine
+            else
+            {
+                // output item
+                if (heldObj != null)
+                {
+
+                    string summary = minutesLeft <= 0
+                    ? this.Translate(L10n.Item.ContentsReady, new { name = heldObj.DisplayName })
+                    : this.Translate(L10n.Item.ContentsPartial, new { name = heldObj.DisplayName, time = this.Stringify(TimeSpan.FromMinutes(minutesLeft)) });
+                    yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Item.Contents), heldObj, summary);
+                }
+            }
+        }
+
+        /// <summary>Get the custom fields indicating what an item is needed for.</summary>
+        /// <param name="obj">The machine whose output to represent.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        private IEnumerable<ICustomField> GetNeededForFields(SObject obj, Metadata metadata)
+        {
+            if (obj == null)
+                yield break;
+
+            List<string> neededFor = new List<string>();
+
+            // bundles
+            {
+                string[] bundles = (
+                    from bundle in this.GetUnfinishedBundles(obj)
+                    orderby bundle.Area, bundle.DisplayName
+                    let countNeeded = this.GetIngredientCountNeeded(bundle, obj)
+                    select countNeeded > 1
+                        ? $"{this.GetTranslatedBundleArea(bundle)}: {bundle.DisplayName} x {countNeeded}"
+                        : $"{this.GetTranslatedBundleArea(bundle)}: {bundle.DisplayName}"
+                ).ToArray();
+                if (bundles.Any())
+                    neededFor.Add(this.Translate(L10n.Item.NeededForCommunityCenter, new { bundles = string.Join(", ", bundles) }));
+            }
+
+            // polyculture achievement
+            if (metadata.Constants.PolycultureCrops.Contains(obj.ParentSheetIndex))
+            {
+                int needed = metadata.Constants.PolycultureCount - this.GameHelper.GetShipped(obj.ParentSheetIndex);
+                if (needed > 0)
+                    neededFor.Add(this.Translate(L10n.Item.NeededForPolyculture, new { count = needed }));
+            }
+
+            // full shipment achievement
+            if (this.GameHelper.GetFullShipmentAchievementItems().Any(p => p.Key == obj.ParentSheetIndex && !p.Value))
+                neededFor.Add(this.Translate(L10n.Item.NeededForFullShipment));
+
+            // a full collection achievement
+            LibraryMuseum museum = Game1.locations.OfType<LibraryMuseum>().FirstOrDefault();
+            if (museum != null && museum.isItemSuitableForDonation(obj))
+                neededFor.Add(this.Translate(L10n.Item.NeededForFullCollection));
+
+            // yield
+            if (neededFor.Any())
+                yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.NeededFor), string.Join(", ", neededFor));
+        }
+
         /// <summary>Get unfinished bundles which require this item.</summary>
         /// <param name="item">The item for which to find bundles.</param>
         private IEnumerable<BundleModel> GetUnfinishedBundles(SObject item)
@@ -468,21 +540,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 yield break;
 
             // get bundles
-            if (item.GetType() == typeof(SObject) && !item.bigCraftable) // avoid false positives with hats, furniture, etc
+            if (item.GetType() == typeof(SObject) && !item.bigCraftable.Value) // avoid false positives with hats, furniture, etc
             {
-                foreach (BundleModel bundle in DataParser.GetBundles())
+                foreach (BundleModel bundle in this.GameHelper.GetBundleData())
                 {
                     // ignore completed bundle
                     if (communityCenter.isBundleComplete(bundle.ID))
                         continue;
 
-                    // get ingredient
-                    BundleIngredientModel ingredient = bundle.Ingredients.FirstOrDefault(p => p.ItemID == item.parentSheetIndex && p.Quality <= (ItemQuality)item.quality);
-                    if (ingredient == null)
-                        continue;
-
-                    // yield if missing
-                    if (!communityCenter.bundles[bundle.ID][ingredient.Index])
+                    bool isMissing = this.GetIngredientsFromBundle(bundle, item).Any(p => this.IsIngredientNeeded(bundle, p));
+                    if (isMissing)
                         yield return bundle;
                 }
             }
@@ -526,10 +593,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // single quality
-            if (!GameHelper.CanHaveQuality(item) || qualityIsKnown)
+            if (!this.GameHelper.CanHaveQuality(item) || qualityIsKnown)
             {
                 ItemQuality quality = qualityIsKnown && item is SObject obj
-                    ? (ItemQuality)obj.quality
+                    ? (ItemQuality)obj.Quality
                     : ItemQuality.Normal;
 
                 return new Dictionary<ItemQuality, int> { [quality] = GetPrice(item) };
@@ -539,12 +606,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             int[] iridiumItems = metadata.Constants.ItemsWithIridiumQuality;
             var prices = new Dictionary<ItemQuality, int>
             {
-                [ItemQuality.Normal] = GetPrice(new SObject(item.parentSheetIndex, 1)),
-                [ItemQuality.Silver] = GetPrice(new SObject(item.parentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
-                [ItemQuality.Gold] = GetPrice(new SObject(item.parentSheetIndex, 1, quality: (int)ItemQuality.Gold))
+                [ItemQuality.Normal] = GetPrice(new SObject(item.ParentSheetIndex, 1)),
+                [ItemQuality.Silver] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
+                [ItemQuality.Gold] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Gold))
             };
-            if (item.GetSpriteType() == ItemSpriteType.Object && (iridiumItems.Contains(item.category) || iridiumItems.Contains(item.parentSheetIndex)))
-                prices[ItemQuality.Iridium] = GetPrice(new SObject(item.parentSheetIndex, 1, quality: (int)ItemQuality.Iridium));
+            if (item.GetSpriteType() == ItemSpriteType.Object && (iridiumItems.Contains(item.Category) || iridiumItems.Contains(item.ParentSheetIndex)))
+                prices[ItemQuality.Iridium] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Iridium));
             return prices;
         }
 
@@ -553,9 +620,38 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         private IDictionary<GiftTaste, string[]> GetGiftTastes(Item item, Metadata metadata)
         {
-            return GameHelper.GetGiftTastes(item, metadata)
+            return this.GameHelper.GetGiftTastes(item, metadata)
                 .GroupBy(p => p.Value, p => p.Key.getName())
                 .ToDictionary(p => p.Key, p => p.Distinct().ToArray());
+        }
+
+        /// <summary>Get bundle ingredients matching the given item.</summary>
+        /// <param name="bundle">The bundle to search.</param>
+        /// <param name="item">The item to match.</param>
+        private IEnumerable<BundleIngredientModel> GetIngredientsFromBundle(BundleModel bundle, SObject item)
+        {
+            return bundle.Ingredients
+                .Where(p => p.ItemID == item.ParentSheetIndex && p.Quality <= (ItemQuality)item.Quality); // get ingredients
+        }
+
+        /// <summary>Get whether an ingredient is still needed for a bundle.</summary>
+        /// <param name="bundle">The bundle to check.</param>
+        /// <param name="ingredient">The ingredient to check.</param>
+        private bool IsIngredientNeeded(BundleModel bundle, BundleIngredientModel ingredient)
+        {
+            CommunityCenter communityCenter = Game1.locations.OfType<CommunityCenter>().First();
+
+            return !communityCenter.bundles[bundle.ID][ingredient.Index];
+        }
+
+        /// <summary>Get the number of an ingredient needed for a bundle.</summary>
+        /// <param name="bundle">The bundle to check.</param>
+        /// <param name="item">The ingredient to check.</param>
+        private int GetIngredientCountNeeded(BundleModel bundle, SObject item)
+        {
+            return this.GetIngredientsFromBundle(bundle, item)
+                .Where(p => this.IsIngredientNeeded(bundle, p))
+                .Sum(p => p.Stack);
         }
     }
 }

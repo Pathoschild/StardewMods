@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -30,11 +30,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public FruitTreeSubject(FruitTree tree, Vector2 tile, ITranslationHelper translations)
-            : base(translations.Get(L10n.FruitTree.Name, new { fruitName = GameHelper.GetObjectBySpriteIndex(tree.indexOfFruit).DisplayName }), null, translations.Get(L10n.Types.FruitTree), translations)
+        public FruitTreeSubject(GameHelper gameHelper, FruitTree tree, Vector2 tile, ITranslationHelper translations)
+            : base(gameHelper, translations.Get(L10n.FruitTree.Name, new { fruitName = gameHelper.GetObjectBySpriteIndex(tree.indexOfFruit.Value).DisplayName }), null, translations.Get(L10n.Types.FruitTree), translations)
         {
             this.Target = tree;
             this.Tile = tile;
@@ -48,43 +49,43 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             FruitTree tree = this.Target;
 
             // get basic info
-            bool isMature = tree.daysUntilMature <= 0;
-            bool isDead = tree.stump;
-            bool isStruckByLightning = tree.struckByLightningCountdown > 0;
+            bool isMature = tree.daysUntilMature.Value <= 0;
+            bool isDead = tree.stump.Value;
+            bool isStruckByLightning = tree.struckByLightningCountdown.Value > 0;
 
             // show next fruit
             if (isMature && !isDead)
             {
                 string label = this.Translate(L10n.FruitTree.NextFruit);
                 if (isStruckByLightning)
-                    yield return new GenericField(label, this.Translate(L10n.FruitTree.NextFruitStruckByLightning, new { count = tree.struckByLightningCountdown }));
-                else if (Game1.currentSeason != tree.fruitSeason && !tree.greenHouseTree)
-                    yield return new GenericField(label, this.Translate(L10n.FruitTree.NextFruitOutOfSeason));
-                else if (tree.fruitsOnTree == FruitTree.maxFruitsOnTrees)
-                    yield return new GenericField(label, this.Translate(L10n.FruitTree.NextFruitMaxFruit));
+                    yield return new GenericField(this.GameHelper, label, this.Translate(L10n.FruitTree.NextFruitStruckByLightning, new { count = tree.struckByLightningCountdown }));
+                else if (Game1.currentSeason != tree.fruitSeason.Value && !tree.GreenHouseTree)
+                    yield return new GenericField(this.GameHelper, label, this.Translate(L10n.FruitTree.NextFruitOutOfSeason));
+                else if (tree.fruitsOnTree.Value == FruitTree.maxFruitsOnTrees)
+                    yield return new GenericField(this.GameHelper, label, this.Translate(L10n.FruitTree.NextFruitMaxFruit));
                 else
-                    yield return new GenericField(label, this.Translate(L10n.Generic.Tomorrow));
+                    yield return new GenericField(this.GameHelper, label, this.Translate(L10n.Generic.Tomorrow));
             }
 
             // show growth data
             if (!isMature)
             {
-                SDate dayOfMaturity = SDate.Now().AddDays(tree.daysUntilMature);
+                SDate dayOfMaturity = SDate.Now().AddDays(tree.daysUntilMature.Value);
                 string grownOnDateText = this.Translate(L10n.FruitTree.GrowthSummary, new { date = this.Stringify(dayOfMaturity) });
-                string daysUntilGrownText = this.Text.GetPlural(tree.daysUntilMature, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = tree.daysUntilMature });
+                string daysUntilGrownText = this.Text.GetPlural(tree.daysUntilMature.Value, L10n.Generic.Tomorrow, L10n.Generic.InXDays).Tokens(new { count = tree.daysUntilMature });
                 string growthText = $"{grownOnDateText} ({daysUntilGrownText})";
 
-                yield return new GenericField(this.Translate(L10n.FruitTree.NextFruit), this.Translate(L10n.FruitTree.NextFruitTooYoung));
-                yield return new GenericField(this.Translate(L10n.FruitTree.Growth), growthText);
+                yield return new GenericField(this.GameHelper, this.Translate(L10n.FruitTree.NextFruit), this.Translate(L10n.FruitTree.NextFruitTooYoung));
+                yield return new GenericField(this.GameHelper, this.Translate(L10n.FruitTree.Growth), growthText);
                 if (this.HasAdjacentObjects(this.Tile))
-                    yield return new GenericField(this.Translate(L10n.FruitTree.Complaints), this.Translate(L10n.FruitTree.ComplaintsAdjacentObjects));
+                    yield return new GenericField(this.GameHelper, this.Translate(L10n.FruitTree.Complaints), this.Translate(L10n.FruitTree.ComplaintsAdjacentObjects));
             }
             else
             {
                 // get quality schedule
                 ItemQuality currentQuality = this.GetCurrentQuality(tree, metadata.Constants.FruitTreeQualityGrowthTime);
                 if (currentQuality == ItemQuality.Iridium)
-                    yield return new GenericField(this.Translate(L10n.FruitTree.Quality), this.Translate(L10n.FruitTree.QualityNow, new { quality = this.Translate(L10n.For(currentQuality)) }));
+                    yield return new GenericField(this.GameHelper, this.Translate(L10n.FruitTree.Quality), this.Translate(L10n.FruitTree.QualityNow, new { quality = this.Translate(L10n.For(currentQuality)) }));
                 else
                 {
                     string[] summary = this
@@ -117,12 +118,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         })
                         .ToArray();
 
-                    yield return new GenericField(this.Translate(L10n.FruitTree.Quality), string.Join(Environment.NewLine, summary));
+                    yield return new GenericField(this.GameHelper, this.Translate(L10n.FruitTree.Quality), string.Join(Environment.NewLine, summary));
                 }
             }
 
             // show season
-            yield return new GenericField(this.Translate(L10n.FruitTree.Season), this.Translate(L10n.FruitTree.SeasonSummary, new { season = this.Text.GetSeasonName(tree.fruitSeason) }));
+            yield return new GenericField(this.GameHelper, this.Translate(L10n.FruitTree.Season), this.Translate(L10n.FruitTree.SeasonSummary, new { season = this.Text.GetSeasonName(tree.fruitSeason.Value) }));
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
@@ -133,8 +134,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             // pinned fields
             yield return new GenericDebugField("mature in", $"{target.daysUntilMature} days", pinned: true);
-            yield return new GenericDebugField("growth stage", target.growthStage, pinned: true);
-            yield return new GenericDebugField("health", target.health, pinned: true);
+            yield return new GenericDebugField("growth stage", target.growthStage.Value, pinned: true);
+            yield return new GenericDebugField("health", target.health.Value, pinned: true);
 
             // raw fields
             foreach (IDebugField field in this.GetDebugFieldsFrom(target))
@@ -174,7 +175,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="daysPerQuality">The number of days before the tree begins producing a higher quality.</param>
         private ItemQuality GetCurrentQuality(FruitTree tree, int daysPerQuality)
         {
-            int maturityLevel = Math.Max(0, Math.Min(3, -tree.daysUntilMature / daysPerQuality));
+            int maturityLevel = Math.Max(0, Math.Min(3, -tree.daysUntilMature.Value / daysPerQuality));
             switch (maturityLevel)
             {
                 case 0:
@@ -196,14 +197,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="daysPerQuality">The number of days before the tree begins producing a higher quality.</param>
         private IEnumerable<KeyValuePair<ItemQuality, int>> GetQualitySchedule(FruitTree tree, ItemQuality currentQuality, int daysPerQuality)
         {
-            if (tree.daysUntilMature > 0)
+            if (tree.daysUntilMature.Value > 0)
                 yield break; // not mature yet
 
             // yield current
             yield return new KeyValuePair<ItemQuality, int>(currentQuality, 0);
 
             // yield future qualities
-            int dayOffset = daysPerQuality - Math.Abs(tree.daysUntilMature % daysPerQuality);
+            int dayOffset = daysPerQuality - Math.Abs(tree.daysUntilMature.Value % daysPerQuality);
             foreach (ItemQuality futureQuality in new[] { ItemQuality.Silver, ItemQuality.Gold, ItemQuality.Iridium })
             {
                 if (currentQuality >= futureQuality)

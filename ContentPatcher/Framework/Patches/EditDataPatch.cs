@@ -30,7 +30,6 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="logName">A unique name for this patch shown in log messages.</param>
-        /// <param name="assetLoader">Handles loading assets from content packs.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
@@ -38,8 +37,8 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="fields">The data fields to edit.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditDataPatch(string logName, AssetLoader assetLoader, IContentPack contentPack, TokenString assetName, ConditionDictionary conditions, IDictionary<string, string> records, IDictionary<string, IDictionary<int, string>> fields, IMonitor monitor, Func<string, string> normaliseAssetName)
-            : base(logName, PatchType.EditData, assetLoader, contentPack, assetName, conditions, normaliseAssetName)
+        public EditDataPatch(string logName, ManagedContentPack contentPack, TokenString assetName, ConditionDictionary conditions, IDictionary<string, string> records, IDictionary<string, IDictionary<int, string>> fields, IMonitor monitor, Func<string, string> normaliseAssetName)
+            : base(logName, PatchType.EditData, contentPack, assetName, conditions, normaliseAssetName)
         {
             this.Records = records;
             this.Fields = fields;
@@ -92,7 +91,10 @@ namespace ContentPatcher.Framework.Patches
                 foreach (KeyValuePair<string, string> record in this.Records)
                 {
                     TKey key = (TKey)Convert.ChangeType(record.Key, typeof(TKey));
-                    data[key] = record.Value;
+                    if (record.Value != null)
+                        data[key] = record.Value;
+                    else
+                        data.Remove(key);
                 }
             }
 

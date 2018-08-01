@@ -29,14 +29,15 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature treeObj))
             {
                 if (treeObj is Tree tree)
-                    this.TreeType = tree.treeType;
+                    this.TreeType = tree.treeType.Value;
             }
         }
 
         /// <summary>Get the output item.</summary>
         public override ITrackedStack GetOutput()
         {
-            return new TrackedItem(this.Machine.heldObject.getOne(), onEmpty: this.Reset);
+            SObject heldObject = this.Machine.heldObject.Value;
+            return new TrackedItem(heldObject.getOne(), onEmpty: this.Reset);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -60,29 +61,29 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             switch (this.TreeType)
             {
                 case 1:
-                    tapper.heldObject = new SObject(725, 1);
-                    tapper.minutesUntilReady = 13000 - Game1.timeOfDay;
+                    tapper.heldObject.Value = new SObject(725, 1);
+                    tapper.MinutesUntilReady = 13000 - Game1.timeOfDay;
                     break;
                 case 2:
-                    tapper.heldObject = new SObject(724, 1);
-                    tapper.minutesUntilReady = 16000 - Game1.timeOfDay;
+                    tapper.heldObject.Value = new SObject(724, 1);
+                    tapper.MinutesUntilReady = 16000 - Game1.timeOfDay;
                     break;
                 case 3:
-                    tapper.heldObject = new SObject(726, 1);
-                    tapper.minutesUntilReady = 10000 - Game1.timeOfDay;
+                    tapper.heldObject.Value = new SObject(726, 1);
+                    tapper.MinutesUntilReady = 10000 - Game1.timeOfDay;
                     break;
                 case 7:
-                    tapper.heldObject = new SObject(420, 1);
-                    tapper.minutesUntilReady = 3000 - Game1.timeOfDay;
+                    tapper.heldObject.Value = new SObject(420, 1);
+                    tapper.MinutesUntilReady = 3000 - Game1.timeOfDay;
                     if (!Game1.currentSeason.Equals("fall"))
                     {
-                        tapper.heldObject = new SObject(404, 1);
-                        tapper.minutesUntilReady = 6000 - Game1.timeOfDay;
+                        tapper.heldObject.Value = new SObject(404, 1);
+                        tapper.MinutesUntilReady = 6000 - Game1.timeOfDay;
                     }
                     break;
             }
-            tapper.heldObject = (SObject)tapper.heldObject.getOne();
-            tapper.readyForHarvest = false;
+            tapper.heldObject.Value = (SObject)tapper.heldObject.Value.getOne();
+            tapper.readyForHarvest.Value = false;
         }
     }
 }

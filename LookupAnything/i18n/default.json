@@ -39,6 +39,13 @@
   "quality.gold": "gold",
   "quality.iridium": "iridium",
 
+  // NPC friendship
+  "friendship-status.friendly": "Friendly",
+  "friendship-status.dating": "Dating",
+  "friendship-status.engaged": "Engaged",
+  "friendship-status.married": "Married",
+  "friendship-status.divorced": "Divorced",
+
   /*********
   ** Data translations
   *********/
@@ -200,16 +207,22 @@
   // item lookup labels
   "item.cask-contents": "Contents",
   "item.cask-schedule": "Aging",
+
+  "item.crabpot-bait": "Bait",
+  "item.crabpot-bait-needed": "Needs bait!",
+  "item.crabpot-bait-not-needed": "Not needed due to Luremaster profession.",
+
+  "item.fence-health": "Health",
+
   "item.contents": "Contents",
-  "item.needed-for": "Needed for",
-  "item.sells-for": "Sells for",
-  "item.sells-to": "Sells to",
   "item.likes-this": "Likes this",
   "item.loves-this": "Loves this",
-  "item.fence-health": "Health",
-  "item.recipes": "Recipes",
+  "item.needed-for": "Needed for",
   "item.number-owned": "Owned",
+  "item.recipes": "Recipes",
   "item.see-also": "See also",
+  "item.sells-for": "Sells for",
+  "item.sells-to": "Sells to",
 
   // item lookup values
   "item.cask-schedule.now": "{{quality}} ready now",

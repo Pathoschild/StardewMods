@@ -23,11 +23,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="obj">The underlying in-game object.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public CropTarget(TerrainFeature obj, Vector2? tilePosition, IReflectionHelper reflectionHelper)
-            : base(TargetType.Crop, obj, tilePosition)
+        public CropTarget(GameHelper gameHelper, TerrainFeature obj, Vector2? tilePosition, IReflectionHelper reflectionHelper)
+            : base(gameHelper, TargetType.Crop, obj, tilePosition)
         {
             this.Crop = ((HoeDirt)obj).crop;
             this.Reflection = reflectionHelper;
@@ -48,18 +49,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         public override bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea)
         {
             Crop crop = this.Crop;
-            SpriteEffects spriteEffects = crop.flip ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            SpriteEffects spriteEffects = crop.flip.Value ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             // base crop
             if (this.SpriteIntersectsPixel(tile, position, spriteArea, Game1.cropSpriteSheet, this.GetSourceRectangle(crop), spriteEffects))
                 return true;
 
             // crop in last phase (may have fruit, be identical to base crop, or be blank)
-            if (!crop.tintColor.Equals(Color.White) && crop.currentPhase == crop.phaseDays.Count - 1 && !crop.dead)
+            if (!crop.tintColor.Equals(Color.White) && crop.currentPhase.Value == crop.phaseDays.Count - 1 && !crop.dead.Value)
             {
                 var sourceRectangle = new Rectangle(
-                    x: (crop.fullyGrown ? (crop.dayOfCurrentPhase <= 0 ? 6 : 7) : crop.currentPhase + 1 + 1) * 16 + (crop.rowInSpriteSheet % 2 != 0 ? 128 : 0),
-                    y: crop.rowInSpriteSheet / 2 * 16 * 2,
+                    x: (crop.fullyGrown.Value ? (crop.dayOfCurrentPhase.Value <= 0 ? 6 : 7) : crop.currentPhase.Value + 1 + 1) * 16 + (crop.rowInSpriteSheet.Value % 2 != 0 ? 128 : 0),
+                    y: crop.rowInSpriteSheet.Value / 2 * 16 * 2,
                     width: 16,
                     height: 32
                 );
@@ -77,7 +78,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="crop">The crop.</param>
         private Rectangle GetSourceRectangle(Crop crop)
         {
-            return this.Reflection.GetMethod(crop, "getSourceRect").Invoke<Rectangle>(crop.rowInSpriteSheet);
+            return this.Reflection.GetMethod(crop, "getSourceRect").Invoke<Rectangle>(crop.rowInSpriteSheet.Value);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Conditions
@@ -31,8 +32,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="context">The condition context.</param>
         public bool IsMatch(ConditionContext context)
         {
-            string contextValue = context.GetValue(this.Key);
-            return this.Values.Contains(contextValue);
+            return context
+                .GetValues(this.Key)
+                .Any(p => this.Values.Contains(p));
         }
     }
 }

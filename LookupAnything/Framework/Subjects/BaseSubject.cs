@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -18,6 +18,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         *********/
         /// <summary>Provides translations stored in the mod folder.</summary>
         protected ITranslationHelper Text { get; }
+
+        /// <summary>Provides utility methods for interacting with the game code.</summary>
+        protected GameHelper GameHelper { get; }
 
 
         /*********
@@ -56,19 +59,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        protected BaseSubject(ITranslationHelper translations)
+        protected BaseSubject(GameHelper gameHelper, ITranslationHelper translations)
         {
+            this.GameHelper = gameHelper;
             this.Text = translations;
         }
 
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="name">The display name.</param>
         /// <param name="description">The object description (if applicable).</param>
         /// <param name="type">The object type.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        protected BaseSubject(string name, string description, string type, ITranslationHelper translations)
-            : this(translations)
+        protected BaseSubject(GameHelper gameHelper, string name, string description, string type, ITranslationHelper translations)
+            : this(gameHelper, translations)
         {
             this.Initialise(name, description, type);
         }

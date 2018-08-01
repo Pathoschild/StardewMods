@@ -49,24 +49,32 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: SObject.FruitsCategory,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 348, input.Name + " Wine", false, true, false, false)
+                output: input =>
                 {
-                    name = input.Name + " Wine",
-                    Price = ((SObject)input).Price * 3,
-                    preserve = SObject.PreserveType.Wine,
-                    preservedParentSheetIndex = input.parentSheetIndex
+                    SObject wine = new SObject(Vector2.Zero, 348, input.Name + " Wine", false, true, false, false)
+                    {
+                        name = input.Name + " Wine",
+                        Price = ((SObject)input).Price * 3
+                    };
+                    wine.preserve.Value = SObject.PreserveType.Wine;
+                    wine.preservedParentSheetIndex.Value = input.ParentSheetIndex;
+                    return wine;
                 },
                 minutes: 10000
             ),
             new Recipe(
                 input: SObject.VegetableCategory,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 350, input.Name + " Juice", false, true, false, false)
+                output: input =>
                 {
-                    name = input.Name + " Juice",
-                    Price = (int)(((SObject)input).Price * 2.25),
-                    preserve = SObject.PreserveType.Juice,
-                    preservedParentSheetIndex = input.parentSheetIndex
+                    SObject juice = new SObject(Vector2.Zero, 350, input.Name + " Juice", false, true, false, false)
+                    {
+                        name = input.Name + " Juice",
+                        Price = (int)(((SObject)input).Price * 2.25)
+                    };
+                    juice.preserve.Value = SObject.PreserveType.Juice;
+                    juice.preservedParentSheetIndex.Value = input.ParentSheetIndex;
+                    return juice;
                 },
                 minutes: 6000
             )

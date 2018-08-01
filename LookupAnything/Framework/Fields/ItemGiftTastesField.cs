@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 
@@ -11,11 +11,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="giftTastes">NPCs by how much they like receiving this item.</param>
         /// <param name="showTaste">The gift taste to show.</param>
-        public ItemGiftTastesField(string label, IDictionary<GiftTaste, string[]> giftTastes, GiftTaste showTaste)
-            : base(label, ItemGiftTastesField.GetText(giftTastes, showTaste)) { }
+        public ItemGiftTastesField(GameHelper gameHelper, string label, IDictionary<GiftTaste, string[]> giftTastes, GiftTaste showTaste)
+            : base(gameHelper, label, ItemGiftTastesField.GetText(giftTastes, showTaste)) { }
 
 
         /*********

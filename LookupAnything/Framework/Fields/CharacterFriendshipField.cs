@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Components;
@@ -26,11 +26,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="friendship">The player's current friendship data with the NPC.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public CharacterFriendshipField(string label, FriendshipModel friendship, ITranslationHelper translations)
-            : base(label, hasValue: true)
+        public CharacterFriendshipField(GameHelper gameHelper, string label, FriendshipModel friendship, ITranslationHelper translations)
+            : base(gameHelper, label, hasValue: true)
         {
             this.Friendship = friendship;
             this.Translations = translations;
@@ -46,8 +47,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         {
             FriendshipModel friendship = this.Friendship;
 
-            // draw hearts
+            // draw status
             float leftOffset = 0;
+            {
+                string statusText = this.Translations.Get(L10n.For(friendship.Status));
+                Vector2 textSize = spriteBatch.DrawTextBlock(font, statusText, new Vector2(position.X + leftOffset, position.Y), wrapWidth - leftOffset);
+                leftOffset += textSize.X + DrawHelper.GetSpaceWidth(font);
+            }
+
+            // draw hearts
             for (int i = 0; i < friendship.TotalHearts; i++)
             {
                 // get icon
@@ -95,12 +103,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             }
 
             // draw caption
-            float spaceSize = DrawHelper.GetSpaceWidth(font);
-            Vector2 textSize = Vector2.Zero;
-            if (caption != null)
-                textSize = spriteBatch.DrawTextBlock(font, caption, new Vector2(position.X + leftOffset + spaceSize, position.Y), wrapWidth - leftOffset);
+            {
+                float spaceSize = DrawHelper.GetSpaceWidth(font);
+                Vector2 textSize = Vector2.Zero;
+                if (caption != null)
+                    textSize = spriteBatch.DrawTextBlock(font, caption, new Vector2(position.X + leftOffset + spaceSize, position.Y), wrapWidth - leftOffset);
 
-            return new Vector2(Sprites.Icons.FilledHeart.Width * Game1.pixelZoom * this.Friendship.TotalHearts + textSize.X + spaceSize, Math.Max(Sprites.Icons.FilledHeart.Height * Game1.pixelZoom, textSize.Y));
+                return new Vector2(Sprites.Icons.FilledHeart.Width * Game1.pixelZoom * this.Friendship.TotalHearts + textSize.X + spaceSize, Math.Max(Sprites.Icons.FilledHeart.Height * Game1.pixelZoom, textSize.Y));
+            }
         }
     }
 }

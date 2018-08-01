@@ -1,9 +1,19 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.13
+* Updated for Stardew Valley 1.3 (including multiplayer support).
+* Added support for auto-grabbers.
+* Added Automate options to edit-chest screen if it's installed.
+* Added support for scrolling chest/category dropdowns with the mouse wheel. (Thanks to mattfeldman!)
+* Improved message when no chests are accessible.
+* Fixed 'ok' button not closing menu in rare cases.
+* Fixed issue where opening the chest UI from the inventory screen while holding an item destroys the item.
+* Improved translations. Thanks to alca259 (Spanish), changbowen (Chinese), dezqo (German), fadedDexofan (Russian), heiwaon (Russian), and TaelFayre (Portuguese)!
+
 ## 1.12.4
 * Updated to SMAPI 2.4.
-* Improved German translations. (Thanks to Husky110!)
+* Improved translations. Thanks to Husky110 (German)!
 
 ## 1.12.3
 * Added option to disable remote chest access from certain locations.
@@ -32,16 +42,16 @@
 * Switched to SMAPI update checks.
 * Fixed being able to close a chest while an item is held, causing the item to disappear.
 * Fixed not being able to reset a chest name to default after editing it.
-* Improved translations thanks to Dorian/[@d0x7](https://github.com/d0x7) (German), vanja-san (Russian), and yuwenlan (Chinese).
+* Improved translations. Thanks to d0x7 (German), vanja-san (Russian), and yuwenlan (Chinese)!
 
 ## 1.11.1
-* Added Portuguese and Spanish translations by Fabilows and ThomasGabrielDelavault respectively.
 * Fixed double cursor when using a controller.
+* Improved translations. Thanks to Fabilows (added Portuguese) and ThomasGabrielDelavault (added Spanish)!
 
 ## 1.11
 * Updated to SMAPI 1.14.
 * Added translation support.
-* Added Chinese and German translations by yuwenlan and Sasara respectively.
+* Improved translations. Thanks to Sasara (added German) and yuwenlan (added Chinese)!
 
 ## 1.10
 * Updated for Stardew Valley 1.2.

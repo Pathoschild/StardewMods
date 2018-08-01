@@ -46,19 +46,19 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 107,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { quality = SObject.highQuality },
+                output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Quality = SObject.highQuality },
                 minutes: 180
             ),
             new Recipe(
                 input: 174,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { quality = SObject.highQuality },
+                output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Quality = SObject.highQuality },
                 minutes: 180
             ),
             new Recipe(
                 input: 182,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { quality = SObject.highQuality },
+                output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Quality = SObject.highQuality },
                 minutes: 180
             )
         };

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -16,12 +17,13 @@ using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod
 {
     /// <summary>The mod entry point.</summary>
-    internal class ModEntry : Mod
+    internal class ModEntry : Mod, IAssetLoader
     {
         /*********
         ** Properties
@@ -47,20 +49,29 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The tractor attachments to apply.</summary>
         private IAttachment[] Attachments;
 
+        /// <summary>Whether the mod is enabled.</summary>
+        private bool IsEnabled = true;
+
         /// <summary>Manages the tractor instance.</summary>
-        private TractorManager Tractor;
+        private Tractor Tractor;
 
         /// <summary>Whether Robin is busy constructing a garage.</summary>
         private bool IsRobinBusy;
-
-        /// <summary>The tractor garages which started construction today.</summary>
-        private readonly List<Building> GaragesStartedToday = new List<Building>();
 
         /// <summary>Whether the player has any tractor garages.</summary>
         private bool HasAnyGarages;
 
         /// <summary>Whether the Pelican Fiber mod is loaded.</summary>
         private bool IsPelicanFiberLoaded;
+
+        /// <summary>The tractor texture to display.</summary>
+        private Texture2D TractorTexture;
+
+        /// <summary>The garage texture to display.</summary>
+        private Texture2D GarageTexture;
+
+        /// <summary>The season for which the textures were loaded.</summary>
+        private string TextureSeason;
 
 
         /*********
@@ -86,10 +97,12 @@ namespace Pathoschild.Stardew.TractorMod
                 new FertilizerAttachment(attachmentConfig.Fertilizer),
                 new GrassStarterAttachment(attachmentConfig.GrassStarter),
                 new HoeAttachment(attachmentConfig.Hoe),
+                new MeleeWeaponAttachment(attachmentConfig.MeleeWeapon),
                 new PickaxeAttachment(attachmentConfig.PickAxe),
                 new ScytheAttachment(attachmentConfig.Scythe),
                 new SeedAttachment(attachmentConfig.Seeds),
                 new SeedBagAttachment(attachmentConfig.SeedBagMod),
+                new SlingshotAttachment(attachmentConfig.Slingshot, this.Helper.Reflection),
                 new WateringCanAttachment(attachmentConfig.WateringCan)
             };
 
@@ -102,11 +115,26 @@ namespace Pathoschild.Stardew.TractorMod
             MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
             InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
             GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
+            LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
+            LocationEvents.BuildingsChanged += this.LocationEvents_BuildingsChanged;
 
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
                 this.Monitor.Log("The translation files in this mod's i18n folder seem to be missing. The mod will still work, but you'll see 'missing translation' messages. Try reinstalling the mod to fix this.", LogLevel.Warn);
+        }
+
+        /// <summary>Get whether this instance can load the initial version of the given asset.</summary>
+        /// <param name="asset">Basic metadata about the asset being loaded.</param>
+        public bool CanLoad<T>(IAssetInfo asset)
+        {
+            return asset.AssetNameEquals("Buildings/TractorGarage");
+        }
+
+        /// <summary>Load a matched asset.</summary>
+        /// <param name="asset">Basic metadata about the asset being loaded.</param>
+        public T Load<T>(IAssetInfo asset)
+        {
+            return (T)(object)this.GarageTexture;
         }
 
 
@@ -135,11 +163,26 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
         {
+            // disable in multiplayer mode
+            this.IsEnabled = !Context.IsMultiplayer;
+            if (!this.IsEnabled)
+            {
+                this.Monitor.Log("Disabled mod; not compatible with multiplayer mode yet.", LogLevel.Warn);
+                return;
+            }
+
+            // set textures
+            if (this.GarageTexture == null || this.TractorTexture == null || this.TextureSeason != Game1.Date.Season)
+            {
+                this.TractorTexture = this.Helper.Content.Load<Texture2D>(this.GetTextureKey("tractor"));
+                this.GarageTexture = this.Helper.Content.Load<Texture2D>(this.GetTextureKey("garage")); // preload asset to avoid errors if loaded during draw loop
+                this.TextureSeason = Game1.Date.Season;
+            }
+
             // set up for new day
             this.Tractor = null;
-            this.GaragesStartedToday.Clear();
             this.RestoreCustomData();
-            this.HasAnyGarages = this.GetGarages().Any();
+            this.HasAnyGarages = this.FindGarages().Any();
         }
 
         /// <summary>The event called before the game starts saving.</summary>
@@ -147,6 +190,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void SaveEvents_BeforeSave(object sender, EventArgs e)
         {
+            if (!this.IsEnabled)
+                return;
+
             this.StashCustomData();
         }
 
@@ -155,6 +201,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void GraphicsEvents_OnPostRenderEvent(object sender, EventArgs e)
         {
+            if (!this.IsEnabled)
+                return;
+
             if (Context.IsWorldReady && Game1.activeClickableMenu == null && this.Config.HighlightRadius && this.Tractor?.IsRiding == true)
                 this.Tractor?.DrawRadius(Game1.spriteBatch);
         }
@@ -164,18 +213,8 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
-            // remove tractor from social menu
-            if (e.NewMenu is GameMenu gameMenu && this.Tractor != null && !this.Tractor.IsRiding)
-            {
-                SocialPage socialPage = (SocialPage)this.Helper.Reflection.GetField<List<IClickableMenu>>(gameMenu, "pages").GetValue()[GameMenu.socialTab];
-                List<ClickableTextureComponent> friendNames = this.Helper.Reflection.GetField<List<ClickableTextureComponent>>(socialPage, "friendNames").GetValue();
-                IDictionary<string, string> npcNames = this.Helper.Reflection.GetField<Dictionary<string, string>>(socialPage, "npcNames").GetValue();
-
-                friendNames.RemoveAll(p => p.name == this.Tractor.Current.name);
-                npcNames.Remove(this.Tractor.Current.name);
-
-                socialPage.updateSlots();
-            }
+            if (!this.IsEnabled)
+                return;
 
             // add blueprint to carpenter menu
             if (Context.IsWorldReady && !this.HasAnyGarages)
@@ -200,13 +239,40 @@ namespace Pathoschild.Stardew.TractorMod
             }
         }
 
+        /// <summary>The event called when a building is added or removed in a location.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void LocationEvents_LocationsChanged(object sender, EventArgsLocationsChanged e)
+        {
+            foreach (BuildableGameLocation location in e.Added.OfType<BuildableGameLocation>())
+            {
+                foreach (Building building in location.buildings)
+                    this.FixGarage(building, location);
+            }
+        }
+
+        /// <summary>The event called when a building is added or removed in a location.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void LocationEvents_BuildingsChanged(object sender, EventArgsLocationBuildingsChanged e)
+        {
+            if (e.Location is BuildableGameLocation location)
+            {
+                foreach (Building building in e.Added)
+                    this.FixGarage(building, location);
+            }
+        }
+
         /// <summary>The event called when the player presses a keyboard button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
         {
+            if (!this.IsEnabled)
+                return;
+
             // summon tractor
-            if (Context.IsPlayerFree && this.Config.Controls.SummonTractor.Contains(e.Button))
+            if (Context.IsPlayerFree && this.Config.Controls.SummonTractor.Contains(e.Button) && !Game1.player.isRidingHorse())
                 this.Tractor?.SetLocation(Game1.currentLocation, Game1.player.getTileLocation());
         }
 
@@ -215,67 +281,77 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (Game1.activeClickableMenu is CarpenterMenu || Game1.activeClickableMenu?.GetType().FullName == this.PelicanFiberMenuFullName)
-                this.ProcessNewConstruction();
+            if (!this.IsEnabled)
+                return;
+
             if (Context.IsPlayerFree)
                 this.Tractor?.Update();
-        }
-
-        /// <summary>The event called when the player warps to a new location.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
-        {
-            this.Tractor?.UpdateForNewLocation(e.PriorLocation, e.NewLocation);
         }
 
         /****
         ** State methods
         ****/
-        /// <summary>Detect and fix tractor garages that started construction today.</summary>
-        private void ProcessNewConstruction()
+        /// <summary>Fix a garage if necessary so it has the correct custom behavior.</summary>
+        /// <param name="building">The building to fix.</param>
+        /// <param name="location">The location containing the building.</param>
+        /// <returns>Returns whether the building is a tractor.</returns>
+        private void FixGarage(Building building, BuildableGameLocation location)
         {
-            foreach (GarageMetadata metadata in this.GetGarages().ToArray())
-            {
-                this.HasAnyGarages = true;
-                Building garage = metadata.Building;
-                BuildableGameLocation location = metadata.Location;
+            // skip if no fix needed
+            if (building is TractorGarage || building.buildingType.Value != this.GarageBuildingType)
+                return;
 
-                // skip if not built today
-                if (garage is TractorGarage)
-                    continue;
-
-                // set construction days after it's placed
-                if (!this.GaragesStartedToday.Contains(garage))
-                {
-                    garage.daysOfConstructionLeft = this.GarageConstructionDays;
-                    this.GaragesStartedToday.Add(garage);
-                }
-
-                // spawn tractor if built instantly by a mod
-                if (!garage.isUnderConstruction())
-                {
-                    this.GaragesStartedToday.Remove(garage);
-                    location.destroyStructure(garage);
-                    location.buildings.Add(new TractorGarage(this.GetBlueprint(), new Vector2(garage.tileX, garage.tileY), 0));
-                    if (this.Tractor == null)
-                        this.Tractor = this.SpawnTractor(location, garage.tileX + 1, garage.tileY + 1);
-                }
-            }
+            // replace building
+            location.destroyStructure(building);
+            this.SpawnGarage(location, building.tileX.Value, building.tileY.Value, building.daysOfConstructionLeft.Value, Guid.NewGuid(), 0);
         }
 
-        /// <summary>Spawn a new tractor.</summary>
-        /// <param name="location">The location in which to spawn a tractor.</param>
+        /// <summary>Spawn a garage in a location (and tractor if needed).</summary>
+        /// <param name="tractorID">The unique ID for the associated tractor.</param>
+        /// <param name="location">The location in which to spawn a garage.</param>
         /// <param name="tileX">The tile X position at which to spawn it.</param>
         /// <param name="tileY">The tile Y position at which to spawn it.</param>
-        private TractorManager SpawnTractor(BuildableGameLocation location, int tileX, int tileY)
+        /// <param name="daysOfConstructionLeft">The days of construction left.</param>
+        /// <param name="hatID">The tractor's hat ID.</param>
+        [SuppressMessage("ReSharper", "PossibleLossOfFraction", Justification = "Deliberate conversion from pixels to tiles.")]
+        private void SpawnGarage(BuildableGameLocation location, int tileX, int tileY, int daysOfConstructionLeft, Guid tractorID, int? hatID)
         {
-            TractorManager tractor = new TractorManager(tileX, tileY, this.Config, this.Attachments, this.GetTexture("tractor"), this.Helper.Translation, this.Helper.Reflection);
-            tractor.SetLocation(location, new Vector2(tileX, tileY));
-            tractor.SetPixelPosition(new Vector2(tractor.Current.Position.X + 20, tractor.Current.Position.Y));
-            return tractor;
-        }
+            // add new garage
+            TractorGarage garage = new TractorGarage(tractorID, this.GetBlueprint(), new Vector2(tileX, tileY), daysOfConstructionLeft);
+            location.buildings.Add(garage);
 
+            // add Robin construction
+            if (garage.isUnderConstruction() && !this.IsRobinBusy && garage.daysOfConstructionLeft.Value < this.GarageConstructionDays)
+            {
+                this.IsRobinBusy = true;
+                NPC robin = Game1.getCharacterFromName("Robin");
+
+                // update Robin
+                robin.Sprite.setCurrentAnimation(new List<FarmerSprite.AnimationFrame>
+                {
+                    new FarmerSprite.AnimationFrame(24, 75),
+                    new FarmerSprite.AnimationFrame(25, 75),
+                    new FarmerSprite.AnimationFrame(26, 300, false, false, farmer => this.Helper.Reflection.GetMethod(robin,"robinHammerSound").Invoke(farmer)),
+                    new FarmerSprite.AnimationFrame(27, 1000, false, false, farmer => this.Helper.Reflection.GetMethod(robin,"robinVariablePause").Invoke(farmer))
+                });
+                robin.ignoreScheduleToday = true;
+                Game1.warpCharacter(robin, location, new Vector2(garage.tileX.Value + garage.tilesWide.Value / 2, garage.tileY.Value + garage.tilesHigh.Value / 2));
+                robin.position.X += Game1.tileSize / 4;
+                robin.position.Y -= Game1.tileSize / 2;
+                robin.CurrentDialogue.Clear();
+                robin.CurrentDialogue.Push(new Dialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.3926"), robin));
+            }
+
+            // spawn tractor if needed
+            if (this.Tractor == null && !garage.isUnderConstruction())
+            {
+                Tractor tractor = new Tractor(tractorID, tileX + 1, tileY + 1, this.Config, this.Attachments, this.Helper.Content.GetActualAssetKey(this.GetTextureKey("tractor")), this.Helper.Translation, this.Helper.Reflection);
+                tractor.SetLocation(location, new Vector2(tileX + 1, tileY + 1));
+                if (hatID.HasValue)
+                    tractor.hat.Value = new Hat(hatID.Value);
+                this.Tractor = tractor;
+            }
+        }
 
         /****
         ** Save methods
@@ -290,15 +366,16 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Stash all tractor and garage data to a separate file to avoid breaking the save file.</summary>
         private void StashCustomData()
         {
-            // back up garages
-            GarageMetadata[] garages = this.GetGarages().ToArray();
+            // stash data
+            GarageMetadata[] garages = this.FindGarages().ToArray();
             CustomSaveData saveData = new CustomSaveData(garages.Select(p => p.SaveData));
             this.Helper.WriteJsonFile(this.GetDataPath(Constants.SaveFolderName), saveData);
 
             // remove tractors + buildings
-            foreach (var garage in garages)
+            foreach (GarageMetadata garage in garages)
                 garage.Location.destroyStructure(garage.Building);
-            this.Tractor?.RemoveTractors();
+            foreach (GameLocation location in CommonHelper.GetLocations())
+                location.characters.Filter(p => !(p is Tractor));
 
             // reset Robin construction
             if (this.IsRobinBusy)
@@ -321,7 +398,6 @@ namespace Pathoschild.Stardew.TractorMod
                 return;
 
             // add tractor + garages
-            BluePrint blueprint = this.GetBlueprint();
             BuildableGameLocation[] locations = CommonHelper.GetLocations().OfType<BuildableGameLocation>().ToArray();
             foreach (CustomSaveBuilding garageData in saveData.Buildings)
             {
@@ -334,35 +410,8 @@ namespace Pathoschild.Stardew.TractorMod
                 }
 
                 // add garage
-                TractorGarage garage = new TractorGarage(blueprint, garageData.Tile, Math.Max(0, garageData.DaysOfConstructionLeft - 1));
-                location.buildings.Add(garage);
-
-                // add Robin construction
-                if (garage.isUnderConstruction() && !this.IsRobinBusy)
-                {
-                    this.IsRobinBusy = true;
-                    NPC robin = Game1.getCharacterFromName("Robin");
-
-                    // update Robin
-                    robin.ignoreMultiplayerUpdates = true;
-                    robin.sprite.setCurrentAnimation(new List<FarmerSprite.AnimationFrame>
-                    {
-                        new FarmerSprite.AnimationFrame(24, 75),
-                        new FarmerSprite.AnimationFrame(25, 75),
-                        new FarmerSprite.AnimationFrame(26, 300, false, false, farmer => this.Helper.Reflection.GetMethod(robin,"robinHammerSound").Invoke(farmer)),
-                        new FarmerSprite.AnimationFrame(27, 1000, false, false, farmer => this.Helper.Reflection.GetMethod(robin,"robinVariablePause").Invoke(farmer))
-                    });
-                    robin.ignoreScheduleToday = true;
-                    Game1.warpCharacter(robin, location.Name, new Vector2(garage.tileX + garage.tilesWide / 2, garage.tileY + garage.tilesHigh / 2), false, false);
-                    robin.position.X += Game1.tileSize / 4;
-                    robin.position.Y -= Game1.tileSize / 2;
-                    robin.CurrentDialogue.Clear();
-                    robin.CurrentDialogue.Push(new Dialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:NPC.cs.3926"), robin));
-                }
-
-                // spawn tractor
-                if (this.Tractor == null && !garage.isUnderConstruction())
-                    this.Tractor = this.SpawnTractor(location, garage.tileX + 1, garage.tileY + 1);
+                int daysOfConstructionLeft = Math.Max(0, garageData.DaysOfConstructionLeft - 1);
+                this.SpawnGarage(location, (int)garageData.Tile.X, (int)garageData.Tile.Y, daysOfConstructionLeft, garageData.TractorID, garageData.TractorHatID);
             }
         }
 
@@ -386,7 +435,7 @@ namespace Pathoschild.Stardew.TractorMod
                     foreach (LegacySaveData.LegacySaveEntry saveData in data.Saves)
                     {
                         saves[$"{saveData.FarmerName}_{saveData.SaveSeed}"] = new CustomSaveData(
-                            saveData.TractorHouse.Select(p => new CustomSaveBuilding(new Vector2(p.X, p.Y), this.GarageBuildingType, "Farm", 0))
+                            saveData.TractorHouse.Select(p => new CustomSaveBuilding(new Vector2(p.X, p.Y), Guid.NewGuid(), null, this.GarageBuildingType, "Farm", 0))
                         );
                     }
                 }
@@ -406,31 +455,35 @@ namespace Pathoschild.Stardew.TractorMod
         /****
         ** Helper methods
         ****/
-        /// <summary>Get garages in the given location to save.</summary>
-        private IEnumerable<GarageMetadata> GetGarages()
+        /// <summary>Get all tractor garages in the game.</summary>
+        private IEnumerable<GarageMetadata> FindGarages()
         {
-            return
-                (
-                    from location in CommonHelper.GetLocations().OfType<BuildableGameLocation>()
-                    from building in location.buildings
-                    where building.buildingType == this.GarageBuildingType
-                    select new GarageMetadata(location, building, new CustomSaveBuilding(new Vector2(building.tileX, building.tileY), this.GarageBuildingType, this.GetMapName(location), building.daysOfConstructionLeft))
-                );
+            foreach (BuildableGameLocation location in CommonHelper.GetLocations().OfType<BuildableGameLocation>())
+            {
+                foreach (TractorGarage garage in location.buildings.OfType<TractorGarage>())
+                {
+                    Tractor tractor = Utility.findHorse(garage.HorseId) as Tractor;
+                    int? tractorHatID = tractor?.hat.Value?.which.Value;
+                    var saveData = new CustomSaveBuilding(new Vector2(garage.tileX.Value, garage.tileY.Value), garage.HorseId, tractorHatID, this.GarageBuildingType, this.GetMapName(location), garage.daysOfConstructionLeft.Value);
+
+                    yield return new GarageMetadata(location, garage, saveData);
+                }
+            }
         }
 
         /// <summary>Get a blueprint to construct the tractor garage.</summary>
         private BluePrint GetBlueprint()
         {
-            return new BluePrint(this.GarageBuildingType)
+            BluePrint blueprint = new BluePrint("Stable") // init vanilla blueprint first to avoid errors
             {
                 name = this.GarageBuildingType,
-                texture = this.GetTexture("garage"),
                 humanDoor = new Point(-1, -1),
                 animalDoor = new Point(-2, -1),
                 mapToWarpTo = null,
                 displayName = this.Helper.Translation.Get("garage.name"),
                 description = this.Helper.Translation.Get("garage.description"),
                 blueprintType = "Buildings",
+                daysToConstruct = this.GarageConstructionDays,
                 nameOfBuildingToUpgrade = null,
                 actionBehavior = null,
                 maxOccupants = -1,
@@ -443,25 +496,32 @@ namespace Pathoschild.Stardew.TractorMod
                     : new Dictionary<int, int>(),
                 namesOfOkayBuildingLocations = new List<string> { "Farm" }
             };
+
+            string textureKey = this.GetTextureKey("garage");
+            this.Helper.Reflection.GetField<string>(blueprint, nameof(BluePrint.textureName)).SetValue(this.Helper.Content.GetActualAssetKey(textureKey));
+            this.Helper.Reflection.GetField<Texture2D>(blueprint, nameof(BluePrint.texture)).SetValue(this.GarageTexture);
+
+            return blueprint;
         }
 
-        /// <summary>Get a texture from the assets folder (including seasonal logic if applicable).</summary>
-        /// <param name="key">The unique key without the path or extension (like 'tractor' or 'garage').</param>
-        private Texture2D GetTexture(string key)
+        /// <summary>Get the asset key for a texture from the assets folder (including seasonal logic if applicable).</summary>
+        /// <param name="spritesheet">The spritesheet name without the path or extension (like 'tractor' or 'garage').</param>
+        private string GetTextureKey(string spritesheet)
         {
             // try seasonal texture
-            string seasonalKey = $"assets/{Game1.currentSeason}_{key}.png";
+            string seasonalKey = $"assets/{Game1.currentSeason}_{spritesheet}.png";
             if (File.Exists(Path.Combine(this.Helper.DirectoryPath, seasonalKey)))
-                return this.Helper.Content.Load<Texture2D>(seasonalKey);
+                return seasonalKey;
 
             // default to single texture
-            return this.Helper.Content.Load<Texture2D>($"assets/{key}.png");
+            return $"assets/{spritesheet}.png";
         }
 
         /// <summary>Get a unique map name for the given location.</summary>
         private string GetMapName(GameLocation location)
         {
-            return location.uniqueName ?? location.Name;
+            string uniqueName = location.uniqueName.Value;
+            return uniqueName ?? location.Name;
         }
 
 

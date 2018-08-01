@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
@@ -50,18 +50,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public static string Heater = "Heater";
         }
 
-        /// <summary>The names of locations referenced by the mod.</summary>
-        public static class LocationNames
-        {
-            /// <summary>The internal name for the greenhouse.</summary>
-            public static string Greenhouse = "Greenhouse";
-        }
-
         /// <summary>The names of buildings referenced by the mod.</summary>
         public static class BuildingNames
         {
             /// <summary>The internal name for the Gold Clock.</summary>
             public static string GoldClock = "Gold Clock";
+        }
+
+        /// <summary>The parent sheet indexes referenced by the mod.</summary>
+        public static class ObjectIndexes
+        {
+            /// <summary>The parent sheet index for the auto-grabber.</summary>
+            public static int AutoGrabber = 165;
         }
     }
 }

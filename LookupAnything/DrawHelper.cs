@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -43,6 +43,18 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Draw a sprite to the screen scaled and centered to fit the given dimensions.</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>
+        /// <param name="sprite">The sprite to draw.</param>
+        /// <param name="x">The X-position at which to draw the sprite.</param>
+        /// <param name="y">The X-position at which to draw the sprite.</param>
+        /// <param name="size">The size to draw.</param>
+        /// <param name="color">The color to tint the sprite.</param>
+        public static void DrawSpriteWithin(this SpriteBatch spriteBatch, SpriteInfo sprite, float x, float y, Vector2 size, Color? color = null)
+        {
+            spriteBatch.DrawSpriteWithin(sprite.Spritesheet, sprite.SourceRectangle, x, y, size, color ?? Color.White);
+        }
+
+        /// <summary>Draw a sprite to the screen scaled and centered to fit the given dimensions.</summary>
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
         /// <param name="sheet">The sprite sheet containing the sprite.</param>
         /// <param name="sprite">The sprite coordinates and dimensions in the sprite sheet.</param>
         /// <param name="x">The X-position at which to draw the sprite.</param>
@@ -59,20 +71,6 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // draw
             spriteBatch.DrawSprite(sheet, sprite, x + leftOffset, y + topOffset, color ?? Color.White, scale);
-        }
-
-        /// <summary>Draw an item icon to the screen scaled and centered to fit the given dimensions.</summary>
-        /// <param name="spriteBatch">The sprite batch being drawn.</param>
-        /// <param name="item">The item for which to draw an icon.</param>
-        /// <param name="x">The X-position at which to draw the sprite.</param>
-        /// <param name="y">The X-position at which to draw the sprite.</param>
-        /// <param name="size">The size to draw.</param>
-        /// <param name="color">The color to tint the sprite.</param>
-        public static void DrawIcon(this SpriteBatch spriteBatch, Item item, float x, float y, Vector2 size, Color? color = null)
-        {
-            Tuple<Texture2D, Rectangle> spriteData = GameHelper.GetSprite(item);
-            if (spriteData != null)
-                spriteBatch.DrawSpriteWithin(spriteData.Item1, spriteData.Item2, x, y, size, color ?? Color.White);
         }
 
         /// <summary>Draw a sprite to the screen.</summary>

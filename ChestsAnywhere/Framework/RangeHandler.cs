@@ -110,8 +110,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 {
                     foreach (Building building in buildableLocation.buildings)
                     {
-                        if (building.indoors != null)
-                            zones[building.indoors] = zone;
+                        GameLocation indoors = building.indoors.Value;
+                        if (indoors != null)
+                            zones[indoors] = zone;
                     }
                 }
             }

@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 {
@@ -9,8 +9,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="position">The tile position.</param>
-        public TileTarget(Vector2 position)
-            : base(TargetType.Tile, position, position) { }
+        public TileTarget(GameHelper gameHelper, Vector2 position)
+            : base(gameHelper, TargetType.Tile, position, position) { }
     }
 }

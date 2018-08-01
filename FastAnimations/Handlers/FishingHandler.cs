@@ -1,4 +1,5 @@
-﻿using Pathoschild.Stardew.FastAnimations.Framework;
+using Pathoschild.Stardew.FastAnimations.Framework;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Tools;
 
@@ -21,7 +22,8 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         public override bool IsEnabled(int playerAnimationID)
         {
             return
-                Game1.player.UsingTool
+                Context.IsWorldReady
+                && Game1.player.UsingTool
                 && Game1.player.CurrentTool is FishingRod rod
                 && !rod.isTimingCast
                 && !rod.isFishing;

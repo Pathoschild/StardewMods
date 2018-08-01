@@ -19,11 +19,25 @@ namespace Pathoschild.Stardew.LookupAnything
     internal class DataParser
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>Provides utility methods for interacting with the game code.</summary>
+        private readonly GameHelper GameHelper;
+
+
+        /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+        public DataParser(GameHelper gameHelper)
+        {
+            this.GameHelper = gameHelper;
+        }
+
         /// <summary>Read parsed data about the Community Center bundles.</summary>
         /// <remarks>Derived from the <see cref="StardewValley.Locations.CommunityCenter"/> constructor and <see cref="StardewValley.Menus.JunimoNoteMenu.openRewardsMenu"/>.</remarks>
-        public static IEnumerable<BundleModel> GetBundles()
+        public IEnumerable<BundleModel> GetBundles()
         {
             IDictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\Bundles");
             foreach (var entry in data)
@@ -61,16 +75,17 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
         /// <param name="player">The player.</param>
         /// <param name="npc">The NPC.</param>
+        /// <param name="friendship">The current friendship data.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static FriendshipModel GetFriendshipForVillager(SFarmer player, NPC npc, Metadata metadata)
+        public FriendshipModel GetFriendshipForVillager(SFarmer player, NPC npc, Friendship friendship, Metadata metadata)
         {
-            return new FriendshipModel(player, npc, metadata.Constants);
+            return new FriendshipModel(player, npc, friendship, metadata.Constants);
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
         /// <param name="player">The player.</param>
         /// <param name="pet">The pet.</param>
-        public static FriendshipModel GetFriendshipForPet(SFarmer player, Pet pet)
+        public FriendshipModel GetFriendshipForPet(SFarmer player, Pet pet)
         {
             return new FriendshipModel(pet.friendshipTowardFarmer, Pet.maxFriendship / 10, Pet.maxFriendship);
         }
@@ -79,15 +94,15 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="player">The player.</param>
         /// <param name="animal">The farm animal.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static FriendshipModel GetFriendshipForAnimal(SFarmer player, FarmAnimal animal, Metadata metadata)
+        public FriendshipModel GetFriendshipForAnimal(SFarmer player, FarmAnimal animal, Metadata metadata)
         {
-            return new FriendshipModel(animal.friendshipTowardFarmer, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints);
+            return new FriendshipModel(animal.friendshipTowardFarmer.Value, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints);
         }
 
         /// <summary>Get the raw gift tastes from the underlying data.</summary>
         /// <param name="objects">The game's object data.</param>
         /// <remarks>Reverse engineered from <c>Data\NPCGiftTastes</c> and <see cref="StardewValley.NPC.getGiftTasteForThisItem"/>.</remarks>
-        public static IEnumerable<GiftTasteModel> GetGiftTastes(ObjectModel[] objects)
+        public IEnumerable<GiftTasteModel> GetGiftTastes(ObjectModel[] objects)
         {
             // extract raw values
             var tastes = new List<GiftTasteModel>();
@@ -149,7 +164,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Parse monster data.</summary>
         /// <remarks>Reverse engineered from <see cref="StardewValley.Monsters.Monster.parseMonsterInfo"/>, <see cref="GameLocation.monsterDrop"/>, and the <see cref="Debris"/> constructor.</remarks>
-        public static IEnumerable<MonsterData> GetMonsters()
+        public IEnumerable<MonsterData> GetMonsters()
         {
             Dictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\Monsters");
 
@@ -236,9 +251,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Parse gift tastes.</summary>
         /// <param name="monitor">The monitor with which to log errors.</param>
         /// <remarks>Derived from the <see cref="CraftingRecipe.createItem"/>.</remarks>
-        public static IEnumerable<ObjectModel> GetObjects(IMonitor monitor)
+        public IEnumerable<ObjectModel> GetObjects(IMonitor monitor)
         {
-            Dictionary<int, string> data = Game1.objectInformation;
+            IDictionary<int, string> data = Game1.objectInformation;
 
             foreach (var pair in data)
             {
@@ -295,7 +310,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public static RecipeModel[] GetRecipes(Metadata metadata, IReflectionHelper reflectionHelper, ITranslationHelper translations)
+        public RecipeModel[] GetRecipes(Metadata metadata, IReflectionHelper reflectionHelper, ITranslationHelper translations)
         {
             List<RecipeModel> recipes = new List<RecipeModel>();
 
@@ -317,14 +332,14 @@ namespace Pathoschild.Stardew.LookupAnything
             recipes.AddRange(
                 from entry in metadata.MachineRecipes
                 let machine = new SObject(Vector2.Zero, entry.MachineID)
-                select new RecipeModel(null, machine.DisplayName, entry.Ingredients, ingredient => DataParser.CreateRecipeItem(ingredient.parentSheetIndex, entry.Output), false, entry.ExceptIngredients)
+                select new RecipeModel(null, machine.DisplayName, entry.Ingredients, ingredient => this.CreateRecipeItem(ingredient.ParentSheetIndex, entry.Output), false, entry.ExceptIngredients)
             );
 
             // building recipes
             recipes.AddRange(
                 from entry in metadata.BuildingRecipes
                 let building = new BluePrint(entry.BuildingKey)
-                select new RecipeModel(null, building.displayName, entry.Ingredients, ingredient => DataParser.CreateRecipeItem(ingredient.parentSheetIndex, entry.Output), false, entry.ExceptIngredients)
+                select new RecipeModel(null, building.displayName, entry.Ingredients, ingredient => this.CreateRecipeItem(ingredient.ParentSheetIndex, entry.Output), false, entry.ExceptIngredients)
             );
 
             return recipes.ToArray();
@@ -336,26 +351,26 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Create a custom recipe output.</summary>
         /// <param name="inputID">The input ingredient ID.</param>
         /// <param name="outputID">The output item ID.</param>
-        private static SObject CreateRecipeItem(int inputID, int outputID)
+        private SObject CreateRecipeItem(int inputID, int outputID)
         {
-            SObject item = GameHelper.GetObjectBySpriteIndex(outputID);
+            SObject item = this.GameHelper.GetObjectBySpriteIndex(outputID);
             switch (outputID)
             {
                 case 342:
-                    item.preserve = SObject.PreserveType.Pickle;
-                    item.preservedParentSheetIndex = inputID;
+                    item.preserve.Value = SObject.PreserveType.Pickle;
+                    item.preservedParentSheetIndex.Value = inputID;
                     break;
                 case 344:
-                    item.preserve = SObject.PreserveType.Jelly;
-                    item.preservedParentSheetIndex = inputID;
+                    item.preserve.Value = SObject.PreserveType.Jelly;
+                    item.preservedParentSheetIndex.Value = inputID;
                     break;
                 case 348:
-                    item.preserve = SObject.PreserveType.Wine;
-                    item.preservedParentSheetIndex = inputID;
+                    item.preserve.Value = SObject.PreserveType.Wine;
+                    item.preservedParentSheetIndex.Value = inputID;
                     break;
                 case 350:
-                    item.preserve = SObject.PreserveType.Juice;
-                    item.preservedParentSheetIndex = inputID;
+                    item.preserve.Value = SObject.PreserveType.Juice;
+                    item.preservedParentSheetIndex.Value = inputID;
                     break;
             }
             return item;

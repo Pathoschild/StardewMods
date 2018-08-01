@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 new Recipe(
                     input: -5,
                     inputCount: 1,
-                    output: item => new SObject(item.parentSheetIndex, 1),
+                    output: item => new SObject(item.ParentSheetIndex, 1),
                     minutes: minutesUntilReady / 2
                 ),
 
@@ -46,7 +46,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <remarks>The coop incubator never produces an object output so it is never done.</remarks>
         public override MachineState GetState()
         {
-            return this.Machine.heldObject != null
+            return this.Machine.heldObject.Value != null
                 ? MachineState.Processing
                 : MachineState.Empty;
         }
@@ -66,10 +66,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             bool started = this.GenericPullRecipe(input, this.Recipes);
             if (started)
             {
-                int eggID = this.Machine.heldObject.parentSheetIndex;
-                this.Machine.parentSheetIndex = eggID == 180 || eggID == 182 || eggID == 305
-                    ? this.Machine.parentSheetIndex + 2
-                    : this.Machine.parentSheetIndex + 1;
+                int eggID = this.Machine.heldObject.Value.ParentSheetIndex;
+                this.Machine.ParentSheetIndex = eggID == 180 || eggID == 182 || eggID == 305
+                    ? this.Machine.ParentSheetIndex + 2
+                    : this.Machine.ParentSheetIndex + 1;
             }
             return started;
         }

@@ -1,6 +1,20 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.4
+* Updated for Stardew Valley 1.3 (including multiplayer support).
+* Added new conditions:
+  * `DayEvent` (check if there's a festival or wedding today);
+  * `HasFlag` (check if the player has received a letter by ID or has a mail flag set);
+  * `HasMod` (check if another mod is installed, e.g. for automatic compatibility patches);
+  * `HasSeenEvent` (check if the player has seen a given event ID);
+  * `Hearts:<NPC>` (check the relationship type for a specific NPC);
+  * `Relationship:<NPC>` (check the relationship type for a specific NPC);
+  * `Spouse` (check if the current player's spouse name).
+* Added support for deleting entries via `EditData`.
+* Added warnings for common mistakes in `patch summary` result.
+* Fixed case sensitivity issues in some cases.
+
 ## 1.3.1
 * Added more detailed info to `patch summary` command.
 * Improved error handling for image edits.

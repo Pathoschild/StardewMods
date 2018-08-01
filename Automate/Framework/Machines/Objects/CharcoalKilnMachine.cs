@@ -36,7 +36,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             if (this.GenericPullRecipe(input, this.Recipes))
             {
-                this.Machine.showNextIndex = true;
+                this.Machine.showNextIndex.Value = true;
                 return true;
             }
             return false;

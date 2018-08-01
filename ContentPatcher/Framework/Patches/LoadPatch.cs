@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Patches
@@ -21,38 +22,60 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="logName">A unique name for this patch shown in log messages.</param>
-        /// <param name="assetLoader">Handles loading assets from content packs.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="localAsset">The asset key to load from the content pack instead.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public LoadPatch(string logName, AssetLoader assetLoader, IContentPack contentPack, TokenString assetName, ConditionDictionary conditions, TokenString localAsset, Func<string, string> normaliseAssetName)
-            : base(logName, PatchType.Load, assetLoader, contentPack, assetName, conditions, normaliseAssetName)
+        public LoadPatch(string logName, ManagedContentPack contentPack, TokenString assetName, ConditionDictionary conditions, TokenString localAsset, Func<string, string> normaliseAssetName)
+            : base(logName, PatchType.Load, contentPack, assetName, conditions, normaliseAssetName)
         {
             this.LocalAsset = localAsset;
         }
 
         /// <summary>Update the patch data when the context changes.</summary>
         /// <param name="context">The condition context.</param>
+        /// <param name="tokenisableConditions">The conditions which can be used in tokens.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        public override bool UpdateContext(ConditionContext context)
+        public override bool UpdateContext(ConditionContext context, IDictionary<ConditionKey, string> tokenisableConditions)
         {
-            bool localAssetChanged = this.LocalAsset.UpdateContext(context);
-            return base.UpdateContext(context) || localAssetChanged;
+            bool localAssetChanged = this.LocalAsset.UpdateContext(tokenisableConditions);
+            return base.UpdateContext(context, tokenisableConditions) || localAssetChanged;
         }
 
         /// <summary>Load the initial version of the asset.</summary>
         /// <param name="asset">The asset to load.</param>
         public override T Load<T>(IAssetInfo asset)
         {
-            return this.AssetLoader.Load<T>(this.ContentPack, this.LocalAsset.Value);
+            T data = this.ContentPack.Load<T>(this.LocalAsset.Value);
+            return (data as object) is Texture2D texture
+                ? (T)(object)this.CloneTexture(texture)
+                : data;
         }
 
         /// <summary>Get the condition tokens used by this patch in its fields.</summary>
         public override IEnumerable<ConditionKey> GetTokensUsed()
         {
             return base.GetTokensUsed().Union(this.LocalAsset.ConditionTokens);
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Clone a texture.</summary>
+        /// <param name="source">The texture to clone.</param>
+        /// <returns>Cloning a texture is necessary when loading to avoid having it shared between different content managers, which can lead to undesirable effects like two players having synchronised texture changes.</returns>
+        private Texture2D CloneTexture(Texture2D source)
+        {
+            // get data
+            int[] pixels = new int[source.Width * source.Height];
+            source.GetData(pixels);
+
+            // create clone
+            Texture2D target = new Texture2D(source.GraphicsDevice, source.Width, source.Height);
+            target.SetData(pixels);
+            return target;
         }
     }
 }

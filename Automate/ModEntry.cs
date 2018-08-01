@@ -21,7 +21,10 @@ namespace Pathoschild.Stardew.Automate
         private ModConfig Config;
 
         /// <summary>Constructs machine instances.</summary>
-        private readonly MachineFactory Factory = new MachineFactory();
+        private MachineFactory Factory;
+
+        /// <summary>Whether to enable automation for the current save.</summary>
+        private bool EnableAutomation => Context.IsMainPlayer;
 
         /// <summary>The machines to process.</summary>
         private readonly IDictionary<GameLocation, MachineGroup[]> MachineGroups = new Dictionary<GameLocation, MachineGroup[]>();
@@ -43,18 +46,22 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            // read config
+            // init
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Factory = new MachineFactory(this.Config.Connectors);
 
             // hook events
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-            LocationEvents.CurrentLocationChanged += this.LocationEvents_CurrentLocationChanged;
-            LocationEvents.LocationsChanged += this.LocationEvents_LocationsChanged;
-            LocationEvents.LocationObjectsChanged += this.LocationEvents_LocationObjectsChanged;
-            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+            IModEvents events = this.Helper.Events;
 
-            // handle player interaction
-            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
+            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            PlayerEvents.Warped += this.PlayerEvents_Warped;
+            events.World.LocationListChanged += this.World_LocationListChanged;
+            events.World.ObjectListChanged += this.World_ObjectListChanged;
+            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+            events.Input.ButtonPressed += this.Input_ButtonPressed;
+
+            if (this.Config.Connectors.Any(p => p.Type == ObjectType.Floor))
+                events.World.TerrainFeatureListChanged += this.World_TerrainFeatureListChanged;
 
             // log info
             if (this.Config.VerboseLogging)
@@ -74,15 +81,22 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void SaveEvents_AfterLoad(object sender, EventArgs e)
         {
-            // reset automation interval
+            // disable if secondary player
+            if (!this.EnableAutomation)
+                this.Monitor.Log("Disabled automation (only the main player can automate machines in multiplayer mode).", LogLevel.Warn);
+
+            // reset
+            this.MachineGroups.Clear();
             this.AutomateCountdown = this.Config.AutomationInterval;
             this.DisableOverlay();
+            foreach (GameLocation location in CommonHelper.GetLocations())
+                this.ReloadQueue.Add(location);
         }
 
         /// <summary>The method invoked when the player warps to a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void LocationEvents_CurrentLocationChanged(object sender, EventArgsCurrentLocationChanged e)
+        private void PlayerEvents_Warped(object sender, EventArgsPlayerWarped e)
         {
             this.ResetOverlayIfShown();
         }
@@ -90,8 +104,11 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when a location is added or removed.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void LocationEvents_LocationsChanged(object sender, EventArgsGameLocationsChanged e)
+        private void World_LocationListChanged(object sender, WorldLocationListChangedEventArgs e)
         {
+            if (!this.EnableAutomation)
+                return;
+
             this.VerboseLog("Location list changed, reloading all machines.");
 
             try
@@ -109,18 +126,25 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when an object is added or removed to a location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void LocationEvents_LocationObjectsChanged(object sender, EventArgsLocationObjectsChanged e)
+        private void World_ObjectListChanged(object sender, WorldObjectListChangedEventArgs e)
         {
-            this.VerboseLog("Object list changed, reloading machines in current location.");
+            if (!this.EnableAutomation)
+                return;
 
-            try
-            {
-                this.ReloadQueue.Add(Game1.currentLocation);
-            }
-            catch (Exception ex)
-            {
-                this.HandleError(ex, "updating the current location");
-            }
+            this.VerboseLog($"Object list changed in {e.Location.Name}, reloading machines in current location.");
+            this.ReloadQueue.Add(e.Location);
+        }
+
+        /// <summary>The method invoked when a terrain feature is added or removed to a location.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void World_TerrainFeatureListChanged(object sender, WorldTerrainFeatureListChangedEventArgs e)
+        {
+            if (!this.EnableAutomation)
+                return;
+
+            this.VerboseLog($"Terrain feature list changed in {e.Location.Name}, reloading machines in current location.");
+            this.ReloadQueue.Add(e.Location);
         }
 
         /// <summary>The method invoked when the in-game clock time changes.</summary>
@@ -128,7 +152,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event arguments.</param>
         private void GameEvents_UpdateTick(object sender, EventArgs e)
         {
-            if (!Context.IsWorldReady)
+            if (!Context.IsWorldReady || !this.EnableAutomation)
                 return;
 
             try
@@ -162,7 +186,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
+        private void Input_ButtonPressed(object sender, InputButtonPressedEventArgs e)
         {
             try
             {
@@ -201,6 +225,8 @@ namespace Pathoschild.Stardew.Automate
             this.VerboseLog($"Reloading machines in {location.Name}...");
 
             this.MachineGroups[location] = this.Factory.GetActiveMachinesGroups(location, this.Helper.Reflection).ToArray();
+            if (!this.MachineGroups[location].Any())
+                this.MachineGroups.Remove(location);
         }
 
         /// <summary>Log an error and warn the user.</summary>

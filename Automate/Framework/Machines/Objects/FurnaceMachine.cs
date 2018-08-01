@@ -13,6 +13,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         private readonly Vector2 Tile;
 
         /// <summary>The recipes to process.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.Object.performObjectDropInAction"/>.</remarks>
         private readonly Recipe[] Recipes =
         {
             // copper => copper bar
@@ -51,7 +52,15 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: SObject.quartzIndex,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 338, "Refined Quartz", false, true, false, false),
+                output: input => new SObject(Vector2.Zero, 338, 1),
+                minutes: 90
+            ),
+
+            // refined quartz => refined quartz
+            new Recipe(
+                input: 82,
+                inputCount: 1,
+                output: input => new SObject(Vector2.Zero, 338, 3),
                 minutes: 90
             )
         };
@@ -78,7 +87,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             {
                 coal.Reduce();
                 this.Machine.initializeLightSource(this.Tile);
-                this.Machine.showNextIndex = true;
+                this.Machine.showNextIndex.Value = true;
                 return true;
             }
             return false;

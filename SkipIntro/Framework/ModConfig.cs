@@ -1,3 +1,6 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 namespace Pathoschild.Stardew.SkipIntro.Framework
 {
     /// <summary>The mod configuration.</summary>
@@ -6,7 +9,8 @@ namespace Pathoschild.Stardew.SkipIntro.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>Whether to skip directly to the loading screen.</summary>
-        public bool SkipToLoadScreen { get; set; } = true;
+        /// <summary>The screen to which to skip.</summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Screen SkipTo { get; set; } = Screen.Title;
     }
 }

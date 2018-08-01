@@ -1,8 +1,6 @@
 This repository contains my SMAPI mods for Stardew Valley. See the individual mods for
 documentation and release notes.
 
-All mods are compatible with Stardew Valley 1.2+ on Linux, Mac, and Windows.
-
 ## Mods
 Active mods:
 * **[Automate](http://www.nexusmods.com/stardewvalley/mods/1063)** <small>([source](Automate))</small>  
@@ -19,8 +17,10 @@ Active mods:
   XNB mods, these content packs get automatic update checks and compatibility checks, are easy to
   install and uninstall, and are less likely to break due to game updates._
 
-* **[Data Maps](https://www.nexusmods.com/stardewvalley/mods/1691)** <small>([source](DataMaps))</small>  
-  _Overlays the world with data maps to show accessibility, sprinkler coverage, etc._
+* **[Data Layers](https://www.nexusmods.com/stardewvalley/mods/1691)** <small>([source](DataLayers))</small>  
+  _Overlays the world with overlays the world with visual data like accessibility,
+  bee/Junimo/scarecrow/sprinkler coverage, etc. It automatically includes data from other mods if
+  applicable._
 
 * **[Debug Mode](http://www.nexusmods.com/stardewvalley/mods/679)** <small>([source](DebugMode))</small>  
   _Press a button to view debug information and unlock the game's built-in debug commands
@@ -42,9 +42,6 @@ Active mods:
   _Skip straight to the title screen or load screen (configurable) when you start the game. It also
   skips the screen transitions, so starting the game is much faster._
 
-* **[The Long Night](http://www.nexusmods.com/stardewvalley/mods/1369)** <small>([source](LongNight))</small>  
-  _Disables collapsing. You just stay awake forever and the night never ends (until you go to bed)._
-
 * **[Tractor Mod](http://www.nexusmods.com/stardewvalley/mods/1401)** <small>([source](TractorMod))</small>  
   _Lets you buy a tractor to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc._
 
@@ -53,20 +50,24 @@ Inactive mods:
   _(deleted) Disables SMAPI's F2 debug mode, which can cause unintended effects like skipping an
   entire season or teleporting into walls. No longer needed after SMAPI 1.0._
 
+* ~~[The Long Night](http://www.nexusmods.com/stardewvalley/mods/1369)~~ <small>([source](LongNight))</small>  
+  _Disables collapsing. You just stay awake forever and the night never ends (until you go to bed).
+  Broke permanently in Stardew Valley 1.3.20._
+
 ## Translating the mods
 The mods can be translated into any language supported by the game, and SMAPI will automatically
 use the right translations.
 
 (❑ = untranslated, ↻ = partly translated, ✓ = fully translated)
 
-&nbsp;     | Chests Anywhere                          | Data Maps                   | Debug Mode                          | Lookup Anything                          | Tractor Mod
----------- | :--------------------------------------- | :-------------------------- | :---------------------------------- | :--------------------------------------- | :------------------------------
-Chinese    | [✓](ChestsAnywhere/i18n/zh.json)        | [✓](DataMaps/i18n/zh.json) | ↻ [partial](DebugMode/i18n/zh.json) | [✓](LookupAnything/i18n/zh.json)        | [✓](TractorMod/i18n/zh.json)
-German     | [✓](ChestsAnywhere/i18n/de.json)        | [✓](DataMaps/i18n/de.json) | ↻ [partial](DebugMode/i18n/de.json) | [✓](LookupAnything/i18n/de.json)        | [✓](TractorMod/i18n/de.json)
-Japanese   | ❑ _none_                                | ❑ _none_                   | ❑ _none_                           | ❑ _none_                                | ❑ _none_
-Portuguese | [✓](ChestsAnywhere/i18n/pt.json)        | ❑ _none_                   | ↻ [partial](DebugMode/i18n/pt.json) | ↻ [partial](LookupAnything/i18n/pt.json) | [✓](TractorMod/i18n/pt.json)
-Russian    | ↻ [partial](ChestsAnywhere/i18n/ru.json) | ❑ _none_                   | ❑ _none_                           | ↻ [partial](LookupAnything/i18n/ru.json) | [✓](TractorMod/i18n/ru.json)
-Spanish    | ↻ [partial](ChestsAnywhere/i18n/es.json) | ❑ _none_                   | ↻ [partial](DebugMode/i18n/es.json) | ↻ [partial](LookupAnything/i18n/de.json) | ❑ _none_
+&nbsp;     | Chests Anywhere                          | Data Layers                          | Debug Mode                          | Lookup Anything                          | Tractor Mod
+---------- | :--------------------------------------- | :----------------------------------- | :---------------------------------- | :--------------------------------------- | :------------------------------
+Chinese    | [↻ partial](ChestsAnywhere/i18n/zh.json) | [↻ partial](DataLayers/i18n/zh.json) | [✓](DebugMode/i18n/zh.json)        | [↻ partial](LookupAnything/i18n/zh.json) | [✓](TractorMod/i18n/zh.json)
+German     | [↻ partial](ChestsAnywhere/i18n/de.json) | [↻ partial](DataLayers/i18n/de.json) | [✓](DebugMode/i18n/de.json)        | [↻ partial](LookupAnything/i18n/de.json) | [✓](TractorMod/i18n/de.json)
+Japanese   | ❑ _none_                                | ❑ _none_                            | ❑ _none_                           | ❑ _none_                                | ❑ _none_
+Portuguese | [✓](ChestsAnywhere/i18n/pt.json)        | [✓](DataLayers/i18n/pt.json)        | [✓](DebugMode/i18n/pt.json)        | [✓](LookupAnything/i18n/pt.json)        | [✓](TractorMod/i18n/pt.json)
+Russian    | [↻ partial](ChestsAnywhere/i18n/ru.json) | [↻ partial](DataLayers/i18n/ru.json) | ↻ [partial](DebugMode/i18n/ru.json) | [↻ partial](LookupAnything/i18n/ru.json) | [✓](TractorMod/i18n/ru.json)
+Spanish    | [↻ partial](ChestsAnywhere/i18n/es.json) | [↻ partial](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json)        | [↻ partial](LookupAnything/i18n/es.json) | [✓](TractorMod/i18n/es.json)
 
 Here's how to translate one of my mods:
 

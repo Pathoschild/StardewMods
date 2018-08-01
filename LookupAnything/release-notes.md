@@ -1,6 +1,22 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.19
+* Updated for Stardew Valley 1.3 (including multiplayer support).
+* Added support for...
+  * auto-grabbers;
+  * garden pots and their crops;
+  * other players;
+  * new friendship data;
+  * crab pot bait.
+* Added number of item needed in bundle list. (Thanks to StefanOssendorf!)
+* Added support for custom greenhouse locations.
+* Fixed issue where a bundle that needs two stacks of an item won't be listed on the item lookup if one stack is filled. (Thanks to StefanOssendorf!)
+* Fixed Custom Farming Redux machines not drawn correctly in some cases.
+* Fixed excessively precise luck field in some cases.
+* Fixed broken translation.
+* Improved translations. Thanks to alca259 (Spanish), fadedDexofan (Russian), and TaelFayre (Portuguese)!
+
 ## 1.18.1
 * Fixed error when looking up something before the save is loaded (thanks to f4iTh!).
 
@@ -10,7 +26,7 @@
 * Added support for custom machines and objects from Custom Farming Redux 2.3.6+.
 * Fixed debug key working when a menu is open.
 * Fixed typo in debug interface.
-* Improved Chinese and German translations. (Thanks to yuwenlan and Husky110!)
+* Improved translations. Thanks to Husky110 (German) and yuwenlan (Chinese)!
 
 ## 1.17
 * Updated to SMAPI 2.0.
@@ -19,7 +35,7 @@
 * Fixed errors in modded object data causing all lookups to fail.
 * Fixed basic bat kills not counted towards Adventure Quest goal.
 * Fixed `HideOnKeyUp` mode not returning to previous menu on close.
-* Improved translations thanks to Dorian/[@d0x7](https://github.com/d0x7) (German) and [@TaelFayre](https://github.com/TaelFayre) (Portuguese).
+* Improved translations. Thanks to d0x7 (German) and TaelFayre (Portuguese)!
 
 ## 1.16
 * NPC gift tastes now list inventory and owned items first.
@@ -28,24 +44,24 @@
 * Fixed lookup errors with some custom NPCs.
 
 ## 1.15.1
-* Added Russian translations. (Thanks to SteaNN!)
 * Fixed missing translation in child 'age' field.
 * Fixed incorrect child age calculation.
+* Improved translations. Thanks to SteaNN (added Russian)!
 
 ## 1.15
 * You can now look up your children.
-* Added Portuguese and Spanish translations. (Thanks to Fabilows and ThomasGabrielDelavault respectively!)
 * Improved lookup matching — if there's no sprite under the cursor, it now tries to look up the tile contents.
 * Fixed animal 'complaint' field text when an animal was attacked overnight.
 * Fixed item 'needed for' field incorrectly matching non-fish items for fishing bundles.
 * Fixed item 'needed for' field not showing bundle area names in English.
+* Improved translations. Thanks to Fabilows (added Portuguese) and ThomasGabrielDelavault (added Spanish)!
 
 ## 1.14
 * Updated to SMAPI 1.14.
 * Added translation support.
-* Added Chinese and German translations. (Thanks to yuwenlan and Sasara respectively!)
 * You can now look up items from the Junimo bundle menu.
 * Fixed a few lookup errors when playing in a language other than English.
+* Improved translations. Thansk to Sasara (added German) and yuwenlan (added Chinese)!
 
 ## 1.13
 * Updated for Stardew Valley 1.2.

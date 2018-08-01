@@ -15,6 +15,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
     internal abstract class BaseAttachment : IAttachment
     {
         /*********
+        ** Accessors
+        *********/
+        /// <summary>The minimum number of ticks between each update.</summary>
+        public int RateLimit { get; }
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Get whether the tool is currently enabled.</summary>
@@ -38,6 +45,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /*********
         ** Protected methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="rateLimit">The minimum number of ticks between each update.</param>
+        protected BaseAttachment(int rateLimit = 0)
+        {
+            this.RateLimit = rateLimit;
+        }
+
         /// <summary>Use a tool on a tile.</summary>
         /// <param name="tool">The tool to use.</param>
         /// <param name="tile">The tile to affect.</param>
@@ -57,6 +71,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         protected bool CheckTileAction(GameLocation location, Vector2 tile, SFarmer player)
         {
             return location.checkAction(new Location((int)tile.X, (int)tile.Y), Game1.viewport, player);
+        }
+
+        /// <summary>Get whether a given object is a weed.</summary>
+        /// <param name="obj">The world object.</param>
+        protected bool IsWeed(SObject obj)
+        {
+            return obj?.Name.ToLower().Contains("weed") == true;
         }
 
         /// <summary>Remove the specified items from the player inventory.</summary>
@@ -86,6 +107,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 return farm.resourceClumps;
             if (location is Woods woods)
                 return woods.stumps;
+            if (location is MineShaft mineshaft)
+                return mineshaft.resourceClumps;
             return new ResourceClump[0];
         }
 
@@ -97,7 +120,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             Rectangle tileArea = this.GetAbsoluteTileArea(tile);
             foreach (ResourceClump clump in this.GetResourceClumps(location))
             {
-                if (clump.getBoundingBox(clump.tile).Intersects(tileArea))
+                if (clump.getBoundingBox(clump.tile.Value).Intersects(tileArea))
                     return clump;
             }
 

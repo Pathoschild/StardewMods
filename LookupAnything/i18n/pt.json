@@ -10,8 +10,8 @@
   "generic.percent": "{{percent}}%",
   "generic.percent-chance-of": "{{percent}}% de chance de {{label}}",
   "generic.percent-ratio": "{{percent}}% ({{value}} de {{max}})",
-  "generic.ratio": "{{value}} of {{max}}",
-  "generic.range": "{{min}} to {{max}}",
+  "generic.ratio": "{{value}} de {{max}}",
+  "generic.range": "{{min}} para {{max}}",
   "generic.yes": "sim",
   "generic.no": "não",
   "generic.seconds": "{{count}} segundos",
@@ -38,6 +38,13 @@
   "quality.silver": "prata",
   "quality.gold": "ouro",
   "quality.iridium": "irídio",
+
+  // NPC friendship
+  "friendship-status.friendly": "Amigável",
+  "friendship-status.dating": "Namorando",
+  "friendship-status.engaged": "Noivos",
+  "friendship-status.married": "Casados",
+  "friendship-status.divorced": "Divorciados",
 
   /*********
   ** Data translations
@@ -137,7 +144,7 @@
   "data.item.mine-stone.description": "Quebre para obter preda.",
 
   // mine containers
-  "data.item.barrel.name": "Barril",
+  "data.item.barrel.name": "Barríl",
   "data.item.barrel.description": "Quebre pra receber bens diversos.",
   "data.item.box.name": "Caixa",
   "data.item.box.description": "Quebre para receber bens diversos.",
@@ -200,23 +207,29 @@
   // item lookup labels
   "item.cask-contents": "Conteúdos",
   "item.cask-schedule": "Envelhecimento",
+
+  "item.crabpot-bait": "Isca",
+  "item.crabpot-bait-needed": "Requer isca!",
+  "item.crabpot-bait-not-needed": "Não é necessaria devido a habilidade Mestre da isca",
+
+  "item.fence-health": "Saúde",
+
   "item.contents": "Conteúdos",
-  "item.needed-for": "Preciso para",
-  "item.sells-for": "vende por",
-  "item.sells-to": "Vende por",
   "item.likes-this": "Gosta disso",
   "item.loves-this": "Ama isso",
-  "item.fence-health": "Saúde",
-  "item.recipes": "Receitas",
+  "item.needed-for": "Preciso para",
   "item.number-owned": "Possui",
+  "item.recipes": "Receitas",
   "item.see-also": "Veja também",
+  "item.sells-for": "vende por",
+  "item.sells-to": "Vende por",
 
   // item lookup values
   "item.cask-schedule.now": "{{quality}} está pronto agora",
   "item.cask-schedule.now-partial": "{{quality}} por agora (use a picareta para parar de envelhecer)",
   "item.cask-schedule.tomorrow": "{{quality}} amanhã",
   "item.cask-schedule.in-x-days": "{{quality}} em {{count}} dias ({{date}})",
-  "item.contents.placed": "{{name}} placed", // TODO
+  "item.contents.placed": "{{name}} colocado",
   "item.contents.ready": "{{name}} pronto",
   "item.contents.partial": "{{name}} em {{time}}",
   "item.needed-for.community-center": "Centro Comunitário ({{bundles}})",

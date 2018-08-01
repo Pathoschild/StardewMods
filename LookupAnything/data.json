@@ -612,7 +612,7 @@ You shouldn't change this file unless you know what you're doing.
             "Context": "World",
             "NameKey": "data.item.gold-node.name",
             "TypeKey": "data.type.stone",
-            "DescriptionKey": "data.item.gold-node.gold."
+            "DescriptionKey": "data.item.gold-node.description"
         },
         {
             "SpriteID": [ 765 ],

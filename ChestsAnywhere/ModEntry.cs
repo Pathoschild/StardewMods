@@ -9,6 +9,7 @@ using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Locations;
 using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.ChestsAnywhere
@@ -33,7 +34,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         ** State
         ****/
         /// <summary>The selected in-game inventory.</summary>
-        private List<Item> SelectedInventory;
+        private IList<Item> SelectedInventory;
 
         /// <summary>The menu overlay which lets the player navigate and edit chests.</summary>
         private ManageChestOverlay ManageChestOverlay;
@@ -83,6 +84,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 this.Monitor.Log(versionError, LogLevel.Error);
                 CommonHelper.ShowErrorMessage(versionError);
             }
+
+            // show multiplayer limitations warning
+            if (!Context.IsMainPlayer)
+                this.Monitor.Log("Multiplayer limitations: you can only access chests in your current location (since you're not the main player). This is due to limitations in the game's sync logic.", LogLevel.Info);
         }
 
         /// <summary>The method invoked when the interface has finished rendering.</summary>
@@ -135,7 +140,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 // add overlay
                 RangeHandler range = this.GetCurrentRange();
                 ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true, alwaysIncludeContainer: chest.Container).ToArray();
-                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Translation);
+                bool isAutomateInstalled = this.Helper.ModRegistry.IsLoaded("Pathoschild.Automate");
+                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Input, this.Helper.Translation, showAutomateOptions: isAutomateInstalled);
                 this.ManageChestOverlay.OnChestSelected += selected =>
                 {
                     this.SelectedInventory = selected.Container.Inventory;
@@ -162,8 +168,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 var controls = this.Config.Controls;
 
                 // open menu
-                if (controls.Toggle.Contains(e.Button) && (Game1.activeClickableMenu == null || (Game1.activeClickableMenu as GameMenu)?.currentTab == 0))
-                    this.OpenMenu();
+                if (controls.Toggle.Contains(e.Button))
+                {
+                    // open if no conflict
+                    if (Game1.activeClickableMenu == null)
+                        this.OpenMenu();
+
+                    // open from inventory if it's safe to close the inventory screen
+                    else if (Game1.activeClickableMenu is GameMenu gameMenu && gameMenu.currentTab == GameMenu.inventoryTab)
+                    {
+                        IClickableMenu inventoryPage = this.Helper.Reflection.GetField<List<IClickableMenu>>(gameMenu, "pages").GetValue()[GameMenu.inventoryTab];
+                        if (inventoryPage.readyToClose())
+                            this.OpenMenu();
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -180,26 +198,25 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // handle disabled location
             if (this.IsDisabledLocation(Game1.currentLocation))
             {
-                CommonHelper.ShowInfoMessage("Remote chest access is disabled here. :)", duration: 1000);
+                CommonHelper.ShowInfoMessage(this.Helper.Translation.Get("errors.disabled-from-here"), duration: 1000);
                 return;
             }
-
 
             // get chests
             RangeHandler range = this.GetCurrentRange();
             ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true).ToArray();
             ManagedChest selectedChest = chests.FirstOrDefault(p => p.Container.IsSameAs(this.SelectedInventory)) ?? chests.FirstOrDefault();
 
-            // render menu
-            if (selectedChest != null)
-                Game1.activeClickableMenu = selectedChest.OpenMenu();
-            else
+            // show error
+            if (selectedChest == null)
             {
-                CommonHelper.ShowInfoMessage(
-                    "You don't have any chests " + (this.Config.Range == ChestRange.Unlimited ? "yet" : "in range") + ". :)",
-                    duration: 1000
-                );
+                string translationKey = this.GetNoChestsFoundErrorKey();
+                CommonHelper.ShowInfoMessage(this.Helper.Translation.Get(translationKey), duration: 1000);
+                return;
             }
+
+            // render menu
+            Game1.activeClickableMenu = selectedChest.OpenMenu();
         }
 
         /// <summary>Validate that the game versions match the minimum requirements, and return an appropriate error message if not.</summary>
@@ -224,7 +241,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="location">The game location.</param>
         private bool IsDisabledLocation(GameLocation location)
         {
-            return this.Config.DisabledInLocations != null && this.Config.DisabledInLocations.Contains(location.Name, StringComparer.InvariantCultureIgnoreCase);
+            if (this.Config.DisabledInLocations == null)
+                return false;
+
+            return
+                this.Config.DisabledInLocations.Contains(location.Name)
+                || (location is MineShaft && location.Name.StartsWith("UndergroundMine") && this.Config.DisabledInLocations.Contains("UndergroundMine"));
         }
 
         /// <summary>Get the range for the current context.</summary>
@@ -234,6 +256,18 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 ? ChestRange.None
                 : this.Config.Range;
             return new RangeHandler(this.Data.WorldAreas, range, Game1.currentLocation);
+        }
+
+        /// <summary>Get the error translation key to show if no chests were found.</summary>
+        private string GetNoChestsFoundErrorKey()
+        {
+            if (this.Config.Range == ChestRange.CurrentLocation || !Context.IsMainPlayer)
+                return "errors.no-chests-in-location";
+
+            if (this.Config.Range != ChestRange.Unlimited)
+                return "errors.no-chests-in-range";
+
+            return "errors.no-chests";
         }
     }
 }

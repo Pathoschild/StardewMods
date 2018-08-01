@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             if (stack.Count <= 0)
                 return;
 
-            List<Item> inventory = this.Chest.items;
+            IList<Item> inventory = this.Chest.items;
 
             // try stack into existing slot
             foreach (Item slot in inventory)

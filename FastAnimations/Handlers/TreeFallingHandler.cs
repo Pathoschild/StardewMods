@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Netcode;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using StardewModdingAPI;
@@ -41,30 +42,32 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         {
             this.Trees =
                 (
-                    from pair in location.terrainFeatures
-                    let tree = pair.Value as Tree
-                    let fruitTree = pair.Value as FruitTree
+                    from pair in location.terrainFeatures.FieldDict
+                    let tree = pair.Value.Value as Tree
+                    let fruitTree = pair.Value.Value as FruitTree
                     where
                         (
                             tree != null
-                            && !tree.stump
-                            && tree.growthStage > Tree.bushStage
+                            && !tree.stump.Value
+                            && tree.growthStage.Value > Tree.bushStage
                         )
                         || (
                             fruitTree != null
-                            && !fruitTree.stump
-                            && fruitTree.growthStage > FruitTree.bushStage
+                            && !fruitTree.stump.Value
+                            && fruitTree.growthStage.Value > FruitTree.bushStage
                         )
                     select pair
                 )
-                .ToDictionary(p => p.Key, p => p.Value);
+                .ToDictionary(p => p.Key, p => p.Value.Value);
         }
 
         /// <summary>Get whether the animation is currently active.</summary>
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override bool IsEnabled(int playerAnimationID)
         {
-            return this.GetFallingTrees().Any();
+            return
+                Context.IsWorldReady
+                && this.GetFallingTrees().Any();
         }
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>
@@ -76,7 +79,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
                 // speed up animation
                 GameTime gameTime = Game1.currentGameTime;
                 for (int i = 1; i < this.Multiplier; i++)
-                    pair.Value.tickUpdate(gameTime, pair.Key);
+                    pair.Value.tickUpdate(gameTime, pair.Key, Game1.currentLocation);
             }
         }
 
@@ -92,7 +95,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
             {
                 if (visibleTiles.Contains((int)pair.Key.X, (int)pair.Key.Y))
                 {
-                    bool isFalling = this.Reflection.GetField<bool>(pair.Value, "falling").GetValue();
+                    bool isFalling = this.Reflection.GetField<NetBool>(pair.Value, "falling").GetValue().Value;
                     if (isFalling)
                         yield return pair;
                 }

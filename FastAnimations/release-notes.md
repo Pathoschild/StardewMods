@@ -1,6 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.6
+* Updated for Stardew Valley 1.3 (including multiplayer support).
+* Added support for...
+  * Pam's bus when driving to/from the desert;
+  * title menu transitions;
+  * blinking-slot delay after you click a load-save slot (thanks to Cat!).
+
 ## 1.5
 * Updated to SMAPI 2.4.
 * Added support for casino slots.

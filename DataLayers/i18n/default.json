@@ -1,0 +1,44 @@
+{
+  // accessibility
+  "accessibility.name": "Accessibility",
+  "accessibility.clear": "Clear",
+  "accessibility.occupied": "Occupied",
+  "accessibility.impassable": "Impassable",
+  "accessibility.warp": "Warp",
+
+  // coverage: bee houses
+  "bee-houses.name": "Coverage: Bee Houses",
+  "bee-houses.range": "Flower Range",
+
+  // coverage: Junimo huts
+  "junimo-huts.name": "Coverage: Junimo Huts",
+  "junimo-huts.can-harvest": "Can Harvest",
+  "junimo-huts.cannot-harvest": "Can't Harvest",
+
+  // coverage: scarecrows
+  "scarecrows.name": "Coverage: Scarecrows",
+  "scarecrows.protected": "Protected",
+  "scarecrows.exposed": "Exposed",
+
+  // coverage: sprinklers
+  "sprinklers.name": "Coverage: Sprinklers",
+  "sprinklers.covered": "Covered",
+  "sprinklers.dry-crops": "Dry Crops",
+
+  // crops: harvest
+  "crop-harvest.name": "Crops: Ready to Harvest",
+  "crop-harvest.ready": "Ready",
+  "crop-harvest.not-ready": "Not Ready",
+  "crop-harvest.not-enough-time": "Not Enough Time",
+
+  // crops: watered
+  "crop-water.name": "Crops: Watered",
+  "crop-water.watered": "Watered Crop",
+  "crop-water.dry": "Dry Crop",
+
+  // crops: fertilized
+  "crop-fertilizer.name": "Crops: Fertilized",
+  "crop-fertilizer.fertilizer": "Fertilizer",
+  "crop-fertilizer.retaining-soil": "Retaining Soil",
+  "crop-fertilizer.speed-gro": "Speed-Gro"
+}

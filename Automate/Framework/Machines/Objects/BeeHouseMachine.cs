@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewValley;
-using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
@@ -57,7 +56,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public override ITrackedStack GetOutput()
         {
             // get raw output
-            SObject output = this.Machine.heldObject;
+            SObject output = this.Machine.heldObject.Value;
             if (output == null)
                 return null;
 
@@ -65,26 +64,23 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             SObject.HoneyType type = SObject.HoneyType.Wild;
             string prefix = type.ToString();
             int addedPrice = 0;
-            if (this.Location is Farm)
+            Crop flower = Utility.findCloseFlower(this.Location, this.Tile);
+            if (flower != null)
             {
-                Crop flower = this.FindCloseFlower(this.Location, this.Tile);
-                if (flower != null)
-                {
-                    string[] flowerData = Game1.objectInformation[flower.indexOfHarvest].Split('/');
-                    prefix = flowerData[0];
-                    addedPrice = Convert.ToInt32(flowerData[1]) * 2;
-                    if (!this.HoneyTypes.TryGetValue(flower.indexOfHarvest, out type))
-                        type = SObject.HoneyType.Wild;
-                }
+                string[] flowerData = Game1.objectInformation[flower.indexOfHarvest.Value].Split('/');
+                prefix = flowerData[0];
+                addedPrice = Convert.ToInt32(flowerData[1]) * 2;
+                if (!this.HoneyTypes.TryGetValue(flower.indexOfHarvest.Value, out type))
+                    type = SObject.HoneyType.Wild;
             }
 
             // build object
-            SObject result = new SObject(output.parentSheetIndex, output.stack)
+            SObject result = new SObject(output.ParentSheetIndex, output.Stack)
             {
                 name = $"{prefix} Honey",
-                price = output.price + addedPrice,
-                honeyType = type
+                Price = output.Price + addedPrice
             };
+            result.honeyType.Value = type;
 
             // yield
             return new TrackedItem(result, onEmpty: this.Reset);
@@ -108,44 +104,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             SObject machine = this.Machine;
 
-            machine.heldObject = new SObject(Vector2.Zero, 340, null, false, true, false, false);
-            machine.minutesUntilReady = 2400 - Game1.timeOfDay + 4320;
-            machine.readyForHarvest = false;
-            machine.showNextIndex = false;
-        }
-
-        /// <summary>Get the closest flower within range of the given beehive.</summary>
-        /// <param name="location">The bee hive's location.</param>
-        /// <param name="tile">The bee hive's tile coordinate.</param>
-        /// <remarks>This logic is duplicated from <see cref="Utility.findCloseFlower"/>, but allows for any location instead of being hardcoded to the farm.</remarks>
-        private Crop FindCloseFlower(GameLocation location, Vector2 tile)
-        {
-            // use default game logic if possible
-            if (location is Farm)
-                return Utility.findCloseFlower(tile);
-
-            // handle flowers in custom locations (e.g. Farm Expansion)
-            {
-                Queue<Vector2> queue = new Queue<Vector2>();
-                HashSet<Vector2> visited = new HashSet<Vector2>();
-                queue.Enqueue(tile);
-                for (int i = 0; i <= 150 && queue.Count > 0; i++)
-                {
-                    // check for fully-grown tile on the current tile
-                    Vector2 curTile = queue.Dequeue();
-                    if (location.terrainFeatures.ContainsKey(curTile) && location.terrainFeatures[curTile] is HoeDirt dirt && dirt.crop != null && dirt.crop.programColored && dirt.crop.currentPhase >= dirt.crop.phaseDays.Count - 1 && !dirt.crop.dead)
-                        return dirt.crop;
-
-                    // try surrounding tiles
-                    foreach (Vector2 nextTile in Utility.getAdjacentTileLocations(curTile))
-                    {
-                        if (!visited.Contains(nextTile))
-                            queue.Enqueue(nextTile);
-                    }
-                    visited.Add(curTile);
-                }
-                return null;
-            }
+            machine.heldObject.Value = new SObject(Vector2.Zero, 340, null, false, true, false, false);
+            machine.MinutesUntilReady = 2400 - Game1.timeOfDay + 4320;
+            machine.readyForHarvest.Value = false;
+            machine.showNextIndex.Value = false;
         }
     }
 }

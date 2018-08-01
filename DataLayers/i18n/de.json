@@ -1,0 +1,45 @@
+{
+  // accessibility
+  "accessibility.name": "Belegung",
+  "accessibility.clear": "Frei",
+  "accessibility.occupied": "Belegt",
+  "accessibility.impassable": "Blockiert",
+  "accessibility.warp": "Warp",
+
+  // coverage: bee houses
+  "bee-houses.name": "Abdeckung: Bienenhäuser",
+  "bee-houses.range": "Blumenreichweite",
+
+  // coverage: Junimo huts
+  "junimo-huts.name": "Abdeckung: Junimo-Hütten",
+  "junimo-huts.can-harvest": "Abbaubar",
+  "junimo-huts.cannot-harvest": "Nicht abbaubar",
+
+  // coverage: scarecrows
+  "scarecrows.name": "Abdeckung: Vogelscheuchen",
+  "scarecrows.protected": "Geschützt",
+  "scarecrows.exposed": "Exponiert",
+
+  // coverage: sprinklers
+  "sprinklers.name": "Abdeckung: Sprenkler",
+  "sprinklers.covered": "Bewässert",
+  "sprinklers.dry-crops": "Trocken",
+
+  // crops: harvest
+  // TODO
+  "crop-harvest.name": "Crops: Ready to Harvest",
+  "crop-harvest.ready": "Ready",
+  "crop-harvest.not-ready": "Not Ready",
+  "crop-harvest.not-enough-time": "Not Enough Time",
+
+  // crops: watered
+  "crop-water.name": "Bewässerung",
+  "crop-water.watered": "Gegossen",
+  "crop-water.dry": "Trocken",
+
+  // crops: fertilized
+  "crop-fertilizer.name": "Düngemitteleinsatz",
+  "crop-fertilizer.fertilizer": "Dünger",
+  "crop-fertilizer.retaining-soil": "Hydrogel",
+  "crop-fertilizer.speed-gro": "Geschwind-Wachs"
+}
