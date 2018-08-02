@@ -45,7 +45,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Get the machine's processing state.</summary>
         public MachineState GetState()
         {
-            if (this.Output.items.Any())
+            if (this.Output.items.Any(item => item != null))
                 return MachineState.Done;
             return this.InputFull()
                 ? MachineState.Processing
@@ -56,7 +56,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         public ITrackedStack GetOutput()
         {
             IList<Item> inventory = this.Output.items;
-            return new TrackedItem(inventory.FirstOrDefault(), onEmpty: item => inventory.Remove(item));
+            return new TrackedItem(inventory.FirstOrDefault(item => item != null), onEmpty: this.OnOutputTaken);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -147,6 +147,18 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
                     return false;
             }
             return true;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Remove an output item once it's been taken.</summary>
+        /// <param name="item">The removed item.</param>
+        private void OnOutputTaken(Item item)
+        {
+            this.Output.clearNulls();
+            this.Output.items.Remove(item);
         }
     }
 }

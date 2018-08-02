@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.10.1
+* Fixed error with some machines if they have null output slots.
+
 ## 1.10
 * Updated for Stardew Valley 1.3, including...
   * multiplayer support;

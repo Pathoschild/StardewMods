@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="onEmpty">The callback invoked when the stack is empty.</param>
         public TrackedItem(Item item, Action<Item> onReduced = null, Action<Item> onEmpty = null)
         {
-            this.Item = item;
+            this.Item = item ?? throw new InvalidOperationException("Can't track a null item stack.");
             this.Sample = this.GetNewStack(item);
             this.LastStackSize = item?.Stack ?? 0;
             this.OnReduced = onReduced;
