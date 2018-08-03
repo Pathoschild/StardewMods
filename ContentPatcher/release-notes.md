@@ -10,7 +10,7 @@
   * `HasSeenEvent` (check if the player has seen a given event ID);
   * `Hearts:<NPC>` (check the relationship type for a specific NPC);
   * `Relationship:<NPC>` (check the relationship type for a specific NPC);
-  * `Spouse` (check if the current player's spouse name).
+  * `Spouse` (check the current player's spouse name).
 * Added support for deleting entries via `EditData`.
 * Added warnings for common mistakes in `patch summary` result.
 * Fixed case sensitivity issues in some cases.
