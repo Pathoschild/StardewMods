@@ -1,4 +1,7 @@
 # Release notes
+## 4.6 (upcoming)
+* Fixed 'instant build' option in CJB Cheats Menu not working with tractor garage.
+
 ## 4.5
 * Updated for Stardew Valley 1.3 (disabled in multiplayer mode).
 * Player is now invincible while riding the tractor (configurable).
