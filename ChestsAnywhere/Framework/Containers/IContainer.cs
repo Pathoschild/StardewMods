@@ -29,9 +29,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /*********
         ** Public methods
         *********/
-        /// <summary>Get whether the in-game container is open.</summary>
-        bool IsOpen();
-
         /// <summary>Get whether the container has its default name.</summary>
         bool HasDefaultName();
 

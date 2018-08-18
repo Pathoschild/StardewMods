@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // initialise
             this.Config = helper.ReadConfig<ModConfig>();
             this.Data = helper.ReadJsonFile<ModData>("data.json") ?? new ModData();
-            this.ChestFactory = new ChestFactory(helper.Translation, helper.Reflection, this.Config.EnableShippingBin);
+            this.ChestFactory = new ChestFactory(helper.Translation, this.Config.EnableShippingBin);
 
             // hook UI
             GraphicsEvents.OnPostRenderHudEvent += this.GraphicsEvents_OnPostRenderHudEvent;

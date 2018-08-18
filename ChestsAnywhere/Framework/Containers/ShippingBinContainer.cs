@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Netcode;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using SFarmer = StardewValley.Farmer;
@@ -16,9 +15,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         *********/
         /// <summary>The farm containing the shipping bin.</summary>
         private readonly Farm Farm;
-
-        /// <summary>Simplifies access to private game data.</summary>
-        private readonly IReflectionHelper Reflection;
 
         /// <summary>The underlying shipping bin.</summary>
         private readonly NetCollection<Item> ShippingBin;
@@ -54,19 +50,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="farm">The farm whose shipping bin to manage.</param>
-        /// <param name="reflection">Simplifies access to private game data.</param>
-        public ShippingBinContainer(Farm farm, IReflectionHelper reflection)
+        public ShippingBinContainer(Farm farm)
         {
             this.Farm = farm;
             this.ShippingBin = farm.shippingBin;
-            this.Reflection = reflection;
-        }
-
-        /// <summary>Get whether the in-game container is open.</summary>
-        public bool IsOpen()
-        {
-            TemporaryAnimatedSprite lid = this.Reflection.GetField<TemporaryAnimatedSprite>(this.Farm, "shippingBinLid").GetValue();
-            return lid != null && lid.currentParentTileIndex != lid.initialParentTileIndex;
         }
 
         /// <summary>Get whether the container has its default name.</summary>
@@ -109,7 +96,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 message: null,
                 behaviorOnItemGrab: this.GrabItemFromContainer,
                 canBeExitedWithKey: true,
-                showOrganizeButton: true
+                showOrganizeButton: true,
+                context: this.Farm
             );
         }
 

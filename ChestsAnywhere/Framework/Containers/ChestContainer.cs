@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
@@ -12,11 +11,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /*********
         ** Properties
         *********/
-        /// <summary>The chest's current lid frame.</summary>
-        private readonly IReflectedField<int> CurrentLidFrame;
-
         /// <summary>The in-game chest.</summary>
         private readonly Chest Chest;
+
+        /// <summary>The <see cref="ItemGrabMenu.context"/> value which indicates what opened the menu.</summary>
+        private readonly object Context;
 
         /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
         private ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory => this.Chest.grabItemFromInventory;
@@ -53,21 +52,15 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="chest">The in-game chest.</param>
-        /// <param name="reflection">Simplifies access to private game code.</param>
+        /// <param name="context">The <see cref="ItemGrabMenu.context"/> value which indicates what opened the menu.</param>
         /// <param name="isEditable">Whether the player can configure the container.</param>
         /// <param name="isChest">Whether to enable chest-specific UI.</param>
-        public ChestContainer(Chest chest, IReflectionHelper reflection, bool isEditable = true, bool isChest = true)
+        public ChestContainer(Chest chest, object context, bool isEditable = true, bool isChest = true)
         {
             this.Chest = chest;
+            this.Context = context;
             this.IsEditable = isEditable;
             this.IsChest = isChest;
-            this.CurrentLidFrame = reflection.GetField<int>(chest, "currentLidFrame");
-        }
-
-        /// <summary>Get whether the in-game container is open.</summary>
-        public bool IsOpen()
-        {
-            return this.CurrentLidFrame.GetValue() == 135;
         }
 
         /// <summary>Get whether the container has its default name.</summary>
@@ -111,7 +104,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 behaviorOnItemGrab: this.GrabItemFromContainer,
                 canBeExitedWithKey: true,
                 showOrganizeButton: true,
-                source: ItemGrabMenu.source_chest
+                source: ItemGrabMenu.source_chest,
+                context: this.Context
             );
         }
     }
