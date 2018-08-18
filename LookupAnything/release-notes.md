@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.20 (upcoming)
+* Improved translations. Thanks to Yllelder (Spanish)!
+
 ## 1.19
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added support for...

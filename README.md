@@ -67,7 +67,7 @@ German     | [↻ partial](ChestsAnywhere/i18n/de.json) | [↻ partial](DataLaye
 Japanese   | ❑ _none_                                | ❑ _none_                            | ❑ _none_                           | ❑ _none_                                | ❑ _none_
 Portuguese | [✓](ChestsAnywhere/i18n/pt.json)        | [✓](DataLayers/i18n/pt.json)        | [✓](DebugMode/i18n/pt.json)        | [✓](LookupAnything/i18n/pt.json)        | [✓](TractorMod/i18n/pt.json)
 Russian    | [↻ partial](ChestsAnywhere/i18n/ru.json) | [↻ partial](DataLayers/i18n/ru.json) | ↻ [partial](DebugMode/i18n/ru.json) | [↻ partial](LookupAnything/i18n/ru.json) | [✓](TractorMod/i18n/ru.json)
-Spanish    | [↻ partial](ChestsAnywhere/i18n/es.json) | [↻ partial](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json)        | [↻ partial](LookupAnything/i18n/es.json) | [✓](TractorMod/i18n/es.json)
+Spanish    | [↻ partial](ChestsAnywhere/i18n/es.json) | [↻ partial](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json)        | [✓](LookupAnything/i18n/es.json)        | [✓](TractorMod/i18n/es.json)
 
 Here's how to translate one of my mods:
 
