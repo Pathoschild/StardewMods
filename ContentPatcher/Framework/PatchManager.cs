@@ -427,7 +427,7 @@ namespace ContentPatcher.Framework
                 // parse condition key
                 if (!ConditionKey.TryParse(pair.Key, out ConditionKey key))
                 {
-                    error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", Enum.GetValues(typeof(ConditionType)))}";
+                    error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", Enum.GetNames(typeof(ConditionType)))}";
                     conditions = null;
                     return false;
                 }

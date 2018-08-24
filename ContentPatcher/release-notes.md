@@ -3,6 +3,7 @@
 # Release notes
 ## 1.4.1 (upcoming)
 * Updated for Stardew Valley 1.3.29.
+* Fixed broken error message.
 
 ## 1.4
 * Updated for Stardew Valley 1.3 (including multiplayer support).
