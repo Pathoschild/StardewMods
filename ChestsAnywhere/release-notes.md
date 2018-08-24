@@ -4,6 +4,7 @@
 ## 1.13.1 (upcoming)
 * Updated for Stardew Valley 1.3.29.
 * Fixed special item menus (e.g. Luau soup) rarely replaced by shipping bin menu.
+* Improved translations. Thanks to pomepome (added Japanese)!
 
 ## 1.13
 * Updated for Stardew Valley 1.3 (including multiplayer support).

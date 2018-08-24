@@ -1,7 +1,7 @@
 # Release notes
 ## 1.4.1 (upcoming)
 * Updated for Stardew Valley 1.3.29.
-* Improved translations. Thanks to Yllelder (Spanish)!
+* Improved translations. Thanks to pomepome (added Japanese) and Yllelder (Spanish)!
 
 ## 1.4
 * **Renamed to Data Layers due to common confusion about the name Data Maps.**
