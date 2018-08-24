@@ -8,12 +8,12 @@
 
   // coverage: bee houses
   "bee-houses.name": "Cobertura: Colmenas",
-  "bee-houses.range": "Rango flores",
+  "bee-houses.range": "Rango Flores",
 
   // coverage: Junimo huts
   "junimo-huts.name": "Cobertura: Cabaña Junimo",
-  "junimo-huts.can-harvest": "Puede cosechar",
-  "junimo-huts.cannot-harvest": "No puede cosechar",
+  "junimo-huts.can-harvest": "Puede Cosechar",
+  "junimo-huts.cannot-harvest": "No Puede Cosechar",
 
   // coverage: scarecrows
   "scarecrows.name": "Cobertura: Espantapájaros",
@@ -23,21 +23,21 @@
   // coverage: sprinklers
   "sprinklers.name": "Cobertura: Aspersores",
   "sprinklers.covered": "Cubierto",
-  "sprinklers.dry-crops": "Sin cubrir",
+  "sprinklers.dry-crops": "Cultivos Secos",
 
   // crops: harvest
   "crop-harvest.name": "Cultivos: Listos para cosechar",
   "crop-harvest.ready": "Listo",
-  "crop-harvest.not-ready": "No está listo",
-  "crop-harvest.not-enough-time": "No da tiempo",
+  "crop-harvest.not-ready": "No Listo Aún",
+  "crop-harvest.not-enough-time": "Tiempo Insuficiente",
 
   // crops: watered
-  "crop-water.name": "Cultivos: Riego",
-  "crop-water.watered": "Regado",
-  "crop-water.dry": "Sin regar",
+  "crop-water.name": "Cultivos: Regados",
+  "crop-water.watered": "Cultivo Regado",
+  "crop-water.dry": "Cultivo Seco",
 
   // crops: fertilized
-  "crop-fertilizer.name": "Cosechas: Fertilizante",
+  "crop-fertilizer.name": "Cultivos: Fertilizados",
   "crop-fertilizer.fertilizer": "Fertilizante",
   "crop-fertilizer.retaining-soil": "Hidrogel",
   "crop-fertilizer.speed-gro": "Acelerador"
