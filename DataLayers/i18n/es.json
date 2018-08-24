@@ -1,7 +1,7 @@
 {
   // accessibility
   "accessibility.name": "Accesibilidad",
-  "accessibility.clear": "Limpio",
+  "accessibility.clear": "Libre",
   "accessibility.occupied": "Ocupado",
   "accessibility.impassable": "Bloqueado",
   "accessibility.warp": "Portal",
@@ -23,23 +23,22 @@
   // coverage: sprinklers
   "sprinklers.name": "Cobertura: Aspersores",
   "sprinklers.covered": "Cubierto",
-  "sprinklers.dry-crops": "Cosechas secas",
+  "sprinklers.dry-crops": "Sin cubrir",
 
   // crops: harvest
-  // TODO
-  "crop-harvest.name": "Crops: Ready to Harvest",
-  "crop-harvest.ready": "Ready",
-  "crop-harvest.not-ready": "Not Ready",
-  "crop-harvest.not-enough-time": "Not Enough Time",
+  "crop-harvest.name": "Cultivos: Listos para cosechar",
+  "crop-harvest.ready": "Listo",
+  "crop-harvest.not-ready": "No está listo",
+  "crop-harvest.not-enough-time": "No da tiempo",
 
   // crops: watered
-  "crop-water.name": "Cosechas: Irrigación",
-  "crop-water.watered": "Cosecha regada",
-  "crop-water.dry": "Cosecha seca",
+  "crop-water.name": "Cultivos: Riego",
+  "crop-water.watered": "Regado",
+  "crop-water.dry": "Sin regar",
 
   // crops: fertilized
-  "crop-fertilizer.name": "Cosechas: Fertilizado",
+  "crop-fertilizer.name": "Cosechas: Fertilizante",
   "crop-fertilizer.fertilizer": "Fertilizante",
-  "crop-fertilizer.retaining-soil": "Retiene agua", //TODO: I don't have a correct word in spanish for describe this
-  "crop-fertilizer.speed-gro": "Fertilizante rápido"
+  "crop-fertilizer.retaining-soil": "Hidrogel",
+  "crop-fertilizer.speed-gro": "Acelerador"
 }
