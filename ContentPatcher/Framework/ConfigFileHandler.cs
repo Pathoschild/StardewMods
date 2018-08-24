@@ -55,18 +55,20 @@ namespace ContentPatcher.Framework
         /// <param name="modHelper">The mod helper through which to save the file.</param>
         public void Save(ManagedContentPack contentPack, InvariantDictionary<ConfigField> config, IModHelper modHelper)
         {
-            string configPath = contentPack.GetFullPath(this.Filename);
-
             // save if settings valid
             if (config.Any())
             {
                 InvariantDictionary<string> data = new InvariantDictionary<string>(config.ToDictionary(p => p.Key, p => string.Join(", ", p.Value.Value)));
-                modHelper.WriteJsonFile(configPath, data);
+                contentPack.WriteJsonFile(this.Filename, data);
             }
 
             // delete if no settings
-            else if (File.Exists(configPath))
-                File.Delete(configPath);
+            else
+            {
+                FileInfo file = new FileInfo(Path.Combine(contentPack.GetFullPath(this.Filename)));
+                if (file.Exists)
+                    file.Delete();
+            }
         }
 
 

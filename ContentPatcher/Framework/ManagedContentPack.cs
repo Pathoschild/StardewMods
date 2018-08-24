@@ -75,6 +75,15 @@ namespace ContentPatcher.Framework
             return this.Pack.ReadJsonFile<TModel>(path);
         }
 
+        /// <summary>Save data to a JSON file in the content pack's folder.</summary>
+        /// <typeparam name="TModel">The model type. This should be a plain class that has public properties for the data you want. The properties can be complex types.</typeparam>
+        /// <param name="path">The file path relative to the mod folder.</param>
+        /// <param name="data">The arbitrary data to save.</param>
+        public void WriteJsonFile<TModel>(string path, TModel data) where TModel : class
+        {
+            this.Pack.WriteJsonFile(path, data);
+        }
+
         /// <summary>Get the raw absolute path for a path within the content pack.</summary>
         /// <param name="relativePath">The path relative to the content pack folder.</param>
         public string GetFullPath(string relativePath)

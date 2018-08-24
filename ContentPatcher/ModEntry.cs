@@ -62,7 +62,7 @@ namespace ContentPatcher
             helper.Content.AssetEditors.Add(this.PatchManager);
             this.PatchManager.SetInitialContext(
                 installedMods: contentPackIDs
-                    .Concat(helper.ModRegistry.GetAll().Select(p => p.UniqueID))
+                    .Concat(helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
                     .OrderBy(p => p, StringComparer.InvariantCultureIgnoreCase)
                     .ToArray()
             );
