@@ -1,0 +1,30 @@
+{
+  // default chest names
+  "default-name.auto-grabber": "自動収穫機 #{{number}}",
+  "default-name.chest": "チェスト #{{number}}",
+  "default-name.fridge": "冷蔵庫",
+  "default-name.junimo-hut": "ジュニモ小屋 #{{number}}",
+  "default-name.shipping-bin": "出荷箱",
+
+  // edit-chest labels
+  "label.location": "場所",
+  "label.location.tile": "タイル {{x}}, {{y}}",
+  "label.name": "名前",
+  "label.category": "カテゴリー",
+  "label.order": "順番",
+  "label.hide-chest": "このチェストを非表示にする",
+  "label.hide-chest-hidden": "このチェストを非表示にする (再び表示するにはチェストを探して下さい!)",
+  "label.automate-prefer-output": "(Automate) このチェストに優先的にアイテムを入れる",
+  "label.automate-ignore": "(Automate) このチェストを自動化に使わない",
+
+  // button labels
+  "button.edit-chest": "チェストの編集",
+  "button.sort-inventory": "インベントリの整頓",
+  "button.ok": "OK",
+
+  // errors
+  "errors.disabled-from-here": "ここからチェストにアクセスできません.",
+  "errors.no-chests": "まだチェストがありません",
+  "errors.no-chests-in-location": "この地域にチェストがありません",
+  "errors.no-chests-in-range": "範囲内にチェストがありません"
+}

@@ -1,0 +1,10 @@
+{
+  // labels shown on the debug screen
+  "label.tile": "タイル",
+  "label.map": "マップ",
+  "label.menu": "メニュー",
+  "label.submenu": "サブメニュー",
+  "label.festival-name": "祭り",
+  "label.event-id": "イベントID",
+  "label.event-script": "イベントスクリプト"
+}
