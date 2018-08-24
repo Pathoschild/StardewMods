@@ -419,37 +419,6 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         private void MigrateLegacySaveData(IModHelper helper)
         {
-            // get file
-            const string filename = "TractorModSave.json";
-            FileInfo file = new FileInfo(Path.Combine(helper.DirectoryPath, filename));
-            if (!file.Exists)
-                return;
-
-            // read legacy data
-            this.Monitor.Log($"Found legacy {filename}, migrating to new save data...");
-            IDictionary<string, CustomSaveData> saves = new Dictionary<string, CustomSaveData>();
-            {
-                LegacySaveData data = helper.ReadJsonFile<LegacySaveData>(filename);
-                if (data.Saves != null && data.Saves.Any())
-                {
-                    foreach (LegacySaveData.LegacySaveEntry saveData in data.Saves)
-                    {
-                        saves[$"{saveData.FarmerName}_{saveData.SaveSeed}"] = new CustomSaveData(
-                            saveData.TractorHouse.Select(p => new CustomSaveBuilding(new Vector2(p.X, p.Y), Guid.NewGuid(), null, this.GarageBuildingType, "Farm", 0))
-                        );
-                    }
-                }
-            }
-
-            // write new files
-            foreach (var save in saves)
-            {
-                if (save.Value.Buildings.Any())
-                    helper.WriteJsonFile(this.GetDataPath(save.Key), save.Value);
-            }
-
-            // delete old file
-            file.Delete();
         }
 
         /****

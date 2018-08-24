@@ -2,6 +2,7 @@
 ## 4.5.1 (upcoming)
 * Updated for Stardew Valley 1.3.29.
 * Fixed 'instant build' option in CJB Cheats Menu not working with tractor garage.
+* Removed support for legacy tractor data. (If you haven't loaded the mod in the last year, you'll need to rebuild the garage.)
 
 ## 4.5
 * Updated for Stardew Valley 1.3 (disabled in multiplayer mode).
