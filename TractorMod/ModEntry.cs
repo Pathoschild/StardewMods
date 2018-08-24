@@ -31,6 +31,9 @@ namespace Pathoschild.Stardew.TractorMod
         /****
         ** Constants
         ****/
+        /// <summary>The data key in the save file for the stashed tractors.</summary>
+        private readonly string DataKey = "tractors";
+
         /// <summary>The tractor garage's building type.</summary>
         private readonly string GarageBuildingType = "TractorGarage";
 
@@ -85,7 +88,6 @@ namespace Pathoschild.Stardew.TractorMod
             this.IsPelicanFiberLoaded = helper.ModRegistry.IsLoaded("jwdred.PelicanFiber");
 
             // read config
-            this.MigrateLegacySaveData(helper);
             this.Config = helper.ReadConfig<ModConfig>();
 
             // init attachments
@@ -356,20 +358,13 @@ namespace Pathoschild.Stardew.TractorMod
         /****
         ** Save methods
         ****/
-        /// <summary>Get the mod-relative path for custom save data.</summary>
-        /// <param name="saveID">The save ID.</param>
-        private string GetDataPath(string saveID)
-        {
-            return $"data/{saveID}.json";
-        }
-
-        /// <summary>Stash all tractor and garage data to a separate file to avoid breaking the save file.</summary>
+        /// <summary>Safely stash tractor and garage data to the save file to avoid serializer errors.</summary>
         private void StashCustomData()
         {
             // stash data
             GarageMetadata[] garages = this.FindGarages().ToArray();
             CustomSaveData saveData = new CustomSaveData(garages.Select(p => p.SaveData));
-            this.Helper.WriteJsonFile(this.GetDataPath(Constants.SaveFolderName), saveData);
+            this.Helper.Data.WriteSaveData(this.DataKey, saveData);
 
             // remove tractors + buildings
             foreach (GarageMetadata garage in garages)
@@ -393,7 +388,9 @@ namespace Pathoschild.Stardew.TractorMod
         private void RestoreCustomData()
         {
             // get save data
-            CustomSaveData saveData = this.Helper.ReadJsonFile<CustomSaveData>(this.GetDataPath(Constants.SaveFolderName));
+            CustomSaveData saveData = this.Helper.Data.ReadSaveData<CustomSaveData>(this.DataKey);
+            if (saveData?.Buildings == null)
+                saveData = this.Helper.Data.ReadJsonFile<CustomSaveData>($"data/{Constants.SaveFolderName}.json"); // pre-4.6 data
             if (saveData?.Buildings == null)
                 return;
 
@@ -413,12 +410,6 @@ namespace Pathoschild.Stardew.TractorMod
                 int daysOfConstructionLeft = Math.Max(0, garageData.DaysOfConstructionLeft - 1);
                 this.SpawnGarage(location, (int)garageData.Tile.X, (int)garageData.Tile.Y, daysOfConstructionLeft, garageData.TractorID, garageData.TractorHatID);
             }
-        }
-
-        /// <summary>Migrate the legacy <c>TractorModSave.json</c> file to the new config files.</summary>
-        /// <param name="helper">Provides simplified APIs for writing mods.</param>
-        private void MigrateLegacySaveData(IModHelper helper)
-        {
         }
 
         /****
