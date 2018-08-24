@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.10.2 (upcoming)
+* Updated for Stardew Valley 1.3.29.
+
 ## 1.10.1
 * Fixed error with some machines if they have null output slots.
 

@@ -1,7 +1,8 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.14 (upcoming)
+## 1.13.1 (upcoming)
+* Updated for Stardew Valley 1.3.29.
 * Fixed special item menus (e.g. Luau soup) rarely replaced by shipping bin menu.
 
 ## 1.13

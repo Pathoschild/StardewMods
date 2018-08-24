@@ -1,4 +1,7 @@
 # Release notes
+## 1.4.1 (upcoming)
+* Updated for Stardew Valley 1.3.29.
+
 ## 1.4
 * **Renamed to Data Layers due to common confusion about the name Data Maps.**
 * Updated for Stardew Valley 1.3 (including multiplayer).

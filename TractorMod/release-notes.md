@@ -1,5 +1,6 @@
 # Release notes
-## 4.6 (upcoming)
+## 4.5.1 (upcoming)
+* Updated for Stardew Valley 1.3.29.
 * Fixed 'instant build' option in CJB Cheats Menu not working with tractor garage.
 
 ## 4.5
