@@ -11,6 +11,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Construct an instance.</summary>
         /// <param name="junimoHut">The in-game junimo hut.</param>
         public JunimoHutContainer(JunimoHut junimoHut)
-            : base(junimoHut.output.Value, context: junimoHut, isChest: false) { }
+            : base(junimoHut.output.Value, context: junimoHut) { }
     }
 }

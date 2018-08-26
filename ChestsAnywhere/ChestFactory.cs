@@ -26,6 +26,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Provides translations stored in the mod's folder.</summary>
         private readonly ITranslationHelper Translations;
 
+        /// <summary>An API for reading and storing local mod data.</summary>
+        private readonly IDataHelper DataHelper;
+
         /// <summary>Whether to support access to the shipping bin.</summary>
         private readonly bool EnableShippingBin;
 
@@ -35,11 +38,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations stored in the mod's folder.</param>
+        /// <param name="dataHelper">An API for reading and storing local mod data.</param>
         /// <param name="enableShippingBin">Whether to support access to the shipping bin.</param>
-        public ChestFactory(ITranslationHelper translations, bool enableShippingBin)
+        public ChestFactory(ITranslationHelper translations, IDataHelper dataHelper, bool enableShippingBin)
         {
             this.Translations = translations;
             this.EnableShippingBin = enableShippingBin;
+            this.DataHelper = dataHelper;
         }
 
         /// <summary>Get all player chests.</summary>
@@ -92,13 +97,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
                     // shipping bin
                     if (this.EnableShippingBin && location is Farm farm)
-                        yield return new ManagedChest(new ShippingBinContainer(farm), farm, Vector2.Zero, this.Translations.Get("default-name.shipping-bin"));
+                        yield return new ManagedChest(new ShippingBinContainer(farm, this.DataHelper), farm, Vector2.Zero, this.Translations.Get("default-name.shipping-bin"));
                 }
             }
 
             return (
                 from chest in Search()
-                orderby chest.Order ?? int.MaxValue, chest.Name
+                orderby chest.Order ?? int.MaxValue, chest.DisplayName
                 where
                     chest.Container.IsSameAs(alwaysIncludeContainer)
                     || (

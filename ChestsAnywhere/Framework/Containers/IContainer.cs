@@ -13,25 +13,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The underlying inventory.</summary>
         IList<Item> Inventory { get; }
 
-        /// <summary>The container's name.</summary>
-        string Name { get; set; }
+        /// <summary>The persisted data for this container.</summary>
+        ContainerData Data { get; }
 
-        /// <summary>Whether the player can configure the container.</summary>
-        bool IsEditable { get; }
-
-        /// <summary>Whether to enable chest-specific UI.</summary>
-        bool IsChest { get; }
-
-        /// <summary>The container's original name.</summary>
-        string DefaultName { get; }
+        /// <summary>Whether Automate options can be configured for this chest.</summary>
+        bool CanConfigureAutomate { get; }
 
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Get whether the container has its default name.</summary>
-        bool HasDefaultName();
-
         /// <summary>Get whether the inventory can accept the item type.</summary>
         /// <param name="item">The item.</param>
         bool CanAcceptItem(Item item);
@@ -46,5 +37,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 
         /// <summary>Open a menu to transfer items between the player's inventory and this container.</summary>
         ItemGrabMenu OpenMenu();
+
+        /// <summary>Persist the container data.</summary>
+        void SaveData();
     }
 }

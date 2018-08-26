@@ -11,6 +11,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /*********
         ** Properties
         *********/
+        /// <summary>The container's default internal name.</summary>
+        private readonly string DefaultName = "Chest";
+
         /// <summary>The in-game chest.</summary>
         private readonly Chest Chest;
 
@@ -30,21 +33,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The underlying inventory.</summary>
         public IList<Item> Inventory => this.Chest.items;
 
-        /// <summary>The container's name.</summary>
-        public string Name
-        {
-            get => this.Chest.Name;
-            set => this.Chest.name = value;
-        }
+        /// <summary>The persisted data for this container.</summary>
+        public ContainerData Data { get; }
 
-        /// <summary>Whether the player can configure the container.</summary>
-        public bool IsEditable { get; }
-
-        /// <summary>Whether to enable chest-specific UI.</summary>
-        public bool IsChest { get; }
-
-        /// <summary>The container's original name.</summary>
-        public string DefaultName => "Chest";
+        /// <summary>Whether Automate options can be configured for this chest.</summary>
+        public bool CanConfigureAutomate { get; } = true;
 
 
         /*********
@@ -53,20 +46,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Construct an instance.</summary>
         /// <param name="chest">The in-game chest.</param>
         /// <param name="context">The <see cref="ItemGrabMenu.context"/> value which indicates what opened the menu.</param>
-        /// <param name="isEditable">Whether the player can configure the container.</param>
-        /// <param name="isChest">Whether to enable chest-specific UI.</param>
-        public ChestContainer(Chest chest, object context, bool isEditable = true, bool isChest = true)
+        public ChestContainer(Chest chest, object context)
         {
             this.Chest = chest;
             this.Context = context;
-            this.IsEditable = isEditable;
-            this.IsChest = isChest;
-        }
-
-        /// <summary>Get whether the container has its default name.</summary>
-        public bool HasDefaultName()
-        {
-            return this.Name == this.DefaultName;
+            this.Data = ContainerData.ParseName(chest.Name, this.DefaultName);
         }
 
         /// <summary>Get whether the inventory can accept the item type.</summary>
@@ -107,6 +91,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 source: ItemGrabMenu.source_chest,
                 context: this.Context
             );
+        }
+
+        /// <summary>Persist the container data.</summary>
+        public void SaveData()
+        {
+            this.Chest.name = this.Data.HasData()
+                ? this.Data.ToName()
+                : this.DefaultName;
         }
     }
 }

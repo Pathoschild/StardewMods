@@ -50,6 +50,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Framework\ContainerData.cs" />
     <Compile Include="Framework\RangeHandler.cs" />
     <Compile Include="ChestFactory.cs" />
     <Compile Include="ModEntry.cs" />
