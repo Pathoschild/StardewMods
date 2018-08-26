@@ -84,9 +84,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         {
             ContainerData data = this.Container.Data;
 
-            data.Name = !string.IsNullOrWhiteSpace(name)
+            data.Name = !string.IsNullOrWhiteSpace(name) && name != this.DefaultDisplayName
                 ? name.Trim()
-                : this.DefaultDisplayName;
+                : null;
             data.Category = !string.IsNullOrWhiteSpace(category) && category != this.Location.Name
                 ? category.Trim()
                 : null;

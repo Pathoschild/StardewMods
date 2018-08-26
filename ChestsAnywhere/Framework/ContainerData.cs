@@ -97,7 +97,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         public string ToName()
         {
             string internalName = !this.HasDefaultDisplayName() ? this.Name : this.DefaultDisplayName;
-            if (this.Order.HasValue)
+            if (this.Order.HasValue && this.Order != 0)
                 internalName += $" |{this.Order}|";
             if (this.IsIgnored)
                 internalName += " |ignore|";
@@ -122,7 +122,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         {
             return
                 !this.HasDefaultDisplayName()
-                || this.Order.HasValue
+                || (this.Order.HasValue && this.Order != 0)
                 || this.IsIgnored
                 || !string.IsNullOrWhiteSpace(this.Category)
                 || this.ShouldAutomateIgnore
