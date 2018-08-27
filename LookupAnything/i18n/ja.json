@@ -3,8 +3,8 @@
   ** Generic translations
   *********/
   // dates (possible tokens: {{seasonName}}, {{seasonNumber}}, {{dayNumber}}, {{year}})
-  "generic.date": "{{seasonName}} {{dayNumber}}",
-  "generic.date-with-year": "{{year}}年目 {{seasonName}} {{dayNumber}}",
+  "generic.date": "{{seasonName}} {{dayNumber}}日",
+  "generic.date-with-year": "{{year}}年目 {{seasonName}} {{dayNumber}}日",
 
   // generic field values
   "generic.percent": "{{percent}}%",
@@ -170,7 +170,7 @@
   "animal.complaints.wild-animal-attack": "夜に野生動物に襲われた",
 
   // fruit tree lookup labels
-  "fruit-tree.complaints": "不平",
+  "fruit-tree.complaints": "不満点",
   "fruit-tree.name": "{{fruitName}}の木",
   "fruit-tree.growth": "成長",
   "fruit-tree.next-fruit": "次の果実",
@@ -214,15 +214,15 @@
 
   "item.fence-health": "耐久値",
 
-  "item.contents": "Contents",
-  "item.likes-this": "Likes this",
-  "item.loves-this": "Loves this",
-  "item.needed-for": "Needed for",
+  "item.contents": "内容",
+  "item.likes-this": "これが好きな人",
+  "item.loves-this": "これが大好きな人",
+  "item.needed-for": "要求されるもの",
   "item.number-owned": "所有数",
   "item.recipes": "レシピ",
   "item.see-also": "これも見て",
   "item.sells-for": "売値",
-  "item.sells-to": "売れる人",
+  "item.sells-to": "売却先",
 
   // item lookup values
   "item.cask-schedule.now": "現在 {{quality}}",
@@ -238,7 +238,7 @@
   "item.needed-for.full-collection": "実績:コンプリートコレクション (博物館に一つ寄付)",
   "item.sells-to.shipping-box": "出荷箱",
   "item.fence-health.gold-clock": "金の時計の効果で減らない",
-  "item.fence-health.summary": "{{percent}}% (大体残り{{count}}日)",
+  "item.fence-health.summary": "{{percent}}% (残り約{{count}}日)",
   "item.recipes.entry": "{{name}} ({{count}}個必要)",
   "item.number-owned.summary": "{{count}}個持っている",
 
@@ -270,7 +270,7 @@
   // NPC lookup values
   "npc.can-romance.married": "あなたと結婚しました♡", // < turns into a heart
   "npc.friendship.not-met": "まだ会っていません",
-  "npc.friendship.need-bouquet": "進むためには花束が必要",
+  "npc.friendship.need-bouquet": "進むには花束が必要",
   "npc.friendship.need-points": "{{count}}pts必要",
 
   // NPC child lookup labels
@@ -304,8 +304,8 @@
   "player.gender.male": "男",
   "player.gender.female": "女",
   "player.luck.summary": "{{percent}}%追加の確率",
-  "player.skill.progress": "level {{level}} (レベルアップに{{expNeeded}}XP必要)",
-  "player.skill.progress-last": "level {{level}}",
+  "player.skill.progress": "レベル{{level}} (レベルアップに{{expNeeded}}XP必要)",
+  "player.skill.progress-last": "レベル{{level}}",
 
   // tile lookup labels
   "tile.description": "マップでのタイル位置です 設定で有効化されたので表示しています",
@@ -323,7 +323,7 @@
   // tree lookup labels
   "tree.stage": "成長段階",
   "tree.next-growth": "次の成長",
-  "tree.has-seed": "種を持っている",
+  "tree.has-seed": "種をつけている",
 
   // non-fruit tree lookup values
   "tree.name.maple": "カエデの木",
@@ -331,7 +331,7 @@
   "tree.name.pine": "マツの木",
   "tree.name.palm": "ヤシの木",
   "tree.name.big-mushroom": "大きなキノコ",
-  "tree.name.unknown": "わからない木",
+  "tree.name.unknown": "未知の木",
   "tree.stage.done": "成長完了",
   "tree.stage.partial": "{{stageName}} ({{step}} / {{max}})",
   "tree.next-growth.winter": "温室の外では冬に育たない",
