@@ -37,7 +37,7 @@ hold item  | default effects | optional effects (disabled by default)
 axe        | clear twigs; clear dead crops. | chop down trees; clear live crops.
 fertiliser | fertilise dirt. | —
 hoe        | till dirt. | —
-melee weapon | clear dead crops. | attack monsters.
+melee weapon | clear dead crops; break mine containers. | attack monsters.
 pickaxe    | break rocks; clear tilled dirt; clear dead crops. | break paths/flooring.
 seeds      | plant seeds in dirt. | —
 scythe     | harvest crops, fruit trees, or forage; clear weeds and dead crops. | —

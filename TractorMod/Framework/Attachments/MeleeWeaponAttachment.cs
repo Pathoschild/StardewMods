@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using SFarmer = StardewValley.Farmer;
@@ -51,6 +52,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // clear dead crops
             if (this.Config.ClearDeadCrops && tileFeature is HoeDirt dirt && dirt.crop != null && dirt.crop.dead.Value)
                 return this.UseToolOnTile(tool, tile);
+
+            // break mine containers
+            if (this.Config.BreakMineContainers && tileObj is BreakableContainer container)
+                return container.performToolAction(tool, location);
 
             // attack monsters
             if (this.Config.AttackMonsters)

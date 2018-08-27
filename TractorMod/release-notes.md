@@ -2,6 +2,7 @@
 ## 4.6 (upcoming)
 * Updated for Stardew Valley 1.3.29.
 * Tractor data is now safely stored in the save file, so you no longer need to keep the `data` subfolder when updating (once your save is migrated).
+* Melee weapons now break mine containers.
 * Fixed 'instant build' option in CJB Cheats Menu not working with tractor garage.
 * Removed support for legacy tractor data. (If you haven't loaded the mod in the last year, you'll need to rebuild the garage.)
 * Improved translations. Thanks to pomepome (added Japanese)!
