@@ -3,8 +3,8 @@
   ** Generic translations
   *********/
   // dates (possible tokens: {{seasonName}}, {{seasonNumber}}, {{dayNumber}}, {{year}})
-  "generic.date": "{{seasonName}} {{dayNumber}}",
-  "generic.date-with-year": "{{year}}年目 {{seasonName}} {{dayNumber}}",
+  "generic.date": "{{seasonName}} {{dayNumber}}日",
+  "generic.date-with-year": "{{year}}年目 {{seasonName}} {{dayNumber}}日",
 
   // generic field values
   "generic.percent": "{{percent}}%",
@@ -170,7 +170,7 @@
   "animal.complaints.wild-animal-attack": "夜に野生動物に襲われた",
 
   // fruit tree lookup labels
-  "fruit-tree.complaints": "不平",
+  "fruit-tree.complaints": "不満点",
   "fruit-tree.name": "{{fruitName}}の木",
   "fruit-tree.growth": "成長",
   "fruit-tree.next-fruit": "次の果実",
@@ -215,8 +215,8 @@
   "item.fence-health": "耐久値",
 
   "item.contents": "内容",
-  "item.likes-this": "好きなもの",
-  "item.loves-this": "大好きなもの",
+  "item.likes-this": "これが好きな人",
+  "item.loves-this": "これが大好きな人",
   "item.needed-for": "要求されるもの",
   "item.number-owned": "所有数",
   "item.recipes": "レシピ",
