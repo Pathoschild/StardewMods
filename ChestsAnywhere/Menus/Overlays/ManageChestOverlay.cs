@@ -227,7 +227,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     this.GroupSelector.Draw(batch, navOpacity);
 
                 // edit button
-                this.EditButton.draw(batch, Color.White * navOpacity, 1f);
+                if (this.Chest.CanEdit)
+                    this.EditButton.draw(batch, Color.White * navOpacity, 1f);
                 this.SortInventoryButton.draw(batch, Color.White * navOpacity, 1f);
             }
 
@@ -338,7 +339,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         this.SelectPreviousCategory();
                     else if (controls.NextCategory.Contains(input) && canNavigate)
                         this.SelectNextCategory();
-                    else if (controls.EditChest.Contains(input) && canNavigate)
+                    else if (this.Chest.CanEdit && controls.EditChest.Contains(input) && canNavigate)
                         this.OpenEdit();
                     else if (controls.SortItems.Contains(input))
                         this.SortInventory();

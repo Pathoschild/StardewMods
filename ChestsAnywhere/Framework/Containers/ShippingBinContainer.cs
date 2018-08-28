@@ -42,6 +42,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The persisted container data.</summary>
         public ContainerData Data { get; }
 
+        /// <summary>Whether the player can customise the container data.</summary>
+        public bool IsDataEditable { get; }
+
         /// <summary>Whether Automate options can be configured for this chest.</summary>
         public bool CanConfigureAutomate { get; } = false; // Automate can't read the shipping bin settings
 
@@ -57,7 +60,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.DataHelper = dataHelper;
             this.Farm = farm;
             this.ShippingBin = farm.shippingBin;
-            this.Data = dataHelper.ReadSaveData<ContainerData>(this.DataKey) ?? new ContainerData(defaultDisplayName: null);
+            this.IsDataEditable = Context.IsMainPlayer;
+            this.Data = this.IsDataEditable
+                ? dataHelper.ReadSaveData<ContainerData>(this.DataKey) ?? new ContainerData(defaultDisplayName: null)
+                : new ContainerData(defaultDisplayName: null);
         }
 
         /// <summary>Get whether the inventory can accept the item type.</summary>

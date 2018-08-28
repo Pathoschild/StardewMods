@@ -21,7 +21,7 @@ that change the game's images and data without replacing XNB files.
 * [FAQs](#faqs)
   * [Compatibility](#compatibility)
   * [Multiplayer](#multiplayer)
-  * [Patch order](#patch-order)
+  * [How multiple patches interact](#how-multiple-patches-interact)
   * [Special cases](#special-cases)
 * [See also](#see-also)
 
@@ -595,15 +595,14 @@ visual     | Only visible to players that have it installed.
 maps       | Only visible to players that have it installed. Players without the custom map will see the normal map and will be subject to the normal bounds (e.g. they may see other players walk through walls, but they won't be able to follow).
 data       | Only directly affects players that have it installed, but can indirectly affect other players. For example, if a content pack changes `Data/ObjectInformation` and you create a new object, other player will see that object's custom values even if their `Data/ObjectInformation` doesn't have those changes.
 
-### Patch order
-Your `content.json` can have multiple patches for the same file. `Action: Load` always happens
-before other action types, but otherwise each patch is applied in the order you list them. This
-patch order within a content pack is by design and unlikely to change.
+### How multiple patches interact
+Any number of patches can be applied to the same file. `Action: Load` always happens before other
+action types, but otherwise each patch is applied sequentially. After each patch is done, the next
+patch will see the combined asset as the input.
 
-The patch order between different content packs is currently **undocumented and not guaranteed**.
-The only guarantee is that `Action: Load` will happen before other patch types (even across content
-packs). Otherwise don't depend on your patches being applied in a certain order relative to those
-in a different content pack.
+Within one content pack, patches are applied in the order they're listed in `content.json`. When
+you have multiple content packs, each one is applied in the order they're loaded by SMAPI; if you
+need to explicitly patch after another content pack, see [manifest dependencies](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Dependencies).
 
 ### Special cases
 Some game assets have special logic. This isn't specific to Content Patcher, but they're documented

@@ -27,6 +27,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>The chest's tile position within its location or building.</summary>
         public Vector2 Tile { get; }
 
+        /// <summary>Whether the player can customise the container data.</summary>
+        public bool CanEdit => this.Container.IsDataEditable;
+
         /// <summary>Whether Automate options can be configured for this chest.</summary>
         public bool CanConfigureAutomate => this.Container.CanConfigureAutomate;
 
