@@ -21,6 +21,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The current weather.</summary>
         Weather,
 
+        /// <summary>The current year number.</summary>
+        Year,
+
         /****
         ** Other basic conditions
         ****/

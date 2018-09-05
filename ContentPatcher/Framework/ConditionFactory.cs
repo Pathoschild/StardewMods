@@ -36,7 +36,8 @@ namespace ContentPatcher.Framework
             ConditionKey.DayOfWeek,
             ConditionKey.Language,
             ConditionKey.Season,
-            ConditionKey.Weather
+            ConditionKey.Weather,
+            ConditionKey.Year
         });
 
 

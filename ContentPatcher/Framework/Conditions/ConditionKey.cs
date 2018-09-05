@@ -41,6 +41,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>A predefined condition key for <see cref="ConditionType.Weather"/>.</summary>
         public static ConditionKey Weather { get; } = new ConditionKey(ConditionType.Weather);
 
+        /// <summary>A predefined condition key for <see cref="ConditionType.Year"/>.</summary>
+        public static ConditionKey Year { get; } = new ConditionKey(ConditionType.Year);
+
         /****
         ** Properties
         ****/

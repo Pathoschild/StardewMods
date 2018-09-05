@@ -2,12 +2,13 @@
 
 # Release notes
 ## 1.5 (upcoming)
-* You can now use any condition with `Action: Load` patches.
-* The `Target` field now allows multiple values (like `"Target": "Festivals, Maps/Festivals"`).
+* Added `Year` condition.
+* Added support for all conditions in `Action: Load` patches.
+* Added support for multiple values in the `Target` field (like `"Target": "Festivals, Maps/Festivals"`).
 * Removed patch prevalidation, which warned modders about issues like patch conflicts before they
   happened. That validation required a number of restrictions on how conditions and tokens could be
-  used. Based on discussion with content pack modders on Discord and in the forums, lifting those
-  restrictions was more valuable than the prevalidation.
+  used. Based on discussion with content pack modders on Discord, lifting those restrictions was
+  more valuable than the prevalidation.
 * Removed image preloading, which is no longer needed with SMAPI 2.8+.
 
 ## 1.4.1

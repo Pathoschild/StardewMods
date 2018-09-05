@@ -28,6 +28,7 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>The order in which condition types should be listed by <c>patch summary</c>.</summary>
         private readonly ConditionType[] DisplayOrder = {
             // general
+            ConditionType.Year,
             ConditionType.Season,
             ConditionType.DayOfWeek,
             ConditionType.Day,

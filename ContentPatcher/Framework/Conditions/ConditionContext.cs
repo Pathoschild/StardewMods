@@ -53,12 +53,14 @@ namespace ContentPatcher.Framework.Conditions
                 this.Set(ConditionKey.Day, date.Day.ToString(CultureInfo.InvariantCulture));
                 this.Set(ConditionKey.DayOfWeek, date.DayOfWeek.ToString().ToLower());
                 this.Set(ConditionKey.Season, date.Season.ToLower());
+                this.Set(ConditionKey.Year, date.Year.ToString());
             }
             else
             {
                 this.Set(ConditionKey.Day);
                 this.Set(ConditionKey.DayOfWeek);
                 this.Set(ConditionKey.Season);
+                this.Set(ConditionKey.Year);
             }
 
             // other basic conditions
