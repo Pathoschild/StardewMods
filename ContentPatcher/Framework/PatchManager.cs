@@ -269,6 +269,10 @@ namespace ContentPatcher.Framework
 
                     this.VerboseLog($"      [{(shouldApply ? "X" : " ")}] {patch.LogName}: {(changes.Any() ? changesStr : "OK")}");
                 }
+
+                // warn for invalid load patch
+                if (patch is LoadPatch loadPatch && patch.MatchesContext && !patch.ContentPack.FileExists(loadPatch.LocalAsset.Value))
+                    this.Monitor.Log($"Patch error: {patch.LogName} has a {nameof(PatchConfig.FromFile)} which matches non-existent file {loadPatch.LocalAsset.Value}.", LogLevel.Error);
             }
 
             // rebuild asset name lookup
@@ -346,7 +350,7 @@ namespace ContentPatcher.Framework
         {
             return this
                 .GetPatches(asset.AssetName)
-                .Where(patch => patch.Type == PatchType.Load && patch.MatchesContext);
+                .Where(patch => patch.Type == PatchType.Load && patch.MatchesContext && patch.IsValidInContext);
         }
 
         /// <summary>Get patches which edit the given asset in the current context.</summary>

@@ -31,25 +31,6 @@ namespace ContentPatcher.Framework.Conditions
             this.Add(key, new Condition(key, new InvariantHashSet(values)));
         }
 
-        /// <summary>Get the explicit values for a condition, or the implied range of values if not explicitly set.</summary>
-        /// <param name="key">The condition key.</param>
-        public IEnumerable<string> GetImpliedValues(ConditionKey key)
-        {
-            // explicit values
-            if (this.TryGetValue(key, out Condition condition))
-            {
-                foreach (string value in condition.Values)
-                    yield return value;
-            }
-
-            // implied range
-            else
-            {
-                foreach (string value in this.ValidValues[key])
-                    yield return value;
-            }
-        }
-
         /// <summary>Get the possible values for a condition.</summary>
         /// <param name="key">The condition key.</param>
         public IEnumerable<string> GetValidValues(ConditionKey key)

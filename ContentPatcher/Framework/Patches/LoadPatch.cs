@@ -40,6 +40,7 @@ namespace ContentPatcher.Framework.Patches
         public override bool UpdateContext(ConditionContext context, IDictionary<ConditionKey, string> tokenisableConditions)
         {
             bool localAssetChanged = this.LocalAsset.UpdateContext(tokenisableConditions);
+            this.IsValidInContext = this.ContentPack.FileExists(this.LocalAsset.Value);
             return base.UpdateContext(context, tokenisableConditions) || localAssetChanged;
         }
 

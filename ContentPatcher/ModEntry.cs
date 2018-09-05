@@ -522,22 +522,6 @@ namespace ContentPatcher
             }
             tokenedPath = builder.Build();
 
-            // preload & validate possible file paths
-            InvariantHashSet missingFiles = new InvariantHashSet();
-            foreach (string localKey in this.ConditionFactory.GetPossibleStrings(tokenedPath, conditions))
-            {
-                if (!pack.FileExists(localKey))
-                    missingFiles.Add(localKey);
-            }
-            if (missingFiles.Any())
-            {
-                error = tokenedPath.ConditionTokens.Any() || missingFiles.Count > 1
-                    ? $"{nameof(PatchConfig.FromFile)} '{path}' matches files which don't exist ({string.Join(", ", missingFiles.OrderBy(p => p))})."
-                    : $"{nameof(PatchConfig.FromFile)} '{path}' matches a file which doesn't exist.";
-                tokenedPath = null;
-                return false;
-            }
-
             // looks OK
             error = null;
             return true;
