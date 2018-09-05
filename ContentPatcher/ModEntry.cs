@@ -528,8 +528,6 @@ namespace ContentPatcher
             {
                 if (!pack.FileExists(localKey))
                     missingFiles.Add(localKey);
-                else if (shouldPreload)
-                    pack.PreloadIfNeeded(localKey);
             }
             if (missingFiles.Any())
             {

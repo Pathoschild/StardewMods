@@ -6,6 +6,7 @@
   happened. That validation required a number of restrictions on how conditions and tokens could be
   used. Based on discussion with content pack modders on Discord and in the forums, lifting those
   restrictions was more valuable than the prevalidation.
+* Removed image preloading, which is no longer needed with SMAPI 2.8+.
 
 ## 1.4.1
 * Updated for Stardew Valley 1.3.29.
