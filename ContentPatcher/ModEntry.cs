@@ -27,7 +27,7 @@ namespace ContentPatcher
         private readonly string ConfigFileName = "config.json";
 
         /// <summary>The supported format versions.</summary>
-        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4" };
+        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4", "1.5" };
 
         /// <summary>Handles constructing, permuting, and updating conditions.</summary>
         private readonly ConditionFactory ConditionFactory = new ConditionFactory();
@@ -182,26 +182,11 @@ namespace ContentPatcher
                         this.VerboseLog($"   found config.json with {config.Count} fields...");
 
                     // validate features
-                    if (content.Format.IsOlderThan("1.3"))
-                    {
-                        if (config.Any())
-                        {
-                            this.Monitor.Log($"Loading content pack '{pack.Manifest.Name}' failed. It specifies format version {content.Format}, but uses the {nameof(ContentConfig.ConfigSchema)} field added in 1.3.", LogLevel.Error);
-                            continue;
-                        }
-                        if (content.Changes.Any(p => p.FromFile != null && p.FromFile.Contains("{{")))
-                        {
-                            this.Monitor.Log($"Loading content pack '{pack.Manifest.Name}' failed. It specifies format version {content.Format}, but uses the {{{{token}}}} feature added in 1.3.", LogLevel.Error);
-                            continue;
-                        }
-                        if (content.Changes.Any(p => p.When != null && p.When.Any()))
-                        {
-                            this.Monitor.Log($"Loading content pack '{pack.Manifest.Name}' failed. It specifies format version {content.Format}, but uses the condition feature ({nameof(ContentConfig.Changes)}.{nameof(PatchConfig.When)} field) added in 1.3.", LogLevel.Error);
-                            continue;
-                        }
-                    }
+                    if (!this.ValidateFormatVersion(pack.Pack, content, config))
+                        continue;
 
                     // load patches
+                    content.Changes = this.SplitPatches(content.Changes).ToArray();
                     this.NamePatches(pack, content.Changes);
                     foreach (PatchConfig patch in content.Changes)
                     {
@@ -216,6 +201,70 @@ namespace ContentPatcher
                 }
 
                 yield return pack.Manifest.UniqueID;
+            }
+        }
+
+        /// <summary>Validate that a content pack doesn't use features that aren't available for its version.</summary>
+        /// <param name="pack">The content pack.</param>
+        /// <param name="content">The mod's content data.</param>
+        /// <param name="config">The mod's configuration settings.</param>
+        [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Variables are named deliberately to avoid ambiguity.")]
+        private bool ValidateFormatVersion(IContentPack pack, ContentConfig content, InvariantDictionary<ConfigField> config)
+        {
+            // init
+            bool predates13 = content.Format.IsOlderThan("1.3");
+            bool predates15 = content.Format.IsOlderThan("1.5");
+            bool LogFailed(string reason)
+            {
+                this.Monitor.Log($"Loading content pack '{pack.Manifest.Name}' failed. It specifies format version {content.Format}, but {reason}.", LogLevel.Error);
+                return false;
+            }
+
+            // 1.3 adds config.json
+            if (predates13 && config.Any())
+                return LogFailed($"uses the {nameof(ContentConfig.ConfigSchema)} field added in 1.3");
+
+            // check patch format
+            foreach (PatchConfig patch in content.Changes)
+            {
+                // 1.3 adds tokens in FromFile
+                if (predates13 && patch.FromFile != null && patch.FromFile.Contains("{{"))
+                    return LogFailed("uses the {{token}} feature added in 1.3");
+
+                // 1.3 adds When
+                if (predates13 && content.Changes.Any(p => p.When != null && p.When.Any()))
+                    return LogFailed($"uses the condition feature ({nameof(ContentConfig.Changes)}.{nameof(PatchConfig.When)} field) added in 1.3");
+
+                // 1.5 adds multiple Target values
+                if (predates15 && patch.Target.Contains(","))
+                    return LogFailed($"specifies multiple {nameof(PatchConfig.Target)} values which requires 1.5 or later");
+            }
+
+            return true;
+        }
+
+        /// <summary>Split patches with multiple target values.</summary>
+        /// <param name="patches">The patches to split.</param>
+        private IEnumerable<PatchConfig> SplitPatches(IEnumerable<PatchConfig> patches)
+        {
+            foreach (PatchConfig patch in patches)
+            {
+                if (string.IsNullOrWhiteSpace(patch.Target) || !patch.Target.Contains(","))
+                {
+                    yield return patch;
+                    continue;
+                }
+
+                int i = 0;
+                foreach (string target in patch.Target.Split(','))
+                {
+                    i++;
+                    yield return new PatchConfig(patch)
+                    {
+                        LogName = !string.IsNullOrWhiteSpace(patch.LogName) ? $"{patch.LogName} {"".PadRight(i, 'I')}" : "",
+                        Target = target.Trim()
+                    };
+                }
             }
         }
 

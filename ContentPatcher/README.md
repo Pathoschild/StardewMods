@@ -139,7 +139,7 @@ All patches support these common fields:
 field      | purpose
 ---------- | -------
 `Action`   | The kind of change to make (`Load`, `EditImage`, or `EditData`); explained in the next section.
-`Target`   | The game asset you want to patch. This is the file path inside your game's `Content` folder, without the file extension or language. For example: use `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`. Capitalisation doesn't matter. Your changes are applied in all languages unless you specify a language [condition](#conditions).
+`Target`   | The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside your game's `Content` folder, without the file extension or language. For example: use `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`. Capitalisation doesn't matter. Your changes are applied in all languages unless you specify a language [condition](#conditions).
 `LogName`  | _(optional)_ A name for this patch shown in log messages. This is very useful for understanding errors; if not specified, will default to a name like `entry #14 (EditImage Animals/Dinosaurs)`.
 `Enabled`  | _(optional)_ Whether to apply this patch. Default true.
 `When`     | _(optional)_ Only apply the patch if the given conditions match (see [_conditions_](#conditions)).

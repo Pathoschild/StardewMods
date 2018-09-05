@@ -3,6 +3,7 @@
 # Release notes
 ## 1.5 (upcoming)
 * You can now use any condition with `Action: Load` patches.
+* The `Target` field now allows multiple values (like `"Target": "Festivals, Maps/Festivals"`).
 * Removed patch prevalidation, which warned modders about issues like patch conflicts before they
   happened. That validation required a number of restrictions on how conditions and tokens could be
   used. Based on discussion with content pack modders on Discord and in the forums, lifting those

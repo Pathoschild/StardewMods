@@ -55,5 +55,29 @@ namespace ContentPatcher.Framework.ConfigModels
 
         /// <summary>The individual fields to edit in data records.</summary>
         public IDictionary<string, IDictionary<int, string>> Fields { get; set; }
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        public PatchConfig() { }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="other">The other patch to clone.</param>
+        public PatchConfig(PatchConfig other)
+        {
+            this.LogName = other.LogName;
+            this.Action = other.Action;
+            this.Target = other.Target;
+            this.Enabled = other.Enabled;
+            this.When = other.When != null ? new InvariantDictionary<string>(other.When) : null;
+            this.FromFile = other.FromFile;
+            this.FromArea = other.FromArea;
+            this.ToArea = other.ToArea;
+            this.PatchMode = other.PatchMode;
+            this.Entries = other.Entries != null ? new Dictionary<string, string>(other.Entries) : null;
+            this.Fields = other.Fields != null ? new Dictionary<string, IDictionary<int, string>>(other.Fields) : null;
+        }
     }
 }
