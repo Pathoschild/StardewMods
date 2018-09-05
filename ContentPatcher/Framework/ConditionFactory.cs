@@ -56,12 +56,6 @@ namespace ContentPatcher.Framework
             return new ConditionContext(locale, this.TokenisableConditions);
         }
 
-        /// <summary>Get all valid condition keys which can be used in tokens.</summary>
-        public IEnumerable<ConditionKey> GetTokenisableConditions()
-        {
-            return this.TokenisableConditions;
-        }
-
         /// <summary>Get the valid values for a condition key.</summary>
         /// <param name="key">The condition keys.</param>
         public IEnumerable<string> GetValidValues(ConditionKey key)

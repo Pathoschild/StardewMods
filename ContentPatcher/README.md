@@ -69,7 +69,7 @@ whether one of these would work for you:
   * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add items and fruit trees.
 
 ### Known limitations
-TODO: conditional maps
+* Map files can't currently be conditional.
 
 ## Create a content pack
 ### Overview
@@ -261,8 +261,7 @@ The weather name. Possible values: `sun`, `rain`, `snow`, and `storm`.
 </tr>
 </table>
 
-These conditions **cannot** be used as [tokens](#tokens) or by an `"Action": "Load"` patch (but can
-be used as a condition for any other patch type):
+These conditions **cannot** be used as [tokens](#tokens) (but can be used as `When` conditions):
 
 <table>
 <tr>
@@ -384,15 +383,10 @@ Divorced | The player married and then divorced them.
 </table>
 
 **Special note about `"Action": "Load"`:**  
-Each file can only be loaded by one patch. Content Patcher will allow multiple loaders, so
-long as their conditions can never overlap. If they can overlap, it will refuse to add the second
-one. For example:
-
-loader A           | loader B               | result
------------------- | ---------------------- | ------
-`season: "Spring"` | `season: "Summer"`     | both are loaded correctly (seasons never overlap).
-`day: 1`           | `dayOfWeek: "Tuesday"` | both are loaded correctly (1st day of month is never Tuesday).
-`day: 1`           | `weather: "Sun"`       | error: sun could happen on the first of a month.
+Each file can only be loaded by one patch. You can have multiple load patches with different
+conditions, and the correct one will be used when the conditions change. However if multiple
+patches can be applied in a given context, Content Patcher will show an error in the SMAPI console
+and apply none of them.
 
 ### Player configuration
 You can let players configure your mod using a `config.json` file. This requires a bit more upfront

@@ -321,15 +321,6 @@ namespace ContentPatcher
                         return TrackSkip($"the {nameof(PatchConfig.When)} field is invalid: {error}.");
                 }
 
-                // validate conditions
-                if (action == PatchType.Load)
-                {
-                    ConditionKey[] tokenisable = this.ConditionFactory.GetTokenisableConditions().ToArray();
-                    ConditionKey[] invalid = conditions.Keys.Except(tokenisable).ToArray();
-                    if (invalid.Any())
-                        return TrackSkip($"can't use these conditions with {nameof(PatchConfig.Action)} {PatchType.Load} ({string.Join(", ", invalid)})");
-                }
-
                 // get patch instance
                 IPatch patch;
                 switch (action)
@@ -338,7 +329,7 @@ namespace ContentPatcher
                     case PatchType.Load:
                         {
                             // init patch
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, out string error, out TokenString fromAsset, shouldPreload: true))
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, out string error, out TokenString fromAsset))
                                 return TrackSkip(error);
                             patch = new LoadPatch(entry.LogName, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
                         }
@@ -369,7 +360,7 @@ namespace ContentPatcher
                                 return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}].");
 
                             // save
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, out string error, out TokenString fromAsset, shouldPreload: true))
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, out string error, out TokenString fromAsset))
                                 return TrackSkip(error);
                             patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
@@ -497,12 +488,10 @@ namespace ContentPatcher
         /// <param name="pack">The content pack being loaded.</param>
         /// <param name="path">The asset path in the content patch.</param>
         /// <param name="config">The config values to apply.</param>
-        /// <param name="conditions">The conditions to apply.</param>
         /// <param name="error">The error reason if preparing the asset fails.</param>
         /// <param name="tokenedPath">The parsed value.</param>
-        /// <param name="shouldPreload">Whether to preload assets if needed.</param>
         /// <returns>Returns whether the local asset was successfully prepared.</returns>
-        private bool TryPrepareLocalAsset(ManagedContentPack pack, string path, InvariantDictionary<ConfigField> config, ConditionDictionary conditions, out string error, out TokenString tokenedPath, bool shouldPreload)
+        private bool TryPrepareLocalAsset(ManagedContentPack pack, string path, InvariantDictionary<ConfigField> config, out string error, out TokenString tokenedPath)
         {
             // normalise raw value
             path = this.NormaliseLocalAssetPath(pack, path);
