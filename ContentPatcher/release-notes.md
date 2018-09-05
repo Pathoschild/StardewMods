@@ -1,7 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.4.1 (upcoming)
+## 1.5 (upcoming)
+* Removed patch prevalidation, which warned modders about issues like patch conflicts before they
+  happened. That validation required a number of restrictions on how conditions and tokens could be
+  used. Based on discussion with content pack modders on Discord and in the forums, lifting those
+  restrictions was more valuable than the prevalidation.
+
+## 1.4.1
 * Updated for Stardew Valley 1.3.29.
 * Fixed broken error message.
 

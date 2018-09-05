@@ -54,7 +54,7 @@ namespace ContentPatcher
         {
             // init
             this.Config = helper.ReadConfig<ModConfig>();
-            this.PatchManager = new PatchManager(this.Monitor, this.ConditionFactory, this.Config.VerboseLog, helper.Content.NormaliseAssetName, helper.Content.CurrentLocaleConstant);
+            this.PatchManager = new PatchManager(this.Monitor, this.ConditionFactory, this.Config.VerboseLog, helper.Content.CurrentLocaleConstant);
             string[] contentPackIDs = this.LoadContentPacks().ToArray();
 
             // register patcher
@@ -341,22 +341,6 @@ namespace ContentPatcher
                             if (!this.TryPrepareLocalAsset(pack, entry.FromFile, config, conditions, out string error, out TokenString fromAsset, shouldPreload: true))
                                 return TrackSkip(error);
                             patch = new LoadPatch(entry.LogName, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
-
-                            // detect conflicting loaders
-                            if (enabled)
-                            {
-                                InvariantDictionary<IPatch> conflicts = this.PatchManager.GetConflictingLoaders(patch);
-                                if (conflicts.Any())
-                                {
-                                    IEnumerable<string> conflictNames = (
-                                        from conflict in conflicts
-                                        orderby conflict.Key
-                                        select $"'{conflict.Value.LogName}' already loads {conflict.Key}"
-                                    );
-                                    return TrackSkip(
-                                        $"{nameof(entry.Target)} '{patch.TokenableAssetName.Raw}' conflicts with other load patches ({string.Join(", ", conflictNames)}). Each file can only be loaded by one patch, unless their conditions can never overlap.");
-                                }
-                            }
                         }
                         break;
 

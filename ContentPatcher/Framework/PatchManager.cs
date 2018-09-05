@@ -63,12 +63,6 @@ namespace ContentPatcher.Framework
         /// <summary>The patches to apply, indexed by asset name.</summary>
         private InvariantDictionary<HashSet<IPatch>> PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>();
 
-        /// <summary>A loader lookup by asset name, used to detect potential conflicts when adding loaders.</summary>
-        private readonly InvariantDictionary<ISet<IPatch>> LoaderCache = new InvariantDictionary<ISet<IPatch>>();
-
-        /// <summary>Normalise an asset name.</summary>
-        private readonly Func<string, string> NormaliseAssetName;
-
 
         /*********
         ** Accessors
@@ -84,15 +78,13 @@ namespace ContentPatcher.Framework
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="conditionFactory">Handles constructing, permuting, and updating conditions.</param>
         /// <param name="verboseLog">Whether to enable verbose logging.</param>
-        /// <param name="normaliseAssetName">Normalise an asset name.</param>
         /// <param name="language">The current language.</param>
-        public PatchManager(IMonitor monitor, ConditionFactory conditionFactory, bool verboseLog, Func<string, string> normaliseAssetName, LocalizedContentManager.LanguageCode language)
+        public PatchManager(IMonitor monitor, ConditionFactory conditionFactory, bool verboseLog, LocalizedContentManager.LanguageCode language)
         {
             this.Monitor = monitor;
             this.ConditionFactory = conditionFactory;
             this.ConditionContext = conditionFactory.BuildContext(language);
             this.Verbose = verboseLog;
-            this.NormaliseAssetName = normaliseAssetName;
         }
 
         /****
@@ -102,7 +94,14 @@ namespace ContentPatcher.Framework
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public bool CanLoad<T>(IAssetInfo asset)
         {
-            bool canLoad = this.GetCurrentLoaders(asset).Any();
+            IPatch[] patches = this.GetCurrentLoaders(asset).ToArray();
+            if (patches.Length > 1)
+            {
+                this.Monitor.Log($"Multiple patches want to load {asset.AssetName} ({string.Join(", ", from entry in patches orderby entry.LogName select entry.LogName)}). None will be applied.", LogLevel.Error);
+                return false;
+            }
+
+            bool canLoad = patches.Any();
             this.VerboseLog($"check: [{(canLoad ? "X" : " ")}] can load {asset.AssetName}");
             return canLoad;
         }
@@ -120,10 +119,15 @@ namespace ContentPatcher.Framework
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public T Load<T>(IAssetInfo asset)
         {
-            IPatch patch = this.GetCurrentLoaders(asset).FirstOrDefault();
-            if (patch == null)
-                throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because no patches currently apply. This should never happen.");
+            // get applicable patches for context
+            IPatch[] patches = this.GetCurrentLoaders(asset).ToArray();
+            if (!patches.Any())
+                throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because no patches currently apply. This should never happen because it means validation failed.");
+            if (patches.Length > 1)
+                throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because multiple patches apply ({string.Join(", ", from entry in patches orderby entry.LogName select entry.LogName)}). This should never happen because it means validation failed.");
 
+            // apply patch
+            IPatch patch = patches.Single();
             if (this.Verbose)
                 this.VerboseLog($"Patch \"{patch.LogName}\" loaded {asset.AssetName}.");
             else
@@ -297,22 +301,6 @@ namespace ContentPatcher.Framework
             // set initial context
             patch.UpdateContext(this.ConditionContext, this.ConditionContext.GetSingleValueConditions());
 
-            // validate loader
-            if (patch.Type == PatchType.Load)
-            {
-                // detect conflicts
-                if (this.GetConflictingLoaders(patch).Any())
-                    throw new InvalidOperationException($"Can't add {patch.Type} patch because it conflicts with an already-registered loader.");
-
-                // track loader
-                foreach (string assetName in this.GetPossibleAssetNames(patch))
-                {
-                    if (!this.LoaderCache.ContainsKey(assetName))
-                        this.LoaderCache.Add(assetName, new HashSet<IPatch>());
-                    this.LoaderCache[assetName].Add(patch);
-                }
-            }
-
             // add to patch list
             this.VerboseLog($"      added {patch.Type} {patch.AssetName}.");
             this.Patches.Add(patch);
@@ -372,33 +360,6 @@ namespace ContentPatcher.Framework
             return this
                 .GetPatches(asset.AssetName)
                 .Where(patch => patch.Type == patchType && patch.MatchesContext);
-        }
-
-        /// <summary>Find any <see cref="PatchType.Load"/> patches which conflict with the given patch, taking conditions into account.</summary>
-        /// <param name="newPatch">The new patch to check.</param>
-        public InvariantDictionary<IPatch> GetConflictingLoaders(IPatch newPatch)
-        {
-            InvariantDictionary<IPatch> conflicts = new InvariantDictionary<IPatch>();
-
-            if (newPatch.Type == PatchType.Load)
-            {
-                foreach (string assetName in this.GetPossibleAssetNames(newPatch))
-                {
-                    if (!this.LoaderCache.TryGetValue(assetName, out ISet<IPatch> otherPatches))
-                        continue;
-
-                    foreach (IPatch otherPatch in otherPatches)
-                    {
-                        if (this.ConditionFactory.CanConditionsOverlap(newPatch.Conditions, otherPatch.Conditions))
-                        {
-                            conflicts[assetName] = otherPatch;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return conflicts;
         }
 
         /****
@@ -546,14 +507,6 @@ namespace ContentPatcher.Framework
                 return festivalName;
 
             return null;
-        }
-
-        /// <summary>Get all possible normalised <see cref="IPatch.AssetName"/> values for a patch.</summary>
-        /// <param name="patch">The patch to check.</param>
-        private IEnumerable<string> GetPossibleAssetNames(IPatch patch)
-        {
-            foreach (string rawAssetName in this.ConditionFactory.GetPossibleStrings(patch.TokenableAssetName, patch.Conditions))
-                yield return this.NormaliseAssetName(rawAssetName);
         }
 
         /// <summary>Get the patch type which applies when editing a given asset type.</summary>

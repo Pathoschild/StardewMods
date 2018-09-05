@@ -171,23 +171,6 @@ namespace ContentPatcher.Framework
             return values;
         }
 
-        /// <summary>Get whether two sets of conditions can potentially both match in some contexts.</summary>
-        /// <param name="left">The first set of conditions to compare.</param>
-        /// <param name="right">The second set of conditions to compare.</param>
-        public bool CanConditionsOverlap(ConditionDictionary left, ConditionDictionary right)
-        {
-            IDictionary<ConditionKey, InvariantHashSet> leftValues = this.GetPossibleTokenisableValues(left);
-            IDictionary<ConditionKey, InvariantHashSet> rightValues = this.GetPossibleTokenisableValues(right);
-
-            foreach (ConditionKey key in this.GetTokenisableConditions())
-            {
-                if (!leftValues[key].Intersect(rightValues[key], StringComparer.InvariantCultureIgnoreCase).Any())
-                    return false;
-            }
-
-            return true;
-        }
-
         /// <summary>Get every permutation of the given values.</summary>
         /// <param name="values">The possible values.</param>
         public IEnumerable<InvariantDictionary<string>> GetPermutations(InvariantDictionary<InvariantHashSet> values)
