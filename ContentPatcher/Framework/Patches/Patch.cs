@@ -92,7 +92,7 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Get the condition tokens used by this patch in its fields.</summary>
         public virtual IEnumerable<ConditionKey> GetTokensUsed()
         {
-            yield break;
+            return this.TokenableAssetName.ConditionTokens;
         }
 
 
