@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -84,14 +85,26 @@ namespace ContentPatcher.Framework
             if (rawSchema == null || !rawSchema.Any())
                 return schema;
 
-            foreach (string key in rawSchema.Keys)
+            foreach (string rawKey in rawSchema.Keys)
             {
-                ConfigSchemaFieldConfig field = rawSchema[key];
+                ConfigSchemaFieldConfig field = rawSchema[rawKey];
 
-                // validate key
-                if (ConditionKey.TryParse(key, out ConditionKey conditionKey))
+                // validate format
+                if (!TokenKey.TryParse(rawKey, out TokenKey key))
                 {
-                    logWarning(key, $"can't use {conditionKey} as a config field, because it's a reserved condition key.");
+                    logWarning(rawKey, $"the name '{rawKey}' is not in a valid format.");
+                    continue;
+                }
+                if (key.Subkey != null)
+                {
+                    logWarning(rawKey, $"the name '{rawKey}' can't have a subkey (:).");
+                    continue;
+                }
+                
+                // validate reserved keys
+                if (Enum.TryParse(key.Key, true, out ConditionType _))
+                {
+                    logWarning(rawKey, $"can't use {key.Key} as a config field, because it's a reserved condition key.");
                     continue;
                 }
 
@@ -99,7 +112,7 @@ namespace ContentPatcher.Framework
                 InvariantHashSet allowValues = this.ParseCommaDelimitedField(field.AllowValues);
                 if (!allowValues.Any())
                 {
-                    logWarning(key, $"no {nameof(ConfigSchemaFieldConfig.AllowValues)} specified.");
+                    logWarning(rawKey, $"no {nameof(ConfigSchemaFieldConfig.AllowValues)} specified.");
                     continue;
                 }
 
@@ -114,20 +127,20 @@ namespace ContentPatcher.Framework
                     string[] invalidValues = defaultValues.Except(allowValues).ToArray();
                     if (invalidValues.Any())
                     {
-                        logWarning(key, $"default values '{string.Join(", ", invalidValues)}' are not allowed according to {nameof(ConfigSchemaFieldConfig.AllowBlank)}.");
+                        logWarning(rawKey, $"default values '{string.Join(", ", invalidValues)}' are not allowed according to {nameof(ConfigSchemaFieldConfig.AllowBlank)}.");
                         continue;
                     }
 
                     // validate allow multiple
                     if (!field.AllowMultiple && defaultValues.Count > 1)
                     {
-                        logWarning(key, $"can't have multiple default values because {nameof(ConfigSchemaFieldConfig.AllowMultiple)} is false.");
+                        logWarning(rawKey, $"can't have multiple default values because {nameof(ConfigSchemaFieldConfig.AllowMultiple)} is false.");
                         continue;
                     }
                 }
 
                 // add to schema
-                schema[key] = new ConfigField(allowValues, defaultValues, field.AllowBlank, field.AllowMultiple);
+                schema[rawKey] = new ConfigField(allowValues, defaultValues, field.AllowBlank, field.AllowMultiple);
             }
 
             return schema;

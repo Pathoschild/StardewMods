@@ -41,11 +41,10 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Framework\Conditions\ConditionKey.cs" />
+    <Compile Include="Framework\Tokens\TokenKey.cs" />
     <Compile Include="Framework\ManagedContentPack.cs" />
     <Compile Include="Framework\Commands\CommandHandler.cs" />
     <Compile Include="Framework\Commands\PatchInfo.cs" />
-    <Compile Include="Framework\ConditionFactory.cs" />
     <Compile Include="Framework\Conditions\Condition.cs" />
     <Compile Include="Framework\Conditions\ConditionType.cs" />
     <Compile Include="Framework\Conditions\ConditionDictionary.cs" />
@@ -54,7 +53,6 @@
     <Compile Include="Framework\ConfigFileHandler.cs" />
     <Compile Include="Framework\Patches\DisabledPatch.cs" />
     <Compile Include="Framework\Patches\Patch.cs" />
-    <Compile Include="Framework\Conditions\ConditionContext.cs" />
     <Compile Include="Framework\Conditions\PatchType.cs" />
     <Compile Include="Framework\Conditions\Weather.cs" />
     <Compile Include="Framework\ConfigModels\ConfigSchemaFieldConfig.cs" />
@@ -66,6 +64,14 @@
     <Compile Include="Framework\Patches\IPatch.cs" />
     <Compile Include="Framework\PatchManager.cs" />
     <Compile Include="Framework\Conditions\TokenString.cs" />
+    <Compile Include="Framework\TokenManager.cs" />
+    <Compile Include="Framework\Tokens\BaseToken.cs" />
+    <Compile Include="Framework\Tokens\VillagerHeartsToken.cs" />
+    <Compile Include="Framework\Tokens\VillagerRelationshipToken.cs" />
+    <Compile Include="Framework\Tokens\IContext.cs" />
+    <Compile Include="Framework\Tokens\IToken.cs" />
+    <Compile Include="Framework\Tokens\ContextualToken.cs" />
+    <Compile Include="Framework\Tokens\StaticToken.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Framework\ConfigModels\PatchConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

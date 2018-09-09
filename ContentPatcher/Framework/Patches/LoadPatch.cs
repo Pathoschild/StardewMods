@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Patches
@@ -34,14 +36,14 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <summary>Update the patch data when the context changes.</summary>
-        /// <param name="context">The condition context.</param>
-        /// <param name="tokenisableConditions">The conditions which can be used in tokens.</param>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <param name="singleValueTokens">The tokens that can only contain one value.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        public override bool UpdateContext(ConditionContext context, IDictionary<ConditionKey, string> tokenisableConditions)
+        public override bool UpdateContext(IContext context, InvariantDictionary<IToken> singleValueTokens)
         {
-            bool localAssetChanged = this.LocalAsset.UpdateContext(tokenisableConditions);
+            bool localAssetChanged = this.LocalAsset.UpdateContext(context, singleValueTokens);
             this.IsValidInContext = this.ContentPack.FileExists(this.LocalAsset.Value);
-            return base.UpdateContext(context, tokenisableConditions) || localAssetChanged;
+            return base.UpdateContext(context, singleValueTokens) || localAssetChanged;
         }
 
         /// <summary>Load the initial version of the asset.</summary>
@@ -54,10 +56,10 @@ namespace ContentPatcher.Framework.Patches
                 : data;
         }
 
-        /// <summary>Get the condition tokens used by this patch in its fields.</summary>
-        public override IEnumerable<ConditionKey> GetTokensUsed()
+        /// <summary>Get the tokens used by this patch in its fields.</summary>
+        public override IEnumerable<TokenKey> GetTokensUsed()
         {
-            return base.GetTokensUsed().Union(this.LocalAsset.ConditionTokens);
+            return base.GetTokensUsed().Union(this.LocalAsset.Tokens);
         }
 
 

@@ -1,4 +1,5 @@
 using System.Linq;
+using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Conditions
@@ -10,7 +11,7 @@ namespace ContentPatcher.Framework.Conditions
         ** Accessors
         *********/
         /// <summary>The condition key in the context.</summary>
-        public ConditionKey Key { get; }
+        public TokenKey Key { get; }
 
         /// <summary>The condition values for which this condition is valid.</summary>
         public InvariantHashSet Values { get; }
@@ -22,7 +23,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Construct an instance.</summary>
         /// <param name="key">The condition key in the context.</param>
         /// <param name="values">The condition values for which this condition is valid.</param>
-        public Condition(ConditionKey key, InvariantHashSet values)
+        public Condition(TokenKey key, InvariantHashSet values)
         {
             this.Key = key;
             this.Values = values;
@@ -30,7 +31,7 @@ namespace ContentPatcher.Framework.Conditions
 
         /// <summary>Whether the condition matches.</summary>
         /// <param name="context">The condition context.</param>
-        public bool IsMatch(ConditionContext context)
+        public bool IsMatch(IContext context)
         {
             return context
                 .GetValues(this.Key)

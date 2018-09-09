@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
+using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -18,6 +19,9 @@ namespace ContentPatcher.Framework.Commands
         *********/
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
+
+        /// <summary>Manages loaded tokens.</summary>
+        private readonly TokenManager TokenManager;
 
         /// <summary>Manages loaded patches.</summary>
         private readonly PatchManager PatchManager;
@@ -68,11 +72,13 @@ namespace ContentPatcher.Framework.Commands
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="tokenManager">Manages loaded tokens.</param>
         /// <param name="patchManager">Manages loaded patches.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="updateContext">A callback which immediately updates the current condition context.</param>
-        public CommandHandler(PatchManager patchManager, IMonitor monitor, Action updateContext)
+        public CommandHandler(TokenManager tokenManager, PatchManager patchManager, IMonitor monitor, Action updateContext)
         {
+            this.TokenManager = tokenManager;
             this.PatchManager = patchManager;
             this.Monitor = monitor;
             this.UpdateContext = updateContext;
@@ -154,7 +160,6 @@ namespace ContentPatcher.Framework.Commands
         /// <returns>Returns whether the command was handled.</returns>
         private bool HandleSummary()
         {
-            ConditionContext context = this.PatchManager.ConditionContext;
             StringBuilder output = new StringBuilder();
 
             // add condition summary
@@ -162,8 +167,16 @@ namespace ContentPatcher.Framework.Commands
             output.AppendLine("========================");
             output.AppendLine("== Current conditions ==");
             output.AppendLine("========================");
-            foreach (var pair in context.GetValues().OrderBy(p => this.GetDisplayOrder(p.Key)).ThenBy(p => p.Key.ForID))
-                output.AppendLine($"   {pair.Key}: {string.Join(", ", pair.Value)}");
+            foreach (IToken token in this.TokenManager.GetTokens().OrderBy(this.GetDisplayOrder))
+            {
+                if (token.RequiresSubkeys)
+                {
+                    foreach (string subkey in token.GetSubkeys().OrderBy(p => p))
+                        output.AppendLine($"   {token.Name}:{subkey}: {string.Join(", ", token.GetValues(subkey))}");
+                }
+                else
+                    output.AppendLine($"   {token.Name}: {string.Join(", ", token.GetValues())}");
+            }
             output.AppendLine();
 
             // add patch summary
@@ -197,7 +210,7 @@ namespace ContentPatcher.Framework.Commands
                         output.Append($" | {patch.Type} {patch.RawAssetName}");
 
                     // log parsed target if tokenised
-                    if (patch.MatchesContext && patch.ParsedAssetName != null && patch.ParsedAssetName.ConditionTokens.Any())
+                    if (patch.MatchesContext && patch.ParsedAssetName != null && patch.ParsedAssetName.Tokens.Any())
                         output.Append($" | => {patch.ParsedAssetName.Value}");
 
                     // log reason not applied
@@ -212,7 +225,7 @@ namespace ContentPatcher.Framework.Commands
                         string[] failedConditions = (
                             from condition in patch.ParsedConditions.Values
                             orderby condition.Key.ToString()
-                            where !condition.IsMatch(context)
+                            where !condition.IsMatch(this.TokenManager)
                             select $"{condition.Key} ({string.Join(", ", condition.Values)})"
                         ).ToArray();
 
@@ -222,10 +235,24 @@ namespace ContentPatcher.Framework.Commands
                         );
                         hasErrorReason = true;
                     }
-                    else if (!patch.IsLoaded)
+                    else if (!patch.IsApplied)
                     {
-                        output.Append(" | disabled (reason unknown)");
-                        hasErrorReason = true;
+                        IList<IToken> tokensOutOfContext =
+                            patch.TokensUsed
+                                .Select(key => this.TokenManager.GetToken(key))
+                                .Where(token => !token.IsValidInContext)
+                                .ToArray();
+
+                        if (tokensOutOfContext.Any())
+                        {
+                            output.Append($" | disabled (uses tokens that aren't in context: {string.Join(", ", tokensOutOfContext.Select(p => p.Name).OrderBy(p => p))})");
+                            hasErrorReason = true;
+                        }
+                        else
+                        {
+                            output.Append(" | disabled (reason unknown)");
+                            hasErrorReason = true;
+                        }
                     }
 
                     // log common issues
@@ -276,11 +303,11 @@ namespace ContentPatcher.Framework.Commands
                 yield return new PatchInfo(patch);
         }
 
-        /// <summary>Get the display order for a condition in <c>patch summary</c> output.</summary>
-        /// <param name="key">The condition key.</param>
-        private int GetDisplayOrder(ConditionKey key)
+        /// <summary>Get the display order for a token in <c>patch summary</c> output.</summary>
+        /// <param name="token">The token to check.</param>
+        private int GetDisplayOrder(IToken token)
         {
-            int index = Array.IndexOf(this.DisplayOrder, key.Type);
+            int index = Array.IndexOf(this.DisplayOrder, token.Name);
             return index != -1
                 ? index
                 : this.DisplayOrder.Length;

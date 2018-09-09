@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Patches
@@ -42,10 +44,10 @@ namespace ContentPatcher.Framework.Patches
         ** Public methods
         *********/
         /// <summary>Update the patch data when the context changes.</summary>
-        /// <param name="context">The condition context.</param>
-        /// <param name="tokenisableConditions">The conditions which can be used in tokens.</param>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <param name="singleValueTokens">The tokens that can only contain one value.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        bool UpdateContext(ConditionContext context, IDictionary<ConditionKey, string> tokenisableConditions);
+        bool UpdateContext(IContext context, InvariantDictionary<IToken> singleValueTokens);
 
         /// <summary>Load the initial version of the asset.</summary>
         /// <typeparam name="T">The asset type.</typeparam>
@@ -59,7 +61,7 @@ namespace ContentPatcher.Framework.Patches
         /// <exception cref="System.NotSupportedException">The current patch type doesn't support editing assets.</exception>
         void Edit<T>(IAssetData asset);
 
-        /// <summary>Get the condition tokens used by this patch in its fields.</summary>
-        IEnumerable<ConditionKey> GetTokensUsed();
+        /// <summary>Get the tokens used by this patch in its fields.</summary>
+        IEnumerable<TokenKey> GetTokensUsed();
     }
 }

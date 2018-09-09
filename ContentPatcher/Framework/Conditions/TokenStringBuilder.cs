@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Conditions
@@ -25,17 +26,17 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The raw string containing tokens.</summary>
         public string RawValue { get; }
 
-        /// <summary>The condition tokens in the string.</summary>
-        public HashSet<ConditionKey> ConditionTokens { get; } = new HashSet<ConditionKey>();
+        /// <summary>The tokens used in the string.</summary>
+        public HashSet<TokenKey> Tokens { get; } = new HashSet<TokenKey>();
 
         /// <summary>The config tokens in the string.</summary>
         public InvariantHashSet ConfigTokens { get; } = new InvariantHashSet();
 
-        /// <summary>The unrecognised tokens in the stirng.</summary>
+        /// <summary>The unrecognised tokens in the string.</summary>
         public InvariantHashSet InvalidTokens { get; } = new InvariantHashSet();
 
         /// <summary>Whether the string contains any tokens (including invalid tokens).</summary>
-        public bool HasAnyTokens => this.ConditionTokens.Count > 0 || this.ConfigTokens.Count > 0 || this.InvalidTokens.Count > 0;
+        public bool HasAnyTokens => this.Tokens.Count > 0 || this.ConfigTokens.Count > 0 || this.InvalidTokens.Count > 0;
 
 
         /*********
@@ -44,27 +45,28 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Construct an instance.</summary>
         /// <param name="rawValue">The raw string which may contain tokens.</param>
         /// <param name="config">The player configuration.</param>
-        public TokenStringBuilder(string rawValue, InvariantDictionary<ConfigField> config)
+        /// <param name="tokens">The tokens to apply.</param>
+        public TokenStringBuilder(string rawValue, InvariantDictionary<ConfigField> config, InvariantDictionary<IToken> tokens)
         {
             this.RawValue = rawValue;
             this.Config = config;
 
             foreach (Match match in TokenStringBuilder.TokenPattern.Matches(rawValue))
             {
-                string key = match.Groups[1].Value.Trim();
-                if (ConditionKey.TryParse(key, out ConditionKey conditionKey))
-                    this.ConditionTokens.Add(conditionKey);
-                else if (config.ContainsKey(key))
-                    this.ConfigTokens.Add(key);
+                string rawToken = match.Groups[1].Value.Trim();
+                if (config.ContainsKey(rawToken))
+                    this.ConfigTokens.Add(rawToken);
+                else if (TokenKey.TryParse(rawToken, out TokenKey key) && tokens.ContainsKey(key.Key))
+                    this.Tokens.Add(key);
                 else
-                    this.InvalidTokens.Add(key);
+                    this.InvalidTokens.Add(rawToken);
             }
         }
 
         /// <summary>Construct a token string and permanently apply config values.</summary>
         public TokenString Build()
         {
-            TokenString tokenString = new TokenString(this.RawValue, this.ConditionTokens, TokenStringBuilder.TokenPattern);
+            TokenString tokenString = new TokenString(this.RawValue, this.Tokens, TokenStringBuilder.TokenPattern);
             InvariantDictionary<string> configValues = new InvariantDictionary<string>(this.Config.ToDictionary(p => p.Key, p => p.Value.Value.FirstOrDefault()));
             tokenString.ApplyPermanently(configValues);
             return tokenString;
