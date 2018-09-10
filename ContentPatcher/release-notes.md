@@ -5,6 +5,8 @@
 * Added `Year` condition.
 * Added support for all conditions in `Action: Load` patches.
 * Added support for multiple values in the `Target` field (like `"Target": "Festivals, Maps/Festivals"`).
+* Added config tokens to `patch summary`.
+* Added warning when a config field has `AllowValues` but a patch checks for an unlisted value.
 * Removed patch prevalidation, which warned modders about issues like patch conflicts before they
   happened. That validation required a number of restrictions on how conditions and tokens could be
   used. Based on discussion with content pack modders on Discord, lifting those restrictions was

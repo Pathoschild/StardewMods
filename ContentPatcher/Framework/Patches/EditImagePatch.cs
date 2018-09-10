@@ -123,7 +123,7 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <summary>Get the tokens used by this patch in its fields.</summary>
-        public override IEnumerable<TokenKey> GetTokensUsed()
+        public override IEnumerable<IToken> GetTokensUsed()
         {
             return base.GetTokensUsed().Union(this.FromLocalAsset.Tokens);
         }

@@ -62,6 +62,6 @@ namespace ContentPatcher.Framework.Patches
         void Edit<T>(IAssetData asset);
 
         /// <summary>Get the tokens used by this patch in its fields.</summary>
-        IEnumerable<TokenKey> GetTokensUsed();
+        IEnumerable<IToken> GetTokensUsed();
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
 {
@@ -15,14 +16,14 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Whether the token may contain multiple values.</summary>
         public bool CanHaveMultipleValues { get; }
 
-        /// <summary>Whether a token is restricted to 'true' or 'false'.</summary>
-        public bool IsBoolean { get; } = false;
-
         /// <summary>Whether this token requires subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with an <c>Abigail</c> subkey).</summary>
         public bool RequiresSubkeys { get; }
 
         /// <summary>Whether the token is applicable in the current context.</summary>
         public bool IsValidInContext { get; protected set; }
+
+        /// <summary>The allowed values (or <c>null</c> if any value is allowed).</summary>
+        public virtual InvariantHashSet AllowedValues { get; set; } = null;
 
 
         /*********

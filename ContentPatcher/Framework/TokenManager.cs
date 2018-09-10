@@ -17,18 +17,11 @@ namespace ContentPatcher.Framework
         /*********
         ** Properties
         *********/
-        /// <summary>The available tokens.</summary>
-        private readonly InvariantDictionary<IToken> Tokens;
+        /// <summary>The available global tokens.</summary>
+        private readonly InvariantDictionary<IToken> GlobalTokens = new InvariantDictionary<IToken>();
 
-        /// <summary>The valid condition values for conditions with restricted values.</summary>
-        private readonly IDictionary<TokenKey, InvariantHashSet> ValidValues = new Dictionary<TokenKey, InvariantHashSet>
-        {
-            [TokenKey.Day] = new InvariantHashSet(Enumerable.Range(1, 28).Select(p => p.ToString())),
-            [TokenKey.DayOfWeek] = new InvariantHashSet(Enum.GetNames(typeof(DayOfWeek))),
-            [TokenKey.Language] = new InvariantHashSet(Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString())),
-            [TokenKey.Season] = new InvariantHashSet(new[] { "Spring", "Summer", "Fall", "Winter" }),
-            [TokenKey.Weather] = new InvariantHashSet(Enum.GetNames(typeof(Weather)))
-        };
+        /// <summary>The available tokens defined within the context of each content pack.</summary>
+        private readonly Dictionary<IContentPack, LocalContext> LocalTokens = new Dictionary<IContentPack, LocalContext>();
 
 
         /*********
@@ -38,32 +31,37 @@ namespace ContentPatcher.Framework
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
         public TokenManager(IContentHelper contentHelper)
         {
-            this.Tokens = new InvariantDictionary<IToken>();
-            foreach (IToken token in this.GetInitialTokens(contentHelper))
-                this.Tokens[token.Name] = token;
+            foreach (IToken token in this.GetGlobalTokens(contentHelper))
+                this.GlobalTokens[token.Name] = token;
         }
 
         /// <summary>Set the list of installed mods and content packs.</summary>
         /// <param name="installedMods">The installed mod IDs.</param>
         public void SetInstalledMods(string[] installedMods)
         {
-            this.Tokens[ConditionType.HasMod.ToString()] = new StaticToken(name: ConditionType.HasMod.ToString(), canHaveMultipleValues: true, values: new InvariantHashSet(installedMods));
+            this.GlobalTokens[ConditionType.HasMod.ToString()] = new StaticToken(name: ConditionType.HasMod.ToString(), canHaveMultipleValues: true, values: new InvariantHashSet(installedMods));
+        }
+
+        /// <summary>Get the tokens which are defined for a specific content pack. This returns a reference to the list, which can be held for a live view of the tokens. If the content pack isn't currently tracked, this will add it.</summary>
+        /// <param name="contentPack">The content pack to manage.</param>
+        public LocalContext TrackLocalTokens(IContentPack contentPack)
+        {
+            if (!this.LocalTokens.TryGetValue(contentPack, out LocalContext localTokens))
+                this.LocalTokens[contentPack] = localTokens = new LocalContext(this);
+            return localTokens;
         }
 
         /// <summary>Update the current context.</summary>
         public void UpdateContext()
         {
-            foreach (IToken token in this.Tokens.Values)
+            foreach (IToken token in this.GlobalTokens.Values)
                 token.UpdateContext(this);
-        }
 
-        /// <summary>Get the valid values for a condition key.</summary>
-        /// <param name="key">The condition keys.</param>
-        public IEnumerable<string> GetValidValues(TokenKey key)
-        {
-            return this.ValidValues.TryGetValue(key, out InvariantHashSet values)
-                ? values
-                : null;
+            foreach (LocalContext localContext in this.LocalTokens.Values)
+            {
+                foreach (IToken localToken in localContext.LocalTokens.Values)
+                    localToken.UpdateContext(localContext);
+            }
         }
 
         /****
@@ -74,7 +72,7 @@ namespace ContentPatcher.Framework
         /// <returns>Returns the matching token, or <c>null</c> if none was found.</returns>
         public IToken GetToken(TokenKey key)
         {
-            return this.Tokens.TryGetValue(key.Key, out IToken token)
+            return this.GlobalTokens.TryGetValue(key.Key, out IToken token)
                 ? token
                 : null;
         }
@@ -82,18 +80,8 @@ namespace ContentPatcher.Framework
         /// <summary>Get the underlying tokens.</summary>
         public IEnumerable<IToken> GetTokens()
         {
-            return this.Tokens.Values;
-        }
-
-        /// <summary>Get the current value of the given token for comparison. This is only valid for tokens where <see cref="IToken.CanHaveMultipleValues"/> is false; see <see cref="IContext.GetValues(string)"/> otherwise.</summary>
-        /// <param name="key">The token key. This may include a subkey, like <c>Relationship:Abigail</c>.</param>
-        /// <exception cref="ArgumentNullException">The specified key is null.</exception>
-        /// <exception cref="ArgumentException">The specified key does includes or doesn't include a subkey, depending on <see cref="IToken.RequiresSubkeys"/>.</exception>
-        /// <exception cref="InvalidOperationException">The specified token allows multiple values; see <see cref="IContext.GetValues(string)"/> instead.</exception>
-        /// <exception cref="KeyNotFoundException">The specified token key doesn't exist.</exception>
-        public string GetValue(string key)
-        {
-            return this.GetValue(TokenKey.Parse(key));
+            foreach (IToken token in this.GlobalTokens.Values)
+                yield return token;
         }
 
         /// <summary>Get the current value of the given token for comparison. This is only valid for tokens where <see cref="IToken.CanHaveMultipleValues"/> is false; see <see cref="IContext.GetValues(TokenKey)"/> otherwise.</summary>
@@ -104,7 +92,8 @@ namespace ContentPatcher.Framework
         /// <exception cref="KeyNotFoundException">The specified token key doesn't exist.</exception>
         public string GetValue(TokenKey key)
         {
-            IToken token = this.AssertGetToken(key.Key, key.Subkey);
+            IToken token = this.GetToken(key);
+            this.AssertToken(key.Key, key.Subkey, token);
 
             if (token.CanHaveMultipleValues)
                 throw new InvalidOperationException($"The {key} token allows multiple values, so {nameof(this.GetValue)} is not valid.");
@@ -115,21 +104,13 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Get the current values of the given token for comparison.</summary>
-        /// <param name="key">The token key. This may include a subkey, like <c>Relationship:Abigail</c>.</param>
-        /// <exception cref="ArgumentNullException">The specified key is null.</exception>
-        /// <exception cref="KeyNotFoundException">The specified token key doesn't exist.</exception>
-        public IEnumerable<string> GetValues(string key)
-        {
-            return this.GetValues(TokenKey.Parse(key));
-        }
-
-        /// <summary>Get the current values of the given token for comparison.</summary>
         /// <param name="key">The token key.</param>
         /// <exception cref="ArgumentNullException">The specified key is null.</exception>
         /// <exception cref="KeyNotFoundException">The specified token key doesn't exist.</exception>
         public IEnumerable<string> GetValues(TokenKey key)
         {
-            IToken token = this.AssertGetToken(key.Key, key.Subkey);
+            IToken token = this.GetToken(key);
+            this.AssertToken(key.Key, key.Subkey, token);
             return key.Subkey != null
                 ? token.GetValues(key.Subkey)
                 : token.GetValues();
@@ -155,20 +136,32 @@ namespace ContentPatcher.Framework
         /*********
         ** Private methods
         *********/
-        /// <summary>Get the tokens with which to initialise the token manager.</summary>
+        /// <summary>Get the global tokens with which to initialise the token manager.</summary>
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
-        private IEnumerable<IToken> GetInitialTokens(IContentHelper contentHelper)
+        private IEnumerable<IToken> GetGlobalTokens(IContentHelper contentHelper)
         {
             // installed mods (placeholder)
             yield return new StaticToken(ConditionType.HasMod.ToString(), canHaveMultipleValues: true, values: new InvariantHashSet());
 
             // language
-            yield return new ContextualToken(ConditionType.Language.ToString(), () => contentHelper.CurrentLocaleConstant.ToString(), needsLoadedSave: false);
+            yield return new ContextualToken(ConditionType.Language.ToString(), () => contentHelper.CurrentLocaleConstant.ToString(), needsLoadedSave: false)
+            {
+                AllowedValues = new InvariantHashSet(Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()))
+            };
 
             // in-game date
-            yield return new ContextualToken(ConditionType.Season.ToString(), () => SDate.Now().Season, needsLoadedSave: true);
-            yield return new ContextualToken(ConditionType.Day.ToString(), () => SDate.Now().Day.ToString(CultureInfo.InvariantCulture), needsLoadedSave: true);
-            yield return new ContextualToken(ConditionType.DayOfWeek.ToString(), () => SDate.Now().DayOfWeek.ToString(), needsLoadedSave: true);
+            yield return new ContextualToken(ConditionType.Season.ToString(), () => SDate.Now().Season, needsLoadedSave: true)
+            {
+                AllowedValues = new InvariantHashSet(new[] { "Spring", "Summer", "Fall", "Winter" })
+            };
+            yield return new ContextualToken(ConditionType.Day.ToString(), () => SDate.Now().Day.ToString(CultureInfo.InvariantCulture), needsLoadedSave: true)
+            {
+                AllowedValues = new InvariantHashSet(Enumerable.Range(1, 28).Select(p => p.ToString()))
+            };
+            yield return new ContextualToken(ConditionType.DayOfWeek.ToString(), () => SDate.Now().DayOfWeek.ToString(), needsLoadedSave: true)
+            {
+                AllowedValues = new InvariantHashSet(Enum.GetNames(typeof(DayOfWeek)))
+            };
             yield return new ContextualToken(ConditionType.Year.ToString(), () => SDate.Now().Year.ToString(CultureInfo.InvariantCulture), needsLoadedSave: true);
 
             // other in-game conditions
@@ -176,26 +169,29 @@ namespace ContentPatcher.Framework
             yield return new ContextualToken(ConditionType.HasFlag.ToString(), () => this.GetMailFlags(), needsLoadedSave: true);
             yield return new ContextualToken(ConditionType.HasSeenEvent.ToString(), () => this.GetEventsSeen(), needsLoadedSave: true);
             yield return new ContextualToken(ConditionType.Spouse.ToString(), () => Game1.player?.spouse, needsLoadedSave: true);
-            yield return new ContextualToken(ConditionType.Weather.ToString(), () => this.GetCurrentWeather(), needsLoadedSave: true);
+            yield return new ContextualToken(ConditionType.Weather.ToString(), () => this.GetCurrentWeather(), needsLoadedSave: true)
+            {
+                AllowedValues = new InvariantHashSet(Enum.GetNames(typeof(Weather)))
+            };
             yield return new VillagerRelationshipToken();
             yield return new VillagerHeartsToken();
         }
 
-        /// <summary>Assert that a key matches a valid token, and get the matching token if so.</summary>
+        /// <summary>Assert that a token is valid and matches the key.</summary>
         /// <param name="tokenKey">The token key.</param>
         /// <param name="subkey">The token subkey (if any).</param>
+        /// <param name="token">The resolved token.</param>
         /// <exception cref="ArgumentException">The specified key does includes or doesn't include a subkey, depending on <see cref="IToken.RequiresSubkeys"/>.</exception>
         /// <exception cref="KeyNotFoundException">The specified token key doesn't exist.</exception>
-        private IToken AssertGetToken(string tokenKey, string subkey)
+        /// <remarks>This implementation is duplicated by <see cref="LocalContext"/>.</remarks>
+        private void AssertToken(string tokenKey, string subkey, IToken token)
         {
-            if (!this.Tokens.TryGetValue(tokenKey, out IToken token))
+            if (token == null)
                 throw new KeyNotFoundException($"There's no token with key {tokenKey}.");
             if (token.RequiresSubkeys && subkey == null)
                 throw new InvalidOperationException($"The {tokenKey} token requires a subkey, but none was provided.");
             if (!token.RequiresSubkeys && subkey != null)
                 throw new InvalidOperationException($"The {tokenKey} token doesn't allow a subkey, but a '{subkey}' subkey was provided.");
-
-            return token;
         }
 
         /// <summary>Get the current weather from the game state.</summary>

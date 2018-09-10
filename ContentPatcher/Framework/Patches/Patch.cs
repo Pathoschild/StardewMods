@@ -92,7 +92,7 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <summary>Get the tokens used by this patch in its fields.</summary>
-        public virtual IEnumerable<TokenKey> GetTokensUsed()
+        public virtual IEnumerable<IToken> GetTokensUsed()
         {
             return this.TokenableAssetName.Tokens;
         }

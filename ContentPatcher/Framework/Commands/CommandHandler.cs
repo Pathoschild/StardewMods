@@ -164,9 +164,9 @@ namespace ContentPatcher.Framework.Commands
 
             // add condition summary
             output.AppendLine();
-            output.AppendLine("========================");
-            output.AppendLine("== Current conditions ==");
-            output.AppendLine("========================");
+            output.AppendLine("=====================");
+            output.AppendLine("==  Global tokens  ==");
+            output.AppendLine("=====================");
             foreach (IToken token in this.TokenManager.GetTokens().OrderBy(this.GetDisplayOrder))
             {
                 if (token.RequiresSubkeys)
@@ -186,7 +186,7 @@ namespace ContentPatcher.Framework.Commands
 
             output.AppendLine(
                 "========================\n"
-                + "==  Content patches   ==\n"
+                + "== Content patches ==\n"
                 + "========================\n"
                 + "The following patches were loaded. For each patch:\n"
                 + "  - 'loaded' shows whether the patch is loaded and enabled (see details for the reason if not).\n"
@@ -196,7 +196,31 @@ namespace ContentPatcher.Framework.Commands
             );
             foreach (IGrouping<string, PatchInfo> patchGroup in patches)
             {
+                LocalContext tokenContext = this.TokenManager.TrackLocalTokens(patchGroup.First().ContentPack.Pack);
                 output.AppendLine($"{patchGroup.Key}:");
+                output.AppendLine("========================");
+
+                // print tokens
+                {
+                    IToken[] localTokens = tokenContext.GetTokens(localOnly: true).ToArray();
+                    if (localTokens.Any())
+                    {
+                        output.AppendLine();
+                        output.AppendLine("   Local tokens:");
+                        foreach (IToken token in localTokens.OrderBy(p => p.Name))
+                        {
+                            if (token.RequiresSubkeys)
+                            {
+                                foreach (string subkey in token.GetSubkeys().OrderBy(p => p))
+                                    output.AppendLine($"      {token.Name}:{subkey}: {string.Join(", ", token.GetValues(subkey))}");
+                            }
+                            else
+                                output.AppendLine($"      {token.Name}: {string.Join(", ", token.GetValues())}");
+                        }
+                    }
+                }
+
+                // print patches
                 output.AppendLine();
                 output.AppendLine("   loaded  | conditions | applied | name + details");
                 output.AppendLine("   ------- | ---------- | ------- | --------------");
@@ -225,21 +249,18 @@ namespace ContentPatcher.Framework.Commands
                         string[] failedConditions = (
                             from condition in patch.ParsedConditions.Values
                             orderby condition.Key.ToString()
-                            where !condition.IsMatch(this.TokenManager)
+                            where !condition.IsMatch(tokenContext)
                             select $"{condition.Key} ({string.Join(", ", condition.Values)})"
                         ).ToArray();
 
-                        output.Append(failedConditions.Any()
-                            ? $" | failed conditions: {string.Join(", ", failedConditions)}"
-                            : " | disabled (reason unknown)"
-                        );
+                        if (failedConditions.Any())
+                            output.Append($" | failed conditions: {string.Join(", ", failedConditions)}");
                         hasErrorReason = true;
                     }
                     else if (!patch.IsApplied)
                     {
                         IList<IToken> tokensOutOfContext =
                             patch.TokensUsed
-                                .Select(key => this.TokenManager.GetToken(key))
                                 .Where(token => !token.IsValidInContext)
                                 .ToArray();
 
