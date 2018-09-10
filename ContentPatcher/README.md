@@ -9,10 +9,12 @@ that change the game's images and data without replacing XNB files.
 * [Create a content pack](#create-a-content-pack)
   * [Overview](#overview)
   * [Common fields](#common-fields)
-  * [Supported patches](#supported-patches)
-  * [Conditions](#conditions)
-  * [Player configuration](#player-configuration)
-  * [Tokens](#tokens)
+  * [Patch types](#patch-types)
+* [Advanced: tokens & conditions](#advanced-tokens--conditions)
+  * [Overview](#overview-1)
+  * [Global tokens](#global-tokens)
+  * [Dynamic tokens](#dynamic-tokens)
+  * [Player config](#player-config)
 * [Release a content pack](#release-a-content-pack)
 * [Troubleshoot](#troubleshoot)
   * [Patch commands](#patch-commands)
@@ -84,7 +86,7 @@ field          | purpose
 -------------- | -------
 `Format`       | The format version (just use `1.5`).
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
-`ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-configuration).
+`ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-config).
 
 Here's a quick example of each possible patch type (explanations below):
 
@@ -139,12 +141,12 @@ All patches support these common fields:
 field      | purpose
 ---------- | -------
 `Action`   | The kind of change to make (`Load`, `EditImage`, or `EditData`); explained in the next section.
-`Target`   | The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside your game's `Content` folder, without the file extension or language. For example: use `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`. Capitalisation doesn't matter. Your changes are applied in all languages unless you specify a language [condition](#conditions).
+`Target`   | The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside your game's `Content` folder, without the file extension or language. For example: use `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`. Capitalisation doesn't matter. Your changes are applied in all languages unless you specify a language [condition](#advanced-tokens--conditions).
 `LogName`  | _(optional)_ A name for this patch shown in log messages. This is very useful for understanding errors; if not specified, will default to a name like `entry #14 (EditImage Animals/Dinosaurs)`.
 `Enabled`  | _(optional)_ Whether to apply this patch. Default true.
-`When`     | _(optional)_ Only apply the patch if the given conditions match (see [_conditions_](#conditions)).
+`When`     | _(optional)_ Only apply the patch if the given conditions match (see [_conditions_](#advanced-tokens--conditions)).
 
-### Supported patches
+### Patch types
 * **Replace an entire file** (`"Action": "Load"`).  
   When the game loads the file, it'll receive your file instead. This is useful for mods which
   change everything (like pet replacement mods).
@@ -184,25 +186,52 @@ field      | purpose
   `Fields`   | _(optional)_ The individual fields you want to change for existing entries. [See example in overview](#overview).
   `Entries`  | _(optional)_ The entries in the data file you want to add, replace, or (if set to `null`) delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. [See example in overview](#overview).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
 
-### Conditions
-You can make a patch conditional by adding a `When` field. The patch will be applied when all
-conditions match, and removed when they no longer match. Conditions are not case-sensitive, and you
-can specify multiple values as a comma-delimited list. You don't need to specify all conditions.
+## Advanced: tokens & conditions
+### Overview
+A **token** is a name which represents a predefined value. For example, `season` (the token) may
+contain `spring`, `summer`, `fall`, or `winter` (the value). You can use [player config](#player-config),
+[global token values](#global-tokens), and [dynamic token values](#dynamic-tokens) as tokens.
 
-For example, this changes the house texture only in Spring or Summer.
+There are two ways to use tokens:
 
-```js
-{
-    "Action": "EditImage",
-    "Target": "Building/houses",
-    "FromFile": "assets/green_house.png",
-    "When": {
-        "Season": "spring, summer"
-    }
-}
-```
+* You can use tokens in the `FromFile`, `Target`, and `Enabled` fields (for tokens with only one
+  value). Just put the name of the token in two curly brackets, and Content Patcher will
+  automatically fill in the value. Tokens are not case-sensitive. For example, this gives the
+  farmhouse a different appearance in each season:
 
-These conditions can be used as conditions and [tokens](#tokens) for any patch:
+  ```js
+  {
+      "Action": "EditImage",
+      "Target": "Building/houses",
+      "FromFile": "assets/{{season}}_house.png" // assets/spring.png, assets/summer.png, etc
+  }
+  ```
+
+  Your patch will only be applied when the token is available. For instance, the above example will
+  be ignored if the player hasn't loaded a save yet (so there's no current season).
+
+* You can make a patch conditional by adding a `When` field. The patch will be applied when all
+  conditions match, and removed when they no longer match. You don't need to specify all conditions.
+
+  Each condition has a token name (like `Season`) and the values to match (like `spring, summer`).
+  Condition names and values are not case-sensitive. For example, this changes the house texture only
+  in Spring or Summer:
+
+  ```js
+  {
+      "Action": "EditImage",
+      "Target": "Building/houses",
+      "FromFile": "assets/green_house.png",
+      "When": {
+          "Season": "spring, summer"
+      }
+  }
+  ```
+
+### Global tokens
+Global token values are defined by Content Patcher, so you can use them without doing anything else.
+
+These conditions can be used as tokens and conditions for any patch:
 
 <table>
 <tr>
@@ -270,7 +299,7 @@ The year number (like `1` or `2`).
 </tr>
 </table>
 
-These conditions **cannot** be used as [tokens](#tokens) (but can be used as `When` conditions):
+These conditions **cannot** be used as tokens (but can be used as conditions):
 
 <table>
 <tr>
@@ -397,12 +426,68 @@ conditions, and the correct one will be used when the conditions change. However
 patches can be applied in a given context, Content Patcher will show an error in the SMAPI console
 and apply none of them.
 
-### Player configuration
-You can let players configure your mod using a `config.json` file. This requires a bit more upfront
-setup for the mod author, but once that's done it'll behave just like a SMAPI `config.json` for
-players. Content Patcher will automatically create and load the file, and you can use the config
-values in [the `When` field](#conditions). Config fields are not case-sensitive, and can only
-contain string values.
+### Dynamic tokens
+Dynamic tokens are defined in a `DynamicTokens` section of your `content.json` (see example below).
+Each block in this section defines the value for a token using these fields:
+
+field   | purpose
+------- | -------
+`Name`  | The name of the token to use for [tokens & condition](#advanced-tokens--conditions).
+`Value` | The value(s) to set. This can be a comma-delimited value to give it multiple values. If _any_ block for a token name has multiple values, it will only be usable in conditions.
+`When`  | _(optional)_ Only set the value if the given [conditions](#advanced-tokens--conditions) match. If not specified, always matches.
+
+Some usage notes:
+* You can list any number of dynamic token blocks.
+* If you list multiple blocks for the same token name, the last one whose conditions match will be
+  used.
+* You can use tokens in the `Value` and `When` fields. That includes dynamic tokens if they're
+  defined earlier in the list (in which case the last value _defined before the current token_
+  will be used).
+
+For example, this `content.json` defines a custom `{{style}}` token and uses it to load different
+crop sprites depending on the weather:
+
+```js
+{
+    "Format": "1.5",
+    "DynamicTokens": [
+        {
+            "Name": "Style",
+            "Value": "default"
+        },
+        {
+            "Name": "Style",
+            "Value": "drenched",
+            "When": {
+                "Weather": "rain, storm"
+            }
+        }
+    ],
+    "Changes": [
+        {
+            "Action": "Load",
+            "Target": "TileSheets/crops",
+            "FromFile": "assets/crop-{{style}}.png"
+        }
+    ]
+}
+```
+
+### Player config
+You can let players configure your mod using a `config.json` file. Content Patcher will
+automatically create and load the file, and you can use the config values as
+[tokens & conditions](#advanced-tokens--conditions). Config fields are not case-sensitive.
+
+To do this, you add a `ConfigSchema` section which defines your config fields and how to validate them
+(see below for an example).
+Available fields for each field:
+
+   field               | meaning
+   ------------------- | -------
+   `AllowValues`       | Required. The values the player can provide, as a comma-delimited string.<br />**Tip:** for a boolean flag, use `"true, false"`.
+   `AllowBlank`        | _(optional)_ Whether the field can be left blank. Behaviour: <ul><li>If false (default): missing and blank fields are filled in with the default value.</li><li>If true: missing fields are filled in with the default value; blank fields are left as-is.</li></ul>
+   `AllowMultiple`     | _(optional)_ Whether the player can specify multiple comma-delimited values. Default false.
+   `Default`           | _(optional)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If not set, defaults to the first value in `AllowValues`.
 
 For example: this `content.json` defines a `Material` config field and uses it to change which
 patch is applied. See below for more details.
@@ -416,6 +501,14 @@ patch is applied. See below for more details.
         }
     },
     "Changes": [
+        // as a token
+        {
+            "Action": "Load",
+            "Target": "LooseSprites/Billboard",
+            "FromFile": "assets/material_{{material}}.png"
+        },
+
+        // as a condition
         {
             "Action": "Load",
             "Target": "LooseSprites/Billboard",
@@ -423,87 +516,20 @@ patch is applied. See below for more details.
             "When": {
                 "Material": "Wood"
             }
-        },
-        {
-            "Action": "Load",
-            "Target": "LooseSprites/Billboard",
-            "FromFile": "assets/material_metal.png",
-            "When": {
-                "Material": "Metal"
-            }
         }
     ]
 }
 ```
 
-Here's how to do it:
-
-1. Add a `ConfigSchema` section to the `content.json` (like above), which defines your config
-   fields and how to validate them. Available fields for each one:
-
-   field               | meaning
-   ------------------- | -------
-   `AllowValues`       | Required. The values the player can provide, as a comma-delimited string.<br />**Tip:** for a boolean flag, use `"true, false"`.
-   `AllowBlank`        | _(optional)_ Whether the field can be left blank. Behaviour: <ul><li>If false (default): missing and blank fields are filled in with the default value.</li><li>If true: missing fields are filled in with the default value; blank fields are left as-is.</li></ul>
-   `AllowMultiple`     | _(optional)_ Whether the player can specify multiple comma-delimited values. Default false.
-   `Default`           | _(optional)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If not set, defaults to the first value in `AllowValues`.
-
-2. Use the config fields as [`When` conditions](#conditions). The field names and values are not
-   case-sensitive.
-
-That's it! Content Patcher will automatically create the `config.json` when you run the game.
-
-### Tokens
-You can use [conditions](#conditions) and [config values](#player-configuration) in the `FromFile`,
-`Target`, and `Enabled` fields in `content.json`. Just put the name of the condition or config
-field in two curly brackets, and Content Patcher will automatically fill in the value.
-
-For example, this gives the farmhouse a different appearance in each season:
+When you run the game, a `config.json` file will appear automatically with text like this:
 
 ```js
 {
-    "Format": "1.5",
-    "Changes": [
-        {
-            "Action": "EditImage",
-            "Target": "Buildings/houses",
-            "FromFile": "assets/{{season}}.png" // assets/spring.png, assets/summer.png, etc
-        }
-    ]
+  "Material": "Wood"
 }
 ```
 
-You can use multiple tokens and conditions for more dynamic changes:
-
-```js
-{
-    "Format": "1.5",
-    "Changes": [
-        {
-            "Action": "EditImage",
-            "Target": "Buildings/houses",
-            "FromFile": "assets/{{season}}_{{weather}}.png", // assets/spring_rain.png, etc
-            "When": {
-                "Weather": "sun, rain"
-            }
-        }
-    ]
-}
-```
-
-Tokens are subject to some restrictions:
-
-* `Enabled`:
-  * Max one token per field.
-  * Config fields can't have `"AllowMultiple": true`.
-  * Config fields must have `"AllowValues": "true, false"`.
-* `FromFile`:
-  * Config fields can't have `"AllowMultiple": true`.
-  * All possible files must exist, subject to any conditions you set. In the first example above,
-    you'll need four files (one per season). If you add a `"Season": "spring, summer"` condition,
-    you'll only need two files.
-* `Target`:
-  * Config fields can't have `"AllowMultiple": true`.
+Players can edit it to configure your content pack.
 
 ## Release a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general
