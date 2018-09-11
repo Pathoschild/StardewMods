@@ -157,8 +157,8 @@ namespace ContentPatcher.Framework
 
                 // update patch
                 IContext tokenContext = this.TokenManager.TrackLocalTokens(patch.ContentPack.Pack);
-                bool changed = patch.UpdateContext(tokenContext, tokenContext.GetSingleValues());
-                bool shouldApply = patch.MatchesContext;
+                bool changed = patch.UpdateContext(tokenContext, tokenContext.GetSingleValues(enforceContext: true).ToDictionary(p => p.Name));
+                bool shouldApply = patch.MatchesContext && patch.GetTokensUsed().All(p => tokenContext.Contains(p.Name, enforceContext: true));
 
                 // track patches to reload
                 bool reload = (wasApplied && changed) || (!wasApplied && shouldApply);
@@ -186,7 +186,7 @@ namespace ContentPatcher.Framework
 
                 // warn for invalid load patch
                 if (patch is LoadPatch loadPatch && patch.MatchesContext && !patch.ContentPack.FileExists(loadPatch.LocalAsset.Value))
-                    this.Monitor.Log($"Patch error: {patch.LogName} has a {nameof(PatchConfig.FromFile)} which matches non-existent file {loadPatch.LocalAsset.Value}.", LogLevel.Error);
+                    this.Monitor.Log($"Patch error: {patch.LogName} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.LocalAsset.Value}'.", LogLevel.Error);
             }
 
             // rebuild asset name lookup
@@ -218,7 +218,7 @@ namespace ContentPatcher.Framework
         {
             // set initial context
             IContext tokenContext = this.TokenManager.TrackLocalTokens(patch.ContentPack.Pack);
-            patch.UpdateContext(tokenContext, tokenContext.GetSingleValues());
+            patch.UpdateContext(tokenContext, tokenContext.GetSingleValues(enforceContext: true).ToDictionary(p => p.Name));
 
             // add to patch list
             this.VerboseLog($"      added {patch.Type} {patch.AssetName}.");

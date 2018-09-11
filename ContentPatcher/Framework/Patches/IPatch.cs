@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
-using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Patches
@@ -47,7 +46,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <param name="singleValueTokens">The tokens that can only contain one value.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        bool UpdateContext(IContext context, InvariantDictionary<IToken> singleValueTokens);
+        bool UpdateContext(IContext context, IDictionary<TokenName, IToken> singleValueTokens);
 
         /// <summary>Load the initial version of the asset.</summary>
         /// <typeparam name="T">The asset type.</typeparam>

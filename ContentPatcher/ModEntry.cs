@@ -197,10 +197,9 @@ namespace ContentPatcher
                     }
 
                     // load tokens
-                    LocalContext tokenContext = this.TokenManager.TrackLocalTokens(pack.Pack);
+                    ModTokenContext tokenContext = this.TokenManager.TrackLocalTokens(pack.Pack);
                     bool usesConfig = false;
                     {
-
                         // load config.json
                         InvariantDictionary<ConfigField> config = configFileHandler.Read(pack, content.ConfigSchema);
                         configFileHandler.Save(pack, config, this.Helper);
@@ -208,16 +207,63 @@ namespace ContentPatcher
                         if (usesConfig)
                             this.VerboseLog($"   found config.json with {config.Count} fields...");
 
-
                         // load config tokens
                         foreach (KeyValuePair<string, ConfigField> pair in config)
                         {
-                            string key = pair.Key;
                             ConfigField field = pair.Value;
-                            tokenContext.LocalTokens[pair.Key] = new StaticToken(key, field.AllowMultiple, field.Value)
+                            tokenContext.AddConfig(new StaticToken(pair.Key, field.AllowMultiple, field.Value)
                             {
                                 AllowedValues = field.AllowValues
-                            };
+                            });
+                        }
+
+                        // load dynamic tokens
+                        foreach (DynamicTokenConfig entry in content.DynamicTokens ?? new DynamicTokenConfig[0])
+                        {
+                            void LogSkip(string reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > dynamic token '{entry.Name}': {reason}", LogLevel.Warn);
+
+                            // validate token key
+                            if (!TokenName.TryParse(entry.Name, out TokenName name))
+                            {
+                                LogSkip("the name could not be parsed as a token key.");
+                                continue;
+                            }
+                            if (name.HasSubkey())
+                            {
+                                LogSkip("the token name cannot contain a subkey (:).");
+                                continue;
+                            }
+                            if (name.TryGetConditionType(out ConditionType conflictingType))
+                            {
+                                LogSkip($"conflicts with global token '{conflictingType}'.");
+                                continue;
+                            }
+                            if (config.ContainsKey(name.Key))
+                            {
+                                LogSkip($"conflicts with player config token '{conflictingType}'.");
+                                continue;
+                            }
+
+                            // parse values
+                            InvariantHashSet values = this.ParseCommaDelimitedField(entry.Value);
+                            if (!values.Any())
+                            {
+                                LogSkip($"{nameof(DynamicTokenConfig.Value)} field can't be empty");
+                                continue;
+                            }
+
+                            // parse conditions
+                            ConditionDictionary conditions;
+                            {
+                                if (!this.TryParseConditions(entry.When, tokenContext, content.Format, latestFormatVersion, minimumTokenVersions, out conditions, out string error))
+                                {
+                                    this.Monitor.Log($"Ignored {pack.Manifest.Name} > '{entry.Name}' token: its {nameof(DynamicTokenConfig.When)} field is invalid: {error}.", LogLevel.Warn);
+                                    continue;
+                                }
+                            }
+
+                            // add token
+                            tokenContext.AddDynamic(new DynamicTokenValue(name, values, conditions));
                         }
                     }
 
@@ -263,6 +309,10 @@ namespace ContentPatcher
             // 1.3 adds config.json
             if (predates13 && usesConfig)
                 return LogFailed($"uses the {nameof(ContentConfig.ConfigSchema)} field added in 1.3");
+
+            // 1.5 adds dynamic tokens
+            if (predates15 && content.DynamicTokens?.Any() == true)
+                return LogFailed($"uses the {nameof(ContentConfig.DynamicTokens)} field added in 1.5");
 
             // check patch format
             foreach (PatchConfig patch in content.Changes)
@@ -484,34 +534,34 @@ namespace ContentPatcher
             foreach (KeyValuePair<string, string> pair in raw)
             {
                 // parse condition key
-                if (!TokenKey.TryParse(pair.Key, out TokenKey key))
+                if (!TokenName.TryParse(pair.Key, out TokenName name))
                 {
-                    error = $"'{pair.Key}' isn't a valid token key";
+                    error = $"'{pair.Key}' isn't a valid token name";
                     conditions = null;
                     return false;
                 }
 
                 // get token
-                IToken token = tokenContext.GetToken(key);
+                IToken token = tokenContext.GetToken(name, enforceContext: false);
                 if (token == null)
                 {
-                    error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", tokenContext.GetTokens().Select(p => p.Name).OrderBy(p => p))}";
+                    error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", tokenContext.GetTokens(enforceContext: false).Select(p => p.Name).OrderBy(p => p))}";
                     conditions = null;
                     return false;
                 }
 
                 // validate types which require an ID
-                if (token.RequiresSubkeys && key.Subkey == null)
+                if (token.RequiresSubkeys && name.HasSubkey())
                 {
-                    error = $"{key.Key} conditions must specify a separate subkey (see readme for usage)";
+                    error = $"{name.Key} conditions must specify a token subkey (see readme for usage)";
                     conditions = null;
                     return false;
                 }
 
                 // check compatibility
-                if (minumumTokenVersions.TryGetValue(key.Key, out ISemanticVersion minVersion) && minVersion.IsNewerThan(formatVersion))
+                if (minumumTokenVersions.TryGetValue(name.Key, out ISemanticVersion minVersion) && minVersion.IsNewerThan(formatVersion))
                 {
-                    error = $"{key} isn't available with format version {formatVersion} (change the {nameof(ContentConfig.Format)} field to {latestFormatVersion} to use newer features)";
+                    error = $"{name} isn't available with format version {formatVersion} (change the {nameof(ContentConfig.Format)} field to {latestFormatVersion} to use newer features)";
                     conditions = null;
                     return false;
                 }
@@ -520,7 +570,7 @@ namespace ContentPatcher
                 InvariantHashSet values = this.ParseCommaDelimitedField(pair.Value);
                 if (!values.Any())
                 {
-                    error = $"{key} can't be empty";
+                    error = $"{name} can't be empty";
                     conditions = null;
                     return false;
                 }
@@ -534,7 +584,7 @@ namespace ContentPatcher
                         string[] invalidValues = values.Except(validValues, StringComparer.InvariantCultureIgnoreCase).ToArray();
                         if (invalidValues.Any())
                         {
-                            error = $"invalid {key} values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", validValues)}";
+                            error = $"invalid {name} values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", validValues)}";
                             conditions = null;
                             return false;
                         }
@@ -542,7 +592,7 @@ namespace ContentPatcher
                 }
 
                 // create condition
-                conditions[key] = new Condition(key, values);
+                conditions[name] = new Condition(name, values);
             }
 
             // return parsed conditions
@@ -624,7 +674,7 @@ namespace ContentPatcher
             // validate unknown tokens
             if (parsed.InvalidTokens.Any())
             {
-                error = $"found unknown tokens: {string.Join(", ", parsed.InvalidTokens.OrderBy(p => p))}";
+                error = $"found unknown tokens ({string.Join(", ", parsed.InvalidTokens.OrderBy(p => p))})";
                 parsed = null;
                 return false;
             }

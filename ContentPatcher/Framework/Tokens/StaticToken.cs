@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
@@ -17,19 +19,26 @@ namespace ContentPatcher.Framework.Tokens
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="name">The token values.</param>
+        /// <param name="name">The token name.</param>
         /// <param name="canHaveMultipleValues">Whether the token may contain multiple values.</param>
         /// <param name="values">Get the current token values.</param>
         public StaticToken(string name, bool canHaveMultipleValues, InvariantHashSet values)
             : base(name, canHaveMultipleValues, requiresSubkeys: false)
         {
             this.Values = values;
+            this.IsValidInContext = true;
         }
 
         /// <summary>Get the current token values.</summary>
-        public override IEnumerable<string> GetValues()
+        /// <param name="name">The token name to check, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.RequiresSubkeys"/>.</exception>
+        public override IEnumerable<string> GetValues(TokenName? name = null)
         {
-            return this.Values;
+            this.AssertTokenName(name);
+
+            if (this.Values != null)
+                return this.Values;
+            return Enumerable.Empty<string>();
         }
     }
 }

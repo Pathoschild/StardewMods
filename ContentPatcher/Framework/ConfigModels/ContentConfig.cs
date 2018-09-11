@@ -9,6 +9,9 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>The format version.</summary>
         public ISemanticVersion Format { get; set; }
 
+        /// <summary>The user-defined tokens whose values may depend on other tokens.</summary>
+        public DynamicTokenConfig[] DynamicTokens { get; set; }
+
         /// <summary>The changes to make.</summary>
         public PatchConfig[] Changes { get; set; }
 

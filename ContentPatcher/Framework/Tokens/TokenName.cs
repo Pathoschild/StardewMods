@@ -4,39 +4,18 @@ using ContentPatcher.Framework.Conditions;
 namespace ContentPatcher.Framework.Tokens
 {
     /// <summary>Represents a token key and subkey if applicable (e.g. <c>Relationship:Abigail</c> is token key <c>Relationship</c> and subkey <c>Abigail</c>).</summary>
-    internal struct TokenKey : IEquatable<TokenKey>
+    internal struct TokenName : IEquatable<TokenName>, IComparable
     {
         /*********
         ** Accessors
         *********/
-        /****
-        ** Predefined keys
-        ****/
-        /// <summary>A predefined condition key for <see cref="ConditionType.Day"/>.</summary>
-        public static TokenKey Day { get; } = new TokenKey(ConditionType.Day);
-
-        /// <summary>A predefined condition key for <see cref="ConditionType.DayOfWeek"/>.</summary>
-        public static TokenKey DayOfWeek { get; } = new TokenKey(ConditionType.DayOfWeek);
-
-        /// <summary>A predefined condition key for <see cref="ConditionType.Language"/>.</summary>
-        public static TokenKey Language { get; } = new TokenKey(ConditionType.Language);
-
-        /// <summary>A predefined condition key for <see cref="ConditionType.Season"/>.</summary>
-        public static TokenKey Season { get; } = new TokenKey(ConditionType.Season);
-
-        /// <summary>A predefined condition key for <see cref="ConditionType.Weather"/>.</summary>
-        public static TokenKey Weather { get; } = new TokenKey(ConditionType.Weather);
-
-        /// <summary>A predefined condition key for <see cref="ConditionType.Year"/>.</summary>
-        public static TokenKey Year { get; } = new TokenKey(ConditionType.Year);
-
         /****
         ** Properties
         ****/
         /// <summary>The token type.</summary>
         public string Key { get; }
 
-        /// <summary>The token subkey, if applicable  indicating which in-game object the condition type applies to. For example, the NPC name when <see cref="Key"/> is <see cref="ConditionType.Relationship"/>.</summary>
+        /// <summary>The token subkey indicating which in-game object the condition type applies to, if applicable. For example, the NPC name when <see cref="Key"/> is <see cref="ConditionType.Relationship"/>.</summary>
         public string Subkey { get; }
 
 
@@ -46,7 +25,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Construct an instance.</summary>
         /// <param name="tokenKey">The condition type.</param>
         /// <param name="subkey">A unique key indicating which in-game object the condition type applies to. For example, the NPC name when <paramref name="tokenKey"/> is <see cref="ConditionType.Relationship"/>.</param>
-        public TokenKey(string tokenKey, string subkey = null)
+        public TokenName(string tokenKey, string subkey = null)
         {
             this.Key = tokenKey?.Trim();
             this.Subkey = subkey?.Trim();
@@ -55,15 +34,38 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Construct an instance.</summary>
         /// <param name="tokenKey">The condition type.</param>
         /// <param name="subkey">A unique key indicating which in-game object the condition type applies to. For example, the NPC name when <paramref name="tokenKey"/> is <see cref="ConditionType.Relationship"/>.</param>
-        public TokenKey(ConditionType tokenKey, string subkey = null)
+        public TokenName(ConditionType tokenKey, string subkey = null)
             : this(tokenKey.ToString(), subkey) { }
 
         /// <summary>Get a string representation for this instance.</summary>
         public override string ToString()
         {
-            return this.Subkey != null
+            return this.HasSubkey()
                 ? $"{this.Key}:{this.Subkey}"
                 : this.Key;
+        }
+
+        /// <summary>Get whether this key has the same root <see cref="Key"/> as another.</summary>
+        /// <param name="other">The other key to check.</param>
+        public bool IsSameRootKey(TokenName other)
+        {
+            if (this.Key == null)
+                return other.Key == null;
+
+            return this.Key.Equals(other.Key, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        /// <summary>Whether this token key specifies a subkey.</summary>
+        public bool HasSubkey()
+        {
+            return !string.IsNullOrWhiteSpace(this.Subkey);
+        }
+
+        /// <summary>Try to parse the <see cref="Key"/> as a global condition type.</summary>
+        /// <param name="type">The parsed condition type, if applicable.</param>
+        public bool TryGetConditionType(out ConditionType type)
+        {
+            return Enum.TryParse(this.Key, true, out type);
         }
 
         /****
@@ -71,27 +73,33 @@ namespace ContentPatcher.Framework.Tokens
         ****/
         /// <summary>Get whether the current object is equal to another object of the same type.</summary>
         /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(TokenKey other)
+        public bool Equals(TokenName other)
         {
-            return
-                this.Key.Equals(other.Key, StringComparison.InvariantCultureIgnoreCase)
-                && (
-                    this.Subkey?.Equals(other.Subkey, StringComparison.CurrentCultureIgnoreCase)
-                    ?? other.Subkey == null
-                );
+            return this.CompareTo(other) == 0;
         }
 
         /// <summary>Get whether this instance and a specified object are equal.</summary>
         /// <param name="obj">The object to compare with the current instance.</param>
         public override bool Equals(object obj)
         {
-            return obj is TokenKey other && this.Equals(other);
+            return obj is TokenName other && this.Equals(other);
         }
 
         /// <summary>Get the hash code for this instance.</summary>
         public override int GetHashCode()
         {
-            return this.ToString().GetHashCode();
+            return this.ToString().ToLowerInvariant().GetHashCode();
+        }
+
+        /****
+        ** IComparable
+        ****/
+        /// <summary>Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.</summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>A value that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance precedes <paramref name="obj" /> in the sort order. Zero This instance occurs in the same position in the sort order as <paramref name="obj" />. Greater than zero This instance follows <paramref name="obj" /> in the sort order.</returns>
+        public int CompareTo(object obj)
+        {
+            return string.Compare(this.ToString(), obj?.ToString(), StringComparison.OrdinalIgnoreCase);
         }
 
         /****
@@ -100,7 +108,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Parse a raw string into a condition key if it's valid.</summary>
         /// <param name="raw">The raw string.</param>
         /// <returns>Returns true if <paramref name="raw"/> was successfully parsed, else false.</returns>
-        public static TokenKey Parse(string raw)
+        public static TokenName Parse(string raw)
         {
             if (string.IsNullOrWhiteSpace(raw))
                 throw new ArgumentNullException(nameof(raw));
@@ -121,23 +129,23 @@ namespace ContentPatcher.Framework.Tokens
             }
 
             // create instance
-            return new TokenKey(key, subkey);
+            return new TokenName(key, subkey);
         }
 
         /// <summary>Parse a raw string into a condition key if it's valid.</summary>
         /// <param name="raw">The raw string.</param>
         /// <param name="key">The parsed condition key.</param>
         /// <returns>Returns true if <paramref name="raw"/> was successfully parsed, else false.</returns>
-        public static bool TryParse(string raw, out TokenKey key)
+        public static bool TryParse(string raw, out TokenName key)
         {
             try
             {
-                key = TokenKey.Parse(raw);
+                key = TokenName.Parse(raw);
                 return true;
             }
             catch
             {
-                key = default(TokenKey);
+                key = default(TokenName);
                 return false;
             }
         }

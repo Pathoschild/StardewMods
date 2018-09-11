@@ -11,7 +11,7 @@ namespace ContentPatcher.Framework.Tokens
         ** Properties
         *********/
         /// <summary>The token name.</summary>
-        string Name { get; }
+        TokenName Name { get; }
 
         /// <summary>Whether the token is applicable in the current context.</summary>
         bool IsValidInContext { get; }
@@ -35,15 +35,11 @@ namespace ContentPatcher.Framework.Tokens
         void UpdateContext(IContext context);
 
         /// <summary>Get the current subkeys (if supported).</summary>
-        IEnumerable<string> GetSubkeys();
+        IEnumerable<TokenName> GetSubkeys();
 
         /// <summary>Get the current token values.</summary>
-        /// <exception cref="InvalidOperationException">This token requires subkeys (see <see cref="IToken.RequiresSubkeys"/>).</exception>
-        IEnumerable<string> GetValues();
-
-        /// <summary>Get the current token values for a subkey, if <see cref="RequiresSubkeys"/> is true.</summary>
-        /// <param name="subkey">The subkey to check.</param>
-        /// <exception cref="InvalidOperationException">This token does not support subkeys (see <see cref="RequiresSubkeys"/>).</exception>
-        IEnumerable<string> GetValues(string subkey);
+        /// <param name="name">The token name to check, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.RequiresSubkeys"/>.</exception>
+        IEnumerable<string> GetValues(TokenName? name = null);
     }
 }

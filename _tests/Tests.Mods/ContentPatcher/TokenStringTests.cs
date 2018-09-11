@@ -1,10 +1,10 @@
 using System.Linq;
+using ContentPatcher.Framework;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
 using FluentAssertions;
 using NUnit.Framework;
 using Pathoschild.Stardew.Common.Utilities;
-using Pathoschild.Stardew.Tests.Mods.ContentPatcher.Framework;
 
 namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
 {
@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         public void TokenStringBuilder_PlainString(string raw)
         {
             // act
-            TokenString tokenStr = new TokenString(raw, new MockContext());
+            TokenString tokenStr = new TokenString(raw, new GenericTokenContext());
 
             // assert
             tokenStr.Raw.Should().Be(raw.Trim());
@@ -41,9 +41,8 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         {
             // arrange
             const string configKey = "tokenKey";
-            var context = new MockContext(
-                new StaticToken(configKey, canHaveMultipleValues: true, values: new InvariantHashSet { "value" })
-            );
+            var context = new GenericTokenContext();
+            context.Save(new StaticToken(configKey, canHaveMultipleValues: true, values: new InvariantHashSet { "value" }));
 
             // act
             TokenString tokenStr = new TokenString(raw, context);
@@ -51,7 +50,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             // assert
             tokenStr.Raw.Should().Be(raw.Trim());
             tokenStr.Tokens.Should().HaveCount(1);
-            tokenStr.Tokens.Select(p => p.Name).Should().BeEquivalentTo(configKey);
+            tokenStr.Tokens.Select(p => p.Name.ToString()).Should().BeEquivalentTo(configKey);
             tokenStr.InvalidTokens.Should().BeEmpty();
             tokenStr.HasAnyTokens.Should().BeTrue();
             tokenStr.IsSingleTokenOnly.Should().BeTrue();
@@ -66,10 +65,9 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             const string configValue = "A";
             const string tokenKey = "season";
             const string raw = "  assets/{{configKey}}_{{season}}_{{invalid}}.png  ";
-            var context = new MockContext(
-                new StaticToken(configKey, canHaveMultipleValues: true, values: new InvariantHashSet { configValue }),
-                new StaticToken(tokenKey, canHaveMultipleValues: false, values: new InvariantHashSet { "A" })
-            );
+            var context = new GenericTokenContext();
+            context.Save(new StaticToken(configKey, canHaveMultipleValues: true, values: new InvariantHashSet { configValue }));
+            context.Save(new StaticToken(tokenKey, canHaveMultipleValues: false, values: new InvariantHashSet { "A" }));
 
             // act
             TokenString tokenStr = new TokenString(raw, context);

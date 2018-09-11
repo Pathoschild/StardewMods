@@ -18,10 +18,10 @@ namespace ContentPatcher.Framework
         ** Properties
         *********/
         /// <summary>The available global tokens.</summary>
-        private readonly InvariantDictionary<IToken> GlobalTokens = new InvariantDictionary<IToken>();
+        private readonly GenericTokenContext GlobalContext = new GenericTokenContext();
 
         /// <summary>The available tokens defined within the context of each content pack.</summary>
-        private readonly Dictionary<IContentPack, LocalContext> LocalTokens = new Dictionary<IContentPack, LocalContext>();
+        private readonly Dictionary<IContentPack, ModTokenContext> LocalTokens = new Dictionary<IContentPack, ModTokenContext>();
 
 
         /*********
@@ -32,104 +32,77 @@ namespace ContentPatcher.Framework
         public TokenManager(IContentHelper contentHelper)
         {
             foreach (IToken token in this.GetGlobalTokens(contentHelper))
-                this.GlobalTokens[token.Name] = token;
+                this.GlobalContext.Tokens[token.Name] = token;
         }
 
         /// <summary>Set the list of installed mods and content packs.</summary>
         /// <param name="installedMods">The installed mod IDs.</param>
         public void SetInstalledMods(string[] installedMods)
         {
-            this.GlobalTokens[ConditionType.HasMod.ToString()] = new StaticToken(name: ConditionType.HasMod.ToString(), canHaveMultipleValues: true, values: new InvariantHashSet(installedMods));
+            this.GlobalContext.Tokens[new TokenName(ConditionType.HasMod)] = new StaticToken(name: ConditionType.HasMod.ToString(), canHaveMultipleValues: true, values: new InvariantHashSet(installedMods));
         }
 
         /// <summary>Get the tokens which are defined for a specific content pack. This returns a reference to the list, which can be held for a live view of the tokens. If the content pack isn't currently tracked, this will add it.</summary>
         /// <param name="contentPack">The content pack to manage.</param>
-        public LocalContext TrackLocalTokens(IContentPack contentPack)
+        public ModTokenContext TrackLocalTokens(IContentPack contentPack)
         {
-            if (!this.LocalTokens.TryGetValue(contentPack, out LocalContext localTokens))
-                this.LocalTokens[contentPack] = localTokens = new LocalContext(this);
+            if (!this.LocalTokens.TryGetValue(contentPack, out ModTokenContext localTokens))
+                this.LocalTokens[contentPack] = localTokens = new ModTokenContext(this);
             return localTokens;
         }
 
         /// <summary>Update the current context.</summary>
         public void UpdateContext()
         {
-            foreach (IToken token in this.GlobalTokens.Values)
+            foreach (IToken token in this.GlobalContext.Tokens.Values)
                 token.UpdateContext(this);
 
-            foreach (LocalContext localContext in this.LocalTokens.Values)
-            {
-                foreach (IToken localToken in localContext.LocalTokens.Values)
-                    localToken.UpdateContext(localContext);
-            }
+            foreach (ModTokenContext localContext in this.LocalTokens.Values)
+                localContext.UpdateContext(this);
         }
 
         /****
         ** IContext
         ****/
-        /// <summary>Get the underlying token which handles a key.</summary>
-        /// <param name="key">The token key.</param>
-        /// <returns>Returns the matching token, or <c>null</c> if none was found.</returns>
-        public IToken GetToken(TokenKey key)
+        /// <summary>Get whether the context contains the given token.</summary>
+        /// <param name="name">The token name.</param>
+        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
+        public bool Contains(TokenName name, bool enforceContext)
         {
-            return this.GlobalTokens.TryGetValue(key.Key, out IToken token)
-                ? token
-                : null;
+            return this.GlobalContext.Contains(name, enforceContext);
+        }
+
+        /// <summary>Get the underlying token which handles a key.</summary>
+        /// <param name="name">The token name.</param>
+        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
+        /// <returns>Returns the matching token, or <c>null</c> if none was found.</returns>
+        public IToken GetToken(TokenName name, bool enforceContext)
+        {
+            return this.GlobalContext.GetToken(name, enforceContext);
         }
 
         /// <summary>Get the underlying tokens.</summary>
-        public IEnumerable<IToken> GetTokens()
+        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
+        public IEnumerable<IToken> GetTokens(bool enforceContext)
         {
-            foreach (IToken token in this.GlobalTokens.Values)
-                yield return token;
-        }
-
-        /// <summary>Get the current value of the given token for comparison. This is only valid for tokens where <see cref="IToken.CanHaveMultipleValues"/> is false; see <see cref="IContext.GetValues(TokenKey)"/> otherwise.</summary>
-        /// <param name="key">The token key.</param>
-        /// <exception cref="ArgumentNullException">The specified key is null.</exception>
-        /// <exception cref="ArgumentException">The specified key does includes or doesn't include a subkey, depending on <see cref="IToken.RequiresSubkeys"/>.</exception>
-        /// <exception cref="InvalidOperationException">The specified token allows multiple values; see <see cref="IContext.GetValues(TokenKey)"/> instead.</exception>
-        /// <exception cref="KeyNotFoundException">The specified token key doesn't exist.</exception>
-        public string GetValue(TokenKey key)
-        {
-            IToken token = this.GetToken(key);
-            this.AssertToken(key.Key, key.Subkey, token);
-
-            if (token.CanHaveMultipleValues)
-                throw new InvalidOperationException($"The {key} token allows multiple values, so {nameof(this.GetValue)} is not valid.");
-
-            return key.Subkey != null
-                ? token.GetValues(key.Subkey).FirstOrDefault()
-                : token.GetValues().FirstOrDefault();
+            return this.GlobalContext.GetTokens(enforceContext);
         }
 
         /// <summary>Get the current values of the given token for comparison.</summary>
-        /// <param name="key">The token key.</param>
+        /// <param name="name">The token name.</param>
+        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
+        /// <returns>Return the values of the matching token, or an empty list if the token doesn't exist.</returns>
         /// <exception cref="ArgumentNullException">The specified key is null.</exception>
-        /// <exception cref="KeyNotFoundException">The specified token key doesn't exist.</exception>
-        public IEnumerable<string> GetValues(TokenKey key)
+        public IEnumerable<string> GetValues(TokenName name, bool enforceContext)
         {
-            IToken token = this.GetToken(key);
-            this.AssertToken(key.Key, key.Subkey, token);
-            return key.Subkey != null
-                ? token.GetValues(key.Subkey)
-                : token.GetValues();
+            return this.GlobalContext.GetValues(name, enforceContext);
         }
 
         /// <summary>Get the tokens that can only contain one value.</summary>
-        public InvariantDictionary<IToken> GetSingleValues()
+        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
+        public IEnumerable<IToken> GetSingleValues(bool enforceContext)
         {
-            InvariantDictionary<IToken> values = new InvariantDictionary<IToken>();
-
-            foreach (IToken token in this.GetTokens())
-            {
-                if (token.CanHaveMultipleValues)
-                    continue;
-
-                values[token.Name] = token;
-            }
-
-            return values;
+            return this.GlobalContext.GetSingleValues(enforceContext);
         }
 
 
@@ -175,23 +148,6 @@ namespace ContentPatcher.Framework
             };
             yield return new VillagerRelationshipToken();
             yield return new VillagerHeartsToken();
-        }
-
-        /// <summary>Assert that a token is valid and matches the key.</summary>
-        /// <param name="tokenKey">The token key.</param>
-        /// <param name="subkey">The token subkey (if any).</param>
-        /// <param name="token">The resolved token.</param>
-        /// <exception cref="ArgumentException">The specified key does includes or doesn't include a subkey, depending on <see cref="IToken.RequiresSubkeys"/>.</exception>
-        /// <exception cref="KeyNotFoundException">The specified token key doesn't exist.</exception>
-        /// <remarks>This implementation is duplicated by <see cref="LocalContext"/>.</remarks>
-        private void AssertToken(string tokenKey, string subkey, IToken token)
-        {
-            if (token == null)
-                throw new KeyNotFoundException($"There's no token with key {tokenKey}.");
-            if (token.RequiresSubkeys && subkey == null)
-                throw new InvalidOperationException($"The {tokenKey} token requires a subkey, but none was provided.");
-            if (!token.RequiresSubkeys && subkey != null)
-                throw new InvalidOperationException($"The {tokenKey} token doesn't allow a subkey, but a '{subkey}' subkey was provided.");
         }
 
         /// <summary>Get the current weather from the game state.</summary>

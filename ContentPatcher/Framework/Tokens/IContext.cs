@@ -1,35 +1,35 @@
 using System;
 using System.Collections.Generic;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
 {
     /// <summary>Provides access to contextual tokens.</summary>
     internal interface IContext
     {
+        /// <summary>Get whether the context contains the given token.</summary>
+        /// <param name="name">The token name.</param>
+        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
+        bool Contains(TokenName name, bool enforceContext);
+
         /// <summary>Get the underlying token which handles a key.</summary>
-        /// <param name="key">The token key.</param>
+        /// <param name="name">The token name.</param>
+        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
         /// <returns>Returns the matching token, or <c>null</c> if none was found.</returns>
-        IToken GetToken(TokenKey key);
+        IToken GetToken(TokenName name, bool enforceContext);
 
         /// <summary>Get the underlying tokens.</summary>
-        IEnumerable<IToken> GetTokens();
-
-        /// <summary>Get the current value of the given token for comparison. This is only valid for tokens where <see cref="IToken.CanHaveMultipleValues"/> is false; see <see cref="IContext.GetValues(TokenKey)"/> otherwise.</summary>
-        /// <param name="key">The token key.</param>
-        /// <exception cref="ArgumentNullException">The specified key is null.</exception>
-        /// <exception cref="ArgumentException">The specified key does includes or doesn't include a subkey, depending on <see cref="IToken.RequiresSubkeys"/>.</exception>
-        /// <exception cref="InvalidOperationException">The specified token allows multiple values; see <see cref="IContext.GetValues(TokenKey)"/> instead.</exception>
-        /// <exception cref="KeyNotFoundException">The specified token key doesn't exist.</exception>
-        string GetValue(TokenKey key);
+        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
+        IEnumerable<IToken> GetTokens(bool enforceContext);
 
         /// <summary>Get the current values of the given token for comparison.</summary>
-        /// <param name="key">The token key.</param>
+        /// <param name="name">The token name.</param>
+        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
+        /// <returns>Return the values of the matching token, or an empty list if the token doesn't exist.</returns>
         /// <exception cref="ArgumentNullException">The specified key is null.</exception>
-        /// <exception cref="KeyNotFoundException">The specified token key doesn't exist.</exception>
-        IEnumerable<string> GetValues(TokenKey key);
+        IEnumerable<string> GetValues(TokenName name, bool enforceContext);
 
         /// <summary>Get the tokens that can only contain one value.</summary>
-        InvariantDictionary<IToken> GetSingleValues();
+        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
+        IEnumerable<IToken> GetSingleValues(bool enforceContext);
     }
 }

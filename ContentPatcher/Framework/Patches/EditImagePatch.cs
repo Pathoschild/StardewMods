@@ -5,7 +5,6 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -61,7 +60,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="context">The condition context.</param>
         /// <param name="singleValueTokens">The tokens that can only contain one value.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        public override bool UpdateContext(IContext context, InvariantDictionary<IToken> singleValueTokens)
+        public override bool UpdateContext(IContext context, IDictionary<TokenName, IToken> singleValueTokens)
         {
             bool localAssetChanged = this.FromLocalAsset.UpdateContext(context, singleValueTokens);
             return base.UpdateContext(context, singleValueTokens) || localAssetChanged;

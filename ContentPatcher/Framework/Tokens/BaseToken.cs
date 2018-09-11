@@ -11,10 +11,10 @@ namespace ContentPatcher.Framework.Tokens
         ** Accessors
         *********/
         /// <summary>The token name.</summary>
-        public string Name { get; }
+        public TokenName Name { get; }
 
         /// <summary>Whether the token may contain multiple values.</summary>
-        public bool CanHaveMultipleValues { get; }
+        public virtual bool CanHaveMultipleValues { get; }
 
         /// <summary>Whether this token requires subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with an <c>Abigail</c> subkey).</summary>
         public bool RequiresSubkeys { get; }
@@ -35,27 +35,17 @@ namespace ContentPatcher.Framework.Tokens
         public virtual void UpdateContext(IContext context) { }
 
         /// <summary>Get the current subkeys (if supported).</summary>
-        public virtual IEnumerable<string> GetSubkeys()
+        public virtual IEnumerable<TokenName> GetSubkeys()
         {
             yield break;
         }
 
         /// <summary>Get the current token values.</summary>
-        /// <exception cref="InvalidOperationException">This token does not support subkeys (see <see cref="IToken.RequiresSubkeys"/>).</exception>
-        public virtual IEnumerable<string> GetValues()
+        /// <param name="name">The token name to check, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or this token require a subkeys and <paramref name="name"/> does not specify one.</exception>
+        public virtual IEnumerable<string> GetValues(TokenName? name = null)
         {
-            if (this.RequiresSubkeys)
-                throw new InvalidOperationException($"The {this.Name} token requires a subkey.");
-            yield break;
-        }
-
-        /// <summary>Get the current token values for a subkey, if <see cref="IToken.RequiresSubkeys"/> is true.</summary>
-        /// <param name="subkey">The subkey to check.</param>
-        /// <exception cref="InvalidOperationException">This token does not support subkeys (see <see cref="IToken.RequiresSubkeys"/>).</exception>
-        public virtual IEnumerable<string> GetValues(string subkey)
-        {
-            if (!this.RequiresSubkeys)
-                throw new InvalidOperationException($"The {this.Name} token does not support subkeys.");
+            this.AssertTokenName(name);
             yield break;
         }
 
@@ -67,11 +57,41 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="name">The token name.</param>
         /// <param name="canHaveMultipleValues">Whether the token may contain multiple values.</param>
         /// <param name="requiresSubkeys">Whether this token recognises subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with a <c>Abigail</c> subkey).</param>
-        protected BaseToken(string name, bool canHaveMultipleValues, bool requiresSubkeys)
+        protected BaseToken(TokenName name, bool canHaveMultipleValues, bool requiresSubkeys)
         {
             this.Name = name;
             this.CanHaveMultipleValues = canHaveMultipleValues;
             this.RequiresSubkeys = requiresSubkeys;
+        }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="name">The token name.</param>
+        /// <param name="canHaveMultipleValues">Whether the token may contain multiple values.</param>
+        /// <param name="requiresSubkeys">Whether this token recognises subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with a <c>Abigail</c> subkey).</param>
+        protected BaseToken(string name, bool canHaveMultipleValues, bool requiresSubkeys)
+            : this(TokenName.Parse(name), canHaveMultipleValues, requiresSubkeys) { }
+
+        /// <summary>Get the current token values.</summary>
+        /// <param name="name">The token name to check, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.RequiresSubkeys"/>.</exception>
+        protected void AssertTokenName(TokenName? name)
+        {
+            if (name == null)
+            {
+                // missing subkey
+                if (this.RequiresSubkeys)
+                    throw new InvalidOperationException($"The '{this.Name}' token requires a subkey.");
+            }
+            else
+            {
+                // not same root key
+                if (!this.Name.IsSameRootKey(name.Value))
+                    throw new InvalidOperationException($"The specified token key ({name}) is not handled by this token ({this.Name}).");
+
+                // no subkey allowed
+                if (!this.RequiresSubkeys && name.Value.HasSubkey())
+                    throw new InvalidOperationException($"The '{this.Name}' token does not support subkeys (:).");
+            }
         }
     }
 }

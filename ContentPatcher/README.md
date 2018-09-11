@@ -203,7 +203,7 @@ There are two ways to use tokens:
   {
       "Action": "EditImage",
       "Target": "Building/houses",
-      "FromFile": "assets/{{season}}_house.png" // assets/spring.png, assets/summer.png, etc
+      "FromFile": "assets/{{season}}_house.png" // assets/spring_house.png, assets/summer_house.png, etc
   }
   ```
 
@@ -441,8 +441,9 @@ Some usage notes:
 * If you list multiple blocks for the same token name, the last one whose conditions match will be
   used.
 * You can use tokens in the `Value` and `When` fields. That includes dynamic tokens if they're
-  defined earlier in the list (in which case the last value _defined before the current token_
-  will be used).
+  defined earlier in the list (in which case the last value _defined before the current block_ will
+  be used).
+* Dynamic tokens can't have the same name as an existing global token or player config field.
 
 For example, this `content.json` defines a custom `{{style}}` token and uses it to load different
 crop sprites depending on the weather:

@@ -4,7 +4,6 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Patches
@@ -39,7 +38,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <param name="singleValueTokens">The tokens that can only contain one value.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        public override bool UpdateContext(IContext context, InvariantDictionary<IToken> singleValueTokens)
+        public override bool UpdateContext(IContext context, IDictionary<TokenName, IToken> singleValueTokens)
         {
             bool localAssetChanged = this.LocalAsset.UpdateContext(context, singleValueTokens);
             this.IsValidInContext = this.ContentPack.FileExists(this.LocalAsset.Value);

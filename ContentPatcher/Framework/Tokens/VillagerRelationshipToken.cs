@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
-using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -14,7 +13,7 @@ namespace ContentPatcher.Framework.Tokens
         ** Properties
         *********/
         /// <summary>The relationships by NPC.</summary>
-        private readonly InvariantDictionary<string> Values = new InvariantDictionary<string>();
+        private readonly IDictionary<TokenName, string> Values = new Dictionary<TokenName, string>();
 
 
         /*********
@@ -33,22 +32,24 @@ namespace ContentPatcher.Framework.Tokens
             if (Context.IsWorldReady)
             {
                 foreach (KeyValuePair<string, Friendship> pair in Game1.player.friendshipData.Pairs)
-                    this.Values[pair.Key] = pair.Value.Status.ToString();
+                    this.Values[new TokenName(this.Name.Key, pair.Key)] = pair.Value.Status.ToString();
             }
         }
 
         /// <summary>Get the current subkeys (if supported).</summary>
-        public override IEnumerable<string> GetSubkeys()
+        public override IEnumerable<TokenName> GetSubkeys()
         {
             return this.Values.Keys;
         }
 
-        /// <summary>Get the current token values for a subkey, if <see cref="IToken.RequiresSubkeys"/> is true.</summary>
-        /// <param name="subkey">The subkey to check.</param>
-        /// <exception cref="InvalidOperationException">This token does not support subkeys (see <see cref="IToken.RequiresSubkeys"/>).</exception>
-        public override IEnumerable<string> GetValues(string subkey)
+        /// <summary>Get the current token values.</summary>
+        /// <param name="name">The token name to check, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or this token require a subkeys and <paramref name="name"/> does not specify one.</exception>
+        public override IEnumerable<string> GetValues(TokenName? name = null)
         {
-            if (this.Values.TryGetValue(subkey, out string value))
+            this.AssertTokenName(name);
+
+            if (this.Values.TryGetValue(name.Value, out string value))
                 yield return value;
         }
     }

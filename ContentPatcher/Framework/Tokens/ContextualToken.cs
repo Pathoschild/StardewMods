@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -56,11 +57,15 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <summary>Get the current token values.</summary>
-        public override IEnumerable<string> GetValues()
+        /// <param name="name">The token name to check, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.RequiresSubkeys"/>.</exception>
+        public override IEnumerable<string> GetValues(TokenName? name = null)
         {
+            this.AssertTokenName(name);
+
             if (this.Values != null)
                 return this.Values;
-            return new string[0];
+            return Enumerable.Empty<string>();
         }
     }
 }

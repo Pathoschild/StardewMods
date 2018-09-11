@@ -90,21 +90,21 @@ namespace ContentPatcher.Framework
                 ConfigSchemaFieldConfig field = rawSchema[rawKey];
 
                 // validate format
-                if (!TokenKey.TryParse(rawKey, out TokenKey key))
+                if (!TokenName.TryParse(rawKey, out TokenName name))
                 {
                     logWarning(rawKey, $"the name '{rawKey}' is not in a valid format.");
                     continue;
                 }
-                if (key.Subkey != null)
+                if (name.HasSubkey())
                 {
                     logWarning(rawKey, $"the name '{rawKey}' can't have a subkey (:).");
                     continue;
                 }
-                
+
                 // validate reserved keys
-                if (Enum.TryParse(key.Key, true, out ConditionType _))
+                if (name.TryGetConditionType(out ConditionType _))
                 {
-                    logWarning(rawKey, $"can't use {key.Key} as a config field, because it's a reserved condition key.");
+                    logWarning(rawKey, $"can't use {name.Key} as a config field, because it's a reserved condition key.");
                     continue;
                 }
 

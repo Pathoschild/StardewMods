@@ -42,7 +42,6 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ContentPatcher\Framework\MockContext.cs" />
     <Compile Include="ContentPatcher\TokenStringTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

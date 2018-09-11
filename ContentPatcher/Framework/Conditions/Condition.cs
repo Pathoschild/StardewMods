@@ -4,16 +4,16 @@ using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Conditions
 {
-    /// <summary>A condition that can be checked against the context.</summary>
+    /// <summary>A condition that can be checked against the token context.</summary>
     internal class Condition
     {
         /*********
         ** Accessors
         *********/
-        /// <summary>The condition key in the context.</summary>
-        public TokenKey Key { get; }
+        /// <summary>The token name in the context.</summary>
+        public TokenName Name { get; }
 
-        /// <summary>The condition values for which this condition is valid.</summary>
+        /// <summary>The token values for which this condition is valid.</summary>
         public InvariantHashSet Values { get; }
 
 
@@ -21,11 +21,11 @@ namespace ContentPatcher.Framework.Conditions
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="key">The condition key in the context.</param>
-        /// <param name="values">The condition values for which this condition is valid.</param>
-        public Condition(TokenKey key, InvariantHashSet values)
+        /// <param name="name">The token name in the context.</param>
+        /// <param name="values">The token values for which this condition is valid.</param>
+        public Condition(TokenName name, InvariantHashSet values)
         {
-            this.Key = key;
+            this.Name = name;
             this.Values = values;
         }
 
@@ -34,8 +34,8 @@ namespace ContentPatcher.Framework.Conditions
         public bool IsMatch(IContext context)
         {
             return context
-                .GetValues(this.Key)
-                .Any(p => this.Values.Contains(p));
+                .GetValues(this.Name, enforceContext: true)
+                .Any(value => this.Values.Contains(value));
         }
     }
 }
