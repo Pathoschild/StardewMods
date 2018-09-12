@@ -68,6 +68,14 @@ namespace ContentPatcher.Framework.Tokens
             return Enum.TryParse(this.Key, true, out type);
         }
 
+        /// <summary>Get the root token (without the <see cref="Subkey"/>).</summary>
+        public TokenName GetRoot()
+        {
+            return this.HasSubkey()
+                ? new TokenName(this.Key)
+                : this;
+        }
+
         /****
         ** IEquatable
         ****/

@@ -158,7 +158,7 @@ namespace ContentPatcher.Framework
                 // update patch
                 IContext tokenContext = this.TokenManager.TrackLocalTokens(patch.ContentPack.Pack);
                 bool changed = patch.UpdateContext(tokenContext, tokenContext.GetSingleValues(enforceContext: true).ToDictionary(p => p.Name));
-                bool shouldApply = patch.MatchesContext && patch.GetTokensUsed().All(p => tokenContext.Contains(p.Name, enforceContext: true));
+                bool shouldApply = patch.MatchesContext;
 
                 // track patches to reload
                 bool reload = (wasApplied && changed) || (!wasApplied && shouldApply);

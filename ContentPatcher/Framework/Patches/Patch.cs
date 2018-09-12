@@ -61,7 +61,9 @@ namespace ContentPatcher.Framework.Patches
             bool conditionsChanged;
             {
                 bool wasMatch = this.MatchesContext;
-                this.MatchesContext = this.Conditions.Count == 0 || this.Conditions.Values.All(p => p.IsMatch(context));
+                this.MatchesContext =
+                    (this.Conditions.Count == 0 || this.Conditions.Values.All(p => p.IsMatch(context)))
+                    && this.GetTokensUsed().All(p => context.Contains(p.Name, enforceContext: true));
                 conditionsChanged = wasMatch != this.MatchesContext;
             }
 

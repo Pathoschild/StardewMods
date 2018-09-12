@@ -91,11 +91,7 @@ namespace ContentPatcher.Framework.Conditions
             return TokenString.TokenPattern.Replace(raw, match =>
             {
                 TokenName name = TokenName.Parse(match.Groups[1].Value);
-                TokenName keyOnly = name.HasSubkey()
-                    ? new TokenName(name.Key)
-                    : name;
-
-                return tokens.TryGetValue(keyOnly, out IToken token)
+                return tokens.TryGetValue(name.GetRoot(), out IToken token)
                     ? token.GetValues(name).FirstOrDefault()
                     : match.Value;
             });

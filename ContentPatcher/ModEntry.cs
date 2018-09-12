@@ -551,7 +551,7 @@ namespace ContentPatcher
                 }
 
                 // validate types which require an ID
-                if (token.RequiresSubkeys && name.HasSubkey())
+                if (token.RequiresSubkeys && !name.HasSubkey())
                 {
                     error = $"{name.Key} conditions must specify a token subkey (see readme for usage)";
                     conditions = null;
@@ -624,11 +624,12 @@ namespace ContentPatcher
         {
             parsed = false;
 
-            // parse tokens
+            // analyse string
             if (!this.TryParseTokenString(rawValue, tokenContext, out error, out TokenString tokenString))
                 return false;
 
-            // validate tokens
+            // validate & extract tokens
+            string text = rawValue;
             if (tokenString.HasAnyTokens)
             {
                 // only one token allowed
@@ -640,7 +641,7 @@ namespace ContentPatcher
 
                 // check token options
                 IToken token = tokenString.Tokens.First();
-                if (token.AllowedValues != null && token.AllowedValues.Count == 2 && token.AllowedValues.Contains("true") && token.AllowedValues.Contains("false"))
+                if (token.AllowedValues == null || token.AllowedValues.Count != 2 || !token.AllowedValues.Contains("true") || !token.AllowedValues.Contains("false"))
                 {
                     error = $"'{tokenString.Raw}' can't be treated as a true/false value because that token isn't restricted to 'true' or 'false'.";
                     return false;
@@ -650,10 +651,12 @@ namespace ContentPatcher
                     error = $"'{tokenString.Raw}' can't be treated as a true/false value because that token can have multiple values.";
                     return false;
                 }
+
+                text = token.GetValues().First();
             }
 
-            // parse value
-            if (!bool.TryParse(tokenString.Raw, out parsed))
+            // parse text
+            if (!bool.TryParse(text, out parsed))
             {
                 error = $"can't parse {tokenString.Raw} as a true/false value.";
                 return false;

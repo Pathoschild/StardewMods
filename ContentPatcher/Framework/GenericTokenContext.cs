@@ -39,7 +39,7 @@ namespace ContentPatcher.Framework
         /// <returns>Returns the matching token, or <c>null</c> if none was found.</returns>
         public IToken GetToken(TokenName name, bool enforceContext)
         {
-            return this.Tokens.TryGetValue(name, out TToken token) && this.ShouldConsider(token, enforceContext)
+            return this.Tokens.TryGetValue(name.GetRoot(), out TToken token) && this.ShouldConsider(token, enforceContext)
                 ? token
                 : null;
         }

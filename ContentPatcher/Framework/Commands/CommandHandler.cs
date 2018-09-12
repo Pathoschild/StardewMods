@@ -315,6 +315,18 @@ namespace ContentPatcher.Framework.Commands
             if (!patch.IsLoaded)
                 return $"not loaded: {patch.ReasonDisabled}";
 
+            // uses tokens not available in the current context
+            {
+                IList<IToken> tokensOutOfContext = patch
+                    .TokensUsed
+                    .Union(patch.ParsedConditions.Keys.Select(p => tokenContext.GetToken(p, enforceContext: false)))
+                    .Where(token => !token.IsValidInContext)
+                    .ToArray();
+
+                if (tokensOutOfContext.Any())
+                    return $"uses tokens not available right now: {string.Join(", ", tokensOutOfContext.Select(p => p.Name).OrderBy(p => p))}";
+            }
+
             // conditions not matched
             if (!patch.MatchesContext && patch.ParsedConditions != null)
             {
@@ -327,17 +339,6 @@ namespace ContentPatcher.Framework.Commands
 
                 if (failedConditions.Any())
                     return $"conditions don't match: {string.Join(", ", failedConditions)}";
-            }
-
-            // uses tokens not available in the current context
-            {
-                IList<IToken> tokensOutOfContext =
-                    patch.TokensUsed
-                        .Where(token => !token.IsValidInContext)
-                        .ToArray();
-
-                if (tokensOutOfContext.Any())
-                    return $"uses tokens that aren't in context: {string.Join(", ", tokensOutOfContext.Select(p => p.Name).OrderBy(p => p))}";
             }
 
             return null;

@@ -33,6 +33,7 @@ namespace ContentPatcher.Framework.Tokens
             {
                 foreach (KeyValuePair<string, Friendship> pair in Game1.player.friendshipData.Pairs)
                     this.Values[new TokenName(this.Name.Key, pair.Key)] = pair.Value.Status.ToString();
+                this.IsValidInContext = true;
             }
         }
 
