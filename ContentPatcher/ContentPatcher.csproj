@@ -71,6 +71,7 @@
     <Compile Include="Framework\Tokens\BaseToken.cs" />
     <Compile Include="Framework\Tokens\ContextualToken.cs" />
     <Compile Include="Framework\Tokens\DynamicTokenValue.cs" />
+    <Compile Include="Framework\Tokens\HasFileToken.cs" />
     <Compile Include="Framework\Tokens\IContext.cs" />
     <Compile Include="Framework\Tokens\IToken.cs" />
     <Compile Include="Framework\Tokens\ManualToken.cs" />

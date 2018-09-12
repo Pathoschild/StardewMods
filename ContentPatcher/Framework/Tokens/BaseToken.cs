@@ -23,7 +23,7 @@ namespace ContentPatcher.Framework.Tokens
         public bool IsValidInContext { get; protected set; }
 
         /// <summary>The allowed values (or <c>null</c> if any value is allowed).</summary>
-        public virtual InvariantHashSet AllowedValues { get; set; } = null;
+        public InvariantHashSet AllowedValues { get; set; } = null;
 
 
         /*********

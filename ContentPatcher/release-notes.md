@@ -3,7 +3,9 @@
 # Release notes
 ## 1.5 (upcoming)
 * Added dynamic tokens defined by the modder.
-* Added `Year` condition.
+* Added conditions:
+  * `HasFile` (check if a file path exists in the content pack);
+  * `Year` (check the year number).
 * Added support for all conditions in `Action: Load` patches.
 * Added support for multiple values in the `Target` field (like `"Target": "Festivals, Maps/Festivals"`).
 * Added config tokens to `patch summary`.

@@ -14,13 +14,13 @@ namespace ContentPatcher.Framework
         /// <summary>The available global tokens.</summary>
         private readonly IContext GlobalContext;
 
-        /// <summary>The available player config tokens.</summary>
-        private readonly GenericTokenContext ConfigContext = new GenericTokenContext();
+        /// <summary>The standard self-contained tokens.</summary>
+        private readonly GenericTokenContext StandardContext = new GenericTokenContext();
 
-        /// <summary>The dynamic tokens.</summary>
+        /// <summary>The dynamic tokens whose value depends on <see cref="DynamicTokenValues"/>.</summary>
         private readonly GenericTokenContext<ManualToken> DynamicContext = new GenericTokenContext<ManualToken>();
 
-        /// <summary>The conditional values which affect dynamic tokens.</summary>
+        /// <summary>The conditional values used to set the values of <see cref="DynamicContext"/> tokens.</summary>
         private readonly IList<DynamicTokenValue> DynamicTokenValues = new List<DynamicTokenValue>();
 
         /// <summary>The underlying token contexts in priority order.</summary>
@@ -38,31 +38,31 @@ namespace ContentPatcher.Framework
         public ModTokenContext(TokenManager tokenManager)
         {
             this.GlobalContext = tokenManager;
-            this.Contexts = new[] { this.GlobalContext, this.ConfigContext, this.DynamicContext };
+            this.Contexts = new[] { this.GlobalContext, this.StandardContext, this.DynamicContext };
         }
 
-        /// <summary>Add a config token to the context.</summary>
+        /// <summary>Add a standard token to the context.</summary>
         /// <param name="token">The config token to add.</param>
-        public void AddConfig(IToken token)
+        public void Add(IToken token)
         {
             if (token.Name.HasSubkey())
                 throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because subkeys aren't supported.");
             if (this.GlobalContext.Contains(token.Name, enforceContext: false))
                 throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because there's a global token with that name.");
-            if (this.ConfigContext.Contains(token.Name, enforceContext: false))
+            if (this.StandardContext.Contains(token.Name, enforceContext: false))
                 throw new InvalidOperationException($"The '{token.Name}' token is already registered.");
 
-            this.ConfigContext.Tokens[token.Name] = token;
+            this.StandardContext.Tokens[token.Name] = token;
         }
 
         /// <summary>Add a dynamic token value to the context.</summary>
         /// <param name="tokenValue">The token to add.</param>
-        public void AddDynamic(DynamicTokenValue tokenValue)
+        public void Add(DynamicTokenValue tokenValue)
         {
             // validate
             if (this.GlobalContext.Contains(tokenValue.Name, enforceContext: false))
                 throw new InvalidOperationException($"Can't register a '{tokenValue.Name}' token because there's a global token with that name.");
-            if (this.ConfigContext.Contains(tokenValue.Name, enforceContext: false))
+            if (this.StandardContext.Contains(tokenValue.Name, enforceContext: false))
                 throw new InvalidOperationException($"Can't register a '{tokenValue.Name}' dynamic token because there's a config token with that name.");
 
             // get (or create) token
@@ -80,7 +80,7 @@ namespace ContentPatcher.Framework
         public void UpdateContext(IContext globalContext)
         {
             // update config tokens
-            foreach (IToken token in this.ConfigContext.Tokens.Values)
+            foreach (IToken token in this.StandardContext.Tokens.Values)
                 token.UpdateContext(this);
 
             // reset dynamic tokens

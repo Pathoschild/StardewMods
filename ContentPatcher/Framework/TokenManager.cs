@@ -47,7 +47,12 @@ namespace ContentPatcher.Framework
         public ModTokenContext TrackLocalTokens(IContentPack contentPack)
         {
             if (!this.LocalTokens.TryGetValue(contentPack, out ModTokenContext localTokens))
+            {
                 this.LocalTokens[contentPack] = localTokens = new ModTokenContext(this);
+                foreach(IToken token in this.GetLocalTokens(contentPack))
+                    localTokens.Add(token);
+            }
+
             return localTokens;
         }
 
@@ -148,6 +153,13 @@ namespace ContentPatcher.Framework
             };
             yield return new VillagerRelationshipToken();
             yield return new VillagerHeartsToken();
+        }
+
+        /// <summary>Get the local tokens with which to initialise a local context.</summary>
+        /// <param name="contentPack">The content pack for which to get tokens.</param>
+        private IEnumerable<IToken> GetLocalTokens(IContentPack contentPack)
+        {
+            yield return new HasFileToken(contentPack.DirectoryPath);
         }
 
         /// <summary>Get the current weather from the game state.</summary>

@@ -49,6 +49,12 @@ namespace ContentPatcher.Framework.Conditions
         Hearts,
 
         /// <summary>The current player's relationship status with the character (matching <see cref="StardewValley.FriendshipStatus"/>)</summary>
-        Relationship
+        Relationship,
+
+        /****
+        ** Magic conditions
+        ****/
+        /// <summary>Whether a file exists in the content pack's folder.</summary>
+        HasFile
     };
 }

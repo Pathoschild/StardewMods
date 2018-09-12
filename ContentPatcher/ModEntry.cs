@@ -211,7 +211,7 @@ namespace ContentPatcher
                         foreach (KeyValuePair<string, ConfigField> pair in config)
                         {
                             ConfigField field = pair.Value;
-                            tokenContext.AddConfig(new StaticToken(pair.Key, field.AllowMultiple, field.Value)
+                            tokenContext.Add(new StaticToken(pair.Key, field.AllowMultiple, field.Value)
                             {
                                 AllowedValues = field.AllowValues
                             });
@@ -263,7 +263,7 @@ namespace ContentPatcher
                             }
 
                             // add token
-                            tokenContext.AddDynamic(new DynamicTokenValue(name, values, conditions));
+                            tokenContext.Add(new DynamicTokenValue(name, values, conditions));
                         }
                     }
 

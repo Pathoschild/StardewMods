@@ -326,6 +326,22 @@ The festival or wedding happening today. Possible values:
 </tr>
 
 <tr valign="top">
+<td>HasFile</td>
+<td>
+
+Whether a file exists in the content pack folder. The file path must be specified as part of the key,
+and may contain tokens. Returns `true` or `false`. For example:
+
+```json
+"When": {
+  "HasFile:assets/{{season}}.png": "true"
+}
+```
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>HasFlag</td>
 <td>
 

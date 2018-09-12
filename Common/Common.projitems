@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\PrismaticTools\IPrismaticToolsApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterJunimos\BetterJunimosIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterJunimos\IBetterJunimosApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PathUtilities.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\BaseOverlay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\FarmExpansion\FarmExpansionIntegration.cs" />
