@@ -245,12 +245,7 @@ namespace ContentPatcher
                             }
 
                             // parse values
-                            InvariantHashSet values = this.ParseCommaDelimitedField(entry.Value);
-                            if (!values.Any())
-                            {
-                                LogSkip($"{nameof(DynamicTokenConfig.Value)} field can't be empty");
-                                continue;
-                            }
+                            InvariantHashSet values = entry.Value != null ? this.ParseCommaDelimitedField(entry.Value) : new InvariantHashSet();
 
                             // parse conditions
                             ConditionDictionary conditions;
