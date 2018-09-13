@@ -69,7 +69,7 @@
     <Compile Include="Framework\PatchManager.cs" />
     <Compile Include="Framework\TokenManager.cs" />
     <Compile Include="Framework\Tokens\BaseToken.cs" />
-    <Compile Include="Framework\Tokens\ContextualToken.cs" />
+    <Compile Include="Framework\Tokens\ConditionTypeToken.cs" />
     <Compile Include="Framework\Tokens\DynamicTokenValue.cs" />
     <Compile Include="Framework\Tokens\HasFileToken.cs" />
     <Compile Include="Framework\Tokens\IContext.cs" />

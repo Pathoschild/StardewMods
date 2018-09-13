@@ -60,19 +60,23 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="name">The token name.</param>
         /// <param name="canHaveMultipleValues">Whether the token may contain multiple values.</param>
         /// <param name="requiresSubkeys">Whether this token recognises subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with a <c>Abigail</c> subkey).</param>
-        protected BaseToken(TokenName name, bool canHaveMultipleValues, bool requiresSubkeys)
+        /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
+        protected BaseToken(TokenName name, bool canHaveMultipleValues, bool requiresSubkeys, IEnumerable<string> allowedValues = null)
         {
             this.Name = name;
             this.CanHaveMultipleValues = canHaveMultipleValues;
             this.RequiresSubkeys = requiresSubkeys;
+            if (allowedValues != null)
+                this.AllowedValues = new InvariantHashSet(allowedValues);
         }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The token name.</param>
         /// <param name="canHaveMultipleValues">Whether the token may contain multiple values.</param>
         /// <param name="requiresSubkeys">Whether this token recognises subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with a <c>Abigail</c> subkey).</param>
-        protected BaseToken(string name, bool canHaveMultipleValues, bool requiresSubkeys)
-            : this(TokenName.Parse(name), canHaveMultipleValues, requiresSubkeys) { }
+        /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
+        protected BaseToken(string name, bool canHaveMultipleValues, bool requiresSubkeys, IEnumerable<string> allowedValues = null)
+            : this(TokenName.Parse(name), canHaveMultipleValues, requiresSubkeys, allowedValues) { }
 
         /// <summary>Get the current token values.</summary>
         /// <param name="name">The token name to check, if applicable.</param>

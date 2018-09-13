@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Tokens
 {
     /// <summary>A token for a built-in condition whose value may change with the context.</summary>
-    internal class ContextualToken : BaseToken
+    internal class ConditionTypeToken : BaseToken
     {
         /*********
         ** Properties
@@ -27,24 +28,26 @@ namespace ContentPatcher.Framework.Tokens
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The token values.</param>
-        /// <param name="getValues">Get the current token values.</param>
+        /// <param name="values">Get the current token values.</param>
         /// <param name="needsLoadedSave">Whether a save must be loaded for the token to be available.</param>
-        public ContextualToken(string name, Func<IEnumerable<string>> getValues, bool needsLoadedSave)
-            : base(name, canHaveMultipleValues: true, requiresSubkeys: false)
+        /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
+        public ConditionTypeToken(ConditionType name, Func<IEnumerable<string>> values, bool needsLoadedSave, IEnumerable<string> allowedValues = null)
+            : base(name.ToString(), canHaveMultipleValues: true, requiresSubkeys: false, allowedValues: allowedValues)
         {
             this.NeedsLoadedSave = needsLoadedSave;
-            this.FetchValues = () => new InvariantHashSet(getValues());
+            this.FetchValues = () => new InvariantHashSet(values());
         }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The token values.</param>
-        /// <param name="getValue">Get the current token value.</param>
+        /// <param name="value">Get the current token value.</param>
         /// <param name="needsLoadedSave">Whether a save must be loaded for the token to be available.</param>
-        public ContextualToken(string name, Func<string> getValue, bool needsLoadedSave)
-            : base(name, canHaveMultipleValues: false, requiresSubkeys: false)
+        /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
+        public ConditionTypeToken(ConditionType name, Func<string> value, bool needsLoadedSave, IEnumerable<string> allowedValues = null)
+            : base(name.ToString(), canHaveMultipleValues: false, requiresSubkeys: false, allowedValues: allowedValues)
         {
             this.NeedsLoadedSave = needsLoadedSave;
-            this.FetchValues = () => new InvariantHashSet { getValue() };
+            this.FetchValues = () => new InvariantHashSet { value() };
         }
 
         /// <summary>Update the token data when the context changes.</summary>

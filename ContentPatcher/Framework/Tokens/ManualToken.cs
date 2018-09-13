@@ -29,20 +29,32 @@ namespace ContentPatcher.Framework.Tokens
         public InvariantHashSet AllowedValues { get; set; } = new InvariantHashSet();
 
         /// <summary>The current values.</summary>
-        public InvariantHashSet Values { get; set; } = new InvariantHashSet();
+        public InvariantHashSet Values { get; set; }
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="key">The token name.</param>
+        /// <param name="name">The token name.</param>
         /// <param name="isMutable">Whether the value can change after it's initialised.</param>
-        public ManualToken(TokenName key, bool isMutable)
+        /// <param name="values">The current values.</param>
+        /// <param name="canHaveMultipleValues">Whether the token may contain multiple values.</param>
+        public ManualToken(TokenName name, bool isMutable, InvariantHashSet values = null, bool canHaveMultipleValues = false)
         {
-            this.Name = key;
+            this.Name = name;
             this.IsMutable = isMutable;
+            this.Values = values ?? new InvariantHashSet();
+            this.CanHaveMultipleValues = canHaveMultipleValues;
         }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="name">The token name.</param>
+        /// <param name="isMutable">Whether the value can change after it's initialised.</param>
+        /// <param name="values">The current values.</param>
+        /// <param name="canHaveMultipleValues">Whether the token may contain multiple values.</param>
+        public ManualToken(string name, bool isMutable, InvariantHashSet values = null, bool canHaveMultipleValues = false)
+            : this(TokenName.Parse(name), isMutable, values, canHaveMultipleValues) { }
 
         /// <summary>Update the token data when the context changes.</summary>
         /// <param name="context">The condition context.</param>

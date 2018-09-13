@@ -122,43 +122,26 @@ namespace ContentPatcher.Framework
         private IEnumerable<IToken> GetGlobalTokens(IContentHelper contentHelper)
         {
             // installed mods (placeholder)
-            // mark token mutable until the mod list is final
-            yield return new ManualToken(new TokenName(ConditionType.HasMod.ToString()), isMutable: true)
-            {
-                CanHaveMultipleValues = true,
-                Values = new InvariantHashSet()
-            };
+            yield return new ManualToken(ConditionType.HasMod.ToString(),
+                isMutable: true, // mark mutable until the mod list is final
+                canHaveMultipleValues: true
+            );
 
             // language
-            yield return new ContextualToken(ConditionType.Language.ToString(), () => contentHelper.CurrentLocaleConstant.ToString(), needsLoadedSave: false)
-            {
-                AllowedValues = new InvariantHashSet(Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()))
-            };
+            yield return new ConditionTypeToken(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), needsLoadedSave: false, allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()));
 
             // in-game date
-            yield return new ContextualToken(ConditionType.Season.ToString(), () => SDate.Now().Season, needsLoadedSave: true)
-            {
-                AllowedValues = new InvariantHashSet(new[] { "Spring", "Summer", "Fall", "Winter" })
-            };
-            yield return new ContextualToken(ConditionType.Day.ToString(), () => SDate.Now().Day.ToString(CultureInfo.InvariantCulture), needsLoadedSave: true)
-            {
-                AllowedValues = new InvariantHashSet(Enumerable.Range(1, 28).Select(p => p.ToString()))
-            };
-            yield return new ContextualToken(ConditionType.DayOfWeek.ToString(), () => SDate.Now().DayOfWeek.ToString(), needsLoadedSave: true)
-            {
-                AllowedValues = new InvariantHashSet(Enum.GetNames(typeof(DayOfWeek)))
-            };
-            yield return new ContextualToken(ConditionType.Year.ToString(), () => SDate.Now().Year.ToString(CultureInfo.InvariantCulture), needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.Season, () => SDate.Now().Season, needsLoadedSave: true, allowedValues: new[] { "Spring", "Summer", "Fall", "Winter" });
+            yield return new ConditionTypeToken(ConditionType.Day, () => SDate.Now().Day.ToString(CultureInfo.InvariantCulture), needsLoadedSave: true, allowedValues: Enumerable.Range(1, 28).Select(p => p.ToString()));
+            yield return new ConditionTypeToken(ConditionType.DayOfWeek, () => SDate.Now().DayOfWeek.ToString(), needsLoadedSave: true, allowedValues: Enum.GetNames(typeof(DayOfWeek)));
+            yield return new ConditionTypeToken(ConditionType.Year, () => SDate.Now().Year.ToString(CultureInfo.InvariantCulture), needsLoadedSave: true);
 
             // other in-game conditions
-            yield return new ContextualToken(ConditionType.DayEvent.ToString(), () => this.GetDayEvent(contentHelper), needsLoadedSave: true);
-            yield return new ContextualToken(ConditionType.HasFlag.ToString(), () => this.GetMailFlags(), needsLoadedSave: true);
-            yield return new ContextualToken(ConditionType.HasSeenEvent.ToString(), () => this.GetEventsSeen(), needsLoadedSave: true);
-            yield return new ContextualToken(ConditionType.Spouse.ToString(), () => Game1.player?.spouse, needsLoadedSave: true);
-            yield return new ContextualToken(ConditionType.Weather.ToString(), () => this.GetCurrentWeather(), needsLoadedSave: true)
-            {
-                AllowedValues = new InvariantHashSet(Enum.GetNames(typeof(Weather)))
-            };
+            yield return new ConditionTypeToken(ConditionType.DayEvent, () => this.GetDayEvent(contentHelper), needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.HasFlag, () => this.GetMailFlags(), needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.HasSeenEvent, () => this.GetEventsSeen(), needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.Spouse, () => Game1.player?.spouse, needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.Weather, () => this.GetCurrentWeather(), needsLoadedSave: true, allowedValues: Enum.GetNames(typeof(Weather)));
             yield return new VillagerRelationshipToken();
             yield return new VillagerHeartsToken();
         }

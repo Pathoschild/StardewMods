@@ -211,7 +211,7 @@ namespace ContentPatcher
                         foreach (KeyValuePair<string, ConfigField> pair in config)
                         {
                             ConfigField field = pair.Value;
-                            tokenContext.Add(new ImmutableToken(pair.Key, field.Value, allowedValues: field.AllowValues));
+                            tokenContext.Add(new ImmutableToken(pair.Key, field.Value, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple));
                         }
 
                         // load dynamic tokens
@@ -717,7 +717,7 @@ namespace ContentPatcher
             {
                 if (token.CanHaveMultipleValues)
                 {
-                    error = $"{{{{{token}}}}} can't be used as a token because it can have multiple values.";
+                    error = $"{{{{{token.Name}}}}} can't be used as a token because it can have multiple values.";
                     parsed = null;
                     return false;
                 }

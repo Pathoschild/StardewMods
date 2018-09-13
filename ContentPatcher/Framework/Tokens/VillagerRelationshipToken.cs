@@ -29,11 +29,11 @@ namespace ContentPatcher.Framework.Tokens
         public override void UpdateContext(IContext context)
         {
             this.Values.Clear();
-            if (Context.IsWorldReady)
+            this.IsValidInContext = Context.IsWorldReady;
+            if (this.IsValidInContext)
             {
                 foreach (KeyValuePair<string, Friendship> pair in Game1.player.friendshipData.Pairs)
                     this.Values[new TokenName(this.Name.Key, pair.Key)] = pair.Value.Status.ToString();
-                this.IsValidInContext = true;
             }
         }
 
