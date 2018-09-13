@@ -467,8 +467,41 @@ namespace ContentPatcher
                             if (entry.Fields != null && entry.Fields.Any(p => p.Value == null || p.Value.Any(n => n.Value == null)))
                                 return TrackSkip($"the {nameof(PatchConfig.Fields)} can't contain empty values.");
 
+                            // parse entries
+                            IDictionary<string, TokenString> entries = new Dictionary<string, TokenString>();
+                            if (entry.Entries != null)
+                            {
+                                foreach (KeyValuePair<string, string> pair in entry.Entries)
+                                {
+                                    string key = pair.Key;
+                                    if (!this.TryParseTokenString(pair.Value, tokenContext, out string error, out TokenString value))
+                                        return TrackSkip($"the {nameof(PatchConfig.Entries)} > '{key}' entry is invalid: {error}.");
+                                    entries[key] = value;
+                                }
+                            }
+
+                            // parse fields
+                            IDictionary<string, IDictionary<int, TokenString>> fields = new Dictionary<string, IDictionary<int, TokenString>>();
+                            if (entry.Fields != null)
+                            {
+                                foreach (var recordPair in entry.Fields)
+                                {
+                                    string key = recordPair.Key;
+                                    fields[key] = new Dictionary<int, TokenString>();
+
+                                    foreach (var fieldPair in recordPair.Value)
+                                    {
+                                        int field = fieldPair.Key;
+                                        if (!this.TryParseTokenString(fieldPair.Value, tokenContext, out string error, out TokenString value))
+                                            return TrackSkip($"the {nameof(PatchConfig.Fields)} > '{key}' > {field} field is invalid: {error}.");
+
+                                        fields[key][field] = value;
+                                    }
+                                }
+                            }
+
                             // save
-                            patch = new EditDataPatch(entry.LogName, pack, assetName, conditions, entry.Entries, entry.Fields, this.Monitor, this.Helper.Content.NormaliseAssetName);
+                            patch = new EditDataPatch(entry.LogName, pack, assetName, conditions, entries, fields, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
                         break;
 

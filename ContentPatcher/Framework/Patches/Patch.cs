@@ -20,6 +20,9 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Accessors
         *********/
+        /// <summary>The last context used to update this patch.</summary>
+        protected IContext LastContext { get; private set; }
+
         /// <summary>A unique name for this patch shown in log messages.</summary>
         public string LogName { get; }
 
@@ -57,6 +60,8 @@ namespace ContentPatcher.Framework.Patches
         /// <returns>Returns whether the patch data changed.</returns>
         public virtual bool UpdateContext(IContext context, IDictionary<TokenName, IToken> singleValueTokens)
         {
+            this.LastContext = context;
+
             // update conditions
             bool conditionsChanged;
             {

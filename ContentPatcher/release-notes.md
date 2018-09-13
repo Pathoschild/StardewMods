@@ -6,8 +6,9 @@
 * Added conditions:
   * `HasFile` (check if a file path exists in the content pack);
   * `Year` (check the year number).
-* Added support for all conditions in `Action: Load` patches.
-* Added support for multiple values in the `Target` field (like `"Target": "Festivals, Maps/Festivals"`).
+* Added: you can now use any condition with `Action: Load` patches.
+* Added: you can now use tokens in `EditData` entries and fields.
+* Added: you can now list multiple values in the `Target` field.
 * Added config tokens to `patch summary`.
 * Added warning when a config field has `AllowValues` but a patch checks for an unlisted value.
 * Removed some early warnings for issues like patch conflicts. That validation required a number of
