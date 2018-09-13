@@ -630,6 +630,14 @@ namespace ContentPatcher
                     }
                 }
 
+                // perform custom validation
+                if (!token.TryCustomValidation(values, out string customError))
+                {
+                    error = $"invalid {name} values: {customError}";
+                    conditions = null;
+                    return false;
+                }
+
                 // create condition
                 conditions[name] = new Condition(name, values);
             }

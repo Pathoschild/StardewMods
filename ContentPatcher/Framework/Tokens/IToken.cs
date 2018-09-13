@@ -37,6 +37,12 @@ namespace ContentPatcher.Framework.Tokens
         /// <returns>Returns whether the token data changed.</returns>
         void UpdateContext(IContext context);
 
+        /// <summary>Perform custom validation on a set of input values.</summary>
+        /// <param name="values">The values to validate.</param>
+        /// <param name="error">The validation error, if any.</param>
+        /// <returns>Returns whether validation succeeded.</returns>
+        bool TryCustomValidation(InvariantHashSet values, out string error);
+
         /// <summary>Get the current subkeys (if supported).</summary>
         IEnumerable<TokenName> GetSubkeys();
 
