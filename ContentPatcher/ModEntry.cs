@@ -65,25 +65,25 @@ namespace ContentPatcher
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            // init
             this.Config = helper.ReadConfig<ModConfig>();
 
-            this.TokenManager = new TokenManager(helper.Content);
+            // fetch content packs
+            ManagedContentPack[] contentPacks = this.GetContentPacks().ToArray();
+            string[] installedMods =
+                (contentPacks.Select(p => p.Manifest.UniqueID))
+                .Concat(helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
+                .OrderBy(p => p, StringComparer.InvariantCultureIgnoreCase)
+                .ToArray();
+
+            // load content packs and context
+            this.TokenManager = new TokenManager(helper.Content, installedMods);
             this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.Config.VerboseLog);
-            string[] contentPackIDs = this.LoadContentPacks().ToArray();
+            this.LoadContentPacks(contentPacks);
+            this.TokenManager.UpdateContext();
 
             // register patcher
             helper.Content.AssetLoaders.Add(this.PatchManager);
             helper.Content.AssetEditors.Add(this.PatchManager);
-            this.TokenManager.SetInstalledMods(
-                installedMods: contentPackIDs
-                    .Concat(helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
-                    .OrderBy(p => p, StringComparer.InvariantCultureIgnoreCase)
-                    .ToArray()
-            );
-
-            // initialise context
-            this.TokenManager.UpdateContext();
 
             // set up events
             if (this.Config.EnableDebugFeatures)
@@ -160,51 +160,67 @@ namespace ContentPatcher
             this.PatchManager.UpdateContext(this.Helper.Content);
         }
 
+        /// <summary>Load the registered content packs.</summary>
+        /// <returns>Returns the loaded content pack IDs.</returns>
+        [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "The value is used immediately, so this isn't an issue.")]
+        private IEnumerable<ManagedContentPack> GetContentPacks()
+        {
+            this.VerboseLog("Preloading content packs...");
+
+            foreach (IContentPack contentPack in this.Helper.GetContentPacks())
+            {
+                try
+                {
+                    // validate content.json has required fields
+                    ContentConfig content = contentPack.ReadJsonFile<ContentConfig>(this.PatchFileName);
+                    if (content == null)
+                    {
+                        this.Monitor.Log($"Ignored content pack '{contentPack.Manifest.Name}' because it has no {this.PatchFileName} file.", LogLevel.Error);
+                        continue;
+                    }
+                    if (content.Format == null || content.Changes == null)
+                    {
+                        this.Monitor.Log($"Ignored content pack '{contentPack.Manifest.Name}' because it doesn't specify the required {nameof(ContentConfig.Format)} or {nameof(ContentConfig.Changes)} fields.", LogLevel.Error);
+                        continue;
+                    }
+
+                    // validate format
+                    if (!this.ValidateFormatVersion(contentPack, content, usesConfig: content.ConfigSchema?.Any() == true))
+                        continue;
+                }
+                catch (Exception ex)
+                {
+                    this.Monitor.Log($"Error preloading content pack '{contentPack.Manifest.Name}'. Technical details:\n{ex}", LogLevel.Error);
+                    continue;
+                }
+
+                yield return new ManagedContentPack(contentPack);
+            }
+        }
+
         /// <summary>Load the patches from all registered content packs.</summary>
         /// <returns>Returns the loaded content pack IDs.</returns>
         [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "The value is used immediately, so this isn't an issue.")]
-        private IEnumerable<string> LoadContentPacks()
+        private void LoadContentPacks(IEnumerable<ManagedContentPack> contentPacks)
         {
             ISemanticVersion latestFormatVersion = new SemanticVersion(this.SupportedFormatVersions.Last());
             InvariantDictionary<ISemanticVersion> minimumTokenVersions = new InvariantDictionary<ISemanticVersion>(
                 this.MinimumTokenVersions.ToDictionary(p => p.Key.ToString(), p => (ISemanticVersion)new SemanticVersion(p.Value))
             );
             ConfigFileHandler configFileHandler = new ConfigFileHandler(this.ConfigFileName, this.ParseCommaDelimitedField, (pack, label, reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {label}: {reason}"));
-            foreach (ManagedContentPack pack in this.Helper.GetContentPacks().Select(p => new ManagedContentPack(p)))
+            foreach (ManagedContentPack pack in contentPacks)
             {
                 this.VerboseLog($"Loading content pack '{pack.Manifest.Name}'...");
 
                 try
                 {
-                    // read changes file
                     ContentConfig content = pack.ReadJsonFile<ContentConfig>(this.PatchFileName);
-                    if (content == null)
-                    {
-                        this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it has no {this.PatchFileName} file.", LogLevel.Error);
-                        continue;
-                    }
-                    if (content.Format == null || content.Changes == null)
-                    {
-                        this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it doesn't specify the required {nameof(ContentConfig.Format)} or {nameof(ContentConfig.Changes)} fields.", LogLevel.Error);
-                        continue;
-                    }
-
-                    // validate version
-                    if (!this.SupportedFormatVersions.Contains(content.Format.ToString()))
-                    {
-                        this.Monitor.Log($"Ignored content pack '{pack.Manifest.Name}' because it uses unsupported format {content.Format} (supported version: {string.Join(", ", this.SupportedFormatVersions)}).", LogLevel.Error);
-                        continue;
-                    }
-
-                    // load tokens
                     ModTokenContext tokenContext = this.TokenManager.TrackLocalTokens(pack.Pack);
-                    bool usesConfig = false;
                     {
                         // load config.json
                         InvariantDictionary<ConfigField> config = configFileHandler.Read(pack, content.ConfigSchema);
                         configFileHandler.Save(pack, config, this.Helper);
-                        usesConfig = config.Any();
-                        if (usesConfig)
+                        if (config.Any())
                             this.VerboseLog($"   found config.json with {config.Count} fields...");
 
                         // load config tokens
@@ -259,10 +275,6 @@ namespace ContentPatcher
                         }
                     }
 
-                    // validate features
-                    if (!this.ValidateFormatVersion(pack.Pack, content, usesConfig))
-                        continue;
-
                     // load patches
                     content.Changes = this.SplitPatches(content.Changes).ToArray();
                     this.NamePatches(pack, content.Changes);
@@ -277,8 +289,6 @@ namespace ContentPatcher
                     this.Monitor.Log($"Error loading content pack '{pack.Manifest.Name}'. Technical details:\n{ex}", LogLevel.Error);
                     continue;
                 }
-
-                yield return pack.Manifest.UniqueID;
             }
         }
 
@@ -297,6 +307,10 @@ namespace ContentPatcher
                 this.Monitor.Log($"Loading content pack '{pack.Manifest.Name}' failed. It specifies format version {content.Format}, but {reason}.", LogLevel.Error);
                 return false;
             }
+
+            // invalid format version
+            if (!this.SupportedFormatVersions.Contains(content.Format.ToString()))
+                return LogFailed($"unsupported format {content.Format} (supported version: {string.Join(", ", this.SupportedFormatVersions)}).");
 
             // 1.3 adds config.json
             if (predates13 && usesConfig)

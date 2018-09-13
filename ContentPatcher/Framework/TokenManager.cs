@@ -29,17 +29,11 @@ namespace ContentPatcher.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
-        public TokenManager(IContentHelper contentHelper)
-        {
-            foreach (IToken token in this.GetGlobalTokens(contentHelper))
-                this.GlobalContext.Tokens[token.Name] = token;
-        }
-
-        /// <summary>Set the list of installed mods and content packs.</summary>
         /// <param name="installedMods">The installed mod IDs.</param>
-        public void SetInstalledMods(string[] installedMods)
+        public TokenManager(IContentHelper contentHelper, IEnumerable<string> installedMods)
         {
-            this.GlobalContext.Tokens[new TokenName(ConditionType.HasMod)] = new ImmutableToken(ConditionType.HasMod.ToString(), new InvariantHashSet(installedMods), canHaveMultipleValues: true);
+            foreach (IToken token in this.GetGlobalTokens(contentHelper, installedMods))
+                this.GlobalContext.Tokens[token.Name] = token;
         }
 
         /// <summary>Get the tokens which are defined for a specific content pack. This returns a reference to the list, which can be held for a live view of the tokens. If the content pack isn't currently tracked, this will add it.</summary>
@@ -119,13 +113,11 @@ namespace ContentPatcher.Framework
         *********/
         /// <summary>Get the global tokens with which to initialise the token manager.</summary>
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
-        private IEnumerable<IToken> GetGlobalTokens(IContentHelper contentHelper)
+        /// <param name="installedMods">The installed mod IDs.</param>
+        private IEnumerable<IToken> GetGlobalTokens(IContentHelper contentHelper, IEnumerable<string> installedMods)
         {
-            // installed mods (placeholder)
-            yield return new ManualToken(ConditionType.HasMod.ToString(),
-                isMutable: true, // mark mutable until the mod list is final
-                canHaveMultipleValues: true
-            );
+            // installed mods
+            yield return new ImmutableToken(ConditionType.HasMod.ToString(), new InvariantHashSet(installedMods), canHaveMultipleValues: true);
 
             // language
             yield return new ConditionTypeToken(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), needsLoadedSave: false, allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()));
