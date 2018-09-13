@@ -4,8 +4,15 @@
 ## 1.5 (upcoming)
 * Added dynamic tokens defined by the modder.
 * Added conditions:
-  * `HasFile` (check if a file path exists in the content pack);
-  * `Year` (check the year number).
+  * `FarmCave` (the current farm cave type);
+  * `FarmhouseLevel` (the upgrade level for the main farmhouse);
+  * `FarmName` (the farm name);
+  * `FarmType` (the farm type like `Standard` or `Wilderness`);
+  * `HasFile` (whether a given file path exists in the content pack);
+  * `PlayerGender` (the player's gender);
+  * `PlayerName` (the player's name);
+  * `PreferredPet` (whether the player is a cat or dog person);
+  * `Year` (the year number).
 * Added: you can now use any condition with `Action: Load` patches.
 * Added: you can now use tokens in `EditData` entries and fields.
 * Added: you can now list multiple values in the `Target` field.
@@ -23,13 +30,13 @@
 ## 1.4
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added new conditions:
-  * `DayEvent` (check if there's a festival or wedding today);
-  * `HasFlag` (check if the player has received a letter by ID or has a mail flag set);
-  * `HasMod` (check if another mod is installed, e.g. for automatic compatibility patches);
-  * `HasSeenEvent` (check if the player has seen a given event ID);
-  * `Hearts:<NPC>` (check the relationship type for a specific NPC);
-  * `Relationship:<NPC>` (check the relationship type for a specific NPC);
-  * `Spouse` (check the current player's spouse name).
+  * `DayEvent` (the festival name or wedding today);
+  * `HasFlag` (the letters or flags set for the current player);
+  * `HasMod` (the installed mods and content packs);
+  * `HasSeenEvent` (the events seen by the current player);
+  * `Hearts:<NPC>` (the relationship type for a given NPC);
+  * `Relationship:<NPC>` (the relationship type for a given NPC);
+  * `Spouse` (the player's spouse name);
 * Added support for deleting entries via `EditData`.
 * Added warnings for common mistakes in `patch summary` result.
 * Fixed case sensitivity issues in some cases.

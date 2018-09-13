@@ -247,7 +247,39 @@ These conditions can be used as tokens and conditions for any patch:
 <td>DayOfWeek</td>
 <td>
 
-The day of week. Possible values: `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, and `sunday`.
+The day of week. Possible values: `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday`, `Saturday`, and `Sunday`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>FarmCave</td>
+<td>
+
+The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `None`, `Bats`, `Mushrooms`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>FarmhouseLevel</td>
+<td>
+
+The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades). The normal values are 0 (initial farmhouse), 1 (adds kitchen), 2 (add children's bedroom), and 3 (adds cellar). Mods may add upgrade levels beyond that.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>FarmName</td>
+<td>The name of the current farm.</td>
+</tr>
+
+<tr valign="top">
+<td>FarmType</td>
+<td>
+
+The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). Possible values: `Standard`, `Riverland`, `Forest`, `Hilltop`, `Wilderness`, `Custom`.
 
 </td>
 </tr>
@@ -272,10 +304,33 @@ code | meaning
 </tr>
 
 <tr valign="top">
+<td>PlayerGender</td>
+<td>
+
+The player's gender. Possible values: `Female`, `Male`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>PlayerName</td>
+<td>The player's name.</td>
+</tr>
+
+<tr valign="top">
+<td>PreferredPet</td>
+<td>
+
+The player's preferred pet. Possible values: `Cat`, `Dog`.
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>Season</td>
 <td>
 
-The season name. Possible values: `spring`, `summer`, `fall`, and `winter`.
+The season name. Possible values: `Spring`, `Summer`, `Fall`, and `Winter`.
 
 </td>
 </tr>
@@ -284,7 +339,7 @@ The season name. Possible values: `spring`, `summer`, `fall`, and `winter`.
 <td>Weather</td>
 <td>
 
-The weather name. Possible values: `sun`, `rain`, `snow`, and `storm`.
+The weather name. Possible values: `Sun`, `Rain`, `Snow`, and `Storm`.
 
 </td>
 </tr>
@@ -432,7 +487,7 @@ Divorced | The player married and then divorced them.
 
 <tr valign="top">
 <td>Spouse</td>
-<td>The current player's spouse name (using their English name regardless of translations).</td>
+<td>The player's spouse name (using their English name regardless of translations).</td>
 </tr>
 </table>
 

@@ -56,6 +56,10 @@
     <Compile Include="Framework\ConfigModels\DynamicTokenConfig.cs" />
     <Compile Include="Framework\ConfigModels\ModConfig.cs" />
     <Compile Include="Framework\ConfigModels\PatchConfig.cs" />
+    <Compile Include="Framework\Constants\FarmType.cs" />
+    <Compile Include="Framework\Constants\Gender.cs" />
+    <Compile Include="Framework\Constants\FarmCaveType.cs" />
+    <Compile Include="Framework\Constants\PetType.cs" />
     <Compile Include="Framework\DebugOverlay.cs" />
     <Compile Include="Framework\GenericTokenContext.cs" />
     <Compile Include="Framework\ManagedContentPack.cs" />

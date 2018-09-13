@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -130,8 +131,15 @@ namespace ContentPatcher.Framework
 
             // other in-game conditions
             yield return new ConditionTypeToken(ConditionType.DayEvent, () => this.GetDayEvent(contentHelper), needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.FarmCave, () => this.GetEnum(Game1.player.caveChoice.Value, FarmCaveType.None).ToString(), needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.FarmhouseUpgrade, () => Game1.player.HouseUpgradeLevel.ToString(), needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.FarmName, () => Game1.player.farmName.Value, needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.FarmType, () => this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString(), needsLoadedSave: true);
             yield return new ConditionTypeToken(ConditionType.HasFlag, () => this.GetMailFlags(), needsLoadedSave: true);
             yield return new ConditionTypeToken(ConditionType.HasSeenEvent, () => this.GetEventsSeen(), needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.PlayerGender, () => (Game1.player.IsMale ? Gender.Male : Gender.Female).ToString(), needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.PreferredPet, () => (Game1.player.catPerson ? PetType.Cat : PetType.Dog).ToString(), needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.PlayerName, () => Game1.player.Name, needsLoadedSave: true);
             yield return new ConditionTypeToken(ConditionType.Spouse, () => Game1.player?.spouse, needsLoadedSave: true);
             yield return new ConditionTypeToken(ConditionType.Weather, () => this.GetCurrentWeather(), needsLoadedSave: true, allowedValues: Enum.GetNames(typeof(Weather)));
             yield return new VillagerRelationshipToken();
@@ -143,6 +151,17 @@ namespace ContentPatcher.Framework
         private IEnumerable<IToken> GetLocalTokens(IContentPack contentPack)
         {
             yield return new HasFileToken(contentPack.DirectoryPath);
+        }
+
+        /// <summary>Get a constant for a given value.</summary>
+        /// <typeparam name="TEnum">The constant enum type.</typeparam>
+        /// <param name="value">The value to convert.</param>
+        /// <param name="defaultValue">The value to use if the value is invalid.</param>
+        private TEnum GetEnum<TEnum>(int value, TEnum defaultValue)
+        {
+            return Enum.IsDefined(typeof(TEnum), value)
+                ? (TEnum)(object)value
+                : defaultValue;
         }
 
         /// <summary>Get the current weather from the game state.</summary>
