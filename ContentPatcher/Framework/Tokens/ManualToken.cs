@@ -19,6 +19,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Whether the token is applicable in the current context.</summary>
         public bool IsValidInContext { get; set; }
 
+        /// <summary>Whether the value can change after it's initialised.</summary>
+        public bool IsMutable { get; }
+
         /// <summary>Whether the token may contain multiple values.</summary>
         public bool CanHaveMultipleValues { get; set; }
 
@@ -34,9 +37,11 @@ namespace ContentPatcher.Framework.Tokens
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="key">The token name.</param>
-        public ManualToken(TokenName key)
+        /// <param name="isMutable">Whether the value can change after it's initialised.</param>
+        public ManualToken(TokenName key, bool isMutable)
         {
             this.Name = key;
+            this.IsMutable = isMutable;
         }
 
         /// <summary>Update the token data when the context changes.</summary>

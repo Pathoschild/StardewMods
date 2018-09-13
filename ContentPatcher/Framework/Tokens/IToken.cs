@@ -16,6 +16,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Whether the token is applicable in the current context.</summary>
         bool IsValidInContext { get; }
 
+        /// <summary>Whether the value can change after it's initialised.</summary>
+        bool IsMutable { get; }
+
         /// <summary>Whether the token may contain multiple values.</summary>
         bool CanHaveMultipleValues { get; }
 

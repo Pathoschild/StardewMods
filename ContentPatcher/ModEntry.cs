@@ -211,10 +211,7 @@ namespace ContentPatcher
                         foreach (KeyValuePair<string, ConfigField> pair in config)
                         {
                             ConfigField field = pair.Value;
-                            tokenContext.Add(new StaticToken(pair.Key, field.AllowMultiple, field.Value)
-                            {
-                                AllowedValues = field.AllowValues
-                            });
+                            tokenContext.Add(new ImmutableToken(pair.Key, field.Value, allowedValues: field.AllowValues));
                         }
 
                         // load dynamic tokens
@@ -431,7 +428,7 @@ namespace ContentPatcher
                 // parse 'enabled'
                 bool enabled = true;
                 {
-                    if (entry.Enabled != null && !this.TryParseBoolean(entry.Enabled, tokenContext, out string error, out enabled))
+                    if (entry.Enabled != null && !this.TryParseEnabled(entry.Enabled, tokenContext, out string error, out enabled))
                         return TrackSkip($"invalid {nameof(PatchConfig.Enabled)} value '{entry.Enabled}': {error}");
                 }
 
@@ -643,12 +640,12 @@ namespace ContentPatcher
             return new InvariantHashSet(values);
         }
 
-        /// <summary>Parse a boolean value from a string which can contain tokens, and validate that it's valid.</summary>
+        /// <summary>Parse a boolean <see cref="PatchConfig.Enabled"/> value from a string which can contain tokens, and validate that it's valid.</summary>
         /// <param name="rawValue">The raw string which may contain tokens.</param>
         /// <param name="tokenContext">The tokens available for this content pack.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseBoolean(string rawValue, IContext tokenContext, out string error, out bool parsed)
+        private bool TryParseEnabled(string rawValue, IContext tokenContext, out string error, out bool parsed)
         {
             parsed = false;
 
@@ -663,20 +660,25 @@ namespace ContentPatcher
                 // only one token allowed
                 if (!tokenString.IsSingleTokenOnly)
                 {
-                    error = $"'{tokenString.Raw}' can't be treated as a true/false value because it contains multiple tokens.";
+                    error = "can't be treated as a true/false value because it contains multiple tokens.";
                     return false;
                 }
 
                 // check token options
                 IToken token = tokenString.Tokens.First();
-                if (token.AllowedValues == null || token.AllowedValues.Count != 2 || !token.AllowedValues.Contains("true") || !token.AllowedValues.Contains("false"))
+                if (token.IsMutable || !token.IsValidInContext)
                 {
-                    error = $"'{tokenString.Raw}' can't be treated as a true/false value because that token isn't restricted to 'true' or 'false'.";
+                    error = $"can only use static tokens in this field, consider using a {nameof(PatchConfig.When)} condition instead.";
+                    return false;
+                }
+                if (token.AllowedValues == null || !token.AllowedValues.All(p => p == "true" || p == "false"))
+                {
+                    error = "that token isn't restricted to 'true' or 'false'.";
                     return false;
                 }
                 if (token.CanHaveMultipleValues)
                 {
-                    error = $"'{tokenString.Raw}' can't be treated as a true/false value because that token can have multiple values.";
+                    error = "can't be treated as a true/false value because that token can have multiple values.";
                     return false;
                 }
 

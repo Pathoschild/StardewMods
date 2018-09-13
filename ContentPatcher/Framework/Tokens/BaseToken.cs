@@ -13,6 +13,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>The token name.</summary>
         public TokenName Name { get; }
 
+        /// <summary>Whether the value can change after it's initialised.</summary>
+        public bool IsMutable { get; } = true;
+
         /// <summary>Whether the token may contain multiple values.</summary>
         public virtual bool CanHaveMultipleValues { get; }
 

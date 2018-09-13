@@ -67,7 +67,7 @@ namespace ContentPatcher.Framework
 
             // get (or create) token
             if (!this.DynamicContext.Tokens.TryGetValue(tokenValue.Name, out ManualToken token))
-                this.DynamicContext.Save(token = new ManualToken(tokenValue.Name));
+                this.DynamicContext.Save(token = new ManualToken(tokenValue.Name, isMutable: true));
 
             // add token value
             foreach (string value in tokenValue.Value)
@@ -81,7 +81,10 @@ namespace ContentPatcher.Framework
         {
             // update config tokens
             foreach (IToken token in this.StandardContext.Tokens.Values)
-                token.UpdateContext(this);
+            {
+                if (token.IsMutable)
+                    token.UpdateContext(this);
+            }
 
             // reset dynamic tokens
             foreach (ManualToken token in this.DynamicContext.Tokens.Values)

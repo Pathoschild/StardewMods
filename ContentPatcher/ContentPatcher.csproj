@@ -75,7 +75,7 @@
     <Compile Include="Framework\Tokens\IContext.cs" />
     <Compile Include="Framework\Tokens\IToken.cs" />
     <Compile Include="Framework\Tokens\ManualToken.cs" />
-    <Compile Include="Framework\Tokens\StaticToken.cs" />
+    <Compile Include="Framework\Tokens\ImmutableToken.cs" />
     <Compile Include="Framework\Tokens\TokenName.cs" />
     <Compile Include="Framework\Tokens\VillagerHeartsToken.cs" />
     <Compile Include="Framework\Tokens\VillagerRelationshipToken.cs" />

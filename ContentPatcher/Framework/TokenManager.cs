@@ -39,7 +39,7 @@ namespace ContentPatcher.Framework
         /// <param name="installedMods">The installed mod IDs.</param>
         public void SetInstalledMods(string[] installedMods)
         {
-            this.GlobalContext.Tokens[new TokenName(ConditionType.HasMod)] = new StaticToken(name: ConditionType.HasMod.ToString(), canHaveMultipleValues: true, values: new InvariantHashSet(installedMods));
+            this.GlobalContext.Tokens[new TokenName(ConditionType.HasMod)] = new ImmutableToken(ConditionType.HasMod.ToString(), new InvariantHashSet(installedMods), canHaveMultipleValues: true);
         }
 
         /// <summary>Get the tokens which are defined for a specific content pack. This returns a reference to the list, which can be held for a live view of the tokens. If the content pack isn't currently tracked, this will add it.</summary>
@@ -49,7 +49,7 @@ namespace ContentPatcher.Framework
             if (!this.LocalTokens.TryGetValue(contentPack, out ModTokenContext localTokens))
             {
                 this.LocalTokens[contentPack] = localTokens = new ModTokenContext(this);
-                foreach(IToken token in this.GetLocalTokens(contentPack))
+                foreach (IToken token in this.GetLocalTokens(contentPack))
                     localTokens.Add(token);
             }
 
@@ -60,7 +60,10 @@ namespace ContentPatcher.Framework
         public void UpdateContext()
         {
             foreach (IToken token in this.GlobalContext.Tokens.Values)
-                token.UpdateContext(this);
+            {
+                if (token.IsMutable)
+                    token.UpdateContext(this);
+            }
 
             foreach (ModTokenContext localContext in this.LocalTokens.Values)
                 localContext.UpdateContext(this);
@@ -119,7 +122,12 @@ namespace ContentPatcher.Framework
         private IEnumerable<IToken> GetGlobalTokens(IContentHelper contentHelper)
         {
             // installed mods (placeholder)
-            yield return new StaticToken(ConditionType.HasMod.ToString(), canHaveMultipleValues: true, values: new InvariantHashSet());
+            // mark token mutable until the mod list is final
+            yield return new ManualToken(new TokenName(ConditionType.HasMod.ToString()), isMutable: true)
+            {
+                CanHaveMultipleValues = true,
+                Values = new InvariantHashSet()
+            };
 
             // language
             yield return new ContextualToken(ConditionType.Language.ToString(), () => contentHelper.CurrentLocaleConstant.ToString(), needsLoadedSave: false)
