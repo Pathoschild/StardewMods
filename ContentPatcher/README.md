@@ -397,6 +397,23 @@ and may contain tokens. Returns `true` or `false`. For example:
 </tr>
 
 <tr valign="top">
+<td>HasProfession</td>
+<td>
+
+The [professions](https://stardewvalleywiki.com/Skills) learned by the player. Possible values:
+
+* Combat skill: `Acrobat`, `Brute`, `Defender`, `Desperado`, `Fighter`, `Scout`.
+* Farming skill: `Agriculturist`, `Artisan`, `Coopmaster`, `Rancher`, `Shepherd`, `Tiller`.
+* Fishing skill: `Angler`, `Fisher`, `Mariner`, `Pirate`, `Luremaster`, `Trapper`.
+* Foraging skill: `Botanist`, `Forester`, `Gatherer`, `Lumberjack`, `Tapper`, `Tracker`.
+* Mining skill: `Blacksmith`, `Excavator`, `Gemologist`, `Geologist`, `Miner`, `Prospector`.
+
+Custom professions added by a mod are represented by their integer profession ID.
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>HasFlag</td>
 <td>
 

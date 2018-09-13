@@ -60,6 +60,7 @@
     <Compile Include="Framework\Constants\Gender.cs" />
     <Compile Include="Framework\Constants\FarmCaveType.cs" />
     <Compile Include="Framework\Constants\PetType.cs" />
+    <Compile Include="Framework\Constants\Profession.cs" />
     <Compile Include="Framework\DebugOverlay.cs" />
     <Compile Include="Framework\GenericTokenContext.cs" />
     <Compile Include="Framework\ManagedContentPack.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Framework\Tokens\ManualToken.cs" />
     <Compile Include="Framework\Tokens\ImmutableToken.cs" />
     <Compile Include="Framework\Tokens\TokenName.cs" />
+    <Compile Include="Framework\Tokens\HasProfessionToken.cs" />
     <Compile Include="Framework\Tokens\VillagerHeartsToken.cs" />
     <Compile Include="Framework\Tokens\VillagerRelationshipToken.cs" />
     <Compile Include="ModEntry.cs" />

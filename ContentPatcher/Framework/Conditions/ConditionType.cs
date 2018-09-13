@@ -57,6 +57,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>An installed mod ID.</summary>
         HasMod,
 
+        /// <summary>A profession ID the player has.</summary>
+        HasProfession,
+
         /// <summary>An event ID the player saw.</summary>
         HasSeenEvent,
 

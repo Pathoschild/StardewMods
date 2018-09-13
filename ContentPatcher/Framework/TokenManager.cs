@@ -142,6 +142,7 @@ namespace ContentPatcher.Framework
             yield return new ConditionTypeToken(ConditionType.PlayerName, () => Game1.player.Name, needsLoadedSave: true);
             yield return new ConditionTypeToken(ConditionType.Spouse, () => Game1.player?.spouse, needsLoadedSave: true);
             yield return new ConditionTypeToken(ConditionType.Weather, () => this.GetCurrentWeather(), needsLoadedSave: true, allowedValues: Enum.GetNames(typeof(Weather)));
+            yield return new HasProfessionToken();
             yield return new VillagerRelationshipToken();
             yield return new VillagerHeartsToken();
         }

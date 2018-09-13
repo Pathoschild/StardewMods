@@ -9,6 +9,7 @@
   * `FarmName` (the farm name);
   * `FarmType` (the farm type like `Standard` or `Wilderness`);
   * `HasFile` (whether a given file path exists in the content pack);
+  * `HasProfession` (whether the player has a given profession);
   * `PlayerGender` (the player's gender);
   * `PlayerName` (the player's name);
   * `PreferredPet` (whether the player is a cat or dog person);
