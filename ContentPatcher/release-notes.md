@@ -3,7 +3,7 @@
 # Release notes
 ## 1.5 (upcoming)
 * Added dynamic tokens defined by the modder.
-* Added conditions:
+* Added new tokens:
   * `FarmCave` (the current farm cave type);
   * `FarmhouseLevel` (the upgrade level for the main farmhouse);
   * `FarmName` (the farm name);
@@ -24,6 +24,7 @@
   restrictions on how conditions and tokens could be used. Based on discussion with content pack
   modders, lifting those restrictions was more valuable than the early validation.
 * Removed image preloading, which is no longer needed with SMAPI 2.8+.
+* Fixed `patch summary` showing tokens that aren't valid in the current context.
 
 ## 1.4.1
 * Updated for Stardew Valley 1.3.29.
@@ -31,7 +32,7 @@
 
 ## 1.4
 * Updated for Stardew Valley 1.3 (including multiplayer support).
-* Added new conditions:
+* Added new tokens:
   * `DayEvent` (the festival name or wedding today);
   * `HasFlag` (the letters or flags set for the current player);
   * `HasMod` (the installed mods and content packs);

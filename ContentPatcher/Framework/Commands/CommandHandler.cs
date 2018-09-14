@@ -167,15 +167,24 @@ namespace ContentPatcher.Framework.Commands
             output.AppendLine("=====================");
             output.AppendLine("==  Global tokens  ==");
             output.AppendLine("=====================");
-            foreach (IToken token in this.TokenManager.GetTokens(enforceContext: false).OrderBy(this.GetDisplayOrder))
             {
-                if (token.RequiresSubkeys)
+                IToken[] tokens = this.TokenManager.GetTokens(enforceContext: false).OrderBy(this.GetDisplayOrder).ToArray();
+                IToken[] tokensOutOfContext = tokens.Where(p => !p.IsValidInContext).ToArray();
+                foreach (IToken token in tokens.Except(tokensOutOfContext))
                 {
-                    foreach (TokenName name in token.GetSubkeys().OrderBy(p => p))
-                        output.AppendLine($"   {name}: {string.Join(", ", token.GetValues(name))}");
+                    if (token.RequiresSubkeys)
+                    {
+                        foreach (TokenName name in token.GetSubkeys().OrderBy(p => p))
+                            output.AppendLine($"   {name}: {string.Join(", ", token.GetValues(name))}");
+                    }
+                    else
+                        output.AppendLine($"   {token.Name}: {string.Join(", ", token.GetValues(token.Name))}");
                 }
-                else
-                    output.AppendLine($"   {token.Name}: {string.Join(", ", token.GetValues(token.Name))}");
+                if (tokensOutOfContext.Any())
+                {
+                    output.AppendLine();
+                    output.AppendLine($"   Tokens not valid in this context: {string.Join(", ", tokensOutOfContext.Select(p => p.Name.ToString()))}.");
+                }
             }
             output.AppendLine();
 
