@@ -58,12 +58,11 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>Update the patch data when the context changes.</summary>
         /// <param name="context">The condition context.</param>
-        /// <param name="singleValueTokens">The tokens that can only contain one value.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        public override bool UpdateContext(IContext context, IDictionary<TokenName, IToken> singleValueTokens)
+        public override bool UpdateContext(IContext context)
         {
-            bool localAssetChanged = this.FromLocalAsset.UpdateContext(context, singleValueTokens);
-            return base.UpdateContext(context, singleValueTokens) || localAssetChanged;
+            bool localAssetChanged = this.FromLocalAsset.UpdateContext(context);
+            return base.UpdateContext(context) || localAssetChanged;
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>
@@ -122,7 +121,7 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <summary>Get the tokens used by this patch in its fields.</summary>
-        public override IEnumerable<IToken> GetTokensUsed()
+        public override IEnumerable<TokenName> GetTokensUsed()
         {
             return base.GetTokensUsed().Union(this.FromLocalAsset.Tokens);
         }

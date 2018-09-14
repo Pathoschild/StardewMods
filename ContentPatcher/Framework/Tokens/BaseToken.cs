@@ -8,6 +8,16 @@ namespace ContentPatcher.Framework.Tokens
     internal abstract class BaseToken : IToken
     {
         /*********
+        ** Properties
+        *********/
+        /// <summary>Whether the root token may contain multiple values.</summary>
+        protected bool CanHaveMultipleRootValues { get; set; }
+
+        /// <summary>Whether the token subkeys may contain multiple values.</summary>
+        protected bool CanHaveMultipleSubkeyValues { get; set; }
+
+
+        /*********
         ** Accessors
         *********/
         /// <summary>The token name.</summary>
@@ -16,17 +26,14 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Whether the value can change after it's initialised.</summary>
         public bool IsMutable { get; } = true;
 
-        /// <summary>Whether the token may contain multiple values.</summary>
-        public virtual bool CanHaveMultipleValues { get; }
+        /// <summary>Whether this token recognises subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with a <c>Abigail</c> subkey).</summary>
+        public bool CanHaveSubkeys { get; private set; }
 
-        /// <summary>Whether this token requires subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with an <c>Abigail</c> subkey).</summary>
-        public bool RequiresSubkeys { get; }
+        /// <summary>Whether this token only allows subkeys (see <see cref="IToken.CanHaveSubkeys"/>).</summary>
+        public bool RequiresSubkeys { get; private set; }
 
         /// <summary>Whether the token is applicable in the current context.</summary>
         public bool IsValidInContext { get; protected set; }
-
-        /// <summary>The allowed values (or <c>null</c> if any value is allowed).</summary>
-        public InvariantHashSet AllowedValues { get; set; } = null;
 
 
         /*********
@@ -36,6 +43,15 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="context">The condition context.</param>
         /// <returns>Returns whether the token data changed.</returns>
         public virtual void UpdateContext(IContext context) { }
+
+        /// <summary>Whether the token may return multiple values for the given name.</summary>
+        /// <param name="name">The token name.</param>
+        public bool CanHaveMultipleValues(TokenName name)
+        {
+            return name.HasSubkey()
+                ? this.CanHaveMultipleSubkeyValues
+                : this.CanHaveMultipleRootValues;
+        }
 
         /// <summary>Perform custom validation on a set of input values.</summary>
         /// <param name="values">The values to validate.</param>
@@ -53,10 +69,17 @@ namespace ContentPatcher.Framework.Tokens
             yield break;
         }
 
+        /// <summary>Get the allowed values for a token name (or <c>null</c> if any value is allowed).</summary>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
+        public virtual InvariantHashSet GetAllowedValues(TokenName name)
+        {
+            return null;
+        }
+
         /// <summary>Get the current token values.</summary>
-        /// <param name="name">The token name to check, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or this token require a subkeys and <paramref name="name"/> does not specify one.</exception>
-        public virtual IEnumerable<string> GetValues(TokenName? name = null)
+        /// <param name="name">The token name to check.</param>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
+        public virtual IEnumerable<string> GetValues(TokenName name)
         {
             this.AssertTokenName(name);
             yield break;
@@ -68,25 +91,28 @@ namespace ContentPatcher.Framework.Tokens
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The token name.</param>
-        /// <param name="canHaveMultipleValues">Whether the token may contain multiple values.</param>
-        /// <param name="requiresSubkeys">Whether this token recognises subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with a <c>Abigail</c> subkey).</param>
-        /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
-        protected BaseToken(TokenName name, bool canHaveMultipleValues, bool requiresSubkeys, IEnumerable<string> allowedValues = null)
+        /// <param name="canHaveMultipleRootValues">Whether the root token may contain multiple values.</param>
+        protected BaseToken(TokenName name, bool canHaveMultipleRootValues)
         {
             this.Name = name;
-            this.CanHaveMultipleValues = canHaveMultipleValues;
-            this.RequiresSubkeys = requiresSubkeys;
-            if (allowedValues != null)
-                this.AllowedValues = new InvariantHashSet(allowedValues);
+            this.CanHaveMultipleRootValues = canHaveMultipleRootValues;
         }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The token name.</param>
-        /// <param name="canHaveMultipleValues">Whether the token may contain multiple values.</param>
-        /// <param name="requiresSubkeys">Whether this token recognises subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with a <c>Abigail</c> subkey).</param>
-        /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
-        protected BaseToken(string name, bool canHaveMultipleValues, bool requiresSubkeys, IEnumerable<string> allowedValues = null)
-            : this(TokenName.Parse(name), canHaveMultipleValues, requiresSubkeys, allowedValues) { }
+        /// <param name="canHaveMultipleRootValues">Whether the root token may contain multiple values.</param>
+        protected BaseToken(string name, bool canHaveMultipleRootValues)
+            : this(TokenName.Parse(name), canHaveMultipleRootValues) { }
+
+        /// <summary>Enable subkeys for this token.</summary>
+        /// <param name="required">Whether a subkey is required when using this token.</param>
+        /// <param name="canHaveMultipleValues">Whether a token subkey may return multiple values.</param>
+        protected void EnableSubkeys(bool required, bool canHaveMultipleValues)
+        {
+            this.CanHaveSubkeys = true;
+            this.RequiresSubkeys = required;
+            this.CanHaveMultipleSubkeyValues = canHaveMultipleValues;
+        }
 
         /// <summary>Get the current token values.</summary>
         /// <param name="name">The token name to check, if applicable.</param>
@@ -106,8 +132,8 @@ namespace ContentPatcher.Framework.Tokens
                     throw new InvalidOperationException($"The specified token key ({name}) is not handled by this token ({this.Name}).");
 
                 // no subkey allowed
-                if (!this.RequiresSubkeys && name.Value.HasSubkey())
-                    throw new InvalidOperationException($"The '{this.Name}' token does not support subkeys (:).");
+                if (!this.CanHaveSubkeys && name.Value.HasSubkey())
+                    throw new InvalidOperationException($"The '{this.Name}' token does not allow subkeys (:).");
             }
         }
     }

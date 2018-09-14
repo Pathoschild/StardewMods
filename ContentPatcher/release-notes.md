@@ -14,6 +14,7 @@
   * `PlayerName` (the player's name);
   * `PreferredPet` (whether the player is a cat or dog person);
   * `Year` (the year number).
+* Added subkey form for all tokens, which can be used to enable AND logic and condition negation (see readme).
 * Added: you can now use any condition with `Action: Load` patches.
 * Added: you can now use tokens in `EditData` entries and fields.
 * Added: you can now list multiple values in the `Target` field.

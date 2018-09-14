@@ -589,12 +589,24 @@ namespace ContentPatcher
                     return false;
                 }
 
-                // validate types which require an ID
-                if (token.RequiresSubkeys && !name.HasSubkey())
+                // validate subkeys
+                if (!token.CanHaveSubkeys)
                 {
-                    error = $"{name.Key} conditions must specify a token subkey (see readme for usage)";
-                    conditions = null;
-                    return false;
+                    if (name.HasSubkey())
+                    {
+                        error = $"{name.Key} conditions don't allow subkeys (:)";
+                        conditions = null;
+                        return false;
+                    }
+                }
+                else if (token.RequiresSubkeys)
+                {
+                    if (!name.HasSubkey())
+                    {
+                        error = $"{name.Key} conditions must specify a token subkey (see readme for usage)";
+                        conditions = null;
+                        return false;
+                    }
                 }
 
                 // check compatibility
@@ -615,7 +627,7 @@ namespace ContentPatcher
                 }
 
                 // restrict to allowed values
-                InvariantHashSet rawValidValues = token.AllowedValues;
+                InvariantHashSet rawValidValues = token.GetAllowedValues(name);
                 if (rawValidValues?.Any() == true)
                 {
                     InvariantHashSet validValues = new InvariantHashSet(rawValidValues);
@@ -687,24 +699,26 @@ namespace ContentPatcher
                 }
 
                 // check token options
-                IToken token = tokenString.Tokens.First();
-                if (token.IsMutable || !token.IsValidInContext)
+                TokenName tokenName = tokenString.Tokens.First();
+                IToken token = tokenContext.GetToken(tokenName, enforceContext: false);
+                InvariantHashSet allowedValues = token?.GetAllowedValues(tokenName);
+                if (token == null || token.IsMutable || !token.IsValidInContext)
                 {
                     error = $"can only use static tokens in this field, consider using a {nameof(PatchConfig.When)} condition instead.";
                     return false;
                 }
-                if (token.AllowedValues == null || !token.AllowedValues.All(p => p == "true" || p == "false"))
+                if (allowedValues == null || !allowedValues.All(p => p == true.ToString() || p == false.ToString()))
                 {
                     error = "that token isn't restricted to 'true' or 'false'.";
                     return false;
                 }
-                if (token.CanHaveMultipleValues)
+                if (token.CanHaveMultipleValues(tokenName))
                 {
                     error = "can't be treated as a true/false value because that token can have multiple values.";
                     return false;
                 }
 
-                text = token.GetValues().First();
+                text = token.GetValues(tokenName).First();
             }
 
             // parse text
@@ -735,11 +749,18 @@ namespace ContentPatcher
             }
 
             // validate tokens
-            foreach (IToken token in parsed.Tokens)
+            foreach (TokenName tokenName in parsed.Tokens)
             {
-                if (token.CanHaveMultipleValues)
+                IToken token = tokenContext.GetToken(tokenName, enforceContext: false);
+                if (token == null)
                 {
-                    error = $"{{{{{token.Name}}}}} can't be used as a token because it can have multiple values.";
+                    error = $"{{{{{tokenName}}}}} can't be used as a token because that token could not be found."; // should never happen
+                    parsed = null;
+                    return false;
+                }
+                if (token.CanHaveMultipleValues(tokenName))
+                {
+                    error = $"{{{{{tokenName}}}}} can't be used as a token because it can have multiple values.";
                     parsed = null;
                     return false;
                 }

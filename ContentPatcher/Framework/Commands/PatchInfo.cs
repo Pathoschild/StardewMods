@@ -42,7 +42,7 @@ namespace ContentPatcher.Framework.Commands
         public string ReasonDisabled { get; }
 
         /// <summary>The tokens used by this patch in its fields.</summary>
-        public IToken[] TokensUsed { get; }
+        public TokenName[] TokensUsed { get; }
 
 
         /*********
@@ -62,7 +62,7 @@ namespace ContentPatcher.Framework.Commands
             this.MatchesContext = false;
             this.IsApplied = false;
             this.ReasonDisabled = patch.ReasonDisabled;
-            this.TokensUsed = new IToken[0];
+            this.TokensUsed = new TokenName[0];
         }
 
         /// <summary>Construct an instance.</summary>

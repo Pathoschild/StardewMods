@@ -157,7 +157,7 @@ namespace ContentPatcher.Framework
 
                 // update patch
                 IContext tokenContext = this.TokenManager.TrackLocalTokens(patch.ContentPack.Pack);
-                bool changed = patch.UpdateContext(tokenContext, tokenContext.GetSingleValues(enforceContext: true).ToDictionary(p => p.Name));
+                bool changed = patch.UpdateContext(tokenContext);
                 bool shouldApply = patch.MatchesContext;
 
                 // track patches to reload
@@ -218,7 +218,7 @@ namespace ContentPatcher.Framework
         {
             // set initial context
             IContext tokenContext = this.TokenManager.TrackLocalTokens(patch.ContentPack.Pack);
-            patch.UpdateContext(tokenContext, tokenContext.GetSingleValues(enforceContext: true).ToDictionary(p => p.Name));
+            patch.UpdateContext(tokenContext);
 
             // add to patch list
             this.VerboseLog($"      added {patch.Type} {patch.AssetName}.");

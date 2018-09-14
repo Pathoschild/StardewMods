@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
 {
@@ -27,10 +26,10 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Construct an instance.</summary>
         /// <param name="modFolder">The absolute path to the mod folder.</param>
         public HasFileToken(string modFolder)
-            : base(ConditionType.HasFile.ToString(), canHaveMultipleValues: false, requiresSubkeys: true)
+            : base(ConditionType.HasFile.ToString(), canHaveMultipleRootValues: false)
         {
             this.ModFolder = modFolder;
-            this.AllowedValues = new InvariantHashSet { true.ToString(), false.ToString() };
+            this.EnableSubkeys(required: true, canHaveMultipleValues: false);
         }
 
         /// <summary>Update the token data when the context changes.</summary>
@@ -43,13 +42,13 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <summary>Get the current token values.</summary>
-        /// <param name="name">The token name to check, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or this token require a subkeys and <paramref name="name"/> does not specify one.</exception>
-        public override IEnumerable<string> GetValues(TokenName? name = null)
+        /// <param name="name">The token name to check.</param>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
+        public override IEnumerable<string> GetValues(TokenName name)
         {
             this.AssertTokenName(name);
 
-            yield return this.GetPathExists(name?.Subkey).ToString();
+            yield return this.GetPathExists(name.Subkey).ToString();
         }
 
 
@@ -68,7 +67,7 @@ namespace ContentPatcher.Framework.Tokens
             TokenString tokenStr = new TokenString(path, this.TokenContext);
             if (tokenStr.InvalidTokens.Any())
                 return false;
-            tokenStr.UpdateContext(this.TokenContext, this.TokenContext.GetSingleValues(enforceContext: true).ToDictionary(p => p.Name));
+            tokenStr.UpdateContext(this.TokenContext);
             path = tokenStr.Value;
 
             // get normalised path

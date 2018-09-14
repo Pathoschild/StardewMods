@@ -192,46 +192,96 @@ A **token** is a name which represents a predefined value. For example, `season`
 contain `spring`, `summer`, `fall`, or `winter` (the value). You can use [player config](#player-config),
 [global token values](#global-tokens), and [dynamic token values](#dynamic-tokens) as tokens.
 
-There are two ways to use tokens:
+There are two ways to use tokens.
 
-* You can use tokens in the `FromFile`, `Target`, and `Enabled` fields (for tokens with only one
-  value). Just put the name of the token in two curly brackets, and Content Patcher will
-  automatically fill in the value. Tokens are not case-sensitive. For example, this gives the
-  farmhouse a different appearance in each season:
+<dl>
+<dt>Conditions</dt>
+<dd>
 
-  ```js
-  {
-      "Action": "EditImage",
-      "Target": "Building/houses",
-      "FromFile": "assets/{{season}}_house.png" // assets/spring_house.png, assets/summer_house.png, etc
-  }
-  ```
+You can make a patch conditional by adding a `When` field, which can list any number of conditions.
+Each condition has a token name (like `Season`) and the values to match (like `spring, summer`).
+Condition names and values are not case-sensitive.
 
-  Your patch will only be applied when the token is available. For instance, the above example will
-  be ignored if the player hasn't loaded a save yet (so there's no current season).
+For example, this changes the house texture only in Spring or Summer, if the player hasn't upgraded
+their house:
 
-* You can make a patch conditional by adding a `When` field. The patch will be applied when all
-  conditions match, and removed when they no longer match. You don't need to specify all conditions.
+```js
+{
+    "Action": "EditImage",
+    "Target": "Building/houses",
+    "FromFile": "assets/green_house.png",
+    "When": {
+        "Season": "spring, summer",
+        "FarmhouseLevel": "0"
+    }
+}
+```
 
-  Each condition has a token name (like `Season`) and the values to match (like `spring, summer`).
-  Condition names and values are not case-sensitive. For example, this changes the house texture only
-  in Spring or Summer:
+Each condition is true if _any_ of its values match, and the patch is applied if _all_ of its
+conditions match.
 
-  ```js
-  {
-      "Action": "EditImage",
-      "Target": "Building/houses",
-      "FromFile": "assets/green_house.png",
-      "When": {
-          "Season": "spring, summer"
-      }
-  }
-  ```
+Most tokens have an optional `{{tokenName:value}}` form which returns `true` or `false`. This can be
+used to perform AND logic:
+
+```js
+// player has blacksmith OR gemologist
+"When": {
+   "HasProfession": "Blacksmith, Gemologist"
+}
+
+// player has blacksmith AND gemologist
+"When": {
+   "HasProfession:Blacksmith": "true",
+   "HasProfession:Gemologist": "true"
+}
+```
+
+This can also be used for negative conditions:
+
+```js
+// only year one
+"When": {
+   "Year": "1"
+}
+
+// NOT year 1
+"When": {
+   "Year:1": "false"
+}
+```
+</dd>
+
+<dt>Token placeholders</dt>
+<dd>
+
+You can use tokens in text by putting two curly brackets around the token name, which will be
+replaced with the actual value automatically. Token placeholders are not case-sensitive. Patches
+will be disabled automatically if a token they use isn't currently available.
+
+For example, this gives the farmhouse a different appearance in each season:
+
+```js
+{
+    "Action": "EditImage",
+    "Target": "Building/houses",
+    "FromFile": "assets/{{season}}_house.png" // assets/spring_house.png, assets/summer_house.png, etc
+}
+```
+
+You can do this in the `FromFile`, `Target`, `Enabled`, `Entries`, and `Fields` fields.
+
+Only tokens which return a single value can be used as tokens. For example, `{{season}}` is allowed
+but `{{hasProfession}}` is not. Most tokens have an optional `{{tokenName:value}}` form which
+returns `true` or `false` (like `{{hasProfession:Gemologist}}`); that form can be used in tokens if
+needed (though it may be of limited use).
+
+</dd>
+</dl>
 
 ### Global tokens
 Global token values are defined by Content Patcher, so you can use them without doing anything else.
 
-These conditions can be used as tokens and conditions for any patch:
+These token values can be used as conditions and token placeholders for any patch:
 
 <table>
 <tr>
@@ -354,7 +404,8 @@ The year number (like `1` or `2`).
 </tr>
 </table>
 
-These conditions **cannot** be used as tokens (but can be used as conditions):
+These token values can be used as conditions, and (in their `tokenName:value` form only) as token
+placeholders:
 
 <table>
 <tr>

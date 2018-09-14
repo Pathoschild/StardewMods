@@ -18,7 +18,7 @@ namespace ContentPatcher.Framework
         private readonly GenericTokenContext StandardContext = new GenericTokenContext();
 
         /// <summary>The dynamic tokens whose value depends on <see cref="DynamicTokenValues"/>.</summary>
-        private readonly GenericTokenContext<ManualToken> DynamicContext = new GenericTokenContext<ManualToken>();
+        private readonly GenericTokenContext<DynamicToken> DynamicContext = new GenericTokenContext<DynamicToken>();
 
         /// <summary>The conditional values used to set the values of <see cref="DynamicContext"/> tokens.</summary>
         private readonly IList<DynamicTokenValue> DynamicTokenValues = new List<DynamicTokenValue>();
@@ -66,13 +66,11 @@ namespace ContentPatcher.Framework
                 throw new InvalidOperationException($"Can't register a '{tokenValue.Name}' dynamic token because there's a config token with that name.");
 
             // get (or create) token
-            if (!this.DynamicContext.Tokens.TryGetValue(tokenValue.Name, out ManualToken token))
-                this.DynamicContext.Save(token = new ManualToken(tokenValue.Name, isMutable: true));
+            if (!this.DynamicContext.Tokens.TryGetValue(tokenValue.Name, out DynamicToken token))
+                this.DynamicContext.Save(token = new DynamicToken(tokenValue.Name));
 
             // add token value
-            foreach (string value in tokenValue.Value)
-                token.AllowedValues.Add(value);
-            token.CanHaveMultipleValues = token.CanHaveMultipleValues || tokenValue.Value.Count > 1;
+            token.AddAllowedValues(tokenValue.Value);
             this.DynamicTokenValues.Add(tokenValue);
         }
 
@@ -87,18 +85,15 @@ namespace ContentPatcher.Framework
             }
 
             // reset dynamic tokens
-            foreach (ManualToken token in this.DynamicContext.Tokens.Values)
-            {
-                token.IsValidInContext = false;
-                token.Values = null;
-            }
+            foreach (DynamicToken token in this.DynamicContext.Tokens.Values)
+                token.SetValidInContext(false);
             foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
             {
                 if (tokenValue.Conditions.Values.All(p => p.IsMatch(this)))
                 {
-                    ManualToken token = this.DynamicContext.Tokens[tokenValue.Name];
-                    token.Values = tokenValue.Value;
-                    token.IsValidInContext = true;
+                    DynamicToken token = this.DynamicContext.Tokens[tokenValue.Name];
+                    token.SetValue(tokenValue.Value);
+                    token.SetValidInContext(true);
                 }
             }
         }
@@ -161,17 +156,6 @@ namespace ContentPatcher.Framework
         {
             IToken token = this.GetToken(name, enforceContext);
             return token?.GetValues(name) ?? Enumerable.Empty<string>();
-        }
-
-        /// <summary>Get the tokens that can only contain one value.</summary>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
-        public IEnumerable<IToken> GetSingleValues(bool enforceContext)
-        {
-            foreach (IContext context in this.Contexts)
-            {
-                foreach (IToken token in context.GetSingleValues(enforceContext))
-                    yield return token;
-            }
         }
     }
 }

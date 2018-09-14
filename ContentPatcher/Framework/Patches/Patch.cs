@@ -56,9 +56,8 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Update the patch data when the context changes.</summary>
         /// <param name="context">Provides access to contextual tokens.</param>
-        /// <param name="singleValueTokens">The tokens that can only contain one value.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        public virtual bool UpdateContext(IContext context, IDictionary<TokenName, IToken> singleValueTokens)
+        public virtual bool UpdateContext(IContext context)
         {
             this.LastContext = context;
 
@@ -68,12 +67,12 @@ namespace ContentPatcher.Framework.Patches
                 bool wasMatch = this.MatchesContext;
                 this.MatchesContext =
                     (this.Conditions.Count == 0 || this.Conditions.Values.All(p => p.IsMatch(context)))
-                    && this.GetTokensUsed().All(p => context.Contains(p.Name, enforceContext: true));
+                    && this.GetTokensUsed().All(p => context.Contains(p, enforceContext: true));
                 conditionsChanged = wasMatch != this.MatchesContext;
             }
 
             // update asset name
-            bool targetChanged = this.TokenableAssetName.UpdateContext(context, singleValueTokens);
+            bool targetChanged = this.TokenableAssetName.UpdateContext(context);
             this.AssetName = this.NormaliseAssetName(this.TokenableAssetName.Value);
 
             return conditionsChanged || targetChanged;
@@ -98,7 +97,7 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <summary>Get the tokens used by this patch in its fields.</summary>
-        public virtual IEnumerable<IToken> GetTokensUsed()
+        public virtual IEnumerable<TokenName> GetTokensUsed()
         {
             return this.TokenableAssetName.Tokens;
         }

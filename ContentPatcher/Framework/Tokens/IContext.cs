@@ -27,9 +27,5 @@ namespace ContentPatcher.Framework.Tokens
         /// <returns>Return the values of the matching token, or an empty list if the token doesn't exist.</returns>
         /// <exception cref="ArgumentNullException">The specified key is null.</exception>
         IEnumerable<string> GetValues(TokenName name, bool enforceContext);
-
-        /// <summary>Get the tokens that can only contain one value.</summary>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
-        IEnumerable<IToken> GetSingleValues(bool enforceContext);
     }
 }

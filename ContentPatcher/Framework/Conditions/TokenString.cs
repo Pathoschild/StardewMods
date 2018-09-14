@@ -23,7 +23,7 @@ namespace ContentPatcher.Framework.Conditions
         public string Raw { get; }
 
         /// <summary>The tokens used in the string.</summary>
-        public HashSet<IToken> Tokens { get; } = new HashSet<IToken>();
+        public HashSet<TokenName> Tokens { get; } = new HashSet<TokenName>();
 
         /// <summary>The unrecognised tokens in the string.</summary>
         public InvariantHashSet InvalidTokens { get; } = new InvariantHashSet();
@@ -55,9 +55,8 @@ namespace ContentPatcher.Framework.Conditions
                 string rawToken = match.Groups[1].Value.Trim();
                 if (TokenName.TryParse(rawToken, out TokenName name))
                 {
-                    IToken token = tokenContext.GetToken(name, enforceContext: false);
-                    if (token != null)
-                        this.Tokens.Add(token);
+                    if (tokenContext.Contains(name, enforceContext: false))
+                        this.Tokens.Add(name);
                     else
                         this.InvalidTokens.Add(rawToken);
                 }
@@ -70,12 +69,11 @@ namespace ContentPatcher.Framework.Conditions
 
         /// <summary>Update the <see cref="Value"/> with the given tokens.</summary>
         /// <param name="context">Provides access to contextual tokens.</param>
-        /// <param name="singleValueTokens">The tokens that can only contain one value.</param>
         /// <returns>Returns whether the value changed.</returns>
-        public bool UpdateContext(IContext context, IDictionary<TokenName, IToken> singleValueTokens)
+        public bool UpdateContext(IContext context)
         {
             string prevValue = this.Value;
-            this.Value = this.Apply(this.Raw, singleValueTokens);
+            this.Value = this.Apply(this.Raw, context);
             return this.Value != prevValue;
         }
 
@@ -85,13 +83,14 @@ namespace ContentPatcher.Framework.Conditions
         *********/
         /// <summary>Get a new string with tokens substituted.</summary>
         /// <param name="raw">The raw string before token substitution.</param>
-        /// <param name="tokens">The token values to apply.</param>
-        private string Apply(string raw, IDictionary<TokenName, IToken> tokens)
+        /// <param name="context">Provides access to contextual tokens.</param>
+        private string Apply(string raw, IContext context)
         {
             return TokenString.TokenPattern.Replace(raw, match =>
             {
                 TokenName name = TokenName.Parse(match.Groups[1].Value);
-                return tokens.TryGetValue(name.GetRoot(), out IToken token)
+                IToken token = context.GetToken(name, enforceContext: true);
+                return token != null
                     ? token.GetValues(name).FirstOrDefault()
                     : match.Value;
             });

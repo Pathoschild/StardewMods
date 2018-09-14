@@ -44,9 +44,8 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Update the patch data when the context changes.</summary>
         /// <param name="context">Provides access to contextual tokens.</param>
-        /// <param name="singleValueTokens">The tokens that can only contain one value.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        bool UpdateContext(IContext context, IDictionary<TokenName, IToken> singleValueTokens);
+        bool UpdateContext(IContext context);
 
         /// <summary>Load the initial version of the asset.</summary>
         /// <typeparam name="T">The asset type.</typeparam>
@@ -61,6 +60,6 @@ namespace ContentPatcher.Framework.Patches
         void Edit<T>(IAssetData asset);
 
         /// <summary>Get the tokens used by this patch in its fields.</summary>
-        IEnumerable<IToken> GetTokensUsed();
+        IEnumerable<TokenName> GetTokensUsed();
     }
 }

@@ -52,15 +52,14 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>Update the patch data when the context changes.</summary>
         /// <param name="context">Provides access to contextual tokens.</param>
-        /// <param name="singleValueTokens">The tokens that can only contain one value.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        public override bool UpdateContext(IContext context, IDictionary<TokenName, IToken> singleValueTokens)
+        public override bool UpdateContext(IContext context)
         {
-            bool changed = base.UpdateContext(context, singleValueTokens);
+            bool changed = base.UpdateContext(context);
 
             foreach (TokenString str in this.MutableTokenStrings)
             {
-                if (str.UpdateContext(context, singleValueTokens))
+                if (str.UpdateContext(context))
                     changed = true;
             }
 
@@ -68,7 +67,7 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <summary>Get the tokens used by this patch in its fields.</summary>
-        public override IEnumerable<IToken> GetTokensUsed()
+        public override IEnumerable<TokenName> GetTokensUsed()
         {
             if (this.MutableTokenStrings.Length == 0)
                 return base.GetTokensUsed();

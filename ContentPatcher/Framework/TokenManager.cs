@@ -101,13 +101,6 @@ namespace ContentPatcher.Framework
             return this.GlobalContext.GetValues(name, enforceContext);
         }
 
-        /// <summary>Get the tokens that can only contain one value.</summary>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
-        public IEnumerable<IToken> GetSingleValues(bool enforceContext)
-        {
-            return this.GlobalContext.GetSingleValues(enforceContext);
-        }
-
 
         /*********
         ** Private methods

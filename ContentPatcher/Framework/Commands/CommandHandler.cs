@@ -175,7 +175,7 @@ namespace ContentPatcher.Framework.Commands
                         output.AppendLine($"   {name}: {string.Join(", ", token.GetValues(name))}");
                 }
                 else
-                    output.AppendLine($"   {token.Name}: {string.Join(", ", token.GetValues())}");
+                    output.AppendLine($"   {token.Name}: {string.Join(", ", token.GetValues(token.Name))}");
             }
             output.AppendLine();
 
@@ -215,7 +215,7 @@ namespace ContentPatcher.Framework.Commands
                                     output.AppendLine($"      {name}: {string.Join(", ", token.GetValues(name))}");
                             }
                             else
-                                output.AppendLine($"      {token.Name}: {string.Join(", ", token.GetValues())}");
+                                output.AppendLine($"      {token.Name}: {string.Join(", ", token.GetValues(token.Name))}");
                         }
                     }
                 }
@@ -317,14 +317,15 @@ namespace ContentPatcher.Framework.Commands
 
             // uses tokens not available in the current context
             {
-                IList<IToken> tokensOutOfContext = patch
+                IList<TokenName> tokensOutOfContext = patch
                     .TokensUsed
-                    .Union(patch.ParsedConditions.Keys.Select(p => tokenContext.GetToken(p, enforceContext: false)))
-                    .Where(token => !token.IsValidInContext)
+                    .Union(patch.ParsedConditions.Keys)
+                    .Where(p => !tokenContext.GetToken(p, enforceContext: false).IsValidInContext)
+                    .OrderBy(p => p.ToString())
                     .ToArray();
 
                 if (tokensOutOfContext.Any())
-                    return $"uses tokens not available right now: {string.Join(", ", tokensOutOfContext.Select(p => p.Name).OrderBy(p => p))}";
+                    return $"uses tokens not available right now: {string.Join(", ", tokensOutOfContext)}";
             }
 
             // conditions not matched

@@ -66,17 +66,6 @@ namespace ContentPatcher.Framework
             return token?.GetValues(name) ?? new string[0];
         }
 
-        /// <summary>Get the tokens that can only contain one value.</summary>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
-        public IEnumerable<IToken> GetSingleValues(bool enforceContext)
-        {
-            foreach (IToken token in this.GetTokens(enforceContext))
-            {
-                if (!token.CanHaveMultipleValues)
-                    yield return token;
-            }
-        }
-
 
         /*********
         ** Private methods

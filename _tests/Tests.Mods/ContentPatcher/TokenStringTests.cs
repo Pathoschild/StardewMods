@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             // assert
             tokenStr.Raw.Should().Be(raw.Trim());
             tokenStr.Tokens.Should().HaveCount(1);
-            tokenStr.Tokens.Select(p => p.Name.ToString()).Should().BeEquivalentTo(configKey);
+            tokenStr.Tokens.Select(p => p.ToString()).Should().BeEquivalentTo(configKey);
             tokenStr.InvalidTokens.Should().BeEmpty();
             tokenStr.HasAnyTokens.Should().BeTrue();
             tokenStr.IsSingleTokenOnly.Should().BeTrue();
@@ -75,7 +75,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             // assert
             tokenStr.Raw.Should().Be(raw.Trim());
             tokenStr.Tokens.Should().HaveCount(2);
-            tokenStr.Tokens.Select(p => p.Name).Should().BeEquivalentTo(new[] { configKey, tokenKey });
+            tokenStr.Tokens.Select(name => name.ToString()).Should().BeEquivalentTo(new[] { configKey, tokenKey });
             tokenStr.InvalidTokens.Should().HaveCount(1).And.BeEquivalentTo("invalid");
             tokenStr.HasAnyTokens.Should().BeTrue();
             tokenStr.IsSingleTokenOnly.Should().BeFalse();

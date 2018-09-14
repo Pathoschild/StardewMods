@@ -24,7 +24,10 @@ namespace ContentPatcher.Framework.Tokens
         *********/
         /// <summary>Construct an instance.</summary>
         public HasProfessionToken()
-            : base(ConditionType.HasProfession.ToString(), canHaveMultipleValues: true, requiresSubkeys: false) { }
+            : base(ConditionType.HasProfession.ToString(), canHaveMultipleRootValues: true)
+        {
+            this.EnableSubkeys(required: false, canHaveMultipleValues: false);
+        }
 
         /// <summary>Update the token data when the context changes.</summary>
         /// <param name="context">The condition context.</param>
@@ -38,18 +41,25 @@ namespace ContentPatcher.Framework.Tokens
                 foreach (int professionID in Game1.player.professions)
                     this.Professions.Add((Profession)professionID);
             }
-
         }
 
         /// <summary>Get the current token values.</summary>
-        /// <param name="name">The token name to check, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or this token require a subkeys and <paramref name="name"/> does not specify one.</exception>
-        public override IEnumerable<string> GetValues(TokenName? name = null)
+        /// <param name="name">The token name to check.</param>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
+        public override IEnumerable<string> GetValues(TokenName name)
         {
             this.AssertTokenName(name);
 
-            foreach (Profession profession in this.Professions)
-                yield return profession.ToString();
+            if (name.HasSubkey())
+            {
+                bool hasProfession = Enum.TryParse(name.Subkey, true, out Profession profession) && this.Professions.Contains(profession);
+                yield return hasProfession.ToString();
+            }
+            else
+            {
+                foreach (Profession profession in this.Professions)
+                    yield return profession.ToString();
+            }
         }
 
         /// <summary>Perform custom validation on a set of input values.</summary>

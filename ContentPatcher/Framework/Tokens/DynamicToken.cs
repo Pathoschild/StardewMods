@@ -4,8 +4,8 @@ using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
 {
-    /// <summary>A token whose value doesn't change after it's initialised.</summary>
-    internal class ImmutableToken : BaseToken
+    /// <summary>A simple token whose value can be changed externally.</summary>
+    internal class DynamicToken : BaseToken
     {
         /*********
         ** Properties
@@ -13,8 +13,8 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>The allowed values for the root token (or <c>null</c> if any value is allowed).</summary>
         private readonly InvariantHashSet AllowedRootValues;
 
-        /// <summary>The current token values.</summary>
-        private readonly InvariantHashSet Values;
+        /// <summary>The current values.</summary>
+        private InvariantHashSet Values = new InvariantHashSet();
 
 
         /*********
@@ -22,26 +22,35 @@ namespace ContentPatcher.Framework.Tokens
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The token name.</param>
-        /// <param name="values">Get the current token values.</param>
-        /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
-        /// <param name="canHaveMultipleValues">Whether the token may contain multiple values (or <c>null</c> to set it based on the given values).</param>
-        public ImmutableToken(TokenName name, InvariantHashSet values, InvariantHashSet allowedValues = null, bool? canHaveMultipleValues = null)
+        public DynamicToken(TokenName name)
             : base(name, canHaveMultipleRootValues: false)
         {
-            this.Values = values ?? new InvariantHashSet();
-            this.AllowedRootValues = allowedValues;
-            this.CanHaveMultipleRootValues = canHaveMultipleValues ?? (this.Values.Count > 1 || this.AllowedRootValues == null || this.AllowedRootValues.Count > 1);
+            this.AllowedRootValues = new InvariantHashSet();
             this.EnableSubkeys(required: false, canHaveMultipleValues: false);
-            this.IsValidInContext = true;
         }
 
-        /// <summary>Construct an instance.</summary>
-        /// <param name="name">The token name.</param>
-        /// <param name="canHaveMultipleValues">Whether the token may contain multiple values (or <c>null</c> to set it based on the given values).</param>
-        /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
-        /// <param name="values">Get the current token values.</param>
-        public ImmutableToken(string name, InvariantHashSet values, InvariantHashSet allowedValues = null, bool? canHaveMultipleValues = null)
-            : this(TokenName.Parse(name), values, allowedValues, canHaveMultipleValues) { }
+        /// <summary>Add a set of possible values.</summary>
+        /// <param name="possibleValues">The possible values to add.</param>
+        public void AddAllowedValues(InvariantHashSet possibleValues)
+        {
+            foreach (string value in possibleValues)
+                this.AllowedRootValues.Add(value);
+            this.CanHaveMultipleRootValues = this.CanHaveMultipleRootValues || possibleValues.Count > 1;
+        }
+
+        /// <summary>Set the current values.</summary>
+        /// <param name="values">The values to set.</param>
+        public void SetValue(InvariantHashSet values)
+        {
+            this.Values = values;
+        }
+
+        /// <summary>Set whether the token is valid in the current context.</summary>
+        /// <param name="validInContext">The value to set.</param>
+        public void SetValidInContext(bool validInContext)
+        {
+            this.IsValidInContext = validInContext;
+        }
 
         /// <summary>Get the allowed values for a token name (or <c>null</c> if any value is allowed).</summary>
         /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>

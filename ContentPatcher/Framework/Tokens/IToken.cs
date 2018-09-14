@@ -19,14 +19,11 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Whether the value can change after it's initialised.</summary>
         bool IsMutable { get; }
 
-        /// <summary>Whether the token may contain multiple values.</summary>
-        bool CanHaveMultipleValues { get; }
-
         /// <summary>Whether this token recognises subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with a <c>Abigail</c> subkey).</summary>
-        bool RequiresSubkeys { get; }
+        bool CanHaveSubkeys { get; }
 
-        /// <summary>The allowed values (or <c>null</c> if any value is allowed).</summary>
-        InvariantHashSet AllowedValues { get; }
+        /// <summary>Whether this token only allows subkeys (see <see cref="CanHaveSubkeys"/>).</summary>
+        bool RequiresSubkeys { get; }
 
 
         /*********
@@ -37,6 +34,10 @@ namespace ContentPatcher.Framework.Tokens
         /// <returns>Returns whether the token data changed.</returns>
         void UpdateContext(IContext context);
 
+        /// <summary>Whether the token may return multiple values for the given name.</summary>
+        /// <param name="name">The token name.</param>
+        bool CanHaveMultipleValues(TokenName name);
+
         /// <summary>Perform custom validation on a set of input values.</summary>
         /// <param name="values">The values to validate.</param>
         /// <param name="error">The validation error, if any.</param>
@@ -46,9 +47,13 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Get the current subkeys (if supported).</summary>
         IEnumerable<TokenName> GetSubkeys();
 
+        /// <summary>Get the allowed values for a token name (or <c>null</c> if any value is allowed).</summary>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="CanHaveSubkeys"/> or <see cref="RequiresSubkeys"/>.</exception>
+        InvariantHashSet GetAllowedValues(TokenName name);
+
         /// <summary>Get the current token values.</summary>
-        /// <param name="name">The token name to check, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.RequiresSubkeys"/>.</exception>
-        IEnumerable<string> GetValues(TokenName? name = null);
+        /// <param name="name">The token name to check.</param>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="CanHaveSubkeys"/> or <see cref="RequiresSubkeys"/>.</exception>
+        IEnumerable<string> GetValues(TokenName name);
     }
 }
