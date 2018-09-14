@@ -294,6 +294,25 @@ These token values can be used as conditions and token placeholders for any patc
 </tr>
 
 <tr valign="top">
+<td>DayEvent</td>
+<td>
+
+The festival or wedding happening today. Possible values:
+* `wedding` (current player is getting married);
+* `dance of the moonlight jellies`;
+* `egg festival`;
+* `feast of the winter star`;
+* `festival of ice`;
+* `flower dance`;
+* `luau`;
+* `stardew valley fair`;
+* `spirit's eve`;
+* a custom festival name.
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>DayOfWeek</td>
 <td>
 
@@ -411,25 +430,6 @@ placeholders:
 <tr>
 <th>condition</th>
 <th>purpose</th>
-
-<tr valign="top">
-<td>DayEvent</td>
-<td>
-
-The festival or wedding happening today. Possible values:
-* `wedding` (current player is getting married);
-* `dance of the moonlight jellies`;
-* `egg festival`;
-* `feast of the winter star`;
-* `festival of ice`;
-* `flower dance`;
-* `luau`;
-* `stardew valley fair`;
-* `spirit's eve`;
-* a custom festival name.
-
-</td>
-</tr>
 
 <tr valign="top">
 <td>HasFile</td>
