@@ -28,6 +28,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The token strings which contain mutable tokens.</summary>
         private readonly TokenString[] MutableTokenStrings;
 
+        /// <summary>Whether the next context update is the first one.</summary>
+        private bool IsFirstUpdate = true;
+
 
         /*********
         ** Public methods
@@ -47,7 +50,7 @@ namespace ContentPatcher.Framework.Patches
             this.Records = records;
             this.Fields = fields;
             this.Monitor = monitor;
-            this.MutableTokenStrings = this.GetMutableTokens(records, fields).ToArray();
+            this.MutableTokenStrings = this.GetTokenStrings(records, fields).Where(str => str.Tokens.Any()).ToArray();
         }
 
         /// <summary>Update the patch data when the context changes.</summary>
@@ -57,10 +60,24 @@ namespace ContentPatcher.Framework.Patches
         {
             bool changed = base.UpdateContext(context);
 
-            foreach (TokenString str in this.MutableTokenStrings)
+            // We need to update all token strings once. After this first time, we can skip
+            // updating any immutable tokens.
+            if (this.IsFirstUpdate)
             {
-                if (str.UpdateContext(context))
-                    changed = true;
+                this.IsFirstUpdate = false;
+                foreach (TokenString str in this.GetTokenStrings(this.Records, this.Fields))
+                {
+                    if (str.UpdateContext(context) && str.Tokens.Any())
+                        changed = true;
+                }
+            }
+            else
+            {
+                foreach (TokenString str in this.MutableTokenStrings)
+                {
+                    if (str.UpdateContext(context))
+                        changed = true;
+                }
             }
 
             return changed;
@@ -110,27 +127,21 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Private methods
         *********/
-        /// <summary>Get the token strings which contain tokens and whose values may change.</summary>
+        /// <summary>Get all token strings in the given data.</summary>
         /// <param name="records">The data records to edit.</param>
         /// <param name="fields">The data fields to edit.</param>
-        private IEnumerable<TokenString> GetMutableTokens(IDictionary<string, TokenString> records, IDictionary<string, IDictionary<int, TokenString>> fields)
+        private IEnumerable<TokenString> GetTokenStrings(IDictionary<string, TokenString> records, IDictionary<string, IDictionary<int, TokenString>> fields)
         {
             if (records != null)
             {
                 foreach (TokenString str in records.Values)
-                {
-                    if (str.Tokens.Any())
-                        yield return str;
-                }
+                    yield return str;
             }
 
             if (fields != null)
             {
                 foreach (TokenString str in fields.SelectMany(p => p.Value.Values))
-                {
-                    if (str.Tokens.Any())
-                        yield return str;
-                }
+                    yield return str;
             }
         }
 
