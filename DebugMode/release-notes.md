@@ -1,7 +1,7 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.9.1 (upcoming)
+## 1.9.1
 * Updated for Stardew Valley 1.3.29.
 * Improved translations. Thanks to pomepome (added Japanese)!
 

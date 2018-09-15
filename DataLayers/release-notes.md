@@ -1,5 +1,5 @@
 # Release notes
-## 1.4.1 (upcoming)
+## 1.4.1
 * Updated for Stardew Valley 1.3.29.
 * Improved translations. Thanks to pomepome (added Japanese), Ria (Spanish), and Yllelder (Spanish)!
 

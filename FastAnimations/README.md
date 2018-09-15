@@ -13,8 +13,10 @@ speed up many animations (currently eating, drinking, milking, shearing, and bre
 3. Run the game using SMAPI.
 
 ## Configure
-The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
-file if you want.
+The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
+file in a text editor to configure the mod.
+
+Here's what you can change:
 
 * You can choose how fast each animation runs. Each value is a multiple of the original speed (e.g. `1` for
 normal speed or `2` for double speed).
