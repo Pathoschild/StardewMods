@@ -1,8 +1,8 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.5 (upcoming)
-* Added dynamic tokens defined by the modder.
+## 1.5
+* Added support for dynamic tokens defined by the modder.
 * Added new tokens:
   * `FarmCave` (the current farm cave type);
   * `FarmhouseLevel` (the upgrade level for the main farmhouse);

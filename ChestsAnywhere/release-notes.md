@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.14.1
+* Disabled shipping bin editing for non-main players (only possible from the host).
+
 ## 1.14
 * Updated for Stardew Valley 1.3.29.
 * Added support for editing the shipping bin.
