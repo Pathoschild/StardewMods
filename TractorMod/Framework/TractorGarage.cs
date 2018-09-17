@@ -29,6 +29,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Perform logic when the day starts.</summary>
         /// <param name="dayOfMonth">The current day of month.</param>
         /// <remarks>This overrides the stable logic to avoid spawning a horse.</remarks>
-        public override void dayUpdate(int dayOfMonth) { }
+        public override void dayUpdate(int dayOfMonth)
+        {
+            // allow instant build with CJB Cheats Menu (though tractor will appear on the next day)
+            if (this.daysOfConstructionLeft.Value > 0)
+                this.daysOfConstructionLeft.Value--;
+        }
     }
 }

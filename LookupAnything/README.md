@@ -25,8 +25,10 @@ Just point your cursor at something and press `F1`. The mod will show live info 
 You can do this in the world, your inventory, the calendar, or a shop.
 
 ## Configure
-The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
-file if you want. These are the available settings:
+The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
+file in a text editor to configure the mod.
+
+These are the available settings:
 
 | setting           | what it affects
 | ----------------- | -------------------

@@ -1,6 +1,15 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.14.1
+* Disabled shipping bin editing for non-main players (only possible from the host).
+
+## 1.14
+* Updated for Stardew Valley 1.3.29.
+* Added support for editing the shipping bin.
+* Fixed special item menus (e.g. Luau soup) rarely replaced by shipping bin menu.
+* Improved translations. Thanks to pomepome (added Japanese) and Ria (Spanish)!
+
 ## 1.13
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added support for auto-grabbers.

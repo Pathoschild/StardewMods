@@ -14,11 +14,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /*********
         ** Properties
         *********/
+        /// <summary>The name of the data key for the shipping bin name.</summary>
+        private readonly string DataKey = "shipping-bin";
+
+        /// <summary>An API for reading and storing local mod data.</summary>
+        private readonly IDataHelper DataHelper;
+
         /// <summary>The farm containing the shipping bin.</summary>
         private readonly Farm Farm;
-
-        /// <summary>Simplifies access to private game data.</summary>
-        private readonly IReflectionHelper Reflection;
 
         /// <summary>The underlying shipping bin.</summary>
         private readonly NetCollection<Item> ShippingBin;
@@ -36,17 +39,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The underlying inventory.</summary>
         public IList<Item> Inventory => this.ShippingBin;
 
-        /// <summary>The container's name.</summary>
-        public string Name { get; set; }
+        /// <summary>The persisted container data.</summary>
+        public ContainerData Data { get; }
 
-        /// <summary>Whether the player can configure the container.</summary>
-        public bool IsEditable { get; } = false;
+        /// <summary>Whether the player can customise the container data.</summary>
+        public bool IsDataEditable { get; }
 
-        /// <summary>Whether to enable chest-specific UI.</summary>
-        public bool IsChest { get; } = false;
-
-        /// <summary>The container's original name.</summary>
-        public string DefaultName => null;
+        /// <summary>Whether Automate options can be configured for this chest.</summary>
+        public bool CanConfigureAutomate { get; } = false; // Automate can't read the shipping bin settings
 
 
         /*********
@@ -54,25 +54,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="farm">The farm whose shipping bin to manage.</param>
-        /// <param name="reflection">Simplifies access to private game data.</param>
-        public ShippingBinContainer(Farm farm, IReflectionHelper reflection)
+        /// <param name="dataHelper">An API for reading and storing local mod data.</param>
+        public ShippingBinContainer(Farm farm, IDataHelper dataHelper)
         {
+            this.DataHelper = dataHelper;
             this.Farm = farm;
             this.ShippingBin = farm.shippingBin;
-            this.Reflection = reflection;
-        }
-
-        /// <summary>Get whether the in-game container is open.</summary>
-        public bool IsOpen()
-        {
-            TemporaryAnimatedSprite lid = this.Reflection.GetField<TemporaryAnimatedSprite>(this.Farm, "shippingBinLid").GetValue();
-            return lid != null && lid.currentParentTileIndex != lid.initialParentTileIndex;
-        }
-
-        /// <summary>Get whether the container has its default name.</summary>
-        public bool HasDefaultName()
-        {
-            return true; // name isn't editable
+            this.IsDataEditable = Context.IsMainPlayer;
+            this.Data = this.IsDataEditable
+                ? dataHelper.ReadSaveData<ContainerData>(this.DataKey) ?? new ContainerData(defaultDisplayName: null)
+                : new ContainerData(defaultDisplayName: null);
         }
 
         /// <summary>Get whether the inventory can accept the item type.</summary>
@@ -109,8 +100,15 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 message: null,
                 behaviorOnItemGrab: this.GrabItemFromContainer,
                 canBeExitedWithKey: true,
-                showOrganizeButton: true
+                showOrganizeButton: true,
+                context: this.Farm
             );
+        }
+
+        /// <summary>Persist the container data.</summary>
+        public void SaveData()
+        {
+            this.DataHelper.WriteSaveData(this.DataKey, this.Data.HasData() ? this.Data : null);
         }
 
 

@@ -69,8 +69,10 @@ Press the `~` key (configurable) to enable or disable debug mode. This will...
    `F10`  | Starts a multiplayer server for the current save (if not already started). | No meaningful effect.
 
 ## Configure
-The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
-file if you want. These are the available settings:
+The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
+file in a text editor to configure the mod.
+
+These are the available settings:
 
 setting           | what it affects
 :---------------- | :------------------

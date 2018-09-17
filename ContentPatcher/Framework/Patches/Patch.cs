@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.Tokens;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Patches
@@ -19,6 +20,9 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Accessors
         *********/
+        /// <summary>The last context used to update this patch.</summary>
+        protected IContext LastContext { get; private set; }
+
         /// <summary>A unique name for this patch shown in log messages.</summary>
         public string LogName { get; }
 
@@ -40,6 +44,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Whether this patch should be applied in the latest context.</summary>
         public bool MatchesContext { get; private set; }
 
+        /// <summary>Whether this patch is valid if <see cref="MatchesContext"/> is true.</summary>
+        public bool IsValidInContext { get; protected set; } = true;
+
         /// <summary>Whether the patch is currently applied to the target asset.</summary>
         public bool IsApplied { get; set; }
 
@@ -48,21 +55,24 @@ namespace ContentPatcher.Framework.Patches
         ** Public methods
         *********/
         /// <summary>Update the patch data when the context changes.</summary>
-        /// <param name="context">The condition context.</param>
-        /// <param name="tokenisableConditions">The conditions which can be used in tokens.</param>
+        /// <param name="context">Provides access to contextual tokens.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        public virtual bool UpdateContext(ConditionContext context, IDictionary<ConditionKey, string> tokenisableConditions)
+        public virtual bool UpdateContext(IContext context)
         {
+            this.LastContext = context;
+
             // update conditions
             bool conditionsChanged;
             {
                 bool wasMatch = this.MatchesContext;
-                this.MatchesContext = this.Conditions.Count == 0 || this.Conditions.Values.All(p => p.IsMatch(context));
+                this.MatchesContext =
+                    (this.Conditions.Count == 0 || this.Conditions.Values.All(p => p.IsMatch(context)))
+                    && this.GetTokensUsed().All(p => context.Contains(p, enforceContext: true));
                 conditionsChanged = wasMatch != this.MatchesContext;
             }
 
             // update asset name
-            bool targetChanged = this.TokenableAssetName.UpdateContext(tokenisableConditions);
+            bool targetChanged = this.TokenableAssetName.UpdateContext(context);
             this.AssetName = this.NormaliseAssetName(this.TokenableAssetName.Value);
 
             return conditionsChanged || targetChanged;
@@ -86,10 +96,10 @@ namespace ContentPatcher.Framework.Patches
             throw new NotSupportedException("This patch type doesn't support loading assets.");
         }
 
-        /// <summary>Get the condition tokens used by this patch in its fields.</summary>
-        public virtual IEnumerable<ConditionKey> GetTokensUsed()
+        /// <summary>Get the tokens used by this patch in its fields.</summary>
+        public virtual IEnumerable<TokenName> GetTokensUsed()
         {
-            yield break;
+            return this.TokenableAssetName.Tokens;
         }
 
 

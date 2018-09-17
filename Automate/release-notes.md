@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.10.3
+* Fixed compatibility issue with More Buildings / PyTK.
+
+## 1.10.2
+* Updated for Stardew Valley 1.3.29.
+
 ## 1.10.1
 * Fixed error with some machines if they have null output slots.
 

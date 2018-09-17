@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -55,18 +56,20 @@ namespace ContentPatcher.Framework
         /// <param name="modHelper">The mod helper through which to save the file.</param>
         public void Save(ManagedContentPack contentPack, InvariantDictionary<ConfigField> config, IModHelper modHelper)
         {
-            string configPath = contentPack.GetFullPath(this.Filename);
-
             // save if settings valid
             if (config.Any())
             {
                 InvariantDictionary<string> data = new InvariantDictionary<string>(config.ToDictionary(p => p.Key, p => string.Join(", ", p.Value.Value)));
-                modHelper.WriteJsonFile(configPath, data);
+                contentPack.WriteJsonFile(this.Filename, data);
             }
 
             // delete if no settings
-            else if (File.Exists(configPath))
-                File.Delete(configPath);
+            else
+            {
+                FileInfo file = new FileInfo(Path.Combine(contentPack.GetFullPath(this.Filename)));
+                if (file.Exists)
+                    file.Delete();
+            }
         }
 
 
@@ -82,14 +85,26 @@ namespace ContentPatcher.Framework
             if (rawSchema == null || !rawSchema.Any())
                 return schema;
 
-            foreach (string key in rawSchema.Keys)
+            foreach (string rawKey in rawSchema.Keys)
             {
-                ConfigSchemaFieldConfig field = rawSchema[key];
+                ConfigSchemaFieldConfig field = rawSchema[rawKey];
 
-                // validate key
-                if (ConditionKey.TryParse(key, out ConditionKey conditionKey))
+                // validate format
+                if (!TokenName.TryParse(rawKey, out TokenName name))
                 {
-                    logWarning(key, $"can't use {conditionKey} as a config field, because it's a reserved condition key.");
+                    logWarning(rawKey, $"the name '{rawKey}' is not in a valid format.");
+                    continue;
+                }
+                if (name.HasSubkey())
+                {
+                    logWarning(rawKey, $"the name '{rawKey}' can't have a subkey (:).");
+                    continue;
+                }
+
+                // validate reserved keys
+                if (name.TryGetConditionType(out ConditionType _))
+                {
+                    logWarning(rawKey, $"can't use {name.Key} as a config field, because it's a reserved condition key.");
                     continue;
                 }
 
@@ -97,7 +112,7 @@ namespace ContentPatcher.Framework
                 InvariantHashSet allowValues = this.ParseCommaDelimitedField(field.AllowValues);
                 if (!allowValues.Any())
                 {
-                    logWarning(key, $"no {nameof(ConfigSchemaFieldConfig.AllowValues)} specified.");
+                    logWarning(rawKey, $"no {nameof(ConfigSchemaFieldConfig.AllowValues)} specified.");
                     continue;
                 }
 
@@ -112,20 +127,20 @@ namespace ContentPatcher.Framework
                     string[] invalidValues = defaultValues.Except(allowValues).ToArray();
                     if (invalidValues.Any())
                     {
-                        logWarning(key, $"default values '{string.Join(", ", invalidValues)}' are not allowed according to {nameof(ConfigSchemaFieldConfig.AllowBlank)}.");
+                        logWarning(rawKey, $"default values '{string.Join(", ", invalidValues)}' are not allowed according to {nameof(ConfigSchemaFieldConfig.AllowBlank)}.");
                         continue;
                     }
 
                     // validate allow multiple
                     if (!field.AllowMultiple && defaultValues.Count > 1)
                     {
-                        logWarning(key, $"can't have multiple default values because {nameof(ConfigSchemaFieldConfig.AllowMultiple)} is false.");
+                        logWarning(rawKey, $"can't have multiple default values because {nameof(ConfigSchemaFieldConfig.AllowMultiple)} is false.");
                         continue;
                     }
                 }
 
                 // add to schema
-                schema[key] = new ConfigField(allowValues, defaultValues, field.AllowBlank, field.AllowMultiple);
+                schema[rawKey] = new ConfigField(allowValues, defaultValues, field.AllowBlank, field.AllowMultiple);
             }
 
             return schema;

@@ -9,10 +9,12 @@ that change the game's images and data without replacing XNB files.
 * [Create a content pack](#create-a-content-pack)
   * [Overview](#overview)
   * [Common fields](#common-fields)
-  * [Supported patches](#supported-patches)
-  * [Conditions](#conditions)
-  * [Player configuration](#player-configuration)
-  * [Tokens](#tokens)
+  * [Patch types](#patch-types)
+* [Advanced: tokens & conditions](#advanced-tokens--conditions)
+  * [Overview](#overview-1)
+  * [Global tokens](#global-tokens)
+  * [Dynamic tokens](#dynamic-tokens)
+  * [Player config](#player-config)
 * [Release a content pack](#release-a-content-pack)
 * [Troubleshoot](#troubleshoot)
   * [Patch commands](#patch-commands)
@@ -21,7 +23,7 @@ that change the game's images and data without replacing XNB files.
 * [FAQs](#faqs)
   * [Compatibility](#compatibility)
   * [Multiplayer](#multiplayer)
-  * [Patch order](#patch-order)
+  * [How multiple patches interact](#how-multiple-patches-interact)
   * [Special cases](#special-cases)
 * [See also](#see-also)
 
@@ -69,7 +71,7 @@ whether one of these would work for you:
   * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add items and fruit trees.
 
 ### Known limitations
-TODO: conditional maps
+* Map files can't currently be conditional.
 
 ## Create a content pack
 ### Overview
@@ -82,15 +84,15 @@ The `content.json` file has three main fields:
 
 field          | purpose
 -------------- | -------
-`Format`       | The format version (just use `1.4`).
+`Format`       | The format version (just use `1.5`).
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
-`ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-configuration).
+`ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-config).
 
 Here's a quick example of each possible patch type (explanations below):
 
 ```js
 {
-  "Format": "1.4",
+  "Format": "1.5",
   "Changes": [
        // replace an entire file
        {
@@ -139,12 +141,12 @@ All patches support these common fields:
 field      | purpose
 ---------- | -------
 `Action`   | The kind of change to make (`Load`, `EditImage`, or `EditData`); explained in the next section.
-`Target`   | The game asset you want to patch. This is the file path inside your game's `Content` folder, without the file extension or language. For example: use `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`. Capitalisation doesn't matter. Your changes are applied in all languages unless you specify a language [condition](#conditions).
+`Target`   | The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside your game's `Content` folder, without the file extension or language. For example: use `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`. Capitalisation doesn't matter. Your changes are applied in all languages unless you specify a language [condition](#advanced-tokens--conditions).
 `LogName`  | _(optional)_ A name for this patch shown in log messages. This is very useful for understanding errors; if not specified, will default to a name like `entry #14 (EditImage Animals/Dinosaurs)`.
 `Enabled`  | _(optional)_ Whether to apply this patch. Default true.
-`When`     | _(optional)_ Only apply the patch if the given conditions match (see [_conditions_](#conditions)).
+`When`     | _(optional)_ Only apply the patch if the given conditions match (see [_conditions_](#advanced-tokens--conditions)).
 
-### Supported patches
+### Patch types
 * **Replace an entire file** (`"Action": "Load"`).  
   When the game loads the file, it'll receive your file instead. This is useful for mods which
   change everything (like pet replacement mods).
@@ -184,12 +186,24 @@ field      | purpose
   `Fields`   | _(optional)_ The individual fields you want to change for existing entries. [See example in overview](#overview).
   `Entries`  | _(optional)_ The entries in the data file you want to add, replace, or (if set to `null`) delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. [See example in overview](#overview).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
 
-### Conditions
-You can make a patch conditional by adding a `When` field. The patch will be applied when all
-conditions match, and removed when they no longer match. Conditions are not case-sensitive, and you
-can specify multiple values as a comma-delimited list. You don't need to specify all conditions.
+## Advanced: tokens & conditions
+### Overview
+A **token** is a name which represents a predefined value. For example, `season` (the token) may
+contain `spring`, `summer`, `fall`, or `winter` (the value). You can use [player config](#player-config),
+[global token values](#global-tokens), and [dynamic token values](#dynamic-tokens) as tokens.
 
-For example, this changes the house texture only in Spring or Summer.
+There are two ways to use tokens.
+
+<dl>
+<dt>Conditions</dt>
+<dd>
+
+You can make a patch conditional by adding a `When` field, which can list any number of conditions.
+Each condition has a token name (like `Season`) and the values to match (like `spring, summer`).
+Condition names and values are not case-sensitive.
+
+For example, this changes the house texture only in Spring or Summer, if the player hasn't upgraded
+their house:
 
 ```js
 {
@@ -197,12 +211,77 @@ For example, this changes the house texture only in Spring or Summer.
     "Target": "Building/houses",
     "FromFile": "assets/green_house.png",
     "When": {
-        "Season": "spring, summer"
+        "Season": "spring, summer",
+        "FarmhouseLevel": "0"
     }
 }
 ```
 
-These conditions can be used as conditions and [tokens](#tokens) for any patch:
+Each condition is true if _any_ of its values match, and the patch is applied if _all_ of its
+conditions match.
+
+Most tokens have an optional `{{tokenName:value}}` form which returns `true` or `false`. This can be
+used to perform AND logic:
+
+```js
+// player has blacksmith OR gemologist
+"When": {
+   "HasProfession": "Blacksmith, Gemologist"
+}
+
+// player has blacksmith AND gemologist
+"When": {
+   "HasProfession:Blacksmith": "true",
+   "HasProfession:Gemologist": "true"
+}
+```
+
+This can also be used for negative conditions:
+
+```js
+// only year one
+"When": {
+   "Year": "1"
+}
+
+// NOT year 1
+"When": {
+   "Year:1": "false"
+}
+```
+</dd>
+
+<dt>Token placeholders</dt>
+<dd>
+
+You can use tokens in text by putting two curly brackets around the token name, which will be
+replaced with the actual value automatically. Token placeholders are not case-sensitive. Patches
+will be disabled automatically if a token they use isn't currently available.
+
+For example, this gives the farmhouse a different appearance in each season:
+
+```js
+{
+    "Action": "EditImage",
+    "Target": "Building/houses",
+    "FromFile": "assets/{{season}}_house.png" // assets/spring_house.png, assets/summer_house.png, etc
+}
+```
+
+You can do this in the `FromFile`, `Target`, `Enabled`, `Entries`, and `Fields` fields.
+
+Only tokens which return a single value can be used as tokens. For example, `{{season}}` is allowed
+but `{{hasProfession}}` is not. Most tokens have an optional `{{tokenName:value}}` form which
+returns `true` or `false` (like `{{hasProfession:Gemologist}}`); that form can be used in tokens if
+needed (though it may be of limited use).
+
+</dd>
+</dl>
+
+### Global tokens
+Global token values are defined by Content Patcher, so you can use them without doing anything else.
+
+These token values can be used as conditions and token placeholders for any patch:
 
 <table>
 <tr>
@@ -215,10 +294,61 @@ These conditions can be used as conditions and [tokens](#tokens) for any patch:
 </tr>
 
 <tr valign="top">
+<td>DayEvent</td>
+<td>
+
+The festival or wedding happening today. Possible values:
+* `wedding` (current player is getting married);
+* `dance of the moonlight jellies`;
+* `egg festival`;
+* `feast of the winter star`;
+* `festival of ice`;
+* `flower dance`;
+* `luau`;
+* `stardew valley fair`;
+* `spirit's eve`;
+* a custom festival name.
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>DayOfWeek</td>
 <td>
 
-The day of week. Possible values: `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, and `sunday`.
+The day of week. Possible values: `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday`, `Saturday`, and `Sunday`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>FarmCave</td>
+<td>
+
+The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `None`, `Bats`, `Mushrooms`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>FarmhouseLevel</td>
+<td>
+
+The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades). The normal values are 0 (initial farmhouse), 1 (adds kitchen), 2 (add children's bedroom), and 3 (adds cellar). Mods may add upgrade levels beyond that.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>FarmName</td>
+<td>The name of the current farm.</td>
+</tr>
+
+<tr valign="top">
+<td>FarmType</td>
+<td>
+
+The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). Possible values: `Standard`, `Riverland`, `Forest`, `Hilltop`, `Wilderness`, `Custom`.
 
 </td>
 </tr>
@@ -243,10 +373,33 @@ code | meaning
 </tr>
 
 <tr valign="top">
+<td>PlayerGender</td>
+<td>
+
+The player's gender. Possible values: `Female`, `Male`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>PlayerName</td>
+<td>The player's name.</td>
+</tr>
+
+<tr valign="top">
+<td>PreferredPet</td>
+<td>
+
+The player's preferred pet. Possible values: `Cat`, `Dog`.
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>Season</td>
 <td>
 
-The season name. Possible values: `spring`, `summer`, `fall`, and `winter`.
+The season name. Possible values: `Spring`, `Summer`, `Fall`, and `Winter`.
 
 </td>
 </tr>
@@ -255,14 +408,23 @@ The season name. Possible values: `spring`, `summer`, `fall`, and `winter`.
 <td>Weather</td>
 <td>
 
-The weather name. Possible values: `sun`, `rain`, `snow`, and `storm`.
+The weather name. Possible values: `Sun`, `Rain`, `Snow`, and `Storm`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>Year</td>
+<td>
+
+The year number (like `1` or `2`).
 
 </td>
 </tr>
 </table>
 
-These conditions **cannot** be used as [tokens](#tokens) or by an `"Action": "Load"` patch (but can
-be used as a condition for any other patch type):
+These token values can be used as conditions, and (in their `tokenName:value` form only) as token
+placeholders:
 
 <table>
 <tr>
@@ -270,20 +432,34 @@ be used as a condition for any other patch type):
 <th>purpose</th>
 
 <tr valign="top">
-<td>DayEvent</td>
+<td>HasFile</td>
 <td>
 
-The festival or wedding happening today. Possible values:
-* `wedding` (current player is getting married);
-* `dance of the moonlight jellies`;
-* `egg festival`;
-* `feast of the winter star`;
-* `festival of ice`;
-* `flower dance`;
-* `luau`;
-* `stardew valley fair`;
-* `spirit's eve`;
-* a custom festival name.
+Whether a file exists in the content pack folder. The file path must be specified as part of the key,
+and may contain tokens. Returns `true` or `false`. For example:
+
+```json
+"When": {
+  "HasFile:assets/{{season}}.png": "true"
+}
+```
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>HasProfession</td>
+<td>
+
+The [professions](https://stardewvalleywiki.com/Skills) learned by the player. Possible values:
+
+* Combat skill: `Acrobat`, `Brute`, `Defender`, `Desperado`, `Fighter`, `Scout`.
+* Farming skill: `Agriculturist`, `Artisan`, `Coopmaster`, `Rancher`, `Shepherd`, `Tiller`.
+* Fishing skill: `Angler`, `Fisher`, `Mariner`, `Pirate`, `Luremaster`, `Trapper`.
+* Foraging skill: `Botanist`, `Forester`, `Gatherer`, `Lumberjack`, `Tapper`, `Tracker`.
+* Mining skill: `Blacksmith`, `Excavator`, `Gemologist`, `Geologist`, `Miner`, `Prospector`.
+
+Custom professions added by a mod are represented by their integer profession ID.
 
 </td>
 </tr>
@@ -379,64 +555,72 @@ Divorced | The player married and then divorced them.
 
 <tr valign="top">
 <td>Spouse</td>
-<td>The current player's spouse name (using their English name regardless of translations).</td>
+<td>The player's spouse name (using their English name regardless of translations).</td>
 </tr>
 </table>
 
 **Special note about `"Action": "Load"`:**  
-Each file can only be loaded by one patch. Content Patcher will allow multiple loaders, so
-long as their conditions can never overlap. If they can overlap, it will refuse to add the second
-one. For example:
+Each file can only be loaded by one patch. You can have multiple load patches with different
+conditions, and the correct one will be used when the conditions change. However if multiple
+patches can be applied in a given context, Content Patcher will show an error in the SMAPI console
+and apply none of them.
 
-loader A           | loader B               | result
------------------- | ---------------------- | ------
-`season: "Spring"` | `season: "Summer"`     | both are loaded correctly (seasons never overlap).
-`day: 1`           | `dayOfWeek: "Tuesday"` | both are loaded correctly (1st day of month is never Tuesday).
-`day: 1`           | `weather: "Sun"`       | error: sun could happen on the first of a month.
+### Dynamic tokens
+Dynamic tokens are defined in a `DynamicTokens` section of your `content.json` (see example below).
+Each block in this section defines the value for a token using these fields:
 
-### Player configuration
-You can let players configure your mod using a `config.json` file. This requires a bit more upfront
-setup for the mod author, but once that's done it'll behave just like a SMAPI `config.json` for
-players. Content Patcher will automatically create and load the file, and you can use the config
-values in [the `When` field](#conditions). Config fields are not case-sensitive, and can only
-contain string values.
+field   | purpose
+------- | -------
+`Name`  | The name of the token to use for [tokens & condition](#advanced-tokens--conditions).
+`Value` | The value(s) to set. This can be a comma-delimited value to give it multiple values. If _any_ block for a token name has multiple values, it will only be usable in conditions.
+`When`  | _(optional)_ Only set the value if the given [conditions](#advanced-tokens--conditions) match. If not specified, always matches.
 
-For example: this `content.json` defines a `Material` config field and uses it to change which
-patch is applied. See below for more details.
+Some usage notes:
+* You can list any number of dynamic token blocks.
+* If you list multiple blocks for the same token name, the last one whose conditions match will be
+  used.
+* You can use tokens in the `Value` and `When` fields. That includes dynamic tokens if they're
+  defined earlier in the list (in which case the last value _defined before the current block_ will
+  be used).
+* Dynamic tokens can't have the same name as an existing global token or player config field.
+
+For example, this `content.json` defines a custom `{{style}}` token and uses it to load different
+crop sprites depending on the weather:
 
 ```js
 {
-    "Format": "1.4",
-    "ConfigSchema": {
-        "Material": {
-            "AllowValues": "Wood, Metal"
+    "Format": "1.5",
+    "DynamicTokens": [
+        {
+            "Name": "Style",
+            "Value": "default"
+        },
+        {
+            "Name": "Style",
+            "Value": "drenched",
+            "When": {
+                "Weather": "rain, storm"
+            }
         }
-    },
+    ],
     "Changes": [
         {
             "Action": "Load",
-            "Target": "LooseSprites/Billboard",
-            "FromFile": "assets/material_wood.png",
-            "When": {
-                "Material": "Wood"
-            }
-        },
-        {
-            "Action": "Load",
-            "Target": "LooseSprites/Billboard",
-            "FromFile": "assets/material_metal.png",
-            "When": {
-                "Material": "Metal"
-            }
+            "Target": "TileSheets/crops",
+            "FromFile": "assets/crop-{{style}}.png"
         }
     ]
 }
 ```
 
-Here's how to do it:
+### Player config
+You can let players configure your mod using a `config.json` file. Content Patcher will
+automatically create and load the file, and you can use the config values as
+[tokens & conditions](#advanced-tokens--conditions). Config fields are not case-sensitive.
 
-1. Add a `ConfigSchema` section to the `content.json` (like above), which defines your config
-   fields and how to validate them. Available fields for each one:
+To do this, you add a `ConfigSchema` section which defines your config fields and how to validate them
+(see below for an example).
+Available fields for each field:
 
    field               | meaning
    ------------------- | -------
@@ -445,62 +629,47 @@ Here's how to do it:
    `AllowMultiple`     | _(optional)_ Whether the player can specify multiple comma-delimited values. Default false.
    `Default`           | _(optional)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If not set, defaults to the first value in `AllowValues`.
 
-2. Use the config fields as [`When` conditions](#conditions). The field names and values are not
-   case-sensitive.
-
-That's it! Content Patcher will automatically create the `config.json` when you run the game.
-
-### Tokens
-You can use [conditions](#conditions) and [config values](#player-configuration) in the `FromFile`,
-`Target`, and `Enabled` fields in `content.json`. Just put the name of the condition or config
-field in two curly brackets, and Content Patcher will automatically fill in the value.
-
-For example, this gives the farmhouse a different appearance in each season:
+For example: this `content.json` defines a `Material` config field and uses it to change which
+patch is applied. See below for more details.
 
 ```js
 {
-    "Format": "1.4",
-    "Changes": [
-        {
-            "Action": "EditImage",
-            "Target": "Buildings/houses",
-            "FromFile": "assets/{{season}}.png" // assets/spring.png, assets/summer.png, etc
+    "Format": "1.5",
+    "ConfigSchema": {
+        "Material": {
+            "AllowValues": "Wood, Metal"
         }
-    ]
-}
-```
-
-You can use multiple tokens and conditions for more dynamic changes:
-
-```js
-{
-    "Format": "1.4",
+    },
     "Changes": [
+        // as a token
         {
-            "Action": "EditImage",
-            "Target": "Buildings/houses",
-            "FromFile": "assets/{{season}}_{{weather}}.png", // assets/spring_rain.png, etc
+            "Action": "Load",
+            "Target": "LooseSprites/Billboard",
+            "FromFile": "assets/material_{{material}}.png"
+        },
+
+        // as a condition
+        {
+            "Action": "Load",
+            "Target": "LooseSprites/Billboard",
+            "FromFile": "assets/material_wood.png",
             "When": {
-                "Weather": "sun, rain"
+                "Material": "Wood"
             }
         }
     ]
 }
 ```
 
-Tokens are subject to some restrictions:
+When you run the game, a `config.json` file will appear automatically with text like this:
 
-* `Enabled`:
-  * Max one token per field.
-  * Config fields can't have `"AllowMultiple": true`.
-  * Config fields must have `"AllowValues": "true, false"`.
-* `FromFile`:
-  * Config fields can't have `"AllowMultiple": true`.
-  * All possible files must exist, subject to any conditions you set. In the first example above,
-    you'll need four files (one per season). If you add a `"Season": "spring, summer"` condition,
-    you'll only need two files.
-* `Target`:
-  * Config fields can't have `"AllowMultiple": true`.
+```js
+{
+  "Material": "Wood"
+}
+```
+
+Players can edit it to configure your content pack.
 
 ## Release a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general
@@ -595,15 +764,14 @@ visual     | Only visible to players that have it installed.
 maps       | Only visible to players that have it installed. Players without the custom map will see the normal map and will be subject to the normal bounds (e.g. they may see other players walk through walls, but they won't be able to follow).
 data       | Only directly affects players that have it installed, but can indirectly affect other players. For example, if a content pack changes `Data/ObjectInformation` and you create a new object, other player will see that object's custom values even if their `Data/ObjectInformation` doesn't have those changes.
 
-### Patch order
-Your `content.json` can have multiple patches for the same file. `Action: Load` always happens
-before other action types, but otherwise each patch is applied in the order you list them. This
-patch order within a content pack is by design and unlikely to change.
+### How multiple patches interact
+Any number of patches can be applied to the same file. `Action: Load` always happens before other
+action types, but otherwise each patch is applied sequentially. After each patch is done, the next
+patch will see the combined asset as the input.
 
-The patch order between different content packs is currently **undocumented and not guaranteed**.
-The only guarantee is that `Action: Load` will happen before other patch types (even across content
-packs). Otherwise don't depend on your patches being applied in a certain order relative to those
-in a different content pack.
+Within one content pack, patches are applied in the order they're listed in `content.json`. When
+you have multiple content packs, each one is applied in the order they're loaded by SMAPI; if you
+need to explicitly patch after another content pack, see [manifest dependencies](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Dependencies).
 
 ### Special cases
 Some game assets have special logic. This isn't specific to Content Patcher, but they're documented

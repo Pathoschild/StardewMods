@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -57,12 +58,11 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>Update the patch data when the context changes.</summary>
         /// <param name="context">The condition context.</param>
-        /// <param name="tokenisableConditions">The conditions which can be used in tokens.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        public override bool UpdateContext(ConditionContext context, IDictionary<ConditionKey, string> tokenisableConditions)
+        public override bool UpdateContext(IContext context)
         {
-            bool localAssetChanged = this.FromLocalAsset.UpdateContext(tokenisableConditions);
-            return base.UpdateContext(context, tokenisableConditions) || localAssetChanged;
+            bool localAssetChanged = this.FromLocalAsset.UpdateContext(context);
+            return base.UpdateContext(context) || localAssetChanged;
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>
@@ -120,10 +120,10 @@ namespace ContentPatcher.Framework.Patches
             editor.PatchImage(source, sourceArea, this.ToArea, this.PatchMode);
         }
 
-        /// <summary>Get the condition tokens used by this patch in its fields.</summary>
-        public override IEnumerable<ConditionKey> GetTokensUsed()
+        /// <summary>Get the tokens used by this patch in its fields.</summary>
+        public override IEnumerable<TokenName> GetTokensUsed()
         {
-            return base.GetTokensUsed().Union(this.FromLocalAsset.ConditionTokens);
+            return base.GetTokensUsed().Union(this.FromLocalAsset.Tokens);
         }
     }
 }

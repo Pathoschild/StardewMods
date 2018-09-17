@@ -1,19 +1,19 @@
 {
   // accessibility
   "accessibility.name": "Accesibilidad",
-  "accessibility.clear": "Limpio",
+  "accessibility.clear": "Libre",
   "accessibility.occupied": "Ocupado",
   "accessibility.impassable": "Bloqueado",
   "accessibility.warp": "Portal",
 
   // coverage: bee houses
   "bee-houses.name": "Cobertura: Colmenas",
-  "bee-houses.range": "Rango flores",
+  "bee-houses.range": "Rango Flores",
 
   // coverage: Junimo huts
   "junimo-huts.name": "Cobertura: Cabaña Junimo",
-  "junimo-huts.can-harvest": "Puede cosechar",
-  "junimo-huts.cannot-harvest": "No puede cosechar",
+  "junimo-huts.can-harvest": "Puede Cosechar",
+  "junimo-huts.cannot-harvest": "No Puede Cosechar",
 
   // coverage: scarecrows
   "scarecrows.name": "Cobertura: Espantapájaros",
@@ -23,23 +23,22 @@
   // coverage: sprinklers
   "sprinklers.name": "Cobertura: Aspersores",
   "sprinklers.covered": "Cubierto",
-  "sprinklers.dry-crops": "Cosechas secas",
+  "sprinklers.dry-crops": "Cultivos Secos",
 
   // crops: harvest
-  // TODO
-  "crop-harvest.name": "Crops: Ready to Harvest",
-  "crop-harvest.ready": "Ready",
-  "crop-harvest.not-ready": "Not Ready",
-  "crop-harvest.not-enough-time": "Not Enough Time",
+  "crop-harvest.name": "Cultivos: Listos para cosechar",
+  "crop-harvest.ready": "Listo",
+  "crop-harvest.not-ready": "No Listo Aún",
+  "crop-harvest.not-enough-time": "Tiempo Insuficiente",
 
   // crops: watered
-  "crop-water.name": "Cosechas: Irrigación",
-  "crop-water.watered": "Cosecha regada",
-  "crop-water.dry": "Cosecha seca",
+  "crop-water.name": "Cultivos: Regados",
+  "crop-water.watered": "Cultivo Regado",
+  "crop-water.dry": "Cultivo Seco",
 
   // crops: fertilized
-  "crop-fertilizer.name": "Cosechas: Fertilizado",
+  "crop-fertilizer.name": "Cultivos: Fertilizados",
   "crop-fertilizer.fertilizer": "Fertilizante",
-  "crop-fertilizer.retaining-soil": "Retiene agua", //TODO: I don't have a correct word in spanish for describe this
-  "crop-fertilizer.speed-gro": "Fertilizante rápido"
+  "crop-fertilizer.retaining-soil": "Hidrogel",
+  "crop-fertilizer.speed-gro": "Acelerador"
 }

@@ -44,7 +44,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             this.Item = item ?? throw new InvalidOperationException("Can't track a null item stack.");
             this.Sample = this.GetNewStack(item);
-            this.LastStackSize = item?.Stack ?? 0;
+            this.LastStackSize = item.Stack;
             this.OnReduced = onReduced;
             this.OnEmpty = onEmpty;
         }

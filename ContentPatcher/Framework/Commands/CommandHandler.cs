@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
+using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -19,6 +20,9 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
+        /// <summary>Manages loaded tokens.</summary>
+        private readonly TokenManager TokenManager;
+
         /// <summary>Manages loaded patches.</summary>
         private readonly PatchManager PatchManager;
 
@@ -28,6 +32,7 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>The order in which condition types should be listed by <c>patch summary</c>.</summary>
         private readonly ConditionType[] DisplayOrder = {
             // general
+            ConditionType.Year,
             ConditionType.Season,
             ConditionType.DayOfWeek,
             ConditionType.Day,
@@ -67,11 +72,13 @@ namespace ContentPatcher.Framework.Commands
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="tokenManager">Manages loaded tokens.</param>
         /// <param name="patchManager">Manages loaded patches.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="updateContext">A callback which immediately updates the current condition context.</param>
-        public CommandHandler(PatchManager patchManager, IMonitor monitor, Action updateContext)
+        public CommandHandler(TokenManager tokenManager, PatchManager patchManager, IMonitor monitor, Action updateContext)
         {
+            this.TokenManager = tokenManager;
             this.PatchManager = patchManager;
             this.Monitor = monitor;
             this.UpdateContext = updateContext;
@@ -153,16 +160,32 @@ namespace ContentPatcher.Framework.Commands
         /// <returns>Returns whether the command was handled.</returns>
         private bool HandleSummary()
         {
-            ConditionContext context = this.PatchManager.ConditionContext;
             StringBuilder output = new StringBuilder();
 
             // add condition summary
             output.AppendLine();
-            output.AppendLine("========================");
-            output.AppendLine("== Current conditions ==");
-            output.AppendLine("========================");
-            foreach (var pair in context.GetValues().OrderBy(p => this.GetDisplayOrder(p.Key)).ThenBy(p => p.Key.ForID))
-                output.AppendLine($"   {pair.Key}: {string.Join(", ", pair.Value)}");
+            output.AppendLine("=====================");
+            output.AppendLine("==  Global tokens  ==");
+            output.AppendLine("=====================");
+            {
+                IToken[] tokens = this.TokenManager.GetTokens(enforceContext: false).OrderBy(this.GetDisplayOrder).ToArray();
+                IToken[] tokensOutOfContext = tokens.Where(p => !p.IsValidInContext).ToArray();
+                foreach (IToken token in tokens.Except(tokensOutOfContext))
+                {
+                    if (token.RequiresSubkeys)
+                    {
+                        foreach (TokenName name in token.GetSubkeys().OrderBy(p => p))
+                            output.AppendLine($"   {name}: {string.Join(", ", token.GetValues(name))}");
+                    }
+                    else
+                        output.AppendLine($"   {token.Name}: {string.Join(", ", token.GetValues(token.Name))}");
+                }
+                if (tokensOutOfContext.Any())
+                {
+                    output.AppendLine();
+                    output.AppendLine($"   Tokens not valid in this context: {string.Join(", ", tokensOutOfContext.Select(p => p.Name.ToString()))}.");
+                }
+            }
             output.AppendLine();
 
             // add patch summary
@@ -172,7 +195,7 @@ namespace ContentPatcher.Framework.Commands
 
             output.AppendLine(
                 "========================\n"
-                + "==  Content patches   ==\n"
+                + "== Content patches ==\n"
                 + "========================\n"
                 + "The following patches were loaded. For each patch:\n"
                 + "  - 'loaded' shows whether the patch is loaded and enabled (see details for the reason if not).\n"
@@ -182,7 +205,31 @@ namespace ContentPatcher.Framework.Commands
             );
             foreach (IGrouping<string, PatchInfo> patchGroup in patches)
             {
+                ModTokenContext tokenContext = this.TokenManager.TrackLocalTokens(patchGroup.First().ContentPack.Pack);
                 output.AppendLine($"{patchGroup.Key}:");
+                output.AppendLine("========================");
+
+                // print tokens
+                {
+                    IToken[] localTokens = tokenContext.GetTokens(localOnly: true, enforceContext: false).ToArray();
+                    if (localTokens.Any())
+                    {
+                        output.AppendLine();
+                        output.AppendLine("   Local tokens:");
+                        foreach (IToken token in localTokens.OrderBy(p => p.Name))
+                        {
+                            if (token.RequiresSubkeys)
+                            {
+                                foreach (TokenName name in token.GetSubkeys().OrderBy(p => p))
+                                    output.AppendLine($"      {name}: {string.Join(", ", token.GetValues(name))}");
+                            }
+                            else
+                                output.AppendLine($"      {token.Name}: {string.Join(", ", token.GetValues(token.Name))}");
+                        }
+                    }
+                }
+
+                // print patches
                 output.AppendLine();
                 output.AppendLine("   loaded  | conditions | applied | name + details");
                 output.AppendLine("   ------- | ---------- | ------- | --------------");
@@ -196,39 +243,16 @@ namespace ContentPatcher.Framework.Commands
                         output.Append($" | {patch.Type} {patch.RawAssetName}");
 
                     // log parsed target if tokenised
-                    if (patch.MatchesContext && patch.ParsedAssetName != null && patch.ParsedAssetName.ConditionTokens.Any())
+                    if (patch.MatchesContext && patch.ParsedAssetName != null && patch.ParsedAssetName.Tokens.Any())
                         output.Append($" | => {patch.ParsedAssetName.Value}");
 
                     // log reason not applied
-                    bool hasErrorReason = false;
-                    if (!patch.IsLoaded)
-                    {
-                        output.Append($" | not loaded: {patch.ReasonDisabled}");
-                        hasErrorReason = true;
-                    }
-                    else if (!patch.MatchesContext && patch.ParsedConditions != null)
-                    {
-                        string[] failedConditions = (
-                            from condition in patch.ParsedConditions.Values
-                            orderby condition.Key.ToString()
-                            where !condition.IsMatch(context)
-                            select $"{condition.Key} ({string.Join(", ", condition.Values)})"
-                        ).ToArray();
-
-                        output.Append(failedConditions.Any()
-                            ? $" | failed conditions: {string.Join(", ", failedConditions)}"
-                            : " | disabled (reason unknown)"
-                        );
-                        hasErrorReason = true;
-                    }
-                    else if (!patch.IsLoaded)
-                    {
-                        output.Append(" | disabled (reason unknown)");
-                        hasErrorReason = true;
-                    }
+                    string errorReason = this.GetReasonNotLoaded(patch, tokenContext);
+                    if (errorReason != null)
+                        output.Append($"  // {errorReason}");
 
                     // log common issues
-                    if (!hasErrorReason && patch.IsLoaded && !patch.IsApplied && patch.ParsedAssetName?.Value != null)
+                    if (errorReason == null && patch.IsLoaded && !patch.IsApplied && patch.ParsedAssetName?.Value != null)
                     {
                         string assetName = patch.ParsedAssetName.Value;
 
@@ -275,14 +299,59 @@ namespace ContentPatcher.Framework.Commands
                 yield return new PatchInfo(patch);
         }
 
-        /// <summary>Get the display order for a condition in <c>patch summary</c> output.</summary>
-        /// <param name="key">The condition key.</param>
-        private int GetDisplayOrder(ConditionKey key)
+        /// <summary>Get the display order for a token in <c>patch summary</c> output.</summary>
+        /// <param name="token">The token to check.</param>
+        private int GetDisplayOrder(IToken token)
         {
-            int index = Array.IndexOf(this.DisplayOrder, key.Type);
+            if (!token.Name.TryGetConditionType(out ConditionType type))
+                return this.DisplayOrder.Length;
+
+            int index = Array.IndexOf(this.DisplayOrder, type);
             return index != -1
                 ? index
                 : this.DisplayOrder.Length;
+        }
+
+        /// <summary>Get a human-readable reason that the patch isn't applied.</summary>
+        /// <param name="patch">The patch to check.</param>
+        /// <param name="tokenContext">The token context for the content pack.</param>
+        private string GetReasonNotLoaded(PatchInfo patch, IContext tokenContext)
+        {
+            if (patch.IsApplied)
+                return null;
+
+            // load error
+            if (!patch.IsLoaded)
+                return $"not loaded: {patch.ReasonDisabled}";
+
+            // uses tokens not available in the current context
+            {
+                IList<TokenName> tokensOutOfContext = patch
+                    .TokensUsed
+                    .Union(patch.ParsedConditions.Keys)
+                    .Where(p => !tokenContext.GetToken(p, enforceContext: false).IsValidInContext)
+                    .OrderBy(p => p.ToString())
+                    .ToArray();
+
+                if (tokensOutOfContext.Any())
+                    return $"uses tokens not available right now: {string.Join(", ", tokensOutOfContext)}";
+            }
+
+            // conditions not matched
+            if (!patch.MatchesContext && patch.ParsedConditions != null)
+            {
+                string[] failedConditions = (
+                    from condition in patch.ParsedConditions.Values
+                    orderby condition.Name.ToString()
+                    where !condition.IsMatch(tokenContext)
+                    select $"{condition.Name} ({string.Join(", ", condition.Values)})"
+                ).ToArray();
+
+                if (failedConditions.Any())
+                    return $"conditions don't match: {string.Join(", ", failedConditions)}";
+            }
+
+            return null;
         }
     }
 }

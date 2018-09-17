@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using StardewValley;
@@ -12,11 +11,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /*********
         ** Properties
         *********/
-        /// <summary>A regular expression which matches a group of tags in the chest name.</summary>
-        private const string TagGroupPattern = @"\|([^\|]+)\|";
-
         /// <summary>The default name to display if it hasn't been customised.</summary>
-        private readonly string DefaultName;
+        private readonly string DefaultDisplayName;
 
 
         /*********
@@ -25,29 +21,35 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>The storage container.</summary>
         public IContainer Container { get; }
 
-        /// <summary>The chest's display name.</summary>
-        public string Name { get; private set; }
-
-        /// <summary>The category name (if any).</summary>
-        public string Category { get; private set; }
-
-        /// <summary>Whether the chest should be ignored.</summary>
-        public bool IsIgnored { get; private set; }
-
-        /// <summary>Whether Automate should ignore this chest.</summary>
-        public bool ShouldAutomateIgnore { get; private set; }
-
-        /// <summary>Whether Automate should prefer this chest for output.</summary>
-        public bool ShouldAutomatePreferForOutput { get; private set; }
-
-        /// <summary>The sort value (if any).</summary>
-        public int? Order { get; private set; }
-
         /// <summary>The location or building which contains the chest.</summary>
         public GameLocation Location { get; }
 
         /// <summary>The chest's tile position within its location or building.</summary>
         public Vector2 Tile { get; }
+
+        /// <summary>Whether the player can customise the container data.</summary>
+        public bool CanEdit => this.Container.IsDataEditable;
+
+        /// <summary>Whether Automate options can be configured for this chest.</summary>
+        public bool CanConfigureAutomate => this.Container.CanConfigureAutomate;
+
+        /// <summary>The user-friendly display name.</summary>
+        public string DisplayName => this.Container.Data.Name ?? this.DefaultDisplayName;
+
+        /// <summary>The user-friendly category name (if any).</summary>
+        public string DisplayCategory => this.Container.Data.Name ?? this.Location.Name;
+
+        /// <summary>Whether the container should be ignored.</summary>
+        public bool IsIgnored => this.Container.Data.IsIgnored;
+
+        /// <summary>Whether Automate should ignore this container.</summary>
+        public bool ShouldAutomateIgnore => this.Container.Data.ShouldAutomateIgnore;
+
+        /// <summary>Whether Automate should prefer this container for output.</summary>
+        public bool ShouldAutomatePreferForOutput => this.Container.Data.ShouldAutomatePreferForOutput;
+
+        /// <summary>The sort value (if any).</summary>
+        public int? Order => this.Container.Data.Order;
 
 
         /*********
@@ -57,74 +59,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="container">The storage container.</param>
         /// <param name="location">The location or building which contains the chest.</param>
         /// <param name="tile">The chest's tile position within its location or building.</param>
-        /// <param name="defaultName">The default name to display if it hasn't been customised.</param>
-        public ManagedChest(IContainer container, GameLocation location, Vector2 tile, string defaultName)
+        /// <param name="defaultDisplayName">The default name to display if it hasn't been customised.</param>
+        public ManagedChest(IContainer container, GameLocation location, Vector2 tile, string defaultDisplayName)
         {
-            // save values
             this.Container = container;
             this.Location = location;
             this.Tile = tile;
-            this.DefaultName = defaultName;
-
-            // parse name
-            if (container.HasDefaultName() || string.IsNullOrWhiteSpace(container.Name))
-                this.Name = this.DefaultName;
-            else
-            {
-                string name = !container.HasDefaultName() ? container.Name : defaultName;
-
-                // read |tags|
-                foreach (Match match in Regex.Matches(name, ManagedChest.TagGroupPattern))
-                {
-                    string tag = match.Groups[1].Value;
-
-                    // ignore
-                    if (tag.ToLower() == "ignore")
-                    {
-                        this.IsIgnored = true;
-                        continue;
-                    }
-
-                    // category
-                    if (tag.ToLower().StartsWith("cat:"))
-                    {
-                        this.Category = tag.Substring(4).Trim();
-                        continue;
-                    }
-
-                    // order
-                    if (int.TryParse(tag, out int order))
-                        this.Order = order;
-
-                    // Automate options
-                    if (tag.ToLower() == "automate:ignore")
-                    {
-                        this.ShouldAutomateIgnore = true;
-                        continue;
-                    }
-                    if (tag.ToLower() == "automate:output")
-                    {
-                        this.ShouldAutomatePreferForOutput = true;
-                        continue;
-                    }
-                }
-
-                // read display name
-                name = Regex.Replace(name, ManagedChest.TagGroupPattern, "").Trim();
-                this.Name = !string.IsNullOrWhiteSpace(name) && name != this.Container.DefaultName
-                    ? name
-                    : this.DefaultName;
-            }
-            // normalise
-            if (this.Category == null)
-                this.Category = "";
+            this.DefaultDisplayName = defaultDisplayName;
         }
 
         /// <summary>Get the grouping category for a chest.</summary>
         public string GetGroup()
         {
-            return !string.IsNullOrWhiteSpace(this.Category)
-                ? this.Category
+            return !string.IsNullOrWhiteSpace(this.Container.Data.Category)
+                ? this.Container.Data.Category
                 : this.Location.Name;
         }
 
@@ -137,31 +85,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="shouldAutomatePreferForOutput">Whether Automate should prefer this chest for output.</param>
         public void Update(string name, string category, int? order, bool ignored, bool shouldAutomateIgnore, bool shouldAutomatePreferForOutput)
         {
-            // update high-level metadata
-            this.Name = !string.IsNullOrWhiteSpace(name) ? name.Trim() : this.DefaultName;
-            this.Category = category?.Trim() ?? "";
-            this.Order = order;
-            this.IsIgnored = ignored;
-            this.ShouldAutomateIgnore = shouldAutomateIgnore;
-            this.ShouldAutomatePreferForOutput = shouldAutomatePreferForOutput;
+            ContainerData data = this.Container.Data;
 
-            // build internal name
-            string internalName = !this.HasDefaultName() ? this.Name : this.Container.DefaultName;
-            if (this.Order.HasValue)
-                internalName += $" |{this.Order}|";
-            if (this.IsIgnored)
-                internalName += " |ignore|";
-            if (!string.IsNullOrWhiteSpace(this.Category) && this.Category != this.Location.Name)
-                internalName += $" |cat:{this.Category}|";
-            if (this.ShouldAutomateIgnore)
-                internalName += " |automate:ignore|";
-            if (this.ShouldAutomatePreferForOutput)
-                internalName += " |automate:output|";
+            data.Name = !string.IsNullOrWhiteSpace(name) && name != this.DefaultDisplayName
+                ? name.Trim()
+                : null;
+            data.Category = !string.IsNullOrWhiteSpace(category) && category != this.Location.Name
+                ? category.Trim()
+                : null;
+            data.Order = order;
+            data.IsIgnored = ignored;
+            data.ShouldAutomateIgnore = shouldAutomateIgnore;
+            data.ShouldAutomatePreferForOutput = shouldAutomatePreferForOutput;
 
-            // update container
-            this.Container.Name = !string.IsNullOrWhiteSpace(internalName)
-                ? internalName
-                : this.Container.DefaultName;
+            this.Container.SaveData();
         }
 
         /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
@@ -173,7 +110,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>Get whether the container has its default name.</summary>
         public bool HasDefaultName()
         {
-            return string.IsNullOrWhiteSpace(this.Name) || this.Name == this.DefaultName;
+            return this.Container.Data.HasDefaultDisplayName();
         }
     }
 }

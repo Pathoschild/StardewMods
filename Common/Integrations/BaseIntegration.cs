@@ -47,7 +47,7 @@ namespace Pathoschild.Stardew.Common.Integrations
             this.Monitor = monitor;
 
             // validate mod
-            IManifest manifest = modRegistry.Get(this.ModID);
+            IManifest manifest = modRegistry.Get(this.ModID)?.Manifest;
             if (manifest == null)
                 return;
             if (manifest.Version.IsOlderThan(minVersion))

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 
@@ -19,10 +20,16 @@ namespace ContentPatcher.Framework.Patches
         private readonly IMonitor Monitor;
 
         /// <summary>The data records to edit.</summary>
-        private readonly IDictionary<string, string> Records;
+        private readonly IDictionary<string, TokenString> Records;
 
         /// <summary>The data fields to edit.</summary>
-        private readonly IDictionary<string, IDictionary<int, string>> Fields;
+        private readonly IDictionary<string, IDictionary<int, TokenString>> Fields;
+
+        /// <summary>The token strings which contain mutable tokens.</summary>
+        private readonly TokenString[] MutableTokenStrings;
+
+        /// <summary>Whether the next context update is the first one.</summary>
+        private bool IsFirstUpdate = true;
 
 
         /*********
@@ -37,12 +44,54 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="fields">The data fields to edit.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditDataPatch(string logName, ManagedContentPack contentPack, TokenString assetName, ConditionDictionary conditions, IDictionary<string, string> records, IDictionary<string, IDictionary<int, string>> fields, IMonitor monitor, Func<string, string> normaliseAssetName)
+        public EditDataPatch(string logName, ManagedContentPack contentPack, TokenString assetName, ConditionDictionary conditions, IDictionary<string, TokenString> records, IDictionary<string, IDictionary<int, TokenString>> fields, IMonitor monitor, Func<string, string> normaliseAssetName)
             : base(logName, PatchType.EditData, contentPack, assetName, conditions, normaliseAssetName)
         {
             this.Records = records;
             this.Fields = fields;
             this.Monitor = monitor;
+            this.MutableTokenStrings = this.GetTokenStrings(records, fields).Where(str => str.Tokens.Any()).ToArray();
+        }
+
+        /// <summary>Update the patch data when the context changes.</summary>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <returns>Returns whether the patch data changed.</returns>
+        public override bool UpdateContext(IContext context)
+        {
+            bool changed = base.UpdateContext(context);
+
+            // We need to update all token strings once. After this first time, we can skip
+            // updating any immutable tokens.
+            if (this.IsFirstUpdate)
+            {
+                this.IsFirstUpdate = false;
+                foreach (TokenString str in this.GetTokenStrings(this.Records, this.Fields))
+                {
+                    if (str.UpdateContext(context) && str.Tokens.Any())
+                        changed = true;
+                }
+            }
+            else
+            {
+                foreach (TokenString str in this.MutableTokenStrings)
+                {
+                    if (str.UpdateContext(context))
+                        changed = true;
+                }
+            }
+
+            return changed;
+        }
+
+        /// <summary>Get the tokens used by this patch in its fields.</summary>
+        public override IEnumerable<TokenName> GetTokensUsed()
+        {
+            if (this.MutableTokenStrings.Length == 0)
+                return base.GetTokensUsed();
+
+            return base
+                .GetTokensUsed()
+                .Union(this.MutableTokenStrings.SelectMany(p => p.Tokens));
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>
@@ -78,6 +127,24 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Private methods
         *********/
+        /// <summary>Get all token strings in the given data.</summary>
+        /// <param name="records">The data records to edit.</param>
+        /// <param name="fields">The data fields to edit.</param>
+        private IEnumerable<TokenString> GetTokenStrings(IDictionary<string, TokenString> records, IDictionary<string, IDictionary<int, TokenString>> fields)
+        {
+            if (records != null)
+            {
+                foreach (TokenString str in records.Values)
+                    yield return str;
+            }
+
+            if (fields != null)
+            {
+                foreach (TokenString str in fields.SelectMany(p => p.Value.Values))
+                    yield return str;
+            }
+        }
+
         /// <summary>Apply the patch to an asset.</summary>
         /// <typeparam name="TKey">The dictionary key type.</typeparam>
         /// <param name="asset">The asset to edit.</param>
@@ -88,11 +155,11 @@ namespace ContentPatcher.Framework.Patches
             // apply records
             if (this.Records != null)
             {
-                foreach (KeyValuePair<string, string> record in this.Records)
+                foreach (KeyValuePair<string, TokenString> record in this.Records)
                 {
                     TKey key = (TKey)Convert.ChangeType(record.Key, typeof(TKey));
                     if (record.Value != null)
-                        data[key] = record.Value;
+                        data[key] = record.Value.Value;
                     else
                         data.Remove(key);
                 }
@@ -101,7 +168,7 @@ namespace ContentPatcher.Framework.Patches
             // apply fields
             if (this.Fields != null)
             {
-                foreach (KeyValuePair<string, IDictionary<int, string>> record in this.Fields)
+                foreach (KeyValuePair<string, IDictionary<int, TokenString>> record in this.Fields)
                 {
                     TKey key = (TKey)Convert.ChangeType(record.Key, typeof(TKey));
                     if (!data.ContainsKey(key))
@@ -111,7 +178,7 @@ namespace ContentPatcher.Framework.Patches
                     }
 
                     string[] actualFields = data[key].Split('/');
-                    foreach (KeyValuePair<int, string> field in record.Value)
+                    foreach (KeyValuePair<int, TokenString> field in record.Value)
                     {
                         if (field.Key < 0 || field.Key > actualFields.Length - 1)
                         {
@@ -119,7 +186,7 @@ namespace ContentPatcher.Framework.Patches
                             continue;
                         }
 
-                        actualFields[field.Key] = field.Value;
+                        actualFields[field.Key] = field.Value.Value;
                     }
 
                     data[key] = string.Join("/", actualFields);

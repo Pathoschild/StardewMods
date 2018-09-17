@@ -37,7 +37,7 @@ hold item  | default effects | optional effects (disabled by default)
 axe        | clear twigs; clear dead crops. | chop down trees; clear live crops.
 fertiliser | fertilise dirt. | —
 hoe        | till dirt. | —
-melee weapon | clear dead crops. | attack monsters.
+melee weapon | clear dead crops; break mine containers. | attack monsters.
 pickaxe    | break rocks; clear tilled dirt; clear dead crops. | break paths/flooring.
 seeds      | plant seeds in dirt. | —
 scythe     | harvest crops, fruit trees, or forage; clear weeds and dead crops. | —
@@ -48,10 +48,10 @@ The tractor uses no stamina when using tools, and the watering can won't run out
 consume fertiliser or seeds when you sow those, though.
 
 ## Configure
-The mod creates a `config.json` file the first time you run it. You can open the file in a text
-editor to configure the mod.
+The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
+file in a text editor to configure the mod.
 
-You can set some general options:
+These are the available settings:
 
 setting | default | effect
 :------ | :------ | :-----

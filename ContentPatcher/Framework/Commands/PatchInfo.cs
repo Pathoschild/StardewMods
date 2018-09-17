@@ -1,5 +1,7 @@
+using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
+using ContentPatcher.Framework.Tokens;
 
 namespace ContentPatcher.Framework.Commands
 {
@@ -39,6 +41,9 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>The reason this patch is disabled (if applicable).</summary>
         public string ReasonDisabled { get; }
 
+        /// <summary>The tokens used by this patch in its fields.</summary>
+        public TokenName[] TokensUsed { get; }
+
 
         /*********
         ** Public methods
@@ -57,6 +62,7 @@ namespace ContentPatcher.Framework.Commands
             this.MatchesContext = false;
             this.IsApplied = false;
             this.ReasonDisabled = patch.ReasonDisabled;
+            this.TokensUsed = new TokenName[0];
         }
 
         /// <summary>Construct an instance.</summary>
@@ -72,6 +78,7 @@ namespace ContentPatcher.Framework.Commands
             this.IsLoaded = true;
             this.MatchesContext = patch.MatchesContext;
             this.IsApplied = patch.IsApplied;
+            this.TokensUsed = patch.GetTokensUsed().ToArray();
         }
 
 

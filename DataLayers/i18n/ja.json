@@ -1,0 +1,44 @@
+{
+  // accessibility
+  "accessibility.name": "アクセシビリティ",
+  "accessibility.clear": "クリア",
+  "accessibility.occupied": "占有",
+  "accessibility.impassable": "通れない",
+  "accessibility.warp": "ワープ",
+
+  // coverage: bee houses
+  "bee-houses.name": "範囲: 蜂の巣",
+  "bee-houses.range": "花の範囲",
+
+  // coverage: Junimo huts
+  "junimo-huts.name": "範囲: ジュニモ小屋",
+  "junimo-huts.can-harvest": "収穫できる",
+  "junimo-huts.cannot-harvest": "収穫できない",
+
+  // coverage: scarecrows
+  "scarecrows.name": "範囲: カカシ",
+  "scarecrows.protected": "守られている",
+  "scarecrows.exposed": "晒されている",
+
+  // coverage: sprinklers
+  "sprinklers.name": "範囲: スプリンクラー",
+  "sprinklers.covered": "範囲内",
+  "sprinklers.dry-crops": "乾いた作物",
+
+  // crops: harvest
+  "crop-harvest.name": "作物: 収穫可能",
+  "crop-harvest.ready": "収穫可能",
+  "crop-harvest.not-ready": "収穫不可能",
+  "crop-harvest.not-enough-time": "時間が足りない",
+
+  // crops: watered
+  "crop-water.name": "作物: 水やり",
+  "crop-water.watered": "潤った作物",
+  "crop-water.dry": "乾いた作物",
+
+  // crops: fertilized
+  "crop-fertilizer.name": "作物: 肥料",
+  "crop-fertilizer.fertilizer": "肥料",
+  "crop-fertilizer.retaining-soil": "保水した土壌",
+  "crop-fertilizer.speed-gro": "グングンノビール"
+}

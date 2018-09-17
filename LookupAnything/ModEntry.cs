@@ -310,7 +310,7 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             this.Monitor.InterceptErrors("loading metadata", () =>
             {
-                this.Metadata = this.Helper.ReadJsonFile<Metadata>(this.DatabaseFileName);
+                this.Metadata = this.Helper.Data.ReadJsonFile<Metadata>(this.DatabaseFileName);
             });
         }
     }

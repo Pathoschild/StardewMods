@@ -1,10 +1,10 @@
 {
   // default chest names
-  "default-name.auto-grabber": "Auto-grabber #{{number}}", // TODO
+  "default-name.auto-grabber": "Recolector Automático #{{number}}",
   "default-name.chest": "Cofre #{{number}}",
   "default-name.fridge": "Nevera",
   "default-name.junimo-hut": "Cabaña Junimo #{{number}}",
-  "default-name.shipping-bin": "Contenedor de envío",
+  "default-name.shipping-bin": "Contenedor de Envío",
 
   // edit-chest labels
   "label.location": "Localización",
@@ -18,14 +18,13 @@
   "label.automate-ignore": "(Automate) No uses este cofre para la automatización",
 
   // button labels
-  "button.edit-chest": "Editar cofre",
-  "button.sort-inventory": "Ordenar inventario",
+  "button.edit-chest": "editar cofre",
+  "button.sort-inventory": "ordenar inventario",
   "button.ok": "OK",
 
   // errors
-  // TODO
-  "errors.disabled-from-here": "You can't access chests from here.",
-  "errors.no-chests": "You don't have any chests yet.",
-  "errors.no-chests-in-location": "You don't have any chests in this area.",
-  "errors.no-chests-in-range": "You don't have any chests in range."
+  "errors.disabled-from-here": "No puedes acceder a tus cofres desde aquí.",
+  "errors.no-chests": "Todavía no tienes ningún cofre.",
+  "errors.no-chests-in-location": "No tienes ningún cofre en este área.",
+  "errors.no-chests-in-range": "No tienes ningún cofre a tu alcance."
 }

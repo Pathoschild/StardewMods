@@ -1,6 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.19.2
+* Improved translations. Thanks to pomepome (Japanese)!
+
+## 1.19.1
+* Updated for Stardew Valley 1.3.29.
+* Improved translations. Thanks to pomepome (added Japanese) and Yllelder (Spanish)!
+
 ## 1.19
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added support for...

@@ -227,7 +227,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     this.GroupSelector.Draw(batch, navOpacity);
 
                 // edit button
-                if (this.Chest.Container.IsEditable)
+                if (this.Chest.CanEdit)
                     this.EditButton.draw(batch, Color.White * navOpacity, 1f);
                 this.SortInventoryButton.draw(batch, Color.White * navOpacity, 1f);
             }
@@ -339,7 +339,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         this.SelectPreviousCategory();
                     else if (controls.NextCategory.Contains(input) && canNavigate)
                         this.SelectNextCategory();
-                    else if (controls.EditChest.Contains(input) && canNavigate)
+                    else if (this.Chest.CanEdit && controls.EditChest.Contains(input) && canNavigate)
                         this.OpenEdit();
                     else if (controls.SortItems.Contains(input))
                         this.SortInventory();
@@ -485,7 +485,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     bool canNavigate = this.CanCloseChest;
                     if (this.Menu.okButton.containsPoint(x, y) && canNavigate)
                         this.Exit(); // in some cases the game won't handle this correctly (e.g. Stardew Valley Fair fishing minigame)
-                    else if (this.Chest.Container.IsEditable && this.EditButton.containsPoint(x, y) && canNavigate)
+                    else if (this.EditButton.containsPoint(x, y) && canNavigate)
                         this.OpenEdit();
                     else if (this.SortInventoryButton.containsPoint(x, y))
                         this.SortInventory();
@@ -508,8 +508,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             switch (this.ActiveElement)
             {
                 case Element.Menu:
-                    if (this.Chest.Container.IsEditable)
-                        this.EditButton.tryHover(x, y);
+                    this.EditButton.tryHover(x, y);
                     this.SortInventoryButton.tryHover(x, y);
                     return false;
 
@@ -550,15 +549,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             // chest dropdown
             {
                 // tab
-                this.ChestTab = new Tab(this.Chest.Name, bounds.X, bounds.Y - Game1.pixelZoom * 25, true, this.Font);
+                this.ChestTab = new Tab(this.Chest.DisplayName, bounds.X, bounds.Y - Game1.pixelZoom * 25, true, this.Font);
 
                 // dropdown
                 ManagedChest[] chests = this.Chests.Where(chest => !this.ShowGroupTab || chest.GetGroup() == this.SelectedGroup).ToArray();
-                this.ChestSelector = new DropList<ManagedChest>(this.Chest, chests, chest => chest.Name, this.ChestTab.bounds.X, this.ChestTab.bounds.Bottom, true, this.Font);
+                this.ChestSelector = new DropList<ManagedChest>(this.Chest, chests, chest => chest.DisplayName, this.ChestTab.bounds.X, this.ChestTab.bounds.Bottom, true, this.Font);
             }
 
             // edit chest button overlay (based on chest dropdown position)
-            if (this.Chest.Container.IsEditable)
             {
                 Rectangle sprite = Sprites.Icons.SpeechBubble;
                 float zoom = Game1.pixelZoom / 2f;
@@ -577,8 +575,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
             // edit form
             int longTextWidth = (int)Game1.smallFont.MeasureString("A sufficiently, reasonably long string").X;
-            this.EditNameField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth, Text = this.Chest.Name };
-            this.EditCategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth, Text = this.Chest.Category };
+            this.EditNameField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth, Text = this.Chest.DisplayName };
+            this.EditCategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth, Text = this.Chest.DisplayCategory };
             this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X, Text = this.Chest.Order?.ToString() };
             this.EditHideChestField = new Checkbox(this.Chest.IsIgnored);
             this.EditAutomateOutput = new Checkbox(this.Chest.ShouldAutomatePreferForOutput);
@@ -669,7 +667,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>Reset and display the edit screen.</summary>
         private void OpenEdit()
         {
-            this.EditNameField.Text = this.Chest.Name;
+            this.EditNameField.Text = this.Chest.DisplayName;
             this.EditCategoryField.Text = this.Chest.GetGroup();
             this.EditOrderField.Text = this.Chest.Order?.ToString();
             this.EditHideChestField.Value = this.Chest.IsIgnored;
