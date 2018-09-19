@@ -2,7 +2,9 @@
 
 # Release notes
 ## 1.5.1
-* Fixed error setting `EditData` entries to `null` in Content Patcher 1.5.
+* Fixed issues in Content Patcher 1.5:
+  * error setting `EditData` entries to `null`;
+  * error using tokens in `Enabled` field.
 
 ## 1.5
 * Added support for dynamic tokens defined by the modder.

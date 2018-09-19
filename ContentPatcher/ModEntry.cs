@@ -707,7 +707,7 @@ namespace ContentPatcher
                     error = $"can only use static tokens in this field, consider using a {nameof(PatchConfig.When)} condition instead.";
                     return false;
                 }
-                if (allowedValues == null || !allowedValues.All(p => p == true.ToString() || p == false.ToString()))
+                if (allowedValues == null || !allowedValues.All(p => bool.TryParse(p, out _)))
                 {
                     error = "that token isn't restricted to 'true' or 'false'.";
                     return false;
