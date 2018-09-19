@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.5.1
+* Fixed error setting `EditData` entries to `null` in Content Patcher 1.5.
+
 ## 1.5
 * Added support for dynamic tokens defined by the modder.
 * Added new tokens:

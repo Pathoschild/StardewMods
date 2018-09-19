@@ -46,8 +46,12 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="tokenContext">The available token context.</param>
         public TokenString(string raw, IContext tokenContext)
         {
-            this.Raw = raw.Trim();
+            // get raw value
+            this.Raw = raw?.Trim();
+            if (string.IsNullOrWhiteSpace(this.Raw))
+                return;
 
+            // extract tokens
             int tokensFound = 0;
             foreach (Match match in TokenString.TokenPattern.Matches(raw))
             {
@@ -63,7 +67,6 @@ namespace ContentPatcher.Framework.Conditions
                 else
                     this.InvalidTokens.Add(rawToken);
             }
-
             this.IsSingleTokenOnly = tokensFound == 1 && TokenString.TokenPattern.Replace(this.Raw, "", 1) == "";
         }
 
