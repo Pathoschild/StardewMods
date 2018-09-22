@@ -669,7 +669,7 @@ namespace ContentPatcher
             IEnumerable<string> values = (
                 from value in field.Split(',')
                 where !string.IsNullOrWhiteSpace(value)
-                select value.Trim().ToLower()
+                select value.Trim()
             );
             return new InvariantHashSet(values);
         }
