@@ -479,34 +479,32 @@ namespace ContentPatcher
                                 return TrackSkip($"the {nameof(PatchConfig.Fields)} can't contain empty values.");
 
                             // parse entries
-                            IDictionary<string, TokenString> entries = new Dictionary<string, TokenString>();
+                            List<EditDataPatchRecord> entries = new List<EditDataPatchRecord>();
                             if (entry.Entries != null)
                             {
                                 foreach (KeyValuePair<string, string> pair in entry.Entries)
                                 {
                                     string key = pair.Key;
                                     if (!this.TryParseTokenString(pair.Value, tokenContext, out string error, out TokenString value))
-                                        return TrackSkip($"the {nameof(PatchConfig.Entries)} > '{key}' entry is invalid: {error}.");
-                                    entries[key] = value;
+                                        return TrackSkip($"the {nameof(PatchConfig.Entries)} > '{key}' entry value is invalid: {error}.");
+                                    entries.Add(new EditDataPatchRecord(key, value));
                                 }
                             }
 
                             // parse fields
-                            IDictionary<string, IDictionary<int, TokenString>> fields = new Dictionary<string, IDictionary<int, TokenString>>();
+                            List<EditDataPatchField> fields = new List<EditDataPatchField>();
                             if (entry.Fields != null)
                             {
-                                foreach (var recordPair in entry.Fields)
+                                foreach (KeyValuePair<string, IDictionary<int, string>> recordPair in entry.Fields)
                                 {
                                     string key = recordPair.Key;
-                                    fields[key] = new Dictionary<int, TokenString>();
-
                                     foreach (var fieldPair in recordPair.Value)
                                     {
                                         int field = fieldPair.Key;
                                         if (!this.TryParseTokenString(fieldPair.Value, tokenContext, out string error, out TokenString value))
                                             return TrackSkip($"the {nameof(PatchConfig.Fields)} > '{key}' > {field} field is invalid: {error}.");
 
-                                        fields[key][field] = value;
+                                        fields.Add(new EditDataPatchField(key, field, value));
                                     }
                                 }
                             }
