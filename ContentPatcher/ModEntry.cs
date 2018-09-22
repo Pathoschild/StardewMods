@@ -484,7 +484,8 @@ namespace ContentPatcher
                             {
                                 foreach (KeyValuePair<string, string> pair in entry.Entries)
                                 {
-                                    string key = pair.Key;
+                                    if (!this.TryParseTokenString(pair.Key, tokenContext, out string keyError, out TokenString key))
+                                        return TrackSkip($"the {nameof(PatchConfig.Entries)} > '{key}' entry key is invalid: {keyError}.");
                                     if (!this.TryParseTokenString(pair.Value, tokenContext, out string error, out TokenString value))
                                         return TrackSkip($"the {nameof(PatchConfig.Entries)} > '{key}' entry value is invalid: {error}.");
                                     entries.Add(new EditDataPatchRecord(key, value));
@@ -497,12 +498,13 @@ namespace ContentPatcher
                             {
                                 foreach (KeyValuePair<string, IDictionary<int, string>> recordPair in entry.Fields)
                                 {
-                                    string key = recordPair.Key;
+                                    if (!this.TryParseTokenString(recordPair.Key, tokenContext, out string keyError, out TokenString key))
+                                        return TrackSkip($"the {nameof(PatchConfig.Fields)} > '{keyError}' field key is invalid: {keyError}.");
                                     foreach (var fieldPair in recordPair.Value)
                                     {
                                         int field = fieldPair.Key;
-                                        if (!this.TryParseTokenString(fieldPair.Value, tokenContext, out string error, out TokenString value))
-                                            return TrackSkip($"the {nameof(PatchConfig.Fields)} > '{key}' > {field} field is invalid: {error}.");
+                                        if (!this.TryParseTokenString(fieldPair.Value, tokenContext, out string valueError, out TokenString value))
+                                            return TrackSkip($"the {nameof(PatchConfig.Fields)} > '{key}' > {field} field is invalid: {valueError}.");
 
                                         fields.Add(new EditDataPatchField(key, field, value));
                                     }

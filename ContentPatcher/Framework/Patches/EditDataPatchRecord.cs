@@ -1,5 +1,5 @@
+using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
-using ContentPatcher.Framework.Tokens;
 
 namespace ContentPatcher.Framework.Patches
 {
@@ -10,7 +10,7 @@ namespace ContentPatcher.Framework.Patches
         ** Accessors
         *********/
         /// <summary>The unique key for the entry in the data file.</summary>
-        public string Key { get; }
+        public TokenString Key { get; }
 
         /// <summary>The entry value to set.</summary>
         public TokenString Value { get; }
@@ -22,18 +22,17 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Construct an instance.</summary>
         /// <param name="key">The unique key for the entry in the data file.</param>
         /// <param name="value">The entry value to set.</param>
-        public EditDataPatchRecord(string key, TokenString value)
+        public EditDataPatchRecord(TokenString key, TokenString value)
         {
             this.Key = key;
             this.Value = value;
         }
 
-        /// <summary>Update the patch data when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the patch data changed.</returns>
-        public bool UpdateContext(IContext context)
+        /// <summary>Get all token strings used in the record.</summary>
+        public IEnumerable<TokenString> GetTokenStrings()
         {
-            return this.Value.UpdateContext(context);
+            yield return this.Key;
+            yield return this.Value;
         }
     }
 }

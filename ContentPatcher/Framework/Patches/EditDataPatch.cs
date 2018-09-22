@@ -66,18 +66,12 @@ namespace ContentPatcher.Framework.Patches
             {
                 this.IsFirstUpdate = false;
                 foreach (TokenString str in this.GetTokenStrings(this.Records, this.Fields))
-                {
-                    if (str.UpdateContext(context) && str.Tokens.Any())
-                        changed = true;
-                }
+                    changed |= str.UpdateContext(context);
             }
             else
             {
                 foreach (TokenString str in this.MutableTokenStrings)
-                {
-                    if (str.UpdateContext(context))
-                        changed = true;
-                }
+                    changed |= str.UpdateContext(context);
             }
 
             return changed;
@@ -132,11 +126,10 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="fields">The data fields to edit.</param>
         private IEnumerable<TokenString> GetTokenStrings(IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields)
         {
-            foreach (EditDataPatchRecord record in records)
-                yield return record.Value;
-
-            foreach (EditDataPatchField field in fields)
-                yield return field.Value;
+            foreach (TokenString tokenStr in records.SelectMany(p => p.GetTokenStrings()))
+                yield return tokenStr;
+            foreach (TokenString tokenStr in fields.SelectMany(p => p.GetTokenStrings()))
+                yield return tokenStr;
         }
 
         /// <summary>Apply the patch to an asset.</summary>
@@ -151,7 +144,7 @@ namespace ContentPatcher.Framework.Patches
             {
                 foreach (EditDataPatchRecord record in this.Records)
                 {
-                    TKey key = (TKey)Convert.ChangeType(record.Key, typeof(TKey));
+                    TKey key = (TKey)Convert.ChangeType(record.Key.Value, typeof(TKey));
                     if (record.Value != null)
                         data[key] = record.Value.Value;
                     else
@@ -162,7 +155,7 @@ namespace ContentPatcher.Framework.Patches
             // apply fields
             if (this.Fields != null)
             {
-                foreach (var recordGroup in this.Fields.GroupBy(p => p.Key))
+                foreach (var recordGroup in this.Fields.GroupBy(p => p.Key.Value))
                 {
                     TKey key = (TKey)Convert.ChangeType(recordGroup.Key, typeof(TKey));
                     if (!data.ContainsKey(key))
