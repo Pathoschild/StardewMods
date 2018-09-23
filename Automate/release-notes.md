@@ -5,7 +5,7 @@
 * Added option to disable shipping bin automation.
 * Fixed compatibility issue with More Buildings mod.
 
-## 1.10.3
+## 1.10.2
 * Updated for Stardew Valley 1.3.29.
 
 ## 1.10.1
