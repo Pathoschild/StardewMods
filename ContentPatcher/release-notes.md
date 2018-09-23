@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.5.1
-* Added token support in `EditData` keys (in addition to values).
+* Added token support in `EditData` keys.
 * Fixed error setting `EditData` entries to `null` since 1.5.
 * Fixed error using tokens in `Enabled` field since 1.5.
 
