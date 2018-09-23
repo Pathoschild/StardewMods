@@ -72,7 +72,7 @@ namespace ContentPatcher
             string[] installedMods =
                 (contentPacks.Select(p => p.Manifest.UniqueID))
                 .Concat(helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
-                .OrderBy(p => p, StringComparer.InvariantCultureIgnoreCase)
+                .OrderByIgnoreCase(p => p)
                 .ToArray();
 
             // load content packs and context
@@ -479,34 +479,34 @@ namespace ContentPatcher
                                 return TrackSkip($"the {nameof(PatchConfig.Fields)} can't contain empty values.");
 
                             // parse entries
-                            IDictionary<string, TokenString> entries = new Dictionary<string, TokenString>();
+                            List<EditDataPatchRecord> entries = new List<EditDataPatchRecord>();
                             if (entry.Entries != null)
                             {
                                 foreach (KeyValuePair<string, string> pair in entry.Entries)
                                 {
-                                    string key = pair.Key;
+                                    if (!this.TryParseTokenString(pair.Key, tokenContext, out string keyError, out TokenString key))
+                                        return TrackSkip($"the {nameof(PatchConfig.Entries)} > '{key}' entry key is invalid: {keyError}.");
                                     if (!this.TryParseTokenString(pair.Value, tokenContext, out string error, out TokenString value))
-                                        return TrackSkip($"the {nameof(PatchConfig.Entries)} > '{key}' entry is invalid: {error}.");
-                                    entries[key] = value;
+                                        return TrackSkip($"the {nameof(PatchConfig.Entries)} > '{key}' entry value is invalid: {error}.");
+                                    entries.Add(new EditDataPatchRecord(key, value));
                                 }
                             }
 
                             // parse fields
-                            IDictionary<string, IDictionary<int, TokenString>> fields = new Dictionary<string, IDictionary<int, TokenString>>();
+                            List<EditDataPatchField> fields = new List<EditDataPatchField>();
                             if (entry.Fields != null)
                             {
-                                foreach (var recordPair in entry.Fields)
+                                foreach (KeyValuePair<string, IDictionary<int, string>> recordPair in entry.Fields)
                                 {
-                                    string key = recordPair.Key;
-                                    fields[key] = new Dictionary<int, TokenString>();
-
+                                    if (!this.TryParseTokenString(recordPair.Key, tokenContext, out string keyError, out TokenString key))
+                                        return TrackSkip($"the {nameof(PatchConfig.Fields)} > '{keyError}' field key is invalid: {keyError}.");
                                     foreach (var fieldPair in recordPair.Value)
                                     {
                                         int field = fieldPair.Key;
-                                        if (!this.TryParseTokenString(fieldPair.Value, tokenContext, out string error, out TokenString value))
-                                            return TrackSkip($"the {nameof(PatchConfig.Fields)} > '{key}' > {field} field is invalid: {error}.");
+                                        if (!this.TryParseTokenString(fieldPair.Value, tokenContext, out string valueError, out TokenString value))
+                                            return TrackSkip($"the {nameof(PatchConfig.Fields)} > '{key}' > {field} field is invalid: {valueError}.");
 
-                                        fields[key][field] = value;
+                                        fields.Add(new EditDataPatchField(key, field, value));
                                     }
                                 }
                             }
@@ -632,7 +632,7 @@ namespace ContentPatcher
                 {
                     InvariantHashSet validValues = new InvariantHashSet(rawValidValues);
                     {
-                        string[] invalidValues = values.Except(validValues, StringComparer.InvariantCultureIgnoreCase).ToArray();
+                        string[] invalidValues = values.ExceptIgnoreCase(validValues).ToArray();
                         if (invalidValues.Any())
                         {
                             error = $"invalid {name} values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", validValues)}";
@@ -669,7 +669,7 @@ namespace ContentPatcher
             IEnumerable<string> values = (
                 from value in field.Split(',')
                 where !string.IsNullOrWhiteSpace(value)
-                select value.Trim().ToLower()
+                select value.Trim()
             );
             return new InvariantHashSet(values);
         }
@@ -707,7 +707,7 @@ namespace ContentPatcher
                     error = $"can only use static tokens in this field, consider using a {nameof(PatchConfig.When)} condition instead.";
                     return false;
                 }
-                if (allowedValues == null || !allowedValues.All(p => p == true.ToString() || p == false.ToString()))
+                if (allowedValues == null || !allowedValues.All(p => bool.TryParse(p, out _)))
                 {
                     error = "that token isn't restricted to 'true' or 'false'.";
                     return false;

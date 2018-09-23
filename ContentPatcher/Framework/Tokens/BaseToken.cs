@@ -24,7 +24,7 @@ namespace ContentPatcher.Framework.Tokens
         public TokenName Name { get; }
 
         /// <summary>Whether the value can change after it's initialised.</summary>
-        public bool IsMutable { get; } = true;
+        public bool IsMutable { get; protected set; } = true;
 
         /// <summary>Whether this token recognises subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with a <c>Abigail</c> subkey).</summary>
         public bool CanHaveSubkeys { get; private set; }

@@ -20,10 +20,10 @@ namespace ContentPatcher.Framework.Patches
         private readonly IMonitor Monitor;
 
         /// <summary>The data records to edit.</summary>
-        private readonly IDictionary<string, TokenString> Records;
+        private readonly EditDataPatchRecord[] Records;
 
         /// <summary>The data fields to edit.</summary>
-        private readonly IDictionary<string, IDictionary<int, TokenString>> Fields;
+        private readonly EditDataPatchField[] Fields;
 
         /// <summary>The token strings which contain mutable tokens.</summary>
         private readonly TokenString[] MutableTokenStrings;
@@ -44,13 +44,13 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="fields">The data fields to edit.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditDataPatch(string logName, ManagedContentPack contentPack, TokenString assetName, ConditionDictionary conditions, IDictionary<string, TokenString> records, IDictionary<string, IDictionary<int, TokenString>> fields, IMonitor monitor, Func<string, string> normaliseAssetName)
+        public EditDataPatch(string logName, ManagedContentPack contentPack, TokenString assetName, ConditionDictionary conditions, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IMonitor monitor, Func<string, string> normaliseAssetName)
             : base(logName, PatchType.EditData, contentPack, assetName, conditions, normaliseAssetName)
         {
-            this.Records = records;
-            this.Fields = fields;
+            this.Records = records.ToArray();
+            this.Fields = fields.ToArray();
             this.Monitor = monitor;
-            this.MutableTokenStrings = this.GetTokenStrings(records, fields).Where(str => str.Tokens.Any()).ToArray();
+            this.MutableTokenStrings = this.GetTokenStrings(this.Records, this.Fields).Where(str => str.Tokens.Any()).ToArray();
         }
 
         /// <summary>Update the patch data when the context changes.</summary>
@@ -66,18 +66,12 @@ namespace ContentPatcher.Framework.Patches
             {
                 this.IsFirstUpdate = false;
                 foreach (TokenString str in this.GetTokenStrings(this.Records, this.Fields))
-                {
-                    if (str.UpdateContext(context) && str.Tokens.Any())
-                        changed = true;
-                }
+                    changed |= str.UpdateContext(context);
             }
             else
             {
                 foreach (TokenString str in this.MutableTokenStrings)
-                {
-                    if (str.UpdateContext(context))
-                        changed = true;
-                }
+                    changed |= str.UpdateContext(context);
             }
 
             return changed;
@@ -130,19 +124,12 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Get all token strings in the given data.</summary>
         /// <param name="records">The data records to edit.</param>
         /// <param name="fields">The data fields to edit.</param>
-        private IEnumerable<TokenString> GetTokenStrings(IDictionary<string, TokenString> records, IDictionary<string, IDictionary<int, TokenString>> fields)
+        private IEnumerable<TokenString> GetTokenStrings(IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields)
         {
-            if (records != null)
-            {
-                foreach (TokenString str in records.Values)
-                    yield return str;
-            }
-
-            if (fields != null)
-            {
-                foreach (TokenString str in fields.SelectMany(p => p.Value.Values))
-                    yield return str;
-            }
+            foreach (TokenString tokenStr in records.SelectMany(p => p.GetTokenStrings()))
+                yield return tokenStr;
+            foreach (TokenString tokenStr in fields.SelectMany(p => p.GetTokenStrings()))
+                yield return tokenStr;
         }
 
         /// <summary>Apply the patch to an asset.</summary>
@@ -155,9 +142,9 @@ namespace ContentPatcher.Framework.Patches
             // apply records
             if (this.Records != null)
             {
-                foreach (KeyValuePair<string, TokenString> record in this.Records)
+                foreach (EditDataPatchRecord record in this.Records)
                 {
-                    TKey key = (TKey)Convert.ChangeType(record.Key, typeof(TKey));
+                    TKey key = (TKey)Convert.ChangeType(record.Key.Value, typeof(TKey));
                     if (record.Value != null)
                         data[key] = record.Value.Value;
                     else
@@ -168,9 +155,9 @@ namespace ContentPatcher.Framework.Patches
             // apply fields
             if (this.Fields != null)
             {
-                foreach (KeyValuePair<string, IDictionary<int, TokenString>> record in this.Fields)
+                foreach (var recordGroup in this.Fields.GroupByIgnoreCase(p => p.Key.Value))
                 {
-                    TKey key = (TKey)Convert.ChangeType(record.Key, typeof(TKey));
+                    TKey key = (TKey)Convert.ChangeType(recordGroup.Key, typeof(TKey));
                     if (!data.ContainsKey(key))
                     {
                         this.Monitor.Log($"Can't apply data patch \"{this.LogName}\" to {this.AssetName}: there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.", LogLevel.Warn);
@@ -178,15 +165,15 @@ namespace ContentPatcher.Framework.Patches
                     }
 
                     string[] actualFields = data[key].Split('/');
-                    foreach (KeyValuePair<int, TokenString> field in record.Value)
+                    foreach (EditDataPatchField field in recordGroup)
                     {
-                        if (field.Key < 0 || field.Key > actualFields.Length - 1)
+                        if (field.FieldIndex < 0 || field.FieldIndex > actualFields.Length - 1)
                         {
-                            this.Monitor.Log($"Can't apply data field \"{this.LogName}\" to {this.AssetName}: record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {field.Key} (must be 0 to {actualFields.Length - 1}).", LogLevel.Warn);
+                            this.Monitor.Log($"Can't apply data field \"{this.LogName}\" to {this.AssetName}: record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {field.FieldIndex} (must be 0 to {actualFields.Length - 1}).", LogLevel.Warn);
                             continue;
                         }
 
-                        actualFields[field.Key] = field.Value.Value;
+                        actualFields[field.FieldIndex] = field.Value.Value;
                     }
 
                     data[key] = string.Join("/", actualFields);

@@ -43,7 +43,7 @@ namespace ContentPatcher.Framework
         public DebugOverlay(IContentHelper contentHelper)
         {
             this.Content = contentHelper;
-            this.TextureNames = this.GetTextureNames(contentHelper).OrderBy(p => p).ToArray();
+            this.TextureNames = this.GetTextureNames(contentHelper).OrderByIgnoreCase(p => p).ToArray();
             this.NextTexture();
         }
 

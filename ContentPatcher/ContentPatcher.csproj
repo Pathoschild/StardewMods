@@ -41,6 +41,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Framework\CaseInsensitiveExtensions.cs" />
     <Compile Include="Framework\Commands\CommandHandler.cs" />
     <Compile Include="Framework\Commands\PatchInfo.cs" />
     <Compile Include="Framework\Conditions\Condition.cs" />
@@ -62,6 +63,8 @@
     <Compile Include="Framework\Constants\PetType.cs" />
     <Compile Include="Framework\Constants\Profession.cs" />
     <Compile Include="Framework\DebugOverlay.cs" />
+    <Compile Include="Framework\Patches\EditDataPatchField.cs" />
+    <Compile Include="Framework\Patches\EditDataPatchRecord.cs" />
     <Compile Include="Framework\GenericTokenContext.cs" />
     <Compile Include="Framework\ManagedContentPack.cs" />
     <Compile Include="Framework\ModTokenContext.cs" />

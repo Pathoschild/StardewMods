@@ -32,6 +32,7 @@ namespace ContentPatcher.Framework.Tokens
             this.AllowedRootValues = allowedValues;
             this.CanHaveMultipleRootValues = canHaveMultipleValues ?? (this.Values.Count > 1 || this.AllowedRootValues == null || this.AllowedRootValues.Count > 1);
             this.EnableSubkeys(required: false, canHaveMultipleValues: false);
+            this.IsMutable = false;
             this.IsValidInContext = true;
         }
 
