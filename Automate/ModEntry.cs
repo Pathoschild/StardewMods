@@ -5,6 +5,7 @@ using System.Linq;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -27,10 +28,10 @@ namespace Pathoschild.Stardew.Automate
         private bool EnableAutomation => Context.IsMainPlayer;
 
         /// <summary>The machines to process.</summary>
-        private readonly IDictionary<GameLocation, MachineGroup[]> MachineGroups = new Dictionary<GameLocation, MachineGroup[]>();
+        private readonly IDictionary<GameLocation, MachineGroup[]> MachineGroups = new Dictionary<GameLocation, MachineGroup[]>(new ObjectReferenceComparer<GameLocation>());
 
         /// <summary>The locations that should be reloaded on the next update tick.</summary>
-        private readonly HashSet<GameLocation> ReloadQueue = new HashSet<GameLocation>();
+        private readonly HashSet<GameLocation> ReloadQueue = new HashSet<GameLocation>(new ObjectReferenceComparer<GameLocation>());
 
         /// <summary>The number of ticks until the next automation cycle.</summary>
         private int AutomateCountdown;

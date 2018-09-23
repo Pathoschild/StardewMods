@@ -37,5 +37,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\ConstraintSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\InvariantDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\InvariantHashSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\ObjectReferenceComparer.cs" />
   </ItemGroup>
 </Project>
