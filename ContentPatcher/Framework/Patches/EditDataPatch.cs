@@ -155,7 +155,7 @@ namespace ContentPatcher.Framework.Patches
             // apply fields
             if (this.Fields != null)
             {
-                foreach (var recordGroup in this.Fields.GroupBy(p => p.Key.Value))
+                foreach (var recordGroup in this.Fields.GroupByIgnoreCase(p => p.Key.Value))
                 {
                     TKey key = (TKey)Convert.ChangeType(recordGroup.Key, typeof(TKey));
                     if (!data.ContainsKey(key))

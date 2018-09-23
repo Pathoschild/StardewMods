@@ -124,7 +124,7 @@ namespace ContentPatcher.Framework
                         defaultValues = new InvariantHashSet(allowValues.First());
 
                     // validate values
-                    string[] invalidValues = defaultValues.Except(allowValues).ToArray();
+                    string[] invalidValues = defaultValues.ExceptIgnoreCase(allowValues).ToArray();
                     if (invalidValues.Any())
                     {
                         logWarning(rawKey, $"default values '{string.Join(", ", invalidValues)}' are not allowed according to {nameof(ConfigSchemaFieldConfig.AllowBlank)}.");
@@ -164,7 +164,7 @@ namespace ContentPatcher.Framework
             );
 
             // remove invalid values
-            foreach (string key in configValues.Keys.Except(config.Keys).ToArray())
+            foreach (string key in configValues.Keys.ExceptIgnoreCase(config.Keys).ToArray())
             {
                 logWarning(key, "no such field supported by this content pack.");
                 configValues.Remove(key);
@@ -194,7 +194,7 @@ namespace ContentPatcher.Framework
                 }
 
                 // validate allow-values
-                string[] invalidValues = field.Value.Except(field.AllowValues).ToArray();
+                string[] invalidValues = field.Value.ExceptIgnoreCase(field.AllowValues).ToArray();
                 if (invalidValues.Any())
                 {
                     logWarning(key, $"found invalid values ({string.Join(", ", invalidValues)}), expected: {string.Join(", ", field.AllowValues)}.");

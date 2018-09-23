@@ -139,7 +139,7 @@ namespace ContentPatcher.Framework.Commands
                     + "intended for troubleshooting and aren't intended for players. You use it by specifying a more "
                     + $"specific command (like 'help' in '{this.CommandName} help'). Here are the available commands:\n\n"
                 );
-                foreach (var entry in helpEntries.OrderBy(p => p.Key))
+                foreach (var entry in helpEntries.OrderByIgnoreCase(p => p.Key))
                 {
                     help.AppendLine(entry.Value);
                     help.AppendLine();
@@ -190,8 +190,8 @@ namespace ContentPatcher.Framework.Commands
 
             // add patch summary
             var patches = this.GetAllPatches()
-                .GroupBy(p => p.ContentPack.Manifest.Name)
-                .OrderBy(p => p.Key);
+                .GroupByIgnoreCase(p => p.ContentPack.Manifest.Name)
+                .OrderByIgnoreCase(p => p.Key);
 
             output.AppendLine(
                 "========================\n"
@@ -233,7 +233,7 @@ namespace ContentPatcher.Framework.Commands
                 output.AppendLine();
                 output.AppendLine("   loaded  | conditions | applied | name + details");
                 output.AppendLine("   ------- | ---------- | ------- | --------------");
-                foreach (PatchInfo patch in patchGroup.OrderBy(p => p.ShortName))
+                foreach (PatchInfo patch in patchGroup.OrderByIgnoreCase(p => p.ShortName))
                 {
                     // log checkbox and patch name
                     output.Append($"   [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {patch.ShortName}");
@@ -330,7 +330,7 @@ namespace ContentPatcher.Framework.Commands
                     .TokensUsed
                     .Union(patch.ParsedConditions.Keys)
                     .Where(p => !tokenContext.GetToken(p, enforceContext: false).IsValidInContext)
-                    .OrderBy(p => p.ToString())
+                    .OrderByIgnoreCase(p => p.ToString())
                     .ToArray();
 
                 if (tokensOutOfContext.Any())

@@ -142,7 +142,7 @@ namespace ContentPatcher.Framework
             // update patches
             InvariantHashSet reloadAssetNames = new InvariantHashSet();
             string prevAssetName = null;
-            foreach (IPatch patch in this.Patches.OrderBy(p => p.AssetName).ThenBy(p => p.LogName))
+            foreach (IPatch patch in this.Patches.OrderByIgnoreCase(p => p.AssetName).ThenByIgnoreCase(p => p.LogName))
             {
                 // log asset name
                 if (this.Verbose && prevAssetName != patch.AssetName)
@@ -191,7 +191,7 @@ namespace ContentPatcher.Framework
 
             // rebuild asset name lookup
             this.PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>(
-                from patchGroup in this.Patches.GroupBy(p => p.AssetName, StringComparer.InvariantCultureIgnoreCase)
+                from patchGroup in this.Patches.GroupByIgnoreCase(p => p.AssetName)
                 let key = patchGroup.Key
                 let value = new HashSet<IPatch>(patchGroup)
                 select new KeyValuePair<string, HashSet<IPatch>>(key, value)
@@ -200,7 +200,7 @@ namespace ContentPatcher.Framework
             // reload assets if needed
             if (reloadAssetNames.Any())
             {
-                this.VerboseLog($"   reloading {reloadAssetNames.Count} assets: {string.Join(", ", reloadAssetNames.OrderBy(p => p))}");
+                this.VerboseLog($"   reloading {reloadAssetNames.Count} assets: {string.Join(", ", reloadAssetNames.OrderByIgnoreCase(p => p))}");
                 contentHelper.InvalidateCache(asset =>
                 {
                     this.VerboseLog($"      [{(reloadAssetNames.Contains(asset.AssetName) ? "X" : " ")}] reload {asset.AssetName}");

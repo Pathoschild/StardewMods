@@ -72,7 +72,7 @@ namespace ContentPatcher
             string[] installedMods =
                 (contentPacks.Select(p => p.Manifest.UniqueID))
                 .Concat(helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
-                .OrderBy(p => p, StringComparer.InvariantCultureIgnoreCase)
+                .OrderByIgnoreCase(p => p)
                 .ToArray();
 
             // load content packs and context
@@ -632,7 +632,7 @@ namespace ContentPatcher
                 {
                     InvariantHashSet validValues = new InvariantHashSet(rawValidValues);
                     {
-                        string[] invalidValues = values.Except(validValues, StringComparer.InvariantCultureIgnoreCase).ToArray();
+                        string[] invalidValues = values.ExceptIgnoreCase(validValues).ToArray();
                         if (invalidValues.Any())
                         {
                             error = $"invalid {name} values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", validValues)}";

@@ -74,7 +74,7 @@ namespace ContentPatcher.Framework.Tokens
             string[] invalidValues = this.GetInvalidValues(values).ToArray();
             if (invalidValues.Any())
             {
-                error = $"can't parse some values ({string.Join(", ", invalidValues)}) as profession IDs; must be a predefined name ({string.Join(", ", Enum.GetNames(typeof(Profession)).OrderBy(p => p))}) or integer ID.";
+                error = $"can't parse some values ({string.Join(", ", invalidValues)}) as profession IDs; must be a predefined name ({string.Join(", ", Enum.GetNames(typeof(Profession)).OrderByIgnoreCase(p => p))}) or integer ID.";
                 return false;
             }
 
