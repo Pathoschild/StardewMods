@@ -28,6 +28,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The object IDs through which machines can connect, but which have no other automation properties.</summary>
         private readonly IDictionary<ObjectType, HashSet<int>> Connectors;
 
+        /// <summary>Whether to treat the shipping bin as a machine that can be automated.</summary>
+        private readonly bool AutomateShippingBin;
+
         /// <summary>The tile area on the farm matching the shipping bin.</summary>
         private readonly Rectangle ShippingBinArea = new Rectangle(71, 14, 2, 1);
 
@@ -37,11 +40,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="connectors">The objects through which machines can connect, but which have no other automation properties.</param>
-        public MachineFactory(ModConfigObject[] connectors)
+        /// <param name="automateShippingBin">Whether to treat the shipping bin as a machine that can be automated.</param>
+        public MachineFactory(ModConfigObject[] connectors, bool automateShippingBin)
         {
             this.Connectors = connectors
                 .GroupBy(connector => connector.Type)
                 .ToDictionary(group => group.Key, group => new HashSet<int>(group.Select(p => p.ID)));
+            this.AutomateShippingBin = automateShippingBin;
         }
 
         /// <summary>Get all machine groups in a location.</summary>
@@ -273,7 +278,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 return new JunimoHutMachine(hut);
             if (building is Mill mill)
                 return new MillMachine(mill);
-            if (location is Farm farm && building is ShippingBin)
+            if (this.AutomateShippingBin && location is Farm farm && building is ShippingBin)
                 return new ShippingBinMachine(farm);
             if (building.buildingType.Value == "Silo")
                 return new FeedHopperMachine();
@@ -290,7 +295,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         private bool TryGetTileMachine(GameLocation location, Vector2 tile, IReflectionHelper reflection, out IMachine machine, out Vector2 size)
         {
             // shipping bin
-            if (location is Farm farm && (int)tile.X == this.ShippingBinArea.X && (int)tile.Y == this.ShippingBinArea.Y)
+            if (this.AutomateShippingBin && location is Farm farm && (int)tile.X == this.ShippingBinArea.X && (int)tile.Y == this.ShippingBinArea.Y)
             {
                 machine = new ShippingBinMachine(farm);
                 size = new Vector2(this.ShippingBinArea.Width, this.ShippingBinArea.Height);

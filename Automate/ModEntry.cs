@@ -49,7 +49,7 @@ namespace Pathoschild.Stardew.Automate
         {
             // init
             this.Config = helper.ReadConfig<ModConfig>();
-            this.Factory = new MachineFactory(this.Config.Connectors);
+            this.Factory = new MachineFactory(this.Config.Connectors, this.Config.AutomateShippingBin);
 
             // hook events
             IModEvents events = this.Helper.Events;

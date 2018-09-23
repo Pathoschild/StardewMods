@@ -2,6 +2,7 @@
 
 # Release notes
 ## 1.10.4
+* Added option to disable shipping bin automation.
 * Fixed compatibility issue with More Buildings mod.
 
 ## 1.10.3

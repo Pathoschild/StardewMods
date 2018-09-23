@@ -45,7 +45,7 @@ This can be used to automate...
 * [preserves jars](http://stardewvalleywiki.com/Preserves_Jar);
 * [recycling machines](http://stardewvalleywiki.com/Recycling_Machine);
 * [seed makers](http://stardewvalleywiki.com/Seed_Maker);
-* shipping bins;
+* shipping bins (can be disabled in `config.json`);
 * [silos](http://stardewvalleywiki.com/Silo);
 * [slime egg-presses](http://stardewvalleywiki.com/Slime_Egg);
 * [slime incubators](https://stardewvalleywiki.com/Slime_Incubator);
@@ -118,6 +118,14 @@ These are the available settings:
 The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)).
 You can separate multiple buttons with commas. The default value is `U` to toggle the automation
 overlay.
+
+  </td>
+</tr>
+<tr>
+  <td><code>AutomateShippingBin</code></td>
+  <td>
+
+Default `true`. Whether the shipping bin should automatically pull items out of connected chests.
 
   </td>
 </tr>
