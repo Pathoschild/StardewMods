@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.5.2
+* Fixed another error setting `EditData` entries to `null` since 1.5.
+
 ## 1.5.1
 * Added token support in `EditData` keys.
 * Fixed error setting `EditData` entries to `null` since 1.5.

@@ -31,6 +31,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Whether the string contains any tokens (including invalid tokens).</summary>
         public bool HasAnyTokens => this.Tokens.Count > 0 || this.InvalidTokens.Count > 0;
 
+        /// <summary>Whether the token string value may change depending on the context.</summary>
+        public bool IsMutable { get; }
+
         /// <summary>Whether the token string consists of a single token with no surrounding text.</summary>
         public bool IsSingleTokenOnly { get; }
 
@@ -68,6 +71,7 @@ namespace ContentPatcher.Framework.Conditions
                     this.InvalidTokens.Add(rawToken);
             }
             this.IsSingleTokenOnly = tokensFound == 1 && TokenString.TokenPattern.Replace(this.Raw, "", 1) == "";
+            this.IsMutable = this.Tokens.Any();
         }
 
         /// <summary>Update the <see cref="Value"/> with the given tokens.</summary>
@@ -76,7 +80,7 @@ namespace ContentPatcher.Framework.Conditions
         public bool UpdateContext(IContext context)
         {
             string prevValue = this.Value;
-            this.Value = this.Apply(this.Raw, context);
+            this.Value = this.GetApplied(context);
             return this.Value != prevValue;
         }
 
@@ -85,11 +89,13 @@ namespace ContentPatcher.Framework.Conditions
         ** Private methods
         *********/
         /// <summary>Get a new string with tokens substituted.</summary>
-        /// <param name="raw">The raw string before token substitution.</param>
         /// <param name="context">Provides access to contextual tokens.</param>
-        private string Apply(string raw, IContext context)
+        private string GetApplied(IContext context)
         {
-            return TokenString.TokenPattern.Replace(raw, match =>
+            if (!this.IsMutable)
+                return this.Raw;
+
+            return TokenString.TokenPattern.Replace(this.Raw, match =>
             {
                 TokenName name = TokenName.Parse(match.Groups[1].Value);
                 IToken token = context.GetToken(name, enforceContext: true);
