@@ -2,6 +2,7 @@
 
 # Release notes
 ## 1.5.2
+* Improved `patch summary` output a bit.
 * Fixed another error setting `EditData` entries to `null` since 1.5.
 
 ## 1.5.1

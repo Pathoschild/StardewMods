@@ -194,9 +194,9 @@ namespace ContentPatcher.Framework.Commands
                 .OrderByIgnoreCase(p => p.Key);
 
             output.AppendLine(
-                "========================\n"
+                "=====================\n"
                 + "== Content patches ==\n"
-                + "========================\n"
+                + "=====================\n"
                 + "The following patches were loaded. For each patch:\n"
                 + "  - 'loaded' shows whether the patch is loaded and enabled (see details for the reason if not).\n"
                 + "  - 'conditions' shows whether the patch matches with the current conditions (see details for the reason if not). If this is unexpectedly false, check (a) the conditions above and (b) your Where field.\n"
@@ -207,11 +207,14 @@ namespace ContentPatcher.Framework.Commands
             {
                 ModTokenContext tokenContext = this.TokenManager.TrackLocalTokens(patchGroup.First().ContentPack.Pack);
                 output.AppendLine($"{patchGroup.Key}:");
-                output.AppendLine("========================");
+                output.AppendLine("".PadRight(patchGroup.Key.Length + 1, '-'));
 
                 // print tokens
                 {
-                    IToken[] localTokens = tokenContext.GetTokens(localOnly: true, enforceContext: false).ToArray();
+                    IToken[] localTokens = tokenContext
+                        .GetTokens(localOnly: true, enforceContext: false)
+                        .Where(p => !(p is HasFileToken)) // no value to display
+                        .ToArray();
                     if (localTokens.Any())
                     {
                         output.AppendLine();
