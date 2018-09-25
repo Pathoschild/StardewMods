@@ -212,7 +212,7 @@ their house:
     "FromFile": "assets/green_house.png",
     "When": {
         "Season": "spring, summer",
-        "FarmhouseLevel": "0"
+        "FarmhouseUpgrade": "0"
     }
 }
 ```
@@ -332,7 +332,7 @@ The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `
 </tr>
 
 <tr valign="top">
-<td>FarmhouseLevel</td>
+<td>FarmhouseUpgrade</td>
 <td>
 
 The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades). The normal values are 0 (initial farmhouse), 1 (adds kitchen), 2 (add children's bedroom), and 3 (adds cellar). Mods may add upgrade levels beyond that.

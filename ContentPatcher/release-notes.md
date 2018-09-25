@@ -10,7 +10,7 @@
 * Added support for dynamic tokens defined by the modder.
 * Added new tokens:
   * `FarmCave` (the current farm cave type);
-  * `FarmhouseLevel` (the upgrade level for the main farmhouse);
+  * `FarmhouseUpgrade` (the upgrade level for the main farmhouse);
   * `FarmName` (the farm name);
   * `FarmType` (the farm type like `Standard` or `Wilderness`);
   * `HasFile` (whether a given file path exists in the content pack);
