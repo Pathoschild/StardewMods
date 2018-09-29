@@ -23,8 +23,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>The mill's output chest.</summary>
         private Chest Output => this.Mill.output.Value;
 
-        /// <summary>The maximum stack size to allow for accepted items.</summary>
-        private readonly IDictionary<int, int> MaxStackSize;
+        /// <summary>The maximum input stack size to allow per item ID, if different from <see cref="Item.maximumStackSize"/>.</summary>
+        private readonly IDictionary<int, int> MaxInputStackSize;
 
 
         /*********
@@ -35,9 +35,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         public MillMachine(Mill mill)
         {
             this.Mill = mill;
-            this.MaxStackSize = new Dictionary<int, int>
+            this.MaxInputStackSize = new Dictionary<int, int>
             {
-                [262] = new SObject(262, 1).maximumStackSize(), // wheat => flour
                 [284] = new SObject(284, 1).maximumStackSize() / 3 // beet => 3 sugar (reduce stack to avoid overfilling output)
             };
         }
@@ -104,7 +103,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
             // try adding to input
             int originalSize = item.Count;
             IList<Item> slots = this.Input.items;
-            int maxStackSize = this.MaxStackSize[item.Sample.ParentSheetIndex];
+            int maxStackSize = this.GetMaxInputStackSize(item.Sample);
             for (int i = 0; i < Chest.capacity; i++)
             {
                 // done
@@ -143,7 +142,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
             // free space in stacks
             foreach (Item slot in slots)
             {
-                if (slot == null || slot.Stack < this.MaxStackSize[slot.ParentSheetIndex])
+                if (slot == null || slot.Stack < this.GetMaxInputStackSize(slot))
                     return false;
             }
             return true;
@@ -159,6 +158,18 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         {
             this.Output.clearNulls();
             this.Output.items.Remove(item);
+        }
+
+        /// <summary>Get the maximum input stack size to allow for an item.</summary>
+        /// <param name="item">The input item to check.</param>
+        private int GetMaxInputStackSize(Item item)
+        {
+            if (item == null)
+                return 0;
+
+            return this.MaxInputStackSize.TryGetValue(item.ParentSheetIndex, out int max)
+                ? max
+                : item.maximumStackSize();
         }
     }
 }
