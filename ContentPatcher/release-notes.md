@@ -1,6 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.5.2
+* Improved `patch summary` output a bit.
+* Fixed another error setting `EditData` entries to `null` since 1.5.
+
 ## 1.5.1
 * Added token support in `EditData` keys.
 * Fixed error setting `EditData` entries to `null` since 1.5.
@@ -10,7 +14,7 @@
 * Added support for dynamic tokens defined by the modder.
 * Added new tokens:
   * `FarmCave` (the current farm cave type);
-  * `FarmhouseLevel` (the upgrade level for the main farmhouse);
+  * `FarmhouseUpgrade` (the upgrade level for the main farmhouse);
   * `FarmName` (the farm name);
   * `FarmType` (the farm type like `Standard` or `Wilderness`);
   * `HasFile` (whether a given file path exists in the content pack);
