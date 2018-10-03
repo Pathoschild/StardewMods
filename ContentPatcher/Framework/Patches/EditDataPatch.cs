@@ -145,7 +145,7 @@ namespace ContentPatcher.Framework.Patches
                 foreach (EditDataPatchRecord record in this.Records)
                 {
                     TKey key = (TKey)Convert.ChangeType(record.Key.Value, typeof(TKey));
-                    if (record.Value != null)
+                    if (record.Value.Value != null)
                         data[key] = record.Value.Value;
                     else
                         data.Remove(key);
