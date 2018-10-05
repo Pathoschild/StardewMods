@@ -55,8 +55,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return true;
             }
 
-            // crop or spring onion
-            if (tileFeature is HoeDirt dirt)
+            // crop or spring onion (if an object like a scarecrow isn't placed on top of it)
+            if (tileFeature is HoeDirt dirt && tileObj == null)
             {
                 if (dirt.crop == null)
                     return false;

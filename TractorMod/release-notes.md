@@ -1,4 +1,7 @@
 # Release notes
+## 4.6.1
+* Fixed scythe interacting with scarecrows if there's hoed dirt under them.
+
 ## 4.6
 * Updated for Stardew Valley 1.3.29.
 * Tractor data is now safely stored in the save file, so you no longer need to keep the `data` subfolder when updating (once your save is migrated).
