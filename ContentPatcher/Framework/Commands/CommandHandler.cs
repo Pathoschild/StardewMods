@@ -54,8 +54,8 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>A regex pattern matching asset names which incorrectly include the Content folder.</summary>
         private readonly Regex AssetNameWithContentPattern = new Regex(@"^Content[/\\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        /// <summary>A regex pattern matching asset names which incorrectly include the .xnb extension.</summary>
-        private readonly Regex AssetNameWithXnbExtensionPattern = new Regex(@"\.xnb$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        /// <summary>A regex pattern matching asset names which incorrectly include an extension.</summary>
+        private readonly Regex AssetNameWithExtensionPattern = new Regex(@"(\.\w+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         /// <summary>A regex pattern matching asset names which incorrectly include the locale code.</summary>
         private readonly Regex AssetNameWithLocalePattern = new Regex(@"^\.(?:de-DE|es-ES|ja-JP|pt-BR|ru-RU|zh-CN)(?:\.xnb)?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -262,13 +262,16 @@ namespace ContentPatcher.Framework.Commands
                         List<string> issues = new List<string>();
                         if (this.AssetNameWithContentPattern.IsMatch(assetName))
                             issues.Add("shouldn't include 'Content/' prefix");
-                        if (this.AssetNameWithXnbExtensionPattern.IsMatch(assetName))
-                            issues.Add("shouldn't include '.xnb' extension");
+                        if (this.AssetNameWithExtensionPattern.IsMatch(assetName))
+                        {
+                            var match = this.AssetNameWithExtensionPattern.Match(assetName);
+                            issues.Add($"shouldn't include '{match.Captures[0]}' extension");
+                        }
                         if (this.AssetNameWithLocalePattern.IsMatch(assetName))
                             issues.Add("shouldn't include language code (use conditions instead)");
 
                         if (issues.Any())
-                            output.Append($" | NOTE: asset name may be incorrect ({string.Join("; ", issues)}).");
+                            output.Append($" | hint: asset name may be incorrect ({string.Join("; ", issues)}).");
                     }
 
                     // end line
