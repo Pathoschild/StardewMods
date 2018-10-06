@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Utilities;
@@ -17,10 +18,10 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         private readonly HashSet<GameLocation> ChangedLocations = new HashSet<GameLocation>(new ObjectReferenceComparer<GameLocation>());
 
         /// <summary>The asset name for the crop data.</summary>
-        private const string CropAssetName = "Data/Crops";
+        private readonly string CropAssetName = "Data/Crops";
 
         /// <summary>The asset name for the winter dirt texture.</summary>
-        private const string WinterDirtAssetName = "TerrainFeatures/hoeDirtSnow";
+        private readonly string WinterDirtAssetName = "TerrainFeatures/hoeDirtSnow";
 
 
         /*********
@@ -31,9 +32,13 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         public override void Entry(IModHelper helper)
         {
             // hook events
+            helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             helper.Events.World.LocationListChanged += this.OnLocationListChanged;
             helper.Events.GameLoop.Saving += this.OnSaving;
+
+            // init
+            this.Reset();
         }
 
         /// <summary>Get whether this instance can edit the given asset.</summary>
@@ -41,8 +46,8 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         public bool CanEdit<T>(IAssetInfo asset)
         {
             return
-                asset.AssetNameEquals(ModEntry.CropAssetName)
-                || asset.AssetNameEquals(ModEntry.WinterDirtAssetName);
+                asset.AssetNameEquals(this.CropAssetName)
+                || asset.AssetNameEquals(this.WinterDirtAssetName);
         }
 
         /// <summary>Edit a matched asset.</summary>
@@ -50,7 +55,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         public void Edit<T>(IAssetData asset)
         {
             // change crop seasons
-            if (asset.AssetNameEquals(ModEntry.CropAssetName))
+            if (asset.AssetNameEquals(this.CropAssetName))
             {
                 asset
                     .AsDictionary<int, string>()
@@ -63,7 +68,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
             }
 
             // change dirt texture
-            else if (asset.AssetNameEquals(ModEntry.WinterDirtAssetName))
+            else if (asset.AssetNameEquals(this.WinterDirtAssetName))
                 asset.ReplaceWith(this.Helper.Content.Load<Texture2D>("TerrainFeatures/hoeDirt", ContentSource.GameContent));
         }
 
@@ -80,7 +85,6 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
             // apply changes
-            this.ChangedLocations.Clear(); // ignore any changes from returning to title
             this.ApplyChanges(Game1.locations);
         }
 
@@ -102,9 +106,23 @@ namespace Pathoschild.Stardew.CropsInAnySeason
             this.ClearChanges();
         }
 
+        /// <summary>The method called after the player returns to the title screen.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
+        {
+            this.Reset();
+        }
+
         /****
         ** Methods
         ****/
+        /// <summary>Reset state when starting a new session.</summary>
+        private void Reset()
+        {
+            this.ChangedLocations.Clear();
+        }
+
         /// <summary>Apply changes to the given locations and track changes for later resetting.</summary>
         /// <param name="locations">The locations to handle.</param>
         private void ApplyChanges(IEnumerable<GameLocation> locations)
