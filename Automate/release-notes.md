@@ -2,6 +2,7 @@
 
 # Release notes
 ## 1.10.5
+* Updated for upcoming SMAPI 3.0 event changes.
 * Fixed error if a mill contains an unrecognised item.
 
 ## 1.10.4

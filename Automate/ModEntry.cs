@@ -53,7 +53,6 @@ namespace Pathoschild.Stardew.Automate
 
             // hook events
             IModEvents events = this.Helper.Events;
-
             SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
             PlayerEvents.Warped += this.PlayerEvents_Warped;
             events.World.LocationListChanged += this.World_LocationListChanged;
@@ -105,7 +104,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when a location is added or removed.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void World_LocationListChanged(object sender, WorldLocationListChangedEventArgs e)
+        private void World_LocationListChanged(object sender, LocationListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
                 return;
@@ -127,7 +126,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when an object is added or removed to a location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void World_ObjectListChanged(object sender, WorldObjectListChangedEventArgs e)
+        private void World_ObjectListChanged(object sender, ObjectListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
                 return;
@@ -139,7 +138,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when a terrain feature is added or removed to a location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void World_TerrainFeatureListChanged(object sender, WorldTerrainFeatureListChangedEventArgs e)
+        private void World_TerrainFeatureListChanged(object sender, TerrainFeatureListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
                 return;
@@ -187,7 +186,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void Input_ButtonPressed(object sender, InputButtonPressedEventArgs e)
+        private void Input_ButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             try
             {

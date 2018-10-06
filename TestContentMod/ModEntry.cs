@@ -74,7 +74,7 @@ namespace Pathoschild.Stardew.TestContentMod
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void Input_ButtonPressed(object sender, InputButtonPressedEventArgs e)
+        private void Input_ButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             // print list of loaded assets
             if (e.Button == SButton.F12)
