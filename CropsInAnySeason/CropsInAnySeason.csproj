@@ -46,7 +46,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />
+    <None Include="README.md" />
     <None Include="release-notes.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="screenshot.png" />
   </ItemGroup>
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
