@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.CropsInAnySeason.Framework;
@@ -7,6 +8,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.CropsInAnySeason
 {
@@ -21,6 +23,13 @@ namespace Pathoschild.Stardew.CropsInAnySeason
 
         /// <summary>The seasons for which to override crops.</summary>
         private HashSet<string> EnabledSeasons;
+
+        /// <summary>The crop seasons from the game's crop data indexed by harvest IDs.</summary>
+        /// <remarks>Crops don't store their crop ID, so we can only match them by the harvest ID they produce. This always works for vanilla crops, since different crops never produce the same harvest ID. It's more heuristic for modded crops, which might have duplicate harvest IDs; in that case we just union their seasons to be safe. This lets us revert crops to their normal seasons if the current season is disabled in the mod configuration.</remarks>
+        private Lazy<IDictionary<int, string[]>> SeasonsByHarvestID;
+
+        /// <summary>Whether the mod has reset crops for the current session.</summary>
+        private bool IsInitialised;
 
         /// <summary>Whether crops should be overridden for the current day.</summary>
         private bool ShouldApply;
@@ -145,8 +154,10 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         /// <summary>Reset state when starting a new session.</summary>
         private void Reset()
         {
+            this.IsInitialised = false;
             this.ShouldApply = true;
             this.ChangedLocations.Clear();
+            this.SeasonsByHarvestID = new Lazy<IDictionary<int, string[]>>(this.GetSeasonsByHarvestID);
         }
 
         /// <summary>Update changes for the given date.</summary>
@@ -164,6 +175,17 @@ namespace Pathoschild.Stardew.CropsInAnySeason
                 this.Helper.Content.InvalidateCache(this.CropAssetName);
                 this.Helper.Content.InvalidateCache(this.WinterDirtAssetName);
             }
+
+            // reset crop changes
+            if (!this.IsInitialised || this.ShouldApply != wasApplied)
+            {
+                this.SeasonsByHarvestID = new Lazy<IDictionary<int, string[]>>(this.GetSeasonsByHarvestID);
+                this.IsInitialised = true;
+                if (this.ShouldApply)
+                    this.ApplyChanges(Game1.locations);
+                else
+                    this.ClearChanges();
+            }
         }
 
         /// <summary>Apply changes to the given locations and track changes for later resetting.</summary>
@@ -176,6 +198,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
                     continue;
 
                 location.IsGreenhouse = true;
+                this.UpdateCrops(new[] { location });
                 this.ChangedLocations.Add(location);
             }
         }
@@ -185,7 +208,54 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         {
             foreach (GameLocation location in this.ChangedLocations)
                 location.IsGreenhouse = false;
+            this.UpdateCrops(this.ChangedLocations);
             this.ChangedLocations.Clear();
+        }
+
+        /// <summary>Update all crops to match their seasons in the crop data.</summary>
+        /// <param name="locations">The game locations in which to update crops.</param>
+        private void UpdateCrops(IEnumerable<GameLocation> locations)
+        {
+            foreach (GameLocation location in locations)
+            {
+                // skip indoor locations (which the mod never changes)
+                if (!location.IsOutdoors)
+                    continue;
+
+                // update each crop
+                foreach (HoeDirt dirt in location.terrainFeatures.Values.OfType<HoeDirt>())
+                {
+                    Crop crop = dirt.crop;
+                    if (crop != null && this.SeasonsByHarvestID.Value.TryGetValue(crop.indexOfHarvest.Value, out string[] seasons) && crop.seasonsToGrowIn.Count != seasons.Length)
+                    {
+                        crop.seasonsToGrowIn.Clear();
+                        crop.seasonsToGrowIn.AddRange(seasons);
+                    }
+                }
+            }
+        }
+
+        /// <summary>Get the crop seasons from the game's crop data indexed by harvest IDs.</summary>
+        /// <remarks>See remarks on <see cref="SeasonsByHarvestID"/>.</remarks>
+        private IDictionary<int, string[]> GetSeasonsByHarvestID()
+        {
+            IDictionary<int, string> cropData = this.Helper.Content.Load<Dictionary<int, string>>(this.CropAssetName, ContentSource.GameContent);
+            IDictionary<int, string[]> seasonsByHarvestID = new Dictionary<int, string[]>();
+            foreach (KeyValuePair<int, string> data in cropData)
+            {
+                // parse data
+                string[] fields = data.Value.Split('/');
+                int harvestID = int.Parse(fields[3]);
+                string[] rawSeasons = fields[1].Split(' ');
+
+                // add seasons
+                if (seasonsByHarvestID.TryGetValue(harvestID, out string[] cropSeasons))
+                    seasonsByHarvestID[harvestID] = cropSeasons.Union(rawSeasons).ToArray();
+                else
+                    seasonsByHarvestID[harvestID] = rawSeasons;
+            }
+
+            return seasonsByHarvestID;
         }
     }
 }
