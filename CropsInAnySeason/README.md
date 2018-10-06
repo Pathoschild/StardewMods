@@ -5,6 +5,7 @@ crops in any season, including winter:
 
 ## Contents
 * [Install](#install)
+* [Configure](#configure)
 * [Compatibility](#compatibility)
 * [See also](#see-also)
 
@@ -15,6 +16,16 @@ crops in any season, including winter:
 
 Note that the mod doesn't change store inventories, so you can only buy crop seeds during their
 usual seasons.
+
+## Configure
+The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
+file in a text editor to configure the mod.
+
+Here's what you can change:
+
+setting              | default    | what it affects
+:------------------- | :--------- | :------------------
+`EnableInSeasons`    | all `true` | The seasons in which any crops should grow. Crops will revert to normal in disabled seasons.
 
 ## Compatibility
 The mod is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and

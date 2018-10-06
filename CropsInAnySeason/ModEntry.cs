@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Utilities;
+using Pathoschild.Stardew.CropsInAnySeason.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 
 namespace Pathoschild.Stardew.CropsInAnySeason
@@ -16,6 +18,12 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         *********/
         /// <summary>The locations which have been greenhouseified.</summary>
         private readonly HashSet<GameLocation> ChangedLocations = new HashSet<GameLocation>(new ObjectReferenceComparer<GameLocation>());
+
+        /// <summary>The seasons for which to override crops.</summary>
+        private HashSet<string> EnabledSeasons;
+
+        /// <summary>Whether crops should be overridden for the current day.</summary>
+        private bool ShouldApply;
 
         /// <summary>The asset name for the crop data.</summary>
         private readonly string CropAssetName = "Data/Crops";
@@ -31,10 +39,15 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            // read config
+            var config = helper.ReadConfig<ModConfig>();
+            this.EnabledSeasons = new HashSet<string>(config.EnableInSeasons.GetEnabledSeasons(), StringComparer.InvariantCultureIgnoreCase);
+
             // hook events
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             helper.Events.World.LocationListChanged += this.OnLocationListChanged;
+            helper.Events.GameLoop.DayEnding += this.OnDayEnding;
             helper.Events.GameLoop.Saving += this.OnSaving;
 
             // init
@@ -46,8 +59,11 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         public bool CanEdit<T>(IAssetInfo asset)
         {
             return
-                asset.AssetNameEquals(this.CropAssetName)
-                || asset.AssetNameEquals(this.WinterDirtAssetName);
+                this.ShouldApply
+                && (
+                    asset.AssetNameEquals(this.CropAssetName)
+                    || asset.AssetNameEquals(this.WinterDirtAssetName)
+                );
         }
 
         /// <summary>Edit a matched asset.</summary>
@@ -62,7 +78,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
                     .Set((id, data) =>
                     {
                         string[] fields = data.Split('/');
-                        fields[1] = "spring summer fall winter";
+                        fields[1] = string.Join(" ", this.EnabledSeasons);
                         return string.Join("/", fields);
                     });
             }
@@ -85,7 +101,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
             // apply changes
-            this.ApplyChanges(Game1.locations);
+            this.UpdateContext(SDate.Now());
         }
 
         /// <summary>The method called after a location is added or removed.</summary>
@@ -95,6 +111,15 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         {
             // handle locations added after day start
             this.ApplyChanges(e.Added);
+        }
+
+        /// <summary>The method called before the day ends, before the game sets up the next day.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnDayEnding(object sender, DayEndingEventArgs e)
+        {
+            // remove changes if needed (to let crops die if the next season is disabled)
+            this.UpdateContext(SDate.Now().AddDays(1));
         }
 
         /// <summary>The method called before the day ends, before the game sets up the next day.</summary>
@@ -120,7 +145,25 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         /// <summary>Reset state when starting a new session.</summary>
         private void Reset()
         {
+            this.ShouldApply = true;
             this.ChangedLocations.Clear();
+        }
+
+        /// <summary>Update changes for the given date.</summary>
+        /// <param name="date">The date for which to update the context.</param>
+        private void UpdateContext(SDate date)
+        {
+            // check context
+            bool wasApplied = this.ShouldApply;
+            this.ShouldApply = this.EnabledSeasons.Contains(date.Season);
+
+            // reset asset changes
+            if (this.ShouldApply != wasApplied)
+            {
+                this.Monitor.Log($"{(this.ShouldApply ? "Enabling" : "Disabling")} for {date.Season}.", LogLevel.Trace);
+                this.Helper.Content.InvalidateCache(this.CropAssetName);
+                this.Helper.Content.InvalidateCache(this.WinterDirtAssetName);
+            }
         }
 
         /// <summary>Apply changes to the given locations and track changes for later resetting.</summary>
