@@ -44,11 +44,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Common", "_tests\Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Mods", "_tests\Tests.Mods\Tests.Mods.csproj", "{3A8B43BC-B3BB-49F1-A2E5-B17CFA94A3C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CropsInAnySeason", "CropsInAnySeason\CropsInAnySeason.csproj", "{2BB33EC7-3B13-4AA4-B982-985F8446966B}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Common\Common.projitems*{0510e2ac-ec06-4211-b733-faf9d3a069ea}*SharedItemsImports = 4
 		Common\Common.projitems*{08d098bb-3de6-4ffd-b9ae-31957724cc75}*SharedItemsImports = 4
 		Common\Common.projitems*{2a9c0811-b2d2-474a-a84c-ddeb16206a62}*SharedItemsImports = 4
+		Common\Common.projitems*{2bb33ec7-3b13-4aa4-b982-985f8446966b}*SharedItemsImports = 4
 		Common\Common.projitems*{3ed4784c-6ea7-4dbe-8476-4e1fa972fc3d}*SharedItemsImports = 4
 		Common\Common.projitems*{56fb522e-923d-4582-ad3d-8ec80f09237a}*SharedItemsImports = 4
 		Common\Common.projitems*{6b9d5445-e45c-431d-a5b8-40556e553f54}*SharedItemsImports = 4
@@ -116,6 +119,10 @@ Global
 		{3A8B43BC-B3BB-49F1-A2E5-B17CFA94A3C1}.Debug|x86.Build.0 = Debug|x86
 		{3A8B43BC-B3BB-49F1-A2E5-B17CFA94A3C1}.Release|x86.ActiveCfg = Release|x86
 		{3A8B43BC-B3BB-49F1-A2E5-B17CFA94A3C1}.Release|x86.Build.0 = Release|x86
+		{2BB33EC7-3B13-4AA4-B982-985F8446966B}.Debug|x86.ActiveCfg = Debug|x86
+		{2BB33EC7-3B13-4AA4-B982-985F8446966B}.Debug|x86.Build.0 = Debug|x86
+		{2BB33EC7-3B13-4AA4-B982-985F8446966B}.Release|x86.ActiveCfg = Release|x86
+		{2BB33EC7-3B13-4AA4-B982-985F8446966B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

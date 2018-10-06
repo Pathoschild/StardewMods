@@ -1,0 +1,10 @@
+{
+  "Name": "Crops In Any Season",
+  "Author": "Pathoschild",
+  "Version": "1.0.0",
+  "MinimumApiVersion": "2.8.0-beta",
+  "Description": "Lets you grow crops in any season (configurable).",
+  "UniqueID": "Pathoschild.CropsInAnySeason",
+  "EntryDll": "CropsInAnySeason.dll",
+  "UpdateKeys": [ ]
+}

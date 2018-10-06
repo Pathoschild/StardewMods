@@ -45,6 +45,10 @@ Active mods:
 * **[Tractor Mod](http://www.nexusmods.com/stardewvalley/mods/1401)** <small>([source](TractorMod))</small>  
   _Lets you buy a tractor to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc._
 
+Not released yet:
+* **Crops In Any Season** <small>([source](CropsInAnySeason))</small>  
+  _Lets you grow crops in any season, including winter._
+
 Inactive mods:
 * ~~No Debug Mode~~  
   _(deleted) Disables SMAPI's F2 debug mode, which can cause unintended effects like skipping an
