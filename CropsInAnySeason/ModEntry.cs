@@ -56,6 +56,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
             this.EnabledSeasons = new HashSet<string>(config.EnableInSeasons.GetEnabledSeasons(), StringComparer.InvariantCultureIgnoreCase);
 
             // hook events
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             helper.Events.World.LocationListChanged += this.OnLocationListChanged;
@@ -72,6 +73,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         {
             return
                 this.ShouldApply
+                && Context.IsMainPlayer
                 && (
                     asset.AssetNameEquals(this.CropAssetName)
                     || asset.AssetNameEquals(this.WinterDirtAssetName)
@@ -107,11 +109,23 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         /****
         ** Event handlers
         ****/
+        /// <summary>The method called after a save is loaded.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
+        {
+            if (!Context.IsMainPlayer)
+                this.Monitor.Log("Disabled in multiplayer (only works for the main player).", LogLevel.Info);
+        }
+
         /// <summary>The method called after a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
+            if (!Context.IsMainPlayer)
+                return;
+
             // apply changes
             this.UpdateContext(SDate.Now());
         }
@@ -121,6 +135,9 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         /// <param name="e">The event arguments.</param>
         private void OnLocationListChanged(object sender, LocationListChangedEventArgs e)
         {
+            if (!Context.IsMainPlayer)
+                return;
+
             // handle locations added after day start
             this.ApplyChanges(e.Added);
         }
@@ -130,6 +147,9 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         /// <param name="e">The event arguments.</param>
         private void OnDayEnding(object sender, DayEndingEventArgs e)
         {
+            if (!Context.IsMainPlayer)
+                return;
+
             // remove changes before next day is calculated if tomorrow is out of season
             this.UpdateContext(SDate.Now().AddDays(1));
         }
@@ -139,6 +159,9 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         /// <param name="e">The event arguments.</param>
         private void OnSaving(object sender, SavingEventArgs e)
         {
+            if (!Context.IsMainPlayer)
+                return;
+
             // remove changes before save (to avoid making changes permanent if the mod is uninstalled)
             this.ClearChanges();
         }

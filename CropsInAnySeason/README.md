@@ -25,7 +25,7 @@ Here's what you can change:
 
 setting              | default    | what it affects
 :------------------- | :--------- | :------------------
-`EnableInSeasons`    | all `true` | The seasons in which any crops should grow. Crops will revert to normal in disabled seasons.
+`EnableInSeasons`    | all `true` | The seasons in which any crops should grow. Crops will revert to normal in disabled seasons (and die in the season transition if they're out of season).
 
 ## Compatibility
 The mod is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
