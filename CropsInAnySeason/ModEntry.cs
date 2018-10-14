@@ -24,6 +24,9 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         /// <summary>The seasons for which to override crops.</summary>
         private HashSet<string> EnabledSeasons;
 
+        /// <summary>The order that seasons should be listed in crop data.</summary>
+        private readonly string[] SeasonOrder = { "spring", "summer", "fall", "winter" };
+
         /// <summary>The crop seasons from the game's crop data indexed by harvest IDs.</summary>
         /// <remarks>Crops don't store their crop ID, so we can only match them by the harvest ID they produce. This always works for vanilla crops, since different crops never produce the same harvest ID. It's more heuristic for modded crops, which might have duplicate harvest IDs; in that case we just union their seasons to be safe. This lets us revert crops to their normal seasons if the current season is disabled in the mod configuration.</remarks>
         private Lazy<IDictionary<int, string[]>> SeasonsByHarvestID;
@@ -127,7 +130,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         /// <param name="e">The event arguments.</param>
         private void OnDayEnding(object sender, DayEndingEventArgs e)
         {
-            // remove changes if needed (to let crops die if the next season is disabled)
+            // remove changes before next day is calculated if tomorrow is out of season
             this.UpdateContext(SDate.Now().AddDays(1));
         }
 
@@ -250,7 +253,12 @@ namespace Pathoschild.Stardew.CropsInAnySeason
 
                 // add seasons
                 if (seasonsByHarvestID.TryGetValue(harvestID, out string[] cropSeasons))
-                    seasonsByHarvestID[harvestID] = cropSeasons.Union(rawSeasons).ToArray();
+                {
+                    seasonsByHarvestID[harvestID] = cropSeasons
+                        .Union(rawSeasons)
+                        .OrderBy(season => Array.IndexOf(this.SeasonOrder, season))
+                        .ToArray();
+                }
                 else
                     seasonsByHarvestID[harvestID] = rawSeasons;
             }
