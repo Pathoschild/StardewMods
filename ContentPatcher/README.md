@@ -158,7 +158,7 @@ field      | purpose
   field      | purpose
   ---------- | -------
   &nbsp;     | See _common fields_ above.
-  `FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.png`, `.tbin`, or `.xnb` file. Capitalisation doesn't matter.
+  `FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.json` (data), `.png` (image), `.tbin` (map), or `.xnb` file. Capitalisation doesn't matter. 
 
 * **Edit an image** (`"Action": "EditImage"`).  
   Instead of replacing an entire spritesheet, you can replace just the part you need. For example,
