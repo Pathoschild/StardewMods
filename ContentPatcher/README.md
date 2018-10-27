@@ -177,14 +177,13 @@ field      | purpose
   `PatchMode`| _(optional)_ How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace the target area with your source image.</li><li><code>Overlay</code>: draw your source image over the target, so the original image shows through transparent pixels. Note that semi-transparent pixels will replace the underlying pixels, they won't be combined.</li></ul>
 
 * **Edit a data file** (`"Action": "EditData"`).  
-  Instead of replacing an entire data file, you can edit the individual entries or even fields you
-  need.
+  Instead of replacing an entire data file, you can edit the individual entries or fields you need.
 
   field      | purpose
   ---------- | -------
   &nbsp;     | See _common fields_ above.
   `Fields`   | _(optional)_ The individual fields you want to change for existing entries. [See example in overview](#overview).
-  `Entries`  | _(optional)_ The entries in the data file you want to add, replace, or (if set to `null`) delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. [See example in overview](#overview).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
+  `Entries`  | _(optional)_ The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. [See example in overview](#overview).<br />To add an entry, just specify a key that doesn't exist.<br />To delete an entry, set the value to `null` (like `"some key": null`).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
 
 ## Advanced: tokens & conditions
 ### Overview
