@@ -1,6 +1,6 @@
 # Release notes
 ## 4.6.1
-* Fixed scythe interacting with scarecrows if there's hoed dirt under them.
+* Fixed scythe, seeds, and fertilizer not ignoring tilled dirt that has an object on it (like sprinklers or scarecrows).
 
 ## 4.6
 * Updated for Stardew Valley 1.3.29.

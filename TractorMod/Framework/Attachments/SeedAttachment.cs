@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return this.Config.Enable && item?.Category == SObject.SeedsCategory;
+            return this.Config.Enable && item?.Category == SObject.SeedsCategory && item.Stack > 0;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -47,7 +47,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            if (item == null || item.Stack <= 0)
+            if (item == null || item.Stack <= 0 || tileObj != null)
                 return false;
 
             // get dirt
