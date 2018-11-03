@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.19.3
+* Added neutral gifts when looking up an NPC.
+
 ## 1.19.2
 * Improved translations. Thanks to pomepome (Japanese)!
 

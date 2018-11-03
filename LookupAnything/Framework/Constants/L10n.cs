@@ -446,6 +446,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Loves gifts</c>.</summary>
             public const string LovesGifts = "npc.loves-gifts";
 
+            /// <summary>A value like <c>Neutral gifts</c>.</summary>
+            public const string NeutralGifts = "npc.neutral-gifts";
+
             /****
             ** Values
             ****/

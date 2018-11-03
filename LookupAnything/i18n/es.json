@@ -266,6 +266,7 @@
   "npc.gifted-this-week": "Regalos semanales",
   "npc.loves-gifts": "Ama",
   "npc.likes-gifts": "Le gusta",
+  "npc.neutral-gifts": "Neutral gifts", // TODO
 
   // NPC lookup values
   "npc.can-romance.married": "¡Estás casado! <", // < turns into a heart

@@ -266,6 +266,7 @@
   "npc.gifted-this-week": "今週贈り物をした",
   "npc.loves-gifts": "大好きな贈り物",
   "npc.likes-gifts": "好きな贈り物",
+  "npc.neutral-gifts": "Neutral gifts", // TODO
 
   // NPC lookup values
   "npc.can-romance.married": "あなたと結婚しました♡", // < turns into a heart

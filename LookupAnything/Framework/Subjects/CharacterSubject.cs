@@ -12,6 +12,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Characters;
+using StardewValley.Menus;
 using StardewValley.Monsters;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
@@ -142,6 +143,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         var giftTastes = this.GetGiftTastes(npc, metadata);
                         yield return new CharacterGiftTastesField(this.GameHelper, this.Translate(L10n.Npc.LovesGifts), giftTastes, GiftTaste.Love);
                         yield return new CharacterGiftTastesField(this.GameHelper, this.Translate(L10n.Npc.LikesGifts), giftTastes, GiftTaste.Like);
+                        yield return new CharacterGiftTastesField(this.GameHelper, this.Translate(L10n.Npc.NeutralGifts), giftTastes, GiftTaste.Neutral);
                     }
                     break;
 
