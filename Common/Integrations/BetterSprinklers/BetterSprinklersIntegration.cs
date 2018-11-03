@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.Common.Integrations.BetterSprinklers
         /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         public BetterSprinklersIntegration(IModRegistry modRegistry, IMonitor monitor)
-            : base("Better Sprinklers", "Speeder.BetterSprinklers", "2.3.1-pathoschild-update.4", modRegistry, monitor)
+            : base("Better Sprinklers", "Speeder.BetterSprinklers", "2.3.1-unofficial.6-pathoschild", modRegistry, monitor)
         {
             if (!this.IsLoaded)
                 return;
