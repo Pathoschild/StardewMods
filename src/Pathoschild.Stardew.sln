@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{775A00CB-7
 		..\.editorconfig = ..\.editorconfig
 		..\.gitattributes = ..\.gitattributes
 		..\.gitignore = ..\.gitignore
+		common.targets = common.targets
 		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
 		..\LICENSE = ..\LICENSE
 		..\README.md = ..\README.md
