@@ -7,12 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LookupAnything", "LookupAny
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{775A00CB-71CD-49BF-BB1B-B09951ABD325}"
 	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		.gitattributes = .gitattributes
-		.gitignore = .gitignore
+		..\.editorconfig = ..\.editorconfig
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
 		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
-		LICENSE = LICENSE
-		README.md = README.md
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = ".Common", "Common\.Common.shproj", "{B9E9EDFC-E98A-4370-994F-40A9F39A0284}"
@@ -39,12 +39,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestContentMod", "TestConte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContentPatcher", "ContentPatcher\ContentPatcher.csproj", "{6B9D5445-E45C-431D-A5B8-40556E553F54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Common", "_tests\Tests.Common\Tests.Common.csproj", "{08D098BB-3DE6-4FFD-B9AE-31957724CC75}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Common", "Tests.Common\Tests.Common.csproj", "{08D098BB-3DE6-4FFD-B9AE-31957724CC75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Mods", "_tests\Tests.Mods\Tests.Mods.csproj", "{3A8B43BC-B3BB-49F1-A2E5-B17CFA94A3C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Mods", "Tests.Mods\Tests.Mods.csproj", "{3A8B43BC-B3BB-49F1-A2E5-B17CFA94A3C1}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Common\Common.projitems*{0510e2ac-ec06-4211-b733-faf9d3a069ea}*SharedItemsImports = 4
 		Common\Common.projitems*{08d098bb-3de6-4ffd-b9ae-31957724cc75}*SharedItemsImports = 4
 		Common\Common.projitems*{2a9c0811-b2d2-474a-a84c-ddeb16206a62}*SharedItemsImports = 4
 		Common\Common.projitems*{3ed4784c-6ea7-4dbe-8476-4e1fa972fc3d}*SharedItemsImports = 4
