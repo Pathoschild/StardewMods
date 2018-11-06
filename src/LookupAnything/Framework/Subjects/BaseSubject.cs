@@ -99,13 +99,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             for (Type type = obj.GetType(); type != null; type = type.BaseType)
             {
-                IEnumerable<FieldInfo> fields = type
-                    .GetFields() // public fields
-                    .Concat(type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy)) // non-public fields
-                    .Where(field => !field.IsLiteral); // exclude constants
+                var fields =
+                    (
+                        from field in type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy)
+                        where !field.IsLiteral // exclude constants
+                        select new { field.Name, Value = this.Stringify(field.GetValue(obj)) }
+                    )
+                    .Concat(
+                        from property in type.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy)
+                        where property.CanRead
+                        select new { property.Name, Value = this.Stringify(property.GetValue(obj)) }
+                    )
+                    .OrderBy(field => field.Name, StringComparer.InvariantCultureIgnoreCase);
 
-                foreach (FieldInfo field in fields)
-                    yield return new GenericDebugField($"{type.Name}::{field.Name}", this.Stringify(field.GetValue(obj)));
+                foreach (var field in fields)
+                    yield return new GenericDebugField($"{type.Name}::{field.Name}", field.Value);
             }
         }
 
