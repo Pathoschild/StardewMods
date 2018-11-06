@@ -1,5 +1,6 @@
 # Release notes
 ## 4.6.1
+* Added support for garden pots.
 * Fixed scythe, seeds, and fertilizer not ignoring tilled dirt that has an object on it (like sprinklers or scarecrows).
 
 ## 4.6

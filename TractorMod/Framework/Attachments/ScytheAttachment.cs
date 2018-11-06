@@ -3,7 +3,6 @@ using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
-using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
@@ -33,7 +32,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
+        public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
         {
             return tool is MeleeWeapon && tool.Name.ToLower().Contains("scythe");
         }
@@ -46,7 +45,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
+        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
             // spawned forage
             if (this.Config.HarvestForage && tileObj?.IsSpawnedObject == true)
@@ -56,9 +55,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             }
 
             // crop or spring onion (if an object like a scarecrow isn't placed on top of it)
-            if (tileFeature is HoeDirt dirt && tileObj == null)
+            if (this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out bool dirtCoveredByObj))
             {
-                if (dirt.crop == null)
+                if (dirtCoveredByObj || dirt.crop == null)
                     return false;
 
                 if (this.Config.ClearDeadCrops && dirt.crop.dead.Value)
