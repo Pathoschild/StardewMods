@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
@@ -100,6 +101,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 tileObj.performToolAction(tool, location); // triggers weed drops, but doesn't remove weed
                 location.removeObject(tile, false);
                 return true;
+            }
+
+            // bush
+            Rectangle tileArea = this.GetAbsoluteTileArea(tile);
+            if (this.Config.HarvestForage && location.largeTerrainFeatures.FirstOrDefault(p => p.getBoundingBox(p.tilePosition.Value).Intersects(tileArea)) is Bush bush)
+            {
+                if (!bush.townBush.Value && bush.tileSheetOffset.Value == 1 && bush.inBloom(Game1.currentSeason, Game1.dayOfMonth))
+                {
+                    bush.performUseAction(bush.tilePosition.Value, location);
+                    return true;
+                }
             }
 
             return false;
