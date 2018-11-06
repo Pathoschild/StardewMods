@@ -79,7 +79,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             }
 
             // fruit tree
-            if (this.Config.HarvestFruitTrees && tileFeature is FruitTree tree)
+            if (this.Config.HarvestFruitTrees && tileFeature is FruitTree tree && tree.fruitsOnTree.Value > 0)
             {
                 tree.performUseAction(tile, location);
                 return true;

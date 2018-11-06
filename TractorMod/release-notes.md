@@ -3,6 +3,7 @@
 * Added support for garden pots.
 * Scythe now harvests bush berries.
 * Fixed scythe, seeds, and fertilizer not ignoring tilled dirt that has an object on it (like sprinklers or scarecrows).
+* Fixed scythe shaking fruit trees when they have no fruit.
 
 ## 4.6
 * Updated for Stardew Valley 1.3.29.
