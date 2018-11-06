@@ -1,7 +1,9 @@
 # Release notes
-## 4.6.1
-* Added support for garden pots.
-* Scythe now harvests bush berries.
+## 4.7
+* Added attachment features:
+  * tools now recognise garden pots;
+  * hoe now digs artifact spots;
+  * scythe now harvests bush berries.
 * Fixed scythe, seeds, and fertilizer not ignoring tilled dirt that has an object on it (like sprinklers or scarecrows).
 * Fixed scythe shaking fruit trees when they have no fruit.
 

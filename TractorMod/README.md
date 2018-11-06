@@ -36,11 +36,11 @@ hold item  | default effects | optional effects (disabled by default)
 ---------- | --------------- | --------------------------------------
 axe        | clear twigs; clear dead crops. | chop down trees; clear live crops.
 fertiliser | fertilise dirt. | —
-hoe        | till dirt. | —
+hoe        | till dirt; dig artifact spots. | —
 melee weapon | clear dead crops; break mine containers. | attack monsters.
 pickaxe    | break rocks; clear tilled dirt; clear dead crops. | break paths/flooring.
 seeds      | plant seeds in dirt. | —
-scythe     | harvest crops, fruit trees, or forage; clear weeds and dead crops. | —
+scythe     | harvest crops, bushes, fruit trees, forage; clear weeds and dead crops. | —
 slingshot  | — | shoot one projectile/tile/second in the aimed direction.
 watering can | water crops. | —
 
