@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
     /// <summary>Metadata for a stashed building.</summary>
-    internal class CustomSaveBuilding
+    internal class LegacySaveDataBuilding
     {
         /*********
         ** Accessors
@@ -38,7 +38,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="type">The tile location.</param>
         /// <param name="map">The name of the map containing the building.</param>
         /// <param name="daysOfConstructionLeft">The number of days until construction ends.</param>
-        public CustomSaveBuilding(Vector2 tile, Guid tractorID, int? tractorHatID, string type, string map, int daysOfConstructionLeft)
+        public LegacySaveDataBuilding(Vector2 tile, Guid tractorID, int? tractorHatID, string type, string map, int daysOfConstructionLeft)
         {
             this.Tile = tile;
             this.TractorID = tractorID != Guid.Empty ? tractorID : Guid.NewGuid(); // assign ID for older data

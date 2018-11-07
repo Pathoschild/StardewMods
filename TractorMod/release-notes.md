@@ -1,11 +1,16 @@
 # Release notes
 ## 4.7
+* Added **experimental** support for multiplayer mode. The mod must be installed by the host player, and installed by any farmhand that wants to use the tractor features.
+* Added support for custom mod locations.
+* Added support for buying multiple tractors.
 * Added attachment features:
   * tools now recognise garden pots;
   * hoe now digs artifact spots;
   * scythe now harvests bush berries.
 * Fixed scythe, seeds, and fertilizer not ignoring tilled dirt that has an object on it (like sprinklers or scarecrows).
 * Fixed scythe shaking fruit trees when they have no fruit.
+
+**Update note:** if Robin is still building your tractor, it will be completed when you update.
 
 ## 4.6
 * Updated for Stardew Valley 1.3.29.
@@ -14,6 +19,10 @@
 * Fixed 'instant build' option in CJB Cheats Menu not working with the tractor garage.
 * Removed support for legacy tractor data. (If you haven't loaded the mod in the last year, you'll need to rebuild the garage.)
 * Improved translations. Thanks to pomepome (added Japanese)!
+
+**Update note:** if you built a tractor before Tractor Mod 4.0 and never played with 4.0&ndash;4.5,
+the previous tractor won't be migrated. You can edit the `config.json` to make the tractor free and
+rebuild it.
 
 ## 4.5
 * Updated for Stardew Valley 1.3 (disabled in multiplayer mode).

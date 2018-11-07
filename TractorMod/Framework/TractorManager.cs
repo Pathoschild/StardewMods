@@ -17,8 +17,8 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
-    /// <summary>The in-game tractor that can be ridden by the player.</summary>
-    internal sealed class Tractor : Horse
+    /// <summary>Manages tractor effects when the current player is riding a tractor horse.</summary>
+    internal sealed class TractorManager
     {
         /*********
         ** Properties
@@ -57,69 +57,77 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>Whether the player is currently riding the tractor.</summary>
-        public bool IsRiding => this.rider == Game1.player;
+        /// <summary>Whether the current player is riding the tractor.</summary>
+        public bool IsCurrentPlayerRiding => TractorManager.IsTractor(Game1.player?.mount);
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="tractorID">The tractor's unique horse ID.</param>
-        /// <param name="tileX">The initial tile X position.</param>
-        /// <param name="tileY">The initial tile Y position.</param>
         /// <param name="config">The mod settings.</param>
-        /// <param name="attachments">The tractor attachments to apply.</param>
-        /// <param name="textureName">The texture asset name to load.</param>
         /// <param name="translation">Provides translations from the mod's i18n folder.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public Tractor(Guid tractorID, int tileX, int tileY, ModConfig config, IEnumerable<IAttachment> attachments, string textureName, ITranslationHelper translation, IReflectionHelper reflection)
-            : base(tractorID, tileX, tileY)
+        /// <param name="attachments">The tractor attachments to apply.</param>
+        public TractorManager(ModConfig config, ITranslationHelper translation, IReflectionHelper reflection, IEnumerable<IAttachment> attachments)
         {
-            this.Name = typeof(Tractor).Name;
-            this.Sprite = new AnimatedSprite(textureName, 0, 32, 32)
-            {
-                textureUsesFlippedRightForLeft = true,
-                loop = true
-            };
             this.Config = config;
-            this.Attachments = attachments.ToArray();
-            this.AttachmentCooldowns = this.Attachments.Where(p => p.RateLimit > this.TicksPerAction).ToDictionary(p => p, p => 0);
             this.Translation = translation;
             this.Reflection = reflection;
+            this.Attachments = attachments.ToArray();
+            this.AttachmentCooldowns = this.Attachments.Where(p => p.RateLimit > this.TicksPerAction).ToDictionary(p => p, p => 0);
         }
 
-        /// <summary>Move the tractor to the given location.</summary>
+        /// <summary>Get the unique name for a tractor horse.</summary>
+        /// <param name="id">The horse ID.</param>
+        public static string GetTractorName(Guid id)
+        {
+            return $"tractor/{id:N}";
+        }
+
+        /// <summary>Get whether the given horse should be treated as a tractor.</summary>
+        /// <param name="horse">The horse to check.</param>
+        public static bool IsTractor(Horse horse)
+        {
+            return horse != null && horse.Name.StartsWith("tractor/");
+        }
+
+        /// <summary>Move a horse to the given location.</summary>
+        /// <param name="horse">The horse to move.</param>
         /// <param name="location">The game location.</param>
         /// <param name="tile">The tile coordinate in the given location.</param>
         /// <remarks>The default <see cref="Game1.warpCharacter(NPC,GameLocation,Vector2)"/> logic doesn't work in the mines, so this method reimplements it with better logic.</remarks>
-        public void SetLocation(GameLocation location, Vector2 tile)
+        public static void SetLocation(Horse horse, GameLocation location, Vector2 tile)
         {
-            this.RemoveFromLocation();
-            if (!location.characters.Contains(this))
-                location.addCharacter(this);
-            this.currentLocation = location;
+            // remove horse from its current location
+            // (The default logic in Game1.removeCharacterFromItsLocation doesn't support the mines. since they're not in Game1.locations.)
+            horse.currentLocation?.characters.Remove(horse);
+            horse.currentLocation = null;
 
-            this.isCharging = false;
-            this.speed = 2;
-            this.blockedInterval = 0;
-            this.position.X = tile.X * Game1.tileSize;
-            this.position.Y = tile.Y * Game1.tileSize;
+            // add to new location
+            location.addCharacter(horse);
+            horse.currentLocation = location;
+
+            horse.isCharging = false;
+            horse.speed = 2;
+            horse.blockedInterval = 0;
+            horse.position.X = tile.X * Game1.tileSize;
+            horse.position.Y = tile.Y * Game1.tileSize;
         }
 
         /// <summary>Update tractor effects and actions in the game.</summary>
         public void Update()
         {
             // track health for invincibility
-            if (this.Config.InvincibleOnTractor && this.IsRiding != this.WasRiding)
+            if (this.Config.InvincibleOnTractor && this.IsCurrentPlayerRiding != this.WasRiding)
             {
-                if (this.IsRiding)
+                if (this.IsCurrentPlayerRiding)
                     this.RiderHealth = Game1.player.health;
-                this.WasRiding = this.IsRiding;
+                this.WasRiding = this.IsCurrentPlayerRiding;
             }
 
             // apply riding effects
-            if (this.IsRiding && Game1.activeClickableMenu == null)
+            if (this.IsCurrentPlayerRiding && Game1.activeClickableMenu == null)
             {
                 // apply invincibility
                 if (this.Config.InvincibleOnTractor)
@@ -173,7 +181,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Get whether the tractor is toggled on by the player.</summary>
         private bool IsEnabled()
         {
-            if (!this.IsRiding)
+            if (!this.IsCurrentPlayerRiding)
                 return false;
 
             // automatic mode
@@ -299,25 +307,20 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             }
         }
 
-        /// <summary>Remove an NPC from its current location.</summary>
-        /// <remarks>The default <see cref="Game1.removeCharacterFromItsLocation"/> logic doesn't work in the mines, so this method reimplements it with better logic.</remarks>
-        private void RemoveFromLocation()
-        {
-            this.currentLocation?.characters.Remove(this); // default logic doesn't support the mines (since they're not in Game1.locations)
-            this.currentLocation = null;
-        }
-
         /// <summary>Temporarily dismount and set up the player to interact with a tile, then return it to the previous state afterwards.</summary>
         /// <param name="action">The action to perform.</param>
         private void TemporarilyFakeInteraction(Action action)
         {
             // get references
+            // (Note: change net values directly to avoid sync bugs, since the value will be reset when we're done.)
             SFarmer player = Game1.player;
-            NetRef<Horse> mountField = this.Reflection.GetField<NetRef<Horse>>(Game1.player, "netMount").GetValue(); // change value directly to bypass the game's on-dismount logic
+            NetRef<Horse> mountField = this.Reflection.GetField<NetRef<Horse>>(Game1.player, "netMount").GetValue();
+            IReflectedField<Horse> mountFieldValue = this.Reflection.GetField<Horse>(mountField, "value");
+            IReflectedField<Vector2> mountPositionValue = this.Reflection.GetField<Vector2>(player.mount.position, "value");
 
             // save current state
             Horse mount = mountField.Value;
-            Vector2 mountPosition = this.Position;
+            Vector2 mountPosition = mount.Position;
             WateringCan wateringCan = player.CurrentTool as WateringCan;
             int waterInCan = wateringCan?.WaterLeft ?? 0;
             float stamina = player.stamina;
@@ -327,8 +330,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             bool canMove = Game1.player.canMove; // fix player frozen due to animations when performing an action
 
             // move mount out of the way
-            mountField.Value = null;
-            this.Position = new Vector2(-5, -5);
+            mountFieldValue.SetValue(null);
+            mountPositionValue.SetValue(new Vector2(-5, -5));
 
             // perform action
             try
@@ -338,8 +341,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             finally
             {
                 // move mount back
-                this.Position = mountPosition;
-                mountField.Value = mount;
+                mountPositionValue.SetValue(mountPosition);
+                mountFieldValue.SetValue(mount);
 
                 // restore previous state
                 if (wateringCan != null)

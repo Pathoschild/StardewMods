@@ -65,14 +65,13 @@
     <Compile Include="Framework\Config\SeedsConfig.cs" />
     <Compile Include="Framework\Config\StandardAttachmentConfig.cs" />
     <Compile Include="Framework\Config\WateringCanConfig.cs" />
-    <Compile Include="Framework\CustomSaveBuilding.cs" />
-    <Compile Include="Framework\CustomSaveData.cs" />
+    <Compile Include="Framework\LegacySaveDataBuilding.cs" />
+    <Compile Include="Framework\LegacySaveData.cs" />
     <Compile Include="Framework\ModAttachments\SeedBagAttachment.cs" />
     <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="Framework\BaseAttachment.cs" />
     <Compile Include="Framework\Config\ModConfigControls.cs" />
-    <Compile Include="Framework\Tractor.cs" />
-    <Compile Include="Framework\TractorGarage.cs" />
+    <Compile Include="Framework\TractorManager.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
