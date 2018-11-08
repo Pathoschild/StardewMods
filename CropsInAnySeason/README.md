@@ -11,7 +11,7 @@ crops in any season, including winter:
 
 ## Install
 1. [Install the latest version of SMAPI](https://smapi.io/).
-2. ~~Install this mod from Nexus mods~~.
+2. [Install this mod from Nexus mods](https://www.nexusmods.com/stardewvalley/mods/3000).
 3. Run the game using SMAPI.
 
 Note that the mod doesn't change store inventories, so you can only buy crop seeds during their
@@ -33,8 +33,9 @@ multiplayer. In multiplayer mode, it must be installed by the main player to wor
 
 ## See also
 * [Release notes](release-notes.md)
-* ~~Nexus mod~~
+* [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/3000)
 * ~~Discussion thread~~
-* Inspired by [All Crops All Seasons](https://www.nexusmods.com/stardewvalley/mods/170),
-  which I maintained for a long time after its author left. (This mod uses a very different
-  approach under the hood though.)
+* [All Crops All Seasons](https://www.nexusmods.com/stardewvalley/mods/170)  
+  _The inspiration for this mod. I maintained All Crops All Seasons for a while after its author
+  left, but decided to create a new mod using a different approach that's more robust and addresses
+  limitations in All Crops All Seasons like multiplayer sync issues and non-configurable seasons._

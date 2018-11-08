@@ -12,6 +12,9 @@ Active mods:
   _Access your chests from anywhere and organise them your way. Transfer items without having to
   run around, from the comfort of your bed to the deepest mine level._
 
+* **[Crops In Any Season](https://www.nexusmods.com/stardewvalley/mods/3000)** <small>([source](CropsInAnySeason))</small>  
+  _Lets you grow crops in any season including winter. The seasons are configurable._
+
 * **[Content Patcher](https://www.nexusmods.com/stardewvalley/mods/1915)** <small>([source](ContentPatcher))</small>  
   _Load content packs that change the game's images and data without replacing XNB files. Unlike
   XNB mods, these content packs get automatic update checks and compatibility checks, are easy to
@@ -44,10 +47,6 @@ Active mods:
 
 * **[Tractor Mod](http://www.nexusmods.com/stardewvalley/mods/1401)** <small>([source](TractorMod))</small>  
   _Lets you buy a tractor to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc._
-
-Not released yet:
-* **Crops In Any Season** <small>([source](CropsInAnySeason))</small>  
-  _Lets you grow crops in any season, including winter._
 
 Inactive mods:
 * ~~No Debug Mode~~  
