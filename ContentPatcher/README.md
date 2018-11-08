@@ -730,9 +730,9 @@ reopen the debug UI to refresh the texture list.
 > ![](docs/screenshots/debug-mode.png)
 
 ### Verbose log
-Content Patcher doesn't log much info. You can change that by opening the mod's `config.json` file
-in a text editor and enable `VerboseLog`. **This may significantly slow down loading, and should
-normally be left disabled unless you need it.**
+Content Patcher doesn't log much info. You can change that by opening SMAPI's `smapi-internal/StardewModdingAPI.config.json`
+in a text editor and enabling `VerboseLogging`. **This may significantly slow down loading, and
+should normally be left disabled unless you need it.**
 
 Once enabled, it will log significantly more information at three points:
 1. when loading patches (e.g. whether each patch was enabled and which files were preloaded);

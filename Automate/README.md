@@ -163,16 +163,6 @@ Valid IDs:
 
   </td>
 </tr>
-<tr>
-  <td><code>VerboseLogging</code>
-  <td>
-
-Default `false`. Whether to write more detailed information about what the mod is doing to the log
-file. This is useful for troubleshooting, but may impact performance and should generally be
-disabled.
-
-  </td>
-</tr>
 </table>
 
 ### In-game settings
