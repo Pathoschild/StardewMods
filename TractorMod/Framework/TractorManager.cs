@@ -316,7 +316,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             SFarmer player = Game1.player;
             NetRef<Horse> mountField = this.Reflection.GetField<NetRef<Horse>>(Game1.player, "netMount").GetValue();
             IReflectedField<Horse> mountFieldValue = this.Reflection.GetField<Horse>(mountField, "value");
-            IReflectedField<Vector2> mountPositionValue = this.Reflection.GetField<Vector2>(player.mount.position, "value");
+            IReflectedField<Vector2> mountPositionValue = this.Reflection.GetField<Vector2>(player.mount.position.Field, "value");
 
             // save current state
             Horse mount = mountField.Value;

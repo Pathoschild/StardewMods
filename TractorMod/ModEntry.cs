@@ -49,8 +49,17 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The tractor being ridden by the current player.</summary>
         private TractorManager TractorManager;
 
+        /// <summary>The garage texture to apply.</summary>
+        private Texture2D GarageTexture;
+
+        /// <summary>The tractor texture to apply.</summary>
+        private Texture2D TractorTexture;
+
         /// <summary>Whether the mod is enabled for the current farmhand.</summary>
         private bool IsEnabled = true;
+
+        /// <summary>The mounted players in the player's current location, used to determine whether tractor textures need to be reapplied.</summary>
+        private HashSet<long> MountedPlayersInCurrentLocation = new HashSet<long>();
 
 
         /*********
@@ -115,7 +124,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public T Load<T>(IAssetInfo asset)
         {
-            return this.Helper.Content.Load<T>(this.GetTextureKey("garage"));
+            return (T)(object)this.GarageTexture;
         }
 
 
@@ -164,6 +173,10 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
+            // reload textures
+            this.TractorTexture = this.Helper.Content.Load<Texture2D>(this.GetTextureKey("tractor"));
+            this.GarageTexture = this.Helper.Content.Load<Texture2D>(this.GetTextureKey("garage"));
+
             // host: apply changes in all locations
             if (Context.IsMainPlayer)
             {
@@ -216,6 +229,8 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
         {
+            this.MountedPlayersInCurrentLocation.Clear();
+
             // farmhand: apply changes to new location
             if (!Context.IsMainPlayer && this.IsEnabled)
                 this.ApplyChanges(e.NewLocation);
@@ -318,6 +333,25 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
+            // In multiplayer, mounting a horse causes other players to construct a new horse instance for the player.mount field.
+            // Track mounted players in the current location, and reapply the texture change when this happens.
+            if (this.IsEnabled && Context.IsWorldReady && Context.IsMultiplayer)
+            {
+                foreach (Farmer player in Game1.currentLocation.farmers.Where(p => p.UniqueMultiplayerID != Game1.player.UniqueMultiplayerID))
+                {
+                    // reapply on mount
+                    if (player.mount != null)
+                    {
+                        if (this.MountedPlayersInCurrentLocation.Add(player.UniqueMultiplayerID))
+                            this.ApplyChanges(player.mount);
+                    }
+
+                    // untrack on unmount (texture will be reapplied in OnNpcListChanged)
+                    else
+                        this.MountedPlayersInCurrentLocation.Remove(player.UniqueMultiplayerID);
+                }
+            }
+
             // update effects
             if (this.IsEnabled && Context.IsPlayerFree)
                 this.TractorManager?.Update();
@@ -355,7 +389,7 @@ namespace Pathoschild.Stardew.TractorMod
                 return;
 
             // apply building
-            stable.texture = new Lazy<Texture2D>(() => this.Helper.Content.Load<Texture2D>(this.GetTextureKey("garage")));
+            stable.texture = new Lazy<Texture2D>(() => this.GarageTexture);
             if (!stable.isUnderConstruction())
             {
                 Horse horse = this.FindHorse(stable.HorseId);
@@ -371,7 +405,7 @@ namespace Pathoschild.Stardew.TractorMod
             if (horse != null && (force || TractorManager.IsTractor(horse)))
             {
                 horse.Name = TractorManager.GetTractorName(horse.HorseId);
-                this.Helper.Reflection.GetField<Texture2D>(horse.Sprite, "spriteTexture").SetValue(this.Helper.Content.Load<Texture2D>(this.GetTextureKey("tractor")));
+                this.Helper.Reflection.GetField<Texture2D>(horse.Sprite, "spriteTexture").SetValue(this.TractorTexture);
             }
         }
 
@@ -524,8 +558,7 @@ namespace Pathoschild.Stardew.TractorMod
                     : new Dictionary<int, int>()
             };
 
-            string textureKey = this.GetTextureKey("garage");
-            this.Helper.Reflection.GetField<Texture2D>(blueprint, nameof(BluePrint.texture)).SetValue(this.Helper.Content.Load<Texture2D>(textureKey));
+            this.Helper.Reflection.GetField<Texture2D>(blueprint, nameof(BluePrint.texture)).SetValue(this.GarageTexture);
 
             return blueprint;
         }
