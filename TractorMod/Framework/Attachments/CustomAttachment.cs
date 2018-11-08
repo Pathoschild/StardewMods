@@ -54,7 +54,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return this.UseToolOnTile(tool, tile);
 
             // apply item
-            if (item != null && this.CustomNames.Contains(item.Name))
+            if (item != null && item.Stack > 0 && this.CustomNames.Contains(item.Name))
             {
                 if (item is SObject obj && obj.canBePlacedHere(location, tile) && obj.placementAction(location, (int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), player))
                 {

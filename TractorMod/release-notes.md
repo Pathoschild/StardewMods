@@ -9,6 +9,7 @@
   * scythe now harvests bush berries.
 * Fixed scythe, seeds, and fertilizer not ignoring tilled dirt that has an object on it (like sprinklers or scarecrows).
 * Fixed scythe shaking fruit trees when they have no fruit.
+* Fixed custom attachments being able to use items past their stack size.
 
 **Update note:** if Robin is still building your tractor, it will be completed when you update.
 

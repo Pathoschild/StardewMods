@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.TractorMod
         private bool IsEnabled = true;
 
         /// <summary>The mounted players in the player's current location, used to determine whether tractor textures need to be reapplied.</summary>
-        private HashSet<long> MountedPlayersInCurrentLocation = new HashSet<long>();
+        private readonly HashSet<long> MountedPlayersInCurrentLocation = new HashSet<long>();
 
 
         /*********
