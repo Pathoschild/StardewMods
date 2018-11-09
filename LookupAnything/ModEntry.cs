@@ -244,12 +244,19 @@ namespace Pathoschild.Stardew.LookupAnything
             this.Monitor.InterceptErrors("looking that up", () =>
             {
                 this.Monitor.Log($"Showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.", LogLevel.Trace);
+
+                // remember previous menu
                 if (Game1.activeClickableMenu != null)
                 {
                     if (!this.Config.HideOnKeyUp || !(Game1.activeClickableMenu is LookupMenu))
                         this.PreviousMenus.Push(Game1.activeClickableMenu);
                 }
-                Game1.activeClickableMenu = new LookupMenu(this.GameHelper, subject, this.Metadata, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor);
+
+                // set new menu
+                // (This bypasses Game1.activeClickableMenu, which disposes the previous menu)
+                this.Helper.Reflection
+                    .GetField<IClickableMenu>(typeof(Game1), "_activeClickableMenu")
+                    .SetValue(new LookupMenu(this.GameHelper, subject, this.Metadata, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor));
             });
         }
 

@@ -6,6 +6,7 @@
 * Added neutral gifts to NPC lookup.
 * Debug fields are now listed in alphabetical order.
 * Debug fields now include non-field properties.
+* Fixed display issues when returning to the previous menu after a lookup in some cases.
 
 ## 1.19.2
 * Improved translations. Thanks to pomepome (Japanese)!
