@@ -127,18 +127,13 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="e">The event data.</param>
         private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
         {
-            // disables input until a world has been loaded
-            if (!Context.IsWorldReady)
-                return;
-
-            // perform bound action
             this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
             {
                 var controls = this.Config.Controls;
 
                 if (controls.ToggleLookup.Contains(e.Button))
                     this.ToggleLookup(LookupMode.Cursor);
-                else if (controls.ToggleLookupInFrontOfPlayer.Contains(e.Button))
+                else if (controls.ToggleLookupInFrontOfPlayer.Contains(e.Button) && Context.IsWorldReady)
                     this.ToggleLookup(LookupMode.FacingPlayer);
                 else if (controls.ScrollUp.Contains(e.Button))
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollUp();

@@ -1,7 +1,8 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.19.3
+## 1.20
+* Added support for looking up a load-game slot.
 * Added farm type to player lookup.
 * Added neutral gifts to NPC lookup.
 * Debug fields are now listed in alphabetical order.
