@@ -291,6 +291,7 @@
 
   // player lookup labels
   "player.farm-name": "Название фермы",
+  "player.farm-map": "Farm map", // TODO
   "player.favorite-thing": "Любимая вещь",
   "player.gender": "Пол",
   "player.spouse": "Супруг(а)",
@@ -302,6 +303,12 @@
   "player.luck": "Удача",
 
   // player lookup values
+  "player.farm-map.forest": "Forest", // TODO
+  "player.farm-map.hill-top": "Hill-top", // TODO
+  "player.farm-map.riverland": "Riverland", // TODO
+  "player.farm-map.standard": "Standard", // TODO
+  "player.farm-map.wilderness": "Wilderness", // TODO
+  "player.farm-map.custom": "Custom", // TODO
   "player.gender.male": "мужской",
   "player.gender.female": "женский",
   "player.luck.summary": "{{percent}}% к разным случайным проверкам",

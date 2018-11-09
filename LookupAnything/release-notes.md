@@ -2,7 +2,8 @@
 
 # Release notes
 ## 1.19.3
-* Added neutral gifts when looking up an NPC.
+* Added farm type to player lookup.
+* Added neutral gifts to NPC lookup.
 * Debug fields are now listed in alphabetical order.
 * Debug fields now include non-field properties.
 

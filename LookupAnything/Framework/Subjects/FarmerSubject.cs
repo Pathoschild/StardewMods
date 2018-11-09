@@ -52,6 +52,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.Gender), this.Translate(farmer.IsMale ? L10n.Player.GenderMale : L10n.Player.GenderFemale));
             yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.FarmName), farmer.farmName.Value);
+            yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.FarmMap), this.GetFarmType(farmer));
             yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.FavoriteThing), farmer.favoriteThing.Value);
             yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.Spouse), this.GetSpouse(farmer)?.displayName);
             yield return new SkillBarField(this.GameHelper, this.Translate(L10n.Player.FarmingSkill), farmer.experiencePoints[SFarmer.farmingSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
@@ -104,6 +105,31 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             return this.Reflection.GetMethod(tv, "getFortuneForecast").Invoke<string>();
         }
 
+        /// <summary>Get the human-readable farm type selected by the player.</summary>
+        /// <param name="farmer">The player whose data to check.</param>
+        private string GetFarmType(Farmer farmer)
+        {
+            // get farm type
+            int farmType = Game1.whichFarm;
+
+            // get type name
+            switch (farmType)
+            {
+                case Farm.combat_layout:
+                    return this.Translate(L10n.Player.FarmMapWilderness);
+                case Farm.default_layout:
+                    return this.Translate(L10n.Player.FarmMapStandard);
+                case Farm.forest_layout:
+                    return this.Translate(L10n.Player.FarmMapForest);
+                case Farm.mountains_layout:
+                    return this.Translate(L10n.Player.FarmMapHillTop);
+                case Farm.riverlands_layout:
+                    return this.Translate(L10n.Player.FarmMapRiverland);
+
+                default:
+                    return this.Translate(L10n.Player.FarmMapCustom);
+            }
+        }
         /// <summary>Get the player's spouse, if they're married.</summary>
         /// <param name="farmer">The farmer whose spouse to find.</param>
         /// <returns>Returns the spouse player or NPC, or <c>null</c> if they're not married.</returns>
