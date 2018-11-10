@@ -40,6 +40,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The number of days needed to build a tractor garage.</summary>
         private readonly int GarageConstructionDays = 3;
 
+        /// <summary>The building type for the garage blueprint.</summary>
+        private readonly string BlueprintBuildingType = "TractorGarage";
+
         /****
         ** State
         ****/
@@ -116,8 +119,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public bool CanLoad<T>(IAssetInfo asset)
         {
-            // allow loading legacy data that might have been stored in the save file
-            return asset.AssetNameEquals("Buildings/TractorGarage");
+            return asset.AssetNameEquals($"Buildings/{this.BlueprintBuildingType}");
         }
 
         /// <summary>Load a matched asset.</summary>
@@ -385,10 +387,11 @@ namespace Pathoschild.Stardew.TractorMod
         private void ApplyChanges(Stable stable)
         {
             // ignore non-tractor stable
-            if (stable.maxOccupants.Value != this.MaxOccupantsID)
+            if (stable.maxOccupants.Value != this.MaxOccupantsID && stable.buildingType.Value != this.BlueprintBuildingType)
                 return;
 
             // apply building
+            stable.buildingType.Value = "Stable"; // changed to 'TractorGarage' for blueprint
             stable.texture = new Lazy<Texture2D>(() => this.GarageTexture);
             if (!stable.isUnderConstruction())
             {
@@ -537,8 +540,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Get a blueprint to construct the tractor garage.</summary>
         private BluePrint GetBlueprint()
         {
-            BluePrint blueprint = new BluePrint("Stable")
+            return new BluePrint("Stable")
             {
+                name = this.BlueprintBuildingType,
                 humanDoor = new Point(-1, -1),
                 animalDoor = new Point(-2, -1),
                 mapToWarpTo = null,
@@ -557,10 +561,6 @@ namespace Pathoschild.Stardew.TractorMod
                     ? new Dictionary<int, int> { [SObject.ironBar] = 20, [SObject.iridiumBar] = 5, [787/* battery pack */] = 5 }
                     : new Dictionary<int, int>()
             };
-
-            this.Helper.Reflection.GetField<Texture2D>(blueprint, nameof(BluePrint.texture)).SetValue(this.GarageTexture);
-
-            return blueprint;
         }
 
         /// <summary>Get the asset key for a texture from the assets folder (including seasonal logic if applicable).</summary>
