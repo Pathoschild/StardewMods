@@ -227,7 +227,7 @@ namespace Pathoschild.Stardew.TractorMod
                 return;
 
             // multiplayer: override textures in the current location
-            if (Context.IsWorldReady && Context.IsMultiplayer)
+            if (Context.IsWorldReady && Context.IsMultiplayer && Game1.currentLocation != null)
             {
                 uint updateRate = Game1.currentLocation.farmers.Count > 1 ? this.TextureUpdateRateWithMultiplePlayers : this.TextureUpdateRateWithSinglePlayer;
                 if (e.IsMultipleOf(updateRate))
