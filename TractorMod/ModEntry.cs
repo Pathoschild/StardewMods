@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.FarmExpansion;
 using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.TractorMod.Framework;
@@ -34,14 +33,20 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The <see cref="Building.maxOccupants"/> value which identifies a tractor garage.</summary>
         private readonly int MaxOccupantsID = -794739;
 
+        /// <summary>The update rate when only one player is in a location (as a frame multiple).</summary>
+        private readonly uint TextureUpdateRateWithSinglePlayer = 30;
+
+        /// <summary>The update rate when multiple players are in the same location (as a frame multiple). This should be more frequent due to sprite broadcasts, new horses instances being created during NetRef&lt;Horse&gt; syncs, etc.</summary>
+        private readonly uint TextureUpdateRateWithMultiplePlayers = 3;
+
         /// <summary>The full type name for the Pelican Fiber mod's construction menu.</summary>
         private readonly string PelicanFiberMenuFullName = "PelicanFiber.Framework.ConstructionMenu";
 
-        /// <summary>The number of days needed to build a tractor garage.</summary>
-        private readonly int GarageConstructionDays = 3;
-
         /// <summary>The building type for the garage blueprint.</summary>
         private readonly string BlueprintBuildingType = "TractorGarage";
+
+        /// <summary>The minimum version the host must have for the mod to be enabled on a farmhand.</summary>
+        private readonly string MinHostVersion = "4.7-alpha.2";
 
         /****
         ** State
@@ -60,9 +65,6 @@ namespace Pathoschild.Stardew.TractorMod
 
         /// <summary>Whether the mod is enabled for the current farmhand.</summary>
         private bool IsEnabled = true;
-
-        /// <summary>The mounted players in the player's current location, used to determine whether tractor textures need to be reapplied.</summary>
-        private readonly HashSet<long> MountedPlayersInCurrentLocation = new HashSet<long>();
 
 
         /*********
@@ -105,10 +107,6 @@ namespace Pathoschild.Stardew.TractorMod
             events.Display.MenuChanged += this.OnMenuChanged;
             events.Input.ButtonPressed += this.OnButtonPressed;
             events.GameLoop.UpdateTicked += this.OnUpdateTicked;
-            events.World.NpcListChanged += this.OnNpcListChanged;
-            events.World.LocationListChanged += this.OnLocationListChanged;
-            events.World.BuildingListChanged += this.OnBuildingListChanged;
-            events.Player.Warped += this.OnWarped;
 
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
@@ -119,6 +117,8 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public bool CanLoad<T>(IAssetInfo asset)
         {
+            // Allow for garages from older versions that didn't get normalised correctly.
+            // This can be removed once support for legacy data is dropped.
             return asset.AssetNameEquals($"Buildings/{this.BlueprintBuildingType}");
         }
 
@@ -160,13 +160,22 @@ namespace Pathoschild.Stardew.TractorMod
                 this.LoadLegacyData();
 
             // check if mod should be enabled for the current player
-            this.IsEnabled = true;
-            if (!Context.IsMainPlayer)
+            this.IsEnabled = Context.IsMainPlayer;
+            if (!this.IsEnabled)
             {
-                IMultiplayerPeer host = this.Helper.Multiplayer.GetConnectedPlayer(Game1.MasterPlayer.UniqueMultiplayerID);
-                this.IsEnabled = host?.GetMod(this.ModManifest.UniqueID) != null;
-                if (!this.IsEnabled)
-                    this.Monitor.Log("This mod is currently disabled because the host player doesn't have it installed.", LogLevel.Warn);
+                ISemanticVersion hostVersion = this.Helper.Multiplayer.GetConnectedPlayer(Game1.MasterPlayer.UniqueMultiplayerID)?.GetMod(this.ModManifest.UniqueID)?.Version;
+                if (hostVersion == null)
+                {
+                    this.IsEnabled = false;
+                    this.Monitor.Log("This mod is disabled because the host player doesn't have it installed.", LogLevel.Warn);
+                }
+                else if (hostVersion.IsOlderThan(this.MinHostVersion))
+                {
+                    this.IsEnabled = false;
+                    this.Monitor.Log($"This mod is disabled because the host player has {this.ModManifest.Name} {hostVersion}, but the minimum compatible version is {this.MinHostVersion}.", LogLevel.Warn);
+                }
+                else
+                    this.IsEnabled = true;
             }
         }
 
@@ -175,67 +184,68 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
+            if (!this.IsEnabled)
+                return;
+
             // reload textures
             this.TractorTexture = this.Helper.Content.Load<Texture2D>(this.GetTextureKey("tractor"));
             this.GarageTexture = this.Helper.Content.Load<Texture2D>(this.GetTextureKey("garage"));
 
-            // host: apply changes in all locations
+            // init garages + tractors
             if (Context.IsMainPlayer)
             {
-                foreach (GameLocation location in this.GetLocations())
-                    this.ApplyChanges(location);
+                foreach (BuildableGameLocation location in this.GetBuildableLocations())
+                {
+                    foreach (Stable garage in this.GetGaragesIn(location))
+                    {
+                        // spawn new tractor if needed
+                        Horse tractor = this.FindHorse(garage.HorseId);
+                        if (tractor == null && !garage.isUnderConstruction())
+                        {
+                            tractor = new Horse(garage.HorseId, garage.tileX.Value + 1, garage.tileY.Value + 1);
+                            location.addCharacter(tractor);
+                        }
+
+                        // normalise tractor
+                        if (tractor != null)
+                            tractor.Name = TractorManager.GetTractorName(garage.HorseId);
+
+                        // apply textures
+                        this.ApplyTextures(garage);
+                        this.ApplyTextures(tractor);
+                    }
+                }
             }
         }
 
-        /// <summary>The event called when a building is added or removed in a location.</summary>
+        /// <summary>The event called when the game updates (roughly sixty times per second).</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void OnLocationListChanged(object sender, LocationListChangedEventArgs e)
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
-            // host: apply changes to new locations
-            if (Context.IsMainPlayer)
+            if (!this.IsEnabled)
+                return;
+
+            // multiplayer: override textures in the current location
+            if (Context.IsWorldReady && Context.IsMultiplayer)
             {
-                foreach (GameLocation location in e.Added)
-                    this.ApplyChanges(location);
+                uint updateRate = Game1.currentLocation.farmers.Count > 1 ? this.TextureUpdateRateWithMultiplePlayers : this.TextureUpdateRateWithSinglePlayer;
+                if (e.IsMultipleOf(updateRate))
+                {
+                    foreach (Horse horse in this.GetTractorsIn(Game1.currentLocation))
+                        this.ApplyTextures(horse);
+                    foreach (Stable stable in this.GetGaragesIn(Game1.currentLocation))
+                        this.ApplyTextures(stable);
+                }
             }
-        }
 
-        /// <summary>The event called when a building is added or removed in a location.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnBuildingListChanged(object sender, BuildingListChangedEventArgs e)
-        {
-            // host (or farmhand in affected location): apply changes to new buildings
-            if (Context.IsMainPlayer || (this.IsEnabled && object.ReferenceEquals(e.Location, Game1.player.currentLocation)))
-            {
-                foreach (Stable stable in e.Added.OfType<Stable>())
-                    this.ApplyChanges(stable);
-            }
-        }
+            // override blueprint texture
+            if (Game1.activeClickableMenu != null)
+                this.ApplyTextures(Game1.activeClickableMenu);
 
-        /// <summary>The event called when the player warps to a new area.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnNpcListChanged(object sender, NpcListChangedEventArgs e)
-        {
-            // host (or farmhand in affected location): apply changes to new horses
-            if (Context.IsMainPlayer || (this.IsEnabled && object.ReferenceEquals(e.Location, Game1.player.currentLocation)))
-            {
-                foreach (Horse horse in e.Added.OfType<Horse>())
-                    this.ApplyChanges(horse);
-            }
-        }
-
-        /// <summary>The event called when the player warps to a new area.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnWarped(object sender, WarpedEventArgs e)
-        {
-            this.MountedPlayersInCurrentLocation.Clear();
-
-            // farmhand: apply changes to new location
-            if (!Context.IsMainPlayer && this.IsEnabled)
-                this.ApplyChanges(e.NewLocation);
+            // update tractor effects
+            if (Context.IsPlayerFree)
+                this.TractorManager?.Update();
         }
 
         /// <summary>The event called before the day ends.</summary>
@@ -243,19 +253,38 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void OnDayEnding(object sender, DayEndingEventArgs e)
         {
-            // host: move any tractors out of locations that Utility.findHorse can't find
+            if (!this.IsEnabled)
+                return;
+
             if (Context.IsMainPlayer)
             {
-                HashSet<GameLocation> validLocations = new HashSet<GameLocation>(Game1.locations, new ObjectReferenceComparer<GameLocation>());
+                // collect valid stable IDs
+                HashSet<Guid> validStableIDs = new HashSet<Guid>(
+                    from location in this.GetBuildableLocations()
+                    from garage in this.GetGaragesIn(location)
+                    select garage.HorseId
+                );
+
+                // get locations reachable by Utility.findHorse
+                HashSet<GameLocation> vanillaLocations = new HashSet<GameLocation>(Game1.locations, new ObjectReferenceComparer<GameLocation>());
+
+                // clean up
                 foreach (GameLocation location in this.GetLocations())
                 {
-                    if (validLocations.Contains(location))
-                        continue;
+                    bool isValidLocation = vanillaLocations.Contains(location);
 
-                    foreach (Horse horse in location.characters.OfType<Horse>().ToArray())
+                    foreach (Horse tractor in this.GetTractorsIn(location).ToArray())
                     {
-                        if (TractorManager.IsTractor(horse))
-                            Game1.warpCharacter(horse, "Farm", new Point(0, 0));
+                        // remove invalid tractor (e.g. building demolished)
+                        if (!validStableIDs.Contains(tractor.HorseId))
+                        {
+                            location.characters.Remove(tractor);
+                            continue;
+                        }
+
+                        // move tractor out of location that Utility.findHorse can't find
+                        if (!isValidLocation)
+                            Game1.warpCharacter(tractor, "Farm", new Point(0, 0));
                     }
                 }
             }
@@ -266,6 +295,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void OnSaving(object sender, SavingEventArgs e)
         {
+            if (!this.IsEnabled)
+                return;
+
             // host: remove legacy data
             if (Context.IsMainPlayer)
             {
@@ -284,12 +316,12 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void OnRendered(object sender, RenderedEventArgs e)
         {
+            if (!this.IsEnabled)
+                return;
+
             // render debug radius
-            if (this.IsEnabled)
-            {
-                if (this.Config.HighlightRadius && Context.IsWorldReady && Game1.activeClickableMenu == null && this.TractorManager?.IsCurrentPlayerRiding == true)
-                    this.TractorManager.DrawRadius(Game1.spriteBatch);
-            }
+            if (this.Config.HighlightRadius && Context.IsWorldReady && Game1.activeClickableMenu == null && this.TractorManager?.IsCurrentPlayerRiding == true)
+                this.TractorManager.DrawRadius(Game1.spriteBatch);
         }
 
         /// <summary>The event called after an active menu is opened or closed.</summary>
@@ -297,8 +329,11 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
+            if (!this.IsEnabled)
+                return;
+
             // add blueprint to carpenter menu
-            if (this.IsEnabled && Context.IsWorldReady && e.NewMenu != null)
+            if (Context.IsWorldReady && e.NewMenu != null)
             {
                 // default menu
                 if (e.NewMenu is CarpenterMenu)
@@ -325,150 +360,73 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
+            if (!this.IsEnabled)
+                return;
+
             // summon available tractor
-            if (this.IsEnabled && Context.IsPlayerFree && this.Config.Controls.SummonTractor.Contains(e.Button) && !Game1.player.isRidingHorse())
+            if (Context.IsPlayerFree && this.Config.Controls.SummonTractor.Contains(e.Button) && !Game1.player.isRidingHorse())
                 this.SummonTractor();
         }
 
-        /// <summary>The event called when the game updates (roughly sixty times per second).</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
-        {
-            // In multiplayer, mounting a horse causes other players to construct a new horse instance for the player.mount field.
-            // Track mounted players in the current location, and reapply the texture change when this happens.
-            if (this.IsEnabled && Context.IsWorldReady && Context.IsMultiplayer)
-            {
-                foreach (Farmer player in Game1.currentLocation.farmers.Where(p => p.UniqueMultiplayerID != Game1.player.UniqueMultiplayerID))
-                {
-                    // reapply on mount
-                    if (player.mount != null)
-                    {
-                        if (this.MountedPlayersInCurrentLocation.Add(player.UniqueMultiplayerID))
-                            this.ApplyChanges(player.mount);
-                    }
-
-                    // untrack on unmount (texture will be reapplied in OnNpcListChanged)
-                    else
-                        this.MountedPlayersInCurrentLocation.Remove(player.UniqueMultiplayerID);
-                }
-            }
-
-            // update effects
-            if (this.IsEnabled && Context.IsPlayerFree)
-                this.TractorManager?.Update();
-        }
-
         /****
-        ** State methods
+        ** Helper methods
         ****/
-        /// <summary>Apply mod changes to a location.</summary>
-        /// <param name="location">The location whose buildings to check.</param>
-        private void ApplyChanges(GameLocation location)
-        {
-            // track stables + horses
-            if (location is BuildableGameLocation buildableLocation)
-            {
-                foreach (Stable stable in buildableLocation.buildings.OfType<Stable>())
-                    this.ApplyChanges(stable);
-            }
-
-            // update untracked horses if farmhand
-            // This is needed because farmhands may not have access to the horse initially if it's in a different location than the stable.
-            if (!Context.IsMainPlayer)
-            {
-                foreach (Horse horse in location.characters.OfType<Horse>())
-                    this.ApplyChanges(horse);
-            }
-        }
-
-        /// <summary>Apply mod changes to a building, if applicable.</summary>
-        /// <param name="stable">The stable to change.</param>
-        private void ApplyChanges(Stable stable)
-        {
-            // ignore non-tractor stable
-            if (stable.maxOccupants.Value != this.MaxOccupantsID && stable.buildingType.Value != this.BlueprintBuildingType)
-                return;
-
-            // apply building
-            stable.buildingType.Value = "Stable"; // changed to 'TractorGarage' for blueprint
-            stable.texture = new Lazy<Texture2D>(() => this.GarageTexture);
-            if (!stable.isUnderConstruction())
-            {
-                Horse horse = this.FindHorse(stable.HorseId);
-                this.ApplyChanges(horse, force: true);
-            }
-        }
-
-        /// <summary>Apply changes to a horse, if applicable.</summary>
-        /// <param name="horse">The horse to change.</param>
-        /// <param name="force">Whether changes should be applied even if this doesn't look like a tractor.</param>
-        private void ApplyChanges(Horse horse, bool force = false)
-        {
-            if (horse != null && (force || TractorManager.IsTractor(horse)))
-            {
-                horse.Name = TractorManager.GetTractorName(horse.HorseId);
-                this.Helper.Reflection.GetField<Texture2D>(horse.Sprite, "spriteTexture").SetValue(this.TractorTexture);
-            }
-        }
-
         /// <summary>Summon an unused tractor to the player's current position, if any are available.</summary>
         private void SummonTractor()
         {
-            // get nearest horse in player's current location
+            // find nearest horse in player's current location (if available)
+            Horse horse = this
+                .GetTractorsIn(Game1.currentLocation, includeMounted: false)
+                .OrderBy(match => Utility.distance(Game1.player.getTileX(), Game1.player.getTileY(), match.getTileX(), match.getTileY()))
+                .FirstOrDefault();
+
+            // else get horse from any location
+            if (horse == null)
             {
-                Horse horse =
-                    (
-                        from match in Game1.currentLocation.characters.OfType<Horse>()
-                        where TractorManager.IsTractor(match) && match.rider == null
-                        orderby Utility.distance(Game1.player.getTileX(), Game1.player.getTileY(), match.getTileX(), match.getTileY())
-                        select match
-                    )
+                horse = this
+                    .GetLocations()
+                    .SelectMany(location => this.GetTractorsIn(location, includeMounted: false))
                     .FirstOrDefault();
-                if (horse != null)
-                {
-                    TractorManager.SetLocation(horse, Game1.currentLocation, Game1.player.getTileLocation());
-                    return;
-                }
             }
 
-            // get horse from any accessible location
-            foreach (GameLocation location in this.GetLocations())
-            {
-                foreach (Horse horse in location.characters.OfType<Horse>())
-                {
-                    if (TractorManager.IsTractor(horse) && horse.rider == null)
-                    {
-                        TractorManager.SetLocation(horse, Game1.currentLocation, Game1.player.getTileLocation());
-                        return;
-                    }
-                }
-            }
+            // warp to player
+            if (horse != null)
+                TractorManager.SetLocation(horse, Game1.currentLocation, Game1.player.getTileLocation());
         }
 
-        /****
-        ** Save methods
-        ****/
         /// <summary>Migrate tractors and garages from older versions of the mod.</summary>
         /// <remarks>The Robin construction logic is derived from <see cref="NPC.reloadSprite"/> and <see cref="Farm.resetForPlayerEntry"/>.</remarks>
         private void LoadLegacyData()
         {
+            // fix building types
+            foreach (BuildableGameLocation location in this.GetBuildableLocations())
+            {
+                foreach (Stable stable in location.buildings.OfType<Stable>())
+                {
+                    if (stable.buildingType.Value == this.BlueprintBuildingType)
+                    {
+                        stable.buildingType.Value = "Stable";
+                        stable.maxOccupants.Value = this.MaxOccupantsID;
+                    }
+                }
+            }
+
             // get save data
-            LegacySaveData saveData = this.Helper.Data.ReadSaveData<LegacySaveData>("tractors");
+            LegacySaveData saveData = this.Helper.Data.ReadSaveData<LegacySaveData>("tractors"); // 4.6
             if (saveData?.Buildings == null)
-                saveData = this.Helper.Data.ReadJsonFile<LegacySaveData>($"data/{Constants.SaveFolderName}.json"); // pre-4.6 data
+                saveData = this.Helper.Data.ReadJsonFile<LegacySaveData>($"data/{Constants.SaveFolderName}.json"); // pre-4.6
             if (saveData?.Buildings == null)
                 return;
 
             // add tractor + garages
-            BuildableGameLocation[] locations = CommonHelper.GetLocations().OfType<BuildableGameLocation>().ToArray();
+            BuildableGameLocation[] locations = this.GetBuildableLocations().ToArray();
             foreach (LegacySaveDataBuilding garageData in saveData.Buildings)
             {
                 // get location
-                BuildableGameLocation location = locations.FirstOrDefault(p => this.GetMapName(p) == (garageData.Map ?? "Farm"));
+                BuildableGameLocation location = locations.FirstOrDefault(p => (p.uniqueName.Value ?? p.Name) == (garageData.Map ?? "Farm"));
                 if (location == null)
                 {
-                    this.Monitor.Log($"Ignored tractor garage in unknown location '{garageData.Map}'.");
+                    this.Monitor.Log($"Ignored legacy tractor garage in unknown location '{garageData.Map}'.", LogLevel.Warn);
                     continue;
                 }
 
@@ -483,24 +441,8 @@ namespace Pathoschild.Stardew.TractorMod
                 garage.maxOccupants.Value = this.MaxOccupantsID;
                 garage.load();
             }
-
-            // fix building types
-            foreach (BuildableGameLocation location in CommonHelper.GetLocations().OfType<BuildableGameLocation>())
-            {
-                foreach (Stable stable in location.buildings.OfType<Stable>())
-                {
-                    if (stable.buildingType.Value == "TractorGarage")
-                    {
-                        stable.buildingType.Value = "Stable";
-                        stable.maxOccupants.Value = this.MaxOccupantsID;
-                    }
-                }
-            }
         }
 
-        /****
-        ** Helper methods
-        ****/
         /// <summary>Get all available locations.</summary>
         private IEnumerable<GameLocation> GetLocations()
         {
@@ -521,15 +463,50 @@ namespace Pathoschild.Stardew.TractorMod
             }
         }
 
+        /// <summary>Get all available buildable locations.</summary>
+        private IEnumerable<BuildableGameLocation> GetBuildableLocations()
+        {
+            return this.GetLocations().OfType<BuildableGameLocation>();
+        }
+
+        /// <summary>Get all tractors in the given location.</summary>
+        /// <param name="location">The location to scan.</param>
+        /// <param name="includeMounted">Whether to include horses that are currently being ridden.</param>
+        private IEnumerable<Horse> GetTractorsIn(GameLocation location, bool includeMounted = true)
+        {
+            // single-player
+            if (!Context.IsMultiplayer || !includeMounted)
+                return location.characters.OfType<Horse>().Where(this.IsTractor);
+
+            // multiplayer
+            return
+                location.characters.OfType<Horse>().Where(this.IsTractor)
+                    .Concat(
+                        from player in location.farmers
+                        where this.IsTractor(player.mount)
+                        select player.mount
+                    )
+                    .Distinct(new ObjectReferenceComparer<Horse>());
+        }
+
+        /// <summary>Get all tractor garages in the given location.</summary>
+        /// <param name="location">The location to scan.</param>
+        private IEnumerable<Stable> GetGaragesIn(GameLocation location)
+        {
+            return location is BuildableGameLocation buildableLocation
+                ? buildableLocation.buildings.OfType<Stable>().Where(this.IsGarage)
+                : Enumerable.Empty<Stable>();
+        }
+
         /// <summary>Find all horses with a given ID.</summary>
         /// <param name="id">The unique horse ID.</param>
         private Horse FindHorse(Guid id)
         {
             foreach (GameLocation location in this.GetLocations())
             {
-                foreach (NPC npc in location.characters)
+                foreach (Horse horse in location.characters.OfType<Horse>())
                 {
-                    if (npc is Horse horse && horse.HorseId == id)
+                    if (horse.HorseId == id)
                         return horse;
                 }
             }
@@ -537,21 +514,32 @@ namespace Pathoschild.Stardew.TractorMod
             return null;
         }
 
+        /// <summary>Get whether a stable is a tractor garage.</summary>
+        /// <param name="stable">The stable to check.</param>
+        private bool IsGarage(Stable stable)
+        {
+            return
+                stable != null
+                && (
+                    stable.maxOccupants.Value == this.MaxOccupantsID
+                    || stable.buildingType.Value == this.BlueprintBuildingType // freshly constructed, not yet normalised
+                );
+        }
+
+        /// <summary>Get whether a horse is a tractor.</summary>
+        /// <param name="horse">The horse to check.</param>
+        private bool IsTractor(Horse horse)
+        {
+            return TractorManager.IsTractor(horse);
+        }
+
         /// <summary>Get a blueprint to construct the tractor garage.</summary>
         private BluePrint GetBlueprint()
         {
             return new BluePrint("Stable")
             {
-                name = this.BlueprintBuildingType,
-                humanDoor = new Point(-1, -1),
-                animalDoor = new Point(-2, -1),
-                mapToWarpTo = null,
                 displayName = this.Helper.Translation.Get("garage.name"),
                 description = this.Helper.Translation.Get("garage.description"),
-                blueprintType = "Buildings",
-                daysToConstruct = this.GarageConstructionDays,
-                nameOfBuildingToUpgrade = null,
-                actionBehavior = null,
                 maxOccupants = this.MaxOccupantsID,
                 moneyRequired = this.Config.BuildPrice,
                 tilesWidth = 4,
@@ -576,11 +564,51 @@ namespace Pathoschild.Stardew.TractorMod
             return $"assets/{spritesheet}.png";
         }
 
-        /// <summary>Get a unique map name for the given location.</summary>
-        private string GetMapName(GameLocation location)
+        /// <summary>Apply the mod textures to the given menu, if applicable.</summary>
+        /// <param name="currentMenu">The menu to change.</param>
+        private void ApplyTextures(IClickableMenu currentMenu)
         {
-            string uniqueName = location.uniqueName.Value;
-            return uniqueName ?? location.Name;
+            switch (currentMenu)
+            {
+                // vanilla menu
+                case CarpenterMenu menu:
+                    if (menu.CurrentBlueprint.maxOccupants == this.MaxOccupantsID)
+                    {
+                        Building building = this.Helper.Reflection.GetField<Building>(menu, "currentBuilding").GetValue();
+                        if (building.texture.Value != this.GarageTexture)
+                            building.texture = new Lazy<Texture2D>(() => this.GarageTexture);
+                    }
+                    break;
+
+                // Pelican Fiber menu
+                case IClickableMenu menu when menu.GetType().FullName == this.PelicanFiberMenuFullName:
+                    {
+                        BluePrint currentBlueprint = this.Helper.Reflection.GetProperty<BluePrint>(menu, "CurrentBlueprint").GetValue();
+                        if (currentBlueprint.maxOccupants == this.MaxOccupantsID)
+                        {
+                            Building building = this.Helper.Reflection.GetField<Building>(menu, "CurrentBuilding").GetValue();
+                            if (building.texture.Value != this.GarageTexture)
+                                building.texture = new Lazy<Texture2D>(() => this.GarageTexture);
+                        }
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>Apply the mod textures to the given stable, if applicable.</summary>
+        /// <param name="horse">The horse to change.</param>
+        private void ApplyTextures(Horse horse)
+        {
+            if (this.IsTractor(horse))
+                this.Helper.Reflection.GetField<Texture2D>(horse.Sprite, "spriteTexture").SetValue(this.TractorTexture);
+        }
+
+        /// <summary>Apply the mod textures to the given stable, if applicable.</summary>
+        /// <param name="stable">The stable to change.</param>
+        private void ApplyTextures(Stable stable)
+        {
+            if (this.IsGarage(stable))
+                stable.texture = new Lazy<Texture2D>(() => this.GarageTexture);
         }
     }
 }
