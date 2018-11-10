@@ -1,7 +1,7 @@
 **Tractor Mod** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you buy a tractor
 (and tractor garage) to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc.
 
-Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, single-player only. See
+Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, for single-player and multiplayer. See
 [_compatibility_](#compatibility) for details.
 
 ## Contents
@@ -55,7 +55,7 @@ These are the available settings:
 
 setting | default | effect
 :------ | :------ | :-----
-`Controls` | | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `T` to summon the tractor. Available inputs:<ul><li>`SummonTractor`: warp the tractor to your position.</li><li>`HoldToActivate`: if specified, the tractor will only do something while you're holding this button. If nothing is specified, tractor will work automatically.</li></ul>
+`Controls` | | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `Backspace` to summon the tractor. Available inputs:<ul><li>`SummonTractor`: warp the tractor to your position.</li><li>`HoldToActivate`: if specified, the tractor will only do something while you're holding this button. If nothing is specified, tractor will work automatically.</li></ul>
 `StandardAttachments` |         | Toggle features for all built-in attachments.
 `BuildPrice` | 150000 | The gold price to buy a tractor garage.
 `BuildUsesResources` | `true` | Whether you need to provide resources to build a tractor garage.
@@ -76,10 +76,12 @@ For a seasonal texture, just prefix the name with the season (like `spring_tract
 will load the seasonal texture if present, else it'll load the default name (like `tractor.png`).
 
 ## Compatibility
-Tractor Mod is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, in single-player mode only.
-The mod will disable itself in multiplayer mode, so it's safe to keep it installed. If you load a
-save in multiplayer and later switch back to single-player, any garages you had previously built
-will reappear where they were before.
+Tractor Mod is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+multiplayer.
+
+In multiplayer mode it must be installed by the host player, plus any farmhands who
+want to use its features. Farmhands who don't have it installed won't have any issues, they just
+won't see the tractor/garage textures or be able to use its features.
 
 ## See also
 * [Release notes](release-notes.md)
