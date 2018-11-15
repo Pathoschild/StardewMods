@@ -13,7 +13,7 @@
 * Fixed custom attachments being able to use items past their stack size.
 
 **Update notes:**
-* If Robin is still building your tractor, it will be completed when you update.
+* If Robin started building your tractor garage in an earlier version, it will be completed when you update.
 * Any current tractors/garages will be migrated to a new format next time you save. If you install an older version of Tractor Mod later, those tractors/garages will turn into horses/stables.
 
 ## 4.6
