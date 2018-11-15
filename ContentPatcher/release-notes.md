@@ -3,7 +3,7 @@
 # Release notes
 ## 1.5.3
 * Added `patch summary` hint if `Target` value incorrectly includes a file extension.
-* Migrated verbose logs to SMAPI's verbose logging option.
+* Migrated verbose logs to SMAPI's verbose logging feature.
 * Fixed yet another error setting `EditData` entries to `null` since 1.5.
 
 ## 1.5.2

@@ -31,9 +31,9 @@ This can be used to automate...
 * [crystalariums](http://stardewvalleywiki.com/Crystalarium);
 * [fruit trees](http://stardewvalleywiki.com/Fruit_Trees);
 * [furnaces](http://stardewvalleywiki.com/Furnace);
+* [garbage cans](http://stardewvalleywiki.com/Garbage_Can);
 * [hay hoppers](http://stardewvalleywiki.com/Hay_Hopper);
 * [Junimo huts](http://stardewvalleywiki.com/Junimo_Hut);
-* [garbage cans](http://stardewvalleywiki.com/Garbage_Can);
 * [incubators (for eggs)](https://stardewvalleywiki.com/Incubator);
 * [kegs](http://stardewvalleywiki.com/Keg);
 * [lightning rods](http://stardewvalleywiki.com/Lightning_Rod);
@@ -49,6 +49,9 @@ This can be used to automate...
 * [silos](http://stardewvalleywiki.com/Silo);
 * [slime egg-presses](http://stardewvalleywiki.com/Slime_Egg);
 * [slime incubators](https://stardewvalleywiki.com/Slime_Incubator);
+* [soda machines](https://stardewvalleywiki.com/Soda_Machine);
+* [statues of endless fortune](https://stardewvalleywiki.com/Statue_Of_Endless_Fortune);
+* [statues of perfection](https://stardewvalleywiki.com/Statue_of_Perfection);
 * [tappers](http://stardewvalleywiki.com/Tapper);
 * and [worm bins](http://stardewvalleywiki.com/Worm_Bin).
 

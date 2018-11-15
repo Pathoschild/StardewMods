@@ -1,6 +1,6 @@
 # Release notes
 ## 4.7
-* Added **experimental** support for multiplayer mode. The mod must be installed by the host player, and installed by any farmhand that wants to use the tractor features.
+* Added support for multiplayer mode. The mod must be installed by the host player, and installed by any farmhand that wants to use the tractor features.
 * Added support for custom mod locations.
 * Added support for buying multiple tractors.
 * Added attachment features:

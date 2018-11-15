@@ -47,6 +47,7 @@ These are the available settings:
   > ![](screenshots/farm-animal.png)
 
 * See your own stats and skill progress. Each green bar represents your progress towards that level.
+  This works from the load-game menu too.
   > ![](screenshots/player.png)
 
 * See a monster's stats, your progress towards the Adventurer's Guild eradication goals, and what

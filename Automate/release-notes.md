@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.10.6
-* Migrated verbose logs to SMAPI's verbose logging option.
+* Migrated verbose logs to SMAPI's verbose logging feature.
 
 ## 1.10.5
 * Updated for SMAPI 2.8-beta.5.
