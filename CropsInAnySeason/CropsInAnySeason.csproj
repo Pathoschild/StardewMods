@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="2.2.0-beta-20180819" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
