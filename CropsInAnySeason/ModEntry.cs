@@ -118,7 +118,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             if (!Context.IsMainPlayer)
-                this.Monitor.Log("Disabled in multiplayer (only works for the main player).", LogLevel.Info);
+                this.Monitor.Log("Multiplayer limitations: this mod only works for the main player.", LogLevel.Info);
         }
 
         /// <summary>The method called after a new day starts.</summary>
@@ -201,7 +201,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
             // reset asset changes
             if (this.ShouldApply != wasApplied)
             {
-                this.Monitor.Log($"{(this.ShouldApply ? "Enabling" : "Disabling")} for {date.Season}.", LogLevel.Trace);
+                this.Monitor.VerboseLog($"{(this.ShouldApply ? "Enabling" : "Disabling")} for {date.Season}.");
                 this.Helper.Content.InvalidateCache(this.CropAssetName);
                 this.Helper.Content.InvalidateCache(this.WinterDirtAssetName);
             }
@@ -231,6 +231,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
                 if (this.ChangedLocations.Contains(location) || !location.IsOutdoors || location.IsGreenhouse)
                     continue;
 
+                this.Monitor.VerboseLog($"Greenhousified {location.Name}.");
                 location.IsGreenhouse = true;
                 this.UpdateCrops(new[] { location });
                 this.ChangedLocations.Add(location);
@@ -241,7 +242,11 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         private void ClearChanges()
         {
             foreach (GameLocation location in this.ChangedLocations)
+            {
+                this.Monitor.VerboseLog($"Ungreenhoused {location.Name}.");
                 location.IsGreenhouse = false;
+            }
+
             this.UpdateCrops(this.ChangedLocations);
             this.ChangedLocations.Clear();
         }
@@ -262,6 +267,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
                     Crop crop = dirt.crop;
                     if (crop != null && this.SeasonsByHarvestID.Value.TryGetValue(crop.indexOfHarvest.Value, out string[] seasons) && !this.AreSameSeasons(seasons, crop.seasonsToGrowIn))
                     {
+                        this.Monitor.VerboseLog($"   Changing {crop.indexOfHarvest}: {string.Join(",", crop.seasonsToGrowIn)} to {string.Join(",", seasons)}");
                         crop.seasonsToGrowIn.Clear();
                         crop.seasonsToGrowIn.AddRange(seasons);
                     }
