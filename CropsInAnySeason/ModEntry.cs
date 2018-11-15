@@ -1,50 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.CropsInAnySeason.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
-using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.CropsInAnySeason
 {
     /// <summary>The mod entry point.</summary>
-    internal class ModEntry : Mod, IAssetEditor
+    internal class ModEntry : Mod
     {
         /*********
         ** Properties
         *********/
-        /// <summary>The locations which have been greenhouseified.</summary>
-        private readonly HashSet<GameLocation> ChangedLocations = new HashSet<GameLocation>(new ObjectReferenceComparer<GameLocation>());
-
         /// <summary>The seasons for which to override crops.</summary>
         private HashSet<string> EnabledSeasons;
 
-        /// <summary>The order that seasons should be listed in crop data.</summary>
-        private readonly string[] SeasonOrder = { "spring", "summer", "fall", "winter" };
-
-        /// <summary>The crop seasons from the game's crop data indexed by harvest IDs.</summary>
-        /// <remarks>Crops don't store their crop ID, so we can only match them by the harvest ID they produce. This always works for vanilla crops, since different crops never produce the same harvest ID. It's more heuristic for modded crops, which might have duplicate harvest IDs; in that case we just union their seasons to be safe. This lets us revert crops to their normal seasons if the current season is disabled in the mod configuration.</remarks>
-        private Lazy<IDictionary<int, string[]>> SeasonsByHarvestID;
-
-        /// <summary>Whether the mod has reset crops for the current session.</summary>
-        private bool IsInitialised;
-
-        /// <summary>Whether crops should be overridden for the current day.</summary>
-        private bool ShouldApply;
-
-        /// <summary>Whether the crop changes have been stashed while the game saves.</summary>
-        private bool IsSaving;
-
-        /// <summary>The asset name for the crop data.</summary>
-        private readonly string CropAssetName = "Data/Crops";
-
-        /// <summary>The asset name for the winter dirt texture.</summary>
-        private readonly string WinterDirtAssetName = "TerrainFeatures/hoeDirtSnow";
+        /// <summary>The locations which have been greenhouseified.</summary>
+        private readonly HashSet<GameLocation> EnabledLocations = new HashSet<GameLocation>(new ObjectReferenceComparer<GameLocation>());
 
 
         /*********
@@ -59,50 +35,10 @@ namespace Pathoschild.Stardew.CropsInAnySeason
             this.EnabledSeasons = new HashSet<string>(config.EnableInSeasons.GetEnabledSeasons(), StringComparer.InvariantCultureIgnoreCase);
 
             // hook events
-            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-            helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             helper.Events.World.LocationListChanged += this.OnLocationListChanged;
             helper.Events.GameLoop.DayEnding += this.OnDayEnding;
             helper.Events.GameLoop.Saving += this.OnSaving;
-
-            // init
-            this.Reset();
-        }
-
-        /// <summary>Get whether this instance can edit the given asset.</summary>
-        /// <param name="asset">Basic metadata about the asset being loaded.</param>
-        public bool CanEdit<T>(IAssetInfo asset)
-        {
-            return
-                this.ShouldApply
-                && Context.IsMainPlayer
-                && (
-                    asset.AssetNameEquals(this.CropAssetName)
-                    || asset.AssetNameEquals(this.WinterDirtAssetName)
-                );
-        }
-
-        /// <summary>Edit a matched asset.</summary>
-        /// <param name="asset">A helper which encapsulates metadata about an asset and enables changes to it.</param>
-        public void Edit<T>(IAssetData asset)
-        {
-            // change crop seasons
-            if (asset.AssetNameEquals(this.CropAssetName))
-            {
-                asset
-                    .AsDictionary<int, string>()
-                    .Set((id, data) =>
-                    {
-                        string[] fields = data.Split('/');
-                        fields[1] = string.Join(" ", this.EnabledSeasons);
-                        return string.Join("/", fields);
-                    });
-            }
-
-            // change dirt texture
-            else if (asset.AssetNameEquals(this.WinterDirtAssetName))
-                asset.ReplaceWith(this.Helper.Content.Load<Texture2D>("TerrainFeatures/hoeDirt", ContentSource.GameContent));
         }
 
 
@@ -112,15 +48,6 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         /****
         ** Event handlers
         ****/
-        /// <summary>The method called after a save is loaded.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
-        {
-            if (!Context.IsMainPlayer)
-                this.Monitor.Log("Multiplayer limitations: this mod only works for the main player.", LogLevel.Info);
-        }
-
         /// <summary>The method called after a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -130,7 +57,9 @@ namespace Pathoschild.Stardew.CropsInAnySeason
                 return;
 
             // apply changes
-            this.UpdateContext(SDate.Now());
+            this.EnabledLocations.Clear();
+            if (this.ShouldApply())
+                this.SetCropMode(Game1.locations, true, this.EnabledLocations);
         }
 
         /// <summary>The method called after a location is added or removed.</summary>
@@ -141,8 +70,9 @@ namespace Pathoschild.Stardew.CropsInAnySeason
             if (!Context.IsMainPlayer)
                 return;
 
-            // handle locations added after day start
-            this.ApplyChanges(e.Added);
+            // set greenhouse mode if applicable
+            if (this.ShouldApply())
+                this.SetCropMode(e.Added, true, this.EnabledLocations);
         }
 
         /// <summary>The method called before the day ends, before the game sets up the next day.</summary>
@@ -154,7 +84,11 @@ namespace Pathoschild.Stardew.CropsInAnySeason
                 return;
 
             // remove changes before next day is calculated if tomorrow is out of season
-            this.UpdateContext(SDate.Now().AddDays(1));
+            if (!this.ShouldApply(SDate.Now().AddDays(1)))
+            {
+                this.SetCropMode(this.EnabledLocations.ToArray(), false, this.EnabledLocations);
+                this.EnabledLocations.Clear();
+            }
         }
 
         /// <summary>The method called before the day ends, before the game sets up the next day.</summary>
@@ -166,154 +100,45 @@ namespace Pathoschild.Stardew.CropsInAnySeason
                 return;
 
             // remove changes before save (to avoid making changes permanent if the mod is uninstalled)
-            this.ClearChanges();
-            this.IsSaving = true;
+            this.SetCropMode(this.EnabledLocations.ToArray(), false, this.EnabledLocations);
+            this.EnabledLocations.Clear();
         }
 
-        /// <summary>The method called after the player returns to the title screen.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
-        {
-            this.Reset();
-        }
 
         /****
         ** Methods
         ****/
-        /// <summary>Reset state when starting a new session.</summary>
-        private void Reset()
+        /// <summary>Whether the mod effects should be enabled for the current date.</summary>
+        private bool ShouldApply()
         {
-            this.IsInitialised = false;
-            this.ShouldApply = true;
-            this.ChangedLocations.Clear();
-            this.SeasonsByHarvestID = new Lazy<IDictionary<int, string[]>>(this.GetSeasonsByHarvestID);
+            return this.ShouldApply(SDate.Now());
         }
 
-        /// <summary>Update changes for the given date.</summary>
-        /// <param name="date">The date for which to update the context.</param>
-        private void UpdateContext(SDate date)
+        /// <summary>Whether the mod effects should be enabled for a given date.</summary>
+        /// <param name="date">The date to check.</param>
+        private bool ShouldApply(SDate date)
         {
-            // check context
-            bool wasApplied = this.ShouldApply;
-            this.ShouldApply = this.EnabledSeasons.Contains(date.Season);
-
-            // reset asset changes
-            if (this.ShouldApply != wasApplied)
-            {
-                this.Monitor.VerboseLog($"{(this.ShouldApply ? "Enabling" : "Disabling")} for {date.Season}.");
-                this.Helper.Content.InvalidateCache(this.CropAssetName);
-                this.Helper.Content.InvalidateCache(this.WinterDirtAssetName);
-            }
-
-            // reset crop changes
-            if (this.IsSaving || !this.IsInitialised || this.ShouldApply != wasApplied)
-            {
-                if (!this.IsInitialised || this.ShouldApply != wasApplied)
-                {
-                    this.SeasonsByHarvestID = new Lazy<IDictionary<int, string[]>>(this.GetSeasonsByHarvestID);
-                    this.IsInitialised = true;
-                }
-
-                if (this.ShouldApply)
-                    this.ApplyChanges(Game1.locations);
-                else
-                    this.ClearChanges();
-            }
+            return this.EnabledSeasons.Contains(date.Season);
         }
 
-        /// <summary>Apply changes to the given locations and track changes for later resetting.</summary>
-        /// <param name="locations">The locations to handle.</param>
-        private void ApplyChanges(IEnumerable<GameLocation> locations)
+        /// <summary>Set the crop mode for the given locations.</summary>
+        /// <param name="locations">The locations to change.</param>
+        /// <param name="value">True to enable crops , false to disable it.</param>
+        /// <param name="greenhouseified">A list of locations which have been temporarily converted to greenhouses.</param>
+        private void SetCropMode(IEnumerable<GameLocation> locations, bool value, HashSet<GameLocation> greenhouseified)
         {
             foreach (GameLocation location in locations)
             {
-                if (this.ChangedLocations.Contains(location) || !location.IsOutdoors || location.IsGreenhouse)
+                if (!location.IsOutdoors || location.IsGreenhouse == value)
                     continue;
 
-                this.Monitor.VerboseLog($"Greenhousified {location.Name}.");
-                location.IsGreenhouse = true;
-                this.UpdateCrops(new[] { location });
-                this.ChangedLocations.Add(location);
-            }
-        }
-
-        /// <summary>Reset changes to all locations.</summary>
-        private void ClearChanges()
-        {
-            foreach (GameLocation location in this.ChangedLocations)
-            {
-                this.Monitor.VerboseLog($"Ungreenhoused {location.Name}.");
-                location.IsGreenhouse = false;
-            }
-
-            this.UpdateCrops(this.ChangedLocations);
-            this.ChangedLocations.Clear();
-        }
-
-        /// <summary>Update all crops to match their seasons in the crop data.</summary>
-        /// <param name="locations">The game locations in which to update crops.</param>
-        private void UpdateCrops(IEnumerable<GameLocation> locations)
-        {
-            foreach (GameLocation location in locations)
-            {
-                // skip indoor locations (which the mod never changes)
-                if (!location.IsOutdoors)
-                    continue;
-
-                // update each crop
-                foreach (HoeDirt dirt in location.terrainFeatures.Values.OfType<HoeDirt>())
-                {
-                    Crop crop = dirt.crop;
-                    if (crop != null && this.SeasonsByHarvestID.Value.TryGetValue(crop.indexOfHarvest.Value, out string[] seasons) && !this.AreSameSeasons(seasons, crop.seasonsToGrowIn))
-                    {
-                        this.Monitor.VerboseLog($"   Changing {crop.indexOfHarvest}: {string.Join(",", crop.seasonsToGrowIn)} to {string.Join(",", seasons)}");
-                        crop.seasonsToGrowIn.Clear();
-                        crop.seasonsToGrowIn.AddRange(seasons);
-                    }
-                }
-            }
-        }
-
-        /// <summary>Get whether two season lists contain the same values.</summary>
-        /// <param name="left">The left seasons to check.</param>
-        /// <param name="right">The right seasons to check.</param>
-        private bool AreSameSeasons(IList<string> left, IList<string> right)
-        {
-            if (left.Count != right.Count)
-                return false;
-
-            HashSet<string> difference = new HashSet<string>(left, StringComparer.InvariantCultureIgnoreCase);
-            difference.SymmetricExceptWith(right);
-            return !difference.Any();
-        }
-
-        /// <summary>Get the crop seasons from the game's crop data indexed by harvest IDs.</summary>
-        /// <remarks>See remarks on <see cref="SeasonsByHarvestID"/>.</remarks>
-        private IDictionary<int, string[]> GetSeasonsByHarvestID()
-        {
-            IDictionary<int, string> cropData = this.Helper.Content.Load<Dictionary<int, string>>(this.CropAssetName, ContentSource.GameContent);
-            IDictionary<int, string[]> seasonsByHarvestID = new Dictionary<int, string[]>();
-            foreach (KeyValuePair<int, string> data in cropData)
-            {
-                // parse data
-                string[] fields = data.Value.Split('/');
-                int harvestID = int.Parse(fields[3]);
-                string[] rawSeasons = fields[1].Split(' ');
-
-                // add seasons
-                if (seasonsByHarvestID.TryGetValue(harvestID, out string[] cropSeasons))
-                {
-                    seasonsByHarvestID[harvestID] = cropSeasons
-                        .Union(rawSeasons)
-                        .OrderBy(season => Array.IndexOf(this.SeasonOrder, season))
-                        .ToArray();
-                }
+                this.Monitor.VerboseLog($"Set {location.Name} to {(value ? "greenhouse" : "non-greenhouse")}.");
+                location.IsGreenhouse = value;
+                if (value)
+                    greenhouseified.Add(location);
                 else
-                    seasonsByHarvestID[harvestID] = rawSeasons;
+                    greenhouseified.Remove(location);
             }
-
-            return seasonsByHarvestID;
         }
     }
 }
