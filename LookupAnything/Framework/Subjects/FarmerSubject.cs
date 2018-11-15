@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
@@ -18,11 +20,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /*********
         ** Properties
         *********/
+        /// <summary>Simplifies access to private game code.</summary>
+        private readonly IReflectionHelper Reflection;
+
         /// <summary>The lookup target.</summary>
         private readonly SFarmer Target;
 
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
+        /// <summary>Whether this is being displayed on the load menu, before the save data is fully initialised.</summary>
+        private readonly bool IsLoadMenu;
+
+        /// <summary>The raw save data for this player, if <see cref="IsLoadMenu"/> is true.</summary>
+        private readonly Lazy<XElement> RawSaveData;
 
 
         /*********
@@ -33,11 +41,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="farmer">The lookup target.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public FarmerSubject(GameHelper gameHelper, SFarmer farmer, ITranslationHelper translations, IReflectionHelper reflectionHelper)
+        /// <param name="isLoadMenu">Whether this is being displayed on the load menu, before the save data is fully initialised.</param>
+        public FarmerSubject(GameHelper gameHelper, SFarmer farmer, ITranslationHelper translations, IReflectionHelper reflectionHelper, bool isLoadMenu = false)
             : base(gameHelper, farmer.Name, null, translations.Get(L10n.Types.Player), translations)
         {
-            this.Target = farmer;
             this.Reflection = reflectionHelper;
+            this.Target = farmer;
+            this.IsLoadMenu = isLoadMenu;
+            this.RawSaveData = isLoadMenu
+                ? new Lazy<XElement>(() => this.ReadSaveFile(farmer.slotName))
+                : null;
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -52,8 +65,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.Gender), this.Translate(farmer.IsMale ? L10n.Player.GenderMale : L10n.Player.GenderFemale));
             yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.FarmName), farmer.farmName.Value);
+            yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.FarmMap), this.GetFarmType());
             yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.FavoriteThing), farmer.favoriteThing.Value);
-            yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.Spouse), this.GetSpouse(farmer)?.displayName);
+            yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.Spouse), this.GetSpouseName());
             yield return new SkillBarField(this.GameHelper, this.Translate(L10n.Player.FarmingSkill), farmer.experiencePoints[SFarmer.farmingSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
             yield return new SkillBarField(this.GameHelper, this.Translate(L10n.Player.MiningSkill), farmer.experiencePoints[SFarmer.miningSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
             yield return new SkillBarField(this.GameHelper, this.Translate(L10n.Player.ForagingSkill), farmer.experiencePoints[SFarmer.foragingSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
@@ -86,9 +100,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         public override bool DrawPortrait(SpriteBatch spriteBatch, Vector2 position, Vector2 size)
         {
             SFarmer farmer = this.Target;
-            FarmerSprite sprite = farmer.FarmerSprite;
 
-            farmer.FarmerRenderer.draw(spriteBatch, sprite.CurrentAnimationFrame, sprite.CurrentFrame, sprite.SourceRect, position, Vector2.Zero, 0.8f, Color.White, 0, 1f, farmer);
+            if (this.IsLoadMenu)
+                farmer.FarmerRenderer.draw(spriteBatch, new FarmerSprite.AnimationFrame(0, 0, false, false), 0, new Rectangle(0, 0, 16, 32), position, Vector2.Zero, 0.8f, 2, Color.White, 0.0f, 1f, farmer);
+            else
+            {
+                FarmerSprite sprite = farmer.FarmerSprite;
+                farmer.FarmerRenderer.draw(spriteBatch, sprite.CurrentAnimationFrame, sprite.CurrentFrame, sprite.SourceRect, position, Vector2.Zero, 0.8f, Color.White, 0, 1f, farmer);
+            }
+
             return true;
         }
 
@@ -100,21 +120,82 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <remarks>Derived from <see cref="GameLocation.answerDialogueAction"/>.</remarks>
         private string GetSpiritLuckMessage()
         {
+            // inject daily luck if not loaded yet
+            if (this.IsLoadMenu)
+            {
+                string rawDailyLuck = this.RawSaveData.Value?.Element("dailyLuck")?.Value;
+                if (rawDailyLuck == null)
+                    return null;
+
+                Game1.dailyLuck = double.Parse(rawDailyLuck);
+            }
+
+            // get daily luck message
             TV tv = new TV();
             return this.Reflection.GetMethod(tv, "getFortuneForecast").Invoke<string>();
         }
 
-        /// <summary>Get the player's spouse, if they're married.</summary>
-        /// <param name="farmer">The farmer whose spouse to find.</param>
-        /// <returns>Returns the spouse player or NPC, or <c>null</c> if they're not married.</returns>
-        private Character GetSpouse(SFarmer farmer)
+        /// <summary>Get the human-readable farm type selected by the player.</summary>
+        private string GetFarmType()
         {
-            long? spousePlayerID = farmer.team.GetSpouse(farmer.UniqueMultiplayerID);
+            // get farm type
+            int farmType = Game1.whichFarm;
+            if (this.IsLoadMenu)
+            {
+                string rawType = this.RawSaveData.Value?.Element("whichFarm")?.Value;
+                farmType = rawType != null ? int.Parse(rawType) : -1;
+            }
+
+            // get type name
+            switch (farmType)
+            {
+                case -1:
+                    return null;
+
+                case Farm.combat_layout:
+                    return this.Translate(L10n.Player.FarmMapWilderness);
+                case Farm.default_layout:
+                    return this.Translate(L10n.Player.FarmMapStandard);
+                case Farm.forest_layout:
+                    return this.Translate(L10n.Player.FarmMapForest);
+                case Farm.mountains_layout:
+                    return this.Translate(L10n.Player.FarmMapHillTop);
+                case Farm.riverlands_layout:
+                    return this.Translate(L10n.Player.FarmMapRiverland);
+
+                default:
+                    return this.Translate(L10n.Player.FarmMapCustom);
+            }
+        }
+
+        /// <summary>Get the player's spouse name, if they're married.</summary>
+        /// <returns>Returns the spouse name, or <c>null</c> if they're not married.</returns>
+        private string GetSpouseName()
+        {
+            if (this.IsLoadMenu)
+                return this.Target.spouse;
+
+            long? spousePlayerID = this.Target.team.GetSpouse(this.Target.UniqueMultiplayerID);
             SFarmer spousePlayer = spousePlayerID.HasValue ? Game1.getFarmerMaybeOffline(spousePlayerID.Value) : null;
 
-            if (spousePlayer != null)
-                return spousePlayer;
-            return Game1.player.getSpouse();
+            return spousePlayer?.displayName ?? Game1.player.getSpouse()?.displayName;
+        }
+
+        /// <summary>Load the raw save file as an XML document.</summary>
+        /// <param name="slotName">The slot file to read.</param>
+        private XElement ReadSaveFile(string slotName)
+        {
+            if (slotName == null)
+                return null; // not available (e.g. farmhand)
+
+            // get file
+            FileInfo file = new FileInfo(Path.Combine(StardewModdingAPI.Constants.SavesPath, slotName, slotName));
+            if (!file.Exists)
+                return null;
+
+            // read contents
+            string text = File.ReadAllText(file.FullName);
+            return XElement.Parse(text);
         }
     }
 }

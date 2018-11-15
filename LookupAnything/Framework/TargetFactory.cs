@@ -418,6 +418,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     }
                     break;
 
+                // load menu
+                case TitleMenu _ when TitleMenu.subMenu is LoadGameMenu loadMenu:
+                    {
+                        ClickableComponent button = loadMenu.slotButtons.FirstOrDefault(p => p.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
+                        if (button != null)
+                        {
+                            int index = this.Reflection.GetField<int>(loadMenu, "currentItemIndex").GetValue() + int.Parse(button.name);
+                            var slots = this.Reflection.GetProperty<List<LoadGameMenu.MenuSlot>>(loadMenu, "MenuSlots").GetValue();
+                            LoadGameMenu.SaveFileSlot slot = slots[index] as LoadGameMenu.SaveFileSlot;
+                            if (slot?.Farmer != null)
+                                return new FarmerSubject(this.GameHelper, slot.Farmer, this.Translations, this.Reflection, isLoadMenu: true);
+                        }
+                    }
+                    break;
 
                 // shop
                 case ShopMenu _:

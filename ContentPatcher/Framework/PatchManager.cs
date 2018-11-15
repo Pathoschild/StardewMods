@@ -23,9 +23,6 @@ namespace ContentPatcher.Framework
         /// <summary>Manages the available contextual tokens.</summary>
         private readonly TokenManager TokenManager;
 
-        /// <summary>Whether to enable verbose logging.</summary>
-        private readonly bool Verbose;
-
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
@@ -45,12 +42,10 @@ namespace ContentPatcher.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="tokenManager">Manages the available contextual tokens.</param>
-        /// <param name="verboseLog">Whether to enable verbose logging.</param>
-        public PatchManager(IMonitor monitor, TokenManager tokenManager, bool verboseLog)
+        public PatchManager(IMonitor monitor, TokenManager tokenManager)
         {
             this.Monitor = monitor;
             this.TokenManager = tokenManager;
-            this.Verbose = verboseLog;
         }
 
         /****
@@ -68,7 +63,7 @@ namespace ContentPatcher.Framework
             }
 
             bool canLoad = patches.Any();
-            this.VerboseLog($"check: [{(canLoad ? "X" : " ")}] can load {asset.AssetName}");
+            this.Monitor.VerboseLog($"check: [{(canLoad ? "X" : " ")}] can load {asset.AssetName}");
             return canLoad;
         }
 
@@ -77,7 +72,7 @@ namespace ContentPatcher.Framework
         public bool CanEdit<T>(IAssetInfo asset)
         {
             bool canEdit = this.GetCurrentEditors(asset).Any();
-            this.VerboseLog($"check: [{(canEdit ? "X" : " ")}] can edit {asset.AssetName}");
+            this.Monitor.VerboseLog($"check: [{(canEdit ? "X" : " ")}] can edit {asset.AssetName}");
             return canEdit;
         }
 
@@ -94,8 +89,8 @@ namespace ContentPatcher.Framework
 
             // apply patch
             IPatch patch = patches.Single();
-            if (this.Verbose)
-                this.VerboseLog($"Patch \"{patch.LogName}\" loaded {asset.AssetName}.");
+            if (this.Monitor.IsVerbose)
+                this.Monitor.VerboseLog($"Patch \"{patch.LogName}\" loaded {asset.AssetName}.");
             else
                 this.Monitor.Log($"{patch.ContentPack.Manifest.Name} loaded {asset.AssetName}.", LogLevel.Trace);
 
@@ -115,8 +110,8 @@ namespace ContentPatcher.Framework
             InvariantHashSet loggedContentPacks = new InvariantHashSet();
             foreach (IPatch patch in patches)
             {
-                if (this.Verbose)
-                    this.VerboseLog($"Applied patch \"{patch.LogName}\" to {asset.AssetName}.");
+                if (this.Monitor.IsVerbose)
+                    this.Monitor.VerboseLog($"Applied patch \"{patch.LogName}\" to {asset.AssetName}.");
                 else if (loggedContentPacks.Add(patch.ContentPack.Manifest.Name))
                     this.Monitor.Log($"{patch.ContentPack.Manifest.Name} edited {asset.AssetName}.", LogLevel.Trace);
 
@@ -137,7 +132,7 @@ namespace ContentPatcher.Framework
         /// <param name="contentHelper">The content helper through which to invalidate assets.</param>
         public void UpdateContext(IContentHelper contentHelper)
         {
-            this.VerboseLog("Propagating context...");
+            this.Monitor.VerboseLog("Propagating context...");
 
             // update patches
             InvariantHashSet reloadAssetNames = new InvariantHashSet();
@@ -145,9 +140,9 @@ namespace ContentPatcher.Framework
             foreach (IPatch patch in this.Patches.OrderByIgnoreCase(p => p.AssetName).ThenByIgnoreCase(p => p.LogName))
             {
                 // log asset name
-                if (this.Verbose && prevAssetName != patch.AssetName)
+                if (this.Monitor.IsVerbose && prevAssetName != patch.AssetName)
                 {
-                    this.VerboseLog($"   {patch.AssetName}:");
+                    this.Monitor.VerboseLog($"   {patch.AssetName}:");
                     prevAssetName = patch.AssetName;
                 }
 
@@ -172,7 +167,7 @@ namespace ContentPatcher.Framework
                 }
 
                 // log change
-                if (this.Verbose)
+                if (this.Monitor.IsVerbose)
                 {
                     IList<string> changes = new List<string>();
                     if (wasApplied != shouldApply)
@@ -181,7 +176,7 @@ namespace ContentPatcher.Framework
                         changes.Add($"target: {wasAssetName} => {patch.AssetName}");
                     string changesStr = string.Join(", ", changes);
 
-                    this.VerboseLog($"      [{(shouldApply ? "X" : " ")}] {patch.LogName}: {(changes.Any() ? changesStr : "OK")}");
+                    this.Monitor.VerboseLog($"      [{(shouldApply ? "X" : " ")}] {patch.LogName}: {(changes.Any() ? changesStr : "OK")}");
                 }
 
                 // warn for invalid load patch
@@ -200,10 +195,10 @@ namespace ContentPatcher.Framework
             // reload assets if needed
             if (reloadAssetNames.Any())
             {
-                this.VerboseLog($"   reloading {reloadAssetNames.Count} assets: {string.Join(", ", reloadAssetNames.OrderByIgnoreCase(p => p))}");
+                this.Monitor.VerboseLog($"   reloading {reloadAssetNames.Count} assets: {string.Join(", ", reloadAssetNames.OrderByIgnoreCase(p => p))}");
                 contentHelper.InvalidateCache(asset =>
                 {
-                    this.VerboseLog($"      [{(reloadAssetNames.Contains(asset.AssetName) ? "X" : " ")}] reload {asset.AssetName}");
+                    this.Monitor.VerboseLog($"      [{(reloadAssetNames.Contains(asset.AssetName) ? "X" : " ")}] reload {asset.AssetName}");
                     return reloadAssetNames.Contains(asset.AssetName);
                 });
             }
@@ -221,7 +216,7 @@ namespace ContentPatcher.Framework
             patch.UpdateContext(tokenContext);
 
             // add to patch list
-            this.VerboseLog($"      added {patch.Type} {patch.AssetName}.");
+            this.Monitor.VerboseLog($"      added {patch.Type} {patch.AssetName}.");
             this.Patches.Add(patch);
 
             // add to lookup cache
@@ -294,15 +289,6 @@ namespace ContentPatcher.Framework
                 return PatchType.EditData;
 
             return null;
-        }
-
-        /// <summary>Log a message if <see cref="Verbose"/> is enabled.</summary>
-        /// <param name="message">The message to log.</param>
-        /// <param name="level">The log level.</param>
-        private void VerboseLog(string message, LogLevel level = LogLevel.Trace)
-        {
-            if (this.Verbose)
-                this.Monitor.Log(message, level);
         }
     }
 }

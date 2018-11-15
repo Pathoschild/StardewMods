@@ -10,9 +10,6 @@ namespace ContentPatcher.Framework.ConfigModels
         /*********
         ** Accessors
         *********/
-        /// <summary>Whether to enable more verbose logging.</summary>
-        public bool VerboseLog { get; set; }
-
         /// <summary>Whether to enable debug features.</summary>
         public bool EnableDebugFeatures { get; set; }
 

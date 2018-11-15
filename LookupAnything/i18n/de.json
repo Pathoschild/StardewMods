@@ -266,6 +266,7 @@
   "npc.gifted-this-week": "Beschenkt diese Woche",
   "npc.loves-gifts": "Liebt Geschenke",
   "npc.likes-gifts": "mag Geschenke",
+  "npc.neutral-gifts": "Neutral gifts", // TODO
 
   // NPC lookup values
   "npc.can-romance.married": "Du bist verheiratet! <", // < turns into a heart
@@ -290,6 +291,7 @@
 
   // player lookup labels
   "player.farm-name": "Farmname",
+  "player.farm-map": "Farm map", // TODO
   "player.favorite-thing": "Lieblingssache",
   "player.gender": "Geschlecht",
   "player.spouse": "Ehepartner",
@@ -301,6 +303,12 @@
   "player.luck": "Glück",
 
   // player lookup values
+  "player.farm-map.forest": "Forest", // TODO
+  "player.farm-map.hill-top": "Hill-top", // TODO
+  "player.farm-map.riverland": "Riverland", // TODO
+  "player.farm-map.standard": "Standard", // TODO
+  "player.farm-map.wilderness": "Wilderness", // TODO
+  "player.farm-map.custom": "Custom", // TODO
   "player.gender.male": "Männlich",
   "player.gender.female": "Weiblich",
   "player.luck.summary": "{{percent}}% zufälliger Ereignisse",

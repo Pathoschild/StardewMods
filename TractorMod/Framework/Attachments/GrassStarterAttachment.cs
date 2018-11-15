@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
         {
-            return this.Config.Enable && item?.ParentSheetIndex == 297;
+            return this.Config.Enable && item?.ParentSheetIndex == 297 && item.Stack > 0;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>

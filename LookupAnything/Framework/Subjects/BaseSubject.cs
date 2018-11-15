@@ -99,13 +99,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             for (Type type = obj.GetType(); type != null; type = type.BaseType)
             {
-                IEnumerable<FieldInfo> fields = type
-                    .GetFields() // public fields
-                    .Concat(type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy)) // non-public fields
-                    .Where(field => !field.IsLiteral); // exclude constants
+                var fields =
+                    (
+                        from field in type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy)
+                        where !field.IsLiteral // exclude constants
+                        select new { field.Name, Value = this.GetDebugValue(obj, field) }
+                    )
+                    .Concat(
+                        from property in type.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy)
+                        where property.CanRead
+                        select new { property.Name, Value = this.GetDebugValue(obj, property) }
+                    )
+                    .OrderBy(field => field.Name, StringComparer.InvariantCultureIgnoreCase);
 
-                foreach (FieldInfo field in fields)
-                    yield return new GenericDebugField($"{type.Name}::{field.Name}", this.Stringify(field.GetValue(obj)));
+                foreach (var field in fields)
+                    yield return new GenericDebugField($"{type.Name}::{field.Name}", field.Value);
             }
         }
 
@@ -120,9 +128,39 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="key">The translation key.</param>
         /// <param name="tokens">An anonymous object containing token key/value pairs, like <c>new { value = 42, name = "Cranberries" }</c>.</param>
         /// <exception cref="KeyNotFoundException">The <paramref name="key" /> doesn't match an available translation.</exception>
-        public Translation Translate(string key, object tokens = null)
+        protected Translation Translate(string key, object tokens = null)
         {
             return this.Text.Get(key, tokens);
+        }
+
+        /// <summary>Get a human-readable value for a debug value.</summary>
+        /// <param name="obj">The object whose values to read.</param>
+        /// <param name="field">The field to read.</param>
+        private string GetDebugValue(object obj, FieldInfo field)
+        {
+            try
+            {
+                return this.Stringify(field.GetValue(obj));
+            }
+            catch (Exception ex)
+            {
+                return $"error reading field: {ex.Message}";
+            }
+        }
+
+        /// <summary>Get a human-readable value for a debug value.</summary>
+        /// <param name="obj">The object whose values to read.</param>
+        /// <param name="property">The property to read.</param>
+        private string GetDebugValue(object obj, PropertyInfo property)
+        {
+            try
+            {
+                return this.Stringify(property.GetValue(obj));
+            }
+            catch (Exception ex)
+            {
+                return $"error reading property: {ex.Message}";
+            }
         }
     }
 }

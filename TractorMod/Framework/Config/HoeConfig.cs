@@ -8,5 +8,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
 
         /// <summary>Whether to clear weeds.</summary>
         public bool ClearWeeds { get; set; } = true;
+
+        /// <summary>Whether to dig artifact spots.</summary>
+        public bool DigArtifactSpots { get; set; } = true;
     }
 }

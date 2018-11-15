@@ -446,6 +446,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Loves gifts</c>.</summary>
             public const string LovesGifts = "npc.loves-gifts";
 
+            /// <summary>A value like <c>Neutral gifts</c>.</summary>
+            public const string NeutralGifts = "npc.neutral-gifts";
+
             /****
             ** Values
             ****/
@@ -512,6 +515,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Farm name</c>.</summary>
             public const string FarmName = "player.farm-name";
 
+            /// <summary>A value like <c>Farm map</c>.</summary>
+            public const string FarmMap = "player.farm-map";
+
             /// <summary>A value like <c>Favourite thing</c>.</summary>
             public const string FavoriteThing = "player.favorite-thing";
 
@@ -542,6 +548,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /****
             ** Values
             ****/
+            /// <summary>A value like <c>Forest</c>.</summary>
+            public const string FarmMapForest = "player.farm-map.forest";
+
+            /// <summary>A value like <c>Hill-top</c>.</summary>
+            public const string FarmMapHillTop = "player.farm-map.hill-top";
+
+            /// <summary>A value like <c>Riverland</c>.</summary>
+            public const string FarmMapRiverland = "player.farm-map.riverland";
+
+            /// <summary>A value like <c>Standard</c>.</summary>
+            public const string FarmMapStandard = "player.farm-map.standard";
+
+            /// <summary>A value like <c>Wilderness</c>.</summary>
+            public const string FarmMapWilderness = "player.farm-map.wilderness";
+
+            /// <summary>A value like <c>Custom</c>.</summary>
+            public const string FarmMapCustom = "player.farm-map.custom";
+
             /// <summary>A value like <c>male</c>.</summary>
             public const string GenderMale = "player.gender.male";
 

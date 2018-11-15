@@ -18,6 +18,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>The attachment settings.</summary>
         private readonly HoeConfig Config;
 
+        /// <summary>The item ID for an artifact spot.</summary>
+        private const int ArtifactSpotItemID = 590;
+
 
         /*********
         ** Public methods
@@ -55,6 +58,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
             // till plain dirt
             if (this.Config.TillDirt && tileFeature == null && tileObj == null)
+                return this.UseToolOnTile(tool, tile);
+
+            // collect artifact spots
+            if (this.Config.DigArtifactSpots && tileObj?.ParentSheetIndex == HoeAttachment.ArtifactSpotItemID)
                 return this.UseToolOnTile(tool, tile);
 
             return false;

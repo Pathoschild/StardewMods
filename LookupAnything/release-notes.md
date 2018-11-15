@@ -1,6 +1,14 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.20
+* Added support for looking up a load-game slot.
+* Added farm type to player lookup.
+* Added neutral gifts to NPC lookup.
+* Data mining fields are now listed in alphabetical order.
+* Data mining mode now shows property values too.
+* Fixed display issues when returning to the previous menu after a lookup in some cases.
+
 ## 1.19.2
 * Improved translations. Thanks to pomepome (Japanese)!
 

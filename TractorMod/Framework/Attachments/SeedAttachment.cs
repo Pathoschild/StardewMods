@@ -2,7 +2,6 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
 using StardewValley.TerrainFeatures;
-using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
@@ -32,9 +31,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
+        public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
         {
-            return this.Config.Enable && item?.Category == SObject.SeedsCategory;
+            return this.Config.Enable && item?.Category == SObject.SeedsCategory && item.Stack > 0;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -45,17 +44,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
+        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
             if (item == null || item.Stack <= 0)
                 return false;
 
             // get dirt
-            if (!(tileFeature is HoeDirt dirt) || dirt.crop != null)
+            if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out bool dirtCoveredByObj) || dirt.crop != null)
                 return false;
 
             // ignore if there's a giant crop, meteorite, etc covering the tile
-            if (this.GetResourceClumpCoveringTile(location, tile) != null)
+            if (dirtCoveredByObj || this.GetResourceClumpCoveringTile(location, tile) != null)
                 return false;
 
             // sow seeds

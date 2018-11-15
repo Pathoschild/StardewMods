@@ -10,9 +10,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /*********
         ** Accessors
         *********/
-        /// <summary>Write more trace information to the log.</summary>
-        public bool VerboseLogging { get; set; } = false;
-
         /// <summary>Whether to treat the shipping bin as a machine that can be automated.</summary>
         public bool AutomateShippingBin { get; set; } = true;
 

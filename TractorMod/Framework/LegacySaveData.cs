@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
-    /// <summary>Contains custom data that's stored outside the save file to avoid issues.</summary>
-    internal class CustomSaveData
+    /// <summary>Contains legacy data that's stored in the save file.</summary>
+    internal class LegacySaveData
     {
         /*********
         ** Accessors
         *********/
         /// <summary>The custom buildings for this save.</summary>
-        public CustomSaveBuilding[] Buildings { get; set; }
+        public LegacySaveDataBuilding[] Buildings { get; set; }
 
 
         /*********
@@ -18,11 +18,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <remarks>This constructor is needed to deserialise from JSON.</remarks>
-        public CustomSaveData() { }
+        public LegacySaveData() { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="buildings">The custom buildings to save.</param>
-        public CustomSaveData(IEnumerable<CustomSaveBuilding> buildings)
+        public LegacySaveData(IEnumerable<LegacySaveDataBuilding> buildings)
         {
             this.Buildings = buildings.ToArray();
         }

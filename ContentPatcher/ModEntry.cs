@@ -77,7 +77,7 @@ namespace ContentPatcher
 
             // load content packs and context
             this.TokenManager = new TokenManager(helper.Content, installedMods);
-            this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.Config.VerboseLog);
+            this.PatchManager = new PatchManager(this.Monitor, this.TokenManager);
             this.LoadContentPacks(contentPacks);
             this.TokenManager.UpdateContext();
 
@@ -165,7 +165,7 @@ namespace ContentPatcher
         [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "The value is used immediately, so this isn't an issue.")]
         private IEnumerable<ManagedContentPack> GetContentPacks()
         {
-            this.VerboseLog("Preloading content packs...");
+            this.Monitor.VerboseLog("Preloading content packs...");
 
             foreach (IContentPack contentPack in this.Helper.GetContentPacks())
             {
@@ -210,7 +210,7 @@ namespace ContentPatcher
             ConfigFileHandler configFileHandler = new ConfigFileHandler(this.ConfigFileName, this.ParseCommaDelimitedField, (pack, label, reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {label}: {reason}"));
             foreach (ManagedContentPack pack in contentPacks)
             {
-                this.VerboseLog($"Loading content pack '{pack.Manifest.Name}'...");
+                this.Monitor.VerboseLog($"Loading content pack '{pack.Manifest.Name}'...");
 
                 try
                 {
@@ -221,7 +221,7 @@ namespace ContentPatcher
                         InvariantDictionary<ConfigField> config = configFileHandler.Read(pack, content.ConfigSchema);
                         configFileHandler.Save(pack, config, this.Helper);
                         if (config.Any())
-                            this.VerboseLog($"   found config.json with {config.Count} fields...");
+                            this.Monitor.VerboseLog($"   found config.json with {config.Count} fields...");
 
                         // load config tokens
                         foreach (KeyValuePair<string, ConfigField> pair in config)
@@ -280,7 +280,7 @@ namespace ContentPatcher
                     this.NamePatches(pack, content.Changes);
                     foreach (PatchConfig patch in content.Changes)
                     {
-                        this.VerboseLog($"   loading {patch.LogName}...");
+                        this.Monitor.VerboseLog($"   loading {patch.LogName}...");
                         this.LoadPatch(pack, content, patch, tokenContext, latestFormatVersion, minimumTokenVersions, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {patch.LogName}: {reasonPhrase}", LogLevel.Warn));
                     }
                 }
@@ -822,15 +822,6 @@ namespace ContentPatcher
             }
 
             return newPath;
-        }
-
-        /// <summary>Log a message if <see cref="ModConfig.VerboseLog"/> is enabled.</summary>
-        /// <param name="message">The message to log.</param>
-        /// <param name="level">The log level.</param>
-        private void VerboseLog(string message, LogLevel level = LogLevel.Trace)
-        {
-            if (this.Config.VerboseLog)
-                this.Monitor.Log(message, level);
         }
     }
 }

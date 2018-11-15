@@ -127,18 +127,13 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="e">The event data.</param>
         private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
         {
-            // disables input until a world has been loaded
-            if (!Context.IsWorldReady)
-                return;
-
-            // perform bound action
             this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
             {
                 var controls = this.Config.Controls;
 
                 if (controls.ToggleLookup.Contains(e.Button))
                     this.ToggleLookup(LookupMode.Cursor);
-                else if (controls.ToggleLookupInFrontOfPlayer.Contains(e.Button))
+                else if (controls.ToggleLookupInFrontOfPlayer.Contains(e.Button) && Context.IsWorldReady)
                     this.ToggleLookup(LookupMode.FacingPlayer);
                 else if (controls.ScrollUp.Contains(e.Button))
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollUp();
@@ -244,12 +239,19 @@ namespace Pathoschild.Stardew.LookupAnything
             this.Monitor.InterceptErrors("looking that up", () =>
             {
                 this.Monitor.Log($"Showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.", LogLevel.Trace);
+
+                // remember previous menu
                 if (Game1.activeClickableMenu != null)
                 {
                     if (!this.Config.HideOnKeyUp || !(Game1.activeClickableMenu is LookupMenu))
                         this.PreviousMenus.Push(Game1.activeClickableMenu);
                 }
-                Game1.activeClickableMenu = new LookupMenu(this.GameHelper, subject, this.Metadata, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor);
+
+                // set new menu
+                // (This bypasses Game1.activeClickableMenu, which disposes the previous menu)
+                this.Helper.Reflection
+                    .GetField<IClickableMenu>(typeof(Game1), "_activeClickableMenu")
+                    .SetValue(new LookupMenu(this.GameHelper, subject, this.Metadata, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor));
             });
         }
 

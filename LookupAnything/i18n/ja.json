@@ -266,6 +266,7 @@
   "npc.gifted-this-week": "今週贈り物をした",
   "npc.loves-gifts": "大好きな贈り物",
   "npc.likes-gifts": "好きな贈り物",
+  "npc.neutral-gifts": "Neutral gifts", // TODO
 
   // NPC lookup values
   "npc.can-romance.married": "あなたと結婚しました♡", // < turns into a heart
@@ -290,6 +291,7 @@
 
   // player lookup labels
   "player.farm-name": "牧場名",
+  "player.farm-map": "Farm map", // TODO
   "player.favorite-thing": "好きなもの",
   "player.gender": "性別",
   "player.spouse": "配偶者",
@@ -301,6 +303,12 @@
   "player.luck": "運勢",
 
   // player lookup values
+  "player.farm-map.forest": "Forest", // TODO
+  "player.farm-map.hill-top": "Hill-top", // TODO
+  "player.farm-map.riverland": "Riverland", // TODO
+  "player.farm-map.standard": "Standard", // TODO
+  "player.farm-map.wilderness": "Wilderness", // TODO
+  "player.farm-map.custom": "Custom", // TODO
   "player.gender.male": "男",
   "player.gender.female": "女",
   "player.luck.summary": "{{percent}}%追加の確率",
