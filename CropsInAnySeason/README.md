@@ -29,7 +29,8 @@ setting              | default    | what it affects
 
 ## Compatibility
 The mod is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
-multiplayer. In multiplayer mode, it must be installed by the main player to work correctly.
+multiplayer. In multiplayer mode, it must be installed by the main player to work correctly. (It
+doesn't need to be installed by farmhands, but it won't cause any issues if they have it.)
 
 ## See also
 * [Release notes](release-notes.md)
@@ -37,5 +38,6 @@ multiplayer. In multiplayer mode, it must be installed by the main player to wor
 * ~~Discussion thread~~
 * [All Crops All Seasons](https://www.nexusmods.com/stardewvalley/mods/170)  
   _The inspiration for this mod. I maintained All Crops All Seasons for a while after its author
-  left, but decided to create a new mod using a different approach that's more robust and addresses
-  limitations in All Crops All Seasons like multiplayer sync issues and non-configurable seasons._
+  left, but later wrote a new mod from scratch using a different approach made possible by changes
+  I requested in Stardew Valley 1.3. The new approach is more robust and addresses limitations in
+  All Crops All Seasons like multiplayer sync issues and non-configurable seasons._
