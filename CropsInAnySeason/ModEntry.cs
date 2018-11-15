@@ -37,6 +37,9 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         /// <summary>Whether crops should be overridden for the current day.</summary>
         private bool ShouldApply;
 
+        /// <summary>Whether the crop changes have been stashed while the game saves.</summary>
+        private bool IsSaving;
+
         /// <summary>The asset name for the crop data.</summary>
         private readonly string CropAssetName = "Data/Crops";
 
@@ -164,6 +167,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
 
             // remove changes before save (to avoid making changes permanent if the mod is uninstalled)
             this.ClearChanges();
+            this.IsSaving = true;
         }
 
         /// <summary>The method called after the player returns to the title screen.</summary>
@@ -203,10 +207,14 @@ namespace Pathoschild.Stardew.CropsInAnySeason
             }
 
             // reset crop changes
-            if (!this.IsInitialised || this.ShouldApply != wasApplied)
+            if (this.IsSaving || !this.IsInitialised || this.ShouldApply != wasApplied)
             {
-                this.SeasonsByHarvestID = new Lazy<IDictionary<int, string[]>>(this.GetSeasonsByHarvestID);
-                this.IsInitialised = true;
+                if (!this.IsInitialised || this.ShouldApply != wasApplied)
+                {
+                    this.SeasonsByHarvestID = new Lazy<IDictionary<int, string[]>>(this.GetSeasonsByHarvestID);
+                    this.IsInitialised = true;
+                }
+
                 if (this.ShouldApply)
                     this.ApplyChanges(Game1.locations);
                 else
@@ -252,13 +260,26 @@ namespace Pathoschild.Stardew.CropsInAnySeason
                 foreach (HoeDirt dirt in location.terrainFeatures.Values.OfType<HoeDirt>())
                 {
                     Crop crop = dirt.crop;
-                    if (crop != null && this.SeasonsByHarvestID.Value.TryGetValue(crop.indexOfHarvest.Value, out string[] seasons) && crop.seasonsToGrowIn.Count != seasons.Length)
+                    if (crop != null && this.SeasonsByHarvestID.Value.TryGetValue(crop.indexOfHarvest.Value, out string[] seasons) && !this.AreSameSeasons(seasons, crop.seasonsToGrowIn))
                     {
                         crop.seasonsToGrowIn.Clear();
                         crop.seasonsToGrowIn.AddRange(seasons);
                     }
                 }
             }
+        }
+
+        /// <summary>Get whether two season lists contain the same values.</summary>
+        /// <param name="left">The left seasons to check.</param>
+        /// <param name="right">The right seasons to check.</param>
+        private bool AreSameSeasons(IList<string> left, IList<string> right)
+        {
+            if (left.Count != right.Count)
+                return false;
+
+            HashSet<string> difference = new HashSet<string>(left, StringComparer.InvariantCultureIgnoreCase);
+            difference.SymmetricExceptWith(right);
+            return !difference.Any();
         }
 
         /// <summary>Get the crop seasons from the game's crop data indexed by harvest IDs.</summary>
