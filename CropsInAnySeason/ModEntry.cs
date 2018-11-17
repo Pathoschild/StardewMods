@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.CropsInAnySeason.Framework;
 using StardewModdingAPI;
@@ -16,6 +17,9 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         /*********
         ** Properties
         *********/
+        /// <summary>The mod configuration.</summary>
+        private ModConfig Config;
+
         /// <summary>The seasons for which to override crops.</summary>
         private HashSet<string> EnabledSeasons;
 
@@ -31,8 +35,8 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         public override void Entry(IModHelper helper)
         {
             // read config
-            var config = helper.ReadConfig<ModConfig>();
-            this.EnabledSeasons = new HashSet<string>(config.EnableInSeasons.GetEnabledSeasons(), StringComparer.InvariantCultureIgnoreCase);
+            this.Config = helper.ReadConfig<ModConfig>();
+            this.EnabledSeasons = new HashSet<string>(this.Config.Seasons.GetEnabledSeasons(), StringComparer.InvariantCultureIgnoreCase);
 
             // hook events
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
@@ -59,7 +63,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
             // apply changes
             this.EnabledLocations.Clear();
             if (this.ShouldApply())
-                this.SetCropMode(Game1.locations, true, this.EnabledLocations);
+                this.SetCropMode(CommonHelper.GetLocations(), true, this.EnabledLocations);
         }
 
         /// <summary>The method called after a location is added or removed.</summary>
@@ -85,10 +89,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
 
             // remove changes before next day is calculated if tomorrow is out of season
             if (!this.ShouldApply(SDate.Now().AddDays(1)))
-            {
-                this.SetCropMode(this.EnabledLocations.ToArray(), false, this.EnabledLocations);
-                this.EnabledLocations.Clear();
-            }
+                this.ClearChanges();
         }
 
         /// <summary>The method called before the day ends, before the game sets up the next day.</summary>
@@ -100,8 +101,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
                 return;
 
             // remove changes before save (to avoid making changes permanent if the mod is uninstalled)
-            this.SetCropMode(this.EnabledLocations.ToArray(), false, this.EnabledLocations);
-            this.EnabledLocations.Clear();
+            this.ClearChanges();
         }
 
 
@@ -121,6 +121,13 @@ namespace Pathoschild.Stardew.CropsInAnySeason
             return this.EnabledSeasons.Contains(date.Season);
         }
 
+        /// <summary>Clear the mod changes in all locations.</summary>
+        private void ClearChanges()
+        {
+            this.SetCropMode(this.EnabledLocations.ToArray(), false, this.EnabledLocations);
+            this.EnabledLocations.Clear();
+        }
+
         /// <summary>Set the crop mode for the given locations.</summary>
         /// <param name="locations">The locations to change.</param>
         /// <param name="value">True to enable crops , false to disable it.</param>
@@ -129,7 +136,7 @@ namespace Pathoschild.Stardew.CropsInAnySeason
         {
             foreach (GameLocation location in locations)
             {
-                if (!location.IsOutdoors || location.IsGreenhouse == value)
+                if (!location.IsOutdoors || location.IsGreenhouse == value || (!this.Config.AllowCropsAnywhere && !(location is Farm)))
                     continue;
 
                 this.Monitor.VerboseLog($"Set {location.Name} to {(value ? "greenhouse" : "non-greenhouse")}.");

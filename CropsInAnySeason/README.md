@@ -1,5 +1,5 @@
 **Crops In Any Season** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you grow
-crops in any season, including winter:
+crops in any season (including winter) and location, both configurable. 
 
 ![](screenshot.png)
 
@@ -23,9 +23,10 @@ file in a text editor to configure the mod.
 
 Here's what you can change:
 
-setting              | default    | what it affects
-:------------------- | :--------- | :------------------
-`EnableInSeasons`    | all `true` | The seasons in which any crops should grow. Crops will revert to normal in disabled seasons (and die in the season transition if they're out of season).
+setting        | default    | what it affects
+:------------- | :--------- | :------------------
+`Seasons`      | all `true` | The seasons in which any crops should grow. Crops will revert to normal in disabled seasons (and die in the season transition if they're out of season).
+`AnyLocation`  | `true`     | Whether you can plant crops in non-farm locations, as long as there's tillable dirt there.
 
 ## Compatibility
 The mod is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
