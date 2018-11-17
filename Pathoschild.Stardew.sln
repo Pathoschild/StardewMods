@@ -44,7 +44,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Common", "_tests\Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Mods", "_tests\Tests.Mods\Tests.Mods.csproj", "{3A8B43BC-B3BB-49F1-A2E5-B17CFA94A3C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CropsInAnySeason", "CropsInAnySeason\CropsInAnySeason.csproj", "{2BB33EC7-3B13-4AA4-B982-985F8446966B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CropsAnytimeAnywhere", "CropsAnytimeAnywhere\CropsAnytimeAnywhere.csproj", "{2BB33EC7-3B13-4AA4-B982-985F8446966B}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

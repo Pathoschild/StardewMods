@@ -7,8 +7,8 @@
     <ProjectGuid>{2BB33EC7-3B13-4AA4-B982-985F8446966B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pathoschild.Stardew.CropsInAnySeason</RootNamespace>
-    <AssemblyName>CropsInAnySeason</AssemblyName>
+    <RootNamespace>Pathoschild.Stardew.CropsAnytimeAnywhere</RootNamespace>
+    <AssemblyName>CropsAnytimeAnywhere</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -52,7 +52,7 @@
     <None Include="release-notes.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="screenshot.png" />
+    <Content Include="screenshot.gif" />
   </ItemGroup>
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

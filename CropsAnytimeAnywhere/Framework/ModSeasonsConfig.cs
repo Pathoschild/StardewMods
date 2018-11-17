@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Pathoschild.Stardew.CropsInAnySeason.Framework
+namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
 {
     /// <summary>The mod configuration for enabled seasons.</summary>
     public class ModSeasonsConfig

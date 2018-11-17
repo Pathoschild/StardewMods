@@ -1,4 +1,4 @@
-namespace Pathoschild.Stardew.CropsInAnySeason.Framework
+namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
 {
     /// <summary>The mod configuration.</summary>
     internal class ModConfig

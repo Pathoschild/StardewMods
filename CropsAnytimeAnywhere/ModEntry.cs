@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
-using Pathoschild.Stardew.CropsInAnySeason.Framework;
+using Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 
-namespace Pathoschild.Stardew.CropsInAnySeason
+namespace Pathoschild.Stardew.CropsAnytimeAnywhere
 {
     /// <summary>The mod entry point.</summary>
     internal class ModEntry : Mod
