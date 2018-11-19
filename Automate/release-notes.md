@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed fences not working as connectors.
+
 ## 1.10.6
 * Migrated verbose logs to SMAPI's verbose logging feature.
 

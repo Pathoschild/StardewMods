@@ -347,7 +347,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             // check for possible connectors
             if (location.Objects.TryGetValue(tile, out SObject obj))
-                return this.IsConnector(obj.bigCraftable.Value ? ObjectType.BigCraftable : ObjectType.Object, obj.ParentSheetIndex);
+                return this.IsConnector(obj.bigCraftable.Value ? ObjectType.BigCraftable : ObjectType.Object, this.GetItemID(obj));
             if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrainFeature) && terrainFeature is Flooring floor)
                 return this.IsConnector(ObjectType.Floor, floor.whichFloor.Value);
             return false;
@@ -362,6 +362,30 @@ namespace Pathoschild.Stardew.Automate.Framework
                 return false;
 
             return this.Connectors.TryGetValue(type, out HashSet<int> ids) && ids.Contains(id);
+        }
+
+        /// <summary>Get the object ID for a given object.</summary>
+        /// <param name="obj">The object instance.</param>
+        private int GetItemID(SObject obj)
+        {
+            // get object ID from fence ID
+            if (obj is Fence fence)
+            {
+                switch (fence.whichType.Value)
+                {
+                    case Fence.wood:
+                        return 322;
+                    case Fence.stone:
+                        return 323;
+                    case Fence.steel:
+                        return 324;
+                    case Fence.gold:
+                        return 298;
+                }
+            }
+
+            // else obj ID
+            return obj.ParentSheetIndex;
         }
     }
 }
