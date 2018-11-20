@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.8.1
-* Updated for Stardew Valley 1.3.29.
+* Updated for Stardew Valley 1.3.32.
 
 ## 1.8
 * Updated for Stardew Valley 1.3.

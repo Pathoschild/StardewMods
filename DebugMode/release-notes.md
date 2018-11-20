@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.9.1
-* Updated for Stardew Valley 1.3.29.
+* Updated for Stardew Valley 1.3.32.
 * Improved translations. Thanks to pomepome (added Japanese)!
 
 ## 1.9
