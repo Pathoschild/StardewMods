@@ -28,7 +28,7 @@ namespace ContentPatcher
         private readonly string ConfigFileName = "config.json";
 
         /// <summary>The supported format versions.</summary>
-        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4", "1.5" };
+        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4", "1.5", "1.6" };
 
         /// <summary>The minimum format versions for newer condition types.</summary>
         private readonly IDictionary<ConditionType, string> MinimumTokenVersions = new Dictionary<ConditionType, string>
@@ -39,7 +39,16 @@ namespace ContentPatcher
             [ConditionType.Hearts] = "1.4",
             [ConditionType.Relationship] = "1.4",
             [ConditionType.Spouse] = "1.4",
-            [ConditionType.Year] = "1.5"
+            [ConditionType.FarmCave] = "1.5",
+            [ConditionType.FarmhouseUpgrade] = "1.5",
+            [ConditionType.FarmName] = "1.5",
+            [ConditionType.HasFile] = "1.5",
+            [ConditionType.HasProfession] = "1.5",
+            [ConditionType.PlayerGender] = "1.5",
+            [ConditionType.PlayerName] = "1.5",
+            [ConditionType.PreferredPet] = "1.5",
+            [ConditionType.Year] = "1.5",
+            [ConditionType.HasWalletItem] = "1.6"
         };
 
         /// <summary>Manages the available contextual tokens.</summary>
