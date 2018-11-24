@@ -2,7 +2,11 @@
 
 # Release notes
 ## Upcoming release
+* Added `Wind` value for `Weather` token.
 * Fixed language token always marked 'not valid in this context'.
+
+**Breaking changes:**
+* The `Weather` token's `Sun` value has been split into `Sun` and `Wind`. See the readme for more info.
 
 ## 1.5.3
 * Added `patch summary` hint if `Target` value incorrectly includes a file extension.

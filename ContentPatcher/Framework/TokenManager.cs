@@ -169,6 +169,9 @@ namespace ContentPatcher.Framework
             if (Game1.isRaining)
                 return (Game1.isLightning ? Weather.Storm : Weather.Rain).ToString();
 
+            if (Game1.isDebrisWeather)
+                return Weather.Wind.ToString();
+
             return Weather.Sun.ToString();
         }
 

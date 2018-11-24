@@ -408,7 +408,15 @@ The season name. Possible values: `Spring`, `Summer`, `Fall`, and `Winter`.
 <td>Weather</td>
 <td>
 
-The weather name. Possible values: `Sun`, `Rain`, `Snow`, and `Storm`.
+The weather type. Possible values:
+
+value   | meaning
+------- | -------
+`Sun`   | The weather is sunny (including festival/wedding days). This is the default weather if no other value applies.
+`Rain`  | Rain is falling, but without lightning.
+`Storm` | Rain is falling with lightning.
+`Snow`  | Snow is falling.
+`Wind`  | The wind is blowing with visible debris (e.g. flower petals in spring and leaves in fall).
 
 </td>
 </tr>
