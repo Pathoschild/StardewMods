@@ -57,7 +57,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <returns>Returns whether the token data changed.</returns>
         public override void UpdateContext(IContext context)
         {
-            this.IsValidInContext = this.NeedsLoadedSave && Context.IsWorldReady;
+            this.IsValidInContext = !this.NeedsLoadedSave || Context.IsWorldReady;
             this.Values.Clear();
             foreach (string value in this.FetchValues())
                 this.Values.Add(value);

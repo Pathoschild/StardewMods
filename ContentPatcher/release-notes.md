@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed language token always marked 'not valid in this context'.
+
 ## 1.5.3
 * Added `patch summary` hint if `Target` value incorrectly includes a file extension.
 * Migrated verbose logs to SMAPI's verbose logging feature.
