@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to Nanogamer7 (German)!
+
 ## 1.14.1
 * Disabled shipping bin editing for non-main players (only possible from the host).
 

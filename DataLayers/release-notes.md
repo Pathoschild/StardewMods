@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to Nanogamer7 (German)!
+
 ## 1.4.2
 * Fixed error accessing Better Sprinklers in SMAPI 2.8+.
 

@@ -1,6 +1,6 @@
 {
   // default chest names
-  "default-name.auto-grabber": "Auto-grabber #{{number}}", // TODO
+  "default-name.auto-grabber": "Automatischer Greifer #{{number}}",
   "default-name.chest": "Kiste #{{number}}",
   "default-name.fridge": "Kühlschrank",
   "default-name.junimo-hut": "Junimo-Hütte #{{number}}",
@@ -8,7 +8,7 @@
 
   // edit-chest labels
   "label.location": "Ort",
-  "label.location.tile": "tile {{x}}, {{y}}",
+  "label.location.tile": "Feld {{x}}, {{y}}",
   "label.name": "Name",
   "label.category": "Kategorie",
   "label.order": "Reihenfolge",
@@ -23,9 +23,8 @@
   "button.ok": "OK",
 
   // errors
-  // TODO
-  "errors.disabled-from-here": "You can't access chests from here.",
-  "errors.no-chests": "You don't have any chests yet.",
-  "errors.no-chests-in-location": "You don't have any chests in this area.",
-  "errors.no-chests-in-range": "You don't have any chests in range."
+  "errors.disabled-from-here": "Du kannst von hier auf keine Kisten zugreifen.",
+  "errors.no-chests": "Du hast noch keine Kisten.",
+  "errors.no-chests-in-location": "Du hast in diesem Bereich keine Kisten.",
+  "errors.no-chests-in-range": "Du hast keine Kisten in Reichweite."
 }

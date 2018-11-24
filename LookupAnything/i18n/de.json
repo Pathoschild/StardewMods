@@ -19,14 +19,14 @@
   "generic.hours": "{{count}} Stunden",
   "generic.days": "{{count}} Tage",
   "generic.in-x-days": "in {{count}} Tagen",
-  "generic.tomorrow": "Morgen",
+  "generic.tomorrow": "morgen",
   "generic.price": "{{price}}g",
   "generic.price-for-quality": "{{price}}g ({{quality}})",
   "generic.price-for-stack": "{{price}}g für ein Stapel von {{count}}",
 
   // types
   "type.fruit-tree": "Fruchtbaum",
-  "type.map-tile": "Map Tile",
+  "type.map-tile": "Kartenkachel",
   "type.monster": "Monster",
   "type.player": "Spieler",
   "type.tree": "Baum",
@@ -39,12 +39,12 @@
   "quality.gold": "Gold",
   "quality.iridium": "Iridium",
 
-  // NPC friendship // TODO
-  "friendship-status.friendly": "Friendly",
-  "friendship-status.dating": "Dating",
-  "friendship-status.engaged": "Engaged",
-  "friendship-status.married": "Married",
-  "friendship-status.divorced": "Divorced",
+  // NPC friendship
+  "friendship-status.friendly": "Freundlich",
+  "friendship-status.dating": "Zusammen",
+  "friendship-status.engaged": "Verlobt",
+  "friendship-status.married": "Verheiratet",
+  "friendship-status.divorced": "Geschieden",
 
   /*********
   ** Data translations
@@ -87,7 +87,7 @@
   // farm
   "data.item.egg-incubator.description": "Brütet Eier zu Küken und Entchen aus.",
   "data.item.broken-branch.name": "Zerbrochener Ast",
-  "data.item.broken-branch.description": "Ein Zerbrochener Ast. Zerhack ihn mit deiner Axt um Holz zu bekommen.",
+  "data.item.broken-branch.description": "Ein Zerbrochener Ast. Zerschlage ihn mit deiner Axt um Holz zu bekommen.",
   "data.item.stone.name": "Stein",
   "data.item.stone.description": "Ein unscheinbarer grauer Stein. Zerbrech ihn um Steine zu bekommen.",
   "data.item.geode.name": "Geodenader",
@@ -99,7 +99,7 @@
 
   // weeds & crystals
   "data.item.weed.name": "Gras",
-  "data.item.weed.description": "Unscheinbares Gras. Enthält vielleicht gemischte Samen oder Fasern.",
+  "data.item.weed.description": "Unscheinbares Gras. Kann gemischte Samen oder Fasern enthalten.",
   "data.item.fertile-weed.name": "Fruchtbares Gras",
   "data.item.fertile-weed.description": "Wird definitiv wilde Samen fallen lassen.",
   "data.item.ice-crystal.name": "Eiskristall",
@@ -129,25 +129,25 @@
 
   // mine ores
   "data.item.copper-node.name": "Kupferader",
-  "data.item.copper-node.description": "Baue sie ab, um Kupfer Erz zu bekommen.",
+  "data.item.copper-node.description": "Baue sie ab, um Kupfererz zu bekommen.",
   "data.item.gold-node.name": "Goldader",
-  "data.item.gold-node.description": "Baue sie ab, um Gold Erz zu bekommen.",
+  "data.item.gold-node.description": "Baue sie ab, um Golderz zu bekommen.",
   "data.item.iridum-node.name": "Iridiumader",
-  "data.item.iridum-node.description": "Baue sie ab, um Iridium Erz zu bekommen.",
+  "data.item.iridum-node.description": "Baue sie ab, um Iridiumerz zu bekommen.",
   "data.item.iron-node.name": "Eisenader",
-  "data.item.iron-node.description": "Baue sie ab, um Eisen Erz zu bekommen.",
+  "data.item.iron-node.description": "Baue sie ab, um Eisenerz zu bekommen.",
 
   // mine stones
   "data.item.colored-stone.name": "Farbiger Stein",
-  "data.item.colored-stone.description": "Ein unscheinbarer Stein. Er enthält vielleicht Stein, Erz oder Geoden.",
+  "data.item.colored-stone.description": "Ein unscheinbarer Stein. Kann Stein, Erz oder Geoden enthalten.",
   "data.item.mine-stone.name": "Stein",
   "data.item.mine-stone.description": "Baue ihn ab, um Steine zu bekommen.",
 
   // mine containers
   "data.item.barrel.name": "Fass",
-  "data.item.barrel.description": "Zerschlage es um verschiedene Dinge zu erhalten.",
+  "data.item.barrel.description": "Zerschlage es um verschiedenes Gut zu erhalten.",
   "data.item.box.name": "Box",
-  "data.item.box.description": "Zerschlage sie um verschiedene Dinge zu erhalten.",
+  "data.item.box.description": "Zerschlage sie um verschiedenes Gut zu erhalten.",
 
   /*********
   ** Specific lookups
@@ -159,7 +159,7 @@
   "animal.complaints": "Beschwerden",
   "animal.produce-ready": "Produkt fertig",
   "animal.growth": "Wachstum",
-  "animal.sells-for": "Verkaufen für",
+  "animal.sells-for": "Verkaufbar für",
 
   // animal lookup values
   "animal.complaints.hungry": "Wurde gestern nicht gefüttert",
@@ -171,18 +171,18 @@
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "Beschwerden",
-  "fruit-tree.name": "{{fruitName}} Baum",
+  "fruit-tree.name": "{{fruitName}}baum",
   "fruit-tree.growth": "Wachstum",
   "fruit-tree.next-fruit": "nächste Frucht",
   "fruit-tree.season": "Jahreszeit",
   "fruit-tree.quality": "Qualität",
 
   // fruit tree lookup values
-  "fruit-tree.complaints.adjacent-objects": "Kann nicht wachsen weil Objekte in der Umgebung sind",
+  "fruit-tree.complaints.adjacent-objects": "Kann nicht wachsen weil angrenzende Objekte zu nahe sind",
   "fruit-tree.growth.summary": "Ausgewachsen am {{date}}",
   "fruit-tree.next-fruit.struck-by-lighting": "Wurde von einem Blitz getroffen! Erhohlt sich in {{count}} Tagen.",
   "fruit-tree.next-fruit.out-of-season": "Ausserhalb der Jahreszeit",
-  "fruit-tree.next-fruit.max-fruit": "Wird keine weiteren Früchte tragen, bis die bisherigen geerntet wurden.",
+  "fruit-tree.next-fruit.max-fruit": "Wird keine neuen Früchte tragen, bis die aktuellen geerntet wurden.",
   "fruit-tree.next-fruit.too-young": "Zu jung um Früchte zu tragen",
   "fruit-tree.quality.now": "{{quality}} jetzt",
   "fruit-tree.quality.on-date": "{{quality}} am {{date}}",
@@ -208,9 +208,9 @@
   "item.cask-contents": "Inhalt",
   "item.cask-schedule": "Alter",
 
-  "item.crabpot-bait": "Bait", // TODO
-  "item.crabpot-bait-needed": "Needs bait!", // TODO
-  "item.crabpot-bait-not-needed": "Not needed due to Luremaster profession.", // TODO
+  "item.crabpot-bait": "Köder",
+  "item.crabpot-bait-needed": "Braucht Köder!",
+  "item.crabpot-bait-not-needed": "Wegen Lockmeister Beruf nicht benötigt.",
 
   "item.fence-health": "Leben",
 
@@ -232,7 +232,7 @@
   "item.contents.placed": "{{name}} platziert",
   "item.contents.ready": "{{name}} bereit",
   "item.contents.partial": "{{name}} in {{time}}",
-  "item.needed-for.community-center": "Gemeindezentrum ({{bundles}})",
+  "item.needed-for.community-center": "Gemeinschaftszentrum ({{bundles}})",
   "item.needed-for.full-shipment": "Volle Lieferung-Errungenschaft (liefere einen)",
   "item.needed-for.polyculture": "Polykultur-Errungenschaft (liefere noch {{count}})",
   "item.needed-for.full-collection": "Eine vollständige Sammel-Errungenschaft (Spende eines dem Museum)",
@@ -266,11 +266,11 @@
   "npc.gifted-this-week": "Beschenkt diese Woche",
   "npc.loves-gifts": "Liebt Geschenke",
   "npc.likes-gifts": "mag Geschenke",
-  "npc.neutral-gifts": "Neutral gifts", // TODO
+  "npc.neutral-gifts": "neutrale Geschenke",
 
   // NPC lookup values
   "npc.can-romance.married": "Du bist verheiratet! <", // < turns into a heart
-  "npc.friendship.not-met": "Du hast ihn / sie noch nicht getroffen",
+  "npc.friendship.not-met": "Du hast die Person noch nicht getroffen",
   "npc.friendship.need-bouquet": "Blumenstrauß jetzt erforderlich",
   "npc.friendship.need-points": "nächstes in {{count}} Punkten",
 
@@ -291,7 +291,7 @@
 
   // player lookup labels
   "player.farm-name": "Farmname",
-  "player.farm-map": "Farm map", // TODO
+  "player.farm-map": "Farmkarte",
   "player.favorite-thing": "Lieblingssache",
   "player.gender": "Geschlecht",
   "player.spouse": "Ehepartner",
@@ -303,12 +303,12 @@
   "player.luck": "Glück",
 
   // player lookup values
-  "player.farm-map.forest": "Forest", // TODO
-  "player.farm-map.hill-top": "Hill-top", // TODO
-  "player.farm-map.riverland": "Riverland", // TODO
-  "player.farm-map.standard": "Standard", // TODO
-  "player.farm-map.wilderness": "Wilderness", // TODO
-  "player.farm-map.custom": "Custom", // TODO
+  "player.farm-map.forest": "Wald",
+  "player.farm-map.hill-top": "Bergspitzen",
+  "player.farm-map.riverland": "Flussbett",
+  "player.farm-map.standard": "Standard",
+  "player.farm-map.wilderness": "Wilderness",
+  "player.farm-map.custom": "Eigene",
   "player.gender.male": "Männlich",
   "player.gender.female": "Weiblich",
   "player.luck.summary": "{{percent}}% zufälliger Ereignisse",

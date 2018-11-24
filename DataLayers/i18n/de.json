@@ -26,11 +26,10 @@
   "sprinklers.dry-crops": "Trocken",
 
   // crops: harvest
-  // TODO
-  "crop-harvest.name": "Crops: Ready to Harvest",
-  "crop-harvest.ready": "Ready",
-  "crop-harvest.not-ready": "Not Ready",
-  "crop-harvest.not-enough-time": "Not Enough Time",
+  "crop-harvest.name": "Saat: Bereit zum Ernten",
+  "crop-harvest.ready": "Fertig",
+  "crop-harvest.not-ready": "Nicht fertig",
+  "crop-harvest.not-enough-time": "Nicht genug Zeit",
 
   // crops: watered
   "crop-water.name": "Bewässerung",

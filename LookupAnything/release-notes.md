@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to Nanogamer7 (German)!
+
 ## 1.20
 * Added support for looking up a load-game slot.
 * Added farm type to player lookup.
