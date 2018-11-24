@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Added new tokens:
+  * `HasWalletItem`: the [special items in the player wallet](https://stardewvalleywiki.com/Wallet).
 * Added `Wind` value for `Weather` token.
 * Fixed language token always marked 'not valid in this context'.
 

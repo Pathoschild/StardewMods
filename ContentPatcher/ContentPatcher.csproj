@@ -61,6 +61,7 @@
     <Compile Include="Framework\Constants\FarmType.cs" />
     <Compile Include="Framework\Constants\Gender.cs" />
     <Compile Include="Framework\Constants\PetType.cs" />
+    <Compile Include="Framework\Constants\WalletItem.cs" />
     <Compile Include="Framework\Constants\Profession.cs" />
     <Compile Include="Framework\DebugOverlay.cs" />
     <Compile Include="Framework\Patches\EditDataPatchField.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="Framework\Tokens\DynamicTokenValue.cs" />
     <Compile Include="Framework\Tokens\HasFileToken.cs" />
     <Compile Include="Framework\Tokens\HasProfessionToken.cs" />
+    <Compile Include="Framework\Tokens\HasWalletItemToken.cs" />
     <Compile Include="Framework\Tokens\IContext.cs" />
     <Compile Include="Framework\Tokens\ImmutableToken.cs" />
     <Compile Include="Framework\Tokens\IToken.cs" />

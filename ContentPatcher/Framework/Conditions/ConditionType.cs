@@ -63,6 +63,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>An event ID the player saw.</summary>
         HasSeenEvent,
 
+        /// <summary>The special items in the player's wallet.</summary>
+        HasWalletItem,
+
         /// <summary>The current player's internal spouse name (if any).</summary>
         Spouse,
 
