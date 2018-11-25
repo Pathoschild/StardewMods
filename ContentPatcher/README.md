@@ -70,9 +70,6 @@ whether one of these would work for you:
   * [Custom Shirts](https://www.nexusmods.com/stardewvalley/mods/2416) to add shirts.
   * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add items and fruit trees.
 
-### Known limitations
-* Map files can't currently be conditional.
-
 ## Create a content pack
 ### Overview
 A content pack is a folder with these files:
