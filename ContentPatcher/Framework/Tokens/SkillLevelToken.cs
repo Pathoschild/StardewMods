@@ -9,36 +9,24 @@ using StardewValley;
 
 namespace ContentPatcher.Framework.Tokens
 {
-    /// <summary>A token for the player's wallet items.</summary>
-    internal class HasWalletItemToken : BaseToken
+    /// <summary>A token for the player's skill levels.</summary>
+    internal class SkillLevelToken : BaseToken
     {
         /*********
         ** Properties
         *********/
-        /// <summary>The defined wallet items and whether the player has them.</summary>
-        private readonly IDictionary<WalletItem, Func<bool>> WalletItems = new Dictionary<WalletItem, Func<bool>>
-        {
-            [WalletItem.DwarvishTranslationGuide] = () => Game1.player.canUnderstandDwarves,
-            [WalletItem.RustyKey] = () => Game1.player.hasRustyKey,
-            [WalletItem.ClubCard] = () => Game1.player.hasClubCard,
-            [WalletItem.SpecialCharm] = () => Game1.player.hasSpecialCharm,
-            [WalletItem.SkullKey] = () => Game1.player.hasSkullKey,
-            [WalletItem.MagnifyingGlass] = () => Game1.player.hasMagnifyingGlass,
-            [WalletItem.DarkTalisman] = () => Game1.player.hasDarkTalisman,
-            [WalletItem.MagicInk] = () => Game1.player.hasMagicInk,
-            [WalletItem.BearsKnowledge] = () => Game1.player.eventsSeen.Contains(2120303),
-            [WalletItem.SpringOnionMastery] = () => Game1.player.eventsSeen.Contains(3910979)
-        };
+        /// <summary>The player's current skill levels.</summary>
+        private readonly IDictionary<Skill, int> SkillLevels = new Dictionary<Skill, int>();
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public HasWalletItemToken()
-            : base(ConditionType.HasWalletItem.ToString(), canHaveMultipleRootValues: true)
+        public SkillLevelToken()
+            : base(ConditionType.SkillLevel.ToString(), canHaveMultipleRootValues: true)
         {
-            this.EnableSubkeys(required: false, canHaveMultipleValues: false);
+            this.EnableSubkeys(required: true, canHaveMultipleValues: false);
         }
 
         /// <summary>Update the token data when the context changes.</summary>
@@ -46,7 +34,17 @@ namespace ContentPatcher.Framework.Tokens
         /// <returns>Returns whether the token data changed.</returns>
         public override void UpdateContext(IContext context)
         {
+            this.SkillLevels.Clear();
             this.IsValidInContext = Context.IsWorldReady;
+            if (this.IsValidInContext)
+            {
+                this.SkillLevels[Skill.Combat] = Game1.player.CombatLevel;
+                this.SkillLevels[Skill.Farming] = Game1.player.FarmingLevel;
+                this.SkillLevels[Skill.Fishing] = Game1.player.FishingLevel;
+                this.SkillLevels[Skill.Foraging] = Game1.player.ForagingLevel;
+                this.SkillLevels[Skill.Luck] = Game1.player.LuckLevel;
+                this.SkillLevels[Skill.Mining] = Game1.player.MiningLevel;
+            }
         }
 
         /// <summary>Get the current token values.</summary>
@@ -55,22 +53,19 @@ namespace ContentPatcher.Framework.Tokens
         public override IEnumerable<string> GetValues(TokenName name)
         {
             this.AssertTokenName(name);
-            if (!Context.IsWorldReady)
-                yield break;
 
             if (name.HasSubkey())
             {
-                bool hasItem = this.TryParseEnum(name.Subkey, out WalletItem item) && this.WalletItems[item]();
-                yield return hasItem.ToString();
+                if (this.TryParseEnum(name.Subkey, out Skill skill) && this.SkillLevels.TryGetValue(skill, out int level))
+                    yield return level.ToString();
             }
-            else
-            {
-                foreach (KeyValuePair<WalletItem, Func<bool>> pair in this.WalletItems)
-                {
-                    if (pair.Value())
-                        yield return pair.Key.ToString();
-                }
-            }
+        }
+
+        /// <summary>Get the current subkeys (if supported).</summary>
+        public override IEnumerable<TokenName> GetSubkeys()
+        {
+            foreach (Skill skill in this.SkillLevels.Keys)
+                yield return new TokenName(ConditionType.SkillLevel, skill.ToString());
         }
 
         /// <summary>Perform custom validation on a set of input values.</summary>
@@ -85,7 +80,7 @@ namespace ContentPatcher.Framework.Tokens
             string[] invalidValues = this.GetInvalidValues(values).ToArray();
             if (invalidValues.Any())
             {
-                error = $"can't parse some values ({string.Join(", ", invalidValues)}) as wallet items; must be one of [{string.Join(", ", Enum.GetNames(typeof(WalletItem)).OrderByIgnoreCase(p => p))}].";
+                error = $"can't parse some values ({string.Join(", ", invalidValues)}) as skill types; must be a predefined name ({string.Join(", ", Enum.GetNames(typeof(Skill)).OrderByIgnoreCase(p => p))}).";
                 return false;
             }
 
@@ -102,7 +97,7 @@ namespace ContentPatcher.Framework.Tokens
         {
             foreach (string value in values)
             {
-                if (!this.TryParseEnum(value, out WalletItem item) || !this.WalletItems.ContainsKey(item))
+                if (!this.TryParseEnum(value, out Skill _))
                     yield return value;
             }
         }

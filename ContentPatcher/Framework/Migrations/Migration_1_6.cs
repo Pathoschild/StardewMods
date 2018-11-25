@@ -18,7 +18,8 @@ namespace ContentPatcher.Framework.Migrations
         {
             this.AddedTokens = new InvariantHashSet
             {
-                ConditionType.HasWalletItem.ToString()
+                ConditionType.HasWalletItem.ToString(),
+                ConditionType.SkillLevel.ToString()
             };
         }
     }

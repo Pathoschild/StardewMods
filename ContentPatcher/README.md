@@ -446,7 +446,7 @@ placeholders:
 Whether a file exists in the content pack folder. The file path must be specified as part of the key,
 and may contain tokens. Returns `true` or `false`. For example:
 
-```json
+```js
 "When": {
   "HasFile:assets/{{season}}.png": "true"
 }
@@ -548,7 +548,7 @@ The event IDs the player has seen, matching IDs in the `Data\Events` files. (You
 The player's heart level with a given NPC. You must specify the character name as part of the key
 (using their English name regardless of translations), like this:
 
-```json
+```js
 "When": {
    "Hearts:Abigail": "10, 11, 12, 13"
 }
@@ -564,7 +564,7 @@ The player's heart level with a given NPC. You must specify the character name a
 The player's relationship with a given NPC or player. You must specify the character name as part
 of the key (using their English name regardless of translations), like this:
 
-```json
+```js
 "When": {
    "Relationship:Abigail": "Married"
 }
@@ -579,6 +579,24 @@ Dating   | The player gave them a bouquet.
 Engaged  | The player gave them a mermaid's pendant, but the marriage hasn't happened yet.
 Married  | The player married them.
 Divorced | The player married and then divorced them.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>SkillLevel</td>
+<td>
+
+The player's skill levels. You must specify the skill level as part of the key like this:
+
+```js
+"When": {
+   "SkillLevel:Combat": "1, 2, 3" // combat level 1, 2, or 3
+}
+```
+
+
+The valid skills are `Combat`, `Farming`, `Fishing`, `Foraging`, `Luck` (unused in the base game), and `Mining`.
 
 </td>
 </tr>

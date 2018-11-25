@@ -78,6 +78,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The current player's relationship status with the character (matching <see cref="StardewValley.FriendshipStatus"/>)</summary>
         Relationship,
 
+        /// <summary>The current player's level for a skill.</summary>
+        SkillLevel,
+
         /****
         ** Magic conditions
         ****/

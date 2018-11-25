@@ -137,6 +137,7 @@ namespace ContentPatcher.Framework
             yield return new ConditionTypeToken(ConditionType.Weather, () => this.GetCurrentWeather(), needsLoadedSave: true, allowedValues: Enum.GetNames(typeof(Weather)));
             yield return new HasProfessionToken();
             yield return new HasWalletItemToken();
+            yield return new SkillLevelToken();
             yield return new VillagerRelationshipToken();
             yield return new VillagerHeartsToken();
         }

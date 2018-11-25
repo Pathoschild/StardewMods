@@ -4,6 +4,7 @@
 ## Upcoming release
 * Added new tokens:
   * `HasWalletItem`: the [special items in the player wallet](https://stardewvalleywiki.com/Wallet).
+  * `SkillLevel`: the player's level for a given skill.
 * Added `Wind` value for `Weather` token.
 * Fixed language token always marked 'not valid in this context'.
 * Fixed token strings not validated for format version compatibility.
