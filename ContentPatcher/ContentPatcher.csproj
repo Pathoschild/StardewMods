@@ -64,6 +64,13 @@
     <Compile Include="Framework\Constants\WalletItem.cs" />
     <Compile Include="Framework\Constants\Profession.cs" />
     <Compile Include="Framework\DebugOverlay.cs" />
+    <Compile Include="Framework\Migrations\AggregateMigration.cs" />
+    <Compile Include="Framework\Migrations\BaseMigration.cs" />
+    <Compile Include="Framework\Migrations\IMigration.cs" />
+    <Compile Include="Framework\Migrations\Migration_1_3.cs" />
+    <Compile Include="Framework\Migrations\Migration_1_4.cs" />
+    <Compile Include="Framework\Migrations\Migration_1_5.cs" />
+    <Compile Include="Framework\Migrations\Migration_1_6.cs" />
     <Compile Include="Framework\Patches\EditDataPatchField.cs" />
     <Compile Include="Framework\Patches\EditDataPatchRecord.cs" />
     <Compile Include="Framework\GenericTokenContext.cs" />
@@ -92,6 +99,7 @@
     <Compile Include="Framework\Tokens\VillagerRelationshipToken.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Framework\RawContentPack.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />

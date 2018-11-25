@@ -6,6 +6,8 @@
   * `HasWalletItem`: the [special items in the player wallet](https://stardewvalleywiki.com/Wallet).
 * Added `Wind` value for `Weather` token.
 * Fixed language token always marked 'not valid in this context'.
+* Fixed token strings not validated for format version compatibility.
+* Fixed some 1.5 tokens not validated for format version compatibility.
 
 **Breaking changes:**
 * The `Weather` token's `Sun` value has been split into `Sun` and `Wind`. See the readme for more info.
