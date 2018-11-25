@@ -25,7 +25,7 @@ namespace ContentPatcher.Framework.Tokens
         public VillagerHeartsToken()
             : base(ConditionType.Hearts.ToString(), canHaveMultipleRootValues: false)
         {
-            this.EnableSubkeys(required: true, canHaveMultipleValues: false);
+            this.EnableSubkeys(required: false, canHaveMultipleValues: false);
         }
 
         /// <summary>Update the token data when the context changes.</summary>
@@ -56,8 +56,16 @@ namespace ContentPatcher.Framework.Tokens
         {
             this.AssertTokenName(name);
 
-            if (this.Values.TryGetValue(name.Subkey, out string value))
-                yield return value;
+            if (name.HasSubkey())
+            {
+                if (this.Values.TryGetValue(name.Subkey, out string value))
+                    yield return value;
+            }
+            else
+            {
+                foreach (var pair in this.Values)
+                    yield return $"{pair.Key}:{pair.Value}";
+            }
         }
     }
 }

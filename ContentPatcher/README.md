@@ -545,12 +545,20 @@ The event IDs the player has seen, matching IDs in the `Data\Events` files. (You
 <td>Hearts</td>
 <td>
 
-The player's heart level with a given NPC. You must specify the character name as part of the key
+The player's heart level with a given NPC. You can specify the character name as part of the key
 (using their English name regardless of translations), like this:
 
 ```js
 "When": {
    "Hearts:Abigail": "10, 11, 12, 13"
+}
+```
+
+Or you can match against multiple NPCs like this:
+
+```js
+"When": {
+   "Hearts": "Abigail:10, Leah:10" // 10 hearts with Abigail or Leah
 }
 ```
 
@@ -561,12 +569,20 @@ The player's heart level with a given NPC. You must specify the character name a
 <td>Relationship</td>
 <td>
 
-The player's relationship with a given NPC or player. You must specify the character name as part
+The player's relationship with a given NPC or player. You can specify the character name as part
 of the key (using their English name regardless of translations), like this:
 
 ```js
 "When": {
    "Relationship:Abigail": "Married"
+}
+```
+
+Or you can match against multiple NPCs like this:
+
+```js
+"When": {
+   "Relationship": "Abigail:Married, Leah:Married" // married Abigail or Leah
 }
 ```
 
@@ -587,7 +603,7 @@ Divorced | The player married and then divorced them.
 <td>SkillLevel</td>
 <td>
 
-The player's skill levels. You must specify the skill level as part of the key like this:
+The player's skill levels. You can specify the skill level as part of the key like this:
 
 ```js
 "When": {
@@ -595,6 +611,13 @@ The player's skill levels. You must specify the skill level as part of the key l
 }
 ```
 
+Or you can match against multiple skills like this:
+
+```js
+"When": {
+   "SkillLevel": "Combat:1, Farming:2" // combat level 1 or farming level 2
+}
+```
 
 The valid skills are `Combat`, `Farming`, `Fishing`, `Foraging`, `Luck` (unused in the base game), and `Mining`.
 

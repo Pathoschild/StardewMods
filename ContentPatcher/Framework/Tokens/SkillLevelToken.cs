@@ -26,7 +26,7 @@ namespace ContentPatcher.Framework.Tokens
         public SkillLevelToken()
             : base(ConditionType.SkillLevel.ToString(), canHaveMultipleRootValues: true)
         {
-            this.EnableSubkeys(required: true, canHaveMultipleValues: false);
+            this.EnableSubkeys(required: false, canHaveMultipleValues: false);
         }
 
         /// <summary>Update the token data when the context changes.</summary>
@@ -47,6 +47,13 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
+        /// <summary>Get the current subkeys (if supported).</summary>
+        public override IEnumerable<TokenName> GetSubkeys()
+        {
+            foreach (Skill skill in this.SkillLevels.Keys)
+                yield return new TokenName(ConditionType.SkillLevel, skill.ToString());
+        }
+
         /// <summary>Get the current token values.</summary>
         /// <param name="name">The token name to check.</param>
         /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
@@ -59,13 +66,11 @@ namespace ContentPatcher.Framework.Tokens
                 if (this.TryParseEnum(name.Subkey, out Skill skill) && this.SkillLevels.TryGetValue(skill, out int level))
                     yield return level.ToString();
             }
-        }
-
-        /// <summary>Get the current subkeys (if supported).</summary>
-        public override IEnumerable<TokenName> GetSubkeys()
-        {
-            foreach (Skill skill in this.SkillLevels.Keys)
-                yield return new TokenName(ConditionType.SkillLevel, skill.ToString());
+            else
+            {
+                foreach (var pair in this.SkillLevels)
+                    yield return $"{pair.Key}:{pair.Value}";
+            }
         }
 
         /// <summary>Perform custom validation on a set of input values.</summary>
