@@ -174,11 +174,11 @@ namespace ContentPatcher.Framework.Commands
                 {
                     if (token.RequiresSubkeys)
                     {
-                        foreach (TokenName name in token.GetSubkeys().OrderBy(p => p))
+                        foreach (TokenName name in token.GetSubkeys().OrderByIgnoreCase(key => key.Subkey))
                             output.AppendLine($"   {name}: {string.Join(", ", token.GetValues(name))}");
                     }
                     else
-                        output.AppendLine($"   {token.Name}: {string.Join(", ", token.GetValues(token.Name))}");
+                        output.AppendLine($"   {token.Name}: {string.Join(", ", token.GetValues(token.Name).OrderByIgnoreCase(p => p))}");
                 }
                 if (tokensOutOfContext.Any())
                 {
