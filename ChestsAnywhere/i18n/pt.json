@@ -20,7 +20,8 @@
   // button labels
   "button.edit-chest": "editar baú",
   "button.sort-inventory": "arrumar inventário",
-  "button.ok": "OK",
+  "button.save": "save", // TODO
+  "button.reset": "reset", // TODO
 
   // errors
   "errors.disabled-from-here": "Você não pode acessar baús daqui.",

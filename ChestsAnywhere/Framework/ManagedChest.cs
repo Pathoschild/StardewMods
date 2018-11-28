@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         public bool CanConfigureAutomate => this.Container.CanConfigureAutomate;
 
         /// <summary>The user-friendly display name.</summary>
-        public string DisplayName => this.Container.Data.Name ?? this.DefaultDisplayName;
+        public string DisplayName => !this.Container.Data.HasDefaultDisplayName() ? this.Container.Data.Name : this.DefaultDisplayName;
 
         /// <summary>The user-friendly category name (if any).</summary>
         public string DisplayCategory => this.Container.Data.Category ?? this.Location.Name;
@@ -74,6 +74,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             return !string.IsNullOrWhiteSpace(this.Container.Data.Category)
                 ? this.Container.Data.Category
                 : this.Location.Name;
+        }
+
+        /// <summary>Reset all data to the default.</summary>
+        public void Reset()
+        {
+            this.Container.Data.Reset();
         }
 
         /// <summary>Update the chest metadata.</summary>

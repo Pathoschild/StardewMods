@@ -129,8 +129,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>A checkbox which indicates whether Automate should ignore this chest.</summary>
         private Checkbox EditAutomateIgnore;
 
-        /// <summary>The button which saves the edit form.</summary>
-        private ClickableTextureComponent EditSaveButton;
+        /// <summary>The clickable area which saves the edit form.</summary>
+        private ClickableComponent EditSaveButtonArea;
+
+        /// <summary>The clickable area which clears data for the edit form.</summary>
+        private ClickableComponent EditResetButtonArea;
 
         /// <summary>The top-right button which closes the edit form.</summary>
         private ClickableTextureComponent EditExitButton;
@@ -288,9 +291,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateIgnore, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-ignore").Y;
                 }
 
-                // save button
-                this.EditSaveButton.bounds = new Rectangle(bounds.X + padding, bounds.Y + (int)topOffset, this.EditSaveButton.bounds.Width, this.EditSaveButton.bounds.Height);
-                this.EditSaveButton.draw(batch);
+                // buttons
+                this.DrawButton(batch, Game1.smallFont, this.EditSaveButtonArea, bounds.X + padding, bounds.Y + (int)topOffset, "button.save", Color.DarkGreen, out Rectangle saveButtonBounds);
+                this.DrawButton(batch, Game1.smallFont, this.EditResetButtonArea, bounds.X + padding + saveButtonBounds.Width + 2, bounds.Y + (int)topOffset, "button.reset", Color.DarkRed, out _);
 
                 // exit button
                 this.EditExitButton.draw(batch);
@@ -434,11 +437,15 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         this.EditAutomateIgnore.Toggle();
 
                     // save button
-                    else if (this.EditSaveButton.containsPoint(x, y))
+                    else if (this.EditSaveButtonArea.containsPoint(x, y))
                     {
                         this.SaveEdit();
                         this.ActiveElement = Element.Menu;
                     }
+
+                    // reset button
+                    else if (this.EditResetButtonArea.containsPoint(x, y))
+                        this.ResetEdit();
 
                     // exit button
                     else if (this.EditExitButton.containsPoint(x, y))
@@ -513,7 +520,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     return false;
 
                 case Element.EditForm:
-                    this.EditSaveButton.tryHover(x, y);
                     this.EditExitButton.tryHover(x, y);
                     return true;
 
@@ -575,17 +581,38 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
             // edit form
             int longTextWidth = (int)Game1.smallFont.MeasureString("A sufficiently, reasonably long string").X;
-            this.EditNameField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth, Text = this.Chest.DisplayName };
-            this.EditCategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth, Text = this.Chest.DisplayCategory };
-            this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X, Text = this.Chest.Order?.ToString() };
-            this.EditHideChestField = new Checkbox(this.Chest.IsIgnored);
-            this.EditAutomateOutput = new Checkbox(this.Chest.ShouldAutomatePreferForOutput);
-            this.EditAutomateIgnore = new Checkbox(this.Chest.ShouldAutomateIgnore);
-            this.EditSaveButton = new ClickableTextureComponent("save-chest", new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), null, this.Translations.Get("button.ok"), Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, IClickableMenu.borderWithDownArrowIndex), 1f);
+            this.EditNameField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth };
+            this.EditCategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth };
+            this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X };
+            this.EditHideChestField = new Checkbox();
+            this.EditAutomateOutput = new Checkbox();
+            this.EditAutomateIgnore = new Checkbox();
+            this.FillForm();
+
+            this.EditSaveButtonArea = new ClickableComponent(new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), "save-chest");
+            this.EditResetButtonArea = new ClickableComponent(new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), "reset-chest");
             this.EditExitButton = new ClickableTextureComponent(new Rectangle(bounds.Right - 9 * Game1.pixelZoom, bounds.Y - Game1.pixelZoom * 2, Sprites.Icons.ExitButton.Width * Game1.pixelZoom, Sprites.Icons.ExitButton.Height * Game1.pixelZoom), Sprites.Icons.Sheet, Sprites.Icons.ExitButton, Game1.pixelZoom);
 
             // adjust menu to fit
             this.Menu.trashCan.bounds.Y = this.SortInventoryButton.bounds.Y - this.Menu.trashCan.bounds.Height - 2 * Game1.pixelZoom;
+        }
+
+        /// <summary>Set the form values to match the underlying chest.</summary>
+        private void FillForm()
+        {
+            this.EditNameField.Text = this.Chest.DisplayName;
+            this.EditCategoryField.Text = this.Chest.DisplayCategory;
+            this.EditOrderField.Text = this.Chest.Order?.ToString();
+            this.EditHideChestField.Value = this.Chest.IsIgnored;
+            this.EditAutomateOutput.Value = this.Chest.ShouldAutomatePreferForOutput;
+            this.EditAutomateIgnore.Value = this.Chest.ShouldAutomateIgnore;
+        }
+
+        /// <summary>Reset the edit form to the default values.</summary>
+        private void ResetEdit()
+        {
+            this.Chest.Reset();
+            this.FillForm();
         }
 
         /// <summary>Save the form input.</summary>
@@ -721,7 +748,33 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             string label = this.Translations.Get(textKey);
             Vector2 labelSize = batch.DrawTextBlock(font, label, new Vector2(x + 7 + checkbox.Width, y), this.Menu.width, checkbox.Value ? Color.Red : Color.Black);
 
-            return new Vector2(x + 7 + checkbox.Width + labelSize.X, Math.Max(checkbox.Width, labelSize.Y));
+            return new Vector2(checkbox.Width + 7 + checkbox.Width + labelSize.X, Math.Max(checkbox.Width, labelSize.Y));
+        }
+
+        /// <summary>Draw a checkbox to the screen, including any position updates needed.</summary>
+        /// <param name="batch">The sprite batch being drawn.</param>
+        /// <param name="font">The font to use for the checkbox label.</param>
+        /// <param name="clickArea">The clickable area to draw.</param>
+        /// <param name="x">The top-left X position to start drawing from.</param>
+        /// <param name="y">The top-left Y position to start drawing from.</param>
+        /// <param name="textKey">The translation key for the checkbox label.</param>
+        /// <param name="color">The text color to draw.</param>
+        /// <param name="bounds">The button's outer bounds.</param>
+        private Vector2 DrawButton(SpriteBatch batch, SpriteFont font, ClickableComponent clickArea, int x, int y, string textKey, in Color color, out Rectangle bounds)
+        {
+            // get text
+            string label = this.Translations.Get(textKey);
+            Vector2 labelSize = font.MeasureString(label);
+
+            // draw button
+            CommonHelper.DrawButton(batch, new Vector2(x, y), labelSize, out Vector2 contentPos, out bounds);
+            Utility.drawBoldText(batch, label, font, contentPos, color);
+
+            // align clickable area
+            clickArea.bounds = bounds;
+
+            // return size
+            return new Vector2(bounds.Width, bounds.Height);
         }
     }
 }

@@ -84,6 +84,35 @@ namespace Pathoschild.Stardew.Common
             return labelSize + new Vector2(paddingSize);
         }
 
+        /// <summary>Draw a button background.</summary>
+        /// <param name="spriteBatch">The sprite batch to which to draw.</param>
+        /// <param name="position">The top-left pixel coordinate at which to draw the button.</param>
+        /// <param name="contentSize">The button content's pixel size.</param>
+        /// <param name="contentPos">The pixel position at which the content begins.</param>
+        /// <param name="bounds">The button's outer bounds.</param>
+        /// <param name="padding">The padding between the content and border.</param>
+        public static void DrawButton(SpriteBatch spriteBatch, in Vector2 position, in Vector2 contentSize, out Vector2 contentPos, out Rectangle bounds, int padding = 0)
+        {
+            CommonHelper.DrawContentBox(
+                spriteBatch: spriteBatch,
+                texture: CommonSprites.Button.Sheet,
+                background: CommonSprites.Button.Background,
+                top: CommonSprites.Button.Top,
+                right: CommonSprites.Button.Right,
+                bottom: CommonSprites.Button.Bottom,
+                left: CommonSprites.Button.Left,
+                topLeft: CommonSprites.Button.TopLeft,
+                topRight: CommonSprites.Button.TopRight,
+                bottomRight: CommonSprites.Button.BottomRight,
+                bottomLeft: CommonSprites.Button.BottomLeft,
+                position: position,
+                contentSize: contentSize,
+                contentPos: out contentPos,
+                bounds: out bounds,
+                padding: padding
+            );
+        }
+
         /// <summary>Draw a scroll background.</summary>
         /// <param name="spriteBatch">The sprite batch to which to draw.</param>
         /// <param name="position">The top-left pixel coordinate at which to draw the scroll.</param>

@@ -20,7 +20,8 @@
   // button labels
   "button.edit-chest": "チェストの編集",
   "button.sort-inventory": "インベントリの整頓",
-  "button.ok": "OK",
+  "button.save": "save", // TODO
+  "button.reset": "reset", // TODO
 
   // errors
   "errors.disabled-from-here": "ここからチェストにアクセスできません.",
