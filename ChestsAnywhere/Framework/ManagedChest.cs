@@ -37,7 +37,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         public string DisplayName => this.Container.Data.Name ?? this.DefaultDisplayName;
 
         /// <summary>The user-friendly category name (if any).</summary>
-        public string DisplayCategory => this.Container.Data.Name ?? this.Location.Name;
+        public string DisplayCategory => this.Container.Data.Category ?? this.Location.Name;
 
         /// <summary>Whether the container should be ignored.</summary>
         public bool IsIgnored => this.Container.Data.IsIgnored;
