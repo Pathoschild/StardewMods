@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed chest options not saved if you only set the _(Automate) Put items in this chest first_ option.
 * Improved translations. Thanks to Nanogamer7 (German)!
 
 ## 1.14.1

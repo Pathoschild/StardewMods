@@ -126,7 +126,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 || this.IsIgnored
                 || !string.IsNullOrWhiteSpace(this.Category)
                 || this.ShouldAutomateIgnore
-                || this.ShouldAutomateIgnore;
+                || this.ShouldAutomatePreferForOutput;
         }
     }
 }
