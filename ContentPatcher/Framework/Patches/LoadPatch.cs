@@ -40,7 +40,7 @@ namespace ContentPatcher.Framework.Patches
         public override bool UpdateContext(IContext context)
         {
             bool localAssetChanged = this.LocalAsset.UpdateContext(context);
-            this.IsValidInContext = this.ContentPack.FileExists(this.LocalAsset.Value);
+            this.IsValidInContext = this.LocalAsset.IsReady && this.ContentPack.FileExists(this.LocalAsset.Value);
             return base.UpdateContext(context) || localAssetChanged;
         }
 

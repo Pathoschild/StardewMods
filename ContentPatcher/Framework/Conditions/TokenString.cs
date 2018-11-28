@@ -15,6 +15,12 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The regex pattern matching a string token.</summary>
         private static readonly Regex TokenPattern = new Regex(@"{{([ \w\.\-]+)}}", RegexOptions.Compiled);
 
+        /// <summary>The underlying value for <see cref="Value"/>.</summary>
+        private string ValueImpl;
+
+        /// <summary>The underlying value for <see cref="IsReady"/>.</summary>
+        private bool IsReadyImpl;
+
 
         /*********
         ** Accessors
@@ -38,7 +44,10 @@ namespace ContentPatcher.Framework.Conditions
         public bool IsSingleTokenOnly { get; }
 
         /// <summary>The string with tokens substituted for the last context update.</summary>
-        public string Value { get; private set; }
+        public string Value => this.ValueImpl;
+
+        /// <summary>Whether all tokens in the value have been replaced.</summary>
+        public bool IsReady => this.IsReadyImpl;
 
 
         /*********
@@ -49,14 +58,18 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="tokenContext">The available token context.</param>
         public TokenString(string raw, IContext tokenContext)
         {
-            // get raw value
+            // set raw value
             this.Raw = raw?.Trim();
             if (string.IsNullOrWhiteSpace(this.Raw))
+            {
+                this.ValueImpl = this.Raw;
+                this.IsReadyImpl = true;
                 return;
+            }
 
             // extract tokens
             int tokensFound = 0;
-            foreach (Match match in TokenString.TokenPattern.Matches(raw))
+            foreach (Match match in TokenString.TokenPattern.Matches(this.Raw))
             {
                 tokensFound++;
                 string rawToken = match.Groups[1].Value.Trim();
@@ -70,8 +83,15 @@ namespace ContentPatcher.Framework.Conditions
                 else
                     this.InvalidTokens.Add(rawToken);
             }
-            this.IsSingleTokenOnly = tokensFound == 1 && TokenString.TokenPattern.Replace(this.Raw, "", 1) == "";
+
+            // set metadata
             this.IsMutable = this.Tokens.Any();
+            if (!this.IsMutable)
+            {
+                this.ValueImpl = this.Raw;
+                this.IsReadyImpl = !this.InvalidTokens.Any();
+            }
+            this.IsSingleTokenOnly = tokensFound == 1 && TokenString.TokenPattern.Replace(this.Raw, "", 1) == "";
         }
 
         /// <summary>Update the <see cref="Value"/> with the given tokens.</summary>
@@ -79,8 +99,11 @@ namespace ContentPatcher.Framework.Conditions
         /// <returns>Returns whether the value changed.</returns>
         public bool UpdateContext(IContext context)
         {
+            if (!this.IsMutable)
+                return false;
+
             string prevValue = this.Value;
-            this.Value = this.GetApplied(context);
+            this.GetApplied(context, out this.ValueImpl, out this.IsReadyImpl);
             return this.Value != prevValue;
         }
 
@@ -90,19 +113,24 @@ namespace ContentPatcher.Framework.Conditions
         *********/
         /// <summary>Get a new string with tokens substituted.</summary>
         /// <param name="context">Provides access to contextual tokens.</param>
-        private string GetApplied(IContext context)
+        /// <param name="result">The input string with tokens substituted.</param>
+        /// <param name="isReady">Whether all tokens in the <paramref name="result"/> have been replaced.</param>
+        private void GetApplied(IContext context, out string result, out bool isReady)
         {
-            if (!this.IsMutable)
-                return this.Raw;
-
-            return TokenString.TokenPattern.Replace(this.Raw, match =>
+            bool allReplaced = true;
+            result = TokenString.TokenPattern.Replace(this.Raw, match =>
             {
                 TokenName name = TokenName.Parse(match.Groups[1].Value);
                 IToken token = context.GetToken(name, enforceContext: true);
-                return token != null
-                    ? token.GetValues(name).FirstOrDefault()
-                    : match.Value;
+                if (token != null)
+                    return token.GetValues(name).FirstOrDefault();
+                else
+                {
+                    allReplaced = false;
+                    return match.Value;
+                }
             });
+            isReady = allReplaced;
         }
     }
 }
