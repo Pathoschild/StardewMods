@@ -1,24 +1,17 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using StardewValley;
 
 namespace Pathoschild.Stardew.Automate
 {
     /// <summary>Provides and stores items for machines.</summary>
-    internal interface IContainer : IEnumerable<ITrackedStack>
+    internal interface IContainer : IAutomatable, IEnumerable<ITrackedStack>
     {
         /*********
         ** Accessors
         *********/
         /// <summary>The container name (if any).</summary>
         string Name { get; }
-
-        /// <summary>The location which contains the container.</summary>
-        GameLocation Location { get; }
-
-        /// <summary>The tile area covered by the container.</summary>
-        Rectangle TileArea { get; }
 
 
         /*********

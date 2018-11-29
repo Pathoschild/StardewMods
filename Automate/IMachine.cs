@@ -1,21 +1,8 @@
-using Microsoft.Xna.Framework;
-using StardewValley;
-
 namespace Pathoschild.Stardew.Automate
 {
     /// <summary>A machine that accepts input and provides output.</summary>
-    internal interface IMachine
+    internal interface IMachine : IAutomatable
     {
-        /*********
-        ** Properties
-        *********/
-        /// <summary>The location which contains the machine.</summary>
-        GameLocation Location { get; }
-
-        /// <summary>The tile area covered by the machine.</summary>
-        Rectangle TileArea { get; }
-
-
         /*********
         ** Public methods
         *********/
