@@ -87,7 +87,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="origin">The first tile to check.</param>
         /// <param name="visited">A lookup of visited tiles.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        private void FloodFillGroup(MachineGroupBuilder group, GameLocation location, Vector2 origin, ISet<Vector2> visited, IReflectionHelper reflection)
+        private void FloodFillGroup(MachineGroupBuilder group, GameLocation location, in Vector2 origin, ISet<Vector2> visited, IReflectionHelper reflection)
         {
             // skip if already visited
             if (visited.Contains(origin))
@@ -103,31 +103,17 @@ namespace Pathoschild.Stardew.Automate.Framework
                 if (!visited.Add(tile))
                     continue;
 
-                // check for a machine, container, or connector
-                Vector2 foundOrigin = tile;
-                Vector2 foundSize;
-                if (this.TryGetMachine(location, tile, reflection, out IMachine machine, out foundOrigin, out Vector2 size))
+                // add machine, container, or connector which covers this tile
+                if (this.TryAddEntity(group, location, tile, reflection, out Rectangle tileArea))
                 {
-                    group.Add(machine);
-                    foundSize = size;
+                    group.Add(tileArea);
+                    foreach (Vector2 cur in tileArea.GetTiles())
+                        visited.Add(cur);
                 }
-                else if (this.TryGetChest(location, tile, out Chest chest) && chest.Name.IndexOf("|automate:ignore|", StringComparison.InvariantCultureIgnoreCase) == -1)
-                {
-                    group.Add(new ChestContainer(chest));
-                    foundSize = Vector2.One;
-                }
-                else if (this.TryGetConnector(location, tile))
-                    foundSize = Vector2.One;
                 else
                     continue;
 
-                // mark tiles visited
-                Rectangle tileArea = new Rectangle((int)foundOrigin.X, (int)foundOrigin.Y, (int)foundSize.X, (int)foundSize.Y);
-                group.Add(tileArea);
-                foreach (Vector2 cur in tileArea.GetTiles())
-                    visited.Add(cur);
-
-                // check surrounding tiles
+                // attach to entities in surrounding tiles
                 foreach (Vector2 next in tileArea.GetSurroundingTiles())
                 {
                     if (!visited.Contains(next))
@@ -136,38 +122,64 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
         }
 
+        /// <summary>Add any machine, container, or connector on the given tile to the machine group.</summary>
+        /// <param name="group">The machine group to extend.</param>
+        /// <param name="location">The location to search.</param>
+        /// <param name="tile">The tile to search.</param>
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        /// <param name="tileArea">The tile area covered by the matching machine, container, or connector.</param>
+        private bool TryAddEntity(MachineGroupBuilder group, GameLocation location, in Vector2 tile, IReflectionHelper reflection, out Rectangle tileArea)
+        {
+            // machine
+            IMachine machine = this.TryGetMachine(location, tile, reflection);
+            if (machine != null)
+            {
+                group.Add(machine);
+                tileArea = machine.TileArea;
+                return true;
+            }
+
+            // container
+            IContainer container = this.TryGetContainer(location, tile);
+            if (container != null && container.Name?.IndexOf("|automate:ignore|", StringComparison.InvariantCultureIgnoreCase) == -1)
+            {
+                group.Add(container);
+                tileArea = container.TileArea;
+                return true;
+            }
+
+            // connector
+            if (this.TryGetConnector(location, tile))
+            {
+                tileArea = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
+                return true;
+            }
+
+            // none found
+            tileArea = Rectangle.Empty;
+            return false;
+        }
+
         /// <summary>Get a machine from the given tile, if any.</summary>
         /// <param name="location">The location to search.</param>
         /// <param name="tile">The tile to search.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        /// <param name="machine">The machine found on the tile.</param>
-        /// <param name="origin">The machine's top-left position. This may be different from <paramref name="tile"/> for machines that take up multiple tiles.</param>
-        /// <param name="size">The tile size of the machine found on the tile.</param>
-        /// <returns>Returns whether a machine was found on the tile.</returns>
-        private bool TryGetMachine(GameLocation location, Vector2 tile, IReflectionHelper reflection, out IMachine machine, out Vector2 origin, out Vector2 size)
+        private IMachine TryGetMachine(GameLocation location, Vector2 tile, IReflectionHelper reflection)
         {
-            origin = tile;
-
             // object machine
             if (location.objects.TryGetValue(tile, out SObject obj) && !(obj is Chest))
             {
-                machine = this.GetMachine(obj, location, tile, reflection);
+                IMachine machine = this.GetMachine(obj, location, tile, reflection);
                 if (machine != null)
-                {
-                    size = Vector2.One;
-                    return true;
-                }
+                    return machine;
             }
 
             // terrain feature machine
             if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature feature))
             {
-                machine = this.GetMachine(feature);
+                IMachine machine = this.GetMachine(feature, location, tile);
                 if (machine != null)
-                {
-                    size = Vector2.One;
-                    return true;
-                }
+                    return machine;
             }
 
             // building machine
@@ -178,94 +190,96 @@ namespace Pathoschild.Stardew.Automate.Framework
                     Rectangle tileArea = new Rectangle(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
                     if (tileArea.Contains((int)tile.X, (int)tile.Y))
                     {
-                        machine = this.GetMachine(building, buildableLocation);
+                        IMachine machine = this.GetMachine(building, buildableLocation);
                         if (machine != null)
-                        {
-                            origin = new Vector2(building.tileX.Value, building.tileY.Value);
-                            size = new Vector2(building.tilesWide.Value, building.tilesHigh.Value);
-                            return true;
-                        }
+                            return machine;
                     }
                 }
             }
 
             // map machines
-            if (this.TryGetTileMachine(location, tile, reflection, out machine, out size))
-                return true;
+            {
+                IMachine machine = this.TryGetTileMachine(location, tile, reflection);
+                if (machine != null)
+                    return machine;
+            }
 
             // none
-            size = Vector2.Zero;
-            machine = null;
-            return false;
+            return null;
         }
 
         /// <param name="obj">The object for which to get a machine.</param>
         /// <param name="location">The location containing the machine.</param>
         /// <param name="tile">The machine's position in its location.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        private IMachine GetMachine(SObject obj, GameLocation location, Vector2 tile, IReflectionHelper reflection)
+        private IMachine GetMachine(SObject obj, GameLocation location, in Vector2 tile, IReflectionHelper reflection)
         {
             if (obj.ParentSheetIndex == 165)
-                return new AutoGrabberMachine(obj);
+                return new AutoGrabberMachine(obj, location);
             if (obj.name == "Bee House")
-                return new BeeHouseMachine(obj, location, tile);
+                return new BeeHouseMachine(obj, location);
             if (obj is Cask cask)
-                return new CaskMachine(cask);
+                return new CaskMachine(cask, location);
             if (obj.name == "Charcoal Kiln")
-                return new CharcoalKilnMachine(obj);
+                return new CharcoalKilnMachine(obj, location);
             if (obj.name == "Cheese Press")
-                return new CheesePressMachine(obj);
+                return new CheesePressMachine(obj, location);
             if (obj is CrabPot pot)
-                return new CrabPotMachine(pot, reflection);
+                return new CrabPotMachine(pot, location, reflection);
             if (obj.Name == "Crystalarium")
-                return new CrystalariumMachine(obj, reflection);
+                return new CrystalariumMachine(obj, location, reflection);
             if (obj.name == "Feed Hopper")
-                return new FeedHopperMachine();
+                return new FeedHopperMachine(obj, location);
             if (obj.Name == "Furnace")
-                return new FurnaceMachine(obj, tile);
+                return new FurnaceMachine(obj, location);
             if (obj.name == "Incubator")
-                return new CoopIncubatorMachine(obj);
+                return new CoopIncubatorMachine(obj, location);
             if (obj.Name == "Keg")
-                return new KegMachine(obj);
+                return new KegMachine(obj, location);
             if (obj.name == "Lightning Rod")
-                return new LightningRodMachine(obj);
+                return new LightningRodMachine(obj, location);
             if (obj.name == "Loom")
-                return new LoomMachine(obj);
+                return new LoomMachine(obj, location);
             if (obj.name == "Mayonnaise Machine")
-                return new MayonnaiseMachine(obj);
+                return new MayonnaiseMachine(obj, location);
             if (obj.Name == "Mushroom Box")
-                return new MushroomBoxMachine(obj);
+                return new MushroomBoxMachine(obj, location);
             if (obj.name == "Oil Maker")
-                return new OilMakerMachine(obj);
+                return new OilMakerMachine(obj, location);
             if (obj.name == "Preserves Jar")
-                return new PreservesJarMachine(obj);
+                return new PreservesJarMachine(obj, location);
             if (obj.name == "Recycling Machine")
-                return new RecyclingMachine(obj);
+                return new RecyclingMachine(obj, location);
             if (obj.name == "Seed Maker")
-                return new SeedMakerMachine(obj);
+                return new SeedMakerMachine(obj, location);
             if (obj.name == "Slime Egg-Press")
-                return new SlimeEggPressMachine(obj);
+                return new SlimeEggPressMachine(obj, location);
             if (obj.name == "Slime Incubator")
-                return new SlimeIncubatorMachine(obj);
+                return new SlimeIncubatorMachine(obj, location);
             if (obj.name == "Soda Machine")
-                return new SodaMachine(obj);
+                return new SodaMachine(obj, location);
             if (obj.name == "Statue Of Endless Fortune")
-                return new StatueOfEndlessFortuneMachine(obj);
+                return new StatueOfEndlessFortuneMachine(obj, location);
             if (obj.name == "Statue Of Perfection")
-                return new StatueOfPerfectionMachine(obj);
+                return new StatueOfPerfectionMachine(obj, location);
             if (obj.name == "Tapper")
-                return new TapperMachine(obj, location, tile);
+            {
+                if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrainFeature) && terrainFeature is Tree tree)
+                    return new TapperMachine(obj, location, tree.treeType.Value);
+            }
             if (obj.name == "Worm Bin")
-                return new WormBinMachine(obj);
+                return new WormBinMachine(obj, location);
             return null;
         }
 
         /// <summary>Get a machine for the given terrain feature, if applicable.</summary>
         /// <param name="feature">The terrain feature for which to get a machine.</param>
-        private IMachine GetMachine(TerrainFeature feature)
+        /// <param name="location">The location containing the machine.</param>
+        /// <param name="tile">The machine's position in its location.</param>
+        private IMachine GetMachine(TerrainFeature feature, GameLocation location, in Vector2 tile)
         {
             if (feature is FruitTree fruitTree)
-                return new FruitTreeMachine(fruitTree);
+                return new FruitTreeMachine(fruitTree, location, tile);
             return null;
         }
 
@@ -275,13 +289,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         private IMachine GetMachine(Building building, BuildableGameLocation location)
         {
             if (building is JunimoHut hut)
-                return new JunimoHutMachine(hut);
+                return new JunimoHutMachine(hut, location);
             if (building is Mill mill)
-                return new MillMachine(mill);
-            if (this.AutomateShippingBin && location is Farm farm && building is ShippingBin)
-                return new ShippingBinMachine(farm);
+                return new MillMachine(mill, location);
+            if (this.AutomateShippingBin && building is ShippingBin bin)
+                return new ShippingBinMachine(bin, location, Game1.getFarm());
             if (building.buildingType.Value == "Silo")
-                return new FeedHopperMachine();
+                return new FeedHopperMachine(building, location);
             return null;
         }
 
@@ -289,17 +303,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="location">The location containing the machine.</param>
         /// <param name="tile">The machine's position in its location.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        /// <param name="machine">The generated machine instance.</param>
-        /// <param name="size">The size of the machine on the map.</param>
         /// <remarks>Shipping bin logic from <see cref="Farm.leftClick"/>, garbage can logic from <see cref="Town.checkAction"/>.</remarks>
-        private bool TryGetTileMachine(GameLocation location, Vector2 tile, IReflectionHelper reflection, out IMachine machine, out Vector2 size)
+        private IMachine TryGetTileMachine(GameLocation location, in Vector2 tile, IReflectionHelper reflection)
         {
             // shipping bin
             if (this.AutomateShippingBin && location is Farm farm && (int)tile.X == this.ShippingBinArea.X && (int)tile.Y == this.ShippingBinArea.Y)
             {
-                machine = new ShippingBinMachine(farm);
-                size = new Vector2(this.ShippingBinArea.Width, this.ShippingBinArea.Height);
-                return true;
+                return new ShippingBinMachine(farm, this.ShippingBinArea);
             }
 
             // garbage cans
@@ -307,39 +317,28 @@ namespace Pathoschild.Stardew.Automate.Framework
             {
                 string action = town.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Action", "Buildings");
                 if (!string.IsNullOrWhiteSpace(action) && action.StartsWith("Garbage ") && int.TryParse(action.Split(' ')[1], out int trashCanIndex))
-                {
-                    machine = new TrashCanMachine(town, tile, trashCanIndex, reflection);
-                    size = Vector2.One;
-                    return true;
-                }
+                    return new TrashCanMachine(town, tile, trashCanIndex, reflection);
             }
 
             // none found
-            machine = null;
-            size = Vector2.Zero;
-            return false;
+            return null;
         }
 
-        /// <summary>Get the chest on a given tile, if any.</summary>
+        /// <summary>Get the container on a given tile, if any.</summary>
         /// <param name="location">The location to search.</param>
         /// <param name="tile">The tile to search.</param>
-        /// <param name="chest">The chest found on the tile.</param>
-        private bool TryGetChest(GameLocation location, Vector2 tile, out Chest chest)
+        private IContainer TryGetContainer(GameLocation location, in Vector2 tile)
         {
-            if (location.objects.TryGetValue(tile, out SObject obj))
-            {
-                chest = obj as Chest;
-                return chest != null;
-            }
+            if (location.objects.TryGetValue(tile, out SObject obj) && obj is Chest chest)
+                return new ChestContainer(chest, location, tile);
 
-            chest = null;
-            return false;
+            return null;
         }
 
         /// <summary>Get a connector from the given tile, if any.</summary>
         /// <param name="location">The location to search.</param>
         /// <param name="tile">The tile to search.</param>
-        private bool TryGetConnector(GameLocation location, Vector2 tile)
+        private bool TryGetConnector(GameLocation location, in Vector2 tile)
         {
             // no connectors
             if (this.Connectors.Count == 0)

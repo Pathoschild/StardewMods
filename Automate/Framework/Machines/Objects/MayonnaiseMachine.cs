@@ -1,10 +1,11 @@
 using Microsoft.Xna.Framework;
+using StardewValley;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A mayonnaise that accepts input and provides output.</summary>
-    internal class MayonnaiseMachine : GenericMachine
+    internal class MayonnaiseMachine : GenericObjectMachine<SObject>
     {
         /*********
         ** Properties
@@ -69,8 +70,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
-        public MayonnaiseMachine(SObject machine)
-            : base(machine) { }
+        /// <param name="location">The location containing the machine.</param>
+        public MayonnaiseMachine(SObject machine, GameLocation location)
+            : base(machine, location) { }
 
         /// <summary>Provide input to the machine.</summary>
         /// <param name="input">The available items.</param>

@@ -7,7 +7,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A recycling maching that accepts input and provides output.</summary>
     /// <remarks>This differs slightly from the game implementation in that it uses a more random RNG, due to a C# limitation which prevents us from accessing machine info from the cached recipe output functions for use in the RNG seed.</remarks>
-    internal class RecyclingMachine : GenericMachine
+    internal class RecyclingMachine : GenericObjectMachine<SObject>
     {
         /*********
         ** Properties
@@ -63,8 +63,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
-        public RecyclingMachine(SObject machine)
-            : base(machine) { }
+        /// <param name="location">The location containing the machine.</param>
+        public RecyclingMachine(SObject machine, GameLocation location)
+            : base(machine, location) { }
 
         /// <summary>Provide input to the machine.</summary>
         /// <param name="input">The available items.</param>

@@ -1,17 +1,19 @@
+using StardewValley;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A statue of perfection that accepts input and provides output.</summary>
-    internal class StatueOfPerfectionMachine : GenericMachine
+    internal class StatueOfPerfectionMachine : GenericObjectMachine<SObject>
     {
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
-        public StatueOfPerfectionMachine(SObject machine)
-            : base(machine) { }
+        /// <param name="location">The location containing the machine.</param>
+        public StatueOfPerfectionMachine(SObject machine, GameLocation location)
+            : base(machine, location) { }
 
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()

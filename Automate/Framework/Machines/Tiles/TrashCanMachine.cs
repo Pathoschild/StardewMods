@@ -8,7 +8,7 @@ using StardewValley.Locations;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
 {
     /// <summary>A trash can that accepts input and provides output.</summary>
-    internal class TrashCanMachine : IMachine
+    internal class TrashCanMachine : BaseMachine
     {
         /*********
         ** Properties
@@ -32,6 +32,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         /// <param name="trashCanIndex">The trash can index.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
         public TrashCanMachine(Town town, Vector2 tile, int trashCanIndex, IReflectionHelper reflection)
+            : base(town, BaseMachine.GetTileAreaFor(tile))
         {
             this.Tile = tile;
             this.TrashCansChecked = reflection.GetField<IList<bool>>(town, "garbageChecked").GetValue();
@@ -40,7 +41,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         }
 
         /// <summary>Get the machine's processing state.</summary>
-        public MachineState GetState()
+        public override MachineState GetState()
         {
             if (this.TrashCanIndex == -1)
                 return MachineState.Disabled;
@@ -50,7 +51,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         }
 
         /// <summary>Get the output item.</summary>
-        public ITrackedStack GetOutput()
+        public override ITrackedStack GetOutput()
         {
             // get trash
             int? itemID = this.GetRandomTrash(this.TrashCanIndex);
@@ -65,7 +66,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         /// <summary>Provide input to the machine.</summary>
         /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public bool SetInput(IStorage input)
+        public override bool SetInput(IStorage input)
         {
             return false; // no input
         }

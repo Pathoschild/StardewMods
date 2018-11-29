@@ -4,7 +4,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A slime incubator that accepts slime eggs and spawns slime monsters.</summary>
-    internal class SlimeIncubatorMachine : GenericMachine
+    internal class SlimeIncubatorMachine : GenericObjectMachine<SObject>
     {
         /*********
         ** Properties
@@ -18,8 +18,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
-        public SlimeIncubatorMachine(SObject machine)
-            : base(machine)
+        /// <param name="location">The location containing the machine.</param>
+        public SlimeIncubatorMachine(SObject machine, GameLocation location)
+            : base(machine, location)
         {
             int minutesUntilReady = Game1.player.professions.Contains(2) ? 2000 : 4000;
             this.Recipes = new[] {

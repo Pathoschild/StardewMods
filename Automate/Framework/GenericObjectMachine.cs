@@ -1,23 +1,17 @@
+using Microsoft.Xna.Framework;
 using StardewValley;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
     /// <summary>A generic machine instance.</summary>
-    internal abstract class GenericMachine<TMachine> : IMachine where TMachine : SObject
+    internal abstract class GenericObjectMachine<TMachine> : BaseMachine<TMachine> where TMachine : SObject
     {
-        /*********
-        ** Properties
-        *********/
-        /// <summary>The underlying machine.</summary>
-        protected TMachine Machine { get; }
-
-
         /*********
         ** Public methods
         *********/
         /// <summary>Get the machine's processing state.</summary>
-        public virtual MachineState GetState()
+        public override MachineState GetState()
         {
             if (this.Machine.heldObject.Value == null)
                 return MachineState.Empty;
@@ -28,15 +22,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         }
 
         /// <summary>Get the output item.</summary>
-        public virtual ITrackedStack GetOutput()
+        public override ITrackedStack GetOutput()
         {
             return new TrackedItem(this.Machine.heldObject.Value, onEmpty: this.GenericReset);
         }
-
-        /// <summary>Provide input to the machine.</summary>
-        /// <param name="input">The available items.</param>
-        /// <returns>Returns whether the machine started processing an item.</returns>
-        public abstract bool SetInput(IStorage input);
 
 
         /*********
@@ -44,10 +33,16 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
-        protected GenericMachine(TMachine machine)
-        {
-            this.Machine = machine;
-        }
+        /// <param name="location">The in-game location.</param>
+        protected GenericObjectMachine(TMachine machine, GameLocation location)
+            : base(machine, location, BaseMachine.GetTileAreaFor(machine)) { }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="machine">The underlying machine.</param>
+        /// <param name="location">The machine's in-game location.</param>
+        /// <param name="tileArea">The tile area covered by the machine.</param>
+        protected GenericObjectMachine(TMachine machine, GameLocation location, in Rectangle tileArea)
+            : base(machine, location, tileArea) { }
 
         /// <summary>Reset the machine so it's ready to accept a new input.</summary>
         /// <param name="item">The output item that was taken.</param>
@@ -70,17 +65,5 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
             return false;
         }
-    }
-
-    /// <summary>A generic machine instance.</summary>
-    internal abstract class GenericMachine : GenericMachine<SObject>
-    {
-        /*********
-        ** Protected methods
-        *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="machine">The underlying machine.</param>
-        protected GenericMachine(SObject machine)
-            : base(machine) { }
     }
 }

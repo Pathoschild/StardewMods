@@ -8,17 +8,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A bee house that accepts input and provides output.</summary>
     /// <remarks>See the game's machine logic in <see cref="SObject.performDropDownAction"/>, <see cref="SObject.checkForAction"/>, and <see cref="SObject.minutesElapsed"/>.</remarks>
-    internal class BeeHouseMachine : GenericMachine
+    internal class BeeHouseMachine : GenericObjectMachine<SObject>
     {
         /*********
         ** Properties
         *********/
-        /// <summary>The location containing the machine.</summary>
-        private readonly GameLocation Location;
-
-        /// <summary>The machine's position in its location.</summary>
-        private readonly Vector2 Tile;
-
         /// <summary>The honey types produced by this beehouse indexed by input ID.</summary>
         private readonly IDictionary<int, SObject.HoneyType> HoneyTypes = new Dictionary<int, SObject.HoneyType>
         {
@@ -36,13 +30,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The location containing the machine.</param>
-        /// <param name="tile">The machine's position in its location.</param>
-        public BeeHouseMachine(SObject machine, GameLocation location, Vector2 tile)
-            : base(machine)
-        {
-            this.Location = location;
-            this.Tile = tile;
-        }
+        public BeeHouseMachine(SObject machine, GameLocation location)
+            : base(machine, location) { }
 
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
@@ -64,7 +53,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             SObject.HoneyType type = SObject.HoneyType.Wild;
             string prefix = type.ToString();
             int addedPrice = 0;
-            Crop flower = Utility.findCloseFlower(this.Location, this.Tile);
+            Crop flower = Utility.findCloseFlower(this.Location, this.Machine.TileLocation);
             if (flower != null)
             {
                 string[] flowerData = Game1.objectInformation[flower.indexOfHarvest.Value].Split('/');
