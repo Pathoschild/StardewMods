@@ -2,8 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Added experimental API to let other mods add new machines, containers, and connectors.
 * Fixed fences not working as connectors.
-* Internal changes to support custom machines in an upcoming release.
 
 ## 1.10.6
 * Migrated verbose logs to SMAPI's verbose logging feature.

@@ -1,7 +1,7 @@
 namespace Pathoschild.Stardew.Automate
 {
     /// <summary>A machine processing state.</summary>
-    internal enum MachineState
+    public enum MachineState
     {
         /// <summary>The machine has no input.</summary>
         Empty,

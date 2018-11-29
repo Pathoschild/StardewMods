@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         ** Properties
         *********/
         /// <summary>The recipes to process.</summary>
-        private readonly Recipe[] Recipes;
+        private readonly IRecipe[] Recipes;
 
 
         /*********
@@ -23,7 +23,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             : base(machine, location)
         {
             int minutesUntilReady = Game1.player.professions.Contains(2) ? 2000 : 4000;
-            this.Recipes = new[] {
+            this.Recipes = new IRecipe[] {
                 // blue slime egg => object with parentSheetIndex of blue slime egg
                 new Recipe(
                     input: 413,

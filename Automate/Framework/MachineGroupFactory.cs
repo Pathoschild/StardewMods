@@ -163,7 +163,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                         Rectangle tileArea = new Rectangle(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
                         if (tileArea.Contains((int)tile.X, (int)tile.Y))
                         {
-                            IAutomatable entity = factory.GetFor(building, buildableLocation);
+                            IAutomatable entity = factory.GetFor(building, buildableLocation, tile);
                             if (entity != null)
                                 return entity;
                         }

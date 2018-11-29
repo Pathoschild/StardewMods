@@ -13,7 +13,7 @@ using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
-using Object = StardewValley.Object;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -52,11 +52,12 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.Reflection = reflection;
         }
 
-        /// <summary>Get an entity</summary>
-        /// <param name="obj">The object for which to get a machine.</param>
-        /// <param name="location">The location containing the machine.</param>
-        /// <param name="tile">The machine's position in its location.</param>
-        public IAutomatable GetFor(Object obj, GameLocation location, in Vector2 tile)
+        /// <summary>Get a machine, container, or connector instance for a given object.</summary>
+        /// <param name="obj">The in-game object.</param>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
+        public IAutomatable GetFor(SObject obj, GameLocation location, in Vector2 tile)
         {
             // chest container
             if (obj is Chest chest)
@@ -126,10 +127,11 @@ namespace Pathoschild.Stardew.Automate.Framework
             return null;
         }
 
-        /// <summary>Get a machine for the given terrain feature, if applicable.</summary>
-        /// <param name="feature">The terrain feature for which to get a machine.</param>
-        /// <param name="location">The location containing the machine.</param>
-        /// <param name="tile">The machine's position in its location.</param>
+        /// <summary>Get a machine, container, or connector instance for a given terrain feature.</summary>
+        /// <param name="feature">The terrain feature.</param>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
         public IAutomatable GetFor(TerrainFeature feature, GameLocation location, in Vector2 tile)
         {
             // machine
@@ -143,10 +145,12 @@ namespace Pathoschild.Stardew.Automate.Framework
             return null;
         }
 
-        /// <summary>Get a machine for the given building, if applicable.</summary>
-        /// <param name="building">The building for which to get a machine.</param>
-        /// <param name="location">The location containing the machine.</param>
-        public IAutomatable GetFor(Building building, BuildableGameLocation location)
+        /// <summary>Get a machine, container, or connector instance for a given building.</summary>
+        /// <param name="building">The building.</param>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
+        public IAutomatable GetFor(Building building, BuildableGameLocation location, in Vector2 tile)
         {
             // machine
             if (building is JunimoHut hut)
@@ -160,9 +164,10 @@ namespace Pathoschild.Stardew.Automate.Framework
             return null;
         }
 
-        /// <summary>Get a machine for the given tile, if applicable.</summary>
-        /// <param name="location">The location containing the machine.</param>
-        /// <param name="tile">The machine's position in its location.</param>
+        /// <summary>Get a machine, container, or connector instance for a given tile position.</summary>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
         /// <remarks>Shipping bin logic from <see cref="Farm.leftClick"/>, garbage can logic from <see cref="Town.checkAction"/>.</remarks>
         public IAutomatable GetForTile(GameLocation location, in Vector2 tile)
         {
@@ -200,7 +205,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         /// <summary>Get the object ID for a given object.</summary>
         /// <param name="obj">The object instance.</param>
-        private int GetItemID(Object obj)
+        private int GetItemID(SObject obj)
         {
             // get object ID from fence ID
             if (obj is Fence fence)

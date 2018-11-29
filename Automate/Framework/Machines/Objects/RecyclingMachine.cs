@@ -16,7 +16,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         private static readonly Random Random = new Random();
 
         /// <summary>The recipes to process.</summary>
-        private readonly Recipe[] Recipes =
+        private readonly IRecipe[] Recipes =
         {
             // trash => coal/iron ore/stone
             new Recipe(

@@ -3,36 +3,41 @@ using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate
 {
     /// <summary>Constructs machines, containers, or connectors which can be added to a machine group.</summary>
-    internal interface IAutomationFactory
+    public interface IAutomationFactory
     {
         /*********
         ** Accessors
         *********/
-        /// <summary>Get an entity</summary>
-        /// <param name="obj">The object for which to get a machine.</param>
-        /// <param name="location">The location containing the machine.</param>
-        /// <param name="tile">The machine's position in its location.</param>
-        IAutomatable GetFor(Object obj, GameLocation location, in Vector2 tile);
+        /// <summary>Get a machine, container, or connector instance for a given object.</summary>
+        /// <param name="obj">The in-game object.</param>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
+        IAutomatable GetFor(SObject obj, GameLocation location, in Vector2 tile);
 
-        /// <summary>Get a machine for the given terrain feature, if applicable.</summary>
-        /// <param name="feature">The terrain feature for which to get a machine.</param>
-        /// <param name="location">The location containing the machine.</param>
-        /// <param name="tile">The machine's position in its location.</param>
+        /// <summary>Get a machine, container, or connector instance for a given terrain feature.</summary>
+        /// <param name="feature">The terrain feature.</param>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
         IAutomatable GetFor(TerrainFeature feature, GameLocation location, in Vector2 tile);
 
-        /// <summary>Get a machine for the given building, if applicable.</summary>
-        /// <param name="building">The building for which to get a machine.</param>
-        /// <param name="location">The location containing the machine.</param>
-        IAutomatable GetFor(Building building, BuildableGameLocation location);
+        /// <summary>Get a machine, container, or connector instance for a given building.</summary>
+        /// <param name="building">The building.</param>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
+        IAutomatable GetFor(Building building, BuildableGameLocation location, in Vector2 tile);
 
-        /// <summary>Get a machine for the given tile, if applicable.</summary>
-        /// <param name="location">The location containing the machine.</param>
-        /// <param name="tile">The machine's position in its location.</param>
-        /// <remarks>Shipping bin logic from <see cref="Farm.leftClick"/>, garbage can logic from <see cref="Town.checkAction"/>.</remarks>
+        /// <summary>Get a machine, container, or connector instance for a given tile position.</summary>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
         IAutomatable GetForTile(GameLocation location, in Vector2 tile);
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Automate.Framework.Models;
@@ -66,6 +65,12 @@ namespace Pathoschild.Stardew.Automate
 
             // log info
             this.Monitor.VerboseLog($"Initialised with automation every {this.Config.AutomationInterval} ticks.");
+        }
+
+        /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry" />.</summary>
+        public override object GetApi()
+        {
+            return new AutomateAPI(this.Factory, this.MachineGroups);
         }
 
 

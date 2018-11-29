@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Pathoschild.Stardew.Automate.Framework;
 
 namespace Pathoschild.Stardew.Automate
 {
     /// <summary>Manages access to items in the underlying containers.</summary>
-    internal interface IStorage
+    public interface IStorage
     {
         /*********
         ** Public methods
@@ -34,7 +35,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="consumable">The matching consumables.</param>
         /// <param name="recipe">The matched requisition.</param>
         /// <returns>Returns whether the requirement is met.</returns>
-        bool TryGetIngredient(Recipe[] recipes, out IConsumable consumable, out Recipe recipe);
+        bool TryGetIngredient(IRecipe[] recipes, out IConsumable consumable, out IRecipe recipe);
 
         /****
         ** TryConsume

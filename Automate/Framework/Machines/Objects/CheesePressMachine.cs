@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         ** Properties
         *********/
         /// <summary>The recipes processed by this machine (input => output).</summary>
-        private readonly Recipe[] Recipes =
+        private readonly IRecipe[] Recipes =
         {
             // goat milk => goat cheese
             new Recipe(
@@ -61,7 +61,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool SetInput(IStorage input)
         {
-            if (input.TryGetIngredient(this.Recipes, out IConsumable consumable, out Recipe recipe))
+            if (input.TryGetIngredient(this.Recipes, out IConsumable consumable, out IRecipe recipe))
             {
                 this.Machine.heldObject.Value = recipe.Output(consumable.Take());
                 this.Machine.MinutesUntilReady = recipe.Minutes;

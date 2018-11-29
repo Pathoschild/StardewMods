@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         *********/
         /// <summary>The recipes to process.</summary>
         /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/>.</remarks>
-        private readonly Recipe[] Recipes =
+        private readonly IRecipe[] Recipes =
         {
             // copper => copper bar
             new Recipe(

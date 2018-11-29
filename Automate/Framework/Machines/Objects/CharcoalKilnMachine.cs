@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         ** Properties
         *********/
         /// <summary>The recipes to process.</summary>
-        private readonly Recipe[] Recipes =
+        private readonly IRecipe[] Recipes =
         {
             // wood => coal
             new Recipe(

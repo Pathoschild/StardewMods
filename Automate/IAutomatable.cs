@@ -4,7 +4,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.Automate
 {
     /// <summary>An automatable entity, which can implement a more specific type like <see cref="IMachine"/> or <see cref="IContainer"/>. If it doesn't implement a more specific type, it's treated as a connector with no additional logic.</summary>
-    internal interface IAutomatable
+    public interface IAutomatable
     {
         /*********
         ** Accessors
