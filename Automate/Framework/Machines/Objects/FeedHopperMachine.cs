@@ -1,17 +1,31 @@
 using System;
 using System.Linq;
 using StardewValley;
+using StardewValley.Buildings;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A hay hopper that accepts input and provides output.</summary>
-    internal class FeedHopperMachine : IMachine
+    internal class FeedHopperMachine : BaseMachine
     {
         /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="obj">The feed hopper to automate.</param>
+        /// <param name="location">The location containing the machine.</param>
+        public FeedHopperMachine(SObject obj, GameLocation location)
+            : base(location, BaseMachine.GetTileAreaFor(obj)) { }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="silo">The silo to automate.</param>
+        /// <param name="location">The location containing the machine.</param>
+        public FeedHopperMachine(Building silo, GameLocation location)
+            : base(location, BaseMachine.GetTileAreaFor(silo)) { }
+
         /// <summary>Get the machine's processing state.</summary>
-        public MachineState GetState()
+        public override MachineState GetState()
         {
             Farm farm = Game1.getFarm();
             return this.GetFreeSpace(farm) > 0
@@ -20,7 +34,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         }
 
         /// <summary>Get the output item.</summary>
-        public ITrackedStack GetOutput()
+        public override ITrackedStack GetOutput()
         {
             return null;
         }
@@ -35,7 +49,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Provide input to the machine.</summary>
         /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public bool SetInput(IStorage input)
+        public override bool SetInput(IStorage input)
         {
             Farm farm = Game1.getFarm();
 

@@ -1,7 +1,7 @@
 namespace Pathoschild.Stardew.Automate
 {
     /// <summary>A machine that accepts input and provides output.</summary>
-    internal interface IMachine
+    public interface IMachine : IAutomatable
     {
         /*********
         ** Public methods

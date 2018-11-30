@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Automate.Framework.Models;
@@ -21,8 +20,8 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
-        /// <summary>Constructs machine instances.</summary>
-        private MachineFactory Factory;
+        /// <summary>Constructs machine groups.</summary>
+        private MachineGroupFactory Factory;
 
         /// <summary>Whether to enable automation for the current save.</summary>
         private bool EnableAutomation => Context.IsMainPlayer;
@@ -49,7 +48,8 @@ namespace Pathoschild.Stardew.Automate
         {
             // init
             this.Config = helper.ReadConfig<ModConfig>();
-            this.Factory = new MachineFactory(this.Config.Connectors, this.Config.AutomateShippingBin);
+            this.Factory = new MachineGroupFactory();
+            this.Factory.Add(new AutomationFactory(this.Config.Connectors, this.Config.AutomateShippingBin, helper.Reflection));
 
             // hook events
             IModEvents events = this.Helper.Events;
@@ -65,6 +65,12 @@ namespace Pathoschild.Stardew.Automate
 
             // log info
             this.Monitor.VerboseLog($"Initialised with automation every {this.Config.AutomationInterval} ticks.");
+        }
+
+        /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry" />.</summary>
+        public override object GetApi()
+        {
+            return new AutomateAPI(this.Factory, this.MachineGroups);
         }
 
 
@@ -222,7 +228,7 @@ namespace Pathoschild.Stardew.Automate
         {
             this.Monitor.VerboseLog($"Reloading machines in {location.Name}...");
 
-            this.MachineGroups[location] = this.Factory.GetActiveMachinesGroups(location, this.Helper.Reflection).ToArray();
+            this.MachineGroups[location] = this.Factory.GetActiveMachinesGroups(location).ToArray();
             if (!this.MachineGroups[location].Any())
                 this.MachineGroups.Remove(location);
         }
@@ -247,7 +253,7 @@ namespace Pathoschild.Stardew.Automate
         private void EnableOverlay()
         {
             if (this.CurrentOverlay == null)
-                this.CurrentOverlay = new OverlayMenu(this.Factory.GetMachineGroups(Game1.currentLocation, this.Helper.Reflection));
+                this.CurrentOverlay = new OverlayMenu(this.Factory.GetMachineGroups(Game1.currentLocation));
         }
 
         /// <summary>Reset the overlay if it's being shown.</summary>

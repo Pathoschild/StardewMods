@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added experimental API to let other mods add new machines, containers, and connectors.
 * Fixed fences not working as connectors.
 
 ## 1.10.6

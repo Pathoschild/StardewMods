@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A crab pot that accepts input and provides output.</summary>
     /// <remarks>See the game's machine logic in <see cref="CrabPot.DayUpdate"/> and <see cref="CrabPot.performObjectDropInAction"/>.</remarks>
-    internal class CrabPotMachine : GenericMachine<CrabPot>
+    internal class CrabPotMachine : GenericObjectMachine<CrabPot>
     {
         /*********
         ** Properties
@@ -25,9 +25,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
+        /// <param name="location">The location containing the machine.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public CrabPotMachine(CrabPot machine, IReflectionHelper reflection)
-            : base(machine)
+        public CrabPotMachine(CrabPot machine, GameLocation location, IReflectionHelper reflection)
+            : base(machine, location)
         {
             this.Reflection = reflection;
         }

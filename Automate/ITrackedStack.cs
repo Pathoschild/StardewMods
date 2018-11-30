@@ -3,7 +3,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.Automate
 {
     /// <summary>An item stack in an input pipe which can be reduced or taken.</summary>
-    internal interface ITrackedStack
+    public interface ITrackedStack
     {
         /*********
         ** Accessors

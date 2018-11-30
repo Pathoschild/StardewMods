@@ -3,7 +3,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.Automate
 {
     /// <summary>An ingredient stack (or stacks) which can be consumed by a machine.</summary>
-    internal interface IConsumable
+    public interface IConsumable
     {
         /*********
         ** Accessors
