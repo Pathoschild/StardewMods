@@ -280,7 +280,7 @@ A set of machines, containers, and connectors which are chained together. You ca
 ### Access the API
 To access the API:
 
-1. Add a reference to the `Pathoschild.Stardew.Automate.dll` file. Make sure it's [_not_ copied to your build output](https://github.com/Pathoschild/SMAPI/blob/develop/docs/mod-build-config.md#ignore-files).
+1. Add a reference to the `Automate.dll` file. Make sure it's [_not_ copied to your build output](https://github.com/Pathoschild/SMAPI/blob/develop/docs/mod-build-config.md#ignore-files).
 2. Hook into [SMAPI's `GameLoop.GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched)
    and get a copy of the API:
    ```c#
@@ -297,74 +297,82 @@ if Automate already has an automatable for an entity, it won't call your factory
 First, let's create a basic machine that transmutes an iron bar into gold in two hours:
 
 ```c#
-using Pathoschild.Stardew.Automate;
+using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Automate.Framework;
+using StardewValley;
 using SObject = StardewValley.Object;
 
-/// <summary>A machine that turns iron bars into gold bars.</summary>
-public class TransmuterMachine : IMachine
+namespace YourModName
 {
-    /*********
-    ** Fields
-    *********/
-    /// <summary>The underlying entity.</summary>
-    private readonly SObject Entity;
-
-
-    /*********
-    ** Accessors
-    *********/
-    /// <summary>The location which contains the machine.</summary>
-    public GameLocation Location { get; }
-
-    /// <summary>The tile area covered by the machine.</summary>
-    public Rectangle TileArea { get; }
-
-
-    /*********
-    ** Public methods
-    *********/
-    /// <summary>Construct an instance.</summary>
-    /// <param name="entity">The underlying entity.</param>
-    /// <param name="location">The location which contains the machine.</param>
-    /// <param name="tile">The tile covered by the machine.</param>
-    public TransmuterMachine(SObject entity, GameLocation location, in Vector2 tile)
+    /// <summary>A machine that turns iron bars into gold bars.</summary>
+    public class TransmuterMachine : IMachine
     {
-        this.Entity = entity;
-        this.Location = location;
-        this.TileArea = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
-    }
+        /*********
+        ** Fields
+        *********/
+        /// <summary>The underlying entity.</summary>
+        private readonly SObject Entity;
 
-    /// <summary>Get the machine's processing state.</summary>
-    public MachineState GetState()
-    {
-        if (this.Entity.heldObject.Value == null)
-            return MachineState.Empty;
 
-        return this.Entity.readyForHarvest.Value
-            ? MachineState.Done
-            : MachineState.Processing;
-    }
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The location which contains the machine.</summary>
+        public GameLocation Location { get; }
 
-    /// <summary>Get the output item.</summary>
-    public ITrackedStack GetOutput()
-    {
-        return new TrackedItem(this.Machine.heldObject.Value, onEmpty: item =>
+        /// <summary>The tile area covered by the machine.</summary>
+        public Rectangle TileArea { get; }
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="entity">The underlying entity.</param>
+        /// <param name="location">The location which contains the machine.</param>
+        /// <param name="tile">The tile covered by the machine.</param>
+        public TransmuterMachine(SObject entity, GameLocation location, in Vector2 tile)
         {
-            this.Entity.heldObject.Value = null;
-            this.Entity.readyForHarvest.Value = false;
-        });
-    }
+            this.Entity = entity;
+            this.Location = location;
+            this.TileArea = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
+        }
 
-    /// <summary>Provide input to the machine.</summary>
-    /// <param name="input">The available items.</param>
-    /// <returns>Returns whether the machine started processing an item.</returns>
-    public bool SetInput(IStorage input)
-    {
-        if (storage.TryGetIngredient(SObject.ironBar, 1, out IConsumable ingredient))
+        /// <summary>Get the machine's processing state.</summary>
+        public MachineState GetState()
         {
-            ingredient.Take();
-            this.Entity.heldObject.Value = new SObject(SObject.goldBar, 1);
-            this.Entity.MinutesUntilReady = 120;
+            if (this.Entity.heldObject.Value == null)
+                return MachineState.Empty;
+
+            return this.Entity.readyForHarvest.Value
+                ? MachineState.Done
+                : MachineState.Processing;
+        }
+
+        /// <summary>Get the output item.</summary>
+        public ITrackedStack GetOutput()
+        {
+            return new TrackedItem(this.Entity.heldObject.Value, onEmpty: item =>
+            {
+                this.Entity.heldObject.Value = null;
+                this.Entity.readyForHarvest.Value = false;
+            });
+        }
+
+        /// <summary>Provide input to the machine.</summary>
+        /// <param name="input">The available items.</param>
+        /// <returns>Returns whether the machine started processing an item.</returns>
+        public bool SetInput(IStorage input)
+        {
+            if (input.TryGetIngredient(SObject.ironBar, 1, out IConsumable ingredient))
+            {
+                ingredient.Take();
+                this.Entity.heldObject.Value = new SObject(SObject.goldBar, 1);
+                this.Entity.MinutesUntilReady = 120;
+                return true;
+            }
+
+            return false;
         }
     }
 }
@@ -374,49 +382,59 @@ Next, let's create a factory which returns the new machine. This example assumes
 in-game object with ID 2000 that you want to automate.
 
 ```c#
-public class MyAutomationFactory : IAutomationFactory
+using Microsoft.Xna.Framework;
+using StardewValley;
+using StardewValley.Buildings;
+using StardewValley.Locations;
+using StardewValley.TerrainFeatures;
+using SObject = StardewValley.Object;
+
+namespace YourModName
 {
-    /// <summary>Get a machine, container, or connector instance for a given object.</summary>
-    /// <param name="obj">The in-game object.</param>
-    /// <param name="location">The location to check.</param>
-    /// <param name="tile">The tile position to check.</param>
-    /// <returns>Returns an instance or <c>null</c>.</returns>
-    public IAutomatable GetFor(SObject obj, GameLocation location, in Vector2 tile)
+    public class MyAutomationFactory : IAutomationFactory
     {
-        if (obj.ParentSheetIndex == 2000)
-            return new TransmuterMachine(obj, location, tile);
+        /// <summary>Get a machine, container, or connector instance for a given object.</summary>
+        /// <param name="obj">The in-game object.</param>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
+        public IAutomatable GetFor(SObject obj, GameLocation location, in Vector2 tile)
+        {
+            if (obj.ParentSheetIndex == 2000)
+                return new TransmuterMachine(obj, location, tile);
 
-        return null;
-    }
+            return null;
+        }
 
-    /// <summary>Get a machine, container, or connector instance for a given terrain feature.</summary>
-    /// <param name="feature">The terrain feature.</param>
-    /// <param name="location">The location to check.</param>
-    /// <param name="tile">The tile position to check.</param>
-    /// <returns>Returns an instance or <c>null</c>.</returns>
-    public IAutomatable GetFor(TerrainFeature feature, GameLocation location, in Vector2 tile)
-    {
-        return null;
-    }
+        /// <summary>Get a machine, container, or connector instance for a given terrain feature.</summary>
+        /// <param name="feature">The terrain feature.</param>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
+        public IAutomatable GetFor(TerrainFeature feature, GameLocation location, in Vector2 tile)
+        {
+            return null;
+        }
 
-    /// <summary>Get a machine, container, or connector instance for a given building.</summary>
-    /// <param name="building">The building.</param>
-    /// <param name="location">The location to check.</param>
-    /// <param name="tile">The tile position to check.</param>
-    /// <returns>Returns an instance or <c>null</c>.</returns>
-    public IAutomatable GetFor(Building building, BuildableGameLocation location, in Vector2 tile)
-    {
-        return null;
-    }
+        /// <summary>Get a machine, container, or connector instance for a given building.</summary>
+        /// <param name="building">The building.</param>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
+        public IAutomatable GetFor(Building building, BuildableGameLocation location, in Vector2 tile)
+        {
+            return null;
+        }
 
-    /// <summary>Get a machine, container, or connector instance for a given tile position.</summary>
-    /// <param name="location">The location to check.</param>
-    /// <param name="tile">The tile position to check.</param>
-    /// <returns>Returns an instance or <c>null</c>.</returns>
-    /// <remarks>Shipping bin logic from <see cref="Farm.leftClick"/>, garbage can logic from <see cref="Town.checkAction"/>.</remarks>
-    public IAutomatable GetForTile(GameLocation location, in Vector2 tile)
-    {
-        return null;
+        /// <summary>Get a machine, container, or connector instance for a given tile position.</summary>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
+        /// <remarks>Shipping bin logic from <see cref="Farm.leftClick"/>, garbage can logic from <see cref="Town.checkAction"/>.</remarks>
+        public IAutomatable GetForTile(GameLocation location, in Vector2 tile)
+        {
+            return null;
+        }
     }
 }
 ```
@@ -428,7 +446,7 @@ IAutomateAPI automate = ...;
 automate.AddFactory(new MyAutomationFactory());
 ```
 
-That's it! When Automate scans a location for automatable, it'll call your `GetFor` method and add
+That's it! When Automate scans a location for automatables, it'll call your `GetFor` method and add
 your custom machine to its normal automation.
 
 ## See also
