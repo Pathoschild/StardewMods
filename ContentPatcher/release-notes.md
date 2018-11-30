@@ -9,10 +9,10 @@
 * Added `Wind` value for `Weather` token.
 * Added support for matching subkey/value pairs for tokens which previously required subkeys.
 * Improved performance for most content packs.
+* Improved `patch summary` format.
 * Fixed language token always marked 'not valid in this context'.
 * Fixed token strings not validated for format version compatibility.
 * Fixed some 1.5 tokens not validated for format version compatibility.
-* Fixed `patch summary` order for token subkeys and values.
 
 Via SMAPI 2.9:
 * Added support for conditional map edits.
