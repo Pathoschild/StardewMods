@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added new tokens:
+  * `DaysPlayed`: the number of in-game days played for the current save.
   * `HasWalletItem`: the [special items in the player wallet](https://stardewvalleywiki.com/Wallet).
   * `SkillLevel`: the player's level for a given skill.
 * Added `Wind` value for `Weather` token.

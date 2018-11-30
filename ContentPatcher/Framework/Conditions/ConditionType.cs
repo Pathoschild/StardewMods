@@ -12,6 +12,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The <see cref="System.DayOfWeek"/> name.</summary>
         DayOfWeek,
 
+        /// <summary>The total number of days played in the current save.</summary>
+        DaysPlayed,
+
         /// <summary>The farm cave type.</summary>
         FarmCave,
 

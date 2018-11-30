@@ -37,6 +37,7 @@ namespace ContentPatcher.Framework.Commands
             ConditionType.DayOfWeek,
             ConditionType.Day,
             ConditionType.DayEvent,
+            ConditionType.DaysPlayed,
             ConditionType.Language,
             ConditionType.Spouse,
             ConditionType.Weather,
