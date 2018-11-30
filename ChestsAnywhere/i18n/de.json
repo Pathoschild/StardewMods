@@ -20,9 +20,8 @@
   // button labels
   "button.edit-chest": "Bearbeite Kiste",
   "button.sort-inventory": "sortiere Inventar",
-  "button.save": "save", // TODO
-  "button.reset": "reset", // TODO
-
+  "button.save": "Speichern",
+  "button.reset": "Zurücksetzen",
   // errors
   "errors.disabled-from-here": "Du kannst von hier auf keine Kisten zugreifen.",
   "errors.no-chests": "Du hast noch keine Kisten.",
