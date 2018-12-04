@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated for the upcoming SMAPI 3.0.
 * Added experimental API to let other mods add new machines, containers, and connectors.
 * Fixed fences not working as connectors.
 

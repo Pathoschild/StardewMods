@@ -44,10 +44,10 @@ namespace Pathoschild.Stardew.DataLayers
             this.Config = helper.ReadConfig<ModConfig>();
 
             // hook up events
-            SaveEvents.AfterReturnToTitle += this.SaveEvents_AfterReturnToTitle;
-            GameEvents.FirstUpdateTick += this.GameEvents_FirstUpdateTick;
-            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
+            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+            helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         }
 
 
@@ -57,7 +57,7 @@ namespace Pathoschild.Stardew.DataLayers
         /// <summary>The method invoked on the first game update tick.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void GameEvents_FirstUpdateTick(object sender, EventArgs e)
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
             // init
             this.Mods = new ModIntegrations(this.Monitor, this.Helper.ModRegistry, this.Helper.Reflection);
@@ -157,7 +157,7 @@ namespace Pathoschild.Stardew.DataLayers
         /// <summary>The method invoked when the player returns to the title screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void SaveEvents_AfterReturnToTitle(object sender, EventArgs e)
+        private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
         {
             this.CurrentOverlay?.Dispose();
             this.CurrentOverlay = null;
@@ -166,7 +166,7 @@ namespace Pathoschild.Stardew.DataLayers
         /// <summary>The method invoked when the player presses an input button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             // perform bound action
             this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
@@ -186,20 +186,20 @@ namespace Pathoschild.Stardew.DataLayers
                         this.CurrentOverlay = null;
                     }
                     else
-                        this.CurrentOverlay = new DataLayerOverlay(this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders);
-                    e.SuppressButton();
+                        this.CurrentOverlay = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders);
+                    this.Helper.Input.Suppress(e.Button);
                 }
 
                 // cycle layers
                 else if (overlayVisible && controls.NextLayer.Contains(e.Button))
                 {
                     this.CurrentOverlay.NextLayer();
-                    e.SuppressButton();
+                    this.Helper.Input.Suppress(e.Button);
                 }
                 else if (overlayVisible && controls.PrevLayer.Contains(e.Button))
                 {
                     this.CurrentOverlay.PrevLayer();
-                    e.SuppressButton();
+                    this.Helper.Input.Suppress(e.Button);
                 }
             });
         }
@@ -207,7 +207,7 @@ namespace Pathoschild.Stardew.DataLayers
         /// <summary>Receive an update tick.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             this.CurrentOverlay?.Update();
         }

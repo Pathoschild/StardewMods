@@ -57,9 +57,9 @@ namespace Pathoschild.Stardew.DebugMode
             this.Config = helper.ReadConfig<ModConfig>();
 
             // hook events
-            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
-            PlayerEvents.Warped += this.PlayerEvents_Warped;
-            GraphicsEvents.OnPostRenderEvent += this.GraphicsEvents_OnPostRenderEvent;
+            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.Player.Warped += this.OnWarped;
+            helper.Events.Display.Rendered += this.OnRendered;
 
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
@@ -73,19 +73,10 @@ namespace Pathoschild.Stardew.DebugMode
         /****
         ** Event handlers
         ****/
-        /// <summary>The event called by SMAPI when rendering to the screen.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        public void GraphicsEvents_OnPostRenderEvent(object sender, EventArgs e)
-        {
-            if (this.DebugMode)
-                this.DrawOverlay(Game1.spriteBatch, Game1.smallFont, this.Pixel.Value);
-        }
-
         /// <summary>The method invoked when the player presses a keyboard button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             // toggle debug menu
             if (this.Config.Controls.ToggleDebug.Contains(e.Button))
@@ -96,16 +87,25 @@ namespace Pathoschild.Stardew.DebugMode
 
             // suppress dangerous actions
             if (this.DebugMode && !this.Config.AllowDangerousCommands && this.DestructiveKeys.Contains(e.Button))
-                e.SuppressButton();
+                this.Helper.Input.Suppress(e.Button);
         }
 
         /// <summary>The method invoked when the player warps into a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void PlayerEvents_Warped(object sender, EventArgsPlayerWarped e)
+        private void OnWarped(object sender, WarpedEventArgs e)
+        {
+            if (this.DebugMode && e.IsLocalPlayer)
+                this.CorrectEntryPosition(e.NewLocation, Game1.player);
+        }
+
+        /// <summary>The event called by SMAPI when rendering to the screen.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        public void OnRendered(object sender, RenderedEventArgs e)
         {
             if (this.DebugMode)
-                this.CorrectEntryPosition(e.NewLocation, Game1.player);
+                this.DrawOverlay(Game1.spriteBatch, Game1.smallFont, this.Pixel.Value);
         }
 
         /****

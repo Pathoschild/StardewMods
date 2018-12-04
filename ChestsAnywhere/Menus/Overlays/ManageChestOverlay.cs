@@ -8,6 +8,7 @@ using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -24,9 +25,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         ****/
         /// <summary>Provides translations stored in the mod's folder.</summary>
         private readonly ITranslationHelper Translations;
-
-        /// <summary>An API for checking and changing input state.</summary>
-        private readonly IInputHelper Input;
 
         /// <summary>The available chests.</summary>
         private readonly ManagedChest[] Chests;
@@ -154,16 +152,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="chest">The selected chest.</param>
         /// <param name="chests">The available chests.</param>
         /// <param name="config">The mod configuration.</param>
+        /// <param name="events">The SMAPI events available for mods.</param>
         /// <param name="input">An API for checking and changing input state.</param>
         /// <param name="translations">Provides translations stored in the mod's folder.</param>
         /// <param name="showAutomateOptions">Whether to show Automate options.</param>
-        public ManageChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, IInputHelper input, ITranslationHelper translations, bool showAutomateOptions)
-            : base(keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
+        public ManageChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, IModEvents events, IInputHelper input, ITranslationHelper translations, bool showAutomateOptions)
+            : base(events, input, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
         {
             this.ShowAutomateOptions = showAutomateOptions;
 
             // helpers
-            this.Input = input;
             this.Translations = translations;
 
             // menu
@@ -373,7 +371,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     bool scrollNext = amount > 0;
 
                     // scroll dropdowns
-                    if (this.Config.Controls.HoldToMouseWheelScrollCategories.Any(p => this.Input.IsDown(p)))
+                    if (this.Config.Controls.HoldToMouseWheelScrollCategories.Any(p => this.InputHelper.IsDown(p)))
                     {
                         if (scrollNext)
                             this.SelectNextCategory();
@@ -381,7 +379,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                             this.SelectPreviousCategory();
                         return true;
                     }
-                    if (this.Config.Controls.HoldToMouseWheelScrollChests.Any(p => this.Input.IsDown(p)))
+                    if (this.Config.Controls.HoldToMouseWheelScrollChests.Any(p => this.InputHelper.IsDown(p)))
                     {
                         if (scrollNext)
                             this.SelectNextChest();

@@ -52,16 +52,15 @@ namespace Pathoschild.Stardew.Automate
             this.Factory.Add(new AutomationFactory(this.Config.Connectors, this.Config.AutomateShippingBin, helper.Reflection));
 
             // hook events
-            IModEvents events = this.Helper.Events;
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
-            PlayerEvents.Warped += this.PlayerEvents_Warped;
-            events.World.LocationListChanged += this.World_LocationListChanged;
-            events.World.ObjectListChanged += this.World_ObjectListChanged;
-            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
-            events.Input.ButtonPressed += this.Input_ButtonPressed;
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+            helper.Events.Player.Warped += this.OnWarped;
+            helper.Events.World.LocationListChanged += this.World_LocationListChanged;
+            helper.Events.World.ObjectListChanged += this.World_ObjectListChanged;
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
             if (this.Config.Connectors.Any(p => p.Type == ObjectType.Floor))
-                events.World.TerrainFeatureListChanged += this.World_TerrainFeatureListChanged;
+                helper.Events.World.TerrainFeatureListChanged += this.World_TerrainFeatureListChanged;
 
             // log info
             this.Monitor.VerboseLog($"Initialised with automation every {this.Config.AutomationInterval} ticks.");
@@ -83,7 +82,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when the player loads a save.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             // disable if secondary player
             if (!this.EnableAutomation)
@@ -100,9 +99,10 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when the player warps to a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void PlayerEvents_Warped(object sender, EventArgsPlayerWarped e)
+        private void OnWarped(object sender, WarpedEventArgs e)
         {
-            this.ResetOverlayIfShown();
+            if (e.IsLocalPlayer)
+                this.ResetOverlayIfShown();
         }
 
         /// <summary>The method invoked when a location is added or removed.</summary>
@@ -154,7 +154,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when the in-game clock time changes.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             if (!Context.IsWorldReady || !this.EnableAutomation)
                 return;
@@ -190,7 +190,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void Input_ButtonPressed(object sender, ButtonPressedEventArgs e)
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             try
             {
@@ -253,7 +253,7 @@ namespace Pathoschild.Stardew.Automate
         private void EnableOverlay()
         {
             if (this.CurrentOverlay == null)
-                this.CurrentOverlay = new OverlayMenu(this.Factory.GetMachineGroups(Game1.currentLocation));
+                this.CurrentOverlay = new OverlayMenu(this.Helper.Events, this.Helper.Input, this.Factory.GetMachineGroups(Game1.currentLocation));
         }
 
         /// <summary>Reset the overlay if it's being shown.</summary>

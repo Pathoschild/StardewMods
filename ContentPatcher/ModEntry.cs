@@ -88,9 +88,9 @@ namespace ContentPatcher
 
             // set up events
             if (this.Config.EnableDebugFeatures)
-                InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
-            SaveEvents.AfterReturnToTitle += this.SaveEvents_AfterReturnToTitle;
-            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
+                helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+            helper.Events.GameLoop.DayStarted += this.OnDayStarted;
 
             // set up commands
             this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, this.UpdateContext);
@@ -107,7 +107,7 @@ namespace ContentPatcher
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             if (this.Config.EnableDebugFeatures)
             {
@@ -115,7 +115,7 @@ namespace ContentPatcher
                 if (this.Config.Controls.ToggleDebug.Contains(e.Button))
                 {
                     if (this.DebugOverlay == null)
-                        this.DebugOverlay = new DebugOverlay(this.Helper.Content);
+                        this.DebugOverlay = new DebugOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Content);
                     else
                     {
                         this.DebugOverlay.Dispose();
@@ -138,7 +138,7 @@ namespace ContentPatcher
         /// <summary>The method invoked when the player returns to the title screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void SaveEvents_AfterReturnToTitle(object sender, EventArgs e)
+        private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
         {
             this.UpdateContext();
         }
@@ -146,7 +146,7 @@ namespace ContentPatcher
         /// <summary>The method invoked when a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
+        private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
             this.UpdateContext();
         }

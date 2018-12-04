@@ -26,7 +26,7 @@ namespace Pathoschild.Stardew.RotateToolbar
         {
             this.Config = helper.ReadConfig<ModConfig>();
 
-            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
+            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         }
 
 
@@ -39,7 +39,7 @@ namespace Pathoschild.Stardew.RotateToolbar
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             if (!Context.IsWorldReady)
                 return;

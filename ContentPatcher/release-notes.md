@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated for the upcoming SMAPI 3.0.
 * Added new tokens:
   * `DaysPlayed`: the number of in-game days played for the current save.
   * `HasWalletItem`: the [special items in the player wallet](https://stardewvalleywiki.com/Wallet).

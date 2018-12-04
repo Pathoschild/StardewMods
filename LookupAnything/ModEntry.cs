@@ -80,7 +80,13 @@ namespace Pathoschild.Stardew.LookupAnything
                 this.Monitor.Log("The translation files in this mod's i18n folder seem to be missing. The mod will still work, but you'll see 'missing translation' messages. Try reinstalling the mod to fix this.", LogLevel.Warn);
 
             // hook up events
-            GameEvents.FirstUpdateTick += this.GameEvents_FirstUpdateTick;
+            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+            helper.Events.GameLoop.DayStarted += this.OnDayStarted;
+            helper.Events.Display.RenderedHud += this.OnRenderedHud;
+            helper.Events.Display.MenuChanged += this.OnMenuChanged;
+            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            if (this.Config.HideOnKeyUp)
+                helper.Events.Input.ButtonReleased += this.OnButtonReleased;
         }
 
 
@@ -93,7 +99,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>The method invoked on the first update tick, once all mods are initialised.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void GameEvents_FirstUpdateTick(object sender, EventArgs e)
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
             if (!this.IsDataValid)
                 return;
@@ -103,20 +109,12 @@ namespace Pathoschild.Stardew.LookupAnything
             this.GameHelper = new GameHelper(customFarming);
             this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, this.GameHelper);
             this.DebugInterface = new DebugInterface(this.GameHelper, this.TargetFactory, this.Config, this.Monitor);
-
-            // hook up events
-            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
-            GraphicsEvents.OnPostRenderHudEvent += this.GraphicsEvents_OnPostRenderHudEvent;
-            MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
-            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
-            if (this.Config.HideOnKeyUp)
-                InputEvents.ButtonReleased += this.InputEvents_ButtonReleased;
         }
 
         /// <summary>The method invoked when a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
+        private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
             // reset low-level cache once per game day (used for expensive queries that don't change within a day)
             this.GameHelper.ResetCache(this.Metadata, this.Helper.Reflection, this.Helper.Translation, this.Monitor);
@@ -125,7 +123,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
             {
@@ -147,7 +145,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>The method invoked when the player releases a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void InputEvents_ButtonReleased(object sender, EventArgsInput e)
+        private void OnButtonReleased(object sender, ButtonReleasedEventArgs e)
         {
             // perform bound action
             this.Monitor.InterceptErrors("handling your input", $"handling input release '{e.Button}'", () =>
@@ -162,12 +160,12 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>The method invoked when the player closes a displayed menu.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void MenuEvents_MenuClosed(object sender, EventArgsClickableMenuClosed e)
+        private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
             // restore the previous menu if it was hidden to show the lookup UI
             this.Monitor.InterceptErrors("restoring the previous menu", () =>
             {
-                if (e.PriorMenu is LookupMenu && this.PreviousMenus.Any())
+                if (e.NewMenu == null && e.OldMenu is LookupMenu && this.PreviousMenus.Any())
                     Game1.activeClickableMenu = this.PreviousMenus.Pop();
             });
         }
@@ -175,7 +173,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>The method invoked when the interface is rendering.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void GraphicsEvents_OnPostRenderHudEvent(object sender, EventArgs e)
+        private void OnRenderedHud(object sender, RenderedHudEventArgs e)
         {
             // render debug interface
             if (this.DebugInterface.Enabled)
