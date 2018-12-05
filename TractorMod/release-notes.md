@@ -1,6 +1,7 @@
 # Release notes
 ## Upcoming release
 * Fixed tractor getting lost in the mines when players cruelly abandon it.
+* Fixed mines not spawning a ladder on infestation levels if the tractor is present.
 * Fixed old tractor data not deleted after migration, which caused duplicate garages in some cases.
 
 ## 4.7

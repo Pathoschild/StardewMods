@@ -109,6 +109,7 @@ namespace Pathoschild.Stardew.TractorMod
                 events.Display.Rendered += this.OnRendered;
             events.Display.MenuChanged += this.OnMenuChanged;
             events.Input.ButtonPressed += this.OnButtonPressed;
+            events.World.NpcListChanged += this.OnNpcListChanged;
             events.World.LocationListChanged += this.OnLocationListChanged;
             events.GameLoop.UpdateTicked += this.OnUpdateTicked;
 
@@ -222,11 +223,14 @@ namespace Pathoschild.Stardew.TractorMod
             }
         }
 
-        /// <summary>The event called after the location list changes (roughly sixty times per second).</summary>
+        /// <summary>The event called after the location list changes.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void OnLocationListChanged(object sender, LocationListChangedEventArgs e)
         {
+            if (!this.IsEnabled)
+                return;
+
             // rescue lost tractors
             if (Context.IsMainPlayer)
             {
@@ -234,6 +238,29 @@ namespace Pathoschild.Stardew.TractorMod
                 {
                     foreach (Horse tractor in this.GetTractorsIn(location).ToArray())
                         TractorManager.SetLocation(tractor, Game1.getFarm(), tractor.DefaultPosition);
+                }
+            }
+        }
+
+        /// <summary>The event called after the list of NPCs in a location changes.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnNpcListChanged(object sender, NpcListChangedEventArgs e)
+        {
+            if (!this.IsEnabled)
+                return;
+
+            // workaround for mines not spawning a ladder on monster levels
+            if (e.Location is MineShaft mine && object.ReferenceEquals(e.Location, Game1.currentLocation))
+            {
+                if (mine.mustKillAllMonstersToAdvance() && mine.characters.All(p => p is Horse))
+                {
+                    IReflectedField<bool> hasLadder = this.Helper.Reflection.GetField<bool>(mine, "ladderHasSpawned");
+                    if (!hasLadder.GetValue())
+                    {
+                        mine.createLadderAt(mine.mineEntrancePosition(Game1.player));
+                        hasLadder.SetValue(true);
+                    }
                 }
             }
         }
