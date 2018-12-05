@@ -49,7 +49,7 @@ namespace Pathoschild.Stardew.TractorMod
         private readonly string MinHostVersion = "4.7-alpha.2";
 
         /// <summary>The absolute path to legacy mod data for the current save.</summary>
-        private string LegacySaveDataPath => Path.Combine(this.Helper.DirectoryPath, "data", $"{Constants.SaveFolderName}.json");
+        private string LegacySaveDataRelativePath => Path.Combine("data", $"{Constants.SaveFolderName}.json");
 
         /****
         ** State
@@ -305,7 +305,7 @@ namespace Pathoschild.Stardew.TractorMod
             if (Context.IsMainPlayer)
             {
                 // remove legacy file (pre-4.6)
-                FileInfo legacyFile = new FileInfo(this.LegacySaveDataPath);
+                FileInfo legacyFile = new FileInfo(Path.Combine(this.Helper.DirectoryPath, this.LegacySaveDataRelativePath));
                 if (legacyFile.Exists)
                     legacyFile.Delete();
 
@@ -417,7 +417,7 @@ namespace Pathoschild.Stardew.TractorMod
             // get save data
             LegacySaveData saveData = this.Helper.Data.ReadSaveData<LegacySaveData>("tractors"); // 4.6
             if (saveData?.Buildings == null)
-                saveData = this.Helper.Data.ReadJsonFile<LegacySaveData>(this.LegacySaveDataPath); // pre-4.6
+                saveData = this.Helper.Data.ReadJsonFile<LegacySaveData>(this.LegacySaveDataRelativePath); // pre-4.6
             if (saveData?.Buildings == null)
                 return;
 
