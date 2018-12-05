@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Fixed old tractor data not deleted after migration, which caused duplicate garages in some cases.
+
 ## 4.7
 * Added support for multiplayer mode. The mod must be installed by the host player, and installed by any farmhand that wants to use the tractor features.
 * Added support for custom mod locations.

@@ -48,6 +48,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The minimum version the host must have for the mod to be enabled on a farmhand.</summary>
         private readonly string MinHostVersion = "4.7-alpha.2";
 
+        /// <summary>The absolute path to legacy mod data for the current save.</summary>
+        private string LegacySaveDataPath => Path.Combine(this.Helper.DirectoryPath, "data", $"{Constants.SaveFolderName}.json");
+
         /****
         ** State
         ****/
@@ -302,7 +305,7 @@ namespace Pathoschild.Stardew.TractorMod
             if (Context.IsMainPlayer)
             {
                 // remove legacy file (pre-4.6)
-                FileInfo legacyFile = new FileInfo($"data/{Constants.SaveFolderName}.json");
+                FileInfo legacyFile = new FileInfo(this.LegacySaveDataPath);
                 if (legacyFile.Exists)
                     legacyFile.Delete();
 
@@ -414,7 +417,7 @@ namespace Pathoschild.Stardew.TractorMod
             // get save data
             LegacySaveData saveData = this.Helper.Data.ReadSaveData<LegacySaveData>("tractors"); // 4.6
             if (saveData?.Buildings == null)
-                saveData = this.Helper.Data.ReadJsonFile<LegacySaveData>($"data/{Constants.SaveFolderName}.json"); // pre-4.6
+                saveData = this.Helper.Data.ReadJsonFile<LegacySaveData>(this.LegacySaveDataPath); // pre-4.6
             if (saveData?.Buildings == null)
                 return;
 
