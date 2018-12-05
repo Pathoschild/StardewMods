@@ -109,6 +109,7 @@ namespace Pathoschild.Stardew.TractorMod
                 events.Display.Rendered += this.OnRendered;
             events.Display.MenuChanged += this.OnMenuChanged;
             events.Input.ButtonPressed += this.OnButtonPressed;
+            events.World.LocationListChanged += this.OnLocationListChanged;
             events.GameLoop.UpdateTicked += this.OnUpdateTicked;
 
             // validate translations
@@ -217,6 +218,22 @@ namespace Pathoschild.Stardew.TractorMod
                         this.ApplyTextures(garage);
                         this.ApplyTextures(tractor);
                     }
+                }
+            }
+        }
+
+        /// <summary>The event called after the location list changes (roughly sixty times per second).</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnLocationListChanged(object sender, LocationListChangedEventArgs e)
+        {
+            // rescue lost tractors
+            if (Context.IsMainPlayer)
+            {
+                foreach (GameLocation location in e.Removed)
+                {
+                    foreach (Horse tractor in this.GetTractorsIn(location).ToArray())
+                        TractorManager.SetLocation(tractor, Game1.getFarm(), tractor.DefaultPosition);
                 }
             }
         }
@@ -451,7 +468,7 @@ namespace Pathoschild.Stardew.TractorMod
         {
             GameLocation[] mainLocations = (Context.IsMainPlayer ? Game1.locations : this.Helper.Multiplayer.GetActiveLocations()).ToArray();
 
-            foreach (GameLocation location in mainLocations)
+            foreach (GameLocation location in mainLocations.Concat(MineShaft.activeMines))
             {
                 yield return location;
 
