@@ -4,7 +4,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.Automate.Framework
 {
     /// <summary>The API which lets other mods interact with Automate.</summary>
-    internal class AutomateAPI : IAutomateAPI
+    public class AutomateAPI : IAutomateAPI
     {
         /*********
         ** Properties
