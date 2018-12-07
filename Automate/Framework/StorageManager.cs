@@ -80,9 +80,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="consumable">The matching consumables.</param>
         /// <param name="recipe">The matched requisition.</param>
         /// <returns>Returns whether the requirement is met.</returns>
-        public bool TryGetIngredient(Recipe[] recipes, out IConsumable consumable, out Recipe recipe)
+        public bool TryGetIngredient(IRecipe[] recipes, out IConsumable consumable, out IRecipe recipe)
         {
-            IDictionary<Recipe, List<ITrackedStack>> accumulator = recipes.ToDictionary(req => req, req => new List<ITrackedStack>());
+            IDictionary<IRecipe, List<ITrackedStack>> accumulator = recipes.ToDictionary(req => req, req => new List<ITrackedStack>());
 
             foreach (ITrackedStack stack in this.GetItems())
             {

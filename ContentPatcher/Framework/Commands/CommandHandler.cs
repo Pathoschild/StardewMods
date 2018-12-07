@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
@@ -28,28 +27,6 @@ namespace ContentPatcher.Framework.Commands
 
         /// <summary>A callback which immediately updates the current condition context.</summary>
         private readonly Action UpdateContext;
-
-        /// <summary>The order in which condition types should be listed by <c>patch summary</c>.</summary>
-        private readonly ConditionType[] DisplayOrder = {
-            // general
-            ConditionType.Year,
-            ConditionType.Season,
-            ConditionType.DayOfWeek,
-            ConditionType.Day,
-            ConditionType.DayEvent,
-            ConditionType.Language,
-            ConditionType.Spouse,
-            ConditionType.Weather,
-
-            // NPCs
-            ConditionType.Hearts,
-            ConditionType.Relationship,
-
-            // lookups
-            ConditionType.HasFlag,
-            ConditionType.HasMod,
-            ConditionType.HasSeenEvent
-        };
 
         /// <summary>A regex pattern matching asset names which incorrectly include the Content folder.</summary>
         private readonly Regex AssetNameWithContentPattern = new Regex(@"^Content[/\\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -168,22 +145,50 @@ namespace ContentPatcher.Framework.Commands
             output.AppendLine("==  Global tokens  ==");
             output.AppendLine("=====================");
             {
-                IToken[] tokens = this.TokenManager.GetTokens(enforceContext: false).OrderBy(this.GetDisplayOrder).ToArray();
-                IToken[] tokensOutOfContext = tokens.Where(p => !p.IsValidInContext).ToArray();
-                foreach (IToken token in tokens.Except(tokensOutOfContext))
+                // get data
+                IToken[] tokens =
+                    (
+                        from token in this.TokenManager.GetTokens(enforceContext: false)
+                        let subkeys = token.GetSubkeys().ToArray()
+                        let rootValues = !token.RequiresSubkeys ? token.GetValues(token.Name).ToArray() : new string[0]
+                        let multiValue =
+                            subkeys.Length > 1
+                            || rootValues.Length > 1
+                            || (subkeys.Length == 1 && token.GetValues(subkeys[0]).Count() > 1)
+                        orderby multiValue, token.Name.Key // single-value tokens first, then alphabetically
+                        select token
+                    )
+                    .ToArray();
+                int labelWidth = tokens.Max(p => p.Name.Key.Length);
+
+                // print table header
+                output.AppendLine($"   {"token name".PadRight(labelWidth)} | value");
+                output.AppendLine($"   {"".PadRight(labelWidth, '-')} | -----");
+
+                // print tokens
+                foreach (IToken token in tokens)
                 {
-                    if (token.RequiresSubkeys)
+                    output.Append($"   {token.Name.Key.PadRight(labelWidth)} | ");
+
+                    if (!token.IsValidInContext)
+                        output.AppendLine("[ ] n/a");
+                    else if (token.RequiresSubkeys)
                     {
+                        bool isFirst = true;
                         foreach (TokenName name in token.GetSubkeys().OrderByIgnoreCase(key => key.Subkey))
-                            output.AppendLine($"   {name}: {string.Join(", ", token.GetValues(name))}");
+                        {
+                            if (isFirst)
+                            {
+                                output.Append("[X] ");
+                                isFirst = false;
+                            }
+                            else
+                                output.Append($"   {"".PadRight(labelWidth, ' ')} |     ");
+                            output.AppendLine($":{name.Subkey}: {string.Join(", ", token.GetValues(name))}");
+                        }
                     }
                     else
-                        output.AppendLine($"   {token.Name}: {string.Join(", ", token.GetValues(token.Name).OrderByIgnoreCase(p => p))}");
-                }
-                if (tokensOutOfContext.Any())
-                {
-                    output.AppendLine();
-                    output.AppendLine($"   Tokens not valid in this context: {string.Join(", ", tokensOutOfContext.Select(p => p.Name.ToString()))}.");
+                        output.AppendLine("[X] " + string.Join(", ", token.GetValues(token.Name).OrderByIgnoreCase(p => p)));
                 }
             }
             output.AppendLine();
@@ -303,19 +308,6 @@ namespace ContentPatcher.Framework.Commands
                 yield return new PatchInfo(patch);
             foreach (DisabledPatch patch in this.PatchManager.GetPermanentlyDisabledPatches())
                 yield return new PatchInfo(patch);
-        }
-
-        /// <summary>Get the display order for a token in <c>patch summary</c> output.</summary>
-        /// <param name="token">The token to check.</param>
-        private int GetDisplayOrder(IToken token)
-        {
-            if (!token.Name.TryGetConditionType(out ConditionType type))
-                return this.DisplayOrder.Length;
-
-            int index = Array.IndexOf(this.DisplayOrder, type);
-            return index != -1
-                ? index
-                : this.DisplayOrder.Length;
         }
 
         /// <summary>Get a human-readable reason that the patch isn't applied.</summary>

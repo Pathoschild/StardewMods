@@ -40,5 +40,12 @@
   "crop-fertilizer.name": "作物: 肥料",
   "crop-fertilizer.fertilizer": "肥料",
   "crop-fertilizer.retaining-soil": "保水した土壌",
-  "crop-fertilizer.speed-gro": "グングンノビール"
+  "crop-fertilizer.speed-gro": "グングンノビール",
+
+  // machine processing
+  // TODO
+  "machines.name": "Machine Processing",
+  "machines.empty": "Empty",
+  "machines.processing": "Processing",
+  "machines.finished": "Finished"
 }

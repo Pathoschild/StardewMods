@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
+using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
 using XRectangle = xTile.Dimensions.Rectangle;
 
@@ -69,10 +71,13 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="events">The SMAPI events available for mods.</param>
+        /// <param name="inputHelper">An API for checking and changing input state.</param>
         /// <param name="layers">The data layers to render.</param>
         /// <param name="drawOverlay">Get whether the overlay should be drawn.</param>
         /// <param name="combineOverlappingBorders">When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</param>
-        public DataLayerOverlay(ILayer[] layers, Func<bool> drawOverlay, bool combineOverlappingBorders)
+        public DataLayerOverlay(IModEvents events, IInputHelper inputHelper, ILayer[] layers, Func<bool> drawOverlay, bool combineOverlappingBorders)
+            : base(events, inputHelper)
         {
             if (!layers.Any())
                 throw new InvalidOperationException("Can't initialise the data layers overlay with no data layers.");

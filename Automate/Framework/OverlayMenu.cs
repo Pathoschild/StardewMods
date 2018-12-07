@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework
@@ -27,8 +28,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="events">The SMAPI events available for mods.</param>
+        /// <param name="inputHelper">An API for checking and changing input state.</param>
         /// <param name="machineGroups">The machine groups to display.</param>
-        public OverlayMenu(IEnumerable<MachineGroup> machineGroups)
+        public OverlayMenu(IModEvents events, IInputHelper inputHelper, IEnumerable<MachineGroup> machineGroups)
+            : base(events, inputHelper)
         {
             // init machine groups
             machineGroups = machineGroups.ToArray();

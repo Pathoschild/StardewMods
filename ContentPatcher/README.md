@@ -319,6 +319,11 @@ The day of week. Possible values: `Monday`, `Tuesday`, `Wednesday`, `Thursday`, 
 </tr>
 
 <tr valign="top">
+<td>DaysPlayed</td>
+<td>The total number of in-game days played for the current save (starting from one when the first day starts).</td>
+</tr>
+
+<tr valign="top">
 <td>FarmCave</td>
 <td>
 

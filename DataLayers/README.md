@@ -50,7 +50,6 @@ Shows which crops are ready to harvest, or which won't be ready before they die 
 change.
 > ![](docs/screenshots/crops-harvest.png)
 
-
 ### Crops: fertilised
 Shows which crops have fertiliser applied.
 > ![](docs/screenshots/crops-fertilized.png)
@@ -58,6 +57,12 @@ Shows which crops have fertiliser applied.
 ### Crops: watered
 Shows which crops have been watered today.
 > ![](docs/screenshots/crops-watered.png)
+
+### Machine processing
+Shows whether your machines are empty, processing, or finished. (You need to install
+[Automate](https://www.nexusmods.com/stardewvalley/mods/1063) for this layer to appear, but it'll
+work for machines that aren't being automated too.)
+> ![](docs/screenshots/machines.png)
 
 ## Configure
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
@@ -80,6 +85,7 @@ Data Layers will automatically integrate with these mods if you they're installe
 
 mod installed     | effects
 ----------------- | ----------
+Automate          | Shows whether your machines are empty, processing, or ready to harvest.
 Better Junimos    | Shows custom Junimo hut range.
 Better Sprinklers | Shows custom sprinkler range.
 Cobalt            | Shows cobalt sprinkler range.

@@ -49,6 +49,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
 
             /// <summary>The crop water layer.</summary>
             public LayerConfig CropWater { get; set; } = new LayerConfig { UpdatesPerSecond = 30 };
+
+            /// <summary>The machine processing layer.</summary>
+            public LayerConfig Machines { get; set; } = new LayerConfig { UpdatesPerSecond = 2 };
         }
 
         /// <summary>A set of control bindings.</summary>

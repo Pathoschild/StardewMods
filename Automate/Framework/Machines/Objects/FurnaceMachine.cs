@@ -1,20 +1,18 @@
 using Microsoft.Xna.Framework;
+using StardewValley;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A furnace that accepts input and provides output.</summary>
-    internal class FurnaceMachine : GenericMachine
+    internal class FurnaceMachine : GenericObjectMachine<SObject>
     {
         /*********
         ** Properties
         *********/
-        /// <summary>The machine's position in its location.</summary>
-        private readonly Vector2 Tile;
-
         /// <summary>The recipes to process.</summary>
-        /// <remarks>Derived from <see cref="StardewValley.Object.performObjectDropInAction"/>.</remarks>
-        private readonly Recipe[] Recipes =
+        /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/>.</remarks>
+        private readonly IRecipe[] Recipes =
         {
             // copper => copper bar
             new Recipe(
@@ -71,12 +69,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
-        /// <param name="tile">The machine's position in its location.</param>
-        public FurnaceMachine(SObject machine, Vector2 tile)
-            : base(machine)
-        {
-            this.Tile = tile;
-        }
+        /// <param name="location">The location containing the machine.</param>
+        public FurnaceMachine(SObject machine, GameLocation location)
+            : base(machine, location) { }
 
         /// <summary>Provide input to the machine.</summary>
         /// <param name="input">The available items.</param>
@@ -86,7 +81,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             if (input.TryGetIngredient(SObject.coal, 1, out IConsumable coal) && this.GenericPullRecipe(input, this.Recipes))
             {
                 coal.Reduce();
-                this.Machine.initializeLightSource(this.Tile);
+                this.Machine.initializeLightSource(this.Machine.TileLocation);
                 this.Machine.showNextIndex.Value = true;
                 return true;
             }

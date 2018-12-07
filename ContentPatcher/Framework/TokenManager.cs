@@ -121,6 +121,7 @@ namespace ContentPatcher.Framework
             yield return new ConditionTypeToken(ConditionType.Day, () => SDate.Now().Day.ToString(CultureInfo.InvariantCulture), needsLoadedSave: true, allowedValues: Enumerable.Range(1, 28).Select(p => p.ToString()));
             yield return new ConditionTypeToken(ConditionType.DayOfWeek, () => SDate.Now().DayOfWeek.ToString(), needsLoadedSave: true, allowedValues: Enum.GetNames(typeof(DayOfWeek)));
             yield return new ConditionTypeToken(ConditionType.Year, () => SDate.Now().Year.ToString(CultureInfo.InvariantCulture), needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.DaysPlayed, () => Game1.stats.DaysPlayed.ToString(CultureInfo.InvariantCulture), needsLoadedSave: true);
 
             // other in-game conditions
             yield return new ConditionTypeToken(ConditionType.DayEvent, () => this.GetDayEvent(contentHelper), needsLoadedSave: true);
@@ -128,13 +129,13 @@ namespace ContentPatcher.Framework
             yield return new ConditionTypeToken(ConditionType.FarmhouseUpgrade, () => Game1.player.HouseUpgradeLevel.ToString(), needsLoadedSave: true);
             yield return new ConditionTypeToken(ConditionType.FarmName, () => Game1.player.farmName.Value, needsLoadedSave: true);
             yield return new ConditionTypeToken(ConditionType.FarmType, () => this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString(), needsLoadedSave: true);
-            yield return new ConditionTypeToken(ConditionType.HasFlag, () => this.GetMailFlags(), needsLoadedSave: true);
-            yield return new ConditionTypeToken(ConditionType.HasSeenEvent, () => this.GetEventsSeen(), needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.HasFlag, this.GetMailFlags, needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.HasSeenEvent, this.GetEventsSeen, needsLoadedSave: true);
             yield return new ConditionTypeToken(ConditionType.PlayerGender, () => (Game1.player.IsMale ? Gender.Male : Gender.Female).ToString(), needsLoadedSave: true);
             yield return new ConditionTypeToken(ConditionType.PreferredPet, () => (Game1.player.catPerson ? PetType.Cat : PetType.Dog).ToString(), needsLoadedSave: true);
             yield return new ConditionTypeToken(ConditionType.PlayerName, () => Game1.player.Name, needsLoadedSave: true);
             yield return new ConditionTypeToken(ConditionType.Spouse, () => Game1.player?.spouse, needsLoadedSave: true);
-            yield return new ConditionTypeToken(ConditionType.Weather, () => this.GetCurrentWeather(), needsLoadedSave: true, allowedValues: Enum.GetNames(typeof(Weather)));
+            yield return new ConditionTypeToken(ConditionType.Weather, this.GetCurrentWeather, needsLoadedSave: true, allowedValues: Enum.GetNames(typeof(Weather)));
             yield return new HasProfessionToken();
             yield return new HasWalletItemToken();
             yield return new SkillLevelToken();

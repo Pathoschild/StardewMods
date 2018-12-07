@@ -11,6 +11,7 @@
     <AssemblyName>Pathoschild.Stardew.Tests.Common</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <LangVersion>latest</LangVersion>
     <EnableModDeploy>False</EnableModDeploy>
     <EnableModZip>False</EnableModZip>
     <CopyModReferencesToBuildOutput>True</CopyModReferencesToBuildOutput>
@@ -23,7 +24,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>

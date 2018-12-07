@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using StardewValley;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A cask that accepts input and provides output.</summary>
-    internal class CaskMachine : GenericMachine<Cask>
+    internal class CaskMachine : GenericObjectMachine<Cask>
     {
         /*********
         ** Properties
@@ -27,8 +28,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
-        public CaskMachine(Cask machine)
-            : base(machine) { }
+        /// <param name="location">The location containing the machine.</param>
+        public CaskMachine(Cask machine, GameLocation location)
+            : base(machine, location) { }
 
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()

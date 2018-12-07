@@ -8,6 +8,7 @@ automatically pull raw items from the chest and push processed items into it.
 * [Configure](#configure)
 * [Compatibility](#compatibility)
 * [FAQs](#faqs)
+* [Extensibility for modders](#extensibility-for-modders)
 * [See also](#see-also)
 
 ## Install
@@ -202,23 +203,30 @@ multiple chests simultaneously) and then scanned until Automate finds enough ite
 for that machine. The order is difficult to predict with multiple chests, but fairly easy if there's
 only one connected chest.
 
-For example, let's say you only have one chest with these item slots:
+For example, let's say you have one chest containing these item stacks:  
+`coal`  
+`3× copper ore`  
+`3× iron ore`  
+`2× copper ore`  
+`2× iron ore`
 
-1. [1 coal]
-2. [3 copper ore]
-3. [3 iron ore]
-4. [2 copper ore]
-5. [2 iron ore]
-
-A furnace has two recipes with those ingredients: [1 coal + 5 copper ore] = copper bar, and
-[1 coal + 5 iron ore] = iron bar. Automate will scan the items from left to right and top to bottom,
+A furnace has two recipes with those ingredients: `coal` + `5× copper ore` = `copper bar`, and
+`coal` + `5× iron ore` = `iron bar`. Automate will scan the items from left to right and top to bottom,
 and collect items until it has a complete recipe. In this case, the furnace will start producing a
 copper bar:
 
-1. [❑ 1 coal + 0 copper ore] [❑ 1 coal + 0 iron ore]
-2. [❑ 1 coal + 3 copper ore] [❑ 1 coal + 0 iron ore]
-3. [❑ 1 coal + 3 copper ore] [❑ 1 coal + 3 iron ore]
-4. [✓ 1 coal + 5 copper ore]
+1. Add `coal` from first stack (two unfinished recipes):  
+   ❑ `coal` + `0 of 5× copper ore` = `copper bar`  
+   ❑ `coal` + `0 of 5× iron ore` = `iron bar`
+2. Add `3× copper ore` from second stack (two unfinished recipes):  
+   ❑ `coal` + `3 of 5× copper ore` = `copper bar`  
+   ❑ `coal` + `0 of 5× iron ore` = `iron bar`
+3. Add `3× iron ore` from third stack (two unfinished recipes):  
+   ❑ `coal` + `3 of 5× copper ore` = `copper bar`  
+   ❑ `coal` + `3 of 5× iron ore` = `iron bar`
+4. Add `2× copper ore` from fourth stack (one recipe filled):  
+   ✓ `coal` + `5× copper ore` = `copper bar`  
+   ❑ ~~`coal` + `3 of 5× iron ore` = `iron bar`~~
 
 ### Which chest will machine output go into?
 The available chests are sorted by discovery order (which isn't predictable), then prioritised in
@@ -235,6 +243,211 @@ that didn't cause any issues, so you can just keep adding more if you want.
 
 ### What if I don't want a specific chest to be connected?
 See _[In-game settings](#in-game-settings)_.
+
+## Extensibility for modders
+Automate has a [mod-provided API](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Mod-provided_APIs)
+you can use to add custom machines, containers, and connectors.
+
+### Basic concepts
+These basic concepts are core to the Automate API:
+
+<dl>
+<dt>Entity</dt>
+<dd>A placed item, terrain feature, building, or other in-game thing.</dd>
+
+<dt>Connector</dt>
+<dd>Something which can be added to a machine group (thus extending its range), but otherwise has
+no logic of its own. It has no state, input, or output.</dd>
+
+<dt>Container</dt>
+<dd>Something which stores and retrieves items (usually a chest).</dd>
+
+<dt>Machine</dt>
+<dd>Something which has a state (e.g. empty or processing) and accepts input, provides output, or
+both. This doesn't need to be a 'machine' in the gameplay sense; Automate provides default machines
+for shipping bins and fruit trees, for example.</dd>
+
+<dt>Machine group</dt>
+<dd>
+
+A set of machines, containers, and connectors which are chained together. You can press `U` in-game
+(configurable) to see machine groups highlighted in green. For example, these are two machine groups:  
+![](screenshots/extensibility-machine-groups.png)
+
+</dd>
+</dl>
+
+### Access the API
+To access the API:
+
+1. Add a reference to the `Automate.dll` file. Make sure it's [_not_ copied to your build output](https://github.com/Pathoschild/SMAPI/blob/develop/docs/mod-build-config.md#ignore-files).
+2. Hook into [SMAPI's `GameLoop.GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched)
+   and get a copy of the API:
+   ```c#
+   IAutomateAPI automate = this.Helper.Registry.GetApi<IAutomateAPI>("Pathoschild.Automate");
+   ```
+3. Use the API to extend Automate (see below).
+
+### Add connectors, containers, and machines
+You can add automatables by implementing an `IAutomationFactory`. Automate will handle the core
+logic (like finding entities, linking automatables into groups, etc); you just need to return the
+automatable for a given entity. You can't change the automation for an existing automatable though;
+if Automate already has an automatable for an entity, it won't call your factory.
+
+First, let's create a basic machine that transmutes an iron bar into gold in two hours:
+
+```c#
+using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Automate.Framework;
+using StardewValley;
+using SObject = StardewValley.Object;
+
+namespace YourModName
+{
+    /// <summary>A machine that turns iron bars into gold bars.</summary>
+    public class TransmuterMachine : IMachine
+    {
+        /*********
+        ** Fields
+        *********/
+        /// <summary>The underlying entity.</summary>
+        private readonly SObject Entity;
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The location which contains the machine.</summary>
+        public GameLocation Location { get; }
+
+        /// <summary>The tile area covered by the machine.</summary>
+        public Rectangle TileArea { get; }
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="entity">The underlying entity.</param>
+        /// <param name="location">The location which contains the machine.</param>
+        /// <param name="tile">The tile covered by the machine.</param>
+        public TransmuterMachine(SObject entity, GameLocation location, in Vector2 tile)
+        {
+            this.Entity = entity;
+            this.Location = location;
+            this.TileArea = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
+        }
+
+        /// <summary>Get the machine's processing state.</summary>
+        public MachineState GetState()
+        {
+            if (this.Entity.heldObject.Value == null)
+                return MachineState.Empty;
+
+            return this.Entity.readyForHarvest.Value
+                ? MachineState.Done
+                : MachineState.Processing;
+        }
+
+        /// <summary>Get the output item.</summary>
+        public ITrackedStack GetOutput()
+        {
+            return new TrackedItem(this.Entity.heldObject.Value, onEmpty: item =>
+            {
+                this.Entity.heldObject.Value = null;
+                this.Entity.readyForHarvest.Value = false;
+            });
+        }
+
+        /// <summary>Provide input to the machine.</summary>
+        /// <param name="input">The available items.</param>
+        /// <returns>Returns whether the machine started processing an item.</returns>
+        public bool SetInput(IStorage input)
+        {
+            if (input.TryGetIngredient(SObject.ironBar, 1, out IConsumable ingredient))
+            {
+                ingredient.Take();
+                this.Entity.heldObject.Value = new SObject(SObject.goldBar, 1);
+                this.Entity.MinutesUntilReady = 120;
+                return true;
+            }
+
+            return false;
+        }
+    }
+}
+```
+
+Next, let's create a factory which returns the new machine. This example assumes you've added an
+in-game object with ID 2000 that you want to automate.
+
+```c#
+using Microsoft.Xna.Framework;
+using StardewValley;
+using StardewValley.Buildings;
+using StardewValley.Locations;
+using StardewValley.TerrainFeatures;
+using SObject = StardewValley.Object;
+
+namespace YourModName
+{
+    public class MyAutomationFactory : IAutomationFactory
+    {
+        /// <summary>Get a machine, container, or connector instance for a given object.</summary>
+        /// <param name="obj">The in-game object.</param>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
+        public IAutomatable GetFor(SObject obj, GameLocation location, in Vector2 tile)
+        {
+            if (obj.ParentSheetIndex == 2000)
+                return new TransmuterMachine(obj, location, tile);
+
+            return null;
+        }
+
+        /// <summary>Get a machine, container, or connector instance for a given terrain feature.</summary>
+        /// <param name="feature">The terrain feature.</param>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
+        public IAutomatable GetFor(TerrainFeature feature, GameLocation location, in Vector2 tile)
+        {
+            return null;
+        }
+
+        /// <summary>Get a machine, container, or connector instance for a given building.</summary>
+        /// <param name="building">The building.</param>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
+        public IAutomatable GetFor(Building building, BuildableGameLocation location, in Vector2 tile)
+        {
+            return null;
+        }
+
+        /// <summary>Get a machine, container, or connector instance for a given tile position.</summary>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        /// <returns>Returns an instance or <c>null</c>.</returns>
+        /// <remarks>Shipping bin logic from <see cref="Farm.leftClick"/>, garbage can logic from <see cref="Town.checkAction"/>.</remarks>
+        public IAutomatable GetForTile(GameLocation location, in Vector2 tile)
+        {
+            return null;
+        }
+    }
+}
+```
+
+And finally, add your factory to the automate API (see [_access the API_](#access-the-api) above):
+
+```c#
+IAutomateAPI automate = ...;
+automate.AddFactory(new MyAutomationFactory());
+```
+
+That's it! When Automate scans a location for automatables, it'll call your `GetFor` method and add
+your custom machine to its normal automation.
 
 ## See also
 * [Release notes](release-notes.md)

@@ -2,10 +2,10 @@ using System;
 using StardewValley;
 using SObject = StardewValley.Object;
 
-namespace Pathoschild.Stardew.Automate
+namespace Pathoschild.Stardew.Automate.Framework
 {
     /// <summary>Describes a generic recipe based on item input and output.</summary>
-    internal class Recipe
+    internal class Recipe : IRecipe
     {
         /*********
         ** Accessors

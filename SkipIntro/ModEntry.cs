@@ -34,8 +34,8 @@ namespace Pathoschild.Stardew.SkipIntro
         {
             this.Config = helper.ReadConfig<ModConfig>();
 
-            MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
-            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+            helper.Events.Display.MenuChanged += this.OnMenuChanged;
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
         }
 
 
@@ -48,7 +48,7 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <summary>The method called when the player returns to the title screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
+        private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
             if (e.NewMenu is TitleMenu)
                 this.CurrentStage = Stage.SkipIntro;
@@ -57,7 +57,7 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <summary>Receives an update tick.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace Pathoschild.Stardew.SkipIntro
             catch (Exception ex)
             {
                 this.Monitor.InterceptError(ex, "skipping the intro");
-                GameEvents.UpdateTick -= this.GameEvents_UpdateTick;
+                this.Helper.Events.GameLoop.UpdateTicked -= this.OnUpdateTicked;
             }
         }
 

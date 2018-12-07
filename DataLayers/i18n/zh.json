@@ -41,5 +41,12 @@
   "crop-fertilizer.name": "作物：施肥",
   "crop-fertilizer.fertilizer": "肥料",
   "crop-fertilizer.retaining-soil": "保湿土壤",
-  "crop-fertilizer.speed-gro": "生长激素"
+  "crop-fertilizer.speed-gro": "生长激素",
+
+  // machine processing
+  // TODO
+  "machines.name": "Machine Processing",
+  "machines.empty": "Empty",
+  "machines.processing": "Processing",
+  "machines.finished": "Finished"
 }

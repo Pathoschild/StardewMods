@@ -5,7 +5,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.Automate
 {
     /// <summary>Provides and stores items for machines.</summary>
-    internal interface IContainer : IEnumerable<ITrackedStack>
+    public interface IContainer : IAutomatable, IEnumerable<ITrackedStack>
     {
         /*********
         ** Accessors
