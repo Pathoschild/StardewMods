@@ -263,6 +263,21 @@ namespace Pathoschild.Stardew.TractorMod
                     }
                 }
             }
+
+            // workaround for instantly-built tractors spawning a horse
+            if (Context.IsMainPlayer && e.Location is BuildableGameLocation buildableLocation)
+            {
+                Horse[] tractors = e.Added.OfType<Horse>().ToArray();
+                if (tractors.Any())
+                {
+                    HashSet<Guid> tractorIDs = new HashSet<Guid>(buildableLocation.buildings.OfType<Stable>().Select(p => p.HorseId));
+                    foreach (Horse tractor in tractors)
+                    {
+                        if (tractorIDs.Contains(tractor.HorseId))
+                            tractor.Name = TractorManager.GetTractorName(tractor.HorseId);
+                    }
+                }
+            }
         }
 
         /// <summary>The event called when the game updates (roughly sixty times per second).</summary>
@@ -274,7 +289,7 @@ namespace Pathoschild.Stardew.TractorMod
                 return;
 
             // multiplayer: override textures in the current location
-            if (Context.IsWorldReady && Context.IsMultiplayer && Game1.currentLocation != null)
+            if (Context.IsWorldReady && Game1.currentLocation != null)
             {
                 uint updateRate = Game1.currentLocation.farmers.Count > 1 ? this.TextureUpdateRateWithMultiplePlayers : this.TextureUpdateRateWithSinglePlayer;
                 if (e.IsMultipleOf(updateRate))
