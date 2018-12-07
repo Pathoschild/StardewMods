@@ -12,13 +12,13 @@
 
   // coverage: Junimo huts
   "junimo-huts.name": "Abdeckung: Junimo-Hütten",
-  "junimo-huts.can-harvest": "Abbaubar",
-  "junimo-huts.cannot-harvest": "Nicht abbaubar",
+  "junimo-huts.can-harvest": "Kann ernten",
+  "junimo-huts.cannot-harvest": "Kann nicht ernten",
 
   // coverage: scarecrows
   "scarecrows.name": "Abdeckung: Vogelscheuchen",
   "scarecrows.protected": "Geschützt",
-  "scarecrows.exposed": "Exponiert",
+  "scarecrows.exposed": "Ungeschützt",
 
   // coverage: sprinklers
   "sprinklers.name": "Abdeckung: Sprenkler",
