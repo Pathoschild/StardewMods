@@ -40,5 +40,12 @@
   "crop-fertilizer.name": "Düngemitteleinsatz",
   "crop-fertilizer.fertilizer": "Dünger",
   "crop-fertilizer.retaining-soil": "Hydrogel",
-  "crop-fertilizer.speed-gro": "Geschwind-Wachs"
+  "crop-fertilizer.speed-gro": "Geschwind-Wachs",
+
+  // machine processing
+  // TODO
+  "machines.name": "Machine Processing",
+  "machines.empty": "Empty",
+  "machines.processing": "Processing",
+  "machines.finished": "Finished"
 }

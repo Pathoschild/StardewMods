@@ -152,6 +152,8 @@ namespace Pathoschild.Stardew.DataLayers
                 yield return new CropFertilizerLayer(translation, layers.CropFertilizer);
             if (layers.CropHarvest.IsEnabled())
                 yield return new CropHarvestLayer(translation, layers.CropHarvest);
+            if (layers.Machines.IsEnabled() && mods.Automate.IsLoaded)
+                yield return new MachineLayer(translation, layers.Machines, mods);
         }
 
         /// <summary>The method invoked when the player returns to the title screen.</summary>

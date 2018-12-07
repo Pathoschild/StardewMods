@@ -1,6 +1,7 @@
 # Release notes
 ## Upcoming release
 * Updated for the upcoming SMAPI 3.0.
+* Added _machine processing_ layer (requires Automate 1.11+).
 * Improved translations. Thanks to Nanogamer7 (German)!
 
 ## 1.4.2

@@ -1,3 +1,4 @@
+using Pathoschild.Stardew.Common.Integrations.Automate;
 using Pathoschild.Stardew.Common.Integrations.BetterJunimos;
 using Pathoschild.Stardew.Common.Integrations.BetterSprinklers;
 using Pathoschild.Stardew.Common.Integrations.Cobalt;
@@ -14,6 +15,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /*********
         ** Accessors
         *********/
+        /// <summary>Handles access to the Automate mod.</summary>
+        public AutomateIntegration Automate { get; }
+
         /// <summary>Handles access to the Better Junimos mod.</summary>
         public BetterJunimosIntegration BetterJunimos { get; }
 
@@ -42,6 +46,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <param name="reflection">An API for accessing private code.</param>
         public ModIntegrations(IMonitor monitor, IModRegistry modRegistry, IReflectionHelper reflection)
         {
+            this.Automate = new AutomateIntegration(modRegistry, monitor);
             this.BetterJunimos = new BetterJunimosIntegration(modRegistry, monitor);
             this.BetterSprinklers = new BetterSprinklersIntegration(modRegistry, monitor);
             this.Cobalt = new CobaltIntegration(modRegistry, monitor);

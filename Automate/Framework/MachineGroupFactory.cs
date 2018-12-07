@@ -48,15 +48,6 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
         }
 
-        /// <summary>Get machines with connections in a location.</summary>
-        /// <param name="location">The location to search.</param>
-        public IEnumerable<MachineGroup> GetActiveMachinesGroups(GameLocation location)
-        {
-            return this
-                .GetMachineGroups(location)
-                .Where(group => group.HasInternalAutomation);
-        }
-
 
         /*********
         ** Private methods

@@ -38,6 +38,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Layers\MachineLayer.cs" />
     <Compile Include="Layers\BaseLayer.cs" />
     <Compile Include="Layers\Coverage\JunimoHutLayer.cs" />
     <Compile Include="Layers\Coverage\BeeHouseLayer.cs" />

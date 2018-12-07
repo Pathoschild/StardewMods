@@ -27,7 +27,10 @@ namespace Pathoschild.Stardew.Automate
         private bool EnableAutomation => Context.IsMainPlayer;
 
         /// <summary>The machines to process.</summary>
-        private readonly IDictionary<GameLocation, MachineGroup[]> MachineGroups = new Dictionary<GameLocation, MachineGroup[]>(new ObjectReferenceComparer<GameLocation>());
+        private readonly IDictionary<GameLocation, MachineGroup[]> ActiveMachineGroups = new Dictionary<GameLocation, MachineGroup[]>(new ObjectReferenceComparer<GameLocation>());
+
+        /// <summary>The disabled machine groups (e.g. machines not connected to a chest).</summary>
+        private readonly IDictionary<GameLocation, MachineGroup[]> DisabledMachineGroups = new Dictionary<GameLocation, MachineGroup[]>(new ObjectReferenceComparer<GameLocation>());
 
         /// <summary>The locations that should be reloaded on the next update tick.</summary>
         private readonly HashSet<GameLocation> ReloadQueue = new HashSet<GameLocation>(new ObjectReferenceComparer<GameLocation>());
@@ -69,7 +72,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry" />.</summary>
         public override object GetApi()
         {
-            return new AutomateAPI(this.Factory, this.MachineGroups);
+            return new AutomateAPI(this.Factory, this.ActiveMachineGroups, this.DisabledMachineGroups);
         }
 
 
@@ -89,7 +92,8 @@ namespace Pathoschild.Stardew.Automate
                 this.Monitor.Log("Disabled automation (only the main player can automate machines in multiplayer mode).", LogLevel.Warn);
 
             // reset
-            this.MachineGroups.Clear();
+            this.ActiveMachineGroups.Clear();
+            this.DisabledMachineGroups.Clear();
             this.AutomateCountdown = this.Config.AutomationInterval;
             this.DisableOverlay();
             foreach (GameLocation location in CommonHelper.GetLocations())
@@ -117,7 +121,8 @@ namespace Pathoschild.Stardew.Automate
 
             try
             {
-                this.MachineGroups.Clear();
+                this.ActiveMachineGroups.Clear();
+                this.DisabledMachineGroups.Clear();
                 foreach (GameLocation location in CommonHelper.GetLocations())
                     this.ReloadQueue.Add(location);
             }
@@ -178,7 +183,7 @@ namespace Pathoschild.Stardew.Automate
                 }
 
                 // process machines
-                foreach (MachineGroup group in this.GetAllMachineGroups())
+                foreach (MachineGroup group in this.GetActiveMachineGroups())
                     group.Automate();
             }
             catch (Exception ex)
@@ -212,10 +217,10 @@ namespace Pathoschild.Stardew.Automate
         /****
         ** Methods
         ****/
-        /// <summary>Get the machine groups in every location.</summary>
-        private IEnumerable<MachineGroup> GetAllMachineGroups()
+        /// <summary>Get the active machine groups in every location.</summary>
+        private IEnumerable<MachineGroup> GetActiveMachineGroups()
         {
-            foreach (KeyValuePair<GameLocation, MachineGroup[]> group in this.MachineGroups)
+            foreach (KeyValuePair<GameLocation, MachineGroup[]> group in this.ActiveMachineGroups)
             {
                 foreach (MachineGroup machineGroup in group.Value)
                     yield return machineGroup;
@@ -228,9 +233,16 @@ namespace Pathoschild.Stardew.Automate
         {
             this.Monitor.VerboseLog($"Reloading machines in {location.Name}...");
 
-            this.MachineGroups[location] = this.Factory.GetActiveMachinesGroups(location).ToArray();
-            if (!this.MachineGroups[location].Any())
-                this.MachineGroups.Remove(location);
+            // get machine groups
+            MachineGroup[] machineGroups = this.Factory.GetMachineGroups(location).ToArray();
+            this.ActiveMachineGroups[location] = machineGroups.Where(p => p.HasInternalAutomation).ToArray();
+            this.DisabledMachineGroups[location] = machineGroups.Where(p => !p.HasInternalAutomation).ToArray();
+
+            // remove unneeded entries
+            if (!this.ActiveMachineGroups[location].Any())
+                this.ActiveMachineGroups.Remove(location);
+            if (!this.DisabledMachineGroups[location].Any())
+                this.DisabledMachineGroups.Remove(location);
         }
 
         /// <summary>Log an error and warn the user.</summary>

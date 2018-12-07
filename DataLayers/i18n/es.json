@@ -40,5 +40,12 @@
   "crop-fertilizer.name": "Cultivos: Fertilizados",
   "crop-fertilizer.fertilizer": "Fertilizante",
   "crop-fertilizer.retaining-soil": "Hidrogel",
-  "crop-fertilizer.speed-gro": "Acelerador"
+  "crop-fertilizer.speed-gro": "Acelerador",
+
+  // machine processing
+  // TODO
+  "machines.name": "Machine Processing",
+  "machines.empty": "Empty",
+  "machines.processing": "Processing",
+  "machines.finished": "Finished"
 }
