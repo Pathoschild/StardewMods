@@ -5,6 +5,7 @@
 * Updated for the upcoming SMAPI 3.0.
 * Added experimental API to let other mods add new machines, containers, and connectors.
 * Fixed fences not working as connectors.
+* Fixed floor connectors not working if an object is placed over them.
 
 ## 1.10.6
 * Migrated verbose logs to SMAPI's verbose logging feature.
