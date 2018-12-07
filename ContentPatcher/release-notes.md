@@ -1,23 +1,21 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Updated for the upcoming SMAPI 3.0.
+## 1.6
 * Added new tokens:
   * `DaysPlayed`: the number of in-game days played for the current save.
   * `HasWalletItem`: the [special items in the player wallet](https://stardewvalleywiki.com/Wallet).
   * `SkillLevel`: the player's level for a given skill.
 * Added `Wind` value for `Weather` token.
-* Added support for matching subkey/value pairs for tokens which previously required subkeys.
+* Added support for matching subkey/value pairs like `"Relationship": "Abigail:Married, Marnie:Friend"`.
+* Added support for conditional map edits (via SMAPI 2.9).
+* Added support editing `Data\NPCDispositions` after the NPC is already created (via SMAPI 2.9).
 * Improved performance for most content packs.
 * Improved `patch summary` format.
+* Updated for the upcoming SMAPI 3.0.
 * Fixed language token always marked 'not valid in this context'.
 * Fixed token strings not validated for format version compatibility.
 * Fixed some 1.5 tokens not validated for format version compatibility.
-
-Via SMAPI 2.9:
-* Added support for conditional map edits.
-* Added support editing `Data\NPCDispositions` after the NPC is already created.
 
 **Update note:**
 * The `Weather` token now returns `Wind` on windy days instead of `Sun`. Existing content packs with `"Format": "1.5"` or earlier should work fine, since Content Patcher will adjust their conditions. Content packs which target version 1.6 or later should handle the new weather value.

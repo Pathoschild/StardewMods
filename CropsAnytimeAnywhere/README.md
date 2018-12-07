@@ -23,10 +23,10 @@ file in a text editor to configure the mod.
 
 Here's what you can change:
 
-setting        | default    | what it affects
-:------------- | :--------- | :------------------
-`Seasons`      | all `true` | The seasons in which any crops should grow. Crops will revert to normal in disabled seasons (and die in the season transition if they're out of season).
-`AnyLocation`  | `true`     | Whether you can plant crops in non-farm locations, as long as there's tillable dirt there.
+setting              | default    | what it affects
+:------------------- | :--------- | :------------------
+`Seasons`            | all `true` | The seasons in which any crops should grow. Crops will revert to normal in disabled seasons (and die in the season transition if they're out of season).
+`AllowCropsAnywhere` | `true`     | Whether you can plant crops in non-farm locations, as long as there's tillable dirt there. This only works in seasons enabled via `Seasons`.
 
 ## Compatibility
 The mod is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and

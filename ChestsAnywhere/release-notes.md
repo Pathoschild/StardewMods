@@ -1,12 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.15
+* Added button to reset a chest's options.
 * Updated for the upcoming SMAPI 3.0.
-* Added button to reset chest options to their default.
-* Fixed issues saving chest options:
-  * fixed form not saved if you only set the _(Automate) Put items in this chest first_ option;
-  * fixed category defaulting to chest name in some cases.
+* Fixed fridge listed as 'chest'.
+* Fixed chest category defaulting to chest name in some cases.
+* Fixed chest options not saved in rare cases.
 * Improved translations. Thanks to Nanogamer7 (German)!
 
 ## 1.14.1

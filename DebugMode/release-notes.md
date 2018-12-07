@@ -1,7 +1,7 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.9.2
 * Updated for the upcoming SMAPI 3.0.
 
 ## 1.9.1
