@@ -1,18 +1,16 @@
-using Microsoft.Xna.Framework;
 using StardewValley;
-using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A tapper that accepts input and provides output.</summary>
-    internal class TapperMachine : GenericMachine
+    internal class TapperMachine : GenericObjectMachine<SObject>
     {
         /*********
         ** Properties
         *********/
         /// <summary>The tree type.</summary>
-        private readonly int TreeType = -1;
+        private readonly int TreeType;
 
 
         /*********
@@ -21,16 +19,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The location to search.</param>
-        /// <param name="tile">The machine's position in its location.</param>
-        public TapperMachine(SObject machine, GameLocation location, Vector2 tile)
-            : base(machine)
+        /// <param name="treeType">The tree type being tapped.</param>
+        public TapperMachine(SObject machine, GameLocation location, int treeType)
+            : base(machine, location)
         {
-            // get tree type
-            if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature treeObj))
-            {
-                if (treeObj is Tree tree)
-                    this.TreeType = tree.treeType.Value;
-            }
+            this.TreeType = treeType;
         }
 
         /// <summary>Get the output item.</summary>

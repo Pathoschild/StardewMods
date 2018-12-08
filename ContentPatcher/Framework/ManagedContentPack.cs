@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework
@@ -7,6 +9,13 @@ namespace ContentPatcher.Framework
     /// <summary>Handles loading assets from content packs.</summary>
     internal class ManagedContentPack
     {
+        /*********
+        ** Properties
+        *********/
+        /// <summary>A dictionary which matches case-insensitive relative paths to the exact path on disk, for case-insensitive file lookups on Linux/Mac.</summary>
+        private IDictionary<string, string> RelativePaths;
+
+
         /*********
         ** Accessors
         *********/
@@ -76,23 +85,27 @@ namespace ContentPatcher.Framework
         /// <param name="key">The case-insensitive asset key.</param>
         private string GetRealPath(string key)
         {
-            // try file match first
-            var exactMatch = new FileInfo(Path.Combine(this.Pack.DirectoryPath, key));
-            if (exactMatch.Exists)
-                return exactMatch.FullName.Substring(this.Pack.DirectoryPath.Length + 1);
+            key = PathUtilities.NormalisePathSeparators(key);
 
-            // search for a case-insensitive file match (Linux/Mac are case-sensitive)
-            foreach (string path in Directory.EnumerateFiles(this.Pack.DirectoryPath, "*", SearchOption.AllDirectories))
+            // cache file paths
+            if (this.RelativePaths == null)
             {
-                if (!path.StartsWith(this.Pack.DirectoryPath))
-                    throw new InvalidOperationException("File search failed, contained files aren't in the searched folder (???).");
-
-                string relativePath = path.Substring(this.Pack.DirectoryPath.Length + 1);
-                if (relativePath.Equals(key, StringComparison.InvariantCultureIgnoreCase))
-                    return relativePath;
+                this.RelativePaths = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+                foreach (string path in this.GetRealRelativePaths())
+                    this.RelativePaths[path] = path;
             }
 
-            return null;
+            // find match
+            return this.RelativePaths.TryGetValue(key, out string relativePath)
+                ? relativePath
+                : null;
+        }
+
+        /// <summary>Get all relative paths in the content pack directory.</summary>
+        private IEnumerable<string> GetRealRelativePaths()
+        {
+            foreach (string path in Directory.EnumerateFiles(this.Pack.DirectoryPath, "*", SearchOption.AllDirectories))
+                yield return path.Substring(this.Pack.DirectoryPath.Length + 1);
         }
     }
 }

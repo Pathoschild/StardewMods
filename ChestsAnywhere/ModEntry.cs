@@ -52,16 +52,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             this.Data = helper.Data.ReadJsonFile<ModData>("data.json") ?? new ModData();
             this.ChestFactory = new ChestFactory(helper.Translation, helper.Data, this.Config.EnableShippingBin);
 
-            // hook UI
-            GraphicsEvents.OnPostRenderHudEvent += this.GraphicsEvents_OnPostRenderHudEvent;
-            MenuEvents.MenuChanged += this.MenuEvents_MenuChanged;
-            MenuEvents.MenuClosed += this.MenuEvents_MenuClosed;
-
-            // hook input
-            InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
-
-            // hook game events
-            SaveEvents.AfterLoad += this.SaveEvents_AfterLoad;
+            // hook events
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+            helper.Events.Display.RenderedHud += this.OnRenderedHud;
+            helper.Events.Display.MenuChanged += this.OnMenuChanged;
+            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
@@ -75,7 +70,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>The method invoked after the player loads a saved game.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void SaveEvents_AfterLoad(object sender, EventArgs e)
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             // validate game version
             string versionError = this.ValidateGameVersion();
@@ -93,7 +88,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>The method invoked when the interface has finished rendering.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void GraphicsEvents_OnPostRenderHudEvent(object sender, EventArgs e)
+        private void OnRenderedHud(object sender, RenderedHudEventArgs e)
         {
             // show chest label
             if (this.Config.ShowHoverTooltips)
@@ -102,7 +97,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 if (cursorChest != null && !cursorChest.HasDefaultName())
                 {
                     Vector2 tooltipPosition = new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f);
-                    CommonHelper.DrawHoverBox(Game1.spriteBatch, cursorChest.DisplayName, tooltipPosition, Game1.viewport.Width - tooltipPosition.X - Game1.tileSize / 2f);
+                    CommonHelper.DrawHoverBox(e.SpriteBatch, cursorChest.DisplayName, tooltipPosition, Game1.viewport.Width - tooltipPosition.X - Game1.tileSize / 2f);
                 }
             }
         }
@@ -110,10 +105,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>The method invoked when the active menu changes.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
+        private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
             // remove overlay
-            if (e.PriorMenu is ItemGrabMenu)
+            if (e.OldMenu is ItemGrabMenu)
             {
                 this.ManageChestOverlay?.Dispose();
                 this.ManageChestOverlay = null;
@@ -141,7 +136,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 RangeHandler range = this.GetCurrentRange();
                 ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true, alwaysIncludeContainer: chest.Container).ToArray();
                 bool isAutomateInstalled = this.Helper.ModRegistry.IsLoaded("Pathoschild.Automate");
-                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Input, this.Helper.Translation, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
+                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Events, this.Helper.Input, this.Helper.Translation, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
                 this.ManageChestOverlay.OnChestSelected += selected =>
                 {
                     this.SelectedInventory = selected.Container.Inventory;
@@ -150,18 +145,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             }
         }
 
-        /// <summary>The method invoked when a menu is closed.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void MenuEvents_MenuClosed(object sender, EventArgsClickableMenuClosed e)
-        {
-            this.MenuEvents_MenuChanged(sender, new EventArgsClickableMenuChanged(e.PriorMenu, null));
-        }
-
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             try
             {

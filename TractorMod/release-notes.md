@@ -1,4 +1,10 @@
 # Release notes
+## 4.7.1
+* Fixed tractor getting lost in the mines when players cruelly abandon it.
+* Fixed tractor/garage looking like a horse/stable in some cases.
+* Fixed mines not spawning a ladder on infestation levels if the tractor is present.
+* Fixed old tractor data not deleted after migration, which caused duplicate garages in some cases.
+
 ## 4.7
 * Added support for multiplayer mode. The mod must be installed by the host player, and installed by any farmhand that wants to use the tractor features.
 * Added support for custom mod locations.

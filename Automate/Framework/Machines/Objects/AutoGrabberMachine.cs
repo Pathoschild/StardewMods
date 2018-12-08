@@ -7,15 +7,16 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>An auto-grabber that provides output.</summary>
     /// <remarks>See the game's default logic in <see cref="SObject.DayUpdate"/> and <see cref="SObject.checkForAction"/>.</remarks>
-    internal class AutoGrabberMachine : GenericMachine<SObject>
+    internal class AutoGrabberMachine : GenericObjectMachine<SObject>
     {
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
-        public AutoGrabberMachine(SObject machine)
-            : base(machine) { }
+        /// <param name="location">The in-game location.</param>
+        public AutoGrabberMachine(SObject machine, GameLocation location)
+            : base(machine, location) { }
 
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()

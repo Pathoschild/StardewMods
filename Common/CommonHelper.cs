@@ -32,7 +32,7 @@ namespace Pathoschild.Stardew.Common
         /// <summary>A blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
         public static Texture2D Pixel => CommonHelper.LazyPixel.Value;
 
-        /// <summary>The width of the horizontal and vertical scroll edges (between the scroll origin position and start of content padding).</summary>
+        /// <summary>The width of the horizontal and vertical scroll edges (between the origin position and start of content padding).</summary>
         public static readonly Vector2 ScrollEdgeSize = new Vector2(CommonSprites.Scroll.TopLeft.Width * Game1.pixelZoom, CommonSprites.Scroll.TopLeft.Height * Game1.pixelZoom);
 
 
@@ -72,7 +72,7 @@ namespace Pathoschild.Stardew.Common
         /// <param name="label">The text to display.</param>
         /// <param name="position">The position at which to draw the text.</param>
         /// <param name="wrapWidth">The maximum width to display.</param>
-        public static Vector2 DrawHoverBox(SpriteBatch spriteBatch, string label, Vector2 position, float wrapWidth)
+        public static Vector2 DrawHoverBox(SpriteBatch spriteBatch, string label, in Vector2 position, float wrapWidth)
         {
             const int paddingSize = 27;
             const int gutterSize = 20;
@@ -84,6 +84,35 @@ namespace Pathoschild.Stardew.Common
             return labelSize + new Vector2(paddingSize);
         }
 
+        /// <summary>Draw a button background.</summary>
+        /// <param name="spriteBatch">The sprite batch to which to draw.</param>
+        /// <param name="position">The top-left pixel coordinate at which to draw the button.</param>
+        /// <param name="contentSize">The button content's pixel size.</param>
+        /// <param name="contentPos">The pixel position at which the content begins.</param>
+        /// <param name="bounds">The button's outer bounds.</param>
+        /// <param name="padding">The padding between the content and border.</param>
+        public static void DrawButton(SpriteBatch spriteBatch, in Vector2 position, in Vector2 contentSize, out Vector2 contentPos, out Rectangle bounds, int padding = 0)
+        {
+            CommonHelper.DrawContentBox(
+                spriteBatch: spriteBatch,
+                texture: CommonSprites.Button.Sheet,
+                background: CommonSprites.Button.Background,
+                top: CommonSprites.Button.Top,
+                right: CommonSprites.Button.Right,
+                bottom: CommonSprites.Button.Bottom,
+                left: CommonSprites.Button.Left,
+                topLeft: CommonSprites.Button.TopLeft,
+                topRight: CommonSprites.Button.TopRight,
+                bottomRight: CommonSprites.Button.BottomRight,
+                bottomLeft: CommonSprites.Button.BottomLeft,
+                position: position,
+                contentSize: contentSize,
+                contentPos: out contentPos,
+                bounds: out bounds,
+                padding: padding
+            );
+        }
+
         /// <summary>Draw a scroll background.</summary>
         /// <param name="spriteBatch">The sprite batch to which to draw.</param>
         /// <param name="position">The top-left pixel coordinate at which to draw the scroll.</param>
@@ -91,10 +120,49 @@ namespace Pathoschild.Stardew.Common
         /// <param name="contentPos">The pixel position at which the content begins.</param>
         /// <param name="bounds">The scroll's outer bounds.</param>
         /// <param name="padding">The padding between the content and border.</param>
-        public static void DrawScroll(SpriteBatch spriteBatch, Vector2 position, Vector2 contentSize, out Vector2 contentPos, out Rectangle bounds, int padding = 5)
+        public static void DrawScroll(SpriteBatch spriteBatch, in Vector2 position, in Vector2 contentSize, out Vector2 contentPos, out Rectangle bounds, int padding = 5)
         {
-            int cornerWidth = (int)CommonHelper.ScrollEdgeSize.X;
-            int cornerHeight = (int)CommonHelper.ScrollEdgeSize.Y;
+            CommonHelper.DrawContentBox(
+                spriteBatch: spriteBatch,
+                texture: CommonSprites.Scroll.Sheet,
+                background: in CommonSprites.Scroll.Background,
+                top: CommonSprites.Scroll.Top,
+                right: CommonSprites.Scroll.Right,
+                bottom: CommonSprites.Scroll.Bottom,
+                left: CommonSprites.Scroll.Left,
+                topLeft: CommonSprites.Scroll.TopLeft,
+                topRight: CommonSprites.Scroll.TopRight,
+                bottomRight: CommonSprites.Scroll.BottomRight,
+                bottomLeft: CommonSprites.Scroll.BottomLeft,
+                position: position,
+                contentSize: contentSize,
+                contentPos: out contentPos,
+                bounds: out bounds,
+                padding: padding
+            );
+        }
+
+        /// <summary>Draw a generic content box like a scroll or button.</summary>
+        /// <param name="spriteBatch">The sprite batch to which to draw.</param>
+        /// <param name="texture">The texture to draw.</param>
+        /// <param name="background">The source rectangle for the background.</param>
+        /// <param name="top">The source rectangle for the top border.</param>
+        /// <param name="right">The source rectangle for the right border.</param>
+        /// <param name="bottom">The source rectangle for the bottom border.</param>
+        /// <param name="left">The source rectangle for the left border.</param>
+        /// <param name="topLeft">The source rectangle for the top-left corner.</param>
+        /// <param name="topRight">The source rectangle for the top-right corner.</param>
+        /// <param name="bottomRight">The source rectangle for the bottom-right corner.</param>
+        /// <param name="bottomLeft">The source rectangle for the bottom-left corner.</param>
+        /// <param name="position">The top-left pixel coordinate at which to draw the button.</param>
+        /// <param name="contentSize">The button content's pixel size.</param>
+        /// <param name="contentPos">The pixel position at which the content begins.</param>
+        /// <param name="bounds">The box's outer bounds.</param>
+        /// <param name="padding">The padding between the content and border.</param>
+        public static void DrawContentBox(SpriteBatch spriteBatch, Texture2D texture, in Rectangle background, in Rectangle top, in Rectangle right, in Rectangle bottom, in Rectangle left, in Rectangle topLeft, in Rectangle topRight, in Rectangle bottomRight, in Rectangle bottomLeft, in Vector2 position, in Vector2 contentSize, out Vector2 contentPos, out Rectangle bounds, int padding)
+        {
+            int cornerWidth = topLeft.Width * Game1.pixelZoom;
+            int cornerHeight = topLeft.Height * Game1.pixelZoom;
             int innerWidth = (int)(contentSize.X + padding * 2);
             int innerHeight = (int)(contentSize.Y + padding * 2);
             int outerWidth = innerWidth + cornerWidth * 2;
@@ -103,19 +171,19 @@ namespace Pathoschild.Stardew.Common
             int y = (int)position.Y;
 
             // draw scroll background
-            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x + cornerWidth, y + cornerHeight, innerWidth, innerHeight), CommonSprites.Scroll.Background, Color.White);
+            spriteBatch.Draw(texture, new Rectangle(x + cornerWidth, y + cornerHeight, innerWidth, innerHeight), background, Color.White);
 
             // draw borders
-            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x + cornerWidth, y, innerWidth, cornerHeight), CommonSprites.Scroll.Top, Color.White);
-            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x + cornerWidth, y + cornerHeight + innerHeight, innerWidth, cornerHeight), CommonSprites.Scroll.Bottom, Color.White);
-            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x, y + cornerHeight, cornerWidth, innerHeight), CommonSprites.Scroll.Left, Color.White);
-            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x + cornerWidth + innerWidth, y + cornerHeight, cornerWidth, innerHeight), CommonSprites.Scroll.Right, Color.White);
+            spriteBatch.Draw(texture, new Rectangle(x + cornerWidth, y, innerWidth, cornerHeight), top, Color.White);
+            spriteBatch.Draw(texture, new Rectangle(x + cornerWidth, y + cornerHeight + innerHeight, innerWidth, cornerHeight), bottom, Color.White);
+            spriteBatch.Draw(texture, new Rectangle(x, y + cornerHeight, cornerWidth, innerHeight), left, Color.White);
+            spriteBatch.Draw(texture, new Rectangle(x + cornerWidth + innerWidth, y + cornerHeight, cornerWidth, innerHeight), right, Color.White);
 
             // draw corners
-            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x, y, cornerWidth, cornerHeight), CommonSprites.Scroll.TopLeft, Color.White);
-            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x, y + cornerHeight + innerHeight, cornerWidth, cornerHeight), CommonSprites.Scroll.BottomLeft, Color.White);
-            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x + cornerWidth + innerWidth, y, cornerWidth, cornerHeight), CommonSprites.Scroll.TopRight, Color.White);
-            spriteBatch.Draw(CommonSprites.Scroll.Sheet, new Rectangle(x + cornerWidth + innerWidth, y + cornerHeight + innerHeight, cornerWidth, cornerHeight), CommonSprites.Scroll.BottomRight, Color.White);
+            spriteBatch.Draw(texture, new Rectangle(x, y, cornerWidth, cornerHeight), topLeft, Color.White);
+            spriteBatch.Draw(texture, new Rectangle(x, y + cornerHeight + innerHeight, cornerWidth, cornerHeight), bottomLeft, Color.White);
+            spriteBatch.Draw(texture, new Rectangle(x + cornerWidth + innerWidth, y, cornerWidth, cornerHeight), topRight, Color.White);
+            spriteBatch.Draw(texture, new Rectangle(x + cornerWidth + innerWidth, y + cornerHeight + innerHeight, cornerWidth, cornerHeight), bottomRight, Color.White);
 
             // set out params
             contentPos = new Vector2(x + cornerWidth + padding, y + cornerHeight + padding);
@@ -146,7 +214,7 @@ namespace Pathoschild.Stardew.Common
         /// <param name="y">The X-position at which to start the line.</param>
         /// <param name="size">The line dimensions.</param>
         /// <param name="color">The color to tint the sprite.</param>
-        public static void DrawLine(this SpriteBatch batch, float x, float y, Vector2 size, Color? color = null)
+        public static void DrawLine(this SpriteBatch batch, float x, float y, in Vector2 size, in Color? color = null)
         {
             batch.Draw(CommonHelper.Pixel, new Rectangle((int)x, (int)y, (int)size.X, (int)size.Y), color ?? Color.White);
         }
@@ -161,7 +229,7 @@ namespace Pathoschild.Stardew.Common
         /// <param name="bold">Whether to draw bold text.</param>
         /// <param name="scale">The font scale.</param>
         /// <returns>Returns the text dimensions.</returns>
-        public static Vector2 DrawTextBlock(this SpriteBatch batch, SpriteFont font, string text, Vector2 position, float wrapWidth, Color? color = null, bool bold = false, float scale = 1)
+        public static Vector2 DrawTextBlock(this SpriteBatch batch, SpriteFont font, string text, in Vector2 position, float wrapWidth, in Color? color = null, bool bold = false, float scale = 1)
         {
             if (text == null)
                 return new Vector2(0, 0);

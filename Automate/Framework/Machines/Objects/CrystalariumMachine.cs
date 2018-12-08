@@ -1,10 +1,11 @@
 using StardewModdingAPI;
+using StardewValley;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A crystalarium that accepts input and provides output.</summary>
-    internal class CrystalariumMachine : GenericMachine
+    internal class CrystalariumMachine : GenericObjectMachine<SObject>
     {
         /*********
         ** Properties
@@ -18,9 +19,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
+        /// <param name="location">The location containing the machine.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public CrystalariumMachine(SObject machine, IReflectionHelper reflection)
-            : base(machine)
+        public CrystalariumMachine(SObject machine, GameLocation location, IReflectionHelper reflection)
+            : base(machine, location)
         {
             this.Reflection = reflection;
         }

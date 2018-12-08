@@ -136,5 +136,21 @@ namespace ContentPatcher.Framework.Tokens
                     throw new InvalidOperationException($"The '{this.Name}' token does not allow subkeys (:).");
             }
         }
+
+        /// <summary>Try to parse a raw case-insensitive string into an enum value.</summary>
+        /// <typeparam name="TEnum">The enum type.</typeparam>
+        /// <param name="raw">The raw string to parse.</param>
+        /// <param name="result">The resulting enum value.</param>
+        /// <param name="mustBeNamed">When parsing a numeric value, whether it must match one of the named enum values.</param>
+        protected bool TryParseEnum<TEnum>(string raw, out TEnum result, bool mustBeNamed = true) where TEnum : struct
+        {
+            if (!Enum.TryParse(raw, true, out result))
+                return false;
+
+            if (mustBeNamed && !Enum.IsDefined(typeof(TEnum), result))
+                return false;
+
+            return true;
+        }
     }
 }

@@ -4,15 +4,16 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A slime egg-press that accepts input and provides output.</summary>
-    internal class SlimeEggPressMachine : GenericMachine
+    internal class SlimeEggPressMachine : GenericObjectMachine<SObject>
     {
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
-        public SlimeEggPressMachine(SObject machine)
-            : base(machine) { }
+        /// <param name="location">The location containing the machine.</param>
+        public SlimeEggPressMachine(SObject machine, GameLocation location)
+            : base(machine, location) { }
 
         /// <summary>Get the output item.</summary>
         public override ITrackedStack GetOutput()

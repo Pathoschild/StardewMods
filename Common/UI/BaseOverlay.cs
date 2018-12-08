@@ -15,6 +15,12 @@ namespace Pathoschild.Stardew.Common.UI
         /*********
         ** Properties
         *********/
+        /// <summary>The SMAPI events available for mods.</summary>
+        private readonly IModEvents Events;
+
+        /// <summary>An API for checking and changing input state.</summary>
+        protected readonly IInputHelper InputHelper;
+
         /// <summary>The last viewport bounds.</summary>
         private Rectangle LastViewport;
 
@@ -28,10 +34,11 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>Release all resources.</summary>
         public virtual void Dispose()
         {
-            GraphicsEvents.OnPostRenderEvent -= this.OnPostRenderEvent;
-            GameEvents.UpdateTick -= this.OnUpdateTick;
-            InputEvents.ButtonPressed -= this.OnButtonPressed;
-            ControlEvents.MouseChanged -= this.OnMouseChanged;
+            this.Events.Display.Rendered -= this.OnRendered;
+            this.Events.GameLoop.UpdateTicked -= this.OnUpdateTicked;
+            this.Events.Input.ButtonPressed -= this.OnButtonPressed;
+            this.Events.Input.CursorMoved -= this.OnCursorMoved;
+            this.Events.Input.MouseWheelScrolled -= this.OnMouseWheelScrolled;
         }
 
 
@@ -42,15 +49,21 @@ namespace Pathoschild.Stardew.Common.UI
         ** Implementation
         ****/
         /// <summary>Construct an instance.</summary>
+        /// <param name="events">The SMAPI events available for mods.</param>
+        /// <param name="inputHelper">An API for checking and changing input state.</param>
         /// <param name="keepAlive">Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</param>
-        protected BaseOverlay(Func<bool> keepAlive = null)
+        protected BaseOverlay(IModEvents events, IInputHelper inputHelper, Func<bool> keepAlive = null)
         {
+            this.Events = events;
+            this.InputHelper = inputHelper;
             this.KeepAliveCheck = keepAlive;
             this.LastViewport = new Rectangle(Game1.viewport.X, Game1.viewport.Y, Game1.viewport.Width, Game1.viewport.Height);
-            GraphicsEvents.OnPostRenderEvent += this.OnPostRenderEvent;
-            GameEvents.UpdateTick += this.OnUpdateTick;
-            InputEvents.ButtonPressed += this.OnButtonPressed;
-            ControlEvents.MouseChanged += this.OnMouseChanged;
+
+            events.Display.Rendered += this.OnRendered;
+            events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            events.Input.ButtonPressed += this.OnButtonPressed;
+            events.Input.CursorMoved += this.OnCursorMoved;
+            events.Input.MouseWheelScrolled += this.OnMouseWheelScrolled;
         }
 
         /// <summary>Draw the overlay to the screen.</summary>
@@ -111,7 +124,7 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>The method called when the game finishes drawing components to the screen.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void OnPostRenderEvent(object sender, EventArgs e)
+        private void OnRendered(object sender, RenderedEventArgs e)
         {
             this.Draw(Game1.spriteBatch);
         }
@@ -119,7 +132,7 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>The method called once per event tick.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void OnUpdateTick(object sender, EventArgs e)
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             // detect end of life
             if (this.KeepAliveCheck != null && !this.KeepAliveCheck())
@@ -141,38 +154,54 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>The method invoked when the player presses a key.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void OnButtonPressed(object sender, EventArgsInput e)
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
-            bool handled = e.Button == SButton.MouseLeft || e.IsUseToolButton
+            bool handled = e.Button == SButton.MouseLeft || e.Button.IsUseToolButton()
                 ? this.ReceiveLeftClick(Game1.getMouseX(), Game1.getMouseY())
                 : this.ReceiveButtonPress(e.Button);
 
             if (handled)
-                e.SuppressButton();
+                this.InputHelper.Suppress(e.Button);
         }
 
-        /// <summary>The method invoked when the mouse state changes.</summary>
+        /// <summary>The method invoked when the mouse wheel is scrolled.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void OnMouseChanged(object sender, EventArgsMouseStateChanged e)
+        private void OnMouseWheelScrolled(object sender, MouseWheelScrolledEventArgs e)
         {
-            // get data
-            MouseState oldState = e.PriorState;
-            MouseState newState = e.NewState;
-            Point position = e.NewPosition;
-
-            // raise events
-            bool hoverHandled = this.ReceiveCursorHover(position.X, position.Y);
-            bool scrollHandled = oldState.ScrollWheelValue != newState.ScrollWheelValue && this.ReceiveScrollWheelAction(newState.ScrollWheelValue - oldState.ScrollWheelValue);
-
-            // suppress handled input
-            if (hoverHandled || scrollHandled)
+            bool scrollHandled = this.ReceiveScrollWheelAction(e.Delta);
+            if (scrollHandled)
             {
                 MouseState cur = Game1.oldMouseState;
                 Game1.oldMouseState = new MouseState(
                     x: cur.X,
                     y: cur.Y,
-                    scrollWheel: scrollHandled ? newState.ScrollWheelValue : cur.ScrollWheelValue,
+                    scrollWheel: e.NewValue,
+                    leftButton: cur.LeftButton,
+                    middleButton: cur.MiddleButton,
+                    rightButton: cur.RightButton,
+                    xButton1: cur.XButton1,
+                    xButton2: cur.XButton2
+                );
+            }
+        }
+
+        /// <summary>The method invoked when the in-game cursor is moved.</summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnCursorMoved(object sender, CursorMovedEventArgs e)
+        {
+            int x = (int)e.NewPosition.ScreenPixels.X;
+            int y = (int)e.NewPosition.ScreenPixels.Y;
+
+            bool hoverHandled = this.ReceiveCursorHover(x, y);
+            if (hoverHandled)
+            {
+                MouseState cur = Game1.oldMouseState;
+                Game1.oldMouseState = new MouseState(
+                    x: x,
+                    y: y,
+                    scrollWheel: cur.ScrollWheelValue,
                     leftButton: cur.LeftButton,
                     middleButton: cur.MiddleButton,
                     rightButton: cur.RightButton,

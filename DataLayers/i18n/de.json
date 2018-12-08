@@ -12,13 +12,13 @@
 
   // coverage: Junimo huts
   "junimo-huts.name": "Abdeckung: Junimo-Hütten",
-  "junimo-huts.can-harvest": "Abbaubar",
-  "junimo-huts.cannot-harvest": "Nicht abbaubar",
+  "junimo-huts.can-harvest": "Kann ernten",
+  "junimo-huts.cannot-harvest": "Kann nicht ernten",
 
   // coverage: scarecrows
   "scarecrows.name": "Abdeckung: Vogelscheuchen",
   "scarecrows.protected": "Geschützt",
-  "scarecrows.exposed": "Exponiert",
+  "scarecrows.exposed": "Ungeschützt",
 
   // coverage: sprinklers
   "sprinklers.name": "Abdeckung: Sprenkler",
@@ -26,11 +26,10 @@
   "sprinklers.dry-crops": "Trocken",
 
   // crops: harvest
-  // TODO
-  "crop-harvest.name": "Crops: Ready to Harvest",
-  "crop-harvest.ready": "Ready",
-  "crop-harvest.not-ready": "Not Ready",
-  "crop-harvest.not-enough-time": "Not Enough Time",
+  "crop-harvest.name": "Saat: Bereit zum Ernten",
+  "crop-harvest.ready": "Fertig",
+  "crop-harvest.not-ready": "Nicht fertig",
+  "crop-harvest.not-enough-time": "Nicht genug Zeit",
 
   // crops: watered
   "crop-water.name": "Bewässerung",
@@ -41,5 +40,11 @@
   "crop-fertilizer.name": "Düngemitteleinsatz",
   "crop-fertilizer.fertilizer": "Dünger",
   "crop-fertilizer.retaining-soil": "Hydrogel",
-  "crop-fertilizer.speed-gro": "Geschwind-Wachs"
+  "crop-fertilizer.speed-gro": "Geschwind-Wachs",
+
+  // machine processing
+  "machines.name": "Maschinelle Verarbeitung",
+  "machines.empty": "Leer",
+  "machines.processing": "Arbeitet",
+  "machines.finished": "Fertig"
 }

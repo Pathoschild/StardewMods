@@ -20,7 +20,8 @@
   // button labels
   "button.edit-chest": "editar cofre",
   "button.sort-inventory": "ordenar inventario",
-  "button.ok": "OK",
+  "button.save": "save", // TODO
+  "button.reset": "reset", // TODO
 
   // errors
   "errors.disabled-from-here": "No puedes acceder a tus cofres desde aquí.",

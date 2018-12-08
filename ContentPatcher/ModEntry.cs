@@ -7,6 +7,7 @@ using ContentPatcher.Framework;
 using ContentPatcher.Framework.Commands;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Migrations;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
@@ -28,18 +29,15 @@ namespace ContentPatcher
         private readonly string ConfigFileName = "config.json";
 
         /// <summary>The supported format versions.</summary>
-        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4", "1.5" };
+        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4", "1.5", "1.6" };
 
-        /// <summary>The minimum format versions for newer condition types.</summary>
-        private readonly IDictionary<ConditionType, string> MinimumTokenVersions = new Dictionary<ConditionType, string>
+        /// <summary>The format version migrations to apply.</summary>
+        private readonly Func<IMigration[]> Migrations = () => new IMigration[]
         {
-            [ConditionType.DayEvent] = "1.4",
-            [ConditionType.HasFlag] = "1.4",
-            [ConditionType.HasSeenEvent] = "1.4",
-            [ConditionType.Hearts] = "1.4",
-            [ConditionType.Relationship] = "1.4",
-            [ConditionType.Spouse] = "1.4",
-            [ConditionType.Year] = "1.5"
+            new Migration_1_3(),
+            new Migration_1_4(),
+            new Migration_1_5(),
+            new Migration_1_6()
         };
 
         /// <summary>Manages the available contextual tokens.</summary>
@@ -67,8 +65,11 @@ namespace ContentPatcher
         {
             this.Config = helper.ReadConfig<ModConfig>();
 
+            // init migrations
+            IMigration[] migrations = this.Migrations();
+
             // fetch content packs
-            ManagedContentPack[] contentPacks = this.GetContentPacks().ToArray();
+            RawContentPack[] contentPacks = this.GetContentPacks(migrations).ToArray();
             string[] installedMods =
                 (contentPacks.Select(p => p.Manifest.UniqueID))
                 .Concat(helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
@@ -87,9 +88,9 @@ namespace ContentPatcher
 
             // set up events
             if (this.Config.EnableDebugFeatures)
-                InputEvents.ButtonPressed += this.InputEvents_ButtonPressed;
-            SaveEvents.AfterReturnToTitle += this.SaveEvents_AfterReturnToTitle;
-            TimeEvents.AfterDayStarted += this.TimeEvents_AfterDayStarted;
+                helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+            helper.Events.GameLoop.DayStarted += this.OnDayStarted;
 
             // set up commands
             this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, this.UpdateContext);
@@ -106,7 +107,7 @@ namespace ContentPatcher
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void InputEvents_ButtonPressed(object sender, EventArgsInput e)
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             if (this.Config.EnableDebugFeatures)
             {
@@ -114,7 +115,7 @@ namespace ContentPatcher
                 if (this.Config.Controls.ToggleDebug.Contains(e.Button))
                 {
                     if (this.DebugOverlay == null)
-                        this.DebugOverlay = new DebugOverlay(this.Helper.Content);
+                        this.DebugOverlay = new DebugOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Content);
                     else
                     {
                         this.DebugOverlay.Dispose();
@@ -137,7 +138,7 @@ namespace ContentPatcher
         /// <summary>The method invoked when the player returns to the title screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void SaveEvents_AfterReturnToTitle(object sender, EventArgs e)
+        private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
         {
             this.UpdateContext();
         }
@@ -145,7 +146,7 @@ namespace ContentPatcher
         /// <summary>The method invoked when a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void TimeEvents_AfterDayStarted(object sender, EventArgs e)
+        private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
             this.UpdateContext();
         }
@@ -161,14 +162,16 @@ namespace ContentPatcher
         }
 
         /// <summary>Load the registered content packs.</summary>
+        /// <param name="migrations">The format version migrations to apply.</param>
         /// <returns>Returns the loaded content pack IDs.</returns>
         [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "The value is used immediately, so this isn't an issue.")]
-        private IEnumerable<ManagedContentPack> GetContentPacks()
+        private IEnumerable<RawContentPack> GetContentPacks(IMigration[] migrations)
         {
             this.Monitor.VerboseLog("Preloading content packs...");
 
             foreach (IContentPack contentPack in this.Helper.GetContentPacks())
             {
+                RawContentPack rawContentPack;
                 try
                 {
                     // validate content.json has required fields
@@ -184,9 +187,16 @@ namespace ContentPatcher
                         continue;
                     }
 
-                    // validate format
-                    if (!this.ValidateFormatVersion(contentPack, content, usesConfig: content.ConfigSchema?.Any() == true))
+                    // apply migrations
+                    IMigration migrator = new AggregateMigration(content.Format, this.SupportedFormatVersions, migrations);
+                    if (!migrator.TryMigrate(content, out string error))
+                    {
+                        this.Monitor.Log($"Loading content pack '{contentPack.Manifest.Name}' failed: {error}.", LogLevel.Error);
                         continue;
+                    }
+
+                    // init
+                    rawContentPack = new RawContentPack(new ManagedContentPack(contentPack), content, migrator);
                 }
                 catch (Exception ex)
                 {
@@ -194,32 +204,32 @@ namespace ContentPatcher
                     continue;
                 }
 
-                yield return new ManagedContentPack(contentPack);
+                yield return rawContentPack;
             }
         }
 
         /// <summary>Load the patches from all registered content packs.</summary>
+        /// <param name="contentPacks">The content packs to load.</param>
         /// <returns>Returns the loaded content pack IDs.</returns>
         [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "The value is used immediately, so this isn't an issue.")]
-        private void LoadContentPacks(IEnumerable<ManagedContentPack> contentPacks)
+        private void LoadContentPacks(IEnumerable<RawContentPack> contentPacks)
         {
-            ISemanticVersion latestFormatVersion = new SemanticVersion(this.SupportedFormatVersions.Last());
-            InvariantDictionary<ISemanticVersion> minimumTokenVersions = new InvariantDictionary<ISemanticVersion>(
-                this.MinimumTokenVersions.ToDictionary(p => p.Key.ToString(), p => (ISemanticVersion)new SemanticVersion(p.Value))
-            );
+            // load content packs
             ConfigFileHandler configFileHandler = new ConfigFileHandler(this.ConfigFileName, this.ParseCommaDelimitedField, (pack, label, reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {label}: {reason}"));
-            foreach (ManagedContentPack pack in contentPacks)
+            foreach (RawContentPack current in contentPacks)
             {
-                this.Monitor.VerboseLog($"Loading content pack '{pack.Manifest.Name}'...");
+                this.Monitor.VerboseLog($"Loading content pack '{current.Manifest.Name}'...");
 
                 try
                 {
-                    ContentConfig content = pack.ReadJsonFile<ContentConfig>(this.PatchFileName);
-                    ModTokenContext tokenContext = this.TokenManager.TrackLocalTokens(pack.Pack);
+                    ContentConfig content = current.Content;
+
+                    // load tokens
+                    ModTokenContext tokenContext = this.TokenManager.TrackLocalTokens(current.ManagedPack.Pack);
                     {
                         // load config.json
-                        InvariantDictionary<ConfigField> config = configFileHandler.Read(pack, content.ConfigSchema);
-                        configFileHandler.Save(pack, config, this.Helper);
+                        InvariantDictionary<ConfigField> config = configFileHandler.Read(current.ManagedPack, content.ConfigSchema);
+                        configFileHandler.Save(current.ManagedPack, config, this.Helper);
                         if (config.Any())
                             this.Monitor.VerboseLog($"   found config.json with {config.Count} fields...");
 
@@ -233,7 +243,7 @@ namespace ContentPatcher
                         // load dynamic tokens
                         foreach (DynamicTokenConfig entry in content.DynamicTokens ?? new DynamicTokenConfig[0])
                         {
-                            void LogSkip(string reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > dynamic token '{entry.Name}': {reason}", LogLevel.Warn);
+                            void LogSkip(string reason) => this.Monitor.Log($"Ignored {current.Manifest.Name} > dynamic token '{entry.Name}': {reason}", LogLevel.Warn);
 
                             // validate token key
                             if (!TokenName.TryParse(entry.Name, out TokenName name))
@@ -263,9 +273,9 @@ namespace ContentPatcher
                             // parse conditions
                             ConditionDictionary conditions;
                             {
-                                if (!this.TryParseConditions(entry.When, tokenContext, content.Format, latestFormatVersion, minimumTokenVersions, out conditions, out string error))
+                                if (!this.TryParseConditions(entry.When, tokenContext, current.Migrator, out conditions, out string error))
                                 {
-                                    this.Monitor.Log($"Ignored {pack.Manifest.Name} > '{entry.Name}' token: its {nameof(DynamicTokenConfig.When)} field is invalid: {error}.", LogLevel.Warn);
+                                    this.Monitor.Log($"Ignored {current.Manifest.Name} > '{entry.Name}' token: its {nameof(DynamicTokenConfig.When)} field is invalid: {error}.", LogLevel.Warn);
                                     continue;
                                 }
                             }
@@ -277,66 +287,19 @@ namespace ContentPatcher
 
                     // load patches
                     content.Changes = this.SplitPatches(content.Changes).ToArray();
-                    this.NamePatches(pack, content.Changes);
+                    this.NamePatches(current.ManagedPack, content.Changes);
                     foreach (PatchConfig patch in content.Changes)
                     {
                         this.Monitor.VerboseLog($"   loading {patch.LogName}...");
-                        this.LoadPatch(pack, content, patch, tokenContext, latestFormatVersion, minimumTokenVersions, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {patch.LogName}: {reasonPhrase}", LogLevel.Warn));
+                        this.LoadPatch(current.ManagedPack, patch, tokenContext, current.Migrator, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {patch.LogName}: {reasonPhrase}", LogLevel.Warn));
                     }
                 }
                 catch (Exception ex)
                 {
-                    this.Monitor.Log($"Error loading content pack '{pack.Manifest.Name}'. Technical details:\n{ex}", LogLevel.Error);
+                    this.Monitor.Log($"Error loading content pack '{current.Manifest.Name}'. Technical details:\n{ex}", LogLevel.Error);
                     continue;
                 }
             }
-        }
-
-        /// <summary>Validate that a content pack doesn't use features that aren't available for its version.</summary>
-        /// <param name="pack">The content pack.</param>
-        /// <param name="content">The mod's content data.</param>
-        /// <param name="usesConfig">Whether the mod uses config settings.</param>
-        [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Variables are named deliberately to avoid ambiguity.")]
-        private bool ValidateFormatVersion(IContentPack pack, ContentConfig content, bool usesConfig)
-        {
-            // init
-            bool predates13 = content.Format.IsOlderThan("1.3");
-            bool predates15 = content.Format.IsOlderThan("1.5");
-            bool LogFailed(string reason)
-            {
-                this.Monitor.Log($"Loading content pack '{pack.Manifest.Name}' failed. It specifies format version {content.Format}, but {reason}.", LogLevel.Error);
-                return false;
-            }
-
-            // invalid format version
-            if (!this.SupportedFormatVersions.Contains(content.Format.ToString()))
-                return LogFailed($"unsupported format {content.Format} (supported version: {string.Join(", ", this.SupportedFormatVersions)}).");
-
-            // 1.3 adds config.json
-            if (predates13 && usesConfig)
-                return LogFailed($"uses the {nameof(ContentConfig.ConfigSchema)} field added in 1.3");
-
-            // 1.5 adds dynamic tokens
-            if (predates15 && content.DynamicTokens?.Any() == true)
-                return LogFailed($"uses the {nameof(ContentConfig.DynamicTokens)} field added in 1.5");
-
-            // check patch format
-            foreach (PatchConfig patch in content.Changes)
-            {
-                // 1.3 adds tokens in FromFile
-                if (predates13 && patch.FromFile != null && patch.FromFile.Contains("{{"))
-                    return LogFailed("uses the {{token}} feature added in 1.3");
-
-                // 1.3 adds When
-                if (predates13 && content.Changes.Any(p => p.When != null && p.When.Any()))
-                    return LogFailed($"uses the condition feature ({nameof(ContentConfig.Changes)}.{nameof(PatchConfig.When)} field) added in 1.3");
-
-                // 1.5 adds multiple Target values
-                if (predates15 && patch.Target.Contains(","))
-                    return LogFailed($"specifies multiple {nameof(PatchConfig.Target)} values which requires 1.5 or later");
-            }
-
-            return true;
         }
 
         /// <summary>Split patches with multiple target values.</summary>
@@ -399,13 +362,11 @@ namespace ContentPatcher
 
         /// <summary>Load one patch from a content pack's <c>content.json</c> file.</summary>
         /// <param name="pack">The content pack being loaded.</param>
-        /// <param name="contentConfig">The content pack's config.</param>
         /// <param name="entry">The change to load.</param>
         /// <param name="tokenContext">The tokens available for this content pack.</param>
-        /// <param name="latestFormatVersion">The latest format version.</param>
-        /// <param name="minumumTokenVersions">The minimum format versions for newer condition types.</param>
+        /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
-        private bool LoadPatch(ManagedContentPack pack, ContentConfig contentConfig, PatchConfig entry, IContext tokenContext, ISemanticVersion latestFormatVersion, InvariantDictionary<ISemanticVersion> minumumTokenVersions, Action<string> logSkip)
+        private bool LoadPatch(ManagedContentPack pack, PatchConfig entry, IContext tokenContext, IMigration migrator, Action<string> logSkip)
         {
             bool TrackSkip(string reason, bool warn = true)
             {
@@ -435,21 +396,21 @@ namespace ContentPatcher
                 {
                     if (string.IsNullOrWhiteSpace(entry.Target))
                         return TrackSkip($"must set the {nameof(PatchConfig.Target)} field.");
-                    if (!this.TryParseTokenString(entry.Target, tokenContext, out string error, out assetName))
+                    if (!this.TryParseTokenString(entry.Target, tokenContext, migrator, out string error, out assetName))
                         return TrackSkip($"the {nameof(PatchConfig.Target)} is invalid: {error}");
                 }
 
                 // parse 'enabled'
                 bool enabled = true;
                 {
-                    if (entry.Enabled != null && !this.TryParseEnabled(entry.Enabled, tokenContext, out string error, out enabled))
+                    if (entry.Enabled != null && !this.TryParseEnabled(entry.Enabled, tokenContext, migrator, out string error, out enabled))
                         return TrackSkip($"invalid {nameof(PatchConfig.Enabled)} value '{entry.Enabled}': {error}");
                 }
 
                 // parse conditions
                 ConditionDictionary conditions;
                 {
-                    if (!this.TryParseConditions(entry.When, tokenContext, contentConfig.Format, latestFormatVersion, minumumTokenVersions, out conditions, out string error))
+                    if (!this.TryParseConditions(entry.When, tokenContext, migrator, out conditions, out string error))
                         return TrackSkip($"the {nameof(PatchConfig.When)} field is invalid: {error}.");
                 }
 
@@ -461,7 +422,7 @@ namespace ContentPatcher
                     case PatchType.Load:
                         {
                             // init patch
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, out string error, out TokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, migrator, out string error, out TokenString fromAsset))
                                 return TrackSkip(error);
                             patch = new LoadPatch(entry.LogName, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
                         }
@@ -484,9 +445,9 @@ namespace ContentPatcher
                             {
                                 foreach (KeyValuePair<string, string> pair in entry.Entries)
                                 {
-                                    if (!this.TryParseTokenString(pair.Key, tokenContext, out string keyError, out TokenString key))
+                                    if (!this.TryParseTokenString(pair.Key, tokenContext, migrator, out string keyError, out TokenString key))
                                         return TrackSkip($"the {nameof(PatchConfig.Entries)} > '{key}' entry key is invalid: {keyError}.");
-                                    if (!this.TryParseTokenString(pair.Value, tokenContext, out string error, out TokenString value))
+                                    if (!this.TryParseTokenString(pair.Value, tokenContext, migrator, out string error, out TokenString value))
                                         return TrackSkip($"the {nameof(PatchConfig.Entries)} > '{key}' entry value is invalid: {error}.");
                                     entries.Add(new EditDataPatchRecord(key, value));
                                 }
@@ -498,12 +459,12 @@ namespace ContentPatcher
                             {
                                 foreach (KeyValuePair<string, IDictionary<int, string>> recordPair in entry.Fields)
                                 {
-                                    if (!this.TryParseTokenString(recordPair.Key, tokenContext, out string keyError, out TokenString key))
+                                    if (!this.TryParseTokenString(recordPair.Key, tokenContext, migrator, out string keyError, out TokenString key))
                                         return TrackSkip($"the {nameof(PatchConfig.Fields)} > '{keyError}' field key is invalid: {keyError}.");
                                     foreach (var fieldPair in recordPair.Value)
                                     {
                                         int field = fieldPair.Key;
-                                        if (!this.TryParseTokenString(fieldPair.Value, tokenContext, out string valueError, out TokenString value))
+                                        if (!this.TryParseTokenString(fieldPair.Value, tokenContext, migrator, out string valueError, out TokenString value))
                                             return TrackSkip($"the {nameof(PatchConfig.Fields)} > '{key}' > {field} field is invalid: {valueError}.");
 
                                         fields.Add(new EditDataPatchField(key, field, value));
@@ -525,7 +486,7 @@ namespace ContentPatcher
                                 return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}].");
 
                             // save
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, out string error, out TokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, migrator, out string error, out TokenString fromAsset))
                                 return TrackSkip(error);
                             patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
@@ -553,12 +514,10 @@ namespace ContentPatcher
         /// <summary>Normalise and parse the given condition values.</summary>
         /// <param name="raw">The raw condition values to normalise.</param>
         /// <param name="tokenContext">The tokens available for this content pack.</param>
-        /// <param name="formatVersion">The format version specified by the content pack.</param>
-        /// <param name="latestFormatVersion">The latest format version.</param>
-        /// <param name="minumumTokenVersions">The minimum format versions for newer condition types.</param>
+        /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
         /// <param name="conditions">The normalised conditions.</param>
         /// <param name="error">An error message indicating why normalisation failed.</param>
-        private bool TryParseConditions(InvariantDictionary<string> raw, IContext tokenContext, ISemanticVersion formatVersion, ISemanticVersion latestFormatVersion, InvariantDictionary<ISemanticVersion> minumumTokenVersions, out ConditionDictionary conditions, out string error)
+        private bool TryParseConditions(InvariantDictionary<string> raw, IContext tokenContext, IMigration migrator, out ConditionDictionary conditions, out string error)
         {
             conditions = new ConditionDictionary();
 
@@ -576,6 +535,13 @@ namespace ContentPatcher
                 if (!TokenName.TryParse(pair.Key, out TokenName name))
                 {
                     error = $"'{pair.Key}' isn't a valid token name";
+                    conditions = null;
+                    return false;
+                }
+
+                // apply migrations
+                if (!migrator.TryMigrate(ref name, out error))
+                {
                     conditions = null;
                     return false;
                 }
@@ -607,14 +573,6 @@ namespace ContentPatcher
                         conditions = null;
                         return false;
                     }
-                }
-
-                // check compatibility
-                if (minumumTokenVersions.TryGetValue(name.Key, out ISemanticVersion minVersion) && minVersion.IsNewerThan(formatVersion))
-                {
-                    error = $"{name} isn't available with format version {formatVersion} (change the {nameof(ContentConfig.Format)} field to {latestFormatVersion} to use newer features)";
-                    conditions = null;
-                    return false;
                 }
 
                 // parse values
@@ -677,14 +635,15 @@ namespace ContentPatcher
         /// <summary>Parse a boolean <see cref="PatchConfig.Enabled"/> value from a string which can contain tokens, and validate that it's valid.</summary>
         /// <param name="rawValue">The raw string which may contain tokens.</param>
         /// <param name="tokenContext">The tokens available for this content pack.</param>
+        /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseEnabled(string rawValue, IContext tokenContext, out string error, out bool parsed)
+        private bool TryParseEnabled(string rawValue, IContext tokenContext, IMigration migrator, out string error, out bool parsed)
         {
             parsed = false;
 
             // analyse string
-            if (!this.TryParseTokenString(rawValue, tokenContext, out error, out TokenString tokenString))
+            if (!this.TryParseTokenString(rawValue, tokenContext, migrator, out error, out TokenString tokenString))
                 return false;
 
             // validate & extract tokens
@@ -733,12 +692,15 @@ namespace ContentPatcher
         /// <summary>Parse a string which can contain tokens, and validate that it's valid.</summary>
         /// <param name="rawValue">The raw string which may contain tokens.</param>
         /// <param name="tokenContext">The tokens available for this content pack.</param>
+        /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseTokenString(string rawValue, IContext tokenContext, out string error, out TokenString parsed)
+        private bool TryParseTokenString(string rawValue, IContext tokenContext, IMigration migrator, out string error, out TokenString parsed)
         {
             // parse
             parsed = new TokenString(rawValue, tokenContext);
+            if (!migrator.TryMigrate(ref parsed, out error))
+                return false;
 
             // validate unknown tokens
             if (parsed.InvalidTokens.Any())
@@ -776,10 +738,11 @@ namespace ContentPatcher
         /// <param name="pack">The content pack being loaded.</param>
         /// <param name="path">The asset path in the content patch.</param>
         /// <param name="tokenContext">The tokens available for this content pack.</param>
+        /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
         /// <param name="error">The error reason if preparing the asset fails.</param>
         /// <param name="tokenedPath">The parsed value.</param>
         /// <returns>Returns whether the local asset was successfully prepared.</returns>
-        private bool TryPrepareLocalAsset(ManagedContentPack pack, string path, IContext tokenContext, out string error, out TokenString tokenedPath)
+        private bool TryPrepareLocalAsset(ManagedContentPack pack, string path, IContext tokenContext, IMigration migrator, out string error, out TokenString tokenedPath)
         {
             // normalise raw value
             path = this.NormaliseLocalAssetPath(pack, path);
@@ -791,7 +754,7 @@ namespace ContentPatcher
             }
 
             // tokenise
-            if (!this.TryParseTokenString(path, tokenContext, out string tokenError, out tokenedPath))
+            if (!this.TryParseTokenString(path, tokenContext, migrator, out string tokenError, out tokenedPath))
             {
                 error = $"the {nameof(PatchConfig.FromFile)} is invalid: {tokenError}";
                 tokenedPath = null;

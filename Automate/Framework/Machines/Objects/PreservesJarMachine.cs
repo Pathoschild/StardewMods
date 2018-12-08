@@ -1,17 +1,18 @@
 using Microsoft.Xna.Framework;
+using StardewValley;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A preserves jar that accepts input and provides output.</summary>
     /// <remarks>See the game's machine logic in <see cref="SObject.performObjectDropInAction"/> and <see cref="SObject.checkForAction"/>.</remarks>
-    internal class PreservesJarMachine : GenericMachine
+    internal class PreservesJarMachine : GenericObjectMachine<SObject>
     {
         /*********
         ** Properties
         *********/
         /// <summary>The recipes to process.</summary>
-        private readonly Recipe[] Recipes =
+        private readonly IRecipe[] Recipes =
         {
             // fruit => jelly
             new Recipe(
@@ -57,8 +58,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
-        public PreservesJarMachine(SObject machine)
-            : base(machine) { }
+        /// <param name="location">The location containing the machine.</param>
+        public PreservesJarMachine(SObject machine, GameLocation location)
+            : base(machine, location) { }
 
         /// <summary>Provide input to the machine.</summary>
         /// <param name="input">The available items.</param>

@@ -11,6 +11,7 @@
     <AssemblyName>Pathoschild.Stardew.Tests.Mods</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <LangVersion>latest</LangVersion>
     <EnableModDeploy>False</EnableModDeploy>
     <EnableModZip>False</EnableModZip>
     <CopyModReferencesToBuildOutput>True</CopyModReferencesToBuildOutput>

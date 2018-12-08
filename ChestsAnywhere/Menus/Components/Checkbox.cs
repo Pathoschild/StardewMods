@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="value">The initial value.</param>
-        public Checkbox(bool value)
+        public Checkbox(bool value = false)
         {
             this.Value = value;
         }

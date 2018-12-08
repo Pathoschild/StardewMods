@@ -20,7 +20,8 @@
   // button labels
   "button.edit-chest": "edit chest",
   "button.sort-inventory": "sort inventory",
-  "button.ok": "OK",
+  "button.save": "save",
+  "button.reset": "reset",
 
   // errors
   "errors.disabled-from-here": "You can't access chests from here.",

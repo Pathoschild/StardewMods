@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.8.2
+* Updated for the upcoming SMAPI 3.0.
+
 ## 1.8.1
 * Updated for Stardew Valley 1.3.32.
 

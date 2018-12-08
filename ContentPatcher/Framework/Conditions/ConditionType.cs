@@ -12,6 +12,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The <see cref="System.DayOfWeek"/> name.</summary>
         DayOfWeek,
 
+        /// <summary>The total number of days played in the current save.</summary>
+        DaysPlayed,
+
         /// <summary>The farm cave type.</summary>
         FarmCave,
 
@@ -63,6 +66,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>An event ID the player saw.</summary>
         HasSeenEvent,
 
+        /// <summary>The special items in the player's wallet.</summary>
+        HasWalletItem,
+
         /// <summary>The current player's internal spouse name (if any).</summary>
         Spouse,
 
@@ -74,6 +80,9 @@ namespace ContentPatcher.Framework.Conditions
 
         /// <summary>The current player's relationship status with the character (matching <see cref="StardewValley.FriendshipStatus"/>)</summary>
         Relationship,
+
+        /// <summary>The current player's level for a skill.</summary>
+        SkillLevel,
 
         /****
         ** Magic conditions

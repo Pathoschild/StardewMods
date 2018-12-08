@@ -52,7 +52,7 @@ namespace ContentPatcher.Framework.Tokens
 
             if (name.HasSubkey())
             {
-                bool hasProfession = Enum.TryParse(name.Subkey, true, out Profession profession) && this.Professions.Contains(profession);
+                bool hasProfession = this.TryParseEnum(name.Subkey, out Profession profession, mustBeNamed: false) && this.Professions.Contains(profession);
                 yield return hasProfession.ToString();
             }
             else
@@ -91,7 +91,7 @@ namespace ContentPatcher.Framework.Tokens
         {
             foreach (string value in values)
             {
-                if (!Enum.TryParse(value, true, out Profession _)) // either a defined Profession constant or arbitrary int value are OK
+                if (!this.TryParseEnum(value, out Profession _, mustBeNamed: false))
                     yield return value;
             }
         }

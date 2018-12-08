@@ -1,6 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.20.1
+* Updated for the upcoming SMAPI 3.0.
+* Improved translations. Thanks to Nanogamer7 (German)!
+
 ## 1.20
 * Added support for looking up a load-game slot.
 * Added farm type to player lookup.

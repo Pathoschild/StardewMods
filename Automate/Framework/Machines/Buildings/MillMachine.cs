@@ -9,19 +9,16 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 {
     /// <summary>A mill machine that accepts input and provides output.</summary>
-    internal class MillMachine : IMachine
+    internal class MillMachine : BaseMachine<Mill>
     {
         /*********
         ** Properties
         *********/
-        /// <summary>The underlying mill.</summary>
-        private readonly Mill Mill;
-
         /// <summary>The mill's input chest.</summary>
-        private Chest Input => this.Mill.input.Value;
+        private Chest Input => this.Machine.input.Value;
 
         /// <summary>The mill's output chest.</summary>
-        private Chest Output => this.Mill.output.Value;
+        private Chest Output => this.Machine.output.Value;
 
         /// <summary>The maximum input stack size to allow per item ID, if different from <see cref="Item.maximumStackSize"/>.</summary>
         private readonly IDictionary<int, int> MaxInputStackSize;
@@ -32,9 +29,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="mill">The underlying mill.</param>
-        public MillMachine(Mill mill)
+        /// <param name="location">The location which contains the machine.</param>
+        public MillMachine(Mill mill, GameLocation location)
+            : base(mill, location, BaseMachine.GetTileAreaFor(mill))
         {
-            this.Mill = mill;
             this.MaxInputStackSize = new Dictionary<int, int>
             {
                 [284] = new SObject(284, 1).maximumStackSize() / 3 // beet => 3 sugar (reduce stack to avoid overfilling output)
@@ -42,7 +40,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         }
 
         /// <summary>Get the machine's processing state.</summary>
-        public MachineState GetState()
+        public override MachineState GetState()
         {
             if (this.Output.items.Any(item => item != null))
                 return MachineState.Done;
@@ -52,7 +50,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         }
 
         /// <summary>Get the output item.</summary>
-        public ITrackedStack GetOutput()
+        public override ITrackedStack GetOutput()
         {
             IList<Item> inventory = this.Output.items;
             return new TrackedItem(inventory.FirstOrDefault(item => item != null), onEmpty: this.OnOutputTaken);
@@ -61,7 +59,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Provide input to the machine.</summary>
         /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
-        public bool SetInput(IStorage input)
+        public override bool SetInput(IStorage input)
         {
             if (this.InputFull())
                 return false;

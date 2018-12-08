@@ -62,8 +62,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.ShippingBin = farm.shippingBin;
             this.IsDataEditable = Context.IsMainPlayer;
             this.Data = this.IsDataEditable
-                ? dataHelper.ReadSaveData<ContainerData>(this.DataKey) ?? new ContainerData(defaultDisplayName: null)
-                : new ContainerData(defaultDisplayName: null);
+                ? dataHelper.ReadSaveData<ContainerData>(this.DataKey) ?? new ContainerData(defaultInternalName: null)
+                : new ContainerData(defaultInternalName: null);
         }
 
         /// <summary>Get whether the inventory can accept the item type.</summary>

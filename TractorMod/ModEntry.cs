@@ -48,6 +48,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The minimum version the host must have for the mod to be enabled on a farmhand.</summary>
         private readonly string MinHostVersion = "4.7-alpha.2";
 
+        /// <summary>The absolute path to legacy mod data for the current save.</summary>
+        private string LegacySaveDataRelativePath => Path.Combine("data", $"{Constants.SaveFolderName}.json");
+
         /****
         ** State
         ****/
@@ -106,6 +109,8 @@ namespace Pathoschild.Stardew.TractorMod
                 events.Display.Rendered += this.OnRendered;
             events.Display.MenuChanged += this.OnMenuChanged;
             events.Input.ButtonPressed += this.OnButtonPressed;
+            events.World.NpcListChanged += this.OnNpcListChanged;
+            events.World.LocationListChanged += this.OnLocationListChanged;
             events.GameLoop.UpdateTicked += this.OnUpdateTicked;
 
             // validate translations
@@ -218,6 +223,63 @@ namespace Pathoschild.Stardew.TractorMod
             }
         }
 
+        /// <summary>The event called after the location list changes.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnLocationListChanged(object sender, LocationListChangedEventArgs e)
+        {
+            if (!this.IsEnabled)
+                return;
+
+            // rescue lost tractors
+            if (Context.IsMainPlayer)
+            {
+                foreach (GameLocation location in e.Removed)
+                {
+                    foreach (Horse tractor in this.GetTractorsIn(location).ToArray())
+                        TractorManager.SetLocation(tractor, Game1.getFarm(), tractor.DefaultPosition);
+                }
+            }
+        }
+
+        /// <summary>The event called after the list of NPCs in a location changes.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnNpcListChanged(object sender, NpcListChangedEventArgs e)
+        {
+            if (!this.IsEnabled)
+                return;
+
+            // workaround for mines not spawning a ladder on monster levels
+            if (e.Location is MineShaft mine && object.ReferenceEquals(e.Location, Game1.currentLocation))
+            {
+                if (mine.mustKillAllMonstersToAdvance() && mine.characters.All(p => p is Horse))
+                {
+                    IReflectedField<bool> hasLadder = this.Helper.Reflection.GetField<bool>(mine, "ladderHasSpawned");
+                    if (!hasLadder.GetValue())
+                    {
+                        mine.createLadderAt(mine.mineEntrancePosition(Game1.player));
+                        hasLadder.SetValue(true);
+                    }
+                }
+            }
+
+            // workaround for instantly-built tractors spawning a horse
+            if (Context.IsMainPlayer && e.Location is BuildableGameLocation buildableLocation)
+            {
+                Horse[] tractors = e.Added.OfType<Horse>().ToArray();
+                if (tractors.Any())
+                {
+                    HashSet<Guid> tractorIDs = new HashSet<Guid>(buildableLocation.buildings.OfType<Stable>().Select(p => p.HorseId));
+                    foreach (Horse tractor in tractors)
+                    {
+                        if (tractorIDs.Contains(tractor.HorseId))
+                            tractor.Name = TractorManager.GetTractorName(tractor.HorseId);
+                    }
+                }
+            }
+        }
+
         /// <summary>The event called when the game updates (roughly sixty times per second).</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -227,7 +289,7 @@ namespace Pathoschild.Stardew.TractorMod
                 return;
 
             // multiplayer: override textures in the current location
-            if (Context.IsWorldReady && Context.IsMultiplayer && Game1.currentLocation != null)
+            if (Context.IsWorldReady && Game1.currentLocation != null)
             {
                 uint updateRate = Game1.currentLocation.farmers.Count > 1 ? this.TextureUpdateRateWithMultiplePlayers : this.TextureUpdateRateWithSinglePlayer;
                 if (e.IsMultipleOf(updateRate))
@@ -302,7 +364,7 @@ namespace Pathoschild.Stardew.TractorMod
             if (Context.IsMainPlayer)
             {
                 // remove legacy file (pre-4.6)
-                FileInfo legacyFile = new FileInfo($"data/{Constants.SaveFolderName}.json");
+                FileInfo legacyFile = new FileInfo(Path.Combine(this.Helper.DirectoryPath, this.LegacySaveDataRelativePath));
                 if (legacyFile.Exists)
                     legacyFile.Delete();
 
@@ -414,7 +476,7 @@ namespace Pathoschild.Stardew.TractorMod
             // get save data
             LegacySaveData saveData = this.Helper.Data.ReadSaveData<LegacySaveData>("tractors"); // 4.6
             if (saveData?.Buildings == null)
-                saveData = this.Helper.Data.ReadJsonFile<LegacySaveData>($"data/{Constants.SaveFolderName}.json"); // pre-4.6
+                saveData = this.Helper.Data.ReadJsonFile<LegacySaveData>(this.LegacySaveDataRelativePath); // pre-4.6
             if (saveData?.Buildings == null)
                 return;
 
@@ -448,7 +510,7 @@ namespace Pathoschild.Stardew.TractorMod
         {
             GameLocation[] mainLocations = (Context.IsMainPlayer ? Game1.locations : this.Helper.Multiplayer.GetActiveLocations()).ToArray();
 
-            foreach (GameLocation location in mainLocations)
+            foreach (GameLocation location in mainLocations.Concat(MineShaft.activeMines))
             {
                 yield return location;
 

@@ -20,7 +20,8 @@
   // button labels
   "button.edit-chest": "编辑箱子",
   "button.sort-inventory": "清单排序",
-  "button.ok": "OK",
+  "button.save": "save", // TODO
+  "button.reset": "reset", // TODO
 
   // errors
   // TODO

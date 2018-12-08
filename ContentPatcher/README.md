@@ -70,9 +70,6 @@ whether one of these would work for you:
   * [Custom Shirts](https://www.nexusmods.com/stardewvalley/mods/2416) to add shirts.
   * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add items and fruit trees.
 
-### Known limitations
-* Map files can't currently be conditional.
-
 ## Create a content pack
 ### Overview
 A content pack is a folder with these files:
@@ -84,7 +81,7 @@ The `content.json` file has three main fields:
 
 field          | purpose
 -------------- | -------
-`Format`       | The format version (just use `1.5`).
+`Format`       | The format version (just use `1.6`).
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
 `ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-config).
 
@@ -92,7 +89,7 @@ Here's a quick example of each possible patch type (explanations below):
 
 ```js
 {
-  "Format": "1.5",
+  "Format": "1.6",
   "Changes": [
        // replace an entire file
        {
@@ -322,6 +319,11 @@ The day of week. Possible values: `Monday`, `Tuesday`, `Wednesday`, `Thursday`, 
 </tr>
 
 <tr valign="top">
+<td>DaysPlayed</td>
+<td>The total number of in-game days played for the current save (starting from one when the first day starts).</td>
+</tr>
+
+<tr valign="top">
 <td>FarmCave</td>
 <td>
 
@@ -408,7 +410,15 @@ The season name. Possible values: `Spring`, `Summer`, `Fall`, and `Winter`.
 <td>Weather</td>
 <td>
 
-The weather name. Possible values: `Sun`, `Rain`, `Snow`, and `Storm`.
+The weather type. Possible values:
+
+value   | meaning
+------- | -------
+`Sun`   | The weather is sunny (including festival/wedding days). This is the default weather if no other value applies.
+`Rain`  | Rain is falling, but without lightning.
+`Storm` | Rain is falling with lightning.
+`Snow`  | Snow is falling.
+`Wind`  | The wind is blowing with visible debris (e.g. flower petals in spring and leaves in fall).
 
 </td>
 </tr>
@@ -438,7 +448,7 @@ placeholders:
 Whether a file exists in the content pack folder. The file path must be specified as part of the key,
 and may contain tokens. Returns `true` or `false`. For example:
 
-```json
+```js
 "When": {
   "HasFile:assets/{{season}}.png": "true"
 }
@@ -460,6 +470,28 @@ The [professions](https://stardewvalleywiki.com/Skills) learned by the player. P
 * Mining skill: `Blacksmith`, `Excavator`, `Gemologist`, `Geologist`, `Miner`, `Prospector`.
 
 Custom professions added by a mod are represented by their integer profession ID.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>HasWalletItem</td>
+<td>
+
+The [special items in the player wallet](https://stardewvalleywiki.com/Wallet). Possible values:
+
+flag                       | meaning
+-------------------------- | -------
+`DwarvishTranslationGuide` | Unlocks speaking to the Dwarf.
+`RustyKey`                 | Unlocks the sewers.
+`ClubCard`                 | Unlocks the desert casino.
+`SpecialCharm`             | Permanently increases daily luck.
+`SkullKey`                 | Unlocks the Skull Cavern in the desert, and the Junimo Kart machine in the Stardrop Saloon.
+`MagnifyingGlass`          | Unlocks the ability to find secret notes.
+`DarkTalisman`             | Unlocks the Witch's Swamp.
+`MagicInk`                 | Unlocks magical buildings through the Wizard, and the dark shrines in the Witch's Swamp.
+`BearsKnowledge`           | Increases sell price of blackberries and salmonberries.
+`SpringOnionMastery`       | Increases sell price of spring onions.
 
 </td>
 </tr>
@@ -515,12 +547,20 @@ The event IDs the player has seen, matching IDs in the `Data\Events` files. (You
 <td>Hearts</td>
 <td>
 
-The player's heart level with a given NPC. You must specify the character name as part of the key
+The player's heart level with a given NPC. You can specify the character name as part of the key
 (using their English name regardless of translations), like this:
 
-```json
+```js
 "When": {
    "Hearts:Abigail": "10, 11, 12, 13"
+}
+```
+
+Or you can match against multiple NPCs like this:
+
+```js
+"When": {
+   "Hearts": "Abigail:10, Leah:10" // 10 hearts with Abigail or Leah
 }
 ```
 
@@ -531,12 +571,20 @@ The player's heart level with a given NPC. You must specify the character name a
 <td>Relationship</td>
 <td>
 
-The player's relationship with a given NPC or player. You must specify the character name as part
+The player's relationship with a given NPC or player. You can specify the character name as part
 of the key (using their English name regardless of translations), like this:
 
-```json
+```js
 "When": {
    "Relationship:Abigail": "Married"
+}
+```
+
+Or you can match against multiple NPCs like this:
+
+```js
+"When": {
+   "Relationship": "Abigail:Married, Leah:Married" // married Abigail or Leah
 }
 ```
 
@@ -549,6 +597,31 @@ Dating   | The player gave them a bouquet.
 Engaged  | The player gave them a mermaid's pendant, but the marriage hasn't happened yet.
 Married  | The player married them.
 Divorced | The player married and then divorced them.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>SkillLevel</td>
+<td>
+
+The player's skill levels. You can specify the skill level as part of the key like this:
+
+```js
+"When": {
+   "SkillLevel:Combat": "1, 2, 3" // combat level 1, 2, or 3
+}
+```
+
+Or you can match against multiple skills like this:
+
+```js
+"When": {
+   "SkillLevel": "Combat:1, Farming:2" // combat level 1 or farming level 2
+}
+```
+
+The valid skills are `Combat`, `Farming`, `Fishing`, `Foraging`, `Luck` (unused in the base game), and `Mining`.
 
 </td>
 </tr>
@@ -589,7 +662,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-    "Format": "1.5",
+    "Format": "1.6",
     "DynamicTokens": [
         {
             "Name": "Style",
@@ -634,7 +707,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-    "Format": "1.5",
+    "Format": "1.6",
     "ConfigSchema": {
         "Material": {
             "AllowValues": "Wood, Metal"

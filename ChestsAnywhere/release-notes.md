@@ -1,6 +1,14 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.15
+* Added button to reset a chest's options.
+* Updated for the upcoming SMAPI 3.0.
+* Fixed fridge listed as 'chest'.
+* Fixed chest category defaulting to chest name in some cases.
+* Fixed chest options not saved in rare cases.
+* Improved translations. Thanks to Nanogamer7 (German)!
+
 ## 1.14.1
 * Disabled shipping bin editing for non-main players (only possible from the host).
 
