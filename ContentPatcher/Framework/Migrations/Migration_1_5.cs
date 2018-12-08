@@ -52,7 +52,7 @@ namespace ContentPatcher.Framework.Migrations
             foreach (PatchConfig patch in content.Changes)
             {
                 // 1.5 adds multiple Target values
-                if (patch.Target.Contains(","))
+                if (patch.Target?.Contains(",") == true)
                 {
                     error = this.GetNounPhraseError($"specifying multiple {nameof(PatchConfig.Target)} values");
                     return false;
