@@ -1,5 +1,5 @@
 # Release notes
-## Upcoming release
+## 4.7.1
 * Fixed tractor getting lost in the mines when players cruelly abandon it.
 * Fixed tractor/garage looking like a horse/stable in some cases.
 * Fixed mines not spawning a ladder on infestation levels if the tractor is present.
