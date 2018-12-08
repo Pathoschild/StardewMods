@@ -12,13 +12,13 @@
 
   // coverage: Junimo huts
   "junimo-huts.name": "Abdeckung: Junimo-Hütten",
-  "junimo-huts.can-harvest": "Abbaubar",
-  "junimo-huts.cannot-harvest": "Nicht abbaubar",
+  "junimo-huts.can-harvest": "Kann ernten",
+  "junimo-huts.cannot-harvest": "Kann nicht ernten",
 
   // coverage: scarecrows
   "scarecrows.name": "Abdeckung: Vogelscheuchen",
   "scarecrows.protected": "Geschützt",
-  "scarecrows.exposed": "Exponiert",
+  "scarecrows.exposed": "Ungeschützt",
 
   // coverage: sprinklers
   "sprinklers.name": "Abdeckung: Sprenkler",
@@ -43,9 +43,8 @@
   "crop-fertilizer.speed-gro": "Geschwind-Wachs",
 
   // machine processing
-  // TODO
-  "machines.name": "Machine Processing",
-  "machines.empty": "Empty",
-  "machines.processing": "Processing",
-  "machines.finished": "Finished"
+  "machines.name": "Maschinelle Verarbeitung",
+  "machines.empty": "Leer",
+  "machines.processing": "Arbeitet",
+  "machines.finished": "Fertig"
 }
