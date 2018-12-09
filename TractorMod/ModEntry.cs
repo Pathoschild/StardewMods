@@ -267,14 +267,14 @@ namespace Pathoschild.Stardew.TractorMod
             // workaround for instantly-built tractors spawning a horse
             if (Context.IsMainPlayer && e.Location is BuildableGameLocation buildableLocation)
             {
-                Horse[] tractors = e.Added.OfType<Horse>().ToArray();
-                if (tractors.Any())
+                Horse[] horses = e.Added.OfType<Horse>().ToArray();
+                if (horses.Any())
                 {
-                    HashSet<Guid> tractorIDs = new HashSet<Guid>(buildableLocation.buildings.OfType<Stable>().Select(p => p.HorseId));
-                    foreach (Horse tractor in tractors)
+                    HashSet<Guid> tractorIDs = new HashSet<Guid>(this.GetGaragesIn(buildableLocation).Select(p => p.HorseId));
+                    foreach (Horse horse in horses)
                     {
-                        if (tractorIDs.Contains(tractor.HorseId))
-                            tractor.Name = TractorManager.GetTractorName(tractor.HorseId);
+                        if (tractorIDs.Contains(horse.HorseId))
+                            horse.Name = TractorManager.GetTractorName(horse.HorseId);
                     }
                 }
             }
