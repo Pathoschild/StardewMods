@@ -1,7 +1,7 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.6.1
 * Fixed error when a content pack has a patch with no `Target` field.
 * Fixed some conditions using subkeys marked invalid incorrectly.
 
