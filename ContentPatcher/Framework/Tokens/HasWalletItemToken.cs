@@ -73,38 +73,17 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
-        /// <summary>Perform custom validation on a set of input values.</summary>
-        /// <param name="values">The values to validate.</param>
-        /// <param name="error">The validation error, if any.</param>
-        /// <returns>Returns whether validation succeeded.</returns>
-        public override bool TryCustomValidation(InvariantHashSet values, out string error)
+        /// <summary>Get the allowed subkeys (or <c>null</c> if any value is allowed).</summary>
+        protected override InvariantHashSet GetAllowedSubkeys()
         {
-            if (!base.TryCustomValidation(values, out error))
-                return false;
-
-            string[] invalidValues = this.GetInvalidValues(values).ToArray();
-            if (invalidValues.Any())
-            {
-                error = $"can't parse some values ({string.Join(", ", invalidValues)}) as wallet items; must be one of [{string.Join(", ", Enum.GetNames(typeof(WalletItem)).OrderByIgnoreCase(p => p))}].";
-                return false;
-            }
-
-            return true;
+            return new InvariantHashSet(this.WalletItems.Keys.Select(p => p.ToString()));
         }
 
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Get the values which can't be parsed as a profession ID.</summary>
-        /// <param name="values">The values to check.</param>
-        private IEnumerable<string> GetInvalidValues(IEnumerable<string> values)
+        /// <summary>Get the allowed values for a token name (or <c>null</c> if any value is allowed).</summary>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
+        public override InvariantHashSet GetAllowedValues(TokenName name)
         {
-            foreach (string value in values)
-            {
-                if (!this.TryParseEnum(value, out WalletItem item) || !this.WalletItems.ContainsKey(item))
-                    yield return value;
-            }
+            return new InvariantHashSet(this.WalletItems.Keys.Select(p => p.ToString()));
         }
     }
 }

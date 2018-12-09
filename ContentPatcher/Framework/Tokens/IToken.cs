@@ -38,11 +38,12 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="name">The token name.</param>
         bool CanHaveMultipleValues(TokenName name);
 
-        /// <summary>Perform custom validation on a set of input values.</summary>
+        /// <summary>Perform custom validation.</summary>
+        /// <param name="name">The token name to validate.</param>
         /// <param name="values">The values to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        bool TryCustomValidation(InvariantHashSet values, out string error);
+        bool TryValidate(TokenName name, InvariantHashSet values, out string error);
 
         /// <summary>Get the current subkeys (if supported).</summary>
         IEnumerable<TokenName> GetSubkeys();

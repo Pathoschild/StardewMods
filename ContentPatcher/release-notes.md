@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed error when a content pack has a patch with no `Target` field.
+* Fixed some conditions using subkeys marked invalid incorrectly.
 
 ## 1.6
 * Added new tokens:
