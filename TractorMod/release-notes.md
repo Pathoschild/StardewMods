@@ -1,6 +1,7 @@
 # Release notes
 ## Upcoming release
 * Fixed horses becoming tractors in some cases. (If you saved after that happened, [see this forum comment](https://community.playstarbound.com/threads/tractor-mod.136649/page-14#post-3319770)).
+* Fixed tractors sometimes not in their garage after loading a save.
 
 ## 4.7.1
 * Fixed tractor getting lost in the mines when players cruelly abandon it.

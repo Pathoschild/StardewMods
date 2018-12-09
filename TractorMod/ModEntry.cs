@@ -205,10 +205,16 @@ namespace Pathoschild.Stardew.TractorMod
                     {
                         // spawn new tractor if needed
                         Horse tractor = this.FindHorse(garage.HorseId);
-                        if (tractor == null && !garage.isUnderConstruction())
+                        if (!garage.isUnderConstruction())
                         {
-                            tractor = new Horse(garage.HorseId, garage.tileX.Value + 1, garage.tileY.Value + 1);
-                            location.addCharacter(tractor);
+                            int x = garage.tileX.Value + 1;
+                            int y = garage.tileY.Value + 1;
+                            if (tractor == null)
+                            {
+                                tractor = new Horse(garage.HorseId, x, y);
+                                location.addCharacter(tractor);
+                            }
+                            tractor.DefaultPosition = new Vector2(x, y);
                         }
 
                         // normalise tractor
@@ -273,7 +279,7 @@ namespace Pathoschild.Stardew.TractorMod
                     HashSet<Guid> tractorIDs = new HashSet<Guid>(this.GetGaragesIn(buildableLocation).Select(p => p.HorseId));
                     foreach (Horse horse in horses)
                     {
-                        if (tractorIDs.Contains(horse.HorseId))
+                        if (tractorIDs.Contains(horse.HorseId) && !TractorManager.IsTractor(horse))
                             horse.Name = TractorManager.GetTractorName(horse.HorseId);
                     }
                 }
