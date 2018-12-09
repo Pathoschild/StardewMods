@@ -584,26 +584,10 @@ namespace ContentPatcher
                     return false;
                 }
 
-                // restrict to allowed values
-                InvariantHashSet rawValidValues = token.GetAllowedValues(name);
-                if (rawValidValues?.Any() == true)
+                // validate token keys & values
+                if (!token.TryValidate(name, values, out string customError))
                 {
-                    InvariantHashSet validValues = new InvariantHashSet(rawValidValues);
-                    {
-                        string[] invalidValues = values.ExceptIgnoreCase(validValues).ToArray();
-                        if (invalidValues.Any())
-                        {
-                            error = $"invalid {name} values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", validValues)}";
-                            conditions = null;
-                            return false;
-                        }
-                    }
-                }
-
-                // perform custom validation
-                if (!token.TryCustomValidation(values, out string customError))
-                {
-                    error = $"invalid {name} values: {customError}";
+                    error = $"invalid {name} condition: {customError}";
                     conditions = null;
                     return false;
                 }

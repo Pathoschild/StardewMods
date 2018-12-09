@@ -54,6 +54,12 @@ namespace ContentPatcher.Framework.Tokens
                 yield return new TokenName(ConditionType.SkillLevel, skill.ToString());
         }
 
+        /// <summary>Get the allowed subkeys (or <c>null</c> if any value is allowed).</summary>
+        protected override InvariantHashSet GetAllowedSubkeys()
+        {
+            return new InvariantHashSet(Enum.GetNames(typeof(Skill)));
+        }
+
         /// <summary>Get the current token values.</summary>
         /// <param name="name">The token name to check.</param>
         /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
@@ -70,40 +76,6 @@ namespace ContentPatcher.Framework.Tokens
             {
                 foreach (var pair in this.SkillLevels)
                     yield return $"{pair.Key}:{pair.Value}";
-            }
-        }
-
-        /// <summary>Perform custom validation on a set of input values.</summary>
-        /// <param name="values">The values to validate.</param>
-        /// <param name="error">The validation error, if any.</param>
-        /// <returns>Returns whether validation succeeded.</returns>
-        public override bool TryCustomValidation(InvariantHashSet values, out string error)
-        {
-            if (!base.TryCustomValidation(values, out error))
-                return false;
-
-            string[] invalidValues = this.GetInvalidValues(values).ToArray();
-            if (invalidValues.Any())
-            {
-                error = $"can't parse some values ({string.Join(", ", invalidValues)}) as skill types; must be a predefined name ({string.Join(", ", Enum.GetNames(typeof(Skill)).OrderByIgnoreCase(p => p))}).";
-                return false;
-            }
-
-            return true;
-        }
-
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Get the values which can't be parsed as a profession ID.</summary>
-        /// <param name="values">The values to check.</param>
-        private IEnumerable<string> GetInvalidValues(IEnumerable<string> values)
-        {
-            foreach (string value in values)
-            {
-                if (!this.TryParseEnum(value, out Skill _))
-                    yield return value;
             }
         }
     }

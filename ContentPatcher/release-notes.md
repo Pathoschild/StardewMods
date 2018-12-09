@@ -1,6 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.6.1
+* Fixed error when a content pack has a patch with no `Target` field.
+* Fixed some conditions using subkeys marked invalid incorrectly.
+
 ## 1.6
 * Added new tokens:
   * `DaysPlayed`: the number of in-game days played for the current save.
@@ -9,7 +13,7 @@
 * Added `Wind` value for `Weather` token.
 * Added support for matching subkey/value pairs like `"Relationship": "Abigail:Married, Marnie:Friend"`.
 * Added support for conditional map edits (via SMAPI 2.9).
-* Added support editing `Data\NPCDispositions` after the NPC is already created (via SMAPI 2.9).
+* Added support for editing `Data\NPCDispositions` after the NPC is already created (via SMAPI 2.9).
 * Improved performance for most content packs.
 * Improved `patch summary` format.
 * Updated for the upcoming SMAPI 3.0.
@@ -17,7 +21,7 @@
 * Fixed token strings not validated for format version compatibility.
 * Fixed some 1.5 tokens not validated for format version compatibility.
 
-**Update note:**
+**Update note for mod authors:**
 * The `Weather` token now returns `Wind` on windy days instead of `Sun`. Existing content packs with `"Format": "1.5"` or earlier should work fine, since Content Patcher will adjust their conditions. Content packs which target version 1.6 or later should handle the new weather value.
 
 ## 1.5.3

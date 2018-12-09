@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
@@ -53,12 +54,67 @@ namespace ContentPatcher.Framework.Tokens
                 : this.CanHaveMultipleRootValues;
         }
 
-        /// <summary>Perform custom validation on a set of input values.</summary>
+        /// <summary>Perform custom validation.</summary>
+        /// <param name="name">The token name to validate.</param>
         /// <param name="values">The values to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public virtual bool TryCustomValidation(InvariantHashSet values, out string error)
+        public virtual bool TryValidate(TokenName name, InvariantHashSet values, out string error)
         {
+            // parse data
+            KeyValuePair<TokenName, string>[] pairs = this.GetSubkeyValuePairsFor(name, values).ToArray();
+
+            // restrict to allowed subkeys
+            if (this.CanHaveSubkeys)
+            {
+                InvariantHashSet validKeys = this.GetAllowedSubkeys();
+                if (validKeys != null)
+                {
+                    string[] invalidSubkeys =
+                        (
+                            from pair in pairs
+                            where pair.Key.Subkey != null && !validKeys.Contains(pair.Key.Subkey)
+                            select pair.Key.Subkey
+                        )
+                        .Distinct()
+                        .ToArray();
+                    if (invalidSubkeys.Any())
+                    {
+                        error = $"invalid subkeys ({string.Join(", ", invalidSubkeys)}); expected one of {string.Join(", ", validKeys)}";
+                        return false;
+                    }
+                }
+            }
+
+            // restrict to allowed values
+            {
+                InvariantHashSet validValues = this.GetAllowedValues(name);
+                if (validValues?.Any() == true)
+                {
+                    string[] invalidValues =
+                        (
+                            from pair in pairs
+                            where !validValues.Contains(pair.Value)
+                            select pair.Value
+                        )
+                        .Distinct()
+                        .ToArray();
+                    if (invalidValues.Any())
+                    {
+                        error = $"invalid values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", validValues)}";
+                        return false;
+                    }
+                }
+            }
+
+            // custom validation
+            foreach (KeyValuePair<TokenName, string> pair in pairs)
+            {
+                if (!this.TryValidate(pair.Key, pair.Value, out error))
+                    return false;
+            }
+
+            // no issues found
             error = null;
             return true;
         }
@@ -103,6 +159,23 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="canHaveMultipleRootValues">Whether the root token may contain multiple values.</param>
         protected BaseToken(string name, bool canHaveMultipleRootValues)
             : this(TokenName.Parse(name), canHaveMultipleRootValues) { }
+
+        /// <summary>Get the allowed subkeys (or <c>null</c> if any value is allowed).</summary>
+        protected virtual InvariantHashSet GetAllowedSubkeys()
+        {
+            return null;
+        }
+
+        /// <summary>Perform custom validation on a subkey/value pair.</summary>
+        /// <param name="name">The token name to validate.</param>
+        /// <param name="value">The value to validate.</param>
+        /// <param name="error">The validation error, if any.</param>
+        /// <returns>Returns whether validation succeeded.</returns>
+        public virtual bool TryValidate(TokenName name, string value, out string error)
+        {
+            error = null;
+            return true;
+        }
 
         /// <summary>Enable subkeys for this token.</summary>
         /// <param name="required">Whether a subkey is required when using this token.</param>
@@ -151,6 +224,33 @@ namespace ContentPatcher.Framework.Tokens
                 return false;
 
             return true;
+        }
+
+        /// <summary>Get the subkey/value pairs used in the given name and values.</summary>
+        /// <param name="name">The token name to validate.</param>
+        /// <param name="values">The values to validate.</param>
+        /// <returns>Returns the subkey/value pairs found. If the <paramref name="name"/> includes a subkey, the <paramref name="values"/> are treated as values of that subkey. Otherwise if <see cref="CanHaveSubkeys"/> is true, then each value is treated as <c>subkey:value</c> (if they contain a colon) or <c>value</c> (with a null subkey).</returns>
+        protected IEnumerable<KeyValuePair<TokenName, string>> GetSubkeyValuePairsFor(TokenName name, InvariantHashSet values)
+        {
+            // no subkeys in values
+            if (!this.CanHaveSubkeys || name.HasSubkey())
+            {
+                foreach (string value in values)
+                    yield return new KeyValuePair<TokenName, string>(name, value);
+            }
+
+            // possible subkeys in values
+            else
+            {
+                foreach (string value in values)
+                {
+                    string[] parts = value.Split(new[] { ':' }, 2);
+                    if (parts.Length < 2)
+                        yield return new KeyValuePair<TokenName, string>(name, parts[0]);
+                    else
+                        yield return new KeyValuePair<TokenName, string>(new TokenName(name.Key, parts[0]), parts[1]);
+                }
+            }
         }
     }
 }

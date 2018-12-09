@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
-using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -62,38 +60,26 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
-        /// <summary>Perform custom validation on a set of input values.</summary>
-        /// <param name="values">The values to validate.</param>
+        /// <summary>Perform custom validation on a subkey/value pair.</summary>
+        /// <param name="name">The token name to validate.</param>
+        /// <param name="value">The value to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public override bool TryCustomValidation(InvariantHashSet values, out string error)
+        public override bool TryValidate(TokenName name, string value, out string error)
         {
-            if (!base.TryCustomValidation(values, out error))
+            if (!base.TryValidate(name, value, out error))
                 return false;
 
-            string[] invalidValues = this.GetInvalidValues(values).ToArray();
-            if (invalidValues.Any())
+            // validate profession IDs
+            string profession = name.HasSubkey() ? name.Subkey : value;
+            if (!this.TryParseEnum(profession, out Profession _, mustBeNamed: false))
             {
-                error = $"can't parse some values ({string.Join(", ", invalidValues)}) as profession IDs; must be a predefined name ({string.Join(", ", Enum.GetNames(typeof(Profession)).OrderByIgnoreCase(p => p))}) or integer ID.";
+                error = $"can't parse '{profession}' as a profession ID; must be one of [{string.Join(", ", Enum.GetNames(typeof(Profession)).OrderByIgnoreCase(p => p))}] or an integer ID.";
                 return false;
             }
 
+            error = null;
             return true;
-        }
-
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Get the values which can't be parsed as a profession ID.</summary>
-        /// <param name="values">The values to check.</param>
-        private IEnumerable<string> GetInvalidValues(IEnumerable<string> values)
-        {
-            foreach (string value in values)
-            {
-                if (!this.TryParseEnum(value, out Profession _, mustBeNamed: false))
-                    yield return value;
-            }
         }
     }
 }
