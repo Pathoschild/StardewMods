@@ -63,7 +63,7 @@ namespace ContentPatcher.Framework.Tokens
         {
             // parse data
             KeyValuePair<TokenName, string>[] pairs = this.GetSubkeyValuePairsFor(name, values).ToArray();
-            
+
             // restrict to allowed subkeys
             if (this.CanHaveSubkeys)
             {

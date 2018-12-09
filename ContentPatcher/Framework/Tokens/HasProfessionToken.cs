@@ -67,6 +67,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <returns>Returns whether validation succeeded.</returns>
         public override bool TryValidate(TokenName name, string value, out string error)
         {
+            if (!base.TryValidate(name, value, out error))
+                return false;
+
             // validate profession IDs
             string profession = name.HasSubkey() ? name.Subkey : value;
             if (!this.TryParseEnum(profession, out Profession _, mustBeNamed: false))
