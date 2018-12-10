@@ -384,7 +384,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         {
                             Item item = this.Reflection.GetField<Item>(menu, "hoveredItem").GetValue();
                             if (item != null)
-                                return new ItemSubject(this.GameHelper, this.Translations, item.getOne(), ObjectContext.Inventory, knownQuality: true);
+                                return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
                         }
 
                         // list of required ingredients
@@ -438,7 +438,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     {
                         Item item = this.Reflection.GetField<Item>(menu, "hoveredItem").GetValue();
                         if (item != null)
-                            return new ItemSubject(this.GameHelper, this.Translations, item.getOne(), ObjectContext.Inventory, knownQuality: true);
+                            return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
                     }
                     break;
 
@@ -459,7 +459,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         // get hovered item
                         Item item = Game1.player.Items[index];
                         if (item != null)
-                            return new ItemSubject(this.GameHelper, this.Translations, item.getOne(), ObjectContext.Inventory, knownQuality: true);
+                            return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
                     }
                     break;
 
