@@ -210,6 +210,8 @@ namespace Pathoschild.Stardew.Automate.Framework
             // get object ID from fence ID
             if (obj is Fence fence)
             {
+                if (fence.isGate.Value)
+                    return 325;
                 switch (fence.whichType.Value)
                 {
                     case Fence.wood:

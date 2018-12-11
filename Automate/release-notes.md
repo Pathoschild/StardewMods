@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed gates not working as connectors.
+
 ## 1.11
 * Added API to support custom machines, containers, and connectors.
 * Updated for the upcoming SMAPI 3.0.
