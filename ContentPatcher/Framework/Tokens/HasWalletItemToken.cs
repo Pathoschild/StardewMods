@@ -49,6 +49,21 @@ namespace ContentPatcher.Framework.Tokens
             this.IsValidInContext = Context.IsWorldReady;
         }
 
+        /// <summary>Get the allowed subkeys (or <c>null</c> if any value is allowed).</summary>
+        protected override InvariantHashSet GetAllowedSubkeys()
+        {
+            return new InvariantHashSet(this.WalletItems.Keys.Select(p => p.ToString()));
+        }
+
+        /// <summary>Get the allowed values for a token name (or <c>null</c> if any value is allowed).</summary>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
+        public override InvariantHashSet GetAllowedValues(TokenName name)
+        {
+            return name.HasSubkey()
+                ? InvariantHashSet.Boolean()
+                : this.GetAllowedSubkeys();
+        }
+
         /// <summary>Get the current token values.</summary>
         /// <param name="name">The token name to check.</param>
         /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
@@ -71,19 +86,6 @@ namespace ContentPatcher.Framework.Tokens
                         yield return pair.Key.ToString();
                 }
             }
-        }
-
-        /// <summary>Get the allowed subkeys (or <c>null</c> if any value is allowed).</summary>
-        protected override InvariantHashSet GetAllowedSubkeys()
-        {
-            return new InvariantHashSet(this.WalletItems.Keys.Select(p => p.ToString()));
-        }
-
-        /// <summary>Get the allowed values for a token name (or <c>null</c> if any value is allowed).</summary>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
-        public override InvariantHashSet GetAllowedValues(TokenName name)
-        {
-            return new InvariantHashSet(this.WalletItems.Keys.Select(p => p.ToString()));
         }
     }
 }

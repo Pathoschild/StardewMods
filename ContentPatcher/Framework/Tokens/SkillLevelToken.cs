@@ -47,17 +47,17 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
+        /// <summary>Get the allowed subkeys (or <c>null</c> if any value is allowed).</summary>
+        protected override InvariantHashSet GetAllowedSubkeys()
+        {
+            return new InvariantHashSet(Enum.GetNames(typeof(Skill)));
+        }
+
         /// <summary>Get the current subkeys (if supported).</summary>
         public override IEnumerable<TokenName> GetSubkeys()
         {
             foreach (Skill skill in this.SkillLevels.Keys)
                 yield return new TokenName(ConditionType.SkillLevel, skill.ToString());
-        }
-
-        /// <summary>Get the allowed subkeys (or <c>null</c> if any value is allowed).</summary>
-        protected override InvariantHashSet GetAllowedSubkeys()
-        {
-            return new InvariantHashSet(Enum.GetNames(typeof(Skill)));
         }
 
         /// <summary>Get the current token values.</summary>

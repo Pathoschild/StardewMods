@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
 {
@@ -39,6 +40,15 @@ namespace ContentPatcher.Framework.Tokens
         {
             this.TokenContext = context;
             this.IsValidInContext = true;
+        }
+
+        /// <summary>Get the allowed values for a token name (or <c>null</c> if any value is allowed).</summary>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
+        public override InvariantHashSet GetAllowedValues(TokenName name)
+        {
+            return name.HasSubkey()
+                ? InvariantHashSet.Boolean()
+                : null;
         }
 
         /// <summary>Get the current token values.</summary>
