@@ -72,7 +72,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry" />.</summary>
         public override object GetApi()
         {
-            return new AutomateAPI(this.Factory, this.ActiveMachineGroups, this.DisabledMachineGroups);
+            return new AutomateAPI(this.Monitor, this.Factory, this.ActiveMachineGroups, this.DisabledMachineGroups);
         }
 
 

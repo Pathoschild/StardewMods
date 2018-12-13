@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
+using StardewModdingAPI;
 using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework
@@ -12,6 +13,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Properties
         *********/
+        /// <summary>Encapsulates monitoring and logging.</summary>
+        private readonly IMonitor Monitor;
+
         /// <summary>Constructs machine groups.</summary>
         private readonly MachineGroupFactory MachineGroupFactory;
 
@@ -26,11 +30,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="machineGroupFactory">Constructs machine groups.</param>
         /// <param name="activeMachineGroups">The active machine groups recognised by Automate.</param>
         /// <param name="disabledMachineGroups">The disabled machine groups recognised by Automate (e.g. machines not connected to a chest).</param>
-        internal AutomateAPI(MachineGroupFactory machineGroupFactory, IDictionary<GameLocation, MachineGroup[]> activeMachineGroups, IDictionary<GameLocation, MachineGroup[]> disabledMachineGroups)
+        internal AutomateAPI(IMonitor monitor, MachineGroupFactory machineGroupFactory, IDictionary<GameLocation, MachineGroup[]> activeMachineGroups, IDictionary<GameLocation, MachineGroup[]> disabledMachineGroups)
         {
+            this.Monitor = monitor;
             this.MachineGroupFactory = machineGroupFactory;
             this.ActiveMachineGroups = activeMachineGroups;
             this.DisabledMachineGroups = disabledMachineGroups;
@@ -40,6 +46,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="factory">An automation factory which construct machines, containers, and connectors.</param>
         public void AddFactory(IAutomationFactory factory)
         {
+            this.Monitor.Log($"Adding automation factory: {factory.GetType().AssemblyQualifiedName}", LogLevel.Trace);
             this.MachineGroupFactory.Add(factory);
         }
 
