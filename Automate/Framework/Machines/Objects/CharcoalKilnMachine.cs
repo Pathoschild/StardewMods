@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using StardewValley;
 using SObject = StardewValley.Object;
 
@@ -28,8 +29,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The location containing the machine.</param>
-        public CharcoalKilnMachine(SObject machine, GameLocation location)
-            : base(machine, location) { }
+        /// <param name="tile">The tile covered by the machine.</param>
+        public CharcoalKilnMachine(SObject machine, GameLocation location, Vector2 tile)
+            : base(machine, location, tile) { }
 
         /// <summary>Provide input to the machine.</summary>
         /// <param name="input">The available items.</param>

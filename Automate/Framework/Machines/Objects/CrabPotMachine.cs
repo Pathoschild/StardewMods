@@ -27,8 +27,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The location containing the machine.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public CrabPotMachine(CrabPot machine, GameLocation location, IReflectionHelper reflection)
-            : base(machine, location)
+        /// <param name="tile">The tile covered by the machine.</param>
+        public CrabPotMachine(CrabPot machine, GameLocation location, Vector2 tile, IReflectionHelper reflection)
+            : base(machine, location, tile)
         {
             this.Reflection = reflection;
         }

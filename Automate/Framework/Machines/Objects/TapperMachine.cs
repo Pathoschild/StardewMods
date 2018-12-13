@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using StardewValley;
 using SObject = StardewValley.Object;
 
@@ -19,9 +20,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The location to search.</param>
+        /// <param name="tile">The tile covered by the machine.</param>
         /// <param name="treeType">The tree type being tapped.</param>
-        public TapperMachine(SObject machine, GameLocation location, int treeType)
-            : base(machine, location)
+        public TapperMachine(SObject machine, GameLocation location, Vector2 tile, int treeType)
+            : base(machine, location, tile)
         {
             this.TreeType = treeType;
         }

@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Buildings;
-using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -50,13 +49,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         protected static Rectangle GetTileAreaFor(Building building)
         {
             return new Rectangle(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
-        }
-
-        /// <summary>Get the tile area for a placed object.</summary>
-        /// <param name="obj">The placed object.</param>
-        protected static Rectangle GetTileAreaFor(SObject obj)
-        {
-            return BaseMachine.GetTileAreaFor(obj.TileLocation);
         }
 
         /// <summary>Get the tile area for a placed object.</summary>

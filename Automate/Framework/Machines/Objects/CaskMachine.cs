@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
@@ -29,8 +30,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The location containing the machine.</param>
-        public CaskMachine(Cask machine, GameLocation location)
-            : base(machine, location) { }
+        /// <param name="tile">The tile covered by the machine.</param>
+        public CaskMachine(Cask machine, GameLocation location, Vector2 tile)
+            : base(machine, location, tile) { }
 
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()

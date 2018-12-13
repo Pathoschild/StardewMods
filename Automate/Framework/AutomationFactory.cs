@@ -65,60 +65,60 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             // machine
             if (obj.ParentSheetIndex == 165)
-                return new AutoGrabberMachine(obj, location);
+                return new AutoGrabberMachine(obj, location, tile);
             if (obj.name == "Bee House")
-                return new BeeHouseMachine(obj, location);
+                return new BeeHouseMachine(obj, location, tile);
             if (obj is Cask cask)
-                return new CaskMachine(cask, location);
+                return new CaskMachine(cask, location, tile);
             if (obj.name == "Charcoal Kiln")
-                return new CharcoalKilnMachine(obj, location);
+                return new CharcoalKilnMachine(obj, location, tile);
             if (obj.name == "Cheese Press")
-                return new CheesePressMachine(obj, location);
+                return new CheesePressMachine(obj, location, tile);
             if (obj is CrabPot pot)
-                return new CrabPotMachine(pot, location, this.Reflection);
+                return new CrabPotMachine(pot, location, tile, this.Reflection);
             if (obj.Name == "Crystalarium")
-                return new CrystalariumMachine(obj, location, this.Reflection);
+                return new CrystalariumMachine(obj, location, tile, this.Reflection);
             if (obj.name == "Feed Hopper")
-                return new FeedHopperMachine(obj, location);
+                return new FeedHopperMachine(location, tile);
             if (obj.Name == "Furnace")
-                return new FurnaceMachine(obj, location);
+                return new FurnaceMachine(obj, location, tile);
             if (obj.name == "Incubator")
-                return new CoopIncubatorMachine(obj, location);
+                return new CoopIncubatorMachine(obj, location, tile);
             if (obj.Name == "Keg")
-                return new KegMachine(obj, location);
+                return new KegMachine(obj, location, tile);
             if (obj.name == "Lightning Rod")
-                return new LightningRodMachine(obj, location);
+                return new LightningRodMachine(obj, location, tile);
             if (obj.name == "Loom")
-                return new LoomMachine(obj, location);
+                return new LoomMachine(obj, location, tile);
             if (obj.name == "Mayonnaise Machine")
-                return new MayonnaiseMachine(obj, location);
+                return new MayonnaiseMachine(obj, location, tile);
             if (obj.Name == "Mushroom Box")
-                return new MushroomBoxMachine(obj, location);
+                return new MushroomBoxMachine(obj, location, tile);
             if (obj.name == "Oil Maker")
-                return new OilMakerMachine(obj, location);
+                return new OilMakerMachine(obj, location, tile);
             if (obj.name == "Preserves Jar")
-                return new PreservesJarMachine(obj, location);
+                return new PreservesJarMachine(obj, location, tile);
             if (obj.name == "Recycling Machine")
-                return new RecyclingMachine(obj, location);
+                return new RecyclingMachine(obj, location, tile);
             if (obj.name == "Seed Maker")
-                return new SeedMakerMachine(obj, location);
+                return new SeedMakerMachine(obj, location, tile);
             if (obj.name == "Slime Egg-Press")
-                return new SlimeEggPressMachine(obj, location);
+                return new SlimeEggPressMachine(obj, location, tile);
             if (obj.name == "Slime Incubator")
-                return new SlimeIncubatorMachine(obj, location);
+                return new SlimeIncubatorMachine(obj, location, tile);
             if (obj.name == "Soda Machine")
-                return new SodaMachine(obj, location);
+                return new SodaMachine(obj, location, tile);
             if (obj.name == "Statue Of Endless Fortune")
-                return new StatueOfEndlessFortuneMachine(obj, location);
+                return new StatueOfEndlessFortuneMachine(obj, location, tile);
             if (obj.name == "Statue Of Perfection")
-                return new StatueOfPerfectionMachine(obj, location);
+                return new StatueOfPerfectionMachine(obj, location, tile);
             if (obj.name == "Tapper")
             {
                 if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrainFeature) && terrainFeature is Tree tree)
-                    return new TapperMachine(obj, location, tree.treeType.Value);
+                    return new TapperMachine(obj, location, tile, tree.treeType.Value);
             }
             if (obj.name == "Worm Bin")
-                return new WormBinMachine(obj, location);
+                return new WormBinMachine(obj, location, tile);
 
             // connector
             if (this.IsConnector(obj.bigCraftable.Value ? ObjectType.BigCraftable : ObjectType.Object, this.GetItemID(obj)))

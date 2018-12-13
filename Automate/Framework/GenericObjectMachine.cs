@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using StardewValley;
 using SObject = StardewValley.Object;
 
@@ -33,8 +34,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The in-game location.</param>
-        protected GenericObjectMachine(TMachine machine, GameLocation location)
-            : base(machine, location, BaseMachine.GetTileAreaFor(machine)) { }
+        /// <param name="tile">The tile covered by the machine.</param>
+        protected GenericObjectMachine(TMachine machine, GameLocation location, Vector2 tile)
+            : base(machine, location, BaseMachine.GetTileAreaFor(tile)) { }
 
         /// <summary>Reset the machine so it's ready to accept a new input.</summary>
         /// <param name="item">The output item that was taken.</param>
