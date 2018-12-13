@@ -89,8 +89,6 @@
     <Compile Include="Framework\Recipe.cs" />
     <Compile Include="Framework\StorageManager.cs" />
     <Compile Include="Framework\Storage\ChestContainer.cs" />
-    <Compile Include="Framework\TrackedItem.cs" />
-    <Compile Include="Framework\TrackedItemCollection.cs" />
     <Compile Include="IAutomatable.cs" />
     <Compile Include="IAutomateAPI.cs" />
     <Compile Include="IAutomationFactory.cs" />
@@ -103,6 +101,8 @@
     <Compile Include="MachineState.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TrackedItem.cs" />
+    <Compile Include="TrackedItemCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="manifest.json" />

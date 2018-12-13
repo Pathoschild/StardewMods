@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Extended Automate API to simplify custom machines.
 * Fixed gates not working as connectors.
 
 ## 1.11
