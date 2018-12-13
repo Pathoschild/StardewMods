@@ -8,6 +8,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere
 {
@@ -139,8 +140,13 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
                 if (!location.IsOutdoors || location.IsGreenhouse == value || (!this.Config.AllowCropsAnywhere && !(location is Farm)))
                     continue;
 
+                // set mode
                 this.Monitor.VerboseLog($"Set {location.Name} to {(value ? "greenhouse" : "non-greenhouse")}.");
                 location.IsGreenhouse = value;
+                foreach (FruitTree tree in location.terrainFeatures.Values.OfType<FruitTree>())
+                    tree.GreenHouseTree = value;
+
+                // track changes
                 if (value)
                     greenhouseified.Add(location);
                 else
