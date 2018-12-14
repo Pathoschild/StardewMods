@@ -320,10 +320,10 @@
   "tile.map-name": "Kartenname",
   "tile.tile": "Kachel",
   "tile.tile-index": "{{layerName}}: Kachelindex",
-  "tile.tilesheet": "{{layerName}}: Kachelblatt",   //TODO
+  "tile.tilesheet": "{{layerName}}: Kachelblatt",
   "tile.blend-mode": "{{layerName}}: Überblendungsmodus",
-  "tile.index-property": "{{layerName}}: Indexeigenschaften: {{propertyName}}",   //TODO
-  "tile.tile-property": "{{layerName}}: Eigenschaften: {{propertyName}}",   //TODO
+  "tile.index-property": "{{layerName}}: Indexeigenschaften: {{propertyName}}",
+  "tile.tile-property": "{{layerName}}: Eigenschaften: {{propertyName}}",
 
   // tile lookup values
   "tile.tile.none-here": "Kein Kachel hier.",
