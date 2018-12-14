@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 
-namespace Pathoschild.Stardew.TestContentMod
+namespace Pathoschild.Stardew.TestMod
 {
     /// <summary>The mod entry point.</summary>
     internal class ModEntry : Mod, IAssetEditor, IAssetLoader

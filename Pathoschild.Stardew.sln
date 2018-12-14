@@ -36,7 +36,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RotateToolbar", "RotateTool
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TractorMod", "TractorMod\TractorMod.csproj", "{0510E2AC-EC06-4211-B733-FAF9D3A069EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestContentMod", "TestContentMod\TestContentMod.csproj", "{91F894EE-6D23-49E8-A0AD-E6A976B8AA82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMod", "TestMod\TestMod.csproj", "{91F894EE-6D23-49E8-A0AD-E6A976B8AA82}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContentPatcher", "ContentPatcher\ContentPatcher.csproj", "{6B9D5445-E45C-431D-A5B8-40556E553F54}"
 EndProject
