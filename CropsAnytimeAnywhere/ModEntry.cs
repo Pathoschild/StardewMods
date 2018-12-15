@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
@@ -102,7 +104,11 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
                 return;
 
             // remove changes before save (to avoid making changes permanent if the mod is uninstalled)
-            this.ClearChanges();
+            if (this.EnabledLocations.Any())
+            {
+                this.ApplyTreeUpdates();
+                this.ClearChanges();
+            }
         }
 
 
@@ -151,6 +157,41 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
                     greenhouseified.Add(location);
                 else
                     greenhouseified.Remove(location);
+            }
+        }
+
+        /// <summary>Add fruit to fruit trees in enabled locations, if they'd normally be out of season. This is a workaround for an issue where fruit trees don't check the <see cref="GameLocation.IsGreenhouse"/> field (see https://stardewvalleywiki.com/User:Pathoschild/Modding_wishlist#Small_changes .)</summary>
+        [SuppressMessage("SMAPI", "AvoidNetField", Justification = "The location name can only be changed through the net field.")]
+        private void ApplyTreeUpdates()
+        {
+            foreach (GameLocation location in this.EnabledLocations)
+            {
+                var trees =
+                    (
+                        from pair in location.terrainFeatures.Pairs
+                        let tree = pair.Value as FruitTree
+                        where tree != null
+                        select new { Tile = pair.Key, Tree = tree }
+                    )
+                    .ToArray();
+
+                if (trees.Any())
+                {
+                    string oldName = location.Name;
+                    try
+                    {
+                        location.name.Value = "Greenhouse";
+                        foreach (var pair in trees)
+                        {
+                            if (pair.Tree.fruitSeason.Value != Game1.currentSeason && pair.Tree.fruitsOnTree.Value < FruitTree.maxFruitsOnTrees)
+                                pair.Tree.dayUpdate(location, pair.Tile);
+                        }
+                    }
+                    finally
+                    {
+                        location.name.Value = oldName;
+                    }
+                }
             }
         }
     }

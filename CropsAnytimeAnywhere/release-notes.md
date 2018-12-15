@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* Fixed fruit trees not updated when the active seasons change.
+* Fixed fruit trees not producing fruit outside their normal seasons.
+* Fixed fruit tree textures not updated correctly.
 
 ## 1.0
 * Initial version.
