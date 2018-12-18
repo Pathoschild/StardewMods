@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed token subkey form not allowed in boolean fields.
+* Updated for change in the upcoming SMAPI 3.0.
 
 ## 1.6.1
 * Fixed error when a content pack has a patch with no `Target` field.
