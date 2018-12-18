@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed debug fields showing wrong values in rare cases when an item was customised after it was spawned.
+* Improved translations. Thanks to Nanogamer7 (German)!
 
 ## 1.20.1
 * Updated for the upcoming SMAPI 3.0.
