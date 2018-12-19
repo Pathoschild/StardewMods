@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Netcode;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewValley;
 using StardewValley.Objects;
@@ -36,6 +38,31 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 return ItemSpriteType.Tool;
 
             return ItemSpriteType.Unknown;
+        }
+
+        /// <summary>Get the value stored for the key. If the value doesn't exist, return that type's default value.</summary>
+        /// <typeparam name="TKey">The type of the dictionary keys</typeparam>
+        /// <typeparam name="TValue">The type of the dictionary values</typeparam>
+        /// <param name="dictionary">This dictionary</param>
+        /// <param name="key">The key to look up</param>
+        /// <returns>Either the value store for the key or a default</returns>
+        public static TValue GetValueOrDefault<TKey, TValue>( this IDictionary<TKey, TValue> dictionary, TKey key )
+        {
+            return dictionary.TryGetValue( key, out var ret ) ? ret : default;
+        }
+
+        /// <summary>Get the value stored for the key. If the value doesn't exist, return that type's default value.</summary>
+        /// <typeparam name="TKey">The type of the dictionary keys</typeparam>
+        /// <typeparam name="TValue">The type of the dictionary values</typeparam>
+        /// <param name="dictionary">This dictionary</param>
+        /// <param name="key">The key to look up</param>
+        /// <returns>Either the value store for the key or a default</returns>
+        public static TValue GetValueOrDefault<TKey, TValue, TField, TSerialDict, TSelf> ( this NetDictionary<TKey, TValue, TField, TSerialDict, TSelf> dictionary, TKey key )
+            where TField : class, INetObject<INetSerializable>, new()
+            where TSerialDict : IDictionary<TKey, TValue>, new()
+            where TSelf : NetDictionary<TKey, TValue, TField, TSerialDict, TSelf>
+        {
+            return dictionary.TryGetValue( key, out var ret ) ? ret : default;
         }
     }
 }

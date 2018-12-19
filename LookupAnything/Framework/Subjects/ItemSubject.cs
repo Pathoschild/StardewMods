@@ -521,6 +521,25 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (museum != null && museum.isItemSuitableForDonation(obj))
                 neededFor.Add(this.Translate(L10n.Item.NeededForFullCollection));
 
+
+            // Gourmet Chef & Craft Master achievements
+            string displayTypeCooking = this.Translate( L10n.RecipeTypes.Cooking );
+            var unmadeRecipes = (
+                from recipe in this.GameHelper.GetRecipesForIngredient( this.DisplayItem )
+                where recipe.TimesCrafted <= 0
+                select new {
+                    isCooking = recipe.DisplayType.Equals( displayTypeCooking ),
+                    name = recipe.CreateItem( this.DisplayItem ).DisplayName }
+            );
+
+            IEnumerable<string> cookingRecipes = from r in unmadeRecipes where r.isCooking orderby r.name select r.name;
+            if ( cookingRecipes.Any() )
+                neededFor.Add(this.Translate(L10n.Item.NeededForGourmetChef, new { recipes = string.Join(", ", cookingRecipes) }));
+
+            IEnumerable<string> craftingRecipes = from r in unmadeRecipes where !r.isCooking orderby r.name select r.name;
+            if ( craftingRecipes.Any() )
+                neededFor.Add(this.Translate(L10n.Item.NeededForCraftMaster, new { recipes = string.Join(", ", craftingRecipes ) }));
+
             // yield
             if (neededFor.Any())
                 yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.NeededFor), string.Join(", ", neededFor));
