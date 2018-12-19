@@ -357,6 +357,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>full collection achievement (donate one to museum)</c>.</summary>
             public const string NeededForFullCollection = "item.needed-for.full-collection";
 
+            /// <summary>A value like <c>gourmet chef achievement (cook {{recipes}})</c>.</summary>
+            public const string NeededForGourmetChef = "item.needed-for.gourmet-chef";
+
+            /// <summary>A value like <c>craft master achievement (make {{recipes}})</c>.</summary>
+            public const string NeededForCraftMaster = "item.needed-for.craft-master";
+
             /// <summary>A value like <c>shipping box</c>.</summary>
             public const string SellsToShippingBox = "item.sells-to.shipping-box";
 
