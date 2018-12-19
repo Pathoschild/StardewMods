@@ -11,6 +11,7 @@ using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
 
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere
 {
@@ -22,6 +23,9 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
+
+        /// <summary>Whether to enable tilling for more tile types.</summary>
+        private bool OverrideTilling;
 
         /// <summary>The seasons for which to override crops.</summary>
         private HashSet<string> EnabledSeasons;
@@ -39,13 +43,16 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
         {
             // read config
             this.Config = helper.ReadConfig<ModConfig>();
-            this.EnabledSeasons = new HashSet<string>(this.Config.Seasons.GetEnabledSeasons(), StringComparer.InvariantCultureIgnoreCase);
+            this.OverrideTilling = this.Config.ForceTillable.IsAnyEnabled();
+            this.EnabledSeasons = new HashSet<string>(this.Config.EnableInSeasons.GetEnabledSeasons(), StringComparer.InvariantCultureIgnoreCase);
 
             // hook events
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
-            helper.Events.World.LocationListChanged += this.OnLocationListChanged;
             helper.Events.GameLoop.DayEnding += this.OnDayEnding;
             helper.Events.GameLoop.Saving += this.OnSaving;
+            helper.Events.World.LocationListChanged += this.OnLocationListChanged;
+            if (this.OverrideTilling)
+                helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         }
 
 
@@ -55,6 +62,24 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
         /****
         ** Event handlers
         ****/
+        /// <summary>Raised after the player presses a button on the keyboard, controller, or mouse.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        {
+            // allow tilling more tiles
+            // (The game has some messy logic for deciding which specific tile to till, but just marking the surrounding tiles diggable is sufficient for our purposes.)
+            if (Context.IsWorldReady && e.Button.IsUseToolButton() && Game1.player.CurrentTool is Hoe)
+            {
+                GameLocation location = Game1.currentLocation;
+                foreach (Vector2 tile in Utility.getSurroundingTileLocationsArray(e.Cursor.GrabTile).Concat(new[] { e.Cursor.GrabTile }))
+                {
+                    if (this.ShouldMakeTillable(location, tile))
+                        location.setTileProperty((int)tile.X, (int)tile.Y, "Back", "Diggable", "T");
+                }
+            }
+        }
+
         /// <summary>The method called after a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -143,7 +168,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
         {
             foreach (GameLocation location in locations)
             {
-                if (!location.IsOutdoors || location.IsGreenhouse == value || (!this.Config.AllowCropsAnywhere && !(location is Farm)))
+                if (!location.IsOutdoors || location.IsGreenhouse == value || (!this.Config.FarmAnyLocation && !(location is Farm)))
                     continue;
 
                 // set mode
@@ -192,6 +217,25 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
                         location.name.Value = oldName;
                     }
                 }
+            }
+        }
+
+        /// <summary>Get whether to override tilling for a given tile.</summary>
+        /// <param name="location">The game location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        private bool ShouldMakeTillable(GameLocation location, Vector2 tile)
+        {
+            ModConfigForceTillable config = this.Config.ForceTillable;
+            switch (location.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Type", "Back"))
+            {
+                case "Dirt":
+                    return config.Dirt;
+                case "Grass":
+                    return config.Grass;
+                case "Stone":
+                    return config.Stone;
+                default:
+                    return config.Other;
             }
         }
     }
