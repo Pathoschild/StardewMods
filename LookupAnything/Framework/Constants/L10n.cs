@@ -318,6 +318,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Owned</c>.</summary>
             public const string Owned = "item.number-owned";
 
+            /// <summary>A value like <c>Cooked</c>.</summary>
+            public const string Cooked = "item.number-cooked";
+
+            /// <summary>A value like <c>Crafted</c>.</summary>
+            public const string Crafted = "item.number-crafted";
+
             /// <summary>A value like <c>See also</c>.</summary>
             public const string SeeAlso = "item.see-also";
 
@@ -377,6 +383,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>you own {{count}} of these</c>.</summary>
             public const string OwnedSummary = "item.number-owned.summary";
+
+            /// <summary>A value like <c>you have cooked {{count}} of these</c>.</summary>
+            public const string CookedSummary = "item.number-cooked.summary";
+
+            /// <summary>A value like <c>you have crafted {{count}} of these</c>.</summary>
+            public const string CraftedSummary = "item.number-crafted.summary";
         }
 
         /// <summary>Monster lookup translations.</summary>
