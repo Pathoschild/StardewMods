@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.Automate
             // init
             this.Config = helper.ReadConfig<ModConfig>();
             this.Factory = new MachineGroupFactory();
-            this.Factory.Add(new AutomationFactory(this.Config.Connectors, this.Config.AutomateShippingBin, helper.Reflection));
+            this.Factory.Add(new AutomationFactory(this.Config.Connectors, this.Config.AutomateShippingBin, this.Monitor, helper.Reflection));
 
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;

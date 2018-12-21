@@ -19,6 +19,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
 
+        /// <summary>Encapsulates monitoring and logging.</summary>
+        private readonly IMonitor Monitor;
+
+        /// <summary>The fish IDs for which any crabpot has logged an 'invalid fish data' error.</summary>
+        private static readonly ISet<int> LoggedInvalidDataErrors = new HashSet<int>();
+
 
         /*********
         ** Public methods
@@ -27,10 +33,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The location containing the machine.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
+        /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="tile">The tile covered by the machine.</param>
-        public CrabPotMachine(CrabPot machine, GameLocation location, Vector2 tile, IReflectionHelper reflection)
+        public CrabPotMachine(CrabPot machine, GameLocation location, Vector2 tile, IMonitor monitor, IReflectionHelper reflection)
             : base(machine, location, tile)
         {
+            this.Monitor = monitor;
             this.Reflection = reflection;
         }
 
@@ -88,12 +96,25 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 
             // mark fish caught for achievements and stats
             IDictionary<int, string> fishData = Game1.content.Load<Dictionary<int, string>>("Data\\Fish");
-            if (fishData.ContainsKey(item.ParentSheetIndex))
+            if (fishData.TryGetValue(item.ParentSheetIndex, out string fishRow))
             {
-                string[] fields = fishData[item.ParentSheetIndex].Split('/');
-                int lowerSize = fields.Length > 5 ? Convert.ToInt32(fields[5]) : 1;
-                int upperSize = fields.Length > 5 ? Convert.ToInt32(fields[6]) : 10;
-                Game1.player.caughtFish(item.ParentSheetIndex, Game1.random.Next(lowerSize, upperSize + 1));
+                int size = 0;
+                try
+                {
+                    string[] fields = fishRow.Split('/');
+                    int lowerSize = fields.Length > 5 ? Convert.ToInt32(fields[5]) : 1;
+                    int upperSize = fields.Length > 5 ? Convert.ToInt32(fields[6]) : 10;
+                    size = Game1.random.Next(lowerSize, upperSize + 1);
+                }
+                catch (Exception ex)
+                {
+                    // The fish length stats don't affect anything, so it's not worth notifying the
+                    // user; just log one trace message per affected fish for troubleshooting.
+                    if (CrabPotMachine.LoggedInvalidDataErrors.Add(item.ParentSheetIndex))
+                        this.Monitor.Log($"The game's fish data has an invalid entry (#{item.ParentSheetIndex}: {fishData[item.ParentSheetIndex]}). Automated crabpots won't track fish length stats for that fish.\n{ex}", LogLevel.Trace);
+                }
+
+                Game1.player.caughtFish(item.ParentSheetIndex, size);
             }
 
             // reset pot

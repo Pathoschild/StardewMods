@@ -316,17 +316,17 @@
   "player.skill.progress-last": "Level {{level}}",
 
   // tile lookup labels
-  "tile.description": "Feld-Informationen. Dies wird angezeigt, weil du \"tile lookups\" in den Konfiguration angeschaltet hast.",
+  "tile.description": "Kachel-Informationen. Dies wird angezeigt, weil du \"tile lookups\" in den Konfiguration angeschaltet hast.",
   "tile.map-name": "Kartenname",
-  "tile.tile": "Feld",
-  "tile.tile-index": "{{layerName}}: Feld-Index",
-  "tile.tilesheet": "{{layerName}}: Tilesheet",   //TODO
-  "tile.blend-mode": "{{layerName}}: Blend-mode",
-  "tile.index-property": "{{layerName}}: index props: {{propertyName}}",   //TODO
-  "tile.tile-property": "{{layerName}}: props: {{propertyName}}",   //TODO
+  "tile.tile": "Kachel",
+  "tile.tile-index": "{{layerName}}: Kachelindex",
+  "tile.tilesheet": "{{layerName}}: Kachelblatt",
+  "tile.blend-mode": "{{layerName}}: Überblendungsmodus",
+  "tile.index-property": "{{layerName}}: Indexeigenschaften: {{propertyName}}",
+  "tile.tile-property": "{{layerName}}: Eigenschaften: {{propertyName}}",
 
   // tile lookup values
-  "tile.tile.none-here": "Kein Feld hier.",
+  "tile.tile.none-here": "Kein Kachel hier.",
 
   // tree lookup labels
   "tree.stage": "Wachstumsstadium",

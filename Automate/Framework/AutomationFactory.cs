@@ -23,6 +23,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Properties
         *********/
+        /// <summary>Encapsulates monitoring and logging.</summary>
+        private readonly IMonitor Monitor;
+
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
 
@@ -42,13 +45,15 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="connectors">The objects through which machines can connect, but which have no other automation properties.</param>
         /// <param name="automateShippingBin">Whether to treat the shipping bin as a machine that can be automated.</param>
+        /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public AutomationFactory(ModConfigObject[] connectors, bool automateShippingBin, IReflectionHelper reflection)
+        public AutomationFactory(ModConfigObject[] connectors, bool automateShippingBin, IMonitor monitor, IReflectionHelper reflection)
         {
             this.Connectors = connectors
                 .GroupBy(connector => connector.Type)
                 .ToDictionary(group => group.Key, group => new HashSet<int>(group.Select(p => p.ID)));
             this.AutomateShippingBin = automateShippingBin;
+            this.Monitor = monitor;
             this.Reflection = reflection;
         }
 
@@ -75,7 +80,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             if (obj.name == "Cheese Press")
                 return new CheesePressMachine(obj, location, tile);
             if (obj is CrabPot pot)
-                return new CrabPotMachine(pot, location, tile, this.Reflection);
+                return new CrabPotMachine(pot, location, tile, this.Monitor, this.Reflection);
             if (obj.Name == "Crystalarium")
                 return new CrystalariumMachine(obj, location, tile, this.Reflection);
             if (obj.name == "Feed Hopper")

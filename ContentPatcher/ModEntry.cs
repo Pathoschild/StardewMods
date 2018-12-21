@@ -169,7 +169,7 @@ namespace ContentPatcher
         {
             this.Monitor.VerboseLog("Preloading content packs...");
 
-            foreach (IContentPack contentPack in this.Helper.GetContentPacks())
+            foreach (IContentPack contentPack in this.Helper.ContentPacks.GetOwned())
             {
                 RawContentPack rawContentPack;
                 try
