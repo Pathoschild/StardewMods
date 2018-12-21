@@ -16,9 +16,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>The item that be created by this recipe, given the ingredient.</summary>
         private readonly Func<Item, Item> Item;
 
-        /// <summary>The item id produced by this recipe</summary>
-        private readonly int ItemIndex;
-
         /// <summary>If available, a cached copy of the localized name for the cooking recipe types</summary>
         private readonly string DisplayTypeCooking;
 
@@ -37,6 +34,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 
         /// <summary>The items needed to craft the recipe (item ID => number needed).</summary>
         public IDictionary<int, int> Ingredients { get; }
+
+        /// <summary>The item id produced by this recipe</summary>
+        public int ItemIndex { get; }
 
         /// <summary>The ingredients which can't be used in this recipe (typically exceptions for a category ingredient).</summary>
         public int[] ExceptIngredients { get; }

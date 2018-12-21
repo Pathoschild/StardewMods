@@ -178,9 +178,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     yield return new RecipesForIngredientField(this.GameHelper, this.Translate(L10n.Item.Recipes), item, recipes, this.Text);
             }
 
-            // owned
+            // owned, cooked, and crafted
             if (showInventoryFields && !isCrop && !(item is Tool))
+            {
                 yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.Owned), this.Translate(L10n.Item.OwnedSummary, new { count = this.GameHelper.CountOwnedItems(item) }));
+
+                var timesCrafted = from recipe in this.GameHelper.GetRecipes()
+                    where recipe.ItemIndex == this.Target.ParentSheetIndex && recipe.TimesCrafted >= 0
+                    select new { count = recipe.TimesCrafted, recipeType = recipe.DisplayType };
+
+                if ( timesCrafted.Any() )
+                {
+                    if ( timesCrafted.First().recipeType.Equals( this.Translate(L10n.RecipeTypes.Cooking) ) )
+                        yield return new GenericField( this.GameHelper, this.Translate( L10n.Item.Cooked ), this.Translate( L10n.Item.CookedSummary, timesCrafted.First() ) );
+                    else
+                        yield return new GenericField( this.GameHelper, this.Translate( L10n.Item.Crafted ), this.Translate( L10n.Item.CraftedSummary, timesCrafted.First() ) );
+                }
+            }
 
             // see also crop
             bool seeAlsoCrop =
@@ -526,7 +540,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             string displayTypeCooking = this.Translate( L10n.RecipeTypes.Cooking );
             var unmadeRecipes = (
                 from recipe in this.GameHelper.GetRecipesForIngredient( this.DisplayItem )
-                where recipe.TimesCrafted <= 0
+                where recipe.TimesCrafted == 0 // Depends upon non-cooking and non-crafting recipes not tracking times crafted
                 select new {
                     isCooking = recipe.DisplayType.Equals( displayTypeCooking ),
                     name = recipe.CreateItem( this.DisplayItem ).DisplayName }
