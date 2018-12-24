@@ -2,8 +2,9 @@
 
 # Release notes
 ## Upcoming release
+* Conditions are now evaluated much earlier when loading a save, which lets content packs affect early processes like map debris spawning.
 * Fixed token subkey form not allowed in boolean fields.
-* Updated for change in the upcoming SMAPI 3.0.
+* Updated for changes in the upcoming SMAPI 3.0.
 
 ## 1.6.1
 * Fixed error when a content pack has a patch with no `Target` field.

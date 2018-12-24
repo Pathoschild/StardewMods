@@ -26,6 +26,13 @@ namespace ContentPatcher.Framework
 
 
         /*********
+        ** Accessors
+        *********/
+        /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
+        public bool IsBasicInfoLoaded { get; set; }
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
@@ -110,35 +117,37 @@ namespace ContentPatcher.Framework
         /// <param name="installedMods">The installed mod IDs.</param>
         private IEnumerable<IToken> GetGlobalTokens(IContentHelper contentHelper, IEnumerable<string> installedMods)
         {
+            bool NeedsBasicInfo() => this.IsBasicInfoLoaded;
+
             // installed mods
             yield return new ImmutableToken(ConditionType.HasMod.ToString(), new InvariantHashSet(installedMods), canHaveMultipleValues: true);
 
             // language
-            yield return new ConditionTypeToken(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), needsLoadedSave: false, allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()));
+            yield return new ConditionTypeToken(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()));
 
             // in-game date
-            yield return new ConditionTypeToken(ConditionType.Season, () => SDate.Now().Season, needsLoadedSave: true, allowedValues: new[] { "Spring", "Summer", "Fall", "Winter" });
-            yield return new ConditionTypeToken(ConditionType.Day, () => SDate.Now().Day.ToString(CultureInfo.InvariantCulture), needsLoadedSave: true, allowedValues: Enumerable.Range(1, 28).Select(p => p.ToString()));
-            yield return new ConditionTypeToken(ConditionType.DayOfWeek, () => SDate.Now().DayOfWeek.ToString(), needsLoadedSave: true, allowedValues: Enum.GetNames(typeof(DayOfWeek)));
-            yield return new ConditionTypeToken(ConditionType.Year, () => SDate.Now().Year.ToString(CultureInfo.InvariantCulture), needsLoadedSave: true);
-            yield return new ConditionTypeToken(ConditionType.DaysPlayed, () => Game1.stats.DaysPlayed.ToString(CultureInfo.InvariantCulture), needsLoadedSave: true);
+            yield return new ConditionTypeToken(ConditionType.Season, () => SDate.Now().Season, NeedsBasicInfo, allowedValues: new[] { "Spring", "Summer", "Fall", "Winter" });
+            yield return new ConditionTypeToken(ConditionType.Day, () => SDate.Now().Day.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo, allowedValues: Enumerable.Range(1, 28).Select(p => p.ToString()));
+            yield return new ConditionTypeToken(ConditionType.DayOfWeek, () => SDate.Now().DayOfWeek.ToString(), NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(DayOfWeek)));
+            yield return new ConditionTypeToken(ConditionType.Year, () => SDate.Now().Year.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
+            yield return new ConditionTypeToken(ConditionType.DaysPlayed, () => Game1.stats.DaysPlayed.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
 
             // other in-game conditions
-            yield return new ConditionTypeToken(ConditionType.DayEvent, () => this.GetDayEvent(contentHelper), needsLoadedSave: true);
-            yield return new ConditionTypeToken(ConditionType.FarmCave, () => this.GetEnum(Game1.player.caveChoice.Value, FarmCaveType.None).ToString(), needsLoadedSave: true);
-            yield return new ConditionTypeToken(ConditionType.FarmhouseUpgrade, () => Game1.player.HouseUpgradeLevel.ToString(), needsLoadedSave: true);
-            yield return new ConditionTypeToken(ConditionType.FarmName, () => Game1.player.farmName.Value, needsLoadedSave: true);
-            yield return new ConditionTypeToken(ConditionType.FarmType, () => this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString(), needsLoadedSave: true);
-            yield return new ConditionTypeToken(ConditionType.HasFlag, this.GetMailFlags, needsLoadedSave: true);
-            yield return new ConditionTypeToken(ConditionType.HasSeenEvent, this.GetEventsSeen, needsLoadedSave: true);
-            yield return new ConditionTypeToken(ConditionType.PlayerGender, () => (Game1.player.IsMale ? Gender.Male : Gender.Female).ToString(), needsLoadedSave: true);
-            yield return new ConditionTypeToken(ConditionType.PreferredPet, () => (Game1.player.catPerson ? PetType.Cat : PetType.Dog).ToString(), needsLoadedSave: true);
-            yield return new ConditionTypeToken(ConditionType.PlayerName, () => Game1.player.Name, needsLoadedSave: true);
-            yield return new ConditionTypeToken(ConditionType.Spouse, () => Game1.player?.spouse, needsLoadedSave: true);
-            yield return new ConditionTypeToken(ConditionType.Weather, this.GetCurrentWeather, needsLoadedSave: true, allowedValues: Enum.GetNames(typeof(Weather)));
-            yield return new HasProfessionToken();
-            yield return new HasWalletItemToken();
-            yield return new SkillLevelToken();
+            yield return new ConditionTypeToken(ConditionType.DayEvent, () => this.GetDayEvent(contentHelper), NeedsBasicInfo);
+            yield return new ConditionTypeToken(ConditionType.FarmCave, () => this.GetEnum(Game1.player.caveChoice.Value, FarmCaveType.None).ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeToken(ConditionType.FarmhouseUpgrade, () => Game1.player.HouseUpgradeLevel.ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeToken(ConditionType.FarmName, () => Game1.player.farmName.Value, NeedsBasicInfo);
+            yield return new ConditionTypeToken(ConditionType.FarmType, () => this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeToken(ConditionType.HasFlag, this.GetMailFlags, NeedsBasicInfo);
+            yield return new ConditionTypeToken(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
+            yield return new ConditionTypeToken(ConditionType.PlayerGender, () => (Game1.player.IsMale ? Gender.Male : Gender.Female).ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeToken(ConditionType.PreferredPet, () => (Game1.player.catPerson ? PetType.Cat : PetType.Dog).ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeToken(ConditionType.PlayerName, () => Game1.player.Name, NeedsBasicInfo);
+            yield return new ConditionTypeToken(ConditionType.Spouse, () => Game1.player?.spouse, NeedsBasicInfo);
+            yield return new ConditionTypeToken(ConditionType.Weather, this.GetCurrentWeather, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(Weather)));
+            yield return new HasProfessionToken(NeedsBasicInfo);
+            yield return new HasWalletItemToken(NeedsBasicInfo);
+            yield return new SkillLevelToken(NeedsBasicInfo);
             yield return new VillagerRelationshipToken();
             yield return new VillagerHeartsToken();
         }
@@ -164,15 +173,14 @@ namespace ContentPatcher.Framework
         /// <summary>Get the current weather from the game state.</summary>
         private string GetCurrentWeather()
         {
-            if (Utility.isFestivalDay(Game1.dayOfMonth, Game1.currentSeason) || Game1.weddingToday)
+            if (Utility.isFestivalDay(Game1.dayOfMonth, Game1.currentSeason) || (SaveGame.loaded?.weddingToday ?? Game1.weddingToday))
                 return Weather.Sun.ToString();
 
             if (Game1.isSnowing)
                 return Weather.Snow.ToString();
             if (Game1.isRaining)
                 return (Game1.isLightning ? Weather.Storm : Weather.Rain).ToString();
-
-            if (Game1.isDebrisWeather)
+            if (SaveGame.loaded?.isDebrisWeather ?? Game1.isDebrisWeather)
                 return Weather.Wind.ToString();
 
             return Weather.Sun.ToString();
@@ -209,7 +217,7 @@ namespace ContentPatcher.Framework
         private string GetDayEvent(IContentHelper contentHelper)
         {
             // marriage
-            if (Game1.weddingToday)
+            if (SaveGame.loaded?.weddingToday ?? Game1.weddingToday)
                 return "wedding";
 
             // festival

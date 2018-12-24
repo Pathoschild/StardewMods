@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common.Utilities;
-using StardewModdingAPI;
+using StardewValley;
 
 namespace ContentPatcher.Framework.Tokens
 {
@@ -18,8 +18,8 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Get the current token values.</summary>
         private readonly Func<InvariantHashSet> FetchValues;
 
-        /// <summary>Whether a save must be loaded for the token to be available.</summary>
-        private readonly bool NeedsLoadedSave;
+        /// <summary>Get whether the token is applicable in the current context, or <c>null</c> if it's always applicable.</summary>
+        private readonly Func<bool> IsValidInContextImpl;
 
         /// <summary>The token values as of the last context update.</summary>
         private readonly InvariantHashSet Values = new InvariantHashSet();
@@ -31,13 +31,13 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The token values.</param>
         /// <param name="values">Get the current token value.</param>
-        /// <param name="needsLoadedSave">Whether a save must be loaded for the token to be available.</param>
+        /// <param name="isValidInContext">Get whether the token is applicable in the current context, or <c>null</c> if it's always applicable.</param>
         /// <param name="canHaveMultipleValues">Whether the root token may contain multiple values.</param>
         /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
-        public ConditionTypeToken(ConditionType name, Func<IEnumerable<string>> values, bool needsLoadedSave, bool canHaveMultipleValues = false, IEnumerable<string> allowedValues = null)
+        public ConditionTypeToken(ConditionType name, Func<IEnumerable<string>> values, Func<bool> isValidInContext = null, bool canHaveMultipleValues = false, IEnumerable<string> allowedValues = null)
             : base(name.ToString(), canHaveMultipleValues)
         {
-            this.NeedsLoadedSave = needsLoadedSave;
+            this.IsValidInContextImpl = isValidInContext;
             this.AllowedRootValues = allowedValues != null ? new InvariantHashSet(allowedValues) : null;
             this.FetchValues = () => new InvariantHashSet(values());
             this.EnableSubkeys(required: false, canHaveMultipleValues: false);
@@ -46,18 +46,18 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The token values.</param>
         /// <param name="value">Get the current token value.</param>
-        /// <param name="needsLoadedSave">Whether a save must be loaded for the token to be available.</param>
+        /// <param name="isValidInContext">Get whether the token is applicable in the current context, or <c>null</c> if it's always applicable.</param>
         /// <param name="canHaveMultipleValues">Whether the root token may contain multiple values.</param>
         /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
-        public ConditionTypeToken(ConditionType name, Func<string> value, bool needsLoadedSave, bool canHaveMultipleValues = false, IEnumerable<string> allowedValues = null)
-            : this(name, () => new[] { value() }, needsLoadedSave, canHaveMultipleValues, allowedValues) { }
+        public ConditionTypeToken(ConditionType name, Func<string> value, Func<bool> isValidInContext = null, bool canHaveMultipleValues = false, IEnumerable<string> allowedValues = null)
+            : this(name, () => new[] { value() }, isValidInContext, canHaveMultipleValues, allowedValues) { }
 
         /// <summary>Update the token data when the context changes.</summary>
         /// <param name="context">The condition context.</param>
         /// <returns>Returns whether the token data changed.</returns>
         public override void UpdateContext(IContext context)
         {
-            this.IsValidInContext = !this.NeedsLoadedSave || Context.IsWorldReady;
+            this.IsValidInContext = this.IsValidInContextImpl == null || this.IsValidInContextImpl();
             this.Values.Clear();
             foreach (string value in this.FetchValues())
                 this.Values.Add(value);

@@ -14,6 +14,9 @@ namespace ContentPatcher.Framework.Tokens
         /*********
         ** Properties
         *********/
+        /// <summary>Get whether the player data is available in the current context.</summary>
+        private readonly Func<bool> IsPlayerDataAvailable;
+
         /// <summary>The player's current professions.</summary>
         private readonly HashSet<Profession> Professions = new HashSet<Profession>();
 
@@ -22,9 +25,11 @@ namespace ContentPatcher.Framework.Tokens
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public HasProfessionToken()
+        /// <param name="isPlayerDataAvailable">Get whether the player data is available in the current context.</param>
+        public HasProfessionToken(Func<bool> isPlayerDataAvailable)
             : base(ConditionType.HasProfession.ToString(), canHaveMultipleRootValues: true)
         {
+            this.IsPlayerDataAvailable = isPlayerDataAvailable;
             this.EnableSubkeys(required: false, canHaveMultipleValues: false);
         }
 
@@ -34,7 +39,7 @@ namespace ContentPatcher.Framework.Tokens
         public override void UpdateContext(IContext context)
         {
             this.Professions.Clear();
-            this.IsValidInContext = Context.IsWorldReady;
+            this.IsValidInContext = this.IsPlayerDataAvailable();
             if (this.IsValidInContext)
             {
                 foreach (int professionID in Game1.player.professions)

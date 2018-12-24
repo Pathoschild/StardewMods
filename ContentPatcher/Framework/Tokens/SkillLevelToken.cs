@@ -15,6 +15,9 @@ namespace ContentPatcher.Framework.Tokens
         /*********
         ** Properties
         *********/
+        /// <summary>Get whether the player data is available in the current context.</summary>
+        private readonly Func<bool> IsPlayerDataAvailable;
+
         /// <summary>The player's current skill levels.</summary>
         private readonly IDictionary<Skill, int> SkillLevels = new Dictionary<Skill, int>();
 
@@ -23,9 +26,10 @@ namespace ContentPatcher.Framework.Tokens
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public SkillLevelToken()
+        public SkillLevelToken(Func<bool> isPlayerDataAvailable)
             : base(ConditionType.SkillLevel.ToString(), canHaveMultipleRootValues: true)
         {
+            this.IsPlayerDataAvailable = isPlayerDataAvailable;
             this.EnableSubkeys(required: false, canHaveMultipleValues: false);
         }
 
@@ -35,7 +39,7 @@ namespace ContentPatcher.Framework.Tokens
         public override void UpdateContext(IContext context)
         {
             this.SkillLevels.Clear();
-            this.IsValidInContext = Context.IsWorldReady;
+            this.IsValidInContext = this.IsPlayerDataAvailable();
             if (this.IsValidInContext)
             {
                 this.SkillLevels[Skill.Combat] = Game1.player.CombatLevel;

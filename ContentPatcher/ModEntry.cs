@@ -12,6 +12,7 @@ using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
+using StardewModdingAPI.Enums;
 using StardewModdingAPI.Events;
 
 namespace ContentPatcher
@@ -91,6 +92,7 @@ namespace ContentPatcher
                 helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
+            helper.Events.Specialised.LoadStageChanged += this.OnLoadStageChanged;
 
             // set up commands
             this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, this.UpdateContext);
@@ -135,12 +137,20 @@ namespace ContentPatcher
             }
         }
 
-        /// <summary>The method invoked when the player returns to the title screen.</summary>
+        /// <summary>Raised when the low-level stage in the game's loading process has changed. This is an advanced event for mods which need to run code at specific points in the loading process. The available stages or when they happen might change without warning in future versions (e.g. due to changes in the game's load process), so mods using this event are more likely to break or have bugs.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
+        private void OnLoadStageChanged(object sender, LoadStageChangedEventArgs e)
         {
-            this.UpdateContext();
+            switch (e.NewStage)
+            {
+                case LoadStage.CreatedBasicInfo:
+                case LoadStage.SaveLoadedBasicInfo:
+                    this.Monitor.VerboseLog($"Updating context: load stage changed to {e.NewStage}.");
+                    this.TokenManager.IsBasicInfoLoaded = true;
+                    this.UpdateContext();
+                    break;
+            }
         }
 
         /// <summary>The method invoked when a new day starts.</summary>
@@ -148,6 +158,17 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
+            this.Monitor.VerboseLog("Updating context: new day started.");
+            this.UpdateContext();
+        }
+
+        /// <summary>The method invoked when the player returns to the title screen.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
+        {
+            this.Monitor.VerboseLog("Updating context: returned to title.");
+            this.TokenManager.IsBasicInfoLoaded = false;
             this.UpdateContext();
         }
 

@@ -4,7 +4,6 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
 using Pathoschild.Stardew.Common.Utilities;
-using StardewModdingAPI;
 using StardewValley;
 
 namespace ContentPatcher.Framework.Tokens
@@ -15,6 +14,9 @@ namespace ContentPatcher.Framework.Tokens
         /*********
         ** Properties
         *********/
+        /// <summary>Get whether the player data is available in the current context.</summary>
+        private readonly Func<bool> IsPlayerDataAvailable;
+
         /// <summary>The defined wallet items and whether the player has them.</summary>
         private readonly IDictionary<WalletItem, Func<bool>> WalletItems = new Dictionary<WalletItem, Func<bool>>
         {
@@ -35,9 +37,11 @@ namespace ContentPatcher.Framework.Tokens
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public HasWalletItemToken()
+        /// <param name="isPlayerDataAvailable">Get whether the player data is available in the current context.</param>
+        public HasWalletItemToken(Func<bool> isPlayerDataAvailable)
             : base(ConditionType.HasWalletItem.ToString(), canHaveMultipleRootValues: true)
         {
+            this.IsPlayerDataAvailable = isPlayerDataAvailable;
             this.EnableSubkeys(required: false, canHaveMultipleValues: false);
         }
 
@@ -46,7 +50,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <returns>Returns whether the token data changed.</returns>
         public override void UpdateContext(IContext context)
         {
-            this.IsValidInContext = Context.IsWorldReady;
+            this.IsValidInContext = this.IsPlayerDataAvailable();
         }
 
         /// <summary>Get the allowed subkeys (or <c>null</c> if any value is allowed).</summary>
@@ -70,8 +74,6 @@ namespace ContentPatcher.Framework.Tokens
         public override IEnumerable<string> GetValues(TokenName name)
         {
             this.AssertTokenName(name);
-            if (!Context.IsWorldReady)
-                yield break;
 
             if (name.HasSubkey())
             {
