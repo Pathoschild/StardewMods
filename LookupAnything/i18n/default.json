@@ -245,8 +245,7 @@
   "item.fence-health.summary": "{{percent}}% (roughly {{count}} days left)",
   "item.recipes.entry": "{{name}} (needs {{count}})",
   "item.number-owned.summary": "you own {{count}} of these",
-  "item.number-cooked.summary": "you have cooked {{count}} of these",
-  "item.number-crafted.summary": "you have crafted {{count}} of these",
+  "item.number-crafted.summary": "you made {{count}} of these",
 
   // monster lookup labels
   "monster.invincible": "Invincible",

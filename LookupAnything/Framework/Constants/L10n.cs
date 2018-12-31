@@ -384,10 +384,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>you own {{count}} of these</c>.</summary>
             public const string OwnedSummary = "item.number-owned.summary";
 
-            /// <summary>A value like <c>you have cooked {{count}} of these</c>.</summary>
-            public const string CookedSummary = "item.number-cooked.summary";
-
-            /// <summary>A value like <c>you have crafted {{count}} of these</c>.</summary>
+            /// <summary>A value like <c>you made {{count}} of these</c>.</summary>
             public const string CraftedSummary = "item.number-crafted.summary";
         }
 

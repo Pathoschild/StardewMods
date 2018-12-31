@@ -219,6 +219,8 @@
   "item.loves-this": "Это любят",
   "item.needed-for": "Нужно для",
   "item.number-owned": "Принадлежит",
+  "item.number-cooked": "Cooked", // TODO
+  "item.number-crafted": "Crafted", // TODO
   "item.recipes": "Рецепты",
   "item.see-also": "Также смотрите",
   "item.sells-for": "Продать за",
@@ -236,6 +238,8 @@
   "item.needed-for.full-shipment": "достижения Мастер-груз (1 шт.)",
   "item.needed-for.polyculture": "достижения Севооборот ({{count}} шт. или больше)",
   "item.needed-for.full-collection": "достижения Полная коллекция (пожертвовать музею)",
+  "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})", // TODO
+  "item.needed-for.craft-master": "craft master achievement (make {{recipes}})", // TODO
   "item.sells-to.shipping-box": "Ящик отгрузки",
   "item.fence-health.gold-clock": "не разрушается (Золотые часы)",
   "item.fence-health.summary": "{{percent}}% (сломается через {{count}} дн.)",
