@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Added times cooked/crafted to item lookups. (Thanks to watson81!)
+* Added 'needed for' support for Gourmet Chef and Craft Master achivements. (Thanks to watson81!)
 * Fixed debug fields showing wrong values in rare cases when an item was customised after it was spawned.
 * Improved translations. Thanks to Nanogamer7 (German)!
 

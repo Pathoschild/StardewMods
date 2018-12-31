@@ -219,6 +219,8 @@
   "item.loves-this": "Loves this",
   "item.needed-for": "Needed for",
   "item.number-owned": "Owned",
+  "item.number-cooked": "Cooked",
+  "item.number-crafted": "Crafted",
   "item.recipes": "Recipes",
   "item.see-also": "See also",
   "item.sells-for": "Sells for",
@@ -236,11 +238,14 @@
   "item.needed-for.full-shipment": "full shipment achievement (ship one)",
   "item.needed-for.polyculture": "polyculture achievement (ship {{count}} more)",
   "item.needed-for.full-collection": "full collection achievement (donate one to museum)",
+  "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})",
+  "item.needed-for.craft-master": "craft master achievement (make {{recipes}})",
   "item.sells-to.shipping-box": "shipping box",
   "item.fence-health.gold-clock": "no decay with Gold Clock",
   "item.fence-health.summary": "{{percent}}% (roughly {{count}} days left)",
   "item.recipes.entry": "{{name}} (needs {{count}})",
   "item.number-owned.summary": "you own {{count}} of these",
+  "item.number-crafted.summary": "you made {{count}} of these",
 
   // monster lookup labels
   "monster.invincible": "Invincible",

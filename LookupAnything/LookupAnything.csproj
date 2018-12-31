@@ -79,6 +79,7 @@
     <Compile Include="Framework\Fields\SkillBarField.cs" />
     <Compile Include="Framework\Models\ObjectModel.cs" />
     <Compile Include="Framework\Models\GiftTasteModel.cs" />
+    <Compile Include="Framework\Models\RecipeType.cs" />
     <Compile Include="Framework\Subjects\FarmerSubject.cs" />
     <Compile Include="Framework\Subjects\TileSubject.cs" />
     <Compile Include="Framework\Targets\TileTarget.cs" />

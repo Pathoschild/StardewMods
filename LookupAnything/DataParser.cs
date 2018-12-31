@@ -332,14 +332,14 @@ namespace Pathoschild.Stardew.LookupAnything
             recipes.AddRange(
                 from entry in metadata.MachineRecipes
                 let machine = new SObject(Vector2.Zero, entry.MachineID)
-                select new RecipeModel(null, machine.DisplayName, entry.Ingredients, ingredient => this.CreateRecipeItem(ingredient.ParentSheetIndex, entry.Output), false, entry.ExceptIngredients)
+                select new RecipeModel(null, RecipeType.MachineInput, machine.DisplayName, entry.Ingredients, ingredient => this.CreateRecipeItem(ingredient.ParentSheetIndex, entry.Output), false, entry.ExceptIngredients, outputItemIndex: entry.Output)
             );
 
             // building recipes
             recipes.AddRange(
                 from entry in metadata.BuildingRecipes
                 let building = new BluePrint(entry.BuildingKey)
-                select new RecipeModel(null, building.displayName, entry.Ingredients, ingredient => this.CreateRecipeItem(ingredient.ParentSheetIndex, entry.Output), false, entry.ExceptIngredients)
+                select new RecipeModel(null, RecipeType.BuildingBlueprint, building.displayName, entry.Ingredients, ingredient => this.CreateRecipeItem(ingredient.ParentSheetIndex, entry.Output), false, entry.ExceptIngredients)
             );
 
             return recipes.ToArray();

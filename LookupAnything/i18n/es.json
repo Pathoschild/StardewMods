@@ -219,6 +219,8 @@
   "item.loves-this": "Lo ama",
   "item.needed-for": "Necesario para",
   "item.number-owned": "Tienes",
+  "item.number-cooked": "Cooked", // TODO
+  "item.number-crafted": "Crafted", // TODO
   "item.recipes": "Recetas",
   "item.see-also": "Ver también",
   "item.sells-for": "Se vende por",
@@ -236,11 +238,14 @@
   "item.needed-for.full-shipment": "Logro de ''full shipment'' (enviar uno)",
   "item.needed-for.polyculture": "Logro de ''polyculture'' (enviar {{count}} más)",
   "item.needed-for.full-collection": "Logro de ''full collection'' (donar esto al museo)",
+  "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})", // TODO
+  "item.needed-for.craft-master": "craft master achievement (make {{recipes}})", // TODO
   "item.sells-to.shipping-box": "Caja de envío",
   "item.fence-health.gold-clock": "Sin decaidas del reloj de oro",
   "item.fence-health.summary": "{{percent}}% (dificilmente {{count}} días)",
   "item.recipes.entry": "{{name}} (necesita {{count}})",
   "item.number-owned.summary": "{{count}} ud(s)",
+  "item.number-crafted.summary": "you made {{count}} of these", // TODO
 
   // monster lookup labels
   "monster.invincible": "Invencible",

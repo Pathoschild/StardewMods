@@ -318,6 +318,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Owned</c>.</summary>
             public const string Owned = "item.number-owned";
 
+            /// <summary>A value like <c>Cooked</c>.</summary>
+            public const string Cooked = "item.number-cooked";
+
+            /// <summary>A value like <c>Crafted</c>.</summary>
+            public const string Crafted = "item.number-crafted";
+
             /// <summary>A value like <c>See also</c>.</summary>
             public const string SeeAlso = "item.see-also";
 
@@ -357,6 +363,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>full collection achievement (donate one to museum)</c>.</summary>
             public const string NeededForFullCollection = "item.needed-for.full-collection";
 
+            /// <summary>A value like <c>gourmet chef achievement (cook {{recipes}})</c>.</summary>
+            public const string NeededForGourmetChef = "item.needed-for.gourmet-chef";
+
+            /// <summary>A value like <c>craft master achievement (make {{recipes}})</c>.</summary>
+            public const string NeededForCraftMaster = "item.needed-for.craft-master";
+
             /// <summary>A value like <c>shipping box</c>.</summary>
             public const string SellsToShippingBox = "item.sells-to.shipping-box";
 
@@ -371,6 +383,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>you own {{count}} of these</c>.</summary>
             public const string OwnedSummary = "item.number-owned.summary";
+
+            /// <summary>A value like <c>you made {{count}} of these</c>.</summary>
+            public const string CraftedSummary = "item.number-crafted.summary";
         }
 
         /// <summary>Monster lookup translations.</summary>

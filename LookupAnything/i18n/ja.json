@@ -219,6 +219,8 @@
   "item.loves-this": "これが大好きな人",
   "item.needed-for": "要求されるもの",
   "item.number-owned": "所有数",
+  "item.number-cooked": "Cooked", // TODO
+  "item.number-crafted": "Crafted", // TODO
   "item.recipes": "レシピ",
   "item.see-also": "これも見て",
   "item.sells-for": "売値",
@@ -236,11 +238,14 @@
   "item.needed-for.full-shipment": "実績:満タンの出荷箱 (一つ出荷)",
   "item.needed-for.polyculture": "実績:混作農業 ({{count}}個出荷)",
   "item.needed-for.full-collection": "実績:コンプリートコレクション (博物館に一つ寄付)",
+  "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})", // TODO
+  "item.needed-for.craft-master": "craft master achievement (make {{recipes}})", // TODO
   "item.sells-to.shipping-box": "出荷箱",
   "item.fence-health.gold-clock": "金の時計の効果で減らない",
   "item.fence-health.summary": "{{percent}}% (残り約{{count}}日)",
   "item.recipes.entry": "{{name}} ({{count}}個必要)",
   "item.number-owned.summary": "{{count}}個持っている",
+  "item.number-crafted.summary": "you made {{count}} of these", // TODO
 
   // monster lookup labels
   "monster.invincible": "無敵",

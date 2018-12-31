@@ -178,9 +178,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     yield return new RecipesForIngredientField(this.GameHelper, this.Translate(L10n.Item.Recipes), item, recipes, this.Text);
             }
 
-            // owned
+            // owned and times cooked/crafted
             if (showInventoryFields && !isCrop && !(item is Tool))
+            {
+                // owned
                 yield return new GenericField(this.GameHelper, this.Translate(L10n.Item.Owned), this.Translate(L10n.Item.OwnedSummary, new { count = this.GameHelper.CountOwnedItems(item) }));
+
+                // times crafted
+                RecipeModel[] recipes = this.GameHelper
+                    .GetRecipes()
+                    .Where(recipe => recipe.OutputItemIndex == this.Target.ParentSheetIndex)
+                    .ToArray();
+                if (recipes.Any())
+                {
+                    string label = this.Translate(recipes.First().Type == RecipeType.Cooking ? L10n.Item.Cooked : L10n.Item.Crafted);
+                    int timesCrafted = recipes.Sum(recipe => recipe.GetTimesCrafted(Game1.player));
+                    yield return new GenericField(this.GameHelper, label, this.Translate(L10n.Item.CraftedSummary, new { count = timesCrafted }));
+                }
+            }
 
             // see also crop
             bool seeAlsoCrop =
@@ -490,21 +505,33 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             List<string> neededFor = new List<string>();
 
+            // fetch info
+            var recipes =
+                (
+                    from recipe in this.GameHelper.GetRecipesForIngredient(this.DisplayItem)
+                    let item = recipe.CreateItem(this.DisplayItem)
+                    orderby item.DisplayName
+                    select new { recipe.Type, item.DisplayName, TimesCrafted = recipe.GetTimesCrafted(Game1.player) }
+                )
+                .ToArray();
+
             // bundles
             {
-                string[] bundles = (
-                    from bundle in this.GetUnfinishedBundles(obj)
-                    orderby bundle.Area, bundle.DisplayName
-                    let countNeeded = this.GetIngredientCountNeeded(bundle, obj)
-                    select countNeeded > 1
-                        ? $"{this.GetTranslatedBundleArea(bundle)}: {bundle.DisplayName} x {countNeeded}"
-                        : $"{this.GetTranslatedBundleArea(bundle)}: {bundle.DisplayName}"
-                ).ToArray();
-                if (bundles.Any())
-                    neededFor.Add(this.Translate(L10n.Item.NeededForCommunityCenter, new { bundles = string.Join(", ", bundles) }));
+                string[] missingBundles =
+                    (
+                        from bundle in this.GetUnfinishedBundles(obj)
+                        orderby bundle.Area, bundle.DisplayName
+                        let countNeeded = this.GetIngredientCountNeeded(bundle, obj)
+                        select countNeeded > 1
+                            ? $"{this.GetTranslatedBundleArea(bundle)}: {bundle.DisplayName} x {countNeeded}"
+                            : $"{this.GetTranslatedBundleArea(bundle)}: {bundle.DisplayName}"
+                    )
+                    .ToArray();
+                if (missingBundles.Any())
+                    neededFor.Add(this.Translate(L10n.Item.NeededForCommunityCenter, new { bundles = string.Join(", ", missingBundles) }));
             }
 
-            // polyculture achievement
+            // polyculture achievement (ship 15 crops)
             if (metadata.Constants.PolycultureCrops.Contains(obj.ParentSheetIndex))
             {
                 int needed = metadata.Constants.PolycultureCount - this.GameHelper.GetShipped(obj.ParentSheetIndex);
@@ -512,14 +539,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     neededFor.Add(this.Translate(L10n.Item.NeededForPolyculture, new { count = needed }));
             }
 
-            // full shipment achievement
+            // full shipment achievement (ship every item)
             if (this.GameHelper.GetFullShipmentAchievementItems().Any(p => p.Key == obj.ParentSheetIndex && !p.Value))
                 neededFor.Add(this.Translate(L10n.Item.NeededForFullShipment));
 
-            // a full collection achievement
+            // full collection achievement (donate every artifact)
             LibraryMuseum museum = Game1.locations.OfType<LibraryMuseum>().FirstOrDefault();
             if (museum != null && museum.isItemSuitableForDonation(obj))
                 neededFor.Add(this.Translate(L10n.Item.NeededForFullCollection));
+
+            // gourmet chef achievement (cook every recipe)
+            {
+                string[] uncookedNames = (from recipe in recipes where recipe.Type == RecipeType.Cooking && recipe.TimesCrafted <= 0 select recipe.DisplayName).ToArray();
+                if (uncookedNames.Any())
+                    neededFor.Add(this.Translate(L10n.Item.NeededForGourmetChef, new { recipes = string.Join(", ", uncookedNames) }));
+            }
+
+            // craft master achievement (craft every item)
+            {
+                string[] uncraftedNames = (from recipe in recipes where recipe.Type == RecipeType.Crafting && recipe.TimesCrafted <= 0 select recipe.DisplayName).ToArray();
+                if (uncraftedNames.Any())
+                    neededFor.Add(this.Translate(L10n.Item.NeededForCraftMaster, new { recipes = string.Join(", ", uncraftedNames) }));
+            }
 
             // yield
             if (neededFor.Any())
