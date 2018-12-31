@@ -257,7 +257,7 @@ namespace Pathoschild.Stardew.TractorMod
                 return;
 
             // workaround for mines not spawning a ladder on monster levels
-            if (e.Location is MineShaft mine && object.ReferenceEquals(e.Location, Game1.currentLocation))
+            if (e.Location is MineShaft mine && e.IsCurrentLocation)
             {
                 if (mine.mustKillAllMonstersToAdvance() && mine.characters.All(p => p is Horse))
                 {
