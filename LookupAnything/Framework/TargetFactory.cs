@@ -336,6 +336,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                                 }
                                 break;
 
+                            // collections menu
+                            // derived from CollectionsPage::performHoverAction
+                            case CollectionsPage collectionsTab:
+                                {
+                                    int currentTab = this.Reflection.GetField<int>(curTab, "currentTab").GetValue();
+                                    if (currentTab == CollectionsPage.achievementsTab || currentTab == CollectionsPage.secretNotesTab)
+                                        break;
+
+                                    int currentPage = this.Reflection.GetField<int>(curTab, "currentPage").GetValue();
+
+                                    foreach (ClickableTextureComponent component in collectionsTab.collections[currentTab][currentPage])
+                                    {
+                                        if (component.containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                                        {
+                                            int itemID = Convert.ToInt32(component.name.Split(' ')[0]);
+                                            SObject obj = new SObject(itemID, 1);
+                                            return new ItemSubject(this.GameHelper, this.Translations, obj, ObjectContext.Inventory, knownQuality: false);
+                                        }
+                                    }
+                                }
+                                break;
+
                             // cooking or crafting menu
                             case CraftingPage _:
                                 {
