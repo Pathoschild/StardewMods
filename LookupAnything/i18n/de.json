@@ -219,8 +219,8 @@
   "item.loves-this": "Liebt das",
   "item.needed-for": "Gebraucht für",
   "item.number-owned": "Im Besitz",
-  "item.number-cooked": "Cooked", // TODO
-  "item.number-crafted": "Crafted", // TODO
+  "item.number-cooked": "Gekocht",
+  "item.number-crafted": "Hergestellt",
   "item.recipes": "Rezepte",
   "item.see-also": "Siehe auch",
   "item.sells-for": "Lässt sich verkaufen für",
@@ -236,16 +236,16 @@
   "item.contents.partial": "{{name}} in {{time}}",
   "item.needed-for.community-center": "Gemeinschaftszentrum ({{bundles}})",
   "item.needed-for.full-shipment": "\"Volle Lieferung\" Errungenschaft (liefere einen)",
-  "item.needed-for.polyculture": "\"Polykultur-Errungenschaft\" (liefere noch {{count}})",
+  "item.needed-for.polyculture": "\"Polykultur\" Errungenschaft (liefere noch {{count}})",
   "item.needed-for.full-collection": "\"Eine vollständige Sammlung\" Errungenschaft (Spende eines dem Museum)",
-  "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})", // TODO
-  "item.needed-for.craft-master": "craft master achievement (make {{recipes}})", // TODO
+  "item.needed-for.gourmet-chef": "\"Gourmetkoch\" Errungenschaft (koche {{recipes}})",
+  "item.needed-for.craft-master": "\"Handwerksmeister\" Errungenschaft (stelle {{recipes}} her)",
   "item.sells-to.shipping-box": "Versandkiste",
   "item.fence-health.gold-clock": "Kein Verfall mit Gold-Uhr",
   "item.fence-health.summary": "{{percent}}% (ungefähr {{count}} Tage übrig)",
   "item.recipes.entry": "{{name}} (braucht {{count}})",
   "item.number-owned.summary": "Du besitzt {{count}} davon",
-  "item.number-crafted.summary": "you made {{count}} of these", // TODO
+  "item.number-crafted.summary": "Du hast bereits {{count}} davon hergestellt",
 
   // monster lookup labels
   "monster.invincible": "Unbesiegbar",
