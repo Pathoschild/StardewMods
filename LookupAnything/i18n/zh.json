@@ -245,6 +245,7 @@
   "item.fence-health.summary": "{{percent}}% (大约还剩{{count}}天)",
   "item.recipes.entry": "{{name}} (需要{{count}})",
   "item.number-owned.summary": "你目前拥有的总数为{{count}}",
+  "item.number-crafted.summary": "you made {{count}} of these", // TODO
 
   // monster lookup labels
   "monster.invincible": "无敌的",

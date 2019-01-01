@@ -245,6 +245,7 @@
   "item.fence-health.summary": "{{percent}}% (сломается через {{count}} дн.)",
   "item.recipes.entry": "{{name}} ({{count}} шт.)",
   "item.number-owned.summary": "вам принадлежит {{count}} шт.",
+  "item.number-crafted.summary": "you made {{count}} of these", // TODO
 
   // monster lookup labels
   "monster.invincible": "Неузявимый",
