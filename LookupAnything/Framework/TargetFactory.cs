@@ -327,6 +327,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         IClickableMenu curTab = tabs[gameMenu.currentTab];
                         switch (curTab)
                         {
+                            // inventory
                             case InventoryPage _:
                                 {
                                     Item item = this.Reflection.GetField<Item>(curTab, "hoveredItem").GetValue();
@@ -335,14 +336,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                                 }
                                 break;
 
+                            // cooking or crafting menu
                             case CraftingPage _:
                                 {
+                                    // player inventory item
                                     Item item = this.Reflection.GetField<Item>(curTab, "hoverItem").GetValue();
                                     if (item != null)
                                         return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+
+                                    // crafting recipe
+                                    CraftingRecipe recipe = this.Reflection.GetField<CraftingRecipe>(curTab, "hoverRecipe").GetValue();
+                                    if (recipe != null)
+                                        return new ItemSubject(this.GameHelper, this.Translations, recipe.createItem(), ObjectContext.Inventory, knownQuality: true);
                                 }
                                 break;
 
+                            // social tab
                             case SocialPage _:
                                 {
                                     // get villagers on current page
