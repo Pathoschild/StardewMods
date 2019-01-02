@@ -25,6 +25,7 @@
   "generic.price-for-stack": "{{price}}з. за пачку из {{count}} шт.",
 
   // types
+  "type.building": "Building", // TODO
   "type.fruit-tree": "Фруктовое дерево",
   "type.map-tile": "Тайл",
   "type.monster": "Монстр",

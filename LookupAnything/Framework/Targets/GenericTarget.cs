@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         ** Properties
         *********/
         /// <summary>Provides utility methods for interacting with the game code.</summary>
-        private readonly GameHelper GameHelper;
+        protected GameHelper GameHelper { get; }
 
         /// <summary>The underlying in-game object.</summary>
         protected TValue Value { get; }

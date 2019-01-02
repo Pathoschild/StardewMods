@@ -25,6 +25,7 @@
   "generic.price-for-stack": "{{price}}g (スタック:{{count}})",
 
   // types
+  "type.building": "Building", // TODO
   "type.fruit-tree": "果樹",
   "type.map-tile": "マップタイル",
   "type.monster": "モンスター",

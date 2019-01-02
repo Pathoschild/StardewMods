@@ -8,6 +8,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using Pathoschild.Stardew.LookupAnything.Framework.Targets;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -149,7 +150,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 yield return new FarmerTarget(this.GameHelper, farmer);
             }
 
-            // tile
+            // buildings
+            if (location is BuildableGameLocation buildableLocation)
+            {
+                foreach (Building building in buildableLocation.buildings)
+                {
+                    if (!this.GameHelper.CouldSpriteOccludeTile(new Vector2(building.tileX.Value, building.tileY.Value + building.tilesHigh.Value), originTile, Constant.MaxBuildingTargetSpriteSize))
+                        continue;
+
+                    yield return new BuildingTarget(this.GameHelper, building);
+                }
+            }
+
+            // tiles
             if (includeMapTile)
                 yield return new TileTarget(this.GameHelper, originTile);
         }
@@ -272,6 +285,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     return new ItemSubject(this.GameHelper, this.Translations, target.GetValue<Item>(), ObjectContext.Inventory, knownQuality: false);
                 case TargetType.Object:
                     return new ItemSubject(this.GameHelper, this.Translations, target.GetValue<Item>(), ObjectContext.World, knownQuality: false);
+
+                // building
+                case TargetType.Building:
+                    return new BuildingSubject(this.GameHelper, target.GetValue<Building>(), target.GetSpritesheetArea(), this.Translations, this.Reflection);
 
                 // tile
                 case TargetType.Tile:

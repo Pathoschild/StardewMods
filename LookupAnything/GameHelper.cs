@@ -380,13 +380,14 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get whether a sprite on a given tile could occlude a specified tile position.</summary>
         /// <param name="spriteTile">The tile of the possible sprite.</param>
         /// <param name="occludeTile">The tile to check for possible occlusion.</param>
-        public bool CouldSpriteOccludeTile(Vector2 spriteTile, Vector2 occludeTile)
+        /// <param name="spriteSize">The largest expected sprite size (measured in tiles).</param>
+        public bool CouldSpriteOccludeTile(Vector2 spriteTile, Vector2 occludeTile, Vector2? spriteSize = null)
         {
-            Vector2 spriteSize = Constant.MaxTargetSpriteSize;
+            spriteSize = spriteSize ?? Constant.MaxTargetSpriteSize;
             return
                 spriteTile.Y >= occludeTile.Y // sprites never extend downard from their tile
-                && Math.Abs(spriteTile.X - occludeTile.X) <= spriteSize.X
-                && Math.Abs(spriteTile.Y - occludeTile.Y) <= spriteSize.Y;
+                && Math.Abs(spriteTile.X - occludeTile.X) <= spriteSize.Value.X
+                && Math.Abs(spriteTile.Y - occludeTile.Y) <= spriteSize.Value.Y;
         }
 
         /// <summary>Get the pixel coordinates within a sprite sheet corresponding to a sprite displayed in the world.</summary>

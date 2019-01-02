@@ -25,6 +25,7 @@
   "generic.price-for-stack": "{{price}}g für einen Stapel von {{count}}",
 
   // types
+  "type.building": "Building", // TODO
   "type.fruit-tree": "Fruchtbaum",
   "type.map-tile": "Kartenkachel",
   "type.monster": "Monster",

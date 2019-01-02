@@ -25,6 +25,7 @@
   "generic.price-for-stack": "{{price}}g for stack of {{count}}",
 
   // types
+  "type.building": "Building",
   "type.fruit-tree": "Fruit tree",
   "type.map-tile": "Map tile",
   "type.monster": "Monster",

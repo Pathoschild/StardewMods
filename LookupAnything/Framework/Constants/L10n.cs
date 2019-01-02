@@ -72,6 +72,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
         /// <summary>Lookup subject types.</summary>
         public static class Types
         {
+            /// <summary>A value like <c>Building</c>.</summary>
+            public const string Building = "type.building";
+
             /// <summary>A value like <c>{{fruitName}} Tree</c>.</summary>
             public const string FruitTree = "type.fruit-tree";
 

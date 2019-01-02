@@ -25,6 +25,7 @@
   "generic.price-for-stack": "{{price}}ouros por um acúmulo de {{count}}",
 
   // types
+  "type.building": "Building", // TODO
   "type.fruit-tree": "Arvore Frutífera",
   "type.map-tile": "Azulejo de mapa",
   "type.monster": "Monstro",

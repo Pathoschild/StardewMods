@@ -25,6 +25,7 @@
   "generic.price-for-stack": "{{price}}g por montón de {{count}}",
 
   // types
+  "type.building": "Building", // TODO
   "type.fruit-tree": "Árbol frutal",
   "type.map-tile": "Casilla del mapa",
   "type.monster": "Monstruo",
