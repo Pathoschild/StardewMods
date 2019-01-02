@@ -190,6 +190,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Owner</c>.</summary>
             public const string Owner = "building.owner";
 
+            /// <summary>A value like <c>Stored hay</c>.</summary>
+            public const string StoredHay = "building.stored-hay";
+
             /****
             ** Values
             ****/
@@ -198,6 +201,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>no owner</c>.</summary>
             public const string OwnerNone = "building.owner.none";
+
+            /// <summary>A value like <c>{{hayCount}} hay (max capacity: {{maxHay}})</c>.</summary>
+            public const string StoredHaySummaryOneSilo = "building.stored-hay.summary-one-silo";
+
+            /// <summary>A value like <c>{{hayCount}} hay in {{siloCount}} silos (max capacity: {{maxHay}})</c>.</summary>
+            public const string StoredHaySummaryMultipleSilos = "building.stored-hay.summary-multiple-silos";
         }
 
         /// <summary>Fruit tree lookup translations.</summary>

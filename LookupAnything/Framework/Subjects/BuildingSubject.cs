@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -64,6 +65,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 yield return new LinkField(this.GameHelper, this.Text.Get(L10n.Building.Owner), owner.Name, () => new FarmerSubject(this.GameHelper, owner, this.Text, this.Reflection));
             else if (building.indoors.Value is Cabin)
                 yield return new GenericField(this.GameHelper, this.Text.Get(L10n.Building.Owner), this.Text.Get(L10n.Building.OwnerNone));
+
+            // silo hay
+            if (building.buildingType.Value == "Silo")
+            {
+                Farm farm = Game1.getFarm();
+                int siloCount = Utility.numSilos();
+                yield return new GenericField(
+                    this.GameHelper,
+                    this.Text.Get(L10n.Building.StoredHay),
+                    this.Text.Get(siloCount == 1 ? L10n.Building.StoredHaySummaryOneSilo : L10n.Building.StoredHaySummaryMultipleSilos, new { hayCount = farm.piecesOfHay, siloCount = siloCount, maxHay = Math.Max(farm.piecesOfHay.Value, siloCount * 240) })
+                );
+            }
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>

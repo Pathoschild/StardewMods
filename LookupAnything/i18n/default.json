@@ -173,10 +173,13 @@
   // building lookup labels
   "building.construction": "Construction",
   "building.owner": "Owner",
+  "building.stored-hay": "Stored hay",
 
   // building lookup values
   "building.construction.summary": "ready on {{date}}",
   "building.owner.none": "no owner",
+  "building.stored-hay.summary-one-silo": "{{hayCount}} hay (max capacity: {{maxHay}})",
+  "building.stored-hay.summary-multiple-silos": "{{hayCount}} hay in {{siloCount}} silos (max capacity: {{maxHay}})",
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "Complaints",
