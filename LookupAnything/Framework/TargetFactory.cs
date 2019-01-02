@@ -122,8 +122,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 if (!this.GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
                     continue;
 
-                if ((feature as HoeDirt)?.crop != null)
-                    yield return new CropTarget(this.GameHelper, feature, spriteTile, this.Reflection);
+                if (feature is HoeDirt dirt && dirt.crop != null)
+                    yield return new CropTarget(this.GameHelper, dirt, spriteTile, this.Reflection);
                 else if (feature is FruitTree fruitTree)
                 {
                     if (this.Reflection.GetField<float>(feature, "alpha").GetValue() < 0.8f)
@@ -141,7 +141,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             }
 
             // players
-            foreach (var farmer in location.farmers)
+            foreach (Farmer farmer in location.farmers)
             {
                 if (!this.GameHelper.CouldSpriteOccludeTile(farmer.getTileLocation(), originTile))
                     continue;
@@ -180,7 +180,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             Rectangle tileArea = this.GameHelper.GetScreenCoordinatesFromTile(tile);
             var candidates = (
                 from target in this.GetNearbyTargets(location, tile, includeMapTile)
-                let spriteArea = target.GetSpriteArea()
+                let spriteArea = target.GetWorldArea()
                 let isAtTile = target.IsAtTile(tile)
                 where
                     target.Type != TargetType.Unknown

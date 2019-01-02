@@ -5,12 +5,12 @@ using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
-using Object = StardewValley.Object;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about a world object.</summary>
-    internal class ObjectTarget : GenericTarget
+    internal class ObjectTarget : GenericTarget<SObject>
     {
         /*********
         ** Public methods
@@ -27,21 +27,44 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-        /// <param name="obj">The underlying in-game object.</param>
+        /// <param name="value">The underlying in-game entity.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public ObjectTarget(GameHelper gameHelper, Object obj, Vector2? tilePosition, IReflectionHelper reflection)
-            : base(gameHelper, TargetType.Object, obj, tilePosition)
+        public ObjectTarget(GameHelper gameHelper, SObject value, Vector2? tilePosition, IReflectionHelper reflection)
+            : base(gameHelper, TargetType.Object, value, tilePosition)
         {
             this.Reflection = reflection;
-            this.CustomSprite = gameHelper.GetSprite(obj, onlyCustom: true); // only get sprite if it's custom; else we'll use contextual logic (e.g. for fence direction)
+            this.CustomSprite = gameHelper.GetSprite(value, onlyCustom: true); // only get sprite if it's custom; else we'll use contextual logic (e.g. for fence direction)
+        }
+
+        /// <summary>Get the sprite's source rectangle within its texture.</summary>
+        public override Rectangle GetSpritesheetArea()
+        {
+            if (this.CustomSprite != null)
+                return this.CustomSprite.SourceRectangle;
+
+            SObject obj = this.Value;
+            switch (obj)
+            {
+                case Fence fence:
+                    return this.GetSpritesheetArea(fence, Game1.currentLocation);
+
+                case Furniture furniture:
+                    return furniture.sourceRect.Value;
+
+                default:
+                    return obj.bigCraftable.Value
+                        ? SObject.getSourceRectForBigCraftable(obj.ParentSheetIndex)
+                        : Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize);
+            }
+
         }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
-        public override Rectangle GetSpriteArea()
+        public override Rectangle GetWorldArea()
         {
             // get object info
-            Object obj = (Object)this.Value;
+            SObject obj = this.Value;
             Rectangle boundingBox = obj.getBoundingBox(this.GetTile());
 
             // get sprite area
@@ -55,54 +78,33 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
                     height: spriteArea.Height
                 );
             }
-            if (obj is Furniture furniture)
-                return this.GetSpriteArea(boundingBox, furniture.sourceRect.Value);
-            if (obj.bigCraftable.Value)
-                return this.GetSpriteArea(boundingBox, Object.getSourceRectForBigCraftable(obj.ParentSheetIndex));
-            if (obj is Fence fence)
-                return this.GetSpriteArea(boundingBox, this.GetSourceRectangle(fence, Game1.currentLocation));
-            else
-                return this.GetSpriteArea(boundingBox, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, Object.spriteSheetTileSize, Object.spriteSheetTileSize));
+
+            return this.GetSpriteArea(boundingBox, this.GetSpritesheetArea());
         }
 
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>
         /// <param name="tile">The tile to search.</param>
         /// <param name="position">The viewport-relative coordinates to search.</param>
-        /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GetSpriteArea"/>.</param>
+        /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GetWorldArea"/>.</param>
         public override bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea)
         {
-            Object obj = (Object)this.Value;
+            SObject obj = this.Value;
 
-            // get sprite data
+            // get texture
             Texture2D spriteSheet;
-            Rectangle sourceRectangle;
             if (this.CustomSprite != null)
-            {
                 spriteSheet = this.CustomSprite.Spritesheet;
-                sourceRectangle = this.CustomSprite.SourceRectangle;
-            }
-            else if (obj is Furniture furniture)
-            {
+            else if (obj is Furniture)
                 spriteSheet = Furniture.furnitureTexture;
-                sourceRectangle = furniture.sourceRect.Value;
-            }
-            else if (obj is Fence fence)
-            {
+            else if (obj is Fence)
                 spriteSheet = this.Reflection.GetField<Lazy<Texture2D>>(obj, "fenceTexture").GetValue().Value;
-                sourceRectangle = this.GetSourceRectangle(fence, Game1.currentLocation);
-            }
             else if (obj.bigCraftable.Value)
-            {
                 spriteSheet = Game1.bigCraftableSpriteSheet;
-                sourceRectangle = Object.getSourceRectForBigCraftable(obj.ParentSheetIndex);
-            }
             else
-            {
                 spriteSheet = Game1.objectSpriteSheet;
-                sourceRectangle = GameLocation.getSourceRectForObject(obj.ParentSheetIndex);
-            }
 
             // check pixel from sprite sheet
+            Rectangle sourceRectangle = this.GetSpritesheetArea();
             SpriteEffects spriteEffects = obj.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             return this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, sourceRectangle, spriteEffects);
         }
@@ -111,7 +113,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="fence">The fence object.</param>
         /// <param name="location">The location containing the fence target.</param>
         /// <remarks>Reverse-engineered from <see cref="Fence.draw(SpriteBatch,int,int,float)"/>.</remarks>
-        private Rectangle GetSourceRectangle(Fence fence, GameLocation location)
+        private Rectangle GetSpritesheetArea(Fence fence, GameLocation location)
         {
             int spriteID = 1;
             if (fence.health.Value > 1.0)

@@ -90,7 +90,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 foreach (ITarget target in targets)
                 {
                     // get metadata
-                    bool spriteAreaIntersects = target.GetSpriteArea().Intersects(tileArea);
+                    bool spriteAreaIntersects = target.GetWorldArea().Intersects(tileArea);
                     ISubject subject = this.TargetFactory.GetSubjectFrom(target);
 
                     // draw tile
@@ -111,7 +111,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                             borderColor *= 0.5f;
                         }
 
-                        Rectangle spriteBox = target.GetSpriteArea();
+                        Rectangle spriteBox = target.GetWorldArea();
                         spriteBatch.DrawLine(spriteBox.X, spriteBox.Y, new Vector2(spriteBox.Width, borderSize), borderColor); // top
                         spriteBatch.DrawLine(spriteBox.X, spriteBox.Y, new Vector2(borderSize, spriteBox.Height), borderColor); // left
                         spriteBatch.DrawLine(spriteBox.X + spriteBox.Width, spriteBox.Y, new Vector2(borderSize, spriteBox.Height), borderColor); // right
