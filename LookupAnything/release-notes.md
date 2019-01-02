@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added building lookups.
 * Added support for lookups from the...
   * cooking menu;
   * crafting menu;

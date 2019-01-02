@@ -178,6 +178,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public const string ComplaintsNotPetted = "animal.complaints.not-petted";
         }
 
+        /// <summary>building lookup translations.</summary>
+        public static class Building
+        {
+            /****
+            ** Labels
+            ****/
+            /// <summary>A value like <c>Owner</c>.</summary>
+            public const string Owner = "building.owner";
+
+            /****
+            ** Values
+            ****/
+            /// <summary>A value like <c>no owner</c>.</summary>
+            public const string OwnerNone = "building.owner.none";
+        }
+
         /// <summary>Fruit tree lookup translations.</summary>
         public static class FruitTree
         {

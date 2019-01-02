@@ -170,6 +170,12 @@
   "animal.complaints.not-petted": "не проявлена забота сегодня",
   "animal.complaints.wild-animal-attack": "атакован диким животным этой ночью",
 
+  // building lookup labels
+  "building.owner": "Owner", // TODO
+
+  // building lookup values
+  "building.owner.none": "no owner", // TODO
+
   // fruit tree lookup labels
   "fruit-tree.complaints": "Жалобы",
   "fruit-tree.name": "{{fruitName}}",

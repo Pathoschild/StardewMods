@@ -5,7 +5,9 @@ using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
+using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Locations;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 {
@@ -47,7 +49,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         public override IEnumerable<ICustomField> GetData(Metadata metadata)
         {
             Building building = this.Target;
-            yield break;
+
+            // owner
+            Farmer owner = this.GetOwner();
+            if (owner != null)
+                yield return new LinkField(this.GameHelper, this.Text.Get(L10n.Building.Owner), owner.Name, () => new FarmerSubject(this.GameHelper, owner, this.Text, this.Reflection));
+            else if (building.indoors.Value is Cabin)
+                yield return new GenericField(this.GameHelper, this.Text.Get(L10n.Building.Owner), this.Text.Get(L10n.Building.OwnerNone));
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
@@ -77,6 +85,29 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             Building target = this.Target;
             spriteBatch.Draw(target.texture.Value, position, this.SourceRectangle, target.color.Value, 0.0f, Vector2.Zero, size.X / this.SourceRectangle.Width, SpriteEffects.None, 0.89f);
             return true;
+        }
+
+
+        /*********
+        ** Private fields
+        *********/
+        /// <summary>Get the building owner, if any.</summary>
+        private Farmer GetOwner()
+        {
+            Building target = this.Target;
+
+            // stable
+            if (target is Stable stable)
+            {
+                long ownerID = stable.owner.Value;
+                return Game1.getFarmerMaybeOffline(ownerID);
+            }
+
+            // cabin
+            if (this.Target.indoors.Value is Cabin cabin)
+                return cabin.owner;
+
+            return null;
         }
     }
 }

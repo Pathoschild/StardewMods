@@ -170,6 +170,12 @@
   "animal.complaints.not-petted": "No ha sido acariciado hoy",
   "animal.complaints.wild-animal-attack": "Atacado por animales salvajes durante la noche",
 
+  // building lookup labels
+  "building.owner": "Owner", // TODO
+
+  // building lookup values
+  "building.owner.none": "no owner", // TODO
+
   // fruit tree lookup labels
   "fruit-tree.complaints": "Quejas",
   "fruit-tree.name": "Árbol de {{fruitName}}",

@@ -170,6 +170,12 @@
   "animal.complaints.not-petted": "hasn't been petted today",
   "animal.complaints.wild-animal-attack": "attacked by wild animals during the night",
 
+  // building lookup labels
+  "building.owner": "Owner",
+
+  // building lookup values
+  "building.owner.none": "no owner",
+
   // fruit tree lookup labels
   "fruit-tree.complaints": "Complaints",
   "fruit-tree.name": "{{fruitName}} Tree",

@@ -170,6 +170,12 @@
   "animal.complaints.not-petted": "今天还没有被爱抚",
   "animal.complaints.wild-animal-attack": "夜晚被野生动物攻击了",
 
+  // building lookup labels
+  "building.owner": "Owner", // TODO
+
+  // building lookup values
+  "building.owner.none": "no owner", // TODO
+
   // fruit tree lookup labels
   "fruit-tree.complaints": "问题",
   "fruit-tree.name": "{{fruitName}}树",
