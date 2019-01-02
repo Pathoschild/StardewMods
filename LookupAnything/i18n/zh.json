@@ -171,9 +171,11 @@
   "animal.complaints.wild-animal-attack": "夜晚被野生动物攻击了",
 
   // building lookup labels
+  "building.construction": "Construction", // TODO
   "building.owner": "Owner", // TODO
 
   // building lookup values
+  "building.construction.summary": "ready on {{date}}", // TODO
   "building.owner.none": "no owner", // TODO
 
   // fruit tree lookup labels

@@ -184,12 +184,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /****
             ** Labels
             ****/
+            /// <summary>A value like <c>Construction</c>.</summary>
+            public const string Construction = "building.construction";
+
             /// <summary>A value like <c>Owner</c>.</summary>
             public const string Owner = "building.owner";
 
             /****
             ** Values
             ****/
+            /// <summary>A value like <c>ready on {{date}}</c>.</summary>
+            public const string ConstructionSummary = "building.construction.summary";
+
             /// <summary>A value like <c>no owner</c>.</summary>
             public const string OwnerNone = "building.owner.none";
         }

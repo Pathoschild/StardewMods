@@ -171,9 +171,11 @@
   "animal.complaints.wild-animal-attack": "Foi atacado por animais selvagens durante a noite",
 
   // building lookup labels
+  "building.construction": "Construction", // TODO
   "building.owner": "Owner", // TODO
 
   // building lookup values
+  "building.construction.summary": "ready on {{date}}", // TODO
   "building.owner.none": "no owner", // TODO
 
   // fruit tree lookup labels

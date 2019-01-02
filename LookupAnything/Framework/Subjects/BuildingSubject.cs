@@ -5,6 +5,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
@@ -49,6 +50,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         public override IEnumerable<ICustomField> GetData(Metadata metadata)
         {
             Building building = this.Target;
+
+            // construction
+            if (building.isUnderConstruction())
+            {
+                SDate readyDate = SDate.Now().AddDays(building.daysOfConstructionLeft.Value);
+                yield return new GenericField(this.GameHelper, this.Text.Get(L10n.Building.Construction), this.Text.Get(L10n.Building.ConstructionSummary, new { date = readyDate }));
+            }
 
             // owner
             Farmer owner = this.GetOwner();
