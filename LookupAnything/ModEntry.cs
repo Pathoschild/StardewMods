@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -238,18 +237,14 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 this.Monitor.Log($"Showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.", LogLevel.Trace);
 
-                // remember previous menu
-                if (Game1.activeClickableMenu != null)
+                LookupMenu lookupMenu = new LookupMenu(this.GameHelper, subject, this.Metadata, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor);
+                if (this.ShouldRestoreMenu(Game1.activeClickableMenu))
                 {
-                    if (!this.Config.HideOnKeyUp || !(Game1.activeClickableMenu is LookupMenu))
-                        this.PreviousMenus.Push(Game1.activeClickableMenu);
+                    this.PreviousMenus.Push(Game1.activeClickableMenu);
+                    this.Helper.Reflection.GetField<IClickableMenu>(typeof(Game1), "_activeClickableMenu").SetValue(lookupMenu); // bypass Game1.activeClickableMenu, which disposes the previous menu
                 }
-
-                // set new menu
-                // (This bypasses Game1.activeClickableMenu, which disposes the previous menu)
-                this.Helper.Reflection
-                    .GetField<IClickableMenu>(typeof(Game1), "_activeClickableMenu")
-                    .SetValue(new LookupMenu(this.GameHelper, subject, this.Metadata, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor));
+                else
+                    Game1.activeClickableMenu = lookupMenu;
             });
         }
 
@@ -312,6 +307,21 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 this.Metadata = this.Helper.Data.ReadJsonFile<Metadata>(this.DatabaseFileName);
             });
+        }
+
+        /// <summary>Get whether a given menu should be restored when the lookup ends.</summary>
+        /// <param name="menu">The menu to check.</param>
+        private bool ShouldRestoreMenu(IClickableMenu menu)
+        {
+            // no menu
+            if (menu == null)
+                return false;
+
+            // if 'hide on key up' is enabled, all lookups should close on key up
+            if (this.Config.HideOnKeyUp && menu is LookupMenu)
+                return false;
+
+            return true;
         }
     }
 }
