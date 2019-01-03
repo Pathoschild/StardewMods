@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
@@ -41,9 +42,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         public BuildingSubject(GameHelper gameHelper, Building building, Rectangle sourceRectangle, ITranslationHelper translations, IReflectionHelper reflectionHelper)
             : base(gameHelper, building.buildingType.Value, null, translations.Get(L10n.Types.Building), translations)
         {
+            // init
             this.Reflection = reflectionHelper;
             this.Target = building;
             this.SourceRectangle = sourceRectangle;
+
+            // get name/description from blueprint if available
+            try
+            {
+                BluePrint blueprint = new BluePrint(building.buildingType.Value);
+                this.Name = blueprint.displayName;
+                this.Description = blueprint.description;
+            }
+            catch (ContentLoadException)
+            {
+                // use default values
+            }
         }
 
         /// <summary>Get the data to display for this subject.</summary>
