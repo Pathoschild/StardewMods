@@ -288,7 +288,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                 // building
                 case TargetType.Building:
-                    return new BuildingSubject(this.GameHelper, target.GetValue<Building>(), target.GetSpritesheetArea(), this.Translations, this.Reflection);
+                    return new BuildingSubject(this.GameHelper, this.Metadata, target.GetValue<Building>(), target.GetSpritesheetArea(), this.Translations, this.Reflection);
 
                 // tile
                 case TargetType.Tile:

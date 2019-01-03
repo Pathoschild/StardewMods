@@ -11,6 +11,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Characters;
 using StardewValley.Locations;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
@@ -30,6 +31,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>The building's source rectangle in its spritesheet.</summary>
         private readonly Rectangle SourceRectangle;
 
+        /// <summary>Provides metadata that's not available from the game data directly.</summary>
+        private readonly Metadata Metadata;
+
 
         /*********
         ** Public methods
@@ -37,13 +41,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="building">The lookup target.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="sourceRectangle">The building's source rectangle in its spritesheet.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public BuildingSubject(GameHelper gameHelper, Building building, Rectangle sourceRectangle, ITranslationHelper translations, IReflectionHelper reflectionHelper)
+        public BuildingSubject(GameHelper gameHelper, Metadata metadata, Building building, Rectangle sourceRectangle, ITranslationHelper translations, IReflectionHelper reflectionHelper)
             : base(gameHelper, building.buildingType.Value, null, translations.Get(L10n.Types.Building), translations)
         {
             // init
+            this.Metadata = metadata;
             this.Reflection = reflectionHelper;
             this.Target = building;
             this.SourceRectangle = sourceRectangle;
@@ -83,6 +89,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 yield return new LinkField(this.GameHelper, this.Text.Get(L10n.Building.Owner), owner.Name, () => new FarmerSubject(this.GameHelper, owner, this.Text, this.Reflection));
             else if (building.indoors.Value is Cabin)
                 yield return new GenericField(this.GameHelper, this.Text.Get(L10n.Building.Owner), this.Text.Get(L10n.Building.OwnerNone));
+
+            // stable horse
+            if (building is Stable stable)
+            {
+                Horse horse = Utility.findHorse(stable.HorseId);
+                if (horse != null)
+                {
+                    yield return new LinkField(this.GameHelper, this.Text.Get(L10n.Building.Horse), horse.Name, () => new CharacterSubject(this.GameHelper, horse, TargetType.Horse, this.Metadata, this.Text, this.Reflection));
+                    yield return new GenericField(this.GameHelper, this.Text.Get(L10n.Building.HorseLocation), this.Text.Get(L10n.Building.HorseLocationSummary, new { location = horse.currentLocation.Name, x = horse.getTileX(), y = horse.getTileY() }));
+                }
+            }
 
             // upgrade level
             if (!underConstruction)

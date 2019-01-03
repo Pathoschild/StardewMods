@@ -187,6 +187,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Construction</c>.</summary>
             public const string Construction = "building.construction";
 
+            /// <summary>A value like <c>Horse</c>.</summary>
+            public const string Horse = "building.horse";
+
+            /// <summary>A value like <c>Horse</c>.</summary>
+            public const string HorseLocation = "building.horse-location";
+
             /// <summary>A value like <c>Owner</c>.</summary>
             public const string Owner = "building.owner";
 
@@ -201,6 +207,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             ****/
             /// <summary>A value like <c>ready on {{date}}</c>.</summary>
             public const string ConstructionSummary = "building.construction.summary";
+
+            /// <summary>A value like <c>{{location}} ({{x}}, {{y}})</c>.</summary>
+            public const string HorseLocationSummary = "building.horse-location.summary";
 
             /// <summary>A value like <c>no owner</c>.</summary>
             public const string OwnerNone = "building.owner.none";

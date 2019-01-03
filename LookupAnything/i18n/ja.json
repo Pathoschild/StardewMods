@@ -173,6 +173,8 @@
   // building lookup labels
   // TODO
   "building.construction": "Construction",
+  "building.horse": "Horse",
+  "building.horse-location": "Horse location",
   "building.owner": "Owner",
   "building.stored-hay": "Stored hay",
   "building.upgrades": "Upgrades",
@@ -180,6 +182,7 @@
   // building lookup values
   // TODO
   "building.construction.summary": "ready on {{date}}",
+  "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
   "building.owner.none": "no owner",
   "building.stored-hay.summary-one-silo": "{{hayCount}} hay (max capacity: {{maxHay}})",
   "building.stored-hay.summary-multiple-silos": "{{hayCount}} hay in {{siloCount}} silos (max capacity: {{maxHay}})",
