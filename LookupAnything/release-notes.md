@@ -11,6 +11,7 @@
 * Added 'needed for' support for Gourmet Chef and Craft Master achivements. (Thanks to watson81!)
 * After clicking a link in a lookup menu, closing the new lookup now returns you to the previous one.
 * Fixed previous menu not restored when `HideOnKeyUp` option is enabled.
+* Fixed visual bug on social tab after lookup when zoom is exactly 100%.
 * Fixed debug fields showing wrong values in rare cases when an item was customised after it was spawned.
 * Improved translations. Thanks to Nanogamer7 (German)!
 
