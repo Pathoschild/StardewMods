@@ -171,15 +171,27 @@
   "animal.complaints.wild-animal-attack": "夜晚被野生动物攻击了",
 
   // building lookup labels
-  "building.construction": "Construction", // TODO
-  "building.owner": "Owner", // TODO
-  "building.stored-hay": "Stored hay", // TODO
+  // TODO
+  "building.construction": "Construction",
+  "building.owner": "Owner",
+  "building.stored-hay": "Stored hay",
+  "building.upgrades": "Upgrades",
 
   // building lookup values
-  "building.construction.summary": "ready on {{date}}", // TODO
-  "building.owner.none": "no owner", // TODO
-  "building.stored-hay.summary-one-silo": "{{hayCount}} hay (max capacity: {{maxHay}})", // TODO
-  "building.stored-hay.summary-multiple-silos": "{{hayCount}} hay in {{siloCount}} silos (max capacity: {{maxHay}})", // TODO
+  // TODO
+  "building.construction.summary": "ready on {{date}}",
+  "building.owner.none": "no owner",
+  "building.stored-hay.summary-one-silo": "{{hayCount}} hay (max capacity: {{maxHay}})",
+  "building.stored-hay.summary-multiple-silos": "{{hayCount}} hay in {{siloCount}} silos (max capacity: {{maxHay}})",
+  "building.upgrades.barn.0": "up to 4 animals, add cows",
+  "building.upgrades.barn.1": "up to 8 animals, add pregnancy and goats",
+  "building.upgrades.barn.2": "up to 12 animals, add autofeed, pigs, and sheep",
+  "building.upgrades.cabin.0": "initial cabin",
+  "building.upgrades.cabin.1": "add kitchen, enable marriage",
+  "building.upgrades.cabin.2": "enable children",
+  "building.upgrades.coop.0": "up to 4 animals; add chickens",
+  "building.upgrades.coop.1": "up to 8 animals; add incubator, dinosaurs, and ducks",
+  "building.upgrades.coop.2": "up to 12 animals; add autofeed and rabbits",
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "问题",

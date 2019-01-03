@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using StardewValley;
@@ -27,6 +27,12 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         {
             /// <summary>The sprite sheet containing the icon sprites.</summary>
             public static Texture2D Sheet => Game1.mouseCursors;
+
+            /// <summary>An empty checkbox icon.</summary>
+            public static readonly Rectangle EmptyCheckbox = new Rectangle(227, 425, 9, 9);
+
+            /// <summary>A filled checkbox icon.</summary>
+            public static readonly Rectangle FilledCheckbox = new Rectangle(236, 425, 9, 9);
 
             /// <summary>A filled heart indicating a friendship level.</summary>
             public static readonly Rectangle FilledHeart = new Rectangle(211, 428, 7, 6);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -64,12 +65,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         public override IEnumerable<ICustomField> GetData(Metadata metadata)
         {
+            // get info
             Building building = this.Target;
+            bool underConstruction = building.isUnderConstruction();
 
-            // construction
-            if (building.isUnderConstruction())
+            // construction / upgrade
+            if (underConstruction || building.daysUntilUpgrade.Value > 0)
             {
-                SDate readyDate = SDate.Now().AddDays(building.daysOfConstructionLeft.Value);
+                int daysLeft = building.isUnderConstruction() ? building.daysOfConstructionLeft.Value : building.daysUntilUpgrade.Value;
+                SDate readyDate = SDate.Now().AddDays(daysLeft);
                 yield return new GenericField(this.GameHelper, this.Text.Get(L10n.Building.Construction), this.Text.Get(L10n.Building.ConstructionSummary, new { date = readyDate }));
             }
 
@@ -80,8 +84,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             else if (building.indoors.Value is Cabin)
                 yield return new GenericField(this.GameHelper, this.Text.Get(L10n.Building.Owner), this.Text.Get(L10n.Building.OwnerNone));
 
+            // upgrade level
+            if (!underConstruction)
+            {
+                var upgradeLevels = this.GetUpgradeLevels(building).ToArray();
+                if (upgradeLevels.Any())
+                    yield return new CheckboxListField(this.GameHelper, this.Text.Get(L10n.Building.Upgrades), upgradeLevels);
+            }
+
             // silo hay
-            if (building.buildingType.Value == "Silo")
+            if (!underConstruction && building.buildingType.Value == "Silo")
             {
                 Farm farm = Game1.getFarm();
                 int siloCount = Utility.numSilos();
@@ -143,6 +155,68 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 return cabin.owner;
 
             return null;
+        }
+
+        /// <summary>Get the upgrade levels for a building, for use with a checkbox field.</summary>
+        /// <param name="building">The building to check.</param>
+        private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetUpgradeLevels(Building building)
+        {
+            // barn
+            if (building is Barn barn)
+            {
+                if (int.TryParse(barn.nameOfIndoorsWithoutUnique.Substring("Barn".Length), out int upgradeLevel))
+                    upgradeLevel--; // Barn2 is first upgrade, etc
+
+                yield return new KeyValuePair<IFormattedText[], bool>(
+                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesBarn0)) },
+                    value: true
+                );
+                yield return new KeyValuePair<IFormattedText[], bool>(
+                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesBarn1)) },
+                    value: upgradeLevel >= 1
+                );
+                yield return new KeyValuePair<IFormattedText[], bool>(
+                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesBarn2)) },
+                    value: upgradeLevel >= 2
+                );
+            }
+
+            // cabin
+            else if (building.indoors.Value is Cabin cabin)
+            {
+                yield return new KeyValuePair<IFormattedText[], bool>(
+                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesCabin0)) },
+                    value: true
+                );
+                yield return new KeyValuePair<IFormattedText[], bool>(
+                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesCabin1)) },
+                    value: cabin.upgradeLevel >= 1
+                );
+                yield return new KeyValuePair<IFormattedText[], bool>(
+                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesCabin2)) },
+                    value: cabin.upgradeLevel >= 2
+                );
+            }
+
+            // coop
+            else if (building is Coop coop)
+            {
+                if (int.TryParse(coop.nameOfIndoorsWithoutUnique.Substring("Coop".Length), out int upgradeLevel))
+                    upgradeLevel--; // Coop2 is first upgrade, etc
+
+                yield return new KeyValuePair<IFormattedText[], bool>(
+                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesCoop0)) },
+                    value: true
+                );
+                yield return new KeyValuePair<IFormattedText[], bool>(
+                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesCoop1)) },
+                    value: upgradeLevel >= 1
+                );
+                yield return new KeyValuePair<IFormattedText[], bool>(
+                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesCoop2)) },
+                    value: upgradeLevel >= 2
+                );
+            }
         }
     }
 }
