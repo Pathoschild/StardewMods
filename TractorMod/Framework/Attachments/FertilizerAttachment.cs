@@ -49,8 +49,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             if (item == null || item.Stack <= 0)
                 return false;
 
-            // get dirt
-            if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out bool dirtCoveredByObj) || dirt.fertilizer.Value != HoeDirt.noFertilizer)
+            // get empty dirt
+            if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out bool dirtCoveredByObj) || dirt.crop != null || dirt.fertilizer.Value != HoeDirt.noFertilizer)
                 return false;
 
             // ignore if there's a giant crop, meteorite, etc covering the tile
