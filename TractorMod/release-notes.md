@@ -1,6 +1,7 @@
 # Release notes
 ## Upcoming release
 * Fixed stable no longer in Robin's carpenter menu after building a tractor garage.
+* Fixed compatibility with Tool Geodes mod.
 
 ## 4.7.2
 * Fixed horses becoming tractors in some cases. (If you saved after that happened, [see this forum comment](https://community.playstarbound.com/threads/tractor-mod.136649/page-14#post-3319770)).
