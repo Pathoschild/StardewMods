@@ -184,8 +184,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /****
             ** Labels
             ****/
+            /// <summary>A value like <c>Animals</c>.</summary>
+            public const string Animals = "building.animals";
+
             /// <summary>A value like <c>Construction</c>.</summary>
             public const string Construction = "building.construction";
+
+            /// <summary>A value like <c>Feed trough</c>.</summary>
+            public const string FeedTrough = "building.feed-trough";
 
             /// <summary>A value like <c>Horse</c>.</summary>
             public const string Horse = "building.horse";
@@ -196,23 +202,41 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Owner</c>.</summary>
             public const string Owner = "building.owner";
 
+            /// <summary>A value like <c>Slimes</c>.</summary>
+            public const string Slimes = "building.slimes";
+
             /// <summary>A value like <c>Stored hay</c>.</summary>
             public const string StoredHay = "building.stored-hay";
 
             /// <summary>A value like <c>Upgrades</c>.</summary>
             public const string Upgrades = "building.upgrades";
 
+            /// <summary>A value like <c>Water trough</c>.</summary>
+            public const string WaterTrough = "building.water-trough";
+
             /****
             ** Values
             ****/
+            /// <summary>A value like <c>{{count}} of max {{max}} animals</c>.</summary>
+            public const string AnimalsSummary = "building.animals.summary";
+
             /// <summary>A value like <c>ready on {{date}}</c>.</summary>
             public const string ConstructionSummary = "building.construction.summary";
+
+            /// <summary>A value like <c>automated</c>.</summary>
+            public const string FeedTroughAutomated = "building.feed-trough.automated";
+
+            /// <summary>A value like <c>{{filled}} of {{max}} feed slots filled</c>.</summary>
+            public const string FeedTroughSummary = "building.feed-trough.summary";
 
             /// <summary>A value like <c>{{location}} ({{x}}, {{y}})</c>.</summary>
             public const string HorseLocationSummary = "building.horse-location.summary";
 
             /// <summary>A value like <c>no owner</c>.</summary>
             public const string OwnerNone = "building.owner.none";
+
+            /// <summary>A value like <c>{{count}} of max {{max}} slimes</c>.</summary>
+            public const string SlimesSummary = "building.slimes.summary";
 
             /// <summary>A value like <c>{{hayCount}} hay (max capacity: {{maxHay}})</c>.</summary>
             public const string StoredHaySummaryOneSilo = "building.stored-hay.summary-one-silo";
@@ -246,6 +270,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>up to 12 animals; add autofeed and rabbits</c>.</summary>
             public const string UpgradesCoop2 = "building.upgrades.coop.2";
+
+            /// <summary>A value like <c>{{filled}} of {{max}} water troughs filled</c>.</summary>
+            public const string WaterTroughSummary = "building.water-trough.summary";
         }
 
         /// <summary>Fruit tree lookup translations.</summary>
