@@ -199,8 +199,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Horse</c>.</summary>
             public const string HorseLocation = "building.horse-location";
 
+            /// <summary>A value like <c>Harvesting enabled</c>.</summary>
+            public const string JunimoHarvestingEnabled = "building.junimo-harvesting-enabled";
+
             /// <summary>A value like <c>Owner</c>.</summary>
             public const string Owner = "building.owner";
+
+            /// <summary>A value like <c>Produce ready</c>.</summary>
+            public const string OutputProcessing = "building.output-processing";
+
+            /// <summary>A value like <c>Produce ready</c>.</summary>
+            public const string OutputReady = "building.output-ready";
 
             /// <summary>A value like <c>Slimes</c>.</summary>
             public const string Slimes = "building.slimes";

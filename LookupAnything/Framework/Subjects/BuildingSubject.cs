@@ -152,6 +152,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     text.Get(siloCount == 1 ? L10n.Building.StoredHaySummaryOneSilo : L10n.Building.StoredHaySummaryMultipleSilos, new { hayCount = farm.piecesOfHay, siloCount = siloCount, maxHay = Math.Max(farm.piecesOfHay.Value, siloCount * 240) })
                 );
             }
+
+            if (built && building is JunimoHut hut)
+            {
+                yield return new GenericField(this.GameHelper, text.Get(L10n.Building.JunimoHarvestingEnabled), text.Stringify(!hut.noHarvest.Value));
+                yield return new ItemIconListField(this.GameHelper, text.Get(L10n.Building.OutputReady), hut.output.Value?.items, showStackSize: true);
+            }
+
+            // mill output
+            if (built && building is Mill mill)
+            {
+                yield return new ItemIconListField(this.GameHelper, text.Get(L10n.Building.OutputProcessing), mill.input.Value?.items, showStackSize: true);
+                yield return new ItemIconListField(this.GameHelper, text.Get(L10n.Building.OutputReady), mill.output.Value?.items, showStackSize: true);
+            }
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
