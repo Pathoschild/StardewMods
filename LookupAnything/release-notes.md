@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Added building lookups.
+* Added building lookups. That includes general info (like name and description), plus info specific to barns, coops, cabins, Junimo huts, mills, silos, slime hutches, and stables.
 * Added support for lookups from the...
   * cooking menu;
   * crafting menu;
