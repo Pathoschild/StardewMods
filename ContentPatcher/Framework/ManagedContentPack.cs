@@ -10,7 +10,7 @@ namespace ContentPatcher.Framework
     internal class ManagedContentPack
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>A dictionary which matches case-insensitive relative paths to the exact path on disk, for case-insensitive file lookups on Linux/Mac.</summary>
         private IDictionary<string, string> RelativePaths;

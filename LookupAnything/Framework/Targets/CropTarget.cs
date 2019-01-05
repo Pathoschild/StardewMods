@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
     internal class CropTarget : GenericTarget<HoeDirt>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;

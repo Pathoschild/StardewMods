@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.LookupAnything
     internal class GameHelper
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The cached object data.</summary>
         private Lazy<ObjectModel[]> Objects;

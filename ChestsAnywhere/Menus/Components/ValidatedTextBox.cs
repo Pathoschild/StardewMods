@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
     internal class ValidatedTextBox : IKeyboardSubscriber
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The underlying textbox.</summary>
         private readonly TextBox Textbox;
@@ -22,7 +22,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
 
 
         /*********
-        ** Properties
+        ** Accessors
         *********/
         /// <summary>The input text.</summary>
         public string Text

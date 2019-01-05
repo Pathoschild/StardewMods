@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
     internal class ChestContainer : IContainer
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The underlying chest.</summary>
         private readonly Chest Chest;

@@ -8,7 +8,7 @@ namespace Pathoschild.Stardew.Common.Integrations.BetterSprinklers
     internal class BetterSprinklersIntegration : BaseIntegration
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod's public API.</summary>
         private readonly IBetterSprinklersApi ModApi;

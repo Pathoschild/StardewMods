@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
     internal class SeedAttachment : BaseAttachment
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The attachment settings.</summary>
         private readonly SeedsConfig Config;

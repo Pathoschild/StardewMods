@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.Automate.Framework
     internal class OverlayMenu : BaseOverlay
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The padding to apply to tile backgrounds to make the grid visible.</summary>
         private readonly int TileGap = 1;

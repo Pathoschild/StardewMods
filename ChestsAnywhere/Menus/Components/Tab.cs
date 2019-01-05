@@ -9,7 +9,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
     internal class Tab : ClickableComponent
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The font with which to render text.</summary>
         private readonly SpriteFont Font;

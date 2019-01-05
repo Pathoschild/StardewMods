@@ -16,7 +16,7 @@ namespace ContentPatcher.Framework
     internal class TokenManager : IContext
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The available global tokens.</summary>
         private readonly GenericTokenContext GlobalContext = new GenericTokenContext();

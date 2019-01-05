@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
     internal class DebugInterface
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         private readonly GameHelper GameHelper;

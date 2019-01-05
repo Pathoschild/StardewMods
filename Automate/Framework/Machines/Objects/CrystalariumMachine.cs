@@ -9,7 +9,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     internal class CrystalariumMachine : GenericObjectMachine<SObject>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;

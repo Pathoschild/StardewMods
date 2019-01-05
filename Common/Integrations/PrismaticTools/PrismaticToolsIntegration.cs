@@ -8,7 +8,7 @@ namespace Pathoschild.Stardew.Common.Integrations.PrismaticTools
     internal class PrismaticToolsIntegration : BaseIntegration
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod's public API.</summary>
         private readonly IPrismaticToolsApi ModApi;

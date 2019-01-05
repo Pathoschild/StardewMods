@@ -8,7 +8,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     internal class CheesePressMachine : GenericObjectMachine<SObject>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The recipes processed by this machine (input => output).</summary>
         private readonly IRecipe[] Recipes =

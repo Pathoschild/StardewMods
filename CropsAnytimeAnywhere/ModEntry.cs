@@ -19,7 +19,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
     internal class ModEntry : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;

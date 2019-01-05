@@ -8,7 +8,7 @@ namespace ContentPatcher.Framework.Tokens
     internal interface IToken
     {
         /*********
-        ** Properties
+        ** Accessors
         *********/
         /// <summary>The token name.</summary>
         TokenName Name { get; }

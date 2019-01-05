@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
     internal class ShippingBinContainer : IContainer
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The name of the data key for the shipping bin name.</summary>
         private readonly string DataKey = "shipping-bin";

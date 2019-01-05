@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.SkipIntro
     internal class ModEntry : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;

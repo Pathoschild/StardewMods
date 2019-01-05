@@ -20,7 +20,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
     internal class LookupMenu : IClickableMenu
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The subject metadata.</summary>
         private readonly ISubject Subject;

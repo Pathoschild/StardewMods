@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
     internal class FertilizerAttachment : BaseAttachment
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The attachment settings.</summary>
         private readonly FertilizerConfig Config;

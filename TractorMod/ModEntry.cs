@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.TractorMod
     internal class ModEntry : Mod, IAssetLoader
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /****
         ** Constants

@@ -7,7 +7,7 @@ namespace Pathoschild.Stardew.Automate
     public class TrackedItem : ITrackedStack
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The item stack.</summary>
         private readonly Item Item;

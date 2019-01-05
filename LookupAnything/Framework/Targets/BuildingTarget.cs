@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
     internal class BuildingTarget : GenericTarget<Building>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The building's tile area.</summary>
         private readonly Rectangle TileArea;

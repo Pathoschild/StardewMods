@@ -21,7 +21,7 @@ namespace ContentPatcher
     internal class ModEntry : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The name of the file which contains patch metadata.</summary>
         private readonly string PatchFileName = "content.json";

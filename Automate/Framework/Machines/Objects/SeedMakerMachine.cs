@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     internal class SeedMakerMachine : GenericObjectMachine<SObject>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>A crop ID => seed ID lookup.</summary>
         private static readonly IDictionary<int, int> CropSeedIDs = SeedMakerMachine.GetCropSeedIDs();

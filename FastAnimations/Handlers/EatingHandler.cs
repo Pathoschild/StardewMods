@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
     internal class EatingHandler : BaseAnimationHandler
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Simplifies access to private code.</summary>
         private readonly IReflectionHelper Reflection;

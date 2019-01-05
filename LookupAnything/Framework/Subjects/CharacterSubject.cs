@@ -21,7 +21,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
     internal class CharacterSubject : BaseSubject
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The NPC type.s</summary>
         private readonly TargetType TargetType;

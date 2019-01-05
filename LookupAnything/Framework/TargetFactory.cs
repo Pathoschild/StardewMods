@@ -22,7 +22,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
     internal class TargetFactory
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Provides metadata that's not available from the game data directly.</summary>
         private readonly Metadata Metadata;

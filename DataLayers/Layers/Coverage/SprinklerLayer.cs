@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
     internal class SprinklerLayer : BaseLayer
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The color for sprinkled tiles.</summary>
         private readonly Color WetColor = Color.Green;

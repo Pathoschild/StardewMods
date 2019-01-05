@@ -16,7 +16,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
     internal class JunimoHutLayer : BaseLayer
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The color for tiles harvested by a Junimo hut.</summary>
         private readonly Color CoveredColor = Color.Green;

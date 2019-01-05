@@ -23,7 +23,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
     internal class ItemSubject : BaseSubject
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The lookup target.</summary>
         private readonly Item Target;

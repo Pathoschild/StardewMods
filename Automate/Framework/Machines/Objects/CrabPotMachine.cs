@@ -14,7 +14,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     internal class CrabPotMachine : GenericObjectMachine<CrabPot>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;

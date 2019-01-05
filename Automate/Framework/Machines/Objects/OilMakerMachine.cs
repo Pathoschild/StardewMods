@@ -8,7 +8,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     internal class OilMakerMachine : GenericObjectMachine<SObject>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The recipes to process.</summary>
         private readonly IRecipe[] Recipes =

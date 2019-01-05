@@ -9,7 +9,7 @@ namespace ContentPatcher.Framework.Patches
     internal interface IPatch
     {
         /*********
-        ** Properties
+        ** Accessors
         *********/
         /// <summary>A unique name for this patch shown in log messages.</summary>
         string LogName { get; }

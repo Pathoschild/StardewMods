@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.Automate.Framework
     internal class StorageManager : IStorage
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The storage containers.</summary>
         private readonly IContainer[] Containers;

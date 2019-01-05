@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
     internal abstract class GenericTarget<TValue> : ITarget
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         protected GameHelper GameHelper { get; }

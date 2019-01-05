@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
     internal class RecipeModel
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The item that be created by this recipe, given the ingredient.</summary>
         private readonly Func<Item, Item> Item;

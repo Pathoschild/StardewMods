@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
     internal class BeeHouseLayer : BaseLayer
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The color for tiles covered by a bee house.</summary>
         private readonly Color CoveredColor = Color.Green;

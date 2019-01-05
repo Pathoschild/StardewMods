@@ -8,7 +8,7 @@ namespace Pathoschild.Stardew.Automate
     public class TrackedItemCollection : ITrackedStack
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The underlying item stacks.</summary>
         private readonly ITrackedStack[] Stacks;

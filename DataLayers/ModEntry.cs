@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.DataLayers
     internal class ModEntry : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;

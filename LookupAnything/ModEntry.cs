@@ -19,7 +19,7 @@ namespace Pathoschild.Stardew.LookupAnything
     internal class ModEntry : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /****
         ** Configuration

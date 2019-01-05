@@ -63,7 +63,7 @@ namespace Pathoschild.Stardew.Automate.Framework
     internal abstract class BaseMachine<TMachine> : BaseMachine
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The underlying entity automated by this machine. This is only stored for the machine instance, and can be null if not applicable.</summary>
         protected TMachine Machine { get; }

@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
     internal class CharacterFriendshipField : GenericField
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The player's current friendship data with the NPC.</summary>
         private readonly FriendshipModel Friendship;

@@ -9,7 +9,7 @@ namespace ContentPatcher.Framework
     internal class ModTokenContext : IContext
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The available global tokens.</summary>
         private readonly IContext GlobalContext;

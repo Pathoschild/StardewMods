@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.Automate.Framework
     internal class MachineGroupBuilder
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The location containing the group.</summary>
         private readonly GameLocation Location;

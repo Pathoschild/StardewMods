@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     internal class RecyclingMachine : GenericObjectMachine<SObject>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The RNG to use for randomising output.</summary>
         private static readonly Random Random = new Random();

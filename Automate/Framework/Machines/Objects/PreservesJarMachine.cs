@@ -9,7 +9,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     internal class PreservesJarMachine : GenericObjectMachine<SObject>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The recipes to process.</summary>
         private readonly IRecipe[] Recipes =

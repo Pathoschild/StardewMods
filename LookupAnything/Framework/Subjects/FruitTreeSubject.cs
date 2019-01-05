@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
     internal class FruitTreeSubject : BaseSubject
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The underlying target.</summary>
         private readonly FruitTree Target;

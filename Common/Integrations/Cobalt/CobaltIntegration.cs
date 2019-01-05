@@ -8,7 +8,7 @@ namespace Pathoschild.Stardew.Common.Integrations.Cobalt
     internal class CobaltIntegration : BaseIntegration
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod's public API.</summary>
         private readonly ICobaltApi ModApi;

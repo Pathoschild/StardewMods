@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
     internal class CustomAttachment : BaseAttachment
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The enabled custom tool or item names.</summary>
         private readonly InvariantHashSet CustomNames;

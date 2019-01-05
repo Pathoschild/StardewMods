@@ -9,7 +9,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
     internal class ManagedChest
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The default name to display if it hasn't been customised.</summary>
         private readonly string DefaultDisplayName;

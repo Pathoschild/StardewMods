@@ -6,7 +6,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
     internal class ContainerData
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>A regular expression which matches a group of tags in the chest name.</summary>
         private const string TagGroupPattern = @"\|([^\|]+)\|";

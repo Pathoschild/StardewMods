@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
     internal class TrashCanMachine : BaseMachine
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The machine's position in its location.</summary>
         private readonly Vector2 Tile;

@@ -21,7 +21,7 @@ namespace Pathoschild.Stardew.Automate.Framework
     internal class AutomationFactory : IAutomationFactory
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;

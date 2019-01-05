@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.Automate.Framework
     internal class MachineGroupFactory
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The automation factories which construct machines, containers, and connectors.</summary>
         private readonly IList<IAutomationFactory> AutomationFactories = new List<IAutomationFactory>();

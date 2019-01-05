@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
     internal class ItemIconListField : GenericField
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The items to draw.</summary>
         private readonly Tuple<Item, SpriteInfo>[] Items;

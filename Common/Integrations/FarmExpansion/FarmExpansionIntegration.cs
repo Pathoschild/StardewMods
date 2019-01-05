@@ -7,7 +7,7 @@ namespace Pathoschild.Stardew.Common.Integrations.FarmExpansion
     internal class FarmExpansionIntegration : BaseIntegration
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod's public API.</summary>
         private readonly IFarmExpansionApi ModApi;

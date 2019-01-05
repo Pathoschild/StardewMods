@@ -15,7 +15,7 @@ namespace ContentPatcher.Framework
     internal class DebugOverlay : BaseOverlay
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The size of the margin around the displayed legend.</summary>
         private readonly int Margin = 30;

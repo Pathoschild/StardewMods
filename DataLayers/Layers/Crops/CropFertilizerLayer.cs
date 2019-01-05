@@ -14,7 +14,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
     internal class CropFertilizerLayer : BaseLayer
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The color for fertilizer.</summary>
         private readonly Color FertilizerColor = Color.Green;

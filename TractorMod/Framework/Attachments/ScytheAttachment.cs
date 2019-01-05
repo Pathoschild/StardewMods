@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
     internal class ScytheAttachment : BaseAttachment
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The attachment settings.</summary>
         private readonly ScytheConfig Config;

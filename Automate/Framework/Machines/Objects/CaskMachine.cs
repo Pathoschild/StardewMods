@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     internal class CaskMachine : GenericObjectMachine<Cask>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The items which can be aged in a cask with their aging rates.</summary>
         private readonly IDictionary<int, float> AgingRates = new Dictionary<int, float>

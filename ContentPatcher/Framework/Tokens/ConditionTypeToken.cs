@@ -10,7 +10,7 @@ namespace ContentPatcher.Framework.Tokens
     internal class ConditionTypeToken : BaseToken
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The allowed values for the root token (or <c>null</c> if any value is allowed).</summary>
         private readonly InvariantHashSet AllowedRootValues;

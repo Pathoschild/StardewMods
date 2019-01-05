@@ -13,7 +13,7 @@ namespace ContentPatcher.Framework.Tokens
     internal class SkillLevelToken : BaseToken
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Get whether the player data is available in the current context.</summary>
         private readonly Func<bool> IsPlayerDataAvailable;

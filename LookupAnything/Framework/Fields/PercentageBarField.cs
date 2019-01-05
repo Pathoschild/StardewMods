@@ -9,7 +9,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
     internal class PercentageBarField : GenericField
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The current progress value.</summary>
         protected readonly int CurrentValue;

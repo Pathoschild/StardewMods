@@ -14,7 +14,7 @@ namespace ContentPatcher.Framework.Commands
     internal class CommandHandler
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;

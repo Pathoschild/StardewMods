@@ -14,7 +14,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
     internal class CropHarvestLayer : BaseLayer
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The color when a crop is ready.</summary>
         private readonly Color ReadyColor = Color.Green;

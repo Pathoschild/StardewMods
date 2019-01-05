@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.Automate.Framework
     public class AutomateAPI : IAutomateAPI
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;

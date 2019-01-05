@@ -16,7 +16,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
     internal class TreeSubject : BaseSubject
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The underlying target.</summary>
         private readonly Tree Target;

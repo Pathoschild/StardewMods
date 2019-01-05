@@ -19,7 +19,7 @@ namespace Pathoschild.Stardew.LookupAnything
     internal class DataParser
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         private readonly GameHelper GameHelper;

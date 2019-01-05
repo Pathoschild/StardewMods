@@ -8,7 +8,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     internal class FurnaceMachine : GenericObjectMachine<SObject>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The recipes to process.</summary>
         /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/>.</remarks>

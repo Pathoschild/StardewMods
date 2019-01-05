@@ -7,7 +7,7 @@ namespace Pathoschild.Stardew.Common.Integrations.PelicanFiber
     internal class PelicanFiberIntegration : BaseIntegration
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The full type name of the Pelican Fiber mod's build menu.</summary>
         private readonly string MenuTypeName = "PelicanFiber.Framework.ConstructionMenu";

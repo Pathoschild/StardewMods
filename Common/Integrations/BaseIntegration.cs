@@ -7,7 +7,7 @@ namespace Pathoschild.Stardew.Common.Integrations
     internal abstract class BaseIntegration : IModIntegration
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod's unique ID.</summary>
         protected string ModID { get; }

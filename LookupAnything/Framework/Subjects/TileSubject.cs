@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
     internal class TileSubject : BaseSubject
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The game location.</summary>
         private readonly GameLocation Location;

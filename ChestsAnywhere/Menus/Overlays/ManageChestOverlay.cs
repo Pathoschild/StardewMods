@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
     internal class ManageChestOverlay : BaseOverlay
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /****
         ** Data

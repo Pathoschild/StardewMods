@@ -8,7 +8,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     internal class TapperMachine : GenericObjectMachine<SObject>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The tree type.</summary>
         private readonly int TreeType;

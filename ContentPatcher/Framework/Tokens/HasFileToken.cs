@@ -12,7 +12,7 @@ namespace ContentPatcher.Framework.Tokens
     internal class HasFileToken : BaseToken
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod folder from which to load assets.</summary>
         private readonly string ModFolder;

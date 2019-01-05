@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
     internal class CheckboxListField : GenericField
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The checkbox values to display.</summary>
         private readonly KeyValuePair<IFormattedText[], bool>[] Checkboxes;

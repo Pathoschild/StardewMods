@@ -9,7 +9,7 @@ namespace ContentPatcher.Framework.Tokens
     internal abstract class BaseToken : IToken
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Whether the root token may contain multiple values.</summary>
         protected bool CanHaveMultipleRootValues { get; set; }
