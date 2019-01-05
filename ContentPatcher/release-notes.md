@@ -1,6 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.6.2
+* Conditions are now checked much sooner when loading a save, so early setup like map debris spawning can be affected conditionally.
+* Fixed token subkey form not allowed in boolean fields.
+* Updated for changes in the upcoming SMAPI 3.0.
+
 ## 1.6.1
 * Fixed error when a content pack has a patch with no `Target` field.
 * Fixed some conditions using subkeys marked invalid incorrectly.

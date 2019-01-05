@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         where TItem : class
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /****
         ** Constants

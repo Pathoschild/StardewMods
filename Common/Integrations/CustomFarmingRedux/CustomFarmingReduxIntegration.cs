@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux
     internal class CustomFarmingReduxIntegration : BaseIntegration
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod's public API.</summary>
         private readonly ICustomFarmingApi ModApi;

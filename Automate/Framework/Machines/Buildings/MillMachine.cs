@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
     internal class MillMachine : BaseMachine<Mill>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mill's input chest.</summary>
         private Chest Input => this.Machine.input.Value;

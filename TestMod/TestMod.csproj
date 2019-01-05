@@ -7,8 +7,8 @@
     <ProjectGuid>{91F894EE-6D23-49E8-A0AD-E6A976B8AA82}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pathoschild.Stardew.TestContentMod</RootNamespace>
-    <AssemblyName>TestContentMod</AssemblyName>
+    <RootNamespace>Pathoschild.Stardew.TestMod</RootNamespace>
+    <AssemblyName>TestMod</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <LangVersion>latest</LangVersion>

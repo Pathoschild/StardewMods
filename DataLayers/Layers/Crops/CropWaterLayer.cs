@@ -14,7 +14,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
     internal class CropWaterLayer : BaseLayer
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The color for a dry crop.</summary>
         private readonly Color DryColor = Color.Red;

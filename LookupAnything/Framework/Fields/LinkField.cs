@@ -8,7 +8,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
     internal class LinkField : GenericField, ILinkField
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Gets the subject the link points to.</summary>
         private readonly Func<ISubject> Subject;

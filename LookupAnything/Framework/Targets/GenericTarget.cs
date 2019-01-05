@@ -6,13 +6,17 @@ using StardewValley;
 namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about an object in the world.</summary>
-    internal abstract class GenericTarget : ITarget
+    /// <typeparam name="TValue">The underlying value type.</typeparam>
+    internal abstract class GenericTarget<TValue> : ITarget
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Provides utility methods for interacting with the game code.</summary>
-        private readonly GameHelper GameHelper;
+        protected GameHelper GameHelper { get; }
+
+        /// <summary>The underlying in-game object.</summary>
+        protected TValue Value { get; }
 
 
         /*********
@@ -20,9 +24,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         *********/
         /// <summary>The target type.</summary>
         public TargetType Type { get; set; }
-
-        /// <summary>The underlying in-game object.</summary>
-        public object Value { get; set; }
 
         /// <summary>The object's tile position in the current location (if applicable).</summary>
         public Vector2? Tile { get; set; }
@@ -51,11 +52,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <typeparam name="T">The expected value type.</typeparam>
         public T GetValue<T>()
         {
-            return (T)this.Value;
+            return (T)(object)this.Value;
         }
 
+        /// <summary>Get the sprite's source rectangle within its texture.</summary>
+        public abstract Rectangle GetSpritesheetArea();
+
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
-        public virtual Rectangle GetSpriteArea()
+        public virtual Rectangle GetWorldArea()
         {
             return this.GameHelper.GetScreenCoordinatesFromTile(this.GetTile());
         }
@@ -63,7 +67,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>
         /// <param name="tile">The tile to search.</param>
         /// <param name="position">The viewport-relative coordinates to search.</param>
-        /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GetSpriteArea"/>.</param>
+        /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GetWorldArea"/>.</param>
         public virtual bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea)
         {
             return this.IsAtTile(tile);
@@ -76,13 +80,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="type">The target type.</param>
-        /// <param name="obj">The underlying in-game object.</param>
+        /// <param name="value">The underlying in-game entity.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        protected GenericTarget(GameHelper gameHelper, TargetType type, object obj, Vector2? tilePosition = null)
+        protected GenericTarget(GameHelper gameHelper, TargetType type, TValue value, Vector2? tilePosition = null)
         {
             this.GameHelper = gameHelper;
             this.Type = type;
-            this.Value = obj;
+            this.Value = value;
             this.Tile = tilePosition;
         }
 
@@ -101,7 +105,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>
         /// <param name="tile">The tile to search.</param>
         /// <param name="position">The viewport-relative coordinates to search.</param>
-        /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GetSpriteArea"/>.</param>
+        /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GetWorldArea"/>.</param>
         /// <param name="spriteSheet">The sprite sheet containing the displayed sprite.</param>
         /// <param name="spriteSourceRectangle">The coordinates and dimensions of the sprite within the sprite sheet.</param>
         /// <param name="spriteEffects">The transformation to apply on the sprite.</param>

@@ -14,7 +14,7 @@ namespace ContentPatcher.Framework.Patches
     internal class EditDataPatch : Patch
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;

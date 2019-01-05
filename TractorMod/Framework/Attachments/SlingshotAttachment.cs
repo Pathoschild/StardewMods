@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
     internal class SlingshotAttachment : BaseAttachment
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The attachment settings.</summary>
         private readonly SlingshotConfig Config;

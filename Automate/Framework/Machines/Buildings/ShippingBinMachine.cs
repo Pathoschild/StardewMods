@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
     internal class ShippingBinMachine : BaseMachine
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The farm to automate.</summary>
         private readonly Farm Farm;

@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.Common.UI
     internal abstract class BaseOverlay : IDisposable
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The SMAPI events available for mods.</summary>
         private readonly IModEvents Events;

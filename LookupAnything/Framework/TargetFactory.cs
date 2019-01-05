@@ -8,6 +8,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using Pathoschild.Stardew.LookupAnything.Framework.Targets;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -21,7 +22,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
     internal class TargetFactory
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Provides metadata that's not available from the game data directly.</summary>
         private readonly Metadata Metadata;
@@ -122,8 +123,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 if (!this.GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
                     continue;
 
-                if ((feature as HoeDirt)?.crop != null)
-                    yield return new CropTarget(this.GameHelper, feature, spriteTile, this.Reflection);
+                if (feature is HoeDirt dirt && dirt.crop != null)
+                    yield return new CropTarget(this.GameHelper, dirt, spriteTile, this.Reflection);
                 else if (feature is FruitTree fruitTree)
                 {
                     if (this.Reflection.GetField<float>(feature, "alpha").GetValue() < 0.8f)
@@ -141,7 +142,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             }
 
             // players
-            foreach (var farmer in location.farmers)
+            foreach (Farmer farmer in location.farmers)
             {
                 if (!this.GameHelper.CouldSpriteOccludeTile(farmer.getTileLocation(), originTile))
                     continue;
@@ -149,7 +150,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 yield return new FarmerTarget(this.GameHelper, farmer);
             }
 
-            // tile
+            // buildings
+            if (location is BuildableGameLocation buildableLocation)
+            {
+                foreach (Building building in buildableLocation.buildings)
+                {
+                    if (!this.GameHelper.CouldSpriteOccludeTile(new Vector2(building.tileX.Value, building.tileY.Value + building.tilesHigh.Value), originTile, Constant.MaxBuildingTargetSpriteSize))
+                        continue;
+
+                    yield return new BuildingTarget(this.GameHelper, building);
+                }
+            }
+
+            // tiles
             if (includeMapTile)
                 yield return new TileTarget(this.GameHelper, originTile);
         }
@@ -180,7 +193,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             Rectangle tileArea = this.GameHelper.GetScreenCoordinatesFromTile(tile);
             var candidates = (
                 from target in this.GetNearbyTargets(location, tile, includeMapTile)
-                let spriteArea = target.GetSpriteArea()
+                let spriteArea = target.GetWorldArea()
                 let isAtTile = target.IsAtTile(tile)
                 where
                     target.Type != TargetType.Unknown
@@ -273,6 +286,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case TargetType.Object:
                     return new ItemSubject(this.GameHelper, this.Translations, target.GetValue<Item>(), ObjectContext.World, knownQuality: false);
 
+                // building
+                case TargetType.Building:
+                    return new BuildingSubject(this.GameHelper, this.Metadata, target.GetValue<Building>(), target.GetSpritesheetArea(), this.Translations, this.Reflection);
+
                 // tile
                 case TargetType.Tile:
                     return new TileSubject(this.GameHelper, Game1.currentLocation, target.GetValue<Vector2>(), this.Translations);
@@ -327,6 +344,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         IClickableMenu curTab = tabs[gameMenu.currentTab];
                         switch (curTab)
                         {
+                            // inventory
                             case InventoryPage _:
                                 {
                                     Item item = this.Reflection.GetField<Item>(curTab, "hoveredItem").GetValue();
@@ -335,14 +353,44 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                                 }
                                 break;
 
-                            case CraftingPage _:
+                            // collections menu
+                            // derived from CollectionsPage::performHoverAction
+                            case CollectionsPage collectionsTab:
                                 {
-                                    Item item = this.Reflection.GetField<Item>(curTab, "hoverItem").GetValue();
-                                    if (item != null)
-                                        return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                                    int currentTab = this.Reflection.GetField<int>(curTab, "currentTab").GetValue();
+                                    if (currentTab == CollectionsPage.achievementsTab || currentTab == CollectionsPage.secretNotesTab)
+                                        break;
+
+                                    int currentPage = this.Reflection.GetField<int>(curTab, "currentPage").GetValue();
+
+                                    foreach (ClickableTextureComponent component in collectionsTab.collections[currentTab][currentPage])
+                                    {
+                                        if (component.containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                                        {
+                                            int itemID = Convert.ToInt32(component.name.Split(' ')[0]);
+                                            SObject obj = new SObject(itemID, 1);
+                                            return new ItemSubject(this.GameHelper, this.Translations, obj, ObjectContext.Inventory, knownQuality: false);
+                                        }
+                                    }
                                 }
                                 break;
 
+                            // cooking or crafting menu
+                            case CraftingPage _:
+                                {
+                                    // player inventory item
+                                    Item item = this.Reflection.GetField<Item>(curTab, "hoverItem").GetValue();
+                                    if (item != null)
+                                        return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+
+                                    // crafting recipe
+                                    CraftingRecipe recipe = this.Reflection.GetField<CraftingRecipe>(curTab, "hoverRecipe").GetValue();
+                                    if (recipe != null)
+                                        return new ItemSubject(this.GameHelper, this.Translations, recipe.createItem(), ObjectContext.Inventory, knownQuality: true);
+                                }
+                                break;
+
+                            // social tab
                             case SocialPage _:
                                 {
                                     // get villagers on current page
@@ -384,7 +432,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         {
                             Item item = this.Reflection.GetField<Item>(menu, "hoveredItem").GetValue();
                             if (item != null)
-                                return new ItemSubject(this.GameHelper, this.Translations, item.getOne(), ObjectContext.Inventory, knownQuality: true);
+                                return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
                         }
 
                         // list of required ingredients
@@ -438,7 +486,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     {
                         Item item = this.Reflection.GetField<Item>(menu, "hoveredItem").GetValue();
                         if (item != null)
-                            return new ItemSubject(this.GameHelper, this.Translations, item.getOne(), ObjectContext.Inventory, knownQuality: true);
+                            return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
                     }
                     break;
 
@@ -459,7 +507,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         // get hovered item
                         Item item = Game1.player.Items[index];
                         if (item != null)
-                            return new ItemSubject(this.GameHelper, this.Translations, item.getOne(), ObjectContext.Inventory, knownQuality: true);
+                            return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
                     }
                     break;
 

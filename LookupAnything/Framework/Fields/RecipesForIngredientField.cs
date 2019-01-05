@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
     internal class RecipesForIngredientField : GenericField
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Metadata needed to draw a recipe.</summary>
         private struct Entry

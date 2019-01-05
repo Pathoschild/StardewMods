@@ -8,7 +8,7 @@ namespace ContentPatcher.Framework.Tokens
     internal class ImmutableToken : BaseToken
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The allowed values for the root token (or <c>null</c> if any value is allowed).</summary>
         private readonly InvariantHashSet AllowedRootValues;
@@ -48,9 +48,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
         public override InvariantHashSet GetAllowedValues(TokenName name)
         {
-            if (name.HasSubkey())
-                return new InvariantHashSet { true.ToString(), false.ToString() };
-            return this.AllowedRootValues;
+            return name.HasSubkey()
+                ? InvariantHashSet.Boolean()
+                : this.AllowedRootValues;
         }
 
         /// <summary>Get the current token values.</summary>

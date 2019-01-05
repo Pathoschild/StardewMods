@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.11.1
+* Improved Automate API to simplify custom machines.
+* Fixed error when the game has invalid fish data.
+* Fixed tree tapper automation issue in Automate 1.11.
+* Fixed gates not working as connectors.
+
 ## 1.11
 * Added API to support custom machines, containers, and connectors.
 * Updated for the upcoming SMAPI 3.0.

@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
     internal class ChestFactory
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The item ID for auto-grabbers.</summary>
         private readonly int AutoGrabberID = 165;

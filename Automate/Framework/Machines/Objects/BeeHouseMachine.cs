@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     internal class BeeHouseMachine : GenericObjectMachine<SObject>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The honey types produced by this beehouse indexed by input ID.</summary>
         private readonly IDictionary<int, SObject.HoneyType> HoneyTypes = new Dictionary<int, SObject.HoneyType>
@@ -30,8 +30,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The location containing the machine.</param>
-        public BeeHouseMachine(SObject machine, GameLocation location)
-            : base(machine, location) { }
+        /// <param name="tile">The tile covered by the machine.</param>
+        public BeeHouseMachine(SObject machine, GameLocation location, Vector2 tile)
+            : base(machine, location, tile) { }
 
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()

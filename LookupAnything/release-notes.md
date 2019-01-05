@@ -1,6 +1,17 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.21
+* Added building lookups. That includes general info (like name and description) and info specific to barns, coops, cabins, Junimo huts, mills, silos, slime hutches, and stables.
+* Added support for lookups from the cooking, crafting, and collection menus.
+* Added times cooked/crafted to item lookups. (Thanks to watson81!)
+* Added 'needed for' support for Gourmet Chef and Craft Master achivements. (Thanks to watson81!)
+* After clicking a link in a lookup menu, closing the new lookup now returns you to the previous one.
+* Fixed previous menu not restored when `HideOnKeyUp` option is enabled.
+* Fixed visual bug on social tab after lookup when zoom is exactly 100%.
+* Fixed debug fields showing wrong values in rare cases when an item was customised after it was spawned.
+* Improved translations. Thanks to Nanogamer7 (German)!
+
 ## 1.20.1
 * Updated for the upcoming SMAPI 3.0.
 * Improved translations. Thanks to Nanogamer7 (German)!

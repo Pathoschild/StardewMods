@@ -25,6 +25,7 @@
   "generic.price-for-stack": "{{count}}个，总共价值{{price}}g",
 
   // types
+  "type.building": "Building", // TODO
   "type.fruit-tree": "果树",
   "type.map-tile": "地格",
   "type.monster": "怪物",
@@ -169,6 +170,32 @@
   "animal.complaints.not-petted": "今天还没有被爱抚",
   "animal.complaints.wild-animal-attack": "夜晚被野生动物攻击了",
 
+  // building lookup labels
+  // TODO
+  "building.construction": "Construction",
+  "building.horse": "Horse",
+  "building.horse-location": "Horse location",
+  "building.owner": "Owner",
+  "building.stored-hay": "Stored hay",
+  "building.upgrades": "Upgrades",
+
+  // building lookup values
+  // TODO
+  "building.construction.summary": "ready on {{date}}",
+  "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
+  "building.owner.none": "no owner",
+  "building.stored-hay.summary-one-silo": "{{hayCount}} hay (max capacity: {{maxHay}})",
+  "building.stored-hay.summary-multiple-silos": "{{hayCount}} hay in {{siloCount}} silos (max capacity: {{maxHay}})",
+  "building.upgrades.barn.0": "up to 4 animals, add cows",
+  "building.upgrades.barn.1": "up to 8 animals, add pregnancy and goats",
+  "building.upgrades.barn.2": "up to 12 animals, add autofeed, pigs, and sheep",
+  "building.upgrades.cabin.0": "initial cabin",
+  "building.upgrades.cabin.1": "add kitchen, enable marriage",
+  "building.upgrades.cabin.2": "enable children",
+  "building.upgrades.coop.0": "up to 4 animals; add chickens",
+  "building.upgrades.coop.1": "up to 8 animals; add incubator, dinosaurs, and ducks",
+  "building.upgrades.coop.2": "up to 12 animals; add autofeed and rabbits",
+
   // fruit tree lookup labels
   "fruit-tree.complaints": "问题",
   "fruit-tree.name": "{{fruitName}}树",
@@ -219,6 +246,8 @@
   "item.loves-this": "最爱",
   "item.needed-for": "用于",
   "item.number-owned": "拥有",
+  "item.number-cooked": "Cooked", // TODO
+  "item.number-crafted": "Crafted", // TODO
   "item.recipes": "配方",
   "item.see-also": "另请参阅",
   "item.sells-for": "售价为",
@@ -236,11 +265,14 @@
   "item.needed-for.full-shipment": "全部货物成就(出货一个)",
   "item.needed-for.polyculture": "混合栽培成就(再出货{{count}}个)",
   "item.needed-for.full-collection": "全套收集成就(向博物馆捐赠一个)",
+  "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})", // TODO
+  "item.needed-for.craft-master": "craft master achievement (make {{recipes}})", // TODO
   "item.sells-to.shipping-box": "出货箱",
   "item.fence-health.gold-clock": "黄金时钟增益，无法腐坏",
   "item.fence-health.summary": "{{percent}}% (大约还剩{{count}}天)",
   "item.recipes.entry": "{{name}} (需要{{count}})",
   "item.number-owned.summary": "你目前拥有的总数为{{count}}",
+  "item.number-crafted.summary": "you made {{count}} of these", // TODO
 
   // monster lookup labels
   "monster.invincible": "无敌的",
@@ -303,11 +335,6 @@
   "player.luck": "运气",
 
   // player lookup values
-  "player.farm-map.forest": "Forest", // TODO
-  "player.farm-map.hill-top": "Hill-top", // TODO
-  "player.farm-map.riverland": "Riverland", // TODO
-  "player.farm-map.standard": "Standard", // TODO
-  "player.farm-map.wilderness": "Wilderness", // TODO
   "player.farm-map.custom": "Custom", // TODO
   "player.gender.male": "男",
   "player.gender.female": "女",

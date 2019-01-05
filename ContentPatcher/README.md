@@ -564,6 +564,9 @@ Or you can match against multiple NPCs like this:
 }
 ```
 
+**Note:** this is only available once the save is fully loaded, so it may not reliably affect
+conditional map spawn logic.
+
 </td>
 </tr>
 
@@ -597,6 +600,9 @@ Dating   | The player gave them a bouquet.
 Engaged  | The player gave them a mermaid's pendant, but the marriage hasn't happened yet.
 Married  | The player married them.
 Divorced | The player married and then divorced them.
+
+**Note:** this is only available once the save is fully loaded, so it may not reliably affect
+conditional map spawn logic.
 
 </td>
 </tr>

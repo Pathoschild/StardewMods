@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
     internal class GrassStarterAttachment : BaseAttachment
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The attachment settings.</summary>
         private readonly GrassStarterConfig Config;

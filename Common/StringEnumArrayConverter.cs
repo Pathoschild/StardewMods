@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.Common
     internal class StringEnumArrayConverter : StringEnumConverter
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Whether to return null values for missing data instead of an empty array.</summary>
         public bool AllowNull { get; set; }

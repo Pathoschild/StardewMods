@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Buildings;
 using SObject = StardewValley.Object;
@@ -13,10 +14,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="obj">The feed hopper to automate.</param>
         /// <param name="location">The location containing the machine.</param>
-        public FeedHopperMachine(SObject obj, GameLocation location)
-            : base(location, BaseMachine.GetTileAreaFor(obj)) { }
+        /// <param name="tile">The tile covered by the machine.</param>
+        public FeedHopperMachine(GameLocation location, Vector2 tile)
+            : base(location, BaseMachine.GetTileAreaFor(tile)) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="silo">The silo to automate.</param>

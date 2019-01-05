@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
     internal class LoadGameMenuHandler : BaseAnimationHandler
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;

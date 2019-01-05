@@ -16,7 +16,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
     internal class DataLayerOverlay : BaseOverlay
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /*****
         ** Constants and config

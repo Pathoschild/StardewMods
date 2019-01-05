@@ -11,7 +11,7 @@ namespace ContentPatcher.Framework.Migrations
     internal class AggregateMigration : IMigration
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The valid format versions.</summary>
         private readonly HashSet<string> ValidVersions;

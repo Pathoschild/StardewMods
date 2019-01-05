@@ -9,7 +9,7 @@ namespace Pathoschild.Stardew.Common.Integrations.Automate
     internal class AutomateIntegration : BaseIntegration
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod's public API.</summary>
         private readonly IAutomateApi ModApi;

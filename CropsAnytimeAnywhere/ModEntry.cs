@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
@@ -8,6 +10,8 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
 
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere
 {
@@ -15,10 +19,13 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
     internal class ModEntry : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
+
+        /// <summary>Whether to enable tilling for more tile types.</summary>
+        private bool OverrideTilling;
 
         /// <summary>The seasons for which to override crops.</summary>
         private HashSet<string> EnabledSeasons;
@@ -36,13 +43,16 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
         {
             // read config
             this.Config = helper.ReadConfig<ModConfig>();
-            this.EnabledSeasons = new HashSet<string>(this.Config.Seasons.GetEnabledSeasons(), StringComparer.InvariantCultureIgnoreCase);
+            this.OverrideTilling = this.Config.ForceTillable.IsAnyEnabled();
+            this.EnabledSeasons = new HashSet<string>(this.Config.EnableInSeasons.GetEnabledSeasons(), StringComparer.InvariantCultureIgnoreCase);
 
             // hook events
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
-            helper.Events.World.LocationListChanged += this.OnLocationListChanged;
             helper.Events.GameLoop.DayEnding += this.OnDayEnding;
             helper.Events.GameLoop.Saving += this.OnSaving;
+            helper.Events.World.LocationListChanged += this.OnLocationListChanged;
+            if (this.OverrideTilling)
+                helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         }
 
 
@@ -52,6 +62,24 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
         /****
         ** Event handlers
         ****/
+        /// <summary>Raised after the player presses a button on the keyboard, controller, or mouse.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        {
+            // allow tilling more tiles
+            // (The game has some messy logic for deciding which specific tile to till, but just marking the surrounding tiles diggable is sufficient for our purposes.)
+            if (Context.IsWorldReady && e.Button.IsUseToolButton() && Game1.player.CurrentTool is Hoe)
+            {
+                GameLocation location = Game1.currentLocation;
+                foreach (Vector2 tile in Utility.getSurroundingTileLocationsArray(e.Cursor.GrabTile).Concat(new[] { e.Cursor.GrabTile }))
+                {
+                    if (this.ShouldMakeTillable(location, tile))
+                        location.setTileProperty((int)tile.X, (int)tile.Y, "Back", "Diggable", "T");
+                }
+            }
+        }
+
         /// <summary>The method called after a new day starts.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -101,7 +129,11 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
                 return;
 
             // remove changes before save (to avoid making changes permanent if the mod is uninstalled)
-            this.ClearChanges();
+            if (this.EnabledLocations.Any())
+            {
+                this.ApplyTreeUpdates();
+                this.ClearChanges();
+            }
         }
 
 
@@ -136,15 +168,74 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
         {
             foreach (GameLocation location in locations)
             {
-                if (!location.IsOutdoors || location.IsGreenhouse == value || (!this.Config.AllowCropsAnywhere && !(location is Farm)))
+                if (!location.IsOutdoors || location.IsGreenhouse == value || (!this.Config.FarmAnyLocation && !(location is Farm)))
                     continue;
 
+                // set mode
                 this.Monitor.VerboseLog($"Set {location.Name} to {(value ? "greenhouse" : "non-greenhouse")}.");
                 location.IsGreenhouse = value;
+                foreach (FruitTree tree in location.terrainFeatures.Values.OfType<FruitTree>())
+                    tree.GreenHouseTree = value;
+
+                // track changes
                 if (value)
                     greenhouseified.Add(location);
                 else
                     greenhouseified.Remove(location);
+            }
+        }
+
+        /// <summary>Add fruit to fruit trees in enabled locations, if they'd normally be out of season. This is a workaround for an issue where fruit trees don't check the <see cref="GameLocation.IsGreenhouse"/> field (see https://stardewvalleywiki.com/User:Pathoschild/Modding_wishlist#Small_changes .)</summary>
+        [SuppressMessage("SMAPI", "AvoidNetField", Justification = "The location name can only be changed through the net field.")]
+        private void ApplyTreeUpdates()
+        {
+            foreach (GameLocation location in this.EnabledLocations)
+            {
+                var trees =
+                    (
+                        from pair in location.terrainFeatures.Pairs
+                        let tree = pair.Value as FruitTree
+                        where tree != null
+                        select new { Tile = pair.Key, Tree = tree }
+                    )
+                    .ToArray();
+
+                if (trees.Any())
+                {
+                    string oldName = location.Name;
+                    try
+                    {
+                        location.name.Value = "Greenhouse";
+                        foreach (var pair in trees)
+                        {
+                            if (pair.Tree.fruitSeason.Value != Game1.currentSeason && pair.Tree.fruitsOnTree.Value < FruitTree.maxFruitsOnTrees)
+                                pair.Tree.dayUpdate(location, pair.Tile);
+                        }
+                    }
+                    finally
+                    {
+                        location.name.Value = oldName;
+                    }
+                }
+            }
+        }
+
+        /// <summary>Get whether to override tilling for a given tile.</summary>
+        /// <param name="location">The game location to check.</param>
+        /// <param name="tile">The tile position to check.</param>
+        private bool ShouldMakeTillable(GameLocation location, Vector2 tile)
+        {
+            ModConfigForceTillable config = this.Config.ForceTillable;
+            switch (location.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Type", "Back"))
+            {
+                case "Dirt":
+                    return config.Dirt;
+                case "Grass":
+                    return config.Grass;
+                case "Stone":
+                    return config.Stone;
+                default:
+                    return config.Other;
             }
         }
     }

@@ -12,7 +12,7 @@ namespace ContentPatcher.Framework.Patches
     internal class LoadPatch : Patch
     {
         /*********
-        ** Properties
+        ** Accessors
         *********/
         /// <summary>The asset key to load from the content pack instead.</summary>
         public TokenString LocalAsset { get; }

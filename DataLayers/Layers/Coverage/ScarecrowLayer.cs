@@ -14,7 +14,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
     internal class ScarecrowLayer : BaseLayer
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The color for tiles protected by a scarecrow.</summary>
         private readonly Color CoveredColor = Color.Green;

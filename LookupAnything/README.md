@@ -66,6 +66,9 @@ These are the available settings:
   > ![](screenshots/crafting.png)
   > ![](screenshots/cask.png)
 
+* See useful info about your buildings (different for each building type).
+  > ![](screenshots/barn.png)
+
 * See when a tree will bear fruit, how long until its fruit quality increases, and any
   problems preventing it from growing.
   > ![](screenshots/fruit-tree2.png)

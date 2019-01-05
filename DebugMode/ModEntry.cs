@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.DebugMode
     internal class ModEntry : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration settings.</summary>
         private ModConfig Config;

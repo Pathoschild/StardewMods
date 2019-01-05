@@ -25,6 +25,7 @@
   "generic.price-for-stack": "{{price}}g für einen Stapel von {{count}}",
 
   // types
+  "type.building": "Building", // TODO
   "type.fruit-tree": "Fruchtbaum",
   "type.map-tile": "Kartenkachel",
   "type.monster": "Monster",
@@ -169,6 +170,32 @@
   "animal.complaints.not-petted": "Wurde heute noch nicht gestreichelt",
   "animal.complaints.wild-animal-attack": "Wurde in der Nacht von einem wildem Tier angegriffen",
 
+  // building lookup labels
+  // TODO
+  "building.construction": "Construction",
+  "building.horse": "Horse",
+  "building.horse-location": "Horse location",
+  "building.owner": "Owner",
+  "building.stored-hay": "Stored hay",
+  "building.upgrades": "Upgrades",
+
+  // building lookup values
+  // TODO
+  "building.construction.summary": "ready on {{date}}",
+  "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
+  "building.owner.none": "no owner",
+  "building.stored-hay.summary-one-silo": "{{hayCount}} hay (max capacity: {{maxHay}})",
+  "building.stored-hay.summary-multiple-silos": "{{hayCount}} hay in {{siloCount}} silos (max capacity: {{maxHay}})",
+  "building.upgrades.barn.0": "up to 4 animals, add cows",
+  "building.upgrades.barn.1": "up to 8 animals, add pregnancy and goats",
+  "building.upgrades.barn.2": "up to 12 animals, add autofeed, pigs, and sheep",
+  "building.upgrades.cabin.0": "initial cabin",
+  "building.upgrades.cabin.1": "add kitchen, enable marriage",
+  "building.upgrades.cabin.2": "enable children",
+  "building.upgrades.coop.0": "up to 4 animals; add chickens",
+  "building.upgrades.coop.1": "up to 8 animals; add incubator, dinosaurs, and ducks",
+  "building.upgrades.coop.2": "up to 12 animals; add autofeed and rabbits",
+
   // fruit tree lookup labels
   "fruit-tree.complaints": "Beschwerden",
   "fruit-tree.name": "{{fruitName}}baum",
@@ -219,6 +246,8 @@
   "item.loves-this": "Liebt das",
   "item.needed-for": "Gebraucht für",
   "item.number-owned": "Im Besitz",
+  "item.number-cooked": "Gekocht",
+  "item.number-crafted": "Hergestellt",
   "item.recipes": "Rezepte",
   "item.see-also": "Siehe auch",
   "item.sells-for": "Lässt sich verkaufen für",
@@ -234,13 +263,16 @@
   "item.contents.partial": "{{name}} in {{time}}",
   "item.needed-for.community-center": "Gemeinschaftszentrum ({{bundles}})",
   "item.needed-for.full-shipment": "\"Volle Lieferung\" Errungenschaft (liefere einen)",
-  "item.needed-for.polyculture": "\"Polykultur-Errungenschaft\" (liefere noch {{count}})",
+  "item.needed-for.polyculture": "\"Polykultur\" Errungenschaft (liefere noch {{count}})",
   "item.needed-for.full-collection": "\"Eine vollständige Sammlung\" Errungenschaft (Spende eines dem Museum)",
+  "item.needed-for.gourmet-chef": "\"Gourmetkoch\" Errungenschaft (koche {{recipes}})",
+  "item.needed-for.craft-master": "\"Handwerksmeister\" Errungenschaft (stelle {{recipes}} her)",
   "item.sells-to.shipping-box": "Versandkiste",
   "item.fence-health.gold-clock": "Kein Verfall mit Gold-Uhr",
   "item.fence-health.summary": "{{percent}}% (ungefähr {{count}} Tage übrig)",
   "item.recipes.entry": "{{name}} (braucht {{count}})",
   "item.number-owned.summary": "Du besitzt {{count}} davon",
+  "item.number-crafted.summary": "Du hast bereits {{count}} davon hergestellt",
 
   // monster lookup labels
   "monster.invincible": "Unbesiegbar",
@@ -303,11 +335,6 @@
   "player.luck": "Glück",
 
   // player lookup values
-  "player.farm-map.forest": "Wald",
-  "player.farm-map.hill-top": "Bergspitzen",
-  "player.farm-map.riverland": "Flussbett",
-  "player.farm-map.standard": "Standard",
-  "player.farm-map.wilderness": "Wildnis",
   "player.farm-map.custom": "Eigene",
   "player.gender.male": "Männlich",
   "player.gender.female": "Weiblich",
@@ -316,17 +343,17 @@
   "player.skill.progress-last": "Level {{level}}",
 
   // tile lookup labels
-  "tile.description": "Feld-Informationen. Dies wird angezeigt, weil du \"tile lookups\" in den Konfiguration angeschaltet hast.",
+  "tile.description": "Kachel-Informationen. Dies wird angezeigt, weil du \"tile lookups\" in den Konfiguration angeschaltet hast.",
   "tile.map-name": "Kartenname",
-  "tile.tile": "Feld",
-  "tile.tile-index": "{{layerName}}: Feld-Index",
-  "tile.tilesheet": "{{layerName}}: Tilesheet",   //TODO
-  "tile.blend-mode": "{{layerName}}: Blend-mode",
-  "tile.index-property": "{{layerName}}: index props: {{propertyName}}",   //TODO
-  "tile.tile-property": "{{layerName}}: props: {{propertyName}}",   //TODO
+  "tile.tile": "Kachel",
+  "tile.tile-index": "{{layerName}}: Kachelindex",
+  "tile.tilesheet": "{{layerName}}: Kachelblatt",
+  "tile.blend-mode": "{{layerName}}: Überblendungsmodus",
+  "tile.index-property": "{{layerName}}: Indexeigenschaften: {{propertyName}}",
+  "tile.tile-property": "{{layerName}}: Eigenschaften: {{propertyName}}",
 
   // tile lookup values
-  "tile.tile.none-here": "Kein Feld hier.",
+  "tile.tile.none-here": "Kein Kachel hier.",
 
   // tree lookup labels
   "tree.stage": "Wachstumsstadium",

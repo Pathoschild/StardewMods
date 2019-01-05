@@ -14,7 +14,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
     internal abstract class BaseSubject : ISubject
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Provides translations stored in the mod folder.</summary>
         protected ITranslationHelper Text { get; }

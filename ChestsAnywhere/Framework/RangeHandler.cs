@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
     internal class RangeHandler
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The range within which chests should be accessible.</summary>
         private readonly ChestRange Range;

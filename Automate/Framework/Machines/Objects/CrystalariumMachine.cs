@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using SObject = StardewValley.Object;
@@ -8,7 +9,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     internal class CrystalariumMachine : GenericObjectMachine<SObject>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
@@ -21,8 +22,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The location containing the machine.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public CrystalariumMachine(SObject machine, GameLocation location, IReflectionHelper reflection)
-            : base(machine, location)
+        /// <param name="tile">The tile covered by the machine.</param>
+        public CrystalariumMachine(SObject machine, GameLocation location, Vector2 tile, IReflectionHelper reflection)
+            : base(machine, location, tile)
         {
             this.Reflection = reflection;
         }

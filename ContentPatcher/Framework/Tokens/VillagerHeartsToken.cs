@@ -12,7 +12,7 @@ namespace ContentPatcher.Framework.Tokens
     internal class VillagerHeartsToken : BaseToken
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The relationships by NPC.</summary>
         private readonly InvariantDictionary<string> Values = new InvariantDictionary<string>();

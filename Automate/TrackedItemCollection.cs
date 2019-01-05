@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using StardewValley;
 
-namespace Pathoschild.Stardew.Automate.Framework
+namespace Pathoschild.Stardew.Automate
 {
     /// <summary>An item stack which wraps an underlying collection of stacks.</summary>
-    internal class TrackedItemCollection : ITrackedStack
+    public class TrackedItemCollection : ITrackedStack
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The underlying item stacks.</summary>
         private readonly ITrackedStack[] Stacks;

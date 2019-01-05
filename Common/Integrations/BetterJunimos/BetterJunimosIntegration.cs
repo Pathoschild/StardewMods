@@ -6,7 +6,7 @@ namespace Pathoschild.Stardew.Common.Integrations.BetterJunimos
     internal class BetterJunimosIntegration : BaseIntegration
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod's public API.</summary>
         private readonly IBetterJunimosApi ModApi;

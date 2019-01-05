@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
     internal class JunimoHutMachine : BaseMachine<JunimoHut>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The Junimo hut's output chest.</summary>
         private Chest Output => this.Machine.output.Value;

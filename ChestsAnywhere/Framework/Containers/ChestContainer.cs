@@ -9,7 +9,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
     internal class ChestContainer : IContainer
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The container's default internal name.</summary>
         private readonly string DefaultName = "Chest";

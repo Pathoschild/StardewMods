@@ -21,7 +21,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
     internal sealed class TractorManager
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The unique buff ID for the tractor speed.</summary>
         private readonly int BuffUniqueID = 58012397;

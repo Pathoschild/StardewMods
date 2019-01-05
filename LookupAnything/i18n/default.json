@@ -25,6 +25,7 @@
   "generic.price-for-stack": "{{price}}g for stack of {{count}}",
 
   // types
+  "type.building": "Building",
   "type.fruit-tree": "Fruit tree",
   "type.map-tile": "Map tile",
   "type.monster": "Monster",
@@ -169,6 +170,42 @@
   "animal.complaints.not-petted": "hasn't been petted today",
   "animal.complaints.wild-animal-attack": "attacked by wild animals during the night",
 
+  // building lookup labels
+  "building.animals": "Animals",
+  "building.construction": "Construction",
+  "building.feed-trough": "Feed trough",
+  "building.horse": "Horse",
+  "building.horse-location": "Horse location",
+  "building.owner": "Owner",
+  "building.slimes": "Slimes",
+  "building.stored-hay": "Stored hay",
+  "building.upgrades": "Upgrades",
+  "building.water-trough": "Water trough",
+
+  // building lookup values
+  "building.animals.summary": "{{count}} of max {{max}} animals",
+  "building.construction.summary": "ready on {{date}}",
+  "building.feed-trough.automated": "automated",
+  "building.feed-trough.summary": "{{filled}} of {{max}} feed slots filled",
+  "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
+  "building.junimo-harvesting-enabled": "Harvesting enabled",
+  "building.owner.none": "no owner",
+  "building.output-processing": "Output processing",
+  "building.output-ready": "Output ready",
+  "building.slimes.summary": "{{count}} of max {{max}} slimes",
+  "building.stored-hay.summary-one-silo": "{{hayCount}} hay (max capacity: {{maxHay}})",
+  "building.stored-hay.summary-multiple-silos": "{{hayCount}} hay in {{siloCount}} silos (max capacity: {{maxHay}})",
+  "building.upgrades.barn.0": "up to 4 animals, add cows",
+  "building.upgrades.barn.1": "up to 8 animals, add pregnancy and goats",
+  "building.upgrades.barn.2": "up to 12 animals, add autofeed, pigs, and sheep",
+  "building.upgrades.cabin.0": "initial cabin",
+  "building.upgrades.cabin.1": "add kitchen, enable marriage",
+  "building.upgrades.cabin.2": "enable children",
+  "building.upgrades.coop.0": "up to 4 animals; add chickens",
+  "building.upgrades.coop.1": "up to 8 animals; add incubator, dinosaurs, and ducks",
+  "building.upgrades.coop.2": "up to 12 animals; add autofeed and rabbits",
+  "building.water-trough.summary": "{{filled}} of {{max}} water troughs filled",
+
   // fruit tree lookup labels
   "fruit-tree.complaints": "Complaints",
   "fruit-tree.name": "{{fruitName}} Tree",
@@ -219,6 +256,8 @@
   "item.loves-this": "Loves this",
   "item.needed-for": "Needed for",
   "item.number-owned": "Owned",
+  "item.number-cooked": "Cooked",
+  "item.number-crafted": "Crafted",
   "item.recipes": "Recipes",
   "item.see-also": "See also",
   "item.sells-for": "Sells for",
@@ -236,11 +275,14 @@
   "item.needed-for.full-shipment": "full shipment achievement (ship one)",
   "item.needed-for.polyculture": "polyculture achievement (ship {{count}} more)",
   "item.needed-for.full-collection": "full collection achievement (donate one to museum)",
+  "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})",
+  "item.needed-for.craft-master": "craft master achievement (make {{recipes}})",
   "item.sells-to.shipping-box": "shipping box",
   "item.fence-health.gold-clock": "no decay with Gold Clock",
   "item.fence-health.summary": "{{percent}}% (roughly {{count}} days left)",
   "item.recipes.entry": "{{name}} (needs {{count}})",
   "item.number-owned.summary": "you own {{count}} of these",
+  "item.number-crafted.summary": "you made {{count}} of these",
 
   // monster lookup labels
   "monster.invincible": "Invincible",
@@ -303,11 +345,6 @@
   "player.luck": "Luck",
 
   // player lookup values
-  "player.farm-map.forest": "Forest",
-  "player.farm-map.hill-top": "Hill-top",
-  "player.farm-map.riverland": "Riverland",
-  "player.farm-map.standard": "Standard",
-  "player.farm-map.wilderness": "Wilderness",
   "player.farm-map.custom": "Custom",
   "player.gender.male": "male",
   "player.gender.female": "female",

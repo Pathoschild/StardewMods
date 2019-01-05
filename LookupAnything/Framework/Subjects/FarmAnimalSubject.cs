@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
     internal class FarmAnimalSubject : BaseSubject
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The lookup target.</summary>
         private readonly FarmAnimal Target;

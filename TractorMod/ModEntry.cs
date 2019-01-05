@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.TractorMod
     internal class ModEntry : Mod, IAssetLoader
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /****
         ** Constants
@@ -257,7 +257,7 @@ namespace Pathoschild.Stardew.TractorMod
                 return;
 
             // workaround for mines not spawning a ladder on monster levels
-            if (e.Location is MineShaft mine && object.ReferenceEquals(e.Location, Game1.currentLocation))
+            if (e.Location is MineShaft mine && e.IsCurrentLocation)
             {
                 if (mine.mustKillAllMonstersToAdvance() && mine.characters.All(p => p is Horse))
                 {
@@ -397,28 +397,30 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
-            if (!this.IsEnabled)
+            if (!this.IsEnabled || !Context.IsWorldReady)
                 return;
 
-            // add blueprint to carpenter menu
-            if (Context.IsWorldReady && e.NewMenu != null)
+            // add blueprints
+            if (e.NewMenu is CarpenterMenu || e.NewMenu?.GetType().FullName == this.PelicanFiberMenuFullName)
             {
-                // default menu
-                if (e.NewMenu is CarpenterMenu)
-                {
-                    this.Helper.Reflection
-                        .GetField<List<BluePrint>>(e.NewMenu, "blueprints")
-                        .GetValue()
-                        .Add(this.GetBlueprint());
-                }
+                // get field
+                IList<BluePrint> blueprints = this.Helper.Reflection
+                    .GetField<List<BluePrint>>(e.NewMenu, e.NewMenu is CarpenterMenu ? "blueprints" : "Blueprints")
+                    .GetValue();
 
-                // modded menus
-                else if (e.NewMenu.GetType().FullName == this.PelicanFiberMenuFullName)
+                // add garage blueprint
+                blueprints.Add(this.GetBlueprint());
+
+                // add stable blueprint if needed
+                // (If player built a tractor garage first, the game won't let them build a stable since it thinks they already have one. Derived from the CarpenterMenu constructor.)
+                if (!blueprints.Any(p => p.name == "Stable" && p.maxOccupants != this.MaxOccupantsID))
                 {
-                    this.Helper.Reflection
-                        .GetField<List<BluePrint>>(e.NewMenu, "Blueprints")
-                        .GetValue()
-                        .Add(this.GetBlueprint());
+                    Farm farm = Game1.getFarm();
+
+                    int cabins = farm.getNumberBuildingsConstructed("Cabin");
+                    int stables = farm.getNumberBuildingsConstructed("Stable") - Game1.getFarm().buildings.OfType<Stable>().Count(this.IsGarage);
+                    if (stables < cabins + 1)
+                        blueprints.Add(new BluePrint("Stable"));
                 }
             }
         }

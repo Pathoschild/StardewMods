@@ -1,13 +1,13 @@
 using System;
 using StardewValley;
 
-namespace Pathoschild.Stardew.Automate.Framework
+namespace Pathoschild.Stardew.Automate
 {
     /// <summary>An item stack which notifies callbacks when it's reduced.</summary>
-    internal class TrackedItem : ITrackedStack
+    public class TrackedItem : ITrackedStack
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The item stack.</summary>
         private readonly Item Item;

@@ -13,8 +13,11 @@ namespace ContentPatcher.Framework.Tokens
     internal class SkillLevelToken : BaseToken
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
+        /// <summary>Get whether the player data is available in the current context.</summary>
+        private readonly Func<bool> IsPlayerDataAvailable;
+
         /// <summary>The player's current skill levels.</summary>
         private readonly IDictionary<Skill, int> SkillLevels = new Dictionary<Skill, int>();
 
@@ -23,9 +26,10 @@ namespace ContentPatcher.Framework.Tokens
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public SkillLevelToken()
+        public SkillLevelToken(Func<bool> isPlayerDataAvailable)
             : base(ConditionType.SkillLevel.ToString(), canHaveMultipleRootValues: true)
         {
+            this.IsPlayerDataAvailable = isPlayerDataAvailable;
             this.EnableSubkeys(required: false, canHaveMultipleValues: false);
         }
 
@@ -35,7 +39,7 @@ namespace ContentPatcher.Framework.Tokens
         public override void UpdateContext(IContext context)
         {
             this.SkillLevels.Clear();
-            this.IsValidInContext = Context.IsWorldReady;
+            this.IsValidInContext = this.IsPlayerDataAvailable();
             if (this.IsValidInContext)
             {
                 this.SkillLevels[Skill.Combat] = Game1.player.CombatLevel;
@@ -47,17 +51,17 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
+        /// <summary>Get the allowed subkeys (or <c>null</c> if any value is allowed).</summary>
+        protected override InvariantHashSet GetAllowedSubkeys()
+        {
+            return new InvariantHashSet(Enum.GetNames(typeof(Skill)));
+        }
+
         /// <summary>Get the current subkeys (if supported).</summary>
         public override IEnumerable<TokenName> GetSubkeys()
         {
             foreach (Skill skill in this.SkillLevels.Keys)
                 yield return new TokenName(ConditionType.SkillLevel, skill.ToString());
-        }
-
-        /// <summary>Get the allowed subkeys (or <c>null</c> if any value is allowed).</summary>
-        protected override InvariantHashSet GetAllowedSubkeys()
-        {
-            return new InvariantHashSet(Enum.GetNames(typeof(Skill)));
         }
 
         /// <summary>Get the current token values.</summary>

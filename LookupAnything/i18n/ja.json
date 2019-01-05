@@ -25,6 +25,7 @@
   "generic.price-for-stack": "{{price}}g (スタック:{{count}})",
 
   // types
+  "type.building": "Building", // TODO
   "type.fruit-tree": "果樹",
   "type.map-tile": "マップタイル",
   "type.monster": "モンスター",
@@ -169,6 +170,32 @@
   "animal.complaints.not-petted": "昨日なでなかった",
   "animal.complaints.wild-animal-attack": "夜に野生動物に襲われた",
 
+  // building lookup labels
+  // TODO
+  "building.construction": "Construction",
+  "building.horse": "Horse",
+  "building.horse-location": "Horse location",
+  "building.owner": "Owner",
+  "building.stored-hay": "Stored hay",
+  "building.upgrades": "Upgrades",
+
+  // building lookup values
+  // TODO
+  "building.construction.summary": "ready on {{date}}",
+  "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
+  "building.owner.none": "no owner",
+  "building.stored-hay.summary-one-silo": "{{hayCount}} hay (max capacity: {{maxHay}})",
+  "building.stored-hay.summary-multiple-silos": "{{hayCount}} hay in {{siloCount}} silos (max capacity: {{maxHay}})",
+  "building.upgrades.barn.0": "up to 4 animals, add cows",
+  "building.upgrades.barn.1": "up to 8 animals, add pregnancy and goats",
+  "building.upgrades.barn.2": "up to 12 animals, add autofeed, pigs, and sheep",
+  "building.upgrades.cabin.0": "initial cabin",
+  "building.upgrades.cabin.1": "add kitchen, enable marriage",
+  "building.upgrades.cabin.2": "enable children",
+  "building.upgrades.coop.0": "up to 4 animals; add chickens",
+  "building.upgrades.coop.1": "up to 8 animals; add incubator, dinosaurs, and ducks",
+  "building.upgrades.coop.2": "up to 12 animals; add autofeed and rabbits",
+
   // fruit tree lookup labels
   "fruit-tree.complaints": "不満点",
   "fruit-tree.name": "{{fruitName}}の木",
@@ -219,6 +246,8 @@
   "item.loves-this": "これが大好きな人",
   "item.needed-for": "要求されるもの",
   "item.number-owned": "所有数",
+  "item.number-cooked": "Cooked", // TODO
+  "item.number-crafted": "Crafted", // TODO
   "item.recipes": "レシピ",
   "item.see-also": "これも見て",
   "item.sells-for": "売値",
@@ -236,11 +265,14 @@
   "item.needed-for.full-shipment": "実績:満タンの出荷箱 (一つ出荷)",
   "item.needed-for.polyculture": "実績:混作農業 ({{count}}個出荷)",
   "item.needed-for.full-collection": "実績:コンプリートコレクション (博物館に一つ寄付)",
+  "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})", // TODO
+  "item.needed-for.craft-master": "craft master achievement (make {{recipes}})", // TODO
   "item.sells-to.shipping-box": "出荷箱",
   "item.fence-health.gold-clock": "金の時計の効果で減らない",
   "item.fence-health.summary": "{{percent}}% (残り約{{count}}日)",
   "item.recipes.entry": "{{name}} ({{count}}個必要)",
   "item.number-owned.summary": "{{count}}個持っている",
+  "item.number-crafted.summary": "you made {{count}} of these", // TODO
 
   // monster lookup labels
   "monster.invincible": "無敵",
@@ -303,11 +335,6 @@
   "player.luck": "運勢",
 
   // player lookup values
-  "player.farm-map.forest": "Forest", // TODO
-  "player.farm-map.hill-top": "Hill-top", // TODO
-  "player.farm-map.riverland": "Riverland", // TODO
-  "player.farm-map.standard": "Standard", // TODO
-  "player.farm-map.wilderness": "Wilderness", // TODO
   "player.farm-map.custom": "Custom", // TODO
   "player.gender.male": "男",
   "player.gender.female": "女",

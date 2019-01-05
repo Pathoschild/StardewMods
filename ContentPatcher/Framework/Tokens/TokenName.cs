@@ -9,9 +9,6 @@ namespace ContentPatcher.Framework.Tokens
         /*********
         ** Accessors
         *********/
-        /****
-        ** Properties
-        ****/
         /// <summary>The token type.</summary>
         public string Key { get; }
 

@@ -60,6 +60,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             // use tool on center of tile
             Vector2 useAt = (tile * Game1.tileSize) + new Vector2(Game1.tileSize / 2f);
+            Game1.player.lastClick = useAt;
             tool.DoFunction(Game1.currentLocation, (int)useAt.X, (int)useAt.Y, 0, Game1.player);
             return true;
         }

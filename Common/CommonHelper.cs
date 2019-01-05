@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.Common
     internal static class CommonHelper
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>A blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
         private static readonly Lazy<Texture2D> LazyPixel = new Lazy<Texture2D>(() =>

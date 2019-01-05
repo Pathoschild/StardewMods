@@ -1,5 +1,6 @@
 **Crops Anytime Anywhere** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you grow
-crops in any season (including winter) and location, both configurable. 
+crops in any season and location, including on grass/dirt tiles you normally couldn't till. You can
+optionally configure the seasons, locations, and tillable tile types.
 
 ![](screenshot.gif)
 
@@ -23,15 +24,17 @@ file in a text editor to configure the mod.
 
 Here's what you can change:
 
-setting              | default    | what it affects
-:------------------- | :--------- | :------------------
-`Seasons`            | all `true` | The seasons in which any crops should grow. Crops will revert to normal in disabled seasons (and die in the season transition if they're out of season).
-`AllowCropsAnywhere` | `true`     | Whether you can plant crops in non-farm locations, as long as there's tillable dirt there. This only works in seasons enabled via `Seasons`.
+setting              | default     | what it affects
+:------------------- | :---------- | :------------------
+`EnableInSeasons`    | all seasons | The seasons in which any crops should grow. Crops will revert to normal in disabled seasons.
+`FarmAnyLocation`    | `true`      | Whether you can plant crops in non-farm locations, as long as there's tillable dirt there. This only works in seasons enabled via `EnableInSeasons`.
+`ForceTillable`      | dirt, grass | The tile types to make tillable beyond those that would normally be (`other` includes indoor flooring). The default values let you plant on dirt and grass tiles.
 
 ## Compatibility
-The mod is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
-multiplayer. In multiplayer mode, it must be installed by the main player to work correctly. (It
-doesn't need to be installed by farmhands, but it won't cause any issues if they have it.)
+Compatible with Stardew Valley 1.3.32+ on Linux/Mac/Windows, both single-player and multiplayer. In
+multiplayer mode, it must be installed by the main player to work correctly; farmhands only need it
+if they want to enable tilling more tile types (but it won't cause any issues if they don't have
+it).
 
 ## See also
 * [Release notes](release-notes.md)

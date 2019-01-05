@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
     internal class MachineLayer : BaseLayer
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The color for a machine with no input.</summary>
         private readonly Color EmptyColor = Color.Red;

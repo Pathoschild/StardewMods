@@ -11,9 +11,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <summary>The target type.</summary>
         TargetType Type { get; set; }
 
-        /// <summary>The underlying in-game object.</summary>
-        object Value { get; set; }
-
         /// <summary>The object's tile position in the current location (if applicable).</summary>
         Vector2? Tile { get; set; }
 
@@ -33,13 +30,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <typeparam name="T">The expected value type.</typeparam>
         T GetValue<T>();
 
+        /// <summary>Get the sprite's source rectangle within its texture.</summary>
+        Rectangle GetSpritesheetArea();
+
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
-        Rectangle GetSpriteArea();
+        Rectangle GetWorldArea();
 
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>
         /// <param name="tile">The tile to search.</param>
         /// <param name="position">The viewport-relative coordinates to search.</param>
-        /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GetSpriteArea"/>.</param>
+        /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GetWorldArea"/>.</param>
         bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea);
     }
 }

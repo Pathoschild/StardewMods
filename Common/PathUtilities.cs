@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.Common
     internal static class PathUtilities
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The possible directory separator characters in a file path.</summary>
         private static readonly char[] PossiblePathSeparators = new[] { '/', '\\', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }.Distinct().ToArray();

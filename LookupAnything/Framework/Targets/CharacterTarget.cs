@@ -7,10 +7,10 @@ using StardewValley.Monsters;
 namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 {
     /// <summary>Positional metadata about an NPC.</summary>
-    internal class CharacterTarget : GenericTarget
+    internal class CharacterTarget : GenericTarget<NPC>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
@@ -22,19 +22,25 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="type">The target type.</param>
-        /// <param name="obj">The underlying in-game object.</param>
+        /// <param name="value">The underlying in-game entity.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public CharacterTarget(GameHelper gameHelper, TargetType type, NPC obj, Vector2? tilePosition, IReflectionHelper reflectionHelper)
-            : base(gameHelper, type, obj, tilePosition)
+        public CharacterTarget(GameHelper gameHelper, TargetType type, NPC value, Vector2? tilePosition, IReflectionHelper reflectionHelper)
+            : base(gameHelper, type, value, tilePosition)
         {
             this.Reflection = reflectionHelper;
         }
 
-        /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
-        public override Rectangle GetSpriteArea()
+        /// <summary>Get the sprite's source rectangle within its texture.</summary>
+        public override Rectangle GetSpritesheetArea()
         {
-            NPC npc = (NPC)this.Value;
+            return this.Value.Sprite.SourceRect;
+        }
+
+        /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
+        public override Rectangle GetWorldArea()
+        {
+            NPC npc = this.Value;
             AnimatedSprite sprite = npc.Sprite;
             var boundingBox = npc.GetBoundingBox(); // the 'occupied' area at the NPC's feet
 
@@ -66,10 +72,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>
         /// <param name="tile">The tile to search.</param>
         /// <param name="position">The viewport-relative coordinates to search.</param>
-        /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GenericTarget.GetSpriteArea"/>.</param>
+        /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GetWorldArea"/>.</param>
         public override bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea)
         {
-            NPC npc = (NPC)this.Value;
+            NPC npc = this.Value;
             AnimatedSprite sprite = npc.Sprite;
 
             // allow any part of the sprite area for monsters

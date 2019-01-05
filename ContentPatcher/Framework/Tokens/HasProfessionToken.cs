@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -11,8 +12,11 @@ namespace ContentPatcher.Framework.Tokens
     internal class HasProfessionToken : BaseToken
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
+        /// <summary>Get whether the player data is available in the current context.</summary>
+        private readonly Func<bool> IsPlayerDataAvailable;
+
         /// <summary>The player's current professions.</summary>
         private readonly HashSet<Profession> Professions = new HashSet<Profession>();
 
@@ -21,9 +25,11 @@ namespace ContentPatcher.Framework.Tokens
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public HasProfessionToken()
+        /// <param name="isPlayerDataAvailable">Get whether the player data is available in the current context.</param>
+        public HasProfessionToken(Func<bool> isPlayerDataAvailable)
             : base(ConditionType.HasProfession.ToString(), canHaveMultipleRootValues: true)
         {
+            this.IsPlayerDataAvailable = isPlayerDataAvailable;
             this.EnableSubkeys(required: false, canHaveMultipleValues: false);
         }
 
@@ -33,12 +39,21 @@ namespace ContentPatcher.Framework.Tokens
         public override void UpdateContext(IContext context)
         {
             this.Professions.Clear();
-            this.IsValidInContext = Context.IsWorldReady;
+            this.IsValidInContext = this.IsPlayerDataAvailable();
             if (this.IsValidInContext)
             {
                 foreach (int professionID in Game1.player.professions)
                     this.Professions.Add((Profession)professionID);
             }
+        }
+
+        /// <summary>Get the allowed values for a token name (or <c>null</c> if any value is allowed).</summary>
+        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
+        public override InvariantHashSet GetAllowedValues(TokenName name)
+        {
+            return name.HasSubkey()
+                ? InvariantHashSet.Boolean()
+                : null;
         }
 
         /// <summary>Get the current token values.</summary>

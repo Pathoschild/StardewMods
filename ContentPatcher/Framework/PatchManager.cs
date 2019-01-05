@@ -15,7 +15,7 @@ namespace ContentPatcher.Framework
     internal class PatchManager : IAssetLoader, IAssetEditor
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /****
         ** State

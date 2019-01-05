@@ -11,7 +11,7 @@ namespace ContentPatcher.Framework.Patches
     internal abstract class Patch : IPatch
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Normalise an asset name.</summary>
         private readonly Func<string, string> NormaliseAssetName;

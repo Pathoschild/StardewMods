@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.FastAnimations
     internal class ModEntry : Mod
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;

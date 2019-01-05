@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     internal class RecyclingMachine : GenericObjectMachine<SObject>
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The RNG to use for randomising output.</summary>
         private static readonly Random Random = new Random();
@@ -64,8 +64,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The location containing the machine.</param>
-        public RecyclingMachine(SObject machine, GameLocation location)
-            : base(machine, location) { }
+        /// <param name="tile">The tile covered by the machine.</param>
+        public RecyclingMachine(SObject machine, GameLocation location, Vector2 tile)
+            : base(machine, location, tile) { }
 
         /// <summary>Provide input to the machine.</summary>
         /// <param name="input">The available items.</param>

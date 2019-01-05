@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Buildings;
-using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -53,13 +52,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         }
 
         /// <summary>Get the tile area for a placed object.</summary>
-        /// <param name="obj">The placed object.</param>
-        protected static Rectangle GetTileAreaFor(SObject obj)
-        {
-            return BaseMachine.GetTileAreaFor(obj.TileLocation);
-        }
-
-        /// <summary>Get the tile area for a placed object.</summary>
         /// <param name="tile">The tile position.</param>
         protected static Rectangle GetTileAreaFor(in Vector2 tile)
         {
@@ -71,7 +63,7 @@ namespace Pathoschild.Stardew.Automate.Framework
     internal abstract class BaseMachine<TMachine> : BaseMachine
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The underlying entity automated by this machine. This is only stored for the machine instance, and can be null if not applicable.</summary>
         protected TMachine Machine { get; }

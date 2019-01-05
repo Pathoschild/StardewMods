@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
     internal class SkillBarField : PercentageBarField
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The experience points needed for each skill level.</summary>
         private readonly int[] SkillPointsPerLevel;

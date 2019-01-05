@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
     internal class AccessibilityLayer : BaseLayer
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The color for a passable tile.</summary>
         private readonly Color ClearColor = Color.Green;

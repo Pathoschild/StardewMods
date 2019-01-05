@@ -25,6 +25,7 @@
   "generic.price-for-stack": "{{price}}g por montón de {{count}}",
 
   // types
+  "type.building": "Building", // TODO
   "type.fruit-tree": "Árbol frutal",
   "type.map-tile": "Casilla del mapa",
   "type.monster": "Monstruo",
@@ -169,6 +170,32 @@
   "animal.complaints.not-petted": "No ha sido acariciado hoy",
   "animal.complaints.wild-animal-attack": "Atacado por animales salvajes durante la noche",
 
+  // building lookup labels
+  // TODO
+  "building.construction": "Construction",
+  "building.horse": "Horse",
+  "building.horse-location": "Horse location",
+  "building.owner": "Owner",
+  "building.stored-hay": "Stored hay",
+  "building.upgrades": "Upgrades",
+
+  // building lookup values
+  // TODO
+  "building.construction.summary": "ready on {{date}}",
+  "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
+  "building.owner.none": "no owner",
+  "building.stored-hay.summary-one-silo": "{{hayCount}} hay (max capacity: {{maxHay}})",
+  "building.stored-hay.summary-multiple-silos": "{{hayCount}} hay in {{siloCount}} silos (max capacity: {{maxHay}})",
+  "building.upgrades.barn.0": "up to 4 animals, add cows",
+  "building.upgrades.barn.1": "up to 8 animals, add pregnancy and goats",
+  "building.upgrades.barn.2": "up to 12 animals, add autofeed, pigs, and sheep",
+  "building.upgrades.cabin.0": "initial cabin",
+  "building.upgrades.cabin.1": "add kitchen, enable marriage",
+  "building.upgrades.cabin.2": "enable children",
+  "building.upgrades.coop.0": "up to 4 animals; add chickens",
+  "building.upgrades.coop.1": "up to 8 animals; add incubator, dinosaurs, and ducks",
+  "building.upgrades.coop.2": "up to 12 animals; add autofeed and rabbits",
+
   // fruit tree lookup labels
   "fruit-tree.complaints": "Quejas",
   "fruit-tree.name": "Árbol de {{fruitName}}",
@@ -219,6 +246,8 @@
   "item.loves-this": "Lo ama",
   "item.needed-for": "Necesario para",
   "item.number-owned": "Tienes",
+  "item.number-cooked": "Cooked", // TODO
+  "item.number-crafted": "Crafted", // TODO
   "item.recipes": "Recetas",
   "item.see-also": "Ver también",
   "item.sells-for": "Se vende por",
@@ -236,11 +265,14 @@
   "item.needed-for.full-shipment": "Logro de ''full shipment'' (enviar uno)",
   "item.needed-for.polyculture": "Logro de ''polyculture'' (enviar {{count}} más)",
   "item.needed-for.full-collection": "Logro de ''full collection'' (donar esto al museo)",
+  "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})", // TODO
+  "item.needed-for.craft-master": "craft master achievement (make {{recipes}})", // TODO
   "item.sells-to.shipping-box": "Caja de envío",
   "item.fence-health.gold-clock": "Sin decaidas del reloj de oro",
   "item.fence-health.summary": "{{percent}}% (dificilmente {{count}} días)",
   "item.recipes.entry": "{{name}} (necesita {{count}})",
   "item.number-owned.summary": "{{count}} ud(s)",
+  "item.number-crafted.summary": "you made {{count}} of these", // TODO
 
   // monster lookup labels
   "monster.invincible": "Invencible",
@@ -303,11 +335,6 @@
   "player.luck": "Suerte",
 
   // player lookup values
-  "player.farm-map.forest": "Forest", // TODO
-  "player.farm-map.hill-top": "Hill-top", // TODO
-  "player.farm-map.riverland": "Riverland", // TODO
-  "player.farm-map.standard": "Standard", // TODO
-  "player.farm-map.wilderness": "Wilderness", // TODO
   "player.farm-map.custom": "Custom", // TODO
   "player.gender.male": "Hombre",
   "player.gender.female": "Mujer",

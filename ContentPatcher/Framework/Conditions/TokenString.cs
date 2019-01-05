@@ -10,7 +10,7 @@ namespace ContentPatcher.Framework.Conditions
     internal class TokenString
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The regex pattern matching a string token.</summary>
         private static readonly Regex TokenPattern = new Regex(@"{{([ \w\.\-]+)}}", RegexOptions.Compiled);

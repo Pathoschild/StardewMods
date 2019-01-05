@@ -1,4 +1,4 @@
-﻿namespace Pathoschild.Stardew.LookupAnything.Framework
+namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     /// <summary>The type of an in-game object for the mod's purposes.</summary>
     internal enum TargetType
@@ -55,8 +55,11 @@
         TerrainFeature,
 
         /****
-        ** Map
+        ** Other
         ****/
+        /// <summary>A constructed building.</summary>
+        Building,
+
         /// <summary>A map tile.</summary>
         Tile
     }

@@ -14,7 +14,7 @@ namespace ContentPatcher.Framework
     internal class ConfigFileHandler
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The name of the config file.</summary>
         private readonly string Filename;
@@ -74,7 +74,7 @@ namespace ContentPatcher.Framework
 
 
         /*********
-        ** Properties
+        ** Private methods
         *********/
         /// <summary>Parse a raw config schema for a content pack.</summary>
         /// <param name="rawSchema">The raw config schema.</param>

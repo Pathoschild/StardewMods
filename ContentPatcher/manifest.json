@@ -1,8 +1,8 @@
 {
   "Name": "Content Patcher",
   "Author": "Pathoschild",
-  "Version": "1.6.1",
-  "MinimumApiVersion": "2.9.0",
+  "Version": "1.6.2",
+  "MinimumApiVersion": "2.10.1",
   "Description": "Loads content packs which edit game data and images without changing the game files.",
   "UniqueID": "Pathoschild.ContentPatcher",
   "EntryDll": "ContentPatcher.dll",

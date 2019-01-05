@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
     internal class ItemDropListField : GenericField
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The possible drops.</summary>
         private readonly Tuple<ItemDropData, SObject, SpriteInfo>[] Drops;
