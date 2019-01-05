@@ -1,8 +1,8 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Conditions are now evaluated much earlier when loading a save, which lets content packs affect early processes like map debris spawning.
+## 1.6.2
+* Conditions are now checked much sooner when loading a save, so early setup like map debris spawning can be affected conditionally.
 * Fixed token subkey form not allowed in boolean fields.
 * Updated for changes in the upcoming SMAPI 3.0.
 

@@ -1,9 +1,8 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Added support for tilling any dirt/grass by default.
-* Added options to enable tilling other tile types.
+## 1.1
+* Added support for tilling any dirt/grass by default (other tile types optional).
 * Fixed fruit trees not producing fruit outside their normal seasons.
 * Fixed fruit tree textures not updated correctly.
 

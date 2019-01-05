@@ -1,12 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Added building lookups. That includes general info (like name and description), plus info specific to barns, coops, cabins, Junimo huts, mills, silos, slime hutches, and stables.
-* Added support for lookups from the...
-  * cooking menu;
-  * crafting menu;
-  * collections menu.
+## 1.21
+* Added building lookups. That includes general info (like name and description) and info specific to barns, coops, cabins, Junimo huts, mills, silos, slime hutches, and stables.
+* Added support for lookups from the cooking, crafting, and collection menus.
 * Added times cooked/crafted to item lookups. (Thanks to watson81!)
 * Added 'needed for' support for Gourmet Chef and Craft Master achivements. (Thanks to watson81!)
 * After clicking a link in a lookup menu, closing the new lookup now returns you to the previous one.
