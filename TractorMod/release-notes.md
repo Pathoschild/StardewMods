@@ -1,4 +1,8 @@
 # Release notes
+## Upcoming release
+* Added attachment features:
+  * pickaxe: break placed objects (disabled by default).
+
 ## 4.7.3
 * Fixed stable no longer in Robin's carpenter menu after building a tractor garage.
 * Fixed fertiliser applied to existing crops.
