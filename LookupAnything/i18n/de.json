@@ -180,13 +180,13 @@
   "building.slimes": "Schleime",
   "building.stored-hay": "Gelagertes Heu",
   "building.upgrades": "Verbesserungen",
-  "building.water-trough": "Wassertrog"
+  "building.water-trough": "Wassertrog",
 
   // building lookup values
   "building.animals.summary": "{{count}} von bis zu {{max}} Tieren",
   "building.construction.summary": "Fertig am {{date}}",
   "building.feed-trough.automated": "automatisiert",
-  "building.feed-trough.summary": "{{filled}} von {{max}} Futterplätzen gefüllt"
+  "building.feed-trough.summary": "{{filled}} von {{max}} Futterplätzen gefüllt",
   "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
   "building.junimo-harvesting-enabled": "Ernten aktiviert",
   "building.owner.none": "kein Besitzer",
