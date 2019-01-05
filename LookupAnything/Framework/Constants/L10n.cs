@@ -672,21 +672,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /****
             ** Values
             ****/
-            /// <summary>A value like <c>Forest</c>.</summary>
-            public const string FarmMapForest = "player.farm-map.forest";
-
-            /// <summary>A value like <c>Hill-top</c>.</summary>
-            public const string FarmMapHillTop = "player.farm-map.hill-top";
-
-            /// <summary>A value like <c>Riverland</c>.</summary>
-            public const string FarmMapRiverland = "player.farm-map.riverland";
-
-            /// <summary>A value like <c>Standard</c>.</summary>
-            public const string FarmMapStandard = "player.farm-map.standard";
-
-            /// <summary>A value like <c>Wilderness</c>.</summary>
-            public const string FarmMapWilderness = "player.farm-map.wilderness";
-
             /// <summary>A value like <c>Custom</c>.</summary>
             public const string FarmMapCustom = "player.farm-map.custom";
 

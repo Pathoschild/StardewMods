@@ -335,11 +335,6 @@
   "player.luck": "Glück",
 
   // player lookup values
-  "player.farm-map.forest": "Wald",
-  "player.farm-map.hill-top": "Bergspitzen",
-  "player.farm-map.riverland": "Flussbett",
-  "player.farm-map.standard": "Standard",
-  "player.farm-map.wilderness": "Wildnis",
   "player.farm-map.custom": "Eigene",
   "player.gender.male": "Männlich",
   "player.gender.female": "Weiblich",

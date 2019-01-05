@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -153,15 +154,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     return null;
 
                 case Farm.combat_layout:
-                    return this.Translate(L10n.Player.FarmMapWilderness);
+                    return Game1.content.LoadString("Strings\\UI:Character_FarmCombat").Split('_').FirstOrDefault();
                 case Farm.default_layout:
-                    return this.Translate(L10n.Player.FarmMapStandard);
+                    return Game1.content.LoadString("Strings\\UI:Character_FarmStandard").Split('_').FirstOrDefault();
                 case Farm.forest_layout:
-                    return this.Translate(L10n.Player.FarmMapForest);
+                    return Game1.content.LoadString("Strings\\UI:Character_FarmForaging").Split('_').FirstOrDefault();
                 case Farm.mountains_layout:
-                    return this.Translate(L10n.Player.FarmMapHillTop);
+                    return Game1.content.LoadString("Strings\\UI:Character_FarmMining").Split('_').FirstOrDefault();
                 case Farm.riverlands_layout:
-                    return this.Translate(L10n.Player.FarmMapRiverland);
+                    return Game1.content.LoadString("Strings\\UI:Character_FarmFishing").Split('_').FirstOrDefault();
 
                 default:
                     return this.Translate(L10n.Player.FarmMapCustom);
