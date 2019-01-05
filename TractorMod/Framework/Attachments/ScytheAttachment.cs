@@ -2,6 +2,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using SObject = StardewValley.Object;
@@ -75,6 +76,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                         this.CheckTileAction(location, tile, player);
                 }
 
+                return true;
+            }
+
+            // machines
+            if (this.Config.HarvestMachines && tileObj != null && tileObj.readyForHarvest.Value && tileObj.heldObject.Value != null)
+            {
+                tileObj.checkForAction(Game1.player);
                 return true;
             }
 
