@@ -5,6 +5,7 @@
   * scythe: collect machine output (disabled by default).
 * Added option to configure build resources.
 * Made axe tree options more granular.
+* Fixed tractor range affected when you charge a tool before mounting.
 
 ## 4.7.3
 * Fixed stable no longer in Robin's carpenter menu after building a tractor garage.

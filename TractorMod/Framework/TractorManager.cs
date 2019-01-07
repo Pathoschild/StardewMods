@@ -118,12 +118,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Update tractor effects and actions in the game.</summary>
         public void Update()
         {
-            // track health for invincibility
-            if (this.Config.InvincibleOnTractor && this.IsCurrentPlayerRiding != this.WasRiding)
+            // update when player mounts or unmounts
+            if (this.IsCurrentPlayerRiding != this.WasRiding)
             {
-                if (this.IsCurrentPlayerRiding)
-                    this.RiderHealth = Game1.player.health;
                 this.WasRiding = this.IsCurrentPlayerRiding;
+
+                // track health for invincibility
+                if (this.Config.InvincibleOnTractor && this.IsCurrentPlayerRiding)
+                    this.RiderHealth = Game1.player.health;
+
+                // reset held-down tool power
+                Game1.player.toolPower = 0;
             }
 
             // apply riding effects
@@ -327,7 +332,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             Vector2 position = player.Position;
             int facingDirection = player.FacingDirection;
             int currentToolIndex = player.CurrentToolIndex;
-            bool canMove = Game1.player.canMove; // fix player frozen due to animations when performing an action
+            bool canMove = player.canMove; // fix player frozen due to animations when performing an action
 
             // move mount out of the way
             mountFieldValue.SetValue(null);
@@ -351,7 +356,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 player.Position = position;
                 player.FacingDirection = facingDirection;
                 player.CurrentToolIndex = currentToolIndex;
-                Game1.player.canMove = canMove;
+                player.canMove = canMove;
             }
         }
     }
