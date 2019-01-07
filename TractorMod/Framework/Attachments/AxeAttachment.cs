@@ -66,15 +66,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             {
                 // cut non-fruit tree
                 case Tree tree:
-                    if (tree.tapped.Value ? this.Config.CutTappedTrees : this.Config.CutTrees)
-                        return this.UseToolOnTile(tool, tile);
-                    break;
+                    return this.ShouldCut(tree) && this.UseToolOnTile(tool, tile);
 
                 // cut fruit tree
-                case FruitTree _:
-                    if (this.Config.CutFruitTrees)
-                        return this.UseToolOnTile(tool, tile);
-                    break;
+                case FruitTree tree:
+                    return this.ShouldCut(tree) && this.UseToolOnTile(tool, tile);
 
                 // clear crops
                 case HoeDirt dirt when dirt.crop != null:
@@ -96,6 +92,46 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             }
 
             return false;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get whether a given tree should be chopped.</summary>
+        /// <param name="tree">The tree to check.</param>
+        private bool ShouldCut(Tree tree)
+        {
+            var config = this.Config;
+
+            // seed
+            if (tree.growthStage.Value == Tree.seedStage)
+                return config.ClearTreeSeeds;
+
+            // sapling
+            if (tree.growthStage.Value < Tree.treeStage)
+                return config.ClearTreeSaplings;
+
+            // full-grown
+            return tree.tapped.Value ? config.CutTappedTrees : config.CutGrownTrees;
+        }
+
+        /// <summary>Get whether a given tree should be chopped.</summary>
+        /// <param name="tree">The tree to check.</param>
+        private bool ShouldCut(FruitTree tree)
+        {
+            var config = this.Config;
+
+            // seed
+            if (tree.growthStage.Value == Tree.seedStage)
+                return config.ClearFruitTreeSeeds;
+
+            // sapling
+            if (tree.growthStage.Value < Tree.treeStage)
+                return config.ClearFruitTreeSaplings;
+
+            // full-grown
+            return config.CutGrownFruitTrees;
         }
     }
 }
