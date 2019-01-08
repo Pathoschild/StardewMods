@@ -17,7 +17,6 @@ using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Menus;
-using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod
 {
@@ -38,6 +37,9 @@ namespace Pathoschild.Stardew.TractorMod
 
         /// <summary>The update rate when multiple players are in the same location (as a frame multiple). This should be more frequent due to sprite broadcasts, new horses instances being created during NetRef&lt;Horse&gt; syncs, etc.</summary>
         private readonly uint TextureUpdateRateWithMultiplePlayers = 3;
+
+        /// <summary>The full type name for the Farm Expansion's construction menu.</summary>
+        private readonly string FarmExpansionMenuFullName = "FarmExpansion.Menus.FECarpenterMenu";
 
         /// <summary>The full type name for the Pelican Fiber mod's construction menu.</summary>
         private readonly string PelicanFiberMenuFullName = "PelicanFiber.Framework.ConstructionMenu";
@@ -633,33 +635,33 @@ namespace Pathoschild.Stardew.TractorMod
         }
 
         /// <summary>Apply the mod textures to the given menu, if applicable.</summary>
-        /// <param name="currentMenu">The menu to change.</param>
-        private void ApplyTextures(IClickableMenu currentMenu)
+        /// <param name="menu">The menu to change.</param>
+        private void ApplyTextures(IClickableMenu menu)
         {
-            switch (currentMenu)
+            // vanilla menu
+            if (menu is CarpenterMenu carpenterMenu)
             {
-                // vanilla menu
-                case CarpenterMenu menu:
-                    if (menu.CurrentBlueprint.maxOccupants == this.MaxOccupantsID)
-                    {
-                        Building building = this.Helper.Reflection.GetField<Building>(menu, "currentBuilding").GetValue();
-                        if (building.texture.Value != this.GarageTexture)
-                            building.texture = new Lazy<Texture2D>(() => this.GarageTexture);
-                    }
-                    break;
+                if (carpenterMenu.CurrentBlueprint.maxOccupants == this.MaxOccupantsID)
+                {
+                    Building building = this.Helper.Reflection.GetField<Building>(carpenterMenu, "currentBuilding").GetValue();
+                    if (building.texture.Value != this.GarageTexture)
+                        building.texture = new Lazy<Texture2D>(() => this.GarageTexture);
+                }
+                return;
+            }
 
-                // Pelican Fiber menu
-                case IClickableMenu menu when menu.GetType().FullName == this.PelicanFiberMenuFullName:
-                    {
-                        BluePrint currentBlueprint = this.Helper.Reflection.GetProperty<BluePrint>(menu, "CurrentBlueprint").GetValue();
-                        if (currentBlueprint.maxOccupants == this.MaxOccupantsID)
-                        {
-                            Building building = this.Helper.Reflection.GetField<Building>(menu, "CurrentBuilding").GetValue();
-                            if (building.texture.Value != this.GarageTexture)
-                                building.texture = new Lazy<Texture2D>(() => this.GarageTexture);
-                        }
-                    }
-                    break;
+            // Farm Expansion & Pelican Fiber menus
+            bool isFarmExpansion = menu.GetType().FullName == this.FarmExpansionMenuFullName;
+            bool isPelicanFiber = !isFarmExpansion && menu.GetType().FullName == this.PelicanFiberMenuFullName;
+            if (isFarmExpansion || isPelicanFiber)
+            {
+                BluePrint currentBlueprint = this.Helper.Reflection.GetProperty<BluePrint>(menu, "CurrentBlueprint").GetValue();
+                if (currentBlueprint.maxOccupants == this.MaxOccupantsID)
+                {
+                    Building building = this.Helper.Reflection.GetField<Building>(menu, isFarmExpansion ? "currentBuilding" : "CurrentBuilding").GetValue();
+                    if (building.texture.Value != this.GarageTexture)
+                        building.texture = new Lazy<Texture2D>(() => this.GarageTexture);
+                }
             }
         }
 

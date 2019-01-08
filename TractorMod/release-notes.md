@@ -5,6 +5,7 @@
   * scythe: collect machine output (disabled by default).
 * Added option to configure build resources.
 * Made axe tree options more granular.
+* Fixed garage texture not applied in the Farm Expansion mod's carpenter menu.
 * Fixed tractor range affected when you charge a tool before mounting.
 
 ## 4.7.3
