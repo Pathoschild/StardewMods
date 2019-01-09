@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added option to disable player inventory organise button (which avoids the trashcan flicker).
+
 ## 1.15
 * Added button to reset a chest's options.
 * Updated for the upcoming SMAPI 3.0.

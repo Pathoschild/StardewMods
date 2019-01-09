@@ -230,7 +230,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 // edit button
                 if (this.Chest.CanEdit)
                     this.EditButton.draw(batch, Color.White * navOpacity, 1f);
-                this.SortInventoryButton.draw(batch, Color.White * navOpacity, 1f);
+
+                // sort inventory button
+                this.SortInventoryButton?.draw(batch, Color.White * navOpacity, 1f);
             }
 
             // edit mode
@@ -492,7 +494,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         this.Exit(); // in some cases the game won't handle this correctly (e.g. Stardew Valley Fair fishing minigame)
                     else if (this.EditButton.containsPoint(x, y) && canNavigate)
                         this.OpenEdit();
-                    else if (this.SortInventoryButton.containsPoint(x, y))
+                    else if (this.SortInventoryButton?.containsPoint(x, y) == true)
                         this.SortInventory();
                     else if (this.ChestTab.containsPoint(x, y) && canNavigate)
                         this.ActiveElement = Element.ChestList;
@@ -514,7 +516,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             {
                 case Element.Menu:
                     this.EditButton.tryHover(x, y);
-                    this.SortInventoryButton.tryHover(x, y);
+                    this.SortInventoryButton?.tryHover(x, y);
                     return false;
 
                 case Element.EditForm:
@@ -569,6 +571,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             }
 
             // sort inventory button overlay (based on OK button position)
+            if (this.Config.AddOrganisePlayerInventoryButton)
             {
                 Rectangle sprite = Sprites.Buttons.Organize;
                 ClickableTextureComponent okButton = this.Menu.okButton;
@@ -576,6 +579,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 Rectangle buttonBounds = new Rectangle(okButton.bounds.X, (int)(okButton.bounds.Y - sprite.Height * zoom - 5 * zoom), (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
                 this.SortInventoryButton = new ClickableTextureComponent("sort-inventory", buttonBounds, null, this.Translations.Get("button.sort-inventory"), Sprites.Icons.Sheet, sprite, zoom);
             }
+            else
+                this.SortInventoryButton = null;
 
             // edit form
             int longTextWidth = (int)Game1.smallFont.MeasureString("A sufficiently, reasonably long string").X;
@@ -592,7 +597,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditExitButton = new ClickableTextureComponent(new Rectangle(bounds.Right - 9 * Game1.pixelZoom, bounds.Y - Game1.pixelZoom * 2, Sprites.Icons.ExitButton.Width * Game1.pixelZoom, Sprites.Icons.ExitButton.Height * Game1.pixelZoom), Sprites.Icons.Sheet, Sprites.Icons.ExitButton, Game1.pixelZoom);
 
             // adjust menu to fit
-            this.Menu.trashCan.bounds.Y = this.SortInventoryButton.bounds.Y - this.Menu.trashCan.bounds.Height - 2 * Game1.pixelZoom;
+            if (this.Config.AddOrganisePlayerInventoryButton)
+                this.Menu.trashCan.bounds.Y = this.SortInventoryButton.bounds.Y - this.Menu.trashCan.bounds.Height - 2 * Game1.pixelZoom;
         }
 
         /// <summary>Set the form values to match the underlying chest.</summary>
