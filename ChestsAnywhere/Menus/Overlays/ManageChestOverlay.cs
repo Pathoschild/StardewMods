@@ -140,6 +140,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /*********
         ** Accessors
         *********/
+        /// <summary>The menu instance for which the overlay was created.</summary>
+        public IClickableMenu ForMenuInstance { get; }
+
         /// <summary>An event raised when the player selects a chest.</summary>
         public event Action<ManagedChest> OnChestSelected;
 
@@ -159,6 +162,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         public ManageChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, IModEvents events, IInputHelper input, ITranslationHelper translations, bool showAutomateOptions)
             : base(events, input, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
         {
+            this.ForMenuInstance = menu;
             this.ShowAutomateOptions = showAutomateOptions;
 
             // helpers

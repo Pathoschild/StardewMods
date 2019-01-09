@@ -54,8 +54,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            helper.Events.GameLoop.UpdateTicking += this.OnUpdateTicking;
             helper.Events.Display.RenderedHud += this.OnRenderedHud;
-            helper.Events.Display.MenuChanged += this.OnMenuChanged;
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
             // validate translations
@@ -102,47 +103,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             }
         }
 
-        /// <summary>The method invoked when the active menu changes.</summary>
+        /// <summary>Raised before the game state is updated (≈60 times per second).</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void OnMenuChanged(object sender, MenuChangedEventArgs e)
+        private void OnUpdateTicking(object sender, UpdateTickingEventArgs e)
         {
-            // remove overlay
-            if (e.OldMenu is ItemGrabMenu)
-            {
-                this.ManageChestOverlay?.Dispose();
-                this.ManageChestOverlay = null;
-            }
+            this.ChangeOverlayIfNeeded();
+        }
 
-            // add overlay
-            if (e.NewMenu is ItemGrabMenu chestMenu)
-            {
-                // get open chest
-                ManagedChest chest = this.ChestFactory.GetChestFromMenu(chestMenu);
-                if (chest == null)
-                    return;
-
-                // reopen shipping box in standard chest UI if needed
-                // This is called in two cases:
-                // - When the player opens the shipping bin directly, it opens the shipping bin view instead of the full chest view.
-                // - When the player changes the items in the chest view, it reopens itself but loses the constructor args (e.g. highlight function).
-                if (this.Config.EnableShippingBin && chest.Container is ShippingBinContainer && (!chestMenu.showReceivingMenu || !(chestMenu.inventory.highlightMethod?.Target is ShippingBinContainer)))
-                {
-                    chestMenu = chest.OpenMenu();
-                    Game1.activeClickableMenu = chestMenu;
-                }
-
-                // add overlay
-                RangeHandler range = this.GetCurrentRange();
-                ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true, alwaysIncludeContainer: chest.Container).ToArray();
-                bool isAutomateInstalled = this.Helper.ModRegistry.IsLoaded("Pathoschild.Automate");
-                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Events, this.Helper.Input, this.Helper.Translation, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
-                this.ManageChestOverlay.OnChestSelected += selected =>
-                {
-                    this.SelectedInventory = selected.Container.Inventory;
-                    Game1.activeClickableMenu = selected.OpenMenu();
-                };
-            }
+        /// <summary>Raised after the game state is updated (≈60 times per second).</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
+        {
+            this.ChangeOverlayIfNeeded();
         }
 
         /// <summary>The method invoked when the player presses a button.</summary>
@@ -173,6 +147,52 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             catch (Exception ex)
             {
                 this.HandleError(ex, "handling key input");
+            }
+        }
+
+        /// <summary>Change the chest UI overlay if needed to match the current menu.</summary>
+        /// <remarks>Since the menu gets reopened whenever the chest inventory changes, this method needs to be called before/after tick to avoid a visible UI flicker.</remarks>
+        private void ChangeOverlayIfNeeded()
+        {
+            // already matches menu
+            if (this.ManageChestOverlay?.ForMenuInstance == Game1.activeClickableMenu)
+                return;
+
+            // remove old overlay
+            if (this.ManageChestOverlay != null)
+            {
+                this.ManageChestOverlay?.Dispose();
+                this.ManageChestOverlay = null;
+            }
+
+            // add new overlay
+            if (Game1.activeClickableMenu is ItemGrabMenu chestMenu)
+            {
+                // get open chest
+                ManagedChest chest = this.ChestFactory.GetChestFromMenu(chestMenu);
+                if (chest == null)
+                    return;
+
+                // reopen shipping box in standard chest UI if needed
+                // This is called in two cases:
+                // - When the player opens the shipping bin directly, it opens the shipping bin view instead of the full chest view.
+                // - When the player changes the items in the chest view, it reopens itself but loses the constructor args (e.g. highlight function).
+                if (this.Config.EnableShippingBin && chest.Container is ShippingBinContainer && (!chestMenu.showReceivingMenu || !(chestMenu.inventory.highlightMethod?.Target is ShippingBinContainer)))
+                {
+                    chestMenu = chest.OpenMenu();
+                    Game1.activeClickableMenu = chestMenu;
+                }
+
+                // add overlay
+                RangeHandler range = this.GetCurrentRange();
+                ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true, alwaysIncludeContainer: chest.Container).ToArray();
+                bool isAutomateInstalled = this.Helper.ModRegistry.IsLoaded("Pathoschild.Automate");
+                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Events, this.Helper.Input, this.Helper.Translation, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
+                this.ManageChestOverlay.OnChestSelected += selected =>
+                {
+                    this.SelectedInventory = selected.Container.Inventory;
+                    Game1.activeClickableMenu = selected.OpenMenu();
+                };
             }
         }
 

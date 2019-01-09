@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* Added option to disable player inventory organise button (which avoids the trashcan flicker).
+* Added option to disable player inventory organise button.
+* Fixed UI flicker when moving items in the chest UI.
 
 ## 1.15
 * Added button to reset a chest's options.
