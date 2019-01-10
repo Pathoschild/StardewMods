@@ -159,6 +159,7 @@ namespace ContentPatcher
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
             this.Monitor.VerboseLog("Updating context: new day started.");
+            this.TokenManager.IsBasicInfoLoaded = true;
             this.UpdateContext();
         }
 

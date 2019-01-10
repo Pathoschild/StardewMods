@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed some conditions not available for multiplayer farmhands after 1.6.2.
+
 ## 1.6.2
 * Conditions are now checked much sooner when loading a save, so early setup like map debris spawning can be affected conditionally.
 * Fixed token subkey form not allowed in boolean fields.
