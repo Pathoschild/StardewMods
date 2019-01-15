@@ -1,7 +1,7 @@
 # Release notes
 ## Upcoming release
 * Added attachment features:
-  * pickaxe: break placed objects (disabled by default).
+  * pickaxe: break mine containers, break placed objects (disabled by default).
   * scythe: collect machine output (disabled by default).
 * Added option to configure build resources.
 * Made axe tree options more granular.

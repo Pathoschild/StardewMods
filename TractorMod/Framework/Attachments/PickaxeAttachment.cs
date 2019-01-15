@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewValley;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using SFarmer = StardewValley.Farmer;
@@ -68,6 +69,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // break objects
             if (this.Config.ClearObjects && tileObj != null)
                 return this.UseToolOnTile(tool, tile);
+
+            // break mine containers
+            if (this.Config.BreakMineContainers && tileObj is BreakableContainer container)
+                return container.performToolAction(tool, location);
 
             // clear twigs & weeds
             if (this.Config.ClearWeeds && this.IsWeed(tileObj))
