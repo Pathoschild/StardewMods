@@ -1,7 +1,7 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.6.3
 * Fixed some conditions not available for multiplayer farmhands after 1.6.2.
 
 ## 1.6.2
