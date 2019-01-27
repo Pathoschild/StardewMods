@@ -6,6 +6,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         /// <summary>Whether to harvest crops.</summary>
         public bool HarvestCrops { get; set; } = true;
 
+        /// <summary>Whether to harvest flowers.</summary>
+        public bool HarvestFlowers { get; set; } = true;
+
         /// <summary>Whether to harvest forage.</summary>
         public bool HarvestForage { get; set; } = true;
 
