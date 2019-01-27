@@ -39,7 +39,7 @@ fertiliser | fertilise dirt. | —
 hoe        | till dirt; dig artifact spots. | —
 melee weapon | clear dead crops; break mine containers. | attack monsters.
 pickaxe    | break rocks; clear tilled dirt; clear dead crops. | break paths/flooring; break placed objects.
-scythe     | harvest crops, bushes, fruit trees, forage; clear weeds and dead crops. | collect machine output.
+scythe     | harvest crops, flowers, bushes, fruit trees, forage; clear weeds and dead crops. | collect machine output.
 seeds      | plant seeds in dirt. | —
 slingshot  | — | shoot one projectile/tile/second in the aimed direction.
 watering can | water crops. | —

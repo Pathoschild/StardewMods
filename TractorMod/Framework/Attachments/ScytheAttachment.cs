@@ -68,7 +68,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                     return true;
                 }
 
-                if (this.Config.HarvestCrops)
+                bool shouldHarvest = dirt.crop.programColored.Value // from Utility.findCloseFlower
+                    ? this.Config.HarvestFlowers
+                    : this.Config.HarvestCrops;
+                if (shouldHarvest)
                 {
                     if (dirt.crop.harvestMethod.Value == Crop.sickleHarvest)
                         return dirt.performToolAction(tool, 0, tile, location);
