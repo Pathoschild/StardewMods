@@ -71,6 +71,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Whether the mod is enabled for the current farmhand.</summary>
         private bool IsEnabled = true;
 
+        /// <summary>Content packs loaded for TractorMod.</summary>
+        private IEnumerable<IContentPack> ContentPacks;
+
 
         /*********
         ** Public methods
@@ -155,6 +158,9 @@ namespace Pathoschild.Stardew.TractorMod
                 farmExpansion.AddFarmBluePrint(this.GetBlueprint());
                 farmExpansion.AddExpansionBluePrint(this.GetBlueprint());
             }
+
+            // get the content packs that may contain assets for the tractor or garage
+            this.ContentPacks = this.Helper.ContentPacks.GetOwned();
         }
 
         /// <summary>The event called after a save slot is loaded.</summary>
@@ -195,8 +201,8 @@ namespace Pathoschild.Stardew.TractorMod
                 return;
 
             // reload textures
-            this.TractorTexture = this.Helper.Content.Load<Texture2D>(this.GetTextureKey("tractor"));
-            this.GarageTexture = this.Helper.Content.Load<Texture2D>(this.GetTextureKey("garage"));
+            this.TractorTexture = this.GetTexture("tractor");
+            this.GarageTexture = this.GetTexture("garage");
 
             // init garages + tractors
             if (Context.IsMainPlayer)
@@ -621,12 +627,55 @@ namespace Pathoschild.Stardew.TractorMod
             };
         }
 
+        /// <summary>Get the asset texture from a content pack or the assets folder (including seasonal logic if applicable).</summary>
+        /// <param name="spritesheet">The spritesheet name without the path or extension (like 'tractor' or 'garage').</param>
+        private Texture2D GetTexture(string spritesheet)
+        {
+            // Try to load the assets from a content pack
+            // If there are multiple content packs loaded, always use the first one
+            foreach (IContentPack contentPack in this.ContentPacks)
+            {
+                try
+                {
+                    // try to get the seasonal asset
+                    return contentPack.LoadAsset<Texture2D>(this.FormatSeasonalSpritesheet(spritesheet));
+                }
+                catch
+                {
+                    // do nothing
+                    this.Monitor.Log($"No {Game1.currentSeason}_{spritesheet}.png found in {contentPack.Manifest.UniqueID} ", LogLevel.Trace);
+                }
+
+                try
+                {
+                    // try to get the non-seasonal asset
+                    return contentPack.LoadAsset<Texture2D>($"{spritesheet}.png");
+                }
+                catch
+                {
+                    // do nothing
+                    this.Monitor.Log($"No {spritesheet}.png found in {contentPack.Manifest.UniqueID} ", LogLevel.Trace);
+                }
+            }
+
+            // use the default spriteseets since an asset could not be loaded from a content pack
+            return this.Helper.Content.Load<Texture2D>(this.GetTextureKey(spritesheet));
+        }
+
+        /// <summary>Format the spritesheet with seasonal logic.</summary>
+        /// <param name="spritesheet">The spritesheet name without the path or extension (like 'tractor' or 'garage').</param>
+        private string FormatSeasonalSpritesheet(string spritesheet)
+        {
+            return $"{Game1.currentSeason}_{spritesheet}.png";
+        }
+
         /// <summary>Get the asset key for a texture from the assets folder (including seasonal logic if applicable).</summary>
         /// <param name="spritesheet">The spritesheet name without the path or extension (like 'tractor' or 'garage').</param>
         private string GetTextureKey(string spritesheet)
         {
+            string seasonalKey = this.FormatSeasonalSpritesheet(spritesheet);
+
             // try seasonal texture
-            string seasonalKey = $"assets/{Game1.currentSeason}_{spritesheet}.png";
             if (File.Exists(Path.Combine(this.Helper.DirectoryPath, seasonalKey)))
                 return seasonalKey;
 
