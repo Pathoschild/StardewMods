@@ -50,6 +50,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The minimum version the host must have for the mod to be enabled on a farmhand.</summary>
         private readonly string MinHostVersion = "4.7-alpha.2";
 
+        /// <summary>A request from a farmhand to warp a tractor to the given player.</summary>
+        private readonly string RequestTractorMessageID = "TractorRequest";
+
         /// <summary>The absolute path to legacy mod data for the current save.</summary>
         private string LegacySaveDataRelativePath => Path.Combine("data", $"{Constants.SaveFolderName}.json");
 
@@ -114,6 +117,7 @@ namespace Pathoschild.Stardew.TractorMod
             events.World.NpcListChanged += this.OnNpcListChanged;
             events.World.LocationListChanged += this.OnLocationListChanged;
             events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            events.Multiplayer.ModMessageReceived += this.OnModMessageReceived;
 
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
@@ -441,16 +445,63 @@ namespace Pathoschild.Stardew.TractorMod
                 this.DismissTractor(Game1.player.mount);
         }
 
+        /// <summary>Raised after a mod message is received over the network.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnModMessageReceived(object sender, ModMessageReceivedEventArgs e)
+        {
+            // tractor request from a farmhand
+            if (e.Type == this.RequestTractorMessageID && Context.IsMainPlayer && e.FromModID == this.ModManifest.UniqueID)
+            {
+                Farmer player = Game1.getFarmer(e.FromPlayerID);
+                if (player != null && !player.IsMainPlayer)
+                {
+                    this.Monitor.Log(
+                        this.SummonLocalTractorTo(player)
+                            ? $"Summon tractor for {player.Name} ({e.FromPlayerID})."
+                            : $"Received tractor request for {player.Name} ({e.FromPlayerID}), but no tractor is available.",
+                        LogLevel.Trace
+                    );
+                }
+                else
+                    this.Monitor.Log($"Received tractor request for {e.FromPlayerID}, but no such player was found.", LogLevel.Trace);
+            }
+        }
+
         /****
         ** Helper methods
         ****/
         /// <summary>Summon an unused tractor to the player's current position, if any are available.</summary>
         private void SummonTractor()
         {
+            bool summoned = this.SummonLocalTractorTo(Game1.player);
+            if (!summoned && !Context.IsMainPlayer)
+            {
+                this.Monitor.Log("Sending tractor request to host player.", LogLevel.Trace);
+                this.Helper.Multiplayer.SendMessage(
+                    message: true,
+                    messageType: this.RequestTractorMessageID,
+                    modIDs: new[] { this.ModManifest.UniqueID },
+                    playerIDs: new[] { Game1.MasterPlayer.UniqueMultiplayerID }
+                );
+            }
+        }
+
+        /// <summary>Summon an unused tractor to a player's current position, if any are available. If the player is a farmhand in multiplayer, only tractors in synced locations can be found by this method.</summary>
+        /// <param name="player">The target player.</param>
+        /// <returns>Returns whether a tractor was successfully summoned.</returns>
+        private bool SummonLocalTractorTo(Farmer player)
+        {
+            // get player info
+            if (player == null)
+                return false;
+            GameLocation location = player.currentLocation;
+            Vector2 tile = player.getTileLocation();
+
             // find nearest horse in player's current location (if available)
             Horse horse = this
-                .GetTractorsIn(Game1.currentLocation, includeMounted: false)
-                .OrderBy(match => Utility.distance(Game1.player.getTileX(), Game1.player.getTileY(), match.getTileX(), match.getTileY()))
+                .GetTractorsIn(location, includeMounted: false)
+                .OrderBy(match => Utility.distance(tile.X, tile.Y, match.getTileX(), match.getTileY()))
                 .FirstOrDefault();
 
             // else get horse from any location
@@ -458,13 +509,17 @@ namespace Pathoschild.Stardew.TractorMod
             {
                 horse = this
                     .GetLocations()
-                    .SelectMany(location => this.GetTractorsIn(location, includeMounted: false))
+                    .SelectMany(loc => this.GetTractorsIn(loc, includeMounted: false))
                     .FirstOrDefault();
             }
 
             // warp to player
             if (horse != null)
-                TractorManager.SetLocation(horse, Game1.currentLocation, Game1.player.getTileLocation());
+            {
+                TractorManager.SetLocation(horse, location, tile);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>Send a tractor back home.</summary>
