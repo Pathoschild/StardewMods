@@ -7,6 +7,7 @@
   * axe: can now configure based on tree size.
   * scythe: can now configure crops and flowers separately.
 * Added option to configure build resources.
+* Added button to send tractor back home.
 * Fixed garage texture not applied in the Farm Expansion mod's carpenter menu.
 * Fixed tractor range affected when you charge a tool before mounting.
 

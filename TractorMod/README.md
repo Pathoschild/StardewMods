@@ -55,7 +55,7 @@ These are the available settings:
 
 setting | effect
 :------ | :-----
-`Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `Backspace` to summon the tractor. Available inputs:<ul><li>`SummonTractor`: warp the tractor to your position.</li><li>`HoldToActivate`: if specified, the tractor will only do something while you're holding this button. If nothing is specified, tractor will work automatically.</li></ul>
+`Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `Backspace` to summon the tractor. Available inputs:<ul><li>`SummonTractor`: warp the tractor to your position.</li><li>`DismissTractor`: return the tractor you're riding to its home.</li><li>`HoldToActivate`: if specified, the tractor will only do something while you're holding this button. If nothing is specified, tractor will work automatically.</li></ul>
 `StandardAttachments` | Toggle features for all built-in attachments.
 `BuildPrice` | The gold price to buy a tractor garage. Default 150,000g.
 `BuildMaterials` | The materials needed to build a tractor garage (see [object IDs](https://stardewvalleywiki.com/Modding:Object_data)). Default 20 iron bars, 5 iridium bars, and 5 battery packs.

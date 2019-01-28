@@ -245,7 +245,7 @@ namespace Pathoschild.Stardew.TractorMod
                 foreach (GameLocation location in e.Removed)
                 {
                     foreach (Horse tractor in this.GetTractorsIn(location).ToArray())
-                        TractorManager.SetLocation(tractor, Game1.getFarm(), tractor.DefaultPosition);
+                        this.DismissTractor(tractor);
                 }
             }
         }
@@ -432,12 +432,13 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="e">The event arguments.</param>
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
-            if (!this.IsEnabled)
+            if (!this.IsEnabled || !Context.IsPlayerFree)
                 return;
 
-            // summon available tractor
-            if (Context.IsPlayerFree && this.Config.Controls.SummonTractor.Contains(e.Button) && !Game1.player.isRidingHorse())
+            if (this.Config.Controls.SummonTractor.Contains(e.Button) && !Game1.player.isRidingHorse())
                 this.SummonTractor();
+            else if (this.Config.Controls.DismissTractor.Contains(e.Button) && Game1.player.isRidingHorse())
+                this.DismissTractor(Game1.player.mount);
         }
 
         /****
@@ -464,6 +465,18 @@ namespace Pathoschild.Stardew.TractorMod
             // warp to player
             if (horse != null)
                 TractorManager.SetLocation(horse, Game1.currentLocation, Game1.player.getTileLocation());
+        }
+
+        /// <summary>Send a tractor back home.</summary>
+        /// <param name="tractor">The tractor to dismiss.</param>
+        private void DismissTractor(Horse tractor)
+        {
+            if (tractor == null)
+                return;
+
+            if (tractor.rider != null)
+                tractor.dismount();
+            TractorManager.SetLocation(tractor, Game1.getFarm(), tractor.DefaultPosition);
         }
 
         /// <summary>Migrate tractors and garages from older versions of the mod.</summary>
