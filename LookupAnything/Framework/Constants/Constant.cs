@@ -9,6 +9,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
         /*********
         ** Accessors
         *********/
+        /// <summary>The maximum stack size for which to calculate a stack price (e.g. to avoid showing a stack size for infinite store inventory).</summary>
+        public static readonly int MaxStackSizeForPricing = 999;
+
         /// <summary>Whether bold text should be enabled where needed.</summary>
         /// <remarks>This is disabled for languages like Chinese which are difficult to read in bold.</remarks>
         public static bool AllowBold => Game1.content.GetCurrentLanguage() != LocalizedContentManager.LanguageCode.zh;

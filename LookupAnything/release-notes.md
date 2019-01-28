@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed cooking achievement check incorrectly shown for items like rarecrows.
+* Fixed invalid stack prices when looking up shop inventory items.
 * Improved translations. Thanks to Nanogamer7 (German)!
 
 ## 1.21
