@@ -353,7 +353,7 @@
   "player.skill.progress-last": "niveau {{level}}",
 
   // tile lookup labels
-  "tile.description": "Une case sur le carte. Ceci est affiché car vous avez activé la recherche des cases dans les paramètres.",
+  "tile.description": "Une case sur la carte. Ceci est affiché car vous avez activé la recherche des cases dans les paramètres.",
   "tile.map-name": "Nom de la carte",
   "tile.tile": "Case",
   "tile.tile-index": "{{layerName}}: tile index",
