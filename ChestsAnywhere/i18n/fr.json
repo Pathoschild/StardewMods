@@ -1,0 +1,31 @@
+{
+  // default chest names
+  "default-name.auto-grabber": "Récolteur-automatique #{{number}}",
+  "default-name.chest": "Coffre #{{number}}",
+  "default-name.fridge": "Réfrigérateur",
+  "default-name.junimo-hut": "Hutte Junimo #{{number}}",
+  "default-name.shipping-bin": "Bac d'expédition",
+
+  // edit-chest labels
+  "label.location": "Lieu",
+  "label.location.tile": "case {{x}}, {{y}}",
+  "label.name": "Nom",
+  "label.category": "Catégorie",
+  "label.order": "Ordre",
+  "label.hide-chest": "Cacher ce coffre",
+  "label.hide-chest-hidden": "Cacher ce coffre (vous devrez trouver ce coffre pour modifier cela !)",
+  "label.automate-prefer-output": "(Automatisation) Mettre les objets dans ce coffre d'abord",
+  "label.automate-ignore": "(Automatisation) Ne pas utiliser ce coffre pour l'automatisation",
+
+  // button labels
+  "button.edit-chest": "modifier coffre",
+  "button.sort-inventory": "trier inventaire",
+  "button.save": "enregistrer",
+  "button.reset": "réinitialiser",
+
+  // errors
+  "errors.disabled-from-here": "Vous ne pouvez accéder aux coffres depuis ici.",
+  "errors.no-chests": "Vous n'avez aucun coffre.",
+  "errors.no-chests-in-location": "Vous n'avez aucun coffre dans cette zone.",
+  "errors.no-chests-in-range": "Vous n'avez aucun coffre à portée."
+}

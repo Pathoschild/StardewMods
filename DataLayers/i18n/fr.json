@@ -1,0 +1,50 @@
+{
+  // accessibility
+  "accessibility.name": "Accessibilité",
+  "accessibility.clear": "Vide",
+  "accessibility.occupied": "Occupé",
+  "accessibility.impassable": "Infranchissable",
+  "accessibility.warp": "Passage",
+
+  // coverage: bee houses
+  "bee-houses.name": "Couverture : Ruche",
+  "bee-houses.range": "Portée des fleurs",
+
+  // coverage: Junimo huts
+  "junimo-huts.name": "Couverture : Hutte Junimo",
+  "junimo-huts.can-harvest": "Peut récolter",
+  "junimo-huts.cannot-harvest": "Ne peut pas récolter",
+
+  // coverage: scarecrows
+  "scarecrows.name": "Couverture : Epouvantail",
+  "scarecrows.protected": "Protégé",
+  "scarecrows.exposed": "Exposé",
+
+  // coverage: sprinklers
+  "sprinklers.name": "Couverture : Arroseur",
+  "sprinklers.covered": "Couverte",
+  "sprinklers.dry-crops": "Non couverte",
+
+  // crops: harvest
+  "crop-harvest.name": "Culture : prête à être récoltée",
+  "crop-harvest.ready": "Prête",
+  "crop-harvest.not-ready": "Pas prête",
+  "crop-harvest.not-enough-time": "Pas assez de temps",
+
+  // crops: watered
+  "crop-water.name": "Culture : arrosage",
+  "crop-water.watered": "Culture arrosée",
+  "crop-water.dry": "Culture sèche",
+
+  // crops: fertilized
+  "crop-fertilizer.name": "Culture : Engrais",
+  "crop-fertilizer.fertilizer": "Engrais",
+  "crop-fertilizer.retaining-soil": "Sol de rétention",
+  "crop-fertilizer.speed-gro": "Croissance rapide",
+
+  // machine processing
+  "machines.name": "Traitement des Machines",
+  "machines.empty": "Vide",
+  "machines.processing": "En cours",
+  "machines.finished": "Terminé"
+}
