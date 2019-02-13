@@ -86,16 +86,16 @@
   "data.type.container": "Contenant",
 
   // farm
-  "data.item.egg-incubator.description": "Fais éclore les oeufs en des poussins et canetons.",
+  "data.item.egg-incubator.description": "Fait éclore les oeufs en des poussins et canetons.",
   "data.item.broken-branch.name": "Branche cassée",
   "data.item.broken-branch.description": "Une branche cassée. A couper avec une hache pour obtenir du bois.",
   "data.item.stone.name": "Pierre",
   "data.item.stone.description": "Une pierre grise. A casser avec une pioche pour obtenir de la pierre.",
-  "data.item.geode.name": "Veine de géode",
+  "data.item.geode.name": "Filon de géode",
   "data.item.geode.description": "A casser pour obtenir des géodes.",
-  "data.item.frozen-geode.name": "Veine de géode gelée",
+  "data.item.frozen-geode.name": "Filon de géode gelée",
   "data.item.frozen-geode.description": "A casser pour obtenir des géodes gelées.",
-  "data.item.magma-geode.name": "Veine de géode de lave",
+  "data.item.magma-geode.name": "Filon de géode de lave",
   "data.item.magma-geode.description": "A casser pour obtenir des géodes de lave.",
 
   // weeds & crystals
