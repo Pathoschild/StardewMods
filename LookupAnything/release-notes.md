@@ -4,7 +4,7 @@
 ## Upcoming release
 * Fixed cooking achievement check incorrectly shown for items like rarecrows.
 * Fixed invalid stack prices when looking up shop inventory items.
-* Improved translations. Thanks to Nanogamer7 (German)!
+* Improved translations. Thanks to Nanogamer7 (German) and VincentRoth (added French)!
 
 ## 1.21
 * Added building lookups. That includes general info (like name and description) and info specific to barns, coops, cabins, Junimo huts, mills, silos, slime hutches, and stables.

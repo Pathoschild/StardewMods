@@ -80,6 +80,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="i18n\de.json" />
+    <None Include="i18n\fr.json" />
     <None Include="i18n\ja.json" />
     <None Include="i18n\ru.json" />
     <None Include="i18n\es.json" />

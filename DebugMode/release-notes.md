@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to VincentRoth (added French)!
+
 ## 1.9.2
 * Updated for the upcoming SMAPI 3.0.
 * Improved translations. Thanks to Nanogamer7 (German)!
