@@ -8,6 +8,7 @@
   * scythe: can now configure crops and flowers separately.
 * Added option to configure build resources.
 * Added button to send tractor back home.
+* Fixed compatibility with Deep Woods.
 * Fixed farmhands unable to summon a tractor if all available tractors are in non-synced locations.
 * Fixed tractor unable to break the Cindersnap forest log.
 * Fixed garage texture not applied in the Farm Expansion mod's carpenter menu.

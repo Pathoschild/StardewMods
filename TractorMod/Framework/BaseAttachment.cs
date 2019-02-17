@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
@@ -14,6 +15,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
     /// <summary>The base class for tool implementations.</summary>
     internal abstract class BaseAttachment : IAttachment
     {
+        /*********
+        ** Fields
+        *********/
+        /// <summary>Simplifies access to private code.</summary>
+        protected IReflectionHelper Reflection { get; }
+
+
         /*********
         ** Accessors
         *********/
@@ -46,9 +54,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="rateLimit">The minimum number of ticks between each update.</param>
-        protected BaseAttachment(int rateLimit = 0)
+        protected BaseAttachment(IReflectionHelper reflection, int rateLimit = 0)
         {
+            this.Reflection = reflection;
             this.RateLimit = rateLimit;
         }
 
@@ -121,6 +131,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     return mineshaft.resourceClumps;
 
                 default:
+                    if (location.Name == "DeepWoods")
+                        return this.Reflection.GetField<IList<ResourceClump>>(location, "resourceClumps", required: false)?.GetValue() ?? new ResourceClump[0];
                     return new ResourceClump[0];
             }
         }

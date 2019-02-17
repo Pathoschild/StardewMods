@@ -86,22 +86,25 @@ namespace Pathoschild.Stardew.TractorMod
             this.Config = helper.ReadConfig<ModConfig>();
 
             // init tractor logic
-            StandardAttachmentsConfig attachmentConfig = this.Config.StandardAttachments;
-            this.TractorManager = new TractorManager(this.Config, this.Helper.Translation, this.Helper.Reflection, attachments: new IAttachment[]
             {
-                new CustomAttachment(this.Config.CustomAttachments), // should be first so it can override default attachments
-                new AxeAttachment(attachmentConfig.Axe),
-                new FertilizerAttachment(attachmentConfig.Fertilizer),
-                new GrassStarterAttachment(attachmentConfig.GrassStarter),
-                new HoeAttachment(attachmentConfig.Hoe),
-                new MeleeWeaponAttachment(attachmentConfig.MeleeWeapon),
-                new PickaxeAttachment(attachmentConfig.PickAxe),
-                new ScytheAttachment(attachmentConfig.Scythe),
-                new SeedAttachment(attachmentConfig.Seeds),
-                new SeedBagAttachment(attachmentConfig.SeedBagMod),
-                new SlingshotAttachment(attachmentConfig.Slingshot, this.Helper.Reflection),
-                new WateringCanAttachment(attachmentConfig.WateringCan)
-            });
+                IReflectionHelper reflection = this.Helper.Reflection;
+                StandardAttachmentsConfig toolConfig = this.Config.StandardAttachments;
+                this.TractorManager = new TractorManager(this.Config, this.Helper.Translation, this.Helper.Reflection, attachments: new IAttachment[]
+                {
+                    new CustomAttachment(this.Config.CustomAttachments, reflection), // should be first so it can override default attachments
+                    new AxeAttachment(toolConfig.Axe, reflection),
+                    new FertilizerAttachment(toolConfig.Fertilizer, reflection),
+                    new GrassStarterAttachment(toolConfig.GrassStarter, reflection),
+                    new HoeAttachment(toolConfig.Hoe, reflection),
+                    new MeleeWeaponAttachment(toolConfig.MeleeWeapon, reflection),
+                    new PickaxeAttachment(toolConfig.PickAxe, reflection),
+                    new ScytheAttachment(toolConfig.Scythe, reflection),
+                    new SeedAttachment(toolConfig.Seeds, reflection),
+                    new SeedBagAttachment(toolConfig.SeedBagMod, reflection),
+                    new SlingshotAttachment(toolConfig.Slingshot, reflection),
+                    new WateringCanAttachment(toolConfig.WateringCan, reflection)
+                });
+            }
 
             // hook events
             IModEvents events = helper.Events;

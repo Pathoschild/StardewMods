@@ -1,8 +1,8 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
+using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using SObject = StardewValley.Object;
@@ -24,7 +24,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod configuration.</param>
-        public ScytheAttachment(ScytheConfig config)
+        /// <param name="reflection">Simplifies access to private code.</param>
+        public ScytheAttachment(ScytheConfig config, IReflectionHelper reflection)
+            : base(reflection)
         {
             this.Config = config;
         }

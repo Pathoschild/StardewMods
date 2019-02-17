@@ -1,8 +1,8 @@
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
-using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
@@ -22,7 +22,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
-        public GrassStarterAttachment(GrassStarterConfig config)
+        /// <param name="reflection">Simplifies access to private code.</param>
+        public GrassStarterAttachment(GrassStarterConfig config, IReflectionHelper reflection)
+            : base(reflection)
         {
             this.Config = config;
         }
@@ -32,7 +34,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
+        public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
         {
             return this.Config.Enable && item?.ParentSheetIndex == 297 && item.Stack > 0;
         }
@@ -45,7 +47,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
+        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
             if (!(item is SObject obj) || obj.Stack <= 0)
                 return false;

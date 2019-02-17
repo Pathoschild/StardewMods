@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
-using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
@@ -32,7 +32,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
-        public AxeAttachment(AxeConfig config)
+        /// <param name="reflection">Simplifies access to private code.</param>
+        public AxeAttachment(AxeConfig config, IReflectionHelper reflection)
+            : base(reflection)
         {
             this.Config = config;
         }
@@ -42,7 +44,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
+        public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
         {
             return tool is Axe;
         }
@@ -55,7 +57,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
+        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
             // clear twigs & weeds
             if (this.Config.ClearDebris && (tileObj?.Name == "Twig" || this.IsWeed(tileObj)))

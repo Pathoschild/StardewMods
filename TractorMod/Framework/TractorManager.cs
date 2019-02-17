@@ -12,7 +12,6 @@ using StardewValley;
 using StardewValley.Characters;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
-using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
@@ -227,7 +226,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         private void UpdateAttachmentEffects()
         {
             // get context
-            SFarmer player = Game1.player;
+            Farmer player = Game1.player;
             GameLocation location = Game1.currentLocation;
             Tool tool = player.CurrentTool;
             Item item = player.CurrentItem;
@@ -271,7 +270,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        private IEnumerable<IAttachment> GetApplicableAttachmentsAfterCooldown(SFarmer player, Tool tool, Item item, GameLocation location)
+        private IEnumerable<IAttachment> GetApplicableAttachmentsAfterCooldown(Farmer player, Tool tool, Item item, GameLocation location)
         {
             foreach (IAttachment attachment in this.Attachments)
             {
@@ -318,7 +317,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             // get references
             // (Note: change net values directly to avoid sync bugs, since the value will be reset when we're done.)
-            SFarmer player = Game1.player;
+            Farmer player = Game1.player;
             NetRef<Horse> mountField = this.Reflection.GetField<NetRef<Horse>>(Game1.player, "netMount").GetValue();
             IReflectedField<Horse> mountFieldValue = this.Reflection.GetField<Horse>(mountField, "value");
             IReflectedField<Vector2> mountPositionValue = this.Reflection.GetField<Vector2>(player.mount.position.Field, "value");
