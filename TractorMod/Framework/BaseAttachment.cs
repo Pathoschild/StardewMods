@@ -104,13 +104,25 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="location">The location to search.</param>
         protected IEnumerable<ResourceClump> GetResourceClumps(GameLocation location)
         {
-            if (location is Farm farm)
-                return farm.resourceClumps;
-            if (location is Woods woods)
-                return woods.stumps;
-            if (location is MineShaft mineshaft)
-                return mineshaft.resourceClumps;
-            return new ResourceClump[0];
+            switch (location)
+            {
+                case Farm farm:
+                    return farm.resourceClumps;
+
+                case Forest forest:
+                    return forest.log != null
+                        ? new[] { forest.log }
+                        : new ResourceClump[0];
+
+                case Woods woods:
+                    return woods.stumps;
+
+                case MineShaft mineshaft:
+                    return mineshaft.resourceClumps;
+
+                default:
+                    return new ResourceClump[0];
+            }
         }
 
         /// <summary>Get the resource clump which covers a given tile, if any.</summary>
