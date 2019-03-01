@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Netcode;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
@@ -99,21 +100,31 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             for (Type type = obj.GetType(); type != null; type = type.BaseType)
             {
+                // get fields & properties
                 var fields =
                     (
                         from field in type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy)
                         where !field.IsLiteral // exclude constants
-                        select new { field.Name, Value = this.GetDebugValue(obj, field) }
+                        select new { field.Name, Type = field.FieldType, Value = this.GetDebugValue(obj, field) }
                     )
                     .Concat(
                         from property in type.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy)
                         where property.CanRead
-                        select new { property.Name, Value = this.GetDebugValue(obj, property) }
+                        select new { property.Name, Type = property.PropertyType, Value = this.GetDebugValue(obj, property) }
                     )
                     .OrderBy(field => field.Name, StringComparer.InvariantCultureIgnoreCase);
 
+                // yield valid values
+                IDictionary<string, string> seenValues = new Dictionary<string, string>(StringComparer.InvariantCulture);
                 foreach (var field in fields)
+                {
+                    if (seenValues.TryGetValue(field.Name, out string value) && value == field.Value)
+                        continue; // key/value pair differs only in the key case
+                    if (field.Value == field.Type.ToString())
+                        continue; // can't be displayed
+
                     yield return new GenericDebugField($"{type.Name}::{field.Name}", field.Value);
+                }
             }
         }
 
