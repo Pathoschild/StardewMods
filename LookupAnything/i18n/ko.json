@@ -170,15 +170,7 @@
   "animal.complaints.not-petted": "오늘 쓰다듬 받지 못함.",
   "animal.complaints.wild-animal-attack": "밤중에 야생 동물들에게 습격당함.",
 
-  // fruit tree lookup labels
-  "fruit-tree.complaints": "불만",
-  "fruit-tree.name": "{{fruitName}} 나무",
-  "fruit-tree.growth": "성장 단계",
-  "fruit-tree.next-fruit": "다음 과일",
-  "fruit-tree.season": "제철",
-  "fruit-tree.quality": "품질",
-
-   // building lookup labels
+  // building lookup labels
   "building.animals": "동물",
   "building.construction": "건축중",
   "building.feed-trough": "여물통",
@@ -213,6 +205,14 @@
   "building.upgrades.coop.1": "최대 8마리의 동물 수용; 알 부화기 추가, 공룡 및 오리 추가",
   "building.upgrades.coop.2": "최대 12마리의 동물 수용; 먹이통 자동화가 가능해지며 토끼를 추가",
   "building.water-trough.summary": "최대 {{max}}칸 중 {{filled}}칸의 물통을 채움",
+
+  // fruit tree lookup labels
+  "fruit-tree.complaints": "불만",
+  "fruit-tree.name": "{{fruitName}} 나무",
+  "fruit-tree.growth": "성장 단계",
+  "fruit-tree.next-fruit": "다음 과일",
+  "fruit-tree.season": "제철",
+  "fruit-tree.quality": "품질",
 
   // fruit tree lookup values
   "fruit-tree.complaints.adjacent-objects": "주변의 물체가 방해해서 자랄 수 없음",
@@ -257,7 +257,7 @@
   "item.needed-for": "필요함",
   "item.number-owned": "보유함",
   "item.number-cooked": "요리됨",
-  "item.number-crafted": "제작됨",  
+  "item.number-crafted": "제작됨",
   "item.recipes": "레시피",
   "item.see-also": "참고",
   "item.sells-for": "판매가",
@@ -275,7 +275,7 @@
   "item.needed-for.full-shipment": "도전과제 '완전 판매' (1개 출하)",
   "item.needed-for.polyculture": "도전과제 '복합 재배' ({{count}}개 더 출하)",
   "item.needed-for.full-collection": "도전과제 '수집 완료' (박물관에 기증)",
-    "item.needed-for.gourmet-chef": "도전과제 '미식가 요리사' ({{recipes}}을/를 요리하세요)",
+  "item.needed-for.gourmet-chef": "도전과제 '미식가 요리사' ({{recipes}}을/를 요리하세요)",
   "item.needed-for.craft-master": "도전과제 '제작의 달인' ({{recipes}}을/를 제작하세요)",
   "item.sells-to.shipping-box": "출하 상자",
   "item.fence-health.gold-clock": "금시계로 인하여 내구도가 감소하지 않음",

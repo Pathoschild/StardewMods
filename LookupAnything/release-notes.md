@@ -7,7 +7,7 @@
   * if a field and property differ only by the capitalisation of their name, only one is now shown.
 * Fixed cooking achievement check incorrectly shown for items like rarecrows.
 * Fixed invalid stack prices when looking up shop inventory items.
-* Improved translations. Thanks to Nanogamer7 (German) and VincentRoth (added French)!
+* Improved translations. Thanks to Nanogamer7 (improved German), S2SKY (added Korean), and VincentRoth (added French)!
 
 ## 1.21
 * Added building lookups. That includes general info (like name and description) and info specific to barns, coops, cabins, Junimo huts, mills, silos, slime hutches, and stables.
