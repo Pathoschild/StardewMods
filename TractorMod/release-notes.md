@@ -8,6 +8,7 @@
   * scythe: can now configure crops and flowers separately.
 * Added option to configure build resources.
 * Added button to send tractor back home.
+* Improved translations. Thanks to S2SKY (added Korean)!
 * Fixed compatibility with Deep Woods.
 * Fixed farmhands unable to summon a tractor if all available tractors are in non-synced locations.
 * Fixed tractor unable to break the Cindersnap forest log.
