@@ -4,6 +4,7 @@
 ## Upcoming release
 * Added option to disable player inventory organise button.
 * Fixed UI flicker when moving items in the chest UI.
+* Fixed shipping bin also listed in Farm Expansion's custom location.
 * Improved translations. Thanks to VincentRoth (added French)!
 
 ## 1.15

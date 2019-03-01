@@ -96,7 +96,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     }
 
                     // shipping bin
-                    if (this.EnableShippingBin && location is Farm farm)
+                    if (this.EnableShippingBin && location is Farm farm && object.ReferenceEquals(farm, Game1.getFarm()))
                         yield return new ManagedChest(new ShippingBinContainer(farm, this.DataHelper), farm, Vector2.Zero, this.Translations.Get("default-name.shipping-bin"));
                 }
             }
