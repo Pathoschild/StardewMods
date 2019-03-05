@@ -46,5 +46,5 @@
   "machines.name": "기계 동작 여부",
   "machines.empty": "빔",
   "machines.processing": "처리중",
-  "machines.finished": "Finished" // TODO
+  "machines.finished": "완료됨" // TODO
 }
