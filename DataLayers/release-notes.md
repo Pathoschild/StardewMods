@@ -1,6 +1,6 @@
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to VincentRoth (added French)!
+* Improved translations. Thanks to S2SKY (added Korean) and VincentRoth (added French)!
 
 ## 1.5
 * Added _machine processing_ layer (requires Automate 1.11+).

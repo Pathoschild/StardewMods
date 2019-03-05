@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to VincentRoth (added French)!
+* Improved translations. Thanks to S2SKY (added Korean) and VincentRoth (added French)!
 
 ## 1.9.2
 * Updated for the upcoming SMAPI 3.0.
