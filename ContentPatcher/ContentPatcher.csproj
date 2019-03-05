@@ -100,6 +100,9 @@
     <Compile Include="Framework\Tokens\TokenName.cs" />
     <Compile Include="Framework\Tokens\VillagerHeartsToken.cs" />
     <Compile Include="Framework\Tokens\VillagerRelationshipToken.cs" />
+    <Compile Include="Framework\Validators\BaseValidator.cs" />
+    <Compile Include="Framework\Validators\IAssetValidator.cs" />
+    <Compile Include="Framework\Validators\StardewValley_1_3_36_Validator.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Framework\RawContentPack.cs" />

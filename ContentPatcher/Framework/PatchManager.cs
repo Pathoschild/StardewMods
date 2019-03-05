@@ -5,6 +5,7 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
+using ContentPatcher.Framework.Validators;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -26,6 +27,9 @@ namespace ContentPatcher.Framework
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
+        /// <summary>Handle special validation logic on loaded or edited assets.</summary>
+        private readonly IAssetValidator[] AssetValidators;
+
         /// <summary>The patches which are permanently disabled for this session.</summary>
         private readonly IList<DisabledPatch> PermanentlyDisabledPatches = new List<DisabledPatch>();
 
@@ -42,10 +46,12 @@ namespace ContentPatcher.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="tokenManager">Manages the available contextual tokens.</param>
-        public PatchManager(IMonitor monitor, TokenManager tokenManager)
+        /// <param name="assetValidators">Handle special validation logic on loaded or edited assets.</param>
+        public PatchManager(IMonitor monitor, TokenManager tokenManager, IAssetValidator[] assetValidators)
         {
             this.Monitor = monitor;
             this.TokenManager = tokenManager;
+            this.AssetValidators = assetValidators;
         }
 
         /****
@@ -95,6 +101,16 @@ namespace ContentPatcher.Framework
                 this.Monitor.Log($"{patch.ContentPack.Manifest.Name} loaded {asset.AssetName}.", LogLevel.Trace);
 
             T data = patch.Load<T>(asset);
+
+            foreach (IAssetValidator validator in this.AssetValidators)
+            {
+                if (!validator.TryValidate(asset, data, patch, out string error))
+                {
+                    this.Monitor.Log($"Can't apply patch {patch.LogName} to {asset.AssetName}: {error}.", LogLevel.Error);
+                    return default;
+                }
+            }
+
             patch.IsApplied = true;
             return data;
         }
