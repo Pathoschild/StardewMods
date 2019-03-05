@@ -42,7 +42,7 @@ namespace ContentPatcher.Framework.Migrations
         /// <returns>Returns whether migration succeeded.</returns>
         public virtual bool TryMigrate(ref TokenName name, out string error)
         {
-            // tokens which need a high version
+            // tokens which need a higher version
             if (this.AddedTokens.Contains(name.Key))
             {
                 error = this.GetNounPhraseError($"using token {name}");

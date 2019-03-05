@@ -12,13 +12,6 @@ namespace ContentPatcher.Framework.Patches
     internal class LoadPatch : Patch
     {
         /*********
-        ** Accessors
-        *********/
-        /// <summary>The asset key to load from the content pack instead.</summary>
-        public TokenString LocalAsset { get; }
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
@@ -31,24 +24,14 @@ namespace ContentPatcher.Framework.Patches
         public LoadPatch(string logName, ManagedContentPack contentPack, TokenString assetName, ConditionDictionary conditions, TokenString localAsset, Func<string, string> normaliseAssetName)
             : base(logName, PatchType.Load, contentPack, assetName, conditions, normaliseAssetName)
         {
-            this.LocalAsset = localAsset;
-        }
-
-        /// <summary>Update the patch data when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the patch data changed.</returns>
-        public override bool UpdateContext(IContext context)
-        {
-            bool localAssetChanged = this.LocalAsset.UpdateContext(context);
-            this.IsValidInContext = this.LocalAsset.IsReady && this.ContentPack.FileExists(this.LocalAsset.Value);
-            return base.UpdateContext(context) || localAssetChanged;
+            this.FromLocalAsset = localAsset;
         }
 
         /// <summary>Load the initial version of the asset.</summary>
         /// <param name="asset">The asset to load.</param>
         public override T Load<T>(IAssetInfo asset)
         {
-            T data = this.ContentPack.Load<T>(this.LocalAsset.Value);
+            T data = this.ContentPack.Load<T>(this.FromLocalAsset.Value);
             return (data as object) is Texture2D texture
                 ? (T)(object)this.CloneTexture(texture)
                 : data;
@@ -57,7 +40,7 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Get the tokens used by this patch in its fields.</summary>
         public override IEnumerable<TokenName> GetTokensUsed()
         {
-            return base.GetTokensUsed().Union(this.LocalAsset.Tokens);
+            return base.GetTokensUsed().Union(this.FromLocalAsset.Tokens);
         }
 
 

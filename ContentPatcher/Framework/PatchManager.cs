@@ -180,8 +180,8 @@ namespace ContentPatcher.Framework
                 }
 
                 // warn for invalid load patch
-                if (patch is LoadPatch loadPatch && patch.MatchesContext && !patch.ContentPack.FileExists(loadPatch.LocalAsset.Value))
-                    this.Monitor.Log($"Patch error: {patch.LogName} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.LocalAsset.Value}'.", LogLevel.Error);
+                if (patch is LoadPatch loadPatch && patch.MatchesContext && !patch.ContentPack.HasFile(loadPatch.FromLocalAsset.Value))
+                    this.Monitor.Log($"Patch error: {patch.LogName} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.FromLocalAsset.Value}'.", LogLevel.Error);
             }
 
             // rebuild asset name lookup

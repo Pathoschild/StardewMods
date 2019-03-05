@@ -19,6 +19,9 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>The content pack which requested the patch.</summary>
         ManagedContentPack ContentPack { get; }
+        
+        /// <summary>The asset key to load from the content pack instead.</summary>
+        TokenString FromLocalAsset { get; }
 
         /// <summary>The normalised asset name to intercept.</summary>
         string TargetAsset { get; }

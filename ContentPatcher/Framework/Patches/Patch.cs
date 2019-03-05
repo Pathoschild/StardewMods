@@ -32,6 +32,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The content pack which requested the patch.</summary>
         public ManagedContentPack ContentPack { get; }
 
+        /// <summary>The raw asset key to intercept (if applicable), including tokens.</summary>
+        public TokenString FromLocalAsset { get; protected set; }
+
         /// <summary>The normalised asset name to intercept.</summary>
         public string TargetAsset { get; private set; }
 
@@ -70,12 +73,19 @@ namespace ContentPatcher.Framework.Patches
                     && this.GetTokensUsed().All(p => context.Contains(p, enforceContext: true));
                 conditionsChanged = wasMatch != this.MatchesContext;
             }
-
-            // update asset name
+            // update target asset
             bool targetChanged = this.RawTargetAsset.UpdateContext(context);
             this.TargetAsset = this.NormaliseAssetName(this.RawTargetAsset.Value);
 
-            return conditionsChanged || targetChanged;
+            // update source asset
+            bool sourceChanged = false;
+            if (this.FromLocalAsset != null)
+            {
+                sourceChanged = this.FromLocalAsset.UpdateContext(context);
+                this.IsValidInContext = this.FromLocalAsset.IsReady && this.ContentPack.HasFile(this.FromLocalAsset.Value);
+            }
+            
+            return conditionsChanged || targetChanged || sourceChanged;
         }
 
         /// <summary>Load the initial version of the asset.</summary>
