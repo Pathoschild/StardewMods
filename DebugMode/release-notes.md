@@ -1,7 +1,7 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.9.3
 * Improved translations. Thanks to S2SKY (added Korean) and VincentRoth (added French)!
 
 ## 1.9.2

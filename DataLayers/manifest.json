@@ -1,8 +1,8 @@
 {
   "Name": "Data Layers",
   "Author": "Pathoschild",
-  "Version": "1.5.0",
-  "MinimumApiVersion": "2.9.0",
+  "Version": "1.5.1",
+  "MinimumApiVersion": "2.11.0",
   "Description": "Overlays the world with visual data like accessibility, bee/Junimo/scarecrow/sprinkler coverage, etc.",
   "UniqueID": "Pathoschild.DataLayers",
   "EntryDll": "DataLayers.dll",

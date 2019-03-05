@@ -1,10 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Improved debug fields:
-  * added human-readable values for more types;
-  * if a field and property differ only by the capitalisation of their name, only one is now shown.
+## 1.21.1
+* Added readable debug fields for more types.
+* Improved debug fields to only show one value if a field/property differ only by the capitalisation of their name.
 * Fixed cooking achievement check incorrectly shown for items like rarecrows.
 * Fixed invalid stack prices when looking up shop inventory items.
 * Improved translations. Thanks to Nanogamer7 (improved German), S2SKY (added Korean), and VincentRoth (added French)!

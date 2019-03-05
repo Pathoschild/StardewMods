@@ -1,8 +1,8 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Fixed custom maps broken in Stardew Valley 1.3.36 crashing the game (they'll now be detected and discarded instead).
+## 1.6.4
+* Added detection for most custom maps broken by Stardew Valley 1.3.36 (they'll now be rejected instead of crashing the game).
 
 ## 1.6.3
 * Fixed some conditions not available for multiplayer farmhands after 1.6.2.

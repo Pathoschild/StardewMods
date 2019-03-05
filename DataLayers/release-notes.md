@@ -1,5 +1,5 @@
 # Release notes
-## Upcoming release
+## 1.5.1
 * Improved translations. Thanks to S2SKY (added Korean) and VincentRoth (added French)!
 
 ## 1.5
