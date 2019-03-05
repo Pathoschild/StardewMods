@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
@@ -14,6 +15,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
     /// <summary>The base class for tool implementations.</summary>
     internal abstract class BaseAttachment : IAttachment
     {
+        /*********
+        ** Fields
+        *********/
+        /// <summary>Simplifies access to private code.</summary>
+        protected IReflectionHelper Reflection { get; }
+
+
         /*********
         ** Accessors
         *********/
@@ -46,9 +54,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="rateLimit">The minimum number of ticks between each update.</param>
-        protected BaseAttachment(int rateLimit = 0)
+        protected BaseAttachment(IReflectionHelper reflection, int rateLimit = 0)
         {
+            this.Reflection = reflection;
             this.RateLimit = rateLimit;
         }
 
@@ -104,13 +114,27 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="location">The location to search.</param>
         protected IEnumerable<ResourceClump> GetResourceClumps(GameLocation location)
         {
-            if (location is Farm farm)
-                return farm.resourceClumps;
-            if (location is Woods woods)
-                return woods.stumps;
-            if (location is MineShaft mineshaft)
-                return mineshaft.resourceClumps;
-            return new ResourceClump[0];
+            switch (location)
+            {
+                case Farm farm:
+                    return farm.resourceClumps;
+
+                case Forest forest:
+                    return forest.log != null
+                        ? new[] { forest.log }
+                        : new ResourceClump[0];
+
+                case Woods woods:
+                    return woods.stumps;
+
+                case MineShaft mineshaft:
+                    return mineshaft.resourceClumps;
+
+                default:
+                    if (location.Name == "DeepWoods")
+                        return this.Reflection.GetField<IList<ResourceClump>>(location, "resourceClumps", required: false)?.GetValue() ?? new ResourceClump[0];
+                    return new ResourceClump[0];
+            }
         }
 
         /// <summary>Get the resource clump which covers a given tile, if any.</summary>

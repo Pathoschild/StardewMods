@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.15.1
+* Added option to disable player inventory organise button.
+* Fixed UI flicker when moving items in the chest menu.
+* Fixed shipping bin also listed in Farm Expansion's custom location.
+* Improved translations. Thanks to S2SKY (added Korean) and VincentRoth (added French)!
+
 ## 1.15
 * Added button to reset a chest's options.
 * Updated for the upcoming SMAPI 3.0.

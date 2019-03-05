@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
+using StardewValley;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
@@ -17,11 +19,16 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The magnetic radius when riding the tractor.</summary>
         public int MagneticRadius { get; set; } = 384;
 
-        /// <summary>Whether you need to provide building resources to buy the garage.</summary>
-        public bool BuildUsesResources { get; set; } = true;
-
         /// <summary>The gold price to buy a tractor garage.</summary>
         public int BuildPrice { get; set; } = 150000;
+
+        /// <summary>The materials needed to to buy the garage.</summary>
+        public Dictionary<int, int> BuildMaterials { get; set; } = new Dictionary<int, int>
+        {
+            [Object.ironBar] = 20,
+            [Object.iridiumBar] = 5,
+            [787/* battery pack */] = 5
+        };
 
         /// <summary>Whether to highlight the tractor radius when riding it.</summary>
         public bool HighlightRadius { get; set; }

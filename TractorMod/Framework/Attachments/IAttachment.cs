@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.TerrainFeatures;
-using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
@@ -24,7 +23,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location);
+        bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location);
 
         /// <summary>Apply the tool to the given tile.</summary>
         /// <param name="tile">The tile to modify.</param>
@@ -34,6 +33,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location);
+        bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location);
     }
 }

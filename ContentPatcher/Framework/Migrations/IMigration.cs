@@ -21,7 +21,7 @@ namespace ContentPatcher.Framework.Migrations
         /// <summary>Migrate a content pack.</summary>
         /// <param name="content">The content pack data to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed.</param>
-        /// <returns>Returns whether the content pack was successfully migrated.</returns>
+        /// <returns>Returns whether migration succeeded.</returns>
         bool TryMigrate(ContentConfig content, out string error);
 
         /// <summary>Migrate a token name.</summary>

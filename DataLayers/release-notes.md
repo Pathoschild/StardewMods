@@ -1,4 +1,7 @@
 # Release notes
+## 1.5.1
+* Improved translations. Thanks to S2SKY (added Korean) and VincentRoth (added French)!
+
 ## 1.5
 * Added _machine processing_ layer (requires Automate 1.11+).
 * Updated for the upcoming SMAPI 3.0.

@@ -19,12 +19,15 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>The content pack which requested the patch.</summary>
         ManagedContentPack ContentPack { get; }
+        
+        /// <summary>The asset key to load from the content pack instead.</summary>
+        TokenString FromLocalAsset { get; }
 
         /// <summary>The normalised asset name to intercept.</summary>
-        string AssetName { get; }
+        string TargetAsset { get; }
 
         /// <summary>The raw asset name to intercept, including tokens.</summary>
-        TokenString TokenableAssetName { get; }
+        TokenString RawTargetAsset { get; }
 
         /// <summary>The conditions which determine whether this patch should be applied.</summary>
         ConditionDictionary Conditions { get; }

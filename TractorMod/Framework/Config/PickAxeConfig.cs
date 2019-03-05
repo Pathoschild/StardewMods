@@ -18,6 +18,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         /// <summary>Whether to clear boulders and meteorites.</summary>
         public bool ClearBouldersAndMeteorites { get; set; } = true;
 
+        /// <summary>Whether to clear placed objects.</summary>
+        public bool ClearObjects { get; set; } = false;
+
+        /// <summary>Whether to break containers in the mine.</summary>
+        public bool BreakMineContainers { get; set; } = true;
+
         /// <summary>Whether to clear weeds.</summary>
         public bool ClearWeeds { get; set; } = true;
     }

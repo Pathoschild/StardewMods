@@ -12,13 +12,14 @@ Active mods:
   _Access your chests from anywhere and organise them your way. Transfer items without having to
   run around, from the comfort of your bed to the deepest mine level._
 
-* **[Crops In Any Season](https://www.nexusmods.com/stardewvalley/mods/3000)** <small>([source](CropsInAnySeason))</small>  
-  _Lets you grow crops in any season including winter. The seasons are configurable._
-
 * **[Content Patcher](https://www.nexusmods.com/stardewvalley/mods/1915)** <small>([source](ContentPatcher))</small>  
   _Load content packs that change the game's images and data without replacing XNB files. Unlike
   XNB mods, these content packs get automatic update checks and compatibility checks, are easy to
   install and uninstall, and are less likely to break due to game updates._
+
+* **[Crops Anytime Anywhere](https://www.nexusmods.com/stardewvalley/mods/3000)** <small>([source](CropsAnytimeAnywhere))</small>  
+  _Lets you grow crops in any season and location, including on grass/dirt tiles you normally
+  couldn't till._
 
 * **[Data Layers](https://www.nexusmods.com/stardewvalley/mods/1691)** <small>([source](DataLayers))</small>  
   _Overlays the world with visual data like accessibility, bee/Junimo/scarecrow/sprinkler coverage,
@@ -65,34 +66,19 @@ use the right translations.
 &nbsp;     | Chests Anywhere                          | Data Layers                          | Debug Mode                          | Lookup Anything                          | Tractor Mod
 ---------- | :--------------------------------------- | :----------------------------------- | :---------------------------------- | :--------------------------------------- | :------------------------------
 Chinese    | [↻ partial](ChestsAnywhere/i18n/zh.json) | [↻ partial](DataLayers/i18n/zh.json) | [✓](DebugMode/i18n/zh.json)        | [↻ partial](LookupAnything/i18n/zh.json) | [✓](TractorMod/i18n/zh.json)
-German     | [✓](ChestsAnywhere/i18n/de.json)        | [✓](DataLayers/i18n/de.json)        | [✓](DebugMode/i18n/de.json)        | [↻ partial](LookupAnything/i18n/de.json) | [✓](TractorMod/i18n/de.json)
+French     | [✓](ChestsAnywhere/i18n/fr.json)        | [✓](DataLayers/i18n/fr.json)        | [✓](DebugMode/i18n/fr.json)        | [✓](LookupAnything/i18n/fr.json)        | ❑
+German     | [✓](ChestsAnywhere/i18n/de.json)        | [✓](DataLayers/i18n/de.json)        | [✓](DebugMode/i18n/de.json)        | [✓](LookupAnything/i18n/de.json)        | [✓](TractorMod/i18n/de.json)
+Hungarian  | ❑                                       | ❑                                   | ❑                                  | ❑                                       | ❑
+Italian    | ❑                                       | ❑                                   | ❑                                  | ❑                                       | ❑
 Japanese   | [↻ partial](ChestsAnywhere/i18n/ja.json) | [↻ partial](DataLayers/i18n/ja.json) | [✓](DebugMode/i18n/ja.json)        | [↻ partial](LookupAnything/i18n/ja.json) | [✓](TractorMod/i18n/ja.json)
+Korean     | [✓](ChestsAnywhere/i18n/ko.json)        | [✓](DataLayers/i18n/ko.json)        | [✓](DebugMode/i18n/ko.json)        | [✓](LookupAnything/i18n/ko.json)        | [✓](TractorMod/i18n/ko.json)
 Portuguese | [↻ partial](ChestsAnywhere/i18n/pt.json) | [↻ partial](DataLayers/i18n/pt.json) | [✓](DebugMode/i18n/pt.json)        | [↻ partial](LookupAnything/i18n/pt.json) | [✓](TractorMod/i18n/pt.json)
 Russian    | [↻ partial](ChestsAnywhere/i18n/ru.json) | [↻ partial](DataLayers/i18n/ru.json) | ↻ [partial](DebugMode/i18n/ru.json) | [↻ partial](LookupAnything/i18n/ru.json) | [✓](TractorMod/i18n/ru.json)
 Spanish    | [↻ partial](ChestsAnywhere/i18n/es.json) | [↻ partial](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json)        | [↻ partial](LookupAnything/i18n/es.json) | [✓](TractorMod/i18n/es.json)
+Turkish    | ❑                                       | ❑                                   | ❑                                  | ❑                                       | ❑
 
-Here's how to translate one of my mods:
-
-1. Copy `default.json` into a new file with the right name:
-
-   language   | file name
-   ---------- | ---------
-   Chinese    | `zh.json`
-   German     | `de.json`
-   Japanese   | `ja.json`
-   Portuguese | `pt.json`
-   Spanish    | `es.json`
-
-2. Translate the second part on each line:
-   ```json
-   "example-key": "some text here"
-                   ^-- translate this
-   ```
-   Don't change the quote characters, and don't translate the text inside `{{these brackets}}`.
-3. Launch the game to try your translations.  
-   _You can edit translations without restarting the game; just type `reload_i18n` in the SMAPI console to reload the translation files._
-
-Create an issue or pull request here with your translations, or send them to me privately. :)
+Contributions are welcome! See [Modding:Translations](https://stardewvalleywiki.com/Modding:Translations)
+on the wiki for help contributing translations.
 
 ## Compiling the mods
 Installing stable releases from Nexus Mods is recommended for most users. If you really want to

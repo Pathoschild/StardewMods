@@ -1,8 +1,8 @@
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.Utilities;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
-using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
@@ -22,7 +22,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="customAttachments">The enabled custom tool or item names.</param>
-        public CustomAttachment(string[] customAttachments)
+        /// <param name="reflection">Simplifies access to private code.</param>
+        public CustomAttachment(string[] customAttachments, IReflectionHelper reflection)
+            : base(reflection)
         {
             this.CustomNames = new InvariantHashSet(customAttachments);
         }
@@ -32,7 +34,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
+        public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
         {
             return
                 (tool != null && this.CustomNames.Contains(tool.Name))
@@ -47,7 +49,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
+        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
             // apply tool
             if (tool != null && this.CustomNames.Contains(tool.Name))

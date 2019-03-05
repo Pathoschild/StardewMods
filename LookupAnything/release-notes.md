@@ -1,6 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.21.1
+* Added readable debug fields for more types.
+* Improved debug fields to only show one value if a field/property differ only by the capitalisation of their name.
+* Fixed cooking achievement check incorrectly shown for items like rarecrows.
+* Fixed invalid stack prices when looking up shop inventory items.
+* Improved translations. Thanks to Nanogamer7 (improved German), S2SKY (added Korean), and VincentRoth (added French)!
+
 ## 1.21
 * Added building lookups. That includes general info (like name and description) and info specific to barns, coops, cabins, Junimo huts, mills, silos, slime hutches, and stables.
 * Added support for lookups from the cooking, crafting, and collection menus.

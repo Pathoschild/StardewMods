@@ -5,6 +5,7 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
+using ContentPatcher.Framework.Validators;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -26,6 +27,9 @@ namespace ContentPatcher.Framework
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
+        /// <summary>Handle special validation logic on loaded or edited assets.</summary>
+        private readonly IAssetValidator[] AssetValidators;
+
         /// <summary>The patches which are permanently disabled for this session.</summary>
         private readonly IList<DisabledPatch> PermanentlyDisabledPatches = new List<DisabledPatch>();
 
@@ -42,10 +46,12 @@ namespace ContentPatcher.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="tokenManager">Manages the available contextual tokens.</param>
-        public PatchManager(IMonitor monitor, TokenManager tokenManager)
+        /// <param name="assetValidators">Handle special validation logic on loaded or edited assets.</param>
+        public PatchManager(IMonitor monitor, TokenManager tokenManager, IAssetValidator[] assetValidators)
         {
             this.Monitor = monitor;
             this.TokenManager = tokenManager;
+            this.AssetValidators = assetValidators;
         }
 
         /****
@@ -95,6 +101,16 @@ namespace ContentPatcher.Framework
                 this.Monitor.Log($"{patch.ContentPack.Manifest.Name} loaded {asset.AssetName}.", LogLevel.Trace);
 
             T data = patch.Load<T>(asset);
+
+            foreach (IAssetValidator validator in this.AssetValidators)
+            {
+                if (!validator.TryValidate(asset, data, patch, out string error))
+                {
+                    this.Monitor.Log($"Can't apply patch {patch.LogName} to {asset.AssetName}: {error}.", LogLevel.Error);
+                    return default;
+                }
+            }
+
             patch.IsApplied = true;
             return data;
         }
@@ -137,17 +153,17 @@ namespace ContentPatcher.Framework
             // update patches
             InvariantHashSet reloadAssetNames = new InvariantHashSet();
             string prevAssetName = null;
-            foreach (IPatch patch in this.Patches.OrderByIgnoreCase(p => p.AssetName).ThenByIgnoreCase(p => p.LogName))
+            foreach (IPatch patch in this.Patches.OrderByIgnoreCase(p => p.TargetAsset).ThenByIgnoreCase(p => p.LogName))
             {
                 // log asset name
-                if (this.Monitor.IsVerbose && prevAssetName != patch.AssetName)
+                if (this.Monitor.IsVerbose && prevAssetName != patch.TargetAsset)
                 {
-                    this.Monitor.VerboseLog($"   {patch.AssetName}:");
-                    prevAssetName = patch.AssetName;
+                    this.Monitor.VerboseLog($"   {patch.TargetAsset}:");
+                    prevAssetName = patch.TargetAsset;
                 }
 
                 // track old values
-                string wasAssetName = patch.AssetName;
+                string wasAssetName = patch.TargetAsset;
                 bool wasApplied = patch.MatchesContext;
 
                 // update patch
@@ -163,7 +179,7 @@ namespace ContentPatcher.Framework
                     if (wasApplied)
                         reloadAssetNames.Add(wasAssetName);
                     if (shouldApply)
-                        reloadAssetNames.Add(patch.AssetName);
+                        reloadAssetNames.Add(patch.TargetAsset);
                 }
 
                 // log change
@@ -172,21 +188,21 @@ namespace ContentPatcher.Framework
                     IList<string> changes = new List<string>();
                     if (wasApplied != shouldApply)
                         changes.Add(shouldApply ? "enabled" : "disabled");
-                    if (wasAssetName != patch.AssetName)
-                        changes.Add($"target: {wasAssetName} => {patch.AssetName}");
+                    if (wasAssetName != patch.TargetAsset)
+                        changes.Add($"target: {wasAssetName} => {patch.TargetAsset}");
                     string changesStr = string.Join(", ", changes);
 
                     this.Monitor.VerboseLog($"      [{(shouldApply ? "X" : " ")}] {patch.LogName}: {(changes.Any() ? changesStr : "OK")}");
                 }
 
                 // warn for invalid load patch
-                if (patch is LoadPatch loadPatch && patch.MatchesContext && !patch.ContentPack.FileExists(loadPatch.LocalAsset.Value))
-                    this.Monitor.Log($"Patch error: {patch.LogName} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.LocalAsset.Value}'.", LogLevel.Error);
+                if (patch is LoadPatch loadPatch && patch.MatchesContext && !patch.ContentPack.HasFile(loadPatch.FromLocalAsset.Value))
+                    this.Monitor.Log($"Patch error: {patch.LogName} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.FromLocalAsset.Value}'.", LogLevel.Error);
             }
 
             // rebuild asset name lookup
             this.PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>(
-                from patchGroup in this.Patches.GroupByIgnoreCase(p => p.AssetName)
+                from patchGroup in this.Patches.GroupByIgnoreCase(p => p.TargetAsset)
                 let key = patchGroup.Key
                 let value = new HashSet<IPatch>(patchGroup)
                 select new KeyValuePair<string, HashSet<IPatch>>(key, value)
@@ -216,14 +232,14 @@ namespace ContentPatcher.Framework
             patch.UpdateContext(tokenContext);
 
             // add to patch list
-            this.Monitor.VerboseLog($"      added {patch.Type} {patch.AssetName}.");
+            this.Monitor.VerboseLog($"      added {patch.Type} {patch.TargetAsset}.");
             this.Patches.Add(patch);
 
             // add to lookup cache
-            if (this.PatchesByCurrentTarget.TryGetValue(patch.AssetName, out HashSet<IPatch> patches))
+            if (this.PatchesByCurrentTarget.TryGetValue(patch.TargetAsset, out HashSet<IPatch> patches))
                 patches.Add(patch);
             else
-                this.PatchesByCurrentTarget[patch.AssetName] = new HashSet<IPatch> { patch };
+                this.PatchesByCurrentTarget[patch.TargetAsset] = new HashSet<IPatch> { patch };
         }
 
         /// <summary>Add a patch that's permanently disabled for this session.</summary>

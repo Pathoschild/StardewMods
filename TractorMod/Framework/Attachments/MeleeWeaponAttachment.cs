@@ -1,10 +1,10 @@
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
-using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
@@ -24,7 +24,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
-        public MeleeWeaponAttachment(MeleeWeaponConfig config)
+        /// <param name="reflection">Simplifies access to private code.</param>
+        public MeleeWeaponAttachment(MeleeWeaponConfig config, IReflectionHelper reflection)
+            : base(reflection)
         {
             this.Config = config;
         }
@@ -34,7 +36,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
+        public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
         {
             return tool is MeleeWeapon;
         }
@@ -47,7 +49,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
+        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
             // clear dead crops
             if (this.Config.ClearDeadCrops && tileFeature is HoeDirt dirt && dirt.crop != null && dirt.crop.dead.Value)
@@ -77,7 +79,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="player">The current player.</param>
         /// <param name="location">The current location.</param>
         /// <remarks>This is a simplified version of <see cref="MeleeWeapon.DoDamage"/>. This doesn't account for player bonuses (since it's hugely overpowered anyway), doesn't cause particle effects, doesn't trigger animation timers, etc.</remarks>
-        private bool UseWeaponOnTile(MeleeWeapon weapon, Vector2 tile, SFarmer player, GameLocation location)
+        private bool UseWeaponOnTile(MeleeWeapon weapon, Vector2 tile, Farmer player, GameLocation location)
         {
             bool attacked = location.damageMonster(
                 areaOfEffect: this.GetAbsoluteTileArea(tile),

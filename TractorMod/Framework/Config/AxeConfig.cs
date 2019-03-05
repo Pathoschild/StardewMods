@@ -3,14 +3,26 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
     /// <summary>Configuration for the axe attachment.</summary>
     internal class AxeConfig
     {
-        /// <summary>Whether to chop down fruit trees.</summary>
-        public bool CutFruitTrees { get; set; }
+        /// <summary>Whether to clear fruit tree seeds.</summary>
+        public bool ClearFruitTreeSeeds { get; set; }
 
-        /// <summary>Whether to chop down trees which have a tapper.</summary>
+        /// <summary>Whether to clear fruit trees that aren't fully grown.</summary>
+        public bool ClearFruitTreeSaplings { get; set; }
+
+        /// <summary>Whether to clear fully-grown fruit trees.</summary>
+        public bool CutGrownFruitTrees { get; set; }
+
+        /// <summary>Whether to clear non-fruit tree seeds.</summary>
+        public bool ClearTreeSeeds { get; set; }
+
+        /// <summary>Whether to clear non-fruit trees that aren't fully grown.</summary>
+        public bool ClearTreeSaplings { get; set; }
+
+        /// <summary>Whether to clear full-grown non-fruit trees.</summary>
+        public bool CutGrownTrees { get; set; }
+
+        /// <summary>Whether to cut non-fruit trees that have a tapper.</summary>
         public bool CutTappedTrees { get; set; }
-
-        /// <summary>Whether to chop down non-fruit trees.</summary>
-        public bool CutTrees { get; set; }
 
         /// <summary>Whether to clear live crops.</summary>
         public bool ClearLiveCrops { get; set; }

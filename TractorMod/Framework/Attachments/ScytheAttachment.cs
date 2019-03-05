@@ -1,6 +1,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -23,7 +24,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod configuration.</param>
-        public ScytheAttachment(ScytheConfig config)
+        /// <param name="reflection">Simplifies access to private code.</param>
+        public ScytheAttachment(ScytheConfig config, IReflectionHelper reflection)
+            : base(reflection)
         {
             this.Config = config;
         }
@@ -67,7 +70,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                     return true;
                 }
 
-                if (this.Config.HarvestCrops)
+                bool shouldHarvest = dirt.crop.programColored.Value // from Utility.findCloseFlower
+                    ? this.Config.HarvestFlowers
+                    : this.Config.HarvestCrops;
+                if (shouldHarvest)
                 {
                     if (dirt.crop.harvestMethod.Value == Crop.sickleHarvest)
                         return dirt.performToolAction(tool, 0, tile, location);
@@ -75,6 +81,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                         this.CheckTileAction(location, tile, player);
                 }
 
+                return true;
+            }
+
+            // machines
+            if (this.Config.HarvestMachines && tileObj != null && tileObj.readyForHarvest.Value && tileObj.heldObject.Value != null)
+            {
+                tileObj.checkForAction(Game1.player);
                 return true;
             }
 

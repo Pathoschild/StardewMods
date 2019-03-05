@@ -38,7 +38,7 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get whether a file exists in the content pack.</summary>
         /// <param name="key">The asset key.</param>
-        public bool FileExists(string key)
+        public bool HasFile(string key)
         {
             return this.GetRealPath(key) != null;
         }

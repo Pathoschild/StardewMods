@@ -2,12 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Netcode;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Network;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
@@ -83,6 +86,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     return translations.Stringify(net.Value);
                 case NetColor net:
                     return translations.Stringify(net.Value);
+                case NetDancePartner net:
+                    return translations.Stringify(net.Value?.Name);
                 case NetDouble net:
                     return translations.Stringify(net.Value);
                 case NetFloat net:
@@ -91,9 +96,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     return translations.Stringify(net.Value);
                 case NetInt net:
                     return translations.Stringify(net.Value);
+                case NetLocationRef net:
+                    return translations.Stringify(net.Value?.uniqueName ?? net.Value?.Name);
                 case NetLong net:
                     return translations.Stringify(net.Value);
                 case NetPoint net:
+                    return translations.Stringify(net.Value);
+                case NetPosition net:
                     return translations.Stringify(net.Value);
                 case NetRectangle net:
                     return translations.Stringify(net.Value);
@@ -102,15 +111,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case NetVector2 net:
                     return translations.Stringify(net.Value);
 
-                // boolean
+                // core types
                 case bool boolean:
                     return translations.Get(boolean ? L10n.Generic.Yes : L10n.Generic.No);
-
-                // game date
+                case Color color:
+                    return $"(r:{color.R} g:{color.G} b:{color.B} a:{color.A})";
                 case SDate date:
                     return translations.Stringify(date, withYear: false);
-
-                // time span
                 case TimeSpan span:
                     {
                         List<string> parts = new List<string>();
@@ -122,25 +129,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             parts.Add(translations.Get(L10n.Generic.Minutes, new { count = span.Minutes }));
                         return string.Join(", ", parts);
                     }
-
-                // vector
                 case Vector2 vector:
                     return $"({vector.X}, {vector.Y})";
-
-                // rectangle
                 case Rectangle rect:
                     return $"(x:{rect.X}, y:{rect.Y}, width:{rect.Width}, height:{rect.Height})";
 
-                // array
+                // game types
+                case AnimatedSprite sprite:
+                    return $"(textureName: {sprite.textureName.Value}, currentFrame:{sprite.currentFrame}, loop:{sprite.loop}, sourceRect:{translations.Stringify(sprite.sourceRect)})";
+                case Stats stats:
+                    {
+                        StringBuilder str = new StringBuilder();
+                        foreach (FieldInfo field in stats.GetType().GetFields())
+                            str.AppendLine($"- {field.Name}: {translations.Stringify(field.GetValue(stats))}");
+                        return str.ToString();
+                    }
+
+                // enumerable
                 case IEnumerable array when !(value is string):
                     {
                         string[] values = (from val in array.Cast<object>() select translations.Stringify(val)).ToArray();
                         return "(" + string.Join(", ", values) + ")";
                     }
-
-                // color
-                case Color color:
-                    return $"(r:{color.R} g:{color.G} b:{color.B} a:{color.A})";
 
                 default:
                     // key/value pair

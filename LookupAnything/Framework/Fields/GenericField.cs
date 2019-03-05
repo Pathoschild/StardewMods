@@ -121,7 +121,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             if (saleValues.Count == 1)
             {
                 string result = translations.Get(L10n.Generic.Price, new { price = saleValues.First().Value });
-                if (stackSize > 1)
+                if (stackSize > 1 && stackSize <= Constant.MaxStackSizeForPricing)
                     result += $" ({translations.Get(L10n.Generic.PriceForStack, new { price = saleValues.First().Value * stackSize, count = stackSize })})";
                 return result;
             }

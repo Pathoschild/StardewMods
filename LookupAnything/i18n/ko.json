@@ -1,0 +1,393 @@
+{
+  /*********
+  ** Generic translations 기본 번역
+  *********/
+  // dates (possible tokens: {{seasonName}}, {{seasonNumber}}, {{dayNumber}}, {{year}})
+  "generic.date": "{{seasonName}} {{dayNumber}}일",
+  "generic.date-with-year": "{{year}}년, {{seasonName}} {{dayNumber}}일",
+
+  // generic field values 기본적 필드 값들
+  "generic.percent": "{{percent}}%",
+  "generic.percent-chance-of": "{{percent}}%의 확률로 {{label}}",
+  "generic.percent-ratio": "{{percent}}% ({{value}} / {{max}})",
+  "generic.ratio": "{{value}} / {{max}}",
+  "generic.range": "{{min}} ~ {{max}}",
+  "generic.yes": "예",
+  "generic.no": "아니오",
+  "generic.seconds": "{{count}} 초",
+  "generic.minutes": "{{count}} 분",
+  "generic.hours": "{{count}} 시간",
+  "generic.days": "{{count}} 일",
+  "generic.in-x-days": "{{count}}일 남음",
+  "generic.tomorrow": "내일",
+  "generic.price": "{{price}}g",
+  "generic.price-for-quality": "{{price}}g ({{quality}})",
+  "generic.price-for-stack": "{{count}}개를 묶음 판매 시 {{price}}G",
+
+  // types 유형
+  "type.building": "건물",
+  "type.fruit-tree": "과일 나무",
+  "type.map-tile": "맵 타일",
+  "type.monster": "몬스터",
+  "type.player": "플레이어",
+  "type.tree": "나무",
+  "type.villager": "주민",
+  "type.other": "기타", // default type
+
+  // item qualities 물품 품질
+  "quality.normal": "일반",
+  "quality.silver": "은",
+  "quality.gold": "금",
+  "quality.iridium": "이리듐",
+
+  // NPC friendship 우정관계
+  "friendship-status.friendly": "친근함",
+  "friendship-status.dating": "연애중",
+  "friendship-status.engaged": "약혼함",
+  "friendship-status.married": "결혼함",
+  "friendship-status.divorced": "이혼함",
+
+  /*********
+  ** Data translations
+  *********/
+  // Community Center bundle areas
+  "bundle-area.pantry": "식료품 저장고",
+  "bundle-area.crafts-room": "제작공방",
+  "bundle-area.fish-tank": "수족관",
+  "bundle-area.boiler-room": "보일러실",
+  "bundle-area.vault": "금고",
+  "bundle-area.bulletin-board": "게시판",
+
+  // shop names
+  "shop.adventure-guild": "모험가 길드",
+  "shop.clint": "클린트의 대장간",
+  "shop.marnie": "마니의 목장",
+  "shop.pierre": "피에르 잡화점",
+  "shop.robin": "로빈 목공소",
+  "shop.willy": "윌리의 낚시용품점",
+
+  // recipe types
+  "recipe-type.cooking": "요리",
+  "recipe-type.crafting": "제작",
+
+  /*********
+  ** NPC overrides
+  *********/
+  "data.npc.pet.description": "당신의 믿음직한 반려동물이다.",
+  "data.npc.horse.description": "당신의 충직한 애마이다.",
+  "data.npc.junimo.description": "정령계로부터 건너온 숲의 정령. 그들에 대하여는 알려진 바가 거의 없다.",
+
+  /*********
+  ** Item overrides
+  *********/
+  // item types
+  "data.type.debris": "잔해",
+  "data.type.stone": "돌",
+  "data.type.container": "수납용기",
+
+  // farm 농장
+  "data.item.egg-incubator.description": "알을 병아리나 새끼 오리로 부화시킨다.",
+  "data.item.broken-branch.name": "부러진 나뭇가지",
+  "data.item.broken-branch.description": "부러진 나뭇가지다. 도끼로 찍어 나무를 얻을 수 있다.",
+  "data.item.stone.name": "돌",
+  "data.item.stone.description": "특징없는 평범한 회색 돌. 부수어 돌을 얻을 수 있다.",
+  "data.item.geode.name": "정동석 노드",
+  "data.item.geode.description": "부수면 정동석을 얻을 수 있다",
+  "data.item.frozen-geode.name": "얼어붙은 정동석 노드",
+  "data.item.frozen-geode.description": "부수면 얼어붙은 정동석을 얻을 수 있다.",
+  "data.item.magma-geode.name": "마그마 정동석 노드",
+  "data.item.magma-geode.description": "부수면 마그마 정동석을 얻을 수 있다.",
+
+  // weeds & crystals
+  "data.item.weed.name": "잡초",
+  "data.item.weed.description": "흔한 특징없는 잡초. 풀무더기 또는 씨앗 무더리를 얻을지도 모른다.",
+  "data.item.fertile-weed.name": "다 자란 잡초",
+  "data.item.fertile-weed.description": "야생 씨앗을 확실히 얻을 수 있는 풀입니다.",
+  "data.item.ice-crystal.name": "얼음 결정",
+  "data.item.ice-crystal.description": "특색없는 얼음 결정. 매우 희박한 확률로 정제된 석영을 획득 가능하다.",
+
+  // mine gems
+  "data.item.amethyst-node.name": "자수정 클러스터",
+  "data.item.amethyst-node.description": "부수면 자수정을 얻을 수 있다.",
+  "data.item.aquamarine-node.name": "아쿠아마린 노드",
+  "data.item.aquamarine-node.description": "부수면 아쿠아마린을 얻을 수 있다.",
+  "data.item.diamond-node.name": "다이아몬드 노드",
+  "data.item.diamond-node.description": "부수면 다이아몬드를 얻을 수 있다.",
+  "data.item.emerald-node.name": "에메랄드 노드",
+  "data.item.emerald-node.description": "부수면 에메랄드를 얻을 수 있다.",
+  "data.item.gem-node.name": "보석 노드",
+  "data.item.gem-node.description": "부수면 에메랄드, 아쿠아마린, 루비, 자수정, 토파즈, 옥 또는 다이아몬드를 얻을 수 있다.",
+  "data.item.jade-node.name": "옥 노드",
+  "data.item.jade-node.description": "부수면 옥을 얻을 수 있다.",
+  "data.item.mystic-stone.name": "신비한 돌",
+  "data.item.mystic-stone.description": "부수면 무지개 파편을 포함한, 희귀한 보석 및 광석들을 얻을 수 있다.",
+  "data.item.prismatic-node.name": "무지갯빛 노드",
+  "data.item.prismatic-node.description": "부수면 무지개 파편을 얻을 수 있다.",
+  "data.item.ruby-node.name": "루비 노드",
+  "data.item.ruby-node.description": "부수면 루비를 얻을 수 있다.",
+  "data.item.topaz-node.name": "토파즈 노드",
+  "data.item.topaz-node.description": "부수면 토파즈를 얻을 수 있다.",
+
+  // mine ores
+  "data.item.copper-node.name": "구리 노드",
+  "data.item.copper-node.description": "부수면 구리 광석을 얻을 수 있다.",
+  "data.item.gold-node.name": "금 노드",
+  "data.item.gold-node.description": "부수면 금 광석을 얻을 수 있다.",
+  "data.item.iridum-node.name": "이리듐 노드",
+  "data.item.iridum-node.description": "부수면 이리듐 광석을 얻을 수 있다.",
+  "data.item.iron-node.name": "철 노드",
+  "data.item.iron-node.description": "부수면 철 광석을 얻을 수 있다.",
+
+  // mine stones
+  "data.item.colored-stone.name": "유색의 돌",
+  "data.item.colored-stone.description": "평범한 돌이다. 돌, 광석 또는 정동석을 얻을 수 있을지도 모른다.",
+  "data.item.mine-stone.name": "돌",
+  "data.item.mine-stone.description": "부수면 돌을 얻을 수 있다.",
+
+  // mine containers
+  "data.item.barrel.name": "나무통",
+  "data.item.barrel.description": "부수면 잡동사니들을 얻을 수 있다.",
+  "data.item.box.name": "상자",
+  "data.item.box.description": "부수면 잡다한 물품들을 얻을 수 있다.",
+
+  /*********
+  ** Specific lookups
+  *********/
+  // animal lookup labels
+  "animal.love": "애정도",
+  "animal.happiness": "행복도",
+  "animal.mood": "오늘의 기분",
+  "animal.complaints": "불만",
+  "animal.produce-ready": "생산물 준비 완료",
+  "animal.growth": "성장 단계",
+  "animal.sells-for": "판매 가격: ",
+
+  // animal lookup values
+  "animal.complaints.hungry": "어제 먹이를 먹지 못함.",
+  "animal.complaints.left-out": "어젯밤 바깥에서 자야했음.",
+  "animal.complaints.new-home": "새로운 집에 적응 중.",
+  "animal.complaints.no-heater": "겨울에 난방기가 없음.",
+  "animal.complaints.not-petted": "오늘 쓰다듬 받지 못함.",
+  "animal.complaints.wild-animal-attack": "밤중에 야생 동물들에게 습격당함.",
+
+  // building lookup labels
+  "building.animals": "동물",
+  "building.construction": "건축중",
+  "building.feed-trough": "여물통",
+  "building.horse": "말",
+  "building.horse-location": "말의 위치",
+  "building.owner": "소유인",
+  "building.slimes": "슬라임",
+  "building.stored-hay": "비축된 건초",
+  "building.upgrades": "업그레이드",
+  "building.water-trough": "물통",
+
+  // building lookup values
+  "building.animals.summary": "최대 {{max}}마리까지의 동물 중 {{count}}마리 수용 중.",
+  "building.construction.summary": "{{date}}에 건설 완료",
+  "building.feed-trough.automated": "자동화",
+  "building.feed-trough.summary": "최대 {{max}}칸 중 {{filled}}칸의 먹이통 채움.",
+  "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
+  "building.junimo-harvesting-enabled": "수확 활성화 됨",
+  "building.owner.none": "소유인 없음.",
+  "building.output-processing": "처리중",
+  "building.output-ready": "생산물 준비 완료",
+  "building.slimes.summary": "최대 {{max}}마리까지의 슬라임 중 {{count}}마리 수용 중.",
+  "building.stored-hay.summary-one-silo": "건초 {{hayCount}}개 (최대 건초 수용한도: {{maxHay}})",
+  "building.stored-hay.summary-multiple-silos": "{{hayCount}}개의 건초가 {{siloCount}}채의 사일로에 저장됨 (최대 수용량: {{maxHay}})",
+  "building.upgrades.barn.0": "최대 4마리의 동물 수용 가능, 소를 추가",
+  "building.upgrades.barn.1": "최대 8마리의 동물 수용 가능, 임신이 가능해지며, 염소를 추가",
+  "building.upgrades.barn.2": "최대 12마리의 동물 수용 가능, 먹이통 자동화가 가능해지며, 돼지와 양을 추가",
+  "building.upgrades.cabin.0": "초기의 오두막집",
+  "building.upgrades.cabin.1": "부엌 추가, 결혼이 가능해짐.",
+  "building.upgrades.cabin.2": "아이를 가질 수 있게 됨.",
+  "building.upgrades.coop.0": "최대 4마리의 동물 수용; 닭을 추가",
+  "building.upgrades.coop.1": "최대 8마리의 동물 수용; 알 부화기 추가, 공룡 및 오리 추가",
+  "building.upgrades.coop.2": "최대 12마리의 동물 수용; 먹이통 자동화가 가능해지며 토끼를 추가",
+  "building.water-trough.summary": "최대 {{max}}칸 중 {{filled}}칸의 물통을 채움",
+
+  // fruit tree lookup labels
+  "fruit-tree.complaints": "불만",
+  "fruit-tree.name": "{{fruitName}} 나무",
+  "fruit-tree.growth": "성장 단계",
+  "fruit-tree.next-fruit": "다음 과일",
+  "fruit-tree.season": "제철",
+  "fruit-tree.quality": "품질",
+
+  // fruit tree lookup values
+  "fruit-tree.complaints.adjacent-objects": "주변의 물체가 방해해서 자랄 수 없음",
+  "fruit-tree.growth.summary": "{{date}}일에 다 자람.",
+  "fruit-tree.next-fruit.struck-by-lighting": "벼락에 맞았다! {{count}}일 후 원상태로 회복.",
+  "fruit-tree.next-fruit.out-of-season": "제철이 아님",
+  "fruit-tree.next-fruit.max-fruit": "현재 열린 열매들을 수확하지 않는다면 추가적인 열매를 맺지 않음",
+  "fruit-tree.next-fruit.too-young": "열매를 맺기엔 너무 어림",
+  "fruit-tree.quality.now": "현재 {{quality}}",
+  "fruit-tree.quality.on-date": "{{date}}일에 {{quality}}",
+  "fruit-tree.quality.on-date-next-year": "내년 {{date}}일에 {{quality}}",
+  "fruit-tree.season.summary": "{{season}} (혹은 온실에서 사시사철 재배 가능)",
+
+  // crop lookup labels
+  "crop.summary": "작물",
+  "crop.harvest": "수확",
+
+  // crop lookup values
+  "crop.summary.dead": "이 작물은 시들었다.",
+  "crop.summary.drops-X": "{{count}}개 수확 가능",
+  "crop.summary.drops-X-to-Y": "{{min}} ~ {{max}}개의 추가 작물을 ({{percent}}%의 확률로 획득 가능)",
+  "crop.summary.harvest-once": "{{daysToFirstHarvest}}일 후에 수확 가능",
+  "crop.summary.harvest-multi": "{{daysToFirstHarvest}}일 후에 수확 가능, 그 후 매 {{daysToNextHarvests}}일마다 주기적 수확 가능.",
+  "crop.summary.seasons": "{{seasons}}에 자람",
+  "crop.summary.sells-for": "판매가격: {{price}}",
+  "crop.harvest.now": "지금 수확 가능",
+  "crop.harvest.too-late": "작물을 수확하기엔 너무 늦은 계절이다 (다음 수확까지 {{date}}일 걸림)",
+
+  // item lookup labels
+  "item.cask-contents": "내용물",
+  "item.cask-schedule": "숙성",
+
+  "item.crabpot-bait": "미끼",
+  "item.crabpot-bait-needed": "미끼 필요!",
+  "item.crabpot-bait-not-needed": "함정 전문가 직업으로 인해 미끼 불필요.",
+
+  "item.fence-health": "내구도",
+
+  "item.contents": "내용물",
+  "item.likes-this": "좋아함",
+  "item.loves-this": "사랑함",
+  "item.needed-for": "필요함",
+  "item.number-owned": "보유함",
+  "item.number-cooked": "요리됨",
+  "item.number-crafted": "제작됨",
+  "item.recipes": "레시피",
+  "item.see-also": "참고",
+  "item.sells-for": "판매가",
+  "item.sells-to": "판매처",
+
+  // item lookup values
+  "item.cask-schedule.now": "{{quality}}의 품질이 준비됨.",
+  "item.cask-schedule.now-partial": "현재 품질: {{quality}} (곡괭이를 사용해 숙성을 중단시킬 수 있다)",
+  "item.cask-schedule.tomorrow": "내일의 품질: {{quality}}",
+  "item.cask-schedule.in-x-days": "{{count}}일 후인 ({{date}}일)에 {{quality}}의 품질 도달.",
+  "item.contents.placed": "{{name}}이/가 들어감",
+  "item.contents.ready": "{{name}}이/가 준비됨",
+  "item.contents.partial": "{{name}}이/가 준비되기까지 {{time}} 남음.",
+  "item.needed-for.community-center": "마을 회관 ({{bundles}})",
+  "item.needed-for.full-shipment": "도전과제 '완전 판매' (1개 출하)",
+  "item.needed-for.polyculture": "도전과제 '복합 재배' ({{count}}개 더 출하)",
+  "item.needed-for.full-collection": "도전과제 '수집 완료' (박물관에 기증)",
+  "item.needed-for.gourmet-chef": "도전과제 '미식가 요리사' ({{recipes}}을/를 요리하세요)",
+  "item.needed-for.craft-master": "도전과제 '제작의 달인' ({{recipes}}을/를 제작하세요)",
+  "item.sells-to.shipping-box": "출하 상자",
+  "item.fence-health.gold-clock": "금시계로 인하여 내구도가 감소하지 않음",
+  "item.fence-health.summary": "{{percent}}% (대략 {{count}}일 남음)",
+  "item.recipes.entry": "{{name}} ({{count}}개 필요)",
+  "item.number-owned.summary": "당신은 이것들을 {{count}}개 보유중.",
+  "item.number-crafted.summary": "당신은 이것들을 {{count}}개 제작했음.",
+
+  // monster lookup labels
+  "monster.invincible": "무적",
+  "monster.health": "체력",
+  "monster.drops": "드랍 물품",
+  "monster.experience": "XP(경험치)",
+  "monster.defence": "방어력",
+  "monster.attack": "공격력",
+  "monster.adventure-guild": "모험가 길드",
+
+  // monster lookup values
+  "monster.drops.nothing": "개털(아무것도 안 줌)",
+  "monster.adventure-guild.complete": "토벌 완료",
+  "monster.adventure-guild.incomplete": "토벌 중",
+  "monster.adventure-guild.progress": "목표 {{requiredCount}} 중 {{count}} 처치.",
+
+  // NPC lookup labels
+  "npc.birthday": "생일",
+  "npc.can-romance": "연애 가능",
+  "npc.friendship": "호감도",
+  "npc.talked-today": "오늘 대화함",
+  "npc.gifted-today": "오늘 선물을 줌",
+  "npc.gifted-this-week": "이번 주 선물 횟수를 모두 사용함",
+  "npc.loves-gifts": "사랑하는 선물",
+  "npc.likes-gifts": "좋아하는 선물",
+  "npc.neutral-gifts": "그저그런 선물",
+
+  // NPC lookup values
+  "npc.can-romance.married": "당신은 이미 결혼했다! <", // < turns into a heart
+  "npc.friendship.not-met": "당신은 아직 이 NPC를 만나지 못했다.",
+  "npc.friendship.need-bouquet": "다음 호감도 진행을 위해서 꽃다발 필요.",
+  "npc.friendship.need-points": "호감도 UP까지 {{count}}점",
+
+  // NPC child lookup labels
+  "npc.child.age": "나이",
+
+  // NPC child lookup values
+  "npc.child.age.description-partial": "{{label}}, ({{nextLabel}}로 자라기까지 {{count}}일 남음)",
+  "npc.child.age.description-grown": "{{label}}",
+  "npc.child.age.newborn": "신생아",
+  "npc.child.age.baby": "아기",
+  "npc.child.age.crawler": "기어다니는 아기",
+  "npc.child.age.toddler": "걸음마를 뗀 아기",
+
+  // pet lookup labels
+  "pet.love": "애정도",
+  "pet.petted-today": "오늘 쓰다듬음",
+
+  // player lookup labels
+  "player.farm-name": "농장명",
+  "player.farm-map": "농장 유형",
+  "player.favorite-thing": "좋아하는 것",
+  "player.gender": "성별",
+  "player.spouse": "배우자",
+  "player.combat-skill": "전투",
+  "player.farming-skill": "농사",
+  "player.fishing-skill": "낚시",
+  "player.foraging-skill": "채집",
+  "player.mining-skill": "채광",
+  "player.luck": "행운",
+
+  // player lookup values
+  "player.farm-map.custom": "사용자 지정",
+  "player.gender.male": "남",
+  "player.gender.female": "여",
+  "player.luck.summary": "다양한 무작위 체크 확률에 {{percent}}%",
+  "player.skill.progress": "레벨 {{level}} (다음 레벨까지 {{expNeeded}}XP)",
+  "player.skill.progress-last": "레벨 {{level}}",
+
+  // tile lookup labels
+  "tile.description": "지도상의 타일 위치. 이는 당신이 '타일 찾아보기(tile lookup)'를 활성화 했기 때문에 표시됨.",
+  "tile.map-name": "맵 이름",
+  "tile.tile": "타일",
+  "tile.tile-index": "{{layerName}}: 타일 인덱스",
+  "tile.tilesheet": "{{layerName}}: 타일 시트",
+  "tile.blend-mode": "{{layerName}}: 혼합 모드",
+  "tile.index-property": "{{layerName}}: 건물 인덱스: {{propertyName}}",
+  "tile.tile-property": "{{layerName}}: 건물: {{propertyName}}",
+
+  // tile lookup values
+  "tile.tile.none-here": "타일 없음",
+
+  // tree lookup labels
+  "tree.stage": "성장 단계",
+  "tree.next-growth": "다음 성장",
+  "tree.has-seed": "씨앗 보유 여부",
+
+  // non-fruit tree lookup values
+  "tree.name.maple": "단풍나무",
+  "tree.name.oak": "참나무",
+  "tree.name.pine": "소나무",
+  "tree.name.palm": "야자나무",
+  "tree.name.big-mushroom": "큰 버섯",
+  "tree.name.unknown": "알 수 없는 나무",
+  "tree.stage.done": "다 자람",
+  "tree.stage.partial": "{{stageName}}, {{max}}단계 중 ({{step}}단계)",
+  "tree.next-growth.winter": "겨울에 온실 밖에서 성장 불가.",
+  "tree.next-growth.adjacent-trees": "다른 나무들과 너무 가까와 성장 불가.",
+  "tree.next-growth.random": "내일 20%의 확률로 다음으로 성장: {{stage}}",
+
+  // tree stages
+  "tree.stages.seed": "씨앗",
+  "tree.stages.sprout": "새싹",
+  "tree.stages.sapling": "묘목",
+  "tree.stages.bush": "관목",
+  "tree.stages.smallTree": "작은 나무",
+  "tree.stages.tree": "나무"
+}

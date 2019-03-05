@@ -10,6 +10,7 @@ using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Migrations;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
+using ContentPatcher.Framework.Validators;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Enums;
@@ -39,6 +40,12 @@ namespace ContentPatcher
             new Migration_1_4(),
             new Migration_1_5(),
             new Migration_1_6()
+        };
+
+        /// <summary>The special validation logic to apply to assets affected by patches.</summary>
+        private readonly Func<IAssetValidator[]> AssetValidators = () => new IAssetValidator[]
+        {
+            new StardewValley_1_3_36_Validator()
         };
 
         /// <summary>Manages the available contextual tokens.</summary>
@@ -79,7 +86,7 @@ namespace ContentPatcher
 
             // load content packs and context
             this.TokenManager = new TokenManager(helper.Content, installedMods);
-            this.PatchManager = new PatchManager(this.Monitor, this.TokenManager);
+            this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.AssetValidators());
             this.LoadContentPacks(contentPacks);
             this.TokenManager.UpdateContext();
 

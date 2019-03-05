@@ -247,12 +247,12 @@ namespace ContentPatcher.Framework.Commands
                     output.Append($"   [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {patch.ShortName}");
 
                     // log raw target (if not in name)
-                    if (!patch.ShortName.Contains($"{patch.Type} {patch.RawAssetName}"))
-                        output.Append($" | {patch.Type} {patch.RawAssetName}");
+                    if (!patch.ShortName.Contains($"{patch.Type} {patch.RawTargetAsset}"))
+                        output.Append($" | {patch.Type} {patch.RawTargetAsset}");
 
                     // log parsed target if tokenised
-                    if (patch.MatchesContext && patch.ParsedAssetName != null && patch.ParsedAssetName.Tokens.Any())
-                        output.Append($" | => {patch.ParsedAssetName.Value}");
+                    if (patch.MatchesContext && patch.ParsedTargetAsset != null && patch.ParsedTargetAsset.Tokens.Any())
+                        output.Append($" | => {patch.ParsedTargetAsset.Value}");
 
                     // log reason not applied
                     string errorReason = this.GetReasonNotLoaded(patch, tokenContext);
@@ -260,9 +260,9 @@ namespace ContentPatcher.Framework.Commands
                         output.Append($"  // {errorReason}");
 
                     // log common issues
-                    if (errorReason == null && patch.IsLoaded && !patch.IsApplied && patch.ParsedAssetName?.Value != null)
+                    if (errorReason == null && patch.IsLoaded && !patch.IsApplied && patch.ParsedTargetAsset?.Value != null)
                     {
-                        string assetName = patch.ParsedAssetName.Value;
+                        string assetName = patch.ParsedTargetAsset.Value;
 
                         List<string> issues = new List<string>();
                         if (this.AssetNameWithContentPattern.IsMatch(assetName))

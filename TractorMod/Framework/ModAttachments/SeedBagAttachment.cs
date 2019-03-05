@@ -1,8 +1,8 @@
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
-using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
@@ -29,7 +29,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
-        public SeedBagAttachment(SeedBagModConfig config)
+        /// <param name="reflection">Simplifies access to private code.</param>
+        public SeedBagAttachment(SeedBagModConfig config, IReflectionHelper reflection)
+            : base(reflection)
         {
             this.Config = config;
         }
@@ -39,7 +41,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool IsEnabled(SFarmer player, Tool tool, Item item, GameLocation location)
+        public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
         {
             return this.Config.Enable && tool?.GetType().FullName == SeedBagAttachment.SeedBagTypeName;
         }
@@ -52,7 +54,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, SFarmer player, Tool tool, Item item, GameLocation location)
+        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
             // apply to plain dirt
             if (tileFeature is HoeDirt)

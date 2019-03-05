@@ -11,6 +11,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         [JsonConverter(typeof(StringEnumArrayConverter))]
         public SButton[] SummonTractor { get; set; } = { SButton.Back };
 
+        /// <summary>The control which returns the tractor to its home.</summary>
+        [JsonConverter(typeof(StringEnumArrayConverter))]
+        public SButton[] DismissTractor { get; set; } = { SButton.Back };
+
         /// <summary>A button which activates the tractor when held, or none to activate automatically.</summary>
         [JsonConverter(typeof(StringEnumArrayConverter))]
         public SButton[] HoldToActivate { get; set; } = new SButton[0];

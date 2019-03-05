@@ -80,6 +80,7 @@
     <None Include="i18n\de.json" />
     <None Include="i18n\ja.json" />
     <None Include="i18n\es.json" />
+    <None Include="i18n\ko.json" />
     <None Include="i18n\pt.json" />
     <None Include="i18n\zh.json" />
     <None Include="i18n\ru.json" />
