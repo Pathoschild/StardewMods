@@ -137,17 +137,17 @@ namespace ContentPatcher.Framework
             // update patches
             InvariantHashSet reloadAssetNames = new InvariantHashSet();
             string prevAssetName = null;
-            foreach (IPatch patch in this.Patches.OrderByIgnoreCase(p => p.AssetName).ThenByIgnoreCase(p => p.LogName))
+            foreach (IPatch patch in this.Patches.OrderByIgnoreCase(p => p.TargetAsset).ThenByIgnoreCase(p => p.LogName))
             {
                 // log asset name
-                if (this.Monitor.IsVerbose && prevAssetName != patch.AssetName)
+                if (this.Monitor.IsVerbose && prevAssetName != patch.TargetAsset)
                 {
-                    this.Monitor.VerboseLog($"   {patch.AssetName}:");
-                    prevAssetName = patch.AssetName;
+                    this.Monitor.VerboseLog($"   {patch.TargetAsset}:");
+                    prevAssetName = patch.TargetAsset;
                 }
 
                 // track old values
-                string wasAssetName = patch.AssetName;
+                string wasAssetName = patch.TargetAsset;
                 bool wasApplied = patch.MatchesContext;
 
                 // update patch
@@ -163,7 +163,7 @@ namespace ContentPatcher.Framework
                     if (wasApplied)
                         reloadAssetNames.Add(wasAssetName);
                     if (shouldApply)
-                        reloadAssetNames.Add(patch.AssetName);
+                        reloadAssetNames.Add(patch.TargetAsset);
                 }
 
                 // log change
@@ -172,8 +172,8 @@ namespace ContentPatcher.Framework
                     IList<string> changes = new List<string>();
                     if (wasApplied != shouldApply)
                         changes.Add(shouldApply ? "enabled" : "disabled");
-                    if (wasAssetName != patch.AssetName)
-                        changes.Add($"target: {wasAssetName} => {patch.AssetName}");
+                    if (wasAssetName != patch.TargetAsset)
+                        changes.Add($"target: {wasAssetName} => {patch.TargetAsset}");
                     string changesStr = string.Join(", ", changes);
 
                     this.Monitor.VerboseLog($"      [{(shouldApply ? "X" : " ")}] {patch.LogName}: {(changes.Any() ? changesStr : "OK")}");
@@ -186,7 +186,7 @@ namespace ContentPatcher.Framework
 
             // rebuild asset name lookup
             this.PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>(
-                from patchGroup in this.Patches.GroupByIgnoreCase(p => p.AssetName)
+                from patchGroup in this.Patches.GroupByIgnoreCase(p => p.TargetAsset)
                 let key = patchGroup.Key
                 let value = new HashSet<IPatch>(patchGroup)
                 select new KeyValuePair<string, HashSet<IPatch>>(key, value)
@@ -216,14 +216,14 @@ namespace ContentPatcher.Framework
             patch.UpdateContext(tokenContext);
 
             // add to patch list
-            this.Monitor.VerboseLog($"      added {patch.Type} {patch.AssetName}.");
+            this.Monitor.VerboseLog($"      added {patch.Type} {patch.TargetAsset}.");
             this.Patches.Add(patch);
 
             // add to lookup cache
-            if (this.PatchesByCurrentTarget.TryGetValue(patch.AssetName, out HashSet<IPatch> patches))
+            if (this.PatchesByCurrentTarget.TryGetValue(patch.TargetAsset, out HashSet<IPatch> patches))
                 patches.Add(patch);
             else
-                this.PatchesByCurrentTarget[patch.AssetName] = new HashSet<IPatch> { patch };
+                this.PatchesByCurrentTarget[patch.TargetAsset] = new HashSet<IPatch> { patch };
         }
 
         /// <summary>Add a patch that's permanently disabled for this session.</summary>

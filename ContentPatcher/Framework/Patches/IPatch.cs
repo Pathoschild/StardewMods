@@ -21,10 +21,10 @@ namespace ContentPatcher.Framework.Patches
         ManagedContentPack ContentPack { get; }
 
         /// <summary>The normalised asset name to intercept.</summary>
-        string AssetName { get; }
+        string TargetAsset { get; }
 
         /// <summary>The raw asset name to intercept, including tokens.</summary>
-        TokenString TokenableAssetName { get; }
+        TokenString RawTargetAsset { get; }
 
         /// <summary>The conditions which determine whether this patch should be applied.</summary>
         ConditionDictionary Conditions { get; }

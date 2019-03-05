@@ -73,7 +73,7 @@ namespace ContentPatcher.Framework.Patches
             // validate
             if (typeof(T) != typeof(Texture2D))
             {
-                this.Monitor.Log($"Can't apply image patch \"{this.LogName}\" to {this.AssetName}: this file isn't an image file (found {typeof(T)}).", LogLevel.Warn);
+                this.Monitor.Log($"Can't apply image patch \"{this.LogName}\" to {this.TargetAsset}: this file isn't an image file (found {typeof(T)}).", LogLevel.Warn);
                 return;
             }
 

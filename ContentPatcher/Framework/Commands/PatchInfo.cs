@@ -18,10 +18,10 @@ namespace ContentPatcher.Framework.Commands
         public string Type { get; }
 
         /// <summary>The asset name to intercept.</summary>
-        public string RawAssetName { get; }
+        public string RawTargetAsset { get; }
 
         /// <summary>The parsed asset name (if available).</summary>
-        public TokenString ParsedAssetName { get; }
+        public TokenString ParsedTargetAsset { get; }
 
         /// <summary>The parsed conditions (if available).</summary>
         public ConditionDictionary ParsedConditions { get; }
@@ -54,8 +54,8 @@ namespace ContentPatcher.Framework.Commands
         {
             this.ShortName = this.GetShortName(patch.ContentPack, patch.LogName);
             this.Type = patch.Type;
-            this.RawAssetName = patch.AssetName;
-            this.ParsedAssetName = null;
+            this.RawTargetAsset = patch.AssetName;
+            this.ParsedTargetAsset = null;
             this.ParsedConditions = null;
             this.ContentPack = patch.ContentPack;
             this.IsLoaded = false;
@@ -71,8 +71,8 @@ namespace ContentPatcher.Framework.Commands
         {
             this.ShortName = this.GetShortName(patch.ContentPack, patch.LogName);
             this.Type = patch.Type.ToString();
-            this.RawAssetName = patch.TokenableAssetName.Raw;
-            this.ParsedAssetName = patch.TokenableAssetName;
+            this.RawTargetAsset = patch.RawTargetAsset.Raw;
+            this.ParsedTargetAsset = patch.RawTargetAsset;
             this.ParsedConditions = patch.Conditions;
             this.ContentPack = patch.ContentPack;
             this.IsLoaded = true;

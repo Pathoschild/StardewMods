@@ -33,10 +33,10 @@ namespace ContentPatcher.Framework.Patches
         public ManagedContentPack ContentPack { get; }
 
         /// <summary>The normalised asset name to intercept.</summary>
-        public string AssetName { get; private set; }
+        public string TargetAsset { get; private set; }
 
         /// <summary>The raw asset name to intercept, including tokens.</summary>
-        public TokenString TokenableAssetName { get; }
+        public TokenString RawTargetAsset { get; }
 
         /// <summary>The conditions which determine whether this patch should be applied.</summary>
         public ConditionDictionary Conditions { get; }
@@ -72,8 +72,8 @@ namespace ContentPatcher.Framework.Patches
             }
 
             // update asset name
-            bool targetChanged = this.TokenableAssetName.UpdateContext(context);
-            this.AssetName = this.NormaliseAssetName(this.TokenableAssetName.Value);
+            bool targetChanged = this.RawTargetAsset.UpdateContext(context);
+            this.TargetAsset = this.NormaliseAssetName(this.RawTargetAsset.Value);
 
             return conditionsChanged || targetChanged;
         }
@@ -99,7 +99,7 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Get the tokens used by this patch in its fields.</summary>
         public virtual IEnumerable<TokenName> GetTokensUsed()
         {
-            return this.TokenableAssetName.Tokens;
+            return this.RawTargetAsset.Tokens;
         }
 
 
@@ -118,7 +118,7 @@ namespace ContentPatcher.Framework.Patches
             this.LogName = logName;
             this.Type = type;
             this.ContentPack = contentPack;
-            this.TokenableAssetName = assetName;
+            this.RawTargetAsset = assetName;
             this.Conditions = conditions;
             this.NormaliseAssetName = normaliseAssetName;
         }
