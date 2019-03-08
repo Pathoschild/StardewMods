@@ -34,6 +34,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             foreach (IContainer container in this.Containers)
             {
+                if (container.Name.IndexOf("|automate:nooutput|", StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    continue;
+
                 foreach (ITrackedStack item in container)
                     yield return item;
             }
@@ -149,6 +152,9 @@ namespace Pathoschild.Stardew.Automate.Framework
             // push into 'output' chests
             foreach (IContainer container in this.Containers)
             {
+                if (container.Name.IndexOf("|automate:noinput|", StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    continue;
+
                 if (container.Name.IndexOf("|automate:output|", StringComparison.InvariantCultureIgnoreCase) < 0)
                     continue;
 
@@ -161,6 +167,9 @@ namespace Pathoschild.Stardew.Automate.Framework
             string itemKey = this.GetItemKey(item.Sample);
             foreach (IContainer container in this.Containers)
             {
+                if (container.Name.IndexOf("|automate:noinput|", StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    continue;
+
                 if (container.All(p => this.GetItemKey(p.Sample) != itemKey))
                     continue;
 
@@ -174,6 +183,9 @@ namespace Pathoschild.Stardew.Automate.Framework
             {
                 foreach (IContainer container in this.Containers)
                 {
+                    if (container.Name.IndexOf("|automate:noinput|", StringComparison.InvariantCultureIgnoreCase) >= 0)
+                        continue;
+
                     container.Store(item);
                     if (item.Count <= 0)
                         return true;
