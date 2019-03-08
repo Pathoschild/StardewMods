@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.6.5
+* Fixed some broken maps in Stardew Valley 1.3.36 not detected.
+
 ## 1.6.4
 * Added detection for most custom maps broken by Stardew Valley 1.3.36 (they'll now be rejected instead of crashing the game).
 
