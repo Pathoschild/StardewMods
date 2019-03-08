@@ -37,15 +37,14 @@
   "crop-water.dry": "Planta Seca",
 
   // crops: fertilized
-  "crop-fertilizer.name": "Plantas: Ferilizadas",
+  "crop-fertilizer.name": "Plantas: Fertilizadas",
   "crop-fertilizer.fertilizer": "Fertilizante",
   "crop-fertilizer.retaining-soil": "Solo Retentor",
   "crop-fertilizer.speed-gro": "Solo Foliar",
 
   // machine processing
-  // TODO
-  "machines.name": "Machine Processing",
-  "machines.empty": "Empty",
-  "machines.processing": "Processing",
-  "machines.finished": "Finished"
+  "machines.name": "Processamento de Máquina",
+  "machines.empty": "Vazio",
+  "machines.processing": "Processando",
+  "machines.finished": "Concluído"
 }
