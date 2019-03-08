@@ -1,7 +1,7 @@
 [← back to readme](README.md)
 
 # Release notes
-## 1.6.5
+## Upcoming release
 * Fixed some broken maps in Stardew Valley 1.3.36 not detected.
 
 ## 1.6.4

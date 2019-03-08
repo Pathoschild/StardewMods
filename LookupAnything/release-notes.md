@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to kelvindules (updated Portuguese)!
+
 ## 1.21.1
 * Added readable debug fields for more types.
 * Improved debug fields to only show one value if a field/property differ only by the capitalisation of their name.

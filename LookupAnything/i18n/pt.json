@@ -183,7 +183,6 @@
   "building.water-trough": "Cocho de Água",
 
   // building lookup values
-  // TODO
   "building.animals.summary": "{{count}} de no máximo {{max}} animais",
   "building.construction.summary": "pronto em {{date}}",
   "building.feed-trough.automated": "automatizado",

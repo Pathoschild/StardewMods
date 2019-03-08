@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to kelvindules (updated Portuguese)!
+
 ## 1.15.1
 * Added option to disable player inventory organise button.
 * Fixed UI flicker when moving items in the chest menu.

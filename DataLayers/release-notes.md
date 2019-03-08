@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to kelvindules (updated Portuguese)!
+
 ## 1.5.1
 * Improved translations. Thanks to S2SKY (added Korean) and VincentRoth (added French)!
 
