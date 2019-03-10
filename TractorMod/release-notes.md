@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Fixed chests being treated as weeds in some cases.
+
 ## 4.8
 * Added attachment features:
   * pickaxe: break mine containers (enabled by default), break placed objects (disabled by default).

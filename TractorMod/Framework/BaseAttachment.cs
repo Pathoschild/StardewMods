@@ -86,9 +86,16 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>Get whether a given object is a weed.</summary>
         /// <param name="obj">The world object.</param>
+        protected bool IsTwig(SObject obj)
+        {
+            return obj.ParentSheetIndex == 294 || obj.ParentSheetIndex == 295;
+        }
+
+        /// <summary>Get whether a given object is a weed.</summary>
+        /// <param name="obj">The world object.</param>
         protected bool IsWeed(SObject obj)
         {
-            return obj?.Name.ToLower().Contains("weed") == true;
+            return !(obj is Chest) && obj?.Name == "Weeds";
         }
 
         /// <summary>Remove the specified items from the player inventory.</summary>

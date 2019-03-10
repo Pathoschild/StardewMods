@@ -54,7 +54,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
-            // clear twigs & weeds
+            // clear weeds
             if (this.Config.ClearWeeds && this.IsWeed(tileObj))
                 return this.UseToolOnTile(tool, tile);
 
