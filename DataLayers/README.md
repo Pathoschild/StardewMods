@@ -86,12 +86,13 @@ Data Layers will automatically integrate with these mods if you they're installe
 mod installed     | effects
 ----------------- | ----------
 Automate          | Shows whether your machines are empty, processing, or ready to harvest.
-Better Junimos    | Shows custom Junimo hut range.
-Better Sprinklers | Shows custom sprinkler range.
-Cobalt            | Shows cobalt sprinkler range.
+Better Junimos    | Shows custom Junimo hut coverage.
+Better Sprinklers | Shows custom sprinkler coverage.
+Cobalt            | Shows cobalt sprinkler coverage.
+Line Sprinklers   | Shows line sprinkler coverage.
 Pelican Fiber     | Shows coverage when building a Junimo hut or sprinkler through Pelican Fiber's menu.
-Prismatic Tools   | Shows prismatic sprinkler range.
-Simple Sprinkler  | Shows custom sprinkler range.
+Prismatic Tools   | Shows prismatic sprinkler coverage.
+Simple Sprinkler  | Shows custom sprinkler coverage.
 
 ## See also
 * [Release notes](release-notes.md)

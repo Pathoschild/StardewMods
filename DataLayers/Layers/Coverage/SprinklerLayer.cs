@@ -61,6 +61,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
             this.MaxRadius = this.StaticTilesBySprinklerID.Max(p => this.GetMaxRadius(p.Value));
             if (mods.BetterSprinklers.IsLoaded)
                 this.MaxRadius = Math.Max(this.MaxRadius, mods.BetterSprinklers.MaxRadius);
+            if (mods.LineSprinklers.IsLoaded)
+                this.MaxRadius = Math.Max(this.MaxRadius, mods.LineSprinklers.MaxRadius);
         }
 
         /// <summary>Get the updated data layer tiles.</summary>
@@ -71,6 +73,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         {
             Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
 
+            // get coverage
+            IDictionary<int, Vector2[]> coverageBySprinklerID = this.GetCurrentSprinklerTiles(this.StaticTilesBySprinklerID);
+
             // get sprinklers
             Vector2[] searchTiles = visibleArea.Expand(this.MaxRadius).GetTiles().ToArray();
             Object[] sprinklers =
@@ -78,13 +83,10 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                     from Vector2 tile in searchTiles
                     where location.objects.ContainsKey(tile)
                     let sprinkler = location.objects[tile]
-                    where this.IsSprinkler(sprinkler)
+                    where coverageBySprinklerID.ContainsKey(sprinkler.ParentSheetIndex)
                     select sprinkler
                 )
                 .ToArray();
-
-            // get radius
-            IDictionary<int, Vector2[]> coverageBySprinklerID = this.GetCurrentSprinklerTiles(this.StaticTilesBySprinklerID);
 
             // yield sprinkler coverage
             HashSet<Vector2> covered = new HashSet<Vector2>();
@@ -102,7 +104,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 
             // yield sprinkler being placed
             Object heldObj = Game1.player.ActiveObject;
-            if (this.IsSprinkler(heldObj))
+            if (heldObj != null && coverageBySprinklerID.ContainsKey(heldObj.ParentSheetIndex))
             {
                 TileData[] tiles = this.GetCoverage(heldObj, cursorTile, coverageBySprinklerID).Select(pos => new TileData(pos, this.WetColor * 0.75f)).ToArray();
                 yield return new TileGroup(tiles, outerBorderColor: this.SelectedColor);
@@ -113,13 +115,6 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /*********
         ** Private methods
         *********/
-        /// <summary>Get whether a map object is a sprinkler.</summary>
-        /// <param name="obj">The map object.</param>
-        private bool IsSprinkler(Object obj)
-        {
-            return obj != null && this.StaticTilesBySprinklerID.ContainsKey(obj.ParentSheetIndex);
-        }
-
         /// <summary>Get whether a map terrain feature is a crop.</summary>
         /// <param name="terrain">The map terrain feature.</param>
         private bool IsCrop(TerrainFeature terrain)
@@ -182,7 +177,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         private IDictionary<int, Vector2[]> GetCurrentSprinklerTiles(IDictionary<int, Vector2[]> staticTiles)
         {
             // get static tiles
-            if (!this.Mods.BetterSprinklers.IsLoaded)
+            if (!this.Mods.BetterSprinklers.IsLoaded && !this.Mods.LineSprinklers.IsLoaded)
                 return staticTiles;
 
             // merge custom tiles
@@ -190,6 +185,11 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
             if (this.Mods.BetterSprinklers.IsLoaded)
             {
                 foreach (var pair in this.Mods.BetterSprinklers.GetSprinklerTiles())
+                    tilesBySprinklerID[pair.Key] = pair.Value;
+            }
+            if (this.Mods.LineSprinklers.IsLoaded)
+            {
+                foreach (var pair in this.Mods.LineSprinklers.GetSprinklerTiles())
                     tilesBySprinklerID[pair.Key] = pair.Value;
             }
             return tilesBySprinklerID;
