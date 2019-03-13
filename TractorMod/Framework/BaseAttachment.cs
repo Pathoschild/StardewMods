@@ -88,7 +88,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="obj">The world object.</param>
         protected bool IsTwig(SObject obj)
         {
-            return obj.ParentSheetIndex == 294 || obj.ParentSheetIndex == 295;
+            return obj?.ParentSheetIndex == 294 || obj?.ParentSheetIndex == 295;
         }
 
         /// <summary>Get whether a given object is a weed.</summary>
