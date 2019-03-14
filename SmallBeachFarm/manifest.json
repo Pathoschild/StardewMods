@@ -1,0 +1,10 @@
+{
+  "Name": "Small Beach Farm",
+  "Author": "Pathoschild",
+  "Version": "1.0.0",
+  "MinimumApiVersion": "2.11.0",
+  "Description": "A fertile pocket beach farm. Farm map created by Opalie.",
+  "UniqueID": "Pathoschild.SmallBeachFarm",
+  "EntryDll": "SmallBeachFarm.dll",
+  "UpdateKeys": []
+}
