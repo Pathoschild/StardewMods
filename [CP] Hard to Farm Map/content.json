@@ -1,0 +1,16 @@
+{
+  "Format": "1.6",
+  
+  "Changes": [
+       {
+          "Action": "Load",
+          "Target": "Maps/Farm_Fishing",
+          "FromFile": "assets/Pathos_Hard.tbin"
+       },
+	          {
+          "Action": "Load",
+          "Target": "Maps/Forest",
+          "FromFile": "assets/Forest.tbin"
+       },
+    ]
+}

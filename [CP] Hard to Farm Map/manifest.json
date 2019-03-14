@@ -1,0 +1,12 @@
+{
+   "Name": "A farm commissioned by Pathos",
+   "Author": "Opalie",
+   "Version": "1.1.0",
+   "Description": "A mod trade!",
+   "UniqueID": "Opalie.PathosHard",
+   "MinimumApiVersion": "2.5",
+   "UpdateKeys": [ "Nexus:" ],
+   "ContentPackFor": {
+      "UniqueID": "Pathoschild.ContentPatcher"
+   }
+}
