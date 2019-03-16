@@ -1,6 +1,7 @@
 # Release notes
 ## Upcoming release
 * Fixed chests being treated as weeds in some cases.
+* Improved translations. Thanks to Mysti57 (added French)!
 
 ## 4.8
 * Added attachment features:
