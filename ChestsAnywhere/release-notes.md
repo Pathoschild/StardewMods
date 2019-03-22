@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to kelvindules (updated Portuguese)!
+* Improved translations. Thanks to kelvindules (updated Portuguese) and kice (updated Chinese)!
 
 ## 1.15.1
 * Added option to disable player inventory organise button.

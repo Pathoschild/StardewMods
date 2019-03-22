@@ -15,6 +15,8 @@
   "label.hide-chest": "Cacher ce coffre",
   "label.hide-chest-hidden": "Cacher ce coffre (vous devrez trouver ce coffre pour modifier cela !)",
   "label.automate-prefer-output": "(Automatisation) Mettre les objets dans ce coffre d'abord",
+  "label.automate-no-input": "(Automatisation) Don't put items in this chest", // TODO
+  "label.automate-no-output": "(Automatisation) Don't get items from this chest", // TODO
   "label.automate-ignore": "(Automatisation) Ne pas utiliser ce coffre pour l'automatisation",
 
   // button labels
