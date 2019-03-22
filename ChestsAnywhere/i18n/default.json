@@ -15,6 +15,8 @@
   "label.hide-chest": "Hide this chest",
   "label.hide-chest-hidden": "Hide this chest (you'll need to find the chest to undo this!)",
   "label.automate-prefer-output": "(Automate) Put items in this chest first",
+  "label.automate-no-input": "(Automate) Don't allow sending item to this chest",
+  "label.automate-no-output": "(Automate) Don't allow getting item from this chest",
   "label.automate-ignore": "(Automate) Don't use this chest for automation",
 
   // button labels

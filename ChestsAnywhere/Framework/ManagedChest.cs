@@ -48,6 +48,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>Whether Automate should prefer this container for output.</summary>
         public bool ShouldAutomatePreferForOutput => this.Container.Data.ShouldAutomatePreferForOutput;
 
+		/// <summary>Whether Automate should allow getting items to this container.</summary>
+        public bool ShouldAutomateNoInput => this.Container.Data.ShouldAutomateNoInput;
+
+		/// <summary>Whether Automate should allow outputting items to this container.</summary>
+        public bool ShouldAutomateNoOutput => this.Container.Data.ShouldAutomateNoOutput;
+
         /// <summary>The sort value (if any).</summary>
         public int? Order => this.Container.Data.Order;
 
@@ -89,7 +95,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="ignored">Whether the chest should be ignored.</param>
         /// <param name="shouldAutomateIgnore">Whether Automate should ignore this chest.</param>
         /// <param name="shouldAutomatePreferForOutput">Whether Automate should prefer this chest for output.</param>
-        public void Update(string name, string category, int? order, bool ignored, bool shouldAutomateIgnore, bool shouldAutomatePreferForOutput)
+        public void Update(string name, string category, int? order, bool ignored, bool shouldAutomateIgnore, bool shouldAutomatePreferForOutput, bool shouldAutomateNoInput, bool shouldAutomateNoOutput)
         {
             ContainerData data = this.Container.Data;
 
@@ -103,6 +109,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             data.IsIgnored = ignored;
             data.ShouldAutomateIgnore = shouldAutomateIgnore;
             data.ShouldAutomatePreferForOutput = shouldAutomatePreferForOutput;
+            data.ShouldAutomateNoInput = shouldAutomateNoInput;
+            data.ShouldAutomateNoOutput = shouldAutomateNoOutput;
 
             this.Container.SaveData();
         }
