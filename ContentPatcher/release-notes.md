@@ -2,7 +2,9 @@
 
 # Release notes
 ## Upcoming release
+* `EditData` patches can no longer set a field value containing `/` (which is the field delimiter).
 * Fixed some broken maps in Stardew Valley 1.3.36 not detected.
+* Fixed typo in some errors.
 
 ## 1.6.4
 * Added detection for most custom maps broken by Stardew Valley 1.3.36 (they'll now be rejected instead of crashing the game).

@@ -475,9 +475,9 @@ namespace ContentPatcher
                                 foreach (KeyValuePair<string, string> pair in entry.Entries)
                                 {
                                     if (!this.TryParseTokenString(pair.Key, tokenContext, migrator, out string keyError, out TokenString key))
-                                        return TrackSkip($"the {nameof(PatchConfig.Entries)} > '{key}' entry key is invalid: {keyError}.");
+                                        return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key}' key is invalid: {keyError}.");
                                     if (!this.TryParseTokenString(pair.Value, tokenContext, migrator, out string error, out TokenString value))
-                                        return TrackSkip($"the {nameof(PatchConfig.Entries)} > '{key}' entry value is invalid: {error}.");
+                                        return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key}' value is invalid: {error}.");
                                     entries.Add(new EditDataPatchRecord(key, value));
                                 }
                             }
@@ -489,12 +489,15 @@ namespace ContentPatcher
                                 foreach (KeyValuePair<string, IDictionary<int, string>> recordPair in entry.Fields)
                                 {
                                     if (!this.TryParseTokenString(recordPair.Key, tokenContext, migrator, out string keyError, out TokenString key))
-                                        return TrackSkip($"the {nameof(PatchConfig.Fields)} > '{keyError}' field key is invalid: {keyError}.");
+                                        return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} is invalid: {keyError}.");
+
                                     foreach (var fieldPair in recordPair.Value)
                                     {
                                         int field = fieldPair.Key;
                                         if (!this.TryParseTokenString(fieldPair.Value, tokenContext, migrator, out string valueError, out TokenString value))
-                                            return TrackSkip($"the {nameof(PatchConfig.Fields)} > '{key}' > {field} field is invalid: {valueError}.");
+                                            return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {field} is invalid: {valueError}.");
+                                        if (value.Raw?.Contains("/") == true)
+                                            return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {field} is invalid: value can't contain field delimiter character '/'.");
 
                                         fields.Add(new EditDataPatchField(key, field, value));
                                     }
