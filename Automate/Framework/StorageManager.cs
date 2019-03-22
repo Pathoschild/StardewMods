@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Pathoschild.Stardew.Automate.Framework.Storage;
 using StardewValley;
 using SObject = StardewValley.Object;
 
@@ -34,7 +35,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             foreach (IContainer container in this.Containers)
             {
-                if (container.Name.IndexOf("|automate:nooutput|", StringComparison.InvariantCultureIgnoreCase) >= 0)
+                if (!container.AllowsOutput())
                     continue;
 
                 foreach (ITrackedStack item in container)
@@ -149,15 +150,12 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             int originalCount = item.Count;
 
+            var preferOutputContainers = this.Containers.Where(p => p.AllowsInput() && p.PreferForOutput());
+            var otherContainers = this.Containers.Where(p => p.AllowsInput() && !p.PreferForOutput());
+
             // push into 'output' chests
-            foreach (IContainer container in this.Containers)
+            foreach (IContainer container in preferOutputContainers)
             {
-                if (container.Name.IndexOf("|automate:noinput|", StringComparison.InvariantCultureIgnoreCase) >= 0)
-                    continue;
-
-                if (container.Name.IndexOf("|automate:output|", StringComparison.InvariantCultureIgnoreCase) < 0)
-                    continue;
-
                 container.Store(item);
                 if (item.Count <= 0)
                     return true;
@@ -165,11 +163,8 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             // push into chests that already have this item
             string itemKey = this.GetItemKey(item.Sample);
-            foreach (IContainer container in this.Containers)
+            foreach (IContainer container in otherContainers)
             {
-                if (container.Name.IndexOf("|automate:noinput|", StringComparison.InvariantCultureIgnoreCase) >= 0)
-                    continue;
-
                 if (container.All(p => this.GetItemKey(p.Sample) != itemKey))
                     continue;
 
@@ -181,11 +176,8 @@ namespace Pathoschild.Stardew.Automate.Framework
             // push into first available chest
             if (item.Count >= 0)
             {
-                foreach (IContainer container in this.Containers)
+                foreach (IContainer container in otherContainers)
                 {
-                    if (container.Name.IndexOf("|automate:noinput|", StringComparison.InvariantCultureIgnoreCase) >= 0)
-                        continue;
-
                     container.Store(item);
                     if (item.Count <= 0)
                         return true;

@@ -47,6 +47,7 @@
     <Compile Include="Framework\BaseMachine.cs" />
     <Compile Include="Framework\Connector.cs" />
     <Compile Include="Framework\Consumable.cs" />
+    <Compile Include="Framework\Storage\ContainerExtensions.cs" />
     <Compile Include="Framework\GenericObjectMachine.cs" />
     <Compile Include="Framework\MachineGroup.cs" />
     <Compile Include="Framework\MachineGroupBuilder.cs" />

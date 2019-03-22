@@ -1,6 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added support for blocking input or output for a chest (thanks to kice!).
+* Fixed "don't use this chest for automation" option not taking effect immediately.
+
 ## 1.11.1
 * Improved Automate API to simplify custom machines.
 * Fixed error when the game has invalid fish data.

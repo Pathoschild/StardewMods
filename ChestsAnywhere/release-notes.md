@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* When Automate is installed, added support for blocking input or output for a chest.
 * Improved translations. Thanks to kelvindules (updated Portuguese) and kice (updated Chinese)!
 
 ## 1.15.1
