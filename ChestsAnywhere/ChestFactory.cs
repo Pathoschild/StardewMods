@@ -55,18 +55,30 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             IEnumerable<ManagedChest> Search()
             {
-                GameLocation[] locations = this.GetAccessibleLocations().ToArray();
-                IDictionary<string, int> duplicateNames = locations
-                    .GroupBy(p => p.Name)
+                // get location info
+                var locations =
+                    (
+                        from GameLocation location in this.GetAccessibleLocations()
+                        select new
+                        {
+                            Location = location,
+                            Category = this.GetCategory(location)
+                        }
+                    )
+                    .ToArray();
+                IDictionary<string, int> defaultCategories = locations
+                    .GroupBy(p => p.Category)
                     .Where(p => p.Count() > 1)
                     .ToDictionary(p => p.Key, p => 0);
 
-                foreach (GameLocation location in locations)
+                // find chests
+                foreach (var entry in locations)
                 {
-                    // get category name
-                    string defaultCategory = duplicateNames.ContainsKey(location.Name)
-                        ? this.Translations.Get("default-duplicate-category", new { locationName = location.Name, number = ++duplicateNames[location.Name] })
-                        : location.Name;
+                    // get info
+                    GameLocation location = entry.Location;
+                    string category = defaultCategories.ContainsKey(entry.Category)
+                        ? this.Translations.Get("default-category.duplicate", new { locationName = entry.Category, number = ++defaultCategories[entry.Category] })
+                        : entry.Category;
 
                     // chests in location
                     {
@@ -85,7 +97,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                     location: location,
                                     tile: tile,
                                     defaultDisplayName: this.Translations.Get("default-name.chest", new { number = ++namelessChests }),
-                                    defaultCategory: defaultCategory
+                                    defaultCategory: category
                                 );
                             }
 
@@ -97,7 +109,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                     location: location,
                                     tile: tile,
                                     defaultDisplayName: this.Translations.Get("default-name.auto-grabber", new { number = ++namelessGrabbers }),
-                                    defaultCategory: defaultCategory
+                                    defaultCategory: category
                                 );
                             }
                         }
@@ -114,7 +126,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                 location: location,
                                 tile: Vector2.Zero,
                                 defaultDisplayName: this.Translations.Get("default-name.fridge"),
-                                defaultCategory: defaultCategory
+                                defaultCategory: category
                             );
                         }
                     }
@@ -132,7 +144,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                     location: location,
                                     tile: new Vector2(hut.tileX.Value, hut.tileY.Value),
                                     defaultDisplayName: this.Translations.Get("default-name.junimo-hut", new { number = ++namelessHuts }),
-                                    defaultCategory: defaultCategory
+                                    defaultCategory: category
                                 );
                             }
                         }
@@ -146,7 +158,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                             location: farm,
                             tile: Vector2.Zero,
                             defaultDisplayName: this.Translations.Get("default-name.shipping-bin"),
-                            defaultCategory: defaultCategory
+                            defaultCategory: category
                         );
                     }
                 }
@@ -232,6 +244,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 default:
                     return null;
             }
+        }
+
+        /// <summary>Get the default category name for a location.</summary>
+        /// <param name="location">The in-game location.</param>
+        private string GetCategory(GameLocation location)
+        {
+            if (location is Cabin cabin)
+            {
+                return !string.IsNullOrWhiteSpace(cabin.owner?.Name)
+                    ? this.Translations.Get("default-category.owned-cabin", new {owner = cabin.owner?.Name})
+                    : this.Translations.Get("default-category.unowned-cabin");
+            }
+
+            return location.Name;
         }
     }
 }

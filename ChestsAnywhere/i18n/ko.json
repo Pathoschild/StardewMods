@@ -6,8 +6,10 @@
   "default-name.junimo-hut": "주니모 오두막 #{{number}}",
   "default-name.shipping-bin": "출하 상자",
 
-  // default category when multiple locations have the same name ({{locationName}} = internal location name like 'Farmhouse')
-  "default-duplicate-category": "{{locationName}} #{{number}}",
+  // default category names
+  "default-category.owned-cabin": "Cabin ({{owner}})", // TODO
+  "default-category.unowned-cabin": "Cabin (empty)", // TODO
+  "default-category.duplicate": "{{locationName}} #{{number}}",
 
   // edit-chest labels
   "label.location": "장소",
