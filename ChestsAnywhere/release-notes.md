@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* When Automate is installed, added support for blocking input or output for a chest.
+* Added Automate options to block input or output for a chest.
+* Separated categories for locations with the same name.
 * Improved translations. Thanks to kelvindules (updated Portuguese) and kice (updated Chinese)!
 
 ## 1.15.1

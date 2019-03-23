@@ -6,6 +6,9 @@
   "default-name.junimo-hut": "Cabana dos junimos #{{number}}",
   "default-name.shipping-bin": "Caixa de Remessas",
 
+  // default category when multiple locations have the same name ({{locationName}} = internal location name like 'Farmhouse')
+  "default-duplicate-category": "{{locationName}} #{{number}}",
+
   // edit-chest labels
   "label.location": "Local",
   "label.location.tile": "posição {{x}}, {{y}}",

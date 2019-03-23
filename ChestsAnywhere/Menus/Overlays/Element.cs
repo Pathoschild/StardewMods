@@ -10,7 +10,7 @@
         ChestList,
 
         /// <summary>The group dropdown.</summary>
-        GroupList,
+        CategoryList,
 
         /// <summary>The edit form.</summary>
         EditForm

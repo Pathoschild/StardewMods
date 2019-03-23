@@ -6,6 +6,9 @@
   "default-name.junimo-hut": "{{number}}座祝尼魔小屋",
   "default-name.shipping-bin": "出货箱",
 
+  // default category when multiple locations have the same name ({{locationName}} = internal location name like 'Farmhouse')
+  "default-duplicate-category": "{{locationName}} #{{number}}",
+
   // edit-chest labels
   "label.location": "位置",
   "label.location.tile": "地格 {{x}}, {{y}}",

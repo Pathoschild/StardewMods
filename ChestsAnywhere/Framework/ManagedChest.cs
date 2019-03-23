@@ -14,6 +14,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>The default name to display if it hasn't been customised.</summary>
         private readonly string DefaultDisplayName;
 
+        /// <summary>The default category to display if it hasn't been customised.</summary>
+        private readonly string DefaultCategory;
+
 
         /*********
         ** Accessors
@@ -37,7 +40,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         public string DisplayName => !this.Container.Data.HasDefaultDisplayName() ? this.Container.Data.Name : this.DefaultDisplayName;
 
         /// <summary>The user-friendly category name (if any).</summary>
-        public string DisplayCategory => this.Container.Data.Category ?? this.Location.Name;
+        public string DisplayCategory => this.Container.Data.Category ?? this.DefaultCategory;
 
         /// <summary>Whether the container should be ignored.</summary>
         public bool IsIgnored => this.Container.Data.IsIgnored;
@@ -48,10 +51,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>Whether Automate should prefer this container for output.</summary>
         public bool ShouldAutomatePreferForOutput => this.Container.Data.ShouldAutomatePreferForOutput;
 
-		/// <summary>Whether Automate should allow getting items to this container.</summary>
+        /// <summary>Whether Automate should allow getting items to this container.</summary>
         public bool ShouldAutomateNoInput => this.Container.Data.ShouldAutomateNoInput;
 
-		/// <summary>Whether Automate should allow outputting items to this container.</summary>
+        /// <summary>Whether Automate should allow outputting items to this container.</summary>
         public bool ShouldAutomateNoOutput => this.Container.Data.ShouldAutomateNoOutput;
 
         /// <summary>The sort value (if any).</summary>
@@ -66,20 +69,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="location">The location or building which contains the chest.</param>
         /// <param name="tile">The chest's tile position within its location or building.</param>
         /// <param name="defaultDisplayName">The default name to display if it hasn't been customised.</param>
-        public ManagedChest(IContainer container, GameLocation location, Vector2 tile, string defaultDisplayName)
+        /// <param name="defaultCategory">The default category to display if it hasn't been customised.</param>
+        public ManagedChest(IContainer container, GameLocation location, Vector2 tile, string defaultDisplayName, string defaultCategory)
         {
             this.Container = container;
             this.Location = location;
             this.Tile = tile;
             this.DefaultDisplayName = defaultDisplayName;
-        }
-
-        /// <summary>Get the grouping category for a chest.</summary>
-        public string GetGroup()
-        {
-            return !string.IsNullOrWhiteSpace(this.Container.Data.Category)
-                ? this.Container.Data.Category
-                : this.Location.Name;
+            this.DefaultCategory = defaultCategory;
         }
 
         /// <summary>Reset all data to the default.</summary>
@@ -102,7 +99,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             data.Name = !string.IsNullOrWhiteSpace(name) && name != this.DefaultDisplayName
                 ? name.Trim()
                 : null;
-            data.Category = !string.IsNullOrWhiteSpace(category) && category != this.Location.Name
+            data.Category = !string.IsNullOrWhiteSpace(category) && category != this.DefaultCategory
                 ? category.Trim()
                 : null;
             data.Order = order;
