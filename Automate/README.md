@@ -174,9 +174,11 @@ Installing [Chests Anywhere](https://www.nexusmods.com/stardewvalley/mods/518) t
 per-chest options directly in-game:
 > ![](screenshots/chests-anywhere-config.png)
 
-This adds two options for automate:
-* **Put items in this chest first:** when choosing a chest to place processed items, put them in
-  this chest before any others (until it's full).
+This adds four options for automate:
+* **Put items in this chest first:** Automate will only push machine output into this chest (until
+  it's full).
+* **Don't put items in this chest:** Automate won't push any machine output into this chest.
+* **Don't take items from this chest:** Automate won't take machine input from this chest.
 * **Don't use this chest for automation:** Automate will completely ignore the chest, so it won't
   be connected to any machines.
 
