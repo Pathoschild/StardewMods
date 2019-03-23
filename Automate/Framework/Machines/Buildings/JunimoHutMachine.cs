@@ -3,6 +3,7 @@ using System.Linq;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Objects;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 {
@@ -12,6 +13,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /*********
         ** Fields
         *********/
+        /// <summary>Whether seeds should be ignored when selecting output.</summary>
+        private readonly bool IgnoreSeedOutput;
+
         /// <summary>The Junimo hut's output chest.</summary>
         private Chest Output => this.Machine.output.Value;
 
@@ -22,8 +26,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Construct an instance.</summary>
         /// <param name="hut">The underlying Junimo hut.</param>
         /// <param name="location">The location which contains the machine.</param>
-        public JunimoHutMachine(JunimoHut hut, GameLocation location)
-            : base(hut, location, BaseMachine.GetTileAreaFor(hut)) { }
+        /// <param name="ignoreSeedOutput">Whether seeds should be ignored when selecting output.</param>
+        public JunimoHutMachine(JunimoHut hut, GameLocation location, bool ignoreSeedOutput)
+            : base(hut, location, BaseMachine.GetTileAreaFor(hut))
+        {
+            this.IgnoreSeedOutput = ignoreSeedOutput;
+        }
 
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
@@ -58,6 +66,23 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         {
             this.Output.clearNulls();
             this.Output.items.Remove(item);
+        }
+
+        /// <summary>Get the next output item.</summary>
+        private Item GetNextOutput()
+        {
+            foreach (Item item in this.Output.items)
+            {
+                if (item == null)
+                    continue;
+
+                if (this.IgnoreSeedOutput && (item as SObject)?.Category == SObject.SeedsCategory)
+                    continue;
+
+                return item;
+            }
+
+            return null;
         }
     }
 }
