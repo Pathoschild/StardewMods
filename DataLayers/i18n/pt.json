@@ -6,6 +6,13 @@
   "accessible.impassable": "Intransitável",
   "accessible.warp": "Passagem",
 
+  // buildable
+  // TODO
+  "buildable.name": "Buildable",
+  "buildable.buildable": "Can Build here",
+  "buildable.occupied": "Occupied",
+  "buildable.not-buildable": "Can't Build Here",
+
   // coverage: bee houses
   "bee-houses.name": "Cobertura: Casas de Abelhas",
   "bee-houses.range": "Alcance das Flores",

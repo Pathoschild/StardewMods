@@ -6,6 +6,13 @@
   "accessible.impassable": "Infranchissable",
   "accessible.warp": "Passage",
 
+  // buildable
+  // TODO
+  "buildable.name": "Buildable",
+  "buildable.buildable": "Can Build here",
+  "buildable.occupied": "Occupied",
+  "buildable.not-buildable": "Can't Build Here",
+
   // coverage: bee houses
   "bee-houses.name": "Couverture : Ruche",
   "bee-houses.range": "Portée des fleurs",

@@ -58,6 +58,7 @@
     <Compile Include="Framework\TileDrawData.cs" />
     <Compile Include="Framework\TileEdge.cs" />
     <Compile Include="Framework\TileGroup.cs" />
+    <Compile Include="Layers\BuildableLayer.cs" />
     <Compile Include="Layers\TillableLayer.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

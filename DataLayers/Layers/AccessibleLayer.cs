@@ -185,8 +185,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             {
                 foreach (Building building in buildableLocation.buildings)
                 {
-                    Rectangle buildingArea = new Rectangle(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
-                    if (buildingArea.Contains((int)tile.X, (int)tile.Y))
+                    if (building.occupiesTile(tile))
                         return true;
                 }
             }

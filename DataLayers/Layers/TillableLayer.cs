@@ -54,11 +54,11 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             TileData[] tiles = this.GetTiles(location, visibleArea.GetTiles()).ToArray();
 
             // tillable tiles
-            TileData[] tillableColors = tiles.Where(p => p.Color == this.TillableColor).ToArray();
-            yield return new TileGroup(tillableColors, outerBorderColor: this.TillableColor);
+            TileData[] tillableTiles = tiles.Where(p => p.Color == this.TillableColor).ToArray();
+            yield return new TileGroup(tillableTiles, outerBorderColor: this.TillableColor);
 
             // other tiles
-            yield return new TileGroup(tiles.Except(tillableColors).ToArray());
+            yield return new TileGroup(tiles.Except(tillableTiles).ToArray());
         }
 
 
@@ -109,8 +109,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             {
                 foreach (Building building in buildableLocation.buildings)
                 {
-                    Rectangle buildingArea = new Rectangle(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
-                    if (buildingArea.Contains((int)tile.X, (int)tile.Y))
+                    if (building.occupiesTile(tile))
                         return true;
                 }
             }

@@ -6,6 +6,13 @@
   "accessible.impassable": "통행불가",
   "accessible.warp": "순간이동",
 
+  // buildable
+  // TODO
+  "buildable.name": "Buildable",
+  "buildable.buildable": "Can Build here",
+  "buildable.occupied": "Occupied",
+  "buildable.not-buildable": "Can't Build Here",
+
   // coverage: bee houses
   "bee-houses.name": "적용범위: 양봉장",
   "bee-houses.range": "꽃의 범위",

@@ -138,6 +138,8 @@ namespace Pathoschild.Stardew.DataLayers
 
             if (layers.Accessible.IsEnabled())
                 yield return new AccessibleLayer(translation, layers.Accessible);
+            if (layers.Buildable.IsEnabled())
+                yield return new BuildableLayer(translation, layers.Buildable);
             if (layers.CoverageForBeeHouses.IsEnabled())
                 yield return new BeeHouseLayer(translation, layers.CoverageForBeeHouses);
             if (layers.CoverageForScarecrows.IsEnabled())

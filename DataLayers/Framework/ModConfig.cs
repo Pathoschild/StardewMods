@@ -29,6 +29,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             /// <summary>Settings for the accessible layer.</summary>
             public LayerConfig Accessible { get; set; } = new LayerConfig { UpdatesPerSecond = 2 };
 
+            /// <summary>Settings for the buildable layer.</summary>
+            public LayerConfig Buildable { get; set; } = new LayerConfig { UpdatesPerSecond = 2 };
+
             /// <summary>Settings for the bee house layer.</summary>
             public LayerConfig CoverageForBeeHouses { get; set; } = new LayerConfig { UpdatesPerSecond = 60 };
 

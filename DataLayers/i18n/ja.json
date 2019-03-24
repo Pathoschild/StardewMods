@@ -6,6 +6,13 @@
   "accessible.impassable": "通れない",
   "accessible.warp": "ワープ",
 
+  // buildable
+  // TODO
+  "buildable.name": "Buildable",
+  "buildable.buildable": "Can Build here",
+  "buildable.occupied": "Occupied",
+  "buildable.not-buildable": "Can't Build Here",
+
   // coverage: bee houses
   "bee-houses.name": "範囲: 蜂の巣",
   "bee-houses.range": "花の範囲",

@@ -6,6 +6,13 @@
   "accessible.impassable": "Bloqueado",
   "accessible.warp": "Portal",
 
+  // buildable
+  // TODO
+  "buildable.name": "Buildable",
+  "buildable.buildable": "Can Build here",
+  "buildable.occupied": "Occupied",
+  "buildable.not-buildable": "Can't Build Here",
+
   // coverage: bee houses
   "bee-houses.name": "Cobertura: Colmenas",
   "bee-houses.range": "Rango Flores",
