@@ -1,10 +1,10 @@
 {
-  // accessibility
-  "accessibility.name": "Accessibility",
-  "accessibility.clear": "Clear",
-  "accessibility.occupied": "Occupied",
-  "accessibility.impassable": "Impassable",
-  "accessibility.warp": "Warp",
+  // accessible
+  "accessible.name": "Accessible",
+  "accessible.clear": "Clear",
+  "accessible.occupied": "Occupied",
+  "accessible.impassable": "Impassable",
+  "accessible.warp": "Warp",
 
   // coverage: bee houses
   "bee-houses.name": "Coverage: Bee Houses",
@@ -46,5 +46,11 @@
   "machines.name": "Machine Processing",
   "machines.empty": "Empty",
   "machines.processing": "Processing",
-  "machines.finished": "Finished"
+  "machines.finished": "Finished",
+
+  // tillable
+  "tillable.name": "Tillable",
+  "tillable.tillable": "Tillable",
+  "tillable.occupied": "Occupied",
+  "tillable.not-tillable": "Not Tillable"
 }

@@ -1,5 +1,6 @@
 # Release notes
 ## Upcoming release
+* Added _tillable_ layer.
 * Added support for Line Sprinklers mod.
 * Improved translations. Thanks to kelvindules (updated Portuguese)!
 

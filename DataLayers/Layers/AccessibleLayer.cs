@@ -15,7 +15,7 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 namespace Pathoschild.Stardew.DataLayers.Layers
 {
     /// <summary>A data layer which shows whether tiles are traversable by the player.</summary>
-    internal class AccessibilityLayer : BaseLayer
+    internal class AccessibleLayer : BaseLayer
     {
         /*********
         ** Fields
@@ -46,15 +46,15 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
-        public AccessibilityLayer(ITranslationHelper translations, LayerConfig config)
-            : base(translations.Get("accessibility.name"), config)
+        public AccessibleLayer(ITranslationHelper translations, LayerConfig config)
+            : base(translations.Get("accessible.name"), config)
         {
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("accessibility.clear"), this.ClearColor),
-                new LegendEntry(translations.Get("accessibility.occupied"), this.OccupiedColor),
-                new LegendEntry(translations.Get("accessibility.impassable"), this.ImpassableColor),
-                new LegendEntry(translations.Get("accessibility.warp"), this.WarpColor)
+                new LegendEntry(translations.Get("accessible.clear"), this.ClearColor),
+                new LegendEntry(translations.Get("accessible.occupied"), this.OccupiedColor),
+                new LegendEntry(translations.Get("accessible.impassable"), this.ImpassableColor),
+                new LegendEntry(translations.Get("accessible.warp"), this.WarpColor)
             };
         }
 
@@ -100,7 +100,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
                 // get pixel coordinates
                 Rectangle tilePixels = new Rectangle((int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), Game1.tileSize, Game1.tileSize);
 
-                // get color code
+                // get color
                 Color color;
                 if (this.IsWarp(location, tile, tilePixels, buildingDoors))
                     color = this.WarpColor;

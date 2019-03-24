@@ -1,10 +1,10 @@
 {
-  // accessibility
-  "accessibility.name": "Доступность",
-  "accessibility.clear": "Доступно",
-  "accessibility.occupied": "Занято",
-  "accessibility.impassable": "Недоступно",
-  "accessibility.warp": "Смена локации",
+  // accessible
+  "accessible.name": "Доступность",
+  "accessible.clear": "Доступно",
+  "accessible.occupied": "Занято",
+  "accessible.impassable": "Недоступно",
+  "accessible.warp": "Смена локации",
 
   // coverage: bee houses
   "bee-houses.name": "Покрытие: Ульи",
@@ -48,5 +48,12 @@
   "machines.name": "Machine Processing",
   "machines.empty": "Empty",
   "machines.processing": "Processing",
-  "machines.finished": "Finished"
+  "machines.finished": "Finished",
+
+  // tillable
+  // TODO
+  "tillable.name": "Tillable",
+  "tillable.tillable": "Tillable",
+  "tillable.occupied": "Occupied",
+  "tillable.not-tillable": "Not Tillable"
 }
