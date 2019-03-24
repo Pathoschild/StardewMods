@@ -23,9 +23,14 @@ border around that one's range and a green border around the coverage without it
 
 Below are the current data layers.
 
-### Accessibility
+### Accessible
 Shows where you can walk and highlights warp tiles; useful for finding hidden paths and nooks.
-> ![](docs/screenshots/accessibility.png)
+> ![](docs/screenshots/accessible.png)
+
+### Buildable
+Shows where you can construct buildings on the farm. Useful for spotting issues before you try to
+build at Robin's.
+> ![](docs/screenshots/buildable.png)
 
 ### Coverage: bee houses
 Shows bee houses' flower search range. (The weird shape isn't a bug, that's the game's
@@ -63,6 +68,10 @@ Shows whether your machines are empty, processing, or finished. (You need to ins
 [Automate](https://www.nexusmods.com/stardewvalley/mods/1063) for this layer to appear, but it'll
 work for machines that aren't being automated too.)
 > ![](docs/screenshots/machines.png)
+
+### Tillable
+Shows where you can till dirt with your hoe. Useful for planning crop layouts.
+> ![](docs/screenshots/tillable.png)
 
 ## Configure
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
