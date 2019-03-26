@@ -42,7 +42,7 @@ namespace ContentPatcher.Framework
         public TokenManager(IContentHelper contentHelper, IEnumerable<string> installedMods)
         {
             foreach (IValueProvider valueProvider in this.GetGlobalValueProviders(contentHelper, installedMods))
-                this.GlobalContext.Tokens[new TokenName(valueProvider.Name)] = new ValueProviderToken(valueProvider);
+                this.GlobalContext.Tokens[new TokenName(valueProvider.Name)] = new GenericToken(valueProvider);
         }
 
         /// <summary>Get the tokens which are defined for a specific content pack. This returns a reference to the list, which can be held for a live view of the tokens. If the content pack isn't currently tracked, this will add it.</summary>
@@ -53,7 +53,7 @@ namespace ContentPatcher.Framework
             {
                 this.LocalTokens[contentPack] = localTokens = new ModTokenContext(this);
                 foreach (IValueProvider valueProvider in this.GetLocalValueProviders(contentPack))
-                    localTokens.Add(new ValueProviderToken(valueProvider));
+                    localTokens.Add(new GenericToken(valueProvider));
             }
 
             return localTokens;

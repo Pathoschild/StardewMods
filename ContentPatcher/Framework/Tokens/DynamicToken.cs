@@ -4,7 +4,7 @@ using Pathoschild.Stardew.Common.Utilities;
 namespace ContentPatcher.Framework.Tokens
 {
     /// <summary>A dynamic token defined by a content pack.</summary>
-    internal class DynamicToken : ValueProviderToken
+    internal class DynamicToken : GenericToken
     {
         /*********
         ** Accessors

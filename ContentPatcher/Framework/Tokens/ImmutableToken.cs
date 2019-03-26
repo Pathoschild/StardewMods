@@ -4,7 +4,7 @@ using Pathoschild.Stardew.Common.Utilities;
 namespace ContentPatcher.Framework.Tokens
 {
     /// <summary>A tokens whose values don't change after it's initialised.</summary>
-    internal class ImmutableToken : ValueProviderToken
+    internal class ImmutableToken : GenericToken
     {
         /*********
         ** Public methods
