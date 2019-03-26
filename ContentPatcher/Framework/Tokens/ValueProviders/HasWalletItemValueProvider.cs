@@ -6,10 +6,10 @@ using ContentPatcher.Framework.Constants;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewValley;
 
-namespace ContentPatcher.Framework.Tokens
+namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
-    /// <summary>A token for the player's wallet items.</summary>
-    internal class HasWalletItemToken : BaseToken
+    /// <summary>A value provider for the player's wallet items.</summary>
+    internal class HasWalletItemValueProvider : BaseValueProvider
     {
         /*********
         ** Fields
@@ -38,46 +38,47 @@ namespace ContentPatcher.Framework.Tokens
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="isPlayerDataAvailable">Get whether the player data is available in the current context.</param>
-        public HasWalletItemToken(Func<bool> isPlayerDataAvailable)
-            : base(ConditionType.HasWalletItem.ToString(), canHaveMultipleRootValues: true)
+        public HasWalletItemValueProvider(Func<bool> isPlayerDataAvailable)
+            : base(ConditionType.HasWalletItem, canHaveMultipleValuesForRoot: true)
         {
             this.IsPlayerDataAvailable = isPlayerDataAvailable;
-            this.EnableSubkeys(required: false, canHaveMultipleValues: false);
+            this.EnableInputArguments(required: false, canHaveMultipleValues: false);
         }
 
-        /// <summary>Update the token data when the context changes.</summary>
+        /// <summary>Update the underlying values.</summary>
         /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the token data changed.</returns>
+        /// <returns>Returns whether the values changed.</returns>
         public override void UpdateContext(IContext context)
         {
             this.IsValidInContext = this.IsPlayerDataAvailable();
         }
 
-        /// <summary>Get the allowed subkeys (or <c>null</c> if any value is allowed).</summary>
-        protected override InvariantHashSet GetAllowedSubkeys()
+        /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>
+        public override InvariantHashSet GetValidInputs()
         {
             return new InvariantHashSet(this.WalletItems.Keys.Select(p => p.ToString()));
         }
 
-        /// <summary>Get the allowed values for a token name (or <c>null</c> if any value is allowed).</summary>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
-        public override InvariantHashSet GetAllowedValues(TokenName name)
+        /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
+        public override InvariantHashSet GetAllowedValues(string input)
         {
-            return name.HasSubkey()
+            return input != null
                 ? InvariantHashSet.Boolean()
-                : this.GetAllowedSubkeys();
+                : this.GetValidInputs();
         }
 
-        /// <summary>Get the current token values.</summary>
-        /// <param name="name">The token name to check.</param>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
-        public override IEnumerable<string> GetValues(TokenName name)
+        /// <summary>Get the current values.</summary>
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
+        public override IEnumerable<string> GetValues(string input)
         {
-            this.AssertTokenName(name);
+            this.AssertInputArgument(input);
 
-            if (name.HasSubkey())
+            if (input != null)
             {
-                bool hasItem = this.TryParseEnum(name.Subkey, out WalletItem item) && this.WalletItems[item]();
+                bool hasItem = this.TryParseEnum(input, out WalletItem item) && this.WalletItems[item]();
                 yield return hasItem.ToString();
             }
             else

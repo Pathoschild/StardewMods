@@ -1,20 +1,16 @@
-using System;
-using System.Collections.Generic;
+using ContentPatcher.Framework.Tokens.ValueProviders;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
 {
-    /// <summary>A simple token whose value can be changed externally.</summary>
-    internal class DynamicToken : BaseToken
+    /// <summary>A dynamic token defined by a content pack.</summary>
+    internal class DynamicToken : ValueProviderToken
     {
         /*********
-        ** Fields
+        ** Accessors
         *********/
-        /// <summary>The allowed values for the root token (or <c>null</c> if any value is allowed).</summary>
-        private readonly InvariantHashSet AllowedRootValues;
-
-        /// <summary>The current values.</summary>
-        private InvariantHashSet Values = new InvariantHashSet();
+        /// <summary>The underlying value provider.</summary>
+        private readonly DynamicTokenValueProvider DynamicValues;
 
 
         /*********
@@ -23,54 +19,32 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The token name.</param>
         public DynamicToken(TokenName name)
-            : base(name, canHaveMultipleRootValues: false)
+            : base(new DynamicTokenValueProvider(name.Key))
         {
-            this.AllowedRootValues = new InvariantHashSet();
-            this.EnableSubkeys(required: false, canHaveMultipleValues: false);
+            this.DynamicValues = (DynamicTokenValueProvider)base.Values;
         }
 
         /// <summary>Add a set of possible values.</summary>
         /// <param name="possibleValues">The possible values to add.</param>
         public void AddAllowedValues(InvariantHashSet possibleValues)
         {
-            foreach (string value in possibleValues)
-                this.AllowedRootValues.Add(value);
-            this.CanHaveMultipleRootValues = this.CanHaveMultipleRootValues || possibleValues.Count > 1;
+            this.DynamicValues.AddAllowedValues(possibleValues);
+            this.CanHaveMultipleRootValues = this.DynamicValues.CanHaveMultipleValues();
         }
 
         /// <summary>Set the current values.</summary>
         /// <param name="values">The values to set.</param>
         public void SetValue(InvariantHashSet values)
         {
-            this.Values = values;
+            this.DynamicValues.SetValue(values);
         }
 
         /// <summary>Set whether the token is valid in the current context.</summary>
         /// <param name="validInContext">The value to set.</param>
         public void SetValidInContext(bool validInContext)
         {
-            this.IsValidInContext = validInContext;
-        }
-
-        /// <summary>Get the allowed values for a token name (or <c>null</c> if any value is allowed).</summary>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
-        public override InvariantHashSet GetAllowedValues(TokenName name)
-        {
-            return name.HasSubkey()
-                ? InvariantHashSet.Boolean()
-                : this.AllowedRootValues;
-        }
-
-        /// <summary>Get the current token values.</summary>
-        /// <param name="name">The token name to check.</param>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
-        public override IEnumerable<string> GetValues(TokenName name)
-        {
-            this.AssertTokenName(name);
-
-            if (name.HasSubkey())
-                return new[] { this.Values.Contains(name.Subkey).ToString() };
-            return this.Values;
+            this.DynamicValues.SetValidInContext(validInContext);
+            this.IsValidInContext = this.DynamicValues.IsValidInContext;
         }
     }
 }

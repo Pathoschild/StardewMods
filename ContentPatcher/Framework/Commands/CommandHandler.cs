@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
@@ -218,7 +219,7 @@ namespace ContentPatcher.Framework.Commands
                 {
                     IToken[] localTokens = tokenContext
                         .GetTokens(localOnly: true, enforceContext: false)
-                        .Where(p => !(p is HasFileToken)) // no value to display
+                        .Where(p => p.Name.Key != ConditionType.HasFile.ToString()) // no value to display
                         .ToArray();
                     if (localTokens.Any())
                     {

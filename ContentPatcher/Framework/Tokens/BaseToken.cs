@@ -59,7 +59,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="values">The values to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public virtual bool TryValidate(TokenName name, InvariantHashSet values, out string error)
+        public bool TryValidate(TokenName name, InvariantHashSet values, out string error)
         {
             // parse data
             KeyValuePair<TokenName, string>[] pairs = this.GetSubkeyValuePairsFor(name, values).ToArray();

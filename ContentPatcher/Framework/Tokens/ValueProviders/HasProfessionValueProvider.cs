@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
 using Pathoschild.Stardew.Common.Utilities;
-using StardewModdingAPI;
 using StardewValley;
 
-namespace ContentPatcher.Framework.Tokens
+namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
-    /// <summary>A token for the player's professions.</summary>
-    internal class HasProfessionToken : BaseToken
+    /// <summary>A value provider for the player's professions.</summary>
+    internal class HasProfessionValueProvider : BaseValueProvider
     {
         /*********
         ** Fields
@@ -26,16 +25,16 @@ namespace ContentPatcher.Framework.Tokens
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="isPlayerDataAvailable">Get whether the player data is available in the current context.</param>
-        public HasProfessionToken(Func<bool> isPlayerDataAvailable)
-            : base(ConditionType.HasProfession.ToString(), canHaveMultipleRootValues: true)
+        public HasProfessionValueProvider(Func<bool> isPlayerDataAvailable)
+            : base(ConditionType.HasProfession, canHaveMultipleValuesForRoot: true)
         {
             this.IsPlayerDataAvailable = isPlayerDataAvailable;
-            this.EnableSubkeys(required: false, canHaveMultipleValues: false);
+            this.EnableInputArguments(required: false, canHaveMultipleValues: false);
         }
 
-        /// <summary>Update the token data when the context changes.</summary>
+        /// <summary>Update the underlying values.</summary>
         /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the token data changed.</returns>
+        /// <returns>Returns whether the values changed.</returns>
         public override void UpdateContext(IContext context)
         {
             this.Professions.Clear();
@@ -48,24 +47,25 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <summary>Get the allowed values for a token name (or <c>null</c> if any value is allowed).</summary>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
-        public override InvariantHashSet GetAllowedValues(TokenName name)
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this token, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
+        public override InvariantHashSet GetAllowedValues(string input)
         {
-            return name.HasSubkey()
+            return input != null
                 ? InvariantHashSet.Boolean()
                 : null;
         }
 
-        /// <summary>Get the current token values.</summary>
-        /// <param name="name">The token name to check.</param>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
-        public override IEnumerable<string> GetValues(TokenName name)
+        /// <summary>Get the current values.</summary>
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this token, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
+        public override IEnumerable<string> GetValues(string input)
         {
-            this.AssertTokenName(name);
+            this.AssertInputArgument(input);
 
-            if (name.HasSubkey())
+            if (input != null)
             {
-                bool hasProfession = this.TryParseEnum(name.Subkey, out Profession profession, mustBeNamed: false) && this.Professions.Contains(profession);
+                bool hasProfession = this.TryParseEnum(input, out Profession profession, mustBeNamed: false) && this.Professions.Contains(profession);
                 yield return hasProfession.ToString();
             }
             else
@@ -75,18 +75,18 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
-        /// <summary>Perform custom validation on a subkey/value pair.</summary>
-        /// <param name="name">The token name to validate.</param>
+        /// <summary>Validate that the provided value is valid for an input argument (regardless of whether they match).</summary>
+        /// <param name="input">The input argument, if applicable.</param>
         /// <param name="value">The value to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public override bool TryValidate(TokenName name, string value, out string error)
+        protected override bool TryValidate(string input, string value, out string error)
         {
-            if (!base.TryValidate(name, value, out error))
+            if (!base.TryValidate(input, value, out error))
                 return false;
 
             // validate profession IDs
-            string profession = name.HasSubkey() ? name.Subkey : value;
+            string profession = input ?? value;
             if (!this.TryParseEnum(profession, out Profession _, mustBeNamed: false))
             {
                 error = $"can't parse '{profession}' as a profession ID; must be one of [{string.Join(", ", Enum.GetNames(typeof(Profession)).OrderByIgnoreCase(p => p))}] or an integer ID.";

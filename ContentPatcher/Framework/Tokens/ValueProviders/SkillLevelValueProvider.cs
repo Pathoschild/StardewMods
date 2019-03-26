@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
 using Pathoschild.Stardew.Common.Utilities;
-using StardewModdingAPI;
 using StardewValley;
 
-namespace ContentPatcher.Framework.Tokens
+namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
-    /// <summary>A token for the player's skill levels.</summary>
-    internal class SkillLevelToken : BaseToken
+    /// <summary>A value provider for the player's skill levels.</summary>
+    internal class SkillLevelValueProvider : BaseValueProvider
     {
         /*********
         ** Fields
@@ -26,16 +24,16 @@ namespace ContentPatcher.Framework.Tokens
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public SkillLevelToken(Func<bool> isPlayerDataAvailable)
-            : base(ConditionType.SkillLevel.ToString(), canHaveMultipleRootValues: true)
+        public SkillLevelValueProvider(Func<bool> isPlayerDataAvailable)
+            : base(ConditionType.SkillLevel, canHaveMultipleValuesForRoot: true)
         {
             this.IsPlayerDataAvailable = isPlayerDataAvailable;
-            this.EnableSubkeys(required: false, canHaveMultipleValues: false);
+            this.EnableInputArguments(required: false, canHaveMultipleValues: false);
         }
 
-        /// <summary>Update the token data when the context changes.</summary>
+        /// <summary>Update the underlying values.</summary>
         /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the token data changed.</returns>
+        /// <returns>Returns whether the values changed.</returns>
         public override void UpdateContext(IContext context)
         {
             this.SkillLevels.Clear();
@@ -51,29 +49,22 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
-        /// <summary>Get the allowed subkeys (or <c>null</c> if any value is allowed).</summary>
-        protected override InvariantHashSet GetAllowedSubkeys()
+        /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>
+        public override InvariantHashSet GetValidInputs()
         {
             return new InvariantHashSet(Enum.GetNames(typeof(Skill)));
         }
 
-        /// <summary>Get the current subkeys (if supported).</summary>
-        public override IEnumerable<TokenName> GetSubkeys()
+        /// <summary>Get the current values.</summary>
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
+        public override IEnumerable<string> GetValues(string input)
         {
-            foreach (Skill skill in this.SkillLevels.Keys)
-                yield return new TokenName(ConditionType.SkillLevel, skill.ToString());
-        }
+            this.AssertInputArgument(input);
 
-        /// <summary>Get the current token values.</summary>
-        /// <param name="name">The token name to check.</param>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
-        public override IEnumerable<string> GetValues(TokenName name)
-        {
-            this.AssertTokenName(name);
-
-            if (name.HasSubkey())
+            if (input != null)
             {
-                if (this.TryParseEnum(name.Subkey, out Skill skill) && this.SkillLevels.TryGetValue(skill, out int level))
+                if (this.TryParseEnum(input, out Skill skill) && this.SkillLevels.TryGetValue(skill, out int level))
                     yield return level.ToString();
             }
             else

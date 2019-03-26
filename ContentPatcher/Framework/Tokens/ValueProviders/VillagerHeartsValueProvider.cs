@@ -6,10 +6,10 @@ using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 
-namespace ContentPatcher.Framework.Tokens
+namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
-    /// <summary>A token for NPC friendship hearts.</summary>
-    internal class VillagerHeartsToken : BaseToken
+    /// <summary>A value provider for NPC friendship hearts.</summary>
+    internal class VillagerHeartsValueProvider : BaseValueProvider
     {
         /*********
         ** Fields
@@ -22,15 +22,15 @@ namespace ContentPatcher.Framework.Tokens
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public VillagerHeartsToken()
-            : base(ConditionType.Hearts.ToString(), canHaveMultipleRootValues: false)
+        public VillagerHeartsValueProvider()
+            : base(ConditionType.Hearts, canHaveMultipleValuesForRoot: false)
         {
-            this.EnableSubkeys(required: false, canHaveMultipleValues: false);
+            this.EnableInputArguments(required: false, canHaveMultipleValues: false);
         }
 
-        /// <summary>Update the token data when the context changes.</summary>
+        /// <summary>Update the underlying values.</summary>
         /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the token data changed.</returns>
+        /// <returns>Returns whether the values changed.</returns>
         public override void UpdateContext(IContext context)
         {
             this.Values.Clear();
@@ -42,23 +42,22 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
-        /// <summary>Get the current subkeys (if supported).</summary>
-        public override IEnumerable<TokenName> GetSubkeys()
+        /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>
+        public override InvariantHashSet GetValidInputs()
         {
-            foreach (string key in this.Values.Keys)
-                yield return new TokenName(this.Name.Key, key);
+            return new InvariantHashSet(this.Values.Keys);
         }
 
-        /// <summary>Get the current token values.</summary>
-        /// <param name="name">The token name to check.</param>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
-        public override IEnumerable<string> GetValues(TokenName name)
+        /// <summary>Get the current values.</summary>
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
+        public override IEnumerable<string> GetValues(string input)
         {
-            this.AssertTokenName(name);
+            this.AssertInputArgument(input);
 
-            if (name.HasSubkey())
+            if (input != null)
             {
-                if (this.Values.TryGetValue(name.Subkey, out string value))
+                if (this.Values.TryGetValue(input, out string value))
                     yield return value;
             }
             else
