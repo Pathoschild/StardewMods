@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to TheOzonO3 (updated Russian)!
+
 ## 1.9.3
 * Improved translations. Thanks to S2SKY (added Korean) and VincentRoth (added French)!
 
