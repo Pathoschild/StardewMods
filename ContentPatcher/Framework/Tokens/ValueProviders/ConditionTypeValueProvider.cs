@@ -58,8 +58,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.IsValidInContext = this.IsValidInContextImpl == null || this.IsValidInContextImpl();
             this.Values.Clear();
-            foreach (string value in this.FetchValues())
-                this.Values.Add(value);
+            if (this.IsValidInContext)
+            {
+                foreach (string value in this.FetchValues())
+                    this.Values.Add(value);
+            }
         }
 
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>

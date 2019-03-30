@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * `EditData` patches can no longer set a field value containing `/` (which is the field delimiter).
+* Fixed error with upcoming SMAPI 3.0 changes.
 * Fixed some broken maps in Stardew Valley 1.3.36 not detected.
 * Fixed typo in some errors.
 
