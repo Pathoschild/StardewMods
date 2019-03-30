@@ -18,6 +18,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>The attachment settings.</summary>
         private readonly ScytheConfig Config;
 
+        /// <summary>A fake pickaxe to use for clearing dead crops.</summary>
+        private readonly Pickaxe FakePickaxe = new Pickaxe();
+
 
         /*********
         ** Public methods
@@ -38,7 +41,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
         {
-            return tool is MeleeWeapon && tool.Name.ToLower().Contains("scythe");
+            return tool is MeleeWeapon && tool.ParentSheetIndex == MeleeWeapon.scythe;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -66,7 +69,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
                 if (this.Config.ClearDeadCrops && dirt.crop.dead.Value)
                 {
-                    this.UseToolOnTile(new Pickaxe(), tile); // clear dead crop
+                    this.UseToolOnTile(this.FakePickaxe, tile); // clear dead crop
                     return true;
                 }
 

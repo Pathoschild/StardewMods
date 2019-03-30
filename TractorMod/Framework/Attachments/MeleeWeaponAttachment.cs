@@ -18,6 +18,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>The attachment settings.</summary>
         private readonly MeleeWeaponConfig Config;
 
+        /// <summary>A fake pickaxe to use for clearing dead crops to ensure consistent behavior.</summary>
+        private readonly Pickaxe FakePickaxe = new Pickaxe();
+
 
         /*********
         ** Public methods
@@ -38,7 +41,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
         {
-            return tool is MeleeWeapon;
+            return tool is MeleeWeapon && tool.ParentSheetIndex != MeleeWeapon.scythe;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -53,7 +56,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         {
             // clear dead crops
             if (this.Config.ClearDeadCrops && tileFeature is HoeDirt dirt && dirt.crop != null && dirt.crop.dead.Value)
-                return this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(this.FakePickaxe, tile);
 
             // break mine containers
             if (this.Config.BreakMineContainers && tileObj is BreakableContainer container)
