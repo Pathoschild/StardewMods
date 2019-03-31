@@ -7,11 +7,10 @@
   "accessible.warp": "Смена локации",
 
   // buildable
-  // TODO
-  "buildable.name": "Buildable",
-  "buildable.buildable": "Can Build here",
-  "buildable.occupied": "Occupied",
-  "buildable.not-buildable": "Can't Build Here",
+  "buildable.name": "Покрытие: Строительство",
+  "buildable.buildable": "Возможно",
+  "buildable.occupied": "Есть преграда",
+  "buildable.not-buildable": "Не возможно",
 
   // coverage: bee houses
   "bee-houses.name": "Покрытие: Ульи",
@@ -33,11 +32,10 @@
   "sprinklers.dry-crops": "Не поливается",
 
   // crops: harvest
-  // TODO
-  "crop-harvest.name": "Crops: Ready to Harvest",
-  "crop-harvest.ready": "Ready",
-  "crop-harvest.not-ready": "Not Ready",
-  "crop-harvest.not-enough-time": "Not Enough Time",
+  "crop-harvest.name": "Покрытие: Готовность к сбору",
+  "crop-harvest.ready": "Готово",
+  "crop-harvest.not-ready": "Не готово",
+  "crop-harvest.not-enough-time": "Не хватит времени",
 
   // crops: watered
   "crop-water.name": "Покрытие: Увлажнение",
@@ -51,16 +49,14 @@
   "crop-fertilizer.speed-gro": "СкороРост",
 
   // machine processing
-  // TODO
-  "machines.name": "Machine Processing",
-  "machines.empty": "Empty",
-  "machines.processing": "Processing",
-  "machines.finished": "Finished",
+  "machines.name": "Покрытие: Состояние машин",
+  "machines.empty": "Пусто",
+  "machines.processing": "В процесе",
+  "machines.finished": "Готово",
 
   // tillable
-  // TODO
-  "tillable.name": "Tillable",
-  "tillable.tillable": "Tillable",
-  "tillable.occupied": "Occupied",
-  "tillable.not-tillable": "Not Tillable"
+  "tillable.name": "Покрытие: Вспахивание",
+  "tillable.tillable": "Возможно",
+  "tillable.occupied": "Есть преграда",
+  "tillable.not-tillable": "Не возможно"
 }
