@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to kelvindules (updated Portuguese)!
+* Improved translations. Thanks to kelvindules (updated Portuguese) and TheOzonO3 (updated Russian)!
 
 ## 1.21.1
 * Added readable debug fields for more types.
