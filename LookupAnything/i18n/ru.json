@@ -25,7 +25,7 @@
   "generic.price-for-stack": "{{price}}з. за пачку из {{count}} шт.",
 
   // types
-  "type.building": "Building", // TODO
+  "type.building": "Постройка",
   "type.fruit-tree": "Фруктовое дерево",
   "type.map-tile": "Тайл",
   "type.monster": "Монстр",
@@ -165,48 +165,46 @@
   // animal lookup values
   "animal.complaints.hungry": "Не был накормлен вчера",
   "animal.complaints.left-out": "Прошлой ночью остался снаружи",
-  "animal.complaints.new-home": "переезд в новый дом",
-  "animal.complaints.no-heater": "нет отопления зимой",
-  "animal.complaints.not-petted": "не проявлена забота сегодня",
-  "animal.complaints.wild-animal-attack": "атакован диким животным этой ночью",
+  "animal.complaints.new-home": "Переезд в новый дом",
+  "animal.complaints.no-heater": "Нет отопления зимой",
+  "animal.complaints.not-petted": "Не проявлена забота сегодня",
+  "animal.complaints.wild-animal-attack": "Атакован диким животным этой ночью",
 
   // building lookup labels
-  // TODO
-  "building.animals": "Animals",
-  "building.construction": "Construction",
-  "building.feed-trough": "Feed trough",
-  "building.horse": "Horse",
-  "building.horse-location": "Horse location",
-  "building.owner": "Owner",
-  "building.slimes": "Slimes",
-  "building.stored-hay": "Stored hay",
-  "building.upgrades": "Upgrades",
-  "building.water-trough": "Water trough",
+  "building.animals": "Животные",
+  "building.construction": "Строительство",
+  "building.feed-trough": "Кормушка",
+  "building.horse": "Лощадь",
+  "building.horse-location": "Расположение лошади",
+  "building.owner": "Владелец",
+  "building.slimes": "Слаймов",
+  "building.stored-hay": "Сена",
+  "building.upgrades": "Улучшения",
+  "building.water-trough": "Корыто",
 
   // building lookup values
-  // TODO
-  "building.animals.summary": "{{count}} of max {{max}} animals",
-  "building.construction.summary": "ready on {{date}}",
-  "building.feed-trough.automated": "automated",
-  "building.feed-trough.summary": "{{filled}} of {{max}} feed slots filled",
+  "building.animals.summary": "{{count}} из {{max}} животных внутри",
+  "building.construction.summary": "будет готово {{date}}",
+  "building.feed-trough.automated": "автоматизированно",
+  "building.feed-trough.summary": "{{filled}} из {{max}} заполненных слотов",
   "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
-  "building.junimo-harvesting-enabled": "Harvesting enabled",
-  "building.owner.none": "no owner",
-  "building.output-processing": "Output processing",
-  "building.output-ready": "Output ready",
-  "building.slimes.summary": "{{count}} of max {{max}} slimes",
-  "building.stored-hay.summary-one-silo": "{{hayCount}} hay (max capacity: {{maxHay}})",
-  "building.stored-hay.summary-multiple-silos": "{{hayCount}} hay in {{siloCount}} silos (max capacity: {{maxHay}})",
-  "building.upgrades.barn.0": "up to 4 animals, add cows",
-  "building.upgrades.barn.1": "up to 8 animals, add pregnancy and goats",
-  "building.upgrades.barn.2": "up to 12 animals, add autofeed, pigs, and sheep",
-  "building.upgrades.cabin.0": "initial cabin",
-  "building.upgrades.cabin.1": "add kitchen, enable marriage",
-  "building.upgrades.cabin.2": "enable children",
-  "building.upgrades.coop.0": "up to 4 animals; add chickens",
-  "building.upgrades.coop.1": "up to 8 animals; add incubator, dinosaurs, and ducks",
-  "building.upgrades.coop.2": "up to 12 animals; add autofeed and rabbits",
-  "building.water-trough.summary": "{{filled}} of {{max}} water troughs filled",
+  "building.junimo-harvesting-enabled": "Сбор урожая включен",
+  "building.owner.none": "нету",
+  "building.output-processing": "В очереди",
+  "building.output-ready": "Готово",
+  "building.slimes.summary": "{{count}} из {{max}}",
+  "building.stored-hay.summary-one-silo": "{{hayCount}} сена (максимум: {{maxHay}})",
+  "building.stored-hay.summary-multiple-silos": "{{hayCount}} сена в {{siloCount}} силосных башнях (максимум: {{maxHay}})",
+  "building.upgrades.barn.0": "до 4 животных; добавляться: коровы",
+  "building.upgrades.barn.1": "до 8 животных; добавляться: беременость животных и козлы",
+  "building.upgrades.barn.2": "до 12 животных; добавляться: система подачи корма, свиньи и овцы",
+  "building.upgrades.cabin.0": "начальный домик",
+  "building.upgrades.cabin.1": "добавляться: кухня, возможность провести свадьбу",
+  "building.upgrades.cabin.2": "добавляться: возможность завести ребенка",
+  "building.upgrades.coop.0": "до 4 животных; добавляться: курицы",
+  "building.upgrades.coop.1": "до 8 животных; добавляться: инкубатор, динозавры и утки",
+  "building.upgrades.coop.2": "до 12 животных; добавляться: система подачи корма and кролики",
+  "building.water-trough.summary": "{{filled}} из {{max}} корыт заполнено",
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "Жалобы",
@@ -247,9 +245,9 @@
   "item.cask-contents": "Содержит",
   "item.cask-schedule": "Старение",
 
-  "item.crabpot-bait": "Bait", // TODO
-  "item.crabpot-bait-needed": "Needs bait!", // TODO
-  "item.crabpot-bait-not-needed": "Not needed due to Luremaster profession.", // TODO
+  "item.crabpot-bait": "Наживка",
+  "item.crabpot-bait-needed": "Нужна наживка!",
+  "item.crabpot-bait-not-needed": "Не требуется в связи с профессией Мастер по наживке.",
 
   "item.fence-health": "Здоровье",
 
@@ -258,8 +256,8 @@
   "item.loves-this": "Это любят",
   "item.needed-for": "Нужно для",
   "item.number-owned": "Принадлежит",
-  "item.number-cooked": "Cooked", // TODO
-  "item.number-crafted": "Crafted", // TODO
+  "item.number-cooked": "Приготовлено",
+  "item.number-crafted": "Скрафчено",
   "item.recipes": "Рецепты",
   "item.see-also": "Также смотрите",
   "item.sells-for": "Продать за",
@@ -274,17 +272,17 @@
   "item.contents.ready": "{{name}} готов",
   "item.contents.partial": "{{name}} через {{time}}",
   "item.needed-for.community-center": "Общественный центр ({{bundles}})",
-  "item.needed-for.full-shipment": "достижения Мастер-груз (1 шт.)",
-  "item.needed-for.polyculture": "достижения Севооборот ({{count}} шт. или больше)",
-  "item.needed-for.full-collection": "достижения Полная коллекция (пожертвовать музею)",
-  "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})", // TODO
-  "item.needed-for.craft-master": "craft master achievement (make {{recipes}})", // TODO
+  "item.needed-for.full-shipment": "достижение Мастер-груз (1 шт.)",
+  "item.needed-for.polyculture": "достижение Севооборот ({{count}} шт. или больше)",
+  "item.needed-for.full-collection": "достижение Полная коллекция (пожертвовать музею)",
+  "item.needed-for.gourmet-chef": "достижение Шеф-повар  (приготовить по {{recipes}} рецептам)",
+  "item.needed-for.craft-master": "достижение Мастер (скрафтить по {{recipes}} рецептам)",
   "item.sells-to.shipping-box": "Ящик отгрузки",
   "item.fence-health.gold-clock": "не разрушается (Золотые часы)",
   "item.fence-health.summary": "{{percent}}% (сломается через {{count}} дн.)",
   "item.recipes.entry": "{{name}} ({{count}} шт.)",
   "item.number-owned.summary": "вам принадлежит {{count}} шт.",
-  "item.number-crafted.summary": "you made {{count}} of these", // TODO
+  "item.number-crafted.summary": "вы сделали {{count}} из них",
 
   // monster lookup labels
   "monster.invincible": "Неузявимый",
@@ -310,7 +308,7 @@
   "npc.gifted-this-week": "Подарки за эту нед. ",
   "npc.loves-gifts": "Любит",
   "npc.likes-gifts": "Нравится",
-  "npc.neutral-gifts": "Neutral gifts", // TODO
+  "npc.neutral-gifts": "Равнодушен",
 
   // NPC lookup values
   "npc.can-romance.married": "Вы женаты! <", // < turns into a heart
@@ -335,7 +333,7 @@
 
   // player lookup labels
   "player.farm-name": "Название фермы",
-  "player.farm-map": "Farm map", // TODO
+  "player.farm-map": "Карта фермы",
   "player.favorite-thing": "Любимая вещь",
   "player.gender": "Пол",
   "player.spouse": "Супруг(а)",
@@ -347,7 +345,7 @@
   "player.luck": "Удача",
 
   // player lookup values
-  "player.farm-map.custom": "Custom", // TODO
+  "player.farm-map.custom": "Пользовательская",
   "player.gender.male": "мужской",
   "player.gender.female": "женский",
   "player.luck.summary": "{{percent}}% к разным случайным проверкам",
