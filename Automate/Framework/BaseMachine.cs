@@ -10,6 +10,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Accessors
         *********/
+        /// <summary>A unique ID for the machine type.</summary>
+        /// <remarks>This value should be identical for two machines if they have the exact same behavior and input logic. For example, if one machine in a group can't process input due to missing items, Automate will skip any other empty machines of that type in the same group since it assumes they need the same inputs.</remarks>
+        public string MachineTypeID { get; protected set; }
+
         /// <summary>The location which contains the machine.</summary>
         public GameLocation Location { get; }
 
@@ -40,6 +44,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="tileArea">The tile area covered by the machine.</param>
         protected BaseMachine(GameLocation location, in Rectangle tileArea)
         {
+            this.MachineTypeID = this.GetType().FullName;
             this.Location = location;
             this.TileArea = tileArea;
         }

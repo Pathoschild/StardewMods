@@ -2,7 +2,9 @@
 
 # Release notes
 ## Upcoming release
+* Significantly improved performance in some cases.
 * Added support for blocking input or output for a chest (thanks to kice!).
+* Machines can now output and input in the same automation cycle.
 * Fixed compatibility with Auto-Grabber Mod and Better Junimos. If they're installed, seeds in auto-grabbers (Auto-Grabber Mod) or Junimo huts (Better Junimos) will be ignored.
 * Fixed "don't use this chest for automation" option not taking effect immediately.
 

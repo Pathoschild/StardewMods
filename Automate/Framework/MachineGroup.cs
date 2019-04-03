@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley;
 
@@ -48,19 +50,41 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Automate the machines inside the group.</summary>
         public void Automate()
         {
+            // get machines ready for input/output
+            IList<IMachine> outputReady = new List<IMachine>();
+            IList<IMachine> inputReady = new List<IMachine>();
             foreach (IMachine machine in this.Machines)
             {
-                MachineState state = machine.GetState();
-                switch (state)
+                switch (machine.GetState())
                 {
-                    case MachineState.Empty:
-                        machine.SetInput(this.StorageManager);
+                    case MachineState.Done:
+                        outputReady.Add(machine);
                         break;
 
-                    case MachineState.Done:
-                        this.StorageManager.TryPush(machine.GetOutput());
+                    case MachineState.Empty:
+                        inputReady.Add(machine);
                         break;
                 }
+            }
+            if (!outputReady.Any() && !inputReady.Any())
+                return;
+
+            // process output
+            foreach (IMachine machine in outputReady)
+            {
+                if (this.StorageManager.TryPush(machine.GetOutput()) && machine.GetState() == MachineState.Empty)
+                    inputReady.Add(machine);
+            }
+
+            // process input
+            HashSet<string> ignoreMachines = new HashSet<string>();
+            foreach (IMachine machine in inputReady)
+            {
+                if (ignoreMachines.Contains(machine.MachineTypeID))
+                    continue;
+
+                if (!machine.SetInput(this.StorageManager))
+                    ignoreMachines.Add(machine.MachineTypeID); // if the machine can't process available input, no need to ask every instance of its type
             }
         }
     }
