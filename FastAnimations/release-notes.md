@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.7
+* Added support for tools and weapons.
+
 ## 1.6.2
 * Updated for the upcoming SMAPI 3.0.
 

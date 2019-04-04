@@ -24,6 +24,12 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /// <summary>The speed multiplier for shearing.</summary>
         public int ShearSpeed { get; set; } = 5;
 
+        /// <summary>The speed multiplier for using tools.</summary>
+        public int ToolSwingSpeed { get; set; } = 1;
+
+        /// <summary>The speed multiplier for using weapons.</summary>
+        public int WeaponSwingSpeed { get; set; } = 1;
+
         /****
         ** World animations
         ****/
