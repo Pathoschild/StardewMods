@@ -7,6 +7,8 @@ using ContentPatcher.Framework;
 using ContentPatcher.Framework.Commands;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Lexing;
+using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Migrations;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
@@ -561,15 +563,18 @@ namespace ContentPatcher
             }
 
             // parse conditions
+            Lexer lexer = new Lexer();
             foreach (KeyValuePair<string, string> pair in raw)
             {
                 // parse condition key
-                if (!TokenName.TryParse(pair.Key, out TokenName name))
+                ILexToken[] lexTokens = lexer.ParseBits(pair.Key, impliedBraces: true).ToArray();
+                if (lexTokens.Length != 1 || !(lexTokens[0] is LexTokenToken lexToken) || lexToken.PipedTokens.Any())
                 {
                     error = $"'{pair.Key}' isn't a valid token name";
                     conditions = null;
                     return false;
                 }
+                TokenName name = new TokenName(lexToken.Name, lexToken.InputArg?.Text);
 
                 // apply migrations
                 if (!migrator.TryMigrate(ref name, out error))

@@ -66,6 +66,15 @@
     <Compile Include="Framework\Constants\WalletItem.cs" />
     <Compile Include="Framework\Constants\Profession.cs" />
     <Compile Include="Framework\DebugOverlay.cs" />
+    <Compile Include="Framework\Lexing\LexTokens\LexBit.cs" />
+    <Compile Include="Framework\Lexing\LexTokens\LexBitType.cs" />
+    <Compile Include="Framework\Lexing\Lexer.cs" />
+    <Compile Include="Framework\Lexing\LexTokens\LexTokenInputArg.cs" />
+    <Compile Include="Framework\Lexing\LexTokens\LexTokenLiteral.cs" />
+    <Compile Include="Framework\Lexing\LexTokens\ILexToken.cs" />
+    <Compile Include="Framework\Lexing\LexTokens\LexTokenPipe.cs" />
+    <Compile Include="Framework\Lexing\LexTokens\LexTokenToken.cs" />
+    <Compile Include="Framework\Lexing\LexTokens\LexTokenType.cs" />
     <Compile Include="Framework\Migrations\AggregateMigration.cs" />
     <Compile Include="Framework\Migrations\BaseMigration.cs" />
     <Compile Include="Framework\Migrations\IMigration.cs" />

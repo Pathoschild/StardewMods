@@ -87,7 +87,7 @@ namespace ContentPatcher.Framework.Tokens
             if (this.CanHaveSubkeys)
             {
                 InvariantHashSet validKeys = this.GetAllowedSubkeys();
-                if (validKeys != null)
+                if (validKeys?.Any() == true)
                 {
                     string[] invalidSubkeys =
                         (

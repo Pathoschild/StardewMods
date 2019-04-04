@@ -69,7 +69,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (this.AllowsInput)
             {
                 InvariantHashSet validInputs = this.GetValidInputs();
-                if (validInputs != null)
+                if (validInputs?.Any() == true)
                 {
                     string[] invalidInputs =
                         (
