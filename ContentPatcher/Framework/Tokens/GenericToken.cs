@@ -26,16 +26,16 @@ namespace ContentPatcher.Framework.Tokens
         public TokenName Name { get; }
 
         /// <summary>Whether the value can change after it's initialised.</summary>
-        public bool IsMutable { get; protected set; } = true;
+        public bool IsMutable => this.Values.IsMutable;
 
         /// <summary>Whether this token recognises subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with a <c>Abigail</c> subkey).</summary>
-        public bool CanHaveSubkeys { get; }
+        public bool CanHaveSubkeys => this.Values.AllowsInput;
 
         /// <summary>Whether this token only allows subkeys (see <see cref="IToken.CanHaveSubkeys"/>).</summary>
-        public bool RequiresSubkeys { get; }
+        public bool RequiresSubkeys => this.Values.RequiresInput;
 
         /// <summary>Whether the token is applicable in the current context.</summary>
-        public bool IsValidInContext { get; protected set; }
+        public bool IsValidInContext => this.Values.IsValidInContext;
 
 
         /*********
@@ -48,10 +48,7 @@ namespace ContentPatcher.Framework.Tokens
             this.Values = provider;
 
             this.Name = TokenName.Parse(provider.Name);
-            this.CanHaveSubkeys = provider.AllowsInput;
-            this.RequiresSubkeys = provider.RequiresInput;
             this.CanHaveMultipleRootValues = provider.CanHaveMultipleValues();
-            this.IsValidInContext = provider.IsValidInContext;
         }
 
         /// <summary>Update the token data when the context changes.</summary>
@@ -60,10 +57,7 @@ namespace ContentPatcher.Framework.Tokens
         public virtual void UpdateContext(IContext context)
         {
             if (this.Values.IsMutable)
-            {
                 this.Values.UpdateContext(context);
-                this.IsValidInContext = this.Values.IsValidInContext;
-            }
         }
 
         /// <summary>Whether the token may return multiple values for the given name.</summary>

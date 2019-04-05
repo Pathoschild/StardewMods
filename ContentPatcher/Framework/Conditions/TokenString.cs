@@ -71,21 +71,32 @@ namespace ContentPatcher.Framework.Conditions
 
             // extract tokens
             this.LexTokens = new Lexer().ParseBits(raw, impliedBraces: false).ToArray();
-            foreach (LexTokenToken token in this.LexTokens.OfType<LexTokenToken>())
+            bool isMutable = false;
+            foreach (LexTokenToken lexToken in this.LexTokens.OfType<LexTokenToken>())
             {
-                TokenName name = new TokenName(token.Name, token.InputArg?.Text);
-                if (tokenContext.Contains(name, enforceContext: false))
+                TokenName name = new TokenName(lexToken.Name, lexToken.InputArg?.Text);
+                IToken token = tokenContext.GetToken(name, enforceContext: false);
+                if (token != null)
+                {
                     this.Tokens.Add(name);
+                    isMutable = isMutable || token.IsMutable;
+                }
                 else
-                    this.InvalidTokens.Add(token.Text);
+                    this.InvalidTokens.Add(lexToken.Text);
             }
 
             // set metadata
-            this.IsMutable = this.Tokens.Any();
-            if (!this.IsMutable)
+            this.IsMutable = isMutable;
+            if (!isMutable)
             {
-                this.ValueImpl = this.Raw;
-                this.IsReadyImpl = !this.InvalidTokens.Any();
+                if (this.InvalidTokens.Any())
+                    this.IsReadyImpl = false;
+                else
+                {
+                    this.GetApplied(tokenContext, out string finalStr, out bool isReady);
+                    this.ValueImpl = finalStr;
+                    this.IsReadyImpl = isReady;
+                }
             }
             this.IsSingleTokenOnly = this.LexTokens.Length == 1 && this.LexTokens.First().Type == LexTokenType.Token;
         }

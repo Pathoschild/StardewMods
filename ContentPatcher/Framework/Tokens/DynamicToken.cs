@@ -44,7 +44,6 @@ namespace ContentPatcher.Framework.Tokens
         public void SetValidInContext(bool validInContext)
         {
             this.DynamicValues.SetValidInContext(validInContext);
-            this.IsValidInContext = this.DynamicValues.IsValidInContext;
         }
     }
 }
