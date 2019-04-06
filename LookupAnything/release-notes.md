@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed debug fields that only differ by name capitalisation not being merged correctly.
 * Improved translations. Thanks to binxhlin (updated Chinese), kelvindules (updated Portuguese), and TheOzonO3 (updated Russian)!
 
 ## 1.21.1

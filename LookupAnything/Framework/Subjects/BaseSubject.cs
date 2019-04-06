@@ -115,7 +115,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     .OrderBy(field => field.Name, StringComparer.InvariantCultureIgnoreCase);
 
                 // yield valid values
-                IDictionary<string, string> seenValues = new Dictionary<string, string>(StringComparer.InvariantCulture);
+                IDictionary<string, string> seenValues = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
                 foreach (var field in fields)
                 {
                     if (seenValues.TryGetValue(field.Name, out string value) && value == field.Value)
@@ -123,6 +123,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     if (field.Value == field.Type.ToString())
                         continue; // can't be displayed
 
+                    seenValues[field.Name] = field.Value;
                     yield return new GenericDebugField($"{type.Name}::{field.Name}", field.Value);
                 }
             }
