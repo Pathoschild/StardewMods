@@ -25,7 +25,7 @@
   // coverage: scarecrows
   "scarecrows.name": "覆盖范围：稻草人",
   "scarecrows.protected": "受保护",
-  "scarecrows.exposed": "未收保护",
+  "scarecrows.exposed": "未受保护",
 
   // coverage: sprinklers
   "sprinklers.name": "覆盖范围：洒水器",
@@ -33,11 +33,10 @@
   "sprinklers.dry-crops": "作物干燥",
 
   // crops: harvest
-  // TODO
-  "crop-harvest.name": "Crops: Ready to Harvest",
-  "crop-harvest.ready": "Ready",
-  "crop-harvest.not-ready": "Not Ready",
-  "crop-harvest.not-enough-time": "Not Enough Time",
+  "crop-harvest.name": "作物：收获",
+  "crop-harvest.ready": "可收获",
+  "crop-harvest.not-ready": "不可收获",
+  "crop-harvest.not-enough-time": "时间不足",
 
   // crops: watered
   "crop-water.name": "作物：浇水",
@@ -51,11 +50,10 @@
   "crop-fertilizer.speed-gro": "生长激素",
 
   // machine processing
-  // TODO
-  "machines.name": "Machine Processing",
-  "machines.empty": "Empty",
-  "machines.processing": "Processing",
-  "machines.finished": "Finished",
+  "machines.name": "机器运转",
+  "machines.empty": "空的",
+  "machines.processing": "运转中",
+  "machines.finished": "已完成",
 
   // tillable
   // TODO
