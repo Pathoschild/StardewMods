@@ -58,6 +58,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="manifest.json" />
+    <None Include="README.md" />
+    <None Include="release-notes.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\[CP] SmallBeachFarm\assets\fall_beach_plus.png">
