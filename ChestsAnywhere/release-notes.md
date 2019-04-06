@@ -1,9 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Added Automate options to block input or output for a chest.
+## 1.16
 * Added owner's name to cabin categories.
+* Added Automate options to block input/output for a chest.
 * Separated categories for locations with the same name.
 * Improved translations. Thanks to kelvindules (updated Portuguese), kice (updated Chinese), and TheOzonO3 (updated Russian)!
 

@@ -1,8 +1,8 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Added support for swinging tools and weapons (thanks to sish101!).
+## 1.7
+* Added support for tool/weapon swing animations (thanks to sish101!).
 
 ## 1.6.2
 * Updated for the upcoming SMAPI 3.0.

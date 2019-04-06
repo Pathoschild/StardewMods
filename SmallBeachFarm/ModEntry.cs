@@ -45,7 +45,7 @@ namespace SmallBeachFarm
         /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
         {
-            if (e.IsLocalPlayer && e.IsLocalPlayer && e.NewLocation.Name == "Farm" && Game1.player.getTileLocation().Y > 29)
+            if (e.IsLocalPlayer && e.NewLocation.Name == "Farm" && Game1.player.getTileLocation().Y > 29)
                 Game1.player.Position = new Vector2(79, 21) * Game1.tileSize;
         }
     }

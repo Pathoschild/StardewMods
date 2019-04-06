@@ -1,7 +1,7 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.9.4
 * Improved translations. Thanks to TheOzonO3 (updated Russian)!
 
 ## 1.9.3

@@ -10,7 +10,7 @@ riverlands farm with a fertile pocket beach, suitable for slower or challenge ru
 2. Install [this mod from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/3750).
 3. Run the game using SMAPI.
 
-**Content Patcher version** (won't work with other packs that change the Cindersnap forest):
+**Content Patcher version** (won't work with other content packs that replace Cindersnap Forest):
 1. [Install the latest version of SMAPI](https://smapi.io/).
 2. [Install Content Patcher](https://www.nexusmods.com/stardewvalley/mods/1915).
 3. Unzip the file download [from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/3750) somewhere (not in your `Mods` folder!).
