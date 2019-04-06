@@ -29,8 +29,8 @@ normal speed or `2` for double speed).
   `FishingSpeed`       | 1×      | How fast you cast and reel when fishing (doesn't affect the minigame).<br /><small>(Suggested value: 2×.)</small>
   `MilkSpeed`          | 5×      | How fast you use the milk pail.
   `ShearSpeed`         | 5×      | How fast you use the shears.
-  `ToolSwingSpeed`     | 1×      | How fast you swing your tools (excludes weapons & the fishing rod).<br /><small>(This could be considered cheating as it can make hoeing/chopping trees/breaking rocks much quicker)</small>
-  `WeaponSwingSpeed`   | 1×      | How fast you swing your weapons.<br /><small>(This could be considered cheating as it can make fighting much easier)</small>
+  `ToolSwingSpeed`     | 1×      | How fast you swing your tools (except weapons & fishing rod).<br /><small>(Suggested value: 2×.)</small>
+  `WeaponSwingSpeed`   | 1×      | How fast you swing your weapons.<br /><small>(Suggested value: 4×.)</small>
 
   World animations:
 

@@ -19,20 +19,20 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override bool IsEnabled(int playerAnimationID)
         {
-            return Game1.player.UsingTool && !(Game1.player.CurrentTool is FishingRod) && !(Game1.player.CurrentTool is MeleeWeapon);
+            return
+                Game1.player.UsingTool
+                && Game1.player.CurrentTool is Tool tool
+                && (
+                    tool.ParentSheetIndex == MeleeWeapon.scythe
+                    || !(tool is FishingRod || tool is MeleeWeapon)
+                );
         }
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override void Update(int playerAnimationID)
         {
-            GameLocation location = Game1.player.currentLocation;
-
-            for (int i = 1; i < this.Multiplier; i++)
-                if (Game1.player.UsingTool)
-                    Game1.player.Update(Game1.currentGameTime, location);
-                else
-                    break;
+            this.SpeedUpPlayer(this.Multiplier, isActive: () => Game1.player.UsingTool);
         }
     }
 }
