@@ -7,8 +7,8 @@
   "default-name.shipping-bin": "出货箱",
 
   // default category names
-  "default-category.owned-cabin": "Cabin ({{owner}})", // TODO
-  "default-category.unowned-cabin": "Cabin (empty)", // TODO
+  "default-category.owned-cabin": "小屋({{owner}})",
+  "default-category.unowned-cabin": "小屋(空的)",
   "default-category.duplicate": "{{locationName}} #{{number}}",
 
   // edit-chest labels

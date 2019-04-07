@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to binxhlin (updated Chinese)!
+
 ## 1.16
 Released 06 April 2019.
 
