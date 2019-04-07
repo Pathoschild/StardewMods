@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to YSRyeol (updated Korean)!
+
 ## 1.6.1
 * Improved translations. Thanks to binxhlin (updated Chinese)!
 
