@@ -1,7 +1,7 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.7.1
 * Fixed weapon speed option being applied to scythe.
 
 ## 1.7

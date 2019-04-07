@@ -1,5 +1,5 @@
 # Release notes
-## Upcoming release
+## 1.6.1
 * Improved translations. Thanks to binxhlin (updated Chinese)!
 
 ## 1.6

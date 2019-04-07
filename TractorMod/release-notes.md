@@ -1,5 +1,5 @@
 # Release notes
-## Upcoming release
+## 4.8.2
 * Fixed scythe no longer harvesting in 4.8.1.
 
 ## 4.8.1
