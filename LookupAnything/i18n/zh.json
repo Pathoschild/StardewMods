@@ -345,7 +345,7 @@
   "player.luck": "运气",
 
   // player lookup values
-  "player.farm-map.custom": "传统",
+  "player.farm-map.custom": "自定义",
   "player.gender.male": "男",
   "player.gender.female": "女",
   "player.luck.summary": "{{percent}}%随机事件概率",
