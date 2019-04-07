@@ -45,6 +45,9 @@ Active mods:
   _Skip straight to the title screen or load screen (configurable) when you start the game. It also
   skips the screen transitions, so starting the game is much faster._
 
+* **[Small Beach Farm](http://www.nexusmods.com/stardewvalley/mods/3750)** <small>([source](SmallBeachFarm))</small>  
+  _Replaces the riverlands farm with a fertile pocket beach, suitable for slower or challenge runs._
+
 * **[Tractor Mod](http://www.nexusmods.com/stardewvalley/mods/1401)** <small>([source](TractorMod))</small>  
   _Lets you buy a tractor to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc._
 
