@@ -20,8 +20,8 @@
   "label.hide-chest": "상자 숨기기",
   "label.hide-chest-hidden": "이 상자를 숨깁니다 (당신은 상자 찾기를 사용해야만 이를 되돌릴 수 있습니다!)",
   "label.automate-prefer-output": "(자동화) 아이템들을 이 상자에 우선적으로 넣습니다.",
-  "label.automate-no-input": "(자동화) Don't put items in this chest", // TODO
-  "label.automate-no-output": "(자동화) Don't get items from this chest", // TODO
+  "label.automate-no-input": "(자동화) 이 상자에 아이템을 넣지 않습니다.",
+  "label.automate-no-output": "(자동화) 이 상자에서 아이템을 꺼내지 않습니다.",
   "label.automate-ignore": "(자동화) 이 상자를 자동화시키지 않습니다",
 
   // button labels
