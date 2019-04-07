@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed weapon speed option being applied to scythe.
+
 ## 1.7
 * Added support for tool/weapon swing animations (thanks to sish101!).
 

@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
         {
-            return tool is MeleeWeapon && tool.ParentSheetIndex != MeleeWeapon.scythe;
+            return tool is MeleeWeapon && tool.InitialParentTileIndex != MeleeWeapon.scythe;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>

@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Fixed scythe no longer harvesting in 4.8.1.
+
 ## 4.8.1
 * Fixed chests being treated as weeds in some cases.
 * Fixed scythe and some melee weapons not clearing dead crops if enabled.
