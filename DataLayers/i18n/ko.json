@@ -7,11 +7,10 @@
   "accessible.warp": "순간이동",
 
   // buildable
-  // TODO
-  "buildable.name": "Buildable",
-  "buildable.buildable": "Can Build here",
-  "buildable.occupied": "Occupied",
-  "buildable.not-buildable": "Can't Build Here",
+  "buildable.name": "건설가능 여부",
+  "buildable.buildable": "건설 가능",
+  "buildable.occupied": "공간 차지중",
+  "buildable.not-buildable": "건설 불가능",
 
   // coverage: bee houses
   "bee-houses.name": "적용범위: 양봉장",
@@ -56,9 +55,8 @@
   "machines.finished": "완료됨",
 
   // tillable
-  // TODO
-  "tillable.name": "Tillable",
-  "tillable.tillable": "Tillable",
-  "tillable.occupied": "Occupied",
-  "tillable.not-tillable": "Not Tillable"
+  "tillable.name": "경작 가능 여부",
+  "tillable.tillable": "경작 가능",
+  "tillable.occupied": "공간 차지중",
+  "tillable.not-tillable": "경작 불가능"
 }
