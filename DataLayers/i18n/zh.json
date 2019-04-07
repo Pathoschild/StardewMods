@@ -7,11 +7,10 @@
   "accessible.warp": "传送点",
 
   // buildable
-  // TODO
-  "buildable.name": "Buildable",
-  "buildable.buildable": "Can Build here",
-  "buildable.occupied": "Occupied",
-  "buildable.not-buildable": "Can't Build Here",
+  "buildable.name": "能否兴建建筑",
+  "buildable.buildable": "可兴建在这",
+  "buildable.occupied": "被占用",
+  "buildable.not-buildable": "不可兴建在这",
 
   // coverage: bee houses
   "bee-houses.name": "覆盖范围：蜂房",
@@ -56,9 +55,8 @@
   "machines.finished": "已完成",
 
   // tillable
-  // TODO
-  "tillable.name": "Tillable",
-  "tillable.tillable": "Tillable",
-  "tillable.occupied": "Occupied",
-  "tillable.not-tillable": "Not Tillable"
+  "tillable.name": "能否耕地",
+  "tillable.tillable": "可耕地",
+  "tillable.occupied": "被占用",
+  "tillable.not-tillable": "不可耕地"
 }
