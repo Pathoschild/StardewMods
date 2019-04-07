@@ -47,7 +47,7 @@
     <Compile Include="Layers\Coverage\ScarecrowLayer.cs" />
     <Compile Include="Layers\Crops\CropWaterLayer.cs" />
     <Compile Include="Layers\Coverage\SprinklerLayer.cs" />
-    <Compile Include="Layers\AccessibilityLayer.cs" />
+    <Compile Include="Layers\AccessibleLayer.cs" />
     <Compile Include="Framework\DataLayerOverlay.cs" />
     <Compile Include="Framework\ILayer.cs" />
     <Compile Include="Framework\ModIntegrations.cs" />
@@ -58,6 +58,8 @@
     <Compile Include="Framework\TileDrawData.cs" />
     <Compile Include="Framework\TileEdge.cs" />
     <Compile Include="Framework\TileGroup.cs" />
+    <Compile Include="Layers\BuildableLayer.cs" />
+    <Compile Include="Layers\TillableLayer.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -74,12 +76,6 @@
     <None Include="manifest.json" />
     <None Include="README.md" />
     <None Include="release-notes.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="docs\screenshots\accessibility.png" />
-    <Content Include="docs\screenshots\junimo-huts.png" />
-    <Content Include="docs\screenshots\scarecrows.png" />
-    <Content Include="docs\screenshots\sprinklers.png" />
   </ItemGroup>
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

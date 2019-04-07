@@ -53,16 +53,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         }
 
         /// <summary>The unique chest categories.</summary>
-        private readonly string[] Groups;
+        private readonly string[] Categories;
 
-        /// <summary>The name of the selected group.</summary>
-        private string SelectedGroup => this.Chest.GetGroup();
+        /// <summary>The name of the selected category.</summary>
+        private string SelectedCategory => this.Chest.DisplayCategory;
 
         /// <summary>The mod configuration.</summary>
         private readonly ModConfig Config;
 
-        /// <summary>Whether to show the group tab.</summary>
-        private bool ShowGroupTab => this.Groups.Length > 1;
+        /// <summary>Whether to show the category dropdown.</summary>
+        private bool ShowCategoryDropdown => this.Categories.Length > 1;
 
         /****
         ** Menu management
@@ -91,14 +91,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The chest selector tab.</summary>
         private Tab ChestTab;
 
-        /// <summary>The group selector tab.</summary>
-        private Tab GroupTab;
+        /// <summary>The category selector tab.</summary>
+        private Tab CategoryTab;
 
         /// <summary>The chest selector dropdown.</summary>
         private DropList<ManagedChest> ChestSelector;
 
-        /// <summary>The group selector dropdown.</summary>
-        private DropList<string> GroupSelector;
+        /// <summary>The category selector dropdown.</summary>
+        private DropList<string> CategorySelector;
 
         /// <summary>The edit button.</summary>
         private ClickableTextureComponent EditButton;
@@ -123,6 +123,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
         /// <summary>A checkbox which indicates whether Automate should should put output in this chest first.</summary>
         private Checkbox EditAutomateOutput;
+
+        /// <summary>A checkbox which indicates whether Automate should allow getting items form this chest.</summary>
+        private Checkbox EditAutomateNoInput;
+
+        /// <summary>A checkbox which indicates whether Automate should allow sending items to this chest.</summary>
+        private Checkbox EditAutomateNoOutput;
 
         /// <summary>A checkbox which indicates whether Automate should ignore this chest.</summary>
         private Checkbox EditAutomateIgnore;
@@ -177,7 +183,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             // chests & config
             this.Chest = chest;
             this.Chests = chests;
-            this.Groups = chests.Select(p => p.GetGroup()).Distinct().OrderBy(p => p).ToArray();
+            this.Categories = chests.Select(p => p.DisplayCategory).Distinct().OrderBy(p => p).ToArray();
             this.Config = config;
 
             // components
@@ -223,13 +229,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
                 // tabs
                 this.ChestTab.Draw(batch, navOpacity);
-                this.GroupTab?.Draw(batch, navOpacity);
+                this.CategoryTab?.Draw(batch, navOpacity);
 
                 // tab dropdowns
                 if (this.ActiveElement == Element.ChestList)
                     this.ChestSelector.Draw(batch, navOpacity);
-                if (this.ActiveElement == Element.GroupList)
-                    this.GroupSelector.Draw(batch, navOpacity);
+                if (this.ActiveElement == Element.CategoryList)
+                    this.CategorySelector.Draw(batch, navOpacity);
 
                 // edit button
                 if (this.Chest.CanEdit)
@@ -292,6 +298,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 if (this.ShowAutomateOptions)
                 {
                     topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateOutput, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-prefer-output").Y;
+                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateNoInput, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-no-input").Y;
+                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateNoOutput, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-no-output").Y;
                     topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateIgnore, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-ignore").Y;
                 }
 
@@ -316,7 +324,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         protected override void ReceiveGameWindowResized(xTile.Dimensions.Rectangle oldBounds, xTile.Dimensions.Rectangle newBounds)
         {
             this.ChestSelector.ReceiveGameWindowResized();
-            this.GroupSelector?.ReceiveGameWindowResized();
+            this.CategorySelector?.ReceiveGameWindowResized();
             this.ReinitialiseComponents();
         }
 
@@ -355,7 +363,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     return true;
 
                 case Element.ChestList:
-                case Element.GroupList:
+                case Element.CategoryList:
                 case Element.EditForm:
                     if (input == SButton.Escape || input == SButton.ControllerB)
                         this.ActiveElement = Element.Menu;
@@ -398,8 +406,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     this.ChestSelector.ReceiveScrollWheelAction(amount);
                     return true;
 
-                case Element.GroupList:
-                    this.GroupSelector?.ReceiveScrollWheelAction(amount);
+                case Element.CategoryList:
+                    this.CategorySelector?.ReceiveScrollWheelAction(amount);
                     return true;
 
                 case Element.EditForm:
@@ -437,6 +445,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         this.EditHideChestField.Toggle();
                     else if (this.EditAutomateOutput.GetBounds().Contains(x, y))
                         this.EditAutomateOutput.Toggle();
+                    else if (this.EditAutomateNoInput.GetBounds().Contains(x, y))
+                        this.EditAutomateNoInput.Toggle();
+                    else if (this.EditAutomateNoOutput.GetBounds().Contains(x, y))
+                        this.EditAutomateNoOutput.Toggle();
                     else if (this.EditAutomateIgnore.GetBounds().Contains(x, y))
                         this.EditAutomateIgnore.Toggle();
 
@@ -474,18 +486,18 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     }
                     return true; // handle all clicks while open
 
-                // group list
-                case Element.GroupList:
+                // category list
+                case Element.CategoryList:
                     // close dropdown
                     this.ActiveElement = Element.Menu;
 
-                    // select group
-                    if (this.GroupSelector.containsPoint(x, y))
+                    // select category
+                    if (this.CategorySelector.containsPoint(x, y))
                     {
-                        string group = this.GroupSelector.Select(x, y);
-                        if (group != null && group != this.SelectedGroup)
+                        string category = this.CategorySelector.Select(x, y);
+                        if (category != null && category != this.SelectedCategory)
                         {
-                            this.SelectChest(this.Chests.First(chest => chest.GetGroup() == group));
+                            this.SelectChest(this.Chests.First(chest => chest.DisplayCategory == category));
                             this.ReinitialiseComponents();
                         }
                     }
@@ -502,8 +514,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         this.SortInventory();
                     else if (this.ChestTab.containsPoint(x, y) && canNavigate)
                         this.ActiveElement = Element.ChestList;
-                    else if (this.GroupTab?.containsPoint(x, y) == true && canNavigate)
-                        this.ActiveElement = Element.GroupList;
+                    else if (this.CategoryTab?.containsPoint(x, y) == true && canNavigate)
+                        this.ActiveElement = Element.CategoryList;
                     else
                         return false;
                     return true;
@@ -528,7 +540,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     return true;
 
                 case Element.ChestList:
-                case Element.GroupList:
+                case Element.CategoryList:
                     return true; // suppress menu hover
 
                 default:
@@ -545,15 +557,15 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         {
             Rectangle bounds = new Rectangle(this.Menu.xPositionOnScreen, this.Menu.yPositionOnScreen, this.Menu.width, this.Menu.height);
 
-            // group dropdown
-            if (this.ShowGroupTab)
+            // category dropdown
+            if (this.ShowCategoryDropdown)
             {
                 // tab
-                Vector2 tabSize = Tab.GetTabSize(this.Font, this.SelectedGroup);
-                this.GroupTab = new Tab(this.SelectedGroup, bounds.Right - (int)tabSize.X - Game1.tileSize, bounds.Y - Game1.pixelZoom * 25, true, this.Font);
+                Vector2 tabSize = Tab.GetTabSize(this.Font, this.SelectedCategory);
+                this.CategoryTab = new Tab(this.SelectedCategory, bounds.Right - (int)tabSize.X - Game1.tileSize, bounds.Y - Game1.pixelZoom * 25, true, this.Font);
 
                 // dropdown
-                this.GroupSelector = new DropList<string>(this.SelectedGroup, this.Groups, group => group, this.GroupTab.bounds.Right, this.GroupTab.bounds.Bottom, false, this.Font);
+                this.CategorySelector = new DropList<string>(this.SelectedCategory, this.Categories, category => category, this.CategoryTab.bounds.Right, this.CategoryTab.bounds.Bottom, false, this.Font);
             }
 
             // chest dropdown
@@ -562,7 +574,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 this.ChestTab = new Tab(this.Chest.DisplayName, bounds.X, bounds.Y - Game1.pixelZoom * 25, true, this.Font);
 
                 // dropdown
-                ManagedChest[] chests = this.Chests.Where(chest => !this.ShowGroupTab || chest.GetGroup() == this.SelectedGroup).ToArray();
+                ManagedChest[] chests = this.Chests.Where(chest => !this.ShowCategoryDropdown || chest.DisplayCategory == this.SelectedCategory).ToArray();
                 this.ChestSelector = new DropList<ManagedChest>(this.Chest, chests, chest => chest.DisplayName, this.ChestTab.bounds.X, this.ChestTab.bounds.Bottom, true, this.Font);
             }
 
@@ -593,6 +605,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X };
             this.EditHideChestField = new Checkbox();
             this.EditAutomateOutput = new Checkbox();
+            this.EditAutomateNoInput = new Checkbox();
+            this.EditAutomateNoOutput = new Checkbox();
             this.EditAutomateIgnore = new Checkbox();
             this.FillForm();
 
@@ -613,6 +627,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditOrderField.Text = this.Chest.Order?.ToString();
             this.EditHideChestField.Value = this.Chest.IsIgnored;
             this.EditAutomateOutput.Value = this.Chest.ShouldAutomatePreferForOutput;
+            this.EditAutomateNoInput.Value = this.Chest.ShouldAutomateNoInput;
+            this.EditAutomateNoOutput.Value = this.Chest.ShouldAutomateNoOutput;
             this.EditAutomateIgnore.Value = this.Chest.ShouldAutomateIgnore;
         }
 
@@ -640,7 +656,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 order: order,
                 ignored: this.EditHideChestField.Value,
                 shouldAutomateIgnore: this.EditAutomateIgnore.Value,
-                shouldAutomatePreferForOutput: this.EditAutomateOutput.Value
+                shouldAutomatePreferForOutput: this.EditAutomateOutput.Value,
+                shouldAutomateNoInput: this.EditAutomateNoInput.Value,
+                shouldAutomateNoOutput: this.EditAutomateNoOutput.Value
             );
             this.OnChestSelected?.Invoke(this.Chest);
         }
@@ -652,7 +670,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.Menu.exitThisMenu();
         }
 
-        /// <summary>Get the index of a chest in the selected group.</summary>
+        /// <summary>Get the index of a chest in the selected category.</summary>
         /// <param name="chest">The chest to find.</param>
         /// <param name="chests">The chests to search.</param>
         private int GetChestIndex(ManagedChest chest, IEnumerable<ManagedChest> chests)
@@ -670,7 +688,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>Switch to the previous chest in the list.</summary>
         private void SelectPreviousChest()
         {
-            ManagedChest[] chests = this.GetChestsFromCategory(this.SelectedGroup);
+            ManagedChest[] chests = this.GetChestsFromCategory(this.SelectedCategory);
             int curIndex = this.GetChestIndex(this.Chest, chests);
             this.SelectChest(chests[curIndex != 0 ? curIndex - 1 : chests.Length - 1]);
         }
@@ -678,7 +696,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>Switch to the next chest in the list.</summary>
         private void SelectNextChest()
         {
-            ManagedChest[] chests = this.GetChestsFromCategory(this.SelectedGroup);
+            ManagedChest[] chests = this.GetChestsFromCategory(this.SelectedCategory);
             int curIndex = this.GetChestIndex(this.Chest, chests);
             this.SelectChest(chests[(curIndex + 1) % chests.Length]);
         }
@@ -686,27 +704,29 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>Switch to the previous category.</summary>
         private void SelectPreviousCategory()
         {
-            int curIndex = Array.IndexOf(this.Groups, this.SelectedGroup);
-            string group = this.Groups[curIndex != 0 ? curIndex - 1 : this.Groups.Length - 1];
-            this.SelectChest(this.Chests.First(chest => chest.GetGroup() == group));
+            int curIndex = Array.IndexOf(this.Categories, this.SelectedCategory);
+            string category = this.Categories[curIndex != 0 ? curIndex - 1 : this.Categories.Length - 1];
+            this.SelectChest(this.Chests.First(chest => chest.DisplayCategory == category));
         }
 
         /// <summary>Switch to the next category.</summary>
         private void SelectNextCategory()
         {
-            int curIndex = Array.IndexOf(this.Groups, this.SelectedGroup);
-            string group = this.Groups[(curIndex + 1) % this.Groups.Length];
-            this.SelectChest(this.Chests.First(chest => chest.GetGroup() == group));
+            int curIndex = Array.IndexOf(this.Categories, this.SelectedCategory);
+            string category = this.Categories[(curIndex + 1) % this.Categories.Length];
+            this.SelectChest(this.Chests.First(chest => chest.DisplayCategory == category));
         }
 
         /// <summary>Reset and display the edit screen.</summary>
         private void OpenEdit()
         {
             this.EditNameField.Text = this.Chest.DisplayName;
-            this.EditCategoryField.Text = this.Chest.GetGroup();
+            this.EditCategoryField.Text = this.Chest.DisplayCategory;
             this.EditOrderField.Text = this.Chest.Order?.ToString();
             this.EditHideChestField.Value = this.Chest.IsIgnored;
             this.EditAutomateOutput.Value = this.Chest.ShouldAutomatePreferForOutput;
+            this.EditAutomateNoInput.Value = this.Chest.ShouldAutomateNoInput;
+            this.EditAutomateNoOutput.Value = this.Chest.ShouldAutomateNoOutput;
             this.EditAutomateIgnore.Value = this.Chest.ShouldAutomateIgnore;
 
             this.ActiveElement = Element.EditForm;
@@ -716,7 +736,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="category">The chest category.</param>
         private ManagedChest[] GetChestsFromCategory(string category)
         {
-            return this.Chests.Where(chest => chest.GetGroup() == category).ToArray();
+            return this.Chests.Where(chest => chest.DisplayCategory == category).ToArray();
         }
 
         /// <summary>Get whether the menu is initialising itself.</summary>

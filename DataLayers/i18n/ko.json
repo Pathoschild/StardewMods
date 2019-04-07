@@ -1,10 +1,17 @@
 {
-  // accessibility
-  "accessibility.name": "진입가능 여부",
-  "accessibility.clear": "공간이 빔",
-  "accessibility.occupied": "공간 차지중",
-  "accessibility.impassable": "통행불가",
-  "accessibility.warp": "순간이동",
+  // accessible
+  "accessible.name": "진입가능 여부",
+  "accessible.clear": "공간이 빔",
+  "accessible.occupied": "공간 차지중",
+  "accessible.impassable": "통행불가",
+  "accessible.warp": "순간이동",
+
+  // buildable
+  // TODO
+  "buildable.name": "Buildable",
+  "buildable.buildable": "Can Build here",
+  "buildable.occupied": "Occupied",
+  "buildable.not-buildable": "Can't Build Here",
 
   // coverage: bee houses
   "bee-houses.name": "적용범위: 양봉장",
@@ -46,5 +53,12 @@
   "machines.name": "기계 동작 여부",
   "machines.empty": "빔",
   "machines.processing": "처리중",
-  "machines.finished": "완료됨"
+  "machines.finished": "완료됨",
+
+  // tillable
+  // TODO
+  "tillable.name": "Tillable",
+  "tillable.tillable": "Tillable",
+  "tillable.occupied": "Occupied",
+  "tillable.not-tillable": "Not Tillable"
 }

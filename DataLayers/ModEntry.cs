@@ -136,8 +136,10 @@ namespace Pathoschild.Stardew.DataLayers
         {
             ModConfig.LayerConfigs layers = config.Layers;
 
-            if (layers.Accessibility.IsEnabled())
-                yield return new AccessibilityLayer(translation, layers.Accessibility);
+            if (layers.Accessible.IsEnabled())
+                yield return new AccessibleLayer(translation, layers.Accessible);
+            if (layers.Buildable.IsEnabled())
+                yield return new BuildableLayer(translation, layers.Buildable);
             if (layers.CoverageForBeeHouses.IsEnabled())
                 yield return new BeeHouseLayer(translation, layers.CoverageForBeeHouses);
             if (layers.CoverageForScarecrows.IsEnabled())
@@ -154,6 +156,8 @@ namespace Pathoschild.Stardew.DataLayers
                 yield return new CropHarvestLayer(translation, layers.CropHarvest);
             if (layers.Machines.IsEnabled() && mods.Automate.IsLoaded)
                 yield return new MachineLayer(translation, layers.Machines, mods);
+            if (layers.Tillable.IsEnabled())
+                yield return new TillableLayer(translation, layers.Tillable);
         }
 
         /// <summary>The method invoked when the player returns to the title screen.</summary>

@@ -6,6 +6,11 @@
   "default-name.junimo-hut": "Cabaña Junimo #{{number}}",
   "default-name.shipping-bin": "Contenedor de Envío",
 
+  // default category names
+  "default-category.owned-cabin": "Cabin ({{owner}})", // TODO
+  "default-category.unowned-cabin": "Cabin (empty)", // TODO
+  "default-category.duplicate": "{{locationName}} #{{number}}",
+
   // edit-chest labels
   "label.location": "Localización",
   "label.location.tile": "casilla {{x}}, {{y}}",
@@ -15,6 +20,8 @@
   "label.hide-chest": "Esconder este cofre",
   "label.hide-chest-hidden": "Esconder este cofre (Necesitaras encontrar el cofre para deshacer esto.!)",
   "label.automate-prefer-output": "(Automate) Pon primero los objetos en el cofre",
+  "label.automate-no-input": "(Automate) Don't put items in this chest", // TODO
+  "label.automate-no-output": "(Automate) Don't get items from this chest", // TODO
   "label.automate-ignore": "(Automate) No uses este cofre para la automatización",
 
   // button labels

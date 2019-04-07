@@ -1,10 +1,17 @@
 {
-  // accessibility
-  "accessibility.name": "Acessibilidade",
-  "accessibility.clear": "Limpo",
-  "accessibility.occupied": "Ocupado",
-  "accessibility.impassable": "Intransitável",
-  "accessibility.warp": "Passagem",
+  // accessible
+  "accessible.name": "Acessibilidade",
+  "accessible.clear": "Limpo",
+  "accessible.occupied": "Ocupado",
+  "accessible.impassable": "Intransitável",
+  "accessible.warp": "Passagem",
+
+  // buildable
+  // TODO
+  "buildable.name": "Buildable",
+  "buildable.buildable": "Can Build here",
+  "buildable.occupied": "Occupied",
+  "buildable.not-buildable": "Can't Build Here",
 
   // coverage: bee houses
   "bee-houses.name": "Cobertura: Casas de Abelhas",
@@ -37,15 +44,21 @@
   "crop-water.dry": "Planta Seca",
 
   // crops: fertilized
-  "crop-fertilizer.name": "Plantas: Ferilizadas",
+  "crop-fertilizer.name": "Plantas: Fertilizadas",
   "crop-fertilizer.fertilizer": "Fertilizante",
   "crop-fertilizer.retaining-soil": "Solo Retentor",
   "crop-fertilizer.speed-gro": "Solo Foliar",
 
   // machine processing
+  "machines.name": "Processamento de Máquina",
+  "machines.empty": "Vazio",
+  "machines.processing": "Processando",
+  "machines.finished": "Concluído",
+
+  // tillable
   // TODO
-  "machines.name": "Machine Processing",
-  "machines.empty": "Empty",
-  "machines.processing": "Processing",
-  "machines.finished": "Finished"
+  "tillable.name": "Tillable",
+  "tillable.tillable": "Tillable",
+  "tillable.occupied": "Occupied",
+  "tillable.not-tillable": "Not Tillable"
 }

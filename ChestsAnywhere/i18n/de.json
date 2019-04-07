@@ -6,6 +6,11 @@
   "default-name.junimo-hut": "Junimo-Hütte #{{number}}",
   "default-name.shipping-bin": "Versandbox",
 
+  // default category names
+  "default-category.owned-cabin": "Cabin ({{owner}})", // TODO
+  "default-category.unowned-cabin": "Cabin (empty)", // TODO
+  "default-category.duplicate": "{{locationName}} #{{number}}",
+
   // edit-chest labels
   "label.location": "Ort",
   "label.location.tile": "Feld {{x}}, {{y}}",
@@ -15,6 +20,8 @@
   "label.hide-chest": "Kiste ausblenden",
   "label.hide-chest-hidden": "Kiste ausblenden (Du musst die Kiste wieder finden um dies rückgängig zu machen!)",
   "label.automate-prefer-output": "(Automatisieren) Lege zuerst Gegenstände in diese Kiste",
+  "label.automate-no-input": "(Automatisieren) Don't put items in this chest", // TODO
+  "label.automate-no-output": "(Automatisieren) Don't get items from this chest", // TODO
   "label.automate-ignore": "(Automatisieren) Diese Kiste ist nicht für die Automatisierung geeignet",
 
   // button labels

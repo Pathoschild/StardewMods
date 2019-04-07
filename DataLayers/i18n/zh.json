@@ -1,10 +1,17 @@
 {
-  // accessibility
-  "accessibility.name": "能否抵达",
-  "accessibility.clear": "可通过",
-  "accessibility.occupied": "被占用",
-  "accessibility.impassable": "不可通过",
-  "accessibility.warp": "传送点",
+  // accessible
+  "accessible.name": "能否抵达",
+  "accessible.clear": "可通过",
+  "accessible.occupied": "被占用",
+  "accessible.impassable": "不可通过",
+  "accessible.warp": "传送点",
+
+  // buildable
+  // TODO
+  "buildable.name": "Buildable",
+  "buildable.buildable": "Can Build here",
+  "buildable.occupied": "Occupied",
+  "buildable.not-buildable": "Can't Build Here",
 
   // coverage: bee houses
   "bee-houses.name": "覆盖范围：蜂房",
@@ -18,7 +25,7 @@
   // coverage: scarecrows
   "scarecrows.name": "覆盖范围：稻草人",
   "scarecrows.protected": "受保护",
-  "scarecrows.exposed": "未收保护",
+  "scarecrows.exposed": "未受保护",
 
   // coverage: sprinklers
   "sprinklers.name": "覆盖范围：洒水器",
@@ -26,11 +33,10 @@
   "sprinklers.dry-crops": "作物干燥",
 
   // crops: harvest
-  // TODO
-  "crop-harvest.name": "Crops: Ready to Harvest",
-  "crop-harvest.ready": "Ready",
-  "crop-harvest.not-ready": "Not Ready",
-  "crop-harvest.not-enough-time": "Not Enough Time",
+  "crop-harvest.name": "作物：收获",
+  "crop-harvest.ready": "可收获",
+  "crop-harvest.not-ready": "不可收获",
+  "crop-harvest.not-enough-time": "时间不足",
 
   // crops: watered
   "crop-water.name": "作物：浇水",
@@ -44,9 +50,15 @@
   "crop-fertilizer.speed-gro": "生长激素",
 
   // machine processing
+  "machines.name": "机器运转",
+  "machines.empty": "空的",
+  "machines.processing": "运转中",
+  "machines.finished": "已完成",
+
+  // tillable
   // TODO
-  "machines.name": "Machine Processing",
-  "machines.empty": "Empty",
-  "machines.processing": "Processing",
-  "machines.finished": "Finished"
+  "tillable.name": "Tillable",
+  "tillable.tillable": "Tillable",
+  "tillable.occupied": "Occupied",
+  "tillable.not-tillable": "Not Tillable"
 }

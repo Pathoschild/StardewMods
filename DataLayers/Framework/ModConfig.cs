@@ -26,32 +26,38 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>Configures the settings for each data layer.</summary>
         internal class LayerConfigs
         {
-            /// <summary>The accessibility layer config.</summary>
-            public LayerConfig Accessibility { get; set; } = new LayerConfig { UpdatesPerSecond = 2 };
+            /// <summary>Settings for the accessible layer.</summary>
+            public LayerConfig Accessible { get; set; } = new LayerConfig { UpdatesPerSecond = 2 };
 
-            /// <summary>The bee house layer.</summary>
+            /// <summary>Settings for the buildable layer.</summary>
+            public LayerConfig Buildable { get; set; } = new LayerConfig { UpdatesPerSecond = 2 };
+
+            /// <summary>Settings for the bee house layer.</summary>
             public LayerConfig CoverageForBeeHouses { get; set; } = new LayerConfig { UpdatesPerSecond = 60 };
 
-            /// <summary>The Junimo hut layer.</summary>
+            /// <summary>Settings for the Junimo hut layer.</summary>
             public LayerConfig CoverageForJunimoHuts { get; set; } = new LayerConfig { UpdatesPerSecond = 60 };
 
-            /// <summary>The scarecrow layer.</summary>
+            /// <summary>Settings for the scarecrow layer.</summary>
             public LayerConfig CoverageForScarecrows { get; set; } = new LayerConfig { UpdatesPerSecond = 60 };
 
-            /// <summary>The sprinkler layer.</summary>
+            /// <summary>Settings for the sprinkler layer.</summary>
             public LayerConfig CoverageForSprinklers { get; set; } = new LayerConfig { UpdatesPerSecond = 60 };
 
-            /// <summary>The fertilizer layer.</summary>
+            /// <summary>Settings for the fertilizer layer.</summary>
             public LayerConfig CropFertilizer { get; set; } = new LayerConfig { UpdatesPerSecond = 30 };
 
-            /// <summary>The crop harvest layer.</summary>
+            /// <summary>Settings for the crop harvest layer.</summary>
             public LayerConfig CropHarvest { get; set; } = new LayerConfig { UpdatesPerSecond = 2 };
 
-            /// <summary>The crop water layer.</summary>
+            /// <summary>Settings for the crop water layer.</summary>
             public LayerConfig CropWater { get; set; } = new LayerConfig { UpdatesPerSecond = 30 };
 
-            /// <summary>The machine processing layer.</summary>
+            /// <summary>Settings for the machine processing layer.</summary>
             public LayerConfig Machines { get; set; } = new LayerConfig { UpdatesPerSecond = 2 };
+
+            /// <summary>Settings for the tillable layer.</summary>
+            public LayerConfig Tillable { get; set; } = new LayerConfig { UpdatesPerSecond = 2 };
         }
 
         /// <summary>A set of control bindings.</summary>

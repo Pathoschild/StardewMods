@@ -23,9 +23,14 @@ border around that one's range and a green border around the coverage without it
 
 Below are the current data layers.
 
-### Accessibility
+### Accessible
 Shows where you can walk and highlights warp tiles; useful for finding hidden paths and nooks.
-> ![](docs/screenshots/accessibility.png)
+> ![](docs/screenshots/accessible.png)
+
+### Buildable
+Shows where you can construct buildings on the farm. Useful for spotting issues before you try to
+build at Robin's.
+> ![](docs/screenshots/buildable.png)
 
 ### Coverage: bee houses
 Shows bee houses' flower search range. (The weird shape isn't a bug, that's the game's
@@ -64,6 +69,10 @@ Shows whether your machines are empty, processing, or finished. (You need to ins
 work for machines that aren't being automated too.)
 > ![](docs/screenshots/machines.png)
 
+### Tillable
+Shows where you can till dirt with your hoe. Useful for planning crop layouts.
+> ![](docs/screenshots/tillable.png)
+
 ## Configure
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
 file in a text editor to configure the mod.
@@ -86,12 +95,13 @@ Data Layers will automatically integrate with these mods if you they're installe
 mod installed     | effects
 ----------------- | ----------
 Automate          | Shows whether your machines are empty, processing, or ready to harvest.
-Better Junimos    | Shows custom Junimo hut range.
-Better Sprinklers | Shows custom sprinkler range.
-Cobalt            | Shows cobalt sprinkler range.
+Better Junimos    | Shows custom Junimo hut coverage.
+Better Sprinklers | Shows custom sprinkler coverage.
+Cobalt            | Shows cobalt sprinkler coverage.
+Line Sprinklers   | Shows line sprinkler coverage.
 Pelican Fiber     | Shows coverage when building a Junimo hut or sprinkler through Pelican Fiber's menu.
-Prismatic Tools   | Shows prismatic sprinkler range.
-Simple Sprinkler  | Shows custom sprinkler range.
+Prismatic Tools   | Shows prismatic sprinkler coverage.
+Simple Sprinkler  | Shows custom sprinkler coverage.
 
 ## See also
 * [Release notes](release-notes.md)

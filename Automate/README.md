@@ -174,9 +174,11 @@ Installing [Chests Anywhere](https://www.nexusmods.com/stardewvalley/mods/518) t
 per-chest options directly in-game:
 > ![](screenshots/chests-anywhere-config.png)
 
-This adds two options for automate:
-* **Put items in this chest first:** when choosing a chest to place processed items, put them in
-  this chest before any others (until it's full).
+This adds four options for automate:
+* **Put items in this chest first:** Automate will only push machine output into this chest (until
+  it's full).
+* **Don't put items in this chest:** Automate won't push any machine output into this chest.
+* **Don't take items from this chest:** Automate won't take machine input from this chest.
 * **Don't use this chest for automation:** Automate will completely ignore the chest, so it won't
   be connected to any machines.
 
@@ -189,8 +191,11 @@ Automate is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both singl
 multiplayer. In multiplayer mode, only the main player can automate machines; other players can
 keep it installed and use the overlay, their mod just won't automate anything.
 
-Automate can be used with custom machine mods, but only the standard machines will currently be
-automated.
+Automate is compatible with...
+
+* [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) (seeds in auto-grabbers will be ignored so you can use its auto-plant feature).
+* [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) (seeds in Junimo huts will be ignored so you can use its auto-plant feature).
+* [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) (see its optional 'CFAutomate' download to enable automation).
 
 ## FAQs
 ### What's the order of processed machines?

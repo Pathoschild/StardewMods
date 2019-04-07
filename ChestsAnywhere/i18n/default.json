@@ -6,6 +6,11 @@
   "default-name.junimo-hut": "Junimo hut #{{number}}",
   "default-name.shipping-bin": "Shipping bin",
 
+  // default category names
+  "default-category.owned-cabin": "Cabin ({{owner}})",
+  "default-category.unowned-cabin": "Cabin (empty)",
+  "default-category.duplicate": "{{locationName}} #{{number}}",
+
   // edit-chest labels
   "label.location": "Location",
   "label.location.tile": "tile {{x}}, {{y}}",
@@ -15,6 +20,8 @@
   "label.hide-chest": "Hide this chest",
   "label.hide-chest-hidden": "Hide this chest (you'll need to find the chest to undo this!)",
   "label.automate-prefer-output": "(Automate) Put items in this chest first",
+  "label.automate-no-input": "(Automate) Don't put items in this chest",
+  "label.automate-no-output": "(Automate) Don't get items from this chest",
   "label.automate-ignore": "(Automate) Don't use this chest for automation",
 
   // button labels

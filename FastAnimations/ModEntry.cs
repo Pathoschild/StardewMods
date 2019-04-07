@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.FastAnimations.Framework;
@@ -100,6 +99,10 @@ namespace Pathoschild.Stardew.FastAnimations
                 yield return new MilkingHandler(config.MilkSpeed);
             if (config.ShearSpeed > 1)
                 yield return new ShearingHandler(config.ShearSpeed);
+            if (config.ToolSwingSpeed > 1)
+                yield return new ToolSwingHandler(config.ToolSwingSpeed);
+            if (config.WeaponSwingSpeed > 1)
+                yield return new WeaponSwingHandler(config.WeaponSwingSpeed);
 
             // world animations
             if (config.BreakGeodeSpeed > 1)

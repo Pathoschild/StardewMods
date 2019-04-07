@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Automate.Framework.Storage;
 using Pathoschild.Stardew.Common;
 using StardewValley;
 using StardewValley.Buildings;
@@ -107,7 +107,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                     return true;
 
                 case IContainer container:
-                    if (container.Name?.IndexOf("|automate:ignore|", StringComparison.InvariantCultureIgnoreCase) == -1)
+                    if (!container.ShouldIgnore())
                     {
                         group.Add(container);
                         return true;

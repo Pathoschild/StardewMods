@@ -46,6 +46,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Mods", "Tests.Mods\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CropsAnytimeAnywhere", "CropsAnytimeAnywhere\CropsAnytimeAnywhere.csproj", "{2BB33EC7-3B13-4AA4-B982-985F8446966B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmallBeachFarm", "SmallBeachFarm\SmallBeachFarm.csproj", "{29A85E4A-02F1-4A25-8EE3-EFE3BE944244}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Common\Common.projitems*{0510e2ac-ec06-4211-b733-faf9d3a069ea}*SharedItemsImports = 4
@@ -123,6 +125,10 @@ Global
 		{2BB33EC7-3B13-4AA4-B982-985F8446966B}.Debug|x86.Build.0 = Debug|x86
 		{2BB33EC7-3B13-4AA4-B982-985F8446966B}.Release|x86.ActiveCfg = Release|x86
 		{2BB33EC7-3B13-4AA4-B982-985F8446966B}.Release|x86.Build.0 = Release|x86
+		{29A85E4A-02F1-4A25-8EE3-EFE3BE944244}.Debug|x86.ActiveCfg = Debug|x86
+		{29A85E4A-02F1-4A25-8EE3-EFE3BE944244}.Debug|x86.Build.0 = Debug|x86
+		{29A85E4A-02F1-4A25-8EE3-EFE3BE944244}.Release|x86.ActiveCfg = Release|x86
+		{29A85E4A-02F1-4A25-8EE3-EFE3BE944244}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

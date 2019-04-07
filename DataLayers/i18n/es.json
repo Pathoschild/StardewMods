@@ -1,10 +1,17 @@
 {
-  // accessibility
-  "accessibility.name": "Accesibilidad",
-  "accessibility.clear": "Libre",
-  "accessibility.occupied": "Ocupado",
-  "accessibility.impassable": "Bloqueado",
-  "accessibility.warp": "Portal",
+  // accessible
+  "accessible.name": "Accesibilidad",
+  "accessible.clear": "Libre",
+  "accessible.occupied": "Ocupado",
+  "accessible.impassable": "Bloqueado",
+  "accessible.warp": "Portal",
+
+  // buildable
+  // TODO
+  "buildable.name": "Buildable",
+  "buildable.buildable": "Can Build here",
+  "buildable.occupied": "Occupied",
+  "buildable.not-buildable": "Can't Build Here",
 
   // coverage: bee houses
   "bee-houses.name": "Cobertura: Colmenas",
@@ -47,5 +54,12 @@
   "machines.name": "Machine Processing",
   "machines.empty": "Empty",
   "machines.processing": "Processing",
-  "machines.finished": "Finished"
+  "machines.finished": "Finished",
+
+  // tillable
+  // TODO
+  "tillable.name": "Tillable",
+  "tillable.tillable": "Tillable",
+  "tillable.occupied": "Occupied",
+  "tillable.not-tillable": "Not Tillable"
 }

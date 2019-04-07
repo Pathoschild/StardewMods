@@ -5,6 +5,7 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Tokens;
+using ContentPatcher.Framework.Tokens.ValueProviders;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
@@ -40,8 +41,8 @@ namespace ContentPatcher.Framework
         /// <param name="installedMods">The installed mod IDs.</param>
         public TokenManager(IContentHelper contentHelper, IEnumerable<string> installedMods)
         {
-            foreach (IToken token in this.GetGlobalTokens(contentHelper, installedMods))
-                this.GlobalContext.Tokens[token.Name] = token;
+            foreach (IValueProvider valueProvider in this.GetGlobalValueProviders(contentHelper, installedMods))
+                this.GlobalContext.Tokens[new TokenName(valueProvider.Name)] = new GenericToken(valueProvider);
         }
 
         /// <summary>Get the tokens which are defined for a specific content pack. This returns a reference to the list, which can be held for a live view of the tokens. If the content pack isn't currently tracked, this will add it.</summary>
@@ -51,8 +52,8 @@ namespace ContentPatcher.Framework
             if (!this.LocalTokens.TryGetValue(contentPack, out ModTokenContext localTokens))
             {
                 this.LocalTokens[contentPack] = localTokens = new ModTokenContext(this);
-                foreach (IToken token in this.GetLocalTokens(contentPack))
-                    localTokens.Add(token);
+                foreach (IValueProvider valueProvider in this.GetLocalValueProviders(contentPack))
+                    localTokens.Add(new GenericToken(valueProvider));
             }
 
             return localTokens;
@@ -112,51 +113,51 @@ namespace ContentPatcher.Framework
         /*********
         ** Private methods
         *********/
-        /// <summary>Get the global tokens with which to initialise the token manager.</summary>
+        /// <summary>Get the global value providers with which to initialise the token manager.</summary>
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
         /// <param name="installedMods">The installed mod IDs.</param>
-        private IEnumerable<IToken> GetGlobalTokens(IContentHelper contentHelper, IEnumerable<string> installedMods)
+        private IEnumerable<IValueProvider> GetGlobalValueProviders(IContentHelper contentHelper, IEnumerable<string> installedMods)
         {
             bool NeedsBasicInfo() => this.IsBasicInfoLoaded;
 
             // installed mods
-            yield return new ImmutableToken(ConditionType.HasMod.ToString(), new InvariantHashSet(installedMods), canHaveMultipleValues: true);
+            yield return new ImmutableValueProvider(ConditionType.HasMod.ToString(), new InvariantHashSet(installedMods), canHaveMultipleValues: true);
 
             // language
-            yield return new ConditionTypeToken(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()));
+            yield return new ConditionTypeValueProvider(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()));
 
             // in-game date
-            yield return new ConditionTypeToken(ConditionType.Season, () => SDate.Now().Season, NeedsBasicInfo, allowedValues: new[] { "Spring", "Summer", "Fall", "Winter" });
-            yield return new ConditionTypeToken(ConditionType.Day, () => SDate.Now().Day.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo, allowedValues: Enumerable.Range(1, 28).Select(p => p.ToString()));
-            yield return new ConditionTypeToken(ConditionType.DayOfWeek, () => SDate.Now().DayOfWeek.ToString(), NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(DayOfWeek)));
-            yield return new ConditionTypeToken(ConditionType.Year, () => SDate.Now().Year.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
-            yield return new ConditionTypeToken(ConditionType.DaysPlayed, () => Game1.stats.DaysPlayed.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.Season, () => SDate.Now().Season, NeedsBasicInfo, allowedValues: new[] { "Spring", "Summer", "Fall", "Winter" });
+            yield return new ConditionTypeValueProvider(ConditionType.Day, () => SDate.Now().Day.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo, allowedValues: Enumerable.Range(1, 28).Select(p => p.ToString()));
+            yield return new ConditionTypeValueProvider(ConditionType.DayOfWeek, () => SDate.Now().DayOfWeek.ToString(), NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(DayOfWeek)));
+            yield return new ConditionTypeValueProvider(ConditionType.Year, () => SDate.Now().Year.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.DaysPlayed, () => Game1.stats.DaysPlayed.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
 
             // other in-game conditions
-            yield return new ConditionTypeToken(ConditionType.DayEvent, () => this.GetDayEvent(contentHelper), NeedsBasicInfo);
-            yield return new ConditionTypeToken(ConditionType.FarmCave, () => this.GetEnum(Game1.player.caveChoice.Value, FarmCaveType.None).ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeToken(ConditionType.FarmhouseUpgrade, () => Game1.player.HouseUpgradeLevel.ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeToken(ConditionType.FarmName, () => Game1.player.farmName.Value, NeedsBasicInfo);
-            yield return new ConditionTypeToken(ConditionType.FarmType, () => this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeToken(ConditionType.HasFlag, this.GetMailFlags, NeedsBasicInfo);
-            yield return new ConditionTypeToken(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
-            yield return new ConditionTypeToken(ConditionType.PlayerGender, () => (Game1.player.IsMale ? Gender.Male : Gender.Female).ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeToken(ConditionType.PreferredPet, () => (Game1.player.catPerson ? PetType.Cat : PetType.Dog).ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeToken(ConditionType.PlayerName, () => Game1.player.Name, NeedsBasicInfo);
-            yield return new ConditionTypeToken(ConditionType.Spouse, () => Game1.player?.spouse, NeedsBasicInfo);
-            yield return new ConditionTypeToken(ConditionType.Weather, this.GetCurrentWeather, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(Weather)));
-            yield return new HasProfessionToken(NeedsBasicInfo);
-            yield return new HasWalletItemToken(NeedsBasicInfo);
-            yield return new SkillLevelToken(NeedsBasicInfo);
-            yield return new VillagerRelationshipToken();
-            yield return new VillagerHeartsToken();
+            yield return new ConditionTypeValueProvider(ConditionType.DayEvent, () => this.GetDayEvent(contentHelper), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.FarmCave, () => this.GetEnum(Game1.player.caveChoice.Value, FarmCaveType.None).ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.FarmhouseUpgrade, () => Game1.player.HouseUpgradeLevel.ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.FarmName, () => Game1.player.farmName.Value, NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.FarmType, () => this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.HasFlag, this.GetMailFlags, NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.PlayerGender, () => (Game1.player.IsMale ? Gender.Male : Gender.Female).ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.PreferredPet, () => (Game1.player.catPerson ? PetType.Cat : PetType.Dog).ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.PlayerName, () => Game1.player.Name, NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.Spouse, () => Game1.player?.spouse, NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.Weather, this.GetCurrentWeather, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(Weather)));
+            yield return new HasProfessionValueProvider(NeedsBasicInfo);
+            yield return new HasWalletItemValueProvider(NeedsBasicInfo);
+            yield return new SkillLevelValueProvider(NeedsBasicInfo);
+            yield return new VillagerRelationshipValueProvider();
+            yield return new VillagerHeartsValueProvider();
         }
 
-        /// <summary>Get the local tokens with which to initialise a local context.</summary>
+        /// <summary>Get the local value providers with which to initialise a local context.</summary>
         /// <param name="contentPack">The content pack for which to get tokens.</param>
-        private IEnumerable<IToken> GetLocalTokens(IContentPack contentPack)
+        private IEnumerable<IValueProvider> GetLocalValueProviders(IContentPack contentPack)
         {
-            yield return new HasFileToken(contentPack.DirectoryPath);
+            yield return new HasFileValueProvider(contentPack.DirectoryPath);
         }
 
         /// <summary>Get a constant for a given value.</summary>

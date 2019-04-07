@@ -1,5 +1,6 @@
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle("ContentPatcher")]
-[assembly: AssemblyVersion("1.6.4")]
-[assembly: AssemblyFileVersion("1.6.4")]
+[assembly: AssemblyVersion("1.6.5")]
+[assembly: InternalsVisibleTo("Pathoschild.Stardew.Tests.Mods")]

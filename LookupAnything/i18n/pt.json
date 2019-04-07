@@ -25,7 +25,7 @@
   "generic.price-for-stack": "{{price}}ouros por um acúmulo de {{count}}",
 
   // types
-  "type.building": "Building", // TODO
+  "type.building": "Construção",
   "type.fruit-tree": "Arvore Frutífera",
   "type.map-tile": "Azulejo de mapa",
   "type.monster": "Monstro",
@@ -171,42 +171,40 @@
   "animal.complaints.wild-animal-attack": "Foi atacado por animais selvagens durante a noite",
 
   // building lookup labels
-  // TODO
-  "building.animals": "Animals",
-  "building.construction": "Construction",
-  "building.feed-trough": "Feed trough",
-  "building.horse": "Horse",
-  "building.horse-location": "Horse location",
-  "building.owner": "Owner",
+  "building.animals": "Animais",
+  "building.construction": "Construção",
+  "building.feed-trough": "Calha de Alimentação",
+  "building.horse": "Cavalo",
+  "building.horse-location": "Localização do Cavalo",
+  "building.owner": "Proprietário",
   "building.slimes": "Slimes",
-  "building.stored-hay": "Stored hay",
-  "building.upgrades": "Upgrades",
-  "building.water-trough": "Water trough",
+  "building.stored-hay": "Feno Armazenado",
+  "building.upgrades": "Melhorias",
+  "building.water-trough": "Cocho de Água",
 
   // building lookup values
-  // TODO
-  "building.animals.summary": "{{count}} of max {{max}} animals",
-  "building.construction.summary": "ready on {{date}}",
-  "building.feed-trough.automated": "automated",
-  "building.feed-trough.summary": "{{filled}} of {{max}} feed slots filled",
+  "building.animals.summary": "{{count}} de no máximo {{max}} animais",
+  "building.construction.summary": "pronto em {{date}}",
+  "building.feed-trough.automated": "automatizado",
+  "building.feed-trough.summary": "{{filled}} de {{max}} calhas de alimentação preenchidas",
   "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
-  "building.junimo-harvesting-enabled": "Harvesting enabled",
-  "building.owner.none": "no owner",
-  "building.output-processing": "Output processing",
-  "building.output-ready": "Output ready",
-  "building.slimes.summary": "{{count}} of max {{max}} slimes",
-  "building.stored-hay.summary-one-silo": "{{hayCount}} hay (max capacity: {{maxHay}})",
-  "building.stored-hay.summary-multiple-silos": "{{hayCount}} hay in {{siloCount}} silos (max capacity: {{maxHay}})",
-  "building.upgrades.barn.0": "up to 4 animals, add cows",
-  "building.upgrades.barn.1": "up to 8 animals, add pregnancy and goats",
-  "building.upgrades.barn.2": "up to 12 animals, add autofeed, pigs, and sheep",
-  "building.upgrades.cabin.0": "initial cabin",
-  "building.upgrades.cabin.1": "add kitchen, enable marriage",
-  "building.upgrades.cabin.2": "enable children",
-  "building.upgrades.coop.0": "up to 4 animals; add chickens",
-  "building.upgrades.coop.1": "up to 8 animals; add incubator, dinosaurs, and ducks",
-  "building.upgrades.coop.2": "up to 12 animals; add autofeed and rabbits",
-  "building.water-trough.summary": "{{filled}} of {{max}} water troughs filled",
+  "building.junimo-harvesting-enabled": "Colheita habilitada",
+  "building.owner.none": "nenhum proprietário",
+  "building.output-processing": "Processamento de saída",
+  "building.output-ready": "Processamento pronto",
+  "building.slimes.summary": "{{count}} de no máximo {{max}} slimes",
+  "building.stored-hay.summary-one-silo": "{{hayCount}} feno (capacidade máxima: {{maxHay}})",
+  "building.stored-hay.summary-multiple-silos": "{{hayCount}} feno em {{siloCount}} silos (capacidade máxima: {{maxHay}})",
+  "building.upgrades.barn.0": "até 4 animais, adiciona vacas",
+  "building.upgrades.barn.1": "até 8 animais, adiciona gravidez e bodes",
+  "building.upgrades.barn.2": "até 12 animais, adiciona auto alimentação, porcos e ovelhas",
+  "building.upgrades.cabin.0": "cabine inicial",
+  "building.upgrades.cabin.1": "adiciona galinhas, habilita casamento",
+  "building.upgrades.cabin.2": "habilita crianças",
+  "building.upgrades.coop.0": "até 4 animais; adiciona galinhas",
+  "building.upgrades.coop.1": "até 8 animais; adiciona incubadora, dinossauros e patos",
+  "building.upgrades.coop.2": "até 12 animais; adiciona auto alimentação e coelhos",
+  "building.water-trough.summary": "{{filled}} de {{max}} cochas de água preenchidas",
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "Reclamações",
@@ -258,8 +256,8 @@
   "item.loves-this": "Ama isso",
   "item.needed-for": "Preciso para",
   "item.number-owned": "Possui",
-  "item.number-cooked": "Cooked", // TODO
-  "item.number-crafted": "Crafted", // TODO
+  "item.number-cooked": "Cozinhado",
+  "item.number-crafted": "Criados",
   "item.recipes": "Receitas",
   "item.see-also": "Veja também",
   "item.sells-for": "vende por",
@@ -277,14 +275,14 @@
   "item.needed-for.full-shipment": "conquista da embarcação cheia (embarque um)",
   "item.needed-for.polyculture": "conquista da policultura (embarque  mais {{count}} )",
   "item.needed-for.full-collection": "conquista do envio completo (doe um para o museu)",
-  "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})", // TODO
-  "item.needed-for.craft-master": "craft master achievement (make {{recipes}})", // TODO
+  "item.needed-for.gourmet-chef": "conquista de chefe gourmet (cozinhe {{recipes}})",
+  "item.needed-for.craft-master": "conquista de criador mestre (crie {{recipes}})",
   "item.sells-to.shipping-box": "caixa de embarcação",
   "item.fence-health.gold-clock": "Não decai com o Relógio de Ouro",
   "item.fence-health.summary": "{{percent}}% (aproximadamente{{count}} dias restantes)",
   "item.recipes.entry": "{{name}} (precisa {{count}})",
   "item.number-owned.summary": "seu próprio {{count}} desses",
-  "item.number-crafted.summary": "you made {{count}} of these", // TODO
+  "item.number-crafted.summary": "você fez {{count}} desses",
 
   // monster lookup labels
   "monster.invincible": "Invencível",
@@ -310,7 +308,7 @@
   "npc.gifted-this-week": "Presenteou essa semana",
   "npc.loves-gifts": "Presentes que ama",
   "npc.likes-gifts": "Presentes que gosta",
-  "npc.neutral-gifts": "Neutral gifts", // TODO
+  "npc.neutral-gifts": "Presentes neutros",
 
   // NPC lookup values
   "npc.can-romance.married": "Você é casado! <", // < turns into a heart
@@ -335,7 +333,7 @@
 
   // player lookup labels
   "player.farm-name": "Nome da fazenda",
-  "player.farm-map": "Farm map", // TODO
+  "player.farm-map": "Mapa da fazenda",
   "player.favorite-thing": "Coisa Favorida",
   "player.gender": "Genero",
   "player.spouse": "Esposa(o)",
@@ -347,7 +345,7 @@
   "player.luck": "Sorte",
 
   // player lookup values
-  "player.farm-map.custom": "Custom", // TODO
+  "player.farm-map.custom": "Personalizado",
   "player.gender.male": "masculino",
   "player.gender.female": "feminino",
   "player.luck.summary": "{{percent}}% muitas verificações aleatórias",

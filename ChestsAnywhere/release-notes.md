@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.16
+* Added owner's name to cabin categories.
+* Added Automate options to block input/output for a chest.
+* Separated categories for locations with the same name.
+* Improved translations. Thanks to kelvindules (updated Portuguese), kice (updated Chinese), and TheOzonO3 (updated Russian)!
+
 ## 1.15.1
 * Added option to disable player inventory organise button.
 * Fixed UI flicker when moving items in the chest menu.

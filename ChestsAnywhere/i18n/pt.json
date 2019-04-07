@@ -6,6 +6,11 @@
   "default-name.junimo-hut": "Cabana dos junimos #{{number}}",
   "default-name.shipping-bin": "Caixa de Remessas",
 
+  // default category names
+  "default-category.owned-cabin": "Cabin ({{owner}})", // TODO
+  "default-category.unowned-cabin": "Cabin (empty)", // TODO
+  "default-category.duplicate": "{{locationName}} #{{number}}",
+
   // edit-chest labels
   "label.location": "Local",
   "label.location.tile": "posição {{x}}, {{y}}",
@@ -15,13 +20,15 @@
   "label.hide-chest": "Esconder esse baú",
   "label.hide-chest-hidden": "Esconder esse baú (Você terá que achar o baú para desfazer isso!)",
   "label.automate-prefer-output": "(Automate) Primeiro coloque itens nesse baú",
+  "label.automate-no-input": "(Automate) Don't put items in this chest", // TODO
+  "label.automate-no-output": "(Automate) Don't get items from this chest", // TODO
   "label.automate-ignore": "(Automate) Não use este baú para automação",
 
   // button labels
   "button.edit-chest": "editar baú",
   "button.sort-inventory": "arrumar inventário",
-  "button.save": "save", // TODO
-  "button.reset": "reset", // TODO
+  "button.save": "salvar",
+  "button.reset": "resetar",
 
   // errors
   "errors.disabled-from-here": "Você não pode acessar baús daqui.",

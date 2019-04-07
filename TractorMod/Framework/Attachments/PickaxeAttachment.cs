@@ -76,7 +76,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             if (this.Config.BreakMineContainers && tileObj is BreakableContainer container)
                 return container.performToolAction(tool, location);
 
-            // clear twigs & weeds
+            // clear weeds
             if (this.Config.ClearWeeds && this.IsWeed(tileObj))
                 return this.UseToolOnTile(tool, tile);
 

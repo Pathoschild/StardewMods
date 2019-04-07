@@ -6,10 +6,10 @@ using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 
-namespace ContentPatcher.Framework.Tokens
+namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
-    /// <summary>A token which check whether a file exists in the content pack's folder.</summary>
-    internal class HasFileToken : BaseToken
+    /// <summary>A value provider which checks whether a file exists in the content pack's folder.</summary>
+    internal class HasFileValueProvider : BaseValueProvider
     {
         /*********
         ** Fields
@@ -17,7 +17,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>The mod folder from which to load assets.</summary>
         private readonly string ModFolder;
 
-        /// <summary>The context for this token instance.</summary>
+        /// <summary>The context as of the last update.</summary>
         private IContext TokenContext;
 
 
@@ -26,39 +26,40 @@ namespace ContentPatcher.Framework.Tokens
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="modFolder">The absolute path to the mod folder.</param>
-        public HasFileToken(string modFolder)
-            : base(ConditionType.HasFile.ToString(), canHaveMultipleRootValues: false)
+        public HasFileValueProvider(string modFolder)
+            : base(ConditionType.HasFile, canHaveMultipleValuesForRoot: false)
         {
             this.ModFolder = modFolder;
-            this.EnableSubkeys(required: true, canHaveMultipleValues: false);
+            this.EnableInputArguments(required: true, canHaveMultipleValues: false);
         }
 
-        /// <summary>Update the token data when the context changes.</summary>
+        /// <summary>Update the underlying values.</summary>
         /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the token data changed.</returns>
+        /// <returns>Returns whether the values changed.</returns>
         public override void UpdateContext(IContext context)
         {
             this.TokenContext = context;
             this.IsValidInContext = true;
         }
 
-        /// <summary>Get the allowed values for a token name (or <c>null</c> if any value is allowed).</summary>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
-        public override InvariantHashSet GetAllowedValues(TokenName name)
+        /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
+        public override InvariantHashSet GetAllowedValues(string input)
         {
-            return name.HasSubkey()
+            return input != null
                 ? InvariantHashSet.Boolean()
                 : null;
         }
 
-        /// <summary>Get the current token values.</summary>
-        /// <param name="name">The token name to check.</param>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
-        public override IEnumerable<string> GetValues(TokenName name)
+        /// <summary>Get the current values.</summary>
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
+        public override IEnumerable<string> GetValues(string input)
         {
-            this.AssertTokenName(name);
+            this.AssertInputArgument(input);
 
-            yield return this.GetPathExists(name.Subkey).ToString();
+            yield return this.GetPathExists(input).ToString();
         }
 
 

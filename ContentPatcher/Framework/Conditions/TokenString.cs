@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Text;
+using ContentPatcher.Framework.Lexing;
+using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -12,8 +14,8 @@ namespace ContentPatcher.Framework.Conditions
         /*********
         ** Fields
         *********/
-        /// <summary>The regex pattern matching a string token.</summary>
-        private static readonly Regex TokenPattern = new Regex(@"{{([ \w\.\-]+)}}", RegexOptions.Compiled);
+        /// <summary>The lexical tokens parsed from the raw string.</summary>
+        private readonly ILexToken[] LexTokens;
 
         /// <summary>The underlying value for <see cref="Value"/>.</summary>
         private string ValueImpl;
@@ -68,30 +70,35 @@ namespace ContentPatcher.Framework.Conditions
             }
 
             // extract tokens
-            int tokensFound = 0;
-            foreach (Match match in TokenString.TokenPattern.Matches(this.Raw))
+            this.LexTokens = new Lexer().ParseBits(raw, impliedBraces: false).ToArray();
+            bool isMutable = false;
+            foreach (LexTokenToken lexToken in this.LexTokens.OfType<LexTokenToken>())
             {
-                tokensFound++;
-                string rawToken = match.Groups[1].Value.Trim();
-                if (TokenName.TryParse(rawToken, out TokenName name))
+                TokenName name = new TokenName(lexToken.Name, lexToken.InputArg?.Text);
+                IToken token = tokenContext.GetToken(name, enforceContext: false);
+                if (token != null)
                 {
-                    if (tokenContext.Contains(name, enforceContext: false))
-                        this.Tokens.Add(name);
-                    else
-                        this.InvalidTokens.Add(rawToken);
+                    this.Tokens.Add(name);
+                    isMutable = isMutable || token.IsMutable;
                 }
                 else
-                    this.InvalidTokens.Add(rawToken);
+                    this.InvalidTokens.Add(lexToken.Text);
             }
 
             // set metadata
-            this.IsMutable = this.Tokens.Any();
-            if (!this.IsMutable)
+            this.IsMutable = isMutable;
+            if (!isMutable)
             {
-                this.ValueImpl = this.Raw;
-                this.IsReadyImpl = !this.InvalidTokens.Any();
+                if (this.InvalidTokens.Any())
+                    this.IsReadyImpl = false;
+                else
+                {
+                    this.GetApplied(tokenContext, out string finalStr, out bool isReady);
+                    this.ValueImpl = finalStr;
+                    this.IsReadyImpl = isReady;
+                }
             }
-            this.IsSingleTokenOnly = tokensFound == 1 && TokenString.TokenPattern.Replace(this.Raw, "", 1) == "";
+            this.IsSingleTokenOnly = this.LexTokens.Length == 1 && this.LexTokens.First().Type == LexTokenType.Token;
         }
 
         /// <summary>Update the <see cref="Value"/> with the given tokens.</summary>
@@ -118,18 +125,30 @@ namespace ContentPatcher.Framework.Conditions
         private void GetApplied(IContext context, out string result, out bool isReady)
         {
             bool allReplaced = true;
-            result = TokenString.TokenPattern.Replace(this.Raw, match =>
+            StringBuilder str = new StringBuilder();
+            foreach (ILexToken lexToken in this.LexTokens)
             {
-                TokenName name = TokenName.Parse(match.Groups[1].Value);
-                IToken token = context.GetToken(name, enforceContext: true);
-                if (token != null)
-                    return token.GetValues(name).FirstOrDefault();
-                else
+                switch (lexToken)
                 {
-                    allReplaced = false;
-                    return match.Value;
+                    case LexTokenToken lexTokenToken:
+                        TokenName name = new TokenName(lexTokenToken.Name, lexTokenToken.InputArg?.Text);
+                        IToken token = context.GetToken(name, enforceContext: true);
+                        if (token != null)
+                            str.Append(token.GetValues(name).FirstOrDefault());
+                        else
+                        {
+                            allReplaced = false;
+                            str.Append(lexToken.Text);
+                        }
+                        break;
+
+                    default:
+                        str.Append(lexToken.Text);
+                        break;
                 }
-            });
+            }
+
+            result = str.ToString();
             isReady = allReplaced;
         }
     }

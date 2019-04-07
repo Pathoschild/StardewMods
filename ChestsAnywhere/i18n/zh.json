@@ -1,10 +1,15 @@
 {
   // default chest names
-  "default-name.auto-grabber": "Auto-grabber #{{number}}", // TODO
+  "default-name.auto-grabber": "自动采集 #{{number}}",
   "default-name.chest": "{{number}}号箱子",
   "default-name.fridge": "冰箱",
   "default-name.junimo-hut": "{{number}}座祝尼魔小屋",
   "default-name.shipping-bin": "出货箱",
+
+  // default category names
+  "default-category.owned-cabin": "Cabin ({{owner}})", // TODO
+  "default-category.unowned-cabin": "Cabin (empty)", // TODO
+  "default-category.duplicate": "{{locationName}} #{{number}}",
 
   // edit-chest labels
   "label.location": "位置",
@@ -14,19 +19,20 @@
   "label.order": "顺序",
   "label.hide-chest": "隐藏此箱子",
   "label.hide-chest-hidden": "隐藏此箱子（你需要亲自找到该箱子撤销隐藏！）",
-  "label.automate-prefer-output": "(Automate) 优先输出到这个箱子",
-  "label.automate-ignore": "(Automate) 忽略这个箱子",
+  "label.automate-prefer-output": "[Automate] 优先输出到这个箱子",
+  "label.automate-no-input": "[Automate] 禁止发送物品到这个箱子",
+  "label.automate-no-output": "[Automate] 禁止从这个箱子获取物品",
+  "label.automate-ignore": "[Automate] 忽略这个箱子",
 
   // button labels
   "button.edit-chest": "编辑箱子",
   "button.sort-inventory": "清单排序",
-  "button.save": "save", // TODO
-  "button.reset": "reset", // TODO
+  "button.save": "保存",
+  "button.reset": "重置",
 
   // errors
-  // TODO
-  "errors.disabled-from-here": "You can't access chests from here.",
-  "errors.no-chests": "You don't have any chests yet.",
-  "errors.no-chests-in-location": "You don't have any chests in this area.",
-  "errors.no-chests-in-range": "You don't have any chests in range."
+  "errors.disabled-from-here": "你无法从当前位置访问这个箱子",
+  "errors.no-chests": "当前没有可用箱子",
+  "errors.no-chests-in-location": "当前区域没有可用箱子",
+  "errors.no-chests-in-range": "范围内没有可用箱子"
 }

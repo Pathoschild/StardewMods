@@ -860,6 +860,7 @@ asset | notes
 ----- | -----
 `Characters/Farmer/accessories` | The number of accessories is hardcoded, so custom accessories need to replace an existing one.
 `Characters/Farmer/skinColors` | The number of skin colors is hardcoded, so custom colors need to replace an existing one.
+`Maps/*` | See [Modding:Maps#Potential issues](https://stardewvalleywiki.com/Modding:Maps#Potential_issues) on the wiki.
 
 ## See also
 * [Release notes](release-notes.md)

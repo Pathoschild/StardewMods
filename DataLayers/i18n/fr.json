@@ -1,10 +1,17 @@
 {
-  // accessibility
-  "accessibility.name": "Accessibilité",
-  "accessibility.clear": "Vide",
-  "accessibility.occupied": "Occupé",
-  "accessibility.impassable": "Infranchissable",
-  "accessibility.warp": "Passage",
+  // accessible
+  "accessible.name": "Accessibilité",
+  "accessible.clear": "Vide",
+  "accessible.occupied": "Occupé",
+  "accessible.impassable": "Infranchissable",
+  "accessible.warp": "Passage",
+
+  // buildable
+  // TODO
+  "buildable.name": "Buildable",
+  "buildable.buildable": "Can Build here",
+  "buildable.occupied": "Occupied",
+  "buildable.not-buildable": "Can't Build Here",
 
   // coverage: bee houses
   "bee-houses.name": "Couverture : Ruche",
@@ -46,5 +53,12 @@
   "machines.name": "Traitement des Machines",
   "machines.empty": "Vide",
   "machines.processing": "En cours",
-  "machines.finished": "Terminé"
+  "machines.finished": "Terminé",
+
+  // tillable
+  // TODO
+  "tillable.name": "Tillable",
+  "tillable.tillable": "Tillable",
+  "tillable.occupied": "Occupied",
+  "tillable.not-tillable": "Not Tillable"
 }
