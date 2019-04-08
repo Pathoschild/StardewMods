@@ -7,8 +7,8 @@
   "default-name.shipping-bin": "출하 상자",
 
   // default category names
-  "default-category.owned-cabin": "Cabin ({{owner}})", // TODO
-  "default-category.unowned-cabin": "Cabin (empty)", // TODO
+  "default-category.owned-cabin": "객실 ({{owner}})",
+  "default-category.unowned-cabin": "객실 (비어있음)",
   "default-category.duplicate": "{{locationName}} #{{number}}",
 
   // edit-chest labels
