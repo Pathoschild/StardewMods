@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         ** Accessors
         *********/
         /// <summary>The number of tiles on each side of the tractor to affect (in addition to the tile under it).</summary>
-        public int Distance { get; set; } = 1;
+        public int Distance { get; set; } = 100;
 
         /// <summary>The speed modifier when riding the tractor.</summary>
         public int TractorSpeed { get; set; } = -2;
