@@ -69,7 +69,7 @@ namespace SmallBeachFarm
         /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
         {
-            if (e.IsLocalPlayer && Game1.whichFarm == Farm.riverlands_layout && e.NewLocation.Name == "Farm" && Game1.player.getTileLocation().Y > 29)
+            if (e.IsLocalPlayer && ModEntry.IsSmallBeachFarm(e.NewLocation) && Game1.player.getTileLocation().Y > 29)
                 Game1.player.Position = new Vector2(79, 21) * Game1.tileSize;
         }
 
@@ -78,9 +78,12 @@ namespace SmallBeachFarm
         /// <param name="e">The event data.</param>
         private void DayEnding(object sender, DayEndingEventArgs e)
         {
+            Farm farm = Game1.getFarm();
+            if (!ModEntry.IsSmallBeachFarm(farm))
+                return;
+
             // update ocean crabpots before the game does
             GameLocation beach = Game1.getLocationFromName("Beach");
-            Farm farm = Game1.getFarm();
             foreach (CrabPot pot in farm.objects.Values.OfType<CrabPot>())
             {
                 if (ModEntry.IsOceanTile(farm, (int)pot.TileLocation.X, (int)pot.TileLocation.Y))
@@ -100,6 +103,9 @@ namespace SmallBeachFarm
         [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
         private static bool GetFishPrefix(Farm __instance, float millisecondsAfterNibble, int bait, int waterDepth, Farmer who, double baitPotency, ref SObject __result)
         {
+            if (!ModEntry.IsSmallBeachFarm(who?.currentLocation))
+                return false;
+
             // get tile being fished
             FishingRod rod = who.CurrentTool as FishingRod;
             if (rod == null)
@@ -117,6 +123,13 @@ namespace SmallBeachFarm
             // get default riverlands fish
             ModEntry.StaticMonitor.VerboseLog($"Fishing river tile at ({rod.bobber.X / Game1.tileSize}, {rod.bobber.Y / Game1.tileSize}).");
             return true;
+        }
+
+        /// <summary>Get whether the given location is the Small Beach Farm.</summary>
+        /// <param name="location">The location to check.</param>
+        private static bool IsSmallBeachFarm(GameLocation location)
+        {
+            return Game1.whichFarm == Farm.riverlands_layout && location?.Name == "Farm";
         }
 
         /// <summary>Get whether a given position is ocean water.</summary>
