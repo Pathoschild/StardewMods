@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Added support for catching both river and ocean fish.
+* The river/ocean are now treated as their respective types for fishing and crabpots.
 * Fixed warp change also applied to non-riverland farms.
 * Fixed some dirt tiles not marked tillable.
 * Fixed being able to walk through riverside bushes.

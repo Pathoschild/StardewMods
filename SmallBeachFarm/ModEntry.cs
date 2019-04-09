@@ -1,10 +1,12 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Harmony;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Objects;
 using StardewValley.Tools;
 using xTile.Dimensions;
 using SObject = StardewValley.Object;
@@ -30,6 +32,7 @@ namespace SmallBeachFarm
         {
             // hook events
             helper.Events.Player.Warped += this.OnWarped;
+            helper.Events.GameLoop.DayEnding += this.DayEnding;
 
             // hook Harmony patch
             ModEntry.StaticMonitor = this.Monitor;
@@ -70,6 +73,21 @@ namespace SmallBeachFarm
                 Game1.player.Position = new Vector2(79, 21) * Game1.tileSize;
         }
 
+        /// <summary>Raised before the game ends the current day.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void DayEnding(object sender, DayEndingEventArgs e)
+        {
+            // update ocean crabpots before the game does
+            GameLocation beach = Game1.getLocationFromName("Beach");
+            Farm farm = Game1.getFarm();
+            foreach (CrabPot pot in farm.objects.Values.OfType<CrabPot>())
+            {
+                if (ModEntry.IsOceanTile(farm, (int)pot.TileLocation.X, (int)pot.TileLocation.Y))
+                    pot.DayUpdate(beach);
+            }
+        }
+
         /// <summary>A method called via Harmony before <see cref="Farm.getFish(float, int, int, Farmer, double)"/>, which gets ocean fish from the beach properties if fishing the ocean water.</summary>
         /// <param name="__instance">The farm instance.</param>
         /// <param name="millisecondsAfterNibble">An argument passed through to the underlying method.</param>
@@ -82,29 +100,42 @@ namespace SmallBeachFarm
         [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
         private static bool GetFishPrefix(Farm __instance, float millisecondsAfterNibble, int bait, int waterDepth, Farmer who, double baitPotency, ref SObject __result)
         {
-            // get fishing rod
+            // get tile being fished
             FishingRod rod = who.CurrentTool as FishingRod;
             if (rod == null)
                 return false;
+            Point tile = new Point((int)(rod.bobber.X / Game1.tileSize), (int)(rod.bobber.Y / Game1.tileSize));
 
-            // get tile's tilesheet under cursor
-            string tilesheetId = __instance.map
-                ?.GetLayer("Back")
-                ?.PickTile(new Location((int)rod.bobber.X, (int)rod.bobber.Y), Game1.viewport.Size)
-                ?.TileSheet
-                ?.Id;
-
-            // get ocean fish if fishing the ocean water
-            if (tilesheetId == "zbeach" || tilesheetId == "zbeachplus")
+            // get ocean fish
+            if (ModEntry.IsOceanTile(__instance, tile.X, tile.Y))
             {
                 __result = __instance.getFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, "Beach");
                 ModEntry.StaticMonitor.VerboseLog($"Fishing ocean tile at ({rod.bobber.X / Game1.tileSize}, {rod.bobber.Y / Game1.tileSize}).");
                 return false;
             }
 
-            // else use default logic
+            // get default riverlands fish
             ModEntry.StaticMonitor.VerboseLog($"Fishing river tile at ({rod.bobber.X / Game1.tileSize}, {rod.bobber.Y / Game1.tileSize}).");
             return true;
+        }
+
+        /// <summary>Get whether a given position is ocean water.</summary>
+        /// <param name="farm">The farm instance.</param>
+        /// <param name="x">The tile X position.</param>
+        /// <param name="y">The tile Y position.</param>
+        private static bool IsOceanTile(Farm farm, int x, int y)
+        {
+            // check water property
+            if (farm.doesTileHaveProperty(x, y, "Water", "Back") == null)
+                return false;
+
+            // check for beach tilesheet
+            string tilesheetId = farm.map
+                ?.GetLayer("Back")
+                ?.PickTile(new Location(x * Game1.tileSize, y * Game1.tileSize), Game1.viewport.Size)
+                ?.TileSheet
+                ?.Id;
+            return tilesheetId == "zbeach" || tilesheetId == "zbeachplus";
         }
     }
 }

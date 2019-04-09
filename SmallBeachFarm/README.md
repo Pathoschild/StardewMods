@@ -18,7 +18,8 @@ A few highlights:
   > ![](docs/tilled-screenshot.png)
 * The exit to Marnie's ranch is on the right:
   > ![](docs/exit-screenshot.png)
-* You can catch riverlands fish in the river and ocean fish in the ocean:
+* You can catch riverlands fish in the river and ocean fish in the ocean (for both fishing and
+  crab pots):
   > ![](docs/fish-areas.png)
 * If you use [Automate](https://www.nexusmods.com/stardewvalley/mods/1063), there's plenty of spots
   to connect a chest to crab pots:
