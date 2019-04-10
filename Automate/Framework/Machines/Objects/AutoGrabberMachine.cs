@@ -15,6 +15,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Whether seeds should be ignored when selecting output.</summary>
         private readonly bool IgnoreSeedOutput;
 
+        /// <summary>Whether fertilizer should be ignored when selecting output.</summary>
+        private readonly bool IgnoreFertilizerOutput;
+
 
         /*********
         ** Public methods
@@ -24,16 +27,18 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <param name="location">The in-game location.</param>
         /// <param name="tile">The tile covered by the machine.</param>
         /// <param name="ignoreSeedOutput">Whether seeds should be ignored when selecting output.</param>
-        public AutoGrabberMachine(SObject machine, GameLocation location, Vector2 tile, bool ignoreSeedOutput)
+        /// <param name="ignoreFertilizerOutput">Whether fertilizer should be ignored when selecting output.</param>
+        public AutoGrabberMachine(SObject machine, GameLocation location, Vector2 tile, bool ignoreSeedOutput, bool ignoreFertilizerOutput)
             : base(machine, location, tile)
         {
             this.IgnoreSeedOutput = ignoreSeedOutput;
+            this.IgnoreFertilizerOutput = ignoreFertilizerOutput;
         }
 
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
         {
-            return this.Machine.heldObject.Value is Chest output && this.GetNextOutput() != null
+            return this.GetNextOutput() != null
                 ? MachineState.Done
                 : MachineState.Processing;
         }
@@ -81,6 +86,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                     continue;
 
                 if (this.IgnoreSeedOutput && (item as SObject)?.Category == SObject.SeedsCategory)
+                    continue;
+                if (this.IgnoreFertilizerOutput && (item as SObject)?.Category == SObject.fertilizerCategory)
                     continue;
 
                 return item;

@@ -16,6 +16,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Whether seeds should be ignored when selecting output.</summary>
         private readonly bool IgnoreSeedOutput;
 
+        /// <summary>Whether fertilizer should be ignored when selecting output.</summary>
+        private readonly bool IgnoreFertilizerOutput;
+
         /// <summary>The Junimo hut's output chest.</summary>
         private Chest Output => this.Machine.output.Value;
 
@@ -27,16 +30,18 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <param name="hut">The underlying Junimo hut.</param>
         /// <param name="location">The location which contains the machine.</param>
         /// <param name="ignoreSeedOutput">Whether seeds should be ignored when selecting output.</param>
-        public JunimoHutMachine(JunimoHut hut, GameLocation location, bool ignoreSeedOutput)
+        /// <param name="ignoreFertilizerOutput">Whether fertilizer should be ignored when selecting output.</param>
+        public JunimoHutMachine(JunimoHut hut, GameLocation location, bool ignoreSeedOutput, bool ignoreFertilizerOutput)
             : base(hut, location, BaseMachine.GetTileAreaFor(hut))
         {
             this.IgnoreSeedOutput = ignoreSeedOutput;
+            this.IgnoreFertilizerOutput = ignoreFertilizerOutput;
         }
 
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
         {
-            if (this.Output.items.Any(item => item != null))
+            if (this.GetNextOutput() != null)
                 return MachineState.Done;
             return MachineState.Processing;
         }
@@ -44,8 +49,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Get the machine output.</summary>
         public override ITrackedStack GetOutput()
         {
-            IList<Item> inventory = this.Output.items;
-            return new TrackedItem(inventory.FirstOrDefault(item => item != null), onEmpty: this.OnOutputTaken);
+            return new TrackedItem(this.GetNextOutput(), onEmpty: this.OnOutputTaken);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -77,6 +81,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
                     continue;
 
                 if (this.IgnoreSeedOutput && (item as SObject)?.Category == SObject.SeedsCategory)
+                    continue;
+                if (this.IgnoreFertilizerOutput && (item as SObject)?.Category == SObject.fertilizerCategory)
                     continue;
 
                 return item;
