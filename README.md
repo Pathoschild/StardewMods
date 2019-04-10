@@ -38,6 +38,10 @@ Active mods:
   gifts, when a crop will be ready to harvest, how long a fence will last, why your farm animals
   are unhappy, and more._
 
+* **Noclip Mode** <small>([source](NoclipMode))</small>  
+  _Toggle [noclip mode](https://en.wikipedia.org/wiki/Noclip_mode) at the press of a button,
+  letting you walk through anything (even map boundaries)._
+
 * **[Rotate Toolbar](http://www.nexusmods.com/stardewvalley/mods/1100)** <small>([source](RotateToolbar))</small>  
   _Rotate the top inventory row for the toolbar by pressing Tab (configurable)._
 
@@ -66,19 +70,19 @@ use the right translations.
 
 (❑ = untranslated, ↻ = partly translated, ✓ = fully translated)
 
-&nbsp;     | Chests Anywhere                          | Data Layers                          | Debug Mode                          | Lookup Anything                          | Tractor Mod
----------- | :--------------------------------------- | :----------------------------------- | :---------------------------------- | :--------------------------------------- | :------------------------------
-Chinese    | [✓](ChestsAnywhere/i18n/zh.json)        | [✓](DataLayers/i18n/zh.json)        | [✓](DebugMode/i18n/zh.json)        | [✓](LookupAnything/i18n/zh.json)        | [✓](TractorMod/i18n/zh.json)
-French     | [↻ partial](ChestsAnywhere/i18n/fr.json) | [↻ partial](DataLayers/i18n/fr.json) | [✓](DebugMode/i18n/fr.json)        | [✓](LookupAnything/i18n/fr.json)        | [✓](TractorMod/i18n/fr.json)
-German     | [↻ partial](ChestsAnywhere/i18n/de.json) | [↻ partial](DataLayers/i18n/de.json) | [✓](DebugMode/i18n/de.json)        | [✓](LookupAnything/i18n/de.json)        | [✓](TractorMod/i18n/de.json)
-Hungarian  | ❑                                       | ❑                                   | ❑                                  | ❑                                       | ❑
-Italian    | ❑                                       | ❑                                   | ❑                                  | ❑                                       | ❑
-Japanese   | [↻ partial](ChestsAnywhere/i18n/ja.json) | [↻ partial](DataLayers/i18n/ja.json) | [✓](DebugMode/i18n/ja.json)        | [↻ partial](LookupAnything/i18n/ja.json) | [✓](TractorMod/i18n/ja.json)
-Korean     | [✓](ChestsAnywhere/i18n/ko.json)        | [✓](DataLayers/i18n/ko.json)        | [✓](DebugMode/i18n/ko.json)        | [✓](LookupAnything/i18n/ko.json)        | [✓](TractorMod/i18n/ko.json)
-Portuguese | [↻ partial](ChestsAnywhere/i18n/pt.json) | [↻ partial](DataLayers/i18n/pt.json) | [✓](DebugMode/i18n/pt.json)        | [✓](LookupAnything/i18n/pt.json)        | [✓](TractorMod/i18n/pt.json)
-Russian    | [✓](ChestsAnywhere/i18n/ru.json)        | [✓](DataLayers/i18n/ru.json)        | [✓](DebugMode/i18n/ru.json)        | [✓](LookupAnything/i18n/ru.json)        | [✓](TractorMod/i18n/ru.json)
-Spanish    | [↻ partial](ChestsAnywhere/i18n/es.json) | [↻ partial](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json)        | [↻ partial](LookupAnything/i18n/es.json) | [✓](TractorMod/i18n/es.json)
-Turkish    | ❑                                       | ❑                                   | ❑                                  | ❑                                       | ❑
+&nbsp;     | Chests Anywhere                          | Data Layers                          | Debug Mode                          | Lookup Anything                          | Noclip Mode | Tractor Mod
+---------- | :--------------------------------------- | :----------------------------------- | :---------------------------------- | :--------------------------------------- | ----------- | :------------------------------
+Chinese    | [✓](ChestsAnywhere/i18n/zh.json)        | [✓](DataLayers/i18n/zh.json)        | [✓](DebugMode/i18n/zh.json)        | [✓](LookupAnything/i18n/zh.json)        | ❑          | [✓](TractorMod/i18n/zh.json)
+French     | [↻ partial](ChestsAnywhere/i18n/fr.json) | [↻ partial](DataLayers/i18n/fr.json) | [✓](DebugMode/i18n/fr.json)        | [✓](LookupAnything/i18n/fr.json)        | ❑          |  [✓](TractorMod/i18n/fr.json)
+German     | [↻ partial](ChestsAnywhere/i18n/de.json) | [↻ partial](DataLayers/i18n/de.json) | [✓](DebugMode/i18n/de.json)        | [✓](LookupAnything/i18n/de.json)        | ❑          |  [✓](TractorMod/i18n/de.json)
+Hungarian  | ❑                                       | ❑                                   | ❑                                  | ❑                                       | ❑          | ❑
+Italian    | ❑                                       | ❑                                   | ❑                                  | ❑                                       | ❑          | ❑
+Japanese   | [↻ partial](ChestsAnywhere/i18n/ja.json) | [↻ partial](DataLayers/i18n/ja.json) | [✓](DebugMode/i18n/ja.json)        | [↻ partial](LookupAnything/i18n/ja.json) | ❑          | [✓](TractorMod/i18n/ja.json)
+Korean     | [✓](ChestsAnywhere/i18n/ko.json)        | [✓](DataLayers/i18n/ko.json)        | [✓](DebugMode/i18n/ko.json)        | [✓](LookupAnything/i18n/ko.json)        | ❑          | [✓](TractorMod/i18n/ko.json)
+Portuguese | [↻ partial](ChestsAnywhere/i18n/pt.json) | [↻ partial](DataLayers/i18n/pt.json) | [✓](DebugMode/i18n/pt.json)        | [✓](LookupAnything/i18n/pt.json)        | ❑          | [✓](TractorMod/i18n/pt.json)
+Russian    | [✓](ChestsAnywhere/i18n/ru.json)        | [✓](DataLayers/i18n/ru.json)        | [✓](DebugMode/i18n/ru.json)        | [✓](LookupAnything/i18n/ru.json)        | ❑          | [✓](TractorMod/i18n/ru.json)
+Spanish    | [↻ partial](ChestsAnywhere/i18n/es.json) | [↻ partial](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json)        | [↻ partial](LookupAnything/i18n/es.json) | ❑          | [✓](TractorMod/i18n/es.json)
+Turkish    | ❑                                       | ❑                                   | ❑                                  | ❑                                       | ❑          | ❑
 
 Contributions are welcome! See [Modding:Translations](https://stardewvalleywiki.com/Modding:Translations)
 on the wiki for help contributing translations.
