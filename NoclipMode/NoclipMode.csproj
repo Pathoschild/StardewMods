@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>NoclipMode</AssemblyName>
+    <Version>1.0.0</Version>
+    <RootNamespace>Pathoschild.Stardew.NoclipMode</RootNamespace>
+    <TargetFramework>net452</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0-beta.4" />
+  </ItemGroup>
+
+  <Import Project="..\Common\Common.projitems" Label="Shared" />
+  <Import Project="$(SolutionDir)\common.targets" />
+
+</Project>
