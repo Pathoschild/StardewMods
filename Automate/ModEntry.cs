@@ -51,12 +51,12 @@ namespace Pathoschild.Stardew.Automate
         {
             // toggle mod compatibility
             bool hasBetterJunimos = helper.ModRegistry.IsLoaded("hawkfalcon.BetterJunimos");
-            bool hasDeluxeAutoGrabber = helper.ModRegistry.IsLoaded("stokastic.DeluxeGrabber");
+            bool hasAutoGrabberMod = helper.ModRegistry.IsLoaded("Jotser.AutoGrabberMod");
 
             // init
             this.Config = helper.ReadConfig<ModConfig>();
             this.Factory = new MachineGroupFactory();
-            this.Factory.Add(new AutomationFactory(this.Config.Connectors, this.Config.AutomateShippingBin, this.Monitor, helper.Reflection, hasBetterJunimos, hasDeluxeAutoGrabber));
+            this.Factory.Add(new AutomationFactory(this.Config.Connectors, this.Config.AutomateShippingBin, this.Monitor, helper.Reflection, hasBetterJunimos, hasAutoGrabberMod));
 
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
