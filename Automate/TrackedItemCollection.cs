@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using StardewValley;
@@ -11,7 +12,7 @@ namespace Pathoschild.Stardew.Automate
         ** Fields
         *********/
         /// <summary>The underlying item stacks.</summary>
-        private readonly ITrackedStack[] Stacks;
+        private readonly IList<ITrackedStack> Stacks = new List<ITrackedStack>();
 
 
         /*********
@@ -19,7 +20,7 @@ namespace Pathoschild.Stardew.Automate
         *********/
         /// <summary>A sample item for comparison.</summary>
         /// <remarks>This should be equivalent to the underlying item (except in stack size), but *not* a reference to it.</remarks>
-        public Item Sample { get; }
+        public Item Sample { get; private set; }
 
         /// <summary>The number of items in the stack.</summary>
         public int Count => this.Stacks.Sum(p => p.Count);
@@ -30,10 +31,32 @@ namespace Pathoschild.Stardew.Automate
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="stacks">The underlying item stacks.</param>
-        public TrackedItemCollection(IEnumerable<ITrackedStack> stacks)
+        public TrackedItemCollection(params ITrackedStack[] stacks)
         {
-            this.Stacks = stacks.ToArray();
-            this.Sample = this.Stacks.FirstOrDefault()?.Sample;
+            foreach (ITrackedStack stack in stacks)
+                this.Add(stack);
+        }
+
+        /// <summary>Add a stack to the collection.</summary>
+        /// <param name="stack">The item stack to add.</param>
+        public void Add(ITrackedStack stack)
+        {
+            if (stack?.Sample == null)
+                throw new InvalidOperationException("Can't track an item with no underlying item.");
+
+            this.Stacks.Add(stack);
+            if (this.Sample == null)
+                this.Sample = stack.Sample;
+        }
+
+        /// <summary>Get whether the underlying items can stack with the items in another stack, based on their respective <see cref="Sample"/> values.</summary>
+        /// <param name="stack">The other stack to check.</param>
+        public bool CanStackWith(ITrackedStack stack)
+        {
+            if (stack?.Sample == null)
+                return false;
+
+            return this.Sample == null || this.Sample.canStackWith(stack.Sample);
         }
 
         /// <summary>Remove the specified number of this item from the stack.</summary>
