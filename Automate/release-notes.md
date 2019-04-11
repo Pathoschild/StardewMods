@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Updated for Stardew Valley 1.4.
+* Updated for Stardew Valley 1.4, including new machine recipes.
 * Added compatibility with Auto-Grabber Mod and Better Junimos. If they're installed, seeds/fertiliser in their respective machines will be ignored.
 * Fixed items with different item qualities being combined into one input stack.
 

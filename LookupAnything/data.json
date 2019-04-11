@@ -297,13 +297,19 @@ You shouldn't change this file unless you know what you're doing.
         {
             "MachineID": 24,
             "Ingredients": {
-                "107": 1, // dinosaur egg
                 "174": 1, // or large white egg
                 "176": 1, // or white egg
                 "180": 1, // or brown egg
                 "182": 1 // or large brown egg
             },
             "Output": 306 // mayonnaise
+        },
+        {
+          "MachineID": 24,
+          "Ingredients": {
+            "107": 1 // dinosaur egg
+          },
+          "Output": 807 // dinosaur mayonnaise
         },
         {
             "MachineID": 24,
