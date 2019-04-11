@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Updated for Stardew Valley 1.4, including new machine recipes.
+
 ## 1.13.2
 Released 25 July 2019.
 

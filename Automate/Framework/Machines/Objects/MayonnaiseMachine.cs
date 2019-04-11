@@ -5,6 +5,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A mayonnaise that accepts input and provides output.</summary>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/>.</remarks>
     internal class MayonnaiseMachine : GenericObjectMachine<SObject>
     {
         /*********
@@ -26,6 +27,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 input: 442,
                 inputCount: 1,
                 output: input => new SObject(Vector2.Zero, 307, null, false, true, false, false),
+                minutes: 180
+            ),
+
+            // dinosaur egg => dinosaur mayonnaise
+            new Recipe(
+                input: 107,
+                inputCount: 1,
+                output: input => new SObject(Vector2.Zero, 807, null, false, true, false, false),
                 minutes: 180
             ),
 
