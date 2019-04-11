@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed warp from Marnie's ranch when riding a horse/tractor.
+
 ## 1.1
 * The river/ocean are now treated as their respective types for fishing and crabpots.
 * Fixed warp change also applied to non-riverland farms.

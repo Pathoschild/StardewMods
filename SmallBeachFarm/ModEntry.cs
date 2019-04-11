@@ -22,6 +22,12 @@ namespace SmallBeachFarm
         /// <summary>Encapsulates logging for the Harmony patch.</summary>
         private static IMonitor StaticMonitor;
 
+        /// <summary>The pixel position at which to place the player after they arrive from Marnie's ranch.</summary>
+        private readonly Vector2 MarnieWarpArrivalPixelPos = new Vector2(76, 21) * Game1.tileSize;
+
+        /// <summary>The maximum pixel Y coordinate for incoming warps. If they arrive beyond this value, the player is moved to <see cref="MarnieWarpArrivalPixelPos"/>.</summary>
+        private readonly int MaxWarpPixelY = 29 * Game1.tileSize;
+
 
         /*********
         ** Public methods
@@ -69,8 +75,10 @@ namespace SmallBeachFarm
         /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
         {
-            if (e.IsLocalPlayer && ModEntry.IsSmallBeachFarm(e.NewLocation) && Game1.player.getTileLocation().Y > 29)
-                Game1.player.Position = new Vector2(79, 21) * Game1.tileSize;
+            // move player if they warp from Marnie's ranch into ocean
+            // note: getTileLocation() seems to be unreliable when mounted.
+            if (e.IsLocalPlayer && ModEntry.IsSmallBeachFarm(e.NewLocation) && Game1.player.Position.Y > this.MaxWarpPixelY)
+                Game1.player.Position = this.MarnieWarpArrivalPixelPos;
         }
 
         /// <summary>Raised before the game ends the current day.</summary>
