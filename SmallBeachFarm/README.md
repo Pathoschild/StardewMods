@@ -2,7 +2,7 @@
 riverlands farm with a fertile pocket beach suitable for slower/challenge runs, and lets you
 catch both river and ocean fish.
 
-> ![](docs/farm-screenshot.png)
+> ![](docs/farm.png)
 
 ## Install
 1. [Install the latest version of SMAPI](https://smapi.io/).
@@ -14,10 +14,11 @@ Just load a save with the riverlands farm, and you'll see the new map!
 
 A few highlights:
 
-* The beach is fertile, so you can plant crops in the sandy areas too:  
+* The beach is fertile, so you can plant crops in the grass and sand too:  
   > ![](docs/tilled-screenshot.png)
 * The exit to Marnie's ranch is on the right:
-  > ![](docs/exit-screenshot.png)
+  > ![](docs/exit.png)
+
 * You can catch riverlands fish in the river and ocean fish in the ocean (for both fishing and
   crab pots):
   > ![](docs/fish-areas.png)
