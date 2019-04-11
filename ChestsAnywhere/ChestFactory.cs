@@ -238,7 +238,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 // shipping bin
                 case Farm _:
                 case ShippingBin _:
-                    return Game1.getFarm().shippingBin;
+                    return Game1.getFarm().getShippingBin(Game1.player);
 
                 // unsupported type
                 default:
