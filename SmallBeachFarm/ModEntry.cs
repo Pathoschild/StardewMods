@@ -61,7 +61,7 @@ namespace SmallBeachFarm
         public T Load<T>(IAssetInfo asset)
         {
             if (asset.AssetNameEquals("Maps/Farm_Fishing"))
-                return this.Helper.Content.Load<T>("assets/[CP] SmallBeachFarm/assets/SmallBeachFarm.tbin");
+                return this.Helper.Content.Load<T>("assets/SmallBeachFarm.tbin");
 
             throw new NotSupportedException($"Unexpected asset '{asset.AssetName}'.");
         }

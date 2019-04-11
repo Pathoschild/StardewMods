@@ -48,16 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\[CP] SmallBeachFarm\assets\Forest.tbin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="assets\[CP] SmallBeachFarm\assets\SmallBeachFarm.tbin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="assets\[CP] SmallBeachFarm\content.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="assets\[CP] SmallBeachFarm\manifest.json">
+    <None Include="assets\SmallBeachFarm.tbin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="manifest.json" />
@@ -65,16 +56,16 @@
     <None Include="release-notes.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\[CP] SmallBeachFarm\assets\fall_beach_plus.png">
+    <Content Include="assets\fall_beach_plus.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\[CP] SmallBeachFarm\assets\spring_beach_plus.png">
+    <Content Include="assets\spring_beach_plus.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\[CP] SmallBeachFarm\assets\summer_beach_plus.png">
+    <Content Include="assets\summer_beach_plus.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\[CP] SmallBeachFarm\assets\winter_beach_plus.png">
+    <Content Include="assets\winter_beach_plus.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
