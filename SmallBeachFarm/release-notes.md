@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* Fixed warp from Marnie's ranch when riding a horse/tractor.
+* Fixed position after entering Marnie's ranch when riding a horse/tractor.
+* Fixed farm warp totem behavior.
 
 ## 1.1
 * The river/ocean are now treated as their respective types for fishing and crabpots.
