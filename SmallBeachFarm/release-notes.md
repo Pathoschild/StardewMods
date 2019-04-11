@@ -2,9 +2,10 @@
 
 # Release notes
 ## Upcoming release
+* Reduced foliage overhang along left edge.
 * Fixed position after entering Marnie's ranch when riding a horse/tractor.
 * Fixed farm warp totem behavior.
-* Reduced foliage overhang along left edge.
+* Fixed support for prebuilding co-op cabins.
 
 ## 1.1
 * The river/ocean are now treated as their respective types for fishing and crabpots.
