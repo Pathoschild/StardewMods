@@ -36,6 +36,13 @@ Yep! If you have things in the water due to the smaller map, see
 [Saves#Change farm type](https://stardewvalleywiki.com/Saves#Change_farm_type)
 for some suggested fixes (skip the part about editing the save file).
 
+### Does this work with map recolors?
+Yep! It currently adjusts automatically for these recolors:
+
+* A Wittily Named Recolor
+* Eemie's Just Another Map Recolor
+* Starblue Valley
+
 ## See also
 * Farm map commissioned from [Opalie](https://www.nexusmods.com/stardewvalley/users/38947035)!
 * [release notes](release-notes.md)

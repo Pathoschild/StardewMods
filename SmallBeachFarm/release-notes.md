@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Added support for tilesheet recolors.
+* Added recolors for A Wittily Named Recolor, Eemie's Just A New Map Recolour, and Starblue Valley.
 * Reduced foliage overhang along left edge.
 * Fixed position after entering Marnie's ranch when riding a horse/tractor.
 * Fixed farm warp totem behavior.
