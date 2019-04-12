@@ -87,7 +87,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                 return (T)(object)map;
             }
 
-
             throw new NotSupportedException($"Unexpected asset '{asset.AssetName}'.");
         }
 
@@ -199,7 +198,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                 ?.PickTile(new Location(x * Game1.tileSize, y * Game1.tileSize), Game1.viewport.Size)
                 ?.TileSheet
                 ?.Id;
-            return tilesheetId == "zbeach" || tilesheetId == "zbeachplus";
+            return tilesheetId == "zbeach" || tilesheetId == "zbeach_farm";
         }
     }
 }
