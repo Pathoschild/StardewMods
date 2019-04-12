@@ -25,7 +25,7 @@ _ReSharper*/
 *.nuget.targets
 
 # vanilla map tilesheets
-SmallBeachFarm/**/assets/paths.png
-SmallBeachFarm/**/assets/spring_beach.png
-SmallBeachFarm/**/assets/spring_outdoorsTileSheet.png
-SmallBeachFarm/**/assets/spring_town.png
+SmallBeachFarm/assets/paths.png
+SmallBeachFarm/assets/spring_beach.png
+SmallBeachFarm/assets/spring_outdoorsTileSheet.png
+SmallBeachFarm/assets/spring_town.png

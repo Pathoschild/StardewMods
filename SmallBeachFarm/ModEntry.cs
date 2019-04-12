@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using Harmony;
 using Microsoft.Xna.Framework;
@@ -8,10 +9,12 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Objects;
 using StardewValley.Tools;
+using xTile;
 using xTile.Dimensions;
+using xTile.Tiles;
 using SObject = StardewValley.Object;
 
-namespace SmallBeachFarm
+namespace Pathoschild.Stardew.SmallBeachFarm
 {
     /// <summary>The mod entry class loaded by SMAPI.</summary>
     public class ModEntry : Mod, IAssetLoader
@@ -21,6 +24,15 @@ namespace SmallBeachFarm
         *********/
         /// <summary>Encapsulates logging for the Harmony patch.</summary>
         private static IMonitor StaticMonitor;
+
+        /// <summary>The pixel position at which to place the player after they arrive from Marnie's ranch.</summary>
+        private readonly Vector2 MarnieWarpArrivalPixelPos = new Vector2(76, 21) * Game1.tileSize;
+
+        /// <summary>The maximum pixel Y coordinate for incoming warps. If they arrive beyond this value, the player is moved to <see cref="MarnieWarpArrivalPixelPos"/>.</summary>
+        private readonly int MaxWarpPixelY = 29 * Game1.tileSize;
+
+        /// <summary>The relative path to the folder containing tilesheet variants.</summary>
+        private readonly string TilesheetsPath = Path.Combine("assets", "tilesheets");
 
 
         /*********
@@ -55,7 +67,25 @@ namespace SmallBeachFarm
         public T Load<T>(IAssetInfo asset)
         {
             if (asset.AssetNameEquals("Maps/Farm_Fishing"))
-                return this.Helper.Content.Load<T>("assets/[CP] SmallBeachFarm/assets/SmallBeachFarm.tbin");
+            {
+                // load map
+                Map map = this.Helper.Content.Load<Map>("assets/SmallBeachFarm.tbin");
+
+                // apply tilesheet recolors
+                DirectoryInfo compatFolder = this.GetCustomTilesheetFolder();
+                if (compatFolder != null)
+                {
+                    this.Monitor.Log($"Applying map tilesheets from {Path.Combine(this.TilesheetsPath, compatFolder.Name)}.", LogLevel.Trace);
+                    foreach (TileSheet tilesheet in map.TileSheets)
+                    {
+                        string assetFileName = Path.GetFileName(tilesheet.ImageSource);
+                        if (File.Exists(Path.Combine(compatFolder.FullName, assetFileName)))
+                            tilesheet.ImageSource = this.Helper.Content.GetActualAssetKey(Path.Combine(this.TilesheetsPath, compatFolder.Name, assetFileName));
+                    }
+                }
+
+                return (T)(object)map;
+            }
 
             throw new NotSupportedException($"Unexpected asset '{asset.AssetName}'.");
         }
@@ -69,8 +99,10 @@ namespace SmallBeachFarm
         /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
         {
-            if (e.IsLocalPlayer && ModEntry.IsSmallBeachFarm(e.NewLocation) && Game1.player.getTileLocation().Y > 29)
-                Game1.player.Position = new Vector2(79, 21) * Game1.tileSize;
+            // move player if they warp from Marnie's ranch into ocean
+            // note: getTileLocation() seems to be unreliable when mounted.
+            if (e.IsLocalPlayer && ModEntry.IsSmallBeachFarm(e.NewLocation) && Game1.player.Position.Y > this.MaxWarpPixelY)
+                Game1.player.Position = this.MarnieWarpArrivalPixelPos;
         }
 
         /// <summary>Raised before the game ends the current day.</summary>
@@ -89,6 +121,24 @@ namespace SmallBeachFarm
                 if (ModEntry.IsOceanTile(farm, (int)pot.TileLocation.X, (int)pot.TileLocation.Y))
                     pot.DayUpdate(beach);
             }
+        }
+
+        /// <summary>Get the folder from which to load tilesheets for compatibility with another mod, if applicable.</summary>
+        private DirectoryInfo GetCustomTilesheetFolder()
+        {
+            // get root compatibility folder
+            DirectoryInfo compatFolder = new DirectoryInfo(Path.Combine(this.Helper.DirectoryPath, this.TilesheetsPath));
+            if (!compatFolder.Exists)
+                return null;
+
+            // get first folder matching an installed mod
+            foreach (DirectoryInfo folder in compatFolder.GetDirectories())
+            {
+                if (folder.Name != "_default" && this.Helper.ModRegistry.IsLoaded(folder.Name))
+                    return folder;
+            }
+
+            return null;
         }
 
         /// <summary>A method called via Harmony before <see cref="Farm.getFish(float, int, int, Farmer, double)"/>, which gets ocean fish from the beach properties if fishing the ocean water.</summary>
@@ -148,7 +198,7 @@ namespace SmallBeachFarm
                 ?.PickTile(new Location(x * Game1.tileSize, y * Game1.tileSize), Game1.viewport.Size)
                 ?.TileSheet
                 ?.Id;
-            return tilesheetId == "zbeach" || tilesheetId == "zbeachplus";
+            return tilesheetId == "zbeach" || tilesheetId == "zbeach_farm";
         }
     }
 }
