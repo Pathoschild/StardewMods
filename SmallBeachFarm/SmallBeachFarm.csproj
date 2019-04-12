@@ -7,7 +7,7 @@
     <ProjectGuid>{29A85E4A-02F1-4A25-8EE3-EFE3BE944244}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SmallBeachFarm</RootNamespace>
+    <RootNamespace>Pathoschild.Stardew.SmallBeachFarm</RootNamespace>
     <AssemblyName>SmallBeachFarm</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -44,6 +44,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Framework\ModConfig.cs" />
     <Compile Include="ModEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -56,64 +57,67 @@
     <None Include="release-notes.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\fall_beach_plus.png">
+    <Content Include="assets\tilesheets\acerbicon.recolor\fall_smallBeachFarm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\recolors\Acerbicon.Recolor\credit.txt">
+    <Content Include="assets\tilesheets\acerbicon.recolor\spring_smallBeachFarm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\recolors\Acerbicon.Recolor\fall_beach_plus.png">
+    <Content Include="assets\tilesheets\acerbicon.recolor\summer_smallBeachFarm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\recolors\Acerbicon.Recolor\spring_beach_plus.png">
+    <Content Include="assets\tilesheets\acerbicon.recolor\winter_smallBeachFarm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\recolors\Acerbicon.Recolor\summer_beach_plus.png">
+    <Content Include="assets\tilesheets\lita.starblueValley\fall_smallBeachFarm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\recolors\Acerbicon.Recolor\winter_beach_plus.png">
+    <Content Include="assets\tilesheets\lita.starblueValley\spring_smallBeachFarm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\recolors\Lita.StarblueValley\credit.txt">
+    <Content Include="assets\tilesheets\lita.starblueValley\summer_smallBeachFarm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\recolors\Lita.StarblueValley\fall_beach_plus.png">
+    <Content Include="assets\tilesheets\lita.starblueValley\winter_smallBeachFarm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\recolors\Lita.StarblueValley\spring_beach_plus.png">
+    <Content Include="assets\tilesheets\minervamaga.cp.eemieMapRecolour\fall_smallBeachFarm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\recolors\Lita.StarblueValley\summer_beach_plus.png">
+    <Content Include="assets\tilesheets\minervamaga.cp.eemieMapRecolour\fall_smallBeachFarm_orange.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\recolors\Lita.StarblueValley\winter_beach_plus.png">
+    <Content Include="assets\tilesheets\minervamaga.cp.eemieMapRecolour\spring_smallBeachFarm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="assets\recolors\minervamaga.CP.eemieMapRecolour\credit.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <Content Include="assets\recolors\minervamaga.CP.eemieMapRecolour\fall_beach_plus.png">
+    <Content Include="assets\tilesheets\minervamaga.cp.eemieMapRecolour\summer_smallBeachFarm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\recolors\minervamaga.CP.eemieMapRecolour\fall_beach_plus_orange.png">
+    <Content Include="assets\tilesheets\minervamaga.cp.eemieMapRecolour\winter_smallBeachFarm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\recolors\minervamaga.CP.eemieMapRecolour\spring_beach_plus.png">
+    <Content Include="assets\tilesheets\_default\fall_beach_flipped.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\recolors\minervamaga.CP.eemieMapRecolour\summer_beach_plus.png">
+    <Content Include="assets\tilesheets\_default\fall_smallBeachFarm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\recolors\minervamaga.CP.eemieMapRecolour\winter_beach_plus.png">
+    <Content Include="assets\tilesheets\_default\spring_beach_flipped.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\spring_beach_plus.png">
+    <Content Include="assets\tilesheets\_default\spring_smallBeachFarm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\summer_beach_plus.png">
+    <Content Include="assets\tilesheets\_default\summer_beach_flipped.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\winter_beach_plus.png">
+    <Content Include="assets\tilesheets\_default\summer_smallBeachFarm.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\tilesheets\_default\winter_beach_flipped.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\tilesheets\_default\winter_smallBeachFarm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

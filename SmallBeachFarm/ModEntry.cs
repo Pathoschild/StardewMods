@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using Harmony;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.SmallBeachFarm.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -14,7 +16,7 @@ using xTile.Dimensions;
 using xTile.Tiles;
 using SObject = StardewValley.Object;
 
-namespace SmallBeachFarm
+namespace Pathoschild.Stardew.SmallBeachFarm
 {
     /// <summary>The mod entry class loaded by SMAPI.</summary>
     public class ModEntry : Mod, IAssetLoader
@@ -31,8 +33,8 @@ namespace SmallBeachFarm
         /// <summary>The maximum pixel Y coordinate for incoming warps. If they arrive beyond this value, the player is moved to <see cref="MarnieWarpArrivalPixelPos"/>.</summary>
         private readonly int MaxWarpPixelY = 29 * Game1.tileSize;
 
-        /// <summary>The relative path to the folder containing tilesheet recolors.</summary>
-        private readonly string RecolorPath = Path.Combine("assets", "recolors");
+        /// <summary>The relative path to the folder containing tilesheet variants.</summary>
+        private readonly string TilesheetsPath = Path.Combine("assets", "tilesheets");
 
 
         /*********
@@ -44,6 +46,7 @@ namespace SmallBeachFarm
         {
             // hook events
             helper.Events.Player.Warped += this.OnWarped;
+            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             helper.Events.GameLoop.DayEnding += this.DayEnding;
 
             // hook Harmony patch
@@ -75,12 +78,12 @@ namespace SmallBeachFarm
                 DirectoryInfo compatFolder = this.GetCustomTilesheetFolder();
                 if (compatFolder != null)
                 {
-                    this.Monitor.Log($"Applying map tilesheets from {Path.Combine(this.RecolorPath, compatFolder.Name)}.", LogLevel.Trace);
+                    this.Monitor.Log($"Applying map tilesheets from {Path.Combine(this.TilesheetsPath, compatFolder.Name)}.", LogLevel.Trace);
                     foreach (TileSheet tilesheet in map.TileSheets)
                     {
-                        string assetFileName = Path.GetFileName(tilesheet.ImageSource); // SMAPI has already replaced the image source with a namespaced key at this point
+                        string assetFileName = Path.GetFileName(tilesheet.ImageSource);
                         if (File.Exists(Path.Combine(compatFolder.FullName, assetFileName)))
-                            tilesheet.ImageSource = this.Helper.Content.GetActualAssetKey(Path.Combine(this.RecolorPath, compatFolder.Name, assetFileName));
+                            tilesheet.ImageSource = this.Helper.Content.GetActualAssetKey(Path.Combine(this.TilesheetsPath, compatFolder.Name, assetFileName));
                     }
                 }
 
@@ -95,6 +98,28 @@ namespace SmallBeachFarm
         /*********
         ** Private methods
         *********/
+        /// <summary>Raised after the game is launched, right before the first update tick. This happens once per game session (unrelated to loading saves). All mods are loaded and initialised at this point, so this is a good time to set up mod integrations.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        {
+            var config = this.Helper.ReadConfig<ModConfig>();
+
+            // regenerate flipped beach textures to support map recolor mods
+            if (config.RegenerateFlippedBeach)
+            {
+                foreach (string season in new[] { "spring", "summer", "fall", "winter" })
+                {
+                    Texture2D flippedBeach = this.VerticalFlipTexture(this.Helper.Content.Load<Texture2D>($"Maps/{season}_beach", ContentSource.GameContent));
+                    using (Stream stream = File.Create(Path.Combine(this.Helper.DirectoryPath, this.TilesheetsPath, "_default", $"{season}_beach_flipped.png")))
+                        flippedBeach.SaveAsPng(stream, flippedBeach.Width, flippedBeach.Height);
+                }
+                this.Monitor.Log("Regenerated flipped beach tilesheets.", LogLevel.Trace);
+            }
+            else
+                this.Monitor.Log("Tilesheet regeneration disabled by config.", LogLevel.Trace);
+        }
+
         /// <summary>Raised after a player warps to a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
@@ -128,14 +153,14 @@ namespace SmallBeachFarm
         private DirectoryInfo GetCustomTilesheetFolder()
         {
             // get root compatibility folder
-            DirectoryInfo compatFolder = new DirectoryInfo(Path.Combine(this.Helper.DirectoryPath, this.RecolorPath));
+            DirectoryInfo compatFolder = new DirectoryInfo(Path.Combine(this.Helper.DirectoryPath, this.TilesheetsPath));
             if (!compatFolder.Exists)
                 return null;
 
             // get first folder matching an installed mod
             foreach (DirectoryInfo folder in compatFolder.GetDirectories())
             {
-                if (this.Helper.ModRegistry.IsLoaded(folder.Name))
+                if (folder.Name != "_default" && this.Helper.ModRegistry.IsLoaded(folder.Name))
                     return folder;
             }
 
@@ -200,6 +225,29 @@ namespace SmallBeachFarm
                 ?.TileSheet
                 ?.Id;
             return tilesheetId == "zbeach" || tilesheetId == "zbeachplus";
+        }
+
+        /// <summary>Vertically flip a texture.</summary>
+        /// <param name="source">The source texture.</param>
+        private Texture2D VerticalFlipTexture(Texture2D source)
+        {
+            // get source pixels
+            Color[] sourcePixels = new Color[source.Width * source.Height];
+            source.GetData(sourcePixels);
+
+            // generate flipped pixels
+            Color[] newPixels = new Color[sourcePixels.Length];
+            Array.Copy(sourcePixels, newPixels, newPixels.Length);
+            for (int i = 0; i < sourcePixels.Length; i++)
+            {
+                int fromRow = source.Height - (i / source.Width) - 1;
+                newPixels[i] = sourcePixels[(fromRow * source.Width) + (i % source.Width)];
+            }
+
+            // build texture
+            Texture2D flipped = new Texture2D(source.GraphicsDevice, source.Width, source.Height);
+            flipped.SetData(newPixels);
+            return flipped;
         }
     }
 }

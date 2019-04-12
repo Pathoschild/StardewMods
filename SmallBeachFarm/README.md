@@ -37,11 +37,25 @@ Yep! If you have things in the water due to the smaller map, see
 for some suggested fixes (skip the part about editing the save file).
 
 ### Does this work with map recolors?
-Yep! It currently adjusts automatically for these recolors:
+Yep! It adjusts automatically for these recolors:
 
 * A Wittily Named Recolor
 * Eemie's Just Another Map Recolor
 * Starblue Valley
+
+To add support for a new recolor, create a new folder in `assets/recolors` matching its ID (from
+its `manifest.json` folder) and drop the modified `{season}_smallBeachFarm.png` files into it.
+(Consider sending me the files, so I can add official support for the recolor!)
+
+## Compiling from source
+Installing stable releases from Nexus Mods is recommended for most users. If you really want to
+compile the mod yourself, see the repository readme for the main instructions.
+
+Special instructions for Small Beach Farm:
+
+1. [Unpack your game's `Content` folder](https://stardewvalleywiki.com/Modding:Editing_XNB_files).
+2. Copy `Maps/paths.png`, `Maps/spring_beach.png`, and `Maps/spring_town.png` directly into the `assets` folder (without the `Map` folder).
+3. Compile as usual. See [Modding:Maps](https://stardewvalleywiki.com/Modding:Maps) for help editing the map file.
 
 ## See also
 * Farm map commissioned from [Opalie](https://www.nexusmods.com/stardewvalley/users/38947035)!

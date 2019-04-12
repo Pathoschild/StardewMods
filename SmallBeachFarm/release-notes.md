@@ -2,9 +2,10 @@
 
 # Release notes
 ## Upcoming release
-* Added support for tilesheet recolors.
-* Added recolors for A Wittily Named Recolor, Eemie's Just A New Map Recolour, and Starblue Valley.
+* Added automatic support for most map recolors.
+* Added custom tilesheet recolors for A Wittily Named Recolor, Eeemie's Just A New Recolor, and Starblue Valley (thanks to Opalie!).
 * Reduced foliage overhang along left edge.
+* Simplified tilesheets to make custom recolors easier.
 * Fixed position after entering Marnie's ranch when riding a horse/tractor.
 * Fixed farm warp totem behavior.
 * Fixed support for prebuilding co-op cabins.
