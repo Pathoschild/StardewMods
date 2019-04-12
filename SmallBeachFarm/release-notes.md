@@ -1,7 +1,7 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.2
 * Added support for map recolors (with support for A Wittily Named Recolor, Eeemie's Just A New Recolor, and Starblue Valley thanks to Opalie!).
 * Reduced foliage overhang along left edge.
 * Changed river mouth and simplified tilesheets to improve recolor compatibility.
