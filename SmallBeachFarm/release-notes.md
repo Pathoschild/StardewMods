@@ -5,6 +5,7 @@
 * Added automatic support for most map recolors.
 * Added custom tilesheet recolors for A Wittily Named Recolor, Eeemie's Just A New Recolor, and Starblue Valley (thanks to Opalie!).
 * Reduced foliage overhang along left edge.
+* Slightly changed river mouth to improve compatibility with map recolors.
 * Simplified tilesheets to make custom recolors easier.
 * Fixed position after entering Marnie's ranch when riding a horse/tractor.
 * Fixed farm warp totem behavior.
