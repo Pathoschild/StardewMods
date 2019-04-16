@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Updated for Stardew Valley 1.4, including new content.
+* Increased width of lookup UI.
 * Fixed planted coffee beans showing seed fields instead of crop fields.
 
 ## 1.21.2
