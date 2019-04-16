@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed planted coffee beans showing seed fields instead of crop fields.
+
 ## 1.21.2
 Released 06 April 2019.
 
