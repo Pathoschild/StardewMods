@@ -60,7 +60,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             this.Target = item;
             this.DisplayItem = this.GetMenuItem(item);
             this.FromCrop = fromCrop;
-            if ((item as SObject)?.Type == "Seeds")
+            if ((item as SObject)?.Type == "Seeds" && fromCrop == null) // fromCrop == null to exclude planted coffee beans
                 this.SeedForCrop = new Crop(item.ParentSheetIndex, 0, 0);
             this.Context = context;
             this.KnownQuality = knownQuality;
