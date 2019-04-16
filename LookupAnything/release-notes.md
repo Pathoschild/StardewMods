@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Increased width of lookup UI.
 * Fixed planted coffee beans showing seed fields instead of crop fields.
 
 ## 1.21.2
