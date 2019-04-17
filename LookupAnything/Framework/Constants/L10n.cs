@@ -561,6 +561,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Gifted today</c>.</summary>
             public const string GiftedToday = "npc.gifted-today";
 
+            /// <summary>A value like <c>Kissed today</c>.</summary>
+            public static string KissedToday = "npc.kissed-today";
+
             /// <summary>A value like <c>Gifted this week</c>.</summary>
             public const string GiftedThisWeek = "npc.gifted-this-week";
 

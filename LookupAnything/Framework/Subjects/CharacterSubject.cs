@@ -128,11 +128,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         // friendship
                         if (Game1.player.friendshipData.ContainsKey(npc.Name))
                         {
+                            // friendship/romance
                             FriendshipModel friendship = this.GameHelper.GetFriendshipForVillager(Game1.player, npc, Game1.player.friendshipData[npc.Name], metadata);
                             yield return new GenericField(this.GameHelper, this.Translate(L10n.Npc.CanRomance), friendship.IsSpouse ? this.Translate(L10n.Npc.CanRomanceMarried) : this.Stringify(friendship.CanDate));
                             yield return new CharacterFriendshipField(this.GameHelper, this.Translate(L10n.Npc.Friendship), friendship, this.Text);
+
+                            // talked/gifted today
                             yield return new GenericField(this.GameHelper, this.Translate(L10n.Npc.TalkedToday), this.Stringify(friendship.TalkedToday));
                             yield return new GenericField(this.GameHelper, this.Translate(L10n.Npc.GiftedToday), this.Stringify(friendship.GiftsToday > 0));
+
+                            // kissed today
+                            if (friendship.IsSpouse)
+                                yield return new GenericField(this.GameHelper, this.Translate(L10n.Npc.KissedToday), this.Stringify(this.Reflection.GetField<bool>(npc, "hasBeenKissedToday").GetValue()));
+
+                            // gifted this week
                             if (!friendship.IsSpouse)
                                 yield return new GenericField(this.GameHelper, this.Translate(L10n.Npc.GiftedThisWeek), this.Translate(L10n.Generic.Ratio, new { value = friendship.GiftsThisWeek, max = NPC.maxGiftsPerWeek }));
                         }

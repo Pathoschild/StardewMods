@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added 'kissed today' to spouse lookups.
 * Added farm type description to player lookup.
 * Increased width of lookup UI.
 * Fixed planted coffee beans showing seed fields instead of crop fields.

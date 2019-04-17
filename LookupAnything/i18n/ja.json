@@ -270,6 +270,10 @@
   "item.cask-schedule.now-partial": "現在 {{quality}} (ツルハシで中止できます)",
   "item.cask-schedule.tomorrow": "明日 {{quality}}",
   "item.cask-schedule.in-x-days": "{{count}}日({{date}})で {{quality}} ",
+
+  "item.fence-health.gold-clock": "金の時計の効果で減らない",
+  "item.fence-health.summary": "{{percent}}% (残り約{{count}}日)",
+
   "item.contents.placed": "設置した {{name}}",
   "item.contents.ready": "{{name}} ready",
   "item.contents.partial": "{{time}}で{{name}}",
@@ -280,8 +284,6 @@
   "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})", // TODO
   "item.needed-for.craft-master": "craft master achievement (make {{recipes}})", // TODO
   "item.sells-to.shipping-box": "出荷箱",
-  "item.fence-health.gold-clock": "金の時計の効果で減らない",
-  "item.fence-health.summary": "{{percent}}% (残り約{{count}}日)",
   "item.recipes.entry": "{{name}} ({{count}}個必要)",
   "item.number-owned.summary": "{{count}}個持っている",
   "item.number-crafted.summary": "you made {{count}} of these", // TODO
@@ -308,6 +310,7 @@
   "npc.talked-today": "今日話した",
   "npc.gifted-today": "今日贈り物をした",
   "npc.gifted-this-week": "今週贈り物をした",
+  "npc.kissed-today": "Kissed today", // TODO
   "npc.loves-gifts": "大好きな贈り物",
   "npc.likes-gifts": "好きな贈り物",
   "npc.neutral-gifts": "Neutral gifts", // TODO
