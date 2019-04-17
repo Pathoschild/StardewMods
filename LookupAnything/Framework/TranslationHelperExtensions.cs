@@ -23,11 +23,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Select the correct translation based on the plural form.</summary>
         /// <param name="translations">The translation helper.</param>
         /// <param name="count">The number.</param>
-        /// <param name="singleKey">The singular form.</param>
-        /// <param name="pluralKey">The plural form.</param>
-        public static Translation GetPlural(this ITranslationHelper translations, int count, string singleKey, string pluralKey)
+        /// <param name="singleText">The singular form.</param>
+        /// <param name="pluralText">The plural form.</param>
+        public static Translation GetPlural(this ITranslationHelper translations, int count, Translation singleText, Translation pluralText)
         {
-            return translations.Get(count == 1 ? singleKey : pluralKey);
+            return count == 1 ? singleText : pluralText;
         }
 
         /// <summary>Get a translated season name from the game.</summary>
@@ -59,14 +59,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="withYear">Whether to include the year number.</param>
         public static string Stringify(this ITranslationHelper translations, SDate date, bool withYear)
         {
-            string key = withYear ? L10n.Generic.DateWithYear : L10n.Generic.Date;
-            return translations.Get(key, new
+            if (withYear)
             {
-                seasonNumber = Utility.getSeasonNumber(date.Season),
-                seasonName = Utility.getSeasonNameFromNumber(Utility.getSeasonNumber(date.Season)),
-                dayNumber = date.Day,
-                year = date.Year
-            });
+                return L10n.Generic.Date(
+                    seasonNumber: Utility.getSeasonNumber(date.Season),
+                    seasonName: Utility.getSeasonNameFromNumber(Utility.getSeasonNumber(date.Season)),
+                    dayNumber: date.Day,
+                    year: date.Year
+                );
+            }
+            else
+            {
+                return L10n.Generic.DateWithYear(
+                    seasonNumber: Utility.getSeasonNumber(date.Season),
+                    seasonName: Utility.getSeasonNameFromNumber(Utility.getSeasonNumber(date.Season)),
+                    dayNumber: date.Day,
+                    year: date.Year
+                );
+            }
         }
 
         /// <summary>Get a human-readable representation of a value.</summary>
@@ -113,7 +123,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                 // core types
                 case bool boolean:
-                    return translations.Get(boolean ? L10n.Generic.Yes : L10n.Generic.No);
+                    return boolean ? L10n.Generic.Yes() : L10n.Generic.No();
                 case Color color:
                     return $"(r:{color.R} g:{color.G} b:{color.B} a:{color.A})";
                 case SDate date:
@@ -122,11 +132,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     {
                         List<string> parts = new List<string>();
                         if (span.Days > 0)
-                            parts.Add(translations.Get(L10n.Generic.Days, new { count = span.Days }));
+                            parts.Add(L10n.Generic.Days(span.Days));
                         if (span.Hours > 0)
-                            parts.Add(translations.Get(L10n.Generic.Hours, new { count = span.Hours }));
+                            parts.Add(L10n.Generic.Hours(span.Hours));
                         if (span.Minutes > 0)
-                            parts.Add(translations.Get(L10n.Generic.Minutes, new { count = span.Minutes }));
+                            parts.Add(L10n.Generic.Minutes(span.Minutes));
                         return string.Join(", ", parts);
                     }
                 case Vector2 vector:

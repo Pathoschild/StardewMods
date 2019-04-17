@@ -35,7 +35,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="position">The tile position.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         public TileSubject(GameHelper gameHelper, GameLocation location, Vector2 position, ITranslationHelper translations)
-            : base(gameHelper, $"({position.X}, {position.Y})", translations.Get(L10n.Tile.Description), translations.Get(L10n.Types.Tile), translations)
+            : base(gameHelper, $"({position.X}, {position.Y})", L10n.Tile.Description(), L10n.Types.Tile(), translations)
         {
             this.Location = location;
             this.Position = position;
@@ -46,13 +46,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         public override IEnumerable<ICustomField> GetData(Metadata metadata)
         {
             // yield map data
-            yield return new GenericField(this.GameHelper, this.Translate(L10n.Tile.MapName), this.Location.Name);
+            yield return new GenericField(this.GameHelper, L10n.Tile.MapName(), this.Location.Name);
 
             // get tiles
             Tile[] tiles = this.GetTiles(this.Location, this.Position).ToArray();
             if (!tiles.Any())
             {
-                yield return new GenericField(this.GameHelper, this.Translate(L10n.Tile.TileField), this.Translate(L10n.Tile.TileFieldNoneFound));
+                yield return new GenericField(this.GameHelper, L10n.Tile.TileField(), L10n.Tile.TileFieldNoneFound());
                 yield break;
             }
 
@@ -60,13 +60,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             foreach (Tile tile in tiles)
             {
                 string layerName = tile.Layer.Id;
-                yield return new GenericField(this.GameHelper, this.Translate(L10n.Tile.TileIndex, new { layerName = layerName }), this.Stringify(tile.TileIndex));
-                yield return new GenericField(this.GameHelper, this.Translate(L10n.Tile.TileSheet, new { layerName = layerName }), tile.TileSheet.ImageSource.Replace("\\", ": ").Replace("/", ": "));
-                yield return new GenericField(this.GameHelper, this.Translate(L10n.Tile.BlendMode, new { layerName = layerName }), this.Stringify(tile.BlendMode));
+                yield return new GenericField(this.GameHelper, L10n.Tile.TileIndex(layerName: layerName), this.Stringify(tile.TileIndex));
+                yield return new GenericField(this.GameHelper, L10n.Tile.TileSheet(layerName: layerName), tile.TileSheet.ImageSource.Replace("\\", ": ").Replace("/", ": "));
+                yield return new GenericField(this.GameHelper, L10n.Tile.BlendMode(layerName: layerName), this.Stringify(tile.BlendMode));
                 foreach (KeyValuePair<string, PropertyValue> property in tile.TileIndexProperties)
-                    yield return new GenericField(this.GameHelper, this.Translate(L10n.Tile.IndexProperty, new { layerName = layerName, propertyName = property.Key }), property.Value);
+                    yield return new GenericField(this.GameHelper, L10n.Tile.IndexProperty(layerName: layerName, propertyName: property.Key), property.Value);
                 foreach (KeyValuePair<string, PropertyValue> property in tile.Properties)
-                    yield return new GenericField(this.GameHelper, this.Translate(L10n.Tile.TileProperty, new { layerName = layerName, propertyName = property.Key }), property.Value);
+                    yield return new GenericField(this.GameHelper, L10n.Tile.TileProperty(layerName: layerName, propertyName: property.Key), property.Value);
             }
         }
 

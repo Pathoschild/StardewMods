@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Netcode;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
@@ -134,15 +133,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         protected string Stringify(object value)
         {
             return this.Text.Stringify(value);
-        }
-
-        /// <summary>Get a translation for the current locale.</summary>
-        /// <param name="key">The translation key.</param>
-        /// <param name="tokens">An anonymous object containing token key/value pairs, like <c>new { value = 42, name = "Cranberries" }</c>.</param>
-        /// <exception cref="KeyNotFoundException">The <paramref name="key" /> doesn't match an available translation.</exception>
-        protected Translation Translate(string key, object tokens = null)
-        {
-            return this.Text.Get(key, tokens);
         }
 
         /// <summary>Get a human-readable value for a debug value.</summary>

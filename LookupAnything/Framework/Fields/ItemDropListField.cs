@@ -80,9 +80,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 spriteBatch.DrawSpriteWithin(sprite, position.X, position.Y + height, iconSize, isGuaranteed ? Color.White : Color.White * 0.5f);
 
                 // draw text
-                string text = isGuaranteed ? item.DisplayName : this.Translations.Get(L10n.Generic.PercentChanceOf, new { percent = Math.Round(drop.Probability, 4) * 100, label = item.DisplayName });
+                string text = isGuaranteed ? item.DisplayName : L10n.Generic.PercentChanceOf(percent: (int)(Math.Round(drop.Probability, 4) * 100), label: item.DisplayName);
                 if (drop.MaxDrop > 1)
-                    text += " (" + this.Translations.Get(L10n.Generic.Range, new { min = 1, max = drop.MaxDrop }) + ")";
+                    text += $" ({L10n.Generic.Range(min: 1, max: drop.MaxDrop)})";
                 Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(iconSize.X + 5, height + 5), wrapWidth, isGuaranteed ? Color.Black : Color.Gray);
 
                 // cross out item if it definitely won't drop

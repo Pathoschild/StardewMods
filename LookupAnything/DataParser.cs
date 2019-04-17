@@ -309,8 +309,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get the recipe ingredients.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public RecipeModel[] GetRecipes(Metadata metadata, IReflectionHelper reflectionHelper, ITranslationHelper translations)
+        public RecipeModel[] GetRecipes(Metadata metadata, IReflectionHelper reflectionHelper)
         {
             List<RecipeModel> recipes = new List<RecipeModel>();
 
@@ -318,14 +317,14 @@ namespace Pathoschild.Stardew.LookupAnything
             recipes.AddRange(
                 from entry in CraftingRecipe.cookingRecipes
                 let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: true)
-                select new RecipeModel(recipe, reflectionHelper, translations)
+                select new RecipeModel(recipe, reflectionHelper)
             );
 
             // crafting recipes
             recipes.AddRange(
                 from entry in CraftingRecipe.craftingRecipes
                 let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: false)
-                select new RecipeModel(recipe, reflectionHelper, translations)
+                select new RecipeModel(recipe, reflectionHelper)
             );
 
             // machine recipes
