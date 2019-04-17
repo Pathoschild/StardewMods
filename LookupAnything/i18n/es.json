@@ -270,6 +270,10 @@
   "item.cask-schedule.now-partial": "{{quality}} ahora (usar pico para detener envejecimiento)",
   "item.cask-schedule.tomorrow": "{{quality}} mañana",
   "item.cask-schedule.in-x-days": "{{quality}} en {{count}} días ({{date}})",
+
+  "item.fence-health.gold-clock": "Sin decaidas del reloj de oro",
+  "item.fence-health.summary": "{{percent}}% (dificilmente {{count}} días)",
+
   "item.contents.placed": "{{name}}",
   "item.contents.ready": "{{name}} listo",
   "item.contents.partial": "{{name}} en {{time}}",
@@ -280,8 +284,6 @@
   "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})", // TODO
   "item.needed-for.craft-master": "craft master achievement (make {{recipes}})", // TODO
   "item.sells-to.shipping-box": "Caja de envío",
-  "item.fence-health.gold-clock": "Sin decaidas del reloj de oro",
-  "item.fence-health.summary": "{{percent}}% (dificilmente {{count}} días)",
   "item.recipes.entry": "{{name}} (necesita {{count}})",
   "item.number-owned.summary": "{{count}} ud(s)",
   "item.number-crafted.summary": "you made {{count}} of these", // TODO
@@ -308,6 +310,7 @@
   "npc.talked-today": "Hemos hablado hoy",
   "npc.gifted-today": "Le he regalado hoy",
   "npc.gifted-this-week": "Regalos semanales",
+  "npc.kissed-today": "Kissed today", // TODO
   "npc.loves-gifts": "Ama",
   "npc.likes-gifts": "Le gusta",
   "npc.neutral-gifts": "Neutral gifts", // TODO

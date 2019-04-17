@@ -268,6 +268,11 @@
   "item.cask-schedule.now-partial": "{{quality}} jetzt bereit (benutze die Spitzhacke um das Altern zu stoppen).",
   "item.cask-schedule.tomorrow": "{{quality}} morgen",
   "item.cask-schedule.in-x-days": "{{quality}} in {{count}} Tagen ({{date}})",
+
+  "item.fence-health.gold-clock": "Kein Verfall mit Gold-Uhr",
+  "item.fence-health.summary": "{{percent}}% (ungefähr {{count}} Tage übrig)",
+
+
   "item.contents.placed": "{{name}} platziert",
   "item.contents.ready": "{{name}} bereit",
   "item.contents.partial": "{{name}} in {{time}}",
@@ -278,8 +283,6 @@
   "item.needed-for.gourmet-chef": "\"Gourmetkoch\" Errungenschaft (koche {{recipes}})",
   "item.needed-for.craft-master": "\"Handwerksmeister\" Errungenschaft (stelle {{recipes}} her)",
   "item.sells-to.shipping-box": "Versandkiste",
-  "item.fence-health.gold-clock": "Kein Verfall mit Gold-Uhr",
-  "item.fence-health.summary": "{{percent}}% (ungefähr {{count}} Tage übrig)",
   "item.recipes.entry": "{{name}} (braucht {{count}})",
   "item.number-owned.summary": "Du besitzt {{count}} davon",
   "item.number-crafted.summary": "Du hast bereits {{count}} davon hergestellt",
@@ -306,6 +309,7 @@
   "npc.talked-today": "Heute geredet",
   "npc.gifted-today": "Heute beschenkt",
   "npc.gifted-this-week": "Diese Woche beschenkt",
+  "npc.kissed-today": "Kissed today", // TODO
   "npc.loves-gifts": "Geliebte Geschenke",
   "npc.likes-gifts": "Mögende Geschenke",
   "npc.neutral-gifts": "Neutrale Geschenke",

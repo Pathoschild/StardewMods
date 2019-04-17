@@ -268,6 +268,10 @@
   "item.cask-schedule.now-partial": "{{quality}} por agora (use a picareta para parar de envelhecer)",
   "item.cask-schedule.tomorrow": "{{quality}} amanhã",
   "item.cask-schedule.in-x-days": "{{quality}} em {{count}} dias ({{date}})",
+
+  "item.fence-health.gold-clock": "Não decai com o Relógio de Ouro",
+  "item.fence-health.summary": "{{percent}}% (aproximadamente{{count}} dias restantes)",
+
   "item.contents.placed": "{{name}} colocado",
   "item.contents.ready": "{{name}} pronto",
   "item.contents.partial": "{{name}} em {{time}}",
@@ -278,8 +282,6 @@
   "item.needed-for.gourmet-chef": "conquista de chefe gourmet (cozinhe {{recipes}})",
   "item.needed-for.craft-master": "conquista de criador mestre (crie {{recipes}})",
   "item.sells-to.shipping-box": "caixa de embarcação",
-  "item.fence-health.gold-clock": "Não decai com o Relógio de Ouro",
-  "item.fence-health.summary": "{{percent}}% (aproximadamente{{count}} dias restantes)",
   "item.recipes.entry": "{{name}} (precisa {{count}})",
   "item.number-owned.summary": "seu próprio {{count}} desses",
   "item.number-crafted.summary": "você fez {{count}} desses",
@@ -306,6 +308,7 @@
   "npc.talked-today": "Conversou hoje",
   "npc.gifted-today": "Já presentiou hoje",
   "npc.gifted-this-week": "Presenteou essa semana",
+  "npc.kissed-today": "Kissed today", // TODO
   "npc.loves-gifts": "Presentes que ama",
   "npc.likes-gifts": "Presentes que gosta",
   "npc.neutral-gifts": "Presentes neutros",

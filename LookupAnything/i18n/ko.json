@@ -268,6 +268,10 @@
   "item.cask-schedule.now-partial": "현재 품질: {{quality}} (곡괭이를 사용해 숙성을 중단시킬 수 있다)",
   "item.cask-schedule.tomorrow": "내일의 품질: {{quality}}",
   "item.cask-schedule.in-x-days": "{{count}}일 후인 ({{date}}일)에 {{quality}}의 품질 도달.",
+
+  "item.fence-health.gold-clock": "금시계로 인하여 내구도가 감소하지 않음",
+  "item.fence-health.summary": "{{percent}}% (대략 {{count}}일 남음)",
+
   "item.contents.placed": "{{name}}이/가 들어감",
   "item.contents.ready": "{{name}}이/가 준비됨",
   "item.contents.partial": "{{name}}이/가 준비되기까지 {{time}} 남음.",
@@ -278,8 +282,6 @@
   "item.needed-for.gourmet-chef": "도전과제 '미식가 요리사' ({{recipes}}을/를 요리하세요)",
   "item.needed-for.craft-master": "도전과제 '제작의 달인' ({{recipes}}을/를 제작하세요)",
   "item.sells-to.shipping-box": "출하 상자",
-  "item.fence-health.gold-clock": "금시계로 인하여 내구도가 감소하지 않음",
-  "item.fence-health.summary": "{{percent}}% (대략 {{count}}일 남음)",
   "item.recipes.entry": "{{name}} ({{count}}개 필요)",
   "item.number-owned.summary": "당신은 이것들을 {{count}}개 보유중.",
   "item.number-crafted.summary": "당신은 이것들을 {{count}}개 제작했음.",
@@ -306,6 +308,7 @@
   "npc.talked-today": "오늘 대화함",
   "npc.gifted-today": "오늘 선물을 줌",
   "npc.gifted-this-week": "이번 주 선물 횟수를 모두 사용함",
+  "npc.kissed-today": "Kissed today", // TODO
   "npc.loves-gifts": "사랑하는 선물",
   "npc.likes-gifts": "좋아하는 선물",
   "npc.neutral-gifts": "그저그런 선물",
