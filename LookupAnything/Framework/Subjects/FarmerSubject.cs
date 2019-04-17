@@ -60,20 +60,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         {
             SFarmer target = this.Target;
 
-            int maxSkillPoints = metadata.Constants.PlayerMaxSkillPoints;
-            int[] skillPointsPerLevel = metadata.Constants.PlayerSkillPointsPerLevel;
-            string luckSummary = this.Translate(L10n.Player.LuckSummary, new { percent = (Game1.dailyLuck >= 0 ? "+" : "") + Math.Round(Game1.dailyLuck * 100, 2) });
-
+            // basic info
             yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.Gender), this.Translate(target.IsMale ? L10n.Player.GenderMale : L10n.Player.GenderFemale));
             yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.FarmName), target.farmName.Value);
             yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.FarmMap), this.GetFarmType());
             yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.FavoriteThing), target.favoriteThing.Value);
             yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.Spouse), this.GetSpouseName());
+
+            // skills
+            int maxSkillPoints = metadata.Constants.PlayerMaxSkillPoints;
+            int[] skillPointsPerLevel = metadata.Constants.PlayerSkillPointsPerLevel;
             yield return new SkillBarField(this.GameHelper, this.Translate(L10n.Player.FarmingSkill), target.experiencePoints[SFarmer.farmingSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
             yield return new SkillBarField(this.GameHelper, this.Translate(L10n.Player.MiningSkill), target.experiencePoints[SFarmer.miningSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
             yield return new SkillBarField(this.GameHelper, this.Translate(L10n.Player.ForagingSkill), target.experiencePoints[SFarmer.foragingSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
             yield return new SkillBarField(this.GameHelper, this.Translate(L10n.Player.FishingSkill), target.experiencePoints[SFarmer.fishingSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
             yield return new SkillBarField(this.GameHelper, this.Translate(L10n.Player.CombatSkill), target.experiencePoints[SFarmer.combatSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
+
+            // luck
+            string luckSummary = this.Translate(L10n.Player.LuckSummary, new { percent = (Game1.dailyLuck >= 0 ? "+" : "") + Math.Round(Game1.dailyLuck * 100, 2) });
             yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.Luck), $"{this.GetSpiritLuckMessage()}{Environment.NewLine}({luckSummary})");
         }
 
@@ -154,15 +158,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     return null;
 
                 case Farm.combat_layout:
-                    return Game1.content.LoadString("Strings\\UI:Character_FarmCombat").Split('_').FirstOrDefault();
+                    return Game1.content.LoadString("Strings\\UI:Character_FarmCombat").Replace("_", Environment.NewLine);
                 case Farm.default_layout:
-                    return Game1.content.LoadString("Strings\\UI:Character_FarmStandard").Split('_').FirstOrDefault();
+                    return Game1.content.LoadString("Strings\\UI:Character_FarmStandard").Replace("_", Environment.NewLine);
                 case Farm.forest_layout:
-                    return Game1.content.LoadString("Strings\\UI:Character_FarmForaging").Split('_').FirstOrDefault();
+                    return Game1.content.LoadString("Strings\\UI:Character_FarmForaging").Replace("_", Environment.NewLine);
                 case Farm.mountains_layout:
-                    return Game1.content.LoadString("Strings\\UI:Character_FarmMining").Split('_').FirstOrDefault();
+                    return Game1.content.LoadString("Strings\\UI:Character_FarmMining").Replace("_", Environment.NewLine);
                 case Farm.riverlands_layout:
-                    return Game1.content.LoadString("Strings\\UI:Character_FarmFishing").Split('_').FirstOrDefault();
+                    return Game1.content.LoadString("Strings\\UI:Character_FarmFishing").Replace("_", Environment.NewLine);
 
                 default:
                     return this.Translate(L10n.Player.FarmMapCustom);
