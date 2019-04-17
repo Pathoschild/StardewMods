@@ -12,7 +12,6 @@ using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Characters;
-using StardewValley.Menus;
 using StardewValley.Monsters;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
@@ -52,9 +51,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // get display type
             string typeName;
             if (type == TargetType.Villager)
-                typeName = this.Text.Get(L10n.Types.Villager);
+                typeName = L10n.Types.Villager();
             else if (type == TargetType.Monster)
-                typeName = this.Text.Get(L10n.Types.Monster);
+                typeName = L10n.Types.Monster();
             else
                 typeName = npc.GetType().Name;
 
@@ -87,7 +86,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     {
                         // birthday
                         SDate birthday = SDate.Now().AddDays(-child.daysOld);
-                        yield return new GenericField(this.GameHelper, this.Text.Get(L10n.Npc.Birthday), this.Text.Stringify(birthday, withYear: true));
+                        yield return new GenericField(this.GameHelper, L10n.Npc.Birthday(), this.Text.Stringify(birthday, withYear: true));
 
                         // age
                         {
@@ -97,21 +96,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                             bool isGrown = daysToNext == -1;
                             int daysAtNext = daysOld + (isGrown ? 0 : daysToNext);
 
-                            string ageLabel = this.Translate(L10n.NpcChild.Age);
-                            string ageName = this.Translate(L10n.For(stage));
                             string ageDesc = isGrown
-                                ? this.Translate(L10n.NpcChild.AgeDescriptionGrown, new { label = ageName })
-                                : this.Translate(L10n.NpcChild.AgeDescriptionPartial, new { label = ageName, count = daysToNext, nextLabel = this.Text.Get(L10n.For(stage + 1)) });
+                                ? L10n.NpcChild.AgeDescriptionGrown(label: stage)
+                                : L10n.NpcChild.AgeDescriptionPartial(label: stage, count: daysToNext, nextLabel: stage + 1);
 
-                            yield return new PercentageBarField(this.GameHelper, ageLabel, child.daysOld, daysAtNext, Color.Green, Color.Gray, ageDesc);
+                            yield return new PercentageBarField(this.GameHelper, L10n.NpcChild.Age(), child.daysOld, daysAtNext, Color.Green, Color.Gray, ageDesc);
                         }
 
                         // friendship
                         if (Game1.player.friendshipData.ContainsKey(child.Name))
                         {
                             FriendshipModel friendship = this.GameHelper.GetFriendshipForVillager(Game1.player, child, Game1.player.friendshipData[child.Name], metadata);
-                            yield return new CharacterFriendshipField(this.GameHelper, this.Translate(L10n.Npc.Friendship), friendship, this.Text);
-                            yield return new GenericField(this.GameHelper, this.Translate(L10n.Npc.TalkedToday), this.Stringify(Game1.player.friendshipData[child.Name].TalkedToToday));
+                            yield return new CharacterFriendshipField(this.GameHelper, L10n.Npc.Friendship(), friendship, this.Text);
+                            yield return new GenericField(this.GameHelper, L10n.Npc.TalkedToday(), this.Stringify(Game1.player.friendshipData[child.Name].TalkedToToday));
                         }
                     }
 
@@ -122,7 +119,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         if (npc.Birthday_Season != null)
                         {
                             SDate birthday = new SDate(npc.Birthday_Day, npc.Birthday_Season);
-                            yield return new GenericField(this.GameHelper, this.Text.Get(L10n.Npc.Birthday), this.Text.Stringify(birthday));
+                            yield return new GenericField(this.GameHelper, L10n.Npc.Birthday(), this.Text.Stringify(birthday));
                         }
 
                         // friendship
@@ -130,54 +127,54 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         {
                             // friendship/romance
                             FriendshipModel friendship = this.GameHelper.GetFriendshipForVillager(Game1.player, npc, Game1.player.friendshipData[npc.Name], metadata);
-                            yield return new GenericField(this.GameHelper, this.Translate(L10n.Npc.CanRomance), friendship.IsSpouse ? this.Translate(L10n.Npc.CanRomanceMarried) : this.Stringify(friendship.CanDate));
-                            yield return new CharacterFriendshipField(this.GameHelper, this.Translate(L10n.Npc.Friendship), friendship, this.Text);
+                            yield return new GenericField(this.GameHelper, L10n.Npc.CanRomance(), friendship.IsSpouse ? L10n.Npc.CanRomanceMarried() : this.Stringify(friendship.CanDate));
+                            yield return new CharacterFriendshipField(this.GameHelper, L10n.Npc.Friendship(), friendship, this.Text);
 
                             // talked/gifted today
-                            yield return new GenericField(this.GameHelper, this.Translate(L10n.Npc.TalkedToday), this.Stringify(friendship.TalkedToday));
-                            yield return new GenericField(this.GameHelper, this.Translate(L10n.Npc.GiftedToday), this.Stringify(friendship.GiftsToday > 0));
+                            yield return new GenericField(this.GameHelper, L10n.Npc.TalkedToday(), this.Stringify(friendship.TalkedToday));
+                            yield return new GenericField(this.GameHelper, L10n.Npc.GiftedToday(), this.Stringify(friendship.GiftsToday > 0));
 
                             // kissed today
                             if (friendship.IsSpouse)
-                                yield return new GenericField(this.GameHelper, this.Translate(L10n.Npc.KissedToday), this.Stringify(this.Reflection.GetField<bool>(npc, "hasBeenKissedToday").GetValue()));
+                                yield return new GenericField(this.GameHelper, L10n.Npc.KissedToday(), this.Stringify(this.Reflection.GetField<bool>(npc, "hasBeenKissedToday").GetValue()));
 
                             // gifted this week
                             if (!friendship.IsSpouse)
-                                yield return new GenericField(this.GameHelper, this.Translate(L10n.Npc.GiftedThisWeek), this.Translate(L10n.Generic.Ratio, new { value = friendship.GiftsThisWeek, max = NPC.maxGiftsPerWeek }));
+                                yield return new GenericField(this.GameHelper, L10n.Npc.GiftedThisWeek(), L10n.Generic.Ratio(value: friendship.GiftsThisWeek, max: NPC.maxGiftsPerWeek));
                         }
                         else
-                            yield return new GenericField(this.GameHelper, this.Translate(L10n.Npc.Friendship), this.Translate(L10n.Npc.FriendshipNotMet));
+                            yield return new GenericField(this.GameHelper, L10n.Npc.Friendship(), L10n.Npc.FriendshipNotMet());
 
                         // gift tastes
                         var giftTastes = this.GetGiftTastes(npc, metadata);
-                        yield return new CharacterGiftTastesField(this.GameHelper, this.Translate(L10n.Npc.LovesGifts), giftTastes, GiftTaste.Love);
-                        yield return new CharacterGiftTastesField(this.GameHelper, this.Translate(L10n.Npc.LikesGifts), giftTastes, GiftTaste.Like);
-                        yield return new CharacterGiftTastesField(this.GameHelper, this.Translate(L10n.Npc.NeutralGifts), giftTastes, GiftTaste.Neutral);
+                        yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.LovesGifts(), giftTastes, GiftTaste.Love);
+                        yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.LikesGifts(), giftTastes, GiftTaste.Like);
+                        yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.NeutralGifts(), giftTastes, GiftTaste.Neutral);
                     }
                     break;
 
                 case TargetType.Pet:
                     Pet pet = (Pet)npc;
-                    yield return new CharacterFriendshipField(this.GameHelper, this.Translate(L10n.Pet.Love), this.GameHelper.GetFriendshipForPet(Game1.player, pet), this.Text);
-                    yield return new GenericField(this.GameHelper, this.Translate(L10n.Pet.PettedToday), this.Stringify(this.Reflection.GetField<bool>(pet, "wasPetToday").GetValue()));
+                    yield return new CharacterFriendshipField(this.GameHelper, L10n.Pet.Love(), this.GameHelper.GetFriendshipForPet(Game1.player, pet), this.Text);
+                    yield return new GenericField(this.GameHelper, L10n.Pet.PettedToday(), this.Stringify(this.Reflection.GetField<bool>(pet, "wasPetToday").GetValue()));
                     break;
 
                 case TargetType.Monster:
                     // basic info
                     Monster monster = (Monster)npc;
-                    yield return new GenericField(this.GameHelper, this.Translate(L10n.Monster.Invincible), this.Translate(L10n.Generic.Seconds, new { count = this.Reflection.GetField<int>(monster, "invincibleCountdown").GetValue() }), hasValue: monster.isInvincible());
-                    yield return new PercentageBarField(this.GameHelper, this.Translate(L10n.Monster.Health), monster.Health, monster.MaxHealth, Color.Green, Color.Gray, this.Translate(L10n.Generic.PercentRatio, new { percent = Math.Round((monster.Health / (monster.MaxHealth * 1f) * 100)), value = monster.Health, max = monster.MaxHealth }));
-                    yield return new ItemDropListField(this.GameHelper, this.Translate(L10n.Monster.Drops), this.GetMonsterDrops(monster), this.Text, defaultText: this.Translate(L10n.Monster.DropsNothing));
-                    yield return new GenericField(this.GameHelper, this.Translate(L10n.Monster.Experience), this.Stringify(monster.ExperienceGained));
-                    yield return new GenericField(this.GameHelper, this.Translate(L10n.Monster.Defence), this.Stringify(monster.resilience.Value));
-                    yield return new GenericField(this.GameHelper, this.Translate(L10n.Monster.Attack), this.Stringify(monster.DamageToFarmer));
+                    yield return new GenericField(this.GameHelper, L10n.Monster.Invincible(), L10n.Generic.Seconds(count: this.Reflection.GetField<int>(monster, "invincibleCountdown").GetValue()), hasValue: monster.isInvincible());
+                    yield return new PercentageBarField(this.GameHelper, L10n.Monster.Health(), monster.Health, monster.MaxHealth, Color.Green, Color.Gray, L10n.Generic.PercentRatio(percent: (int)Math.Round((monster.Health / (monster.MaxHealth * 1f) * 100)), value: monster.Health, max: monster.MaxHealth));
+                    yield return new ItemDropListField(this.GameHelper, L10n.Monster.Drops(), this.GetMonsterDrops(monster), this.Text, defaultText: L10n.Monster.DropsNothing());
+                    yield return new GenericField(this.GameHelper, L10n.Monster.Experience(), this.Stringify(monster.ExperienceGained));
+                    yield return new GenericField(this.GameHelper, L10n.Monster.Defence(), this.Stringify(monster.resilience.Value));
+                    yield return new GenericField(this.GameHelper, L10n.Monster.Attack(), this.Stringify(monster.DamageToFarmer));
 
                     // Adventure Guild quest
                     AdventureGuildQuestData adventureGuildQuest = metadata.GetAdventurerGuildQuest(monster.Name);
                     if (adventureGuildQuest != null)
                     {
                         int kills = adventureGuildQuest.Targets.Select(p => Game1.stats.getMonstersKilled(p)).Sum();
-                        yield return new GenericField(this.GameHelper, this.Translate(L10n.Monster.AdventureGuild), $"{this.Translate(kills >= adventureGuildQuest.RequiredKills ? L10n.Monster.AdventureGuildComplete : L10n.Monster.AdventureGuildIncomplete)} ({this.Translate(L10n.Monster.AdventureGuildProgress, new { count = kills, requiredCount = adventureGuildQuest.RequiredKills })})");
+                        yield return new GenericField(this.GameHelper, L10n.Monster.AdventureGuild(), $"{(kills >= adventureGuildQuest.RequiredKills ? L10n.Monster.AdventureGuildComplete() : L10n.Monster.AdventureGuildIncomplete())} ({L10n.Monster.AdventureGuildProgress(count: kills, requiredCount: adventureGuildQuest.RequiredKills)})");
                     }
                     break;
             }

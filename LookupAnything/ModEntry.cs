@@ -65,6 +65,9 @@ namespace Pathoschild.Stardew.LookupAnything
             // load config
             this.Config = this.Helper.ReadConfig<ModConfig>();
 
+            // load translations
+            L10n.Init(helper.Translation);
+
             // load & validate database
             this.LoadMetadata();
             this.IsDataValid = this.Metadata.LooksValid();
