@@ -268,6 +268,10 @@
   "item.cask-schedule.now-partial": "{{quality}} сейчас (используйте кирку для остановки старения)",
   "item.cask-schedule.tomorrow": "{{quality}} завтра",
   "item.cask-schedule.in-x-days": "{{quality}} через {{count}} дн. ({{date}})",
+
+  "item.fence-health.gold-clock": "не разрушается (Золотые часы)",
+  "item.fence-health.summary": "{{percent}}% (сломается через {{count}} дн.)",
+
   "item.contents.placed": "содержит {{name}}",
   "item.contents.ready": "{{name}} готов",
   "item.contents.partial": "{{name}} через {{time}}",
@@ -278,8 +282,6 @@
   "item.needed-for.gourmet-chef": "достижение Шеф-повар  (приготовить по {{recipes}} рецептам)",
   "item.needed-for.craft-master": "достижение Мастер (скрафтить по {{recipes}} рецептам)",
   "item.sells-to.shipping-box": "Ящик отгрузки",
-  "item.fence-health.gold-clock": "не разрушается (Золотые часы)",
-  "item.fence-health.summary": "{{percent}}% (сломается через {{count}} дн.)",
   "item.recipes.entry": "{{name}} ({{count}} шт.)",
   "item.number-owned.summary": "вам принадлежит {{count}} шт.",
   "item.number-crafted.summary": "вы сделали {{count}} из них",
@@ -306,6 +308,7 @@
   "npc.talked-today": "Разговор сегодня",
   "npc.gifted-today": "Подарок сегодня",
   "npc.gifted-this-week": "Подарки за эту нед. ",
+  "npc.kissed-today": "Kissed today", // TODO
   "npc.loves-gifts": "Любит",
   "npc.likes-gifts": "Нравится",
   "npc.neutral-gifts": "Равнодушен",

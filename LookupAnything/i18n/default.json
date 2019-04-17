@@ -268,6 +268,10 @@
   "item.cask-schedule.now-partial": "{{quality}} now (use pickaxe to stop aging)",
   "item.cask-schedule.tomorrow": "{{quality}} tomorrow",
   "item.cask-schedule.in-x-days": "{{quality}} in {{count}} days ({{date}})",
+
+  "item.fence-health.gold-clock": "no decay with Gold Clock",
+  "item.fence-health.summary": "{{percent}}% (roughly {{count}} days left)",
+
   "item.contents.placed": "{{name}} placed",
   "item.contents.ready": "{{name}} ready",
   "item.contents.partial": "{{name}} in {{time}}",
@@ -278,8 +282,6 @@
   "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})",
   "item.needed-for.craft-master": "craft master achievement (make {{recipes}})",
   "item.sells-to.shipping-box": "shipping box",
-  "item.fence-health.gold-clock": "no decay with Gold Clock",
-  "item.fence-health.summary": "{{percent}}% (roughly {{count}} days left)",
   "item.recipes.entry": "{{name}} (needs {{count}})",
   "item.number-owned.summary": "you own {{count}} of these",
   "item.number-crafted.summary": "you made {{count}} of these",
@@ -306,6 +308,7 @@
   "npc.talked-today": "Talked today",
   "npc.gifted-today": "Gifted today",
   "npc.gifted-this-week": "Gifted this week",
+  "npc.kissed-today": "Kissed today",
   "npc.loves-gifts": "Loves gifts",
   "npc.likes-gifts": "Likes gifts",
   "npc.neutral-gifts": "Neutral gifts",
