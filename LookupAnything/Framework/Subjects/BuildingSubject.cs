@@ -48,7 +48,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         public BuildingSubject(GameHelper gameHelper, Metadata metadata, Building building, Rectangle sourceRectangle, ITranslationHelper translations, IReflectionHelper reflectionHelper)
-            : base(gameHelper, building.buildingType.Value, null, translations.Get(L10n.Types.Building), translations)
+            : base(gameHelper, building.buildingType.Value, null, L10n.Types.Building(), translations)
         {
             // init
             this.Metadata = metadata;
@@ -85,15 +85,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 int daysLeft = building.isUnderConstruction() ? building.daysOfConstructionLeft.Value : building.daysUntilUpgrade.Value;
                 SDate readyDate = SDate.Now().AddDays(daysLeft);
-                yield return new GenericField(this.GameHelper, text.Get(L10n.Building.Construction), text.Get(L10n.Building.ConstructionSummary, new { date = readyDate }));
+                yield return new GenericField(this.GameHelper, L10n.Building.Construction(), L10n.Building.ConstructionSummary(date: readyDate));
             }
 
             // owner
             Farmer owner = this.GetOwner();
             if (owner != null)
-                yield return new LinkField(this.GameHelper, text.Get(L10n.Building.Owner), owner.Name, () => new FarmerSubject(this.GameHelper, owner, text, this.Reflection));
+                yield return new LinkField(this.GameHelper, L10n.Building.Owner(), owner.Name, () => new FarmerSubject(this.GameHelper, owner, text, this.Reflection));
             else if (building.indoors.Value is Cabin)
-                yield return new GenericField(this.GameHelper, text.Get(L10n.Building.Owner), text.Get(L10n.Building.OwnerNone));
+                yield return new GenericField(this.GameHelper, L10n.Building.Owner(), L10n.Building.OwnerNone());
 
             // stable horse
             if (built && building is Stable stable)
@@ -101,8 +101,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 Horse horse = Utility.findHorse(stable.HorseId);
                 if (horse != null)
                 {
-                    yield return new LinkField(this.GameHelper, text.Get(L10n.Building.Horse), horse.Name, () => new CharacterSubject(this.GameHelper, horse, TargetType.Horse, this.Metadata, text, this.Reflection));
-                    yield return new GenericField(this.GameHelper, text.Get(L10n.Building.HorseLocation), text.Get(L10n.Building.HorseLocationSummary, new { location = horse.currentLocation.Name, x = horse.getTileX(), y = horse.getTileY() }));
+                    yield return new LinkField(this.GameHelper, L10n.Building.Horse(), horse.Name, () => new CharacterSubject(this.GameHelper, horse, TargetType.Horse, this.Metadata, text, this.Reflection));
+                    yield return new GenericField(this.GameHelper, L10n.Building.HorseLocation(), L10n.Building.HorseLocationSummary(location: horse.currentLocation.Name, x: horse.getTileX(), y: horse.getTileY()));
                 }
             }
 
@@ -110,15 +110,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (built && building.indoors.Value is AnimalHouse animalHouse)
             {
                 // animal counts
-                yield return new GenericField(this.GameHelper, text.Get(L10n.Building.Animals), text.Get(L10n.Building.AnimalsSummary, new { count = animalHouse.animalsThatLiveHere.Count, max = animalHouse.animalLimit.Value }));
+                yield return new GenericField(this.GameHelper, L10n.Building.Animals(), L10n.Building.AnimalsSummary(count: animalHouse.animalsThatLiveHere.Count, max: animalHouse.animalLimit.Value));
 
                 // feed trough
                 if ((building is Barn || building is Coop) && upgradeLevel >= 2)
-                    yield return new GenericField(this.GameHelper, text.Get(L10n.Building.FeedTrough), text.Get(L10n.Building.FeedTroughAutomated));
+                    yield return new GenericField(this.GameHelper, L10n.Building.FeedTrough(), L10n.Building.FeedTroughAutomated());
                 else
                 {
                     this.GetFeedMetrics(animalHouse, out int totalFeedSpaces, out int filledFeedSpaces);
-                    yield return new GenericField(this.GameHelper, text.Get(L10n.Building.FeedTrough), text.Get(L10n.Building.FeedTroughSummary, new { filled = filledFeedSpaces, max = totalFeedSpaces }));
+                    yield return new GenericField(this.GameHelper, L10n.Building.FeedTrough(), L10n.Building.FeedTroughSummary(filled: filledFeedSpaces, max: totalFeedSpaces));
                 }
             }
 
@@ -127,10 +127,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 // slime count
                 int slimeCount = slimeHutch.characters.OfType<GreenSlime>().Count();
-                yield return new GenericField(this.GameHelper, text.Get(L10n.Building.Slimes), text.Get(L10n.Building.SlimesSummary, new { count = slimeCount, max = 20 }));
+                yield return new GenericField(this.GameHelper, L10n.Building.Slimes(), L10n.Building.SlimesSummary(count: slimeCount, max: 20));
 
                 // water trough
-                yield return new GenericField(this.GameHelper, text.Get(L10n.Building.WaterTrough), text.Get(L10n.Building.WaterTroughSummary, new { filled = slimeHutch.waterSpots.Count(p => p), max = slimeHutch.waterSpots.Count }));
+                yield return new GenericField(this.GameHelper, L10n.Building.WaterTrough(), L10n.Building.WaterTroughSummary(filled: slimeHutch.waterSpots.Count(p => p), max: slimeHutch.waterSpots.Count));
             }
 
             // upgrade level
@@ -138,7 +138,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 var upgradeLevelSummary = this.GetUpgradeLevelSummary(building, upgradeLevel).ToArray();
                 if (upgradeLevelSummary.Any())
-                    yield return new CheckboxListField(this.GameHelper, text.Get(L10n.Building.Upgrades), upgradeLevelSummary);
+                    yield return new CheckboxListField(this.GameHelper, L10n.Building.Upgrades(), upgradeLevelSummary);
             }
 
             // silo hay
@@ -146,24 +146,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 Farm farm = Game1.getFarm();
                 int siloCount = Utility.numSilos();
+                int hayCount = farm.piecesOfHay.Value;
+                int maxHay = Math.Max(farm.piecesOfHay.Value, siloCount * 240);
                 yield return new GenericField(
                     this.GameHelper,
-                    text.Get(L10n.Building.StoredHay),
-                    text.Get(siloCount == 1 ? L10n.Building.StoredHaySummaryOneSilo : L10n.Building.StoredHaySummaryMultipleSilos, new { hayCount = farm.piecesOfHay, siloCount = siloCount, maxHay = Math.Max(farm.piecesOfHay.Value, siloCount * 240) })
+                    L10n.Building.StoredHay(),
+                    siloCount == 1
+                        ? L10n.Building.StoredHaySummaryOneSilo(hayCount: hayCount, maxHay: maxHay)
+                        : L10n.Building.StoredHaySummaryMultipleSilos(hayCount: hayCount, maxHay: maxHay, siloCount: siloCount)
                 );
             }
 
             if (built && building is JunimoHut hut)
             {
-                yield return new GenericField(this.GameHelper, text.Get(L10n.Building.JunimoHarvestingEnabled), text.Stringify(!hut.noHarvest.Value));
-                yield return new ItemIconListField(this.GameHelper, text.Get(L10n.Building.OutputReady), hut.output.Value?.items, showStackSize: true);
+                yield return new GenericField(this.GameHelper, L10n.Building.JunimoHarvestingEnabled(), text.Stringify(!hut.noHarvest.Value));
+                yield return new ItemIconListField(this.GameHelper, L10n.Building.OutputReady(), hut.output.Value?.items, showStackSize: true);
             }
 
             // mill output
             if (built && building is Mill mill)
             {
-                yield return new ItemIconListField(this.GameHelper, text.Get(L10n.Building.OutputProcessing), mill.input.Value?.items, showStackSize: true);
-                yield return new ItemIconListField(this.GameHelper, text.Get(L10n.Building.OutputReady), mill.output.Value?.items, showStackSize: true);
+                yield return new ItemIconListField(this.GameHelper, L10n.Building.OutputProcessing(), mill.input.Value?.items, showStackSize: true);
+                yield return new ItemIconListField(this.GameHelper, L10n.Building.OutputReady(), mill.output.Value?.items, showStackSize: true);
             }
         }
 
@@ -271,15 +275,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (building is Barn)
             {
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesBarn0)) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesBarn0()) },
                     value: true
                 );
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesBarn1)) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesBarn1()) },
                     value: upgradeLevel >= 1
                 );
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesBarn2)) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesBarn2()) },
                     value: upgradeLevel >= 2
                 );
             }
@@ -288,15 +292,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             else if (building.indoors.Value is Cabin)
             {
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesCabin0)) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesCabin0()) },
                     value: true
                 );
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesCabin1)) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesCabin1()) },
                     value: upgradeLevel >= 1
                 );
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesCabin2)) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesCabin2()) },
                     value: upgradeLevel >= 2
                 );
             }
@@ -305,15 +309,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             else if (building is Coop)
             {
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesCoop0)) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesCoop0()) },
                     value: true
                 );
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesCoop1)) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesCoop1()) },
                     value: upgradeLevel >= 1
                 );
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(this.Text.Get(L10n.Building.UpgradesCoop2)) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesCoop2()) },
                     value: upgradeLevel >= 2
                 );
             }

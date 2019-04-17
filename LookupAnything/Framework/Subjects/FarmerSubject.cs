@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -44,7 +43,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="isLoadMenu">Whether this is being displayed on the load menu, before the save data is fully initialised.</param>
         public FarmerSubject(GameHelper gameHelper, SFarmer farmer, ITranslationHelper translations, IReflectionHelper reflectionHelper, bool isLoadMenu = false)
-            : base(gameHelper, farmer.Name, null, translations.Get(L10n.Types.Player), translations)
+            : base(gameHelper, farmer.Name, null, L10n.Types.Player(), translations)
         {
             this.Reflection = reflectionHelper;
             this.Target = farmer;
@@ -61,24 +60,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             SFarmer target = this.Target;
 
             // basic info
-            yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.Gender), this.Translate(target.IsMale ? L10n.Player.GenderMale : L10n.Player.GenderFemale));
-            yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.FarmName), target.farmName.Value);
-            yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.FarmMap), this.GetFarmType());
-            yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.FavoriteThing), target.favoriteThing.Value);
-            yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.Spouse), this.GetSpouseName());
+            yield return new GenericField(this.GameHelper, L10n.Player.Gender(), target.IsMale ? L10n.Player.GenderMale() : L10n.Player.GenderFemale());
+            yield return new GenericField(this.GameHelper, L10n.Player.FarmName(), target.farmName.Value);
+            yield return new GenericField(this.GameHelper, L10n.Player.FarmMap(), this.GetFarmType());
+            yield return new GenericField(this.GameHelper, L10n.Player.FavoriteThing(), target.favoriteThing.Value);
+            yield return new GenericField(this.GameHelper, L10n.Player.Spouse(), this.GetSpouseName());
 
             // skills
             int maxSkillPoints = metadata.Constants.PlayerMaxSkillPoints;
             int[] skillPointsPerLevel = metadata.Constants.PlayerSkillPointsPerLevel;
-            yield return new SkillBarField(this.GameHelper, this.Translate(L10n.Player.FarmingSkill), target.experiencePoints[SFarmer.farmingSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
-            yield return new SkillBarField(this.GameHelper, this.Translate(L10n.Player.MiningSkill), target.experiencePoints[SFarmer.miningSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
-            yield return new SkillBarField(this.GameHelper, this.Translate(L10n.Player.ForagingSkill), target.experiencePoints[SFarmer.foragingSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
-            yield return new SkillBarField(this.GameHelper, this.Translate(L10n.Player.FishingSkill), target.experiencePoints[SFarmer.fishingSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
-            yield return new SkillBarField(this.GameHelper, this.Translate(L10n.Player.CombatSkill), target.experiencePoints[SFarmer.combatSkill], maxSkillPoints, skillPointsPerLevel, this.Text);
+            yield return new SkillBarField(this.GameHelper, L10n.Player.FarmingSkill(), target.experiencePoints[SFarmer.farmingSkill], maxSkillPoints, skillPointsPerLevel);
+            yield return new SkillBarField(this.GameHelper, L10n.Player.MiningSkill(), target.experiencePoints[SFarmer.miningSkill], maxSkillPoints, skillPointsPerLevel);
+            yield return new SkillBarField(this.GameHelper, L10n.Player.ForagingSkill(), target.experiencePoints[SFarmer.foragingSkill], maxSkillPoints, skillPointsPerLevel);
+            yield return new SkillBarField(this.GameHelper, L10n.Player.FishingSkill(), target.experiencePoints[SFarmer.fishingSkill], maxSkillPoints, skillPointsPerLevel);
+            yield return new SkillBarField(this.GameHelper, L10n.Player.CombatSkill(), target.experiencePoints[SFarmer.combatSkill], maxSkillPoints, skillPointsPerLevel);
 
             // luck
-            string luckSummary = this.Translate(L10n.Player.LuckSummary, new { percent = (Game1.dailyLuck >= 0 ? "+" : "") + Math.Round(Game1.dailyLuck * 100, 2) });
-            yield return new GenericField(this.GameHelper, this.Translate(L10n.Player.Luck), $"{this.GetSpiritLuckMessage()}{Environment.NewLine}({luckSummary})");
+            string luckSummary = L10n.Player.LuckSummary(percent: (Game1.dailyLuck >= 0 ? "+" : "") + Math.Round(Game1.dailyLuck * 100, 2));
+            yield return new GenericField(this.GameHelper, L10n.Player.Luck(), $"{this.GetSpiritLuckMessage()}{Environment.NewLine}({luckSummary})");
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
@@ -169,7 +168,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     return Game1.content.LoadString("Strings\\UI:Character_FarmFishing").Replace("_", Environment.NewLine);
 
                 default:
-                    return this.Translate(L10n.Player.FarmMapCustom);
+                    return L10n.Player.FarmMapCustom();
             }
         }
 
