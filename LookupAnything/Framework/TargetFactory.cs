@@ -332,17 +332,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="cursorPos">The cursor's viewport-relative coordinates.</param>
         public ISubject GetSubjectFrom(IClickableMenu menu, Vector2 cursorPos)
         {
-            // get target menu
-            IClickableMenu targetMenu = menu;
-            {
-                if (menu is GameMenu gameMenu)
-                {
-                    List<IClickableMenu> tabs = this.Reflection.GetField<List<IClickableMenu>>(gameMenu, "pages").GetValue();
-                    targetMenu = tabs[gameMenu.currentTab];
-                }
-            }
+            IClickableMenu targetMenu =
+                (menu as GameMenu)?.GetCurrentPage()
+                ?? menu;
 
-            // get target
             switch (targetMenu)
             {
                 // calendar
@@ -391,7 +384,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case CollectionsPage collectionsTab:
                     {
                         int currentTab = this.Reflection.GetField<int>(collectionsTab, "currentTab").GetValue();
-                        if (currentTab == CollectionsPage.achievementsTab || currentTab == CollectionsPage.secretNotesTab)
+                        if (currentTab == CollectionsPage.achievementsTab || currentTab == CollectionsPage.secretNotesTab || currentTab == CollectionsPage.lettersTab)
                             break;
 
                         int currentPage = this.Reflection.GetField<int>(collectionsTab, "currentPage").GetValue();
@@ -505,8 +498,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // shop
                 case ShopMenu _:
                     {
-                        Item item = this.Reflection.GetField<Item>(menu, "hoveredItem").GetValue();
-                        if (item != null)
+                        ISalable entry = this.Reflection.GetField<ISalable>(menu, "hoveredItem").GetValue();
+                        if (entry is Item item)
                             return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
                     }
                     break;
