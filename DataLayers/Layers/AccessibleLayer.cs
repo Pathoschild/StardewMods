@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
 
         /// <summary>The action tile property values which trigger a warp.</summary>
         /// <remarks>See remarks on <see cref="IsWarp"/>.</remarks>
-        private readonly HashSet<string> WarpActions = new HashSet<string> { "EnterSewer", "LockedDoorWarp", "Mine", "Warp", "WarpCommunityCenter", "WarpGreenhouse", "WarpMensLocker", "WarpWomensLocker", "WizardHatch" };
+        private readonly HashSet<string> WarpActions = new HashSet<string> { "EnterSewer", "LockedDoorWarp", "Mine", "Theater_Entrance", "Warp", "WarpCommunityCenter", "WarpGreenhouse", "WarpMensLocker", "WarpWomensLocker", "WizardHatch" };
 
         /// <summary>The touch action tile property values which trigger a warp.</summary>
         private readonly HashSet<string> TouchWarpActions = new HashSet<string> { "Door", "MagicWarp" };
@@ -129,10 +129,6 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             if (buildingDoors.Contains(tile))
                 return true;
 
-            // check map warps
-            if (location.isCollidingWithWarpOrDoor(tilePixels) != null)
-                return true;
-
             // check tile actions
             Tile buildingTile = location.map.GetLayer("Buildings").PickTile(new Location(tilePixels.X, tilePixels.Y), Game1.viewport.Size);
             if (buildingTile != null && buildingTile.Properties.TryGetValue("Action", out PropertyValue action) && this.WarpActions.Contains(action.ToString().Split(' ')[0]))
@@ -151,7 +147,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             }
             catch
             {
-                // This fails in some cases like TMX Loader's custom tile properties. It's safe to
+                // This fails in some cases like the movie theater entrance (which is checked via
+                // this.WarpActions above) or TMX Loader's custom tile properties. It's safe to
                 // ignore the error here, since that means it's not a valid warp.
             }
 
