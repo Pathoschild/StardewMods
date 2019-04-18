@@ -63,6 +63,7 @@
     "bundle-area.boiler-room": "锅炉房",
     "bundle-area.vault": "地下室",
     "bundle-area.bulletin-board": "布告栏",
+    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
 
     // shop names
     "shop.adventure-guild": "探险家公会",
@@ -268,6 +269,12 @@
 
     "item.fence-health": "耐久",
 
+    "item.movie-snack-preference": "Preference", // TODO
+    "item.movie-ticket.movie-this-week": "Movie this week", // TODO
+    "item.movie-ticket.loves-movie": "Loves movie", // TODO
+    "item.movie-ticket.likes-movie": "Likes movie", // TODO
+    "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
+
     "item.contents": "内容",
     "item.likes-this": "喜欢",
     "item.loves-this": "最爱",
@@ -288,6 +295,11 @@
 
     "item.fence-health.gold-clock": "黄金时钟增益，无法腐坏",
     "item.fence-health.summary": "{{percent}}% (大约还剩{{count}}天)",
+
+    "item.movie-snack-preference.love": "{{name}} loves this", // TODO
+    "item.movie-snack-preference.like": "{{name}} likes this", // TODO
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this", // TODO
+    "item.movie-ticket.movie-this-week.none": "No movie this week", // TODO
 
     "item.contents.placed": "已放置{{name}}",
     "item.contents.ready": "目前{{name}}",
@@ -358,6 +370,7 @@
     "player.favorite-thing": "兴趣",
     "player.gender": "性别",
     "player.spouse": "配偶",
+    "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "战斗",
     "player.farming-skill": "耕种",
     "player.fishing-skill": "钓鱼",

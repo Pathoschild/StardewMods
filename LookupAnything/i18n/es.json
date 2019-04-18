@@ -63,6 +63,7 @@
     "bundle-area.boiler-room": "Sala de caldera",
     "bundle-area.vault": "Caja fuerte",
     "bundle-area.bulletin-board": "Tablón de anuncios",
+    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
 
     // shop names
     "shop.adventure-guild": "Gremio de aventureros",
@@ -270,6 +271,12 @@
 
     "item.fence-health": "Salud",
 
+    "item.movie-snack-preference": "Preference", // TODO
+    "item.movie-ticket.movie-this-week": "Movie this week", // TODO
+    "item.movie-ticket.loves-movie": "Loves movie", // TODO
+    "item.movie-ticket.likes-movie": "Likes movie", // TODO
+    "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
+
     "item.contents": "Contiene",
     "item.likes-this": "Le gusta a",
     "item.loves-this": "Lo ama",
@@ -290,6 +297,11 @@
 
     "item.fence-health.gold-clock": "Sin decaidas del reloj de oro",
     "item.fence-health.summary": "{{percent}}% (dificilmente {{count}} días)",
+
+    "item.movie-snack-preference.love": "{{name}} loves this", // TODO
+    "item.movie-snack-preference.like": "{{name}} likes this", // TODO
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this", // TODO
+    "item.movie-ticket.movie-this-week.none": "No movie this week", // TODO
 
     "item.contents.placed": "{{name}}",
     "item.contents.ready": "{{name}} listo",
@@ -360,6 +372,7 @@
     "player.favorite-thing": "Cosa favorita",
     "player.gender": "Género",
     "player.spouse": "Esposa",
+    "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "Combate",
     "player.farming-skill": "Agricultura",
     "player.fishing-skill": "Pesca",
@@ -377,7 +390,7 @@
     "player.skill.progress-last": "Nivel {{level}}",
 
     // tile lookup labels
-   // note from translator: better not to translate the technical terms
+    // note from translator: better not to translate the technical terms
     "tile.description": "Una casilla en el mapa. Esto se muestra porque activaste «tile lookups» en la configuracion.",
     "tile.map-name": "Nombre del mapa",
     "tile.tile": "Casilla",

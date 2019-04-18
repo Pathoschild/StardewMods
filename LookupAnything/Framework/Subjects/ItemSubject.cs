@@ -13,6 +13,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.GameData.Movies;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
@@ -167,6 +168,33 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     double daysLeft = Math.Round(fence.health.Value * metadata.Constants.FenceDecayRate / 60 / 24);
                     double percent = Math.Round(health * 100);
                     yield return new PercentageBarField(this.GameHelper, healthLabel, (int)fence.health.Value, (int)maxHealth, Color.Green, Color.Red, L10n.Item.FenceHealthSummary(percent: (int)percent, count: (int)daysLeft));
+                }
+            }
+
+            // movie ticket
+            if (obj?.ParentSheetIndex == 809 && !obj.bigCraftable.Value)
+            {
+                MovieData movie = MovieTheater.GetMovieForDate(Game1.Date);
+                if (movie == null)
+                    yield return new GenericField(this.GameHelper, L10n.MovieTicket.MovieThisWeek(), L10n.MovieTicket.NoMovieThisWeek());
+                else
+                {
+                    // movie this week
+                    yield return new GenericField(this.GameHelper, L10n.MovieTicket.MovieThisWeek(), new IFormattedText[]
+                    {
+                        new FormattedText(movie.Title, bold: true),
+                        new FormattedText(Environment.NewLine),
+                        new FormattedText(movie.Description)
+                    });
+
+                    // movie tastes
+                    IDictionary<GiftTaste, string[]> tastes = this.GameHelper.GetMovieTastes(movie, metadata)
+                        .GroupBy(entry => entry.Value)
+                        .ToDictionary(group => group.Key, group => group.Select(p => p.Key.Name).OrderBy(p => p).ToArray());
+
+                    yield return new ItemGiftTastesField(this.GameHelper, L10n.MovieTicket.LovesMovie(), tastes, GiftTaste.Love);
+                    yield return new ItemGiftTastesField(this.GameHelper, L10n.MovieTicket.LikesMovie(), tastes, GiftTaste.Like);
+                    yield return new ItemGiftTastesField(this.GameHelper, L10n.MovieTicket.DislikesMovie(), tastes, GiftTaste.Dislike);
                 }
             }
 
@@ -578,7 +606,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             // get community center
             CommunityCenter communityCenter = Game1.locations.OfType<CommunityCenter>().First();
-            if (communityCenter.areAllAreasComplete())
+            if (communityCenter.areAllAreasComplete() && communityCenter.isBundleComplete(36))
                 yield break;
 
             // get bundles
@@ -612,6 +640,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     return L10n.BundleAreas.Vault();
                 case "Bulletin Board":
                     return L10n.BundleAreas.BulletinBoard();
+                case "Abandoned Joja Mart":
+                    return L10n.BundleAreas.AbandonedJojaMart();
                 default:
                     return bundle.Area;
             }
@@ -624,7 +654,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         private IDictionary<ItemQuality, int> GetSaleValue(Item item, bool qualityIsKnown, Metadata metadata)
         {
             // get sale price
-            // derived from ShopMenu::receiveLeftClick
+            // derived from Utility.getSellToStorePriceOfItem
             int GetPrice(Item i)
             {
                 int price = (i as SObject)?.sellToStorePrice() ?? (i.salePrice() / 2);

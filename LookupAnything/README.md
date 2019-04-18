@@ -56,7 +56,8 @@ These are the available settings:
   (gray but not crossed out).
   > ![](screenshots/monster.png)
 
-* See what an item is used for, and who likes getting it as a gift.
+* See what an item is used for, who likes getting it as a gift, and its dye color (and strength)
+  when used in tailoring. Look up a movie ticket to see what's playing and who would like the movie.
   > ![](screenshots/item.png)
 
 * See when a crop will be ready to harvest.

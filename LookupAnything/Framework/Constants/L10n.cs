@@ -157,6 +157,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>Bulletin Board</c>.</summary>
             public static Translation BulletinBoard() => L10n.Helper.Get("bundle-area.bulletin-board");
+
+            /// <summary>A value like <c>Abandoned Joja Mart</c>.</summary>
+            public static Translation AbandonedJojaMart() => L10n.Helper.Get("bundle-area.abandoned-joja-mart");
         }
 
         /// <summary>Recipe types.</summary>
@@ -571,6 +574,53 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public static Translation CraftedSummary(int count) => L10n.Helper.Get("item.number-crafted.summary", new { count });
         }
 
+        /// <summary>Movie snack lookup translations.</summary>
+        public static class MovieSnack
+        {
+            /****
+            ** Labels
+            ****/
+            /// <summary>A value like <c>Preference</c>.</summary>
+            public static Translation Preference() => L10n.Helper.Get("item.movie-snack-preference");
+
+
+            /*********
+            ** Public methods
+            *********/
+            /// <summary>Get a value like <c>{{name}} loves this</c>, <c>{{name}} likes this</c>, etc.</summary>
+            /// <param name="taste">The taste value returned by <see cref="StardewValley.Locations.MovieTheater.GetConcessionTasteForCharacter"/>.</param>
+            /// <param name="name">The NPC name.</param>
+            public static Translation ForTaste(string taste, string name)
+            {
+                return L10n.Helper.Get($"item.movie-snack-preference.{taste}", new { name });
+            }
+        }
+
+        /// <summary>Movie ticket lookup translations.</summary>
+        public static class MovieTicket
+        {
+            /****
+            ** Labels
+            ****/
+            /// <summary>A value like <c>Movie this week</c>.</summary>
+            public static Translation MovieThisWeek() => L10n.Helper.Get("item.movie-ticket.movie-this-week");
+
+            /// <summary>A value like <c>Loves movie</c>.</summary>
+            public static Translation LovesMovie() => L10n.Helper.Get("item.movie-ticket.loves-movie");
+
+            /// <summary>A value like <c>Likes movie</c>.</summary>
+            public static Translation LikesMovie() => L10n.Helper.Get("item.movie-ticket.likes-movie");
+
+            /// <summary>A value like <c>Dislikes movie</c>.</summary>
+            public static Translation DislikesMovie() => L10n.Helper.Get("item.movie-ticket.dislikes-movie");
+
+            /****
+            ** Values
+            ****/
+            /// <summary>A value like <c>No movie this week</c>.</summary>
+            public static Translation NoMovieThisWeek() => L10n.Helper.Get("item.movie-ticket.movie-this-week.none");
+        }
+
         /// <summary>Monster lookup translations.</summary>
         public static class Monster
         {
@@ -727,6 +777,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>Spouse</c>.</summary>
             public static Translation Spouse() => L10n.Helper.Get("player.spouse");
+
+            /// <summary>A value like <c>Watched movie this week</c>.</summary>
+            public static Translation WatchedMovieThisWeek() => L10n.Helper.Get("player.watched-movie-this-week");
 
             /// <summary>A value like <c>Combat skill</c>.</summary>
             public static Translation CombatSkill() => L10n.Helper.Get("player.combat-skill");

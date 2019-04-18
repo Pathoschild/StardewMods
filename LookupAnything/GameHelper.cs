@@ -13,6 +13,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.GameData.Movies;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.Tools;
@@ -241,6 +242,21 @@ namespace Pathoschild.Stardew.LookupAnything
                 GiftTaste? taste = this.GetGiftTaste(npc, item);
                 if (taste.HasValue)
                     yield return new KeyValuePair<NPC, GiftTaste>(npc, taste.Value);
+            }
+        }
+
+        /// <summary>Get how much each NPC likes watching a movie.</summary>
+        /// <param name="movie">The movie to check.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public IEnumerable<KeyValuePair<NPC, GiftTaste>> GetMovieTastes(MovieData movie, Metadata metadata)
+        {
+            foreach (NPC npc in this.GetAllCharacters())
+            {
+                if (!this.IsSocialVillager(npc, metadata))
+                    continue;
+
+                GiftTaste taste = (GiftTaste)Enum.Parse(typeof(GiftTaste), MovieTheater.GetResponseForMovie(npc), ignoreCase: true);
+                yield return new KeyValuePair<NPC, GiftTaste>(npc, taste);
             }
         }
 

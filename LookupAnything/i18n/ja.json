@@ -63,6 +63,7 @@
     "bundle-area.boiler-room": "ボイラー室",
     "bundle-area.vault": "金庫",
     "bundle-area.bulletin-board": "掲示板",
+    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
 
     // shop names
     "shop.adventure-guild": "冒険者ギルド",
@@ -266,6 +267,12 @@
 
     "item.fence-health": "耐久値",
 
+    "item.movie-snack-preference": "Preference", // TODO
+    "item.movie-ticket.movie-this-week": "Movie this week", // TODO
+    "item.movie-ticket.loves-movie": "Loves movie", // TODO
+    "item.movie-ticket.likes-movie": "Likes movie", // TODO
+    "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
+
     "item.contents": "内容",
     "item.likes-this": "これが好きな人",
     "item.loves-this": "これが大好きな人",
@@ -286,6 +293,11 @@
 
     "item.fence-health.gold-clock": "金の時計の効果で減らない",
     "item.fence-health.summary": "{{percent}}% (残り約{{count}}日)",
+
+    "item.movie-snack-preference.love": "{{name}} loves this", // TODO
+    "item.movie-snack-preference.like": "{{name}} likes this", // TODO
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this", // TODO
+    "item.movie-ticket.movie-this-week.none": "No movie this week", // TODO
 
     "item.contents.placed": "設置した {{name}}",
     "item.contents.ready": "{{name}} ready",
@@ -356,6 +368,7 @@
     "player.favorite-thing": "好きなもの",
     "player.gender": "性別",
     "player.spouse": "配偶者",
+    "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "戦闘",
     "player.farming-skill": "農業",
     "player.fishing-skill": "釣り",

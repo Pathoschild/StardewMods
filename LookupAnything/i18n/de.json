@@ -63,6 +63,7 @@
     "bundle-area.boiler-room": "Heizraum",
     "bundle-area.vault": "Tresor",
     "bundle-area.bulletin-board": "Schwarzes Brett",
+    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
 
     // shop names
     "shop.adventure-guild": "Abenteurergilde",
@@ -77,8 +78,8 @@
     "recipe-type.crafting": "Herstellen",
 
     /*********
-  ** NPC overrides
-  *********/
+    ** NPC overrides
+    *********/
     "data.npc.pet.description": "Dein treues Haustier.",
     "data.npc.horse.description": "Dein treues Ross.",
     "data.npc.junimo.description": "Ein Waldgeist aus der Geisterwelt. Es ist nur wenig über sie bekannt.",
@@ -266,6 +267,12 @@
 
     "item.fence-health": "Leben",
 
+    "item.movie-snack-preference": "Preference", // TODO
+    "item.movie-ticket.movie-this-week": "Movie this week", // TODO
+    "item.movie-ticket.loves-movie": "Loves movie", // TODO
+    "item.movie-ticket.likes-movie": "Likes movie", // TODO
+    "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
+
     "item.contents": "Inhalt",
     "item.likes-this": "Mag das",
     "item.loves-this": "Liebt das",
@@ -287,6 +294,10 @@
     "item.fence-health.gold-clock": "Kein Verfall mit Gold-Uhr",
     "item.fence-health.summary": "{{percent}}% (ungefähr {{count}} Tage übrig)",
 
+    "item.movie-snack-preference.love": "{{name}} loves this", // TODO
+    "item.movie-snack-preference.like": "{{name}} likes this", // TODO
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this", // TODO
+    "item.movie-ticket.movie-this-week.none": "No movie this week", // TODO
 
     "item.contents.placed": "{{name}} platziert",
     "item.contents.ready": "{{name}} bereit",
@@ -357,6 +368,7 @@
     "player.favorite-thing": "Lieblingsgegenstand",
     "player.gender": "Geschlecht",
     "player.spouse": "Ehepartner",
+    "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "Kampf",
     "player.farming-skill": "Hofarbeit",
     "player.fishing-skill": "Fischen",

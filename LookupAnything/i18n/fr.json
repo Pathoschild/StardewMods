@@ -63,6 +63,7 @@
     "bundle-area.boiler-room": "Chaufferie",
     "bundle-area.vault": "Coffre",
     "bundle-area.bulletin-board": "Panneau d'affichage",
+    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
 
     // shop names
     "shop.adventure-guild": "Guilde des aventuriers",
@@ -268,6 +269,12 @@
 
     "item.fence-health": "Santé",
 
+    "item.movie-snack-preference": "Preference", // TODO
+    "item.movie-ticket.movie-this-week": "Movie this week", // TODO
+    "item.movie-ticket.loves-movie": "Loves movie", // TODO
+    "item.movie-ticket.likes-movie": "Likes movie", // TODO
+    "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
+
     "item.contents": "Contenu",
     "item.likes-this": "Apprécié par",
     "item.loves-this": "Adoré par",
@@ -288,6 +295,11 @@
 
     "item.fence-health.gold-clock": "pas de déclin avec l'Horloge d'Or",
     "item.fence-health.summary": "{{percent}}% (environ {{count}} jours restant)",
+
+    "item.movie-snack-preference.love": "{{name}} loves this", // TODO
+    "item.movie-snack-preference.like": "{{name}} likes this", // TODO
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this", // TODO
+    "item.movie-ticket.movie-this-week.none": "No movie this week", // TODO
 
     "item.contents.placed": "{{name}} placé",
     "item.contents.ready": "{{name}} prêt",
@@ -358,6 +370,7 @@
     "player.favorite-thing": "Chose préférée",
     "player.gender": "Sexe",
     "player.spouse": "Conjoint(e)",
+    "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "Combat",
     "player.farming-skill": "Agriculture",
     "player.fishing-skill": "Pêche",

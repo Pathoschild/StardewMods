@@ -507,6 +507,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         ISalable entry = shopMenu.hoveredItem;
                         if (entry is Item item)
                             return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                        if (entry is MovieConcession snack)
+                            return new MovieSnackSubject(this.GameHelper, this.Translations, snack);
                     }
                     break;
 

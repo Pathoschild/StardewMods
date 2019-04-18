@@ -63,6 +63,7 @@
     "bundle-area.boiler-room": "Бойлерная",
     "bundle-area.vault": "Сейф",
     "bundle-area.bulletin-board": "Доска объявлений",
+    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
 
     // shop names
     "shop.adventure-guild": "Гильдия Приключений",
@@ -266,6 +267,12 @@
 
     "item.fence-health": "Здоровье",
 
+    "item.movie-snack-preference": "Preference", // TODO
+    "item.movie-ticket.movie-this-week": "Movie this week", // TODO
+    "item.movie-ticket.loves-movie": "Loves movie", // TODO
+    "item.movie-ticket.likes-movie": "Likes movie", // TODO
+    "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
+
     "item.contents": "Содержит",
     "item.likes-this": "Нравится",
     "item.loves-this": "Любят",
@@ -286,6 +293,11 @@
 
     "item.fence-health.gold-clock": "не разрушается благодаря золотым часам",
     "item.fence-health.summary": "{{percent}}% (сломается через {{count}} дн.)",
+
+    "item.movie-snack-preference.love": "{{name}} loves this", // TODO
+    "item.movie-snack-preference.like": "{{name}} likes this", // TODO
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this", // TODO
+    "item.movie-ticket.movie-this-week.none": "No movie this week", // TODO
 
     "item.contents.placed": "содержит {{name}}",
     "item.contents.ready": "{{name}} готов",
@@ -356,6 +368,7 @@
     "player.favorite-thing": "Любимая вещь",
     "player.gender": "Пол",
     "player.spouse": "Супруг(а)",
+    "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "Боевые навыки",
     "player.farming-skill": "Фермерство",
     "player.fishing-skill": "Рыбная ловля",

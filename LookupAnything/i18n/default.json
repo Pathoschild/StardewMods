@@ -54,8 +54,8 @@
     "friendship-status.divorced": "Divorced",
 
     /*********
-    ** Data translations
-    *********/
+  ** Data translations
+  *********/
     // Community Center bundle areas
     "bundle-area.pantry": "Pantry",
     "bundle-area.crafts-room": "Crafts Room",
@@ -63,6 +63,7 @@
     "bundle-area.boiler-room": "Boiler Room",
     "bundle-area.vault": "Vault",
     "bundle-area.bulletin-board": "Bulletin Board",
+    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart",
 
     // shop names
     "shop.adventure-guild": "Adventure Guild",
@@ -266,6 +267,12 @@
 
     "item.fence-health": "Health",
 
+    "item.movie-snack-preference": "Preference",
+    "item.movie-ticket.movie-this-week": "Movie this week",
+    "item.movie-ticket.loves-movie": "Loves movie",
+    "item.movie-ticket.likes-movie": "Likes movie",
+    "item.movie-ticket.dislikes-movie": "Dislikes movie",
+
     "item.contents": "Contents",
     "item.likes-this": "Likes this",
     "item.loves-this": "Loves this",
@@ -286,6 +293,11 @@
 
     "item.fence-health.gold-clock": "no decay with Gold Clock",
     "item.fence-health.summary": "{{percent}}% (roughly {{count}} days left)",
+
+    "item.movie-snack-preference.love": "{{name}} loves this",
+    "item.movie-snack-preference.like": "{{name}} likes this",
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this",
+    "item.movie-ticket.movie-this-week.none": "No movie this week",
 
     "item.contents.placed": "{{name}} placed",
     "item.contents.ready": "{{name}} ready",
@@ -356,6 +368,7 @@
     "player.favorite-thing": "Favorite thing",
     "player.gender": "Gender",
     "player.spouse": "Spouse",
+    "player.watched-movie-this-week": "Watched movie this week",
     "player.combat-skill": "Combat",
     "player.farming-skill": "Farming",
     "player.fishing-skill": "Fishing",

@@ -61,6 +61,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new GenericField(this.GameHelper, L10n.Player.FavoriteThing(), target.favoriteThing.Value);
             yield return new GenericField(this.GameHelper, L10n.Player.Spouse(), this.GetSpouseName());
 
+            // saw a movie this week
+            if (Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheater"))
+                yield return new GenericField(this.GameHelper, L10n.Player.WatchedMovieThisWeek(), this.Stringify(target.lastSeenMovieWeek.Value >= Game1.Date.TotalSundayWeeks));
+
             // skills
             int maxSkillPoints = metadata.Constants.PlayerMaxSkillPoints;
             int[] skillPointsPerLevel = metadata.Constants.PlayerSkillPointsPerLevel;

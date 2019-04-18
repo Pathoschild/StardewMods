@@ -63,6 +63,7 @@
     "bundle-area.boiler-room": "Sala da Caldeira",
     "bundle-area.vault": "Cofre",
     "bundle-area.bulletin-board": "Mural de Recados",
+    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
 
     // shop names
     "shop.adventure-guild": "Guilda dos Aventureiros",
@@ -266,6 +267,12 @@
 
     "item.fence-health": "Saúde",
 
+    "item.movie-snack-preference": "Preference", // TODO
+    "item.movie-ticket.movie-this-week": "Movie this week", // TODO
+    "item.movie-ticket.loves-movie": "Loves movie", // TODO
+    "item.movie-ticket.likes-movie": "Likes movie", // TODO
+    "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
+
     "item.contents": "Conteúdo",
     "item.likes-this": "Gosta disso",
     "item.loves-this": "Ama isso",
@@ -286,6 +293,11 @@
 
     "item.fence-health.gold-clock": "Não decai com o Relógio de Ouro",
     "item.fence-health.summary": "{{percent}}% (aproximadamente {{count}} dias restantes)",
+
+    "item.movie-snack-preference.love": "{{name}} loves this", // TODO
+    "item.movie-snack-preference.like": "{{name}} likes this", // TODO
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this", // TODO
+    "item.movie-ticket.movie-this-week.none": "No movie this week", // TODO
 
     "item.contents.placed": "{{name}} colocado",
     "item.contents.ready": "{{name}} pronto",
@@ -356,6 +368,7 @@
     "player.favorite-thing": "Coisa Favorida",
     "player.gender": "Genero",
     "player.spouse": "Esposa(o)",
+    "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "Combate",
     "player.farming-skill": "Cultivo",
     "player.fishing-skill": "Pescaria",

@@ -63,6 +63,7 @@
     "bundle-area.boiler-room": "보일러실",
     "bundle-area.vault": "금고",
     "bundle-area.bulletin-board": "게시판",
+    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
 
     // shop names
     "shop.adventure-guild": "모험가 길드",
@@ -268,6 +269,12 @@
 
     "item.fence-health": "내구도",
 
+    "item.movie-snack-preference": "Preference", // TODO
+    "item.movie-ticket.movie-this-week": "Movie this week", // TODO
+    "item.movie-ticket.loves-movie": "Loves movie", // TODO
+    "item.movie-ticket.likes-movie": "Likes movie", // TODO
+    "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
+
     "item.contents": "내용물",
     "item.likes-this": "좋아함",
     "item.loves-this": "사랑함",
@@ -288,6 +295,11 @@
 
     "item.fence-health.gold-clock": "금시계로 인하여 내구도가 감소하지 않음",
     "item.fence-health.summary": "{{percent}}% (대략 {{count}}일 남음)",
+
+    "item.movie-snack-preference.love": "{{name}} loves this", // TODO
+    "item.movie-snack-preference.like": "{{name}} likes this", // TODO
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this", // TODO
+    "item.movie-ticket.movie-this-week.none": "No movie this week", // TODO
 
     "item.contents.placed": "{{name}}이/가 들어감",
     "item.contents.ready": "{{name}}이/가 준비됨",
@@ -358,6 +370,7 @@
     "player.favorite-thing": "좋아하는 것",
     "player.gender": "성별",
     "player.spouse": "배우자",
+    "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "전투",
     "player.farming-skill": "농사",
     "player.fishing-skill": "낚시",
