@@ -258,6 +258,9 @@
     "crop.harvest.too-late": "Zu spät in der Jahrezeit für eine weitere Ernte (wäre am {{date}}).",
 
     // item lookup labels
+    "item.can-be-dyed": "Can be dyed", // TODO
+    "item.produces-dye": "Produces dye", // TODO
+
     "item.cask-contents": "Inhalt",
     "item.cask-schedule": "Altern",
 

@@ -258,6 +258,9 @@
     "crop.harvest.too-late": "次の収穫には遅すぎる ({{date}}になる)",
 
     // item lookup labels
+    "item.can-be-dyed": "Can be dyed", // TODO
+    "item.produces-dye": "Produces dye", // TODO
+
     "item.cask-contents": "中身",
     "item.cask-schedule": "成熟日数",
 

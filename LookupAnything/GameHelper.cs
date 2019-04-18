@@ -13,6 +13,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.GameData.Crafting;
 using StardewValley.GameData.Movies;
 using StardewValley.Locations;
 using StardewValley.Objects;
@@ -350,6 +351,18 @@ namespace Pathoschild.Stardew.LookupAnything
                     continue;
 
                 yield return recipe;
+            }
+
+            // from tailor recipes
+            List<TailorItemRecipe> tailorRecipes = Game1.temporaryContent.Load<List<TailorItemRecipe>>("Data\\TailoringRecipes");
+            foreach (TailorItemRecipe recipe in tailorRecipes)
+            {
+                if (recipe.FirstItemTags?.All(item.HasContextTag) == false && recipe.SecondItemTags?.All(item.HasContextTag) == false)
+                    continue; // needs all tags for one of the recipe slots
+
+                RecipeIngredientModel ingredient = new RecipeIngredientModel(item.ParentSheetIndex, 1);
+                Item Output(Item input) => new Clothing(recipe.CraftedItemID);
+                yield return new RecipeModel(null, RecipeType.TailorInput, "Tailoring", new[] { ingredient }, Output, mustBeLearned: false, outputItemIndex: recipe.CraftedItemID, isForMachine: _ => false);
             }
         }
 

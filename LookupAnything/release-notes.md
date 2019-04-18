@@ -5,6 +5,7 @@
 Released 26 November 2019.
 
 * Updated for Stardew Valley 1.4, including...
+  * new mechanics (clothing, dyeing, and tailoring);
   * movie theater.
 * Added save format version to save slot lookups.
 * Updated for compatibility with Json Assets 1.3.8.

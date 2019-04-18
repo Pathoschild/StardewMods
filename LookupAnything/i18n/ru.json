@@ -258,6 +258,9 @@
     "crop.harvest.too-late": "слишком поздно в этом сезоне для следующего сбора (урожай {{date}})",
 
     // item lookup labels
+    "item.can-be-dyed": "Can be dyed", // TODO
+    "item.produces-dye": "Produces dye", // TODO
+
     "item.cask-contents": "Содержит",
     "item.cask-schedule": "Изнашивается",
 

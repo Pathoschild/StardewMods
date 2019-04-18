@@ -262,6 +262,9 @@
     "crop.harvest.too-late": "Demasiado tarde para cosecharlo esta temporada (sería en {{date}})",
 
     // item lookup labels
+    "item.can-be-dyed": "Can be dyed", // TODO
+    "item.produces-dye": "Produces dye", // TODO
+
     "item.cask-contents": "Contiene",
     "item.cask-schedule": "Envejecimiento",
 

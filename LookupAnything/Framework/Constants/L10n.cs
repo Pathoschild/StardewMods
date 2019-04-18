@@ -459,6 +459,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /****
             ** Labels
             ****/
+            /// <summary>A value like <c>Can be dyed</c>.</summary>
+            public static Translation CanBeDyed() => L10n.Helper.Get("item.can-be-dyed");
+
+            /// <summary>A value like <c>Produces dye</c>.</summary>
+            public static Translation ProducesDye() => L10n.Helper.Get("item.produces-dye");
+
             /// <summary>A value like <c>Aging</c>.</summary>
             public static Translation CaskSchedule() => L10n.Helper.Get("item.cask-schedule");
 

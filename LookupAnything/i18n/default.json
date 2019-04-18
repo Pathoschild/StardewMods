@@ -258,6 +258,9 @@
     "crop.harvest.too-late": "too late in the season for the next harvest (would be on {{date}})",
 
     // item lookup labels
+    "item.can-be-dyed": "Can be dyed",
+    "item.produces-dye": "Produces dye",
+
     "item.cask-contents": "Contents",
     "item.cask-schedule": "Aging",
 

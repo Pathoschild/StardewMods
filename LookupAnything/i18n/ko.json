@@ -260,6 +260,9 @@
     "crop.harvest.too-late": "작물을 수확하기엔 너무 늦은 계절이다 (다음 수확까지 {{date}}일 걸림)",
 
     // item lookup labels
+    "item.can-be-dyed": "Can be dyed", // TODO
+    "item.produces-dye": "Produces dye", // TODO
+
     "item.cask-contents": "내용물",
     "item.cask-schedule": "숙성",
 

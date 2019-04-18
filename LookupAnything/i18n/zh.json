@@ -260,6 +260,9 @@
     "crop.harvest.too-late": "下次收获超出本季(下次收获将在{{date}})",
 
     // item lookup labels
+    "item.can-be-dyed": "Can be dyed", // TODO
+    "item.produces-dye": "Produces dye", // TODO
+
     "item.cask-contents": "内容",
     "item.cask-schedule": "陈酿中",
 

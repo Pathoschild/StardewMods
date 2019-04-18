@@ -147,6 +147,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     yield return new GenericField(this.GameHelper, L10n.Item.SellsTo(), string.Join(", ", buyers));
                 }
 
+                // clothing
+                if (item is Clothing clothing)
+                    yield return new GenericField(this.GameHelper, L10n.Item.CanBeDyed(), this.Stringify(clothing.dyeable.Value));
+
                 // gift tastes
                 var giftTastes = this.GetGiftTastes(item, metadata);
                 yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.LovesThis(), giftTastes, GiftTaste.Love);
@@ -219,6 +223,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     }
                     break;
             }
+
+            // dyes
+            yield return new ColorField(this.GameHelper, L10n.Item.ProducesDye(), item);
 
             // owned and times cooked/crafted
             if (showInventoryFields && !isCrop && !(item is Tool))

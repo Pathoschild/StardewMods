@@ -260,6 +260,9 @@
     "crop.harvest.too-late": "trop tard dans la saison pour la prochaine récolte (sera le {{date}})",
 
     // item lookup labels
+    "item.can-be-dyed": "Peut être teint",
+    "item.produces-dye": "Produces dye", // TODO
+
     "item.cask-contents": "Contenu",
     "item.cask-schedule": "Âge",
 
