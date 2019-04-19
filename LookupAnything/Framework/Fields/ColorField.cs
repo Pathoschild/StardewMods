@@ -18,6 +18,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>The dye strength.</summary>
         private readonly int Strength;
 
+        /// <summary>Whether the field should display a shifting prismatic color scheme.</summary>
+        private readonly bool IsPrismatic;
+
 
         /*********
         ** Public methods
@@ -30,19 +33,31 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             : base(gameHelper, label)
         {
             // get color
-            Color? color = TailoringMenu.GetDyeColor(item);
-            if (!color.HasValue)
-                return;
-            this.Color = color.Value;
-            this.HasValue = true;
+            if (item.Name == "Prismatic Shard")
+            {
+                this.IsPrismatic = true;
+                this.HasValue = true;
+            }
+            else
+            {
+                Color? color = TailoringMenu.GetDyeColor(item);
+                if (color.HasValue)
+                {
+                    this.Color = color.Value;
+                    this.HasValue = true;
+                }
+            }
 
             // get dye strength
-            if (item.HasContextTag("dye_strong"))
-                this.Strength = 3;
-            else if (item.HasContextTag("dye_medium"))
-                this.Strength = 2;
-            else
-                this.Strength = 1;
+            if (this.HasValue)
+            {
+                if (item.HasContextTag("dye_strong"))
+                    this.Strength = 3;
+                else if (item.HasContextTag("dye_medium"))
+                    this.Strength = 2;
+                else
+                    this.Strength = 1;
+            }
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
@@ -59,9 +74,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
             // draw preview icon & text
             float offset = 0;
+            Color color = this.IsPrismatic ? Utility.GetPrismaticColor() : this.Color;
             for (int i = 0; i < this.Strength; i++)
             {
-                spriteBatch.DrawSpriteWithin(CommonHelper.Pixel, new Rectangle(0, 0, 1, 1), position.X + offset, position.Y, iconSize, this.Color);
+                spriteBatch.DrawSpriteWithin(CommonHelper.Pixel, new Rectangle(0, 0, 1, 1), position.X + offset, position.Y, iconSize, color);
                 offset += iconSize.X + 2;
             }
 
