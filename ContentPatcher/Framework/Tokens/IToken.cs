@@ -5,7 +5,7 @@ using Pathoschild.Stardew.Common.Utilities;
 namespace ContentPatcher.Framework.Tokens
 {
     /// <summary>A token whose value may change depending on the current context.</summary>
-    internal interface IToken
+    internal interface IToken : IContextual
     {
         /*********
         ** Accessors
@@ -29,11 +29,6 @@ namespace ContentPatcher.Framework.Tokens
         /*********
         ** Public methods
         *********/
-        /// <summary>Update the token data when the context changes.</summary>
-        /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the token data changed.</returns>
-        void UpdateContext(IContext context);
-
         /// <summary>Whether the token may return multiple values for the given name.</summary>
         /// <param name="name">The token name.</param>
         bool CanHaveMultipleValues(TokenName name);
