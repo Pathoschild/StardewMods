@@ -7,6 +7,8 @@ Released 26 November 2019.
 * Updated for Stardew Valley 1.4, including...
   * new mechanics (clothing, dyeing, and tailoring);
   * movie theater;
+  * new farm map;
+  * new social NPC profiles;
   * new Krobus relationship;
   * pet water bowl and petting changes.
 * Added save format version to save slot lookups.

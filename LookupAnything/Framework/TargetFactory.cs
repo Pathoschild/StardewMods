@@ -454,6 +454,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     }
                     break;
 
+                case ProfileMenu profileMenu:
+                    {
+                        Item item = profileMenu.hoveredItem;
+                        if (item != null)
+                            return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                        break;
+                    }
+
                 // Community Center bundle menu
                 case JunimoNoteMenu bundleMenu:
                     {

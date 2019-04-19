@@ -168,6 +168,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     return Game1.content.LoadString("Strings\\UI:Character_FarmMining").Replace("_", Environment.NewLine);
                 case Farm.riverlands_layout:
                     return Game1.content.LoadString("Strings\\UI:Character_FarmFishing").Replace("_", Environment.NewLine);
+                case Farm.fourCorners_layout:
+                    return Game1.content.LoadString("Strings\\UI:Character_FarmFourCorners").Replace("_", Environment.NewLine);
 
                 default:
                     return L10n.Player.FarmMapCustom();
