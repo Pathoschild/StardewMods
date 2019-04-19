@@ -13,12 +13,6 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>The token name.</summary>
         TokenName Name { get; }
 
-        /// <summary>Whether the token is applicable in the current context.</summary>
-        bool IsValidInContext { get; }
-
-        /// <summary>Whether the value can change after it's initialised.</summary>
-        bool IsMutable { get; }
-
         /// <summary>Whether this token recognises subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with a <c>Abigail</c> subkey).</summary>
         bool CanHaveSubkeys { get; }
 

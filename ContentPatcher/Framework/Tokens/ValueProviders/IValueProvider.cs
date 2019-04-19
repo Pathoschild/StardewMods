@@ -13,12 +13,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>The value provider name.</summary>
         string Name { get; }
 
-        /// <summary>Whether values exist in the current context.</summary>
-        bool IsValidInContext { get; }
-
-        /// <summary>Whether the provided values can change after the provider is initialised.</summary>
-        bool IsMutable { get; }
-
         /// <summary>Whether the value provider allows an input argument (e.g. an NPC name for a relationship token).</summary>
         bool AllowsInput { get; }
 

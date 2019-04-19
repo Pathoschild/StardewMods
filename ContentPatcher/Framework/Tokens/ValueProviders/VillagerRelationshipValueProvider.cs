@@ -27,18 +27,22 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.EnableInputArguments(required: false, canHaveMultipleValues: false);
         }
 
-        /// <summary>Update the underlying values.</summary>
-        /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the values changed.</returns>
-        public override void UpdateContext(IContext context)
+        /// <summary>Update the instance when the context changes.</summary>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <returns>Returns whether the instance changed.</returns>
+        public override bool UpdateContext(IContext context)
         {
-            this.Values.Clear();
-            this.IsValidInContext = Context.IsWorldReady;
-            if (this.IsValidInContext)
+            return this.IsChanged(this.Values, () =>
             {
-                foreach (KeyValuePair<string, Friendship> pair in Game1.player.friendshipData.Pairs)
-                    this.Values[pair.Key] = pair.Value.Status.ToString();
-            }
+                this.Values.Clear();
+                this.IsReady = Context.IsWorldReady;
+
+                if (this.IsReady)
+                {
+                    foreach (KeyValuePair<string, Friendship> pair in Game1.player.friendshipData.Pairs)
+                        this.Values[pair.Key] = pair.Value.Status.ToString();
+                }
+            });
         }
 
         /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>

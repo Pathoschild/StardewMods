@@ -20,6 +20,12 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Accessors
         *********/
+        /// <summary>Whether the instance may change depending on the context.</summary>
+        public bool IsMutable { get; } = true;
+
+        /// <summary>Whether the instance is valid for the current context.</summary>
+        public bool IsReady { get; protected set; }
+
         /// <summary>The last context used to update this patch.</summary>
         protected IContext LastContext { get; private set; }
 
@@ -44,12 +50,6 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The conditions which determine whether this patch should be applied.</summary>
         public ConditionDictionary Conditions { get; }
 
-        /// <summary>Whether this patch should be applied in the latest context.</summary>
-        public bool MatchesContext { get; private set; }
-
-        /// <summary>Whether this patch is valid if <see cref="MatchesContext"/> is true.</summary>
-        public bool IsValidInContext { get; protected set; } = true;
-
         /// <summary>Whether the patch is currently applied to the target asset.</summary>
         public bool IsApplied { get; set; }
 
@@ -67,11 +67,11 @@ namespace ContentPatcher.Framework.Patches
             // update conditions
             bool conditionsChanged;
             {
-                bool wasMatch = this.MatchesContext;
-                this.MatchesContext =
+                bool wasReady = this.IsReady;
+                this.IsReady =
                     (this.Conditions.Count == 0 || this.Conditions.Values.All(p => p.IsMatch(context)))
                     && this.GetTokensUsed().All(p => context.Contains(p, enforceContext: true));
-                conditionsChanged = wasMatch != this.MatchesContext;
+                conditionsChanged = wasReady != this.IsReady;
             }
             // update target asset
             bool targetChanged = this.RawTargetAsset.UpdateContext(context);
@@ -82,9 +82,9 @@ namespace ContentPatcher.Framework.Patches
             if (this.FromLocalAsset != null)
             {
                 sourceChanged = this.FromLocalAsset.UpdateContext(context);
-                this.IsValidInContext = this.FromLocalAsset.IsReady && this.ContentPack.HasFile(this.FromLocalAsset.Value);
+                this.IsReady = this.IsReady && this.FromLocalAsset.IsReady && this.ContentPack.HasFile(this.FromLocalAsset.Value);
             }
-            
+
             return conditionsChanged || targetChanged || sourceChanged;
         }
 

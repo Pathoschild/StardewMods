@@ -32,18 +32,21 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.EnableInputArguments(required: false, canHaveMultipleValues: false);
         }
 
-        /// <summary>Update the underlying values.</summary>
-        /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the values changed.</returns>
-        public override void UpdateContext(IContext context)
+        /// <summary>Update the instance when the context changes.</summary>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <returns>Returns whether the instance changed.</returns>
+        public override bool UpdateContext(IContext context)
         {
-            this.Professions.Clear();
-            this.IsValidInContext = this.IsPlayerDataAvailable();
-            if (this.IsValidInContext)
+            return this.IsChanged(this.Professions, () =>
             {
-                foreach (int professionID in Game1.player.professions)
-                    this.Professions.Add((Profession)professionID);
-            }
+                this.Professions.Clear();
+                this.IsReady = this.IsPlayerDataAvailable();
+                if (this.IsReady)
+                {
+                    foreach (int professionID in Game1.player.professions)
+                        this.Professions.Add((Profession)professionID);
+                }
+            });
         }
 
         /// <summary>Get the allowed values for a token name (or <c>null</c> if any value is allowed).</summary>

@@ -86,14 +86,14 @@ namespace ContentPatcher.Framework
 
             // reset dynamic tokens
             foreach (DynamicToken token in this.DynamicContext.Tokens.Values)
-                token.SetValidInContext(false);
+                token.SetReady(false);
             foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
             {
                 if (tokenValue.Conditions.Values.All(p => p.IsMatch(this)))
                 {
                     DynamicToken token = this.DynamicContext.Tokens[tokenValue.Name];
                     token.SetValue(tokenValue.Value);
-                    token.SetValidInContext(true);
+                    token.SetReady(true);
                 }
             }
         }
