@@ -206,8 +206,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <remarks>Derived from <see cref="Pet.checkAction"/> and <see cref="Pet.dayUpdate"/>.</remarks>
         private IEnumerable<ICustomField> GetDataForPet(Pet pet)
         {
+            Farm farm = Game1.getFarm();
+
+            // friendship
             yield return new CharacterFriendshipField(this.GameHelper, L10n.Pet.Love(), this.GameHelper.GetFriendshipForPet(Game1.player, pet), this.Text);
-            yield return new GenericField(this.GameHelper, L10n.Pet.PettedToday(), this.Stringify(this.Reflection.GetField<bool>(pet, "wasPetToday").GetValue()));
+
+            // petted today / last petted
+            int lastPettedDay = this.Reflection.GetField<int>(pet, "lastPetDay").GetValue();
+            int daysSincePetted = Game1.Date.TotalDays - lastPettedDay;
+            yield return new GenericField(this.GameHelper, L10n.Pet.PettedToday(), daysSincePetted == 0 ? L10n.Pet.LastPettedYes() : this.Stringify(false));
+            if (daysSincePetted != 0)
+                yield return new GenericField(this.GameHelper, L10n.Pet.LastPetted(), daysSincePetted == 1 ? L10n.Generic.Yesterday() : L10n.Pet.LastPettedDaysAgo(daysSincePetted));
+
+            // water bowl
+            yield return new GenericField(this.GameHelper, L10n.Pet.WaterBowl(), farm.petBowlWatered.Value ? L10n.Pet.WaterBowlFilled() : L10n.Pet.WaterBowlEmpty());
         }
 
         /// <summary>Get the fields to display for a villager NPC.</summary>

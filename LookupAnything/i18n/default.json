@@ -367,6 +367,14 @@
     // pet lookup labels
     "pet.love": "Love",
     "pet.petted-today": "Petted today",
+    "pet.last-petted": "Last petted",
+    "pet.water-bowl": "Water bowl",
+
+    // pet lookup values
+    "pet.last-petted.yes": "yes (+12 love)",
+    "pet.last-petted.days-ago": "{{days}} days ago",
+    "pet.water-bowl.empty": "empty",
+    "pet.water-bowl.filled": "filled (+6 love)",
 
     // player lookup labels
     "player.farm-name": "Farm name",

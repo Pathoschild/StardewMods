@@ -767,6 +767,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>Petted today</c>.</summary>
             public static Translation PettedToday() => L10n.Helper.Get("pet.petted-today");
+
+            /// <summary>A value like <c>Last petted</c>.</summary>
+            public static Translation LastPetted() => L10n.Helper.Get("pet.last-petted");
+
+            /// <summary>A value like <c>yes (+12 love)</c>.</summary>
+            public static Translation LastPettedYes() => L10n.Helper.Get("pet.last-petted.yes");
+
+            /// <summary>A value like <c>{{days}} days ago</c>.</summary>
+            public static Translation LastPettedDaysAgo(int days) => L10n.Helper.Get("pet.last-petted.days-ago", new { days });
+
+            /// <summary>A value like <c>Water bowl</c>.</summary>
+            public static Translation WaterBowl() => L10n.Helper.Get("pet.water-bowl");
+
+            /// <summary>A value like <c>empty</c>.</summary>
+            public static Translation WaterBowlEmpty() => L10n.Helper.Get("pet.water-bowl.empty");
+
+            /// <summary>A value like <c>filled (+6 love)</c>.</summary>
+            public static Translation WaterBowlFilled() => L10n.Helper.Get("pet.water-bowl.filled");
         }
 
         /// <summary>Player lookup translations.</summary>
