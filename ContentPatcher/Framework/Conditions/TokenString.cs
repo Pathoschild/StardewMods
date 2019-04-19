@@ -9,7 +9,7 @@ using Pathoschild.Stardew.Common.Utilities;
 namespace ContentPatcher.Framework.Conditions
 {
     /// <summary>A string value which can contain condition tokens.</summary>
-    internal class TokenString
+    internal class TokenString : IContextual
     {
         /*********
         ** Fields

@@ -90,6 +90,7 @@
     <Compile Include="Framework\Patches\DisabledPatch.cs" />
     <Compile Include="Framework\Patches\EditDataPatch.cs" />
     <Compile Include="Framework\Patches\EditImagePatch.cs" />
+    <Compile Include="Framework\IContextual.cs" />
     <Compile Include="Framework\Patches\IPatch.cs" />
     <Compile Include="Framework\Patches\LoadPatch.cs" />
     <Compile Include="Framework\Patches\Patch.cs" />

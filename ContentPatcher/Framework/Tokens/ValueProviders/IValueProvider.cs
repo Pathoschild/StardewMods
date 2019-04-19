@@ -5,7 +5,7 @@ using Pathoschild.Stardew.Common.Utilities;
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
     /// <summary>Provides values for a token name with optional input.</summary>
-    internal interface IValueProvider
+    internal interface IValueProvider : IContextual
     {
         /*********
         ** Accessors
@@ -29,11 +29,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /*********
         ** Public methods
         *********/
-        /// <summary>Update the underlying values.</summary>
-        /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the values changed.</returns>
-        void UpdateContext(IContext context);
-
         /// <summary>Whether the value provider may return multiple values for the given input.</summary>
         /// <param name="input">The input argument, if applicable.</param>
         bool CanHaveMultipleValues(string input = null);
