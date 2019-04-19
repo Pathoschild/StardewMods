@@ -52,6 +52,7 @@
     "friendship-status.engaged": "婚約済",
     "friendship-status.married": "結婚済",
     "friendship-status.divorced": "離婚済",
+    "friendship-status.kicked-out": "Kicked out", // TODO
 
     /*********
     ** Data translations
@@ -340,12 +341,14 @@
     "npc.gifted-today": "今日贈り物をした",
     "npc.gifted-this-week": "今週贈り物をした",
     "npc.kissed-today": "今日キスをした",
+    "npc.hugged-today": "Hugged today", // TODO
     "npc.loves-gifts": "大好きな贈り物",
     "npc.likes-gifts": "好きな贈り物",
     "npc.neutral-gifts": "普通の贈り物",
 
     // NPC lookup values
     "npc.can-romance.married": "あなたと結婚しました♡", // < turns into a heart
+    "npc.can-romance.housemate": "You're housemates!", // TODO
     "npc.friendship.not-met": "まだ会っていません",
     "npc.friendship.need-bouquet": "進むには花束が必要",
     "npc.friendship.need-points": "{{count}}pts必要",
@@ -370,6 +373,7 @@
     "player.farm-map": "牧場マップ",
     "player.favorite-thing": "好きなもの",
     "player.gender": "性別",
+    "player.housemate": "Housemate", // TODO
     "player.spouse": "配偶者",
     "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "戦闘",

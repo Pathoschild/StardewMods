@@ -691,6 +691,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Gifted today</c>.</summary>
             public static Translation GiftedToday() => L10n.Helper.Get("npc.gifted-today");
 
+            /// <summary>A value like <c>Hugged today</c>.</summary>
+            public static Translation HuggedToday() => L10n.Helper.Get("npc.hugged-today");
+
             /// <summary>A value like <c>Kissed today</c>.</summary>
             public static Translation KissedToday() => L10n.Helper.Get("npc.kissed-today");
 
@@ -711,6 +714,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             ****/
             /// <summary>A value like <c>You're married! &lt;</c>.</summary>
             public static Translation CanRomanceMarried() => L10n.Helper.Get("npc.can-romance.married");
+
+            /// <summary>A value like <c>You're housemates!</c>.</summary>
+            public static Translation CanRomanceHousemate() => L10n.Helper.Get("npc.can-romance.housemate");
 
             /// <summary>A value like <c>You haven't met them yet.</c>.</summary>
             public static Translation FriendshipNotMet() => L10n.Helper.Get("npc.friendship.not-met");
@@ -780,6 +786,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>Gender</c>.</summary>
             public static Translation Gender() => L10n.Helper.Get("player.gender");
+
+            /// <summary>A value like <c>Housemate</c>.</summary>
+            public static Translation Housemate() => L10n.Helper.Get("player.housemate");
 
             /// <summary>A value like <c>Spouse</c>.</summary>
             public static Translation Spouse() => L10n.Helper.Get("player.spouse");
@@ -945,8 +954,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
         /// <summary>Get a translation for an enum value.</summary>
         /// <param name="status">The friendship status.</param>
-        public static Translation For(FriendshipStatus status)
+        /// <param name="wasHousemate">Whether the NPC is eligible to be a housemate, rather than spouse.</param>
+        public static Translation For(FriendshipStatus status, bool wasHousemate)
         {
+            if (wasHousemate && status == FriendshipStatus.Divorced)
+                return L10n.Helper.Get("friendship-status.kicked-out");
             return L10n.Helper.Get($"friendship-status.{status.ToString().ToLower()}");
         }
 

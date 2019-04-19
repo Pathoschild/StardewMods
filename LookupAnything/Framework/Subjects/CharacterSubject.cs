@@ -229,19 +229,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 {
                     // friendship/romance
                     FriendshipModel friendship = this.GameHelper.GetFriendshipForVillager(Game1.player, npc, Game1.player.friendshipData[npc.Name], metadata);
-                    yield return new GenericField(this.GameHelper, L10n.Npc.CanRomance(), friendship.IsSpouse ? L10n.Npc.CanRomanceMarried() : this.Stringify(friendship.CanDate));
+                    yield return new GenericField(this.GameHelper, L10n.Npc.CanRomance(), friendship.IsSpouse ? L10n.Npc.CanRomanceMarried() : friendship.IsHousemate ? L10n.Npc.CanRomanceHousemate() : this.Stringify(friendship.CanDate));
                     yield return new CharacterFriendshipField(this.GameHelper, L10n.Npc.Friendship(), friendship, this.Text);
 
                     // talked/gifted today
                     yield return new GenericField(this.GameHelper, L10n.Npc.TalkedToday(), this.Stringify(friendship.TalkedToday));
                     yield return new GenericField(this.GameHelper, L10n.Npc.GiftedToday(), this.Stringify(friendship.GiftsToday > 0));
 
-                    // kissed today
-                    if (friendship.IsSpouse)
-                        yield return new GenericField(this.GameHelper, L10n.Npc.KissedToday(), this.Stringify(npc.hasBeenKissedToday.Value));
+                    // kissed/hugged today
+                    if (friendship.IsSpouse || friendship.IsHousemate)
+                        yield return new GenericField(this.GameHelper, friendship.IsSpouse ? L10n.Npc.KissedToday() : L10n.Npc.HuggedToday(), this.Stringify(npc.hasBeenKissedToday.Value));
 
                     // gifted this week
-                    if (!friendship.IsSpouse)
+                    if (!friendship.IsSpouse && !friendship.IsHousemate)
                         yield return new GenericField(this.GameHelper, L10n.Npc.GiftedThisWeek(), L10n.Generic.Ratio(value: friendship.GiftsThisWeek, max: NPC.maxGiftsPerWeek));
                 }
                 else

@@ -52,6 +52,7 @@
     "friendship-status.engaged": "Prometido",
     "friendship-status.married": "Casado",
     "friendship-status.divorced": "Divorciado",
+    "friendship-status.kicked-out": "Kicked out", // TODO
 
     /*********
     ** Data translations
@@ -344,12 +345,14 @@
     "npc.gifted-today": "Le he regalado hoy",
     "npc.gifted-this-week": "Regalos semanales",
     "npc.kissed-today": "Kissed today", // TODO
+    "npc.hugged-today": "Hugged today", // TODO
     "npc.loves-gifts": "Ama",
     "npc.likes-gifts": "Le gusta",
     "npc.neutral-gifts": "Neutral gifts", // TODO
 
     // NPC lookup values
     "npc.can-romance.married": "¡Estás casado! <", // < turns into a heart
+    "npc.can-romance.housemate": "You're housemates!", // TODO
     "npc.friendship.not-met": "No lo has conocido todavía.",
     "npc.friendship.need-bouquet": "Necesitas un ramo de flores para lo siguiente",
     "npc.friendship.need-points": "siguiente en {{count}} puntos",
@@ -374,6 +377,7 @@
     "player.farm-map": "Farm map", // TODO
     "player.favorite-thing": "Cosa favorita",
     "player.gender": "Género",
+    "player.housemate": "Housemate", // TODO
     "player.spouse": "Esposa",
     "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "Combate",

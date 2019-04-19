@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new GenericField(this.GameHelper, L10n.Player.FarmName(), target.farmName.Value);
             yield return new GenericField(this.GameHelper, L10n.Player.FarmMap(), this.GetFarmType());
             yield return new GenericField(this.GameHelper, L10n.Player.FavoriteThing(), target.favoriteThing.Value);
-            yield return new GenericField(this.GameHelper, L10n.Player.Spouse(), this.GetSpouseName());
+            yield return new GenericField(this.GameHelper, Game1.player.spouse == "Krobus" ? L10n.Player.Housemate() : L10n.Player.Spouse(), this.GetSpouseName());
 
             // saw a movie this week
             if (Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheater"))

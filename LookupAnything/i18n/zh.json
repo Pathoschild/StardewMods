@@ -52,6 +52,7 @@
     "friendship-status.engaged": "已订婚",
     "friendship-status.married": "已结婚",
     "friendship-status.divorced": "已离婚",
+    "friendship-status.kicked-out": "Kicked out", // TODO
 
     /*********
     ** Data translations
@@ -342,12 +343,14 @@
     "npc.gifted-today": "今天已送礼",
     "npc.gifted-this-week": "本周送礼",
     "npc.kissed-today": "Kissed today", // TODO
+    "npc.hugged-today": "Hugged today", // TODO
     "npc.loves-gifts": "最爱",
     "npc.likes-gifts": "喜欢",
     "npc.neutral-gifts": "普通",
 
     // NPC lookup values
     "npc.can-romance.married": "你已经结婚了！ <", // < turns into a heart
+    "npc.can-romance.housemate": "You're housemates!", // TODO
     "npc.friendship.not-met": "你们还没有见过面",
     "npc.friendship.need-bouquet": "需要花束进行到下一阶段",
     "npc.friendship.need-points": "下一等级需要{{count}}点好感度",
@@ -372,6 +375,7 @@
     "player.farm-map": "农场地图",
     "player.favorite-thing": "兴趣",
     "player.gender": "性别",
+    "player.housemate": "Housemate", // TODO
     "player.spouse": "配偶",
     "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "战斗",

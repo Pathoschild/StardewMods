@@ -52,6 +52,7 @@
     "friendship-status.engaged": "Помолвлены",
     "friendship-status.married": "В браке",
     "friendship-status.divorced": "Разведены",
+    "friendship-status.kicked-out": "Kicked out", // TODO
 
     /*********
     ** Data translations
@@ -340,12 +341,14 @@
     "npc.gifted-today": "Подарок за сегодня",
     "npc.gifted-this-week": "Подарки за эту неделю",
     "npc.kissed-today": "Поцелуй за сегодня",
+    "npc.hugged-today": "Hugged today", // TODO
     "npc.loves-gifts": "Любит подарки:",
     "npc.likes-gifts": "Нравятся подарки:",
     "npc.neutral-gifts": "Равнодушен к подаркам:",
 
     // NPC lookup values
     "npc.can-romance.married": "Вы женаты! <", // < turns into a heart
+    "npc.can-romance.housemate": "You're housemates!", // TODO
     "npc.friendship.not-met": "Вы ещё не встречались.",
     "npc.friendship.need-bouquet": "нужен букет для след.",
     "npc.friendship.need-points": "след. через {{count}}",
@@ -370,6 +373,7 @@
     "player.farm-map": "Карта фермы",
     "player.favorite-thing": "Любимая вещь",
     "player.gender": "Пол",
+    "player.housemate": "Housemate", // TODO
     "player.spouse": "Супруг(а)",
     "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "Боевые навыки",

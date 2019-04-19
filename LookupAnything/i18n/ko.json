@@ -52,6 +52,7 @@
     "friendship-status.engaged": "약혼함",
     "friendship-status.married": "결혼함",
     "friendship-status.divorced": "이혼함",
+    "friendship-status.kicked-out": "Kicked out", // TODO
 
     /*********
     ** Data translations
@@ -342,12 +343,14 @@
     "npc.gifted-today": "오늘 선물을 줌",
     "npc.gifted-this-week": "이번 주 선물 횟수를 모두 사용함",
     "npc.kissed-today": "Kissed today", // TODO
+    "npc.hugged-today": "Hugged today", // TODO
     "npc.loves-gifts": "사랑하는 선물",
     "npc.likes-gifts": "좋아하는 선물",
     "npc.neutral-gifts": "그저그런 선물",
 
     // NPC lookup values
     "npc.can-romance.married": "당신은 이미 결혼했다! <", // < turns into a heart
+    "npc.can-romance.housemate": "You're housemates!", // TODO
     "npc.friendship.not-met": "당신은 아직 이 NPC를 만나지 못했다.",
     "npc.friendship.need-bouquet": "다음 호감도 진행을 위해서 꽃다발 필요.",
     "npc.friendship.need-points": "호감도 UP까지 {{count}}점",
@@ -372,6 +375,7 @@
     "player.farm-map": "농장 유형",
     "player.favorite-thing": "좋아하는 것",
     "player.gender": "성별",
+    "player.housemate": "Housemate", // TODO
     "player.spouse": "배우자",
     "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "전투",
