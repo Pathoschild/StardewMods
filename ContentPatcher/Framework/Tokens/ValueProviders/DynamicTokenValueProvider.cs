@@ -45,11 +45,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.Values = values;
         }
 
-        /// <summary>Set whether the token is valid in the current context.</summary>
-        /// <param name="validInContext">The value to set.</param>
-        public void SetValidInContext(bool validInContext)
+        /// <summary>Set whether the token is valid for the current context.</summary>
+        /// <param name="ready">The value to set.</param>
+        public void SetReady(bool ready)
         {
-            this.IsValidInContext = validInContext;
+            this.IsReady = ready;
         }
 
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>

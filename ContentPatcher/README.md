@@ -204,7 +204,7 @@ their house:
 ```js
 {
     "Action": "EditImage",
-    "Target": "Building/houses",
+    "Target": "Buildings/houses",
     "FromFile": "assets/green_house.png",
     "When": {
         "Season": "spring, summer",
@@ -259,7 +259,7 @@ For example, this gives the farmhouse a different appearance in each season:
 ```js
 {
     "Action": "EditImage",
-    "Target": "Building/houses",
+    "Target": "Buildings/houses",
     "FromFile": "assets/{{season}}_house.png" // assets/spring_house.png, assets/summer_house.png, etc
 }
 ```

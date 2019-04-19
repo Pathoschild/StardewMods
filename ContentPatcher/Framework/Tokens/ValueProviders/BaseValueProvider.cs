@@ -28,23 +28,26 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Whether the provided values can change after the provider is initialised.</summary>
         public bool IsMutable { get; protected set; } = true;
 
+        /// <summary>Whether the instance is valid for the current context.</summary>
+        public bool IsReady { get; protected set; }
+
         /// <summary>Whether the value provider allows an input argument (e.g. an NPC name for a relationship token).</summary>
         public bool AllowsInput { get; private set; }
 
         /// <summary>Whether the value provider requires an input argument to work, and does not provide values without it (see <see cref="IValueProvider.AllowsInput"/>).</summary>
         public bool RequiresInput { get; private set; }
 
-        /// <summary>Whether values exist in the current context.</summary>
-        public bool IsValidInContext { get; protected set; }
-
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Update the underlying values.</summary>
-        /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the values changed.</returns>
-        public virtual void UpdateContext(IContext context) { }
+        /// <summary>Update the instance when the context changes.</summary>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <returns>Returns whether the instance changed.</returns>
+        public virtual bool UpdateContext(IContext context)
+        {
+            return false;
+        }
 
         /// <summary>Whether the value provider may return multiple values for the given input.</summary>
         /// <param name="input">The input argument, if applicable.</param>
@@ -243,6 +246,43 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                         yield return new KeyValuePair<string, string>(parts[0], parts[1]);
                 }
             }
+        }
+
+        /// <summary>Get whether the value provider's <see cref="IsReady"/> or values change when an action is invoked.</summary>
+        /// <typeparam name="T">The value type.</typeparam>
+        /// <param name="values">The underlying values to check.</param>
+        /// <param name="action">The action to perform.</param>
+        protected bool IsChanged<T>(HashSet<T> values, Action action)
+        {
+            return this.IsChanged(() =>
+            {
+                HashSet<T> oldValues = new HashSet<T>(values);
+                action();
+                return values.Count != oldValues.Count || values.Any(p => !oldValues.Contains(p));
+            });
+        }
+
+        /// <summary>Get whether the value provider's <see cref="IsReady"/> or values change when an action is invoked.</summary>
+        /// <param name="values">The underlying values to check.</param>
+        /// <param name="action">The action to perform.</param>
+        protected bool IsChanged(IDictionary<string, string> values, Action action)
+        {
+            return this.IsChanged(() =>
+            {
+                Dictionary<string, string> oldValues = new Dictionary<string, string>(values);
+                action();
+                return
+                    values.Count != oldValues.Count
+                    || oldValues.Any(entry => !values.TryGetValue(entry.Key, out string newValue) || entry.Value?.Equals(newValue, StringComparison.InvariantCultureIgnoreCase) != true);
+            });
+        }
+
+        /// <summary>Get whether the value provider's <see cref="IsReady"/> or values change when an action is invoked.</summary>
+        /// <param name="action">The action to perform, which returns true if the valus changed.</param>
+        protected bool IsChanged(Func<bool> action)
+        {
+            bool wasReady = this.IsReady;
+            return action() || this.IsReady != wasReady;
         }
     }
 }

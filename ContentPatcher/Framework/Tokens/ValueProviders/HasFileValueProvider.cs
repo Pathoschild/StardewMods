@@ -33,13 +33,17 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.EnableInputArguments(required: true, canHaveMultipleValues: false);
         }
 
-        /// <summary>Update the underlying values.</summary>
-        /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the values changed.</returns>
-        public override void UpdateContext(IContext context)
+        /// <summary>Update the instance when the context changes.</summary>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <returns>Returns whether the instance changed.</returns>
+        public override bool UpdateContext(IContext context)
         {
+            bool changed = !this.IsReady;
+
             this.TokenContext = context;
-            this.IsValidInContext = true;
+            this.IsReady = true;
+
+            return changed;
         }
 
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>

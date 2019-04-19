@@ -18,19 +18,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         private readonly Func<bool> IsPlayerDataAvailable;
 
         /// <summary>The defined wallet items and whether the player has them.</summary>
-        private readonly IDictionary<WalletItem, Func<bool>> WalletItems = new Dictionary<WalletItem, Func<bool>>
-        {
-            [WalletItem.DwarvishTranslationGuide] = () => Game1.player.canUnderstandDwarves,
-            [WalletItem.RustyKey] = () => Game1.player.hasRustyKey,
-            [WalletItem.ClubCard] = () => Game1.player.hasClubCard,
-            [WalletItem.SpecialCharm] = () => Game1.player.hasSpecialCharm,
-            [WalletItem.SkullKey] = () => Game1.player.hasSkullKey,
-            [WalletItem.MagnifyingGlass] = () => Game1.player.hasMagnifyingGlass,
-            [WalletItem.DarkTalisman] = () => Game1.player.hasDarkTalisman,
-            [WalletItem.MagicInk] = () => Game1.player.hasMagicInk,
-            [WalletItem.BearsKnowledge] = () => Game1.player.eventsSeen.Contains(2120303),
-            [WalletItem.SpringOnionMastery] = () => Game1.player.eventsSeen.Contains(3910979)
-        };
+        private readonly IDictionary<WalletItem, bool> Values = new Dictionary<WalletItem, bool>();
 
 
         /*********
@@ -45,18 +33,43 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.EnableInputArguments(required: false, canHaveMultipleValues: false);
         }
 
-        /// <summary>Update the underlying values.</summary>
-        /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the values changed.</returns>
-        public override void UpdateContext(IContext context)
+        /// <summary>Update the instance when the context changes.</summary>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <returns>Returns whether the instance changed.</returns>
+        public override bool UpdateContext(IContext context)
         {
-            this.IsValidInContext = this.IsPlayerDataAvailable();
+            return this.IsChanged(() =>
+            {
+                IDictionary<WalletItem, bool> oldValues = new Dictionary<WalletItem, bool>(this.Values);
+
+                this.Values.Clear();
+                this.IsReady = this.IsPlayerDataAvailable();
+                if (this.IsReady)
+                {
+                    this.Values[WalletItem.DwarvishTranslationGuide] = Game1.player.canUnderstandDwarves;
+                    this.Values[WalletItem.RustyKey] = Game1.player.hasRustyKey;
+                    this.Values[WalletItem.ClubCard] = Game1.player.hasClubCard;
+                    this.Values[WalletItem.SpecialCharm] = Game1.player.hasSpecialCharm;
+                    this.Values[WalletItem.SkullKey] = Game1.player.hasSkullKey;
+                    this.Values[WalletItem.MagnifyingGlass] = Game1.player.hasMagnifyingGlass;
+                    this.Values[WalletItem.DarkTalisman] = Game1.player.hasDarkTalisman;
+                    this.Values[WalletItem.MagicInk] = Game1.player.hasMagicInk;
+                    this.Values[WalletItem.BearsKnowledge] = Game1.player.eventsSeen.Contains(2120303);
+                    this.Values[WalletItem.SpringOnionMastery] = Game1.player.eventsSeen.Contains(3910979);
+
+                    return
+                        this.Values.Count != oldValues.Count
+                        || this.Values.Any(entry => !oldValues.TryGetValue(entry.Key, out bool oldValue) || entry.Value != oldValue);
+                }
+
+                return false;
+            });
         }
 
         /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>
         public override InvariantHashSet GetValidInputs()
         {
-            return new InvariantHashSet(this.WalletItems.Keys.Select(p => p.ToString()));
+            return new InvariantHashSet(this.Values.Keys.Select(p => p.ToString()));
         }
 
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
@@ -78,14 +91,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             if (input != null)
             {
-                bool hasItem = this.TryParseEnum(input, out WalletItem item) && this.WalletItems[item]();
+                bool hasItem = this.TryParseEnum(input, out WalletItem item) && this.Values[item];
                 yield return hasItem.ToString();
             }
             else
             {
-                foreach (KeyValuePair<WalletItem, Func<bool>> pair in this.WalletItems)
+                foreach (KeyValuePair<WalletItem, bool> pair in this.Values)
                 {
-                    if (pair.Value())
+                    if (pair.Value)
                         yield return pair.Key.ToString();
                 }
             }

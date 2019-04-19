@@ -682,7 +682,7 @@ namespace ContentPatcher
                 TokenName tokenName = tokenString.Tokens.First();
                 IToken token = tokenContext.GetToken(tokenName, enforceContext: false);
                 InvariantHashSet allowedValues = token?.GetAllowedValues(tokenName);
-                if (token == null || token.IsMutable || !token.IsValidInContext)
+                if (token == null || token.IsMutable || !token.IsReady)
                 {
                     error = $"can only use static tokens in this field, consider using a {nameof(PatchConfig.When)} condition instead.";
                     return false;

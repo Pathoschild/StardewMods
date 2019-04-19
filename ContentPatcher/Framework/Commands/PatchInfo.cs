@@ -76,7 +76,7 @@ namespace ContentPatcher.Framework.Commands
             this.ParsedConditions = patch.Conditions;
             this.ContentPack = patch.ContentPack;
             this.IsLoaded = true;
-            this.MatchesContext = patch.MatchesContext;
+            this.MatchesContext = patch.IsReady;
             this.IsApplied = patch.IsApplied;
             this.TokensUsed = patch.GetTokensUsed().ToArray();
         }

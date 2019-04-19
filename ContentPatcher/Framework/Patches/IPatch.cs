@@ -19,7 +19,7 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>The content pack which requested the patch.</summary>
         ManagedContentPack ContentPack { get; }
-        
+
         /// <summary>The asset key to load from the content pack instead.</summary>
         TokenString FromLocalAsset { get; }
 
@@ -31,12 +31,6 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>The conditions which determine whether this patch should be applied.</summary>
         ConditionDictionary Conditions { get; }
-
-        /// <summary>Whether this patch should be applied in the latest context.</summary>
-        bool MatchesContext { get; }
-
-        /// <summary>Whether this patch is valid if <see cref="MatchesContext"/> is true.</summary>
-        bool IsValidInContext { get; }
 
         /// <summary>Whether the patch is currently applied to the target asset.</summary>
         bool IsApplied { get; set; }

@@ -171,7 +171,7 @@ namespace ContentPatcher.Framework.Commands
                 {
                     output.Append($"   {token.Name.Key.PadRight(labelWidth)} | ");
 
-                    if (!token.IsValidInContext)
+                    if (!token.IsReady)
                         output.AppendLine("[ ] n/a");
                     else if (token.RequiresSubkeys)
                     {
@@ -328,7 +328,7 @@ namespace ContentPatcher.Framework.Commands
                 IList<TokenName> tokensOutOfContext = patch
                     .TokensUsed
                     .Union(patch.ParsedConditions.Keys)
-                    .Where(p => !tokenContext.GetToken(p, enforceContext: false).IsValidInContext)
+                    .Where(p => !tokenContext.GetToken(p, enforceContext: false).IsReady)
                     .OrderByIgnoreCase(p => p.ToString())
                     .ToArray();
 

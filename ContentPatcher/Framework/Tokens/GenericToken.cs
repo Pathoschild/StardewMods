@@ -28,14 +28,14 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Whether the value can change after it's initialised.</summary>
         public bool IsMutable => this.Values.IsMutable;
 
+        /// <summary>Whether the instance is valid for the current context.</summary>
+        public bool IsReady => this.Values.IsReady;
+
         /// <summary>Whether this token recognises subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with a <c>Abigail</c> subkey).</summary>
         public bool CanHaveSubkeys => this.Values.AllowsInput;
 
         /// <summary>Whether this token only allows subkeys (see <see cref="IToken.CanHaveSubkeys"/>).</summary>
         public bool RequiresSubkeys => this.Values.RequiresInput;
-
-        /// <summary>Whether the token is applicable in the current context.</summary>
-        public bool IsValidInContext => this.Values.IsValidInContext;
 
 
         /*********
@@ -54,10 +54,15 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Update the token data when the context changes.</summary>
         /// <param name="context">The condition context.</param>
         /// <returns>Returns whether the token data changed.</returns>
-        public virtual void UpdateContext(IContext context)
+        public bool UpdateContext(IContext context)
         {
+            bool changed = false;
             if (this.Values.IsMutable)
-                this.Values.UpdateContext(context);
+            {
+                if (this.Values.UpdateContext(context))
+                    changed = true;
+            }
+            return changed;
         }
 
         /// <summary>Whether the token may return multiple values for the given name.</summary>

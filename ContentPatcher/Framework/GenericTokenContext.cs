@@ -75,7 +75,7 @@ namespace ContentPatcher.Framework
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
         private bool ShouldConsider(IToken token, bool enforceContext)
         {
-            return !enforceContext || token.IsValidInContext;
+            return !enforceContext || token.IsReady;
         }
     }
 
