@@ -13,7 +13,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         ** Fields
         *********/
         /// <summary>The JSON fields whose values may change based on the context.</summary>
-        private readonly TokenisableJValue[] TokenisableFields;
+        private readonly TokenisableProxy[] TokenisableFields;
 
 
         /*********
@@ -74,35 +74,38 @@ namespace ContentPatcher.Framework.Tokens.Json
         /// <summary>Find all tokenisable fields in a JSON structure, replace immutable tokens with their values, and get a list of mutable tokens.</summary>
         /// <param name="token">The JSON structure to scan.</param>
         /// <param name="context">Provides access to contextual tokens.</param>
-        private IEnumerable<TokenisableJValue> ResolveTokenisableFields(JToken token, IContext context)
+        private IEnumerable<TokenisableProxy> ResolveTokenisableFields(JToken token, IContext context)
         {
             switch (token)
             {
                 case JValue valueToken:
                     {
                         string value = valueToken.Value<string>();
-                        TokenString tokenStr = new TokenString(value, context);
-
-                        // replace with immutable value
-                        if (!tokenStr.IsMutable)
-                        {
-                            if (tokenStr.Value != value)
-                                valueToken.Value = tokenStr.Value;
-                        }
-
-                        // else store token
-                        else
-                        {
-                            TokenisableJValue contextualToken = new TokenisableJValue(valueToken, tokenStr);
-                            yield return contextualToken;
-                        }
+                        TokenisableProxy proxy = this.TryResolveTokenisableFields(value, context, val => valueToken.Value = val);
+                        if (proxy != null)
+                            yield return proxy;
                         break;
                     }
 
                 case JObject objToken:
-                    foreach (JProperty property in objToken.Properties())
+                    foreach (JProperty p in objToken.Properties())
                     {
-                        foreach (TokenisableJValue contextual in this.ResolveTokenisableFields(property.Value, context))
+                        JProperty property = p;
+
+                        // resolve property name
+                        {
+                            TokenisableProxy proxy = this.TryResolveTokenisableFields(property.Name, context, val =>
+                            {
+                                var newProperty = new JProperty(val, property.Value);
+                                property.Replace(newProperty);
+                                property = newProperty;
+                            });
+                            if (proxy != null)
+                                yield return proxy;
+                        }
+
+                        // resolve property values
+                        foreach (TokenisableProxy contextual in this.ResolveTokenisableFields(property.Value, context))
                             yield return contextual;
                     }
                     break;
@@ -110,7 +113,7 @@ namespace ContentPatcher.Framework.Tokens.Json
                 case JArray arrToken:
                     foreach (JToken valueToken in arrToken)
                     {
-                        foreach (TokenisableJValue contextual in this.ResolveTokenisableFields(valueToken, context))
+                        foreach (TokenisableProxy contextual in this.ResolveTokenisableFields(valueToken, context))
                             yield return contextual;
                     }
                     break;
@@ -118,6 +121,24 @@ namespace ContentPatcher.Framework.Tokens.Json
                 default:
                     throw new InvalidOperationException($"Unknown JSON token: {token.GetType().FullName} ({token.Type})");
             }
+        }
+
+        /// <summary>Resolve tokens in a string field, replace immutable tokens with their values, and get mutable tokens.</summary>
+        /// <param name="str">The string to scan.</param>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <param name="setValue">Update the source with a new value.</param>
+        private TokenisableProxy TryResolveTokenisableFields(string str, IContext context, Action<string> setValue)
+        {
+            TokenString tokenStr = new TokenString(str, context);
+
+            // handle mutable token
+            if (tokenStr.IsMutable)
+                return new TokenisableProxy(tokenStr, setValue);
+
+            // substitute immutable value
+            if (tokenStr.Value != str)
+                setValue(tokenStr.Value);
+            return null;
         }
     }
 }

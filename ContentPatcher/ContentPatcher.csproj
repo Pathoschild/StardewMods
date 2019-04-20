@@ -50,7 +50,7 @@
     <Compile Include="Framework\Conditions\ConditionType.cs" />
     <Compile Include="Framework\Conditions\PatchType.cs" />
     <Compile Include="Framework\Tokens\Json\TokenisableJToken.cs" />
-    <Compile Include="Framework\Tokens\Json\TokenisableJValue.cs" />
+    <Compile Include="Framework\Tokens\Json\TokenisableProxy.cs" />
     <Compile Include="Framework\Conditions\TokenString.cs" />
     <Compile Include="Framework\Conditions\Weather.cs" />
     <Compile Include="Framework\ConfigFileHandler.cs" />
