@@ -31,8 +31,8 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The token strings which contain mutable tokens.</summary>
         private readonly TokenString[] MutableTokenStrings;
 
-        /// <summary>Whether the next context update is the first one.</summary>
-        private bool IsFirstUpdate = true;
+        /// <summary>The underlying contextual values.</summary>
+        private readonly IContextual[] ContextualValues;
 
 
         /*********
@@ -54,6 +54,8 @@ namespace ContentPatcher.Framework.Patches
             this.Fields = fields.ToArray();
             this.Monitor = monitor;
             this.MutableTokenStrings = this.GetTokenStrings(this.Records, this.Fields).Where(str => str.Tokens.Any()).ToArray();
+
+            this.ContextualValues = this.Records.Concat<IContextual>(this.Fields).Where(p => p != null).ToArray();
         }
 
         /// <summary>Update the patch data when the context changes.</summary>
@@ -63,18 +65,10 @@ namespace ContentPatcher.Framework.Patches
         {
             bool changed = base.UpdateContext(context);
 
-            // We need to update all token strings once. After this first time, we can skip
-            // updating any immutable tokens.
-            if (this.IsFirstUpdate)
+            foreach (IContextual value in this.ContextualValues)
             {
-                this.IsFirstUpdate = false;
-                foreach (TokenString str in this.GetTokenStrings(this.Records, this.Fields))
-                    changed |= str.UpdateContext(context);
-            }
-            else
-            {
-                foreach (TokenString str in this.MutableTokenStrings)
-                    changed |= str.UpdateContext(context);
+                if (value.UpdateContext(context))
+                    changed = true;
             }
 
             return changed;
@@ -256,7 +250,7 @@ namespace ContentPatcher.Framework.Patches
                         string[] actualFields = ((string)(object)data[key]).Split('/');
                         foreach (EditDataPatchField field in recordGroup)
                         {
-                            if (!int.TryParse(field.FieldKey, out int index))
+                            if (!int.TryParse(field.FieldKey.Value, out int index))
                             {
                                 this.Monitor.Log($"Can't apply data field \"{this.LogName}\" to {this.TargetAsset}: record '{key}' under {nameof(PatchConfig.Fields)} is a string, so it requires a field index between 0 and {actualFields.Length - 1} (received \"{field.FieldKey}\"instead)).", LogLevel.Warn);
                                 continue;

@@ -1,19 +1,19 @@
+using System;
 using ContentPatcher.Framework.Conditions;
-using Newtonsoft.Json.Linq;
 
 namespace ContentPatcher.Framework.Tokens.Json
 {
-    /// <summary>Tracks a <see cref="JValue"/> instance whose value is set by a tokenisable <see cref="TokenString"/>.</summary>
-    internal class TokenisableJValue : IContextual
+    /// <summary>Tracks a instance whose value is set by a tokenisable <see cref="TokenString"/>.</summary>
+    internal class TokenisableProxy : IContextual
     {
         /*********
         ** Access
         *********/
-        /// <summary>The underlying JSON value token.</summary>
-        public JValue Field { get; }
-
         /// <summary>The token string which provides the field value.</summary>
         public TokenString TokenString { get; }
+
+        /// <summary>Set the instance value.</summary>
+        public Action<string> SetValue { get; }
 
         /// <summary>Whether the instance may change depending on the context.</summary>
         public bool IsMutable => this.TokenString.IsMutable;
@@ -26,12 +26,12 @@ namespace ContentPatcher.Framework.Tokens.Json
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="field">The underlying JSON value.</param>
         /// <param name="tokenString">The token string which provides the field value.</param>
-        public TokenisableJValue(JValue field, TokenString tokenString)
+        /// <param name="setValue">Set the instance value.</param>
+        public TokenisableProxy(TokenString tokenString, Action<string> setValue)
         {
-            this.Field = field;
             this.TokenString = tokenString;
+            this.SetValue = setValue;
         }
 
 
@@ -41,7 +41,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         public bool UpdateContext(IContext context)
         {
             bool changed = this.TokenString.UpdateContext(context);
-            this.Field.Value = this.TokenString.Value;
+            this.SetValue(this.TokenString.Value);
             return changed;
         }
     }

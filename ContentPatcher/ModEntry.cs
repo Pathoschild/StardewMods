@@ -429,7 +429,7 @@ namespace ContentPatcher
                 {
                     if (string.IsNullOrWhiteSpace(entry.Target))
                         return TrackSkip($"must set the {nameof(PatchConfig.Target)} field.");
-                    if (!this.TryParseTokenString(entry.Target, tokenContext, migrator, out string error, out assetName))
+                    if (!this.TryParseStringTokens(entry.Target, tokenContext, migrator, out string error, out assetName))
                         return TrackSkip($"the {nameof(PatchConfig.Target)} is invalid: {error}");
                 }
 
@@ -474,10 +474,11 @@ namespace ContentPatcher
                             {
                                 foreach (KeyValuePair<string, JToken> pair in entry.Entries)
                                 {
-                                    if (!this.TryParseTokenString(pair.Key, tokenContext, migrator, out string keyError, out TokenString key))
+                                    if (!this.TryParseStringTokens(pair.Key, tokenContext, migrator, out string keyError, out TokenString key))
                                         return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key}' key is invalid: {keyError}.");
-                                    if (!this.TryParseJToken(pair.Value, tokenContext, migrator, out string error, out TokenisableJToken value))
+                                    if (!this.TryParseJsonTokens(pair.Value, tokenContext, migrator, out string error, out TokenisableJToken value))
                                         return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key}' value is invalid: {error}.");
+
                                     entries.Add(new EditDataPatchRecord(key, value));
                                 }
                             }
@@ -488,18 +489,24 @@ namespace ContentPatcher
                             {
                                 foreach (KeyValuePair<string, IDictionary<string, JToken>> recordPair in entry.Fields)
                                 {
-                                    if (!this.TryParseTokenString(recordPair.Key, tokenContext, migrator, out string keyError, out TokenString key))
+                                    // parse entry key
+                                    if (!this.TryParseStringTokens(recordPair.Key, tokenContext, migrator, out string keyError, out TokenString key))
                                         return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} is invalid: {keyError}.");
 
+                                    // parse fields
                                     foreach (var fieldPair in recordPair.Value)
                                     {
-                                        string field = fieldPair.Key;
-                                        if (!this.TryParseJToken(fieldPair.Value, tokenContext, migrator, out string valueError, out TokenisableJToken value))
-                                            return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {field} is invalid: {valueError}.");
-                                        if (value.Value is JValue jValue && jValue.Value<string>()?.Contains("/") == true)
-                                            return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {field} is invalid: value can't contain field delimiter character '/'.");
+                                        // parse field key
+                                        if (!this.TryParseStringTokens(fieldPair.Key, tokenContext, migrator, out string fieldError, out TokenString fieldKey))
+                                            return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldPair.Key} key is invalid: {fieldError}.");
 
-                                        fields.Add(new EditDataPatchField(key, field, value));
+                                        // parse value
+                                        if (!this.TryParseJsonTokens(fieldPair.Value, tokenContext, migrator, out string valueError, out TokenisableJToken value))
+                                            return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: {valueError}.");
+                                        if (value?.Value is JValue jValue && jValue.Value<string>()?.Contains("/") == true)
+                                            return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: value can't contain field delimiter character '/'.");
+
+                                        fields.Add(new EditDataPatchField(key, fieldKey, value));
                                     }
                                 }
                             }
@@ -662,7 +669,7 @@ namespace ContentPatcher
             parsed = false;
 
             // analyse string
-            if (!this.TryParseTokenString(rawValue, tokenContext, migrator, out error, out TokenString tokenString))
+            if (!this.TryParseStringTokens(rawValue, tokenContext, migrator, out error, out TokenString tokenString))
                 return false;
 
             // validate & extract tokens
@@ -713,8 +720,8 @@ namespace ContentPatcher
         /// <param name="tokenContext">The tokens available for this content pack.</param>
         /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
-        /// <param name="parsed">The parsed value.</param>
-        private bool TryParseJToken(JToken rawJson, IContext tokenContext, IMigration migrator, out string error, out TokenisableJToken parsed)
+        /// <param name="parsed">The parsed value, which may be legitimately <c>null</c> even if successful.</param>
+        private bool TryParseJsonTokens(JToken rawJson, IContext tokenContext, IMigration migrator, out string error, out TokenisableJToken parsed)
         {
             if (rawJson == null)
             {
@@ -762,6 +769,8 @@ namespace ContentPatcher
             }
 
             // looks OK
+            if (parsed.Value.Type == JTokenType.Null)
+                parsed = null;
             error = null;
             return true;
         }
@@ -772,7 +781,7 @@ namespace ContentPatcher
         /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseTokenString(string rawValue, IContext tokenContext, IMigration migrator, out string error, out TokenString parsed)
+        private bool TryParseStringTokens(string rawValue, IContext tokenContext, IMigration migrator, out string error, out TokenString parsed)
         {
             // parse
             parsed = new TokenString(rawValue, tokenContext);
@@ -810,7 +819,6 @@ namespace ContentPatcher
             return true;
         }
 
-
         /// <summary>Prepare a local asset file for a patch to use.</summary>
         /// <param name="pack">The content pack being loaded.</param>
         /// <param name="path">The asset path in the content patch.</param>
@@ -831,7 +839,7 @@ namespace ContentPatcher
             }
 
             // tokenise
-            if (!this.TryParseTokenString(path, tokenContext, migrator, out string tokenError, out tokenedPath))
+            if (!this.TryParseStringTokens(path, tokenContext, migrator, out string tokenError, out tokenedPath))
             {
                 error = $"the {nameof(PatchConfig.FromFile)} is invalid: {tokenError}";
                 tokenedPath = null;

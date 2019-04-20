@@ -288,8 +288,7 @@ For example, this gives the farmhouse a different appearance in each season:
 }
 ```
 
-You can do this in the `FromFile`, `Target`, `Enabled`, `Entries` (keys and values), and `Fields`
-(entry keys and field values) fields.
+You can do this in the `FromFile`, `Target`, `Enabled`, `Entries`, and `Fields` fields (including entry/field keys).
 
 Only tokens which return a single value can be used as tokens. For example, `{{season}}` is allowed
 but `{{hasProfession}}` is not. Most tokens have an optional `{{tokenName:value}}` form which
