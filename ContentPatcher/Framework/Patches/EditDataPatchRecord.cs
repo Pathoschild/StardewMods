@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.Tokens.Json;
 
 namespace ContentPatcher.Framework.Patches
 {
@@ -13,7 +14,7 @@ namespace ContentPatcher.Framework.Patches
         public TokenString Key { get; }
 
         /// <summary>The entry value to set.</summary>
-        public TokenString Value { get; }
+        public TokenisableJToken Value { get; }
 
 
         /*********
@@ -22,7 +23,7 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Construct an instance.</summary>
         /// <param name="key">The unique key for the entry in the data file.</param>
         /// <param name="value">The entry value to set.</param>
-        public EditDataPatchRecord(TokenString key, TokenString value)
+        public EditDataPatchRecord(TokenString key, TokenisableJToken value)
         {
             this.Key = key;
             this.Value = value;
@@ -32,7 +33,8 @@ namespace ContentPatcher.Framework.Patches
         public IEnumerable<TokenString> GetTokenStrings()
         {
             yield return this.Key;
-            yield return this.Value;
+            foreach (TokenString str in this.Value.GetTokenStrings())
+                yield return str;
         }
     }
 }

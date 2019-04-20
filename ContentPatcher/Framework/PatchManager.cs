@@ -9,6 +9,7 @@ using ContentPatcher.Framework.Validators;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
+using xTile;
 
 namespace ContentPatcher.Framework
 {
@@ -301,10 +302,10 @@ namespace ContentPatcher.Framework
         {
             if (assetType == typeof(Texture2D))
                 return PatchType.EditImage;
-            if (assetType.IsGenericType && assetType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+            if (assetType == typeof(Map))
+                return null;
+            else
                 return PatchType.EditData;
-
-            return null;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Tokens;
+using ContentPatcher.Framework.Tokens.Json;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
@@ -88,12 +89,30 @@ namespace ContentPatcher.Framework.Migrations
         /// <param name="tokenStr">The tokenised string to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        public bool TryMigrate(ref TokenString tokenStr, out string error)
+        public bool TryMigrate(TokenString tokenStr, out string error)
         {
             // apply migrations
             foreach (IMigration migration in this.Migrations)
             {
-                if (!migration.TryMigrate(ref tokenStr, out error))
+                if (!migration.TryMigrate(tokenStr, out error))
+                    return false;
+            }
+
+            // no issues found
+            error = null;
+            return true;
+        }
+
+        /// <summary>Migrate a tokenised JSON structure.</summary>
+        /// <param name="tokenStructure">The tokenised JSON structure to migrate.</param>
+        /// <param name="error">An error message which indicates why migration failed (if any).</param>
+        /// <returns>Returns whether migration succeeded.</returns>
+        public bool TryMigrate(TokenisableJToken tokenStructure, out string error)
+        {
+            // apply migrations
+            foreach (IMigration migration in this.Migrations)
+            {
+                if (!migration.TryMigrate(tokenStructure, out error))
                     return false;
             }
 

@@ -1,6 +1,7 @@
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Tokens;
+using ContentPatcher.Framework.Tokens.Json;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -58,7 +59,7 @@ namespace ContentPatcher.Framework.Migrations
         /// <param name="tokenStr">The tokenised string to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        public virtual bool TryMigrate(ref TokenString tokenStr, out string error)
+        public virtual bool TryMigrate(TokenString tokenStr, out string error)
         {
             // tokens which need a high version
             foreach (TokenName token in tokenStr.Tokens)
@@ -71,6 +72,22 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             // no issue found
+            error = null;
+            return true;
+        }
+
+        /// <summary>Migrate a tokenised JSON structure.</summary>
+        /// <param name="tokenStructure">The tokenised JSON structure to migrate.</param>
+        /// <param name="error">An error message which indicates why migration failed (if any).</param>
+        /// <returns>Returns whether migration succeeded.</returns>
+        public bool TryMigrate(TokenisableJToken tokenStructure, out string error)
+        {
+            foreach (TokenString str in tokenStructure.GetTokenStrings())
+            {
+                if (!this.TryMigrate(str, out error))
+                    return false;
+            }
+
             error = null;
             return true;
         }
