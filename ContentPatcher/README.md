@@ -107,7 +107,7 @@ Here's a quick example of each possible patch type (explanations below):
           "ToArea": { "X": 256, "Y": 96, "Width": 16, "Height": 16 } // optional, defaults to source size from top-left
        },
 
-       // edit fields for existing entries in a data file (zero-indexed)
+       // edit fields for existing entries in a string data file (zero-indexed)
        {
           "Action": "EditData",
           "Target": "Data/ObjectInformation",
@@ -119,13 +119,37 @@ Here's a quick example of each possible patch type (explanations below):
           }
        },
 
-       // add or replace entries in a data file
+       // edit fields for existing entries in an object data file
+       {
+          "Action": "EditData",
+          "Target": "Data/Things",
+          "Fields": {
+             "spring_thing_0": {
+                "Title": "A Thing",
+                "Description": "Example content"
+             }
+          }
+       },
+
+       // add or replace entries in a string data file
        {
           "Action": "EditData",
           "Target": "Data/ObjectInformation",
           "Entries": {
              "70": "Jade/200/-300/Minerals -2/Jade/A pale green ornamental stone.",
              "72": "Diamond/750/-300/Minerals -2/Diamond/A rare and valuable gem."
+          }
+       },
+
+       // add or replace entries in an object file
+       {
+          "Action": "EditData",
+          "Target": "Data/Things",
+          "Entries": {
+             "spring_thing_0": {
+                "Title": "A Thing",
+                "Description": "Example content"
+             }
           }
        }
     ]

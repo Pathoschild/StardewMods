@@ -1,0 +1,123 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using ContentPatcher.Framework.Conditions;
+using Newtonsoft.Json.Linq;
+
+namespace ContentPatcher.Framework.Tokens.Json
+{
+    /// <summary>A JSON structure containing tokenisable values.</summary>
+    internal class TokenisableJToken : IContextual
+    {
+        /*********
+        ** Fields
+        *********/
+        /// <summary>The JSON fields whose values may change based on the context.</summary>
+        private readonly TokenisableJValue[] TokenisableFields;
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The underlying JSON structure.</summary>
+        public JToken Value { get; }
+
+        /// <summary>Whether the instance may change depending on the context.</summary>
+        public bool IsMutable { get; }
+
+        /// <summary>Whether the instance is valid for the current context.</summary>
+        public bool IsReady { get; private set; }
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="value">The JSON object to modify.</param>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        public TokenisableJToken(JToken value, IContext context)
+        {
+            this.Value = value;
+            this.TokenisableFields = this.ResolveTokenisableFields(value, context).ToArray();
+            this.IsMutable = this.TokenisableFields.Any(p => p.IsMutable);
+            this.IsReady = !this.TokenisableFields.Any() || this.TokenisableFields.All(p => p.IsReady);
+        }
+
+        /// <summary>Update the instance when the context changes.</summary>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <returns>Returns whether the instance changed.</returns>
+        public bool UpdateContext(IContext context)
+        {
+            bool changed = false;
+
+            foreach (IContextual field in this.TokenisableFields)
+            {
+                if (field.UpdateContext(context))
+                    changed = true;
+            }
+            this.IsReady = this.TokenisableFields.All(p => p.IsReady);
+
+            return changed;
+        }
+
+        /// <summary>Get the token strings contained in the JSON structure.</summary>
+        public IEnumerable<TokenString> GetTokenStrings()
+        {
+            foreach (var field in this.TokenisableFields)
+                yield return field.TokenString;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Find all tokenisable fields in a JSON structure, replace immutable tokens with their values, and get a list of mutable tokens.</summary>
+        /// <param name="token">The JSON structure to scan.</param>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        private IEnumerable<TokenisableJValue> ResolveTokenisableFields(JToken token, IContext context)
+        {
+            switch (token)
+            {
+                case JValue valueToken:
+                    {
+                        string value = valueToken.Value<string>();
+                        TokenString tokenStr = new TokenString(value, context);
+
+                        // replace with immutable value
+                        if (!tokenStr.IsMutable)
+                        {
+                            if (tokenStr.Value != value)
+                                valueToken.Value = tokenStr.Value;
+                        }
+
+                        // else store token
+                        else
+                        {
+                            TokenisableJValue contextualToken = new TokenisableJValue(valueToken, tokenStr);
+                            yield return contextualToken;
+                        }
+                        break;
+                    }
+
+                case JObject objToken:
+                    foreach (JProperty property in objToken.Properties())
+                    {
+                        foreach (TokenisableJValue contextual in this.ResolveTokenisableFields(property.Value, context))
+                            yield return contextual;
+                    }
+                    break;
+
+                case JArray arrToken:
+                    foreach (JToken valueToken in arrToken)
+                    {
+                        foreach (TokenisableJValue contextual in this.ResolveTokenisableFields(valueToken, context))
+                            yield return contextual;
+                    }
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Unknown JSON token: {token.GetType().FullName} ({token.Type})");
+            }
+        }
+    }
+}

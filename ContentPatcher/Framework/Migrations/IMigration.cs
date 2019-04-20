@@ -1,6 +1,7 @@
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Tokens;
+using ContentPatcher.Framework.Tokens.Json;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
@@ -34,6 +35,12 @@ namespace ContentPatcher.Framework.Migrations
         /// <param name="tokenStr">The tokenised string to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        bool TryMigrate(ref TokenString tokenStr, out string error);
+        bool TryMigrate(TokenString tokenStr, out string error);
+
+        /// <summary>Migrate a tokenised JSON structure.</summary>
+        /// <param name="tokenStructure">The tokenised JSON structure to migrate.</param>
+        /// <param name="error">An error message which indicates why migration failed (if any).</param>
+        /// <returns>Returns whether migration succeeded.</returns>
+        bool TryMigrate(TokenisableJToken tokenStructure, out string error);
     }
 }
