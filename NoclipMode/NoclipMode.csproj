@@ -48,9 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="i18n\default.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="i18n\default.json" />
     <None Include="manifest.json" />
     <None Include="README.md" />
     <None Include="release-notes.md" />

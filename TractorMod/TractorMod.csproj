@@ -92,12 +92,8 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\tractor.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="assets\garage.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="assets\tractor.png" />
+    <Content Include="assets\garage.png" />
     <Content Include="screenshots\build-garage.png" />
     <Content Include="screenshots\buy-garage.png" />
     <Content Include="screenshots\final-garage.png" />
