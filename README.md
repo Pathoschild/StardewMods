@@ -74,7 +74,7 @@ use the right translations.
 ---------- | :--------------------------------------- | :----------------------------------- | :---------------------------------- | :--------------------------------------- | ----------- | :------------------------------
 Chinese    | [✓](ChestsAnywhere/i18n/zh.json)        | [✓](DataLayers/i18n/zh.json)        | [✓](DebugMode/i18n/zh.json)        | [↻ partial](LookupAnything/i18n/zh.json) | ❑          | [✓](TractorMod/i18n/zh.json)
 French     | [↻ partial](ChestsAnywhere/i18n/fr.json) | [↻ partial](DataLayers/i18n/fr.json) | [✓](DebugMode/i18n/fr.json)        | [↻ partial](LookupAnything/i18n/fr.json) | ❑          |  [✓](TractorMod/i18n/fr.json)
-German     | [↻ partial](ChestsAnywhere/i18n/de.json) | [↻ partial](DataLayers/i18n/de.json) | [✓](DebugMode/i18n/de.json)        | [↻ partial](LookupAnything/i18n/de.json) | ❑          |  [✓](TractorMod/i18n/de.json)
+German     | [✓](ChestsAnywhere/i18n/de.json)        | [↻ partial](DataLayers/i18n/de.json) | [✓](DebugMode/i18n/de.json)        | [↻ partial](LookupAnything/i18n/de.json) | ❑          |  [✓](TractorMod/i18n/de.json)
 Hungarian  | ❑                                       | ❑                                   | ❑                                  | ❑                                       | ❑          | ❑
 Italian    | ❑                                       | ❑                                   | ❑                                  | ❑                                       | ❑          | ❑
 Japanese   | [↻ partial](ChestsAnywhere/i18n/ja.json) | [↻ partial](DataLayers/i18n/ja.json) | [✓](DebugMode/i18n/ja.json)        | [↻ partial](LookupAnything/i18n/ja.json) | ❑          | [✓](TractorMod/i18n/ja.json)
