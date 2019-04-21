@@ -1,6 +1,6 @@
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to YSRyeol (updated Korean)!
+* Improved translations. Thanks to Firevulture (updated German) and YSRyeol (updated Korean)!
 
 ## 1.6.1
 Released 07 April 2019.
