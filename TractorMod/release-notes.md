@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Fixed issue where pressing the dismiss-tractor key while riding a horse caused the horse to disappear.
+
 ## 4.8.2
 * Fixed scythe no longer harvesting in 4.8.1.
 
