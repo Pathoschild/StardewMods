@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0-alpha.20190419" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0-alpha.20190426" />
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />

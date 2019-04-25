@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0-alpha.20190419" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0-alpha.20190426" />
   </ItemGroup>
 
   <Import Project="$(SolutionDir)\common.targets" />
