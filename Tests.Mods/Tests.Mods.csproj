@@ -36,7 +36,7 @@
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.6.0" />
     <PackageReference Include="NUnit" Version="3.11.0" />
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0-alpha.20190419" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0-alpha.20190426" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>

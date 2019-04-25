@@ -31,7 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0-alpha.20190419" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0-alpha.20190426" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
