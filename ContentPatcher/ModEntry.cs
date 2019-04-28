@@ -291,12 +291,12 @@ namespace ContentPatcher
                             }
                             if (name.TryGetConditionType(out ConditionType conflictingType))
                             {
-                                LogSkip($"conflicts with global token '{conflictingType}'.");
+                                LogSkip("the token name is already used by a global token.");
                                 continue;
                             }
                             if (config.ContainsKey(name.Key))
                             {
-                                LogSkip($"conflicts with player config token '{conflictingType}'.");
+                                LogSkip("the token name is already used by a config token.");
                                 continue;
                             }
 

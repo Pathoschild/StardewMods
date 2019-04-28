@@ -5,6 +5,7 @@
 * Updated for Stardew Valley 1.4.
 * Added support for data model assets in Stardew Valley 1.4.
 * Added support for tokens in field keys.
+* Fixed incorrect error text when dynamic/config tokens conflict.
 
 ## 1.6.5
 * Fixed `EditData` allowing field values containing `/` (which is the field delimiter).
