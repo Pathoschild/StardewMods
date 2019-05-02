@@ -45,6 +45,15 @@ setting           | what it affects
 `ShowDataMiningFields` | Default `false`. Whether to show raw data useful for data miners (as separate fields at the bottom of lookup results). This is an advanced feature not intended for most players.
 
 ## Showcase
+### Progression mode
+The optional 'progression mode' hides spoilers until you've discovered them in-game ([disabled by
+default](#Configure)). This currently affects gift tastes. Hidden content is indicated by
+grayed-out text like this:
+> ![](screenshots/progression-mode.png)
+
+
+The screenshots below are without progression mode, and may show spoilers.
+
 ### Sample lookups
 * See a villager's social data, friendship with you, and the gifts they like. This will highlight
   the gifts you're carrying (green) or own (black).
