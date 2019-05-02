@@ -489,11 +489,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Sells to</c>.</summary>
             public static Translation SellsTo() => L10n.Helper.Get("item.sells-to");
 
+            /// <summary>A value like <c>Loves this</c>.</summary>
+            public static Translation LovesThis() => L10n.Helper.Get("item.loves-this");
+
             /// <summary>A value like <c>Likes this</c>.</summary>
             public static Translation LikesThis() => L10n.Helper.Get("item.likes-this");
 
-            /// <summary>A value like <c>Loves this</c>.</summary>
-            public static Translation LovesThis() => L10n.Helper.Get("item.loves-this");
+            /// <summary>A value like <c>Neutral about this</c>.</summary>
+            public static Translation NeutralAboutThis() => L10n.Helper.Get("item.neutral-about-this");
+
+            /// <summary>A value like <c>Dislikes this</c>.</summary>
+            public static Translation DislikesThis() => L10n.Helper.Get("item.dislikes-this");
+
+            /// <summary>A value like <c>Hates this</c>.</summary>
+            public static Translation HatesThis() => L10n.Helper.Get("item.hates-this");
 
             /// <summary>A value like <c>Health</c>.</summary>
             public static Translation FenceHealth() => L10n.Helper.Get("item.fence-health");
@@ -714,6 +723,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>Neutral gifts</c>.</summary>
             public static Translation NeutralGifts() => L10n.Helper.Get("npc.neutral-gifts");
+
+            /// <summary>A value like <c>Dislikes gifts</c>.</summary>
+            public static Translation DislikesGifts() => L10n.Helper.Get("npc.dislikes-gifts");
+
+            /// <summary>A value like <c>Hates gifts</c>.</summary>
+            public static Translation HatesGifts() => L10n.Helper.Get("npc.hates-gifts");
 
             /****
             ** Values

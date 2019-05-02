@@ -278,8 +278,11 @@
     "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
 
     "item.contents": "Содержит",
-    "item.likes-this": "Нравится",
     "item.loves-this": "Любят",
+    "item.likes-this": "Нравится",
+    "item.neutral-about-this": "Neutral about this", // TODO
+    "item.dislikes-this": "Dislikes this", // TODO
+    "item.hates-this": "Hates this", // TODO
     "item.needed-for": "Необходим для",
     "item.number-owned": "Наличие",
     "item.number-cooked": "Приготовлено",
@@ -348,6 +351,8 @@
     "npc.loves-gifts": "Любит подарки:",
     "npc.likes-gifts": "Нравятся подарки:",
     "npc.neutral-gifts": "Равнодушен к подаркам:",
+    "npc.dislikes-gifts": "Dislikes gifts", // TODO
+    "npc.hates-gifts": "Hates gifts", // TODO
 
     // NPC lookup values
     "npc.can-romance.married": "Вы женаты! <", // < turns into a heart

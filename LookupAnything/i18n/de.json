@@ -278,8 +278,11 @@
     "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
 
     "item.contents": "Inhalt",
-    "item.likes-this": "Mag das",
     "item.loves-this": "Liebt das",
+    "item.likes-this": "Mag das",
+    "item.neutral-about-this": "Neutral about this", // TODO
+    "item.dislikes-this": "Dislikes this", // TODO
+    "item.hates-this": "Hates this", // TODO
     "item.needed-for": "Gebraucht für",
     "item.number-owned": "Im Besitz",
     "item.number-cooked": "Gekocht",
@@ -348,6 +351,8 @@
     "npc.loves-gifts": "Geliebte Geschenke",
     "npc.likes-gifts": "Gemochte Geschenke",
     "npc.neutral-gifts": "Neutrale Geschenke",
+    "npc.dislikes-gifts": "Dislikes gifts", // TODO
+    "npc.hates-gifts": "Hates gifts", // TODO
 
     // NPC lookup values
     "npc.can-romance.married": "Du bist verheiratet! <", // < turns into a heart

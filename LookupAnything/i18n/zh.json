@@ -280,8 +280,11 @@
     "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
 
     "item.contents": "内容",
-    "item.likes-this": "喜欢",
     "item.loves-this": "最爱",
+    "item.likes-this": "喜欢",
+    "item.neutral-about-this": "Neutral about this", // TODO
+    "item.dislikes-this": "Dislikes this", // TODO
+    "item.hates-this": "Hates this", // TODO
     "item.needed-for": "用于",
     "item.number-owned": "拥有",
     "item.number-cooked": "已烹饪",
@@ -350,6 +353,8 @@
     "npc.loves-gifts": "最爱",
     "npc.likes-gifts": "喜欢",
     "npc.neutral-gifts": "普通",
+    "npc.dislikes-gifts": "Dislikes gifts", // TODO
+    "npc.hates-gifts": "Hates gifts", // TODO
 
     // NPC lookup values
     "npc.can-romance.married": "你已经结婚了！ <", // < turns into a heart

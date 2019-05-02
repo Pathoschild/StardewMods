@@ -160,6 +160,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(item, metadata);
                 yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.LovesThis(), item.ParentSheetIndex, giftTastes, GiftTaste.Love, onlyRevealed: this.ProgressionMode);
                 yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.LikesThis(), item.ParentSheetIndex, giftTastes, GiftTaste.Like, onlyRevealed: this.ProgressionMode);
+                if (this.ProgressionMode)
+                {
+                    yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.NeutralAboutThis(), item.ParentSheetIndex, giftTastes, GiftTaste.Neutral, onlyRevealed: this.ProgressionMode);
+                    yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.DislikesThis(), item.ParentSheetIndex, giftTastes, GiftTaste.Dislike, onlyRevealed: this.ProgressionMode);
+                    yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.HatesThis(), item.ParentSheetIndex, giftTastes, GiftTaste.Hate, onlyRevealed: this.ProgressionMode);
+                }
             }
 
             // fence

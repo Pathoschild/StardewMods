@@ -269,6 +269,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.LovesGifts(), giftTastes, GiftTaste.Love, onlyRevealed: this.ProgressionMode);
                 yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.LikesGifts(), giftTastes, GiftTaste.Like, onlyRevealed: this.ProgressionMode);
                 yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.NeutralGifts(), giftTastes, GiftTaste.Neutral, onlyRevealed: this.ProgressionMode);
+                if (this.ProgressionMode)
+                {
+                    yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.DislikesGifts(), giftTastes, GiftTaste.Dislike, onlyRevealed: this.ProgressionMode);
+                    yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.HatesGifts(), giftTastes, GiftTaste.Hate, onlyRevealed: this.ProgressionMode);
+                }
             }
         }
 

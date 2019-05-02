@@ -278,8 +278,11 @@
     "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
 
     "item.contents": "内容",
-    "item.likes-this": "これが好きな人",
     "item.loves-this": "これが大好きな人",
+    "item.likes-this": "これが好きな人",
+    "item.neutral-about-this": "Neutral about this", // TODO
+    "item.dislikes-this": "Dislikes this", // TODO
+    "item.hates-this": "Hates this", // TODO
     "item.needed-for": "要求されるもの",
     "item.number-owned": "所有数",
     "item.number-cooked": "調理数",
@@ -348,6 +351,8 @@
     "npc.loves-gifts": "大好きな贈り物",
     "npc.likes-gifts": "好きな贈り物",
     "npc.neutral-gifts": "普通の贈り物",
+    "npc.dislikes-gifts": "Dislikes gifts", // TODO
+    "npc.hates-gifts": "Hates gifts", // TODO
 
     // NPC lookup values
     "npc.can-romance.married": "あなたと結婚しました♡", // < turns into a heart

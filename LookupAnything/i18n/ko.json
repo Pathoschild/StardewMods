@@ -280,8 +280,11 @@
     "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
 
     "item.contents": "내용물",
-    "item.likes-this": "좋아함",
     "item.loves-this": "사랑함",
+    "item.likes-this": "좋아함",
+    "item.neutral-about-this": "Neutral about this", // TODO
+    "item.dislikes-this": "Dislikes this", // TODO
+    "item.hates-this": "Hates this", // TODO
     "item.needed-for": "필요함",
     "item.number-owned": "보유함",
     "item.number-cooked": "요리됨",
@@ -350,6 +353,8 @@
     "npc.loves-gifts": "사랑하는 선물",
     "npc.likes-gifts": "좋아하는 선물",
     "npc.neutral-gifts": "그저그런 선물",
+    "npc.dislikes-gifts": "Dislikes gifts", // TODO
+    "npc.hates-gifts": "Hates gifts", // TODO
 
     // NPC lookup values
     "npc.can-romance.married": "당신은 이미 결혼했다! <", // < turns into a heart
