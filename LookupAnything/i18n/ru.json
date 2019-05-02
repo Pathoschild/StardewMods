@@ -290,6 +290,9 @@
     "item.sells-to": "Место продажи",
 
     // item lookup values
+    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+
     "item.cask-schedule.now": "{{quality}} теперь готово.",
     "item.cask-schedule.now-partial": "{{quality}} сейчас (используйте кирку для остановки старения)",
     "item.cask-schedule.tomorrow": "{{quality}} завтра",
@@ -352,6 +355,8 @@
     "npc.friendship.not-met": "Вы ещё не встречались.",
     "npc.friendship.need-bouquet": "нужен букет для след.",
     "npc.friendship.need-points": "след. через {{count}}",
+    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
 
     // NPC child lookup labels
     "npc.child.age": "Возраст",

@@ -290,6 +290,9 @@
     "item.sells-to": "売却先",
 
     // item lookup values
+    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+
     "item.cask-schedule.now": "現在 {{quality}}",
     "item.cask-schedule.now-partial": "現在 {{quality}} (ツルハシで中止できます)",
     "item.cask-schedule.tomorrow": "明日 {{quality}}",
@@ -352,6 +355,8 @@
     "npc.friendship.not-met": "まだ会っていません",
     "npc.friendship.need-bouquet": "進むには花束が必要",
     "npc.friendship.need-points": "{{count}}pts必要",
+    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
 
     // NPC child lookup labels
     "npc.child.age": "年齢",

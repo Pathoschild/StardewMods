@@ -292,6 +292,9 @@
     "item.sells-to": "판매처",
 
     // item lookup values
+    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+
     "item.cask-schedule.now": "{{quality}}의 품질이 준비됨.",
     "item.cask-schedule.now-partial": "현재 품질: {{quality}} (곡괭이를 사용해 숙성을 중단시킬 수 있다)",
     "item.cask-schedule.tomorrow": "내일의 품질: {{quality}}",
@@ -354,6 +357,8 @@
     "npc.friendship.not-met": "당신은 아직 이 NPC를 만나지 못했다.",
     "npc.friendship.need-bouquet": "다음 호감도 진행을 위해서 꽃다발 필요.",
     "npc.friendship.need-points": "호감도 UP까지 {{count}}점",
+    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
 
     // NPC child lookup labels
     "npc.child.age": "나이",

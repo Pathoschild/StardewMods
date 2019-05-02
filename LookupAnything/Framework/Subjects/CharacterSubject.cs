@@ -32,6 +32,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
 
+        /// <summary>Whether to only show content once the player discovers it.</summary>
+        private readonly bool ProgressionMode;
+
 
         /*********
         ** Public methods
@@ -43,11 +46,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
+        /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
         /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-        public CharacterSubject(GameHelper gameHelper, NPC npc, TargetType type, Metadata metadata, ITranslationHelper translations, IReflectionHelper reflectionHelper)
+        public CharacterSubject(GameHelper gameHelper, NPC npc, TargetType type, Metadata metadata, ITranslationHelper translations, IReflectionHelper reflectionHelper, bool progressionMode)
             : base(gameHelper, translations)
         {
             this.Reflection = reflectionHelper;
+            this.ProgressionMode = progressionMode;
 
             // get display type
             string typeName;
@@ -260,10 +265,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     yield return new GenericField(this.GameHelper, L10n.Npc.Friendship(), L10n.Npc.FriendshipNotMet());
 
                 // gift tastes
-                var giftTastes = this.GetGiftTastes(npc, metadata);
-                yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.LovesGifts(), giftTastes, GiftTaste.Love);
-                yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.LikesGifts(), giftTastes, GiftTaste.Like);
-                yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.NeutralGifts(), giftTastes, GiftTaste.Neutral);
+                IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(npc, metadata);
+                yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.LovesGifts(), giftTastes, GiftTaste.Love, onlyRevealed: this.ProgressionMode);
+                yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.LikesGifts(), giftTastes, GiftTaste.Like, onlyRevealed: this.ProgressionMode);
+                yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.NeutralGifts(), giftTastes, GiftTaste.Neutral, onlyRevealed: this.ProgressionMode);
             }
         }
 
@@ -273,13 +278,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Get how much an NPC likes receiving each item as a gift.</summary>
         /// <param name="npc">The NPC.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        private IDictionary<GiftTaste, Item[]> GetGiftTastes(NPC npc, Metadata metadata)
+        private IDictionary<GiftTaste, GiftTasteModel[]> GetGiftTastes(NPC npc, Metadata metadata)
         {
             return this.GameHelper.GetGiftTastes(npc, metadata)
-                .GroupBy(entry => entry.Value) // gift taste
+                .GroupBy(entry => entry.Taste)
                 .ToDictionary(
-                    tasteGroup => tasteGroup.Key, // gift taste
-                    tasteGroup => tasteGroup.Select(entry => (Item)entry.Key).ToArray() // items
+                    tasteGroup => tasteGroup.Key,
+                    tasteGroup => tasteGroup.ToArray()
                 );
         }
 

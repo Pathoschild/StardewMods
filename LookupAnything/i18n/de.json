@@ -290,6 +290,9 @@
     "item.sells-to": "Lässt sich verkaufen bei",
 
     // item lookup values
+    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+
     "item.cask-schedule.now": "{{quality}} jetzt bereit.",
     "item.cask-schedule.now-partial": "{{quality}} jetzt bereit (benutze die Spitzhacke um das Altern zu stoppen).",
     "item.cask-schedule.tomorrow": "{{quality}} morgen",
@@ -352,6 +355,8 @@
     "npc.friendship.not-met": "Du hast die Person noch nicht getroffen",
     "npc.friendship.need-bouquet": "Blumenstrauß für nächstes erforderlich",
     "npc.friendship.need-points": "nächstes in {{count}} Punkten",
+    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
 
     // NPC child lookup labels
     "npc.child.age": "Alter",

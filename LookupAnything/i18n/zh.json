@@ -292,6 +292,9 @@
     "item.sells-to": "卖给",
 
     // item lookup values
+    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+
     "item.cask-schedule.now": "目前{{quality}}",
     "item.cask-schedule.now-partial": "目前{{quality}}(用镐停止陈酿)",
     "item.cask-schedule.tomorrow": "明天{{quality}}",
@@ -354,6 +357,8 @@
     "npc.friendship.not-met": "你们还没有见过面",
     "npc.friendship.need-bouquet": "需要花束进行到下一阶段",
     "npc.friendship.need-points": "下一等级需要{{count}}点好感度",
+    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
 
     // NPC child lookup labels
     "npc.child.age": "年龄",

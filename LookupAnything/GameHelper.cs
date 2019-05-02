@@ -14,7 +14,6 @@ using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.GameData.Crafting;
-using StardewValley.GameData.Movies;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.Tools;
@@ -32,7 +31,7 @@ namespace Pathoschild.Stardew.LookupAnything
         private Lazy<ObjectModel[]> Objects;
 
         /// <summary>The cached villagers' gift tastes.</summary>
-        private Lazy<GiftTasteModel[]> GiftTastes;
+        private Lazy<GiftTasteEntry[]> GiftTastes;
 
         /// <summary>The cached recipes.</summary>
         private Lazy<RecipeModel[]> Recipes;
@@ -63,7 +62,7 @@ namespace Pathoschild.Stardew.LookupAnything
         public void ResetCache(Metadata metadata, IReflectionHelper reflectionHelper, ITranslationHelper translations, IMonitor monitor)
         {
             this.Objects = new Lazy<ObjectModel[]>(() => this.DataParser.GetObjects(monitor).ToArray());
-            this.GiftTastes = new Lazy<GiftTasteModel[]>(() => this.DataParser.GetGiftTastes(this.Objects.Value).ToArray());
+            this.GiftTastes = new Lazy<GiftTasteEntry[]>(() => this.DataParser.GetGiftTastes(this.Objects.Value).ToArray());
             this.Recipes = new Lazy<RecipeModel[]>(() => this.DataParser.GetRecipes(metadata, reflectionHelper, monitor).ToArray());
         }
 
@@ -230,7 +229,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
         /// <param name="item">The item to check.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public IEnumerable<KeyValuePair<NPC, GiftTaste>> GetGiftTastes(Item item, Metadata metadata)
+        public IEnumerable<GiftTasteModel> GetGiftTastes(Item item, Metadata metadata)
         {
             if (!item.canBeGivenAsGift())
                 yield break;
@@ -242,32 +241,17 @@ namespace Pathoschild.Stardew.LookupAnything
 
                 GiftTaste? taste = this.GetGiftTaste(npc, item);
                 if (taste.HasValue)
-                    yield return new KeyValuePair<NPC, GiftTaste>(npc, taste.Value);
-            }
-        }
-
-        /// <summary>Get how much each NPC likes watching a movie.</summary>
-        /// <param name="movie">The movie to check.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public IEnumerable<KeyValuePair<NPC, GiftTaste>> GetMovieTastes(MovieData movie, Metadata metadata)
-        {
-            foreach (NPC npc in this.GetAllCharacters())
-            {
-                if (!this.IsSocialVillager(npc, metadata))
-                    continue;
-
-                GiftTaste taste = (GiftTaste)Enum.Parse(typeof(GiftTaste), MovieTheater.GetResponseForMovie(npc), ignoreCase: true);
-                yield return new KeyValuePair<NPC, GiftTaste>(npc, taste);
+                    yield return new GiftTasteModel(npc, item, taste.Value);
             }
         }
 
         /// <summary>Get the items a specified NPC can receive.</summary>
         /// <param name="npc">The NPC to check.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public IDictionary<SObject, GiftTaste> GetGiftTastes(NPC npc, Metadata metadata)
+        public IEnumerable<GiftTasteModel> GetGiftTastes(NPC npc, Metadata metadata)
         {
             if (!this.IsSocialVillager(npc, metadata))
-                return new Dictionary<SObject, GiftTaste>();
+                return new GiftTasteModel[0];
 
             // get giftable items
             HashSet<int> giftableItemIDs = new HashSet<int>(
@@ -284,9 +268,22 @@ namespace Pathoschild.Stardew.LookupAnything
                     let item = this.GetObjectBySpriteIndex(itemID)
                     let taste = this.GetGiftTaste(npc, item)
                     where taste.HasValue
-                    select new { Item = item, Taste = taste.Value }
-                )
-                .ToDictionary(p => p.Item, p => p.Taste);
+                    select new GiftTasteModel(npc, item, taste.Value)
+                );
+        }
+
+        /// <summary>Get how much each NPC likes watching this week's movie.</summary>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public IEnumerable<KeyValuePair<NPC, GiftTaste>> GetMovieTastes(Metadata metadata)
+        {
+            foreach (NPC npc in this.GetAllCharacters())
+            {
+                if (!this.IsSocialVillager(npc, metadata))
+                    continue;
+
+                GiftTaste taste = (GiftTaste)Enum.Parse(typeof(GiftTaste), MovieTheater.GetResponseForMovie(npc), ignoreCase: true);
+                yield return new KeyValuePair<NPC, GiftTaste>(npc, taste);
+            }
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>

@@ -44,6 +44,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</summary>
         private readonly bool KnownQuality;
 
+        /// <summary>Whether to only show content once the player discovers it.</summary>
+        private readonly bool ProgressionMode;
+
 
         /*********
         ** Public methods
@@ -51,13 +54,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
+        /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
         /// <param name="item">The underlying target.</param>
         /// <param name="context">The context of the object being looked up.</param>
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
         /// <param name="fromCrop">The crop associated with the item (if applicable).</param>
-        public ItemSubject(GameHelper gameHelper, ITranslationHelper translations, Item item, ObjectContext context, bool knownQuality, Crop fromCrop = null)
+        public ItemSubject(GameHelper gameHelper, ITranslationHelper translations, bool progressionMode, Item item, ObjectContext context, bool knownQuality, Crop fromCrop = null)
             : base(gameHelper, translations)
         {
+            this.ProgressionMode = progressionMode;
             this.Target = item;
             this.DisplayItem = this.GetMenuItem(item);
             this.FromCrop = fromCrop;
@@ -111,7 +116,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 if (potCrop != null)
                 {
                     Item drop = this.GameHelper.GetObjectBySpriteIndex(potCrop.indexOfHarvest.Value);
-                    yield return new LinkField(this.GameHelper, L10n.Item.Contents(), drop.DisplayName, () => new ItemSubject(this.GameHelper, this.Text, this.GameHelper.GetObjectBySpriteIndex(potCrop.indexOfHarvest.Value), ObjectContext.World, knownQuality: false, fromCrop: potCrop));
+                    yield return new LinkField(this.GameHelper, L10n.Item.Contents(), drop.DisplayName, () => new ItemSubject(this.GameHelper, this.Text, this.ProgressionMode, this.GameHelper.GetObjectBySpriteIndex(potCrop.indexOfHarvest.Value), ObjectContext.World, knownQuality: false, fromCrop: potCrop));
                 }
             }
 
@@ -152,9 +157,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     yield return new GenericField(this.GameHelper, L10n.Item.CanBeDyed(), this.Stringify(clothing.dyeable.Value));
 
                 // gift tastes
-                var giftTastes = this.GetGiftTastes(item, metadata);
-                yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.LovesThis(), giftTastes, GiftTaste.Love);
-                yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.LikesThis(), giftTastes, GiftTaste.Like);
+                IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(item, metadata);
+                yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.LovesThis(), item.ParentSheetIndex, giftTastes, GiftTaste.Love, onlyRevealed: this.ProgressionMode);
+                yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.LikesThis(), item.ParentSheetIndex, giftTastes, GiftTaste.Like, onlyRevealed: this.ProgressionMode);
             }
 
             // fence
@@ -192,13 +197,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     });
 
                     // movie tastes
-                    IDictionary<GiftTaste, string[]> tastes = this.GameHelper.GetMovieTastes(movie, metadata)
+                    IDictionary<GiftTaste, string[]> tastes = this.GameHelper.GetMovieTastes(metadata)
                         .GroupBy(entry => entry.Value)
                         .ToDictionary(group => group.Key, group => group.Select(p => p.Key.Name).OrderBy(p => p).ToArray());
 
-                    yield return new ItemGiftTastesField(this.GameHelper, L10n.MovieTicket.LovesMovie(), tastes, GiftTaste.Love);
-                    yield return new ItemGiftTastesField(this.GameHelper, L10n.MovieTicket.LikesMovie(), tastes, GiftTaste.Like);
-                    yield return new ItemGiftTastesField(this.GameHelper, L10n.MovieTicket.DislikesMovie(), tastes, GiftTaste.Dislike);
+                    yield return new MovieTastesField(this.GameHelper, L10n.MovieTicket.LovesMovie(), tastes, GiftTaste.Love);
+                    yield return new MovieTastesField(this.GameHelper, L10n.MovieTicket.LikesMovie(), tastes, GiftTaste.Like);
+                    yield return new MovieTastesField(this.GameHelper, L10n.MovieTicket.DislikesMovie(), tastes, GiftTaste.Dislike);
                 }
             }
 
@@ -256,7 +261,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (seeAlsoCrop)
             {
                 Item drop = this.GameHelper.GetObjectBySpriteIndex(this.SeedForCrop.indexOfHarvest.Value);
-                yield return new LinkField(this.GameHelper, L10n.Item.SeeAlso(), drop.DisplayName, () => new ItemSubject(this.GameHelper, this.Text, drop, ObjectContext.Inventory, false, this.SeedForCrop));
+                yield return new LinkField(this.GameHelper, L10n.Item.SeeAlso(), drop.DisplayName, () => new ItemSubject(this.GameHelper, this.Text, this.ProgressionMode, drop, ObjectContext.Inventory, false, this.SeedForCrop));
             }
         }
 
@@ -694,10 +699,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
         /// <param name="item">The potential gift item.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        private IDictionary<GiftTaste, string[]> GetGiftTastes(Item item, Metadata metadata)
+        private IDictionary<GiftTaste, GiftTasteModel[]> GetGiftTastes(Item item, Metadata metadata)
         {
             return this.GameHelper.GetGiftTastes(item, metadata)
-                .GroupBy(p => p.Value, p => p.Key.getName())
+                .GroupBy(p => p.Taste)
                 .ToDictionary(p => p.Key, p => p.Distinct().ToArray());
         }
 

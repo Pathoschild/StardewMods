@@ -11,6 +11,7 @@ Released 26 November 2019.
   * new social NPC profiles;
   * new Krobus relationship;
   * pet water bowl and petting changes.
+* Added optional progression mode (only shows gift tastes for gifts you've already given).
 * Added save format version to save slot lookups.
 * Updated for compatibility with Json Assets 1.3.8.
 * Fixed player luck in multiplayer showing your own luck instead of theirs.

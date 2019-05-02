@@ -516,6 +516,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /****
             ** Values
             ****/
+            /// <summary>A value like <c>, and {{count}} unrevealed villagers</c>.</summary>
+            public static Translation UndiscoveredVillagers(int count) => L10n.Helper.Get("item.undiscovered-gift-taste", new { count });
+
+            /// <summary>A value like <c>, and {{count}} unrevealed villagers</c>.</summary>
+            public static Translation UndiscoveredVillagersAppend(int count) => L10n.Helper.Get("item.undiscovered-gift-taste-appended", new { count });
+
             /// <summary>A value like <c>{{quality}} ready now</c>.</summary>
             public static Translation CaskScheduleNow(ItemQuality quality) => L10n.Helper.Get("item.cask-schedule.now", new { quality = L10n.For(quality) });
 
@@ -712,6 +718,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /****
             ** Values
             ****/
+            /// <summary>A value like <c>, and {{count}} unrevealed items</c>.</summary>
+            public static Translation UndiscoveredVillagers(int count) => L10n.Helper.Get("npc.undiscovered-gift-taste", new { count });
+
+            /// <summary>A value like <c>, and {{count}} unrevealed items</c>.</summary>
+            public static Translation UndiscoveredVillagersAppend(int count) => L10n.Helper.Get("npc.undiscovered-gift-taste-appended", new { count });
+
             /// <summary>A value like <c>You're married! &lt;</c>.</summary>
             public static Translation CanRomanceMarried() => L10n.Helper.Get("npc.can-romance.married");
 

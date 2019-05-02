@@ -290,6 +290,9 @@
     "item.sells-to": "Vende para",
 
     // item lookup values
+    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+
     "item.cask-schedule.now": "{{quality}} está pronto agora",
     "item.cask-schedule.now-partial": "{{quality}} por agora (use a picareta para parar de envelhecer)",
     "item.cask-schedule.tomorrow": "{{quality}} amanhã",
@@ -352,6 +355,8 @@
     "npc.friendship.not-met": "Você não os conheceu ainda.",
     "npc.friendship.need-bouquet": "Precisa de um buquê pra prosseguir",
     "npc.friendship.need-points": "Precisa de {{count}} pontos para prosseguir",
+    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
 
     // NPC child lookup labels
     "npc.child.age": "Idade",

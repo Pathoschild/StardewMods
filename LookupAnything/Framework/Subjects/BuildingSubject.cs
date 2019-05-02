@@ -36,6 +36,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Provides metadata that's not available from the game data directly.</summary>
         private readonly Metadata Metadata;
 
+        /// <summary>Whether to only show content once the player discovers it.</summary>
+        private readonly bool ProgressionMode;
+
 
         /*********
         ** Public methods
@@ -47,7 +50,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="sourceRectangle">The building's source rectangle in its spritesheet.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public BuildingSubject(GameHelper gameHelper, Metadata metadata, Building building, Rectangle sourceRectangle, ITranslationHelper translations, IReflectionHelper reflectionHelper)
+        /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
+        public BuildingSubject(GameHelper gameHelper, Metadata metadata, Building building, Rectangle sourceRectangle, ITranslationHelper translations, IReflectionHelper reflectionHelper, bool progressionMode)
             : base(gameHelper, building.buildingType.Value, null, L10n.Types.Building(), translations)
         {
             // init
@@ -55,6 +59,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             this.Reflection = reflectionHelper;
             this.Target = building;
             this.SourceRectangle = sourceRectangle;
+            this.ProgressionMode = progressionMode;
 
             // get name/description from blueprint if available
             try
@@ -101,7 +106,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 Horse horse = Utility.findHorse(stable.HorseId);
                 if (horse != null)
                 {
-                    yield return new LinkField(this.GameHelper, L10n.Building.Horse(), horse.Name, () => new CharacterSubject(this.GameHelper, horse, TargetType.Horse, this.Metadata, text, this.Reflection));
+                    yield return new LinkField(this.GameHelper, L10n.Building.Horse(), horse.Name, () => new CharacterSubject(this.GameHelper, horse, TargetType.Horse, this.Metadata, text, this.Reflection, this.ProgressionMode));
                     yield return new GenericField(this.GameHelper, L10n.Building.HorseLocation(), L10n.Building.HorseLocationSummary(location: horse.currentLocation.Name, x: horse.getTileX(), y: horse.getTileY()));
                 }
             }
