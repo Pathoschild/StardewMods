@@ -65,42 +65,35 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <returns>Returns whether validation succeeded.</returns>
         public bool TryValidate(string input, InvariantHashSet values, out string error)
         {
-            // parse data
-            KeyValuePair<string, string>[] pairs = this.GetInputValuePairs(input, values).ToArray();
-
-            // restrict to allowed input
-            if (this.AllowsInput)
+            // validate input
+            if (input != null)
             {
+                // check if input allowed
+                if (!this.AllowsInput)
+                {
+                    error = $"invalid input argument ({input}), token {this.Name} doesn't allow input.";
+                    return false;
+                }
+
+                // check value
                 InvariantHashSet validInputs = this.GetValidInputs();
                 if (validInputs?.Any() == true)
                 {
-                    string[] invalidInputs =
-                        (
-                            from pair in pairs
-                            where pair.Key != null && !validInputs.Contains(pair.Key)
-                            select pair.Key
-                        )
-                        .Distinct()
-                        .ToArray();
-                    if (invalidInputs.Any())
+                    if (!validInputs.Contains(input))
                     {
-                        error = $"invalid input arguments ({string.Join(", ", invalidInputs)}), expected any of {string.Join(", ", validInputs)}";
+                        error = $"invalid input argument ({input}) for {this.Name} token, expected any of {string.Join(", ", validInputs)}";
                         return false;
                     }
                 }
             }
 
-            // restrict to allowed values
+            // validate values
             {
                 InvariantHashSet validValues = this.GetAllowedValues(input);
                 if (validValues?.Any() == true)
                 {
-                    string[] invalidValues =
-                        (
-                            from pair in pairs
-                            where !validValues.Contains(pair.Value)
-                            select pair.Value
-                        )
+                    string[] invalidValues = values
+                        .Where(p => !validValues.Contains(p))
                         .Distinct()
                         .ToArray();
                     if (invalidValues.Any())
@@ -112,9 +105,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             }
 
             // custom validation
-            foreach (KeyValuePair<string, string> pair in pairs)
+            foreach (string value in values)
             {
-                if (!this.TryValidate(pair.Key, pair.Value, out error))
+                if (!this.TryValidate(input, value, out error))
                     return false;
             }
 
@@ -219,33 +212,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 return false;
 
             return true;
-        }
-
-        /// <summary>Parse a user-defined set of values for input/value pairs. For example, <c>"Abigail:10"</c> for a relationship token would be parsed as input argument 'Abigail' with value '10'.</summary>
-        /// <param name="input">The current input argument, if applicable.</param>
-        /// <param name="values">The values to parse.</param>
-        /// <returns>Returns the input/value pairs found. If <paramref name="input"/> is non-null, the <paramref name="values"/> are treated as values for that input argument. Otherwise if <see cref="AllowsInput"/> is true, then each value is treated as <c>input:value</c> (if they contain a colon) or <c>value</c> (with a null input).</returns>
-        protected IEnumerable<KeyValuePair<string, string>> GetInputValuePairs(string input, InvariantHashSet values)
-        {
-            // no input arguments in values
-            if (!this.AllowsInput || input != null)
-            {
-                foreach (string value in values)
-                    yield return new KeyValuePair<string, string>(input, value);
-            }
-
-            // possible input arguments in values
-            else
-            {
-                foreach (string value in values)
-                {
-                    string[] parts = value.Split(new[] { ':' }, 2);
-                    if (parts.Length < 2)
-                        yield return new KeyValuePair<string, string>(input, parts[0]);
-                    else
-                        yield return new KeyValuePair<string, string>(parts[0], parts[1]);
-                }
-            }
         }
 
         /// <summary>Get whether the value provider's <see cref="IsReady"/> or values change when an action is invoked.</summary>

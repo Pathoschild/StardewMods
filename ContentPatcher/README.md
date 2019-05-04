@@ -579,14 +579,6 @@ The player's heart level with a given NPC. You can specify the character name as
 }
 ```
 
-Or you can match against multiple NPCs like this:
-
-```js
-"When": {
-   "Hearts": "Abigail:10, Leah:10" // 10 hearts with Abigail or Leah
-}
-```
-
 **Note:** this is only available once the save is fully loaded, so it may not reliably affect
 conditional map spawn logic.
 
@@ -603,14 +595,6 @@ of the key (using their English name regardless of translations), like this:
 ```js
 "When": {
    "Relationship:Abigail": "Married"
-}
-```
-
-Or you can match against multiple NPCs like this:
-
-```js
-"When": {
-   "Relationship": "Abigail:Married, Leah:Married" // married Abigail or Leah
 }
 ```
 
@@ -639,14 +623,6 @@ The player's skill levels. You can specify the skill level as part of the key li
 ```js
 "When": {
    "SkillLevel:Combat": "1, 2, 3" // combat level 1, 2, or 3
-}
-```
-
-Or you can match against multiple skills like this:
-
-```js
-"When": {
-   "SkillLevel": "Combat:1, Farming:2" // combat level 1 or farming level 2
 }
 ```
 

@@ -79,58 +79,28 @@ namespace ContentPatcher.Framework.Tokens
         /// <returns>Returns whether validation succeeded.</returns>
         public bool TryValidate(TokenName name, InvariantHashSet values, out string error)
         {
-            // parse data
-            KeyValuePair<TokenName, string>[] pairs = this.GetSubkeyValuePairsFor(name, values).ToArray();
-
-            // restrict to allowed subkeys
-            if (this.CanHaveSubkeys)
+            // validate subkey
+            if (name.HasSubkey())
             {
-                InvariantHashSet validKeys = this.GetAllowedSubkeys();
-                if (validKeys?.Any() == true)
+                // check if subkey allowed
+                if (!this.CanHaveSubkeys)
                 {
-                    string[] invalidSubkeys =
-                        (
-                            from pair in pairs
-                            where pair.Key.Subkey != null && !validKeys.Contains(pair.Key.Subkey)
-                            select pair.Key.Subkey
-                        )
-                        .Distinct()
-                        .ToArray();
-                    if (invalidSubkeys.Any())
-                    {
-                        error = $"invalid subkeys ({string.Join(", ", invalidSubkeys)}); expected one of {string.Join(", ", validKeys)}";
-                        return false;
-                    }
+                    error = $"invalid subkey ({name}); token does not support subkeys.";
+                    return false;
                 }
-            }
 
-            // restrict to allowed values
-            {
-                InvariantHashSet validValues = this.GetAllowedValues(name);
-                if (validValues?.Any() == true)
+                // check subkey value
+                InvariantHashSet validKeys = this.GetAllowedSubkeys();
+                if (!validKeys.Contains(name.Key))
                 {
-                    string[] invalidValues =
-                        (
-                            from pair in pairs
-                            where !validValues.Contains(pair.Value)
-                            select pair.Value
-                        )
-                        .Distinct()
-                        .ToArray();
-                    if (invalidValues.Any())
-                    {
-                        error = $"invalid values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", validValues)}";
-                        return false;
-                    }
+                    error = $"invalid subkey ({name}), expected one of {string.Join(", ", validKeys)}";
+                    return false;
                 }
             }
 
             // custom validation
-            foreach (KeyValuePair<TokenName, string> pair in pairs)
-            {
-                if (!this.Values.TryValidate(pair.Key.Subkey, new InvariantHashSet { pair.Value }, out error))
-                    return false;
-            }
+            if (!this.Values.TryValidate(name.Subkey, values, out error))
+                return false;
 
             // no issues found
             error = null;
@@ -206,33 +176,6 @@ namespace ContentPatcher.Framework.Tokens
                 return false;
 
             return true;
-        }
-
-        /// <summary>Get the subkey/value pairs used in the given name and values.</summary>
-        /// <param name="name">The token name to validate.</param>
-        /// <param name="values">The values to validate.</param>
-        /// <returns>Returns the subkey/value pairs found. If the <paramref name="name"/> includes a subkey, the <paramref name="values"/> are treated as values of that subkey. Otherwise if <see cref="CanHaveSubkeys"/> is true, then each value is treated as <c>subkey:value</c> (if they contain a colon) or <c>value</c> (with a null subkey).</returns>
-        protected IEnumerable<KeyValuePair<TokenName, string>> GetSubkeyValuePairsFor(TokenName name, InvariantHashSet values)
-        {
-            // no subkeys in values
-            if (!this.CanHaveSubkeys || name.HasSubkey())
-            {
-                foreach (string value in values)
-                    yield return new KeyValuePair<TokenName, string>(name, value);
-            }
-
-            // possible subkeys in values
-            else
-            {
-                foreach (string value in values)
-                {
-                    string[] parts = value.Split(new[] { ':' }, 2);
-                    if (parts.Length < 2)
-                        yield return new KeyValuePair<TokenName, string>(name, parts[0]);
-                    else
-                        yield return new KeyValuePair<TokenName, string>(new TokenName(name.Key, parts[0]), parts[1]);
-                }
-            }
         }
     }
 }
