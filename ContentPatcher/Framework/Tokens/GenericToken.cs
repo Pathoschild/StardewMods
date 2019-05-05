@@ -91,7 +91,7 @@ namespace ContentPatcher.Framework.Tokens
 
                 // check subkey value
                 InvariantHashSet validKeys = this.GetAllowedSubkeys();
-                if (!validKeys.Contains(name.Key))
+                if (validKeys?.Any() == true && !validKeys.Contains(name.Key))
                 {
                     error = $"invalid subkey ({name}), expected one of {string.Join(", ", validKeys)}";
                     return false;
