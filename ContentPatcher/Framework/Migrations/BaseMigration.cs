@@ -1,5 +1,6 @@
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 using Pathoschild.Stardew.Common.Utilities;
@@ -37,16 +38,16 @@ namespace ContentPatcher.Framework.Migrations
             return true;
         }
 
-        /// <summary>Migrate a token name.</summary>
-        /// <param name="name">The token name to migrate.</param>
+        /// <summary>Migrate a lexical token.</summary>
+        /// <param name="lexToken">The lexical token to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        public virtual bool TryMigrate(ref TokenName name, out string error)
+        public bool TryMigrate(ref ILexToken lexToken, out string error)
         {
             // tokens which need a higher version
-            if (this.AddedTokens.Contains(name.Key))
+            if (lexToken is LexTokenToken token && this.AddedTokens.Contains(token.Name))
             {
-                error = this.GetNounPhraseError($"using token {name}");
+                error = this.GetNounPhraseError($"using token {token.Name}");
                 return false;
             }
 

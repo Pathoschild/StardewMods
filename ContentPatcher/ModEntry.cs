@@ -571,8 +571,18 @@ namespace ContentPatcher
             Lexer lexer = new Lexer();
             foreach (KeyValuePair<string, string> pair in raw)
             {
-                // parse condition key
+                // get lexical tokens
                 ILexToken[] lexTokens = lexer.ParseBits(pair.Key, impliedBraces: true).ToArray();
+                for (int i = 0; i < lexTokens.Length; i++)
+                {
+                    if (!migrator.TryMigrate(ref lexTokens[0], out error))
+                    {
+                        conditions = null;
+                        return false;
+                    }
+                }
+
+                // parse condition key
                 if (lexTokens.Length != 1 || !(lexTokens[0] is LexTokenToken lexToken) || lexToken.PipedTokens.Any())
                 {
                     error = $"'{pair.Key}' isn't a valid token name";
@@ -580,13 +590,6 @@ namespace ContentPatcher
                     return false;
                 }
                 TokenName name = new TokenName(lexToken.Name, lexToken.InputArg?.Text);
-
-                // apply migrations
-                if (!migrator.TryMigrate(ref name, out error))
-                {
-                    conditions = null;
-                    return false;
-                }
 
                 // get token
                 IToken token = tokenContext.GetToken(name, enforceContext: false);
