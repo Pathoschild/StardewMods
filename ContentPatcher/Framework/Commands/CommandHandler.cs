@@ -325,13 +325,13 @@ namespace ContentPatcher.Framework.Commands
 
             // uses tokens not available in the current context
             {
-                IList<TokenName> tokensOutOfContext = patch
+                string[] tokensOutOfContext = patch
                     .TokensUsed
-                    .Union(patch.ParsedConditions.Keys)
-                    .Where(p => !tokenContext.GetToken(p, enforceContext: false).IsReady)
-                    .OrderByIgnoreCase(p => p.ToString())
+                    .Union(patch.ParsedConditions.Keys.Select(p => p.Key))
+                    .Distinct()
+                    .Where(name => !tokenContext.GetToken(new TokenName(name), enforceContext: false).IsReady)
+                    .OrderByIgnoreCase(name => name)
                     .ToArray();
-
                 if (tokensOutOfContext.Any())
                     return $"uses tokens not available right now: {string.Join(", ", tokensOutOfContext)}";
             }

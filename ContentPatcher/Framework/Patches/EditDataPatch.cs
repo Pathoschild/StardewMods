@@ -74,15 +74,17 @@ namespace ContentPatcher.Framework.Patches
             return changed;
         }
 
-        /// <summary>Get the tokens used by this patch in its fields.</summary>
-        public override IEnumerable<TokenName> GetTokensUsed()
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public override IEnumerable<string> GetTokensUsed()
         {
-            if (this.MutableTokenStrings.Length == 0)
-                return base.GetTokensUsed();
+            foreach (string name in base.GetTokensUsed())
+                yield return name;
 
-            return base
-                .GetTokensUsed()
-                .Union(this.MutableTokenStrings.SelectMany(p => p.Tokens));
+            foreach (TokenString str in this.MutableTokenStrings)
+            {
+                foreach (string name in str.GetContextualTokenNames())
+                    yield return name;
+            }
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>

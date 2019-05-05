@@ -114,6 +114,12 @@ namespace ContentPatcher.Framework.Conditions
             return this.Value != prevValue;
         }
 
+        /// <summary>Get the token placeholder names used in the string.</summary>
+        public IEnumerable<string> GetContextualTokenNames()
+        {
+            return this.GetContextualTokenNames(this.LexTokens);
+        }
+
 
         /*********
         ** Private methods
@@ -150,6 +156,29 @@ namespace ContentPatcher.Framework.Conditions
 
             result = str.ToString();
             isReady = allReplaced;
+        }
+
+        /// <summary>Get the token placeholder names from the given lexical tokens.</summary>
+        /// <param name="lexTokens">The lexical tokens to scan.</param>
+        private IEnumerable<string> GetContextualTokenNames(ILexToken[] lexTokens)
+        {
+            if (lexTokens?.Any() != true)
+                yield break;
+
+            foreach (ILexToken lexToken in lexTokens)
+            {
+                if (lexToken is LexTokenToken token)
+                {
+                    yield return token.Name;
+
+                    ILexToken[] inputLexTokens = token.InputArg?.Parts;
+                    if (inputLexTokens != null)
+                    {
+                        foreach (string name in this.GetContextualTokenNames(inputLexTokens))
+                            yield return name;
+                    }
+                }
+            }
         }
     }
 }

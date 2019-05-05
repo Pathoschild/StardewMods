@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
-using ContentPatcher.Framework.Tokens;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Patches
@@ -51,7 +50,7 @@ namespace ContentPatcher.Framework.Patches
         /// <exception cref="System.NotSupportedException">The current patch type doesn't support editing assets.</exception>
         void Edit<T>(IAssetData asset);
 
-        /// <summary>Get the tokens used by this patch in its fields.</summary>
-        IEnumerable<TokenName> GetTokensUsed();
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        IEnumerable<string> GetTokensUsed();
     }
 }

@@ -70,7 +70,7 @@ namespace ContentPatcher.Framework.Patches
                 bool wasReady = this.IsReady;
                 this.IsReady =
                     (this.Conditions.Count == 0 || this.Conditions.Values.All(p => p.IsMatch(context)))
-                    && this.GetTokensUsed().All(p => context.Contains(p, enforceContext: true));
+                    && this.GetTokensUsed().All(name => context.Contains(new TokenName(name), enforceContext: true));
                 conditionsChanged = wasReady != this.IsReady;
             }
             // update target asset
@@ -106,10 +106,10 @@ namespace ContentPatcher.Framework.Patches
             throw new NotSupportedException("This patch type doesn't support loading assets.");
         }
 
-        /// <summary>Get the tokens used by this patch in its fields.</summary>
-        public virtual IEnumerable<TokenName> GetTokensUsed()
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public virtual IEnumerable<string> GetTokensUsed()
         {
-            return this.RawTargetAsset.Tokens;
+            return this.RawTargetAsset.GetContextualTokenNames();
         }
 
 

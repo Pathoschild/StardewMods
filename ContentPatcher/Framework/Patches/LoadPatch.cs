@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
-using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 
@@ -37,10 +35,13 @@ namespace ContentPatcher.Framework.Patches
                 : data;
         }
 
-        /// <summary>Get the tokens used by this patch in its fields.</summary>
-        public override IEnumerable<TokenName> GetTokensUsed()
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public override IEnumerable<string> GetTokensUsed()
         {
-            return base.GetTokensUsed().Union(this.FromLocalAsset.Tokens);
+            foreach (string name in base.GetTokensUsed())
+                yield return name;
+            foreach (string name in this.FromLocalAsset.GetContextualTokenNames())
+                yield return name;
         }
 
 
