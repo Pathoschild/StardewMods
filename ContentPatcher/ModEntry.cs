@@ -592,7 +592,7 @@ namespace ContentPatcher
                 TokenName name = new TokenName(lexToken.Name, lexToken.InputArg?.Text);
 
                 // get token
-                IToken token = tokenContext.GetToken(name, enforceContext: false);
+                IToken token = tokenContext.GetToken(name.Key, enforceContext: false);
                 if (token == null)
                 {
                     error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", tokenContext.GetTokens(enforceContext: false).Select(p => p.Name).OrderBy(p => p))}";
@@ -688,7 +688,7 @@ namespace ContentPatcher
 
                 // check token options
                 TokenName tokenName = tokenString.Tokens.First();
-                IToken token = tokenContext.GetToken(tokenName, enforceContext: false);
+                IToken token = tokenContext.GetToken(tokenName.Key, enforceContext: false);
                 InvariantHashSet allowedValues = token?.GetAllowedValues(tokenName);
                 if (token == null || token.IsMutable || !token.IsReady)
                 {
@@ -754,17 +754,17 @@ namespace ContentPatcher
                 // validate tokens
                 foreach (TokenName tokenName in tokenStrings.SelectMany(p => p.Tokens))
                 {
-                    IToken token = tokenContext.GetToken(tokenName, enforceContext: false);
+                    IToken token = tokenContext.GetToken(tokenName.Key, enforceContext: false);
                     if (token == null)
                     {
-                        error = $"{{{{{tokenName}}}}} can't be used as a token because that token could not be found."; // should never happen
+                        error = $"'{tokenName.Key}' can't be used as a token because that token could not be found."; // should never happen
                         parsed = null;
                         return false;
                     }
 
                     if (token.CanHaveMultipleValues(tokenName))
                     {
-                        error = $"{{{{{tokenName}}}}} can't be used as a token because it can have multiple values.";
+                        error = $"'{tokenName.Key}' can't be used as a token because it can have multiple values.";
                         parsed = null;
                         return false;
                     }
@@ -802,16 +802,16 @@ namespace ContentPatcher
             // validate tokens
             foreach (TokenName tokenName in parsed.Tokens)
             {
-                IToken token = tokenContext.GetToken(tokenName, enforceContext: false);
+                IToken token = tokenContext.GetToken(tokenName.Key, enforceContext: false);
                 if (token == null)
                 {
-                    error = $"{{{{{tokenName}}}}} can't be used as a token because that token could not be found."; // should never happen
+                    error = $"'{tokenName.Key}' can't be used as a token because that token could not be found."; // should never happen
                     parsed = null;
                     return false;
                 }
                 if (token.CanHaveMultipleValues(tokenName))
                 {
-                    error = $"{{{{{tokenName}}}}} can't be used as a token because it can have multiple values.";
+                    error = $"'{tokenName.Key}' can't be used as a token because it can have multiple values.";
                     parsed = null;
                     return false;
                 }

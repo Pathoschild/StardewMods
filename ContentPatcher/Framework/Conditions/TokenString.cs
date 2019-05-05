@@ -75,7 +75,7 @@ namespace ContentPatcher.Framework.Conditions
             foreach (LexTokenToken lexToken in this.LexTokens.OfType<LexTokenToken>())
             {
                 TokenName name = new TokenName(lexToken.Name, lexToken.InputArg?.Text);
-                IToken token = tokenContext.GetToken(name, enforceContext: false);
+                IToken token = tokenContext.GetToken(lexToken.Name, enforceContext: false);
                 if (token != null)
                 {
                     this.Tokens.Add(name);
@@ -138,7 +138,7 @@ namespace ContentPatcher.Framework.Conditions
                 {
                     case LexTokenToken lexTokenToken:
                         TokenName name = new TokenName(lexTokenToken.Name, lexTokenToken.InputArg?.Text);
-                        IToken token = context.GetToken(name, enforceContext: true);
+                        IToken token = context.GetToken(lexTokenToken.Name, enforceContext: true);
                         if (token != null)
                             str.Append(token.GetValues(name).FirstOrDefault());
                         else

@@ -329,7 +329,7 @@ namespace ContentPatcher.Framework.Commands
                     .TokensUsed
                     .Union(patch.ParsedConditions.Keys.Select(p => p.Key))
                     .Distinct()
-                    .Where(name => !tokenContext.GetToken(new TokenName(name), enforceContext: false).IsReady)
+                    .Where(name => !tokenContext.GetToken(name, enforceContext: false).IsReady)
                     .OrderByIgnoreCase(name => name)
                     .ToArray();
                 if (tokensOutOfContext.Any())

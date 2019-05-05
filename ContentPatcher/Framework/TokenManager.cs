@@ -42,7 +42,7 @@ namespace ContentPatcher.Framework
         public TokenManager(IContentHelper contentHelper, IEnumerable<string> installedMods)
         {
             foreach (IValueProvider valueProvider in this.GetGlobalValueProviders(contentHelper, installedMods))
-                this.GlobalContext.Tokens[new TokenName(valueProvider.Name)] = new GenericToken(valueProvider);
+                this.GlobalContext.Tokens[valueProvider.Name] = new GenericToken(valueProvider);
         }
 
         /// <summary>Get the tokens which are defined for a specific content pack. This returns a reference to the list, which can be held for a live view of the tokens. If the content pack isn't currently tracked, this will add it.</summary>
@@ -78,7 +78,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get whether the context contains the given token.</summary>
         /// <param name="name">The token name.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
-        public bool Contains(TokenName name, bool enforceContext)
+        public bool Contains(string name, bool enforceContext)
         {
             return this.GlobalContext.Contains(name, enforceContext);
         }
@@ -87,7 +87,7 @@ namespace ContentPatcher.Framework
         /// <param name="name">The token name.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
         /// <returns>Returns the matching token, or <c>null</c> if none was found.</returns>
-        public IToken GetToken(TokenName name, bool enforceContext)
+        public IToken GetToken(string name, bool enforceContext)
         {
             return this.GlobalContext.GetToken(name, enforceContext);
         }
@@ -101,12 +101,13 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get the current values of the given token for comparison.</summary>
         /// <param name="name">The token name.</param>
+        /// <param name="input">The input argument, if any.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
         /// <returns>Return the values of the matching token, or an empty list if the token doesn't exist.</returns>
         /// <exception cref="ArgumentNullException">The specified key is null.</exception>
-        public IEnumerable<string> GetValues(TokenName name, bool enforceContext)
+        public IEnumerable<string> GetValues(string name, string input, bool enforceContext)
         {
-            return this.GlobalContext.GetValues(name, enforceContext);
+            return this.GlobalContext.GetValues(name, input, enforceContext);
         }
 
 

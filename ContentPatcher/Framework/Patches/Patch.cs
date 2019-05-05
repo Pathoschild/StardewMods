@@ -70,7 +70,7 @@ namespace ContentPatcher.Framework.Patches
                 bool wasReady = this.IsReady;
                 this.IsReady =
                     (this.Conditions.Count == 0 || this.Conditions.Values.All(p => p.IsMatch(context)))
-                    && this.GetTokensUsed().All(name => context.Contains(new TokenName(name), enforceContext: true));
+                    && this.GetTokensUsed().All(name => context.Contains(name, enforceContext: true));
                 conditionsChanged = wasReady != this.IsReady;
             }
             // update target asset

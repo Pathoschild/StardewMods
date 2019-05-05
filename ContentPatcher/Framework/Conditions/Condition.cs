@@ -34,7 +34,7 @@ namespace ContentPatcher.Framework.Conditions
         public bool IsMatch(IContext context)
         {
             return context
-                .GetValues(this.Name, enforceContext: true)
+                .GetValues(this.Name.Key, this.Name.Subkey, enforceContext: true)
                 .Any(value => this.Values.Contains(value));
         }
     }
