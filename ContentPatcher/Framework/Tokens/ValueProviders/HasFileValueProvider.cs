@@ -49,9 +49,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override InvariantHashSet GetAllowedValues(string input)
+        public override InvariantHashSet GetAllowedValues(ITokenString input)
         {
-            return input != null
+            return input?.Value != null
                 ? InvariantHashSet.Boolean()
                 : null;
         }
@@ -59,7 +59,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the current values.</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(string input)
+        public override IEnumerable<string> GetValues(ITokenString input)
         {
             this.AssertInputArgument(input);
 
@@ -71,24 +71,15 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Private methods
         *********/
         /// <summary>Get whether the given file path exists.</summary>
-        /// <param name="path">A relative file path.</param>
+        /// <param name="input">The relative file path.</param>
         /// <exception cref="InvalidOperationException">The path is not relative or contains directory climbing (../).</exception>
-        private bool GetPathExists(string path)
+        private bool GetPathExists(ITokenString input)
         {
-            if (string.IsNullOrWhiteSpace(path))
+            if (string.IsNullOrWhiteSpace(input?.Value) || input.InvalidTokens.Any())
                 return false;
-
-            // parse tokens
-            TokenString tokenStr = new TokenString(path, this.TokenContext);
-            if (tokenStr.InvalidTokens.Any())
-                return false;
-            tokenStr.UpdateContext(this.TokenContext);
-            path = tokenStr.Value;
 
             // get normalised path
-            if (string.IsNullOrWhiteSpace(path))
-                return false;
-            path = PathUtilities.NormalisePathSeparators(path);
+            string path = PathUtilities.NormalisePathSeparators(input.Value);
 
             // validate
             if (Path.IsPathRooted(path))

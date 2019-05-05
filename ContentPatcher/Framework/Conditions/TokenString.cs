@@ -8,8 +8,8 @@ using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Conditions
 {
-    /// <summary>A string value which can contain condition tokens.</summary>
-    internal class TokenString : IContextual
+    /// <summary>A string value optionally containing tokens.</summary>
+    internal class TokenString : ITokenString
     {
         /*********
         ** Fields

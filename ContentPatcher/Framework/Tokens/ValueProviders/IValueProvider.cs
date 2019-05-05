@@ -25,14 +25,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Whether the value provider may return multiple values for the given input.</summary>
         /// <param name="input">The input argument, if applicable.</param>
-        bool CanHaveMultipleValues(string input = null);
+        bool CanHaveMultipleValues(ITokenString input = null);
 
         /// <summary>Validate that the provided values are valid for the input argument (regardless of whether they match).</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <param name="values">The values to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        bool TryValidate(string input, InvariantHashSet values, out string error);
+        bool TryValidate(ITokenString input, InvariantHashSet values, out string error);
 
         /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>
         InvariantHashSet GetValidInputs();
@@ -40,11 +40,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="AllowsInput"/> or <see cref="RequiresInput"/>.</exception>
-        InvariantHashSet GetAllowedValues(string input);
+        InvariantHashSet GetAllowedValues(ITokenString input);
 
         /// <summary>Get the current values.</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="AllowsInput"/> or <see cref="RequiresInput"/>.</exception>
-        IEnumerable<string> GetValues(string input);
+        IEnumerable<string> GetValues(ITokenString input);
     }
 }

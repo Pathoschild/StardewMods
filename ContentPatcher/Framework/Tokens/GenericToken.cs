@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens.ValueProviders;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -17,6 +18,10 @@ namespace ContentPatcher.Framework.Tokens
 
         /// <summary>Whether the root token may contain multiple values.</summary>
         protected bool CanHaveMultipleRootValues { get; set; }
+
+        /// <summary>Backing field for <see cref="GetTokenString"/>.</summary>
+        [Obsolete("This is a transitional field for tracking.")]
+        private IContext LastContext;
 
 
         /*********
@@ -56,6 +61,8 @@ namespace ContentPatcher.Framework.Tokens
         /// <returns>Returns whether the token data changed.</returns>
         public bool UpdateContext(IContext context)
         {
+            this.LastContext = context;
+
             bool changed = false;
             if (this.Values.IsMutable)
             {
@@ -69,7 +76,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="name">The token name.</param>
         public bool CanHaveMultipleValues(TokenName name)
         {
-            return this.Values.CanHaveMultipleValues(name.Subkey);
+            return this.Values.CanHaveMultipleValues(this.GetTokenString(name.Subkey));
         }
 
         /// <summary>Perform custom validation.</summary>
@@ -99,7 +106,7 @@ namespace ContentPatcher.Framework.Tokens
             }
 
             // custom validation
-            if (!this.Values.TryValidate(name.Subkey, values, out error))
+            if (!this.Values.TryValidate(this.GetTokenString(name.Subkey), values, out error))
                 return false;
 
             // no issues found
@@ -117,7 +124,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
         public virtual InvariantHashSet GetAllowedValues(TokenName name)
         {
-            return this.Values.GetAllowedValues(name.Subkey);
+            return this.Values.GetAllowedValues(this.GetTokenString(name.Subkey));
         }
 
         /// <summary>Get the current token values.</summary>
@@ -126,7 +133,7 @@ namespace ContentPatcher.Framework.Tokens
         public virtual IEnumerable<string> GetValues(TokenName name)
         {
             this.AssertTokenName(name);
-            return this.Values.GetValues(name.Subkey);
+            return this.Values.GetValues(this.GetTokenString(name.Subkey));
         }
 
 
@@ -176,6 +183,14 @@ namespace ContentPatcher.Framework.Tokens
                 return false;
 
             return true;
+        }
+
+        /// <summary>Transitional method to convert a string input to <see cref="TokenString"/>.</summary>
+        /// <param name="value">The value to convert.</param>
+        [Obsolete("This is a transitional method for tracking.")]
+        private ITokenString GetTokenString(string value)
+        {
+            return new TokenString(value, this.LastContext);
         }
     }
 }

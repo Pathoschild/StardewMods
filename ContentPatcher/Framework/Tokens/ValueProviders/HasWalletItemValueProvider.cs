@@ -75,9 +75,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override InvariantHashSet GetAllowedValues(string input)
+        public override InvariantHashSet GetAllowedValues(ITokenString input)
         {
-            return input != null
+            return input?.Value != null
                 ? InvariantHashSet.Boolean()
                 : this.GetValidInputs();
         }
@@ -85,13 +85,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the current values.</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(string input)
+        public override IEnumerable<string> GetValues(ITokenString input)
         {
             this.AssertInputArgument(input);
 
-            if (input != null)
+            if (input?.Value != null)
             {
-                bool hasItem = this.TryParseEnum(input, out WalletItem item) && this.Values[item];
+                bool hasItem = this.TryParseEnum(input.Value, out WalletItem item) && this.Values[item];
                 yield return hasItem.ToString();
             }
             else

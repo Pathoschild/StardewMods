@@ -55,13 +55,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the current values.</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(string input)
+        public override IEnumerable<string> GetValues(ITokenString input)
         {
             this.AssertInputArgument(input);
 
-            if (input != null)
+            if (input?.Value != null)
             {
-                if (this.Values.TryGetValue(input, out string value))
+                if (this.Values.TryGetValue(input.Value, out string value))
                     yield return value;
             }
             else
