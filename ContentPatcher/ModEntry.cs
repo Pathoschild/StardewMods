@@ -304,7 +304,7 @@ namespace ContentPatcher
                             InvariantHashSet values = entry.Value != null ? this.ParseCommaDelimitedField(entry.Value) : new InvariantHashSet();
 
                             // parse conditions
-                            ConditionDictionary conditions;
+                            IList<Condition> conditions;
                             {
                                 if (!this.TryParseConditions(entry.When, tokenContext, current.Migrator, out conditions, out string error))
                                 {
@@ -441,7 +441,7 @@ namespace ContentPatcher
                 }
 
                 // parse conditions
-                ConditionDictionary conditions;
+                IList<Condition> conditions;
                 {
                     if (!this.TryParseConditions(entry.When, tokenContext, migrator, out conditions, out string error))
                         return TrackSkip($"the {nameof(PatchConfig.When)} field is invalid: {error}.");
@@ -556,9 +556,9 @@ namespace ContentPatcher
         /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
         /// <param name="conditions">The normalised conditions.</param>
         /// <param name="error">An error message indicating why normalisation failed.</param>
-        private bool TryParseConditions(InvariantDictionary<string> raw, IContext tokenContext, IMigration migrator, out ConditionDictionary conditions, out string error)
+        private bool TryParseConditions(InvariantDictionary<string> raw, IContext tokenContext, IMigration migrator, out IList<Condition> conditions, out string error)
         {
-            conditions = new ConditionDictionary();
+            conditions = new List<Condition>();
 
             // no conditions
             if (raw == null || !raw.Any())
@@ -638,7 +638,7 @@ namespace ContentPatcher
                 }
 
                 // create condition
-                conditions[name] = new Condition(name, values);
+                conditions.Add(new Condition(name, values));
             }
 
             // return parsed conditions

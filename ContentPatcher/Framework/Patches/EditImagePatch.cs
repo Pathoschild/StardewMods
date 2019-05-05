@@ -45,7 +45,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="patchMode">Indicates how the image should be patched.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditImagePatch(string logName, ManagedContentPack contentPack, TokenString assetName, ConditionDictionary conditions, TokenString fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor, Func<string, string> normaliseAssetName)
+        public EditImagePatch(string logName, ManagedContentPack contentPack, TokenString assetName, IEnumerable<Condition> conditions, TokenString fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor, Func<string, string> normaliseAssetName)
             : base(logName, PatchType.EditImage, contentPack, assetName, conditions, normaliseAssetName)
         {
             this.FromLocalAsset = fromLocalAsset;

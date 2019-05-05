@@ -47,7 +47,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="fields">The data fields to edit.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditDataPatch(string logName, ManagedContentPack contentPack, TokenString assetName, ConditionDictionary conditions, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IMonitor monitor, Func<string, string> normaliseAssetName)
+        public EditDataPatch(string logName, ManagedContentPack contentPack, TokenString assetName, IEnumerable<Condition> conditions, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IMonitor monitor, Func<string, string> normaliseAssetName)
             : base(logName, PatchType.EditData, contentPack, assetName, conditions, normaliseAssetName)
         {
             this.Records = records.ToArray();

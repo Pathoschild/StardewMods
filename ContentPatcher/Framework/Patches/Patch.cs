@@ -48,7 +48,7 @@ namespace ContentPatcher.Framework.Patches
         public TokenString RawTargetAsset { get; }
 
         /// <summary>The conditions which determine whether this patch should be applied.</summary>
-        public ConditionDictionary Conditions { get; }
+        public Condition[] Conditions { get; }
 
         /// <summary>Whether the patch is currently applied to the target asset.</summary>
         public bool IsApplied { get; set; }
@@ -69,7 +69,7 @@ namespace ContentPatcher.Framework.Patches
             {
                 bool wasReady = this.IsReady;
                 this.IsReady =
-                    (this.Conditions.Count == 0 || this.Conditions.Values.All(p => p.IsMatch(context)))
+                    (this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(context)))
                     && this.GetTokensUsed().All(name => context.Contains(name, enforceContext: true));
                 conditionsChanged = wasReady != this.IsReady;
             }
@@ -123,13 +123,13 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        protected Patch(string logName, PatchType type, ManagedContentPack contentPack, TokenString assetName, ConditionDictionary conditions, Func<string, string> normaliseAssetName)
+        protected Patch(string logName, PatchType type, ManagedContentPack contentPack, TokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normaliseAssetName)
         {
             this.LogName = logName;
             this.Type = type;
             this.ContentPack = contentPack;
             this.RawTargetAsset = assetName;
-            this.Conditions = conditions;
+            this.Conditions = conditions.ToArray();
             this.NormaliseAssetName = normaliseAssetName;
         }
     }

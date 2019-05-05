@@ -89,7 +89,7 @@ namespace ContentPatcher.Framework
                 token.SetReady(false);
             foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
             {
-                if (tokenValue.Conditions.Values.All(p => p.IsMatch(this)))
+                if (tokenValue.Conditions.All(p => p.IsMatch(this)))
                 {
                     DynamicToken token = this.DynamicContext.Tokens[tokenValue.Name.Key];
                     token.SetValue(tokenValue.Value);

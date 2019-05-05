@@ -327,7 +327,7 @@ namespace ContentPatcher.Framework.Commands
             {
                 string[] tokensOutOfContext = patch
                     .TokensUsed
-                    .Union(patch.ParsedConditions.Keys.Select(p => p.Key))
+                    .Union(patch.ParsedConditions.Select(p => p.Name.Key))
                     .Distinct()
                     .Where(name => !tokenContext.GetToken(name, enforceContext: false).IsReady)
                     .OrderByIgnoreCase(name => name)
@@ -340,7 +340,7 @@ namespace ContentPatcher.Framework.Commands
             if (!patch.MatchesContext && patch.ParsedConditions != null)
             {
                 string[] failedConditions = (
-                    from condition in patch.ParsedConditions.Values
+                    from condition in patch.ParsedConditions
                     orderby condition.Name.ToString()
                     where !condition.IsMatch(tokenContext)
                     select $"{condition.Name} ({string.Join(", ", condition.Values)})"

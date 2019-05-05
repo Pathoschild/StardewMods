@@ -23,7 +23,7 @@ namespace ContentPatcher.Framework.Commands
         public TokenString ParsedTargetAsset { get; }
 
         /// <summary>The parsed conditions (if available).</summary>
-        public ConditionDictionary ParsedConditions { get; }
+        public Condition[] ParsedConditions { get; }
 
         /// <summary>The content pack which requested the patch.</summary>
         public ManagedContentPack ContentPack { get; }

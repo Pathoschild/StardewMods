@@ -29,7 +29,7 @@ namespace ContentPatcher.Framework.Patches
         TokenString RawTargetAsset { get; }
 
         /// <summary>The conditions which determine whether this patch should be applied.</summary>
-        ConditionDictionary Conditions { get; }
+        Condition[] Conditions { get; }
 
         /// <summary>Whether the patch is currently applied to the target asset.</summary>
         bool IsApplied { get; set; }

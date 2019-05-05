@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -16,7 +18,7 @@ namespace ContentPatcher.Framework.Tokens
         public InvariantHashSet Value { get; }
 
         /// <summary>The conditions that must match to set this value.</summary>
-        public ConditionDictionary Conditions { get; }
+        public Condition[] Conditions { get; }
 
 
         /*********
@@ -26,11 +28,11 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="key">The name of the token whose value to set.</param>
         /// <param name="value">The token value to set.</param>
         /// <param name="conditions">The conditions that must match to set this value.</param>
-        public DynamicTokenValue(TokenName key, InvariantHashSet value, ConditionDictionary conditions)
+        public DynamicTokenValue(TokenName key, InvariantHashSet value, IEnumerable<Condition> conditions)
         {
             this.Name = key;
             this.Value = value;
-            this.Conditions = conditions;
+            this.Conditions = conditions.ToArray();
         }
     }
 }
