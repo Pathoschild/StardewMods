@@ -315,12 +315,15 @@ needed (though it may be of limited use).
 ### Global tokens
 Global token values are defined by Content Patcher, so you can use them without doing anything else.
 
-These token values can be used as conditions and token placeholders for any patch:
+<dl>
+<dt>Date and weather:</dt>
+<dd>
 
 <table>
 <tr>
 <th>condition</th>
 <th>purpose</th>
+</tr>
 
 <tr valign="top">
 <td>Day</td>
@@ -361,89 +364,6 @@ The day of week. Possible values: `Monday`, `Tuesday`, `Wednesday`, `Thursday`, 
 </tr>
 
 <tr valign="top">
-<td>FarmCave</td>
-<td>
-
-The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `None`, `Bats`, `Mushrooms`.
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>FarmhouseUpgrade</td>
-<td>
-
-The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades). The normal values are 0 (initial farmhouse), 1 (adds kitchen), 2 (add children's bedroom), and 3 (adds cellar). Mods may add upgrade levels beyond that.
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>FarmName</td>
-<td>The name of the current farm.</td>
-</tr>
-
-<tr valign="top">
-<td>FarmType</td>
-<td>
-
-The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). Possible values: `Standard`, `Riverland`, `Forest`, `Hilltop`, `Wilderness`, `Custom`.
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>IsMainPlayer</td>
-<td>
-
-Whether the player is the main player. Possible values: `true`, `false`.
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>Language</td>
-<td>
-
-The game's current language. Possible values:
-
-code | meaning
----- | -------
-`de` | German
-`en` | English
-`es` | Spanish
-`ja` | Japanese
-`ru` | Russian
-`pt` | Portuguese
-`zh` | Chinese
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>PlayerGender</td>
-<td>
-
-The player's gender. Possible values: `Female`, `Male`.
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>PlayerName</td>
-<td>The player's name.</td>
-</tr>
-
-<tr valign="top">
-<td>PreferredPet</td>
-<td>
-
-The player's preferred pet. Possible values: `Cat`, `Dog`.
-
-</td>
-</tr>
-
-<tr valign="top">
 <td>Season</td>
 <td>
 
@@ -478,46 +398,14 @@ The year number (like `1` or `2`).
 </td>
 </tr>
 </table>
+</dd>
 
-These token values can be used as conditions, and (in their `tokenName:value` form only) as token
-placeholders:
-
+<dt>Player:</dt>
+<dd>
 <table>
 <tr>
 <th>condition</th>
 <th>purpose</th>
-
-<tr valign="top">
-<td>HasFile</td>
-<td>
-
-Whether a file exists in the content pack folder. The file path must be specified as part of the key,
-and may contain tokens. Returns `true` or `false`. For example:
-
-```js
-"When": {
-  "HasFile:assets/{{season}}.png": "true"
-}
-```
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>HasProfession</td>
-<td>
-
-The [professions](https://stardewvalleywiki.com/Skills) learned by the player. Possible values:
-
-* Combat skill: `Acrobat`, `Brute`, `Defender`, `Desperado`, `Fighter`, `Scout`.
-* Farming skill: `Agriculturist`, `Artisan`, `Coopmaster`, `Rancher`, `Shepherd`, `Tiller`.
-* Fishing skill: `Angler`, `Fisher`, `Mariner`, `Pirate`, `Luremaster`, `Trapper`.
-* Foraging skill: `Botanist`, `Forester`, `Gatherer`, `Lumberjack`, `Tapper`, `Tracker`.
-* Mining skill: `Blacksmith`, `Excavator`, `Gemologist`, `Geologist`, `Miner`, `Prospector`.
-
-Custom professions added by a mod are represented by their integer profession ID.
-
-</td>
 </tr>
 
 <tr valign="top">
@@ -550,10 +438,18 @@ flag | meaning
 </tr>
 
 <tr valign="top">
-<td>HasMod</td>
+<td>HasProfession</td>
 <td>
 
-The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
+The [professions](https://stardewvalleywiki.com/Skills) learned by the player. Possible values:
+
+* Combat skill: `Acrobat`, `Brute`, `Defender`, `Desperado`, `Fighter`, `Scout`.
+* Farming skill: `Agriculturist`, `Artisan`, `Coopmaster`, `Rancher`, `Shepherd`, `Tiller`.
+* Fishing skill: `Angler`, `Fisher`, `Mariner`, `Pirate`, `Luremaster`, `Trapper`.
+* Foraging skill: `Botanist`, `Forester`, `Gatherer`, `Lumberjack`, `Tapper`, `Tracker`.
+* Mining skill: `Blacksmith`, `Excavator`, `Gemologist`, `Geologist`, `Miner`, `Prospector`.
+
+Custom professions added by a mod are represented by their integer profession ID.
 
 </td>
 </tr>
@@ -569,21 +465,6 @@ The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
 
 The event IDs the player has seen, matching IDs in the `Data\Events` files. (You can use
 [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.)
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>HasValue</td>
-<td>
-
-Whether a given value is non-blank. For example, to check if the player is married to anyone:
-
-```js
-"When": {
-  "HasValue:{{spouse}}": "true"
-}
-```
 
 </td>
 </tr>
@@ -611,10 +492,70 @@ flag                       | meaning
 </tr>
 
 <tr valign="top">
+<td>IsMainPlayer</td>
+<td>
+
+Whether the player is the main player. Possible values: `true`, `false`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>PlayerGender</td>
+<td>
+
+The player's gender. Possible values: `Female`, `Male`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>PlayerName</td>
+<td>The player's name.</td>
+</tr>
+
+<tr valign="top">
+<td>PreferredPet</td>
+<td>
+
+The player's preferred pet. Possible values: `Cat`, `Dog`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>SkillLevel</td>
+<td>
+
+The player's skill levels. You can specify the skill level as an input argument like this:
+
+```js
+"When": {
+   "SkillLevel:Combat": "1, 2, 3" // combat level 1, 2, or 3
+}
+```
+
+The valid skills are `Combat`, `Farming`, `Fishing`, `Foraging`, `Luck` (unused in the base game), and `Mining`.
+
+</td>
+</tr>
+</table>
+</dd>
+
+<dt>Relationships:</dt>
+
+<dd>
+<table>
+<tr>
+<th>condition</th>
+<th>purpose</th>
+</tr>
+
+<tr valign="top">
 <td>Hearts</td>
 <td>
 
-The player's heart level with a given NPC. You can specify the character name as part of the key
+The player's heart level with a given NPC. You can specify the character name as an input argument
 (using their English name regardless of translations), like this:
 
 ```js
@@ -658,28 +599,130 @@ conditional map spawn logic.
 </td>
 </tr>
 
-<tr valign="top">
-<td>SkillLevel</td>
-<td>
-
-The player's skill levels. You can specify the skill level as part of the key like this:
-
-```js
-"When": {
-   "SkillLevel:Combat": "1, 2, 3" // combat level 1, 2, or 3
-}
-```
-
-The valid skills are `Combat`, `Farming`, `Fishing`, `Foraging`, `Luck` (unused in the base game), and `Mining`.
-
-</td>
-</tr>
 
 <tr valign="top">
 <td>Spouse</td>
 <td>The player's spouse name (using their English name regardless of translations).</td>
 </tr>
+
 </table>
+</dd>
+
+<dt>World:</dt>
+
+<dd>
+<table>
+<tr>
+<th>condition</th>
+<th>purpose</th>
+</tr>
+
+<tr valign="top">
+<td>FarmCave</td>
+<td>
+
+The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `None`, `Bats`, `Mushrooms`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>FarmhouseUpgrade</td>
+<td>
+
+The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades). The normal values are 0 (initial farmhouse), 1 (adds kitchen), 2 (add children's bedroom), and 3 (adds cellar). Mods may add upgrade levels beyond that.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>FarmName</td>
+<td>The name of the current farm.</td>
+</tr>
+
+<tr valign="top">
+<td>FarmType</td>
+<td>
+
+The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). Possible values: `Standard`, `Riverland`, `Forest`, `Hilltop`, `Wilderness`, `Custom`.
+
+</td>
+</tr>
+
+</table>
+</dd>
+
+<dt>Other:</dt>
+
+<dd>
+<table>
+<tr>
+<th>condition</th>
+<th>purpose</th>
+</tr>
+
+<tr valign="top">
+<td>HasMod</td>
+<td>
+
+The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>HasFile</td>
+<td>
+
+Whether a file exists in the content pack folder. The file path must be specified as an input
+argument. Returns `true` or `false`. For example:
+
+```js
+"When": {
+  "HasFile:assets/{{season}}.png": "true"
+}
+```
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>HasValue</td>
+<td>
+
+Whether a given value is non-blank. For example, to check if the player is married to anyone:
+
+```js
+"When": {
+  "HasValue:{{spouse}}": "true"
+}
+```
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>Language</td>
+<td>
+
+The game's current language. Possible values:
+
+code | meaning
+---- | -------
+`de` | German
+`en` | English
+`es` | Spanish
+`ja` | Japanese
+`ru` | Russian
+`pt` | Portuguese
+`zh` | Chinese
+
+</td>
+</tr>
+
+</table>
+</dd>
+</dl>
 
 **Special note about `"Action": "Load"`:**  
 Each file can only be loaded by one patch. You can have multiple load patches with different
