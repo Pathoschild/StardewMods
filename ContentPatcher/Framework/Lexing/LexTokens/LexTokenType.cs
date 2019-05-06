@@ -10,9 +10,6 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         Token,
 
         /// <summary>The input argument to a Content Patcher token.</summary>
-        TokenInput,
-
-        /// <summary>A pipe which transfers the output of one token into the input of another.</summary>
-        TokenPipe
+        TokenInput
     }
 }

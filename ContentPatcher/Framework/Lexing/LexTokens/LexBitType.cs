@@ -13,9 +13,6 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         EndToken,
 
         /// <summary>The character which separates a token name from its input argument (':').</summary>
-        InputArgSeparator,
-
-        /// <summary>The character which pipes the output of one token into the input of another ('|').</summary>
-        TokenPipe
+        InputArgSeparator
     }
 }

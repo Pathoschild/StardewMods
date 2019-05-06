@@ -583,7 +583,7 @@ namespace ContentPatcher
                 }
 
                 // parse condition key
-                if (lexTokens.Length != 1 || !(lexTokens[0] is LexTokenToken lexToken) || lexToken.PipedTokens.Any())
+                if (lexTokens.Length != 1 || !(lexTokens[0] is LexTokenToken lexToken))
                 {
                     error = $"'{pair.Key}' isn't a valid token name";
                     conditions = null;
