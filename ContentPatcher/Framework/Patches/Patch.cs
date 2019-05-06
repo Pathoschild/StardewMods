@@ -92,7 +92,7 @@ namespace ContentPatcher.Framework.Patches
             {
                 bool wasReady = this.IsReady;
                 this.IsReady =
-                    (this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(context)))
+                    (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(context)))
                     && this.GetTokensUsed().All(name => context.Contains(name, enforceContext: true));
                 changed = changed || this.IsReady != wasReady;
             }
