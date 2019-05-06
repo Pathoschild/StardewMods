@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to binxhlin (updated Chinese), Firevulture (updated German), and YSRyeol (updated Korean)!
+* Improved translations. Thanks to binxhlin (updated Chinese), Firevulture (updated German), Yllelder (updated Spanish), and YSRyeol (updated Korean)!
 
 ## 1.16
 Released 06 April 2019.
