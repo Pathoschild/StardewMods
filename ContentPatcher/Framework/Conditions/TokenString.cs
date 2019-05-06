@@ -122,7 +122,7 @@ namespace ContentPatcher.Framework.Conditions
         }
 
         /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>
-        /// <param name="recursive">Whether to scan recursively.</param>
+        /// <param name="recursive">Whether to scan recursively.</param> 
         public IEnumerable<LexTokenToken> GetTokenPlaceholders(bool recursive)
         {
             return this.GetTokenPlaceholders(this.LexTokens, recursive);
@@ -148,7 +148,10 @@ namespace ContentPatcher.Framework.Conditions
                         IToken token = context.GetToken(lexTokenToken.Name, enforceContext: true);
                         TokenString input = new TokenString(lexTokenToken.InputArg?.Parts, context);
                         if (token != null)
-                            str.Append(token.GetValues(input).FirstOrDefault());
+                        {
+                            string[] values = token.GetValues(input).ToArray();
+                            str.Append(string.Join(", ", values));
+                        }
                         else
                         {
                             allReplaced = false;

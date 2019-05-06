@@ -6,11 +6,13 @@
   * `HasReadLetter`: whether the player has opened a given mail letter.
   * `HasValue`: whether a token has a non-blank value, like `HasValue:{{spouse}}`.
   * `IsMainPlayer`: whether the player is the main player.
-* Added support for tokens in field keys.
+* Tokens can now be nested (like `Hearts:{{spouse}}`).
+* Tokens can now be used in `Fields` keys.
+* Tokens with multiple values can now be used as placeholders.
+* Improved input argument validation.
 * Added support for new asset types in the upcoming Stardew Valley 1.4.
-* Improved subkey validation.
 * Fixed incorrect error text when dynamic/config tokens conflict.
-* Removed support for the subkey syntax in condition values (where you could do `"Relationship": "Abigail:Married"` instead of `"Relationship:Abigail": "Married"`). This only affects one content pack on Nexus.
+* Removed support for the condition value subkey syntax (like `"Relationship": "Abigail:Married"` instead of `"Relationship:Abigail": "Married"`). This only affects one content pack on Nexus.
 
 ## 1.6.5
 * Fixed `EditData` allowing field values containing `/` (which is the field delimiter).

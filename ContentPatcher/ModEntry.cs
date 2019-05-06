@@ -751,14 +751,6 @@ namespace ContentPatcher
                         parsed = null;
                         return false;
                     }
-
-                    TokenString input = new TokenString(lexToken.InputArg, tokenContext);
-                    if (token.CanHaveMultipleValues(input))
-                    {
-                        error = $"'{lexToken}' can't be used as a token because it can have multiple values.";
-                        parsed = null;
-                        return false;
-                    }
                 }
             }
 
@@ -797,14 +789,6 @@ namespace ContentPatcher
                 if (token == null)
                 {
                     error = $"'{lexToken}' can't be used as a token because that token could not be found."; // should never happen
-                    parsed = null;
-                    return false;
-                }
-
-                TokenString input = new TokenString(lexToken.InputArg, tokenContext);
-                if (token.CanHaveMultipleValues(input))
-                {
-                    error = $"'{lexToken}' can't be used as a token because it can have multiple values.";
                     parsed = null;
                     return false;
                 }
