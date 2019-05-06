@@ -73,7 +73,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
         public override InvariantHashSet GetAllowedValues(ITokenString input)
         {
-            return input?.Value != null
+            return input.IsMeaningful()
                 ? InvariantHashSet.Boolean()
                 : this.AllowedRootValues;
         }
@@ -85,7 +85,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInputArgument(input);
 
-            if (input?.Value != null)
+            if (input.IsMeaningful())
                 return new[] { this.Values.Contains(input.Value).ToString() };
             return this.Values;
         }

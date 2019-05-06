@@ -4,12 +4,15 @@ using System.Linq;
 
 namespace ContentPatcher.Framework
 {
-    /// <summary>Provides case-insensitive extension methods.</summary>
-    internal static class CaseInsensitiveExtensions
+    /// <summary>Provides extension methods for internal use.</summary>
+    internal static class InternalExtensions
     {
         /*********
         ** Public methods
         *********/
+        /****
+        ** Case-insensitive extensions
+        ****/
         /// <summary>Get the set difference of two sequences, using the invariant culture and ignoring case.</summary>
         /// <param name="source">The first sequence to compare.</param>
         /// <param name="other">The second sequence to compare.</param>
@@ -47,6 +50,16 @@ namespace ContentPatcher.Framework
         public static IOrderedEnumerable<TSource> ThenByIgnoreCase<TSource>(this IOrderedEnumerable<TSource> source, Func<TSource, string> keySelector)
         {
             return source.ThenBy(keySelector, StringComparer.InvariantCultureIgnoreCase);
+        }
+
+        /****
+        ** Tokens
+        ****/
+        /// <summary>Get whether a token string has a meaningful value.</summary>
+        /// <param name="str">The token string.</param>
+        public static bool IsMeaningful(this ITokenString str)
+        {
+            return !string.IsNullOrWhiteSpace(str?.Value);
         }
     }
 }

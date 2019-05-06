@@ -51,7 +51,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
         public override InvariantHashSet GetAllowedValues(ITokenString input)
         {
-            return input?.Value != null
+            return input.IsMeaningful()
                 ? InvariantHashSet.Boolean()
                 : null;
         }
@@ -75,7 +75,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <exception cref="InvalidOperationException">The path is not relative or contains directory climbing (../).</exception>
         private bool GetPathExists(ITokenString input)
         {
-            if (string.IsNullOrWhiteSpace(input?.Value) || input.InvalidTokens.Any())
+            if (!input.IsMeaningful() || input.InvalidTokens.Any())
                 return false;
 
             // get normalised path

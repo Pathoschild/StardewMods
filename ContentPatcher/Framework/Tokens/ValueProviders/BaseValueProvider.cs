@@ -53,7 +53,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="input">The input argument, if applicable.</param>
         public bool CanHaveMultipleValues(ITokenString input = null)
         {
-            return input?.Value != null
+            return input.IsMeaningful()
                 ? this.CanHaveMultipleValuesForInput
                 : this.CanHaveMultipleValuesForRoot;
         }
@@ -66,7 +66,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public bool TryValidate(ITokenString input, InvariantHashSet values, out string error)
         {
             // validate input
-            if (input?.Value != null)
+            if (input.IsMeaningful())
             {
                 // check if input allowed
                 if (!this.AllowsInput)
@@ -184,9 +184,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="AllowsInput"/> or <see cref="RequiresInput"/>.</exception>
         protected void AssertInputArgument(ITokenString input)
         {
-            if (this.RequiresInput && input?.Value == null)
+            if (this.RequiresInput && !input.IsMeaningful())
                 throw new InvalidOperationException($"The '{this.Name}' token requires an input argument.");
-            if (!this.AllowsInput && input?.Value != null)
+            if (!this.AllowsInput && input.IsMeaningful())
                 throw new InvalidOperationException($"The '{this.Name}' token does not allow input arguments.");
         }
 

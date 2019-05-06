@@ -77,7 +77,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
         public override InvariantHashSet GetAllowedValues(ITokenString input)
         {
-            return input?.Value != null
+            return input.IsMeaningful()
                 ? InvariantHashSet.Boolean()
                 : this.GetValidInputs();
         }
@@ -89,7 +89,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInputArgument(input);
 
-            if (input?.Value != null)
+            if (input.IsMeaningful())
             {
                 bool hasItem = this.TryParseEnum(input.Value, out WalletItem item) && this.Values[item];
                 yield return hasItem.ToString();

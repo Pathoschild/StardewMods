@@ -76,7 +76,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInputArgument(input);
 
-            if (input?.Value != null)
+            if (input.IsMeaningful())
             {
                 if (this.TryParseEnum(input.Value, out Skill skill) && this.SkillLevels.TryGetValue(skill, out int level))
                     yield return level.ToString();

@@ -261,7 +261,7 @@ namespace ContentPatcher.Framework.Commands
                         output.Append($"  // {errorReason}");
 
                     // log common issues
-                    if (errorReason == null && patch.IsLoaded && !patch.IsApplied && patch.ParsedTargetAsset?.Value != null)
+                    if (errorReason == null && patch.IsLoaded && !patch.IsApplied && patch.ParsedTargetAsset.IsMeaningful())
                     {
                         string assetName = patch.ParsedTargetAsset.Value;
 

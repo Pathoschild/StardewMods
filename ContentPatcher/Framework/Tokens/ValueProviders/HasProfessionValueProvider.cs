@@ -54,7 +54,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <exception cref="InvalidOperationException">The input argument doesn't match this token, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
         public override InvariantHashSet GetAllowedValues(ITokenString input)
         {
-            return input?.Value != null
+            return input.IsMeaningful()
                 ? InvariantHashSet.Boolean()
                 : null;
         }
@@ -66,7 +66,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInputArgument(input);
 
-            if (input?.Value != null)
+            if (input.IsMeaningful())
             {
                 bool hasProfession = this.TryParseEnum(input.Value, out Profession profession, mustBeNamed: false) && this.Professions.Contains(profession);
                 yield return hasProfession.ToString();
@@ -89,7 +89,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 return false;
 
             // validate profession IDs
-            string profession = input?.Value ?? value;
+            string profession = input.IsMeaningful() ? input.Value : value;
             if (!this.TryParseEnum(profession, out Profession _, mustBeNamed: false))
             {
                 error = $"can't parse '{profession}' as a profession ID; must be one of [{string.Join(", ", Enum.GetNames(typeof(Profession)).OrderByIgnoreCase(p => p))}] or an integer ID.";

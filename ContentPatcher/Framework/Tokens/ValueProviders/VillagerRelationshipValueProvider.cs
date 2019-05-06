@@ -58,7 +58,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInputArgument(input);
 
-            if (input?.Value != null)
+            if (input.IsMeaningful())
             {
                 if (this.Values.TryGetValue(input.Value, out string value))
                     yield return value;
