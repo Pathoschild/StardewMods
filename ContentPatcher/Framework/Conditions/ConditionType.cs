@@ -27,6 +27,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The current farm type.</summary>
         FarmType,
 
+        /// <summary>Whether the player is the main player or farmhand.</summary>
+        IsMainPlayer,
+
         /// <summary>The <see cref="StardewValley.LocalizedContentManager.LanguageCode"/> name.</summary>
         Language,
 

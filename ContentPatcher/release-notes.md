@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Added new tokens:
+  * `IsMainPlayer`: whether the player is the main player.
 * Added support for tokens in field keys.
 * Added support for new asset types in the upcoming Stardew Valley 1.4.
 * Improved subkey validation.

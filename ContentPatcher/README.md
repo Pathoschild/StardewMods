@@ -393,6 +393,15 @@ The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). Possible valu
 </tr>
 
 <tr valign="top">
+<td>IsMainPlayer</td>
+<td>
+
+Whether the player is the main player. Possible values: `true`, `false`.
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>Language</td>
 <td>
 
