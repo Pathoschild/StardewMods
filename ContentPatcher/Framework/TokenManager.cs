@@ -155,6 +155,9 @@ namespace ContentPatcher.Framework
             yield return new SkillLevelValueProvider(NeedsBasicInfo);
             yield return new VillagerRelationshipValueProvider();
             yield return new VillagerHeartsValueProvider();
+
+            // special tokens
+            yield return new HasValueValueProvider();
         }
 
         /// <summary>Get the local value providers with which to initialise a local context.</summary>

@@ -521,28 +521,6 @@ Custom professions added by a mod are represented by their integer profession ID
 </tr>
 
 <tr valign="top">
-<td>HasWalletItem</td>
-<td>
-
-The [special items in the player wallet](https://stardewvalleywiki.com/Wallet). Possible values:
-
-flag                       | meaning
--------------------------- | -------
-`DwarvishTranslationGuide` | Unlocks speaking to the Dwarf.
-`RustyKey`                 | Unlocks the sewers.
-`ClubCard`                 | Unlocks the desert casino.
-`SpecialCharm`             | Permanently increases daily luck.
-`SkullKey`                 | Unlocks the Skull Cavern in the desert, and the Junimo Kart machine in the Stardrop Saloon.
-`MagnifyingGlass`          | Unlocks the ability to find secret notes.
-`DarkTalisman`             | Unlocks the Witch's Swamp.
-`MagicInk`                 | Unlocks magical buildings through the Wizard, and the dark shrines in the Witch's Swamp.
-`BearsKnowledge`           | Increases sell price of blackberries and salmonberries.
-`SpringOnionMastery`       | Increases sell price of spring onions.
-
-</td>
-</tr>
-
-<tr valign="top">
 <td>HasFlag</td>
 <td>
 
@@ -585,6 +563,43 @@ The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
 
 The event IDs the player has seen, matching IDs in the `Data\Events` files. (You can use
 [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.)
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>HasValue</td>
+<td>
+
+Whether a given value is non-blank. For example, to check if the player is married to anyone:
+
+```js
+"When": {
+  "HasValue:{{spouse}}": "true"
+}
+```
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>HasWalletItem</td>
+<td>
+
+The [special items in the player wallet](https://stardewvalleywiki.com/Wallet). Possible values:
+
+flag                       | meaning
+-------------------------- | -------
+`DwarvishTranslationGuide` | Unlocks speaking to the Dwarf.
+`RustyKey`                 | Unlocks the sewers.
+`ClubCard`                 | Unlocks the desert casino.
+`SpecialCharm`             | Permanently increases daily luck.
+`SkullKey`                 | Unlocks the Skull Cavern in the desert, and the Junimo Kart machine in the Stardrop Saloon.
+`MagnifyingGlass`          | Unlocks the ability to find secret notes.
+`DarkTalisman`             | Unlocks the Witch's Swamp.
+`MagicInk`                 | Unlocks magical buildings through the Wizard, and the dark shrines in the Witch's Swamp.
+`BearsKnowledge`           | Increases sell price of blackberries and salmonberries.
+`SpringOnionMastery`       | Increases sell price of spring onions.
 
 </td>
 </tr>

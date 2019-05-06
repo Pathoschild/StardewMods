@@ -17,9 +17,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>The mod folder from which to load assets.</summary>
         private readonly string ModFolder;
 
-        /// <summary>The context as of the last update.</summary>
-        private IContext TokenContext;
-
 
         /*********
         ** Public methods
@@ -39,10 +36,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public override bool UpdateContext(IContext context)
         {
             bool changed = !this.IsReady;
-
-            this.TokenContext = context;
             this.IsReady = true;
-
             return changed;
         }
 

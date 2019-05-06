@@ -341,9 +341,12 @@ namespace ContentPatcher.Framework.Commands
             {
                 string[] failedConditions = (
                     from condition in patch.ParsedConditions
-                    orderby condition.Name.ToString()
+                    let displayText = !string.IsNullOrWhiteSpace(condition.Input?.Raw)
+                        ? $"{condition.Name}:{condition.Input.Raw}"
+                        : condition.Name
+                    orderby displayText
                     where !condition.IsMatch(tokenContext)
-                    select $"{condition.Name} ({string.Join(", ", condition.Values)})"
+                    select $"{displayText} ({string.Join(", ", condition.Values)})"
                 ).ToArray();
 
                 if (failedConditions.Any())

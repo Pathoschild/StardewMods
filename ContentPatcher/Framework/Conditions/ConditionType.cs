@@ -91,6 +91,9 @@ namespace ContentPatcher.Framework.Conditions
         ** Magic conditions
         ****/
         /// <summary>Whether a file exists in the content pack's folder.</summary>
-        HasFile
+        HasFile,
+
+        /// <summary>Whether a given value is non-blank.</summary>
+        HasValue
     };
 }
