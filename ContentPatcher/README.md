@@ -208,9 +208,22 @@ field      | purpose
 
 ## Advanced: tokens & conditions
 ### Overview
-A **token** is a name which represents a predefined value. For example, `season` (the token) may
-contain `spring`, `summer`, `fall`, or `winter` (the value). You can use [player config](#player-config),
+A **token** is a placeholder for a predefined value. For example, `season` (the token) may contain
+`spring`, `summer`, `fall`, or `winter` (the value). You can use [player config](#player-config),
 [global token values](#global-tokens), and [dynamic token values](#dynamic-tokens) as tokens.
+
+Tokens are indicated by two curly braces (except in `When` condition keys, where the braces are
+implied). For example, here's a simple dialogue text which includes the current season name:
+```js
+"Entries": {
+   "fri": "It's a beautiful {{season}} day!"
+}
+```
+
+Most tokens contain values directly, like `{{Season}}` = `spring` or `{{HasProfession}}` =
+`Blacksmith, Forester, Miner`. Some tokens also have an _input argument_, which can be a literal
+value (like `{{Relationship:Abigail}}` = `Married`) or contain tokens too (like
+`{{HasFile:assets/{{spouse}}.png}}` = `true`).
 
 There are two ways to use tokens.
 
@@ -219,20 +232,21 @@ There are two ways to use tokens.
 <dd>
 
 You can make a patch conditional by adding a `When` field, which can list any number of conditions.
-Each condition has a token name (like `Season`) and the values to match (like `spring, summer`).
-Condition names and values are not case-sensitive.
+Each condition consists of a single token without braces (like `Season`) and the values to match
+(like `spring, summer`). Condition names and values are not case-sensitive.
 
 For example, this changes the house texture only in Spring or Summer, if the player hasn't upgraded
-their house:
+their house and the asset exists:
 
 ```js
 {
     "Action": "EditImage",
     "Target": "Buildings/houses",
-    "FromFile": "assets/green_house.png",
+    "FromFile": "assets/{{season}}_house.png",
     "When": {
         "Season": "spring, summer",
-        "FarmhouseUpgrade": "0"
+        "FarmhouseUpgrade": "0",
+        "FileExists:assets/{{season}}_house.png": "true"
     }
 }
 ```
