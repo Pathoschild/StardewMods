@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.Lexing.LexTokens;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 
@@ -40,8 +41,8 @@ namespace ContentPatcher.Framework.Patches
         {
             foreach (string name in base.GetTokensUsed())
                 yield return name;
-            foreach (string name in this.FromLocalAsset.GetContextualTokenNames())
-                yield return name;
+            foreach (LexTokenToken lexToken in this.FromLocalAsset.GetTokenPlaceholders(recursive: true))
+                yield return lexToken.Name;
         }
 
 

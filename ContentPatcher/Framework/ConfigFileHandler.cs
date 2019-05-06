@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
-using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -90,21 +89,21 @@ namespace ContentPatcher.Framework
                 ConfigSchemaFieldConfig field = rawSchema[rawKey];
 
                 // validate format
-                if (!TokenName.TryParse(rawKey, out TokenName name))
+                if (string.IsNullOrWhiteSpace(rawKey))
                 {
-                    logWarning(rawKey, $"the name '{rawKey}' is not in a valid format.");
+                    logWarning(rawKey, "the config field name can't be empty.");
                     continue;
                 }
-                if (name.HasSubkey())
+                if (rawKey.Contains(InternalConstants.InputArgSeparator))
                 {
-                    logWarning(rawKey, $"the name '{rawKey}' can't have a subkey (:).");
+                    logWarning(rawKey, $"the name '{rawKey}' can't have an input argument ({InternalConstants.InputArgSeparator} character).");
                     continue;
                 }
 
                 // validate reserved keys
-                if (name.TryGetConditionType(out ConditionType _))
+                if (Enum.TryParse<ConditionType>(rawKey, true, out _))
                 {
-                    logWarning(rawKey, $"can't use {name.Key} as a config field, because it's a reserved condition key.");
+                    logWarning(rawKey, $"can't use {rawKey} as a config field, because it's a reserved condition key.");
                     continue;
                 }
 

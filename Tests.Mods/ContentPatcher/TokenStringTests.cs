@@ -28,16 +28,16 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
 
             // assert
             tokenStr.Raw.Should().Be(raw.Trim());
-            tokenStr.Tokens.Should().HaveCount(0);
+            tokenStr.GetTokenPlaceholders(recursive: false).Should().HaveCount(0);
             tokenStr.InvalidTokens.Should().HaveCount(0);
             tokenStr.HasAnyTokens.Should().BeFalse();
         }
 
         /// <summary>Test that the <see cref="TokenString"/> constructor sets the expected property values when given a single valid token.</summary>
-        [TestCase("{{tokenKey}}")]
-        [TestCase("  {{tokenKey}}   ")]
-        [TestCase("  {{  tokenKey  }}   ")]
-        public void TokenStringBuilder_WithSingleToken(string raw)
+        [TestCase("{{tokenKey}}", "{{tokenKey}}")]
+        [TestCase("  {{tokenKey}}   ", "{{tokenKey}}")]
+        [TestCase("  {{  tokenKey  }}   ", "{{tokenKey}}")]
+        public void TokenStringBuilder_WithSingleToken(string raw, string parsed)
         {
             // arrange
             const string configKey = "tokenKey";
@@ -48,9 +48,9 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             TokenString tokenStr = new TokenString(raw, context);
 
             // assert
-            tokenStr.Raw.Should().Be(raw.Trim());
-            tokenStr.Tokens.Should().HaveCount(1);
-            tokenStr.Tokens.Select(p => p.ToString()).Should().BeEquivalentTo(configKey);
+            tokenStr.Raw.Should().Be(parsed);
+            tokenStr.GetTokenPlaceholders(recursive: false).Should().HaveCount(1);
+            tokenStr.GetTokenPlaceholders(recursive: false).Select(p => p.Text).Should().BeEquivalentTo("{{" + configKey + "}}");
             tokenStr.InvalidTokens.Should().BeEmpty();
             tokenStr.HasAnyTokens.Should().BeTrue();
             tokenStr.IsSingleTokenOnly.Should().BeTrue();
@@ -64,7 +64,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             const string configKey = "configKey";
             const string configValue = "A";
             const string tokenKey = "season";
-            const string raw = "  assets/{{configKey}}_{{season}}_{{invalid}}.png  ";
+            const string raw = "  assets/{{configKey}}_{{season}}_{{ invalid  }}.png  ";
             var context = new GenericTokenContext();
             context.Save(new ImmutableToken(configKey, new InvariantHashSet { configValue }));
             context.Save(new ImmutableToken(tokenKey, new InvariantHashSet { "A" }));
@@ -73,9 +73,9 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             TokenString tokenStr = new TokenString(raw, context);
 
             // assert
-            tokenStr.Raw.Should().Be(raw.Trim());
-            tokenStr.Tokens.Should().HaveCount(2);
-            tokenStr.Tokens.Select(name => name.ToString()).Should().BeEquivalentTo(new[] { configKey, tokenKey });
+            tokenStr.Raw.Should().Be("assets/{{configKey}}_{{season}}_{{invalid}}.png");
+            tokenStr.GetTokenPlaceholders(recursive: false).Should().HaveCount(3);
+            tokenStr.GetTokenPlaceholders(recursive: false).Select(name => name.Text).Should().BeEquivalentTo(new[] { "{{configKey}}", "{{season}}", "{{invalid}}" });
             tokenStr.InvalidTokens.Should().HaveCount(1).And.BeEquivalentTo("invalid");
             tokenStr.HasAnyTokens.Should().BeTrue();
             tokenStr.IsSingleTokenOnly.Should().BeFalse();

@@ -279,22 +279,22 @@ namespace ContentPatcher
                             void LogSkip(string reason) => this.Monitor.Log($"Ignored {current.Manifest.Name} > dynamic token '{entry.Name}': {reason}", LogLevel.Warn);
 
                             // validate token key
-                            if (!TokenName.TryParse(entry.Name, out TokenName name))
+                            if (string.IsNullOrWhiteSpace(entry.Name))
                             {
-                                LogSkip("the name could not be parsed as a token key.");
+                                LogSkip("the token name can't be empty.");
                                 continue;
                             }
-                            if (name.HasSubkey())
+                            if (entry.Name.Contains(InternalConstants.InputArgSeparator))
                             {
-                                LogSkip("the token name cannot contain a subkey (:).");
+                                LogSkip($"the token name can't have an input argument ({InternalConstants.InputArgSeparator} character).");
                                 continue;
                             }
-                            if (name.TryGetConditionType(out ConditionType conflictingType))
+                            if (Enum.TryParse<ConditionType>(entry.Name, true, out _))
                             {
                                 LogSkip("the token name is already used by a global token.");
                                 continue;
                             }
-                            if (config.ContainsKey(name.Key))
+                            if (config.ContainsKey(entry.Name))
                             {
                                 LogSkip("the token name is already used by a config token.");
                                 continue;
@@ -314,7 +314,7 @@ namespace ContentPatcher
                             }
 
                             // add token
-                            tokenContext.Add(new DynamicTokenValue(name, values, conditions));
+                            tokenContext.Add(new DynamicTokenValue(entry.Name, values, conditions));
                         }
                     }
 
@@ -589,10 +589,10 @@ namespace ContentPatcher
                     conditions = null;
                     return false;
                 }
-                TokenName name = new TokenName(lexToken.Name, lexToken.InputArg?.Text);
+                ITokenString input = new TokenString(lexToken.InputArg, tokenContext);
 
                 // get token
-                IToken token = tokenContext.GetToken(name.Key, enforceContext: false);
+                IToken token = tokenContext.GetToken(lexToken.Name, enforceContext: false);
                 if (token == null)
                 {
                     error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", tokenContext.GetTokens(enforceContext: false).Select(p => p.Name).OrderBy(p => p))}";
@@ -600,45 +600,32 @@ namespace ContentPatcher
                     return false;
                 }
 
-                // validate subkeys
-                if (!token.CanHaveSubkeys)
+                // validate input
+                if (!token.TryValidateInput(input, out error))
                 {
-                    if (name.HasSubkey())
-                    {
-                        error = $"{name.Key} conditions don't allow input arguments (:)";
-                        conditions = null;
-                        return false;
-                    }
-                }
-                else if (token.RequiresSubkeys)
-                {
-                    if (!name.HasSubkey())
-                    {
-                        error = $"{name.Key} conditions must specify an input argument (see readme for usage)";
-                        conditions = null;
-                        return false;
-                    }
+                    conditions = null;
+                    return false;
                 }
 
                 // parse values
                 InvariantHashSet values = this.ParseCommaDelimitedField(pair.Value);
                 if (!values.Any())
                 {
-                    error = $"{name} can't be empty";
+                    error = $"{lexToken.Name} can't be empty";
                     conditions = null;
                     return false;
                 }
 
                 // validate token keys & values
-                if (!token.TryValidate(name, values, tokenContext, out string customError))
+                if (!token.TryValidateValues(input, values, tokenContext, out string customError))
                 {
-                    error = $"invalid {name} condition: {customError}";
+                    error = $"invalid {lexToken.Name} condition: {customError}";
                     conditions = null;
                     return false;
                 }
 
                 // create condition
-                conditions.Add(new Condition(name: lexToken.Name, input: new TokenString(lexToken.InputArg?.Parts, tokenContext), values: values));
+                conditions.Add(new Condition(name: lexToken.Name, input: input, values: values));
             }
 
             // return parsed conditions
@@ -686,10 +673,13 @@ namespace ContentPatcher
                     return false;
                 }
 
+                // parse token
+                LexTokenToken lexToken = tokenString.GetTokenPlaceholders(recursive: false).Single();
+                IToken token = tokenContext.GetToken(lexToken.Name, enforceContext: false);
+                TokenString input = new TokenString(lexToken.InputArg, tokenContext);
+
                 // check token options
-                TokenName tokenName = tokenString.Tokens.First();
-                IToken token = tokenContext.GetToken(tokenName.Key, enforceContext: false);
-                InvariantHashSet allowedValues = token?.GetAllowedValues(tokenName);
+                InvariantHashSet allowedValues = token?.GetAllowedValues(input);
                 if (token == null || token.IsMutable || !token.IsReady)
                 {
                     error = $"can only use static tokens in this field, consider using a {nameof(PatchConfig.When)} condition instead.";
@@ -700,13 +690,13 @@ namespace ContentPatcher
                     error = "that token isn't restricted to 'true' or 'false'.";
                     return false;
                 }
-                if (token.CanHaveMultipleValues(tokenName))
+                if (token.CanHaveMultipleValues(input))
                 {
                     error = "can't be treated as a true/false value because that token can have multiple values.";
                     return false;
                 }
 
-                text = token.GetValues(tokenName).First();
+                text = token.GetValues(input).First();
             }
 
             // parse text
@@ -752,19 +742,20 @@ namespace ContentPatcher
                 }
 
                 // validate tokens
-                foreach (TokenName tokenName in tokenStrings.SelectMany(p => p.Tokens))
+                foreach (LexTokenToken lexToken in tokenStrings.SelectMany(p => p.GetTokenPlaceholders(recursive: false)).Distinct())
                 {
-                    IToken token = tokenContext.GetToken(tokenName.Key, enforceContext: false);
+                    IToken token = tokenContext.GetToken(lexToken.Name, enforceContext: false);
                     if (token == null)
                     {
-                        error = $"'{tokenName.Key}' can't be used as a token because that token could not be found."; // should never happen
+                        error = $"'{lexToken}' can't be used as a token because that token could not be found."; // should never happen
                         parsed = null;
                         return false;
                     }
 
-                    if (token.CanHaveMultipleValues(tokenName))
+                    TokenString input = new TokenString(lexToken.InputArg, tokenContext);
+                    if (token.CanHaveMultipleValues(input))
                     {
-                        error = $"'{tokenName.Key}' can't be used as a token because it can have multiple values.";
+                        error = $"'{lexToken}' can't be used as a token because it can have multiple values.";
                         parsed = null;
                         return false;
                     }
@@ -800,18 +791,20 @@ namespace ContentPatcher
             }
 
             // validate tokens
-            foreach (TokenName tokenName in parsed.Tokens)
+            foreach (LexTokenToken lexToken in parsed.GetTokenPlaceholders(recursive: false))
             {
-                IToken token = tokenContext.GetToken(tokenName.Key, enforceContext: false);
+                IToken token = tokenContext.GetToken(lexToken.Name, enforceContext: false);
                 if (token == null)
                 {
-                    error = $"'{tokenName.Key}' can't be used as a token because that token could not be found."; // should never happen
+                    error = $"'{lexToken}' can't be used as a token because that token could not be found."; // should never happen
                     parsed = null;
                     return false;
                 }
-                if (token.CanHaveMultipleValues(tokenName))
+
+                TokenString input = new TokenString(lexToken.InputArg, tokenContext);
+                if (token.CanHaveMultipleValues(input))
                 {
-                    error = $"'{tokenName.Key}' can't be used as a token because it can have multiple values.";
+                    error = $"'{lexToken}' can't be used as a token because it can have multiple values.";
                     parsed = null;
                     return false;
                 }

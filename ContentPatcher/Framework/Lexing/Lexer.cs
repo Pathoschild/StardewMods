@@ -50,7 +50,7 @@ namespace ContentPatcher.Framework.Lexing
                         type = LexBitType.EndToken;
                         break;
 
-                    case ":":
+                    case InternalConstants.InputArgSeparator:
                         type = LexBitType.InputArgSeparator;
                         break;
 

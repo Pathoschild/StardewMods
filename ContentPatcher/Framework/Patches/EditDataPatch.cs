@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Lexing.LexTokens;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -50,7 +51,7 @@ namespace ContentPatcher.Framework.Patches
             this.Records = records.ToArray();
             this.Fields = fields.ToArray();
             this.Monitor = monitor;
-            this.MutableTokenStrings = this.GetTokenStrings(this.Records, this.Fields).Where(str => str.Tokens.Any()).ToArray();
+            this.MutableTokenStrings = this.GetTokenStrings(this.Records, this.Fields).Where(str => str.HasAnyTokens).ToArray();
 
             // track contextuals
             this.ContextualValues.AddRange(this.Records.Where(p => p != null));
@@ -66,8 +67,8 @@ namespace ContentPatcher.Framework.Patches
 
             foreach (TokenString str in this.MutableTokenStrings)
             {
-                foreach (string name in str.GetContextualTokenNames())
-                    yield return name;
+                foreach (LexTokenToken lexToken in str.GetTokenPlaceholders(recursive: true))
+                    yield return lexToken.Name;
             }
         }
 

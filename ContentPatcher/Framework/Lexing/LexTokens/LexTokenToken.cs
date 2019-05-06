@@ -61,12 +61,18 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
             str.Append(name);
             if (tokenInputArgArgument != null)
             {
-                str.Append(":");
+                str.Append(InternalConstants.InputArgSeparator);
                 str.Append(tokenInputArgArgument.Value.Text);
             }
             if (!impliedBraces)
                 str.Append("}}");
             return str.ToString();
+        }
+
+        /// <summary>Get a string representation of the lexical token.</summary>
+        public override string ToString()
+        {
+            return this.Text;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ContentPatcher.Framework.Tokens
         ** Accessors
         *********/
         /// <summary>The name of the token whose value to set.</summary>
-        public TokenName Name { get; }
+        public string Name { get; }
 
         /// <summary>The token value to set.</summary>
         public InvariantHashSet Value { get; }
@@ -31,12 +31,12 @@ namespace ContentPatcher.Framework.Tokens
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="key">The name of the token whose value to set.</param>
+        /// <param name="name">The name of the token whose value to set.</param>
         /// <param name="value">The token value to set.</param>
         /// <param name="conditions">The conditions that must match to set this value.</param>
-        public DynamicTokenValue(TokenName key, InvariantHashSet value, IEnumerable<Condition> conditions)
+        public DynamicTokenValue(string name, InvariantHashSet value, IEnumerable<Condition> conditions)
         {
-            this.Name = key;
+            this.Name = name;
             this.Value = value;
             this.Conditions = conditions.ToArray();
         }

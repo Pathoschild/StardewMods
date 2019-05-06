@@ -105,7 +105,7 @@ namespace ContentPatcher.Framework
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
         /// <returns>Return the values of the matching token, or an empty list if the token doesn't exist.</returns>
         /// <exception cref="ArgumentNullException">The specified key is null.</exception>
-        public IEnumerable<string> GetValues(string name, string input, bool enforceContext)
+        public IEnumerable<string> GetValues(string name, ITokenString input, bool enforceContext)
         {
             return this.GlobalContext.GetValues(name, input, enforceContext);
         }

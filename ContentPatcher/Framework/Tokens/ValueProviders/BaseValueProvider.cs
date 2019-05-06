@@ -58,12 +58,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 : this.CanHaveMultipleValuesForRoot;
         }
 
-        /// <summary>Validate that the provided values are valid for the input argument (regardless of whether they match).</summary>
+        /// <summary>Validate that the provided input argument is valid.</summary>
         /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="values">The values to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidate(ITokenString input, InvariantHashSet values, out string error)
+        public bool TryValidateInput(ITokenString input, out string error)
         {
             // validate input
             if (input.IsMeaningful())
@@ -81,13 +80,28 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 {
                     if (!validInputs.Contains(input.Value))
                     {
-                        error = $"invalid input argument ({input}) for {this.Name} token, expected any of {string.Join(", ", validInputs)}";
+                        error = $"invalid input argument ({(input.Raw != input.Value ? $"{input.Raw} => {input.Value}" : input.Value)}) for {this.Name} token, expected any of {string.Join(", ", validInputs)}";
                         return false;
                     }
                 }
             }
 
-            // validate values
+            // no issues found
+            error = null;
+            return true;
+        }
+
+        /// <summary>Validate that the provided values are valid for the input argument (regardless of whether they match).</summary>
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <param name="values">The values to validate.</param>
+        /// <param name="error">The validation error, if any.</param>
+        /// <returns>Returns whether validation succeeded.</returns>
+        public bool TryValidateValues(ITokenString input, InvariantHashSet values, out string error)
+        {
+            if (!this.TryValidateInput(input, out error))
+                return false;
+
+            // default validation
             {
                 InvariantHashSet validValues = this.GetAllowedValues(input);
                 if (validValues?.Any() == true)

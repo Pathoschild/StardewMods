@@ -1,7 +1,6 @@
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing.LexTokens;
-using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -44,11 +43,24 @@ namespace ContentPatcher.Framework.Migrations
         /// <returns>Returns whether migration succeeded.</returns>
         public bool TryMigrate(ref ILexToken lexToken, out string error)
         {
-            // tokens which need a higher version
-            if (lexToken is LexTokenToken token && this.AddedTokens.Contains(token.Name))
+            if (lexToken is LexTokenToken token)
             {
-                error = this.GetNounPhraseError($"using token {token.Name}");
-                return false;
+                // tokens which need a higher version
+                if (this.AddedTokens.Contains(token.Name))
+                {
+                    error = this.GetNounPhraseError($"using token {token.Name}");
+                    return false;
+                }
+
+                // check input arguments
+                if (token.InputArg != null)
+                {
+                    for (int i = 0; i < token.InputArg.Value.Parts.Length; i++)
+                    {
+                        if (!this.TryMigrate(ref lexToken, out error))
+                            return false;
+                    }
+                }
             }
 
             // no issue found
@@ -62,15 +74,9 @@ namespace ContentPatcher.Framework.Migrations
         /// <returns>Returns whether migration succeeded.</returns>
         public virtual bool TryMigrate(TokenString tokenStr, out string error)
         {
-            // tokens which need a high version
-            foreach (TokenName token in tokenStr.Tokens)
-            {
-                if (this.AddedTokens.Contains(token.Key))
-                {
-                    error = this.GetNounPhraseError($"using token {token.Key}");
-                    return false;
-                }
-            }
+            // tokens which need a higher version
+            for (int i = 0; i < tokenStr.LexTokens.Length; i++)
+                this.TryMigrate(ref tokenStr.LexTokens[i], out error);
 
             // no issue found
             error = null;

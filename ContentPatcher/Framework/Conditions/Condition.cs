@@ -14,7 +14,7 @@ namespace ContentPatcher.Framework.Conditions
         public string Name { get; }
 
         /// <summary>The token input argument, if any.</summary>
-        public TokenString Input { get; }
+        public ITokenString Input { get; }
 
         /// <summary>The token values for which this condition is valid.</summary>
         public InvariantHashSet Values { get; }
@@ -33,7 +33,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="name">The token name in the context.</param>
         /// <param name="input">The token input argument, if any.</param>
         /// <param name="values">The token values for which this condition is valid.</param>
-        public Condition(string name, TokenString input, InvariantHashSet values)
+        public Condition(string name, ITokenString input, InvariantHashSet values)
         {
             this.Name = name;
             this.Input = input;
@@ -48,7 +48,7 @@ namespace ContentPatcher.Framework.Conditions
                 return false;
 
             return context
-                .GetValues(this.Name, this.Input?.Value, enforceContext: true)
+                .GetValues(this.Name, this.Input, enforceContext: true)
                 .Any(value => this.Values.Contains(value));
         }
 

@@ -18,8 +18,8 @@ namespace ContentPatcher.Framework.Tokens
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The token name.</param>
-        public DynamicToken(TokenName name)
-            : base(new DynamicTokenValueProvider(name.Key))
+        public DynamicToken(string name)
+            : base(new DynamicTokenValueProvider(name))
         {
             this.DynamicValues = (DynamicTokenValueProvider)base.Values;
         }

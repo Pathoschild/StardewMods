@@ -23,7 +23,7 @@ namespace ContentPatcher.Framework
         /// <param name="token">The token to save.</param>
         public void Save(TToken token)
         {
-            this.Tokens[token.Name.Key] = token;
+            this.Tokens[token.Name] = token;
         }
 
         /// <summary>Get whether the context contains the given token.</summary>
@@ -62,10 +62,10 @@ namespace ContentPatcher.Framework
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
         /// <returns>Return the values of the matching token, or an empty list if the token doesn't exist.</returns>
         /// <exception cref="ArgumentNullException">The specified key is null.</exception>
-        public IEnumerable<string> GetValues(string name, string input, bool enforceContext)
+        public IEnumerable<string> GetValues(string name, ITokenString input, bool enforceContext)
         {
             IToken token = this.GetToken(name, enforceContext);
-            return token?.GetValues(new TokenName(name, input)) ?? new string[0];
+            return token?.GetValues(input) ?? new string[0];
         }
 
 

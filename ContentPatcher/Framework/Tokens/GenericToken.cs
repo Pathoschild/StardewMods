@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens.ValueProviders;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -19,16 +17,12 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Whether the root token may contain multiple values.</summary>
         protected bool CanHaveMultipleRootValues { get; set; }
 
-        /// <summary>Backing field for <see cref="GetTokenString"/>.</summary>
-        [Obsolete("This is a transitional field for tracking.")]
-        private IContext LastContext;
-
 
         /*********
         ** Accessors
         *********/
         /// <summary>The token name.</summary>
-        public TokenName Name { get; }
+        public string Name { get; }
 
         /// <summary>Whether the value can change after it's initialised.</summary>
         public bool IsMutable => this.Values.IsMutable;
@@ -36,11 +30,11 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Whether the instance is valid for the current context.</summary>
         public bool IsReady => this.Values.IsReady;
 
-        /// <summary>Whether this token recognises subkeys (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with a <c>Abigail</c> subkey).</summary>
-        public bool CanHaveSubkeys => this.Values.AllowsInput;
+        /// <summary>Whether this token recognises input arguments (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with an <c>Abigail</c> input).</summary>
+        public bool CanHaveInput => this.Values.AllowsInput;
 
-        /// <summary>Whether this token only allows subkeys (see <see cref="IToken.CanHaveSubkeys"/>).</summary>
-        public bool RequiresSubkeys => this.Values.RequiresInput;
+        /// <summary>Whether this token is only valid with an input argument (see <see cref="IToken.CanHaveInput"/>).</summary>
+        public bool RequiresInput => this.Values.RequiresInput;
 
 
         /*********
@@ -52,7 +46,7 @@ namespace ContentPatcher.Framework.Tokens
         {
             this.Values = provider;
 
-            this.Name = TokenName.Parse(provider.Name);
+            this.Name = provider.Name;
             this.CanHaveMultipleRootValues = provider.CanHaveMultipleValues();
         }
 
@@ -61,8 +55,6 @@ namespace ContentPatcher.Framework.Tokens
         /// <returns>Returns whether the token data changed.</returns>
         public bool UpdateContext(IContext context)
         {
-            this.LastContext = context;
-
             bool changed = false;
             if (this.Values.IsMutable)
             {
@@ -73,103 +65,74 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <summary>Whether the token may return multiple values for the given name.</summary>
-        /// <param name="name">The token name.</param>
-        public bool CanHaveMultipleValues(TokenName name)
+        /// <param name="input">The input argument, if any.</param>
+        public bool CanHaveMultipleValues(ITokenString input)
         {
-            return this.Values.CanHaveMultipleValues(this.GetTokenString(name.Subkey, this.LastContext));
+            return this.Values.CanHaveMultipleValues(input);
         }
 
-        /// <summary>Perform custom validation.</summary>
-        /// <param name="name">The token name to validate.</param>
+        /// <summary>Validate that the provided input argument is valid.</summary>
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <param name="error">The validation error, if any.</param>
+        /// <returns>Returns whether validation succeeded.</returns>
+        public bool TryValidateInput(ITokenString input, out string error)
+        {
+            return this.Values.TryValidateInput(input, out error);
+        }
+
+        /// <summary>Validate that the provided values are valid for the input argument (regardless of whether they match).</summary>
+        /// <param name="input">The input argument, if applicable.</param>
         /// <param name="values">The values to validate.</param>
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidate(TokenName name, InvariantHashSet values, IContext context, out string error)
+        public bool TryValidateValues(ITokenString input, InvariantHashSet values, IContext context, out string error)
         {
-            this.LastContext = context;
-
-            // validate subkey
-            if (name.HasSubkey())
-            {
-                // check if subkey allowed
-                if (!this.CanHaveSubkeys)
-                {
-                    error = $"invalid subkey ({name}); token does not support subkeys.";
-                    return false;
-                }
-
-                // check subkey value
-                InvariantHashSet validKeys = this.GetAllowedSubkeys();
-                if (validKeys?.Any() == true && !validKeys.Contains(name.Key))
-                {
-                    error = $"invalid subkey ({name}), expected one of {string.Join(", ", validKeys)}";
-                    return false;
-                }
-            }
-
-            // custom validation
-            if (!this.Values.TryValidate(this.GetTokenString(name.Subkey, context), values, out error))
+            if (!this.TryValidateInput(input, out error) || !this.Values.TryValidateValues(input, values, out error))
                 return false;
 
-            // no issues found
             error = null;
             return true;
         }
 
-        /// <summary>Get the current subkeys (if supported).</summary>
-        public virtual IEnumerable<TokenName> GetSubkeys()
+        /// <summary>Get the allowed input arguments, if supported and restricted to a specific list.</summary>
+        public InvariantHashSet GetAllowedInputArguments()
         {
-            return this.Values.GetValidInputs()?.Select(input => new TokenName(this.Name.Key, input));
+            return this.Values.GetValidInputs();
         }
 
-        /// <summary>Get the allowed values for a token name (or <c>null</c> if any value is allowed).</summary>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
-        public virtual InvariantHashSet GetAllowedValues(TokenName name)
+        /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
+        /// <param name="input">The input argument, if any.</param>
+        /// <exception cref="InvalidOperationException">The input does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
+        public virtual InvariantHashSet GetAllowedValues(ITokenString input)
         {
-            return this.Values.GetAllowedValues(this.GetTokenString(name.Subkey, this.LastContext));
+            return this.Values.GetAllowedValues(input);
         }
 
         /// <summary>Get the current token values.</summary>
-        /// <param name="name">The token name to check.</param>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
-        public virtual IEnumerable<string> GetValues(TokenName name)
+        /// <param name="input">The input to check, if any.</param>
+        /// <exception cref="InvalidOperationException">The input does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
+        public virtual IEnumerable<string> GetValues(ITokenString input)
         {
-            this.AssertTokenName(name);
-            return this.Values.GetValues(this.GetTokenString(name.Subkey, this.LastContext));
+            this.AssertInput(input);
+            return this.Values.GetValues(input);
         }
 
 
         /*********
         ** Protected methods
         *********/
-        /// <summary>Get the allowed subkeys (or <c>null</c> if any value is allowed).</summary>
-        protected virtual InvariantHashSet GetAllowedSubkeys()
+        /// <summary>Assert that an input argument is valid.</summary>
+        /// <param name="input">The input to check, if any.</param>
+        /// <exception cref="InvalidOperationException">The input does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
+        protected void AssertInput(ITokenString input)
         {
-            return this.Values.GetValidInputs();
-        }
+            bool hasInput = input.IsMeaningful();
 
-        /// <summary>Get the current token values.</summary>
-        /// <param name="name">The token name to check, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.RequiresSubkeys"/>.</exception>
-        protected void AssertTokenName(TokenName? name)
-        {
-            if (name == null)
-            {
-                // missing subkey
-                if (this.RequiresSubkeys)
-                    throw new InvalidOperationException($"The '{this.Name}' token requires a subkey.");
-            }
-            else
-            {
-                // not same root key
-                if (!this.Name.IsSameRootKey(name.Value))
-                    throw new InvalidOperationException($"The specified token key ({name}) is not handled by this token ({this.Name}).");
-
-                // no subkey allowed
-                if (!this.CanHaveSubkeys && name.Value.HasSubkey())
-                    throw new InvalidOperationException($"The '{this.Name}' token does not allow subkeys (:).");
-            }
+            if (!this.CanHaveInput && hasInput)
+                throw new InvalidOperationException($"The '{this.Name}' token does not allow input arguments ({InternalConstants.InputArgSeparator}).");
+            if (this.RequiresInput && !hasInput)
+                throw new InvalidOperationException($"The '{this.Name}' token requires an input argument.");
         }
 
         /// <summary>Try to parse a raw case-insensitive string into an enum value.</summary>
@@ -186,15 +149,6 @@ namespace ContentPatcher.Framework.Tokens
                 return false;
 
             return true;
-        }
-
-        /// <summary>Transitional method to convert a string input to <see cref="TokenString"/>.</summary>
-        /// <param name="value">The value to convert.</param>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        [Obsolete("This is a transitional method for tracking.")]
-        private ITokenString GetTokenString(string value, IContext context)
-        {
-            return new TokenString(value, context);
         }
     }
 }

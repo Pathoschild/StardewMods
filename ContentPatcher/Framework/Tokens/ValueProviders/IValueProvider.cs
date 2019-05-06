@@ -27,12 +27,18 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="input">The input argument, if applicable.</param>
         bool CanHaveMultipleValues(ITokenString input = null);
 
+        /// <summary>Validate that the provided input argument is valid.</summary>
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <param name="error">The validation error, if any.</param>
+        /// <returns>Returns whether validation succeeded.</returns>
+        bool TryValidateInput(ITokenString input, out string error);
+
         /// <summary>Validate that the provided values are valid for the input argument (regardless of whether they match).</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <param name="values">The values to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        bool TryValidate(ITokenString input, InvariantHashSet values, out string error);
+        bool TryValidateValues(ITokenString input, InvariantHashSet values, out string error);
 
         /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>
         InvariantHashSet GetValidInputs();

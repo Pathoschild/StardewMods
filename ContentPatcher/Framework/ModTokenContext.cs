@@ -45,14 +45,14 @@ namespace ContentPatcher.Framework
         /// <param name="token">The config token to add.</param>
         public void Add(IToken token)
         {
-            if (token.Name.HasSubkey())
-                throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because subkeys aren't supported.");
-            if (this.GlobalContext.Contains(token.Name.Key, enforceContext: false))
+            if (token.Name.Contains(InternalConstants.InputArgSeparator))
+                throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because input arguments aren't supported ({InternalConstants.InputArgSeparator} character).");
+            if (this.GlobalContext.Contains(token.Name, enforceContext: false))
                 throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because there's a global token with that name.");
-            if (this.StandardContext.Contains(token.Name.Key, enforceContext: false))
+            if (this.StandardContext.Contains(token.Name, enforceContext: false))
                 throw new InvalidOperationException($"The '{token.Name}' token is already registered.");
 
-            this.StandardContext.Tokens[token.Name.Key] = token;
+            this.StandardContext.Tokens[token.Name] = token;
         }
 
         /// <summary>Add a dynamic token value to the context.</summary>
@@ -60,13 +60,13 @@ namespace ContentPatcher.Framework
         public void Add(DynamicTokenValue tokenValue)
         {
             // validate
-            if (this.GlobalContext.Contains(tokenValue.Name.Key, enforceContext: false))
+            if (this.GlobalContext.Contains(tokenValue.Name, enforceContext: false))
                 throw new InvalidOperationException($"Can't register a '{tokenValue.Name}' token because there's a global token with that name.");
-            if (this.StandardContext.Contains(tokenValue.Name.Key, enforceContext: false))
+            if (this.StandardContext.Contains(tokenValue.Name, enforceContext: false))
                 throw new InvalidOperationException($"Can't register a '{tokenValue.Name}' dynamic token because there's a config token with that name.");
 
             // get (or create) token
-            if (!this.DynamicContext.Tokens.TryGetValue(tokenValue.Name.Key, out DynamicToken token))
+            if (!this.DynamicContext.Tokens.TryGetValue(tokenValue.Name, out DynamicToken token))
                 this.DynamicContext.Save(token = new DynamicToken(tokenValue.Name));
 
             // add token value
@@ -89,7 +89,7 @@ namespace ContentPatcher.Framework
                 tokenValue.UpdateContext(this);
                 if (tokenValue.Conditions.All(p => p.IsMatch(this)))
                 {
-                    DynamicToken token = this.DynamicContext.Tokens[tokenValue.Name.Key];
+                    DynamicToken token = this.DynamicContext.Tokens[tokenValue.Name];
                     token.SetValue(tokenValue.Value);
                     token.SetReady(true);
                 }
@@ -151,10 +151,10 @@ namespace ContentPatcher.Framework
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
         /// <returns>Return the values of the matching token, or an empty list if the token doesn't exist.</returns>
         /// <exception cref="ArgumentNullException">The specified token name is null.</exception>
-        public IEnumerable<string> GetValues(string name, string input, bool enforceContext)
+        public IEnumerable<string> GetValues(string name, ITokenString input, bool enforceContext)
         {
             IToken token = this.GetToken(name, enforceContext);
-            return token?.GetValues(new TokenName(name, input)) ?? Enumerable.Empty<string>();
+            return token?.GetValues(input) ?? Enumerable.Empty<string>();
         }
     }
 }
