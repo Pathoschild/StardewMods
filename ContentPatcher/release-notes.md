@@ -2,9 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* Updated for Stardew Valley 1.4.
-* Added support for data model assets in Stardew Valley 1.4.
 * Added support for tokens in field keys.
+* Added support for new asset types in the upcoming Stardew Valley 1.4.
 * Improved subkey validation.
 * Fixed incorrect error text when dynamic/config tokens conflict.
 * Removed support for the subkey syntax in condition values (where you could do `"Relationship": "Abigail:Married"` instead of `"Relationship:Abigail": "Married"`). This only affects one content pack on Nexus.
