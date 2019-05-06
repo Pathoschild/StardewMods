@@ -16,6 +16,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Normalise an asset name.</summary>
         private readonly Func<string, string> NormaliseAssetName;
 
+        /// <summary>The underlying contextual values.</summary>
+        protected readonly List<IContextual> ContextualValues = new List<IContextual>();
+
 
         /*********
         ** Accessors
@@ -63,29 +66,37 @@ namespace ContentPatcher.Framework.Patches
         public virtual bool UpdateContext(IContext context)
         {
             this.LastContext = context;
+            bool changed = false;
 
-            // update conditions
-            bool conditionsChanged;
+            // update contextual values
+            foreach (IContextual contextual in this.ContextualValues)
+            {
+                bool wasReady = contextual.IsReady;
+                if (contextual.UpdateContext(context) || contextual.IsReady != wasReady)
+                    changed = true;
+            }
+
+            // update source asset
+            if (this.FromLocalAsset != null)
+            {
+                bool sourceChanged = this.FromLocalAsset.UpdateContext(context);
+                this.IsReady = this.IsReady && this.FromLocalAsset.IsReady && this.ContentPack.HasFile(this.FromLocalAsset.Value);
+                changed = changed || sourceChanged;
+            }
+
+            // update target asset
+            this.TargetAsset = this.NormaliseAssetName(this.RawTargetAsset.Value);
+
+            // update ready flag
             {
                 bool wasReady = this.IsReady;
                 this.IsReady =
                     (this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(context)))
                     && this.GetTokensUsed().All(name => context.Contains(name, enforceContext: true));
-                conditionsChanged = wasReady != this.IsReady;
-            }
-            // update target asset
-            bool targetChanged = this.RawTargetAsset.UpdateContext(context);
-            this.TargetAsset = this.NormaliseAssetName(this.RawTargetAsset.Value);
-
-            // update source asset
-            bool sourceChanged = false;
-            if (this.FromLocalAsset != null)
-            {
-                sourceChanged = this.FromLocalAsset.UpdateContext(context);
-                this.IsReady = this.IsReady && this.FromLocalAsset.IsReady && this.ContentPack.HasFile(this.FromLocalAsset.Value);
+                changed = changed || this.IsReady != wasReady;
             }
 
-            return conditionsChanged || targetChanged || sourceChanged;
+            return changed;
         }
 
         /// <summary>Load the initial version of the asset.</summary>
@@ -125,12 +136,17 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
         protected Patch(string logName, PatchType type, ManagedContentPack contentPack, TokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normaliseAssetName)
         {
+            // set values
             this.LogName = logName;
             this.Type = type;
             this.ContentPack = contentPack;
             this.RawTargetAsset = assetName;
             this.Conditions = conditions.ToArray();
             this.NormaliseAssetName = normaliseAssetName;
+
+            // track contextuals
+            this.ContextualValues.AddRange(this.Conditions);
+            this.ContextualValues.Add(this.RawTargetAsset);
         }
     }
 }

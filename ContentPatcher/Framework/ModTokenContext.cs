@@ -79,16 +79,14 @@ namespace ContentPatcher.Framework
         {
             // update config tokens
             foreach (IToken token in this.StandardContext.Tokens.Values)
-            {
-                if (token.IsMutable)
-                    token.UpdateContext(this);
-            }
+                token.UpdateContext(this);
 
             // reset dynamic tokens
             foreach (DynamicToken token in this.DynamicContext.Tokens.Values)
                 token.SetReady(false);
             foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
             {
+                tokenValue.UpdateContext(this);
                 if (tokenValue.Conditions.All(p => p.IsMatch(this)))
                 {
                     DynamicToken token = this.DynamicContext.Tokens[tokenValue.Name.Key];

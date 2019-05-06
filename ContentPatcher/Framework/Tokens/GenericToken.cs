@@ -76,16 +76,19 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="name">The token name.</param>
         public bool CanHaveMultipleValues(TokenName name)
         {
-            return this.Values.CanHaveMultipleValues(this.GetTokenString(name.Subkey));
+            return this.Values.CanHaveMultipleValues(this.GetTokenString(name.Subkey, this.LastContext));
         }
 
         /// <summary>Perform custom validation.</summary>
         /// <param name="name">The token name to validate.</param>
         /// <param name="values">The values to validate.</param>
+        /// <param name="context">Provides access to contextual tokens.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidate(TokenName name, InvariantHashSet values, out string error)
+        public bool TryValidate(TokenName name, InvariantHashSet values, IContext context, out string error)
         {
+            this.LastContext = context;
+
             // validate subkey
             if (name.HasSubkey())
             {
@@ -106,7 +109,7 @@ namespace ContentPatcher.Framework.Tokens
             }
 
             // custom validation
-            if (!this.Values.TryValidate(this.GetTokenString(name.Subkey), values, out error))
+            if (!this.Values.TryValidate(this.GetTokenString(name.Subkey, context), values, out error))
                 return false;
 
             // no issues found
@@ -124,7 +127,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <exception cref="InvalidOperationException">The key doesn't match this token, or the key does not respect <see cref="IToken.CanHaveSubkeys"/> or <see cref="IToken.RequiresSubkeys"/>.</exception>
         public virtual InvariantHashSet GetAllowedValues(TokenName name)
         {
-            return this.Values.GetAllowedValues(this.GetTokenString(name.Subkey));
+            return this.Values.GetAllowedValues(this.GetTokenString(name.Subkey, this.LastContext));
         }
 
         /// <summary>Get the current token values.</summary>
@@ -133,7 +136,7 @@ namespace ContentPatcher.Framework.Tokens
         public virtual IEnumerable<string> GetValues(TokenName name)
         {
             this.AssertTokenName(name);
-            return this.Values.GetValues(this.GetTokenString(name.Subkey));
+            return this.Values.GetValues(this.GetTokenString(name.Subkey, this.LastContext));
         }
 
 
@@ -187,10 +190,11 @@ namespace ContentPatcher.Framework.Tokens
 
         /// <summary>Transitional method to convert a string input to <see cref="TokenString"/>.</summary>
         /// <param name="value">The value to convert.</param>
+        /// <param name="context">Provides access to contextual tokens.</param>
         [Obsolete("This is a transitional method for tracking.")]
-        private ITokenString GetTokenString(string value)
+        private ITokenString GetTokenString(string value, IContext context)
         {
-            return new TokenString(value, this.LastContext);
+            return new TokenString(value, context);
         }
     }
 }

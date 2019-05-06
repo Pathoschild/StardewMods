@@ -327,7 +327,7 @@ namespace ContentPatcher.Framework.Commands
             {
                 string[] tokensOutOfContext = patch
                     .TokensUsed
-                    .Union(patch.ParsedConditions.Select(p => p.Name.Key))
+                    .Union(patch.ParsedConditions.Select(p => p.Name))
                     .Distinct()
                     .Where(name => !tokenContext.GetToken(name, enforceContext: false).IsReady)
                     .OrderByIgnoreCase(name => name)

@@ -605,7 +605,7 @@ namespace ContentPatcher
                 {
                     if (name.HasSubkey())
                     {
-                        error = $"{name.Key} conditions don't allow subkeys (:)";
+                        error = $"{name.Key} conditions don't allow input arguments (:)";
                         conditions = null;
                         return false;
                     }
@@ -614,7 +614,7 @@ namespace ContentPatcher
                 {
                     if (!name.HasSubkey())
                     {
-                        error = $"{name.Key} conditions must specify a token subkey (see readme for usage)";
+                        error = $"{name.Key} conditions must specify an input argument (see readme for usage)";
                         conditions = null;
                         return false;
                     }
@@ -630,7 +630,7 @@ namespace ContentPatcher
                 }
 
                 // validate token keys & values
-                if (!token.TryValidate(name, values, out string customError))
+                if (!token.TryValidate(name, values, tokenContext, out string customError))
                 {
                     error = $"invalid {name} condition: {customError}";
                     conditions = null;
@@ -638,7 +638,7 @@ namespace ContentPatcher
                 }
 
                 // create condition
-                conditions.Add(new Condition(name, values));
+                conditions.Add(new Condition(name: lexToken.Name, input: new TokenString(lexToken.InputArg?.Parts, tokenContext), values: values));
             }
 
             // return parsed conditions

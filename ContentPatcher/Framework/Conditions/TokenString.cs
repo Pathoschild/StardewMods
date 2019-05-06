@@ -57,11 +57,23 @@ namespace ContentPatcher.Framework.Conditions
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="raw">The raw string before token substitution.</param>
-        /// <param name="tokenContext">The available token context.</param>
-        public TokenString(string raw, IContext tokenContext)
+        /// <param name="context">The available token context.</param>
+        public TokenString(string raw, IContext context)
+            : this(
+                lexTokens: new Lexer().ParseBits(raw, impliedBraces: false).ToArray(),
+                context: context
+            )
+        { }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="lexTokens">The lexical tokens parsed from the raw string.</param>
+        /// <param name="context">The available token context.</param>
+        public TokenString(ILexToken[] lexTokens, IContext context)
         {
+            this.LexTokens = lexTokens ?? new ILexToken[0];
+
             // set raw value
-            this.Raw = raw?.Trim();
+            this.Raw = string.Join("", this.LexTokens.Select(p => p.Text));
             if (string.IsNullOrWhiteSpace(this.Raw))
             {
                 this.ValueImpl = this.Raw;
@@ -70,12 +82,11 @@ namespace ContentPatcher.Framework.Conditions
             }
 
             // extract tokens
-            this.LexTokens = new Lexer().ParseBits(raw, impliedBraces: false).ToArray();
             bool isMutable = false;
             foreach (LexTokenToken lexToken in this.LexTokens.OfType<LexTokenToken>())
             {
                 TokenName name = new TokenName(lexToken.Name, lexToken.InputArg?.Text);
-                IToken token = tokenContext.GetToken(lexToken.Name, enforceContext: false);
+                IToken token = context.GetToken(lexToken.Name, enforceContext: false);
                 if (token != null)
                 {
                     this.Tokens.Add(name);
@@ -93,7 +104,7 @@ namespace ContentPatcher.Framework.Conditions
                     this.IsReadyImpl = false;
                 else
                 {
-                    this.GetApplied(tokenContext, out string finalStr, out bool isReady);
+                    this.GetApplied(context, out string finalStr, out bool isReady);
                     this.ValueImpl = finalStr;
                     this.IsReadyImpl = isReady;
                 }

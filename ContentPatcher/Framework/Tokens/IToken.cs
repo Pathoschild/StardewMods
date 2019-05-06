@@ -30,9 +30,10 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Perform custom validation.</summary>
         /// <param name="name">The token name to validate.</param>
         /// <param name="values">The values to validate.</param>
+        /// <param name="context">Provides access to contextual tokens.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        bool TryValidate(TokenName name, InvariantHashSet values, out string error);
+        bool TryValidate(TokenName name, InvariantHashSet values, IContext context, out string error);
 
         /// <summary>Get the current subkeys (if supported).</summary>
         IEnumerable<TokenName> GetSubkeys();

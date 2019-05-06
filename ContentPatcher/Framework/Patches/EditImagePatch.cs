@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
-using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -48,20 +47,15 @@ namespace ContentPatcher.Framework.Patches
         public EditImagePatch(string logName, ManagedContentPack contentPack, TokenString assetName, IEnumerable<Condition> conditions, TokenString fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor, Func<string, string> normaliseAssetName)
             : base(logName, PatchType.EditImage, contentPack, assetName, conditions, normaliseAssetName)
         {
+            // set fields
             this.FromLocalAsset = fromLocalAsset;
             this.FromArea = fromArea != Rectangle.Empty ? fromArea : null as Rectangle?;
             this.ToArea = toArea != Rectangle.Empty ? toArea : null as Rectangle?;
             this.PatchMode = patchMode;
             this.Monitor = monitor;
-        }
 
-        /// <summary>Update the patch data when the context changes.</summary>
-        /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the patch data changed.</returns>
-        public override bool UpdateContext(IContext context)
-        {
-            bool localAssetChanged = this.FromLocalAsset.UpdateContext(context);
-            return base.UpdateContext(context) || localAssetChanged;
+            // track contextuals
+            this.ContextualValues.Add(this.FromLocalAsset);
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>

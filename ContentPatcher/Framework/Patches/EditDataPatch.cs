@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
-using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -31,9 +30,6 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The token strings which contain mutable tokens.</summary>
         private readonly TokenString[] MutableTokenStrings;
 
-        /// <summary>The underlying contextual values.</summary>
-        private readonly IContextual[] ContextualValues;
-
 
         /*********
         ** Public methods
@@ -50,28 +46,16 @@ namespace ContentPatcher.Framework.Patches
         public EditDataPatch(string logName, ManagedContentPack contentPack, TokenString assetName, IEnumerable<Condition> conditions, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IMonitor monitor, Func<string, string> normaliseAssetName)
             : base(logName, PatchType.EditData, contentPack, assetName, conditions, normaliseAssetName)
         {
+            // set fields
             this.Records = records.ToArray();
             this.Fields = fields.ToArray();
             this.Monitor = monitor;
             this.MutableTokenStrings = this.GetTokenStrings(this.Records, this.Fields).Where(str => str.Tokens.Any()).ToArray();
 
-            this.ContextualValues = this.Records.Concat<IContextual>(this.Fields).Where(p => p != null).ToArray();
-        }
-
-        /// <summary>Update the patch data when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the patch data changed.</returns>
-        public override bool UpdateContext(IContext context)
-        {
-            bool changed = base.UpdateContext(context);
-
-            foreach (IContextual value in this.ContextualValues)
-            {
-                if (value.UpdateContext(context))
-                    changed = true;
-            }
-
-            return changed;
+            // track contextuals
+            this.ContextualValues.AddRange(this.Records.Where(p => p != null));
+            this.ContextualValues.AddRange(this.Fields.Where(p => p != null));
+            this.ContextualValues.AddRange(this.Conditions);
         }
 
         /// <summary>Get the token names used by this patch in its fields.</summary>
