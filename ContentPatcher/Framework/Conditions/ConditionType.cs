@@ -66,6 +66,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>A profession ID the player has.</summary>
         HasProfession,
 
+        /// <summary>A letter ID read by the player. Equivalent to <see cref="HasFlag"/>, but only counts letters that have been displayed to the user.</summary>
+        HasReadLetter,
+
         /// <summary>An event ID the player saw.</summary>
         HasSeenEvent,
 

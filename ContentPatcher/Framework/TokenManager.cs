@@ -147,6 +147,7 @@ namespace ContentPatcher.Framework
             yield return new ConditionTypeValueProvider(ConditionType.FarmName, () => Game1.player.farmName.Value, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.FarmType, () => this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.HasFlag, this.GetMailFlags, NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.HasReadLetter, this.GetReadLetters, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.Spouse, () => Game1.player?.spouse, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.Weather, this.GetCurrentWeather, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(Weather)));
@@ -204,6 +205,15 @@ namespace ContentPatcher.Framework
             return player.eventsSeen
                 .OrderBy(p => p)
                 .Select(p => p.ToString(CultureInfo.InvariantCulture));
+        }
+
+        /// <summary>Get the letter IDs read by the player.</summary>
+        /// <remarks>See game logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
+        private IEnumerable<string> GetReadLetters()
+        {
+            if (Game1.player == null)
+                return new string[0];
+            return Game1.player.mailReceived;
         }
 
         /// <summary>Get the letter IDs and mail flags set for the player.</summary>

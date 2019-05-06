@@ -524,8 +524,9 @@ Custom professions added by a mod are represented by their integer profession ID
 <td>HasFlag</td>
 <td>
 
-The letter IDs received by the player. The game also uses this to store some useful flags. For
-example:
+The letter IDs received by the player.
+
+The game also uses this to store some useful flags. For example:
 
 flag | meaning
 ---- | -------
@@ -555,6 +556,11 @@ flag | meaning
 The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
 
 </td>
+</tr>
+
+<tr valign="top">
+<td>HasReadLetter</td>
+<td>The letter IDs opened by the player (i.e. a letter UI was displayed).</td>
 </tr>
 
 <tr valign="top">
