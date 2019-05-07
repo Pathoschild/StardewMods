@@ -56,13 +56,32 @@ namespace ContentPatcher.Framework.Migrations
             if (!base.TryMigrate(content, out error))
                 return false;
 
-            // 1.7 adds tokens in field keys
-            foreach (PatchConfig patch in content.Changes)
+            // 1.7 adds tokens in dynamic token values
+            if (content.DynamicTokens != null)
             {
-                if (patch.Fields != null && patch.Fields.Keys.Any(p => p.Contains("{{")))
+                if (content.DynamicTokens.Any(p => p.Value?.Contains("{{") == true))
                 {
-                    error = this.GetNounPhraseError("using tokens in field keys");
+                    error = this.GetNounPhraseError("using tokens in dynamic token values");
                     return false;
+                }
+            }
+
+            // 1.7 adds tokens in field keys and condition values
+            if (content.Changes != null)
+            {
+                foreach (PatchConfig patch in content.Changes)
+                {
+                    if (patch.Fields != null && patch.Fields.Keys.Any(key => key.Contains("{{")))
+                    {
+                        error = this.GetNounPhraseError("using tokens in field keys");
+                        return false;
+                    }
+
+                    if (patch.When != null && patch.When.Any(condition => condition.Value?.Contains("{{") == true))
+                    {
+                        error = this.GetNounPhraseError("using tokens in condition values");
+                        return false;
+                    }
                 }
             }
 
