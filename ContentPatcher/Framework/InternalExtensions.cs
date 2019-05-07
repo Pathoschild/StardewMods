@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework
 {
@@ -60,6 +61,23 @@ namespace ContentPatcher.Framework
         public static bool IsMeaningful(this ITokenString str)
         {
             return !string.IsNullOrWhiteSpace(str?.Value);
+        }
+
+        /// <summary>Get unique comma-separated values from a token string.</summary>
+        /// <param name="tokenStr">The token string to parse.</param>
+        /// <exception cref="InvalidOperationException">The token string is not ready (<see cref="IContextual.IsReady"/> is false).</exception>
+        public static InvariantHashSet SplitValues(this ITokenString tokenStr)
+        {
+            if (string.IsNullOrWhiteSpace(tokenStr?.Value))
+                return new InvariantHashSet();
+            if (!tokenStr.IsReady)
+                throw new InvalidOperationException($"Can't get values from a non-ready token string (raw value: {tokenStr.Raw}).");
+
+            return new InvariantHashSet(
+                tokenStr.Value
+                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(p => p.Trim())
+            );
         }
     }
 }

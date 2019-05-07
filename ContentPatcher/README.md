@@ -232,11 +232,15 @@ There are two ways to use tokens.
 <dd>
 
 You can make a patch conditional by adding a `When` field, which can list any number of conditions.
-Each condition consists of a single token without braces (like `Season`) and the values to match
-(like `spring, summer`). Condition names and values are not case-sensitive.
+Each condition has...
+* A key (before `:`) containing a [token](#advanced-tokens--conditions) without the outer curly
+  braces, like `Season` or `HasValue:{{spouse}}`. The key is not case-sensitive.
+* A value (after `:`) containing the comma-separated values to match, like `spring, summer`. If the
+  key token returns any of these values, the condition matches. This field supports
+  [tokens](#advanced-tokens--conditions) and is not case-sensitive.
 
-For example, this changes the house texture only in Spring or Summer, if the player hasn't upgraded
-their house and the asset exists:
+For example: this changes the house texture only in spring or summer, if the player is married, and
+the number of hearts with their spouse matches the number in the `{{minHearts}}` config field:
 
 ```js
 {
@@ -245,8 +249,8 @@ their house and the asset exists:
     "FromFile": "assets/{{season}}_house.png",
     "When": {
         "Season": "spring, summer",
-        "FarmhouseUpgrade": "0",
-        "FileExists:assets/{{season}}_house.png": "true"
+        "HasValue:{{spouse}}": "true",
+        "Hearts:{{spouse}}": "{{minHearts}}"
     }
 }
 ```

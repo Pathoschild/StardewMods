@@ -619,16 +619,20 @@ namespace ContentPatcher
                 }
 
                 // parse values
-                InvariantHashSet values = this.ParseCommaDelimitedField(pair.Value);
-                if (!values.Any())
+                if (string.IsNullOrWhiteSpace(pair.Value))
                 {
-                    error = $"{lexToken.Name} can't be empty";
+                    error = $"can't parse condition {pair.Key}: value can't be empty";
                     conditions = null;
+                    return false;
+                }
+                if (!this.TryParseStringTokens(pair.Value, tokenContext, migrator, out error, out ITokenString values))
+                {
+                    error = $"can't parse condition {pair.Key}: {error}";
                     return false;
                 }
 
                 // validate token keys & values
-                if (!token.TryValidateValues(input, values, tokenContext, out string customError))
+                if (!values.IsMutable && !token.TryValidateValues(input, values.SplitValues(), tokenContext, out string customError))
                 {
                     error = $"invalid {lexToken.Name} condition: {customError}";
                     conditions = null;

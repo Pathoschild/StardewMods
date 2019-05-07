@@ -8,11 +8,11 @@
   * `IsCommunityCenterComplete`: whether all bundles in the community center are completed.
   * `IsMainPlayer`: whether the player is the main player.
 * Tokens can now be nested (like `Hearts:{{spouse}}`).
-* Tokens can now be used in dynamic token values and `Fields` keys.
+* Tokens can now be used almost everywhere (including dynamic token values, condition values, and `Fields` keys).
 * Tokens with multiple values can now be used as placeholders.
-* The `config.json` schema now supports unrestricted values.
+* Tokens from `config.json` can now be unrestricted (`AllowValues` is now optional).
 * Improved input argument validation.
-* Added support for new asset types in the upcoming Stardew Valley 1.4.
+* Added support for new asset structures in the upcoming Stardew Valley 1.4.
 * Fixed incorrect error text when dynamic/config tokens conflict.
 * Fixed config schema issues logged as `Debug` instead of `Warning`.
 * Removed support for the condition value subkey syntax (like `"Relationship": "Abigail:Married"` instead of `"Relationship:Abigail": "Married"`). This only affects one content pack on Nexus.

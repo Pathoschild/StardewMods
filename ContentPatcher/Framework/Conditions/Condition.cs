@@ -17,13 +17,16 @@ namespace ContentPatcher.Framework.Conditions
         public ITokenString Input { get; }
 
         /// <summary>The token values for which this condition is valid.</summary>
-        public InvariantHashSet Values { get; }
+        public ITokenString Values { get; }
+
+        /// <summary>The current values from <see cref="Values"/>.</summary>
+        public InvariantHashSet CurrentValues { get; private set; }
 
         /// <summary>Whether the instance may change depending on the context.</summary>
-        public bool IsMutable => this.Input?.IsMutable ?? true;
+        public bool IsMutable => this.Values.IsMutable || this.Input?.IsMutable == true;
 
         /// <summary>Whether the instance is valid for the current context.</summary>
-        public bool IsReady => this.Input?.IsReady ?? true;
+        public bool IsReady => this.Values.IsReady && this.Input?.IsReady != false;
 
 
         /*********
@@ -33,11 +36,14 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="name">The token name in the context.</param>
         /// <param name="input">The token input argument, if any.</param>
         /// <param name="values">The token values for which this condition is valid.</param>
-        public Condition(string name, ITokenString input, InvariantHashSet values)
+        public Condition(string name, ITokenString input, ITokenString values)
         {
             this.Name = name;
             this.Input = input;
             this.Values = values;
+
+            if (this.Values.IsReady)
+                this.CurrentValues = this.Values.SplitValues();
         }
 
         /// <summary>Whether the condition matches.</summary>
@@ -49,7 +55,7 @@ namespace ContentPatcher.Framework.Conditions
 
             return context
                 .GetValues(this.Name, this.Input, enforceContext: true)
-                .Any(value => this.Values.Contains(value));
+                .Any(value => this.CurrentValues.Contains(value));
         }
 
         /// <summary>Update the instance when the context changes.</summary>
@@ -57,7 +63,18 @@ namespace ContentPatcher.Framework.Conditions
         /// <returns>Returns whether the instance changed.</returns>
         public bool UpdateContext(IContext context)
         {
-            return this.Input?.UpdateContext(context) ?? false;
+            bool changed = false;
+
+            if (this.Values.UpdateContext(context))
+            {
+                changed = true;
+                this.CurrentValues = this.Values.SplitValues();
+            }
+            if (this.Input?.UpdateContext(context) == true)
+                changed = true;
+
+
+            return changed;
         }
     }
 }

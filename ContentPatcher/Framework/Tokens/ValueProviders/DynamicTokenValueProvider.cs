@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
@@ -43,7 +42,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             }
 
             // get possible values from literal token
-            InvariantHashSet splitValues = this.ExtractValues(possibleValues);
+            InvariantHashSet splitValues = possibleValues.SplitValues();
             foreach (string value in splitValues)
                 this.AllowedRootValues.Add(value.Trim());
             this.CanHaveMultipleValuesForRoot = this.CanHaveMultipleValuesForRoot || splitValues.Count > 1;
@@ -53,7 +52,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="values">The values to set.</param>
         public void SetValue(ITokenString values)
         {
-            this.Values = this.ExtractValues(values);
+            this.Values = values.SplitValues();
         }
 
         /// <summary>Set whether the token is valid for the current context.</summary>
@@ -83,26 +82,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (input.IsMeaningful())
                 return new[] { this.Values.Contains(input.Value).ToString() };
             return this.Values;
-        }
-
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Get the comma-separated values from a token string.</summary>
-        /// <param name="values">The token string to parse.</param>
-        private InvariantHashSet ExtractValues(ITokenString values)
-        {
-            if (string.IsNullOrWhiteSpace(values?.Value))
-                return new InvariantHashSet();
-            if (!values.IsReady)
-                throw new InvalidOperationException($"Can't get values from a non-ready token string (raw value: {values.Raw}).");
-
-            return new InvariantHashSet(
-                values.Value
-                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(p => p.Trim())
-            );
         }
     }
 }
