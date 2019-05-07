@@ -23,6 +23,7 @@ namespace ContentPatcher.Framework.Migrations
             {
                 ConditionType.HasReadLetter.ToString(),
                 ConditionType.HasValue.ToString(),
+                ConditionType.IsCommunityCenterComplete.ToString(),
                 ConditionType.IsMainPlayer.ToString()
             };
         }

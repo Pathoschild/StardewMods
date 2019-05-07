@@ -87,6 +87,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The current farm type.</summary>
         FarmType,
 
+        /// <summary>Whether all bundles in the community center are completed.</summary>
+        IsCommunityCenterComplete,
+
         /****
         ** Other
         ****/
