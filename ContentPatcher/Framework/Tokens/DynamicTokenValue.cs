@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
 {
@@ -15,16 +14,16 @@ namespace ContentPatcher.Framework.Tokens
         public string Name { get; }
 
         /// <summary>The token value to set.</summary>
-        public InvariantHashSet Value { get; }
+        public ITokenString Value { get; }
 
         /// <summary>The conditions that must match to set this value.</summary>
         public Condition[] Conditions { get; }
 
         /// <summary>Whether the instance may change depending on the context.</summary>
-        public bool IsMutable => this.Conditions.Any(p => p.IsMutable);
+        public bool IsMutable => this.Value.IsMutable || this.Conditions.Any(p => p.IsMutable);
 
         /// <summary>Whether the instance is valid for the current context.</summary>
-        public bool IsReady => this.Conditions.All(p => p.IsReady);
+        public bool IsReady => this.Value.IsReady && this.Conditions.All(p => p.IsReady);
 
 
         /*********
@@ -34,7 +33,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="name">The name of the token whose value to set.</param>
         /// <param name="value">The token value to set.</param>
         /// <param name="conditions">The conditions that must match to set this value.</param>
-        public DynamicTokenValue(string name, InvariantHashSet value, IEnumerable<Condition> conditions)
+        public DynamicTokenValue(string name, ITokenString value, IEnumerable<Condition> conditions)
         {
             this.Name = name;
             this.Value = value;
@@ -53,6 +52,9 @@ namespace ContentPatcher.Framework.Tokens
                 if (value.UpdateContext(context))
                     changed = true;
             }
+
+            if (this.Value.UpdateContext(context))
+                changed = true;
 
             return changed;
         }

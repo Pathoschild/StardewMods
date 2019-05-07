@@ -8,7 +8,7 @@
   * `IsCommunityCenterComplete`: whether all bundles in the community center are completed.
   * `IsMainPlayer`: whether the player is the main player.
 * Tokens can now be nested (like `Hearts:{{spouse}}`).
-* Tokens can now be used in `Fields` keys.
+* Tokens can now be used in dynamic token values and `Fields` keys.
 * Tokens with multiple values can now be used as placeholders.
 * The `config.json` schema now supports unrestricted values.
 * Improved input argument validation.

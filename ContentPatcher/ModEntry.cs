@@ -302,14 +302,24 @@ namespace ContentPatcher
                             }
 
                             // parse values
-                            InvariantHashSet values = entry.Value != null ? this.ParseCommaDelimitedField(entry.Value) : new InvariantHashSet();
+                            ITokenString values;
+                            if (!string.IsNullOrWhiteSpace(entry.Value))
+                            {
+                                if (!this.TryParseStringTokens(entry.Value, tokenContext, current.Migrator, out string valueError, out values))
+                                {
+                                    LogSkip($"the token value is invalid: {valueError}");
+                                    continue;
+                                }
+                            }
+                            else
+                                values = new LiteralString("");
 
                             // parse conditions
                             IList<Condition> conditions;
                             {
-                                if (!this.TryParseConditions(entry.When, tokenContext, current.Migrator, out conditions, out string error))
+                                if (!this.TryParseConditions(entry.When, tokenContext, current.Migrator, out conditions, out string conditionError))
                                 {
-                                    this.Monitor.Log($"Ignored {current.Manifest.Name} > '{entry.Name}' token: its {nameof(DynamicTokenConfig.When)} field is invalid: {error}.", LogLevel.Warn);
+                                    this.Monitor.Log($"Ignored {current.Manifest.Name} > '{entry.Name}' token: its {nameof(DynamicTokenConfig.When)} field is invalid: {conditionError}.", LogLevel.Warn);
                                     continue;
                                 }
                             }

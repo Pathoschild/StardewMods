@@ -1,5 +1,4 @@
 using ContentPatcher.Framework.Tokens.ValueProviders;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
 {
@@ -26,7 +25,7 @@ namespace ContentPatcher.Framework.Tokens
 
         /// <summary>Add a set of possible values.</summary>
         /// <param name="possibleValues">The possible values to add.</param>
-        public void AddAllowedValues(InvariantHashSet possibleValues)
+        public void AddAllowedValues(ITokenString possibleValues)
         {
             this.DynamicValues.AddAllowedValues(possibleValues);
             this.CanHaveMultipleRootValues = this.DynamicValues.CanHaveMultipleValues();
@@ -34,7 +33,7 @@ namespace ContentPatcher.Framework.Tokens
 
         /// <summary>Set the current values.</summary>
         /// <param name="values">The values to set.</param>
-        public void SetValue(InvariantHashSet values)
+        public void SetValue(ITokenString values)
         {
             this.DynamicValues.SetValue(values);
         }

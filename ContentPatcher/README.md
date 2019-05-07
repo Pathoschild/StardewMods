@@ -162,9 +162,9 @@ All patches support these common fields:
 field      | purpose
 ---------- | -------
 `Action`   | The kind of change to make (`Load`, `EditImage`, or `EditData`); explained in the next section.
-`Target`   | The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside your game's `Content` folder, without the file extension or language. For example: use `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`. Capitalisation doesn't matter. Your changes are applied in all languages unless you specify a language [condition](#advanced-tokens--conditions).
+`Target`   | The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside your game's `Content` folder, without the file extension or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`). This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter. Your changes are applied in all languages unless you specify a language [condition](#advanced-tokens--conditions).
 `LogName`  | _(optional)_ A name for this patch shown in log messages. This is very useful for understanding errors; if not specified, will default to a name like `entry #14 (EditImage Animals/Dinosaurs)`.
-`Enabled`  | _(optional)_ Whether to apply this patch. Default true.
+`Enabled`  | _(optional)_ Whether to apply this patch. Default true. This fields supports immutable [tokens](#advanced-tokens--conditions) (e.g. config tokens) if they return true/false.
 `When`     | _(optional)_ Only apply the patch if the given conditions match (see [_conditions_](#advanced-tokens--conditions)).
 
 ### Patch types
@@ -179,7 +179,7 @@ field      | purpose
   field      | purpose
   ---------- | -------
   &nbsp;     | See _common fields_ above.
-  `FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.json` (data), `.png` (image), `.tbin` (map), or `.xnb` file. Capitalisation doesn't matter. 
+  `FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.json` (data), `.png` (image), `.tbin` (map), or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter.
 
 * **Edit an image** (`"Action": "EditImage"`).  
   Instead of replacing an entire spritesheet, you can replace just the part you need. For example,
@@ -192,7 +192,7 @@ field      | purpose
   field      | purpose
   ---------- | -------
   &nbsp;     | See _common fields_ above.
-  `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file. Capitalisation doesn't matter.
+  `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter.
   `FromArea` | _(optional)_ The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. [See example in overview](#overview).
   `ToArea`   | _(optional)_ The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. [See example in overview](#overview).
   `PatchMode`| _(optional)_ How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace the target area with your source image.</li><li><code>Overlay</code>: draw your source image over the target, so the original image shows through transparent pixels. Note that semi-transparent pixels will replace the underlying pixels, they won't be combined.</li></ul>
@@ -203,8 +203,8 @@ field      | purpose
   field      | purpose
   ---------- | -------
   &nbsp;     | See _common fields_ above.
-  `Fields`   | _(optional)_ The individual fields you want to change for existing entries. [See example in overview](#overview).
-  `Entries`  | _(optional)_ The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. [See example in overview](#overview).<br />To add an entry, just specify a key that doesn't exist.<br />To delete an entry, set the value to `null` (like `"some key": null`).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
+  `Fields`   | _(optional)_ The individual fields you want to change for existing entries. This field supports [tokens](#advanced-tokens--conditions) in field keys and values. [See example in overview](#overview). 
+  `Entries`  | _(optional)_ The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. This field supports [tokens](#advanced-tokens--conditions) in entry keys and values. [See example in overview](#overview).<br />To add an entry, just specify a key that doesn't exist.<br />To delete an entry, set the value to `null` (like `"some key": null`).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
 
 ## Advanced: tokens & conditions
 ### Overview
@@ -302,12 +302,12 @@ For example, this gives the farmhouse a different appearance in each season:
 }
 ```
 
-You can do this in the `FromFile`, `Target`, `Enabled`, `Entries`, and `Fields` fields (including entry/field keys).
+You can use placeholders in most fields (the documentation for each field will mention if it does).
 
-Only tokens which return a single value can be used as tokens. For example, `{{season}}` is allowed
-but `{{hasProfession}}` is not. Most tokens have an optional `{{tokenName:value}}` form which
-returns `true` or `false` (like `{{hasProfession:Gemologist}}`); that form can be used in tokens if
-needed (though it may be of limited use).
+Tokens which return a single value (like `{{season}}`) are most useful in placeholders. You can
+use multi-value tokens as placeholders too, which will return a comma-delimited list. Most tokens
+also have an optional `{{tokenName:value}}` form which returns `true` or `false` (like
+`{{hasProfession:Gemologist}}`).
 
 </dd>
 </dl>
@@ -746,7 +746,7 @@ Each block in this section defines the value for a token using these fields:
 field   | purpose
 ------- | -------
 `Name`  | The name of the token to use for [tokens & condition](#advanced-tokens--conditions).
-`Value` | The value(s) to set. This can be a comma-delimited value to give it multiple values. If _any_ block for a token name has multiple values, it will only be usable in conditions.
+`Value` | The value(s) to set. This can be a comma-delimited value to give it multiple values. If _any_ block for a token name has multiple values, it will only be usable in conditions. This field supports [tokens](#advanced-tokens--conditions), including dynamic tokens defined before this entry.
 `When`  | _(optional)_ Only set the value if the given [conditions](#advanced-tokens--conditions) match. If not specified, always matches.
 
 Some usage notes:
@@ -754,8 +754,8 @@ Some usage notes:
 * If you list multiple blocks for the same token name, the last one whose conditions match will be
   used.
 * You can use tokens in the `Value` and `When` fields. That includes dynamic tokens if they're
-  defined earlier in the list (in which case the last value _defined before the current block_ will
-  be used).
+  defined earlier in the list (in which case the last applicable value _defined before this entry_
+  will be used).
 * Dynamic tokens can't have the same name as an existing global token or player config field.
 
 For example, this `content.json` defines a custom `{{style}}` token and uses it to load different
@@ -767,11 +767,11 @@ crop sprites depending on the weather:
     "DynamicTokens": [
         {
             "Name": "Style",
-            "Value": "default"
+            "Value": "dry"
         },
         {
             "Name": "Style",
-            "Value": "drenched",
+            "Value": "wet",
             "When": {
                 "Weather": "rain, storm"
             }
