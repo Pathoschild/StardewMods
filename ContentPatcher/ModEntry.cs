@@ -248,7 +248,7 @@ namespace ContentPatcher
         private void LoadContentPacks(IEnumerable<RawContentPack> contentPacks)
         {
             // load content packs
-            ConfigFileHandler configFileHandler = new ConfigFileHandler(this.ConfigFileName, this.ParseCommaDelimitedField, (pack, label, reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {label}: {reason}"));
+            ConfigFileHandler configFileHandler = new ConfigFileHandler(this.ConfigFileName, this.ParseCommaDelimitedField, (pack, label, reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {label}: {reason}", LogLevel.Warn));
             foreach (RawContentPack current in contentPacks)
             {
                 this.Monitor.VerboseLog($"Loading content pack '{current.Manifest.Name}'...");

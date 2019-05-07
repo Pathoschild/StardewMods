@@ -12,6 +12,7 @@
 * Improved input argument validation.
 * Added support for new asset types in the upcoming Stardew Valley 1.4.
 * Fixed incorrect error text when dynamic/config tokens conflict.
+* Fixed config schema issues logged as `Debug` instead of `Warning`.
 * Removed support for the condition value subkey syntax (like `"Relationship": "Abigail:Married"` instead of `"Relationship:Abigail": "Married"`). This only affects one content pack on Nexus.
 
 ## 1.6.5
