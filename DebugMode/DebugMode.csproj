@@ -1,7 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>DebugMode</AssemblyName>
+    <Version>1.9.4</Version>
     <RootNamespace>Pathoschild.Stardew.DebugMode</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>

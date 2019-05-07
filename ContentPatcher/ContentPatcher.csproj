@@ -1,7 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>ContentPatcher</AssemblyName>
+    <Version>1.6.5</Version>
     <RootNamespace>ContentPatcher</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>

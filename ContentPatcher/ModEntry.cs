@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using ContentPatcher.Framework;
 using ContentPatcher.Framework.Commands;
 using ContentPatcher.Framework.Conditions;
@@ -20,6 +21,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Enums;
 using StardewModdingAPI.Events;
 
+[assembly: InternalsVisibleTo("Pathoschild.Stardew.Tests.Mods")]
 namespace ContentPatcher
 {
     /// <summary>The mod entry point.</summary>
