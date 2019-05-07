@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>ContentPatcher</AssemblyName>
-    <RootNamespace>Pathoschild.Stardew.ContentPatcher</RootNamespace>
+    <RootNamespace>ContentPatcher</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
 
