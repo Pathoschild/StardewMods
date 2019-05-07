@@ -29,7 +29,7 @@ namespace ContentPatcher.Framework.Patches
         private readonly EditDataPatchField[] Fields;
 
         /// <summary>The token strings which contain mutable tokens.</summary>
-        private readonly TokenString[] MutableTokenStrings;
+        private readonly ITokenString[] MutableTokenStrings;
 
 
         /*********
@@ -44,7 +44,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="fields">The data fields to edit.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditDataPatch(string logName, ManagedContentPack contentPack, TokenString assetName, IEnumerable<Condition> conditions, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IMonitor monitor, Func<string, string> normaliseAssetName)
+        public EditDataPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IMonitor monitor, Func<string, string> normaliseAssetName)
             : base(logName, PatchType.EditData, contentPack, assetName, conditions, normaliseAssetName)
         {
             // set fields
@@ -65,7 +65,7 @@ namespace ContentPatcher.Framework.Patches
             foreach (string name in base.GetTokensUsed())
                 yield return name;
 
-            foreach (TokenString str in this.MutableTokenStrings)
+            foreach (ITokenString str in this.MutableTokenStrings)
             {
                 foreach (LexTokenToken lexToken in str.GetTokenPlaceholders(recursive: true))
                     yield return lexToken.Name;
@@ -138,11 +138,11 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Get all token strings in the given data.</summary>
         /// <param name="records">The data records to edit.</param>
         /// <param name="fields">The data fields to edit.</param>
-        private IEnumerable<TokenString> GetTokenStrings(IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields)
+        private IEnumerable<ITokenString> GetTokenStrings(IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields)
         {
-            foreach (TokenString tokenStr in records.SelectMany(p => p.GetTokenStrings()))
+            foreach (ITokenString tokenStr in records.SelectMany(p => p.GetTokenStrings()))
                 yield return tokenStr;
-            foreach (TokenString tokenStr in fields.SelectMany(p => p.GetTokenStrings()))
+            foreach (ITokenString tokenStr in fields.SelectMany(p => p.GetTokenStrings()))
                 yield return tokenStr;
         }
 

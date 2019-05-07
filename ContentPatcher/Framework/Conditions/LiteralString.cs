@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
@@ -53,6 +55,13 @@ namespace ContentPatcher.Framework.Conditions
         public bool UpdateContext(IContext context)
         {
             return false;
+        }
+
+        /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>
+        /// <param name="recursive">Whether to scan recursively.</param> 
+        public IEnumerable<LexTokenToken> GetTokenPlaceholders(bool recursive)
+        {
+            return Enumerable.Empty<LexTokenToken>();
         }
     }
 }

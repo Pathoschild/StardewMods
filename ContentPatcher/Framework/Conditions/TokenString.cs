@@ -146,7 +146,7 @@ namespace ContentPatcher.Framework.Conditions
                 {
                     case LexTokenToken lexTokenToken:
                         IToken token = context.GetToken(lexTokenToken.Name, enforceContext: true);
-                        TokenString input = new TokenString(lexTokenToken.InputArg?.Parts, context);
+                        ITokenString input = new TokenString(lexTokenToken.InputArg?.Parts, context);
                         if (token != null)
                         {
                             string[] values = token.GetValues(input).ToArray();

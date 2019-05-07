@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 
@@ -20,10 +19,10 @@ namespace ContentPatcher.Framework.Patches
         ** Accessors
         *********/
         /// <summary>The unique key for the entry in the data file.</summary>
-        public TokenString EntryKey { get; }
+        public ITokenString EntryKey { get; }
 
         /// <summary>The field index to change.</summary>
-        public TokenString FieldKey { get; }
+        public ITokenString FieldKey { get; }
 
         /// <summary>The entry value to set.</summary>
         public TokenisableJToken Value { get; }
@@ -42,7 +41,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="entryKey">The unique key for the entry in the data file.</param>
         /// <param name="fieldKey">The field number to change.</param>
         /// <param name="value">The entry value to set.</param>
-        public EditDataPatchField(TokenString entryKey, TokenString fieldKey, TokenisableJToken value)
+        public EditDataPatchField(ITokenString entryKey, ITokenString fieldKey, TokenisableJToken value)
         {
             this.EntryKey = entryKey;
             this.FieldKey = fieldKey;
@@ -52,11 +51,11 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <summary>Get all token strings used in the record.</summary>
-        public IEnumerable<TokenString> GetTokenStrings()
+        public IEnumerable<ITokenString> GetTokenStrings()
         {
             yield return this.EntryKey;
             yield return this.FieldKey;
-            foreach (TokenString str in this.Value.GetTokenStrings())
+            foreach (ITokenString str in this.Value.GetTokenStrings())
                 yield return str;
         }
 

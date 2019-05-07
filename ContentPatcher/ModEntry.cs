@@ -426,7 +426,7 @@ namespace ContentPatcher
                 }
 
                 // parse target asset
-                TokenString assetName;
+                ITokenString assetName;
                 {
                     if (string.IsNullOrWhiteSpace(entry.Target))
                         return TrackSkip($"must set the {nameof(PatchConfig.Target)} field.");
@@ -456,7 +456,7 @@ namespace ContentPatcher
                     case PatchType.Load:
                         {
                             // init patch
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, migrator, out string error, out TokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, migrator, out string error, out ITokenString fromAsset))
                                 return TrackSkip(error);
                             patch = new LoadPatch(entry.LogName, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
                         }
@@ -475,7 +475,7 @@ namespace ContentPatcher
                             {
                                 foreach (KeyValuePair<string, JToken> pair in entry.Entries)
                                 {
-                                    if (!this.TryParseStringTokens(pair.Key, tokenContext, migrator, out string keyError, out TokenString key))
+                                    if (!this.TryParseStringTokens(pair.Key, tokenContext, migrator, out string keyError, out ITokenString key))
                                         return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key}' key is invalid: {keyError}.");
                                     if (!this.TryParseJsonTokens(pair.Value, tokenContext, migrator, out string error, out TokenisableJToken value))
                                         return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key}' value is invalid: {error}.");
@@ -491,14 +491,14 @@ namespace ContentPatcher
                                 foreach (KeyValuePair<string, IDictionary<string, JToken>> recordPair in entry.Fields)
                                 {
                                     // parse entry key
-                                    if (!this.TryParseStringTokens(recordPair.Key, tokenContext, migrator, out string keyError, out TokenString key))
+                                    if (!this.TryParseStringTokens(recordPair.Key, tokenContext, migrator, out string keyError, out ITokenString key))
                                         return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} is invalid: {keyError}.");
 
                                     // parse fields
                                     foreach (var fieldPair in recordPair.Value)
                                     {
                                         // parse field key
-                                        if (!this.TryParseStringTokens(fieldPair.Key, tokenContext, migrator, out string fieldError, out TokenString fieldKey))
+                                        if (!this.TryParseStringTokens(fieldPair.Key, tokenContext, migrator, out string fieldError, out ITokenString fieldKey))
                                             return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldPair.Key} key is invalid: {fieldError}.");
 
                                         // parse value
@@ -526,7 +526,7 @@ namespace ContentPatcher
                                 return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}].");
 
                             // save
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, migrator, out string error, out TokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, migrator, out string error, out ITokenString fromAsset))
                                 return TrackSkip(error);
                             patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
@@ -660,7 +660,7 @@ namespace ContentPatcher
             parsed = false;
 
             // analyse string
-            if (!this.TryParseStringTokens(rawValue, tokenContext, migrator, out error, out TokenString tokenString))
+            if (!this.TryParseStringTokens(rawValue, tokenContext, migrator, out error, out ITokenString tokenString))
                 return false;
 
             // validate & extract tokens
@@ -677,7 +677,7 @@ namespace ContentPatcher
                 // parse token
                 LexTokenToken lexToken = tokenString.GetTokenPlaceholders(recursive: false).Single();
                 IToken token = tokenContext.GetToken(lexToken.Name, enforceContext: false);
-                TokenString input = new TokenString(lexToken.InputArg, tokenContext);
+                ITokenString input = new TokenString(lexToken.InputArg, tokenContext);
 
                 // check token options
                 InvariantHashSet allowedValues = token?.GetAllowedValues(input);
@@ -730,7 +730,7 @@ namespace ContentPatcher
                 return false;
 
             // validate tokens
-            TokenString[] tokenStrings = parsed.GetTokenStrings().ToArray();
+            ITokenString[] tokenStrings = parsed.GetTokenStrings().ToArray();
             if (tokenStrings.Any())
             {
                 // validate unknown tokens
@@ -768,7 +768,7 @@ namespace ContentPatcher
         /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseStringTokens(string rawValue, IContext tokenContext, IMigration migrator, out string error, out TokenString parsed)
+        private bool TryParseStringTokens(string rawValue, IContext tokenContext, IMigration migrator, out string error, out ITokenString parsed)
         {
             // parse
             parsed = new TokenString(rawValue, tokenContext);
@@ -808,7 +808,7 @@ namespace ContentPatcher
         /// <param name="error">The error reason if preparing the asset fails.</param>
         /// <param name="tokenedPath">The parsed value.</param>
         /// <returns>Returns whether the local asset was successfully prepared.</returns>
-        private bool TryPrepareLocalAsset(ManagedContentPack pack, string path, IContext tokenContext, IMigration migrator, out string error, out TokenString tokenedPath)
+        private bool TryPrepareLocalAsset(ManagedContentPack pack, string path, IContext tokenContext, IMigration migrator, out string error, out ITokenString tokenedPath)
         {
             // normalise raw value
             path = this.NormaliseLocalAssetPath(pack, path);

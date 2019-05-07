@@ -43,13 +43,13 @@ namespace ContentPatcher.Framework.Patches
         public ManagedContentPack ContentPack { get; }
 
         /// <summary>The raw asset key to intercept (if applicable), including tokens.</summary>
-        public TokenString FromLocalAsset { get; protected set; }
+        public ITokenString FromLocalAsset { get; protected set; }
 
         /// <summary>The normalised asset name to intercept.</summary>
         public string TargetAsset { get; private set; }
 
         /// <summary>The raw asset name to intercept, including tokens.</summary>
-        public TokenString RawTargetAsset { get; }
+        public ITokenString RawTargetAsset { get; }
 
         /// <summary>The conditions which determine whether this patch should be applied.</summary>
         public Condition[] Conditions { get; }
@@ -136,7 +136,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        protected Patch(string logName, PatchType type, ManagedContentPack contentPack, TokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normaliseAssetName)
+        protected Patch(string logName, PatchType type, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normaliseAssetName)
         {
             // set values
             this.LogName = logName;

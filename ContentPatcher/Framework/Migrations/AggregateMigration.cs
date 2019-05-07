@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens.Json;
@@ -89,7 +88,7 @@ namespace ContentPatcher.Framework.Migrations
         /// <param name="tokenStr">The tokenised string to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        public bool TryMigrate(TokenString tokenStr, out string error)
+        public bool TryMigrate(ITokenString tokenStr, out string error)
         {
             // apply migrations
             foreach (IMigration migration in this.Migrations)

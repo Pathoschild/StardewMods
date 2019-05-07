@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -6,6 +7,9 @@ namespace ContentPatcher.Framework
     /// <summary>A string value optionally containing tokens.</summary>
     internal interface ITokenString : IContextual
     {
+        /*********
+        ** Accessors
+        *********/
         /// <summary>The raw string without token substitution.</summary>
         string Raw { get; }
 
@@ -23,5 +27,13 @@ namespace ContentPatcher.Framework
 
         /// <summary>The string with tokens substituted for the last context update.</summary>
         string Value { get; }
+
+
+        /*********
+        ** Methods
+        *********/
+        /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>
+        /// <param name="recursive">Whether to scan recursively.</param> 
+        IEnumerable<LexTokenToken> GetTokenPlaceholders(bool recursive);
     }
 }

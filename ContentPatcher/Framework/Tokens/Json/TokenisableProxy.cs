@@ -1,5 +1,4 @@
 using System;
-using ContentPatcher.Framework.Conditions;
 
 namespace ContentPatcher.Framework.Tokens.Json
 {
@@ -10,7 +9,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         ** Access
         *********/
         /// <summary>The token string which provides the field value.</summary>
-        public TokenString TokenString { get; }
+        public ITokenString TokenString { get; }
 
         /// <summary>Set the instance value.</summary>
         public Action<string> SetValue { get; }
@@ -28,7 +27,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         /// <summary>Construct an instance.</summary>
         /// <param name="tokenString">The token string which provides the field value.</param>
         /// <param name="setValue">Set the instance value.</param>
-        public TokenisableProxy(TokenString tokenString, Action<string> setValue)
+        public TokenisableProxy(ITokenString tokenString, Action<string> setValue)
         {
             this.TokenString = tokenString;
             this.SetValue = setValue;
