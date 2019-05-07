@@ -754,8 +754,9 @@ Some usage notes:
 * If you list multiple blocks for the same token name, the last one whose conditions match will be
   used.
 * You can use tokens in the `Value` and `When` fields. That includes dynamic tokens if they're
-  defined earlier in the list (in which case the last applicable value _defined before this entry_
-  will be used).
+  defined earlier in the list (in which case the last applicable value _defined before this block_
+  will be used). Using a token in the value implicitly adds a `When` condition (so the block is
+  skipped if the token is unavailable, like `{{season}}` when a save isn't loaded).
 * Dynamic tokens can't have the same name as an existing global token or player config field.
 
 For example, this `content.json` defines a custom `{{style}}` token and uses it to load different
