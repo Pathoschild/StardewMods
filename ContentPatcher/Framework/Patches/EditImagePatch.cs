@@ -18,9 +18,6 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
-        /// <summary>The asset key to load from the content pack instead.</summary>
-        private readonly TokenString FromLocalAsset;
-
         /// <summary>The sprite area from which to read an image.</summary>
         private readonly Rectangle? FromArea;
 
