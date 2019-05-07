@@ -789,10 +789,10 @@ Available fields for each field:
 
    field               | meaning
    ------------------- | -------
-   `AllowValues`       | Required. The values the player can provide, as a comma-delimited string.<br />**Tip:** for a boolean flag, use `"true, false"`.
-   `AllowBlank`        | _(optional)_ Whether the field can be left blank. Behaviour: <ul><li>If false (default): missing and blank fields are filled in with the default value.</li><li>If true: missing fields are filled in with the default value; blank fields are left as-is.</li></ul>
-   `AllowMultiple`     | _(optional)_ Whether the player can specify multiple comma-delimited values. Default false.
-   `Default`           | _(optional)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If not set, defaults to the first value in `AllowValues`.
+   `AllowValues`       | _(optional.)_ The values the player can provide, as a comma-delimited string. If omitted, any value is allowed.<br />**Tip:** for a boolean flag, use `"true, false"`.
+   `AllowBlank`        | _(optional.)_ Whether the field can be left blank. If false or omitted, blank fields will be replaced with the default value.
+   `AllowMultiple`     | _(optional.)_ Whether the player can specify multiple comma-delimited values. Default false.
+   `Default`           | _(optional unless `AllowBlank` is false.)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If omitted, blank fields are left blank.
 
 For example: this `content.json` defines a `Material` config field and uses it to change which
 patch is applied. See below for more details.
@@ -802,7 +802,8 @@ patch is applied. See below for more details.
     "Format": "1.7",
     "ConfigSchema": {
         "Material": {
-            "AllowValues": "Wood, Metal"
+            "AllowValues": "Wood, Metal",
+            "Default": "Wood"
         }
     },
     "Changes": [

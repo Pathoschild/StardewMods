@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
@@ -29,7 +30,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(name, canHaveMultipleValuesForRoot: false)
         {
             this.Values = values ?? new InvariantHashSet();
-            this.AllowedRootValues = allowedValues;
+            this.AllowedRootValues = allowedValues?.Any() == true ? allowedValues : null;
             this.CanHaveMultipleValuesForRoot = canHaveMultipleValues ?? (this.Values.Count > 1 || this.AllowedRootValues == null || this.AllowedRootValues.Count > 1);
             this.EnableInputArguments(required: false, canHaveMultipleValues: false);
             this.IsMutable = false;

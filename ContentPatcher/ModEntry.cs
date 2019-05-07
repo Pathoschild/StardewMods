@@ -262,7 +262,7 @@ namespace ContentPatcher
                     ModTokenContext tokenContext = this.TokenManager.TrackLocalTokens(current.ManagedPack.Pack);
                     {
                         // load config.json
-                        InvariantDictionary<ConfigField> config = configFileHandler.Read(current.ManagedPack, content.ConfigSchema);
+                        InvariantDictionary<ConfigField> config = configFileHandler.Read(current.ManagedPack, content.ConfigSchema, current.Content.Format);
                         configFileHandler.Save(current.ManagedPack, config, this.Helper);
                         if (config.Any())
                             this.Monitor.VerboseLog($"   found config.json with {config.Count} fields...");

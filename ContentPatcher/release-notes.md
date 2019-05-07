@@ -9,11 +9,17 @@
 * Tokens can now be nested (like `Hearts:{{spouse}}`).
 * Tokens can now be used in `Fields` keys.
 * Tokens with multiple values can now be used as placeholders.
+* The `config.json` schema now supports unrestricted values.
 * Improved input argument validation.
 * Added support for new asset types in the upcoming Stardew Valley 1.4.
 * Fixed incorrect error text when dynamic/config tokens conflict.
 * Fixed config schema issues logged as `Debug` instead of `Warning`.
 * Removed support for the condition value subkey syntax (like `"Relationship": "Abigail:Married"` instead of `"Relationship:Abigail": "Married"`). This only affects one content pack on Nexus.
+
+**Update note for mod authors:**
+* The `ConfigSchema` field changes when you update your format to 1.7:
+  * `AllowValues` is no longer required. If you omit it, the config field will allow _any_ value.
+  * If you omit `Default`, the default is now blank instead of the first `AllowValues` value.
 
 ## 1.6.5
 * Fixed `EditData` allowing field values containing `/` (which is the field delimiter).
