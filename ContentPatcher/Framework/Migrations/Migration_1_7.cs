@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -38,7 +39,7 @@ namespace ContentPatcher.Framework.Migrations
                 return false;
 
             // 1.7 adds nested tokens
-            if (lexToken is LexTokenToken token && token.InputArg?.Parts.Any(p => p.Type == LexTokenType.Token) == true)
+            if (lexToken is LexTokenToken token && !token.Name.Equals("HasFile", StringComparison.InvariantCultureIgnoreCase) && token.InputArg?.Parts.Any(p => p.Type == LexTokenType.Token) == true)
             {
                 error = this.GetNounPhraseError($"using nested tokens like '{lexToken.Text}'");
                 return false;
@@ -77,7 +78,7 @@ namespace ContentPatcher.Framework.Migrations
                         return false;
                     }
 
-                    if (patch.When != null && patch.When.Any(condition => condition.Value?.Contains("{{") == true))
+                    if (patch.When != null && patch.When.Any(condition => condition.Value?.Contains("{{") == true && condition.Value?.IndexOf("HasFile", StringComparison.InvariantCultureIgnoreCase) == -1))
                     {
                         error = this.GetNounPhraseError("using tokens in condition values");
                         return false;
