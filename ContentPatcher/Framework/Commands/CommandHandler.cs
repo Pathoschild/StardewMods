@@ -344,9 +344,12 @@ namespace ContentPatcher.Framework.Commands
                     let displayText = !string.IsNullOrWhiteSpace(condition.Input?.Raw)
                         ? $"{condition.Name}:{condition.Input.Raw}"
                         : condition.Name
+                    let displayValue = condition.Values.HasAnyTokens
+                        ? $"{condition.Values.Raw} => {string.Join(", ", condition.CurrentValues)}"
+                        : $"{string.Join(", ", condition.CurrentValues)}"
                     orderby displayText
                     where !condition.IsMatch(tokenContext)
-                    select $"{displayText} ({string.Join(", ", condition.Values)})"
+                    select $"{displayText} (expected one of {displayValue})"
                 ).ToArray();
 
                 if (failedConditions.Any())
