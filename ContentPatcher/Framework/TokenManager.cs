@@ -32,6 +32,8 @@ namespace ContentPatcher.Framework
         /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
         public bool IsBasicInfoLoaded { get; set; }
 
+        public InvariantDictionary<InvariantHashSet> BasicTokensUsedBy { get; } = new InvariantDictionary<InvariantHashSet>();
+
 
         /*********
         ** Public methods

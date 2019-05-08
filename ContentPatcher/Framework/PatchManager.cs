@@ -163,6 +163,18 @@ namespace ContentPatcher.Framework
         {
             this.Monitor.VerboseLog("Propagating specific context...");
 
+            // collect more tokens
+            foreach ( string token in tokens.ToArray() )
+            {
+                if (!this.TokenManager.BasicTokensUsedBy.TryGetValue(token, out InvariantHashSet moreTokens))
+                    continue;
+                foreach (string extraToken in moreTokens )
+                {
+                    if (!tokens.Contains(extraToken))
+                        tokens.Add(extraToken);
+                }
+            }
+
             // collect patches
             IEnumerable<string> tokPatches = this.PatchesByToken.Keys.Intersect(tokens);
             IEnumerable<KeyValuePair<string, HashSet<IPatch>>> patchesSets = this.PatchesByToken.Where(p => tokPatches.Contains(p.Key));

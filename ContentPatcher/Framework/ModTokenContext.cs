@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -83,6 +85,44 @@ namespace ContentPatcher.Framework
             // add token value
             token.AddAllowedValues(tokenValue.Value);
             this.DynamicTokenValues.Add(tokenValue);
+
+            // track what tokens this token uses, if any
+            Queue<string> q = new Queue<string>();
+            foreach (Condition cond in tokenValue.Conditions)
+            {
+                foreach (LexTokenToken lexToken in cond.Input.GetTokenPlaceholders(recursive: true))
+                    q.Enqueue(lexToken.Name);
+                foreach (LexTokenToken lexToken in cond.Values.GetTokenPlaceholders(recursive: true))
+                    q.Enqueue(lexToken.Name);
+            }
+            foreach (LexTokenToken lexToken in tokenValue.Value.GetTokenPlaceholders(recursive: true))
+                q.Enqueue(lexToken.Name);
+            while (q.Count > 0)
+            {
+                string tokStr = q.Dequeue();
+                IToken tok = this.GlobalContext.GetToken(tokStr, enforceContext: false);
+                
+                if (tok is DynamicToken dynTok)
+                {
+                    foreach (string val in dynTok.GetAllowedValues(null))
+                    {
+                        TokenString tokenStr = new TokenString(val, this.GlobalContext, null);
+                        foreach (LexTokenToken lexToken in tokenValue.Value.GetTokenPlaceholders(recursive: true))
+                        {
+                            q.Enqueue(lexToken.Name);
+                        }
+                    }
+                }
+                else
+                {
+                    if (!this.GlobalContext.BasicTokensUsedBy.TryGetValue(tok.Name, out InvariantHashSet used))
+                    {
+                        this.GlobalContext.BasicTokensUsedBy.Add(tok.Name, used = new InvariantHashSet());
+                    }
+                    if (!used.Contains(tokenValue.Name))
+                        used.Add(tokenValue.Name);
+                }
+            }
         }
 
         /// <summary>Update the current context.</summary>
