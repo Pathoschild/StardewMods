@@ -12,8 +12,11 @@ namespace ContentPatcher.Framework
         /*********
         ** Fields
         *********/
+        /// <summary>The mod this token context belongs to.</summary>
+        private readonly string Mod;
+        
         /// <summary>The available global tokens.</summary>
-        private readonly IContext GlobalContext;
+        private readonly TokenManager GlobalContext;
 
         /// <summary>The standard self-contained tokens.</summary>
         private readonly GenericTokenContext StandardContext = new GenericTokenContext();
@@ -35,11 +38,13 @@ namespace ContentPatcher.Framework
         ** Token management
         ****/
         /// <summary>Construct an instance.</summary>
+        /// <param name="mod">The mod this token context belongs to.</param>
         /// <param name="tokenManager">Manages the available global tokens.</param>
-        public ModTokenContext(TokenManager tokenManager)
+        public ModTokenContext(string mod, TokenManager tokenManager)
         {
+            this.Mod = mod;
             this.GlobalContext = tokenManager;
-            this.Contexts = new[] { this.GlobalContext, this.StandardContext, this.DynamicContext };
+            this.Contexts = new IContext[] { this.GlobalContext, this.StandardContext, this.DynamicContext };
         }
 
         /// <summary>Add a standard token to the context.</summary>
@@ -53,6 +58,7 @@ namespace ContentPatcher.Framework
             if (this.StandardContext.Contains(token.Name, enforceContext: false))
                 throw new InvalidOperationException($"The '{token.Name}' token is already registered.");
 
+            this.GlobalContext.AddModToken(this.Mod, token);
             this.StandardContext.Tokens[token.Name] = token;
         }
 
@@ -61,14 +67,18 @@ namespace ContentPatcher.Framework
         public void Add(DynamicTokenValue tokenValue)
         {
             // validate
-            if (this.GlobalContext.Contains(tokenValue.Name, enforceContext: false))
-                throw new InvalidOperationException($"Can't register a '{tokenValue.Name}' token because there's a global token with that name.");
-            if (this.StandardContext.Contains(tokenValue.Name, enforceContext: false))
-                throw new InvalidOperationException($"Can't register a '{tokenValue.Name}' dynamic token because there's a config token with that name.");
+            string plainTokenName = tokenValue.Name.Substring(tokenValue.Name.IndexOf('/') + 1);
+            if (this.GlobalContext.Contains(plainTokenName, enforceContext: false))
+                throw new InvalidOperationException($"Can't register a '{plainTokenName}' token because there's a global token with that name.");
+            if (this.StandardContext.Contains(plainTokenName, enforceContext: false))
+                throw new InvalidOperationException($"Can't register a '{plainTokenName}' dynamic token because there's a config token with that name.");
 
             // get (or create) token
             if (!this.DynamicContext.Tokens.TryGetValue(tokenValue.Name, out DynamicToken token))
+            {
                 this.DynamicContext.Save(token = new DynamicToken(tokenValue.Name));
+                this.GlobalContext.AddModToken(this.Mod, token);
+            }
 
             // add token value
             token.AddAllowedValues(tokenValue.Value);

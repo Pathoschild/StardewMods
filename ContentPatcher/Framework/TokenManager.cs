@@ -51,7 +51,7 @@ namespace ContentPatcher.Framework
         {
             if (!this.LocalTokens.TryGetValue(contentPack, out ModTokenContext localTokens))
             {
-                this.LocalTokens[contentPack] = localTokens = new ModTokenContext(this);
+                this.LocalTokens[contentPack] = localTokens = new ModTokenContext(contentPack.Manifest.UniqueID, this);
                 foreach (IValueProvider valueProvider in this.GetLocalValueProviders(contentPack))
                     localTokens.Add(new GenericToken(valueProvider));
             }
@@ -122,6 +122,11 @@ namespace ContentPatcher.Framework
             return this.GlobalContext.GetValues(name, input, enforceContext);
         }
 
+        public void AddModToken(string mod, IToken token)
+        {
+            this.GlobalContext.Tokens[token.Name] = token;
+        }
+
 
         /*********
         ** Private methods
@@ -178,7 +183,7 @@ namespace ContentPatcher.Framework
         /// <param name="contentPack">The content pack for which to get tokens.</param>
         private IEnumerable<IValueProvider> GetLocalValueProviders(IContentPack contentPack)
         {
-            yield return new HasFileValueProvider(contentPack.DirectoryPath);
+            yield return new HasFileValueProvider(contentPack.Manifest.UniqueID, contentPack.DirectoryPath);
         }
 
         /// <summary>Get a constant for a given value.</summary>
