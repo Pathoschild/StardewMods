@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
@@ -75,6 +76,24 @@ namespace ContentPatcher.Framework.Conditions
 
 
             return changed;
+        }
+
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public IEnumerable<string> GetTokensUsed()
+        {
+            // name
+            yield return this.Name;
+
+            // from input
+            if (this.Input != null)
+            {
+                foreach (string token in this.Input.GetTokensUsed())
+                    yield return token;
+            }
+
+            // from values
+            foreach (string token in this.Values.GetTokensUsed())
+                yield return token;
         }
     }
 }

@@ -49,6 +49,12 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return false;
         }
 
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public IEnumerable<string> GetTokensUsed()
+        {
+            return Enumerable.Empty<string>();
+        }
+
         /// <summary>Whether the value provider may return multiple values for the given input.</summary>
         /// <param name="input">The input argument, if applicable.</param>
         public bool CanHaveMultipleValues(ITokenString input = null)

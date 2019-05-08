@@ -58,5 +58,17 @@ namespace ContentPatcher.Framework.Tokens
 
             return changed;
         }
+
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public IEnumerable<string> GetTokensUsed()
+        {
+            // value
+            foreach (string token in this.Value.GetTokensUsed())
+                yield return token;
+
+            // conditions
+            foreach (string token in this.Conditions.SelectMany(p => p.GetTokensUsed()))
+                yield return token;
+        }
     }
 }

@@ -20,6 +20,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The underlying value for <see cref="IsReady"/>.</summary>
         private bool IsReadyImpl;
 
+        /// <summary>The token names used in the string.</summary>
+        private readonly InvariantHashSet TokensUsed = new InvariantHashSet();
+
 
         /*********
         ** Accessors
@@ -91,7 +94,10 @@ namespace ContentPatcher.Framework.Conditions
                 hasTokens = true;
                 IToken token = context.GetToken(lexToken.Name, enforceContext: false);
                 if (token != null)
+                {
+                    this.TokensUsed.Add(token.Name);
                     isMutable = isMutable || token.IsMutable;
+                }
                 else
                     this.InvalidTokens.Add(lexToken.Name);
             }
@@ -119,6 +125,12 @@ namespace ContentPatcher.Framework.Conditions
             string prevValue = this.Value;
             this.GetApplied(context, out this.ValueImpl, out this.IsReadyImpl);
             return this.Value != prevValue;
+        }
+
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public IEnumerable<string> GetTokensUsed()
+        {
+            return this.TokensUsed;
         }
 
         /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>

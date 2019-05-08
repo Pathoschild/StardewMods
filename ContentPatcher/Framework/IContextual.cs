@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ContentPatcher.Framework.Tokens;
 
 namespace ContentPatcher.Framework
@@ -22,5 +23,8 @@ namespace ContentPatcher.Framework
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <returns>Returns whether the instance changed.</returns>
         bool UpdateContext(IContext context);
+
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        IEnumerable<string> GetTokensUsed();
     }
 }

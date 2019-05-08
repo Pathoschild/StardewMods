@@ -60,11 +60,16 @@ namespace ContentPatcher.Framework.Tokens.Json
             return changed;
         }
 
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public IEnumerable<string> GetTokensUsed()
+        {
+            return this.TokenisableFields.SelectMany(p => p.GetTokensUsed());
+        }
+
         /// <summary>Get the token strings contained in the JSON structure.</summary>
         public IEnumerable<ITokenString> GetTokenStrings()
         {
-            foreach (TokenisableProxy field in this.TokenisableFields)
-                yield return field.TokenString;
+            return this.TokenisableFields.Select(p => p.TokenString);
         }
 
 

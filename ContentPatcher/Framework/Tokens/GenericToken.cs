@@ -64,6 +64,12 @@ namespace ContentPatcher.Framework.Tokens
             return changed;
         }
 
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public IEnumerable<string> GetTokensUsed()
+        {
+            return this.Values.GetTokensUsed();
+        }
+
         /// <summary>Whether the token may return multiple values for the given name.</summary>
         /// <param name="input">The input argument, if any.</param>
         public bool CanHaveMultipleValues(ITokenString input)

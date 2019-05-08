@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
-using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
 using StardewModdingAPI;
 
@@ -121,8 +120,7 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Get the token names used by this patch in its fields.</summary>
         public virtual IEnumerable<string> GetTokensUsed()
         {
-            foreach (LexTokenToken lexToken in this.RawTargetAsset.GetTokenPlaceholders(recursive: true))
-                yield return lexToken.Name;
+            return this.RawTargetAsset.GetTokensUsed();
         }
 
 

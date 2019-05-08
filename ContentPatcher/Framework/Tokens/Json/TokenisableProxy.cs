@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace ContentPatcher.Framework.Tokens.Json
 {
@@ -42,6 +43,12 @@ namespace ContentPatcher.Framework.Tokens.Json
             bool changed = this.TokenString.UpdateContext(context);
             this.SetValue(this.TokenString.Value);
             return changed;
+        }
+
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public IEnumerable<string> GetTokensUsed()
+        {
+            return this.TokenString.GetTokensUsed();
         }
     }
 }

@@ -57,6 +57,12 @@ namespace ContentPatcher.Framework.Conditions
             return false;
         }
 
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public IEnumerable<string> GetTokensUsed()
+        {
+            return Enumerable.Empty<string>();
+        }
+
         /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>
         /// <param name="recursive">Whether to scan recursively.</param> 
         public IEnumerable<LexTokenToken> GetTokenPlaceholders(bool recursive)
