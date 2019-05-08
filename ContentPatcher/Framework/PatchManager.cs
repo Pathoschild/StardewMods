@@ -40,6 +40,9 @@ namespace ContentPatcher.Framework
         /// <summary>The patches to apply, indexed by asset name.</summary>
         private InvariantDictionary<HashSet<IPatch>> PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>();
 
+        /// <summary>The patches to apply, indexed by condition.</summary>
+        private InvariantDictionary<HashSet<IPatch>> PatchesByCondition = new InvariantDictionary<HashSet<IPatch>>();
+        
 
         /*********
         ** Public methods
@@ -150,75 +153,25 @@ namespace ContentPatcher.Framework
         public void UpdateContext(IContentHelper contentHelper)
         {
             this.Monitor.VerboseLog("Propagating context...");
+            UpdateContextImpl(contentHelper, this.Patches);
+        }
+
+        /// <summary>Update the current context, checking only specific tokens.</summary>
+        /// <param name="contentHelper">The content helper through which to invalidate assets.</param>
+        /// <param name="tokens">The tokens to check with.</param>
+        public void UpdateSpecificContext(IContentHelper contentHelper, InvariantHashSet tokens)
+        {
+            this.Monitor.VerboseLog("Propagating specific context...");
+
+            // collect patches
+            IEnumerable<string> condPatches = this.PatchesByCondition.Keys.Intersect(tokens);
+            IEnumerable<KeyValuePair<string, HashSet<IPatch>>> patchesSets = this.PatchesByCondition.Where(p => condPatches.Contains(p.Key));
+            IEnumerable<IPatch> patches = new HashSet<IPatch>();
+            foreach (KeyValuePair<string, HashSet<IPatch>> patchesSet in patchesSets)
+                patches = patches.Union(patchesSet.Value);
 
             // update patches
-            InvariantHashSet reloadAssetNames = new InvariantHashSet();
-            string prevAssetName = null;
-            foreach (IPatch patch in this.Patches.OrderByIgnoreCase(p => p.TargetAsset).ThenByIgnoreCase(p => p.LogName))
-            {
-                // log asset name
-                if (this.Monitor.IsVerbose && prevAssetName != patch.TargetAsset)
-                {
-                    this.Monitor.VerboseLog($"   {patch.TargetAsset}:");
-                    prevAssetName = patch.TargetAsset;
-                }
-
-                // track old values
-                string wasAssetName = patch.TargetAsset;
-                bool wasReady = patch.IsReady;
-
-                // update patch
-                IContext tokenContext = this.TokenManager.TrackLocalTokens(patch.ContentPack.Pack);
-                bool changed = patch.UpdateContext(tokenContext);
-                bool isReady = patch.IsReady;
-
-                // track patches to reload
-                bool reload = (wasReady && changed) || (!wasReady && isReady);
-                if (reload)
-                {
-                    patch.IsApplied = false;
-                    if (wasReady)
-                        reloadAssetNames.Add(wasAssetName);
-                    if (isReady)
-                        reloadAssetNames.Add(patch.TargetAsset);
-                }
-
-                // log change
-                if (this.Monitor.IsVerbose)
-                {
-                    IList<string> changes = new List<string>();
-                    if (wasReady != isReady)
-                        changes.Add(isReady ? "enabled" : "disabled");
-                    if (wasAssetName != patch.TargetAsset)
-                        changes.Add($"target: {wasAssetName} => {patch.TargetAsset}");
-                    string changesStr = string.Join(", ", changes);
-
-                    this.Monitor.VerboseLog($"      [{(isReady ? "X" : " ")}] {patch.LogName}: {(changes.Any() ? changesStr : "OK")}");
-                }
-
-                // warn for invalid load patch
-                if (patch is LoadPatch loadPatch && patch.IsReady && !patch.ContentPack.HasFile(loadPatch.FromLocalAsset.Value))
-                    this.Monitor.Log($"Patch error: {patch.LogName} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.FromLocalAsset.Value}'.", LogLevel.Error);
-            }
-
-            // rebuild asset name lookup
-            this.PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>(
-                from patchGroup in this.Patches.GroupByIgnoreCase(p => p.TargetAsset)
-                let key = patchGroup.Key
-                let value = new HashSet<IPatch>(patchGroup)
-                select new KeyValuePair<string, HashSet<IPatch>>(key, value)
-            );
-
-            // reload assets if needed
-            if (reloadAssetNames.Any())
-            {
-                this.Monitor.VerboseLog($"   reloading {reloadAssetNames.Count} assets: {string.Join(", ", reloadAssetNames.OrderByIgnoreCase(p => p))}");
-                contentHelper.InvalidateCache(asset =>
-                {
-                    this.Monitor.VerboseLog($"      [{(reloadAssetNames.Contains(asset.AssetName) ? "X" : " ")}] reload {asset.AssetName}");
-                    return reloadAssetNames.Contains(asset.AssetName);
-                });
-            }
+            UpdateContextImpl(contentHelper, patches);
         }
 
         /****
@@ -241,6 +194,16 @@ namespace ContentPatcher.Framework
                 patches.Add(patch);
             else
                 this.PatchesByCurrentTarget[patch.TargetAsset] = new HashSet<IPatch> { patch };
+
+            // add to condition cache
+            foreach (var cond in patch.Conditions)
+            {
+                if (this.PatchesByCondition.TryGetValue(cond.Name, out HashSet<IPatch> condPatches))
+                    condPatches.Add(patch);
+                else
+                    this.PatchesByCondition[cond.Name] = new HashSet<IPatch> { patch };
+            }
+
         }
 
         /// <summary>Add a patch that's permanently disabled for this session.</summary>
@@ -306,6 +269,80 @@ namespace ContentPatcher.Framework
                 return null;
             else
                 return PatchType.EditData;
+        }
+
+        /// <summary>Implementation of updating the context.</summary>
+        /// <param name="contentHelper">The content helper through which to invalidate assets.</param>
+        public void UpdateContextImpl(IContentHelper contentHelper, IEnumerable<IPatch> patches)
+        {
+            // update patches
+            InvariantHashSet reloadAssetNames = new InvariantHashSet();
+            string prevAssetName = null;
+            foreach (IPatch patch in patches.OrderByIgnoreCase(p => p.TargetAsset).ThenByIgnoreCase(p => p.LogName))
+            {
+                // log asset name
+                if (this.Monitor.IsVerbose && prevAssetName != patch.TargetAsset)
+                {
+                    this.Monitor.VerboseLog($"   {patch.TargetAsset}:");
+                    prevAssetName = patch.TargetAsset;
+                }
+
+                // track old values
+                string wasAssetName = patch.TargetAsset;
+                bool wasReady = patch.IsReady;
+
+                // update patch
+                IContext tokenContext = this.TokenManager.TrackLocalTokens(patch.ContentPack.Pack);
+                bool changed = patch.UpdateContext(tokenContext);
+                bool isReady = patch.IsReady;
+
+                // track patches to reload
+                bool reload = (wasReady && changed) || (!wasReady && isReady);
+                if (reload)
+                {
+                    patch.IsApplied = false;
+                    if (wasReady)
+                        reloadAssetNames.Add(wasAssetName);
+                    if (isReady)
+                        reloadAssetNames.Add(patch.TargetAsset);
+                }
+
+                // log change
+                if (this.Monitor.IsVerbose)
+                {
+                    IList<string> changes = new List<string>();
+                    if (wasReady != isReady)
+                        changes.Add(isReady ? "enabled" : "disabled");
+                    if (wasAssetName != patch.TargetAsset)
+                        changes.Add($"target: {wasAssetName} => {patch.TargetAsset}");
+                    string changesStr = string.Join(", ", changes);
+
+                    this.Monitor.VerboseLog($"      [{(isReady ? "X" : " ")}] {patch.LogName}: {(changes.Any() ? changesStr : "OK")}");
+                }
+
+                // warn for invalid load patch
+                if (patch is LoadPatch loadPatch && patch.IsReady && !patch.ContentPack.HasFile(loadPatch.FromLocalAsset.Value))
+                    this.Monitor.Log($"Patch error: {patch.LogName} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.FromLocalAsset.Value}'.", LogLevel.Error);
+            }
+
+            // rebuild asset name lookup
+            this.PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>(
+                from patchGroup in this.Patches.GroupByIgnoreCase(p => p.TargetAsset)
+                let key = patchGroup.Key
+                let value = new HashSet<IPatch>(patchGroup)
+                select new KeyValuePair<string, HashSet<IPatch>>(key, value)
+            );
+
+            // reload assets if needed
+            if (reloadAssetNames.Any())
+            {
+                this.Monitor.VerboseLog($"   reloading {reloadAssetNames.Count} assets: {string.Join(", ", reloadAssetNames.OrderByIgnoreCase(p => p))}");
+                contentHelper.InvalidateCache(asset =>
+                {
+                    this.Monitor.VerboseLog($"      [{(reloadAssetNames.Contains(asset.AssetName) ? "X" : " ")}] reload {asset.AssetName}");
+                    return reloadAssetNames.Contains(asset.AssetName);
+                });
+            }
         }
     }
 }

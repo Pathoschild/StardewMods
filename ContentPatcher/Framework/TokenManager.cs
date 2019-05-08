@@ -72,6 +72,15 @@ namespace ContentPatcher.Framework
                 localContext.UpdateContext(this);
         }
 
+        /// <summary>Update the context for specific tokens. Only supports global tokens.</summary>
+        /// <param name="tokens">The tokens to update.</param>
+        public void UpdateSpecificContext(InvariantHashSet tokens)
+        {
+            var specific = this.GlobalContext.Tokens.Keys.Intersect(tokens);
+            foreach (string token in specific)
+                this.GlobalContext.GetToken(token, false).UpdateContext(this);
+        }
+
         /****
         ** IContext
         ****/
@@ -137,6 +146,8 @@ namespace ContentPatcher.Framework
             yield return new ConditionTypeValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
             yield return new HasWalletItemValueProvider(NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.IsMainPlayer, () => Context.IsMainPlayer.ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.IsOutdoors, () => Game1.currentLocation?.IsOutdoors.ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.LocationName, () => Game1.currentLocation?.Name, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.PlayerGender, () => (Game1.player.IsMale ? Gender.Male : Gender.Female).ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.PlayerName, () => Game1.player.Name, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.PreferredPet, () => (Game1.player.catPerson ? PetType.Cat : PetType.Dog).ToString(), NeedsBasicInfo);
