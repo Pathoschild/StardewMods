@@ -76,9 +76,12 @@ namespace ContentPatcher.Framework
         /// <param name="tokens">The tokens to update.</param>
         public void UpdateSpecificContext(InvariantHashSet tokens)
         {
-            var specific = this.GlobalContext.Tokens.Keys.Intersect(tokens);
+            IEnumerable<string> specific = this.GlobalContext.Tokens.Keys.Intersect(tokens);
             foreach (string token in specific)
                 this.GlobalContext.GetToken(token, false).UpdateContext(this);
+
+            foreach (ModTokenContext localContext in this.LocalTokens.Values)
+                localContext.UpdateSpecificContext(tokens);
         }
 
         /****

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework
 {
@@ -82,6 +83,30 @@ namespace ContentPatcher.Framework
                 token.UpdateContext(this);
 
             // reset dynamic tokens
+            foreach (DynamicToken token in this.DynamicContext.Tokens.Values)
+                token.SetReady(false);
+            foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
+            {
+                tokenValue.UpdateContext(this);
+                if (tokenValue.IsReady && tokenValue.Conditions.All(p => p.IsMatch(this)))
+                {
+                    DynamicToken token = this.DynamicContext.Tokens[tokenValue.Name];
+                    token.SetValue(tokenValue.Value);
+                    token.SetReady(true);
+                }
+            }
+        }
+
+        /// <summary>Update the current context for certain tokens.</summary>
+        public void UpdateSpecificContext(InvariantHashSet tokens)
+        {
+            // update config tokens
+            IEnumerable<string> specific = this.StandardContext.Tokens.Keys.Intersect(tokens);
+            foreach (string token in specific)
+                this.StandardContext.GetToken(token, false).UpdateContext(this);
+
+            // reset dynamic tokens
+            // TODO: Only update relevant dynamic tokens
             foreach (DynamicToken token in this.DynamicContext.Tokens.Values)
                 token.SetReady(false);
             foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)

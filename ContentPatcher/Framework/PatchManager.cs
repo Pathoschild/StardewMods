@@ -40,8 +40,8 @@ namespace ContentPatcher.Framework
         /// <summary>The patches to apply, indexed by asset name.</summary>
         private InvariantDictionary<HashSet<IPatch>> PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>();
 
-        /// <summary>The patches to apply, indexed by condition.</summary>
-        private InvariantDictionary<HashSet<IPatch>> PatchesByCondition = new InvariantDictionary<HashSet<IPatch>>();
+        /// <summary>The patches to apply, indexed by token.</summary>
+        private InvariantDictionary<HashSet<IPatch>> PatchesByToken = new InvariantDictionary<HashSet<IPatch>>();
         
 
         /*********
@@ -164,8 +164,8 @@ namespace ContentPatcher.Framework
             this.Monitor.VerboseLog("Propagating specific context...");
 
             // collect patches
-            IEnumerable<string> condPatches = this.PatchesByCondition.Keys.Intersect(tokens);
-            IEnumerable<KeyValuePair<string, HashSet<IPatch>>> patchesSets = this.PatchesByCondition.Where(p => condPatches.Contains(p.Key));
+            IEnumerable<string> tokPatches = this.PatchesByToken.Keys.Intersect(tokens);
+            IEnumerable<KeyValuePair<string, HashSet<IPatch>>> patchesSets = this.PatchesByToken.Where(p => tokPatches.Contains(p.Key));
             IEnumerable<IPatch> patches = new HashSet<IPatch>();
             foreach (KeyValuePair<string, HashSet<IPatch>> patchesSet in patchesSets)
                 patches = patches.Union(patchesSet.Value);
@@ -195,15 +195,21 @@ namespace ContentPatcher.Framework
             else
                 this.PatchesByCurrentTarget[patch.TargetAsset] = new HashSet<IPatch> { patch };
 
-            // add to condition cache
-            foreach (var cond in patch.Conditions)
+            // add to token cache
+            foreach (Condition cond in patch.Conditions)
             {
-                if (this.PatchesByCondition.TryGetValue(cond.Name, out HashSet<IPatch> condPatches))
-                    condPatches.Add(patch);
+                if (this.PatchesByToken.TryGetValue(cond.Name, out HashSet<IPatch> tokPatches))
+                    tokPatches.Add(patch);
                 else
-                    this.PatchesByCondition[cond.Name] = new HashSet<IPatch> { patch };
+                    this.PatchesByToken[cond.Name] = new HashSet<IPatch> { patch };
             }
-
+            foreach (string tok in patch.GetTokensUsed())
+            {
+                if (this.PatchesByToken.TryGetValue(tok, out HashSet<IPatch> tokPatches))
+                    tokPatches.Add(patch);
+                else
+                    this.PatchesByToken[tok] = new HashSet<IPatch> { patch };
+            }
         }
 
         /// <summary>Add a patch that's permanently disabled for this session.</summary>
