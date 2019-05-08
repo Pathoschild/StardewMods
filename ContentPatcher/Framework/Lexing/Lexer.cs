@@ -50,12 +50,8 @@ namespace ContentPatcher.Framework.Lexing
                         type = LexBitType.EndToken;
                         break;
 
-                    case ":":
+                    case InternalConstants.InputArgSeparator:
                         type = LexBitType.InputArgSeparator;
-                        break;
-
-                    case "|":
-                        type = LexBitType.TokenPipe;
                         break;
 
                     default:
@@ -98,25 +94,19 @@ namespace ContentPatcher.Framework.Lexing
             IEnumerable<ILexToken> RawParse()
             {
                 // 'Implied braces' means we're parsing inside a token. This necessarily starts with a token name,
-                // optionally followed by an input argument and token pipes.
+                // optionally followed by an input argument.
                 if (impliedBraces)
                 {
                     while (input.Any())
                     {
+                        // extract token
                         yield return this.ExtractToken(input, impliedBraces: true);
                         if (!input.Any())
                             yield break;
 
+                        // throw error if there's content after the token ends
                         var next = input.Peek();
-                        switch (next.Type)
-                        {
-                            case LexBitType.TokenPipe:
-                                yield return new LexTokenPipe(input.Dequeue().Text);
-                                break;
-
-                            default:
-                                throw new InvalidOperationException($"Unexpected {next.Type}, expected {LexBitType.Literal} or {LexBitType.TokenPipe}");
-                        }
+                        throw new InvalidOperationException($"Unexpected {next.Type}, expected {LexBitType.Literal}");
                     }
                     yield break;
                 }
@@ -132,9 +122,8 @@ namespace ContentPatcher.Framework.Lexing
                             yield return this.ExtractToken(input, impliedBraces: false);
                             break;
 
-                        // pipe/separator outside token
+                        // text/separator outside token
                         case LexBitType.Literal:
-                        case LexBitType.TokenPipe:
                         case LexBitType.InputArgSeparator:
                             input.Dequeue();
                             yield return new LexTokenLiteral(next.Text);
@@ -169,9 +158,9 @@ namespace ContentPatcher.Framework.Lexing
                 }
 
                 // trim before/after separator
-                if (next?.Type == LexTokenType.TokenInput || next?.Type == LexTokenType.TokenPipe)
+                if (next?.Type == LexTokenType.TokenInput)
                     newText = newText.TrimEnd();
-                if (previous?.Type == LexTokenType.TokenInput || previous?.Type == LexTokenType.TokenPipe)
+                if (previous?.Type == LexTokenType.TokenInput)
                     newText = newText.TrimStart();
 
                 // trim whole result
@@ -200,9 +189,8 @@ namespace ContentPatcher.Framework.Lexing
         /// <summary>Extract a token from the front of a lexical input queue.</summary>
         /// <param name="input">The input from which to extract a token. The extracted lexical bits will be removed from the queue.</param>
         /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenisable string which main contain a mix of literal and {{token}} values.</param>
-        /// <param name="endBeforePipe">Whether a <see cref="LexTokenType.TokenPipe"/> should signal the end of the token. Only valid if <see cref="impliedBraces"/> is true.</param>
-        /// <returns>Returns the token, or multiple tokens if chained using <see cref="LexBitType.TokenPipe"/>.</returns>
-        public LexTokenToken ExtractToken(Queue<LexBit> input, bool impliedBraces, bool endBeforePipe = false)
+        /// <returns>Returns the token.</returns>
+        public LexTokenToken ExtractToken(Queue<LexBit> input, bool impliedBraces)
         {
             LexBit GetNextAndAssert()
             {
@@ -232,17 +220,6 @@ namespace ContentPatcher.Framework.Lexing
                 inputArg = this.ExtractInputArgument(input);
             }
 
-            // extract piped tokens
-            IList<LexTokenToken> pipedTokens = new List<LexTokenToken>();
-            if (!endBeforePipe)
-            {
-                while (input.Any() && input.Peek().Type == LexBitType.TokenPipe)
-                {
-                    input.Dequeue();
-                    pipedTokens.Add(this.ExtractToken(input, impliedBraces: true, endBeforePipe: true));
-                }
-            }
-
             // end token
             if (!impliedBraces)
             {
@@ -251,7 +228,7 @@ namespace ContentPatcher.Framework.Lexing
                     throw new InvalidOperationException($"Unexpected {endToken.Type} before end of token.");
             }
 
-            return new LexTokenToken(name.Text.Trim(), inputArg, impliedBraces, pipedTokens.ToArray());
+            return new LexTokenToken(name.Text.Trim(), inputArg, impliedBraces);
         }
 
         /// <summary>Extract a token input argument from the front of a lexical input queue.</summary>
@@ -270,13 +247,6 @@ namespace ContentPatcher.Framework.Lexing
                     case LexBitType.StartToken:
                         tokenDepth++;
                         inputArgBits.Enqueue(input.Dequeue());
-                        break;
-
-                    case LexBitType.TokenPipe:
-                        if (tokenDepth > 0)
-                            throw new InvalidOperationException($"Unexpected {next.Type} within token input argument");
-
-                        reachedEnd = true;
                         break;
 
                     case LexBitType.EndToken:

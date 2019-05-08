@@ -150,17 +150,17 @@ namespace ContentPatcher.Framework.Commands
                 IToken[] tokens =
                     (
                         from token in this.TokenManager.GetTokens(enforceContext: false)
-                        let subkeys = token.GetSubkeys().ToArray()
-                        let rootValues = !token.RequiresSubkeys ? token.GetValues(token.Name).ToArray() : new string[0]
-                        let multiValue =
-                            subkeys.Length > 1
+                        let inputArgs = token.GetAllowedInputArguments().ToArray()
+                        let rootValues = !token.RequiresInput ? token.GetValues(null).ToArray() : new string[0]
+                        let isMultiValue =
+                            inputArgs.Length > 1
                             || rootValues.Length > 1
-                            || (subkeys.Length == 1 && token.GetValues(subkeys[0]).Count() > 1)
-                        orderby multiValue, token.Name.Key // single-value tokens first, then alphabetically
+                            || (inputArgs.Length == 1 && token.GetValues(new LiteralString(inputArgs[0])).Count() > 1)
+                        orderby isMultiValue, token.Name // single-value tokens first, then alphabetically
                         select token
                     )
                     .ToArray();
-                int labelWidth = tokens.Max(p => p.Name.Key.Length);
+                int labelWidth = tokens.Max(p => p.Name.Length);
 
                 // print table header
                 output.AppendLine($"   {"token name".PadRight(labelWidth)} | value");
@@ -169,14 +169,14 @@ namespace ContentPatcher.Framework.Commands
                 // print tokens
                 foreach (IToken token in tokens)
                 {
-                    output.Append($"   {token.Name.Key.PadRight(labelWidth)} | ");
+                    output.Append($"   {token.Name.PadRight(labelWidth)} | ");
 
-                    if (!token.IsValidInContext)
+                    if (!token.IsReady)
                         output.AppendLine("[ ] n/a");
-                    else if (token.RequiresSubkeys)
+                    else if (token.RequiresInput)
                     {
                         bool isFirst = true;
-                        foreach (TokenName name in token.GetSubkeys().OrderByIgnoreCase(key => key.Subkey))
+                        foreach (string input in token.GetAllowedInputArguments().OrderByIgnoreCase(input => input))
                         {
                             if (isFirst)
                             {
@@ -185,11 +185,11 @@ namespace ContentPatcher.Framework.Commands
                             }
                             else
                                 output.Append($"   {"".PadRight(labelWidth, ' ')} |     ");
-                            output.AppendLine($":{name.Subkey}: {string.Join(", ", token.GetValues(name))}");
+                            output.AppendLine($":{input}: {string.Join(", ", token.GetValues(new LiteralString(input)))}");
                         }
                     }
                     else
-                        output.AppendLine("[X] " + string.Join(", ", token.GetValues(token.Name).OrderByIgnoreCase(p => p)));
+                        output.AppendLine("[X] " + string.Join(", ", token.GetValues(null).OrderByIgnoreCase(p => p)));
                 }
             }
             output.AppendLine();
@@ -219,7 +219,7 @@ namespace ContentPatcher.Framework.Commands
                 {
                     IToken[] localTokens = tokenContext
                         .GetTokens(localOnly: true, enforceContext: false)
-                        .Where(p => p.Name.Key != ConditionType.HasFile.ToString()) // no value to display
+                        .Where(p => p.Name != ConditionType.HasFile.ToString()) // no value to display
                         .ToArray();
                     if (localTokens.Any())
                     {
@@ -227,13 +227,13 @@ namespace ContentPatcher.Framework.Commands
                         output.AppendLine("   Local tokens:");
                         foreach (IToken token in localTokens.OrderBy(p => p.Name))
                         {
-                            if (token.RequiresSubkeys)
+                            if (token.RequiresInput)
                             {
-                                foreach (TokenName name in token.GetSubkeys().OrderBy(p => p))
-                                    output.AppendLine($"      {name}: {string.Join(", ", token.GetValues(name))}");
+                                foreach (string input in token.GetAllowedInputArguments().OrderBy(p => p))
+                                    output.AppendLine($"      {input}: {string.Join(", ", token.GetValues(new LiteralString(input)))}");
                             }
                             else
-                                output.AppendLine($"      {token.Name}: {string.Join(", ", token.GetValues(token.Name))}");
+                                output.AppendLine($"      {token.Name}: {string.Join(", ", token.GetValues(null))}");
                         }
                     }
                 }
@@ -252,7 +252,7 @@ namespace ContentPatcher.Framework.Commands
                         output.Append($" | {patch.Type} {patch.RawTargetAsset}");
 
                     // log parsed target if tokenised
-                    if (patch.MatchesContext && patch.ParsedTargetAsset != null && patch.ParsedTargetAsset.Tokens.Any())
+                    if (patch.MatchesContext && patch.ParsedTargetAsset != null && patch.ParsedTargetAsset.HasAnyTokens)
                         output.Append($" | => {patch.ParsedTargetAsset.Value}");
 
                     // log reason not applied
@@ -261,7 +261,7 @@ namespace ContentPatcher.Framework.Commands
                         output.Append($"  // {errorReason}");
 
                     // log common issues
-                    if (errorReason == null && patch.IsLoaded && !patch.IsApplied && patch.ParsedTargetAsset?.Value != null)
+                    if (errorReason == null && patch.IsLoaded && !patch.IsApplied && patch.ParsedTargetAsset.IsMeaningful())
                     {
                         string assetName = patch.ParsedTargetAsset.Value;
 
@@ -325,13 +325,13 @@ namespace ContentPatcher.Framework.Commands
 
             // uses tokens not available in the current context
             {
-                IList<TokenName> tokensOutOfContext = patch
+                string[] tokensOutOfContext = patch
                     .TokensUsed
-                    .Union(patch.ParsedConditions.Keys)
-                    .Where(p => !tokenContext.GetToken(p, enforceContext: false).IsValidInContext)
-                    .OrderByIgnoreCase(p => p.ToString())
+                    .Union(patch.ParsedConditions.Select(p => p.Name))
+                    .Distinct()
+                    .Where(name => !tokenContext.GetToken(name, enforceContext: false).IsReady)
+                    .OrderByIgnoreCase(name => name)
                     .ToArray();
-
                 if (tokensOutOfContext.Any())
                     return $"uses tokens not available right now: {string.Join(", ", tokensOutOfContext)}";
             }
@@ -340,10 +340,16 @@ namespace ContentPatcher.Framework.Commands
             if (!patch.MatchesContext && patch.ParsedConditions != null)
             {
                 string[] failedConditions = (
-                    from condition in patch.ParsedConditions.Values
-                    orderby condition.Name.ToString()
+                    from condition in patch.ParsedConditions
+                    let displayText = !string.IsNullOrWhiteSpace(condition.Input?.Raw)
+                        ? $"{condition.Name}:{condition.Input.Raw}"
+                        : condition.Name
+                    let displayValue = condition.Values.HasAnyTokens
+                        ? $"{condition.Values.Raw} => {string.Join(", ", condition.CurrentValues)}"
+                        : $"{string.Join(", ", condition.CurrentValues)}"
+                    orderby displayText
                     where !condition.IsMatch(tokenContext)
-                    select $"{condition.Name} ({string.Join(", ", condition.Values)})"
+                    select $"{displayText} (expected one of {displayValue})"
                 ).ToArray();
 
                 if (failedConditions.Any())

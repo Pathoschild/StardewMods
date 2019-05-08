@@ -2,6 +2,8 @@
 
 # Release notes
 ## 1.2
+Released 12 April 2019.
+
 * Added support for map recolors (with support for A Wittily Named Recolor, Eeemie's Just A New Recolor, and Starblue Valley thanks to Opalie!).
 * Reduced foliage overhang along left edge.
 * Changed river mouth and simplified tilesheets to improve recolor compatibility.
@@ -11,10 +13,14 @@
 * Fixed mailbox not using its default farm sprite.
 
 ## 1.1
+Released 09 April 2019.
+
 * The river/ocean are now treated as their respective types for fishing and crabpots.
 * Fixed warp change also applied to non-riverland farms.
 * Fixed some dirt tiles not marked tillable.
 * Fixed being able to walk through riverside bushes.
 
 ## 1.0
+Released 06 April 2019.
+
 * Initial release. Farm map commissioned from [Opalie](https://www.nexusmods.com/stardewvalley/users/38947035)!

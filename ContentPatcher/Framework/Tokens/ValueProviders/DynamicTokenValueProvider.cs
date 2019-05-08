@@ -11,7 +11,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Fields
         *********/
         /// <summary>The allowed root values (or <c>null</c> if any value is allowed).</summary>
-        private readonly InvariantHashSet AllowedRootValues;
+        private InvariantHashSet AllowedRootValues;
 
         /// <summary>The current values.</summary>
         private InvariantHashSet Values = new InvariantHashSet();
@@ -31,33 +31,43 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
         /// <summary>Add a set of possible values.</summary>
         /// <param name="possibleValues">The possible values to add.</param>
-        public void AddAllowedValues(InvariantHashSet possibleValues)
+        public void AddAllowedValues(ITokenString possibleValues)
         {
-            foreach (string value in possibleValues)
-                this.AllowedRootValues.Add(value);
-            this.CanHaveMultipleValuesForRoot = this.CanHaveMultipleValuesForRoot || possibleValues.Count > 1;
+            // can't reasonably generate known values if tokens are involved
+            if (possibleValues.IsMutable || this.AllowedRootValues == null)
+            {
+                this.AllowedRootValues = null;
+                this.CanHaveMultipleValuesForRoot = true;
+                return;
+            }
+
+            // get possible values from literal token
+            InvariantHashSet splitValues = possibleValues.SplitValues();
+            foreach (string value in splitValues)
+                this.AllowedRootValues.Add(value.Trim());
+            this.CanHaveMultipleValuesForRoot = this.CanHaveMultipleValuesForRoot || splitValues.Count > 1;
         }
 
         /// <summary>Set the current values.</summary>
         /// <param name="values">The values to set.</param>
-        public void SetValue(InvariantHashSet values)
+        public void SetValue(ITokenString values)
         {
-            this.Values = values;
+            this.Values = values.SplitValues();
         }
 
-        /// <summary>Set whether the token is valid in the current context.</summary>
-        /// <param name="validInContext">The value to set.</param>
-        public void SetValidInContext(bool validInContext)
+        /// <summary>Set whether the token is valid for the current context.</summary>
+        /// <param name="ready">The value to set.</param>
+        public void SetReady(bool ready)
         {
-            this.IsValidInContext = validInContext;
+            this.IsReady = ready;
         }
 
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override InvariantHashSet GetAllowedValues(string input)
+        public override InvariantHashSet GetAllowedValues(ITokenString input)
         {
-            return input != null
+            return input.IsMeaningful()
                 ? InvariantHashSet.Boolean()
                 : this.AllowedRootValues;
         }
@@ -65,12 +75,12 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the current values.</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(string input)
+        public override IEnumerable<string> GetValues(ITokenString input)
         {
             this.AssertInputArgument(input);
 
-            if (input != null)
-                return new[] { this.Values.Contains(input).ToString() };
+            if (input.IsMeaningful())
+                return new[] { this.Values.Contains(input.Value).ToString() };
             return this.Values;
         }
     }

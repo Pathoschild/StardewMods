@@ -1,7 +1,6 @@
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
-using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Commands
 {
@@ -21,10 +20,10 @@ namespace ContentPatcher.Framework.Commands
         public string RawTargetAsset { get; }
 
         /// <summary>The parsed asset name (if available).</summary>
-        public TokenString ParsedTargetAsset { get; }
+        public ITokenString ParsedTargetAsset { get; }
 
         /// <summary>The parsed conditions (if available).</summary>
-        public ConditionDictionary ParsedConditions { get; }
+        public Condition[] ParsedConditions { get; }
 
         /// <summary>The content pack which requested the patch.</summary>
         public ManagedContentPack ContentPack { get; }
@@ -41,8 +40,8 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>The reason this patch is disabled (if applicable).</summary>
         public string ReasonDisabled { get; }
 
-        /// <summary>The tokens used by this patch in its fields.</summary>
-        public TokenName[] TokensUsed { get; }
+        /// <summary>The token names used by this patch in its fields.</summary>
+        public InvariantHashSet TokensUsed { get; }
 
 
         /*********
@@ -62,7 +61,7 @@ namespace ContentPatcher.Framework.Commands
             this.MatchesContext = false;
             this.IsApplied = false;
             this.ReasonDisabled = patch.ReasonDisabled;
-            this.TokensUsed = new TokenName[0];
+            this.TokensUsed = new InvariantHashSet();
         }
 
         /// <summary>Construct an instance.</summary>
@@ -76,9 +75,9 @@ namespace ContentPatcher.Framework.Commands
             this.ParsedConditions = patch.Conditions;
             this.ContentPack = patch.ContentPack;
             this.IsLoaded = true;
-            this.MatchesContext = patch.MatchesContext;
+            this.MatchesContext = patch.IsReady;
             this.IsApplied = patch.IsApplied;
-            this.TokensUsed = patch.GetTokensUsed().ToArray();
+            this.TokensUsed = new InvariantHashSet(patch.GetTokensUsed());
         }
 
 

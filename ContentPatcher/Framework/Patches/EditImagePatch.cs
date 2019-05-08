@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
-using ContentPatcher.Framework.Tokens;
+using ContentPatcher.Framework.Lexing.LexTokens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -18,9 +17,6 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
-
-        /// <summary>The asset key to load from the content pack instead.</summary>
-        private readonly TokenString FromLocalAsset;
 
         /// <summary>The sprite area from which to read an image.</summary>
         private readonly Rectangle? FromArea;
@@ -46,23 +42,18 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="patchMode">Indicates how the image should be patched.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditImagePatch(string logName, ManagedContentPack contentPack, TokenString assetName, ConditionDictionary conditions, TokenString fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor, Func<string, string> normaliseAssetName)
+        public EditImagePatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString fromLocalAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor, Func<string, string> normaliseAssetName)
             : base(logName, PatchType.EditImage, contentPack, assetName, conditions, normaliseAssetName)
         {
+            // set fields
             this.FromLocalAsset = fromLocalAsset;
             this.FromArea = fromArea != Rectangle.Empty ? fromArea : null as Rectangle?;
             this.ToArea = toArea != Rectangle.Empty ? toArea : null as Rectangle?;
             this.PatchMode = patchMode;
             this.Monitor = monitor;
-        }
 
-        /// <summary>Update the patch data when the context changes.</summary>
-        /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the patch data changed.</returns>
-        public override bool UpdateContext(IContext context)
-        {
-            bool localAssetChanged = this.FromLocalAsset.UpdateContext(context);
-            return base.UpdateContext(context) || localAssetChanged;
+            // track contextuals
+            this.ContextualValues.Add(this.FromLocalAsset);
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>
@@ -120,10 +111,13 @@ namespace ContentPatcher.Framework.Patches
             editor.PatchImage(source, sourceArea, this.ToArea, this.PatchMode);
         }
 
-        /// <summary>Get the tokens used by this patch in its fields.</summary>
-        public override IEnumerable<TokenName> GetTokensUsed()
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public override IEnumerable<string> GetTokensUsed()
         {
-            return base.GetTokensUsed().Union(this.FromLocalAsset.Tokens);
+            foreach (string name in base.GetTokensUsed())
+                yield return name;
+            foreach (LexTokenToken lexToken in this.FromLocalAsset.GetTokenPlaceholders(recursive: true))
+                yield return lexToken.Name;
         }
     }
 }

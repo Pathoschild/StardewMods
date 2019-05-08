@@ -9,6 +9,7 @@ using ContentPatcher.Framework.Validators;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
+using xTile;
 
 namespace ContentPatcher.Framework
 {
@@ -164,21 +165,21 @@ namespace ContentPatcher.Framework
 
                 // track old values
                 string wasAssetName = patch.TargetAsset;
-                bool wasApplied = patch.MatchesContext;
+                bool wasReady = patch.IsReady;
 
                 // update patch
                 IContext tokenContext = this.TokenManager.TrackLocalTokens(patch.ContentPack.Pack);
                 bool changed = patch.UpdateContext(tokenContext);
-                bool shouldApply = patch.MatchesContext;
+                bool isReady = patch.IsReady;
 
                 // track patches to reload
-                bool reload = (wasApplied && changed) || (!wasApplied && shouldApply);
+                bool reload = (wasReady && changed) || (!wasReady && isReady);
                 if (reload)
                 {
                     patch.IsApplied = false;
-                    if (wasApplied)
+                    if (wasReady)
                         reloadAssetNames.Add(wasAssetName);
-                    if (shouldApply)
+                    if (isReady)
                         reloadAssetNames.Add(patch.TargetAsset);
                 }
 
@@ -186,17 +187,17 @@ namespace ContentPatcher.Framework
                 if (this.Monitor.IsVerbose)
                 {
                     IList<string> changes = new List<string>();
-                    if (wasApplied != shouldApply)
-                        changes.Add(shouldApply ? "enabled" : "disabled");
+                    if (wasReady != isReady)
+                        changes.Add(isReady ? "enabled" : "disabled");
                     if (wasAssetName != patch.TargetAsset)
                         changes.Add($"target: {wasAssetName} => {patch.TargetAsset}");
                     string changesStr = string.Join(", ", changes);
 
-                    this.Monitor.VerboseLog($"      [{(shouldApply ? "X" : " ")}] {patch.LogName}: {(changes.Any() ? changesStr : "OK")}");
+                    this.Monitor.VerboseLog($"      [{(isReady ? "X" : " ")}] {patch.LogName}: {(changes.Any() ? changesStr : "OK")}");
                 }
 
                 // warn for invalid load patch
-                if (patch is LoadPatch loadPatch && patch.MatchesContext && !patch.ContentPack.HasFile(loadPatch.FromLocalAsset.Value))
+                if (patch is LoadPatch loadPatch && patch.IsReady && !patch.ContentPack.HasFile(loadPatch.FromLocalAsset.Value))
                     this.Monitor.Log($"Patch error: {patch.LogName} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.FromLocalAsset.Value}'.", LogLevel.Error);
             }
 
@@ -276,7 +277,7 @@ namespace ContentPatcher.Framework
         {
             return this
                 .GetPatches(asset.AssetName)
-                .Where(patch => patch.Type == PatchType.Load && patch.MatchesContext && patch.IsValidInContext);
+                .Where(patch => patch.Type == PatchType.Load && patch.IsReady);
         }
 
         /// <summary>Get patches which edit the given asset in the current context.</summary>
@@ -289,7 +290,7 @@ namespace ContentPatcher.Framework
 
             return this
                 .GetPatches(asset.AssetName)
-                .Where(patch => patch.Type == patchType && patch.MatchesContext);
+                .Where(patch => patch.Type == patchType && patch.IsReady);
         }
 
         /*********
@@ -301,10 +302,10 @@ namespace ContentPatcher.Framework
         {
             if (assetType == typeof(Texture2D))
                 return PatchType.EditImage;
-            if (assetType.IsGenericType && assetType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+            if (assetType == typeof(Map))
+                return null;
+            else
                 return PatchType.EditData;
-
-            return null;
         }
     }
 }

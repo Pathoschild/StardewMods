@@ -1,6 +1,6 @@
-using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
-using ContentPatcher.Framework.Tokens;
+using ContentPatcher.Framework.Lexing.LexTokens;
+using ContentPatcher.Framework.Tokens.Json;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
@@ -24,16 +24,22 @@ namespace ContentPatcher.Framework.Migrations
         /// <returns>Returns whether migration succeeded.</returns>
         bool TryMigrate(ContentConfig content, out string error);
 
-        /// <summary>Migrate a token name.</summary>
-        /// <param name="name">The token name to migrate.</param>
+        /// <summary>Migrate a lexical token.</summary>
+        /// <param name="lexToken">The lexical token to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        bool TryMigrate(ref TokenName name, out string error);
+        bool TryMigrate(ref ILexToken lexToken, out string error);
 
         /// <summary>Migrate a tokenised string.</summary>
         /// <param name="tokenStr">The tokenised string to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        bool TryMigrate(ref TokenString tokenStr, out string error);
+        bool TryMigrate(ITokenString tokenStr, out string error);
+
+        /// <summary>Migrate a tokenised JSON structure.</summary>
+        /// <param name="tokenStructure">The tokenised JSON structure to migrate.</param>
+        /// <param name="error">An error message which indicates why migration failed (if any).</param>
+        /// <returns>Returns whether migration succeeded.</returns>
+        bool TryMigrate(TokenisableJToken tokenStructure, out string error);
     }
 }

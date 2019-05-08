@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
@@ -29,19 +30,19 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(name, canHaveMultipleValuesForRoot: false)
         {
             this.Values = values ?? new InvariantHashSet();
-            this.AllowedRootValues = allowedValues;
+            this.AllowedRootValues = allowedValues?.Any() == true ? allowedValues : null;
             this.CanHaveMultipleValuesForRoot = canHaveMultipleValues ?? (this.Values.Count > 1 || this.AllowedRootValues == null || this.AllowedRootValues.Count > 1);
             this.EnableInputArguments(required: false, canHaveMultipleValues: false);
             this.IsMutable = false;
-            this.IsValidInContext = true;
+            this.IsReady = true;
         }
 
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override InvariantHashSet GetAllowedValues(string input)
+        public override InvariantHashSet GetAllowedValues(ITokenString input)
         {
-            return input != null
+            return input.IsMeaningful()
                 ? InvariantHashSet.Boolean()
                 : this.AllowedRootValues;
         }
@@ -49,12 +50,12 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the current values.</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(string input)
+        public override IEnumerable<string> GetValues(ITokenString input)
         {
             this.AssertInputArgument(input);
 
-            if (input != null)
-                return new[] { this.Values.Contains(input).ToString() };
+            if (input.IsMeaningful())
+                return new[] { this.Values.Contains(input.Value).ToString() };
             return this.Values;
         }
     }

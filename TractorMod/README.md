@@ -68,7 +68,7 @@ setting | effect
 `TractorSpeed` | The speed modifier when riding a tractor. Default -2.
 `MagneticRadius` | The item magnetism amount (higher values attract items from father away). Default 384.
 `HighlightRadius` | Whether to highlight the tractor radius when riding one. Default `false`.
-`CustomAttachments` | The custom items or tools to apply. If you specify something that's already supported (like the axe), this will override all limitations on its use. These must match the exact internal item/tool names (not the translated display names). For example: `"CustomTools": ["Axe"]`
+`CustomAttachments` | The custom items or tools to apply. If you specify something that's already supported (like the axe), this will override all limitations on its use. These must match the exact internal item/tool names (not the translated display names). For example: `"CustomAttachments": ["Axe"]`
 
 ## Custom textures
 You can drop new PNGs into the `assets` folder to change the appearance of tractors or garages.

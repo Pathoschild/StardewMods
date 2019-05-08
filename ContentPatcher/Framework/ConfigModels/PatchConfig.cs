@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.ConfigModels
@@ -51,10 +52,10 @@ namespace ContentPatcher.Framework.ConfigModels
         ** EditData
         ****/
         /// <summary>The data records to edit.</summary>
-        public IDictionary<string, string> Entries { get; set; }
+        public IDictionary<string, JToken> Entries { get; set; }
 
         /// <summary>The individual fields to edit in data records.</summary>
-        public IDictionary<string, IDictionary<int, string>> Fields { get; set; }
+        public IDictionary<string, IDictionary<string, JToken>> Fields { get; set; }
 
 
         /*********
@@ -76,8 +77,8 @@ namespace ContentPatcher.Framework.ConfigModels
             this.FromArea = other.FromArea;
             this.ToArea = other.ToArea;
             this.PatchMode = other.PatchMode;
-            this.Entries = other.Entries != null ? new Dictionary<string, string>(other.Entries) : null;
-            this.Fields = other.Fields != null ? new Dictionary<string, IDictionary<int, string>>(other.Fields) : null;
+            this.Entries = other.Entries != null ? new Dictionary<string, JToken>(other.Entries) : null;
+            this.Fields = other.Fields != null ? new Dictionary<string, IDictionary<string, JToken>>(other.Fields) : null;
         }
     }
 }

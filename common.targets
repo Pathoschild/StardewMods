@@ -1,4 +1,22 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
   <PropertyGroup>
+    <!-- metadata -->
+    <Authors>Pathoschild</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/Pathoschild/StardewMods</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <!--recognise XNA Framework DLLs in the GAC-->
+    <AssemblySearchPaths>$(AssemblySearchPaths);{GAC}</AssemblySearchPaths>
+
+    <!-- build settings -->
+    <LangVersion>latest</LangVersion>
+    <Platforms>x86</Platforms>
+    <PlatformTarget>x86</PlatformTarget>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+
 </Project>

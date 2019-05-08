@@ -45,8 +45,8 @@ namespace ContentPatcher.Framework
         /// <param name="token">The config token to add.</param>
         public void Add(IToken token)
         {
-            if (token.Name.HasSubkey())
-                throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because subkeys aren't supported.");
+            if (token.Name.Contains(InternalConstants.InputArgSeparator))
+                throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because input arguments aren't supported ({InternalConstants.InputArgSeparator} character).");
             if (this.GlobalContext.Contains(token.Name, enforceContext: false))
                 throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because there's a global token with that name.");
             if (this.StandardContext.Contains(token.Name, enforceContext: false))
@@ -79,21 +79,19 @@ namespace ContentPatcher.Framework
         {
             // update config tokens
             foreach (IToken token in this.StandardContext.Tokens.Values)
-            {
-                if (token.IsMutable)
-                    token.UpdateContext(this);
-            }
+                token.UpdateContext(this);
 
             // reset dynamic tokens
             foreach (DynamicToken token in this.DynamicContext.Tokens.Values)
-                token.SetValidInContext(false);
+                token.SetReady(false);
             foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
             {
-                if (tokenValue.Conditions.Values.All(p => p.IsMatch(this)))
+                tokenValue.UpdateContext(this);
+                if (tokenValue.IsReady && tokenValue.Conditions.All(p => p.IsMatch(this)))
                 {
                     DynamicToken token = this.DynamicContext.Tokens[tokenValue.Name];
                     token.SetValue(tokenValue.Value);
-                    token.SetValidInContext(true);
+                    token.SetReady(true);
                 }
             }
         }
@@ -119,7 +117,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get whether the context contains the given token.</summary>
         /// <param name="name">The token name.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
-        public bool Contains(TokenName name, bool enforceContext)
+        public bool Contains(string name, bool enforceContext)
         {
             return this.Contexts.Any(p => p.Contains(name, enforceContext));
         }
@@ -128,7 +126,7 @@ namespace ContentPatcher.Framework
         /// <param name="name">The token name.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
         /// <returns>Returns the matching token, or <c>null</c> if none was found.</returns>
-        public IToken GetToken(TokenName name, bool enforceContext)
+        public IToken GetToken(string name, bool enforceContext)
         {
             foreach (IContext context in this.Contexts)
             {
@@ -149,13 +147,14 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get the current values of the given token for comparison.</summary>
         /// <param name="name">The token name.</param>
+        /// <param name="input">The input argument, if any.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
         /// <returns>Return the values of the matching token, or an empty list if the token doesn't exist.</returns>
         /// <exception cref="ArgumentNullException">The specified token name is null.</exception>
-        public IEnumerable<string> GetValues(TokenName name, bool enforceContext)
+        public IEnumerable<string> GetValues(string name, ITokenString input, bool enforceContext)
         {
             IToken token = this.GetToken(name, enforceContext);
-            return token?.GetValues(name) ?? Enumerable.Empty<string>();
+            return token?.GetValues(input) ?? Enumerable.Empty<string>();
         }
     }
 }

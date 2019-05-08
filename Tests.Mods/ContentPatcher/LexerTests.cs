@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ContentPatcher.Framework.Lexing;
@@ -60,16 +59,6 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             "[ ]<StartToken:{{>[  Relationship ]<InputArgSeparator::>[ Abigail ]<EndToken:}}>[   ]",
             "[ ]<Token:Relationship input=<input:[Abigail]>>[   ]"
         )]
-        [TestCase(
-            " {{  token : inputArgument/{{subtoken}} | piped-token }}   ",
-            "[ ]<StartToken:{{>[  token ]<InputArgSeparator::>[ inputArgument/]<StartToken:{{>[subtoken]<EndToken:}}>[ ]<TokenPipe:|>[ piped-token ]<EndToken:}}>[   ]",
-            "[ ]<Token:token input=<input:[inputArgument/]<Token:subtoken>> piped=(<Token:piped-token>)>[   ]"
-        )]
-        [TestCase(
-            " {{  token : inputArgument/{{subtoken}} | piped-token-a | pipedTokenB }}   ", // input
-            "[ ]<StartToken:{{>[  token ]<InputArgSeparator::>[ inputArgument/]<StartToken:{{>[subtoken]<EndToken:}}>[ ]<TokenPipe:|>[ piped-token-a ]<TokenPipe:|>[ pipedTokenB ]<EndToken:}}>[   ]", // lexical bits
-            "[ ]<Token:token input=<input:[inputArgument/]<Token:subtoken>> piped=(<Token:piped-token-a>)(<Token:pipedTokenB>)>[   ]" // lexical tokens
-        )]
         public void ParseTokenisedString(string input, string expectedBits, string expectedTokens)
         {
             // act
@@ -118,12 +107,6 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
                             str.Append($"<{token.Type}:{token.Name}");
                             if (token.InputArg != null)
                                 str.Append($" input={this.GetComparableShorthand(token.InputArg)}");
-                            if (token.PipedTokens.Any())
-                            {
-                                str.Append(" piped=");
-                                foreach (LexTokenToken pipedToken in token.PipedTokens)
-                                    str.Append($"({this.GetComparableShorthand(pipedToken)})");
-                            }
 
                             str.Append(">");
                             return str.ToString();

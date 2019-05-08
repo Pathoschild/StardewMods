@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
-using ContentPatcher.Framework.Tokens;
+using ContentPatcher.Framework.Lexing.LexTokens;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 
@@ -21,7 +20,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="localAsset">The asset key to load from the content pack instead.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public LoadPatch(string logName, ManagedContentPack contentPack, TokenString assetName, ConditionDictionary conditions, TokenString localAsset, Func<string, string> normaliseAssetName)
+        public LoadPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString localAsset, Func<string, string> normaliseAssetName)
             : base(logName, PatchType.Load, contentPack, assetName, conditions, normaliseAssetName)
         {
             this.FromLocalAsset = localAsset;
@@ -37,10 +36,13 @@ namespace ContentPatcher.Framework.Patches
                 : data;
         }
 
-        /// <summary>Get the tokens used by this patch in its fields.</summary>
-        public override IEnumerable<TokenName> GetTokensUsed()
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public override IEnumerable<string> GetTokensUsed()
         {
-            return base.GetTokensUsed().Union(this.FromLocalAsset.Tokens);
+            foreach (string name in base.GetTokensUsed())
+                yield return name;
+            foreach (LexTokenToken lexToken in this.FromLocalAsset.GetTokenPlaceholders(recursive: true))
+                yield return lexToken.Name;
         }
 
 

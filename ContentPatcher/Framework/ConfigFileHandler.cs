@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
-using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -43,9 +42,10 @@ namespace ContentPatcher.Framework
         /// <summary>Read the configuration file for a content pack.</summary>
         /// <param name="contentPack">The content pack.</param>
         /// <param name="rawSchema">The raw config schema from the mod's <c>content.json</c>.</param>
-        public InvariantDictionary<ConfigField> Read(ManagedContentPack contentPack, InvariantDictionary<ConfigSchemaFieldConfig> rawSchema)
+        /// <param name="formatVersion">The content format version.</param>
+        public InvariantDictionary<ConfigField> Read(ManagedContentPack contentPack, InvariantDictionary<ConfigSchemaFieldConfig> rawSchema, ISemanticVersion formatVersion)
         {
-            InvariantDictionary<ConfigField> config = this.LoadConfigSchema(rawSchema, logWarning: (field, reason) => this.LogWarning(contentPack, $"{nameof(ContentConfig.ConfigSchema)} field '{field}'", reason));
+            InvariantDictionary<ConfigField> config = this.LoadConfigSchema(rawSchema, logWarning: (field, reason) => this.LogWarning(contentPack, $"{nameof(ContentConfig.ConfigSchema)} field '{field}'", reason), formatVersion);
             this.LoadConfigValues(contentPack, config, logWarning: (field, reason) => this.LogWarning(contentPack, $"{this.Filename} > {field}", reason));
             return config;
         }
@@ -79,7 +79,8 @@ namespace ContentPatcher.Framework
         /// <summary>Parse a raw config schema for a content pack.</summary>
         /// <param name="rawSchema">The raw config schema.</param>
         /// <param name="logWarning">The callback to invoke on each validation warning, passed the field name and reason respectively.</param>
-        private InvariantDictionary<ConfigField> LoadConfigSchema(InvariantDictionary<ConfigSchemaFieldConfig> rawSchema, Action<string, string> logWarning)
+        /// <param name="formatVersion">The content format version.</param>
+        private InvariantDictionary<ConfigField> LoadConfigSchema(InvariantDictionary<ConfigSchemaFieldConfig> rawSchema, Action<string, string> logWarning, ISemanticVersion formatVersion)
         {
             InvariantDictionary<ConfigField> schema = new InvariantDictionary<ConfigField>();
             if (rawSchema == null || !rawSchema.Any())
@@ -90,53 +91,64 @@ namespace ContentPatcher.Framework
                 ConfigSchemaFieldConfig field = rawSchema[rawKey];
 
                 // validate format
-                if (!TokenName.TryParse(rawKey, out TokenName name))
+                if (string.IsNullOrWhiteSpace(rawKey))
                 {
-                    logWarning(rawKey, $"the name '{rawKey}' is not in a valid format.");
+                    logWarning(rawKey, "the config field name can't be empty.");
                     continue;
                 }
-                if (name.HasSubkey())
+                if (rawKey.Contains(InternalConstants.InputArgSeparator))
                 {
-                    logWarning(rawKey, $"the name '{rawKey}' can't have a subkey (:).");
+                    logWarning(rawKey, $"the name '{rawKey}' can't have an input argument ({InternalConstants.InputArgSeparator} character).");
                     continue;
                 }
 
                 // validate reserved keys
-                if (name.TryGetConditionType(out ConditionType _))
+                if (Enum.TryParse<ConditionType>(rawKey, true, out _))
                 {
-                    logWarning(rawKey, $"can't use {name.Key} as a config field, because it's a reserved condition key.");
+                    logWarning(rawKey, $"can't use {rawKey} as a config field, because it's a reserved condition key.");
                     continue;
                 }
 
-                // read allowed values
+                // read allowed/default values
                 InvariantHashSet allowValues = this.ParseCommaDelimitedField(field.AllowValues);
-                if (!allowValues.Any())
-                {
-                    logWarning(rawKey, $"no {nameof(ConfigSchemaFieldConfig.AllowValues)} specified.");
-                    continue;
-                }
-
-                // read default values
                 InvariantHashSet defaultValues = this.ParseCommaDelimitedField(field.Default);
+
+                // pre-1.7 behaviour
+                if (formatVersion.IsOlderThan("1.7"))
                 {
-                    // inject default
+                    // allowed values are required
+                    if (!allowValues.Any())
+                    {
+                        logWarning(rawKey, $"no {nameof(ConfigSchemaFieldConfig.AllowValues)} specified (and format version is less than 1.7).");
+                        continue;
+                    }
+
+                    // inject default if needed
                     if (!defaultValues.Any() && !field.AllowBlank)
                         defaultValues = new InvariantHashSet(allowValues.First());
+                }
 
-                    // validate values
+                // validate allowed values
+                if (!field.AllowBlank && !defaultValues.Any())
+                {
+                    logWarning(rawKey, $"if {nameof(field.AllowBlank)} is false, you must specify {nameof(field.Default)}.");
+                    continue;
+                }
+                if (allowValues.Any() && defaultValues.Any())
+                {
                     string[] invalidValues = defaultValues.ExceptIgnoreCase(allowValues).ToArray();
                     if (invalidValues.Any())
                     {
                         logWarning(rawKey, $"default values '{string.Join(", ", invalidValues)}' are not allowed according to {nameof(ConfigSchemaFieldConfig.AllowBlank)}.");
                         continue;
                     }
+                }
 
-                    // validate allow multiple
-                    if (!field.AllowMultiple && defaultValues.Count > 1)
-                    {
-                        logWarning(rawKey, $"can't have multiple default values because {nameof(ConfigSchemaFieldConfig.AllowMultiple)} is false.");
-                        continue;
-                    }
+                // validate allow multiple
+                if (!field.AllowMultiple && defaultValues.Count > 1)
+                {
+                    logWarning(rawKey, $"can't have multiple default values because {nameof(ConfigSchemaFieldConfig.AllowMultiple)} is false.");
+                    continue;
                 }
 
                 // add to schema
@@ -194,11 +206,15 @@ namespace ContentPatcher.Framework
                 }
 
                 // validate allow-values
-                string[] invalidValues = field.Value.ExceptIgnoreCase(field.AllowValues).ToArray();
-                if (invalidValues.Any())
+                if (field.AllowValues.Any())
                 {
-                    logWarning(key, $"found invalid values ({string.Join(", ", invalidValues)}), expected: {string.Join(", ", field.AllowValues)}.");
-                    field.Value = field.DefaultValues;
+                    string[] invalidValues = field.Value.ExceptIgnoreCase(field.AllowValues).ToArray();
+                    if (invalidValues.Any())
+                    {
+                        logWarning(key,
+                            $"found invalid values ({string.Join(", ", invalidValues)}), expected: {string.Join(", ", field.AllowValues)}.");
+                        field.Value = field.DefaultValues;
+                    }
                 }
             }
         }

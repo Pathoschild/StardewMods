@@ -81,7 +81,7 @@ The `content.json` file has three main fields:
 
 field          | purpose
 -------------- | -------
-`Format`       | The format version (just use `1.6`).
+`Format`       | The format version. You should always use the latest version (currently `1.7`) to use the latest features and avoid obsolete behavior.
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
 `ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-config).
 
@@ -89,7 +89,7 @@ Here's a quick example of each possible patch type (explanations below):
 
 ```js
 {
-  "Format": "1.6",
+  "Format": "1.7",
   "Changes": [
        // replace an entire file
        {
@@ -107,7 +107,7 @@ Here's a quick example of each possible patch type (explanations below):
           "ToArea": { "X": 256, "Y": 96, "Width": 16, "Height": 16 } // optional, defaults to source size from top-left
        },
 
-       // edit fields for existing entries in a data file (zero-indexed)
+       // edit fields for existing entries in a string data file (zero-indexed)
        {
           "Action": "EditData",
           "Target": "Data/ObjectInformation",
@@ -119,13 +119,37 @@ Here's a quick example of each possible patch type (explanations below):
           }
        },
 
-       // add or replace entries in a data file
+       // edit fields for existing entries in an object data file
+       {
+          "Action": "EditData",
+          "Target": "Data/Things",
+          "Fields": {
+             "spring_thing_0": {
+                "Title": "A Thing",
+                "Description": "Example content"
+             }
+          }
+       },
+
+       // add or replace entries in a string data file
        {
           "Action": "EditData",
           "Target": "Data/ObjectInformation",
           "Entries": {
              "70": "Jade/200/-300/Minerals -2/Jade/A pale green ornamental stone.",
              "72": "Diamond/750/-300/Minerals -2/Diamond/A rare and valuable gem."
+          }
+       },
+
+       // add or replace entries in an object file
+       {
+          "Action": "EditData",
+          "Target": "Data/Things",
+          "Entries": {
+             "spring_thing_0": {
+                "Title": "A Thing",
+                "Description": "Example content"
+             }
           }
        }
     ]
@@ -138,9 +162,9 @@ All patches support these common fields:
 field      | purpose
 ---------- | -------
 `Action`   | The kind of change to make (`Load`, `EditImage`, or `EditData`); explained in the next section.
-`Target`   | The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside your game's `Content` folder, without the file extension or language. For example: use `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`. Capitalisation doesn't matter. Your changes are applied in all languages unless you specify a language [condition](#advanced-tokens--conditions).
+`Target`   | The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside your game's `Content` folder, without the file extension or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`). This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter. Your changes are applied in all languages unless you specify a language [condition](#advanced-tokens--conditions).
 `LogName`  | _(optional)_ A name for this patch shown in log messages. This is very useful for understanding errors; if not specified, will default to a name like `entry #14 (EditImage Animals/Dinosaurs)`.
-`Enabled`  | _(optional)_ Whether to apply this patch. Default true.
+`Enabled`  | _(optional)_ Whether to apply this patch. Default true. This fields supports immutable [tokens](#advanced-tokens--conditions) (e.g. config tokens) if they return true/false.
 `When`     | _(optional)_ Only apply the patch if the given conditions match (see [_conditions_](#advanced-tokens--conditions)).
 
 ### Patch types
@@ -155,7 +179,7 @@ field      | purpose
   field      | purpose
   ---------- | -------
   &nbsp;     | See _common fields_ above.
-  `FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.json` (data), `.png` (image), `.tbin` (map), or `.xnb` file. Capitalisation doesn't matter. 
+  `FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.json` (data), `.png` (image), `.tbin` (map), or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter.
 
 * **Edit an image** (`"Action": "EditImage"`).  
   Instead of replacing an entire spritesheet, you can replace just the part you need. For example,
@@ -168,7 +192,7 @@ field      | purpose
   field      | purpose
   ---------- | -------
   &nbsp;     | See _common fields_ above.
-  `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file. Capitalisation doesn't matter.
+  `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter.
   `FromArea` | _(optional)_ The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. [See example in overview](#overview).
   `ToArea`   | _(optional)_ The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. [See example in overview](#overview).
   `PatchMode`| _(optional)_ How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace the target area with your source image.</li><li><code>Overlay</code>: draw your source image over the target, so the original image shows through transparent pixels. Note that semi-transparent pixels will replace the underlying pixels, they won't be combined.</li></ul>
@@ -179,14 +203,27 @@ field      | purpose
   field      | purpose
   ---------- | -------
   &nbsp;     | See _common fields_ above.
-  `Fields`   | _(optional)_ The individual fields you want to change for existing entries. [See example in overview](#overview).
-  `Entries`  | _(optional)_ The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. [See example in overview](#overview).<br />To add an entry, just specify a key that doesn't exist.<br />To delete an entry, set the value to `null` (like `"some key": null`).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
+  `Fields`   | _(optional)_ The individual fields you want to change for existing entries. This field supports [tokens](#advanced-tokens--conditions) in field keys and values. [See example in overview](#overview). 
+  `Entries`  | _(optional)_ The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. This field supports [tokens](#advanced-tokens--conditions) in entry keys and values. [See example in overview](#overview).<br />To add an entry, just specify a key that doesn't exist.<br />To delete an entry, set the value to `null` (like `"some key": null`).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
 
 ## Advanced: tokens & conditions
 ### Overview
-A **token** is a name which represents a predefined value. For example, `season` (the token) may
-contain `spring`, `summer`, `fall`, or `winter` (the value). You can use [player config](#player-config),
+A **token** is a placeholder for a predefined value. For example, `season` (the token) may contain
+`spring`, `summer`, `fall`, or `winter` (the value). You can use [player config](#player-config),
 [global token values](#global-tokens), and [dynamic token values](#dynamic-tokens) as tokens.
+
+Tokens are indicated by two curly braces (except in `When` condition keys, where the braces are
+implied). For example, here's a simple dialogue text which includes the current season name:
+```js
+"Entries": {
+   "fri": "It's a beautiful {{season}} day!"
+}
+```
+
+Most tokens contain values directly, like `{{Season}}` = `spring` or `{{HasProfession}}` =
+`Blacksmith, Forester, Miner`. Some tokens also have an _input argument_, which can be a literal
+value (like `{{Relationship:Abigail}}` = `Married`) or contain tokens too (like
+`{{HasFile:assets/{{spouse}}.png}}` = `true`).
 
 There are two ways to use tokens.
 
@@ -195,20 +232,25 @@ There are two ways to use tokens.
 <dd>
 
 You can make a patch conditional by adding a `When` field, which can list any number of conditions.
-Each condition has a token name (like `Season`) and the values to match (like `spring, summer`).
-Condition names and values are not case-sensitive.
+Each condition has...
+* A key (before `:`) containing a [token](#advanced-tokens--conditions) without the outer curly
+  braces, like `Season` or `HasValue:{{spouse}}`. The key is not case-sensitive.
+* A value (after `:`) containing the comma-separated values to match, like `spring, summer`. If the
+  key token returns any of these values, the condition matches. This field supports
+  [tokens](#advanced-tokens--conditions) and is not case-sensitive.
 
-For example, this changes the house texture only in Spring or Summer, if the player hasn't upgraded
-their house:
+For example: this changes the house texture only in spring or summer, if the player is married, and
+the number of hearts with their spouse matches the number in the `{{minHearts}}` config field:
 
 ```js
 {
     "Action": "EditImage",
-    "Target": "Building/houses",
-    "FromFile": "assets/green_house.png",
+    "Target": "Buildings/houses",
+    "FromFile": "assets/{{season}}_house.png",
     "When": {
         "Season": "spring, summer",
-        "FarmhouseUpgrade": "0"
+        "HasValue:{{spouse}}": "true",
+        "Hearts:{{spouse}}": "{{minHearts}}"
     }
 }
 ```
@@ -259,18 +301,17 @@ For example, this gives the farmhouse a different appearance in each season:
 ```js
 {
     "Action": "EditImage",
-    "Target": "Building/houses",
+    "Target": "Buildings/houses",
     "FromFile": "assets/{{season}}_house.png" // assets/spring_house.png, assets/summer_house.png, etc
 }
 ```
 
-You can do this in the `FromFile`, `Target`, `Enabled`, `Entries` (keys and values), and `Fields`
-(entry keys and field values) fields.
+You can use placeholders in most fields (the documentation for each field will mention if it does).
 
-Only tokens which return a single value can be used as tokens. For example, `{{season}}` is allowed
-but `{{hasProfession}}` is not. Most tokens have an optional `{{tokenName:value}}` form which
-returns `true` or `false` (like `{{hasProfession:Gemologist}}`); that form can be used in tokens if
-needed (though it may be of limited use).
+Tokens which return a single value (like `{{season}}`) are most useful in placeholders. You can
+use multi-value tokens as placeholders too, which will return a comma-delimited list. Most tokens
+also have an optional `{{tokenName:value}}` form which returns `true` or `false` (like
+`{{hasProfession:Gemologist}}`).
 
 </dd>
 </dl>
@@ -278,12 +319,15 @@ needed (though it may be of limited use).
 ### Global tokens
 Global token values are defined by Content Patcher, so you can use them without doing anything else.
 
-These token values can be used as conditions and token placeholders for any patch:
+<dl>
+<dt>Date and weather:</dt>
+<dd>
 
 <table>
 <tr>
 <th>condition</th>
 <th>purpose</th>
+</tr>
 
 <tr valign="top">
 <td>Day</td>
@@ -324,80 +368,6 @@ The day of week. Possible values: `Monday`, `Tuesday`, `Wednesday`, `Thursday`, 
 </tr>
 
 <tr valign="top">
-<td>FarmCave</td>
-<td>
-
-The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `None`, `Bats`, `Mushrooms`.
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>FarmhouseUpgrade</td>
-<td>
-
-The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades). The normal values are 0 (initial farmhouse), 1 (adds kitchen), 2 (add children's bedroom), and 3 (adds cellar). Mods may add upgrade levels beyond that.
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>FarmName</td>
-<td>The name of the current farm.</td>
-</tr>
-
-<tr valign="top">
-<td>FarmType</td>
-<td>
-
-The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). Possible values: `Standard`, `Riverland`, `Forest`, `Hilltop`, `Wilderness`, `Custom`.
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>Language</td>
-<td>
-
-The game's current language. Possible values:
-
-code | meaning
----- | -------
-`de` | German
-`en` | English
-`es` | Spanish
-`ja` | Japanese
-`ru` | Russian
-`pt` | Portuguese
-`zh` | Chinese
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>PlayerGender</td>
-<td>
-
-The player's gender. Possible values: `Female`, `Male`.
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>PlayerName</td>
-<td>The player's name.</td>
-</tr>
-
-<tr valign="top">
-<td>PreferredPet</td>
-<td>
-
-The player's preferred pet. Possible values: `Cat`, `Dog`.
-
-</td>
-</tr>
-
-<tr valign="top">
 <td>Season</td>
 <td>
 
@@ -432,27 +402,41 @@ The year number (like `1` or `2`).
 </td>
 </tr>
 </table>
+</dd>
 
-These token values can be used as conditions, and (in their `tokenName:value` form only) as token
-placeholders:
-
+<dt>Player:</dt>
+<dd>
 <table>
 <tr>
 <th>condition</th>
 <th>purpose</th>
+</tr>
 
 <tr valign="top">
-<td>HasFile</td>
+<td>HasFlag</td>
 <td>
 
-Whether a file exists in the content pack folder. The file path must be specified as part of the key,
-and may contain tokens. Returns `true` or `false`. For example:
+The letter IDs received by the player.
 
-```js
-"When": {
-  "HasFile:assets/{{season}}.png": "true"
-}
-```
+The game also uses this to store some useful flags. For example:
+
+flag | meaning
+---- | -------
+`artifactFound` | The player has found at least one artifact.
+`Beat_PK` | The player has beaten the Prairie King arcade game.
+`beenToWoods` | The player has entered the Secret Woods at least once.
+`canReadJunimoText` | The player can read the language of Junimos (i.e. the plaques in the Community Center).
+`ccIsComplete` | The player has completed the Community Center. Note that this isn't set reliably; see the `IsCommunityCenterComplete` token instead.  See also flags for specific sections: `ccBoilerRoom`, `ccBulletin`, `ccCraftsRoom`, `ccFishTank`, `ccPantry`, and `ccVault`. The equivalent section flags for the Joja warehouse are `jojaBoilerRoom`, `jojaCraftsRoom`, `jojaFishTank`, `jojaPantry`, and `jojaVault`.
+`doorUnlockAbigail` | The player has unlocked access to Abigail's room. See also flags for other NPCs: `doorUnlockAlex`, `doorUnlockCaroline`, `doorUnlockEmily`, `doorUnlockHaley`, `doorUnlockHarvey`, `doorUnlockJas`, `doorUnlockJodi`, `doorUnlockMarnie`, `doorUnlockMaru`, `doorUnlockPenny`, `doorUnlockPierre`, `doorUnlockRobin`, `doorUnlockSam`, `doorUnlockSebastian`, `doorUnlockVincent`.
+`galaxySword` | The player has acquired the Galaxy Sword.
+`geodeFound` | The player has found at least one geode.
+`guildMember` | The player is a member of the Adventurer's Guild.
+`jojaMember` | The player bought a Joja membership.
+`JunimoKart` | The player has beaten the Junimo Kart arcade game.
+`landslideDone` | The landside blocking access to the mines has been cleared.
+`museumComplete` | The player has completed the Museum artifact collection.
+`openedSewer` | The player has unlocked the sewers.
+`qiChallengeComplete` | The player completed the Qi's Challenge quest by reaching level 25 in the Skull Cavern.
 
 </td>
 </tr>
@@ -470,6 +454,21 @@ The [professions](https://stardewvalleywiki.com/Skills) learned by the player. P
 * Mining skill: `Blacksmith`, `Excavator`, `Gemologist`, `Geologist`, `Miner`, `Prospector`.
 
 Custom professions added by a mod are represented by their integer profession ID.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>HasReadLetter</td>
+<td>The letter IDs opened by the player (i.e. a letter UI was displayed).</td>
+</tr>
+
+<tr valign="top">
+<td>HasSeenEvent</td>
+<td>
+
+The event IDs the player has seen, matching IDs in the `Data\Events` files. (You can use
+[Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.)
 
 </td>
 </tr>
@@ -497,70 +496,75 @@ flag                       | meaning
 </tr>
 
 <tr valign="top">
-<td>HasFlag</td>
+<td>IsMainPlayer</td>
 <td>
 
-The letter IDs received by the player. The game also uses this to store some useful flags. For
-example:
-
-flag | meaning
----- | -------
-`artifactFound` | The player has found at least one artifact.
-`Beat_PK` | The player has beaten the Prairie King arcade game.
-`beenToWoods` | The player has entered the Secret Woods at least once.
-`canReadJunimoText` | The player can read the language of Junimos (i.e. the plaques in the Community Center).
-`ccIsComplete` | The player has completed the Community Center. See also flags for specific sections: `ccBoilerRoom`, `ccBulletin`, `ccCraftsRoom`, `ccFishTank`, `ccPantry`, and `ccVault`. The equivalent section flags for the Joja warehouse are `jojaBoilerRoom`, `jojaCraftsRoom`, `jojaFishTank`, `jojaPantry`, and `jojaVault`.
-`doorUnlockAbigail` | The player has unlocked access to Abigail's room. See also flags for other NPCs: `doorUnlockAlex`, `doorUnlockCaroline`, `doorUnlockEmily`, `doorUnlockHaley`, `doorUnlockHarvey`, `doorUnlockJas`, `doorUnlockJodi`, `doorUnlockMarnie`, `doorUnlockMaru`, `doorUnlockPenny`, `doorUnlockPierre`, `doorUnlockRobin`, `doorUnlockSam`, `doorUnlockSebastian`, `doorUnlockVincent`.
-`galaxySword` | The player has acquired the Galaxy Sword.
-`geodeFound` | The player has found at least one geode.
-`guildMember` | The player is a member of the Adventurer's Guild.
-`jojaMember` | The player bought a Joja membership.
-`JunimoKart` | The player has beaten the Junimo Kart arcade game.
-`landslideDone` | The landside blocking access to the mines has been cleared.
-`museumComplete` | The player has completed the Museum artifact collection.
-`openedSewer` | The player has unlocked the sewers.
-`qiChallengeComplete` | The player completed the Qi's Challenge quest by reaching level 25 in the Skull Cavern.
+Whether the player is the main player. Possible values: `true`, `false`.
 
 </td>
 </tr>
 
 <tr valign="top">
-<td>HasMod</td>
+<td>PlayerGender</td>
 <td>
 
-The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
+The player's gender. Possible values: `Female`, `Male`.
 
 </td>
 </tr>
 
 <tr valign="top">
-<td>HasSeenEvent</td>
+<td>PlayerName</td>
+<td>The player's name.</td>
+</tr>
+
+<tr valign="top">
+<td>PreferredPet</td>
 <td>
 
-The event IDs the player has seen, matching IDs in the `Data\Events` files. (You can use
-[Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.)
+The player's preferred pet. Possible values: `Cat`, `Dog`.
 
 </td>
+</tr>
+
+<tr valign="top">
+<td>SkillLevel</td>
+<td>
+
+The player's skill levels. You can specify the skill level as an input argument like this:
+
+```js
+"When": {
+   "SkillLevel:Combat": "1, 2, 3" // combat level 1, 2, or 3
+}
+```
+
+The valid skills are `Combat`, `Farming`, `Fishing`, `Foraging`, `Luck` (unused in the base game), and `Mining`.
+
+</td>
+</tr>
+</table>
+</dd>
+
+<dt>Relationships:</dt>
+
+<dd>
+<table>
+<tr>
+<th>condition</th>
+<th>purpose</th>
 </tr>
 
 <tr valign="top">
 <td>Hearts</td>
 <td>
 
-The player's heart level with a given NPC. You can specify the character name as part of the key
+The player's heart level with a given NPC. You can specify the character name as an input argument
 (using their English name regardless of translations), like this:
 
 ```js
 "When": {
    "Hearts:Abigail": "10, 11, 12, 13"
-}
-```
-
-Or you can match against multiple NPCs like this:
-
-```js
-"When": {
-   "Hearts": "Abigail:10, Leah:10" // 10 hearts with Abigail or Leah
 }
 ```
 
@@ -583,14 +587,6 @@ of the key (using their English name regardless of translations), like this:
 }
 ```
 
-Or you can match against multiple NPCs like this:
-
-```js
-"When": {
-   "Relationship": "Abigail:Married, Leah:Married" // married Abigail or Leah
-}
-```
-
 The valid relationship types are...
 
 value    | meaning
@@ -607,36 +603,144 @@ conditional map spawn logic.
 </td>
 </tr>
 
-<tr valign="top">
-<td>SkillLevel</td>
-<td>
-
-The player's skill levels. You can specify the skill level as part of the key like this:
-
-```js
-"When": {
-   "SkillLevel:Combat": "1, 2, 3" // combat level 1, 2, or 3
-}
-```
-
-Or you can match against multiple skills like this:
-
-```js
-"When": {
-   "SkillLevel": "Combat:1, Farming:2" // combat level 1 or farming level 2
-}
-```
-
-The valid skills are `Combat`, `Farming`, `Fishing`, `Foraging`, `Luck` (unused in the base game), and `Mining`.
-
-</td>
-</tr>
 
 <tr valign="top">
 <td>Spouse</td>
 <td>The player's spouse name (using their English name regardless of translations).</td>
 </tr>
+
 </table>
+</dd>
+
+<dt>World:</dt>
+
+<dd>
+<table>
+<tr>
+<th>condition</th>
+<th>purpose</th>
+</tr>
+
+<tr valign="top">
+<td>FarmCave</td>
+<td>
+
+The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `None`, `Bats`, `Mushrooms`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>FarmhouseUpgrade</td>
+<td>
+
+The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades). The normal values are 0 (initial farmhouse), 1 (adds kitchen), 2 (add children's bedroom), and 3 (adds cellar). Mods may add upgrade levels beyond that.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>FarmName</td>
+<td>The name of the current farm.</td>
+</tr>
+
+<tr valign="top">
+<td>FarmType</td>
+<td>
+
+The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). Possible values: `Standard`, `Riverland`, `Forest`, `Hilltop`, `Wilderness`, `Custom`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>IsCommunityCenterComplete</td>
+<td>
+
+Whether all bundles in the community center are completed. Possible values: `true`, `false`.
+
+</td>
+</tr>
+
+</table>
+</dd>
+
+<dt>Other:</dt>
+
+<dd>
+<table>
+<tr>
+<th>condition</th>
+<th>purpose</th>
+</tr>
+
+<tr valign="top">
+<td>HasMod</td>
+<td>
+
+The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>HasFile</td>
+<td>
+
+Whether a file exists in the content pack folder. The file path must be specified as an input
+argument. Returns `true` or `false`. For example:
+
+```js
+"When": {
+  "HasFile:assets/{{season}}.png": "true"
+}
+```
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>HasValue</td>
+<td>
+
+Whether the input argument is non-blank. For example, to check if the player is married to anyone:
+
+```js
+"When": {
+  "HasValue:{{spouse}}": "true"
+}
+```
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>Language</td>
+<td>
+
+The game's current language. Possible values:
+
+code | meaning
+---- | -------
+`de` | German
+`en` | English
+`es` | Spanish
+`fr` | French
+`hu` | Hungarian
+`it` | Italian
+`ja` | Japanese
+`ko` | Korean
+`pt` | Portuguese
+`ru` | Russian
+`tr` | Turkish
+`zh` | Chinese
+
+</td>
+</tr>
+
+</table>
+</dd>
+</dl>
 
 **Special note about `"Action": "Load"`:**  
 Each file can only be loaded by one patch. You can have multiple load patches with different
@@ -651,7 +755,7 @@ Each block in this section defines the value for a token using these fields:
 field   | purpose
 ------- | -------
 `Name`  | The name of the token to use for [tokens & condition](#advanced-tokens--conditions).
-`Value` | The value(s) to set. This can be a comma-delimited value to give it multiple values. If _any_ block for a token name has multiple values, it will only be usable in conditions.
+`Value` | The value(s) to set. This can be a comma-delimited value to give it multiple values. If _any_ block for a token name has multiple values, it will only be usable in conditions. This field supports [tokens](#advanced-tokens--conditions), including dynamic tokens defined before this entry.
 `When`  | _(optional)_ Only set the value if the given [conditions](#advanced-tokens--conditions) match. If not specified, always matches.
 
 Some usage notes:
@@ -659,8 +763,9 @@ Some usage notes:
 * If you list multiple blocks for the same token name, the last one whose conditions match will be
   used.
 * You can use tokens in the `Value` and `When` fields. That includes dynamic tokens if they're
-  defined earlier in the list (in which case the last value _defined before the current block_ will
-  be used).
+  defined earlier in the list (in which case the last applicable value _defined before this block_
+  will be used). Using a token in the value implicitly adds a `When` condition (so the block is
+  skipped if the token is unavailable, like `{{season}}` when a save isn't loaded).
 * Dynamic tokens can't have the same name as an existing global token or player config field.
 
 For example, this `content.json` defines a custom `{{style}}` token and uses it to load different
@@ -668,15 +773,15 @@ crop sprites depending on the weather:
 
 ```js
 {
-    "Format": "1.6",
+    "Format": "1.7",
     "DynamicTokens": [
         {
             "Name": "Style",
-            "Value": "default"
+            "Value": "dry"
         },
         {
             "Name": "Style",
-            "Value": "drenched",
+            "Value": "wet",
             "When": {
                 "Weather": "rain, storm"
             }
@@ -703,20 +808,21 @@ Available fields for each field:
 
    field               | meaning
    ------------------- | -------
-   `AllowValues`       | Required. The values the player can provide, as a comma-delimited string.<br />**Tip:** for a boolean flag, use `"true, false"`.
-   `AllowBlank`        | _(optional)_ Whether the field can be left blank. Behaviour: <ul><li>If false (default): missing and blank fields are filled in with the default value.</li><li>If true: missing fields are filled in with the default value; blank fields are left as-is.</li></ul>
-   `AllowMultiple`     | _(optional)_ Whether the player can specify multiple comma-delimited values. Default false.
-   `Default`           | _(optional)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If not set, defaults to the first value in `AllowValues`.
+   `AllowValues`       | _(optional.)_ The values the player can provide, as a comma-delimited string. If omitted, any value is allowed.<br />**Tip:** for a boolean flag, use `"true, false"`.
+   `AllowBlank`        | _(optional.)_ Whether the field can be left blank. If false or omitted, blank fields will be replaced with the default value.
+   `AllowMultiple`     | _(optional.)_ Whether the player can specify multiple comma-delimited values. Default false.
+   `Default`           | _(optional unless `AllowBlank` is false.)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If omitted, blank fields are left blank.
 
 For example: this `content.json` defines a `Material` config field and uses it to change which
 patch is applied. See below for more details.
 
 ```js
 {
-    "Format": "1.6",
+    "Format": "1.7",
     "ConfigSchema": {
         "Material": {
-            "AllowValues": "Wood, Metal"
+            "AllowValues": "Wood, Metal",
+            "Default": "Wood"
         }
     },
     "Changes": [

@@ -8,20 +8,20 @@ using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Conditions
 {
-    /// <summary>A string value which can contain condition tokens.</summary>
-    internal class TokenString
+    /// <summary>A string value optionally containing tokens.</summary>
+    internal class TokenString : ITokenString
     {
         /*********
         ** Fields
         *********/
-        /// <summary>The lexical tokens parsed from the raw string.</summary>
-        private readonly ILexToken[] LexTokens;
-
         /// <summary>The underlying value for <see cref="Value"/>.</summary>
         private string ValueImpl;
 
         /// <summary>The underlying value for <see cref="IsReady"/>.</summary>
         private bool IsReadyImpl;
+
+        /// <summary>The token names used in the string.</summary>
+        private readonly InvariantHashSet TokensUsed = new InvariantHashSet();
 
 
         /*********
@@ -30,14 +30,14 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The raw string without token substitution.</summary>
         public string Raw { get; }
 
-        /// <summary>The tokens used in the string.</summary>
-        public HashSet<TokenName> Tokens { get; } = new HashSet<TokenName>();
+        /// <summary>The lexical tokens parsed from the raw string.</summary>
+        public ILexToken[] LexTokens { get; }
 
         /// <summary>The unrecognised tokens in the string.</summary>
         public InvariantHashSet InvalidTokens { get; } = new InvariantHashSet();
 
         /// <summary>Whether the string contains any tokens (including invalid tokens).</summary>
-        public bool HasAnyTokens => this.Tokens.Count > 0 || this.InvalidTokens.Count > 0;
+        public bool HasAnyTokens { get; }
 
         /// <summary>Whether the token string value may change depending on the context.</summary>
         public bool IsMutable { get; }
@@ -57,11 +57,28 @@ namespace ContentPatcher.Framework.Conditions
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="raw">The raw string before token substitution.</param>
-        /// <param name="tokenContext">The available token context.</param>
-        public TokenString(string raw, IContext tokenContext)
+        /// <param name="context">The available token context.</param>
+        public TokenString(string raw, IContext context)
+            : this(lexTokens: new Lexer().ParseBits(raw, impliedBraces: false).ToArray(), context: context) { }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="raw">The raw token input argument.</param>
+        /// <param name="context">The available token context.</param>
+        public TokenString(LexTokenInputArg? raw, IContext context)
+            : this(lexTokens: raw?.Parts, context: context) { }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="lexTokens">The lexical tokens parsed from the raw string.</param>
+        /// <param name="context">The available token context.</param>
+        public TokenString(ILexToken[] lexTokens, IContext context)
         {
+            // get lexical tokens
+            this.LexTokens = (lexTokens ?? new ILexToken[0])
+                .Where(p => !string.IsNullOrWhiteSpace(p.Text)) // ignore whitespace-only tokens
+                .ToArray();
+
             // set raw value
-            this.Raw = raw?.Trim();
+            this.Raw = string.Join("", this.LexTokens.Select(p => p.Text)).Trim();
             if (string.IsNullOrWhiteSpace(this.Raw))
             {
                 this.ValueImpl = this.Raw;
@@ -70,35 +87,31 @@ namespace ContentPatcher.Framework.Conditions
             }
 
             // extract tokens
-            this.LexTokens = new Lexer().ParseBits(raw, impliedBraces: false).ToArray();
             bool isMutable = false;
+            bool hasTokens = false;
             foreach (LexTokenToken lexToken in this.LexTokens.OfType<LexTokenToken>())
             {
-                TokenName name = new TokenName(lexToken.Name, lexToken.InputArg?.Text);
-                IToken token = tokenContext.GetToken(name, enforceContext: false);
+                hasTokens = true;
+                IToken token = context.GetToken(lexToken.Name, enforceContext: false);
                 if (token != null)
                 {
-                    this.Tokens.Add(name);
+                    this.TokensUsed.Add(token.Name);
                     isMutable = isMutable || token.IsMutable;
                 }
                 else
-                    this.InvalidTokens.Add(lexToken.Text);
+                    this.InvalidTokens.Add(lexToken.Name);
             }
 
             // set metadata
             this.IsMutable = isMutable;
-            if (!isMutable)
-            {
-                if (this.InvalidTokens.Any())
-                    this.IsReadyImpl = false;
-                else
-                {
-                    this.GetApplied(tokenContext, out string finalStr, out bool isReady);
-                    this.ValueImpl = finalStr;
-                    this.IsReadyImpl = isReady;
-                }
-            }
+            this.HasAnyTokens = hasTokens;
             this.IsSingleTokenOnly = this.LexTokens.Length == 1 && this.LexTokens.First().Type == LexTokenType.Token;
+
+            // set initial context
+            if (this.InvalidTokens.Any())
+                this.IsReadyImpl = false;
+            else
+                this.GetApplied(context, out this.ValueImpl, out this.IsReadyImpl);
         }
 
         /// <summary>Update the <see cref="Value"/> with the given tokens.</summary>
@@ -106,12 +119,25 @@ namespace ContentPatcher.Framework.Conditions
         /// <returns>Returns whether the value changed.</returns>
         public bool UpdateContext(IContext context)
         {
-            if (!this.IsMutable)
+            if (!this.IsMutable || this.InvalidTokens.Any())
                 return false;
 
             string prevValue = this.Value;
             this.GetApplied(context, out this.ValueImpl, out this.IsReadyImpl);
             return this.Value != prevValue;
+        }
+
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public IEnumerable<string> GetTokensUsed()
+        {
+            return this.TokensUsed;
+        }
+
+        /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>
+        /// <param name="recursive">Whether to scan recursively.</param> 
+        public IEnumerable<LexTokenToken> GetTokenPlaceholders(bool recursive)
+        {
+            return this.GetTokenPlaceholders(this.LexTokens, recursive);
         }
 
 
@@ -131,10 +157,13 @@ namespace ContentPatcher.Framework.Conditions
                 switch (lexToken)
                 {
                     case LexTokenToken lexTokenToken:
-                        TokenName name = new TokenName(lexTokenToken.Name, lexTokenToken.InputArg?.Text);
-                        IToken token = context.GetToken(name, enforceContext: true);
+                        IToken token = context.GetToken(lexTokenToken.Name, enforceContext: true);
+                        ITokenString input = new TokenString(lexTokenToken.InputArg?.Parts, context);
                         if (token != null)
-                            str.Append(token.GetValues(name).FirstOrDefault());
+                        {
+                            string[] values = token.GetValues(input).ToArray();
+                            str.Append(string.Join(", ", values));
+                        }
                         else
                         {
                             allReplaced = false;
@@ -148,8 +177,35 @@ namespace ContentPatcher.Framework.Conditions
                 }
             }
 
-            result = str.ToString();
+            result = str.ToString().Trim();
             isReady = allReplaced;
+        }
+
+        /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>
+        /// <param name="lexTokens">The lexical tokens to scan.</param>
+        /// <param name="recursive">Whether to scan recursively.</param>
+        private IEnumerable<LexTokenToken> GetTokenPlaceholders(ILexToken[] lexTokens, bool recursive)
+        {
+            if (lexTokens?.Any() != true)
+                yield break;
+
+            foreach (ILexToken lexToken in lexTokens)
+            {
+                if (lexToken is LexTokenToken token)
+                {
+                    yield return token;
+
+                    if (recursive)
+                    {
+                        ILexToken[] inputLexTokens = token.InputArg?.Parts;
+                        if (inputLexTokens != null)
+                        {
+                            foreach (LexTokenToken subtoken in this.GetTokenPlaceholders(inputLexTokens, recursive: true))
+                                yield return subtoken;
+                        }
+                    }
+                }
+            }
         }
     }
 }

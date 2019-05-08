@@ -1,7 +1,32 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.7
+Released 08 May 2019.
+
+* Added new tokens:
+  * `HasReadLetter`: whether the player has opened a given mail letter.
+  * `HasValue`: whether the input argument is non-blank, like `HasValue:{{spouse}}`.
+  * `IsCommunityCenterComplete`: whether all bundles in the community center are completed.
+  * `IsMainPlayer`: whether the player is the main player.
+* Tokens can now be nested (like `Hearts:{{spouse}}`).
+* Tokens can now be used almost everywhere (including dynamic token values, condition values, and `Fields` keys).
+* Tokens with multiple values can now be used as placeholders.
+* Tokens from `config.json` can now be unrestricted (`AllowValues` is now optional).
+* Improved input argument validation.
+* Added support for new asset structures in the upcoming Stardew Valley 1.4.
+* Fixed incorrect error text when dynamic/config tokens conflict.
+* Fixed config schema issues logged as `Debug` instead of `Warning`.
+* Removed support for the condition value subkey syntax (like `"Relationship": "Abigail:Married"` instead of `"Relationship:Abigail": "Married"`). This only affects one content pack on Nexus.
+
+**Update note for mod authors:**
+* The `ConfigSchema` field changes when you update your format to 1.7:
+  * `AllowValues` is no longer required. If you omit it, the config field will allow _any_ value.
+  * If you omit `Default`, the default is now blank instead of the first `AllowValues` value.
+
 ## 1.6.5
+Released 06 April 2019.
+
 * Fixed `EditData` allowing field values containing `/` (which is the field delimiter).
 * Fixed error with upcoming SMAPI 3.0 changes.
 * Fixed some broken maps in Stardew Valley 1.3.36 not detected.
@@ -9,21 +34,31 @@
 * Internal rewriting to support upcoming features.
 
 ## 1.6.4
+Released 05 March 2019.
+
 * Added detection for most custom maps broken by Stardew Valley 1.3.36 (they'll now be rejected instead of crashing the game).
 
 ## 1.6.3
+Released 15 January 2019.
+
 * Fixed some conditions not available for multiplayer farmhands after 1.6.2.
 
 ## 1.6.2
+Released 04 January 2019.
+
 * Conditions are now checked much sooner when loading a save, so early setup like map debris spawning can be affected conditionally.
 * Fixed token subkey form not allowed in boolean fields.
 * Updated for changes in the upcoming SMAPI 3.0.
 
 ## 1.6.1
+Released 08 December 2018.
+
 * Fixed error when a content pack has a patch with no `Target` field.
 * Fixed some conditions using subkeys marked invalid incorrectly.
 
 ## 1.6
+Released 08 December 2018.
+
 * Added new tokens:
   * `DaysPlayed`: the number of in-game days played for the current save.
   * `HasWalletItem`: the [special items in the player wallet](https://stardewvalleywiki.com/Wallet).
@@ -43,20 +78,27 @@
 * The `Weather` token now returns `Wind` on windy days instead of `Sun`. Existing content packs with `"Format": "1.5"` or earlier should work fine, since Content Patcher will adjust their conditions. Content packs which target version 1.6 or later should handle the new weather value.
 
 ## 1.5.3
+Released 08 November 2018.
+
 * Added `patch summary` hint if `Target` value incorrectly includes a file extension.
 * Migrated verbose logs to SMAPI's verbose logging feature.
 * Fixed yet another error setting `EditData` entries to `null` since 1.5.
 
 ## 1.5.2
+Released 29 September 2018.
+
 * Improved `patch summary` output a bit.
 * Fixed another error setting `EditData` entries to `null` since 1.5.
 
 ## 1.5.1
+Released 23 September 2018.
+
 * Added token support in `EditData` keys.
 * Fixed error setting `EditData` entries to `null` since 1.5.
 * Fixed error using tokens in `Enabled` field since 1.5.
 
 ## 1.5
+Released 17 September 2018.
 * Added support for dynamic tokens defined by the modder.
 * Added new tokens:
   * `FarmCave` (the current farm cave type);
@@ -82,10 +124,14 @@
 * Fixed `patch summary` showing tokens that aren't valid in the current context.
 
 ## 1.4.1
+Released 26 August 2018.
+
 * Updated for Stardew Valley 1.3.29.
 * Fixed broken error message.
 
 ## 1.4
+Released 01 August 2018.
+
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added new tokens:
   * `DayEvent` (the festival name or wedding today);
@@ -100,12 +146,16 @@
 * Fixed case sensitivity issues in some cases.
 
 ## 1.3.1
+Released 08 April 2018.
+
 * Added more detailed info to `patch summary` command.
 * Improved error handling for image edits.
 * Fixed unnecessary warnings when a patch is disabled.
 * Fixed error when a content pack's `config.json` has invalid keys.
 
 ## 1.3
+Released 26 March 2018.
+
 * Added support for patch conditions (with initial support for season, day of month, day of week, and language).
 * Added support for content packs having `config.json`.
 * Added support for condition/config tokens in `content.json`.
@@ -119,17 +169,23 @@
 * Fixed errors using debug overlay on Linux/Mac.
 
 ## 1.2
+Released 09 March 2018.
+
 * Added support for overlaying images.
 * Added optional debug mode for modders.
 * `FromFile`, `Target`, and map tilesheets are now case-insensitive.
 * Fixed null fields not being ignored after warning.
 
 ## 1.1
+Released 02 March 2018.
+
 * Added `Enabled` field to disable individual patches (thanks to f4iTh!).
 * Added support for XNB files in `FromFile`.
 * Added support for maps in `FromFile` which reference unpacked PNG tilesheets.
 
 ## 1.0
+Released 25 February 2018.
+
 * Initial release.
 * Added support for replacing assets, editing images, and editing data files.
 * Added support for extending spritesheets.

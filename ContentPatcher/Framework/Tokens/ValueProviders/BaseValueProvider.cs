@@ -28,31 +28,73 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Whether the provided values can change after the provider is initialised.</summary>
         public bool IsMutable { get; protected set; } = true;
 
+        /// <summary>Whether the instance is valid for the current context.</summary>
+        public bool IsReady { get; protected set; }
+
         /// <summary>Whether the value provider allows an input argument (e.g. an NPC name for a relationship token).</summary>
         public bool AllowsInput { get; private set; }
 
         /// <summary>Whether the value provider requires an input argument to work, and does not provide values without it (see <see cref="IValueProvider.AllowsInput"/>).</summary>
         public bool RequiresInput { get; private set; }
 
-        /// <summary>Whether values exist in the current context.</summary>
-        public bool IsValidInContext { get; protected set; }
-
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Update the underlying values.</summary>
-        /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the values changed.</returns>
-        public virtual void UpdateContext(IContext context) { }
+        /// <summary>Update the instance when the context changes.</summary>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <returns>Returns whether the instance changed.</returns>
+        public virtual bool UpdateContext(IContext context)
+        {
+            return false;
+        }
+
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public IEnumerable<string> GetTokensUsed()
+        {
+            return Enumerable.Empty<string>();
+        }
 
         /// <summary>Whether the value provider may return multiple values for the given input.</summary>
         /// <param name="input">The input argument, if applicable.</param>
-        public bool CanHaveMultipleValues(string input = null)
+        public bool CanHaveMultipleValues(ITokenString input = null)
         {
-            return input != null
+            return input.IsMeaningful()
                 ? this.CanHaveMultipleValuesForInput
                 : this.CanHaveMultipleValuesForRoot;
+        }
+
+        /// <summary>Validate that the provided input argument is valid.</summary>
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <param name="error">The validation error, if any.</param>
+        /// <returns>Returns whether validation succeeded.</returns>
+        public bool TryValidateInput(ITokenString input, out string error)
+        {
+            // validate input
+            if (input.IsMeaningful())
+            {
+                // check if input allowed
+                if (!this.AllowsInput)
+                {
+                    error = $"invalid input argument ({input}), token {this.Name} doesn't allow input.";
+                    return false;
+                }
+
+                // check value
+                InvariantHashSet validInputs = this.GetValidInputs();
+                if (validInputs?.Any() == true)
+                {
+                    if (!validInputs.Contains(input.Value))
+                    {
+                        error = $"invalid input argument ({(input.Raw != input.Value ? $"{input.Raw} => {input.Value}" : input.Value)}) for {this.Name} token, expected any of {string.Join(", ", validInputs)}";
+                        return false;
+                    }
+                }
+            }
+
+            // no issues found
+            error = null;
+            return true;
         }
 
         /// <summary>Validate that the provided values are valid for the input argument (regardless of whether they match).</summary>
@@ -60,44 +102,18 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="values">The values to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidate(string input, InvariantHashSet values, out string error)
+        public bool TryValidateValues(ITokenString input, InvariantHashSet values, out string error)
         {
-            // parse data
-            KeyValuePair<string, string>[] pairs = this.GetInputValuePairs(input, values).ToArray();
+            if (!this.TryValidateInput(input, out error))
+                return false;
 
-            // restrict to allowed input
-            if (this.AllowsInput)
-            {
-                InvariantHashSet validInputs = this.GetValidInputs();
-                if (validInputs?.Any() == true)
-                {
-                    string[] invalidInputs =
-                        (
-                            from pair in pairs
-                            where pair.Key != null && !validInputs.Contains(pair.Key)
-                            select pair.Key
-                        )
-                        .Distinct()
-                        .ToArray();
-                    if (invalidInputs.Any())
-                    {
-                        error = $"invalid input arguments ({string.Join(", ", invalidInputs)}), expected any of {string.Join(", ", validInputs)}";
-                        return false;
-                    }
-                }
-            }
-
-            // restrict to allowed values
+            // default validation
             {
                 InvariantHashSet validValues = this.GetAllowedValues(input);
                 if (validValues?.Any() == true)
                 {
-                    string[] invalidValues =
-                        (
-                            from pair in pairs
-                            where !validValues.Contains(pair.Value)
-                            select pair.Value
-                        )
+                    string[] invalidValues = values
+                        .Where(p => !validValues.Contains(p))
                         .Distinct()
                         .ToArray();
                     if (invalidValues.Any())
@@ -109,9 +125,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             }
 
             // custom validation
-            foreach (KeyValuePair<string, string> pair in pairs)
+            foreach (string value in values)
             {
-                if (!this.TryValidate(pair.Key, pair.Value, out error))
+                if (!this.TryValidate(input, value, out error))
                     return false;
             }
 
@@ -129,7 +145,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public virtual InvariantHashSet GetAllowedValues(string input)
+        public virtual InvariantHashSet GetAllowedValues(ITokenString input)
         {
             return null;
         }
@@ -137,7 +153,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the current values.</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public virtual IEnumerable<string> GetValues(string input)
+        public virtual IEnumerable<string> GetValues(ITokenString input)
         {
             this.AssertInputArgument(input);
             yield break;
@@ -167,7 +183,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="value">The value to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        protected virtual bool TryValidate(string input, string value, out string error)
+        protected virtual bool TryValidate(ITokenString input, string value, out string error)
         {
             error = null;
             return true;
@@ -186,20 +202,12 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Assert that an input argument is valid for the value provider.</summary>
         /// <param name="input">The input argument to check, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="AllowsInput"/> or <see cref="RequiresInput"/>.</exception>
-        protected void AssertInputArgument(string input)
+        protected void AssertInputArgument(ITokenString input)
         {
-            if (input == null)
-            {
-                // missing input argument
-                if (this.RequiresInput)
-                    throw new InvalidOperationException($"The '{this.Name}' token requires an input argument.");
-            }
-            else
-            {
-                // no subkey allowed
-                if (!this.AllowsInput)
-                    throw new InvalidOperationException($"The '{this.Name}' token does not allow input arguments.");
-            }
+            if (this.RequiresInput && !input.IsMeaningful())
+                throw new InvalidOperationException($"The '{this.Name}' token requires an input argument.");
+            if (!this.AllowsInput && input.IsMeaningful())
+                throw new InvalidOperationException($"The '{this.Name}' token does not allow input arguments.");
         }
 
         /// <summary>Try to parse a raw case-insensitive string into an enum value.</summary>
@@ -218,31 +226,41 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return true;
         }
 
-        /// <summary>Parse a user-defined set of values for input/value pairs. For example, <c>"Abigail:10"</c> for a relationship token would be parsed as input argument 'Abigail' with value '10'.</summary>
-        /// <param name="input">The current input argument, if applicable.</param>
-        /// <param name="values">The values to parse.</param>
-        /// <returns>Returns the input/value pairs found. If <paramref name="input"/> is non-null, the <paramref name="values"/> are treated as values for that input argument. Otherwise if <see cref="AllowsInput"/> is true, then each value is treated as <c>input:value</c> (if they contain a colon) or <c>value</c> (with a null input).</returns>
-        protected IEnumerable<KeyValuePair<string, string>> GetInputValuePairs(string input, InvariantHashSet values)
+        /// <summary>Get whether the value provider's <see cref="IsReady"/> or values change when an action is invoked.</summary>
+        /// <typeparam name="T">The value type.</typeparam>
+        /// <param name="values">The underlying values to check.</param>
+        /// <param name="action">The action to perform.</param>
+        protected bool IsChanged<T>(HashSet<T> values, Action action)
         {
-            // no input arguments in values
-            if (!this.AllowsInput || input != null)
+            return this.IsChanged(() =>
             {
-                foreach (string value in values)
-                    yield return new KeyValuePair<string, string>(input, value);
-            }
+                HashSet<T> oldValues = new HashSet<T>(values);
+                action();
+                return values.Count != oldValues.Count || values.Any(p => !oldValues.Contains(p));
+            });
+        }
 
-            // possible input arguments in values
-            else
+        /// <summary>Get whether the value provider's <see cref="IsReady"/> or values change when an action is invoked.</summary>
+        /// <param name="values">The underlying values to check.</param>
+        /// <param name="action">The action to perform.</param>
+        protected bool IsChanged(IDictionary<string, string> values, Action action)
+        {
+            return this.IsChanged(() =>
             {
-                foreach (string value in values)
-                {
-                    string[] parts = value.Split(new[] { ':' }, 2);
-                    if (parts.Length < 2)
-                        yield return new KeyValuePair<string, string>(input, parts[0]);
-                    else
-                        yield return new KeyValuePair<string, string>(parts[0], parts[1]);
-                }
-            }
+                Dictionary<string, string> oldValues = new Dictionary<string, string>(values);
+                action();
+                return
+                    values.Count != oldValues.Count
+                    || oldValues.Any(entry => !values.TryGetValue(entry.Key, out string newValue) || entry.Value?.Equals(newValue, StringComparison.InvariantCultureIgnoreCase) != true);
+            });
+        }
+
+        /// <summary>Get whether the value provider's <see cref="IsReady"/> or values change when an action is invoked.</summary>
+        /// <param name="action">The action to perform, which returns true if the valus changed.</param>
+        protected bool IsChanged(Func<bool> action)
+        {
+            bool wasReady = this.IsReady;
+            return action() || this.IsReady != wasReady;
         }
     }
 }

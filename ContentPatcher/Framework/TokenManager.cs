@@ -42,7 +42,7 @@ namespace ContentPatcher.Framework
         public TokenManager(IContentHelper contentHelper, IEnumerable<string> installedMods)
         {
             foreach (IValueProvider valueProvider in this.GetGlobalValueProviders(contentHelper, installedMods))
-                this.GlobalContext.Tokens[new TokenName(valueProvider.Name)] = new GenericToken(valueProvider);
+                this.GlobalContext.Tokens[valueProvider.Name] = new GenericToken(valueProvider);
         }
 
         /// <summary>Get the tokens which are defined for a specific content pack. This returns a reference to the list, which can be held for a live view of the tokens. If the content pack isn't currently tracked, this will add it.</summary>
@@ -78,7 +78,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get whether the context contains the given token.</summary>
         /// <param name="name">The token name.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
-        public bool Contains(TokenName name, bool enforceContext)
+        public bool Contains(string name, bool enforceContext)
         {
             return this.GlobalContext.Contains(name, enforceContext);
         }
@@ -87,7 +87,7 @@ namespace ContentPatcher.Framework
         /// <param name="name">The token name.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
         /// <returns>Returns the matching token, or <c>null</c> if none was found.</returns>
-        public IToken GetToken(TokenName name, bool enforceContext)
+        public IToken GetToken(string name, bool enforceContext)
         {
             return this.GlobalContext.GetToken(name, enforceContext);
         }
@@ -101,12 +101,13 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get the current values of the given token for comparison.</summary>
         /// <param name="name">The token name.</param>
+        /// <param name="input">The input argument, if any.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
         /// <returns>Return the values of the matching token, or an empty list if the token doesn't exist.</returns>
         /// <exception cref="ArgumentNullException">The specified key is null.</exception>
-        public IEnumerable<string> GetValues(TokenName name, bool enforceContext)
+        public IEnumerable<string> GetValues(string name, ITokenString input, bool enforceContext)
         {
-            return this.GlobalContext.GetValues(name, enforceContext);
+            return this.GlobalContext.GetValues(name, input, enforceContext);
         }
 
 
@@ -120,37 +121,43 @@ namespace ContentPatcher.Framework
         {
             bool NeedsBasicInfo() => this.IsBasicInfoLoaded;
 
-            // installed mods
-            yield return new ImmutableValueProvider(ConditionType.HasMod.ToString(), new InvariantHashSet(installedMods), canHaveMultipleValues: true);
-
-            // language
-            yield return new ConditionTypeValueProvider(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()));
-
-            // in-game date
-            yield return new ConditionTypeValueProvider(ConditionType.Season, () => SDate.Now().Season, NeedsBasicInfo, allowedValues: new[] { "Spring", "Summer", "Fall", "Winter" });
+            // date and weather
             yield return new ConditionTypeValueProvider(ConditionType.Day, () => SDate.Now().Day.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo, allowedValues: Enumerable.Range(1, 28).Select(p => p.ToString()));
-            yield return new ConditionTypeValueProvider(ConditionType.DayOfWeek, () => SDate.Now().DayOfWeek.ToString(), NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(DayOfWeek)));
-            yield return new ConditionTypeValueProvider(ConditionType.Year, () => SDate.Now().Year.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.DaysPlayed, () => Game1.stats.DaysPlayed.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
-
-            // other in-game conditions
             yield return new ConditionTypeValueProvider(ConditionType.DayEvent, () => this.GetDayEvent(contentHelper), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.DayOfWeek, () => SDate.Now().DayOfWeek.ToString(), NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(DayOfWeek)));
+            yield return new ConditionTypeValueProvider(ConditionType.DaysPlayed, () => Game1.stats.DaysPlayed.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.Season, () => SDate.Now().Season, NeedsBasicInfo, allowedValues: new[] { "Spring", "Summer", "Fall", "Winter" });
+            yield return new ConditionTypeValueProvider(ConditionType.Year, () => SDate.Now().Year.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.Weather, this.GetCurrentWeather, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(Weather)));
+
+            // player
+            yield return new ConditionTypeValueProvider(ConditionType.HasFlag, this.GetMailFlags, NeedsBasicInfo);
+            yield return new HasProfessionValueProvider(NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.HasReadLetter, this.GetReadLetters, NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
+            yield return new HasWalletItemValueProvider(NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.IsMainPlayer, () => Context.IsMainPlayer.ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.PlayerGender, () => (Game1.player.IsMale ? Gender.Male : Gender.Female).ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.PlayerName, () => Game1.player.Name, NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.PreferredPet, () => (Game1.player.catPerson ? PetType.Cat : PetType.Dog).ToString(), NeedsBasicInfo);
+            yield return new SkillLevelValueProvider(NeedsBasicInfo);
+
+            // relationships
+            yield return new VillagerHeartsValueProvider();
+            yield return new VillagerRelationshipValueProvider();
+            yield return new ConditionTypeValueProvider(ConditionType.Spouse, () => Game1.player?.spouse, NeedsBasicInfo);
+
+            // world
             yield return new ConditionTypeValueProvider(ConditionType.FarmCave, () => this.GetEnum(Game1.player.caveChoice.Value, FarmCaveType.None).ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.FarmhouseUpgrade, () => Game1.player.HouseUpgradeLevel.ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.FarmName, () => Game1.player.farmName.Value, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.FarmType, () => this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.HasFlag, this.GetMailFlags, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.PlayerGender, () => (Game1.player.IsMale ? Gender.Male : Gender.Female).ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.PreferredPet, () => (Game1.player.catPerson ? PetType.Cat : PetType.Dog).ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.PlayerName, () => Game1.player.Name, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.Spouse, () => Game1.player?.spouse, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.Weather, this.GetCurrentWeather, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(Weather)));
-            yield return new HasProfessionValueProvider(NeedsBasicInfo);
-            yield return new HasWalletItemValueProvider(NeedsBasicInfo);
-            yield return new SkillLevelValueProvider(NeedsBasicInfo);
-            yield return new VillagerRelationshipValueProvider();
-            yield return new VillagerHeartsValueProvider();
+            yield return new ConditionTypeValueProvider(ConditionType.IsCommunityCenterComplete, () => this.GetIsCommunityCenterComplete().ToString(), NeedsBasicInfo);
+
+            // other
+            yield return new ImmutableValueProvider(ConditionType.HasMod.ToString(), new InvariantHashSet(installedMods), canHaveMultipleValues: true);
+            yield return new HasValueValueProvider();
+            yield return new ConditionTypeValueProvider(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()));
         }
 
         /// <summary>Get the local value providers with which to initialise a local context.</summary>
@@ -199,6 +206,15 @@ namespace ContentPatcher.Framework
                 .Select(p => p.ToString(CultureInfo.InvariantCulture));
         }
 
+        /// <summary>Get the letter IDs read by the player.</summary>
+        /// <remarks>See game logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
+        private IEnumerable<string> GetReadLetters()
+        {
+            if (Game1.player == null)
+                return new string[0];
+            return Game1.player.mailReceived;
+        }
+
         /// <summary>Get the letter IDs and mail flags set for the player.</summary>
         /// <remarks>See game logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
         private IEnumerable<string> GetMailFlags()
@@ -211,6 +227,13 @@ namespace ContentPatcher.Framework
                 .mailReceived
                 .Union(player.mailForTomorrow)
                 .Union(player.mailbox);
+        }
+
+        /// <summary>Get whether the community center is complete.</summary>
+        /// <remarks>See game logic in <see cref="StardewValley.Locations.Town.resetLocalState"/>.</remarks>
+        private bool GetIsCommunityCenterComplete()
+        {
+            return Game1.MasterPlayer.mailReceived.Contains("ccIsComplete") || Game1.MasterPlayer.hasCompletedCommunityCenter();
         }
 
         /// <summary>Get the name for today's day event (e.g. wedding or festival) from the game data.</summary>
