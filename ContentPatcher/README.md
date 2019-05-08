@@ -703,7 +703,7 @@ argument. Returns `true` or `false`. For example:
 <td>HasValue</td>
 <td>
 
-Whether a given value is non-blank. For example, to check if the player is married to anyone:
+Whether the input argument is non-blank. For example, to check if the player is married to anyone:
 
 ```js
 "When": {
@@ -725,9 +725,14 @@ code | meaning
 `de` | German
 `en` | English
 `es` | Spanish
+`fr` | French
+`hu` | Hungarian
+`it` | Italian
 `ja` | Japanese
-`ru` | Russian
+`ko` | Korean
 `pt` | Portuguese
+`ru` | Russian
+`tr` | Turkish
 `zh` | Chinese
 
 </td>

@@ -1,10 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.7
+Released 08 May 2019.
+
 * Added new tokens:
   * `HasReadLetter`: whether the player has opened a given mail letter.
-  * `HasValue`: whether a token has a non-blank value, like `HasValue:{{spouse}}`.
+  * `HasValue`: whether the input argument is non-blank, like `HasValue:{{spouse}}`.
   * `IsCommunityCenterComplete`: whether all bundles in the community center are completed.
   * `IsMainPlayer`: whether the player is the main player.
 * Tokens can now be nested (like `Hearts:{{spouse}}`).
