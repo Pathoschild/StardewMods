@@ -48,6 +48,12 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Whether the player is the main player or farmhand.</summary>
         IsMainPlayer,
 
+        /// <summary>Whether the player is outside or not.</summary>
+        IsOutdoors,
+
+        /// <summary>The current location name of the player.</summary>
+        LocationName,
+
         /// <summary>The gender of the current player.</summary>
         PlayerGender,
 

@@ -37,7 +37,7 @@ namespace ContentPatcher
         private readonly string ConfigFileName = "config.json";
 
         /// <summary>The supported format versions.</summary>
-        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4", "1.5", "1.6", "1.7" };
+        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8" };
 
         /// <summary>The format version migrations to apply.</summary>
         private readonly Func<IMigration[]> Migrations = () => new IMigration[]
@@ -46,7 +46,8 @@ namespace ContentPatcher
             new Migration_1_4(),
             new Migration_1_5(),
             new Migration_1_6(),
-            new Migration_1_7()
+            new Migration_1_7(),
+            new Migration_1_8(),
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -106,6 +107,7 @@ namespace ContentPatcher
                 helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
+            helper.Events.Player.Warped += this.OnWarped;
             helper.Events.Specialised.LoadStageChanged += this.OnLoadStageChanged;
 
             // set up commands
@@ -177,6 +179,15 @@ namespace ContentPatcher
             this.UpdateContext();
         }
 
+        /// <summary>The method invoked when the player warps.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnWarped(object sender, WarpedEventArgs e)
+        {
+            this.Monitor.VerboseLog("Updating context: player warped.");
+            this.UpdateSpecificContext(new InvariantHashSet() { ConditionType.LocationName.ToString(), ConditionType.IsOutdoors.ToString() } );
+        }
+
         /// <summary>The method invoked when the player returns to the title screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
@@ -195,6 +206,13 @@ namespace ContentPatcher
         {
             this.TokenManager.UpdateContext();
             this.PatchManager.UpdateContext(this.Helper.Content);
+        }
+
+        /// <summary>Update the current context for specific tokens.</summary>
+        private void UpdateSpecificContext(InvariantHashSet tokens)
+        {
+            this.TokenManager.UpdateSpecificContext(tokens);
+            this.PatchManager.UpdateSpecificContext(this.Helper.Content, tokens);
         }
 
         /// <summary>Load the registered content packs.</summary>
