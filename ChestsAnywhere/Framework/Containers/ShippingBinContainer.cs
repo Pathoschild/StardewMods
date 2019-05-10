@@ -132,7 +132,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 if (!slot.canStackWith(item))
                     continue;
 
-                item.Stack = slot.addToStack(item.Stack);
+                item.Stack = slot.addToStack(item);
                 if (item.Stack <= 0)
                     break;
             }
