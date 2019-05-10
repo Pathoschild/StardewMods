@@ -114,8 +114,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
                     Item slot = slots[i];
                     if (item.Sample.canStackWith(slot) && slot.Stack < maxStackSize)
                     {
-                        int maxToAdd = Math.Min(item.Count, maxStackSize - slot.Stack); // the most items we can add to the stack (in theory)
-                        int actualAdded = maxToAdd - slot.addToStack(maxToAdd); // how many items were actually added to the stack
+                        var sample = item.Sample.getOne();
+                        sample.Stack = Math.Min(item.Count, maxStackSize - slot.Stack); // the most items we can add to the stack (in theory)
+                        int actualAdded = sample.Stack - slot.addToStack(sample); // how many items were actually added to the stack
                         item.Reduce(actualAdded);
                     }
                     continue;
