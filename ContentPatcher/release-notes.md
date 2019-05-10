@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved errors when token parsing fails.
+
 ## 1.7
 Released 08 May 2019.
 
