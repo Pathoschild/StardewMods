@@ -66,6 +66,7 @@ namespace ContentPatcher.Framework.Patches
         public virtual bool UpdateContext(IContext context)
         {
             this.LastContext = context;
+            bool isReady = true;
             bool changed = false;
 
             // update contextual values
@@ -80,7 +81,7 @@ namespace ContentPatcher.Framework.Patches
             if (this.FromLocalAsset != null)
             {
                 bool sourceChanged = this.FromLocalAsset.UpdateContext(context);
-                this.IsReady = this.IsReady && this.FromLocalAsset.IsReady && this.ContentPack.HasFile(this.FromLocalAsset.Value);
+                isReady = this.FromLocalAsset.IsReady && this.ContentPack.HasFile(this.FromLocalAsset.Value);
                 changed = changed || sourceChanged;
             }
 
@@ -91,7 +92,8 @@ namespace ContentPatcher.Framework.Patches
             {
                 bool wasReady = this.IsReady;
                 this.IsReady =
-                    (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(context)))
+                    isReady
+                    && (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(context)))
                     && this.GetTokensUsed().All(name => context.Contains(name, enforceContext: true));
                 changed = changed || this.IsReady != wasReady;
             }
