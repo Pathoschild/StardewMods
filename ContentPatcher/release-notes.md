@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Improved errors when token parsing fails.
+* Fixed patches not applied in some cases.
 
 ## 1.7
 Released 08 May 2019.
