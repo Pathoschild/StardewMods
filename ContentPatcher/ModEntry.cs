@@ -20,6 +20,7 @@ using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Enums;
 using StardewModdingAPI.Events;
+using StardewValley;
 
 [assembly: InternalsVisibleTo("Pathoschild.Stardew.Tests.Mods")]
 namespace ContentPatcher
@@ -160,6 +161,7 @@ namespace ContentPatcher
             {
                 case LoadStage.CreatedBasicInfo:
                 case LoadStage.SaveLoadedBasicInfo:
+                case LoadStage.Loaded when Game1.dayOfMonth == 0: // handled by OnDayStarted if we're not creating a new save
                     this.Monitor.VerboseLog($"Updating context: load stage changed to {e.NewStage}.");
                     this.TokenManager.IsBasicInfoLoaded = true;
                     this.UpdateContext();
