@@ -139,7 +139,7 @@ namespace ContentPatcher.Framework
                     string[] invalidValues = defaultValues.ExceptIgnoreCase(allowValues).ToArray();
                     if (invalidValues.Any())
                     {
-                        logWarning(rawKey, $"default values '{string.Join(", ", invalidValues)}' are not allowed according to {nameof(ConfigSchemaFieldConfig.AllowBlank)}.");
+                        logWarning(rawKey, $"default values '{string.Join(", ", invalidValues)}' are not allowed according to {nameof(ConfigSchemaFieldConfig.AllowValues)}.");
                         continue;
                     }
                 }

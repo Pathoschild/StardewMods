@@ -4,6 +4,7 @@
 ## Upcoming release
 * Improved errors when token parsing fails.
 * Fixed patches not applied in some cases.
+* Fixed incorrect error message when `Default` and `AllowValues` conflict.
 
 ## 1.7
 Released 08 May 2019.
