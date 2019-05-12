@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added support for list assets in Stardew Valley 1.4.
 * Improved errors when token parsing fails.
 * Fixed patches not applied in some cases.
 * Fixed incorrect error message when `Default` and `AllowValues` conflict.
