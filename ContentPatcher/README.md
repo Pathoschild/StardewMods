@@ -9,7 +9,9 @@ that change the game's images and data without replacing XNB files.
 * [Create a content pack](#create-a-content-pack)
   * [Overview](#overview)
   * [Common fields](#common-fields)
-  * [Patch types](#patch-types)
+  * [Replace an entire file](#replace-an-entire-file)
+  * [Edit part of an image](#edit-part-of-an-image)
+  * [Edit part of a data file](#edit-part-of-a-data-file)
 * [Advanced: tokens & conditions](#advanced-tokens--conditions)
   * [Overview](#overview-1)
   * [Global tokens](#global-tokens)
@@ -85,74 +87,24 @@ field          | purpose
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
 `ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-config).
 
-Here's a quick example of each possible patch type (explanations below):
-
+You can list any number of patches (surrounded by `{` and `}` in the `Changes` field). See the next
+few sections for more info about the format. For example:
 ```js
 {
-  "Format": "1.7",
-  "Changes": [
-       // replace an entire file
-       {
-          "Action": "Load",
-          "Target": "Animals/Dinosaur",
-          "FromFile": "assets/dinosaur.png"
-       },
+   "Format": "1.7",
+   "Changes": [
+      {
+         "Action": "Load",
+         "Target": "Animals/Dinosaur",
+         "FromFile": "assets/dinosaur.png"
+      },
 
-       // edit part of an image
-       {
-          "Action": "EditImage",
-          "Target": "Maps/springobjects",
-          "FromFile": "assets/fish-object.png",
-          "FromArea": { "X": 0, "Y": 0, "Width": 16, "Height": 16 }, // optional, defaults to entire FromFile
-          "ToArea": { "X": 256, "Y": 96, "Width": 16, "Height": 16 } // optional, defaults to source size from top-left
-       },
-
-       // edit fields for existing entries in a string data file (zero-indexed)
-       {
-          "Action": "EditData",
-          "Target": "Data/ObjectInformation",
-          "Fields": {
-             "70": {
-                0: "Jade",
-                5: "A pale green ornamental stone."
-             }
-          }
-       },
-
-       // edit fields for existing entries in an object data file
-       {
-          "Action": "EditData",
-          "Target": "Data/Things",
-          "Fields": {
-             "spring_thing_0": {
-                "Title": "A Thing",
-                "Description": "Example content"
-             }
-          }
-       },
-
-       // add or replace entries in a string data file
-       {
-          "Action": "EditData",
-          "Target": "Data/ObjectInformation",
-          "Entries": {
-             "70": "Jade/200/-300/Minerals -2/Jade/A pale green ornamental stone.",
-             "72": "Diamond/750/-300/Minerals -2/Diamond/A rare and valuable gem."
-          }
-       },
-
-       // add or replace entries in an object file
-       {
-          "Action": "EditData",
-          "Target": "Data/Things",
-          "Entries": {
-             "spring_thing_0": {
-                "Title": "A Thing",
-                "Description": "Example content"
-             }
-          }
-       }
-    ]
+      {
+         "Action": "EditImage",
+         "Target": "Maps/springobjects",
+         "FromFile": "assets/fish-object.png"
+      },
+   ]
 }
 ```
 
@@ -161,50 +113,126 @@ All patches support these common fields:
 
 field      | purpose
 ---------- | -------
-`Action`   | The kind of change to make (`Load`, `EditImage`, or `EditData`); explained in the next section.
+`Action`   | The kind of change to make (`Load`, `EditImage`, or `EditData`); explained in the next three sections.
 `Target`   | The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside your game's `Content` folder, without the file extension or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`). This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter. Your changes are applied in all languages unless you specify a language [condition](#advanced-tokens--conditions).
 `LogName`  | _(optional)_ A name for this patch shown in log messages. This is very useful for understanding errors; if not specified, will default to a name like `entry #14 (EditImage Animals/Dinosaurs)`.
 `Enabled`  | _(optional)_ Whether to apply this patch. Default true. This fields supports immutable [tokens](#advanced-tokens--conditions) (e.g. config tokens) if they return true/false.
 `When`     | _(optional)_ Only apply the patch if the given conditions match (see [_conditions_](#advanced-tokens--conditions)).
 
-### Patch types
-* **Replace an entire file** (`"Action": "Load"`).  
-  When the game loads the file, it'll receive your file instead. This is useful for mods which
-  change everything (like pet replacement mods).
+### Replace an entire file
+`"Action": "Load"` replaces the entire file with your version. This is useful for mods which
+change the whole file (like pet replacement mods).
 
-  Avoid this if you don't need to change the whole file though — each file can only be replaced
-  once, so your content pack won't be compatible with other content packs that replace the same
-  file. (It'll work fine with content packs that only edit the file, though.)
+Avoid this if you don't need to change the whole file though — each file can only be replaced once,
+so your content pack won't be compatible with other content packs that replace the same file.
+(It'll work fine with content packs that only edit the file, though.)
 
-  field      | purpose
-  ---------- | -------
-  &nbsp;     | See _common fields_ above.
-  `FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.json` (data), `.png` (image), `.tbin` (map), or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter.
+field      | purpose
+---------- | -------
+&nbsp;     | See _common fields_ above.
+`FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.json` (data), `.png` (image), `.tbin` (map), or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter.
 
-* **Edit an image** (`"Action": "EditImage"`).  
-  Instead of replacing an entire spritesheet, you can replace just the part you need. For example,
-  you can change an item image by changing only its sprite in the spritesheet. Any number of
-  content packs can edit the same file.
+For example, this replaces the dinosaur sprite with your own image:
+```js
+{
+   "Format": "1.7",
+   "Changes": [
+      {
+         "Action": "Load",
+         "Target": "Animals/Dinosaur",
+         "FromFile": "assets/dinosaur.png"
+      },
+   ]
+}
+```
 
-  You can extend an image downwards by just patching past the bottom. Content Patcher will
-  automatically expand the image to fit.
+### Edit part of an image
+`"Action": "EditImage"` changes one part of an image. For example, you can change one area in a
+spritesheet, or overlay an image onto the existing one.
 
-  field      | purpose
-  ---------- | -------
-  &nbsp;     | See _common fields_ above.
-  `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter.
-  `FromArea` | _(optional)_ The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. [See example in overview](#overview).
-  `ToArea`   | _(optional)_ The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. [See example in overview](#overview).
-  `PatchMode`| _(optional)_ How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace the target area with your source image.</li><li><code>Overlay</code>: draw your source image over the target, so the original image shows through transparent pixels. Note that semi-transparent pixels will replace the underlying pixels, they won't be combined.</li></ul>
+Any number of content packs can edit the same file. You can extend an image downwards by just
+patching past the bottom (Content Patcher will expand the image to fit).
 
-* **Edit a data file** (`"Action": "EditData"`).  
-  Instead of replacing an entire data file, you can edit the individual entries or fields you need.
+field      | purpose
+---------- | -------
+&nbsp;     | See _common fields_ above.
+`FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter.
+`FromArea` | _(optional)_ The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area.
+`ToArea`   | _(optional)_ The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area.
+`PatchMode`| _(optional)_ How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace the target area with your source image.</li><li><code>Overlay</code>: draw your source image over the target, so the original image shows through transparent pixels. Note that semi-transparent pixels will replace the underlying pixels, they won't be combined.</li></ul>
 
-  field      | purpose
-  ---------- | -------
-  &nbsp;     | See _common fields_ above.
-  `Fields`   | _(optional)_ The individual fields you want to change for existing entries. This field supports [tokens](#advanced-tokens--conditions) in field keys and values. [See example in overview](#overview). 
-  `Entries`  | _(optional)_ The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. This field supports [tokens](#advanced-tokens--conditions) in entry keys and values. [See example in overview](#overview).<br />To add an entry, just specify a key that doesn't exist.<br />To delete an entry, set the value to `null` (like `"some key": null`).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra field(s) to avoid errors for non-English players.
+
+For example, this changes one object sprite:
+```js
+{
+   "Format": "1.7",
+   "Changes": [
+      {
+         "Action": "EditImage",
+         "Target": "Maps/springobjects",
+         "FromFile": "assets/fish-object.png",
+         "FromArea": { "X": 0, "Y": 0, "Width": 16, "Height": 16 }, // optional, defaults to entire FromFile
+         "ToArea": { "X": 256, "Y": 96, "Width": 16, "Height": 16 } // optional, defaults to source size from top-left
+      },
+   ]
+}
+```
+
+### Edit part of a data file
+`"Action": "EditData"` lets you edit fields or add/remove/edit entries inside a data model.
+
+field      | purpose
+---------- | -------
+&nbsp;     | See _common fields_ above.
+`Fields`   | _(optional)_ The individual fields you want to change for existing entries. This field supports [tokens](#advanced-tokens--conditions) in field keys and values. The key for each field is the field index (starting at zero) for a slash-delimited string, or the field name for an object.
+`Entries`  | _(optional)_ The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. This field supports [tokens](#advanced-tokens--conditions) in entry keys and values.<br />To add an entry, just specify a key that doesn't exist.<br />To delete an entry, set the value to `null` (like `"some key": null`).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra fields to avoid errors for non-English players.
+
+For example, consider this line in `Data/ObjectInformation`:
+```js
+   "70": "Jade/200/-300/Minerals -2/Jade/A pale green ornamental stone."
+```
+
+The whole line is one entry, which contains six fields counting from zero (so field 0 is `Jade` and
+field 5 is `A pale green ornamental stone.`). This example patch adds a new item #900, and edits
+the name/description for Jade (item #70):
+
+```js
+{
+   "Format": "1.7",
+   "Changes": [
+       {
+          "Action": "EditData",
+          "Target": "Data/ObjectInformation",
+          "Entries": {
+             "900": "Crimson Jade/400/-300/Minerals -2/Crimson Jade/A pale green ornamental stone with a strange crimson sheen."
+          },
+          "Fields": {
+             "70": {
+                4: "Normal Jade",
+                5: "A pale green ornamental stone with no sheen."
+             }
+          }
+       }
+   ]
+}
+```
+
+You can also delete an entry entirely. For example, that can be used to change event conditions:
+```js
+{
+   "Format": "1.7",
+   "Changes": [
+       {
+          "Action": "EditData",
+          "Target": "Data/Events/Beach",
+          "Entries": {
+             "733330/f Sam 750/w sunny/t 700 1500/z winter/y 1": null,
+             "733330/f Sam 750/w sunny/t 700 1500/z winter": "[snipped: long event script here]"
+          }
+       }
+   ]
+}
+```
 
 ## Advanced: tokens & conditions
 ### Overview
