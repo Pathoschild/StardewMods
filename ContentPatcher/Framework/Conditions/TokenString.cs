@@ -58,19 +58,19 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Construct an instance.</summary>
         /// <param name="raw">The raw string before token substitution.</param>
         /// <param name="context">The available token context.</param>
-        public TokenString(string raw, IContext context, string mod)
-            : this(lexTokens: new Lexer().ParseBits(raw, impliedBraces: false).ToArray(), context: context, mod: mod) { }
+        public TokenString(string raw, IContext context)
+            : this(lexTokens: new Lexer().ParseBits(raw, impliedBraces: false).ToArray(), context: context) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="raw">The raw token input argument.</param>
         /// <param name="context">The available token context.</param>
-        public TokenString(LexTokenInputArg? raw, IContext context, string mod)
-            : this(lexTokens: raw?.Parts, context: context, mod: mod) { }
+        public TokenString(LexTokenInputArg? raw, IContext context)
+            : this(lexTokens: raw?.Parts, context: context) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="lexTokens">The lexical tokens parsed from the raw string.</param>
         /// <param name="context">The available token context.</param>
-        public TokenString(ILexToken[] lexTokens, IContext context, string mod)
+        public TokenString(ILexToken[] lexTokens, IContext context)
         {
             // get lexical tokens
             this.LexTokens = (lexTokens ?? new ILexToken[0])
@@ -89,11 +89,8 @@ namespace ContentPatcher.Framework.Conditions
             // extract tokens
             bool isMutable = false;
             bool hasTokens = false;
-            for (int i = 0; i < this.LexTokens.Length; ++i)
+            foreach (LexTokenToken lexToken in this.LexTokens.OfType<LexTokenToken>())
             {
-                if (!(this.LexTokens[i] is LexTokenToken lexToken))
-                    continue;
-
                 hasTokens = true;
                 IToken token = context.GetToken(lexToken.Name, enforceContext: false);
                 if (token != null)
@@ -101,18 +98,8 @@ namespace ContentPatcher.Framework.Conditions
                     this.TokensUsed.Add(token.Name);
                     isMutable = isMutable || token.IsMutable;
                 }
-                else if (mod != null)
-                {
-                    token = context.GetToken($"{mod}/{lexToken.Name}", enforceContext: false);
-                    if (token != null)
-                    {
-                        this.TokensUsed.Add(token.Name);
-                        isMutable = isMutable || token.IsMutable;
-                        this.LexTokens[i] = new LexTokenToken($"{mod}/{lexToken.Name}", lexToken.InputArg, lexToken.ImpliedBraces);
-                    }
-                    else
-                        this.InvalidTokens.Add(lexToken.Name);
-                }
+                else
+                    this.InvalidTokens.Add(lexToken.Name);
             }
 
             // set metadata
@@ -124,7 +111,7 @@ namespace ContentPatcher.Framework.Conditions
             if (this.InvalidTokens.Any())
                 this.IsReadyImpl = false;
             else
-                this.GetApplied(context, mod, out this.ValueImpl, out this.IsReadyImpl);
+                this.GetApplied(context, out this.ValueImpl, out this.IsReadyImpl);
         }
 
         /// <summary>Update the <see cref="Value"/> with the given tokens.</summary>
@@ -136,7 +123,7 @@ namespace ContentPatcher.Framework.Conditions
                 return false;
 
             string prevValue = this.Value;
-            this.GetApplied(context, null, out this.ValueImpl, out this.IsReadyImpl);
+            this.GetApplied(context, out this.ValueImpl, out this.IsReadyImpl);
             return this.Value != prevValue;
         }
 
@@ -161,7 +148,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <param name="result">The input string with tokens substituted.</param>
         /// <param name="isReady">Whether all tokens in the <paramref name="result"/> have been replaced.</param>
-        private void GetApplied(IContext context, string modId,out string result, out bool isReady)
+        private void GetApplied(IContext context, out string result, out bool isReady)
         {
             bool allReplaced = true;
             StringBuilder str = new StringBuilder();
@@ -171,7 +158,7 @@ namespace ContentPatcher.Framework.Conditions
                 {
                     case LexTokenToken lexTokenToken:
                         IToken token = context.GetToken(lexTokenToken.Name, enforceContext: true);
-                        ITokenString input = new TokenString(lexTokenToken.InputArg?.Parts, context, modId);
+                        ITokenString input = new TokenString(lexTokenToken.InputArg?.Parts, context);
                         if (token != null)
                         {
                             string[] values = token.GetValues(input).ToArray();

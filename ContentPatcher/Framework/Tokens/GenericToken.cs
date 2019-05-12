@@ -21,6 +21,9 @@ namespace ContentPatcher.Framework.Tokens
         /*********
         ** Accessors
         *********/
+        /// <summary>The mod namespace in which the token is accessible, or <c>null</c> for any namespace.</summary>
+        public string Scope { get; }
+
         /// <summary>The token name.</summary>
         public string Name { get; }
 
@@ -42,10 +45,11 @@ namespace ContentPatcher.Framework.Tokens
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="provider">The underlying value provider.</param>
-        public GenericToken(IValueProvider provider)
+        /// <param name="scope">The mod namespace in which the token is accessible, or <c>null</c> for any namespace.</param>
+        public GenericToken(IValueProvider provider, string scope = null)
         {
             this.Values = provider;
-
+            this.Scope = scope;
             this.Name = provider.Name;
             this.CanHaveMultipleRootValues = provider.CanHaveMultipleValues();
         }

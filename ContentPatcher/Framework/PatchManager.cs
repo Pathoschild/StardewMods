@@ -42,7 +42,7 @@ namespace ContentPatcher.Framework
 
         /// <summary>The patches to apply, indexed by token.</summary>
         private InvariantDictionary<HashSet<IPatch>> PatchesByToken = new InvariantDictionary<HashSet<IPatch>>();
-        
+
 
         /*********
         ** Public methods
@@ -153,7 +153,7 @@ namespace ContentPatcher.Framework
         public void UpdateContext(IContentHelper contentHelper)
         {
             this.Monitor.VerboseLog("Propagating context...");
-            UpdateContextImpl(contentHelper, this.Patches);
+            this.UpdateContextImpl(contentHelper, this.Patches);
         }
 
         /// <summary>Update the current context, checking only specific tokens.</summary>
@@ -164,11 +164,11 @@ namespace ContentPatcher.Framework
             this.Monitor.VerboseLog("Propagating specific context...");
 
             // collect more tokens
-            foreach ( string token in tokens.ToArray() )
+            foreach (string token in tokens.ToArray())
             {
                 if (!this.TokenManager.BasicTokensUsedBy.TryGetValue(token, out InvariantHashSet moreTokens))
                     continue;
-                foreach (string extraToken in moreTokens )
+                foreach (string extraToken in moreTokens)
                 {
                     if (!tokens.Contains(extraToken))
                         tokens.Add(extraToken);
@@ -183,7 +183,7 @@ namespace ContentPatcher.Framework
                 patches = patches.Union(patchesSet.Value);
 
             // update patches
-            UpdateContextImpl(contentHelper, patches);
+            this.UpdateContextImpl(contentHelper, patches);
         }
 
         /****

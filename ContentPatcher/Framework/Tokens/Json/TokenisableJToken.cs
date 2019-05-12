@@ -12,9 +12,6 @@ namespace ContentPatcher.Framework.Tokens.Json
         /*********
         ** Fields
         *********/
-        /// <summary>The mod ID where this token came from.</summary>
-        private readonly string ModId;
-
         /// <summary>The JSON fields whose values may change based on the context.</summary>
         private readonly TokenisableProxy[] TokenisableFields;
 
@@ -38,9 +35,8 @@ namespace ContentPatcher.Framework.Tokens.Json
         /// <summary>Construct an instance.</summary>
         /// <param name="value">The JSON object to modify.</param>
         /// <param name="context">Provides access to contextual tokens.</param>
-        public TokenisableJToken(JToken value, IContext context, string modId)
+        public TokenisableJToken(JToken value, IContext context)
         {
-            this.ModId = modId;
             this.Value = value;
             this.TokenisableFields = this.ResolveTokenisableFields(value, context).ToArray();
             this.IsMutable = this.TokenisableFields.Any(p => p.IsMutable);
@@ -138,7 +134,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         /// <param name="setValue">Update the source with a new value.</param>
         private TokenisableProxy TryResolveTokenisableFields(string str, IContext context, Action<string> setValue)
         {
-            ITokenString tokenStr = new TokenString(str, context, this.ModId);
+            ITokenString tokenStr = new TokenString(str, context);
 
             // handle mutable token
             if (tokenStr.IsMutable)
