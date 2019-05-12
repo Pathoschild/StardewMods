@@ -2,7 +2,8 @@
 ## 4.9
 Released 26 November 2019.
 
-* Updated for Stardew Valley 1.4.
+* Updated for Stardew Valley 1.4, including...
+  * fertiliser can now be applied to planted crops.
 * Added attachment features:
   * axe: cut giant crops; cut choppable bushes (disabled by default).
   * milk pail: collect milk from animals.
