@@ -234,6 +234,56 @@ You can also delete an entry entirely. For example, that can be used to change e
 }
 ```
 
+_(Some of the text below is censored because it reveals unannounced info about the upcoming Stardew
+Valley 1.4.)_
+
+A few assets like `██████████` contain data models instead of strings. Editing these works pretty
+much the same way, but fields have names instead of indexes. For example, this ██████████ and
+██████████:
+```js
+{
+   "Format": "1.7",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "██████████",
+         "Fields": {
+            "██████████": {
+               "██████████": "██████████"
+            }
+         },
+         "Entries": {
+            "██████████": {
+               "ID": "██████████",
+               "██████████": "██████████",
+               "██████████": "██████████",
+               "██████████": "██████████",
+               "██████████": [ "██████████", "██████████" ],
+               "██████████": [
+                  {
+                     "██████████": "██████████",
+                     "██████████": "██████████",
+                     "██████████": "██████████",
+                     "██████████": "██████████"
+                  }
+               ]
+            }
+         }
+      }
+   ]
+}
+```
+
+**Note:** some assets like `██████████` contain a list, not a dictionary. In that case Content
+Patcher chooses one of the field values as a key for the purposes of assigning values:
+
+asset | field used
+----- | ----------
+_any_ | `ID` (if it exists)
+`██████████` | `Name`
+`██████████` | `NPCName`
+`██████████` | ██████████
+
 ## Advanced: tokens & conditions
 ### Overview
 A **token** is a placeholder for a predefined value. For example, `season` (the token) may contain
