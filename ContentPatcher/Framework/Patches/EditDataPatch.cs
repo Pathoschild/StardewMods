@@ -75,7 +75,7 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Apply the patch to a loaded asset.</summary>
         /// <typeparam name="T">The asset type.</typeparam>
         /// <param name="asset">The asset to edit.</param>
-        /// <exception cref="NotSupportedException">The current patch type doesn't support editing assets.</exception>
+        /// <exception cref="NotSupportedException">The asset data can't be parsed or edited.</exception>
         public override void Edit<T>(IAssetData asset)
         {
             // throw on invalid type
@@ -85,7 +85,7 @@ namespace ContentPatcher.Framework.Patches
                 return;
             }
 
-            // handle dictionary type
+            // handle dictionary types
             if (typeof(T).IsGenericType && typeof(T).GetGenericTypeDefinition() == typeof(Dictionary<,>))
             {
                 // get dictionary's key/value types
@@ -110,11 +110,10 @@ namespace ContentPatcher.Framework.Patches
                     .Invoke(this, new object[] { asset });
             }
 
-            // handle arbitrary data
-            // TODO: hack for testing until they change GameData assets to dictionaries
+            // handle list types
             else if (typeof(T).IsGenericType && typeof(T).GetGenericTypeDefinition() == typeof(List<>))
             {
-                // get dictionary's value type
+                // get list's value type
                 Type keyType = typeof(T).GetGenericArguments().FirstOrDefault();
                 if (keyType == null)
                     throw new InvalidOperationException("Can't parse the asset's list value type.");
@@ -129,6 +128,10 @@ namespace ContentPatcher.Framework.Patches
                     .MakeGenericMethod(keyType)
                     .Invoke(this, new object[] { asset });
             }
+
+            // unknown type
+            else
+                throw new NotSupportedException($"Unknown data asset type {typeof(T).FullName}, expected dictionary or list.");
         }
 
 
@@ -146,35 +149,6 @@ namespace ContentPatcher.Framework.Patches
                 yield return tokenStr;
         }
 
-        /// <summary>Apply the patch to a list asset.</summary>
-        /// <typeparam name="TValue">The list value type.</typeparam>
-        /// <param name="asset">The asset to edit.</param>
-        private void ApplyList<TValue>(IAssetData asset)
-        {
-            // TODO: this is a horrible hack.
-            Dictionary<string, TValue> data = ((List<TValue>)asset.Data).ToDictionary(this.GetId);
-            IAssetData newAsset = (IAssetData)asset
-                .GetType()
-                .GetConstructor(new[] { typeof(string), typeof(string), typeof(object), typeof(Func<string, string>) })
-                .Invoke(new[] { asset.Locale, asset.AssetName, data, asset.GetType().GetField("GetNormalisedPath", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy).GetValue(asset) });
-            this.ApplyDictionary<string, TValue>(newAsset);
-
-            asset.ReplaceWith(data.Values.ToList());
-        }
-
-        /// <summary>Get the entry ID for a list asset entry.</summary>
-        /// <typeparam name="TValue">The list value type.</typeparam>
-        /// <param name="entity">The entity whose ID to fetch.</param>
-        private string GetId<TValue>(TValue entity)
-        {
-            switch (entity)
-            {
-
-                default:
-                    throw new InvalidOperationException($"No ID implementation for list asset value type {typeof(TValue).FullName}.");
-            }
-        }
-
         /// <summary>Apply the patch to a dictionary asset.</summary>
         /// <typeparam name="TKey">The dictionary key type.</typeparam>
         /// <typeparam name="TValue">The dictionary value type.</typeparam>
@@ -182,7 +156,58 @@ namespace ContentPatcher.Framework.Patches
         private void ApplyDictionary<TKey, TValue>(IAssetData asset)
         {
             IDictionary<TKey, TValue> data = asset.AsDictionary<TKey, TValue>().Data;
+            this.ApplyCollection<TKey, TValue>(
+                hasEntry: key => data.ContainsKey(key),
+                getEntry: key => data[key],
+                setEntry: (key, value) => data[key] = value,
+                removeEntry: key => data.Remove(key)
+            );
+        }
 
+        /// <summary>Apply the patch to a list asset.</summary>
+        /// <typeparam name="TValue">The list value type.</typeparam>
+        /// <param name="asset">The asset to edit.</param>
+        private void ApplyList<TValue>(IAssetData asset)
+        {
+            IList<TValue> data = asset.AsList<TValue>().Data;
+            TValue GetByKey(string key) => data.FirstOrDefault(p => this.GetKey(p) == key);
+
+            this.ApplyCollection<string, TValue>(
+                hasEntry: key => GetByKey(key) != null,
+                getEntry: key => GetByKey(key),
+                setEntry: (key, value) =>
+                {
+                    TValue match = GetByKey(key);
+                    if (match != null)
+                    {
+                        int index = data.IndexOf(match);
+                        data.RemoveAt(index);
+                        data.Insert(index, value);
+                    }
+                    else
+                        data.Add(value);
+                },
+                removeEntry: key =>
+                {
+                    TValue match = GetByKey(key);
+                    if (match != null)
+                    {
+                        int index = data.IndexOf(match);
+                        data.RemoveAt(index);
+                    }
+                }
+            );
+        }
+
+        /// <summary>Apply the patch to a dictionary asset.</summary>
+        /// <typeparam name="TKey">The dictionary key type.</typeparam>
+        /// <typeparam name="TValue">The dictionary value type.</typeparam>
+        /// <param name="hasEntry">Get whether the collection has the given entry.</param>
+        /// <param name="getEntry">Get an entry from the collection.</param>
+        /// <param name="removeEntry">Remove an entry from the collection.</param>
+        /// <param name="setEntry">Add or replace an entry in the collection.</param>
+        private void ApplyCollection<TKey, TValue>(Func<TKey, bool> hasEntry, Func<TKey, TValue> getEntry, Action<TKey> removeEntry, Action<TKey, TValue> setEntry)
+        {
             // apply records
             if (this.Records != null)
             {
@@ -198,9 +223,9 @@ namespace ContentPatcher.Framework.Patches
                     if (typeof(TValue) == typeof(string))
                     {
                         if (record.Value?.Value == null)
-                            data.Remove(key);
+                            removeEntry(key);
                         else if (record.Value.Value is JValue field)
-                            data[key] = field.Value<TValue>();
+                            setEntry(key, field.Value<TValue>());
                         else
                             this.Monitor.Log($"Can't apply data patch \"{this.LogName} > entry #{i}\" to {this.TargetAsset}: this asset has string values (but {record.Value.Value.Type} values were provided).", LogLevel.Warn);
                     }
@@ -209,9 +234,9 @@ namespace ContentPatcher.Framework.Patches
                     else
                     {
                         if (record.Value?.Value == null)
-                            data.Remove(key);
+                            removeEntry(key);
                         else if (record.Value.Value is JObject field)
-                            data[key] = field.ToObject<TValue>();
+                            setEntry(key, field.ToObject<TValue>());
                         else
                             this.Monitor.Log($"Can't apply data patch \"{this.LogName} > entry #{i}\" to {this.TargetAsset}: this asset has {typeof(TValue)} values (but {record.Value.Value.Type} values were provided).", LogLevel.Warn);
                     }
@@ -225,7 +250,7 @@ namespace ContentPatcher.Framework.Patches
                 {
                     // get key
                     TKey key = (TKey)Convert.ChangeType(recordGroup.Key, typeof(TKey));
-                    if (!data.ContainsKey(key))
+                    if (!hasEntry(key))
                     {
                         this.Monitor.Log($"Can't apply data patch \"{this.LogName}\" to {this.TargetAsset}: there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.", LogLevel.Warn);
                         continue;
@@ -234,7 +259,7 @@ namespace ContentPatcher.Framework.Patches
                     // apply string
                     if (typeof(TValue) == typeof(string))
                     {
-                        string[] actualFields = ((string)(object)data[key]).Split('/');
+                        string[] actualFields = ((string)(object)getEntry(key)).Split('/');
                         foreach (EditDataPatchField field in recordGroup)
                         {
                             if (!int.TryParse(field.FieldKey.Value, out int index))
@@ -251,7 +276,7 @@ namespace ContentPatcher.Framework.Patches
                             actualFields[index] = field.Value.Value.Value<string>();
                         }
 
-                        data[key] = (TValue)(object)string.Join("/", actualFields);
+                        setEntry(key, (TValue)(object)string.Join("/", actualFields));
                     }
 
                     // apply object
@@ -259,14 +284,22 @@ namespace ContentPatcher.Framework.Patches
                     {
                         JObject obj = new JObject();
                         foreach (EditDataPatchField field in recordGroup)
-                            obj[field.FieldKey] = field.Value.Value;
+                            obj[field.FieldKey.Value] = field.Value.Value;
 
                         JsonSerializer serializer = new JsonSerializer();
                         using (JsonReader reader = obj.CreateReader())
-                            serializer.Populate(reader, data[key]);
+                            serializer.Populate(reader, getEntry(key));
                     }
                 }
             }
+        }
+
+        /// <summary>Get the key for a list asset entry.</summary>
+        /// <typeparam name="TValue">The list value type.</typeparam>
+        /// <param name="entity">The entity whose ID to fetch.</param>
+        private string GetKey<TValue>(TValue entity)
+        {
+            return InternalConstants.GetListAssetKey(entity);
         }
     }
 }
