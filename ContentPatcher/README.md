@@ -659,7 +659,7 @@ Whether the player is outdoors. Possible values: `true`, `false`. This [does not
 <td>
 
 The internal name of the player's current location (visible using [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679)).
-Possible values: `true`, `false`. This [does not affect dialogue](#known-limitations).
+This [does not affect dialogue](#known-limitations).
 
 </td>
 </tr>
