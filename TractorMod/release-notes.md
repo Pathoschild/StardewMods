@@ -1,5 +1,6 @@
 # Release notes
 ## Upcoming release
+* Updated for Stardew Valley 1.4.
 * Fixed issue where pressing the dismiss-tractor key while riding a horse caused the horse to disappear.
 
 ## 4.8.2
