@@ -108,10 +108,11 @@ namespace ContentPatcher
                 helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
+            helper.Events.Player.Warped += this.OnWarped;
             helper.Events.Specialised.LoadStageChanged += this.OnLoadStageChanged;
 
             // set up commands
-            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, this.UpdateContext);
+            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, () => this.UpdateContext());
             helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (name, args) => this.CommandHandler.Handle(args));
         }
 
@@ -180,6 +181,16 @@ namespace ContentPatcher
             this.UpdateContext();
         }
 
+        /// <summary>The method invoked when the player warps.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnWarped(object sender, WarpedEventArgs e)
+        {
+            ConditionType[] affectedTokens = new[] { ConditionType.LocationName, ConditionType.IsOutdoors };
+            this.Monitor.VerboseLog($"Updating context for {string.Join(", ", affectedTokens)}: player warped.");
+            this.UpdateContext(affectedTokens);
+        }
+
         /// <summary>The method invoked when the player returns to the title screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
@@ -194,10 +205,15 @@ namespace ContentPatcher
         ** Methods
         ****/
         /// <summary>Update the current context.</summary>
-        private void UpdateContext()
+        /// <param name="affectedTokens">The specific tokens for which to update context, or <c>null</c> to affect all tokens</param>
+        private void UpdateContext(ConditionType[] affectedTokens = null)
         {
-            this.TokenManager.UpdateContext();
-            this.PatchManager.UpdateContext(this.Helper.Content);
+            InvariantHashSet set = affectedTokens != null
+                ? new InvariantHashSet(affectedTokens.Select(p => p.ToString()))
+                : null;
+
+            this.TokenManager.UpdateContext(set);
+            this.PatchManager.UpdateContext(this.Helper.Content, set);
         }
 
         /// <summary>Load the registered content packs.</summary>
@@ -276,7 +292,7 @@ namespace ContentPatcher
                         foreach (KeyValuePair<string, ConfigField> pair in config)
                         {
                             ConfigField field = pair.Value;
-                            tokenContext.Add(new ImmutableToken(pair.Key, field.Value, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple));
+                            tokenContext.Add(new ImmutableToken(pair.Key, field.Value, scope: current.Manifest.UniqueID, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple));
                         }
 
                         // load dynamic tokens
@@ -678,7 +694,7 @@ namespace ContentPatcher
                 }
 
                 // create condition
-                conditions.Add(new Condition(name: lexToken.Name, input: input, values: values));
+                conditions.Add(new Condition(name: token.Name, input: input, values: values));
             }
 
             // return parsed conditions

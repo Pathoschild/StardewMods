@@ -89,7 +89,7 @@ namespace ContentPatcher.Framework.Conditions
             // extract tokens
             bool isMutable = false;
             bool hasTokens = false;
-            foreach (LexTokenToken lexToken in this.LexTokens.OfType<LexTokenToken>())
+            foreach (LexTokenToken lexToken in this.GetTokenPlaceholders(this.LexTokens, recursive: true))
             {
                 hasTokens = true;
                 IToken token = context.GetToken(lexToken.Name, enforceContext: false);

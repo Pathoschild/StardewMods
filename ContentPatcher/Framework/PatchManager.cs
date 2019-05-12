@@ -40,6 +40,9 @@ namespace ContentPatcher.Framework
         /// <summary>The patches to apply, indexed by asset name.</summary>
         private InvariantDictionary<HashSet<IPatch>> PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>();
 
+        /// <summary>The patches to apply, indexed by token.</summary>
+        private InvariantDictionary<HashSet<IPatch>> PatchesAffectedByToken = new InvariantDictionary<HashSet<IPatch>>();
+
 
         /*********
         ** Public methods
@@ -147,14 +150,32 @@ namespace ContentPatcher.Framework
 
         /// <summary>Update the current context.</summary>
         /// <param name="contentHelper">The content helper through which to invalidate assets.</param>
-        public void UpdateContext(IContentHelper contentHelper)
+        /// <param name="globalChangedTokens">The global token values which changed, or <c>null</c> to update all tokens.</param>
+        public void UpdateContext(IContentHelper contentHelper, InvariantHashSet globalChangedTokens = null)
         {
             this.Monitor.VerboseLog("Propagating context...");
+
+            // collect patches to update
+            HashSet<IPatch> patches;
+            if (globalChangedTokens != null)
+            {
+                patches = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
+                foreach (string tokenName in globalChangedTokens)
+                {
+                    if (this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch> affectedPatches))
+                    {
+                        foreach (IPatch patch in affectedPatches)
+                            patches.Add(patch);
+                    }
+                }
+            }
+            else
+                patches = this.Patches;
 
             // update patches
             InvariantHashSet reloadAssetNames = new InvariantHashSet();
             string prevAssetName = null;
-            foreach (IPatch patch in this.Patches.OrderByIgnoreCase(p => p.TargetAsset).ThenByIgnoreCase(p => p.LogName))
+            foreach (IPatch patch in patches.OrderByIgnoreCase(p => p.TargetAsset).ThenByIgnoreCase(p => p.LogName))
             {
                 // log asset name
                 if (this.Monitor.IsVerbose && prevAssetName != patch.TargetAsset)
@@ -228,19 +249,39 @@ namespace ContentPatcher.Framework
         /// <param name="patch">The patch to add.</param>
         public void Add(IPatch patch)
         {
+            ModTokenContext modContext = this.TokenManager.TrackLocalTokens(patch.ContentPack.Pack);
+
             // set initial context
-            IContext tokenContext = this.TokenManager.TrackLocalTokens(patch.ContentPack.Pack);
-            patch.UpdateContext(tokenContext);
+            patch.UpdateContext(modContext);
 
             // add to patch list
             this.Monitor.VerboseLog($"      added {patch.Type} {patch.TargetAsset}.");
             this.Patches.Add(patch);
 
-            // add to lookup cache
-            if (this.PatchesByCurrentTarget.TryGetValue(patch.TargetAsset, out HashSet<IPatch> patches))
-                patches.Add(patch);
-            else
-                this.PatchesByCurrentTarget[patch.TargetAsset] = new HashSet<IPatch> { patch };
+            // add to target cache
+            if (!this.PatchesByCurrentTarget.TryGetValue(patch.TargetAsset, out HashSet<IPatch> patches))
+                this.PatchesByCurrentTarget[patch.TargetAsset] = patches = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
+            patches.Add(patch);
+
+            // add to token cache
+            InvariantHashSet tokensUsed = new InvariantHashSet(patch.GetTokensUsed());
+            foreach (string tokenName in tokensUsed)
+                this.TrackPatchAffectedByToken(patch, tokenName);
+            foreach (IToken token in this.TokenManager.GetTokens(enforceContext: false))
+            {
+                if (!tokensUsed.Contains(token.Name) && modContext.GetTokensAffectedBy(token.Name).Any(name => tokensUsed.Contains(name)))
+                    this.TrackPatchAffectedByToken(patch, token.Name);
+            }
+        }
+
+        /// <summary>Track that a given token may cause the patch to update.</summary>
+        /// <param name="patch">The affected patch.</param>
+        /// <param name="tokenName">The token name.</param>
+        private void TrackPatchAffectedByToken(IPatch patch, string tokenName)
+        {
+            if (!this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch> affected))
+                this.PatchesAffectedByToken[tokenName] = affected = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
+            affected.Add(patch);
         }
 
         /// <summary>Add a patch that's permanently disabled for this session.</summary>

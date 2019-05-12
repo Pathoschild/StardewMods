@@ -218,8 +218,11 @@ namespace ContentPatcher.Framework.Commands
                 // print tokens
                 {
                     IToken[] localTokens = tokenContext
-                        .GetTokens(localOnly: true, enforceContext: false)
-                        .Where(p => p.Name != ConditionType.HasFile.ToString()) // no value to display
+                        .GetTokens(enforceContext: false)
+                        .Where(token =>
+                            token.Scope != null // ignore global tokens
+                            && token.Name != ConditionType.HasFile.ToString() // no value to display
+                        )
                         .ToArray();
                     if (localTokens.Any())
                     {
