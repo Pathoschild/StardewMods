@@ -1,5 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using StardewValley.GameData.Crafting;
+using StardewValley.GameData.Movies;
 
 namespace ContentPatcher.Framework
 {
@@ -29,6 +33,20 @@ namespace ContentPatcher.Framework
         {
             switch (entity)
             {
+                case ConcessionTaste taste:
+                    return taste.Name;
+
+                case MovieCharacterReaction reaction:
+                    return reaction.NPCName;
+
+                case TailorItemRecipe recipe:
+                    IList<string> keyParts = new List<string>();
+                    if (recipe.FirstItemTags.Any())
+                        keyParts.Add($"L:{string.Join(",", recipe.FirstItemTags)}");
+                    if (recipe.SecondItemTags.Any())
+                        keyParts.Add($"R:{string.Join(",", recipe.SecondItemTags)}");
+                    return string.Join("|", keyParts);
+
                 default:
                     PropertyInfo property = entity.GetType().GetProperty("ID");
                     if (property != null)
