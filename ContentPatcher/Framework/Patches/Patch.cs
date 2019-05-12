@@ -123,13 +123,20 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Get the token names used by this patch in its fields.</summary>
         public virtual IEnumerable<string> GetTokensUsed()
         {
+            // from local asset
             if (this.FromLocalAsset != null)
             {
                 foreach (LexTokenToken lexToken in this.FromLocalAsset.GetTokenPlaceholders(recursive: true))
                     yield return lexToken.Name;
             }
+
+            // raw target asset
             foreach (LexTokenToken lexToken in this.RawTargetAsset.GetTokenPlaceholders(recursive: true))
                 yield return lexToken.Name;
+
+            // conditions
+            foreach (string name in this.Conditions.SelectMany(p => p.GetTokensUsed()))
+                yield return name;
         }
 
 
