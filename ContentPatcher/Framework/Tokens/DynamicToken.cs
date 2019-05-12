@@ -17,8 +17,9 @@ namespace ContentPatcher.Framework.Tokens
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The token name.</param>
-        public DynamicToken(string name)
-            : base(new DynamicTokenValueProvider(name))
+        /// <param name="scope">The mod namespace in which the token is accessible.</param>
+        public DynamicToken(string name, string scope)
+            : base(new DynamicTokenValueProvider(name), scope)
         {
             this.DynamicValues = (DynamicTokenValueProvider)base.Values;
         }
