@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ContentPatcher.Framework.Conditions;
-using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -18,7 +16,7 @@ namespace ContentPatcher.Framework
         private readonly string Scope;
 
         /// <summary>The available global tokens.</summary>
-        private readonly TokenManager GlobalContext;
+        private readonly IContext GlobalContext;
 
         /// <summary>The available local standard tokens.</summary>
         private readonly GenericTokenContext LocalContext = new GenericTokenContext();
@@ -32,6 +30,9 @@ namespace ContentPatcher.Framework
         /// <summary>The underlying token contexts in priority order.</summary>
         private readonly IContext[] Contexts;
 
+        /// <summary>Maps tokens to those affected by changes to their value in the mod context.</summary>
+        private InvariantDictionary<InvariantHashSet> TokenDependents { get; } = new InvariantDictionary<InvariantHashSet>();
+
 
         /*********
         ** Public methods
@@ -42,11 +43,11 @@ namespace ContentPatcher.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="scope">The namespace for tokens specific to this mod.</param>
         /// <param name="tokenManager">Manages the available global tokens.</param>
-        public ModTokenContext(string scope, TokenManager tokenManager)
+        public ModTokenContext(string scope, IContext tokenManager)
         {
             this.Scope = scope;
             this.GlobalContext = tokenManager;
-            this.Contexts = new IContext[] { this.GlobalContext, this.LocalContext, this.DynamicContext };
+            this.Contexts = new[] { this.GlobalContext, this.LocalContext, this.DynamicContext };
         }
 
         /// <summary>Add a standard token to the context.</summary>
@@ -83,50 +84,62 @@ namespace ContentPatcher.Framework
             token.AddAllowedValues(tokenValue.Value);
             this.DynamicTokenValues.Add(tokenValue);
 
-            // track what tokens this token uses, if any
-            Queue<string> tokenQueue = new Queue<string>();
-            foreach (Condition condition in tokenValue.Conditions)
+            // track tokens which should trigger an update to this token
+            Queue<string> tokenQueue = new Queue<string>(tokenValue.GetTokensUsed());
+            InvariantHashSet visited = new InvariantHashSet();
+            while (tokenQueue.Any())
             {
-                foreach (LexTokenToken lexToken in condition.Input.GetTokenPlaceholders(recursive: true))
-                    tokenQueue.Enqueue(lexToken.Name);
-                foreach (LexTokenToken lexToken in condition.Values.GetTokenPlaceholders(recursive: true))
-                    tokenQueue.Enqueue(lexToken.Name);
-            }
-            foreach (LexTokenToken lexToken in tokenValue.Value.GetTokenPlaceholders(recursive: true))
-                tokenQueue.Enqueue(lexToken.Name);
-            while (tokenQueue.Count > 0)
-            {
+                // get token name
                 string tokenName = tokenQueue.Dequeue();
-                IToken curToken = this.GlobalContext.GetToken(tokenName, enforceContext: false);
+                if (!visited.Add(tokenName))
+                    continue;
 
-                if (curToken is DynamicToken dynamicToken)
+                // if the current token uses other tokens, they may affect the being added too
+                IToken curToken = this.GetToken(tokenName, enforceContext: false);
+                foreach (string name in curToken.GetTokensUsed())
+                    tokenQueue.Enqueue(name);
+                if (curToken is DynamicToken curDynamicToken)
                 {
-                    foreach (string val in dynamicToken.GetAllowedValues(null))
-                    {
-                        TokenString tokenStr = new TokenString(val, this.GlobalContext);
-                        foreach (LexTokenToken lexToken in tokenValue.Value.GetTokenPlaceholders(recursive: true))
-                            tokenQueue.Enqueue(lexToken.Name);
-                    }
+                    foreach (string name in curDynamicToken.GetPossibleTokensUsed())
+                        tokenQueue.Enqueue(name);
                 }
-                else
-                {
-                    if (!this.GlobalContext.BasicTokensUsedBy.TryGetValue(curToken.Name, out InvariantHashSet used))
-                        this.GlobalContext.BasicTokensUsedBy.Add(curToken.Name, used = new InvariantHashSet());
 
-                    if (!used.Contains(tokenValue.Name))
-                        used.Add(tokenValue.Name);
-                }
+                // add dynamic value as a dependency of the current token
+                if (!this.TokenDependents.TryGetValue(curToken.Name, out InvariantHashSet used))
+                    this.TokenDependents.Add(curToken.Name, used = new InvariantHashSet());
+                used.Add(tokenValue.Name);
             }
         }
 
         /// <summary>Update the current context.</summary>
-        public void UpdateContext(IContext globalContext)
+        /// <param name="globalContext">The global token context.</param>
+        /// <param name="globalChangedTokens">The global token values which changed, or <c>null</c> to update all tokens.</param>
+        public void UpdateContext(IContext globalContext, InvariantHashSet globalChangedTokens)
         {
-            // update config tokens
+            // get affected tokens (or null to update all tokens)
+            InvariantHashSet affectedTokens = null;
+            if (globalChangedTokens != null)
+            {
+                affectedTokens = new InvariantHashSet();
+                foreach (string globalToken in globalChangedTokens)
+                {
+                    foreach (string affectedToken in this.GetTokensAffectedBy(globalToken))
+                        affectedTokens.Add(affectedToken);
+                }
+
+                if (!affectedTokens.Any())
+                    return;
+            }
+
+            // update local standard tokens
             foreach (IToken token in this.LocalContext.Tokens.Values)
-                token.UpdateContext(this);
+            {
+                if (token.IsMutable && affectedTokens?.Contains(token.Name) != false)
+                    token.UpdateContext(this);
+            }
 
             // reset dynamic tokens
+            // note: since token values are affected by the order they're defined, only updating tokens affected by globalChangedTokens is not trivial.
             foreach (DynamicToken token in this.DynamicContext.Tokens.Values)
                 token.SetReady(false);
             foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
@@ -141,28 +154,13 @@ namespace ContentPatcher.Framework
             }
         }
 
-        /// <summary>Update the current context for certain tokens.</summary>
-        public void UpdateSpecificContext(InvariantHashSet tokens)
+        /// <summary>Get the tokens affected by changes to a given token.</summary>
+        /// <param name="token">The token name to check.</param>
+        public IEnumerable<string> GetTokensAffectedBy(string token)
         {
-            // update config tokens
-            IEnumerable<string> specific = this.LocalContext.Tokens.Keys.Intersect(tokens);
-            foreach (string token in specific)
-                this.LocalContext.GetToken(token, false).UpdateContext(this);
-
-            // reset dynamic tokens
-            // TODO: Only update relevant dynamic tokens
-            foreach (DynamicToken token in this.DynamicContext.Tokens.Values)
-                token.SetReady(false);
-            foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
-            {
-                tokenValue.UpdateContext(this);
-                if (tokenValue.IsReady && tokenValue.Conditions.All(p => p.IsMatch(this)))
-                {
-                    DynamicToken token = this.DynamicContext.Tokens[tokenValue.Name];
-                    token.SetValue(tokenValue.Value);
-                    token.SetReady(true);
-                }
-            }
+            return this.TokenDependents.TryGetValue(token, out InvariantHashSet affectedTokens)
+                ? affectedTokens
+                : Enumerable.Empty<string>();
         }
 
         /****

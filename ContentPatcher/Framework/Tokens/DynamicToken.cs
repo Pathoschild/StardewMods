@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using ContentPatcher.Framework.Tokens.ValueProviders;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
 {
@@ -10,6 +12,9 @@ namespace ContentPatcher.Framework.Tokens
         *********/
         /// <summary>The underlying value provider.</summary>
         private readonly DynamicTokenValueProvider DynamicValues;
+
+        /// <summary>The values which this dynamic token may use.</summary>
+        private readonly InvariantHashSet PossibleTokensUsed = new InvariantHashSet();
 
 
         /*********
@@ -28,6 +33,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="possibleValues">The possible values to add.</param>
         public void AddAllowedValues(ITokenString possibleValues)
         {
+            foreach (string name in possibleValues.GetTokensUsed())
+                this.PossibleTokensUsed.Add(name);
+
             this.DynamicValues.AddAllowedValues(possibleValues);
             this.CanHaveMultipleRootValues = this.DynamicValues.CanHaveMultipleValues();
         }
@@ -44,6 +52,12 @@ namespace ContentPatcher.Framework.Tokens
         public void SetReady(bool ready)
         {
             this.DynamicValues.SetReady(ready);
+        }
+
+        /// <summary>Get the token names used by this patch in its fields.</summary>
+        public IEnumerable<string> GetPossibleTokensUsed()
+        {
+            return this.PossibleTokensUsed;
         }
     }
 }

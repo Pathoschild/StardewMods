@@ -32,9 +32,6 @@ namespace ContentPatcher.Framework
         /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
         public bool IsBasicInfoLoaded { get; set; }
 
-        /// <summary>Maps tokens to the other tokens affected by changes to their value.</summary>
-        public InvariantDictionary<InvariantHashSet> BasicTokensUsedBy { get; } = new InvariantDictionary<InvariantHashSet>();
-
 
         /*********
         ** Public methods
@@ -65,28 +62,19 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Update the current context.</summary>
-        public void UpdateContext()
+        /// <param name="globalChangedTokens">The global token values which changed, or <c>null</c> to update all tokens.</param>
+        public void UpdateContext(InvariantHashSet globalChangedTokens = null)
         {
+            // update global tokens
             foreach (IToken token in this.GlobalContext.Tokens.Values)
             {
-                if (token.IsMutable)
+                if (token.IsMutable && globalChangedTokens?.Contains(token.Name) != false)
                     token.UpdateContext(this);
             }
 
+            // update mod contexts
             foreach (ModTokenContext localContext in this.LocalTokens.Values)
-                localContext.UpdateContext(this);
-        }
-
-        /// <summary>Update the context for specific tokens. Only supports global tokens.</summary>
-        /// <param name="tokens">The tokens to update.</param>
-        public void UpdateSpecificContext(InvariantHashSet tokens)
-        {
-            IEnumerable<string> specific = this.GlobalContext.Tokens.Keys.Intersect(tokens);
-            foreach (string token in specific)
-                this.GlobalContext.GetToken(token, false).UpdateContext(this);
-
-            foreach (ModTokenContext localContext in this.LocalTokens.Values)
-                localContext.UpdateSpecificContext(tokens);
+                localContext.UpdateContext(this, globalChangedTokens);
         }
 
         /****

@@ -112,7 +112,7 @@ namespace ContentPatcher
             helper.Events.Specialised.LoadStageChanged += this.OnLoadStageChanged;
 
             // set up commands
-            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, this.UpdateContext);
+            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, () => this.UpdateContext());
             helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (name, args) => this.CommandHandler.Handle(args));
         }
 
@@ -186,8 +186,9 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
         {
-            this.Monitor.VerboseLog("Updating context: player warped.");
-            this.UpdateSpecificContext(new InvariantHashSet() { ConditionType.LocationName.ToString(), ConditionType.IsOutdoors.ToString() });
+            ConditionType[] affectedTokens = new[] { ConditionType.LocationName, ConditionType.IsOutdoors };
+            this.Monitor.VerboseLog($"Updating context for {string.Join(", ", affectedTokens)}: player warped.");
+            this.UpdateContext(affectedTokens);
         }
 
         /// <summary>The method invoked when the player returns to the title screen.</summary>
@@ -204,17 +205,15 @@ namespace ContentPatcher
         ** Methods
         ****/
         /// <summary>Update the current context.</summary>
-        private void UpdateContext()
+        /// <param name="affectedTokens">The specific tokens for which to update context, or <c>null</c> to affect all tokens</param>
+        private void UpdateContext(ConditionType[] affectedTokens = null)
         {
-            this.TokenManager.UpdateContext();
-            this.PatchManager.UpdateContext(this.Helper.Content);
-        }
+            InvariantHashSet set = affectedTokens != null
+                ? new InvariantHashSet(affectedTokens.Select(p => p.ToString()))
+                : null;
 
-        /// <summary>Update the current context for specific tokens.</summary>
-        private void UpdateSpecificContext(InvariantHashSet tokens)
-        {
-            this.TokenManager.UpdateSpecificContext(tokens);
-            this.PatchManager.UpdateSpecificContext(this.Helper.Content, tokens);
+            this.TokenManager.UpdateContext(set);
+            this.PatchManager.UpdateContext(this.Helper.Content, set);
         }
 
         /// <summary>Load the registered content packs.</summary>
