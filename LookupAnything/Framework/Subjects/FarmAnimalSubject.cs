@@ -52,14 +52,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // yield fields
-            yield return new CharacterFriendshipField(this.GameHelper, this.Translate(L10n.Animal.Love), this.GameHelper.GetFriendshipForAnimal(Game1.player, animal, metadata), this.Text);
-            yield return new PercentageBarField(this.GameHelper, this.Translate(L10n.Animal.Happiness), animal.happiness.Value, byte.MaxValue, Color.Green, Color.Gray, this.Translate(L10n.Generic.Percent, new { percent = Math.Round(animal.happiness.Value / (metadata.Constants.AnimalMaxHappiness * 1f) * 100) }));
-            yield return new GenericField(this.GameHelper, this.Translate(L10n.Animal.Mood), animal.getMoodMessage());
-            yield return new GenericField(this.GameHelper, this.Translate(L10n.Animal.Complaints), this.GetMoodReason(animal));
-            yield return new ItemIconField(this.GameHelper, this.Translate(L10n.Animal.ProduceReady), animal.currentProduce.Value > 0 ? this.GameHelper.GetObjectBySpriteIndex(animal.currentProduce.Value) : null);
+            yield return new CharacterFriendshipField(this.GameHelper, L10n.Animal.Love(), this.GameHelper.GetFriendshipForAnimal(Game1.player, animal, metadata), this.Text);
+            yield return new PercentageBarField(this.GameHelper, L10n.Animal.Happiness(), animal.happiness.Value, byte.MaxValue, Color.Green, Color.Gray, L10n.Generic.Percent(percent: (int)Math.Round(animal.happiness.Value / (metadata.Constants.AnimalMaxHappiness * 1f) * 100)));
+            yield return new GenericField(this.GameHelper, L10n.Animal.Mood(), animal.getMoodMessage());
+            yield return new GenericField(this.GameHelper, L10n.Animal.Complaints(), this.GetMoodReason(animal));
+            yield return new ItemIconField(this.GameHelper, L10n.Animal.ProduceReady(), animal.currentProduce.Value > 0 ? this.GameHelper.GetObjectBySpriteIndex(animal.currentProduce.Value) : null);
             if (!isFullyGrown)
-                yield return new GenericField(this.GameHelper, this.Translate(L10n.Animal.Growth), $"{this.Translate(L10n.Generic.Days, new { count = daysUntilGrown })} ({this.Stringify(dayOfMaturity)})");
-            yield return new GenericField(this.GameHelper, this.Translate(L10n.Animal.SellsFor), GenericField.GetSaleValueString(animal.getSellPrice(), 1, this.Text));
+                yield return new GenericField(this.GameHelper, L10n.Animal.Growth(), $"{L10n.Generic.Days(count: daysUntilGrown)} ({this.Stringify(dayOfMaturity)})");
+            yield return new GenericField(this.GameHelper, L10n.Animal.SellsFor(), GenericField.GetSaleValueString(animal.getSellPrice(), 1, this.Text));
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
@@ -103,28 +103,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             // winter without heat
             if (Game1.IsWinter && Game1.currentLocation.numberOfObjectsWithName(Constant.ItemNames.Heater) <= 0)
-                factors.Add(this.Translate(L10n.Animal.ComplaintsNoHeater));
+                factors.Add(L10n.Animal.ComplaintsNoHeater());
 
             // mood
             switch (animal.moodMessage.Value)
             {
                 case FarmAnimal.newHome:
-                    factors.Add(this.Translate(L10n.Animal.ComplaintsNewHome));
+                    factors.Add(L10n.Animal.ComplaintsNewHome());
                     break;
                 case FarmAnimal.hungry:
-                    factors.Add(this.Translate(L10n.Animal.ComplaintsHungry));
+                    factors.Add(L10n.Animal.ComplaintsHungry());
                     break;
                 case FarmAnimal.disturbedByDog:
-                    factors.Add(this.Translate(L10n.Animal.ComplaintsWildAnimalAttack));
+                    factors.Add(L10n.Animal.ComplaintsWildAnimalAttack());
                     break;
                 case FarmAnimal.leftOutAtNight:
-                    factors.Add(this.Translate(L10n.Animal.ComplaintsLeftOut));
+                    factors.Add(L10n.Animal.ComplaintsLeftOut());
                     break;
             }
 
             // not pet
             if (!animal.wasPet.Value)
-                factors.Add(this.Translate(L10n.Animal.ComplaintsNotPetted));
+                factors.Add(L10n.Animal.ComplaintsNotPetted());
 
             // return factors
             return string.Join(", ", factors);

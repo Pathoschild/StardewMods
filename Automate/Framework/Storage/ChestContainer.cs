@@ -60,7 +60,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             {
                 if (slot != null && stack.Sample.canStackWith(slot))
                 {
-                    int added = stack.Count - slot.addToStack(stack.Count);
+                    Item sample = stack.Sample.getOne();
+                    sample.Stack = stack.Count;
+                    int added = stack.Count - slot.addToStack(sample);
                     stack.Reduce(added);
                     if (stack.Count <= 0)
                         return;

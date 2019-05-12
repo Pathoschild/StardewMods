@@ -268,6 +268,10 @@
   "item.cask-schedule.now-partial": "目前{{quality}}(用镐停止陈酿)",
   "item.cask-schedule.tomorrow": "明天{{quality}}",
   "item.cask-schedule.in-x-days": "将在{{count}}天({{date}})后提升到{{quality}}",
+
+  "item.fence-health.gold-clock": "黄金时钟增益，无法腐坏",
+  "item.fence-health.summary": "{{percent}}% (大约还剩{{count}}天)",
+
   "item.contents.placed": "已放置{{name}}",
   "item.contents.ready": "目前{{name}}",
   "item.contents.partial": "{{name}} in {{time}}",
@@ -278,8 +282,6 @@
   "item.needed-for.gourmet-chef": "美食大厨成就(烹饪{{recipes}})",
   "item.needed-for.craft-master": "制造大师成就(制造{{recipes}})",
   "item.sells-to.shipping-box": "出货箱",
-  "item.fence-health.gold-clock": "黄金时钟增益，无法腐坏",
-  "item.fence-health.summary": "{{percent}}% (大约还剩{{count}}天)",
   "item.recipes.entry": "{{name}} (需要{{count}})",
   "item.number-owned.summary": "你目前拥有的总数为{{count}}",
   "item.number-crafted.summary": "你已制造{{count}}个此物",
@@ -306,6 +308,7 @@
   "npc.talked-today": "今天已交谈",
   "npc.gifted-today": "今天已送礼",
   "npc.gifted-this-week": "本周送礼",
+  "npc.kissed-today": "Kissed today", // TODO
   "npc.loves-gifts": "最爱",
   "npc.likes-gifts": "喜欢",
   "npc.neutral-gifts": "普通",

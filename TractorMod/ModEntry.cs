@@ -529,7 +529,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="tractor">The tractor to dismiss.</param>
         private void DismissTractor(Horse tractor)
         {
-            if (tractor == null)
+            if (tractor == null || !this.IsTractor(tractor))
                 return;
 
             if (tractor.rider != null)

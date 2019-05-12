@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         public void TokenStringBuilder_PlainString(string raw)
         {
             // act
-            TokenString tokenStr = new TokenString(raw, new GenericTokenContext());
+            TokenString tokenStr = new TokenString(raw, new GenericTokenContext(), null);
 
             // assert
             tokenStr.Raw.Should().Be(raw.Trim());
@@ -45,7 +45,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             context.Save(new ImmutableToken(configKey, new InvariantHashSet { "value" }));
 
             // act
-            TokenString tokenStr = new TokenString(raw, context);
+            TokenString tokenStr = new TokenString(raw, context, null);
 
             // assert
             tokenStr.Raw.Should().Be(parsed);
@@ -70,7 +70,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             context.Save(new ImmutableToken(tokenKey, new InvariantHashSet { "A" }));
 
             // act
-            TokenString tokenStr = new TokenString(raw, context);
+            TokenString tokenStr = new TokenString(raw, context, null);
 
             // assert
             tokenStr.Raw.Should().Be("assets/{{configKey}}_{{season}}_{{invalid}}.png");

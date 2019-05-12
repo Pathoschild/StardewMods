@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
             if (tracker != null)
             {
                 SObject item = (SObject)tracker.Take(tracker.Count);
-                this.Farm.shippingBin.Add(item);
+                this.Farm.getShippingBin(Game1.MasterPlayer).Add(item);
                 this.Farm.lastItemShipped = item;
                 this.Farm.showShipment(item, false);
                 return true;

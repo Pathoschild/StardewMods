@@ -20,6 +20,7 @@ using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Enums;
 using StardewModdingAPI.Events;
+using StardewValley;
 
 [assembly: InternalsVisibleTo("Pathoschild.Stardew.Tests.Mods")]
 namespace ContentPatcher
@@ -47,7 +48,7 @@ namespace ContentPatcher
             new Migration_1_5(),
             new Migration_1_6(),
             new Migration_1_7(),
-            new Migration_1_8(),
+            new Migration_1_8()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -162,6 +163,7 @@ namespace ContentPatcher
             {
                 case LoadStage.CreatedBasicInfo:
                 case LoadStage.SaveLoadedBasicInfo:
+                case LoadStage.Loaded when Game1.dayOfMonth == 0: // handled by OnDayStarted if we're not creating a new save
                     this.Monitor.VerboseLog($"Updating context: load stage changed to {e.NewStage}.");
                     this.TokenManager.IsBasicInfoLoaded = true;
                     this.UpdateContext();
@@ -496,8 +498,8 @@ namespace ContentPatcher
                     case PatchType.EditData:
                         {
                             // validate
-                            if (entry.Entries == null && entry.Fields == null)
-                                return TrackSkip($"either {nameof(PatchConfig.Entries)} or {nameof(PatchConfig.Fields)} must be specified for a '{action}' change.");
+                            if (entry.Entries == null && entry.Fields == null && entry.MoveEntries == null)
+                                return TrackSkip($"one of {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, or {nameof(PatchConfig.MoveEntries)} must be specified for an '{action}' change.");
 
                             // parse entries
                             List<EditDataPatchRecord> entries = new List<EditDataPatchRecord>();
@@ -542,8 +544,41 @@ namespace ContentPatcher
                                 }
                             }
 
+                            // parse move entries
+                            List<EditDataPatchMoveRecord> moveEntries = new List<EditDataPatchMoveRecord>();
+                            if (entry.MoveEntries != null)
+                            {
+                                foreach (PatchMoveEntryConfig moveEntry in entry.MoveEntries)
+                                {
+                                    // validate
+                                    string[] targets = new[] { moveEntry.BeforeID, moveEntry.AfterID, moveEntry.ToPosition };
+                                    if (string.IsNullOrWhiteSpace(moveEntry.ID))
+                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > move entry is invalid: must specify an {nameof(PatchMoveEntryConfig.ID)} value.");
+                                    if (targets.All(string.IsNullOrWhiteSpace))
+                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, or {nameof(PatchMoveEntryConfig.AfterID)}.");
+                                    if (targets.Count(p => !string.IsNullOrWhiteSpace(p)) > 1)
+                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify only one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, and {nameof(PatchMoveEntryConfig.AfterID)}.");
+
+                                    // parse IDs
+                                    if (!this.TryParseStringTokens(pack.Manifest.UniqueID, moveEntry.ID, tokenContext, migrator, out string idError, out ITokenString moveId))
+                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.ID)} is invalid: {idError}.");
+                                    if (!this.TryParseStringTokens(pack.Manifest.UniqueID, moveEntry.BeforeID, tokenContext, migrator, out string beforeIdError, out ITokenString beforeId))
+                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.BeforeID)} is invalid: {beforeIdError}.");
+                                    if (!this.TryParseStringTokens(pack.Manifest.UniqueID, moveEntry.AfterID, tokenContext, migrator, out string afterIdError, out ITokenString afterId))
+                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.AfterID)} is invalid: {afterIdError}.");
+
+                                    // parse position
+                                    MoveEntryPosition toPosition = MoveEntryPosition.None;
+                                    if (!string.IsNullOrWhiteSpace(moveEntry.ToPosition) && (!Enum.TryParse(moveEntry.ToPosition, true, out toPosition) || toPosition == MoveEntryPosition.None))
+                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.ToPosition)} is invalid: must be one of {nameof(MoveEntryPosition.Bottom)} or {nameof(MoveEntryPosition.Top)}.");
+
+                                    // create move entry
+                                    moveEntries.Add(new EditDataPatchMoveRecord(moveId, beforeId, afterId, toPosition));
+                                }
+                            }
+
                             // save
-                            patch = new EditDataPatch(entry.LogName, pack, assetName, conditions, entries, fields, this.Monitor, this.Helper.Content.NormaliseAssetName);
+                            patch = new EditDataPatch(entry.LogName, pack, assetName, conditions, entries, fields, moveEntries, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
                         break;
 

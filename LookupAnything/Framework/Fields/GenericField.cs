@@ -120,9 +120,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             // one quality
             if (saleValues.Count == 1)
             {
-                string result = translations.Get(L10n.Generic.Price, new { price = saleValues.First().Value });
+                string result = L10n.Generic.Price(price: saleValues.First().Value);
                 if (stackSize > 1 && stackSize <= Constant.MaxStackSizeForPricing)
-                    result += $" ({translations.Get(L10n.Generic.PriceForStack, new { price = saleValues.First().Value * stackSize, count = stackSize })})";
+                    result += $" ({L10n.Generic.PriceForStack(price: saleValues.First().Value * stackSize, count: stackSize)})";
                 return result;
             }
 
@@ -133,8 +133,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 if (saleValues.ContainsKey(quality))
                 {
                     priceStrings.Add(quality == ItemQuality.Normal
-                        ? translations.Get(L10n.Generic.Price, new { price = saleValues[quality] })
-                        : translations.Get(L10n.Generic.PriceForQuality, new { price = saleValues[quality], quality = translations.Get(L10n.For(quality)) })
+                        ? L10n.Generic.Price(price: saleValues[quality])
+                        : L10n.Generic.PriceForQuality(price: saleValues[quality], quality: quality)
                     );
                 }
 

@@ -66,13 +66,6 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
 
         /*********
-        ** Accessors
-        *********/
-        /// <summary>Whether the lookup is showing information for a tile.</summary>
-        public bool IsTileLookup { get; set; }
-
-
-        /*********
         ** Public methods
         *********/
         /****
@@ -391,7 +384,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         private void UpdateLayout()
         {
             // update size
-            this.width = Math.Min(Game1.tileSize * 14, Game1.viewport.Width);
+            this.width = Math.Min(Game1.tileSize * 18, Game1.viewport.Width);
             this.height = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * this.width), Game1.viewport.Height);
 
             // update position

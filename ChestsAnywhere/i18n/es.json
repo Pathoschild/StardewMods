@@ -1,14 +1,14 @@
 {
   // default chest names
-  "default-name.auto-grabber": "Recolector Automático #{{number}}",
+  "default-name.auto-grabber": "Recolector automático #{{number}}",
   "default-name.chest": "Cofre #{{number}}",
   "default-name.fridge": "Nevera",
-  "default-name.junimo-hut": "Cabaña Junimo #{{number}}",
-  "default-name.shipping-bin": "Contenedor de Envío",
+  "default-name.junimo-hut": "Cabaña junimo #{{number}}",
+  "default-name.shipping-bin": "Contenedor de envío",
 
   // default category names
-  "default-category.owned-cabin": "Cabin ({{owner}})", // TODO
-  "default-category.unowned-cabin": "Cabin (empty)", // TODO
+  "default-category.owned-cabin": "Cabaña ({{owner}})",
+  "default-category.unowned-cabin": "Cabaña (vacía)",
   "default-category.duplicate": "{{locationName}} #{{number}}",
 
   // edit-chest labels
@@ -18,17 +18,17 @@
   "label.category": "Categoría",
   "label.order": "Orden",
   "label.hide-chest": "Esconder este cofre",
-  "label.hide-chest-hidden": "Esconder este cofre (Necesitaras encontrar el cofre para deshacer esto.!)",
-  "label.automate-prefer-output": "(Automate) Pon primero los objetos en el cofre",
-  "label.automate-no-input": "(Automate) Don't put items in this chest", // TODO
-  "label.automate-no-output": "(Automate) Don't get items from this chest", // TODO
-  "label.automate-ignore": "(Automate) No uses este cofre para la automatización",
+  "label.hide-chest-hidden": "Esconder este cofre (¡necesitarás encontrar el cofre para deshacer esto!)",
+  "label.automate-prefer-output": "(Automático) Pon primero los objetos en el cofre",
+  "label.automate-no-input": "(Automático) No poner objetos en este cofre",
+  "label.automate-no-output": "(Automático) No sacar objetos de este cofre",
+  "label.automate-ignore": "(Automático) No usar este cofre para automatizaciones",
 
   // button labels
   "button.edit-chest": "editar cofre",
   "button.sort-inventory": "ordenar inventario",
-  "button.save": "save", // TODO
-  "button.reset": "reset", // TODO
+  "button.save": "guardar",
+  "button.reset": "reiniciar",
 
   // errors
   "errors.disabled-from-here": "No puedes acceder a tus cofres desde aquí.",

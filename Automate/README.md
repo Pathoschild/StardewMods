@@ -193,8 +193,8 @@ keep it installed and use the overlay, their mod just won't automate anything.
 
 Automate is compatible with...
 
-* [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) (seeds in auto-grabbers will be ignored so you can use its auto-plant feature).
-* [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) (seeds in Junimo huts will be ignored so you can use its auto-plant feature).
+* [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) (seeds/fertiliser in auto-grabbers will be ignored).
+* [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) (seeds/fertiliser in Junimo huts will be ignored).
 * [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) (see its optional 'CFAutomate' download to enable automation).
 
 ## FAQs
