@@ -28,8 +28,14 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The data fields to edit.</summary>
         private readonly EditDataPatchField[] Fields;
 
+        /// <summary>The records to reorder, if the target is a list asset.</summary>
+        private readonly EditDataPatchMoveRecord[] MoveRecords;
+
         /// <summary>The token strings which contain mutable tokens.</summary>
         private readonly ITokenString[] MutableTokenStrings;
+
+        /// <summary>A list of warning messages which have been previously logged.</summary>
+        private HashSet<string> LoggedWarnings = new HashSet<string>();
 
 
         /*********
@@ -42,20 +48,23 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="records">The data records to edit.</param>
         /// <param name="fields">The data fields to edit.</param>
+        /// <param name="moveRecords">The records to reorder, if the target is a list asset.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditDataPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IMonitor monitor, Func<string, string> normaliseAssetName)
+        public EditDataPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IMonitor monitor, Func<string, string> normaliseAssetName)
             : base(logName, PatchType.EditData, contentPack, assetName, conditions, normaliseAssetName)
         {
             // set fields
             this.Records = records.ToArray();
             this.Fields = fields.ToArray();
+            this.MoveRecords = moveRecords.ToArray();
             this.Monitor = monitor;
-            this.MutableTokenStrings = this.GetTokenStrings(this.Records, this.Fields).Where(str => str.HasAnyTokens).ToArray();
+            this.MutableTokenStrings = this.GetTokenStrings(this.Records, this.Fields, this.MoveRecords).Where(str => str.HasAnyTokens).ToArray();
 
             // track contextuals
             this.ContextualValues.AddRange(this.Records.Where(p => p != null));
             this.ContextualValues.AddRange(this.Fields.Where(p => p != null));
+            this.ContextualValues.AddRange(this.MoveRecords.Where(p => p != null));
             this.ContextualValues.AddRange(this.Conditions);
         }
 
@@ -141,11 +150,14 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Get all token strings in the given data.</summary>
         /// <param name="records">The data records to edit.</param>
         /// <param name="fields">The data fields to edit.</param>
-        private IEnumerable<ITokenString> GetTokenStrings(IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields)
+        /// <param name="moveRecords">The records to reorder, if the target is a list asset.</param>
+        private IEnumerable<ITokenString> GetTokenStrings(IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords)
         {
             foreach (ITokenString tokenStr in records.SelectMany(p => p.GetTokenStrings()))
                 yield return tokenStr;
             foreach (ITokenString tokenStr in fields.SelectMany(p => p.GetTokenStrings()))
+                yield return tokenStr;
+            foreach (ITokenString tokenStr in moveRecords.SelectMany(p => p.GetTokenStrings()))
                 yield return tokenStr;
         }
 
@@ -155,13 +167,20 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="asset">The asset to edit.</param>
         private void ApplyDictionary<TKey, TValue>(IAssetData asset)
         {
+            // get data
             IDictionary<TKey, TValue> data = asset.AsDictionary<TKey, TValue>().Data;
+
+            // apply field/record edits
             this.ApplyCollection<TKey, TValue>(
                 hasEntry: key => data.ContainsKey(key),
                 getEntry: key => data[key],
                 setEntry: (key, value) => data[key] = value,
                 removeEntry: key => data.Remove(key)
             );
+
+            // apply moves
+            if (this.MoveRecords.Any())
+                this.LogOnce($"Can't move records for \"{this.LogName}\" > {nameof(PatchConfig.MoveEntries)}: target asset '{this.TargetAsset}' isn't an ordered list).", LogLevel.Warn);
         }
 
         /// <summary>Apply the patch to a list asset.</summary>
@@ -169,9 +188,11 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="asset">The asset to edit.</param>
         private void ApplyList<TValue>(IAssetData asset)
         {
+            // get data
             IList<TValue> data = asset.AsList<TValue>().Data;
             TValue GetByKey(string key) => data.FirstOrDefault(p => this.GetKey(p) == key);
 
+            // apply field/record edits
             this.ApplyCollection<string, TValue>(
                 hasEntry: key => GetByKey(key) != null,
                 getEntry: key => GetByKey(key),
@@ -197,6 +218,60 @@ namespace ContentPatcher.Framework.Patches
                     }
                 }
             );
+
+            // apply moves
+            foreach (EditDataPatchMoveRecord moveRecord in this.MoveRecords)
+            {
+                if (!moveRecord.IsReady)
+                    continue;
+                string errorLabel = $"record \"{this.LogName}\" > {nameof(PatchConfig.MoveEntries)} > \"{moveRecord.ID.Value}\"";
+
+                // get entry
+                TValue entry = GetByKey(moveRecord.ID.Value);
+                if (entry == null)
+                {
+                    this.LogOnce($"Can't move {errorLabel}: no entry with that ID exists.", LogLevel.Warn);
+                    continue;
+                }
+                int fromIndex = data.IndexOf(entry);
+
+                // move to position
+                if (moveRecord.ToPosition == MoveEntryPosition.Top)
+                {
+                    data.RemoveAt(fromIndex);
+                    data.Insert(0, entry);
+                }
+                else if (moveRecord.ToPosition == MoveEntryPosition.Bottom)
+                {
+                    data.RemoveAt(fromIndex);
+                    data.Add(entry);
+                }
+                else if (moveRecord.AfterID.IsMeaningful() || moveRecord.BeforeID.IsMeaningful())
+                {
+                    // get config
+                    bool isAfterID = moveRecord.AfterID.IsMeaningful();
+                    string anchorID = isAfterID ? moveRecord.AfterID.Value : moveRecord.BeforeID.Value;
+                    errorLabel += $" {(isAfterID ? nameof(PatchMoveEntryConfig.AfterID) : nameof(PatchMoveEntryConfig.BeforeID))} \"{anchorID}\"";
+
+                    // get anchor entry
+                    TValue anchorEntry = GetByKey(anchorID);
+                    if (anchorEntry == null)
+                    {
+                        this.LogOnce($"Can't move {errorLabel}: no entry with the relative ID exists.", LogLevel.Warn);
+                        continue;
+                    }
+                    if (object.ReferenceEquals(entry, anchorEntry))
+                    {
+                        this.LogOnce($"Can't move {errorLabel}: can't move entry relative to itself.", LogLevel.Warn);
+                        continue;
+                    }
+
+                    // move record
+                    data.RemoveAt(fromIndex);
+                    int newIndex = data.IndexOf(anchorEntry);
+                    data.Insert(isAfterID ? newIndex + 1 : newIndex, entry);
+                }
+            }
         }
 
         /// <summary>Apply the patch to a dictionary asset.</summary>
@@ -300,6 +375,15 @@ namespace ContentPatcher.Framework.Patches
         private string GetKey<TValue>(TValue entity)
         {
             return InternalConstants.GetListAssetKey(entity);
+        }
+
+        /// <summary>Log a message the first time it occurs.</summary>
+        /// <param name="message">The log message.</param>
+        /// <param name="level">The log level.</param>
+        private void LogOnce(string message, LogLevel level)
+        {
+            if (this.LoggedWarnings.Add(message))
+                this.Monitor.Log(message, level);
         }
     }
 }

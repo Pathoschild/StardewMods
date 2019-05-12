@@ -83,7 +83,7 @@ The `content.json` file has three main fields:
 
 field          | purpose
 -------------- | -------
-`Format`       | The format version. You should always use the latest version (currently `1.7`) to use the latest features and avoid obsolete behavior.
+`Format`       | The format version. You should always use the latest version (currently `1.8`) to use the latest features and avoid obsolete behavior.
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
 `ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-config).
 
@@ -91,7 +91,7 @@ You can list any number of patches (surrounded by `{` and `}` in the `Changes` f
 few sections for more info about the format. For example:
 ```js
 {
-   "Format": "1.7",
+   "Format": "1.8",
    "Changes": [
       {
          "Action": "Load",
@@ -135,7 +135,7 @@ field      | purpose
 For example, this replaces the dinosaur sprite with your own image:
 ```js
 {
-   "Format": "1.7",
+   "Format": "1.8",
    "Changes": [
       {
          "Action": "Load",
@@ -165,7 +165,7 @@ field      | purpose
 For example, this changes one object sprite:
 ```js
 {
-   "Format": "1.7",
+   "Format": "1.8",
    "Changes": [
       {
          "Action": "EditImage",
@@ -179,26 +179,42 @@ For example, this changes one object sprite:
 ```
 
 ### Edit part of a data file
-`"Action": "EditData"` lets you edit fields or add/remove/edit entries inside a data model.
+`"Action": "EditData"` lets you edit fields or add/remove/edit entries inside a data file.
 
 field      | purpose
 ---------- | -------
 &nbsp;     | See _common fields_ above.
 `Fields`   | _(optional)_ The individual fields you want to change for existing entries. This field supports [tokens](#advanced-tokens--conditions) in field keys and values. The key for each field is the field index (starting at zero) for a slash-delimited string, or the field name for an object.
-`Entries`  | _(optional)_ The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. This field supports [tokens](#advanced-tokens--conditions) in entry keys and values.<br />To add an entry, just specify a key that doesn't exist.<br />To delete an entry, set the value to `null` (like `"some key": null`).<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra fields to avoid errors for non-English players.
+`Entries`  | _(optional)_ The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. To add an entry, just specify a key that doesn't exist; to delete an entry, set the value to `null` (like `"some key": null`). This field supports [tokens](#advanced-tokens--conditions) in entry keys and values.<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra fields to avoid errors for non-English players.
+`MoveEntries` | _(optional)_ Change the entry order in a list asset like `██████████`. (Using this with a non-list asset will cause an error, since those have no order.)
 
-For example, consider this line in `Data/ObjectInformation`:
+You can have any combination of those fields within one patch. They'll be applied in this order:
+`Entries`, `Fields`, `MoveEntries`.
+
+<dl>
+<dt>Definitions</dt>
+<dd>
+
+Consider this line in `Data/ObjectInformation`:
 ```js
    "70": "Jade/200/-300/Minerals -2/Jade/A pale green ornamental stone."
 ```
 
-The whole line is one entry, which contains six fields counting from zero (so field 0 is `Jade` and
-field 5 is `A pale green ornamental stone.`). This example patch adds a new item #900, and edits
-the name/description for Jade (item #70):
+The whole line is one **entry** with a key (`"70"`) and value (`"Jade/200/-300/Minerals -2/Jade/A
+pale green ornamental stone."`). The value contains six **fields** counting from zero, from field 0
+(`Jade`) to field 5 (`A pale green ornamental stone.`).
+
+</dd>
+
+<dt>Basic changes</dt>
+<dd>
+
+This example patch creates a new in-game item (i.e. adds a new entry), and edits the name and
+description fields for an existing entry (item #70):
 
 ```js
 {
-   "Format": "1.7",
+   "Format": "1.8",
    "Changes": [
        {
           "Action": "EditData",
@@ -217,10 +233,11 @@ the name/description for Jade (item #70):
 }
 ```
 
-You can also delete an entry entirely. For example, that can be used to change event conditions:
+You can also delete entries entirely by setting their value to `null`. For example, that can be
+used to change event conditions:
 ```js
 {
-   "Format": "1.7",
+   "Format": "1.8",
    "Changes": [
        {
           "Action": "EditData",
@@ -234,15 +251,23 @@ You can also delete an entry entirely. For example, that can be used to change e
 }
 ```
 
+</dd>
+
+<dt>Edit data model assets</dt>
+<dd>
+
 _(Some of the text below is censored because it reveals unannounced info about the upcoming Stardew
 Valley 1.4.)_
 
-A few assets like `██████████` contain data models instead of strings. Editing these works pretty
-much the same way, but fields have names instead of indexes. For example, this ██████████ and
-██████████:
+
+A few assets like `██████████` contain data models, not strings like above. You can edit those
+the same way, with two differences: fields have names instead of indexes, and entry values are
+structures instead of strings.
+
+For example, this ██████████ and adds ██████████:
 ```js
 {
-   "Format": "1.7",
+   "Format": "1.8",
    "Changes": [
       {
          "Action": "EditData",
@@ -274,15 +299,53 @@ much the same way, but fields have names instead of indexes. For example, this �
 }
 ```
 
-**Note:** some assets like `██████████` contain a list, not a dictionary. In that case Content
-Patcher chooses one of the field values as a key for the purposes of assigning values:
+</dd>
+
+<dt>Edit list assets</dt>
+<dd>
+
+_(Some of the text below is censored because it reveals unannounced info about the upcoming Stardew
+Valley 1.4.)_
+
+A few assets like `██████████` contain a list of entries (meaning they don't have a key).
+Content Patcher will automatically select one field to treat as the key, so you can edit them the
+same way as usual:
 
 asset | field used
 ----- | ----------
-_any_ | `ID` (if it exists)
+_default_ | `ID` if it exists.
 `██████████` | `Name`
 `██████████` | `NPCName`
 `██████████` | ██████████
+
+List assets also have an order which can affect game logic (e.g. the first entry in
+`██████████` matching the NPC is used). You can move an entry within that order using the
+`MoveEntries` field.
+
+Here's an example showing all possible reorder options. (If you specify a `BeforeID` or `AfterID`
+that doesn't match any entry, a warning will be shown.)
+```js
+{
+   "Format": "1.8",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "██████████",
+         "MoveEntries": [
+            { "ID": "Abigail", "BeforeID": "Leah" }, // move entry so it's right before Leah
+            { "ID": "Abigail", "AfterID": "Leah" }, // move entry so it's right after Leah
+            { "ID": "Abigail", "ToPosition": "Top" }, // move entry to the top of the list
+            { "ID": "Abigail", "ToPosition": "Bottom" }, // move entry to the bottom of the list
+         ]
+      }
+   ]
+}
+```
+
+New entries are added at the bottom of the list by default.
+
+</dd>
+</dl>
 
 ## Advanced: tokens & conditions
 ### Overview
@@ -545,7 +608,7 @@ Custom professions added by a mod are represented by their integer profession ID
 <td>HasSeenEvent</td>
 <td>
 
-The event IDs the player has seen, matching IDs in the `Data\Events` files. (You can use
+The event IDs the player has seen, matching IDs in the `Data/Events` files. (You can use
 [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.)
 
 </td>
@@ -851,7 +914,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-    "Format": "1.7",
+    "Format": "1.8",
     "DynamicTokens": [
         {
             "Name": "Style",
@@ -896,7 +959,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-    "Format": "1.7",
+    "Format": "1.8",
     "ConfigSchema": {
         "Material": {
             "AllowValues": "Wood, Metal",

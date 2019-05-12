@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common.Utilities;
@@ -57,6 +58,9 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>The individual fields to edit in data records.</summary>
         public IDictionary<string, IDictionary<string, JToken>> Fields { get; set; }
 
+        /// <summary>The records to reorder, if the target is a list asset.</summary>
+        public List<PatchMoveEntryConfig> MoveEntries { get; set; }
+
 
         /*********
         ** Public methods
@@ -65,7 +69,7 @@ namespace ContentPatcher.Framework.ConfigModels
         public PatchConfig() { }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="other">The other patch to clone.</param>
+        /// <param name="other">The other instance to copy.</param>
         public PatchConfig(PatchConfig other)
         {
             this.LogName = other.LogName;
@@ -77,8 +81,9 @@ namespace ContentPatcher.Framework.ConfigModels
             this.FromArea = other.FromArea;
             this.ToArea = other.ToArea;
             this.PatchMode = other.PatchMode;
-            this.Entries = other.Entries != null ? new Dictionary<string, JToken>(other.Entries) : null;
-            this.Fields = other.Fields != null ? new Dictionary<string, IDictionary<string, JToken>>(other.Fields) : null;
+            this.Entries = other.Entries?.ToDictionary(p => p.Key, p => p.Value);
+            this.Fields = other.Fields?.ToDictionary(p => p.Key, p => p.Value);
+            this.MoveEntries = other.MoveEntries?.Select(p => new PatchMoveEntryConfig(p)).ToList();
         }
     }
 }
