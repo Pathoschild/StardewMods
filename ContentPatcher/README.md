@@ -26,7 +26,7 @@ that change the game's images and data without replacing XNB files.
   * [Compatibility](#compatibility)
   * [Multiplayer](#multiplayer)
   * [How multiple patches interact](#how-multiple-patches-interact)
-  * [Special cases](#special-cases)
+  * [Known limitations](#known-limitations)
 * [See also](#see-also)
 
 ## Install
@@ -646,6 +646,25 @@ Whether the player is the main player. Possible values: `true`, `false`.
 </tr>
 
 <tr valign="top">
+<td>IsOutdoors</td>
+<td>
+
+Whether the player is outdoors. Possible values: `true`, `false`. This [does not affect dialogue](#known-limitations).
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>LocationName</td>
+<td>
+
+The internal name of the player's current location (visible using [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679)).
+Possible values: `true`, `false`. This [does not affect dialogue](#known-limitations).
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>PlayerGender</td>
 <td>
 
@@ -1099,15 +1118,17 @@ Within one content pack, patches are applied in the order they're listed in `con
 you have multiple content packs, each one is applied in the order they're loaded by SMAPI; if you
 need to explicitly patch after another content pack, see [manifest dependencies](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Dependencies).
 
-### Special cases
-Some game assets have special logic. This isn't specific to Content Patcher, but they're documented
-here for convenience.
+### Known limitations
+* Dialogue is set when the day starts, so conditions that update during the day (like `IsOutdoors`)
+  won't affect dialogue.
+* Some game assets have special logic. This isn't specific to Content Patcher, but they're documented
+  here for convenience.
 
-asset | notes
------ | -----
-`Characters/Farmer/accessories` | The number of accessories is hardcoded, so custom accessories need to replace an existing one.
-`Characters/Farmer/skinColors` | The number of skin colors is hardcoded, so custom colors need to replace an existing one.
-`Maps/*` | See [Modding:Maps#Potential issues](https://stardewvalleywiki.com/Modding:Maps#Potential_issues) on the wiki.
+  asset | notes
+  ----- | -----
+  `Characters/Farmer/accessories` | The number of accessories is hardcoded, so custom accessories need to replace an existing one.
+  `Characters/Farmer/skinColors` | The number of skin colors is hardcoded, so custom colors need to replace an existing one.
+  `Maps/*` | See [Modding:Maps#Potential issues](https://stardewvalleywiki.com/Modding:Maps#Potential_issues) on the wiki.
 
 ## See also
 * [Release notes](release-notes.md)
