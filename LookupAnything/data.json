@@ -793,16 +793,20 @@ You shouldn't change this file unless you know what you're doing.
             "RequiredKills": 150
         },
         {
-            "Targets": [ "Bat", "Frost Bat", "Lava Bat" ],
-            "RequiredKills": 200
-        },
-        {
             "Targets": [ "Skeleton", "Skeleton Mage" ],
             "RequiredKills": 50
         },
         {
+            "Targets": [ "Rock Crab", "Lava Crab", "Iridium Crab" ],
+            "RequiredKills": 60
+        },
+        {
             "Targets": [ "Grub", "Fly", "Bug" ],
             "RequiredKills": 125
+        },
+        {
+            "Targets": [ "Bat", "Frost Bat", "Lava Bat" ],
+            "RequiredKills": 200
         },
         {
             "Targets": [ "Duggy" ],
@@ -811,6 +815,18 @@ You shouldn't change this file unless you know what you're doing.
         {
             "Targets": [ "Dust Spirit" ],
             "RequiredKills": 500
+        },
+        {
+            "Targets": [ "Mummy" ],
+            "RequiredKills": 100
+        },
+        {
+          "Targets": [ "Pepper Rex" ],
+            "RequiredKills": 50
+        },
+        {
+          "Targets": [ "Serpent" ],
+          "RequiredKills": 250
         }
     ]
 }

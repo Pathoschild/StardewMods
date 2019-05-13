@@ -11,6 +11,7 @@ Released 26 November 2019.
   * new 14-heart spouse events;
   * new social NPC profiles;
   * new Krobus relationship;
+  * new Adventurer's Guild goals;
   * pet water bowl and petting changes.
 * Added optional progression mode (only shows gift tastes for gifts you've already given).
 * Added save format version to save slot lookups.
