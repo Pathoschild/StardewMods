@@ -785,7 +785,7 @@ namespace ContentPatcher
         /// <param name="parsed">The parsed value, which may be legitimately <c>null</c> even if successful.</param>
         private bool TryParseJsonTokens(JToken rawJson, IContext tokenContext, IMigration migrator, out string error, out TokenisableJToken parsed)
         {
-            if (rawJson == null)
+            if (rawJson == null || rawJson.Type == JTokenType.Null)
             {
                 error = null;
                 parsed = null;
