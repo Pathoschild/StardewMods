@@ -8,6 +8,7 @@ Released 26 November 2019.
   * new mechanics (clothing, dyeing, and tailoring);
   * movie theater;
   * new farm map;
+  * new 14-heart spouse events;
   * new social NPC profiles;
   * new Krobus relationship;
   * pet water bowl and petting changes.

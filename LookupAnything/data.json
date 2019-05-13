@@ -23,7 +23,7 @@ You shouldn't change this file unless you know what you're doing.
         "AsocialVillagers": [ "Bouncer", "Gunther", "Henchman", "Marlon", "Mister Qi" ],
         "DatingHearts": 2,
         "SpouseMaxFriendship": 3000,
-        "SpouseFriendshipForStardrop": 3375,
+        "SpouseFriendshipForStardrop": 3500,
 
         /* players */
         "PlayerMaxSkillPoints": 15000,
