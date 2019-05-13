@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework
 {
@@ -11,8 +14,11 @@ namespace ContentPatcher.Framework
         /*********
         ** Fields
         *********/
+        /// <summary>The mod this token context belongs to.</summary>
+        private readonly string Mod;
+        
         /// <summary>The available global tokens.</summary>
-        private readonly IContext GlobalContext;
+        private readonly TokenManager GlobalContext;
 
         /// <summary>The standard self-contained tokens.</summary>
         private readonly GenericTokenContext StandardContext = new GenericTokenContext();
@@ -34,11 +40,13 @@ namespace ContentPatcher.Framework
         ** Token management
         ****/
         /// <summary>Construct an instance.</summary>
+        /// <param name="mod">The mod this token context belongs to.</param>
         /// <param name="tokenManager">Manages the available global tokens.</param>
-        public ModTokenContext(TokenManager tokenManager)
+        public ModTokenContext(string mod, TokenManager tokenManager)
         {
+            this.Mod = mod;
             this.GlobalContext = tokenManager;
-            this.Contexts = new[] { this.GlobalContext, this.StandardContext, this.DynamicContext };
+            this.Contexts = new IContext[] { this.GlobalContext, this.StandardContext, this.DynamicContext };
         }
 
         /// <summary>Add a standard token to the context.</summary>
@@ -52,6 +60,7 @@ namespace ContentPatcher.Framework
             if (this.StandardContext.Contains(token.Name, enforceContext: false))
                 throw new InvalidOperationException($"The '{token.Name}' token is already registered.");
 
+            this.GlobalContext.AddModToken(this.Mod, token);
             this.StandardContext.Tokens[token.Name] = token;
         }
 
@@ -60,18 +69,60 @@ namespace ContentPatcher.Framework
         public void Add(DynamicTokenValue tokenValue)
         {
             // validate
-            if (this.GlobalContext.Contains(tokenValue.Name, enforceContext: false))
-                throw new InvalidOperationException($"Can't register a '{tokenValue.Name}' token because there's a global token with that name.");
-            if (this.StandardContext.Contains(tokenValue.Name, enforceContext: false))
-                throw new InvalidOperationException($"Can't register a '{tokenValue.Name}' dynamic token because there's a config token with that name.");
+            string plainTokenName = tokenValue.Name.Substring(tokenValue.Name.IndexOf('/') + 1);
+            if (this.GlobalContext.Contains(plainTokenName, enforceContext: false))
+                throw new InvalidOperationException($"Can't register a '{plainTokenName}' token because there's a global token with that name.");
+            if (this.StandardContext.Contains(plainTokenName, enforceContext: false))
+                throw new InvalidOperationException($"Can't register a '{plainTokenName}' dynamic token because there's a config token with that name.");
 
             // get (or create) token
             if (!this.DynamicContext.Tokens.TryGetValue(tokenValue.Name, out DynamicToken token))
+            {
                 this.DynamicContext.Save(token = new DynamicToken(tokenValue.Name));
+                this.GlobalContext.AddModToken(this.Mod, token);
+            }
 
             // add token value
             token.AddAllowedValues(tokenValue.Value);
             this.DynamicTokenValues.Add(tokenValue);
+
+            // track what tokens this token uses, if any
+            Queue<string> q = new Queue<string>();
+            foreach (Condition cond in tokenValue.Conditions)
+            {
+                foreach (LexTokenToken lexToken in cond.Input.GetTokenPlaceholders(recursive: true))
+                    q.Enqueue(lexToken.Name);
+                foreach (LexTokenToken lexToken in cond.Values.GetTokenPlaceholders(recursive: true))
+                    q.Enqueue(lexToken.Name);
+            }
+            foreach (LexTokenToken lexToken in tokenValue.Value.GetTokenPlaceholders(recursive: true))
+                q.Enqueue(lexToken.Name);
+            while (q.Count > 0)
+            {
+                string tokStr = q.Dequeue();
+                IToken tok = this.GlobalContext.GetToken(tokStr, enforceContext: false);
+                
+                if (tok is DynamicToken dynTok)
+                {
+                    foreach (string val in dynTok.GetAllowedValues(null))
+                    {
+                        TokenString tokenStr = new TokenString(val, this.GlobalContext, null);
+                        foreach (LexTokenToken lexToken in tokenValue.Value.GetTokenPlaceholders(recursive: true))
+                        {
+                            q.Enqueue(lexToken.Name);
+                        }
+                    }
+                }
+                else
+                {
+                    if (!this.GlobalContext.BasicTokensUsedBy.TryGetValue(tok.Name, out InvariantHashSet used))
+                    {
+                        this.GlobalContext.BasicTokensUsedBy.Add(tok.Name, used = new InvariantHashSet());
+                    }
+                    if (!used.Contains(tokenValue.Name))
+                        used.Add(tokenValue.Name);
+                }
+            }
         }
 
         /// <summary>Update the current context.</summary>
@@ -82,6 +133,30 @@ namespace ContentPatcher.Framework
                 token.UpdateContext(this);
 
             // reset dynamic tokens
+            foreach (DynamicToken token in this.DynamicContext.Tokens.Values)
+                token.SetReady(false);
+            foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
+            {
+                tokenValue.UpdateContext(this);
+                if (tokenValue.IsReady && tokenValue.Conditions.All(p => p.IsMatch(this)))
+                {
+                    DynamicToken token = this.DynamicContext.Tokens[tokenValue.Name];
+                    token.SetValue(tokenValue.Value);
+                    token.SetReady(true);
+                }
+            }
+        }
+
+        /// <summary>Update the current context for certain tokens.</summary>
+        public void UpdateSpecificContext(InvariantHashSet tokens)
+        {
+            // update config tokens
+            IEnumerable<string> specific = this.StandardContext.Tokens.Keys.Intersect(tokens);
+            foreach (string token in specific)
+                this.StandardContext.GetToken(token, false).UpdateContext(this);
+
+            // reset dynamic tokens
+            // TODO: Only update relevant dynamic tokens
             foreach (DynamicToken token in this.DynamicContext.Tokens.Values)
                 token.SetReady(false);
             foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)

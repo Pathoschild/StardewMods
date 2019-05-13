@@ -22,9 +22,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="modId">The mod ID.</param>
         /// <param name="modFolder">The absolute path to the mod folder.</param>
-        public HasFileValueProvider(string modFolder)
-            : base(ConditionType.HasFile, canHaveMultipleValuesForRoot: false)
+        public HasFileValueProvider(string modId, string modFolder)
+            : base($"{modId}/{ConditionType.HasFile.ToString()}", canHaveMultipleValuesForRoot: false)
         {
             this.ModFolder = modFolder;
             this.EnableInputArguments(required: true, canHaveMultipleValues: false);

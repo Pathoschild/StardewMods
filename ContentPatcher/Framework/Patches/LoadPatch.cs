@@ -41,8 +41,6 @@ namespace ContentPatcher.Framework.Patches
         {
             foreach (string name in base.GetTokensUsed())
                 yield return name;
-            foreach (LexTokenToken lexToken in this.FromLocalAsset.GetTokenPlaceholders(recursive: true))
-                yield return lexToken.Name;
         }
 
 
