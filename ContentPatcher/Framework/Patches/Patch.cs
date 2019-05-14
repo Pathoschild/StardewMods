@@ -70,18 +70,20 @@ namespace ContentPatcher.Framework.Patches
             bool isReady = true;
             bool changed = false;
 
+            IContext myContext = new SinglePatchContext(this, context);
+
             // update contextual values
             foreach (IContextual contextual in this.ContextualValues)
             {
                 bool wasReady = contextual.IsReady;
-                if (contextual.UpdateContext(context) || contextual.IsReady != wasReady)
+                if (contextual.UpdateContext(myContext) || contextual.IsReady != wasReady)
                     changed = true;
             }
 
             // update source asset
             if (this.FromLocalAsset != null)
             {
-                bool sourceChanged = this.FromLocalAsset.UpdateContext(context);
+                bool sourceChanged = this.FromLocalAsset.UpdateContext(myContext);
                 isReady = this.FromLocalAsset.IsReady && this.ContentPack.HasFile(this.FromLocalAsset.Value);
                 changed = changed || sourceChanged;
             }
@@ -94,8 +96,8 @@ namespace ContentPatcher.Framework.Patches
                 bool wasReady = this.IsReady;
                 this.IsReady =
                     isReady
-                    && (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(context)))
-                    && this.GetTokensUsed().All(name => context.Contains(name, enforceContext: true));
+                    && (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(myContext)))
+                    && this.GetTokensUsed().All(name => myContext.Contains(name, enforceContext: true));
                 changed = changed || this.IsReady != wasReady;
             }
 

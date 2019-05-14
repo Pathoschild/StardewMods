@@ -21,7 +21,8 @@ namespace ContentPatcher.Framework.Migrations
             this.AddedTokens = new InvariantHashSet
             {
                 ConditionType.IsOutdoors.ToString(),
-                ConditionType.LocationName.ToString()
+                ConditionType.LocationName.ToString(),
+                ConditionType.TargetName.ToString(),
             };
         }
 

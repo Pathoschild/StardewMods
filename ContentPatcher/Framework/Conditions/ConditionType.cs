@@ -109,6 +109,9 @@ namespace ContentPatcher.Framework.Conditions
         HasValue,
 
         /// <summary>The <see cref="StardewValley.LocalizedContentManager.LanguageCode"/> name.</summary>
-        Language
+        Language,
+
+        /// <summary>The target filename of the patch.</summary>
+        TargetName,
     };
 }
