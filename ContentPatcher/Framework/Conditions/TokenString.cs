@@ -9,7 +9,7 @@ using Pathoschild.Stardew.Common.Utilities;
 namespace ContentPatcher.Framework.Conditions
 {
     /// <summary>A string value optionally containing tokens.</summary>
-    internal class TokenString : ITokenString
+    internal class TokenString : IManagedTokenString
     {
         /*********
         ** Fields
@@ -158,7 +158,7 @@ namespace ContentPatcher.Framework.Conditions
                 {
                     case LexTokenToken lexTokenToken:
                         IToken token = context.GetToken(lexTokenToken.Name, enforceContext: true);
-                        ITokenString input = new TokenString(lexTokenToken.InputArg?.Parts, context);
+                        IManagedTokenString input = new TokenString(lexTokenToken.InputArg?.Parts, context);
                         if (token != null)
                         {
                             string[] values = token.GetValues(input).ToArray();

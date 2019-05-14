@@ -71,7 +71,7 @@ namespace ContentPatcher.Framework.Migrations
         /// <param name="tokenStr">The tokenised string to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        public virtual bool TryMigrate(ITokenString tokenStr, out string error)
+        public virtual bool TryMigrate(IManagedTokenString tokenStr, out string error)
         {
             // tokens which need a higher version
             for (int i = 0; i < tokenStr.LexTokens.Length; i++)
@@ -88,7 +88,7 @@ namespace ContentPatcher.Framework.Migrations
         /// <returns>Returns whether migration succeeded.</returns>
         public bool TryMigrate(TokenisableJToken tokenStructure, out string error)
         {
-            foreach (ITokenString str in tokenStructure.GetTokenStrings())
+            foreach (IManagedTokenString str in tokenStructure.GetTokenStrings())
             {
                 if (!this.TryMigrate(str, out error))
                     return false;

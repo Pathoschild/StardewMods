@@ -15,10 +15,10 @@ namespace ContentPatcher.Framework.Conditions
         public string Name { get; }
 
         /// <summary>The token input argument, if any.</summary>
-        public ITokenString Input { get; }
+        public IManagedTokenString Input { get; }
 
         /// <summary>The token values for which this condition is valid.</summary>
-        public ITokenString Values { get; }
+        public IManagedTokenString Values { get; }
 
         /// <summary>The current values from <see cref="Values"/>.</summary>
         public InvariantHashSet CurrentValues { get; private set; }
@@ -37,7 +37,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="name">The token name in the context.</param>
         /// <param name="input">The token input argument, if any.</param>
         /// <param name="values">The token values for which this condition is valid.</param>
-        public Condition(string name, ITokenString input, ITokenString values)
+        public Condition(string name, IManagedTokenString input, IManagedTokenString values)
         {
             this.Name = name;
             this.Input = input;

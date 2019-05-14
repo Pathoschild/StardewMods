@@ -58,7 +58,7 @@ namespace ContentPatcher.Framework
         ****/
         /// <summary>Get whether a token string has a meaningful value.</summary>
         /// <param name="str">The token string.</param>
-        public static bool IsMeaningful(this ITokenString str)
+        public static bool IsMeaningful(this IManagedTokenString str)
         {
             return !string.IsNullOrWhiteSpace(str?.Value);
         }
@@ -66,7 +66,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get unique comma-separated values from a token string.</summary>
         /// <param name="tokenStr">The token string to parse.</param>
         /// <exception cref="InvalidOperationException">The token string is not ready (<see cref="IContextual.IsReady"/> is false).</exception>
-        public static InvariantHashSet SplitValues(this ITokenString tokenStr)
+        public static InvariantHashSet SplitValues(this IManagedTokenString tokenStr)
         {
             if (string.IsNullOrWhiteSpace(tokenStr?.Value))
                 return new InvariantHashSet();

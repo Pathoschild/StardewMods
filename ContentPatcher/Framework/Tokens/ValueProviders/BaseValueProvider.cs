@@ -57,7 +57,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
         /// <summary>Whether the value provider may return multiple values for the given input.</summary>
         /// <param name="input">The input argument, if applicable.</param>
-        public bool CanHaveMultipleValues(ITokenString input = null)
+        public bool CanHaveMultipleValues(IManagedTokenString input = null)
         {
             return input.IsMeaningful()
                 ? this.CanHaveMultipleValuesForInput
@@ -68,7 +68,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="input">The input argument, if applicable.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidateInput(ITokenString input, out string error)
+        public bool TryValidateInput(IManagedTokenString input, out string error)
         {
             // validate input
             if (input.IsMeaningful())
@@ -102,7 +102,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="values">The values to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidateValues(ITokenString input, InvariantHashSet values, out string error)
+        public bool TryValidateValues(IManagedTokenString input, InvariantHashSet values, out string error)
         {
             if (!this.TryValidateInput(input, out error))
                 return false;
@@ -145,7 +145,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public virtual InvariantHashSet GetAllowedValues(ITokenString input)
+        public virtual InvariantHashSet GetAllowedValues(IManagedTokenString input)
         {
             return null;
         }
@@ -153,7 +153,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the current values.</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public virtual IEnumerable<string> GetValues(ITokenString input)
+        public virtual IEnumerable<string> GetValues(IManagedTokenString input)
         {
             this.AssertInputArgument(input);
             yield break;
@@ -183,7 +183,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="value">The value to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        protected virtual bool TryValidate(ITokenString input, string value, out string error)
+        protected virtual bool TryValidate(IManagedTokenString input, string value, out string error)
         {
             error = null;
             return true;
@@ -202,7 +202,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Assert that an input argument is valid for the value provider.</summary>
         /// <param name="input">The input argument to check, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="AllowsInput"/> or <see cref="RequiresInput"/>.</exception>
-        protected void AssertInputArgument(ITokenString input)
+        protected void AssertInputArgument(IManagedTokenString input)
         {
             if (this.RequiresInput && !input.IsMeaningful())
                 throw new InvalidOperationException($"The '{this.Name}' token requires an input argument.");

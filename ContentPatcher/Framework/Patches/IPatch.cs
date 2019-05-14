@@ -20,13 +20,13 @@ namespace ContentPatcher.Framework.Patches
         ManagedContentPack ContentPack { get; }
 
         /// <summary>The asset key to load from the content pack instead.</summary>
-        ITokenString FromLocalAsset { get; }
+        IManagedTokenString FromLocalAsset { get; }
 
         /// <summary>The normalised asset name to intercept.</summary>
         string TargetAsset { get; }
 
         /// <summary>The raw asset name to intercept, including tokens.</summary>
-        ITokenString RawTargetAsset { get; }
+        IManagedTokenString RawTargetAsset { get; }
 
         /// <summary>The conditions which determine whether this patch should be applied.</summary>
         Condition[] Conditions { get; }

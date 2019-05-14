@@ -52,7 +52,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the allowed values for a token name (or <c>null</c> if any value is allowed).</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this token, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override InvariantHashSet GetAllowedValues(ITokenString input)
+        public override InvariantHashSet GetAllowedValues(IManagedTokenString input)
         {
             return input.IsMeaningful()
                 ? InvariantHashSet.Boolean()
@@ -62,7 +62,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the current values.</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this token, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        public override IEnumerable<string> GetValues(IManagedTokenString input)
         {
             this.AssertInputArgument(input);
 
@@ -83,7 +83,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="value">The value to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        protected override bool TryValidate(ITokenString input, string value, out string error)
+        protected override bool TryValidate(IManagedTokenString input, string value, out string error)
         {
             if (!base.TryValidate(input, value, out error))
                 return false;

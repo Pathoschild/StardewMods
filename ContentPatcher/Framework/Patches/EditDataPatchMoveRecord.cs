@@ -18,13 +18,13 @@ namespace ContentPatcher.Framework.Patches
         ** Accessors
         *********/
         /// <summary>The unique key for the entry in the data file.</summary>
-        public ITokenString ID { get; }
+        public IManagedTokenString ID { get; }
 
         /// <summary>The ID of another entry this one should be inserted before.</summary>
-        public ITokenString BeforeID { get; }
+        public IManagedTokenString BeforeID { get; }
 
         /// <summary>The ID of another entry this one should be inserted after.</summary>
-        public ITokenString AfterID { get; }
+        public IManagedTokenString AfterID { get; }
 
         /// <summary>The position to set.</summary>
         public MoveEntryPosition ToPosition { get; }
@@ -45,7 +45,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="beforeID">The ID of another entry this one should be inserted before.</param>
         /// <param name="afterID">The ID of another entry this one should be inserted after.</param>
         /// <param name="toPosition">The position to set.</param>
-        public EditDataPatchMoveRecord(ITokenString id, ITokenString beforeID, ITokenString afterID, MoveEntryPosition toPosition)
+        public EditDataPatchMoveRecord(IManagedTokenString id, IManagedTokenString beforeID, IManagedTokenString afterID, MoveEntryPosition toPosition)
         {
             this.ID = id;
             this.BeforeID = beforeID;
@@ -56,9 +56,9 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <summary>Get all token strings used in the record.</summary>
-        public IEnumerable<ITokenString> GetTokenStrings()
+        public IEnumerable<IManagedTokenString> GetTokenStrings()
         {
-            return this.ContextualValues.OfType<ITokenString>();
+            return this.ContextualValues.OfType<IManagedTokenString>();
         }
 
         /// <summary>Update the instance when the context changes.</summary>

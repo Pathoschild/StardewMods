@@ -67,7 +67,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         }
 
         /// <summary>Get the token strings contained in the JSON structure.</summary>
-        public IEnumerable<ITokenString> GetTokenStrings()
+        public IEnumerable<IManagedTokenString> GetTokenStrings()
         {
             return this.TokenisableFields.Select(p => p.TokenString);
         }
@@ -134,7 +134,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         /// <param name="setValue">Update the source with a new value.</param>
         private TokenisableProxy TryResolveTokenisableFields(string str, IContext context, Action<string> setValue)
         {
-            ITokenString tokenStr = new TokenString(str, context);
+            IManagedTokenString tokenStr = new TokenString(str, context);
 
             // handle mutable token
             if (tokenStr.IsMutable)

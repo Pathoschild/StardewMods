@@ -43,7 +43,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override InvariantHashSet GetAllowedValues(ITokenString input)
+        public override InvariantHashSet GetAllowedValues(IManagedTokenString input)
         {
             return input.IsMeaningful()
                 ? InvariantHashSet.Boolean()
@@ -53,7 +53,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the current values.</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        public override IEnumerable<string> GetValues(IManagedTokenString input)
         {
             this.AssertInputArgument(input);
 
@@ -67,7 +67,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get whether the given file path exists.</summary>
         /// <param name="input">The relative file path.</param>
         /// <exception cref="InvalidOperationException">The path is not relative or contains directory climbing (../).</exception>
-        private bool GetPathExists(ITokenString input)
+        private bool GetPathExists(IManagedTokenString input)
         {
             if (!input.IsMeaningful() || input.InvalidTokens.Any())
                 return false;

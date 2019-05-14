@@ -28,13 +28,13 @@ namespace ContentPatcher.Framework.Tokens
         *********/
         /// <summary>Whether the token may return multiple values for the given name.</summary>
         /// <param name="input">The input argument, if any.</param>
-        bool CanHaveMultipleValues(ITokenString input);
+        bool CanHaveMultipleValues(IManagedTokenString input);
 
         /// <summary>Validate that the provided input argument is valid.</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        bool TryValidateInput(ITokenString input, out string error);
+        bool TryValidateInput(IManagedTokenString input, out string error);
 
         /// <summary>Validate that the provided values are valid for the input argument (regardless of whether they match).</summary>
         /// <param name="input">The input argument, if applicable.</param>
@@ -42,7 +42,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        bool TryValidateValues(ITokenString input, InvariantHashSet values, IContext context, out string error);
+        bool TryValidateValues(IManagedTokenString input, InvariantHashSet values, IContext context, out string error);
 
         /// <summary>Get the allowed input arguments, if supported and restricted to a specific list.</summary>
         InvariantHashSet GetAllowedInputArguments();
@@ -50,11 +50,11 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
         /// <param name="input">The input argument, if any.</param>
         /// <exception cref="InvalidOperationException">The input does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
-        InvariantHashSet GetAllowedValues(ITokenString input);
+        InvariantHashSet GetAllowedValues(IManagedTokenString input);
 
         /// <summary>Get the current token values.</summary>
         /// <param name="input">The input argument, if any.</param>
         /// <exception cref="InvalidOperationException">The input does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
-        IEnumerable<string> GetValues(ITokenString input);
+        IEnumerable<string> GetValues(IManagedTokenString input);
     }
 }

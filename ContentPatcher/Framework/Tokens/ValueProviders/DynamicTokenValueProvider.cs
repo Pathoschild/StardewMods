@@ -31,7 +31,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
         /// <summary>Add a set of possible values.</summary>
         /// <param name="possibleValues">The possible values to add.</param>
-        public void AddAllowedValues(ITokenString possibleValues)
+        public void AddAllowedValues(IManagedTokenString possibleValues)
         {
             // can't reasonably generate known values if tokens are involved
             if (possibleValues.IsMutable || this.AllowedRootValues == null)
@@ -50,7 +50,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
         /// <summary>Set the current values.</summary>
         /// <param name="values">The values to set.</param>
-        public void SetValue(ITokenString values)
+        public void SetValue(IManagedTokenString values)
         {
             this.Values = values.SplitValues();
         }
@@ -65,7 +65,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override InvariantHashSet GetAllowedValues(ITokenString input)
+        public override InvariantHashSet GetAllowedValues(IManagedTokenString input)
         {
             return input.IsMeaningful()
                 ? InvariantHashSet.Boolean()
@@ -75,7 +75,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the current values.</summary>
         /// <param name="input">The input argument, if applicable.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        public override IEnumerable<string> GetValues(IManagedTokenString input)
         {
             this.AssertInputArgument(input);
 
