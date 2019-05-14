@@ -14,6 +14,9 @@ namespace ContentPatcher.Framework
         /// <summary>The character uses as an input argument separator.</summary>
         public const string InputArgSeparator = ":";
 
+        /// <summary>The character uses as an token scope separator.</summary>
+        public const string TokenScopeSeparator = "/";
+
 
         /*********
         ** Methods
