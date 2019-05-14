@@ -7,7 +7,7 @@ using Pathoschild.Stardew.Common.Utilities;
 namespace ContentPatcher.Framework.Conditions
 {
     /// <summary>A literal string value.</summary>
-    internal class LiteralString : ITokenString
+    internal class LiteralString : IManagedTokenString
     {
         /*********
         ** Accessors

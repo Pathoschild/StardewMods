@@ -32,7 +32,7 @@ namespace ContentPatcher.Framework.Patches
         private readonly EditDataPatchMoveRecord[] MoveRecords;
 
         /// <summary>The token strings which contain mutable tokens.</summary>
-        private readonly ITokenString[] MutableTokenStrings;
+        private readonly IManagedTokenString[] MutableTokenStrings;
 
         /// <summary>A list of warning messages which have been previously logged.</summary>
         private HashSet<string> LoggedWarnings = new HashSet<string>();
@@ -51,7 +51,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="moveRecords">The records to reorder, if the target is a list asset.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditDataPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IMonitor monitor, Func<string, string> normaliseAssetName)
+        public EditDataPatch(string logName, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IMonitor monitor, Func<string, string> normaliseAssetName)
             : base(logName, PatchType.EditData, contentPack, assetName, conditions, normaliseAssetName)
         {
             // set fields
@@ -74,7 +74,7 @@ namespace ContentPatcher.Framework.Patches
             foreach (string name in base.GetTokensUsed())
                 yield return name;
 
-            foreach (ITokenString str in this.MutableTokenStrings)
+            foreach (IManagedTokenString str in this.MutableTokenStrings)
             {
                 foreach (LexTokenToken lexToken in str.GetTokenPlaceholders(recursive: true))
                     yield return lexToken.Name;
@@ -151,13 +151,13 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="records">The data records to edit.</param>
         /// <param name="fields">The data fields to edit.</param>
         /// <param name="moveRecords">The records to reorder, if the target is a list asset.</param>
-        private IEnumerable<ITokenString> GetTokenStrings(IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords)
+        private IEnumerable<IManagedTokenString> GetTokenStrings(IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords)
         {
-            foreach (ITokenString tokenStr in records.SelectMany(p => p.GetTokenStrings()))
+            foreach (IManagedTokenString tokenStr in records.SelectMany(p => p.GetTokenStrings()))
                 yield return tokenStr;
-            foreach (ITokenString tokenStr in fields.SelectMany(p => p.GetTokenStrings()))
+            foreach (IManagedTokenString tokenStr in fields.SelectMany(p => p.GetTokenStrings()))
                 yield return tokenStr;
-            foreach (ITokenString tokenStr in moveRecords.SelectMany(p => p.GetTokenStrings()))
+            foreach (IManagedTokenString tokenStr in moveRecords.SelectMany(p => p.GetTokenStrings()))
                 yield return tokenStr;
         }
 

@@ -76,7 +76,7 @@ namespace ContentPatcher.Framework.Tokens
 
         /// <summary>Whether the token may return multiple values for the given name.</summary>
         /// <param name="input">The input argument, if any.</param>
-        public bool CanHaveMultipleValues(ITokenString input)
+        public bool CanHaveMultipleValues(IManagedTokenString input)
         {
             return this.Values.CanHaveMultipleValues(input);
         }
@@ -85,7 +85,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="input">The input argument, if applicable.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidateInput(ITokenString input, out string error)
+        public bool TryValidateInput(IManagedTokenString input, out string error)
         {
             return this.Values.TryValidateInput(input, out error);
         }
@@ -96,7 +96,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidateValues(ITokenString input, InvariantHashSet values, IContext context, out string error)
+        public bool TryValidateValues(IManagedTokenString input, InvariantHashSet values, IContext context, out string error)
         {
             if (!this.TryValidateInput(input, out error) || !this.Values.TryValidateValues(input, values, out error))
                 return false;
@@ -114,7 +114,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
         /// <param name="input">The input argument, if any.</param>
         /// <exception cref="InvalidOperationException">The input does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
-        public virtual InvariantHashSet GetAllowedValues(ITokenString input)
+        public virtual InvariantHashSet GetAllowedValues(IManagedTokenString input)
         {
             return this.Values.GetAllowedValues(input);
         }
@@ -122,7 +122,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Get the current token values.</summary>
         /// <param name="input">The input to check, if any.</param>
         /// <exception cref="InvalidOperationException">The input does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
-        public virtual IEnumerable<string> GetValues(ITokenString input)
+        public virtual IEnumerable<string> GetValues(IManagedTokenString input)
         {
             this.AssertInput(input);
             return this.Values.GetValues(input);
@@ -135,7 +135,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Assert that an input argument is valid.</summary>
         /// <param name="input">The input to check, if any.</param>
         /// <exception cref="InvalidOperationException">The input does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
-        protected void AssertInput(ITokenString input)
+        protected void AssertInput(IManagedTokenString input)
         {
             bool hasInput = input.IsMeaningful();
 

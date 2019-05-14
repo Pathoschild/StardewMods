@@ -20,7 +20,7 @@ namespace ContentPatcher.Framework.Commands
         public string RawTargetAsset { get; }
 
         /// <summary>The parsed asset name (if available).</summary>
-        public ITokenString ParsedTargetAsset { get; }
+        public IManagedTokenString ParsedTargetAsset { get; }
 
         /// <summary>The parsed conditions (if available).</summary>
         public Condition[] ParsedConditions { get; }

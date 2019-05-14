@@ -14,7 +14,7 @@ namespace ContentPatcher.Framework.Tokens
         public string Name { get; }
 
         /// <summary>The token value to set.</summary>
-        public ITokenString Value { get; }
+        public IManagedTokenString Value { get; }
 
         /// <summary>The conditions that must match to set this value.</summary>
         public Condition[] Conditions { get; }
@@ -33,7 +33,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="name">The name of the token whose value to set.</param>
         /// <param name="value">The token value to set.</param>
         /// <param name="conditions">The conditions that must match to set this value.</param>
-        public DynamicTokenValue(string name, ITokenString value, IEnumerable<Condition> conditions)
+        public DynamicTokenValue(string name, IManagedTokenString value, IEnumerable<Condition> conditions)
         {
             this.Name = name;
             this.Value = value;

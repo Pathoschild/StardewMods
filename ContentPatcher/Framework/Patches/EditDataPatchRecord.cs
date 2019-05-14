@@ -19,7 +19,7 @@ namespace ContentPatcher.Framework.Patches
         ** Accessors
         *********/
         /// <summary>The unique key for the entry in the data file.</summary>
-        public ITokenString Key { get; }
+        public IManagedTokenString Key { get; }
 
         /// <summary>The entry value to set.</summary>
         public TokenisableJToken Value { get; }
@@ -37,7 +37,7 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Construct an instance.</summary>
         /// <param name="key">The unique key for the entry in the data file.</param>
         /// <param name="value">The entry value to set.</param>
-        public EditDataPatchRecord(ITokenString key, TokenisableJToken value)
+        public EditDataPatchRecord(IManagedTokenString key, TokenisableJToken value)
         {
             this.Key = key;
             this.Value = value;
@@ -46,12 +46,12 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <summary>Get all token strings used in the record.</summary>
-        public IEnumerable<ITokenString> GetTokenStrings()
+        public IEnumerable<IManagedTokenString> GetTokenStrings()
         {
             yield return this.Key;
             if (this.Value != null)
             {
-                foreach (ITokenString str in this.Value.GetTokenStrings())
+                foreach (IManagedTokenString str in this.Value.GetTokenStrings())
                     yield return str;
             }
         }
