@@ -165,7 +165,8 @@ namespace ContentPatcher.Framework
             yield return new ImmutableValueProvider(ConditionType.HasMod.ToString(), new InvariantHashSet(installedMods), canHaveMultipleValues: true);
             yield return new HasValueValueProvider();
             yield return new ConditionTypeValueProvider(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()));
-            yield return new ForValidationValueProvider(ConditionType.TargetName);
+            yield return new ForValidationValueProvider(ConditionType.Target);
+            yield return new ForValidationValueProvider(ConditionType.TargetWithoutPath);
         }
 
         /// <summary>Get the local value providers with which to initialise a local context.</summary>

@@ -22,7 +22,8 @@ namespace ContentPatcher.Framework.Migrations
             {
                 ConditionType.IsOutdoors.ToString(),
                 ConditionType.LocationName.ToString(),
-                ConditionType.TargetName.ToString(),
+                ConditionType.Target.ToString(),
+                ConditionType.TargetWithoutPath.ToString()
             };
         }
 

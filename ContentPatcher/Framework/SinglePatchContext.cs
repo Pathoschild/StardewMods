@@ -15,8 +15,14 @@ namespace ContentPatcher.Framework
         /// <summary>The parent context that provides non-patch-specific tokens.</summary>
         private IContext LastParentContext;
 
-        /// <summary>The token instance for the TargetName token.</summary>
-        private readonly DynamicToken TargetNameToken;
+        /// <summary>The token instance for the <see cref="ConditionType.Target"/> token.</summary>
+        private readonly DynamicToken TargetToken;
+
+        /// <summary>The token instance for the <see cref="ConditionType.TargetWithoutPath"/> token.</summary>
+        private readonly DynamicToken TargetWithoutPathToken;
+
+        /// <summary>The custom tokens provided by this instance.</summary>
+        private readonly IToken[] CustomTokens;
 
 
         /*********
@@ -26,7 +32,11 @@ namespace ContentPatcher.Framework
         /// <param name="scope">The mod namespace in which the token is accessible.</param>
         public SinglePatchContext(string scope)
         {
-            this.TargetNameToken = new DynamicToken(ConditionType.TargetName.ToString(), scope);
+            this.CustomTokens = new IToken[]
+            {
+                this.TargetToken = new DynamicToken(ConditionType.Target.ToString(), scope),
+                this.TargetWithoutPathToken = new DynamicToken(ConditionType.TargetWithoutPath.ToString(), scope)
+            };
         }
 
         /****
@@ -39,8 +49,11 @@ namespace ContentPatcher.Framework
         {
             this.LastParentContext = parentContext;
 
-            this.TargetNameToken.SetReady(targetName.IsReady);
-            this.TargetNameToken.SetValue(new LiteralString(targetName.IsReady ? Path.GetFileName(targetName.Value) : ""));
+            this.TargetToken.SetReady(targetName.IsReady);
+            this.TargetToken.SetValue(targetName);
+
+            this.TargetWithoutPathToken.SetReady(targetName.IsReady);
+            this.TargetWithoutPathToken.SetValue(new LiteralString(targetName.IsReady ? Path.GetFileName(targetName.Value) : ""));
         }
 
         /// <summary>Get whether the context contains the given token.</summary>
@@ -57,19 +70,27 @@ namespace ContentPatcher.Framework
         /// <returns>Returns the matching token, or <c>null</c> if none was found.</returns>
         public IToken GetToken(string name, bool enforceContext)
         {
-            if (string.Equals(name, this.TargetNameToken.Name, StringComparison.InvariantCultureIgnoreCase))
-                return this.TargetNameToken;
+            foreach (IToken token in this.CustomTokens)
+            {
+                if (string.Equals(name, token.Name, StringComparison.InvariantCultureIgnoreCase))
+                    return token;
+            }
 
-            return this.LastParentContext.GetToken(name, enforceContext);
+            return this.LastParentContext?.GetToken(name, enforceContext);
         }
 
         /// <summary>Get the underlying tokens.</summary>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
         public IEnumerable<IToken> GetTokens(bool enforceContext)
         {
-            yield return this.TargetNameToken;
-            foreach (IToken token in this.LastParentContext.GetTokens(enforceContext))
+            foreach (IToken token in this.CustomTokens)
                 yield return token;
+
+            if (this.LastParentContext != null)
+            {
+                foreach (IToken token in this.LastParentContext.GetTokens(enforceContext))
+                    yield return token;
+            }
         }
 
         /// <summary>Get the current values of the given token for comparison.</summary>
