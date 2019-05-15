@@ -352,7 +352,7 @@ namespace ContentPatcher
                     }
 
                     // load patches
-                    IContext patchTokenContext = new SinglePatchContext(current.Manifest.UniqueID); // make patch tokens available to patches
+                    IContext patchTokenContext = new SinglePatchContext(current.Manifest.UniqueID, parentContext: modContext); // make patch tokens available to patches
 
                     content.Changes = this.SplitPatches(content.Changes).ToArray();
                     this.NamePatches(current.ManagedPack, content.Changes);

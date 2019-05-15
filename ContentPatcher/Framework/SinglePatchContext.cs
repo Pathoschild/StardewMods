@@ -31,8 +31,10 @@ namespace ContentPatcher.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="scope">The mod namespace in which the token is accessible.</param>
-        public SinglePatchContext(string scope)
+        /// <param name="parentContext">The initial parent context that provides non-patch-specific tokens, if any.</param>
+        public SinglePatchContext(string scope, IContext parentContext = null)
         {
+            this.LastParentContext = parentContext;
             this.CustomTokens = new IToken[]
             {
                 this.TargetToken = new DynamicToken(ConditionType.Target.ToString(), scope),
