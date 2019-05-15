@@ -30,8 +30,8 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Whether the instance is valid for the current context.</summary>
         public bool IsReady { get; protected set; }
 
-        /// <summary>The last context used to update this patch.</summary>
-        protected IContext LastContext { get; private set; }
+        /// <summary>The context which provides tokens for this patch, including patch-specific tokens like <see cref="ConditionType.TargetName"/>.</summary>
+        protected SinglePatchContext PrivateContext { get; }
 
         /// <summary>A unique name for this patch shown in log messages.</summary>
         public string LogName { get; }
@@ -66,38 +66,42 @@ namespace ContentPatcher.Framework.Patches
         /// <returns>Returns whether the patch data changed.</returns>
         public virtual bool UpdateContext(IContext context)
         {
-            this.LastContext = context;
             bool isReady = true;
             bool changed = false;
 
-            IContext myContext = new SinglePatchContext(this, context);
+            // update target asset (needed by patch context)
+            this.RawTargetAsset.UpdateContext(context);
+            this.TargetAsset = this.NormaliseAssetName(this.RawTargetAsset.Value);
+
+            // update patch context
+            this.PrivateContext.Update(context, this.RawTargetAsset);
 
             // update contextual values
             foreach (IContextual contextual in this.ContextualValues)
             {
+                if (contextual == this.RawTargetAsset)
+                    continue; // updated above
+
                 bool wasReady = contextual.IsReady;
-                if (contextual.UpdateContext(myContext) || contextual.IsReady != wasReady)
+                if (contextual.UpdateContext(this.PrivateContext) || contextual.IsReady != wasReady)
                     changed = true;
             }
 
             // update source asset
             if (this.FromLocalAsset != null)
             {
-                bool sourceChanged = this.FromLocalAsset.UpdateContext(myContext);
+                bool sourceChanged = this.FromLocalAsset.UpdateContext(this.PrivateContext);
                 isReady = this.FromLocalAsset.IsReady && this.ContentPack.HasFile(this.FromLocalAsset.Value);
                 changed = changed || sourceChanged;
             }
-
-            // update target asset
-            this.TargetAsset = this.NormaliseAssetName(this.RawTargetAsset.Value);
 
             // update ready flag
             {
                 bool wasReady = this.IsReady;
                 this.IsReady =
                     isReady
-                    && (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(myContext)))
-                    && this.GetTokensUsed().All(name => myContext.Contains(name, enforceContext: true));
+                    && (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(this.PrivateContext)))
+                    && this.GetTokensUsed().All(name => this.PrivateContext.Contains(name, enforceContext: true));
                 changed = changed || this.IsReady != wasReady;
             }
 
@@ -161,6 +165,7 @@ namespace ContentPatcher.Framework.Patches
             this.RawTargetAsset = assetName;
             this.Conditions = conditions.ToArray();
             this.NormaliseAssetName = normaliseAssetName;
+            this.PrivateContext = new SinglePatchContext(scope: this.ContentPack.Manifest.UniqueID);
 
             // track contextuals
             this.ContextualValues.AddRange(this.Conditions);
