@@ -985,6 +985,56 @@ code | meaning
 
 </table>
 </dd>
+
+<dt>Patch-specific tokens:</dt>
+
+<dd>
+These tokens provide a value specific to the current patch. They can't be used in dynamic tokens or
+any other field outside a patch block.
+
+<table>
+<tr>
+<th>condition</th>
+<th>purpose</th>
+</tr>
+
+<tr valign="top">
+<td>Target</td>
+<td>
+
+The patch's `Target` field value for the current asset. Path separators are normalised for the OS.
+This is mainly useful for patches which specify multiple targets:
+
+```js
+{
+   "Action": "EditImage",
+   "Target": "Characters/Abigail, Characters/Sam",
+   "FromFile": "assets/{{Target}}.png" // assets/Characters/Abigail.png *or* assets/Characters/Sam.png
+}
+```
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>TargetWithoutPath</td>
+<td>
+
+Equivalent to `Target`, but only the part after the last path separator:
+
+```js
+{
+   "Action": "EditImage",
+   "Target": "Characters/Abigail, Characters/Sam",
+   "FromFile": "assets/{{TargetWithoutPath}}.png" // assets/Abigail.png *or* assets/Sam.png
+}
+```
+
+</td>
+</tr>
+
+</table>
+</dd>
 </dl>
 
 **Special note about `"Action": "Load"`:**  
