@@ -59,7 +59,7 @@ namespace ContentPatcher.Framework.ConfigModels
         public IDictionary<string, IDictionary<string, JToken>> Fields { get; set; }
 
         /// <summary>The records to reorder, if the target is a list asset.</summary>
-        public List<PatchMoveEntryConfig> MoveEntries { get; set; }
+        public PatchMoveEntryConfig[] MoveEntries { get; set; }
 
 
         /*********
@@ -83,7 +83,7 @@ namespace ContentPatcher.Framework.ConfigModels
             this.PatchMode = other.PatchMode;
             this.Entries = other.Entries?.ToDictionary(p => p.Key, p => p.Value);
             this.Fields = other.Fields?.ToDictionary(p => p.Key, p => p.Value);
-            this.MoveEntries = other.MoveEntries?.Select(p => new PatchMoveEntryConfig(p)).ToList();
+            this.MoveEntries = other.MoveEntries?.Select(p => new PatchMoveEntryConfig(p)).ToArray();
         }
     }
 }

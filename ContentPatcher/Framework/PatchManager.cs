@@ -344,7 +344,7 @@ namespace ContentPatcher.Framework
             if (assetType == typeof(Texture2D))
                 return PatchType.EditImage;
             if (assetType == typeof(Map))
-                return null;
+                return PatchType.EditMap;
             else
                 return PatchType.EditData;
         }

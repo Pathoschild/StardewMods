@@ -189,7 +189,7 @@ namespace ContentPatcher.Framework.Patches
         private void ApplyList<TValue>(IAssetData asset)
         {
             // get data
-            IList<TValue> data = asset.AsList<TValue>().Data;
+            IList<TValue> data = asset.GetData<List<TValue>>();
             TValue GetByKey(string key) => data.FirstOrDefault(p => this.GetKey(p) == key);
 
             // apply field/record edits

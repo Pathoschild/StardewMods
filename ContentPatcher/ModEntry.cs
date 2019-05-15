@@ -15,6 +15,7 @@ using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 using ContentPatcher.Framework.Validators;
+using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -593,6 +594,22 @@ namespace ContentPatcher
                             if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, migrator, out string error, out ITokenString fromAsset))
                                 return TrackSkip(error);
                             patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormaliseAssetName);
+                        }
+                        break;
+
+                    // edit map
+                    case PatchType.EditMap:
+                        {
+                            // read map asset
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, migrator, out string error, out ITokenString fromAsset))
+                                return TrackSkip(error);
+
+                            // validate
+                            if (entry.ToArea == Rectangle.Empty)
+                                return TrackSkip($"must specify {nameof(entry.ToArea)} (use \"Action\": \"Load\" if you want to replace the whole map file).");
+
+                            // save
+                            patch = new EditMapPatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
                         break;
 

@@ -113,7 +113,7 @@ All patches support these common fields:
 
 field      | purpose
 ---------- | -------
-`Action`   | The kind of change to make (`Load`, `EditImage`, or `EditData`); explained in the next three sections.
+`Action`   | The kind of change to make (`Load`, `EditImage`, `EditData`, `EditMap`); explained in the next four sections.
 `Target`   | The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside your game's `Content` folder, without the file extension or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`). This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter. Your changes are applied in all languages unless you specify a language [condition](#advanced-tokens--conditions).
 `LogName`  | _(optional)_ A name for this patch shown in log messages. This is very useful for understanding errors; if not specified, will default to a name like `entry #14 (EditImage Animals/Dinosaurs)`.
 `Enabled`  | _(optional)_ Whether to apply this patch. Default true. This fields supports immutable [tokens](#advanced-tokens--conditions) (e.g. config tokens) if they return true/false.
@@ -346,6 +346,91 @@ New entries are added at the bottom of the list by default.
 
 </dd>
 </dl>
+
+## Edit part of a map
+`"Action": "EditMap"` changes part of an in-game map by copying tiles, properties, and tilesheets
+from a source map. This is essentially a copy & paste from one map into another, replacing whatever
+was in the target area before.
+
+Any number of content packs can edit the same map. If two patches overlap, whichever one is applied
+last will take effect for the overlapping tiles.
+
+<table>
+<tr>
+<th>field</th>
+<th>purpose</th>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>
+
+See _common fields_ above.
+
+</td>
+</tr>
+<tr>
+<td>
+
+`FromFile`
+
+</td>
+<td>
+
+The relative path to the map in your content pack folder from which to copy (like `assets/town.tbin`). This can be a `.tbin` or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter.
+
+Content Patcher will handle tilesheets referenced by the `FromFile` map for you if it's a `.tbin` file:
+* If a tilesheet isn't referenced by the target map, Content Patcher will add it for you (with a `z_` ID prefix to avoid conflicts with hardcoded game logic). If the source map has a custom version of a tilesheet that's already referenced, it'll be added as a separate tilesheet only used by your tiles.
+* If you include the tilesheet file in your mod folder, Content Patcher will use that one automatically; otherwise it will be loaded from the game's `Content/Maps` folder.
+
+</td>
+</tr>
+<tr>
+<td>
+
+`FromArea`
+
+</td>
+<td>
+
+_(optional)_ The part of the source map to copy. Defaults to the whole source map. This is specified as an object with the X and Y tile coordinates of the top-left corner, and the tile width and height of the area.
+
+</td>
+</tr>
+<tr>
+<td>
+
+`ToArea`
+
+</td>
+<td>
+
+(Required) The part of the target map to replace. This is specified as an object with the X and Y tile coordinates of the top-left corner, and the tile width and height of the area.
+
+</td>
+</tr>
+</table>
+
+For example, this replaces the town square with the one in another map:
+```js
+{
+   "Format": "1.8",
+   "Changes": [
+      {
+         "Action": "EditMap",
+         "Target": "Maps/Town",
+         "FromFile": "assets/town.tbin",
+         "FromArea": { "X": 22, "Y": 61, "Width": 16, "Height": 13 },
+         "ToArea": { "X": 22, "Y": 61, "Width": 16, "Height": 13 }
+      },
+   ]
+}
+```
+
+Known limitations:
+* Patching non-farmhouse-floor tiles into the farmhouse's `Back` layer may cause strange effects,
+  due to the game's floor decorating logic.
+* Conditional map patches may reset the map's seasonal tilesheets to spring. This is a SMAPI bug
+  that will be fixed in SMAPI 3.0.
 
 ## Advanced: tokens & conditions
 ### Overview
