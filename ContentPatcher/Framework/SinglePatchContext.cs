@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common;
 
 namespace ContentPatcher.Framework
 {
@@ -49,11 +50,21 @@ namespace ContentPatcher.Framework
         {
             this.LastParentContext = parentContext;
 
-            this.TargetToken.SetReady(targetName.IsReady);
-            this.TargetToken.SetValue(targetName);
+            if (targetName.IsReady)
+            {
+                string path = PathUtilities.NormalisePathSeparators(targetName.Value);
 
-            this.TargetWithoutPathToken.SetReady(targetName.IsReady);
-            this.TargetWithoutPathToken.SetValue(new LiteralString(targetName.IsReady ? Path.GetFileName(targetName.Value) : ""));
+                this.TargetToken.SetReady(true);
+                this.TargetToken.SetValue(new LiteralString(path));
+
+                this.TargetWithoutPathToken.SetReady(true);
+                this.TargetWithoutPathToken.SetValue(new LiteralString(Path.GetFileName(path)));
+            }
+            else
+            {
+                this.TargetToken.SetReady(false);
+                this.TargetWithoutPathToken.SetReady(false);
+            }
         }
 
         /// <summary>Get whether the context contains the given token.</summary>

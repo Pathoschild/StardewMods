@@ -259,7 +259,7 @@ namespace ContentPatcher.Framework.Commands
                         output.Append($" | => {patch.ParsedTargetAsset.Value}");
 
                     // log reason not applied
-                    string errorReason = this.GetReasonNotLoaded(patch, tokenContext);
+                    string errorReason = this.GetReasonNotLoaded(patch);
                     if (errorReason != null)
                         output.Append($"  // {errorReason}");
 
@@ -316,11 +316,12 @@ namespace ContentPatcher.Framework.Commands
 
         /// <summary>Get a human-readable reason that the patch isn't applied.</summary>
         /// <param name="patch">The patch to check.</param>
-        /// <param name="tokenContext">The token context for the content pack.</param>
-        private string GetReasonNotLoaded(PatchInfo patch, IContext tokenContext)
+        private string GetReasonNotLoaded(PatchInfo patch)
         {
             if (patch.IsApplied)
                 return null;
+
+            IContext tokenContext = patch.PatchContext;
 
             // load error
             if (!patch.IsLoaded)

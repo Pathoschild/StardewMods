@@ -281,7 +281,7 @@ namespace ContentPatcher
                     ContentConfig content = current.Content;
 
                     // load tokens
-                    ModTokenContext tokenContext = this.TokenManager.TrackLocalTokens(current.ManagedPack.Pack);
+                    ModTokenContext modContext = this.TokenManager.TrackLocalTokens(current.ManagedPack.Pack);
                     {
                         // load config.json
                         InvariantDictionary<ConfigField> config = configFileHandler.Read(current.ManagedPack, content.ConfigSchema, current.Content.Format);
@@ -293,7 +293,7 @@ namespace ContentPatcher
                         foreach (KeyValuePair<string, ConfigField> pair in config)
                         {
                             ConfigField field = pair.Value;
-                            tokenContext.Add(new ImmutableToken(pair.Key, field.Value, scope: current.Manifest.UniqueID, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple));
+                            modContext.Add(new ImmutableToken(pair.Key, field.Value, scope: current.Manifest.UniqueID, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple));
                         }
 
                         // load dynamic tokens
@@ -327,7 +327,7 @@ namespace ContentPatcher
                             ITokenString values;
                             if (!string.IsNullOrWhiteSpace(entry.Value))
                             {
-                                if (!this.TryParseStringTokens(entry.Value, tokenContext, current.Migrator, out string valueError, out values))
+                                if (!this.TryParseStringTokens(entry.Value, modContext, current.Migrator, out string valueError, out values))
                                 {
                                     LogSkip($"the token value is invalid: {valueError}");
                                     continue;
@@ -339,7 +339,7 @@ namespace ContentPatcher
                             // parse conditions
                             IList<Condition> conditions;
                             {
-                                if (!this.TryParseConditions(entry.When, tokenContext, current.Migrator, out conditions, out string conditionError))
+                                if (!this.TryParseConditions(entry.When, modContext, current.Migrator, out conditions, out string conditionError))
                                 {
                                     this.Monitor.Log($"Ignored {current.Manifest.Name} > '{entry.Name}' token: its {nameof(DynamicTokenConfig.When)} field is invalid: {conditionError}.", LogLevel.Warn);
                                     continue;
@@ -347,17 +347,20 @@ namespace ContentPatcher
                             }
 
                             // add token
-                            tokenContext.Add(new DynamicTokenValue(entry.Name, values, conditions));
+                            modContext.Add(new DynamicTokenValue(entry.Name, values, conditions));
                         }
                     }
 
                     // load patches
+                    IContext patchTokenContext = new SinglePatchContext(current.Manifest.UniqueID); // make patch tokens available to patches
+
                     content.Changes = this.SplitPatches(content.Changes).ToArray();
                     this.NamePatches(current.ManagedPack, content.Changes);
+
                     foreach (PatchConfig patch in content.Changes)
                     {
                         this.Monitor.VerboseLog($"   loading {patch.LogName}...");
-                        this.LoadPatch(current.ManagedPack, patch, tokenContext, current.Migrator, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {patch.LogName}: {reasonPhrase}", LogLevel.Warn));
+                        this.LoadPatch(current.ManagedPack, patch, patchTokenContext, current.Migrator, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {patch.LogName}: {reasonPhrase}", LogLevel.Warn));
                     }
                 }
                 catch (Exception ex)

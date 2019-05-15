@@ -1,5 +1,6 @@
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
+using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Commands
@@ -43,6 +44,9 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>The token names used by this patch in its fields.</summary>
         public InvariantHashSet TokensUsed { get; }
 
+        /// <summary>The patch context.</summary>
+        public IContext PatchContext { get; }
+
 
         /*********
         ** Public methods
@@ -78,6 +82,7 @@ namespace ContentPatcher.Framework.Commands
             this.MatchesContext = patch.IsReady;
             this.IsApplied = patch.IsApplied;
             this.TokensUsed = new InvariantHashSet(patch.GetTokensUsed());
+            this.PatchContext = patch.GetPatchContext();
         }
 
 

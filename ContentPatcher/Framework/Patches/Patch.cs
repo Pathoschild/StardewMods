@@ -20,6 +20,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The underlying contextual values.</summary>
         protected readonly List<IContextual> ContextualValues = new List<IContextual>();
 
+        /// <summary>The context which provides tokens for this patch, including patch-specific tokens like <see cref="ConditionType.Target"/>.</summary>
+        protected SinglePatchContext PrivateContext { get; }
+
 
         /*********
         ** Accessors
@@ -29,9 +32,6 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>Whether the instance is valid for the current context.</summary>
         public bool IsReady { get; protected set; }
-
-        /// <summary>The context which provides tokens for this patch, including patch-specific tokens like <see cref="ConditionType.TargetName"/>.</summary>
-        protected SinglePatchContext PrivateContext { get; }
 
         /// <summary>A unique name for this patch shown in log messages.</summary>
         public string LogName { get; }
@@ -143,6 +143,12 @@ namespace ContentPatcher.Framework.Patches
             // conditions
             foreach (string name in this.Conditions.SelectMany(p => p.GetTokensUsed()))
                 yield return name;
+        }
+
+        /// <summary>Get the context which provides tokens for this patch, including patch-specific tokens like <see cref="ConditionType.Target"/>.</summary>
+        public IContext GetPatchContext()
+        {
+            return this.PrivateContext;
         }
 
 
