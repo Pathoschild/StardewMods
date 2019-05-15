@@ -67,7 +67,7 @@ namespace ContentPatcher.Framework.Patches
 
             // fetch data
             Map source = this.ContentPack.Load<Map>(this.FromLocalAsset.Value);
-            Rectangle sourceArea = this.FromArea ?? new Rectangle(0, 0, source.DisplayWidth, source.DisplayHeight);
+            Rectangle sourceArea = this.FromArea ?? this.GetMapArea(source);
             Rectangle targetArea = this.ToArea ?? new Rectangle(0, 0, sourceArea.Width, sourceArea.Height);
             Map target = asset.GetData<Map>();
 
@@ -117,6 +117,24 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Private methods
         *********/
+        /// <summary>Get a rectangle which encompasses all layers for a map.</summary>
+        /// <param name="map">The map to check.</param>
+        private Rectangle GetMapArea(Map map)
+        {
+            // get max map size
+            int maxWidth = 0;
+            int maxHeight = 0;
+            foreach (Layer layer in map.Layers)
+            {
+                if (layer.LayerWidth > maxWidth)
+                    maxWidth = layer.LayerWidth;
+                if (layer.LayerHeight > maxHeight)
+                    maxHeight = layer.LayerHeight;
+            }
+
+            return new Rectangle(0, 0, maxWidth, maxHeight);
+        }
+
         /// <summary>Copy the tiles from one map onto another. This assumes the input arguments have already been validated for correctness.</summary>
         /// <param name="source">The map from which to copy tiles.</param>
         /// <param name="sourceArea">The tile area within the source map to copy.</param>
