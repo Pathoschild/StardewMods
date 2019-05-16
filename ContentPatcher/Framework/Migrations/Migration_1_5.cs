@@ -49,13 +49,16 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             // check patch format
-            foreach (PatchConfig patch in content.Changes)
+            if (content.Changes?.Any() == true)
             {
-                // 1.5 adds multiple Target values
-                if (patch.Target?.Contains(",") == true)
+                foreach (PatchConfig patch in content.Changes)
                 {
-                    error = this.GetNounPhraseError($"specifying multiple {nameof(PatchConfig.Target)} values");
-                    return false;
+                    // 1.5 adds multiple Target values
+                    if (patch.Target?.Contains(",") == true)
+                    {
+                        error = this.GetNounPhraseError($"specifying multiple {nameof(PatchConfig.Target)} values");
+                        return false;
+                    }
                 }
             }
 

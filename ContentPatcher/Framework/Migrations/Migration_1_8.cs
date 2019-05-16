@@ -37,7 +37,7 @@ namespace ContentPatcher.Framework.Migrations
                 return false;
 
             // 1.8 adds MoveEntries
-            if (content.Changes != null)
+            if (content.Changes?.Any() == true)
             {
                 foreach (PatchConfig patch in content.Changes)
                 {

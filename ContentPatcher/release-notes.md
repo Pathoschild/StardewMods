@@ -12,6 +12,7 @@
 * Improved errors when token parsing fails.
 * Fixed patches not applied in some cases.
 * Fixed incorrect error message when `Default` and `AllowValues` conflict.
+* Fixed confusing errors when a content pack is broken and using an old format version.
 
 Thanks to spacechase0 for contributions to support the new tokens!
 
