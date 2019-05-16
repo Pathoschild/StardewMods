@@ -4,7 +4,6 @@ using Harmony;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Tools;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.SmallBeachFarm.Framework
@@ -27,6 +26,9 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         /// <summary>Get whether a given position is ocean water.</summary>
         private static Func<Farm, int, int, bool> IsOceanTile;
 
+        /// <summary>Whether the mod is currently applying patch changes (to avoid infinite recursion),</summary>
+        private static bool IsInPatch = false;
+
 
         /*********
         ** Public methods
@@ -45,7 +47,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
             FarmPatcher.IsOceanTile = isOceanTile;
 
             harmony.Patch(
-                original: AccessTools.Method(typeof(Farm), nameof(Farm.getFish), new[] { typeof(float), typeof(int), typeof(int), typeof(Farmer), typeof(double) }),
+                original: AccessTools.Method(typeof(Farm), nameof(Farm.getFish)),
                 prefix: new HarmonyMethod(typeof(FarmPatcher), nameof(FarmPatcher.Before_GetFish))
             );
             harmony.Patch(
@@ -73,31 +75,35 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         /// <param name="waterDepth">An argument passed through to the underlying method.</param>
         /// <param name="who">An argument passed through to the underlying method.</param>
         /// <param name="baitPotency">An argument passed through to the underlying method.</param>
+        /// <param name="bobberTile">The tile containing the bobber.</param>
         /// <param name="__result">The return value to use for the method.</param>
         /// <returns>Returns <c>true</c> if the original logic should run, or <c>false</c> to use <paramref name="__result"/> as the return value.</returns>
         [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
-        private static bool Before_GetFish(Farm __instance, float millisecondsAfterNibble, int bait, int waterDepth, Farmer who, double baitPotency, ref SObject __result)
+        private static bool Before_GetFish(Farm __instance, float millisecondsAfterNibble, int bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile, ref SObject __result)
         {
-            if (!FarmPatcher.IsSmallBeachFarm(who?.currentLocation))
+            if (FarmPatcher.IsInPatch || !FarmPatcher.IsSmallBeachFarm(who?.currentLocation))
                 return false;
 
-            // get tile being fished
-            FishingRod rod = who.CurrentTool as FishingRod;
-            if (rod == null)
-                return false;
-            Point tile = new Point((int)(rod.bobber.X / Game1.tileSize), (int)(rod.bobber.Y / Game1.tileSize));
-
-            // get ocean fish
-            if (FarmPatcher.IsOceanTile(__instance, tile.X, tile.Y))
+            try
             {
-                __result = __instance.getFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, "Beach");
-                FarmPatcher.Monitor.VerboseLog($"Fishing ocean tile at ({rod.bobber.X / Game1.tileSize}, {rod.bobber.Y / Game1.tileSize}).");
-                return false;
-            }
+                FarmPatcher.IsInPatch = true;
 
-            // get default riverlands fish
-            FarmPatcher.Monitor.VerboseLog($"Fishing river tile at ({rod.bobber.X / Game1.tileSize}, {rod.bobber.Y / Game1.tileSize}).");
-            return true;
+                // get ocean fish
+                if (FarmPatcher.IsOceanTile(__instance, (int)bobberTile.X, (int)bobberTile.Y))
+                {
+                    __result = __instance.getFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, "Beach");
+                    FarmPatcher.Monitor.VerboseLog($"Fishing ocean tile at ({bobberTile.X / Game1.tileSize}, {bobberTile.Y / Game1.tileSize}).");
+                    return false;
+                }
+
+                // get default riverlands fish
+                FarmPatcher.Monitor.VerboseLog($"Fishing river tile at ({bobberTile.X / Game1.tileSize}, {bobberTile.Y / Game1.tileSize}).");
+                return true;
+            }
+            finally
+            {
+                FarmPatcher.IsInPatch = false;
+            }
         }
 
         /// <summary>A method called via Harmony after <see cref="Farm.resetLocalState"/>.</summary>
@@ -110,7 +116,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
 
             // change background track
             if (FarmPatcher.ShouldUseBeachMusic())
-                Game1.changeMusicTrack("ocean");
+                Game1.changeMusicTrack("ocean", music_context: Game1.MusicContext.SubLocation);
         }
 
         /// <summary>A method called via Harmony after <see cref="Farm.resetSharedState"/>.</summary>
@@ -143,7 +149,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
 
             // change background track
             if (FarmPatcher.ShouldUseBeachMusic())
-                Game1.changeMusicTrack("none");
+                Game1.changeMusicTrack("none", music_context: Game1.MusicContext.SubLocation);
         }
 
         /// <summary>Get whether the Small Beach Farm's music should be overridden with the beach sounds.</summary>

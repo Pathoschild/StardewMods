@@ -8,7 +8,6 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Objects;
-using StardewValley.Tools;
 using xTile;
 using xTile.Dimensions;
 using xTile.Tiles;
