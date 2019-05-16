@@ -48,6 +48,12 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Whether the player is the main player or farmhand.</summary>
         IsMainPlayer,
 
+        /// <summary>Whether the player's current location is outdoors.</summary>
+        IsOutdoors,
+
+        /// <summary>The name of the player's current location.</summary>
+        LocationName,
+
         /// <summary>The gender of the current player.</summary>
         PlayerGender,
 
@@ -103,6 +109,16 @@ namespace ContentPatcher.Framework.Conditions
         HasValue,
 
         /// <summary>The <see cref="StardewValley.LocalizedContentManager.LanguageCode"/> name.</summary>
-        Language
+        Language,
+
+
+        /****
+        ** Patch-specific
+        ****/
+        /// <summary>The current patch's full target value.</summary>
+        Target,
+
+        /// <summary>The filename portion of the current patch's target value.</summary>
+        TargetWithoutPath
     };
 }

@@ -10,6 +10,9 @@ namespace ContentPatcher.Framework.Tokens
         /*********
         ** Accessors
         *********/
+        /// <summary>The mod namespace in which the token is accessible, or <c>null</c> for any namespace.</summary>
+        string Scope { get; }
+
         /// <summary>The token name.</summary>
         string Name { get; }
 

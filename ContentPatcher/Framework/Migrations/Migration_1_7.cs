@@ -68,7 +68,7 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             // 1.7 adds tokens in field keys and condition values
-            if (content.Changes != null)
+            if (content.Changes?.Any() == true)
             {
                 foreach (PatchConfig patch in content.Changes)
                 {

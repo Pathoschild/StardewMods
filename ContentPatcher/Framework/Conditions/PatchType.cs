@@ -10,6 +10,9 @@ namespace ContentPatcher.Framework.Conditions
         EditImage,
 
         /// <summary>Edit a data file.</summary>
-        EditData
+        EditData,
+
+        /// <summary>Edit a map after it's loaded.</summary>
+        EditMap
     }
 }

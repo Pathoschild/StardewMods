@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
-using ContentPatcher.Framework.Lexing.LexTokens;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 
@@ -34,15 +33,6 @@ namespace ContentPatcher.Framework.Patches
             return (data as object) is Texture2D texture
                 ? (T)(object)this.CloneTexture(texture)
                 : data;
-        }
-
-        /// <summary>Get the token names used by this patch in its fields.</summary>
-        public override IEnumerable<string> GetTokensUsed()
-        {
-            foreach (string name in base.GetTokensUsed())
-                yield return name;
-            foreach (LexTokenToken lexToken in this.FromLocalAsset.GetTokenPlaceholders(recursive: true))
-                yield return lexToken.Name;
         }
 
 

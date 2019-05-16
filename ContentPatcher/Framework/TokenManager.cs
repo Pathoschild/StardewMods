@@ -49,27 +49,32 @@ namespace ContentPatcher.Framework
         /// <param name="contentPack">The content pack to manage.</param>
         public ModTokenContext TrackLocalTokens(IContentPack contentPack)
         {
+            string scope = contentPack.Manifest.UniqueID;
+
             if (!this.LocalTokens.TryGetValue(contentPack, out ModTokenContext localTokens))
             {
-                this.LocalTokens[contentPack] = localTokens = new ModTokenContext(this);
+                this.LocalTokens[contentPack] = localTokens = new ModTokenContext(scope, this);
                 foreach (IValueProvider valueProvider in this.GetLocalValueProviders(contentPack))
-                    localTokens.Add(new GenericToken(valueProvider));
+                    localTokens.Add(new GenericToken(valueProvider, scope));
             }
 
             return localTokens;
         }
 
         /// <summary>Update the current context.</summary>
-        public void UpdateContext()
+        /// <param name="globalChangedTokens">The global token values which changed, or <c>null</c> to update all tokens.</param>
+        public void UpdateContext(InvariantHashSet globalChangedTokens = null)
         {
+            // update global tokens
             foreach (IToken token in this.GlobalContext.Tokens.Values)
             {
-                if (token.IsMutable)
+                if (token.IsMutable && globalChangedTokens?.Contains(token.Name) != false)
                     token.UpdateContext(this);
             }
 
+            // update mod contexts
             foreach (ModTokenContext localContext in this.LocalTokens.Values)
-                localContext.UpdateContext(this);
+                localContext.UpdateContext(this, globalChangedTokens);
         }
 
         /****
@@ -137,6 +142,8 @@ namespace ContentPatcher.Framework
             yield return new ConditionTypeValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
             yield return new HasWalletItemValueProvider(NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.IsMainPlayer, () => Context.IsMainPlayer.ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.IsOutdoors, () => Game1.currentLocation?.IsOutdoors.ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.LocationName, () => Game1.currentLocation?.Name, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.PlayerGender, () => (Game1.player.IsMale ? Gender.Male : Gender.Female).ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.PlayerName, () => Game1.player.Name, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.PreferredPet, () => (Game1.player.catPerson ? PetType.Cat : PetType.Dog).ToString(), NeedsBasicInfo);

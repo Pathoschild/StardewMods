@@ -15,11 +15,13 @@ using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 using ContentPatcher.Framework.Validators;
+using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Enums;
 using StardewModdingAPI.Events;
+using StardewValley;
 
 [assembly: InternalsVisibleTo("Pathoschild.Stardew.Tests.Mods")]
 namespace ContentPatcher
@@ -37,7 +39,7 @@ namespace ContentPatcher
         private readonly string ConfigFileName = "config.json";
 
         /// <summary>The supported format versions.</summary>
-        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4", "1.5", "1.6", "1.7" };
+        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8" };
 
         /// <summary>The format version migrations to apply.</summary>
         private readonly Func<IMigration[]> Migrations = () => new IMigration[]
@@ -46,7 +48,8 @@ namespace ContentPatcher
             new Migration_1_4(),
             new Migration_1_5(),
             new Migration_1_6(),
-            new Migration_1_7()
+            new Migration_1_7(),
+            new Migration_1_8()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -106,10 +109,11 @@ namespace ContentPatcher
                 helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
+            helper.Events.Player.Warped += this.OnWarped;
             helper.Events.Specialised.LoadStageChanged += this.OnLoadStageChanged;
 
             // set up commands
-            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, this.UpdateContext);
+            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, () => this.UpdateContext());
             helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (name, args) => this.CommandHandler.Handle(args));
         }
 
@@ -160,6 +164,7 @@ namespace ContentPatcher
             {
                 case LoadStage.CreatedBasicInfo:
                 case LoadStage.SaveLoadedBasicInfo:
+                case LoadStage.Loaded when Game1.dayOfMonth == 0: // handled by OnDayStarted if we're not creating a new save
                     this.Monitor.VerboseLog($"Updating context: load stage changed to {e.NewStage}.");
                     this.TokenManager.IsBasicInfoLoaded = true;
                     this.UpdateContext();
@@ -177,6 +182,16 @@ namespace ContentPatcher
             this.UpdateContext();
         }
 
+        /// <summary>The method invoked when the player warps.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnWarped(object sender, WarpedEventArgs e)
+        {
+            ConditionType[] affectedTokens = new[] { ConditionType.LocationName, ConditionType.IsOutdoors };
+            this.Monitor.VerboseLog($"Updating context for {string.Join(", ", affectedTokens)}: player warped.");
+            this.UpdateContext(affectedTokens);
+        }
+
         /// <summary>The method invoked when the player returns to the title screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
@@ -191,10 +206,15 @@ namespace ContentPatcher
         ** Methods
         ****/
         /// <summary>Update the current context.</summary>
-        private void UpdateContext()
+        /// <param name="affectedTokens">The specific tokens for which to update context, or <c>null</c> to affect all tokens</param>
+        private void UpdateContext(ConditionType[] affectedTokens = null)
         {
-            this.TokenManager.UpdateContext();
-            this.PatchManager.UpdateContext(this.Helper.Content);
+            InvariantHashSet set = affectedTokens != null
+                ? new InvariantHashSet(affectedTokens.Select(p => p.ToString()))
+                : null;
+
+            this.TokenManager.UpdateContext(set);
+            this.PatchManager.UpdateContext(this.Helper.Content, set);
         }
 
         /// <summary>Load the registered content packs.</summary>
@@ -261,7 +281,7 @@ namespace ContentPatcher
                     ContentConfig content = current.Content;
 
                     // load tokens
-                    ModTokenContext tokenContext = this.TokenManager.TrackLocalTokens(current.ManagedPack.Pack);
+                    ModTokenContext modContext = this.TokenManager.TrackLocalTokens(current.ManagedPack.Pack);
                     {
                         // load config.json
                         InvariantDictionary<ConfigField> config = configFileHandler.Read(current.ManagedPack, content.ConfigSchema, current.Content.Format);
@@ -273,7 +293,7 @@ namespace ContentPatcher
                         foreach (KeyValuePair<string, ConfigField> pair in config)
                         {
                             ConfigField field = pair.Value;
-                            tokenContext.Add(new ImmutableToken(pair.Key, field.Value, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple));
+                            modContext.Add(new ImmutableToken(pair.Key, field.Value, scope: current.Manifest.UniqueID, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple));
                         }
 
                         // load dynamic tokens
@@ -307,7 +327,7 @@ namespace ContentPatcher
                             ITokenString values;
                             if (!string.IsNullOrWhiteSpace(entry.Value))
                             {
-                                if (!this.TryParseStringTokens(entry.Value, tokenContext, current.Migrator, out string valueError, out values))
+                                if (!this.TryParseStringTokens(entry.Value, modContext, current.Migrator, out string valueError, out values))
                                 {
                                     LogSkip($"the token value is invalid: {valueError}");
                                     continue;
@@ -319,7 +339,7 @@ namespace ContentPatcher
                             // parse conditions
                             IList<Condition> conditions;
                             {
-                                if (!this.TryParseConditions(entry.When, tokenContext, current.Migrator, out conditions, out string conditionError))
+                                if (!this.TryParseConditions(entry.When, modContext, current.Migrator, out conditions, out string conditionError))
                                 {
                                     this.Monitor.Log($"Ignored {current.Manifest.Name} > '{entry.Name}' token: its {nameof(DynamicTokenConfig.When)} field is invalid: {conditionError}.", LogLevel.Warn);
                                     continue;
@@ -327,17 +347,20 @@ namespace ContentPatcher
                             }
 
                             // add token
-                            tokenContext.Add(new DynamicTokenValue(entry.Name, values, conditions));
+                            modContext.Add(new DynamicTokenValue(entry.Name, values, conditions));
                         }
                     }
 
                     // load patches
+                    IContext patchTokenContext = new SinglePatchContext(current.Manifest.UniqueID, parentContext: modContext); // make patch tokens available to patches
+
                     content.Changes = this.SplitPatches(content.Changes).ToArray();
                     this.NamePatches(current.ManagedPack, content.Changes);
+
                     foreach (PatchConfig patch in content.Changes)
                     {
                         this.Monitor.VerboseLog($"   loading {patch.LogName}...");
-                        this.LoadPatch(current.ManagedPack, patch, tokenContext, current.Migrator, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {patch.LogName}: {reasonPhrase}", LogLevel.Warn));
+                        this.LoadPatch(current.ManagedPack, patch, patchTokenContext, current.Migrator, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {patch.LogName}: {reasonPhrase}", LogLevel.Warn));
                     }
                 }
                 catch (Exception ex)
@@ -478,8 +501,8 @@ namespace ContentPatcher
                     case PatchType.EditData:
                         {
                             // validate
-                            if (entry.Entries == null && entry.Fields == null)
-                                return TrackSkip($"either {nameof(PatchConfig.Entries)} or {nameof(PatchConfig.Fields)} must be specified for a '{action}' change.");
+                            if (entry.Entries == null && entry.Fields == null && entry.MoveEntries == null)
+                                return TrackSkip($"one of {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, or {nameof(PatchConfig.MoveEntries)} must be specified for an '{action}' change.");
 
                             // parse entries
                             List<EditDataPatchRecord> entries = new List<EditDataPatchRecord>();
@@ -524,8 +547,41 @@ namespace ContentPatcher
                                 }
                             }
 
+                            // parse move entries
+                            List<EditDataPatchMoveRecord> moveEntries = new List<EditDataPatchMoveRecord>();
+                            if (entry.MoveEntries != null)
+                            {
+                                foreach (PatchMoveEntryConfig moveEntry in entry.MoveEntries)
+                                {
+                                    // validate
+                                    string[] targets = new[] { moveEntry.BeforeID, moveEntry.AfterID, moveEntry.ToPosition };
+                                    if (string.IsNullOrWhiteSpace(moveEntry.ID))
+                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > move entry is invalid: must specify an {nameof(PatchMoveEntryConfig.ID)} value.");
+                                    if (targets.All(string.IsNullOrWhiteSpace))
+                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, or {nameof(PatchMoveEntryConfig.AfterID)}.");
+                                    if (targets.Count(p => !string.IsNullOrWhiteSpace(p)) > 1)
+                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify only one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, and {nameof(PatchMoveEntryConfig.AfterID)}.");
+
+                                    // parse IDs
+                                    if (!this.TryParseStringTokens(moveEntry.ID, tokenContext, migrator, out string idError, out ITokenString moveId))
+                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.ID)} is invalid: {idError}.");
+                                    if (!this.TryParseStringTokens(moveEntry.BeforeID, tokenContext, migrator, out string beforeIdError, out ITokenString beforeId))
+                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.BeforeID)} is invalid: {beforeIdError}.");
+                                    if (!this.TryParseStringTokens(moveEntry.AfterID, tokenContext, migrator, out string afterIdError, out ITokenString afterId))
+                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.AfterID)} is invalid: {afterIdError}.");
+
+                                    // parse position
+                                    MoveEntryPosition toPosition = MoveEntryPosition.None;
+                                    if (!string.IsNullOrWhiteSpace(moveEntry.ToPosition) && (!Enum.TryParse(moveEntry.ToPosition, true, out toPosition) || toPosition == MoveEntryPosition.None))
+                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.ToPosition)} is invalid: must be one of {nameof(MoveEntryPosition.Bottom)} or {nameof(MoveEntryPosition.Top)}.");
+
+                                    // create move entry
+                                    moveEntries.Add(new EditDataPatchMoveRecord(moveId, beforeId, afterId, toPosition));
+                                }
+                            }
+
                             // save
-                            patch = new EditDataPatch(entry.LogName, pack, assetName, conditions, entries, fields, this.Monitor, this.Helper.Content.NormaliseAssetName);
+                            patch = new EditDataPatch(entry.LogName, pack, assetName, conditions, entries, fields, moveEntries, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
                         break;
 
@@ -541,6 +597,22 @@ namespace ContentPatcher
                             if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, migrator, out string error, out ITokenString fromAsset))
                                 return TrackSkip(error);
                             patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormaliseAssetName);
+                        }
+                        break;
+
+                    // edit map
+                    case PatchType.EditMap:
+                        {
+                            // read map asset
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, migrator, out string error, out ITokenString fromAsset))
+                                return TrackSkip(error);
+
+                            // validate
+                            if (entry.ToArea == Rectangle.Empty)
+                                return TrackSkip($"must specify {nameof(entry.ToArea)} (use \"Action\": \"Load\" if you want to replace the whole map file).");
+
+                            // save
+                            patch = new EditMapPatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
                         break;
 
@@ -642,7 +714,7 @@ namespace ContentPatcher
                 }
 
                 // create condition
-                conditions.Add(new Condition(name: lexToken.Name, input: input, values: values));
+                conditions.Add(new Condition(name: token.Name, input: input, values: values));
             }
 
             // return parsed conditions
@@ -733,7 +805,7 @@ namespace ContentPatcher
         /// <param name="parsed">The parsed value, which may be legitimately <c>null</c> even if successful.</param>
         private bool TryParseJsonTokens(JToken rawJson, IContext tokenContext, IMigration migrator, out string error, out TokenisableJToken parsed)
         {
-            if (rawJson == null)
+            if (rawJson == null || rawJson.Type == JTokenType.Null)
             {
                 error = null;
                 parsed = null;

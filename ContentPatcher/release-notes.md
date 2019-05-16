@@ -1,6 +1,23 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.8
+Released 16 May 2019.
+
+* Added new tokens:
+  * `IsOutdoors`: whether the player is outdoors.
+  * `LocationName`: the name of the player's current location.
+  * `Target`: the target field value for the current patch.
+  * `TargetWithoutPath`: the target field value for the current patch (only the part after the last path separator).
+* Added map patching.
+* Added support for list assets in the upcoming Stardew Valley 1.4.
+* Improved errors when token parsing fails.
+* Fixed patches not applied in some cases.
+* Fixed incorrect error message when `Default` and `AllowValues` conflict.
+* Fixed confusing errors when a content pack is broken and using an old format version.
+
+Thanks to spacechase0 for contributions to support the new tokens!
+
 ## 1.7
 Released 08 May 2019.
 

@@ -13,7 +13,7 @@ namespace ContentPatcher.Framework.Lexing
         ** Fields
         *********/
         /// <summary>A regular expression which matches lexical patterns that split lexical patterns. For example, ':' is a <see cref="LexBitType.InputArgSeparator"/> pattern that splits a token name and its input arguments. The split pattern is itself a lexical pattern.</summary>
-        private readonly Regex LexicalSplitPattern = new Regex(@"({{|}}|:|\|)", RegexOptions.Compiled);
+        private readonly Regex LexicalSplitPattern = new Regex(@"({{|}}|:)", RegexOptions.Compiled);
 
 
         /*********
@@ -135,9 +135,18 @@ namespace ContentPatcher.Framework.Lexing
                     }
                 }
             }
+            string rawInput = string.Join("", input.Select(p => p.Text));
+            LinkedList<ILexToken> tokens;
+            try
+            {
+                tokens = new LinkedList<ILexToken>(RawParse());
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error parsing '{rawInput}' as a tokenisable string", ex);
+            }
 
             // normalise literal values
-            LinkedList<ILexToken> tokens = new LinkedList<ILexToken>(RawParse());
             IList<LinkedListNode<ILexToken>> removeQueue = new List<LinkedListNode<ILexToken>>();
             for (LinkedListNode<ILexToken> node = tokens.First; node != null; node = node.Next)
             {

@@ -33,20 +33,23 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             // check patch format
-            foreach (PatchConfig patch in content.Changes)
+            if (content.Changes?.Any() == true)
             {
-                // 1.3 adds tokens in FromFile
-                if (patch.FromFile != null && patch.FromFile.Contains("{{"))
+                foreach (PatchConfig patch in content.Changes)
                 {
-                    error = this.GetNounPhraseError($"using the {{{{token}}}} feature in {nameof(PatchConfig.FromFile)} fields");
-                    return false;
-                }
+                    // 1.3 adds tokens in FromFile
+                    if (patch.FromFile != null && patch.FromFile.Contains("{{"))
+                    {
+                        error = this.GetNounPhraseError($"using the {{{{token}}}} feature in {nameof(PatchConfig.FromFile)} fields");
+                        return false;
+                    }
 
-                // 1.3 adds When
-                if (content.Changes.Any(p => p.When != null && p.When.Any()))
-                {
-                    error = this.GetNounPhraseError($"using the condition feature ({nameof(ContentConfig.Changes)}.{nameof(PatchConfig.When)} field)");
-                    return false;
+                    // 1.3 adds When
+                    if (patch.When?.Any() == true)
+                    {
+                        error = this.GetNounPhraseError($"using the condition feature ({nameof(ContentConfig.Changes)}.{nameof(PatchConfig.When)} field)");
+                        return false;
+                    }
                 }
             }
 

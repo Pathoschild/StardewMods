@@ -7,21 +7,23 @@ using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
 {
-    /// <summary>Migrate patches to format version 1.6.</summary>
+    /// <summary>Migrate patches to format version 1.8.</summary>
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Named for clarity.")]
-    internal class Migration_1_6 : BaseMigration
+    internal class Migration_1_8 : BaseMigration
     {
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public Migration_1_6()
-            : base(new SemanticVersion(1, 6, 0))
+        public Migration_1_8()
+            : base(new SemanticVersion(1, 8, 0))
         {
             this.AddedTokens = new InvariantHashSet
             {
-                ConditionType.HasWalletItem.ToString(),
-                ConditionType.SkillLevel.ToString()
+                ConditionType.IsOutdoors.ToString(),
+                ConditionType.LocationName.ToString(),
+                ConditionType.Target.ToString(),
+                ConditionType.TargetWithoutPath.ToString()
             };
         }
 
@@ -34,13 +36,16 @@ namespace ContentPatcher.Framework.Migrations
             if (!base.TryMigrate(content, out error))
                 return false;
 
-            // before 1.6, the 'sun' weather included 'wind'
+            // 1.8 adds MoveEntries
             if (content.Changes?.Any() == true)
             {
                 foreach (PatchConfig patch in content.Changes)
                 {
-                    if (patch.When != null && patch.When.TryGetValue(ConditionType.Weather.ToString(), out string value) && value.Contains("Sun"))
-                        patch.When[ConditionType.Weather.ToString()] = $"{value}, Wind";
+                    if (patch.MoveEntries?.Any() == true)
+                    {
+                        error = this.GetNounPhraseError($"using {nameof(PatchConfig.MoveEntries)}");
+                        return false;
+                    }
                 }
             }
 
