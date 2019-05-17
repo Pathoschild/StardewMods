@@ -141,7 +141,10 @@ namespace ContentPatcher.Framework
             // reset dynamic tokens
             // note: since token values are affected by the order they're defined, only updating tokens affected by globalChangedTokens is not trivial.
             foreach (DynamicToken token in this.DynamicContext.Tokens.Values)
+            {
+                token.SetValue(null);
                 token.SetReady(false);
+            }
             foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
             {
                 tokenValue.UpdateContext(this);

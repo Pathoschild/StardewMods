@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved `patch summary` display for local tokens.
+
 ## 1.8
 Released 16 May 2019.
 

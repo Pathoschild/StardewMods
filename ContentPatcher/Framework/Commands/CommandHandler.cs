@@ -217,27 +217,41 @@ namespace ContentPatcher.Framework.Commands
 
                 // print tokens
                 {
-                    IToken[] localTokens = tokenContext
-                        .GetTokens(enforceContext: false)
-                        .Where(token =>
-                            token.Scope != null // ignore global tokens
-                            && token.Name != ConditionType.HasFile.ToString() // no value to display
+                    var tokens =
+                        (
+                            // get non-global tokens
+                            from IToken token in tokenContext.GetTokens(enforceContext: false)
+                            where token.Scope != null && token.Name != ConditionType.HasFile.ToString()
+
+                            // get input arguments
+                            let validInputs = token.IsReady && token.RequiresInput
+                                ? token.GetAllowedInputArguments().Select(p => new LiteralString(p)).AsEnumerable<ITokenString>()
+                                : new ITokenString[] { null }
+                            from ITokenString input in validInputs
+
+                            // select display data
+                            let result = new
+                            {
+                                Name = token.RequiresInput ? $"{token.Name}:{input}" : token.Name,
+                                Value = token.IsReady ? string.Join(", ", token.GetValues(input)) : "",
+                                IsReady = token.IsReady
+                            }
+                            orderby result.Name
+                            select result
                         )
                         .ToArray();
-                    if (localTokens.Any())
+                    if (tokens.Any())
                     {
+                        int maxNameWidth = tokens.Max(p => p.Name.Length);
+
                         output.AppendLine();
                         output.AppendLine("   Local tokens:");
-                        foreach (IToken token in localTokens.OrderBy(p => p.Name))
-                        {
-                            if (token.RequiresInput)
-                            {
-                                foreach (string input in token.GetAllowedInputArguments().OrderBy(p => p))
-                                    output.AppendLine($"      {input}: {string.Join(", ", token.GetValues(new LiteralString(input)))}");
-                            }
-                            else
-                                output.AppendLine($"      {token.Name}: {string.Join(", ", token.GetValues(null))}");
-                        }
+
+                        output.AppendLine($"      {"token name".PadRight(maxNameWidth)} | value");
+                        output.AppendLine($"      {"----------".PadRight(maxNameWidth, '-')} | -----");
+
+                        foreach (var token in tokens)
+                            output.AppendLine($"      {token.Name.PadRight(maxNameWidth)} | [{(token.IsReady ? "X" : " ")}] {token.Value}");
                     }
                 }
 
