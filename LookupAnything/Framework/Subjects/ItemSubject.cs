@@ -335,7 +335,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (crop == null)
                 yield break;
 
-            var data = new CropDataParser(crop);
+            var data = new CropDataParser(crop, isPlanted: !isSeed);
 
             // add next-harvest field
             if (!isSeed)

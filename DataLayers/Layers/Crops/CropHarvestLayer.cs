@@ -71,7 +71,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
                 Crop crop = this.GetDirt(location, tile)?.crop;
                 if (crop == null)
                     continue;
-                CropDataParser data = new CropDataParser(crop);
+                CropDataParser data = new CropDataParser(crop, isPlanted: true);
 
                 // yield tile
                 if (data.CanHarvestNow)

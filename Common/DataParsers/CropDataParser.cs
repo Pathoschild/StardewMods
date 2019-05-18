@@ -39,17 +39,23 @@ namespace Pathoschild.Stardew.Common.DataParsers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="crop">The crop.</param>
-        public CropDataParser(Crop crop)
+        /// <param name="isPlanted">Whether the crop is planted.</param>
+        public CropDataParser(Crop crop, bool isPlanted)
         {
             this.Crop = crop;
             if (crop != null)
             {
+                // get crop data
                 this.Seasons = crop.seasonsToGrowIn.ToArray();
                 this.HasMultipleHarvests = crop.regrowAfterHarvest.Value == -1;
                 this.HarvestablePhase = crop.phaseDays.Count - 1;
                 this.CanHarvestNow = (crop.currentPhase.Value >= this.HarvestablePhase) && (!crop.fullyGrown.Value || crop.dayOfCurrentPhase.Value <= 0);
                 this.DaysToFirstHarvest = crop.phaseDays.Take(crop.phaseDays.Count - 1).Sum(); // ignore harvestable phase
                 this.DaysToSubsequentHarvest = crop.regrowAfterHarvest.Value;
+
+                // adjust for agriculturist profession (10% faster initial growth)
+                if (!isPlanted && Game1.player.professions.Contains(Farmer.agriculturist))
+                    this.DaysToFirstHarvest = (int)(this.DaysToFirstHarvest * 0.9);
             }
         }
 
