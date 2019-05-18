@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved `config.json` keybind parsing.
+
 ## 1.8.2
 Released 27 May 2019.
 

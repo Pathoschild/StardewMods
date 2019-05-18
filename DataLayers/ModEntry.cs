@@ -23,6 +23,9 @@ namespace Pathoschild.Stardew.DataLayers
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
+        /// <summary>The configured key bindings.</summary>
+        private ModConfigKeys Keys;
+
         /// <summary>The current overlay being displayed, if any.</summary>
         private DataLayerOverlay CurrentOverlay;
 
@@ -42,6 +45,7 @@ namespace Pathoschild.Stardew.DataLayers
         {
             // read config
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
 
             // hook up events
             helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
@@ -181,10 +185,10 @@ namespace Pathoschild.Stardew.DataLayers
                 if (!this.CanOverlayNow())
                     return;
                 bool overlayVisible = this.CurrentOverlay != null;
-                var controls = this.Config.Controls;
+                ModConfigKeys keys = this.Keys;
 
                 // toggle overlay
-                if (controls.ToggleLayer.Contains(e.Button))
+                if (keys.ToggleLayer.Contains(e.Button))
                 {
                     if (overlayVisible)
                     {
@@ -197,12 +201,12 @@ namespace Pathoschild.Stardew.DataLayers
                 }
 
                 // cycle layers
-                else if (overlayVisible && controls.NextLayer.Contains(e.Button))
+                else if (overlayVisible && keys.NextLayer.Contains(e.Button))
                 {
                     this.CurrentOverlay.NextLayer();
                     this.Helper.Input.Suppress(e.Button);
                 }
-                else if (overlayVisible && controls.PrevLayer.Contains(e.Button))
+                else if (overlayVisible && keys.PrevLayer.Contains(e.Button))
                 {
                     this.CurrentOverlay.PrevLayer();
                     this.Helper.Input.Suppress(e.Button);

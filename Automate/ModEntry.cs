@@ -20,6 +20,9 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
+        /// <summary>The configured key bindings.</summary>
+        private ModConfigKeys Keys;
+
         /// <summary>Constructs machine groups.</summary>
         private MachineGroupFactory Factory;
 
@@ -55,6 +58,7 @@ namespace Pathoschild.Stardew.Automate
 
             // init
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
             this.Factory = new MachineGroupFactory();
             this.Factory.Add(new AutomationFactory(this.Config.Connectors, this.Config.AutomateShippingBin, this.Monitor, helper.Reflection, hasBetterJunimos, hasAutoGrabberMod));
 
@@ -204,7 +208,7 @@ namespace Pathoschild.Stardew.Automate
             try
             {
                 // toggle overlay
-                if (Context.IsPlayerFree && this.Config.Controls.ToggleOverlay.Contains(e.Button))
+                if (Context.IsPlayerFree && this.Keys.ToggleOverlay.Contains(e.Button))
                 {
                     if (this.CurrentOverlay != null)
                         this.DisableOverlay();

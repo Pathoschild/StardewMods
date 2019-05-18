@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved `config.json` keybind parsing.
+
 ## 1.9.4
 Released 06 April 2019.
 

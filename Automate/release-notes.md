@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added compatibility with Auto-Grabber Mod and Better Junimos. If they're installed, seeds/fertiliser in their respective machines will be ignored.
+* Improved `config.json` keybind parsing.
 * Fixed items with different item qualities being combined into one input stack.
 
 ## 1.12

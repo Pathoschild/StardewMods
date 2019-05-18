@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Improved `config.json` keybind parsing.
 * Improved translations. Thanks to binxhlin (updated Chinese), Firevulture (updated German), Yllelder (updated Spanish), and YSRyeol (updated Korean)!
 
 ## 1.16

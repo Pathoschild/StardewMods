@@ -16,6 +16,9 @@ namespace Pathoschild.Stardew.RotateToolbar
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
+        /// <summary>The configured key bindings.</summary>
+        private ModConfigKeys Keys;
+
 
         /*********
         ** Public methods
@@ -24,8 +27,11 @@ namespace Pathoschild.Stardew.RotateToolbar
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
+            // read config
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
 
+            // hook events
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
         }
 
@@ -47,11 +53,10 @@ namespace Pathoschild.Stardew.RotateToolbar
             // perform bound action
             this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
             {
-                var controls = this.Config.Controls;
-
-                if (controls.ShiftToNext.Contains(e.Button))
+                ModConfigKeys keys = this.Keys;
+                if (keys.ShiftToNext.Contains(e.Button))
                     this.RotateToolbar(true, this.Config.DeselectItemOnRotate);
-                else if (controls.ShiftToPrevious.Contains(e.Button))
+                else if (keys.ShiftToPrevious.Contains(e.Button))
                     this.RotateToolbar(false, this.Config.DeselectItemOnRotate);
             });
         }

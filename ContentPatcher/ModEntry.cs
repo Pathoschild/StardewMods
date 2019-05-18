@@ -70,6 +70,9 @@ namespace ContentPatcher
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
+        /// <summary>The configured key bindings.</summary>
+        private ModConfigKeys Keys;
+
         /// <summary>The debug overlay (if enabled).</summary>
         private DebugOverlay DebugOverlay;
 
@@ -82,6 +85,7 @@ namespace ContentPatcher
         public override void Entry(IModHelper helper)
         {
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
 
             // init migrations
             IMigration[] migrations = this.Migrations();
@@ -134,7 +138,7 @@ namespace ContentPatcher
             if (this.Config.EnableDebugFeatures)
             {
                 // toggle overlay
-                if (this.Config.Controls.ToggleDebug.Contains(e.Button))
+                if (this.Keys.ToggleDebug.Contains(e.Button))
                 {
                     if (this.DebugOverlay == null)
                         this.DebugOverlay = new DebugOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Content);
@@ -149,9 +153,9 @@ namespace ContentPatcher
                 // cycle textures
                 if (this.DebugOverlay != null)
                 {
-                    if (this.Config.Controls.DebugPrevTexture.Contains(e.Button))
+                    if (this.Keys.DebugPrevTexture.Contains(e.Button))
                         this.DebugOverlay.PrevTexture();
-                    if (this.Config.Controls.DebugNextTexture.Contains(e.Button))
+                    if (this.Keys.DebugNextTexture.Contains(e.Button))
                         this.DebugOverlay.NextTexture();
                 }
             }

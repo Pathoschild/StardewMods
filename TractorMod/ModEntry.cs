@@ -62,6 +62,9 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The mod settings.</summary>
         private ModConfig Config;
 
+        /// <summary>The configured key bindings.</summary>
+        private ModConfigKeys Keys;
+
         /// <summary>The tractor being ridden by the current player.</summary>
         private TractorManager TractorManager;
 
@@ -84,12 +87,13 @@ namespace Pathoschild.Stardew.TractorMod
         {
             // read config
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
 
             // init tractor logic
             {
                 IReflectionHelper reflection = this.Helper.Reflection;
                 StandardAttachmentsConfig toolConfig = this.Config.StandardAttachments;
-                this.TractorManager = new TractorManager(this.Config, this.Helper.Translation, this.Helper.Reflection, attachments: new IAttachment[]
+                this.TractorManager = new TractorManager(this.Config, this.Keys, this.Helper.Translation, this.Helper.Reflection, attachments: new IAttachment[]
                 {
                     new CustomAttachment(this.Config.CustomAttachments, reflection), // should be first so it can override default attachments
                     new AxeAttachment(toolConfig.Axe, reflection),
@@ -442,9 +446,9 @@ namespace Pathoschild.Stardew.TractorMod
             if (!this.IsEnabled || !Context.IsPlayerFree)
                 return;
 
-            if (this.Config.Controls.SummonTractor.Contains(e.Button) && !Game1.player.isRidingHorse())
+            if (this.Keys.SummonTractor.Contains(e.Button) && !Game1.player.isRidingHorse())
                 this.SummonTractor();
-            else if (this.Config.Controls.DismissTractor.Contains(e.Button) && Game1.player.isRidingHorse())
+            else if (this.Keys.DismissTractor.Contains(e.Button) && Game1.player.isRidingHorse())
                 this.DismissTractor(Game1.player.mount);
         }
 

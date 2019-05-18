@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using Netcode;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
+using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
@@ -43,6 +44,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The mod settings.</summary>
         private readonly ModConfig Config;
 
+        /// <summary>The configured key bindings.</summary>
+        private readonly ModConfigKeys Keys;
+
         /// <summary>The number of ticks since the tractor last checked for an action to perform.</summary>
         private int SkippedActionTicks;
 
@@ -65,12 +69,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod settings.</param>
+        /// <param name="keys">The configured key bindings.</param>
         /// <param name="translation">Provides translations from the mod's i18n folder.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="attachments">The tractor attachments to apply.</param>
-        public TractorManager(ModConfig config, ITranslationHelper translation, IReflectionHelper reflection, IEnumerable<IAttachment> attachments)
+        public TractorManager(ModConfig config, ModConfigKeys keys, ITranslationHelper translation, IReflectionHelper reflection, IEnumerable<IAttachment> attachments)
         {
             this.Config = config;
+            this.Keys = keys;
             this.Translation = translation;
             this.Reflection = reflection;
             this.Attachments = attachments.ToArray();
@@ -194,7 +200,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
             // hold-to-activate mode
             KeyboardState state = Keyboard.GetState();
-            return this.Config.Controls.HoldToActivate.Any(button => button.TryGetKeyboard(out Keys key) && state.IsKeyDown(key));
+            return this.Keys.HoldToActivate.Any(button => button.TryGetKeyboard(out Keys key) && state.IsKeyDown(key));
         }
 
         /// <summary>Apply the tractor buff to the current player.</summary>

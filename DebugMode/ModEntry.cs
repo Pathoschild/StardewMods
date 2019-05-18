@@ -22,6 +22,9 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>The mod configuration settings.</summary>
         private ModConfig Config;
 
+        /// <summary>The configured key bindings.</summary>
+        private ModConfigKeys Keys;
+
         /// <summary>Whether the built-in debug mode is enabled.</summary>
         private bool DebugMode
         {
@@ -55,6 +58,7 @@ namespace Pathoschild.Stardew.DebugMode
         {
             // initialise
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
 
             // hook events
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
@@ -79,7 +83,7 @@ namespace Pathoschild.Stardew.DebugMode
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             // toggle debug menu
-            if (this.Config.Controls.ToggleDebug.Contains(e.Button))
+            if (this.Keys.ToggleDebug.Contains(e.Button))
             {
                 Program.releaseBuild = !Program.releaseBuild;
                 this.DebugMode = !this.DebugMode;

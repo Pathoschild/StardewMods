@@ -27,6 +27,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
+        /// <summary>The configured key bindings.</summary>
+        private ModConfigKeys Keys;
+
         /// <summary>Provides metadata that's not available from the game data directly.</summary>
         private Metadata Metadata;
 
@@ -64,6 +67,7 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             // load config
             this.Config = this.Helper.ReadConfig<ModConfig>();
+            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
 
             // load translations
             L10n.Init(helper.Translation);
@@ -129,17 +133,17 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
             {
-                var controls = this.Config.Controls;
+                ModConfigKeys keys = this.Keys;
 
-                if (controls.ToggleLookup.Contains(e.Button))
+                if (keys.ToggleLookup.Contains(e.Button))
                     this.ToggleLookup(LookupMode.Cursor);
-                else if (controls.ToggleLookupInFrontOfPlayer.Contains(e.Button) && Context.IsWorldReady)
+                else if (keys.ToggleLookupInFrontOfPlayer.Contains(e.Button) && Context.IsWorldReady)
                     this.ToggleLookup(LookupMode.FacingPlayer);
-                else if (controls.ScrollUp.Contains(e.Button))
+                else if (keys.ScrollUp.Contains(e.Button))
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollUp();
-                else if (controls.ScrollDown.Contains(e.Button))
+                else if (keys.ScrollDown.Contains(e.Button))
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollDown();
-                else if (controls.ToggleDebug.Contains(e.Button) && Context.IsPlayerFree)
+                else if (keys.ToggleDebug.Contains(e.Button) && Context.IsPlayerFree)
                     this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
             });
         }
@@ -152,9 +156,9 @@ namespace Pathoschild.Stardew.LookupAnything
             // perform bound action
             this.Monitor.InterceptErrors("handling your input", $"handling input release '{e.Button}'", () =>
             {
-                var controls = this.Config.Controls;
+                ModConfigKeys keys = this.Keys;
 
-                if (controls.ToggleLookup.Contains(e.Button) || controls.ToggleLookupInFrontOfPlayer.Contains(e.Button))
+                if (keys.ToggleLookup.Contains(e.Button) || keys.ToggleLookupInFrontOfPlayer.Contains(e.Button))
                     this.HideLookup();
             });
         }
