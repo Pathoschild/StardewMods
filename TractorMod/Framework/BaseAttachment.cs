@@ -138,7 +138,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     return mineshaft.resourceClumps;
 
                 default:
-                    if (location.Name == "DeepWoods")
+                    if (location.Name == "DeepWoods" || location.Name.StartsWith("DeepWoods_"))
                         return this.Reflection.GetField<IList<ResourceClump>>(location, "resourceClumps", required: false)?.GetValue() ?? new ResourceClump[0];
                     return new ResourceClump[0];
             }
