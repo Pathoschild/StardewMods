@@ -7,6 +7,7 @@
 * Increased width of lookup UI.
 * Fixed planted coffee beans showing seed fields instead of crop fields.
 * Fixed seed growth time predictions not accounting for Agriculturist profession.
+* Fixed "you made -1 of these" field for some crafted items.
 
 ## 1.21.2
 Released 06 April 2019.
