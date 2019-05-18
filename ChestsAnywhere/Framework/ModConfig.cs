@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
@@ -20,7 +18,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         public bool AddOrganisePlayerInventoryButton { get; set; } = true;
 
         /// <summary>The range at which chests are accessible.</summary>
-        [JsonConverter(typeof(StringEnumConverter))]
         public ChestRange Range { get; set; } = ChestRange.Unlimited;
 
         /// <summary>The key bindings.</summary>
