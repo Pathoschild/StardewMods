@@ -68,12 +68,12 @@ namespace ContentPatcher.Framework.Patches
             bool changed = false;
 
             // update patch context
-            this.RawTargetAsset.UpdateContext(context);
+            changed = this.RawTargetAsset.UpdateContext(context);
             this.TargetAsset = this.NormaliseAssetName(this.RawTargetAsset.Value);
             this.PrivateContext.Update(context, this.RawTargetAsset);
 
             // update contextual values
-            changed = this.Contextuals.UpdateContext(context);
+            changed = this.Contextuals.UpdateContext(context) || changed;
 
             // update ready flag
             bool wasReady = this.IsReady;
