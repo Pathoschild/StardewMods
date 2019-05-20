@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 
@@ -12,7 +11,7 @@ namespace ContentPatcher.Framework.Patches
         ** Fields
         *********/
         /// <summary>The underlying contextual values.</summary>
-        private readonly IContextual[] ContextualValues;
+        private readonly AggregateContextual Contextuals;
 
 
         /*********
@@ -47,7 +46,10 @@ namespace ContentPatcher.Framework.Patches
             this.FieldKey = fieldKey;
             this.Value = value;
 
-            this.ContextualValues = new IContextual[] { entryKey, fieldKey, value }.Where(p => p != null).ToArray();
+            this.Contextuals = new AggregateContextual()
+                .Add(entryKey)
+                .Add(fieldKey)
+                .Add(value);
         }
 
         /// <summary>Get all token strings used in the record.</summary>
@@ -64,21 +66,13 @@ namespace ContentPatcher.Framework.Patches
         /// <returns>Returns whether the instance changed.</returns>
         public bool UpdateContext(IContext context)
         {
-            bool changed = false;
-
-            foreach (IContextual value in this.ContextualValues)
-            {
-                if (value.UpdateContext(context))
-                    changed = true;
-            }
-
-            return changed;
+            return this.Contextuals.UpdateContext(context);
         }
 
         /// <summary>Get the token names used by this patch in its fields.</summary>
         public IEnumerable<string> GetTokensUsed()
         {
-            return this.GetTokenStrings().SelectMany(p => p.GetTokensUsed());
+            return this.Contextuals.GetTokensUsed();
         }
     }
 }

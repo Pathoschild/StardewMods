@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
-using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
 using StardewModdingAPI;
 
@@ -18,7 +17,7 @@ namespace ContentPatcher.Framework.Patches
         private readonly Func<string, string> NormaliseAssetName;
 
         /// <summary>The underlying contextual values.</summary>
-        protected readonly List<IContextual> ContextualValues = new List<IContextual>();
+        protected readonly AggregateContextual Contextuals = new AggregateContextual();
 
         /// <summary>The context which provides tokens for this patch, including patch-specific tokens like <see cref="ConditionType.Target"/>.</summary>
         protected SinglePatchContext PrivateContext { get; }
@@ -27,12 +26,6 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Accessors
         *********/
-        /// <summary>Whether the instance may change depending on the context.</summary>
-        public bool IsMutable { get; } = true;
-
-        /// <summary>Whether the instance is valid for the current context.</summary>
-        public bool IsReady { get; protected set; }
-
         /// <summary>A unique name for this patch shown in log messages.</summary>
         public string LogName { get; }
 
@@ -42,8 +35,14 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The content pack which requested the patch.</summary>
         public ManagedContentPack ContentPack { get; }
 
+        /// <summary>Whether the instance may change depending on the context.</summary>
+        public bool IsMutable { get; } = true;
+
+        /// <summary>Whether the instance is valid for the current context.</summary>
+        public bool IsReady { get; private set; }
+
         /// <summary>The raw asset key to intercept (if applicable), including tokens.</summary>
-        public ITokenString FromLocalAsset { get; protected set; }
+        public ITokenString FromLocalAsset { get; }
 
         /// <summary>The normalised asset name to intercept.</summary>
         public string TargetAsset { get; private set; }
@@ -66,46 +65,25 @@ namespace ContentPatcher.Framework.Patches
         /// <returns>Returns whether the patch data changed.</returns>
         public virtual bool UpdateContext(IContext context)
         {
-            bool isReady = true;
             bool changed = false;
 
-            // update target asset (needed by patch context)
+            // update patch context
             this.RawTargetAsset.UpdateContext(context);
             this.TargetAsset = this.NormaliseAssetName(this.RawTargetAsset.Value);
-
-            // update patch context
             this.PrivateContext.Update(context, this.RawTargetAsset);
 
             // update contextual values
-            foreach (IContextual contextual in this.ContextualValues)
-            {
-                if (contextual == this.RawTargetAsset)
-                    continue; // updated above
-
-                bool wasReady = contextual.IsReady;
-                if (contextual.UpdateContext(this.PrivateContext) || contextual.IsReady != wasReady)
-                    changed = true;
-            }
-
-            // update source asset
-            if (this.FromLocalAsset != null)
-            {
-                bool sourceChanged = this.FromLocalAsset.UpdateContext(this.PrivateContext);
-                isReady = this.FromLocalAsset.IsReady && this.ContentPack.HasFile(this.FromLocalAsset.Value);
-                changed = changed || sourceChanged;
-            }
+            changed = this.Contextuals.UpdateContext(context);
 
             // update ready flag
-            {
-                bool wasReady = this.IsReady;
-                this.IsReady =
-                    isReady
-                    && (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(this.PrivateContext)))
-                    && this.GetTokensUsed().All(name => this.PrivateContext.Contains(name, enforceContext: true));
-                changed = changed || this.IsReady != wasReady;
-            }
+            bool wasReady = this.IsReady;
+            this.IsReady =
+                this.Contextuals.IsReady
+                && (this.FromLocalAsset != null && this.ContentPack.HasFile(this.FromLocalAsset.Value))
+                && (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(this.PrivateContext)))
+                && this.GetTokensUsed().All(name => this.PrivateContext.Contains(name, enforceContext: true));
 
-            return changed;
+            return changed || this.IsReady != wasReady;
         }
 
         /// <summary>Load the initial version of the asset.</summary>
@@ -129,20 +107,7 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Get the token names used by this patch in its fields.</summary>
         public virtual IEnumerable<string> GetTokensUsed()
         {
-            // from local asset
-            if (this.FromLocalAsset != null)
-            {
-                foreach (LexTokenToken lexToken in this.FromLocalAsset.GetTokenPlaceholders(recursive: true))
-                    yield return lexToken.Name;
-            }
-
-            // raw target asset
-            foreach (LexTokenToken lexToken in this.RawTargetAsset.GetTokenPlaceholders(recursive: true))
-                yield return lexToken.Name;
-
-            // conditions
-            foreach (string name in this.Conditions.SelectMany(p => p.GetTokensUsed()))
-                yield return name;
+            return this.Contextuals.GetTokensUsed();
         }
 
         /// <summary>Get the context which provides tokens for this patch, including patch-specific tokens like <see cref="ConditionType.Target"/>.</summary>
@@ -162,9 +127,9 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        protected Patch(string logName, PatchType type, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normaliseAssetName)
+        /// <param name="fromLocalAsset">The raw asset key to intercept (if applicable), including tokens.</param>
+        protected Patch(string logName, PatchType type, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normaliseAssetName, ITokenString fromLocalAsset = null)
         {
-            // set values
             this.LogName = logName;
             this.Type = type;
             this.ContentPack = contentPack;
@@ -172,10 +137,12 @@ namespace ContentPatcher.Framework.Patches
             this.Conditions = conditions.ToArray();
             this.NormaliseAssetName = normaliseAssetName;
             this.PrivateContext = new SinglePatchContext(scope: this.ContentPack.Manifest.UniqueID);
+            this.FromLocalAsset = fromLocalAsset;
 
-            // track contextuals
-            this.ContextualValues.AddRange(this.Conditions);
-            this.ContextualValues.Add(this.RawTargetAsset);
+            this.Contextuals
+                .Add(this.Conditions)
+                .Add(this.RawTargetAsset)
+                .Add(this.FromLocalAsset);
         }
     }
 }

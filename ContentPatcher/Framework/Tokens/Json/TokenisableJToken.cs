@@ -12,8 +12,8 @@ namespace ContentPatcher.Framework.Tokens.Json
         /*********
         ** Fields
         *********/
-        /// <summary>The JSON fields whose values may change based on the context.</summary>
-        private readonly TokenisableProxy[] TokenisableFields;
+        /// <summary>The underlying contextual values.</summary>
+        private readonly AggregateContextual Contextuals = new AggregateContextual();
 
 
         /*********
@@ -23,10 +23,10 @@ namespace ContentPatcher.Framework.Tokens.Json
         public JToken Value { get; }
 
         /// <summary>Whether the instance may change depending on the context.</summary>
-        public bool IsMutable { get; }
+        public bool IsMutable => this.Contextuals.IsMutable;
 
         /// <summary>Whether the instance is valid for the current context.</summary>
-        public bool IsReady { get; private set; }
+        public bool IsReady => this.Contextuals.IsReady;
 
 
         /*********
@@ -38,9 +38,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         public TokenisableJToken(JToken value, IContext context)
         {
             this.Value = value;
-            this.TokenisableFields = this.ResolveTokenisableFields(value, context).ToArray();
-            this.IsMutable = this.TokenisableFields.Any(p => p.IsMutable);
-            this.IsReady = !this.TokenisableFields.Any() || this.TokenisableFields.All(p => p.IsReady);
+            this.Contextuals.Add(this.ResolveTokenisableFields(value, context));
         }
 
         /// <summary>Update the instance when the context changes.</summary>
@@ -48,28 +46,19 @@ namespace ContentPatcher.Framework.Tokens.Json
         /// <returns>Returns whether the instance changed.</returns>
         public bool UpdateContext(IContext context)
         {
-            bool changed = false;
-
-            foreach (IContextual field in this.TokenisableFields)
-            {
-                if (field.UpdateContext(context))
-                    changed = true;
-            }
-            this.IsReady = this.TokenisableFields.All(p => p.IsReady);
-
-            return changed;
+            return this.Contextuals.UpdateContext(context);
         }
 
         /// <summary>Get the token names used by this patch in its fields.</summary>
         public IEnumerable<string> GetTokensUsed()
         {
-            return this.TokenisableFields.SelectMany(p => p.GetTokensUsed());
+            return this.Contextuals.GetTokensUsed();
         }
 
         /// <summary>Get the token strings contained in the JSON structure.</summary>
         public IEnumerable<ITokenString> GetTokenStrings()
         {
-            return this.TokenisableFields.Select(p => p.TokenString);
+            return this.Contextuals.Values.OfType<ITokenString>();
         }
 
 

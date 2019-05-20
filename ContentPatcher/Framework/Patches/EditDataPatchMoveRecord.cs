@@ -11,7 +11,7 @@ namespace ContentPatcher.Framework.Patches
         ** Fields
         *********/
         /// <summary>The underlying contextual values.</summary>
-        private readonly IContextual[] ContextualValues;
+        private readonly AggregateContextual Contextuals;
 
 
         /*********
@@ -30,10 +30,10 @@ namespace ContentPatcher.Framework.Patches
         public MoveEntryPosition ToPosition { get; }
 
         /// <summary>Whether the instance may change depending on the context.</summary>
-        public bool IsMutable => this.ContextualValues.Any(p => p.IsMutable);
+        public bool IsMutable => this.Contextuals.IsMutable;
 
         /// <summary>Whether the instance is valid for the current context.</summary>
-        public bool IsReady => this.ContextualValues.All(p => p.IsReady);
+        public bool IsReady => this.Contextuals.IsReady;
 
 
 
@@ -52,13 +52,16 @@ namespace ContentPatcher.Framework.Patches
             this.AfterID = afterID;
             this.ToPosition = toPosition;
 
-            this.ContextualValues = new IContextual[] { id, beforeID, afterID }.Where(p => p != null).ToArray();
+            this.Contextuals = new AggregateContextual()
+                .Add(id)
+                .Add(beforeID)
+                .Add(afterID);
         }
 
         /// <summary>Get all token strings used in the record.</summary>
         public IEnumerable<ITokenString> GetTokenStrings()
         {
-            return this.ContextualValues.OfType<ITokenString>();
+            return this.Contextuals.Values.OfType<ITokenString>();
         }
 
         /// <summary>Update the instance when the context changes.</summary>
@@ -66,21 +69,13 @@ namespace ContentPatcher.Framework.Patches
         /// <returns>Returns whether the instance changed.</returns>
         public bool UpdateContext(IContext context)
         {
-            bool changed = false;
-
-            foreach (IContextual value in this.ContextualValues)
-            {
-                if (value.UpdateContext(context))
-                    changed = true;
-            }
-
-            return changed;
+            return this.Contextuals.UpdateContext(context);
         }
 
         /// <summary>Get the token names used by this patch in its fields.</summary>
         public IEnumerable<string> GetTokensUsed()
         {
-            return this.GetTokenStrings().SelectMany(p => p.GetTokensUsed());
+            return this.Contextuals.GetTokensUsed();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace ContentPatcher.Framework
         ** Methods
         *********/
         /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>
-        /// <param name="recursive">Whether to scan recursively.</param> 
+        /// <param name="recursive">Whether to scan recursively.</param>
         IEnumerable<LexTokenToken> GetTokenPlaceholders(bool recursive);
     }
 }

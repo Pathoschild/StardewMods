@@ -59,13 +59,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <returns>Returns whether the token data changed.</returns>
         public bool UpdateContext(IContext context)
         {
-            bool changed = false;
-            if (this.Values.IsMutable)
-            {
-                if (this.Values.UpdateContext(context))
-                    changed = true;
-            }
-            return changed;
+            return this.Values.UpdateContext(context);
         }
 
         /// <summary>Get the token names used by this patch in its fields.</summary>

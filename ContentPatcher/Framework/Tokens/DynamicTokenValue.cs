@@ -8,6 +8,13 @@ namespace ContentPatcher.Framework.Tokens
     internal class DynamicTokenValue : IContextual
     {
         /*********
+        ** Fields
+        *********/
+        /// <summary>The underlying contextual values.</summary>
+        private readonly AggregateContextual Contextuals;
+
+
+        /*********
         ** Accessors
         *********/
         /// <summary>The name of the token whose value to set.</summary>
@@ -20,10 +27,10 @@ namespace ContentPatcher.Framework.Tokens
         public Condition[] Conditions { get; }
 
         /// <summary>Whether the instance may change depending on the context.</summary>
-        public bool IsMutable => this.Value.IsMutable || this.Conditions.Any(p => p.IsMutable);
+        public bool IsMutable => this.Contextuals.IsMutable;
 
         /// <summary>Whether the instance is valid for the current context.</summary>
-        public bool IsReady => this.Value.IsReady && this.Conditions.All(p => p.IsReady);
+        public bool IsReady => this.Contextuals.IsReady;
 
 
         /*********
@@ -38,6 +45,9 @@ namespace ContentPatcher.Framework.Tokens
             this.Name = name;
             this.Value = value;
             this.Conditions = conditions.ToArray();
+            this.Contextuals = new AggregateContextual()
+                .Add(this.Value)
+                .Add(this.Conditions);
         }
 
         /// <summary>Update the instance when the context changes.</summary>
@@ -45,30 +55,13 @@ namespace ContentPatcher.Framework.Tokens
         /// <returns>Returns whether the instance changed.</returns>
         public bool UpdateContext(IContext context)
         {
-            bool changed = false;
-
-            foreach (IContextual value in this.Conditions)
-            {
-                if (value.UpdateContext(context))
-                    changed = true;
-            }
-
-            if (this.Value.UpdateContext(context))
-                changed = true;
-
-            return changed;
+            return this.Contextuals.UpdateContext(context);
         }
 
         /// <summary>Get the token names used by this patch in its fields.</summary>
         public IEnumerable<string> GetTokensUsed()
         {
-            // value
-            foreach (string token in this.Value.GetTokensUsed())
-                yield return token;
-
-            // conditions
-            foreach (string token in this.Conditions.SelectMany(p => p.GetTokensUsed()))
-                yield return token;
+            return this.Contextuals.GetTokensUsed();
         }
     }
 }
