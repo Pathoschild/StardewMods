@@ -22,6 +22,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The context which provides tokens for this patch, including patch-specific tokens like <see cref="ConditionType.Target"/>.</summary>
         protected SinglePatchContext PrivateContext { get; }
 
+        /// <summary>Whether the <see cref="FromLocalAsset"/> file exists.</summary>
+        private bool FromLocalAssetExistsImpl;
+
 
         /*********
         ** Accessors
@@ -74,16 +77,22 @@ namespace ContentPatcher.Framework.Patches
 
             // update contextual values
             changed = this.Contextuals.UpdateContext(context) || changed;
+            this.FromLocalAssetExistsImpl = this.FromLocalAsset?.IsReady == true && this.ContentPack.HasFile(this.FromLocalAsset.Value);
 
             // update ready flag
             bool wasReady = this.IsReady;
             this.IsReady =
                 this.Contextuals.IsReady
-                && (this.FromLocalAsset != null && this.ContentPack.HasFile(this.FromLocalAsset.Value))
                 && (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(this.PrivateContext)))
                 && this.GetTokensUsed().All(name => this.PrivateContext.Contains(name, enforceContext: true));
 
             return changed || this.IsReady != wasReady;
+        }
+
+        /// <summary>Get whether the <see cref="FromLocalAsset"/> file exists.</summary>
+        public bool FromLocalAssetExists()
+        {
+            return this.FromLocalAssetExistsImpl;
         }
 
         /// <summary>Load the initial version of the asset.</summary>

@@ -65,13 +65,22 @@ namespace ContentPatcher.Framework
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public bool CanLoad<T>(IAssetInfo asset)
         {
+            // get load patches
             IPatch[] patches = this.GetCurrentLoaders(asset).ToArray();
+
+            // validate
             if (patches.Length > 1)
             {
                 this.Monitor.Log($"Multiple patches want to load {asset.AssetName} ({string.Join(", ", from entry in patches orderby entry.LogName select entry.LogName)}). None will be applied.", LogLevel.Error);
                 return false;
             }
+            if (patches.Length == 1 && !patches[0].FromLocalAssetExists())
+            {
+                this.Monitor.Log($"Can't apply load \"{patches[0].LogName}\" to {patches[0].TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{patches[0].FromLocalAsset.Value}' doesn't exist.", LogLevel.Warn);
+                return false;
+            }
 
+            // return result
             bool canLoad = patches.Any();
             this.Monitor.VerboseLog($"check: [{(canLoad ? "X" : " ")}] can load {asset.AssetName}");
             return canLoad;

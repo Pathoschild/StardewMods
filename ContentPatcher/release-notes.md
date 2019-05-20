@@ -4,6 +4,7 @@
 ## Upcoming release
 * Improved `patch summary` display for local tokens.
 * Improved `config.json` keybind parsing.
+* Fixed patch not reapplied in 1.8 if only `FromFile` value changed.
 
 ## 1.8
 Released 16 May 2019.

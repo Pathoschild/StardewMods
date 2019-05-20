@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.ConfigModels;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -57,6 +58,11 @@ namespace ContentPatcher.Framework.Patches
             if (typeof(T) != typeof(Map))
             {
                 this.Monitor.Log($"Can't apply map patch \"{this.LogName}\" to {this.TargetAsset}: this file isn't a map file (found {typeof(T)}).", LogLevel.Warn);
+                return;
+            }
+            if (!this.FromLocalAssetExists())
+            {
+                this.Monitor.Log($"Can't apply map patch \"{this.LogName}\" to {this.TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{this.FromLocalAsset.Value}' doesn't exist.", LogLevel.Warn);
                 return;
             }
 

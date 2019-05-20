@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.ConfigModels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -59,6 +60,11 @@ namespace ContentPatcher.Framework.Patches
             if (typeof(T) != typeof(Texture2D))
             {
                 this.Monitor.Log($"Can't apply image patch \"{this.LogName}\" to {this.TargetAsset}: this file isn't an image file (found {typeof(T)}).", LogLevel.Warn);
+                return;
+            }
+            if (!this.FromLocalAssetExists())
+            {
+                this.Monitor.Log($"Can't apply image patch \"{this.LogName}\" to {this.TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{this.FromLocalAsset.Value}' doesn't exist.", LogLevel.Warn);
                 return;
             }
 
