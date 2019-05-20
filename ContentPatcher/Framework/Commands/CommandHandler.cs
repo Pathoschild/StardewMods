@@ -160,7 +160,7 @@ namespace ContentPatcher.Framework.Commands
                         select token
                     )
                     .ToArray();
-                int labelWidth = tokens.Max(p => p.Name.Length);
+                int labelWidth = Math.Max(tokens.Max(p => p.Name.Length), "token name".Length);
 
                 // print table header
                 output.AppendLine($"   {"token name".PadRight(labelWidth)} | value");
@@ -242,16 +242,16 @@ namespace ContentPatcher.Framework.Commands
                         .ToArray();
                     if (tokens.Any())
                     {
-                        int maxNameWidth = tokens.Max(p => p.Name.Length);
+                        int labelWidth = Math.Max(tokens.Max(p => p.Name.Length), "token name".Length);
 
                         output.AppendLine();
                         output.AppendLine("   Local tokens:");
 
-                        output.AppendLine($"      {"token name".PadRight(maxNameWidth)} | value");
-                        output.AppendLine($"      {"----------".PadRight(maxNameWidth, '-')} | -----");
+                        output.AppendLine($"      {"token name".PadRight(labelWidth)} | value");
+                        output.AppendLine($"      {"".PadRight(labelWidth, '-')} | -----");
 
                         foreach (var token in tokens)
-                            output.AppendLine($"      {token.Name.PadRight(maxNameWidth)} | [{(token.IsReady ? "X" : " ")}] {token.Value}");
+                            output.AppendLine($"      {token.Name.PadRight(labelWidth)} | [{(token.IsReady ? "X" : " ")}] {token.Value}");
                     }
                 }
 

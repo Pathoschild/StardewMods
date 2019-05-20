@@ -78,14 +78,12 @@ namespace ContentPatcher.Framework.Conditions
         {
             if (this.Contextuals.UpdateContext(context))
             {
-                this.CurrentValues = this.Values.SplitValues();
+                this.CurrentValues = this.Contextuals.IsReady
+                    ? this.Values.SplitValues()
+                    : null;
                 return true;
             }
-            else
-            {
-                this.CurrentValues = null;
-                return false;
-            }
+            return false;
         }
 
         /// <summary>Get the token names used by this patch in its fields.</summary>
