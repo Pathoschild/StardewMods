@@ -80,5 +80,14 @@ namespace ContentPatcher.Framework
         {
             return this.ValuesImpl.SelectMany(p => p.GetTokensUsed());
         }
+
+        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        public IContextualState GetDiagnosticState()
+        {
+            ContextualState state = new ContextualState();
+            foreach (IContextual contextual in this.ValuesImpl)
+                state.MergeFrom(contextual.GetDiagnosticState());
+            return state;
+        }
     }
 }

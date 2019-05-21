@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Tokens;
 using StardewModdingAPI;
 
@@ -18,6 +19,9 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>The underlying contextual values.</summary>
         protected readonly AggregateContextual Contextuals = new AggregateContextual();
+
+        /// <summary>Diagnostic info about the instance.</summary>
+        protected readonly ContextualState State = new ContextualState();
 
         /// <summary>The context which provides tokens for this patch, including patch-specific tokens like <see cref="ConditionType.Target"/>.</summary>
         protected SinglePatchContext PrivateContext { get; }
@@ -68,7 +72,8 @@ namespace ContentPatcher.Framework.Patches
         /// <returns>Returns whether the patch data changed.</returns>
         public virtual bool UpdateContext(IContext context)
         {
-            bool changed = false;
+            this.State.Reset();
+            bool changed;
 
             // update patch context
             changed = this.RawTargetAsset.UpdateContext(context);
@@ -76,15 +81,21 @@ namespace ContentPatcher.Framework.Patches
             this.PrivateContext.Update(context, this.RawTargetAsset);
 
             // update contextual values
-            changed = this.Contextuals.UpdateContext(context) || changed;
-            this.FromLocalAssetExistsImpl = this.FromLocalAsset?.IsReady == true && this.ContentPack.HasFile(this.FromLocalAsset.Value);
+            changed = this.Contextuals.UpdateContext(this.PrivateContext) || changed;
+            this.FromLocalAssetExistsImpl = false;
+            if (this.FromLocalAsset?.IsReady == true)
+            {
+                this.FromLocalAssetExistsImpl = this.ContentPack.HasFile(this.FromLocalAsset.Value);
+                if (!this.FromLocalAssetExistsImpl)
+                    this.State.AddErrors($"{nameof(PatchConfig.FromFile)} file '{this.FromLocalAsset.Value}' does not exist");
+            }
 
             // update ready flag
+            // note: from file asset existence deliberately isn't checked here, so we can show warnings at runtime instead.
             bool wasReady = this.IsReady;
             this.IsReady =
                 this.Contextuals.IsReady
-                && (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(this.PrivateContext)))
-                && this.GetTokensUsed().All(name => this.PrivateContext.Contains(name, enforceContext: true));
+                && (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(this.PrivateContext)));
 
             return changed || this.IsReady != wasReady;
         }
@@ -117,6 +128,13 @@ namespace ContentPatcher.Framework.Patches
         public virtual IEnumerable<string> GetTokensUsed()
         {
             return this.Contextuals.GetTokensUsed();
+        }
+
+        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        public IContextualState GetDiagnosticState()
+        {
+            return this.State.Clone()
+                .MergeFrom(this.Contextuals.GetDiagnosticState());
         }
 
         /// <summary>Get the context which provides tokens for this patch, including patch-specific tokens like <see cref="ConditionType.Target"/>.</summary>

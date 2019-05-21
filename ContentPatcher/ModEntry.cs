@@ -97,8 +97,8 @@ namespace ContentPatcher
             // load content packs and context
             this.TokenManager = new TokenManager(helper.Content, installedMods);
             this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.AssetValidators());
-            this.LoadContentPacks(contentPacks);
             this.TokenManager.UpdateContext();
+            this.LoadContentPacks(contentPacks);
 
             // register patcher
             helper.Content.AssetLoaders.Add(this.PatchManager);
@@ -822,7 +822,7 @@ namespace ContentPatcher
             if (tokenStrings.Any())
             {
                 // validate unknown tokens
-                string[] unknownTokens = tokenStrings.SelectMany(p => p.InvalidTokens).OrderBy(p => p).ToArray();
+                string[] unknownTokens = tokenStrings.SelectMany(p => p.GetDiagnosticState().InvalidTokens).OrderBy(p => p).ToArray();
                 if (unknownTokens.Any())
                 {
                     error = $"found unknown tokens ({string.Join(", ", unknownTokens)})";
@@ -864,9 +864,10 @@ namespace ContentPatcher
                 return false;
 
             // validate unknown tokens
-            if (parsed.InvalidTokens.Any())
+            IContextualState state = parsed.GetDiagnosticState();
+            if (state.InvalidTokens.Any())
             {
-                error = $"found unknown tokens ({string.Join(", ", parsed.InvalidTokens.OrderBy(p => p))})";
+                error = $"found unknown tokens ({string.Join(", ", state.InvalidTokens.OrderBy(p => p))})";
                 parsed = null;
                 return false;
             }

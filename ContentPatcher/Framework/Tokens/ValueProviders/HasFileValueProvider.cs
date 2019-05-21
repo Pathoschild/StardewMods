@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
@@ -36,7 +35,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public override bool UpdateContext(IContext context)
         {
             bool changed = !this.IsReady;
-            this.IsReady = true;
+            this.MarkReady(true);
             return changed;
         }
 
@@ -69,7 +68,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <exception cref="InvalidOperationException">The path is not relative or contains directory climbing (../).</exception>
         private bool GetPathExists(ITokenString input)
         {
-            if (!input.IsMeaningful() || input.InvalidTokens.Any())
+            if (!input.IsMeaningful() || !input.IsReady)
                 return false;
 
             // get normalised path

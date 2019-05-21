@@ -336,23 +336,15 @@ namespace ContentPatcher.Framework.Commands
                 return null;
 
             IContext tokenContext = patch.PatchContext;
+            IContextualState state = patch.State;
 
-            // load error
-            if (!patch.IsLoaded)
-                return $"not loaded: {patch.ReasonDisabled}";
-
-            // uses tokens not available in the current context
-            {
-                string[] tokensOutOfContext = patch
-                    .TokensUsed
-                    .Union(patch.ParsedConditions.Select(p => p.Name))
-                    .Distinct()
-                    .Where(name => !tokenContext.GetToken(name, enforceContext: false).IsReady)
-                    .OrderByIgnoreCase(name => name)
-                    .ToArray();
-                if (tokensOutOfContext.Any())
-                    return $"uses tokens not available right now: {string.Join(", ", tokensOutOfContext)}";
-            }
+            // state error
+            if (state.InvalidTokens.Any())
+                return $"uses invalid tokens: {string.Join(", ", state.InvalidTokens.OrderByIgnoreCase(p => p))}";
+            if (state.UnavailableTokens.Any())
+                return $"uses unready tokens: {string.Join(", ", state.UnavailableTokens.OrderByIgnoreCase(p => p))}";
+            if (state.Errors.Any())
+                return string.Join("; ", state.Errors);
 
             // conditions not matched
             if (!patch.MatchesContext && patch.ParsedConditions != null)
@@ -362,18 +354,24 @@ namespace ContentPatcher.Framework.Commands
                     let displayText = !string.IsNullOrWhiteSpace(condition.Input?.Raw)
                         ? $"{condition.Name}:{condition.Input.Raw}"
                         : condition.Name
+                    let isMultiValue = condition.CurrentValues.Count > 1
                     let displayValue = condition.Values.HasAnyTokens
                         ? $"{condition.Values.Raw} => {string.Join(", ", condition.CurrentValues)}"
                         : $"{string.Join(", ", condition.CurrentValues)}"
                     orderby displayText
                     where !condition.IsMatch(tokenContext)
-                    select $"{displayText} (expected one of {displayValue})"
+                    select $"{displayText} (should be {(isMultiValue ? "one of " : "")}{displayValue})"
                 ).ToArray();
 
                 if (failedConditions.Any())
                     return $"conditions don't match: {string.Join(", ", failedConditions)}";
             }
 
+            // non-matching for an unknown reason
+            if (!patch.MatchesContext)
+                return "doesn't match context (unknown reason)";
+
+            // seems fine, just not applied yet
             return null;
         }
     }

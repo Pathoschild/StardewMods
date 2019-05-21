@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,14 +15,11 @@ namespace ContentPatcher.Framework.Conditions
         /*********
         ** Fields
         *********/
-        /// <summary>The underlying value for <see cref="Value"/>.</summary>
-        private string ValueImpl;
-
-        /// <summary>The underlying value for <see cref="IsReady"/>.</summary>
-        private bool IsReadyImpl;
-
         /// <summary>The token names used in the string.</summary>
         private readonly InvariantHashSet TokensUsed = new InvariantHashSet();
+
+        /// <summary>Diagnostic info about the contextual instance.</summary>
+        private readonly ContextualState State = new ContextualState();
 
 
         /*********
@@ -33,9 +31,6 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The lexical tokens parsed from the raw string.</summary>
         public ILexToken[] LexTokens { get; }
 
-        /// <summary>The unrecognised tokens in the string.</summary>
-        public InvariantHashSet InvalidTokens { get; } = new InvariantHashSet();
-
         /// <summary>Whether the string contains any tokens (including invalid tokens).</summary>
         public bool HasAnyTokens { get; }
 
@@ -46,10 +41,10 @@ namespace ContentPatcher.Framework.Conditions
         public bool IsSingleTokenOnly { get; }
 
         /// <summary>The string with tokens substituted for the last context update.</summary>
-        public string Value => this.ValueImpl;
+        public string Value { get; private set; }
 
         /// <summary>Whether all tokens in the value have been replaced.</summary>
-        public bool IsReady => this.IsReadyImpl;
+        public bool IsReady => this.State.IsReady;
 
 
         /*********
@@ -81,8 +76,7 @@ namespace ContentPatcher.Framework.Conditions
             this.Raw = string.Join("", this.LexTokens.Select(p => p.Text)).Trim();
             if (string.IsNullOrWhiteSpace(this.Raw))
             {
-                this.ValueImpl = this.Raw;
-                this.IsReadyImpl = true;
+                this.Value = this.Raw;
                 return;
             }
 
@@ -99,7 +93,7 @@ namespace ContentPatcher.Framework.Conditions
                     isMutable = isMutable || token.IsMutable;
                 }
                 else
-                    this.InvalidTokens.Add(lexToken.Name);
+                    this.State.AddInvalidTokens(lexToken.Name);
             }
 
             // set metadata
@@ -108,10 +102,8 @@ namespace ContentPatcher.Framework.Conditions
             this.IsSingleTokenOnly = this.LexTokens.Length == 1 && this.LexTokens.First().Type == LexTokenType.Token;
 
             // set initial context
-            if (this.InvalidTokens.Any())
-                this.IsReadyImpl = false;
-            else
-                this.GetApplied(context, out this.ValueImpl, out this.IsReadyImpl);
+            if (this.State.IsReady)
+                this.ForceUpdate(context);
         }
 
         /// <summary>Update the <see cref="Value"/> with the given tokens.</summary>
@@ -119,12 +111,10 @@ namespace ContentPatcher.Framework.Conditions
         /// <returns>Returns whether the value changed.</returns>
         public bool UpdateContext(IContext context)
         {
-            if (!this.IsMutable || this.InvalidTokens.Any())
+            if (!this.IsMutable || this.State.InvalidTokens.Any())
                 return false;
 
-            string prevValue = this.Value;
-            this.GetApplied(context, out this.ValueImpl, out this.IsReadyImpl);
-            return this.Value != prevValue;
+            return this.ForceUpdate(context);
         }
 
         /// <summary>Get the token names used by this patch in its fields.</summary>
@@ -140,18 +130,48 @@ namespace ContentPatcher.Framework.Conditions
             return this.GetTokenPlaceholders(this.LexTokens, recursive);
         }
 
+        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        public IContextualState GetDiagnosticState()
+        {
+            return this.State.Clone();
+        }
+
 
         /*********
         ** Private methods
         *********/
+        /// <summary>Force a context update.</summary>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <returns>Returns whether the context changed.</returns>
+        private bool ForceUpdate(IContext context)
+        {
+            string wasValue = this.Value;
+            bool wasReady = this.State.IsReady;
+
+            if (this.TryGetApplied(context, out string value, out InvariantHashSet unknownTokens))
+                this.Value = value;
+            else
+            {
+                this.Value = null;
+                if (!unknownTokens.Any())
+                    throw new InvalidOperationException($"Could not apply tokens to string '{this.Raw}', but no invalid tokens were reported."); // sanity check, should never happen
+                this.State.AddUnavailableTokens(unknownTokens.ToArray());
+            }
+
+            return
+                this.Value != wasValue
+                || this.State.IsReady != wasReady;
+        }
+
         /// <summary>Get a new string with tokens substituted.</summary>
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <param name="result">The input string with tokens substituted.</param>
-        /// <param name="isReady">Whether all tokens in the <paramref name="result"/> have been replaced.</param>
-        private void GetApplied(IContext context, out string result, out bool isReady)
+        /// <param name="unavailableTokens">The tokens which could not be replaced (if any).</param>
+        /// <returns>Returns whether all tokens in the <paramref name="result"/> were successfully replaced.</returns>
+        private bool TryGetApplied(IContext context, out string result, out InvariantHashSet unavailableTokens)
         {
-            bool allReplaced = true;
             StringBuilder str = new StringBuilder();
+            unavailableTokens = new InvariantHashSet();
             foreach (ILexToken lexToken in this.LexTokens)
             {
                 switch (lexToken)
@@ -166,7 +186,7 @@ namespace ContentPatcher.Framework.Conditions
                         }
                         else
                         {
-                            allReplaced = false;
+                            unavailableTokens.Add(lexTokenToken.Name);
                             str.Append(lexToken.Text);
                         }
                         break;
@@ -178,7 +198,7 @@ namespace ContentPatcher.Framework.Conditions
             }
 
             result = str.ToString().Trim();
-            isReady = allReplaced;
+            return !unavailableTokens.Any();
         }
 
         /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>

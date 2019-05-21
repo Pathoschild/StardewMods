@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using ContentPatcher.Framework.Lexing.LexTokens;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework
 {
@@ -15,9 +14,6 @@ namespace ContentPatcher.Framework
 
         /// <summary>The lexical tokens parsed from the raw string.</summary>
         ILexToken[] LexTokens { get; }
-
-        /// <summary>The unrecognised tokens in the string.</summary>
-        InvariantHashSet InvalidTokens { get; }
 
         /// <summary>Whether the string contains any tokens (including invalid tokens).</summary>
         bool HasAnyTokens { get; }

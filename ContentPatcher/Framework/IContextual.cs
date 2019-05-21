@@ -26,5 +26,8 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get the token names used by this patch in its fields.</summary>
         IEnumerable<string> GetTokensUsed();
+
+        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        IContextualState GetDiagnosticState();
     }
 }

@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Improved `patch summary` display for local tokens.
+* Improved `patch summary` to show the actual reason a patch wasn't loaded, instead of making a heuristic guess.
 * Improved `config.json` keybind parsing.
 * Fixed patch not reapplied in 1.8 if only `FromFile` value changed.
 

@@ -42,9 +42,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 IDictionary<Skill, int> oldSkillLevels = new Dictionary<Skill, int>(this.SkillLevels);
 
                 this.SkillLevels.Clear();
-                this.IsReady = this.IsPlayerDataAvailable();
-
-                if (this.IsReady)
+                if (this.MarkReady(this.IsPlayerDataAvailable()))
                 {
                     this.SkillLevels[Skill.Combat] = Game1.player.CombatLevel;
                     this.SkillLevels[Skill.Farming] = Game1.player.FarmingLevel;

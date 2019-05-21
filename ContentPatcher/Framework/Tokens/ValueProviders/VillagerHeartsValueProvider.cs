@@ -36,9 +36,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return this.IsChanged(this.Values, () =>
             {
                 this.Values.Clear();
-                this.IsReady = Context.IsWorldReady;
-
-                if (this.IsReady)
+                if (this.MarkReady(Context.IsWorldReady))
                 {
                     foreach (KeyValuePair<string, Friendship> pair in Game1.player.friendshipData.Pairs)
                         this.Values[pair.Key] = (pair.Value.Points / NPC.friendshipPointsPerHeartLevel).ToString(CultureInfo.InvariantCulture);

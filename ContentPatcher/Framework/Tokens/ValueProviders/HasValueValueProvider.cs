@@ -15,7 +15,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public HasValueValueProvider()
             : base(ConditionType.HasValue, canHaveMultipleValuesForRoot: false)
         {
-            this.IsReady = true;
             this.EnableInputArguments(required: false, canHaveMultipleValues: false);
         }
 

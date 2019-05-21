@@ -40,8 +40,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return this.IsChanged(this.Professions, () =>
             {
                 this.Professions.Clear();
-                this.IsReady = this.IsPlayerDataAvailable();
-                if (this.IsReady)
+                if (this.MarkReady(this.IsPlayerDataAvailable()))
                 {
                     foreach (int professionID in Game1.player.professions)
                         this.Professions.Add((Profession)professionID);

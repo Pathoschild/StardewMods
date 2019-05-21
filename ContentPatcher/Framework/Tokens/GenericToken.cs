@@ -68,6 +68,12 @@ namespace ContentPatcher.Framework.Tokens
             return this.Values.GetTokensUsed();
         }
 
+        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        public IContextualState GetDiagnosticState()
+        {
+            return this.Values.GetDiagnosticState();
+        }
+
         /// <summary>Whether the token may return multiple values for the given name.</summary>
         /// <param name="input">The input argument, if any.</param>
         public bool CanHaveMultipleValues(ITokenString input)

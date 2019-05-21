@@ -12,7 +12,10 @@ namespace ContentPatcher.Framework.Conditions
         ** Fields
         *********/
         /// <summary>The underlying contextual values.</summary>
-        protected readonly AggregateContextual Contextuals;
+        private readonly AggregateContextual Contextuals;
+
+        /// <summary>Diagnostic info about the instance.</summary>
+        private readonly ContextualState State = new ContextualState();
 
 
         /*********
@@ -34,7 +37,7 @@ namespace ContentPatcher.Framework.Conditions
         public bool IsMutable => this.Contextuals.IsMutable;
 
         /// <summary>Whether the instance is valid for the current context.</summary>
-        public bool IsReady => this.Contextuals.IsReady;
+        public bool IsReady => this.Contextuals.IsReady && this.State.IsReady;
 
 
         /*********
@@ -76,11 +79,20 @@ namespace ContentPatcher.Framework.Conditions
         /// <returns>Returns whether the instance changed.</returns>
         public bool UpdateContext(IContext context)
         {
-            if (this.Contextuals.UpdateContext(context))
+            // update contextuals
+            bool wasReady = this.IsReady;
+            bool changed = this.Contextuals.UpdateContext(context);
+
+            // check token name
+            if (!context.Contains(this.Name, enforceContext: true))
+                this.State.AddUnavailableTokens(this.Name);
+
+            // update values
+            if (changed || wasReady != this.IsReady)
             {
-                this.CurrentValues = this.Contextuals.IsReady
+                this.CurrentValues = this.IsReady
                     ? this.Values.SplitValues()
-                    : null;
+                    : new InvariantHashSet();
                 return true;
             }
             return false;
@@ -92,6 +104,13 @@ namespace ContentPatcher.Framework.Conditions
             yield return this.Name;
             foreach (string token in this.Contextuals.GetTokensUsed())
                 yield return token;
+        }
+
+        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        public IContextualState GetDiagnosticState()
+        {
+            return this.State.Clone()
+                .MergeFrom(this.Contextuals.GetDiagnosticState());
         }
     }
 }
