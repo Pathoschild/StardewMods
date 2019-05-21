@@ -79,8 +79,11 @@ namespace ContentPatcher.Framework.Conditions
         /// <returns>Returns whether the instance changed.</returns>
         public bool UpdateContext(IContext context)
         {
-            // update contextuals
+            // reset
             bool wasReady = this.IsReady;
+            this.State.Reset();
+
+            // update contextuals
             bool changed = this.Contextuals.UpdateContext(context);
 
             // check token name

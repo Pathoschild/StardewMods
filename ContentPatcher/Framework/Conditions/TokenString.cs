@@ -145,9 +145,12 @@ namespace ContentPatcher.Framework.Conditions
         /// <returns>Returns whether the context changed.</returns>
         private bool ForceUpdate(IContext context)
         {
+            // reset
             string wasValue = this.Value;
             bool wasReady = this.State.IsReady;
+            this.State.Reset();
 
+            // reapply
             if (this.TryGetApplied(context, out string value, out InvariantHashSet unknownTokens))
                 this.Value = value;
             else

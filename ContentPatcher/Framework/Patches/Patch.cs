@@ -72,12 +72,14 @@ namespace ContentPatcher.Framework.Patches
         /// <returns>Returns whether the patch data changed.</returns>
         public virtual bool UpdateContext(IContext context)
         {
+            // reset
+            bool wasReady = this.IsReady;
             this.State.Reset();
             bool changed;
 
             // update patch context
             changed = this.RawTargetAsset.UpdateContext(context);
-            this.TargetAsset = this.NormaliseAssetName(this.RawTargetAsset.Value);
+            this.TargetAsset = this.RawTargetAsset.IsReady ? this.NormaliseAssetName(this.RawTargetAsset.Value) : "";
             this.PrivateContext.Update(context, this.RawTargetAsset);
 
             // update contextual values
@@ -92,7 +94,6 @@ namespace ContentPatcher.Framework.Patches
 
             // update ready flag
             // note: from file asset existence deliberately isn't checked here, so we can show warnings at runtime instead.
-            bool wasReady = this.IsReady;
             this.IsReady =
                 this.Contextuals.IsReady
                 && (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(this.PrivateContext)));
