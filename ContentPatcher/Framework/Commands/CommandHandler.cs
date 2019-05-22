@@ -264,13 +264,33 @@ namespace ContentPatcher.Framework.Commands
                     // log checkbox and patch name
                     output.Append($"   [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {patch.ShortName}");
 
-                    // log raw target (if not in name)
-                    if (!patch.ShortName.Contains($"{patch.Type} {patch.RawTargetAsset}"))
-                        output.Append($" | {patch.Type} {patch.RawTargetAsset}");
+                    // log target value if different from name
+                    {
+                        // get raw value
+                        string rawValue = null;
+                        if (!patch.ShortName.Contains($"{patch.Type} {patch.RawTargetAsset}"))
+                            rawValue = $"{patch.Type} {patch.RawTargetAsset}";
 
-                    // log parsed target if tokenised
-                    if (patch.MatchesContext && patch.ParsedTargetAsset != null && patch.ParsedTargetAsset.HasAnyTokens)
-                        output.Append($" | => {patch.ParsedTargetAsset.Value}");
+                        // get parsed value
+                        string parsedValue = null;
+                        if (patch.MatchesContext && patch.ParsedTargetAsset != null && patch.ParsedTargetAsset.HasAnyTokens)
+                            parsedValue = patch.ParsedTargetAsset.Value;
+
+                        // format
+                        if (rawValue != null || parsedValue != null)
+                        {
+                            output.Append(" (");
+                            if (rawValue != null)
+                            {
+                                output.Append(rawValue);
+                                if (parsedValue != null)
+                                    output.Append(" ");
+                            }
+                            if (parsedValue != null)
+                                output.Append($"=> {parsedValue}");
+                            output.Append(")");
+                        }
+                    }
 
                     // log reason not applied
                     string errorReason = this.GetReasonNotLoaded(patch);
@@ -294,7 +314,7 @@ namespace ContentPatcher.Framework.Commands
                             issues.Add("shouldn't include language code (use conditions instead)");
 
                         if (issues.Any())
-                            output.Append($" | hint: asset name may be incorrect ({string.Join("; ", issues)}).");
+                            output.Append($" // hint: asset name may be incorrect ({string.Join("; ", issues)}).");
                     }
 
                     // end line
@@ -340,9 +360,9 @@ namespace ContentPatcher.Framework.Commands
 
             // state error
             if (state.InvalidTokens.Any())
-                return $"uses invalid tokens: {string.Join(", ", state.InvalidTokens.OrderByIgnoreCase(p => p))}";
+                return $"invalid tokens: {string.Join(", ", state.InvalidTokens.OrderByIgnoreCase(p => p))}";
             if (state.UnavailableTokens.Any())
-                return $"uses unready tokens: {string.Join(", ", state.UnavailableTokens.OrderByIgnoreCase(p => p))}";
+                return $"tokens not ready: {string.Join(", ", state.UnavailableTokens.OrderByIgnoreCase(p => p))}";
             if (state.Errors.Any())
                 return string.Join("; ", state.Errors);
 
