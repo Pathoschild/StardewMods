@@ -85,10 +85,12 @@ namespace ContentPatcher.Framework.Patches
             // update contextual values
             changed = this.Contextuals.UpdateContext(this.PrivateContext) || changed;
             this.FromLocalAssetExistsImpl = false;
-            if (this.FromLocalAsset?.IsReady == true)
+
+            // check whether file exists
+            if (this.Contextuals.IsReady && this.FromLocalAsset != null)
             {
                 this.FromLocalAssetExistsImpl = this.ContentPack.HasFile(this.FromLocalAsset.Value);
-                if (!this.FromLocalAssetExistsImpl)
+                if (!this.FromLocalAssetExistsImpl && this.Conditions.All(p => p.IsMatch(context)))
                     this.State.AddErrors($"{nameof(PatchConfig.FromFile)} file '{this.FromLocalAsset.Value}' does not exist");
             }
 

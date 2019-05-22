@@ -6,6 +6,7 @@
   * now shows the actual reason a patch wasn't loaded (instead of showing a heuristic guess);
   * added more info for local tokens;
   * simplified some output.
+* Improved errors when a local file doesn't exist.
 * Improved `config.json` keybind parsing.
 * Fixed patch not reapplied in 1.8 if only `FromFile` value changed.
 
