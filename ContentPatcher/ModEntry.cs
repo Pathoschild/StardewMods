@@ -383,14 +383,12 @@ namespace ContentPatcher
                     continue;
                 }
 
-                int i = 0;
-                foreach (string target in patch.Target.Split(','))
+                foreach (string target in patch.Target.Split(new[] {',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Distinct(StringComparer.InvariantCultureIgnoreCase))
                 {
-                    i++;
                     yield return new PatchConfig(patch)
                     {
-                        LogName = !string.IsNullOrWhiteSpace(patch.LogName) ? $"{patch.LogName} {"".PadRight(i, 'I')}" : "",
-                        Target = target.Trim()
+                        LogName = !string.IsNullOrWhiteSpace(patch.LogName) ? $"{patch.LogName} > {target}" : "",
+                        Target = target
                     };
                 }
             }

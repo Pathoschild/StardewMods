@@ -268,7 +268,7 @@ namespace ContentPatcher.Framework.Commands
                     {
                         // get raw value
                         string rawValue = null;
-                        if (!patch.ShortName.Contains($"{patch.Type} {patch.RawTargetAsset}"))
+                        if (!patch.ShortName.Contains($"{patch.RawTargetAsset}"))
                             rawValue = $"{patch.Type} {patch.RawTargetAsset}";
 
                         // get parsed value
