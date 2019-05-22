@@ -94,11 +94,13 @@ namespace ContentPatcher
                 .OrderByIgnoreCase(p => p)
                 .ToArray();
 
-            // load content packs and context
+            // load content packs
             this.TokenManager = new TokenManager(helper.Content, installedMods);
             this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.AssetValidators());
-            this.TokenManager.UpdateContext();
             this.LoadContentPacks(contentPacks);
+
+            // set initial context once patches & dynamic tokens are loaded
+            this.UpdateContext();
 
             // register patcher
             helper.Content.AssetLoaders.Add(this.PatchManager);
@@ -383,7 +385,7 @@ namespace ContentPatcher
                     continue;
                 }
 
-                foreach (string target in patch.Target.Split(new[] {',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Distinct(StringComparer.InvariantCultureIgnoreCase))
+                foreach (string target in patch.Target.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Distinct(StringComparer.InvariantCultureIgnoreCase))
                 {
                     yield return new PatchConfig(patch)
                     {

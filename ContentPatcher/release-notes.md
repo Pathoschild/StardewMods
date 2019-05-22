@@ -8,7 +8,7 @@
   * simplified some output.
 * Improved errors when a local file doesn't exist.
 * Improved `config.json` keybind parsing.
-* Fixed patch not reapplied in 1.8 if only `FromFile` value changed.
+* Fixed patch update bugs in Content Patcher 1.8.
 
 ## 1.8
 Released 16 May 2019.
