@@ -371,16 +371,12 @@ namespace ContentPatcher.Framework.Commands
             {
                 string[] failedConditions = (
                     from condition in patch.ParsedConditions
-                    let displayText = !string.IsNullOrWhiteSpace(condition.Input?.Raw)
+                    let displayText = !condition.Name.Equals("HasFile", StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrWhiteSpace(condition.Input?.Raw)
                         ? $"{condition.Name}:{condition.Input.Raw}"
                         : condition.Name
-                    let isMultiValue = condition.CurrentValues.Count > 1
-                    let displayValue = condition.Values.HasAnyTokens
-                        ? $"{condition.Values.Raw} => {string.Join(", ", condition.CurrentValues)}"
-                        : $"{string.Join(", ", condition.CurrentValues)}"
                     orderby displayText
                     where !condition.IsMatch(tokenContext)
-                    select $"{displayText} (should be {(isMultiValue ? "one of " : "")}{displayValue})"
+                    select $"{displayText}"
                 ).ToArray();
 
                 if (failedConditions.Any())

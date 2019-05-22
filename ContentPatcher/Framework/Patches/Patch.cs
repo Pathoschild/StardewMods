@@ -91,7 +91,7 @@ namespace ContentPatcher.Framework.Patches
             {
                 this.FromLocalAssetExistsImpl = this.ContentPack.HasFile(this.FromLocalAsset.Value);
                 if (!this.FromLocalAssetExistsImpl && this.Conditions.All(p => p.IsMatch(context)))
-                    this.State.AddErrors($"{nameof(PatchConfig.FromFile)} file '{this.FromLocalAsset.Value}' does not exist");
+                    this.State.AddErrors($"{nameof(PatchConfig.FromFile)} '{this.FromLocalAsset.Value}' does not exist");
             }
 
             // update ready flag
