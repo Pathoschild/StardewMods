@@ -25,12 +25,16 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         {
             // act
             TokenString tokenStr = new TokenString(raw, new GenericTokenContext());
+            IContextualState diagnosticState = tokenStr.GetDiagnosticState();
 
             // assert
             tokenStr.Raw.Should().Be(raw.Trim());
             tokenStr.GetTokenPlaceholders(recursive: false).Should().HaveCount(0);
-            tokenStr.InvalidTokens.Should().HaveCount(0);
             tokenStr.HasAnyTokens.Should().BeFalse();
+            diagnosticState.IsReady.Should().BeTrue();
+            diagnosticState.UnavailableTokens.Should().BeEmpty();
+            diagnosticState.InvalidTokens.Should().BeEmpty();
+            diagnosticState.Errors.Should().BeEmpty();
         }
 
         /// <summary>Test that the <see cref="TokenString"/> constructor sets the expected property values when given a single valid token.</summary>
@@ -46,14 +50,18 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
 
             // act
             TokenString tokenStr = new TokenString(raw, context);
+            IContextualState diagnosticState = tokenStr.GetDiagnosticState();
 
             // assert
             tokenStr.Raw.Should().Be(parsed);
             tokenStr.GetTokenPlaceholders(recursive: false).Should().HaveCount(1);
             tokenStr.GetTokenPlaceholders(recursive: false).Select(p => p.Text).Should().BeEquivalentTo("{{" + configKey + "}}");
-            tokenStr.InvalidTokens.Should().BeEmpty();
             tokenStr.HasAnyTokens.Should().BeTrue();
             tokenStr.IsSingleTokenOnly.Should().BeTrue();
+            diagnosticState.IsReady.Should().BeTrue();
+            diagnosticState.UnavailableTokens.Should().BeEmpty();
+            diagnosticState.InvalidTokens.Should().BeEmpty();
+            diagnosticState.Errors.Should().BeEmpty();
         }
 
         /// <summary>Test that the <see cref="TokenString"/> constructor sets the expected property values when given a string containing config, condition, and invalid values.</summary>
@@ -71,14 +79,19 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
 
             // act
             TokenString tokenStr = new TokenString(raw, context);
+            IContextualState diagnosticState = tokenStr.GetDiagnosticState();
 
             // assert
             tokenStr.Raw.Should().Be("assets/{{configKey}}_{{season}}_{{invalid}}.png");
             tokenStr.GetTokenPlaceholders(recursive: false).Should().HaveCount(3);
             tokenStr.GetTokenPlaceholders(recursive: false).Select(name => name.Text).Should().BeEquivalentTo(new[] { "{{configKey}}", "{{season}}", "{{invalid}}" });
-            tokenStr.InvalidTokens.Should().HaveCount(1).And.BeEquivalentTo("invalid");
+            tokenStr.IsReady.Should().BeFalse();
             tokenStr.HasAnyTokens.Should().BeTrue();
             tokenStr.IsSingleTokenOnly.Should().BeFalse();
+            diagnosticState.IsReady.Should().BeFalse();
+            diagnosticState.UnavailableTokens.Should().BeEmpty();
+            diagnosticState.InvalidTokens.Should().HaveCount(1).And.BeEquivalentTo("invalid");
+            diagnosticState.Errors.Should().BeEmpty();
         }
     }
 }

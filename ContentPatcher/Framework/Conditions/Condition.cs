@@ -9,6 +9,16 @@ namespace ContentPatcher.Framework.Conditions
     internal class Condition : IContextual
     {
         /*********
+        ** Fields
+        *********/
+        /// <summary>The underlying contextual values.</summary>
+        private readonly AggregateContextual Contextuals;
+
+        /// <summary>Diagnostic info about the instance.</summary>
+        private readonly ContextualState State = new ContextualState();
+
+
+        /*********
         ** Accessors
         *********/
         /// <summary>The token name in the context.</summary>
@@ -24,10 +34,10 @@ namespace ContentPatcher.Framework.Conditions
         public InvariantHashSet CurrentValues { get; private set; }
 
         /// <summary>Whether the instance may change depending on the context.</summary>
-        public bool IsMutable => this.Values.IsMutable || this.Input?.IsMutable == true;
+        public bool IsMutable => this.Contextuals.IsMutable;
 
         /// <summary>Whether the instance is valid for the current context.</summary>
-        public bool IsReady => this.Values.IsReady && this.Input?.IsReady != false;
+        public bool IsReady => this.Contextuals.IsReady && this.State.IsReady;
 
 
         /*********
@@ -39,11 +49,16 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="values">The token values for which this condition is valid.</param>
         public Condition(string name, ITokenString input, ITokenString values)
         {
+            // save values
             this.Name = name;
             this.Input = input;
             this.Values = values;
+            this.Contextuals = new AggregateContextual()
+                .Add(input)
+                .Add(values);
 
-            if (this.Values.IsReady)
+            // init values
+            if (this.IsReady)
                 this.CurrentValues = this.Values.SplitValues();
         }
 
@@ -64,36 +79,41 @@ namespace ContentPatcher.Framework.Conditions
         /// <returns>Returns whether the instance changed.</returns>
         public bool UpdateContext(IContext context)
         {
-            bool changed = false;
+            // reset
+            bool wasReady = this.IsReady;
+            this.State.Reset();
 
-            if (this.Values.UpdateContext(context))
+            // update contextuals
+            bool changed = this.Contextuals.UpdateContext(context);
+
+            // check token name
+            if (!context.Contains(this.Name, enforceContext: true))
+                this.State.AddUnavailableTokens(this.Name);
+
+            // update values
+            if (changed || wasReady != this.IsReady)
             {
-                changed = true;
-                this.CurrentValues = this.Values.SplitValues();
+                this.CurrentValues = this.IsReady
+                    ? this.Values.SplitValues()
+                    : new InvariantHashSet();
+                return true;
             }
-            if (this.Input?.UpdateContext(context) == true)
-                changed = true;
-
-
-            return changed;
+            return false;
         }
 
         /// <summary>Get the token names used by this patch in its fields.</summary>
         public IEnumerable<string> GetTokensUsed()
         {
-            // name
             yield return this.Name;
-
-            // from input
-            if (this.Input != null)
-            {
-                foreach (string token in this.Input.GetTokensUsed())
-                    yield return token;
-            }
-
-            // from values
-            foreach (string token in this.Values.GetTokensUsed())
+            foreach (string token in this.Contextuals.GetTokensUsed())
                 yield return token;
+        }
+
+        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        public IContextualState GetDiagnosticState()
+        {
+            return this.State.Clone()
+                .MergeFrom(this.Contextuals.GetDiagnosticState());
         }
     }
 }

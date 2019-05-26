@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Conditions
 {
@@ -17,9 +16,6 @@ namespace ContentPatcher.Framework.Conditions
 
         /// <summary>The lexical tokens parsed from the raw string.</summary>
         public ILexToken[] LexTokens { get; }
-
-        /// <summary>The unrecognised tokens in the string.</summary>
-        public InvariantHashSet InvalidTokens { get; } = new InvariantHashSet();
 
         /// <summary>Whether the string contains any tokens (including invalid tokens).</summary>
         public bool HasAnyTokens { get; } = false;
@@ -68,6 +64,12 @@ namespace ContentPatcher.Framework.Conditions
         public IEnumerable<LexTokenToken> GetTokenPlaceholders(bool recursive)
         {
             return Enumerable.Empty<LexTokenToken>();
+        }
+
+        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        public IContextualState GetDiagnosticState()
+        {
+            return new ContextualState();
         }
     }
 }

@@ -1,6 +1,16 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.8.1
+Released 26 May 2019.
+
+* Improved `patch summary`:
+  * now tracks the reason a patch wasn't loaded (instead of showing a heuristic guess);
+  * added more info for local tokens;
+  * simplified some output.
+* Improved errors when a local file doesn't exist.
+* Fixed patch update bugs in Content Patcher 1.8.
+
 ## 1.8
 Released 16 May 2019.
 

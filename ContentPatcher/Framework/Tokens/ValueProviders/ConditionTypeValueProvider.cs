@@ -59,8 +59,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return this.IsChanged(this.Values, () =>
             {
                 this.Values.Clear();
-                this.IsReady = this.IsValidInContextImpl == null || this.IsValidInContextImpl();
-                if (this.IsReady)
+                if (this.MarkReady(this.IsValidInContextImpl == null || this.IsValidInContextImpl()))
                 {
                     foreach (string value in this.FetchValues())
                         this.Values.Add(value);

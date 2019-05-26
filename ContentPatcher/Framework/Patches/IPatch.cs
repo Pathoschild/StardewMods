@@ -38,6 +38,9 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Public methods
         *********/
+        /// <summary>Get whether the <see cref="FromLocalAsset"/> file exists.</summary>
+        bool FromLocalAssetExists();
+
         /// <summary>Load the initial version of the asset.</summary>
         /// <typeparam name="T">The asset type.</typeparam>
         /// <param name="asset">The asset to load.</param>

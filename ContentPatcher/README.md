@@ -956,6 +956,15 @@ Whether the input argument is non-blank. For example, to check if the player is 
 }
 ```
 
+This isn't limited to a single token. You can pass in any tokenised string, and `HasValue` will
+return true if the resulting string is non-blank:
+
+```js
+"When": {
+  "HasValue:{{spouse}}{{LocationName}}": "true"
+}
+```
+
 </td>
 </tr>
 

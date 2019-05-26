@@ -43,8 +43,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 IDictionary<WalletItem, bool> oldValues = new Dictionary<WalletItem, bool>(this.Values);
 
                 this.Values.Clear();
-                this.IsReady = this.IsPlayerDataAvailable();
-                if (this.IsReady)
+                if (this.MarkReady(this.IsPlayerDataAvailable()))
                 {
                     this.Values[WalletItem.DwarvishTranslationGuide] = Game1.player.canUnderstandDwarves;
                     this.Values[WalletItem.RustyKey] = Game1.player.hasRustyKey;

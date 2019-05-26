@@ -18,6 +18,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Whether multiple values may exist when an input argument is provided.</summary>
         protected bool CanHaveMultipleValuesForInput { get; set; }
 
+        /// <summary>Diagnostic info about the contextual instance.</summary>
+        private readonly ContextualState State = new ContextualState();
+
 
         /*********
         ** Accessors
@@ -29,7 +32,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public bool IsMutable { get; protected set; } = true;
 
         /// <summary>Whether the instance is valid for the current context.</summary>
-        public bool IsReady { get; protected set; }
+        public bool IsReady => this.State.IsReady;
 
         /// <summary>Whether the value provider allows an input argument (e.g. an NPC name for a relationship token).</summary>
         public bool AllowsInput { get; private set; }
@@ -53,6 +56,12 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public IEnumerable<string> GetTokensUsed()
         {
             return Enumerable.Empty<string>();
+        }
+
+        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        public IContextualState GetDiagnosticState()
+        {
+            return this.State.Clone();
         }
 
         /// <summary>Whether the value provider may return multiple values for the given input.</summary>
@@ -224,6 +233,19 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 return false;
 
             return true;
+        }
+
+        /// <summary>Set the value provider's ready flag.</summary>
+        /// <param name="ready">Whether the provider is ready.</param>
+        /// <returns>Returns the ready flag value.</returns>
+        protected bool MarkReady(bool ready)
+        {
+            if (ready)
+                this.State.Reset();
+            else
+                this.State.AddUnavailableTokens(this.Name);
+
+            return ready;
         }
 
         /// <summary>Get whether the value provider's <see cref="IsReady"/> or values change when an action is invoked.</summary>

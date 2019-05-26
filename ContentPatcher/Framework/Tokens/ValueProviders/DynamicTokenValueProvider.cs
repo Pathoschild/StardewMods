@@ -59,7 +59,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="ready">The value to set.</param>
         public void SetReady(bool ready)
         {
-            this.IsReady = ready;
+            this.MarkReady(ready);
         }
 
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>

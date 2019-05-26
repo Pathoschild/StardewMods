@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
-using ContentPatcher.Framework.Lexing.LexTokens;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -31,11 +30,8 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The records to reorder, if the target is a list asset.</summary>
         private readonly EditDataPatchMoveRecord[] MoveRecords;
 
-        /// <summary>The token strings which contain mutable tokens.</summary>
-        private readonly ITokenString[] MutableTokenStrings;
-
         /// <summary>A list of warning messages which have been previously logged.</summary>
-        private HashSet<string> LoggedWarnings = new HashSet<string>();
+        private readonly HashSet<string> LoggedWarnings = new HashSet<string>();
 
 
         /*********
@@ -59,26 +55,13 @@ namespace ContentPatcher.Framework.Patches
             this.Fields = fields.ToArray();
             this.MoveRecords = moveRecords.ToArray();
             this.Monitor = monitor;
-            this.MutableTokenStrings = this.GetTokenStrings(this.Records, this.Fields, this.MoveRecords).Where(str => str.HasAnyTokens).ToArray();
 
             // track contextuals
-            this.ContextualValues.AddRange(this.Records.Where(p => p != null));
-            this.ContextualValues.AddRange(this.Fields.Where(p => p != null));
-            this.ContextualValues.AddRange(this.MoveRecords.Where(p => p != null));
-            this.ContextualValues.AddRange(this.Conditions);
-        }
-
-        /// <summary>Get the token names used by this patch in its fields.</summary>
-        public override IEnumerable<string> GetTokensUsed()
-        {
-            foreach (string name in base.GetTokensUsed())
-                yield return name;
-
-            foreach (ITokenString str in this.MutableTokenStrings)
-            {
-                foreach (LexTokenToken lexToken in str.GetTokenPlaceholders(recursive: true))
-                    yield return lexToken.Name;
-            }
+            this.Contextuals
+                .Add(this.Records)
+                .Add(this.Fields)
+                .Add(this.MoveRecords)
+                .Add(this.Conditions);
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>
@@ -147,20 +130,6 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Private methods
         *********/
-        /// <summary>Get all token strings in the given data.</summary>
-        /// <param name="records">The data records to edit.</param>
-        /// <param name="fields">The data fields to edit.</param>
-        /// <param name="moveRecords">The records to reorder, if the target is a list asset.</param>
-        private IEnumerable<ITokenString> GetTokenStrings(IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords)
-        {
-            foreach (ITokenString tokenStr in records.SelectMany(p => p.GetTokenStrings()))
-                yield return tokenStr;
-            foreach (ITokenString tokenStr in fields.SelectMany(p => p.GetTokenStrings()))
-                yield return tokenStr;
-            foreach (ITokenString tokenStr in moveRecords.SelectMany(p => p.GetTokenStrings()))
-                yield return tokenStr;
-        }
-
         /// <summary>Apply the patch to a dictionary asset.</summary>
         /// <typeparam name="TKey">The dictionary key type.</typeparam>
         /// <typeparam name="TValue">The dictionary value type.</typeparam>

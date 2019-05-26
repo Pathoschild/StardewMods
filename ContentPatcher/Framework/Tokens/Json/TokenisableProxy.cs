@@ -50,5 +50,11 @@ namespace ContentPatcher.Framework.Tokens.Json
         {
             return this.TokenString.GetTokensUsed();
         }
+
+        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        public IContextualState GetDiagnosticState()
+        {
+            return this.TokenString.GetDiagnosticState();
+        }
     }
 }

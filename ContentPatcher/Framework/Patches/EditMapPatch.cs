@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.ConfigModels;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -41,16 +42,11 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
         public EditMapPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString fromLocalAsset, Rectangle fromArea, Rectangle toArea, IMonitor monitor, Func<string, string> normaliseAssetName)
-            : base(logName, PatchType.EditMap, contentPack, assetName, conditions, normaliseAssetName)
+            : base(logName, PatchType.EditMap, contentPack, assetName, conditions, normaliseAssetName, fromLocalAsset: fromLocalAsset)
         {
-            // set fields
-            this.FromLocalAsset = fromLocalAsset;
             this.FromArea = fromArea != Rectangle.Empty ? fromArea : null as Rectangle?;
             this.ToArea = toArea != Rectangle.Empty ? toArea : null as Rectangle?;
             this.Monitor = monitor;
-
-            // track contextuals
-            this.ContextualValues.Add(this.FromLocalAsset);
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>
@@ -62,6 +58,11 @@ namespace ContentPatcher.Framework.Patches
             if (typeof(T) != typeof(Map))
             {
                 this.Monitor.Log($"Can't apply map patch \"{this.LogName}\" to {this.TargetAsset}: this file isn't a map file (found {typeof(T)}).", LogLevel.Warn);
+                return;
+            }
+            if (!this.FromLocalAssetExists())
+            {
+                this.Monitor.Log($"Can't apply map patch \"{this.LogName}\" to {this.TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{this.FromLocalAsset.Value}' doesn't exist.", LogLevel.Warn);
                 return;
             }
 

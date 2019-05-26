@@ -160,7 +160,7 @@ namespace ContentPatcher.Framework.Commands
                         select token
                     )
                     .ToArray();
-                int labelWidth = tokens.Max(p => p.Name.Length);
+                int labelWidth = Math.Max(tokens.Max(p => p.Name.Length), "token name".Length);
 
                 // print table header
                 output.AppendLine($"   {"token name".PadRight(labelWidth)} | value");
@@ -217,27 +217,41 @@ namespace ContentPatcher.Framework.Commands
 
                 // print tokens
                 {
-                    IToken[] localTokens = tokenContext
-                        .GetTokens(enforceContext: false)
-                        .Where(token =>
-                            token.Scope != null // ignore global tokens
-                            && token.Name != ConditionType.HasFile.ToString() // no value to display
+                    var tokens =
+                        (
+                            // get non-global tokens
+                            from IToken token in tokenContext.GetTokens(enforceContext: false)
+                            where token.Scope != null && token.Name != ConditionType.HasFile.ToString()
+
+                            // get input arguments
+                            let validInputs = token.IsReady && token.RequiresInput
+                                ? token.GetAllowedInputArguments().Select(p => new LiteralString(p)).AsEnumerable<ITokenString>()
+                                : new ITokenString[] { null }
+                            from ITokenString input in validInputs
+
+                            // select display data
+                            let result = new
+                            {
+                                Name = token.RequiresInput ? $"{token.Name}:{input}" : token.Name,
+                                Value = token.IsReady ? string.Join(", ", token.GetValues(input)) : "",
+                                IsReady = token.IsReady
+                            }
+                            orderby result.Name
+                            select result
                         )
                         .ToArray();
-                    if (localTokens.Any())
+                    if (tokens.Any())
                     {
+                        int labelWidth = Math.Max(tokens.Max(p => p.Name.Length), "token name".Length);
+
                         output.AppendLine();
                         output.AppendLine("   Local tokens:");
-                        foreach (IToken token in localTokens.OrderBy(p => p.Name))
-                        {
-                            if (token.RequiresInput)
-                            {
-                                foreach (string input in token.GetAllowedInputArguments().OrderBy(p => p))
-                                    output.AppendLine($"      {input}: {string.Join(", ", token.GetValues(new LiteralString(input)))}");
-                            }
-                            else
-                                output.AppendLine($"      {token.Name}: {string.Join(", ", token.GetValues(null))}");
-                        }
+
+                        output.AppendLine($"      {"token name".PadRight(labelWidth)} | value");
+                        output.AppendLine($"      {"".PadRight(labelWidth, '-')} | -----");
+
+                        foreach (var token in tokens)
+                            output.AppendLine($"      {token.Name.PadRight(labelWidth)} | [{(token.IsReady ? "X" : " ")}] {token.Value}");
                     }
                 }
 
@@ -250,13 +264,33 @@ namespace ContentPatcher.Framework.Commands
                     // log checkbox and patch name
                     output.Append($"   [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {patch.ShortName}");
 
-                    // log raw target (if not in name)
-                    if (!patch.ShortName.Contains($"{patch.Type} {patch.RawTargetAsset}"))
-                        output.Append($" | {patch.Type} {patch.RawTargetAsset}");
+                    // log target value if different from name
+                    {
+                        // get raw value
+                        string rawValue = null;
+                        if (!patch.ShortName.Contains($"{patch.RawTargetAsset}"))
+                            rawValue = $"{patch.Type} {patch.RawTargetAsset}";
 
-                    // log parsed target if tokenised
-                    if (patch.MatchesContext && patch.ParsedTargetAsset != null && patch.ParsedTargetAsset.HasAnyTokens)
-                        output.Append($" | => {patch.ParsedTargetAsset.Value}");
+                        // get parsed value
+                        string parsedValue = null;
+                        if (patch.MatchesContext && patch.ParsedTargetAsset != null && patch.ParsedTargetAsset.HasAnyTokens)
+                            parsedValue = patch.ParsedTargetAsset.Value;
+
+                        // format
+                        if (rawValue != null || parsedValue != null)
+                        {
+                            output.Append(" (");
+                            if (rawValue != null)
+                            {
+                                output.Append(rawValue);
+                                if (parsedValue != null)
+                                    output.Append(" ");
+                            }
+                            if (parsedValue != null)
+                                output.Append($"=> {parsedValue}");
+                            output.Append(")");
+                        }
+                    }
 
                     // log reason not applied
                     string errorReason = this.GetReasonNotLoaded(patch);
@@ -280,7 +314,7 @@ namespace ContentPatcher.Framework.Commands
                             issues.Add("shouldn't include language code (use conditions instead)");
 
                         if (issues.Any())
-                            output.Append($" | hint: asset name may be incorrect ({string.Join("; ", issues)}).");
+                            output.Append($" // hint: asset name may be incorrect ({string.Join("; ", issues)}).");
                     }
 
                     // end line
@@ -322,44 +356,38 @@ namespace ContentPatcher.Framework.Commands
                 return null;
 
             IContext tokenContext = patch.PatchContext;
+            IContextualState state = patch.State;
 
-            // load error
-            if (!patch.IsLoaded)
-                return $"not loaded: {patch.ReasonDisabled}";
-
-            // uses tokens not available in the current context
-            {
-                string[] tokensOutOfContext = patch
-                    .TokensUsed
-                    .Union(patch.ParsedConditions.Select(p => p.Name))
-                    .Distinct()
-                    .Where(name => !tokenContext.GetToken(name, enforceContext: false).IsReady)
-                    .OrderByIgnoreCase(name => name)
-                    .ToArray();
-                if (tokensOutOfContext.Any())
-                    return $"uses tokens not available right now: {string.Join(", ", tokensOutOfContext)}";
-            }
+            // state error
+            if (state.InvalidTokens.Any())
+                return $"invalid tokens: {string.Join(", ", state.InvalidTokens.OrderByIgnoreCase(p => p))}";
+            if (state.UnavailableTokens.Any())
+                return $"tokens not ready: {string.Join(", ", state.UnavailableTokens.OrderByIgnoreCase(p => p))}";
+            if (state.Errors.Any())
+                return string.Join("; ", state.Errors);
 
             // conditions not matched
             if (!patch.MatchesContext && patch.ParsedConditions != null)
             {
                 string[] failedConditions = (
                     from condition in patch.ParsedConditions
-                    let displayText = !string.IsNullOrWhiteSpace(condition.Input?.Raw)
+                    let displayText = !condition.Name.Equals("HasFile", StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrWhiteSpace(condition.Input?.Raw)
                         ? $"{condition.Name}:{condition.Input.Raw}"
                         : condition.Name
-                    let displayValue = condition.Values.HasAnyTokens
-                        ? $"{condition.Values.Raw} => {string.Join(", ", condition.CurrentValues)}"
-                        : $"{string.Join(", ", condition.CurrentValues)}"
                     orderby displayText
                     where !condition.IsMatch(tokenContext)
-                    select $"{displayText} (expected one of {displayValue})"
+                    select $"{displayText}"
                 ).ToArray();
 
                 if (failedConditions.Any())
                     return $"conditions don't match: {string.Join(", ", failedConditions)}";
             }
 
+            // non-matching for an unknown reason
+            if (!patch.MatchesContext)
+                return "doesn't match context (unknown reason)";
+
+            // seems fine, just not applied yet
             return null;
         }
     }

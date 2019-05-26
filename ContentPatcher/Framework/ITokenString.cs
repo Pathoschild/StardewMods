@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using ContentPatcher.Framework.Lexing.LexTokens;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework
 {
@@ -16,9 +15,6 @@ namespace ContentPatcher.Framework
         /// <summary>The lexical tokens parsed from the raw string.</summary>
         ILexToken[] LexTokens { get; }
 
-        /// <summary>The unrecognised tokens in the string.</summary>
-        InvariantHashSet InvalidTokens { get; }
-
         /// <summary>Whether the string contains any tokens (including invalid tokens).</summary>
         bool HasAnyTokens { get; }
 
@@ -33,7 +29,7 @@ namespace ContentPatcher.Framework
         ** Methods
         *********/
         /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>
-        /// <param name="recursive">Whether to scan recursively.</param> 
+        /// <param name="recursive">Whether to scan recursively.</param>
         IEnumerable<LexTokenToken> GetTokenPlaceholders(bool recursive);
     }
 }

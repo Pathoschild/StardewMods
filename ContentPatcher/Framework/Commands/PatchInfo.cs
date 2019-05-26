@@ -1,7 +1,6 @@
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Commands
 {
@@ -38,14 +37,11 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>Whether the patch is currently applied.</summary>
         public bool IsApplied { get; }
 
-        /// <summary>The reason this patch is disabled (if applicable).</summary>
-        public string ReasonDisabled { get; }
-
-        /// <summary>The token names used by this patch in its fields.</summary>
-        public InvariantHashSet TokensUsed { get; }
-
         /// <summary>The patch context.</summary>
         public IContext PatchContext { get; }
+
+        /// <summary>Diagnostic info about the patch.</summary>
+        public IContextualState State { get; }
 
 
         /*********
@@ -64,8 +60,7 @@ namespace ContentPatcher.Framework.Commands
             this.IsLoaded = false;
             this.MatchesContext = false;
             this.IsApplied = false;
-            this.ReasonDisabled = patch.ReasonDisabled;
-            this.TokensUsed = new InvariantHashSet();
+            this.State = new ContextualState().AddErrors(patch.ReasonDisabled);
         }
 
         /// <summary>Construct an instance.</summary>
@@ -81,8 +76,8 @@ namespace ContentPatcher.Framework.Commands
             this.IsLoaded = true;
             this.MatchesContext = patch.IsReady;
             this.IsApplied = patch.IsApplied;
-            this.TokensUsed = new InvariantHashSet(patch.GetTokensUsed());
             this.PatchContext = patch.GetPatchContext();
+            this.State = patch.GetDiagnosticState();
         }
 
 

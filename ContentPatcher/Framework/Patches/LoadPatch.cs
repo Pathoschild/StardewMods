@@ -20,10 +20,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="localAsset">The asset key to load from the content pack instead.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
         public LoadPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString localAsset, Func<string, string> normaliseAssetName)
-            : base(logName, PatchType.Load, contentPack, assetName, conditions, normaliseAssetName)
-        {
-            this.FromLocalAsset = localAsset;
-        }
+            : base(logName, PatchType.Load, contentPack, assetName, conditions, normaliseAssetName, fromLocalAsset: localAsset) { }
 
         /// <summary>Load the initial version of the asset.</summary>
         /// <param name="asset">The asset to load.</param>

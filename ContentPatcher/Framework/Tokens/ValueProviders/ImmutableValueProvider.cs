@@ -34,7 +34,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.CanHaveMultipleValuesForRoot = canHaveMultipleValues ?? (this.Values.Count > 1 || this.AllowedRootValues == null || this.AllowedRootValues.Count > 1);
             this.EnableInputArguments(required: false, canHaveMultipleValues: false);
             this.IsMutable = false;
-            this.IsReady = true;
         }
 
         /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
