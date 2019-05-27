@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming version
+* Fixed some patches broken in Content Patcher 1.8.1.
 * Fixed `EditMap` working with older format versions.
 
 ## 1.8.1

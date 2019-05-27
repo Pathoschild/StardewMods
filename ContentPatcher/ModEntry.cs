@@ -385,8 +385,11 @@ namespace ContentPatcher
                     continue;
                 }
 
-                foreach (string target in patch.Target.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Distinct(StringComparer.InvariantCultureIgnoreCase))
+                foreach (string target in patch.Target.Split(',').Select(p => p.Trim()).Distinct(StringComparer.InvariantCultureIgnoreCase))
                 {
+                    if (string.IsNullOrWhiteSpace(target))
+                        continue;
+
                     yield return new PatchConfig(patch)
                     {
                         LogName = !string.IsNullOrWhiteSpace(patch.LogName) ? $"{patch.LogName} > {target}" : "",
