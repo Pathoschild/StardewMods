@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.8.2
+Released 27 May 2019.
+
+* Fixed some patches broken in Content Patcher 1.8.1.
+* Fixed `EditMap` working with older format versions.
+
 ## 1.8.1
 Released 26 May 2019.
 

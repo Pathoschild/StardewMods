@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -36,11 +37,18 @@ namespace ContentPatcher.Framework.Migrations
             if (!base.TryMigrate(content, out error))
                 return false;
 
-            // 1.8 adds MoveEntries
             if (content.Changes?.Any() == true)
             {
                 foreach (PatchConfig patch in content.Changes)
                 {
+                    // 1.8 adds EditMap
+                    if (Enum.TryParse(patch.Action, true, out PatchType action) && action == PatchType.EditMap)
+                    {
+                        error = this.GetNounPhraseError($"using action {nameof(PatchType.EditMap)}");
+                        return false;
+                    }
+
+                    // 1.8 adds MoveEntries
                     if (patch.MoveEntries?.Any() == true)
                     {
                         error = this.GetNounPhraseError($"using {nameof(PatchConfig.MoveEntries)}");
