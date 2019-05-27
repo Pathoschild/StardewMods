@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming version
+* Fixed `EditMap` working with older format versions.
+
 ## 1.8.1
 Released 26 May 2019.
 
