@@ -44,7 +44,7 @@ namespace ContentPatcher.Framework.Migrations
                     // 1.8 adds EditMap
                     if (Enum.TryParse(patch.Action, true, out PatchType action) && action == PatchType.EditMap)
                     {
-                        error = this.GetNounPhraseError($"using action: {nameof(PatchType.EditMap)}");
+                        error = this.GetNounPhraseError($"using action {nameof(PatchType.EditMap)}");
                         return false;
                     }
 
