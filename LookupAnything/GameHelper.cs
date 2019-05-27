@@ -322,15 +322,33 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<RecipeModel> GetRecipesForIngredient(Item item)
         {
             if (item is SObject obj && obj.bigCraftable.Value)
-                return new RecipeModel[0]; // bigcraftables never valid as an ingredient
+                yield break; // bigcraftables never valid as an ingredient
 
-            return (
-                from recipe in this.GetRecipes()
-                where
-                    (recipe.Ingredients.ContainsKey(item.ParentSheetIndex) || recipe.Ingredients.ContainsKey(item.Category))
-                    && recipe.ExceptIngredients?.Contains(item.ParentSheetIndex) != true
-                select recipe
-            );
+            // from cached recipes
+            foreach (var recipe in this.GetRecipes())
+            {
+                if (!recipe.Ingredients.ContainsKey(item.ParentSheetIndex) && !recipe.Ingredients.ContainsKey(item.Category))
+                    continue;
+                if (recipe.ExceptIngredients?.Contains(item.ParentSheetIndex) == true)
+                    continue;
+
+                yield return recipe;
+            }
+        }
+
+        /// <summary>Get the recipes for a given machine.</summary>
+        /// <param name="machine">The machine.</param>
+        public IEnumerable<RecipeModel> GetRecipesForMachine(SObject machine)
+        {
+            if (machine == null)
+                yield break;
+
+            // from cached recipes
+            foreach (var recipe in this.GetRecipes())
+            {
+                if (recipe.IsForMachine(machine))
+                    yield return recipe;
+            }
         }
 
         /// <summary>Get an object by its parent sprite index.</summary>
@@ -339,6 +357,14 @@ namespace Pathoschild.Stardew.LookupAnything
         public SObject GetObjectBySpriteIndex(int index, int stack = 1)
         {
             return new SObject(index, stack);
+        }
+
+        /// <summary>Get an object by its parent sprite index.</summary>
+        /// <param name="category">The category number.</param>
+        public IEnumerable<SObject> GetObjectsByCategory(int category)
+        {
+            foreach (ObjectModel model in this.Objects.Value.Where(obj => obj.Category == category))
+                yield return this.GetObjectBySpriteIndex(model.ParentSpriteIndex);
         }
 
         /// <summary>Get whether an item can have a quality (which increases its sale price).</summary>

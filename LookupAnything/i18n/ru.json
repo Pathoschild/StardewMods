@@ -282,7 +282,8 @@
   "item.needed-for.gourmet-chef": "достижение Шеф-повар  (приготовить по {{recipes}} рецептам)",
   "item.needed-for.craft-master": "достижение Мастер (скрафтить по {{recipes}} рецептам)",
   "item.sells-to.shipping-box": "Ящик отгрузки",
-  "item.recipes.entry": "{{name}} ({{count}} шт.)",
+  "item.recipes-for-ingredient.entry": "{{name}} ({{count}} шт.)",
+  "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}", // TODO
   "item.number-owned.summary": "вам принадлежит {{count}} шт.",
   "item.number-crafted.summary": "вы сделали {{count}} из них",
 

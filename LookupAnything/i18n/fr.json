@@ -282,7 +282,8 @@
   "item.needed-for.gourmet-chef": "succès chef gourmet (cuisiner {{recipes}})",
   "item.needed-for.craft-master": "succès maître artisant (fabriquer {{recipes}})",
   "item.sells-to.shipping-box": "bac d'expédition",
-  "item.recipes.entry": "{{name}} (nécessite {{count}})",
+  "item.recipes-for-ingredient.entry": "{{name}} (nécessite {{count}})",
+  "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}", // TODO
   "item.number-owned.summary": "vous en possédez {{count}}",
   "item.number-crafted.summary": "vous en avez fabriqué {{count}}",
 

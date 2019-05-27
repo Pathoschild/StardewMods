@@ -8,6 +8,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.Objects;
 using SFarmer = StardewValley.Farmer;
@@ -331,14 +332,38 @@ namespace Pathoschild.Stardew.LookupAnything
             recipes.AddRange(
                 from entry in metadata.MachineRecipes
                 let machine = new SObject(Vector2.Zero, entry.MachineID)
-                select new RecipeModel(null, RecipeType.MachineInput, machine.DisplayName, entry.Ingredients, ingredient => this.CreateRecipeItem(ingredient.ParentSheetIndex, entry.Output), false, entry.ExceptIngredients, outputItemIndex: entry.Output)
+                select new RecipeModel(
+                    key: null,
+                    type: RecipeType.MachineInput,
+                    displayType: machine.DisplayName,
+                    ingredients: entry.Ingredients,
+                    item: ingredient => this.CreateRecipeItem(ingredient.ParentSheetIndex, entry.Output),
+                    mustBeLearned: false,
+                    exceptIngredients: entry.ExceptIngredients,
+                    outputItemIndex: entry.Output,
+                    minOutput: entry.MinOutput,
+                    maxOutput: entry.MaxOutput,
+                    outputChance: entry.OutputChance,
+                    isForMachine: p => p is SObject obj && obj.ParentSheetIndex == entry.MachineID
+                )
             );
 
             // building recipes
             recipes.AddRange(
                 from entry in metadata.BuildingRecipes
                 let building = new BluePrint(entry.BuildingKey)
-                select new RecipeModel(null, RecipeType.BuildingBlueprint, building.displayName, entry.Ingredients, ingredient => this.CreateRecipeItem(ingredient.ParentSheetIndex, entry.Output), false, entry.ExceptIngredients)
+                select new RecipeModel(
+                    key: null,
+                    type: RecipeType.BuildingBlueprint,
+                    displayType: building.displayName,
+                    ingredients: entry.Ingredients,
+                    item: ingredient => this.CreateRecipeItem(ingredient.ParentSheetIndex, entry.Output),
+                    mustBeLearned: false,
+                    outputItemIndex: entry.Output,
+                    minOutput: entry.OutputCount ?? 1,
+                    exceptIngredients: entry.ExceptIngredients,
+                    isForMachine: p => p is Building target && target.buildingType.Value == entry.BuildingKey
+                )
             );
 
             return recipes.ToArray();

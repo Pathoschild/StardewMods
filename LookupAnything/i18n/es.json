@@ -284,7 +284,8 @@
   "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})", // TODO
   "item.needed-for.craft-master": "craft master achievement (make {{recipes}})", // TODO
   "item.sells-to.shipping-box": "Caja de envío",
-  "item.recipes.entry": "{{name}} (necesita {{count}})",
+  "item.recipes-for-ingredient.entry": "{{name}} (necesita {{count}})",
+  "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}", // TODO
   "item.number-owned.summary": "{{count}} ud(s)",
   "item.number-crafted.summary": "you made {{count}} of these", // TODO
 

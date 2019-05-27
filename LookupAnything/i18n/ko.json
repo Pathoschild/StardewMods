@@ -282,7 +282,8 @@
   "item.needed-for.gourmet-chef": "도전과제 '미식가 요리사' ({{recipes}}을/를 요리하세요)",
   "item.needed-for.craft-master": "도전과제 '제작의 달인' ({{recipes}}을/를 제작하세요)",
   "item.sells-to.shipping-box": "출하 상자",
-  "item.recipes.entry": "{{name}} ({{count}}개 필요)",
+  "item.recipes-for-ingredient.entry": "{{name}} ({{count}}개 필요)",
+  "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}", // TODO
   "item.number-owned.summary": "당신은 이것들을 {{count}}개 보유중.",
   "item.number-crafted.summary": "당신은 이것들을 {{count}}개 제작했음.",
 

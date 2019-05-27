@@ -519,7 +519,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public static Translation FenceHealthSummary(int percent, int count) => L10n.Helper.Get("item.fence-health.summary", new { percent, count });
 
             /// <summary>A value like <c>{{name}} (needs {{count}})</c>.</summary>
-            public static Translation RecipesEntry(string name, int count) => L10n.Helper.Get("item.recipes.entry", new { name, count });
+            public static Translation RecipesForIngredientEntry(string name, int count) => L10n.Helper.Get("item.recipes-for-ingredient.entry", new { name, count });
+
+            /// <summary>A value like <c>{{name}} x{{count}}</c>.</summary>
+            public static Translation RecipesForMachineMultipleItems(string name, int count) => L10n.Helper.Get("item.recipes-for-machine.multiple-items", new { name, count });
+
+            /// <summary>A value like <c>{{name}} x{{minCount}} to {{maxCount}}</c>.</summary>
+            public static Translation RecipesForMachineMultipleItems(string name, int minCount, int maxCount) => L10n.Helper.Get("item.recipes-for-machine.multiple-items", new { name, count = L10n.Generic.Range(minCount, maxCount) });
 
             /// <summary>A value like <c>you own {{count}} of these</c>.</summary>
             public static Translation OwnedSummary(int count) => L10n.Helper.Get("item.number-owned.summary", new { count });

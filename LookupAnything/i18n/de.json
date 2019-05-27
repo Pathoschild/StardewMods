@@ -283,7 +283,8 @@
   "item.needed-for.gourmet-chef": "\"Gourmetkoch\" Errungenschaft (koche {{recipes}})",
   "item.needed-for.craft-master": "\"Handwerksmeister\" Errungenschaft (stelle {{recipes}} her)",
   "item.sells-to.shipping-box": "Versandkiste",
-  "item.recipes.entry": "{{name}} (braucht {{count}})",
+  "item.recipes-for-ingredient.entry": "{{name}} (braucht {{count}})",
+  "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}", // TODO
   "item.number-owned.summary": "Du besitzt {{count}} davon",
   "item.number-crafted.summary": "Du hast bereits {{count}} davon hergestellt",
 

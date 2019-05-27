@@ -171,11 +171,25 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // recipes
-            if (item.GetSpriteType() == ItemSpriteType.Object)
+            switch (item.GetSpriteType())
             {
-                RecipeModel[] recipes = this.GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
-                if (recipes.Any())
-                    yield return new RecipesForIngredientField(this.GameHelper, L10n.Item.Recipes(), item, recipes);
+                // for ingredient
+                case ItemSpriteType.Object:
+                    {
+                        RecipeModel[] recipes = this.GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
+                        if (recipes.Any())
+                            yield return new RecipesForIngredientField(this.GameHelper, L10n.Item.Recipes(), item, recipes);
+                    }
+                    break;
+
+                // for machine
+                case ItemSpriteType.BigCraftable:
+                    {
+                        RecipeModel[] recipes = this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject).ToArray();
+                        if (recipes.Any())
+                            yield return new RecipesForMachineField(this.GameHelper, L10n.Item.Recipes(), recipes);
+                    }
+                    break;
             }
 
             // owned and times cooked/crafted

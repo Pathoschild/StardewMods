@@ -282,7 +282,8 @@
   "item.needed-for.gourmet-chef": "美食大厨成就(烹饪{{recipes}})",
   "item.needed-for.craft-master": "制造大师成就(制造{{recipes}})",
   "item.sells-to.shipping-box": "出货箱",
-  "item.recipes.entry": "{{name}} (需要{{count}})",
+  "item.recipes-for-ingredient.entry": "{{name}} (需要{{count}})",
+  "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}", // TODO
   "item.number-owned.summary": "你目前拥有的总数为{{count}}",
   "item.number-crafted.summary": "你已制造{{count}}个此物",
 

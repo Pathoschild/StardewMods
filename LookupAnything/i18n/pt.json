@@ -282,7 +282,8 @@
   "item.needed-for.gourmet-chef": "conquista de chefe gourmet (cozinhe {{recipes}})",
   "item.needed-for.craft-master": "conquista de criador mestre (crie {{recipes}})",
   "item.sells-to.shipping-box": "caixa de embarcação",
-  "item.recipes.entry": "{{name}} (precisa {{count}})",
+  "item.recipes-for-ingredient.entry": "{{name}} (precisa {{count}})",
+  "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}", // TODO
   "item.number-owned.summary": "seu próprio {{count}} desses",
   "item.number-crafted.summary": "você fez {{count}} desses",
 
