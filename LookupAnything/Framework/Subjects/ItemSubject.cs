@@ -43,6 +43,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</summary>
         private readonly bool KnownQuality;
 
+        /// <summary>A cached item instance customised for drawing the item portait.</summary>
+        private Item CachedPortraitItem;
+
 
         /*********
         ** Public methods
@@ -264,20 +267,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
         public override bool DrawPortrait(SpriteBatch spriteBatch, Vector2 position, Vector2 size)
         {
-            Item item = this.DisplayItem;
-
-            // draw stackable object
-            if ((item as SObject)?.Stack > 1)
+            // get portrait item
+            Item item = this.CachedPortraitItem;
+            if (item == null)
             {
-                // remove stack number (doesn't play well with clipped content)
-                SObject obj = (SObject)item;
-                obj = new SObject(obj.ParentSheetIndex, 1, obj.IsRecipe, obj.Price, obj.Quality);
-                obj.bigCraftable.Value = obj.bigCraftable.Value;
-                obj.drawInMenu(spriteBatch, position, 1);
-                return true;
+                item = this.DisplayItem;
+                if (item is SObject original && original.Stack > 1)
+                {
+                    // remove stack number (doesn't play well with clipped content)
+                    SObject obj = new SObject(original.ParentSheetIndex, 1, original.IsRecipe, original.Price, original.Quality);
+                    obj.bigCraftable.Value = original.bigCraftable.Value;
+                    item = obj;
+                }
+                this.CachedPortraitItem = item;
             }
 
-            // draw generic item
+            // draw item
             item.drawInMenu(spriteBatch, position, 1);
             return true;
         }

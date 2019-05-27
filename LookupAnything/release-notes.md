@@ -11,6 +11,7 @@
 * Fixed seed growth time predictions not accounting for Agriculturist profession.
 * Fixed "you made -1 of these" field for some crafted items.
 * Fixed some missing/incorrect recipes.
+* Fixed incorrect subject image when looking up a bigcraftable item in your inventory.
 
 ## 1.21.2
 Released 06 April 2019.
