@@ -66,6 +66,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             this.Recipes = this
                 .GetRecipeEntries(this.GameHelper, recipes)
                 .OrderBy(entry => string.Join(", ", entry.Inputs.SelectMany(input => input.DisplayText)))
+                .ThenBy(entry => entry.Output.DisplayText)
                 .ToArray();
 
             // calculate column alignment
@@ -121,7 +122,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     EntryItem input = entry.Inputs[i];
 
                     // icon
-                    spriteBatch.DrawSpriteWithin(input.Sprite, position.X + leftOffset, position.Y + topOffset, iconSize, iconColor);
+                    if (input.Sprite != null)
+                        spriteBatch.DrawSpriteWithin(input.Sprite, position.X + leftOffset, position.Y + topOffset, iconSize, iconColor);
                     leftOffset += iconSize.X;
 
                     // name + count
@@ -146,7 +148,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     lineHeight = Math.Max(lineHeight, joinerSize.Y);
 
                     // icon
-                    spriteBatch.DrawSpriteWithin(entry.Output.Sprite, position.X + leftOffset, position.Y + topOffset, iconSize, iconColor);
+                    if (entry.Output.Sprite != null)
+                        spriteBatch.DrawSpriteWithin(entry.Output.Sprite, position.X + leftOffset, position.Y + topOffset, iconSize, iconColor);
                     leftOffset += iconSize.X;
 
                     // name + count + chance
@@ -169,17 +172,35 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="recipes">The recipe to list.</param>
         private IEnumerable<Entry> GetRecipeEntries(GameHelper gameHelper, IEnumerable<RecipeModel> recipes)
         {
-            foreach (RecipeModel originalRecipe in recipes)
+            foreach (RecipeModel recipe in recipes)
             {
-                foreach (RecipeModel recipe in this.ResolveCategories(originalRecipe))
+                // get inputs
+                List<EntryItem> inputs = new List<EntryItem>();
+                foreach (var inputPair in recipe.Ingredients)
                 {
-                    // get inputs
-                    List<EntryItem> inputs = new List<EntryItem>();
-                    Item mainInputItem = null;
-                    foreach (var inputPair in recipe.Ingredients)
+                    int id = inputPair.Key;
+                    int count = inputPair.Value;
+
+                    // category
+                    if (id < 0)
+                    {
+                        Item sampleInput = gameHelper.GetObjectsByCategory(id).FirstOrDefault();
+                        if (sampleInput == null)
+                            continue;
+
+                        string displayText = this.GetItemDisplayText(name: sampleInput.getCategoryName(), minCount: count, maxCount: count, chance: 100);
+                        inputs.Add(new EntryItem
+                        {
+                            Sprite = null,
+                            DisplayText = displayText,
+                            DisplayTextSize = Game1.smallFont.MeasureString(displayText)
+                        });
+                    }
+
+                    // item
+                    else
                     {
                         Item input = gameHelper.GetObjectBySpriteIndex(inputPair.Key);
-                        int count = inputPair.Value;
                         string displayText = this.GetItemDisplayText(name: input.DisplayName, minCount: count, maxCount: count, chance: 100);
                         inputs.Add(new EntryItem
                         {
@@ -187,87 +208,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                             DisplayText = displayText,
                             DisplayTextSize = Game1.smallFont.MeasureString(displayText)
                         });
-                        mainInputItem = input; // assume last input listed in the recipe is the variable input, if any
                     }
+                }
 
-                    // get output
-                    EntryItem output;
+                // get output
+                EntryItem output;
+                {
+                    Item outputItem = recipe.CreateItem(null);
+                    string displayText = this.GetItemDisplayText(name: outputItem.DisplayName, minCount: recipe.MinOutput, maxCount: recipe.MaxOutput, chance: recipe.OutputChance);
+                    output = new EntryItem
                     {
-                        Item outputItem = originalRecipe.CreateItem(mainInputItem);
-                        string displayText = this.GetItemDisplayText(name: outputItem.DisplayName, minCount: recipe.MinOutput, maxCount: recipe.MaxOutput, chance: recipe.OutputChance);
-                        output = new EntryItem
-                        {
-                            Sprite = gameHelper.GetSprite(outputItem),
-                            DisplayText = displayText,
-                            DisplayTextSize = Game1.smallFont.MeasureString(displayText)
-                        };
-                    }
-
-                    yield return new Entry
-                    {
-                        IsKnown = !originalRecipe.MustBeLearned || originalRecipe.KnowsRecipe(Game1.player),
-                        Inputs = inputs.ToArray(),
-                        Output = output
+                        Sprite = gameHelper.GetSprite(outputItem),
+                        DisplayText = displayText,
+                        DisplayTextSize = Game1.smallFont.MeasureString(displayText)
                     };
                 }
-            }
-        }
 
-        /// <summary>Get a list of specific-item recipes from a recipe which may contain category inputs.</summary>
-        /// <param name="recipe">The recipes to parse.</param>
-        private IEnumerable<RecipeModel> ResolveCategories(RecipeModel recipe)
-        {
-            // generate category => itemID map
-            IDictionary<int, int[]> itemMap = new Dictionary<int, int[]>();
-            foreach (int category in recipe.Ingredients.Keys)
-            {
-                if (category < 0 && !itemMap.ContainsKey(category))
+                yield return new Entry
                 {
-                    itemMap[category] = this.GameHelper
-                        .GetObjectsByCategory(category)
-                        .Select(p => p.ParentSheetIndex)
-                        .Except(recipe.ExceptIngredients)
-                        .ToArray();
-                }
-            }
-
-            // no changes needed
-            foreach (RecipeModel newRecipe in this.ResolveCategories(new[] { recipe }, itemMap))
-                yield return newRecipe;
-        }
-
-        /// <summary>Get a list of specific-item recipes from recipes which may contain category inputs.</summary>
-        /// <param name="recipes">The recipes to parse.</param>
-        /// <param name="itemMap">Maps reference item categories to a list of matching item IDs.</param>
-        private IEnumerable<RecipeModel> ResolveCategories(IEnumerable<RecipeModel> recipes, IDictionary<int, int[]> itemMap)
-        {
-            // no changes needed
-            if (!itemMap.Any())
-            {
-                foreach (RecipeModel recipe in recipes)
-                    yield return recipe;
-                yield break;
-            }
-
-            // dequeue next category
-            var firstPair = itemMap.First();
-            int category = firstPair.Key;
-            int[] itemIDs = firstPair.Value;
-            itemMap.Remove(category);
-
-            // resolve categories
-            foreach (RecipeModel recipe in recipes)
-            {
-                if (!recipe.Ingredients.TryGetValue(category, out int count))
-                    yield return recipe;
-
-                foreach (int itemID in itemIDs)
-                {
-                    var newRecipe = new RecipeModel(recipe);
-                    newRecipe.Ingredients.Remove(category);
-                    newRecipe.Ingredients[itemID] = count;
-                    yield return newRecipe;
-                }
+                    IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
+                    Inputs = inputs.ToArray(),
+                    Output = output
+                };
             }
         }
 

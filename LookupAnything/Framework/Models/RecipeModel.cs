@@ -61,7 +61,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="type">The recipe type.</param>
         /// <param name="displayType">The display name for the machine or building name for which the recipe applies.</param>
         /// <param name="ingredients">The items needed to craft the recipe (item ID => number needed).</param>
-        /// <param name="item">The item that's created by this recipe.</param>
+        /// <param name="item">The item that's created by this recipe, given an optional input.</param>
         /// <param name="mustBeLearned">Whether the recipe must be learned before it can be used.</param>
         /// <param name="isForMachine">Get whether this recipe is for the given machine.</param>
         /// <param name="exceptIngredients">The ingredients which can't be used in this recipe (typically exceptions for a category ingredient).</param>
@@ -132,7 +132,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         { }
 
         /// <summary>Create the item crafted by this recipe.</summary>
-        /// <param name="ingredient">The ingredient for which to create an item.</param>
+        /// <param name="ingredient">The optional ingredient for which to create an item.</param>
         public Item CreateItem(Item ingredient)
         {
             return this.Item(ingredient);

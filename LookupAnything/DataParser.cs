@@ -337,7 +337,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     type: RecipeType.MachineInput,
                     displayType: machine.DisplayName,
                     ingredients: entry.Ingredients,
-                    item: ingredient => this.CreateRecipeItem(ingredient.ParentSheetIndex, entry.Output),
+                    item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, entry.Output),
                     mustBeLearned: false,
                     exceptIngredients: entry.ExceptIngredients,
                     outputItemIndex: entry.Output,
@@ -357,7 +357,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     type: RecipeType.BuildingBlueprint,
                     displayType: building.displayName,
                     ingredients: entry.Ingredients,
-                    item: ingredient => this.CreateRecipeItem(ingredient.ParentSheetIndex, entry.Output),
+                    item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, entry.Output),
                     mustBeLearned: false,
                     outputItemIndex: entry.Output,
                     minOutput: entry.OutputCount ?? 1,
@@ -375,27 +375,30 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Create a custom recipe output.</summary>
         /// <param name="inputID">The input ingredient ID.</param>
         /// <param name="outputID">The output item ID.</param>
-        private SObject CreateRecipeItem(int inputID, int outputID)
+        private SObject CreateRecipeItem(int? inputID, int outputID)
         {
             SObject item = this.GameHelper.GetObjectBySpriteIndex(outputID);
-            switch (outputID)
+            if (inputID != null)
             {
-                case 342:
-                    item.preserve.Value = SObject.PreserveType.Pickle;
-                    item.preservedParentSheetIndex.Value = inputID;
-                    break;
-                case 344:
-                    item.preserve.Value = SObject.PreserveType.Jelly;
-                    item.preservedParentSheetIndex.Value = inputID;
-                    break;
-                case 348:
-                    item.preserve.Value = SObject.PreserveType.Wine;
-                    item.preservedParentSheetIndex.Value = inputID;
-                    break;
-                case 350:
-                    item.preserve.Value = SObject.PreserveType.Juice;
-                    item.preservedParentSheetIndex.Value = inputID;
-                    break;
+                switch (outputID)
+                {
+                    case 342:
+                        item.preserve.Value = SObject.PreserveType.Pickle;
+                        item.preservedParentSheetIndex.Value = inputID.Value;
+                        break;
+                    case 344:
+                        item.preserve.Value = SObject.PreserveType.Jelly;
+                        item.preservedParentSheetIndex.Value = inputID.Value;
+                        break;
+                    case 348:
+                        item.preserve.Value = SObject.PreserveType.Wine;
+                        item.preservedParentSheetIndex.Value = inputID.Value;
+                        break;
+                    case 350:
+                        item.preserve.Value = SObject.PreserveType.Juice;
+                        item.preservedParentSheetIndex.Value = inputID.Value;
+                        break;
+                }
             }
             return item;
         }
