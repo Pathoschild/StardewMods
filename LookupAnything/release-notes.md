@@ -5,14 +5,17 @@
 Released 26 November 2019.
 
 * Updated for Stardew Valley 1.4, including...
+  * per-player shipping bins;
   * new mechanics (clothing, dyeing, and tailoring);
+  * new recipes (Dinosaur Mayonnaise);
   * movie theater;
   * new farm map;
   * new 14-heart spouse events;
   * new social NPC profiles;
   * new Krobus relationship;
   * new Adventurer's Guild goals;
-  * pet water bowl and petting changes.
+  * pet water bowl and petting changes;
+  * chance of double output with higher-quality inputs for Cheese Press, Loom, and Mayonnaise Machine.
 * Added optional progression mode (only shows gift tastes for gifts you've already given).
 * Added save format version to save slot lookups.
 * Updated for compatibility with Json Assets 1.3.8.
