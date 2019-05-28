@@ -345,14 +345,32 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>A plain bush that doesn't grow anything.</c></summary>
             public static Translation PlainDescription() => L10n.Helper.Get("bush.description.plain");
 
+            /// <summary>A value like <c>Tea Bush</c>.</summary>
+            public static Translation TeaName() => L10n.Helper.Get("bush.name.tea");
+
+            /// <summary>A value like <c>A bush that grows tea leaves.</c></summary>
+            public static Translation TeaDescription() => L10n.Helper.Get("bush.description.tea");
+
+            /// <summary>A value like <c>Date planted</c>.</summary>
+            public static Translation DatePlanted() => L10n.Helper.Get("bush.date-planted");
+
+            /// <summary>A value like <c>Growth</c>.</summary>
+            public static Translation Growth() => L10n.Helper.Get("bush.growth");
+
             /// <summary>A value like <c>Next harvest</c>.</summary>
             public static Translation NextHarvest() => L10n.Helper.Get("bush.next-harvest");
 
             /****
             ** Values
             ****/
+            /// <summary>A value like <c>mature on {{date}}</c>.</summary>
+            public static Translation GrowthSummary(string date) => L10n.Helper.Get("bush.growth.summary", new { date });
+
             /// <summary>A value like <c>Provides salmonberries in spring 15 to 18, and blackberries in fall 8 to 11.</c>.</summary>
             public static Translation ScheduleBerry() => L10n.Helper.Get("bush.schedule.berry");
+
+            /// <summary>A value like <c>Provides tea leaves after the 22nd of spring, summer, fall, and (if in the greenhouse) winter.</c>.</summary>
+            public static Translation ScheduleTea() => L10n.Helper.Get("bush.schedule.tea");
         }
 
         /// <summary>Fruit tree lookup translations.</summary>

@@ -217,12 +217,19 @@
     // bush lookup labels
     "bush.name.berry": "Ягодный куст",
     "bush.name.plain": "Обычный куст",
+    "bush.name.tea": "Tea Bush", // TODO
     "bush.description.berry": "Куст, на котором растёт морошка или ежевика.",
     "bush.description.plain": "Куст, на котором ничего не растёт.",
+    "bush.description.Tea": "A bush that grows tea leaves.", // TODO
+    "bush.date-planted": "Date planted", // TODO
+    "bush.growth": "Growth", // TODO
     "bush.next-harvest": "Следующий сбор",
 
     // bush lookup values
+    // TODO
+    "bush.growth.summary": "вырастет {{date}}",
     "bush.schedule.berry": "20% шанса на сбор морошки, с 15-го по 18-ое число весны, а также на сбор ежевики, с 8-го по 11-ое число осени.",
+    "bush.schedule.tea": "Grows tea leaves from the 22nd of each season (except winter if not in the greenhouse).",
 
     // fruit tree lookup labels
     "fruit-tree.complaints": "Жалобы",

@@ -217,12 +217,18 @@
     // bush lookup labels
     "bush.name.berry": "Arbusto de bagas",
     "bush.name.plain": "Arbusto simples",
+    "bush.name.tea": "Tea Bush", // TODO
     "bush.description.berry": "Um arbusto que cresce amoras e amoras-silvestres.",
     "bush.description.plain": "Um arbusto simples que não cresce nada.",
+    "bush.description.Tea": "A bush that grows tea leaves.", // TODO
+    "bush.date-planted": "Date planted", // TODO
+    "bush.growth": "Growth", // TODO
     "bush.next-harvest": "Próxima colheita",
 
     // bush lookup values
+    "bush.growth.summary": "fica madura em {{date}}",
     "bush.schedule.berry": "20% de chance de dar: amora-silvestre, na primavera, entre os dias 15 e 18; amoras no outono, entre os dias 8 a 11.",
+    "bush.schedule.tea": "Grows tea leaves from the 22nd of each season (except winter if not in the greenhouse).", // TODO
 
     // fruit tree lookup labels
     "fruit-tree.complaints": "Reclamações",

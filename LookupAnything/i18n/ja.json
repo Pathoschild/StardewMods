@@ -217,12 +217,18 @@
     // bush lookup labels
     "bush.name.berry": "ベリーの茂み",
     "bush.name.plain": "ただの茂み",
+    "bush.name.tea": "Tea Bush", // TODO
     "bush.description.berry": "サーモンベリーとブラックベリーが実る茂み",
     "bush.description.plain": "何も実らないただの茂み",
+    "bush.description.Tea": "A bush that grows tea leaves.", // TODO
+    "bush.date-planted": "Date planted", // TODO
+    "bush.growth": "Growth", // TODO
     "bush.next-harvest": "次の収穫",
 
     // bush lookup values
+    "bush.growth.summary": "{{date}}に成熟", // TODO
     "bush.schedule.berry": "20%の確率で春15日-18日にサーモンベリーが, 秋8日-11日にブラックベリーが実る",
+    "bush.schedule.tea": "Grows tea leaves from the 22nd of each season (except winter if not in the greenhouse).", // TODO
 
     // fruit tree lookup labels
     "fruit-tree.complaints": "不満点",

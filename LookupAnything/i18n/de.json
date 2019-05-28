@@ -217,12 +217,18 @@
     // bush lookup labels
     "bush.name.berry": "Beerenbusch",
     "bush.name.plain": "Einfacher Busch",
+    "bush.name.tea": "Tea Bush", // TODO
     "bush.description.berry": "Ein Busch an dem Lachsbeeren und Brombeeren wachsen.",
     "bush.description.plain": "Ein einfacher Busch an dem nichts wächst.",
+    "bush.description.Tea": "A bush that grows tea leaves.", // TODO
+    "bush.date-planted": "Date planted", // TODO
+    "bush.growth": "Growth", // TODO
     "bush.next-harvest": "Nächste Ernte",
 
     // bush lookup values
+    "bush.growth.summary": "Ausgewachsen am {{date}}",
     "bush.schedule.berry": "20% Chance auf Lachsbeeren im Frühling 15-18 und Brombeeren im Herbst 8-11.",
+    "bush.schedule.tea": "Grows tea leaves from the 22nd of each season (except winter if not in the greenhouse).", // TODO
 
     // fruit tree lookup labels
     "fruit-tree.complaints": "Beschwerden",
