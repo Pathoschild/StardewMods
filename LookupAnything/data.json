@@ -534,6 +534,62 @@ You shouldn't change this file unless you know what you're doing.
             ],
             "Output": 413, // blue slime egg
             "OutputChance": 21
+        },
+
+        /* wood chipper */
+        {
+            "MachineID": 211,
+            "Ingredients": [
+                { "ID": 709 } // hardwood
+            ],
+            "Output": 724, // maple syrup
+            "OutputChance": 0.67
+        },
+        {
+            "MachineID": 211,
+            "Ingredients": [
+                { "ID": 709 } // hardwood
+            ],
+            "Output": 725, // oak resin
+            "OutputChance": 0.67
+        },
+        {
+            "MachineID": 211,
+            "Ingredients": [
+                { "ID": 709 } // hardwood
+            ],
+            "Output": 726, // pine tar
+            "OutputChance": 0.67
+        },
+        {
+            "MachineID": 211,
+            "Ingredients": [
+                { "ID": 709 } // hardwood
+            ],
+            "Output": 388, // wood
+            "MinOutput": 5,
+            "MaxOutput": 10,
+            "OutputChance": 88.2
+        },
+        {
+            "MachineID": 211,
+            "Ingredients": [
+                { "ID": 709 } // hardwood
+            ],
+            "Output": 388, // wood
+            "MinOutput": 15,
+            "MaxOutput": 20,
+            "OutputChance": 9.8
+        },
+
+        {
+            "MachineID": 211,
+            "Ingredients": [
+                { "ID": 169 } // driftwood
+            ],
+            "Output": 388, // wood
+            "MinOutput": 5,
+            "MaxOutput": 9
         }
     ],
 
@@ -821,12 +877,12 @@ You shouldn't change this file unless you know what you're doing.
             "RequiredKills": 100
         },
         {
-          "Targets": [ "Pepper Rex" ],
+            "Targets": [ "Pepper Rex" ],
             "RequiredKills": 50
         },
         {
-          "Targets": [ "Serpent" ],
-          "RequiredKills": 250
+            "Targets": [ "Serpent" ],
+            "RequiredKills": 250
         }
     ]
 }

@@ -135,6 +135,8 @@ namespace Pathoschild.Stardew.Automate.Framework
                 if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrainFeature) && terrainFeature is Tree tree)
                     return new TapperMachine(obj, location, tile, tree.treeType.Value);
             }
+            if (obj is WoodChipper woodChipper)
+                return new WoodChipperMachine(woodChipper, location, tile);
             if (obj.name == "Worm Bin")
                 return new WormBinMachine(obj, location, tile);
 

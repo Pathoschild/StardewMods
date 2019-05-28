@@ -4,7 +4,10 @@
 ## 1.14
 Released 26 November 2019.
 
-* Updated for Stardew Valley 1.4, including new machine recipes.
+* Updated for Stardew Valley 1.4, including...
+  * new wood chipper;
+  * new dinosaur mayonnaise recipe;
+  * chance of double output with higher quality items for Cheese Press and Loom.
 * Fixed auto-grabbers not showing empty sprite when emptied automatically.
 
 ## 1.13.2

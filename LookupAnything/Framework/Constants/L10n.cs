@@ -49,7 +49,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>{{percent}}%</c>.</summary>
             /// <param name="percent">The percentage chance.</param>
-            public static Translation Percent(int percent) => L10n.Helper.Get("generic.percent", new { percent });
+            public static Translation Percent(decimal percent) => L10n.Helper.Get("generic.percent", new { percent });
 
             /// <summary>A value like <c>{{percent}}% chance of {{label}}</c>.</summary>
             /// <param name="percent">The percentage chance.</param>
