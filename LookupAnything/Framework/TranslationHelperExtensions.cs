@@ -61,7 +61,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         {
             if (withYear)
             {
-                return L10n.Generic.Date(
+                return L10n.Generic.DateWithYear(
                     seasonNumber: Utility.getSeasonNumber(date.Season),
                     seasonName: Utility.getSeasonNameFromNumber(Utility.getSeasonNumber(date.Season)),
                     dayNumber: date.Day,
@@ -70,7 +70,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             }
             else
             {
-                return L10n.Generic.DateWithYear(
+                return L10n.Generic.Date(
                     seasonNumber: Utility.getSeasonNumber(date.Season),
                     seasonName: Utility.getSeasonNameFromNumber(Utility.getSeasonNumber(date.Season)),
                     dayNumber: date.Day,
@@ -127,7 +127,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case Color color:
                     return $"(r:{color.R} g:{color.G} b:{color.B} a:{color.A})";
                 case SDate date:
-                    return translations.Stringify(date, withYear: false);
+                    return translations.Stringify(date, withYear: date.Year != Game1.year);
                 case TimeSpan span:
                     {
                         List<string> parts = new List<string>();
