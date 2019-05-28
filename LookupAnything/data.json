@@ -278,6 +278,13 @@ You shouldn't change this file unless you know what you're doing.
         {
             "MachineID": 12,
             "Ingredients": [
+                { "ID": 815 } // tea leaves
+            ],
+            "Output": 614 // green tea
+        },
+        {
+            "MachineID": 12,
+            "Ingredients": [
                 { "ID": 340 } // honey
             ],
             "Output": 459 // mead

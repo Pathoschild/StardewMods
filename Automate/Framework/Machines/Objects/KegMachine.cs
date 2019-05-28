@@ -30,6 +30,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 minutes: 120
             ),
 
+            // tea leaves => green tea
+            new Recipe(
+                input: 815,
+                inputCount: 1,
+                output: input => new Object(Vector2.Zero, 614, "Green Tea", false, true, false, false) { name = "Green Tea" },
+                minutes: 180
+            ),
+
             // wheat => beer
             new Recipe(
                 input: 262,
