@@ -141,33 +141,41 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     yield return new CheckboxListField(this.GameHelper, L10n.Building.Upgrades(), upgradeLevelSummary);
             }
 
-            // silo hay
-            if (built && building.buildingType.Value == "Silo")
+            // specific buildings
+            if (built)
             {
-                Farm farm = Game1.getFarm();
-                int siloCount = Utility.numSilos();
-                int hayCount = farm.piecesOfHay.Value;
-                int maxHay = Math.Max(farm.piecesOfHay.Value, siloCount * 240);
-                yield return new GenericField(
-                    this.GameHelper,
-                    L10n.Building.StoredHay(),
-                    siloCount == 1
-                        ? L10n.Building.StoredHaySummaryOneSilo(hayCount: hayCount, maxHay: maxHay)
-                        : L10n.Building.StoredHaySummaryMultipleSilos(hayCount: hayCount, maxHay: maxHay, siloCount: siloCount)
-                );
-            }
+                switch (building)
+                {
+                    // Junimo hut
+                    case JunimoHut hut:
+                        yield return new GenericField(this.GameHelper, L10n.Building.JunimoHarvestingEnabled(), text.Stringify(!hut.noHarvest.Value));
+                        yield return new ItemIconListField(this.GameHelper, L10n.Building.OutputReady(), hut.output.Value?.items, showStackSize: true);
+                        break;
 
-            if (built && building is JunimoHut hut)
-            {
-                yield return new GenericField(this.GameHelper, L10n.Building.JunimoHarvestingEnabled(), text.Stringify(!hut.noHarvest.Value));
-                yield return new ItemIconListField(this.GameHelper, L10n.Building.OutputReady(), hut.output.Value?.items, showStackSize: true);
-            }
+                    // mill
+                    case Mill mill:
+                        yield return new ItemIconListField(this.GameHelper, L10n.Building.OutputProcessing(), mill.input.Value?.items, showStackSize: true);
+                        yield return new ItemIconListField(this.GameHelper, L10n.Building.OutputReady(), mill.output.Value?.items, showStackSize: true);
+                        break;
 
-            // mill output
-            if (built && building is Mill mill)
-            {
-                yield return new ItemIconListField(this.GameHelper, L10n.Building.OutputProcessing(), mill.input.Value?.items, showStackSize: true);
-                yield return new ItemIconListField(this.GameHelper, L10n.Building.OutputReady(), mill.output.Value?.items, showStackSize: true);
+                    // silo
+                    case Building _ when building.buildingType.Value == "Silo":
+                        {
+                            // hay summary
+                            Farm farm = Game1.getFarm();
+                            int siloCount = Utility.numSilos();
+                            int hayCount = farm.piecesOfHay.Value;
+                            int maxHay = Math.Max(farm.piecesOfHay.Value, siloCount * 240);
+                            yield return new GenericField(
+                                this.GameHelper,
+                                L10n.Building.StoredHay(),
+                                siloCount == 1
+                                    ? L10n.Building.StoredHaySummaryOneSilo(hayCount: hayCount, maxHay: maxHay)
+                                    : L10n.Building.StoredHaySummaryMultipleSilos(hayCount: hayCount, maxHay: maxHay, siloCount: siloCount)
+                            );
+                        }
+                        break;
+                }
             }
         }
 
