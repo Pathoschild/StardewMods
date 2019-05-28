@@ -123,22 +123,48 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 if (!this.GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
                     continue;
 
-                if (feature is HoeDirt dirt && dirt.crop != null)
-                    yield return new CropTarget(this.GameHelper, dirt, spriteTile, this.Reflection);
-                else if (feature is FruitTree fruitTree)
+                switch (feature)
                 {
-                    if (this.Reflection.GetField<float>(feature, "alpha").GetValue() < 0.8f)
-                        continue; // ignore when tree is faded out (so player can lookup things behind it)
-                    yield return new FruitTreeTarget(this.GameHelper, fruitTree, spriteTile);
+                    case Bush bush: // planted bush
+                        yield return new BushTarget(this.GameHelper, bush, this.Reflection);
+                        break;
+
+                    case HoeDirt dirt when dirt.crop != null:
+                        yield return new CropTarget(this.GameHelper, dirt, spriteTile, this.Reflection);
+                        break;
+
+                    case FruitTree fruitTree:
+                        if (this.Reflection.GetField<float>(fruitTree, "alpha").GetValue() < 0.8f)
+                            continue; // ignore when tree is faded out (so player can lookup things behind it)
+                        yield return new FruitTreeTarget(this.GameHelper, fruitTree, spriteTile);
+                        break;
+
+                    case Tree wildTree:
+                        if (this.Reflection.GetField<float>(feature, "alpha").GetValue() < 0.8f)
+                            continue; // ignore when tree is faded out (so player can lookup things behind it)
+                        yield return new TreeTarget(this.GameHelper, wildTree, spriteTile, this.Reflection);
+                        break;
+
+                    default:
+                        yield return new UnknownTarget(this.GameHelper, feature, spriteTile);
+                        break;
                 }
-                else if (feature is Tree wildTree)
+            }
+
+            // large terrain features
+            foreach (LargeTerrainFeature feature in location.largeTerrainFeatures)
+            {
+                Vector2 spriteTile = feature.tilePosition.Value;
+
+                if (!this.GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
+                    continue;
+
+                switch (feature)
                 {
-                    if (this.Reflection.GetField<float>(feature, "alpha").GetValue() < 0.8f)
-                        continue; // ignore when tree is faded out (so player can lookup things behind it)
-                    yield return new TreeTarget(this.GameHelper, wildTree, spriteTile, this.Reflection);
+                    case Bush bush: // wild bush
+                        yield return new BushTarget(this.GameHelper, bush, this.Reflection);
+                        break;
                 }
-                else
-                    yield return new UnknownTarget(this.GameHelper, feature, spriteTile);
             }
 
             // players
@@ -289,6 +315,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // building
                 case TargetType.Building:
                     return new BuildingSubject(this.GameHelper, this.Metadata, target.GetValue<Building>(), target.GetSpritesheetArea(), this.Translations, this.Reflection);
+
+                case TargetType.Bush:
+                    return new BushSubject(this.GameHelper, target.GetValue<Bush>(), this.Translations);
 
                 // tile
                 case TargetType.Tile:

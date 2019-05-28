@@ -31,6 +31,7 @@
 
   // types
   "type.building": "Gebäude",
+  "type.bush": "Bush", // TODO
   "type.fruit-tree": "Fruchtbaum",
   "type.map-tile": "Kartenkachel",
   "type.monster": "Monster",
@@ -210,6 +211,18 @@
   "building.upgrades.coop.1": "bis zu 8 Tiere, fügt Brutkasten, Dinosaurier und Enten hinzu",
   "building.upgrades.coop.2": "bis zu 12 Tiere, fügt automatische Fütterung und Hasen hinzu",
   "building.water-trough.summary": "{{filled}} von {{max}} Wassertrögen gefüllt",
+
+  // bush lookup labels
+  // TODO
+  "bush.name.berry": "Berry Bush",
+  "bush.name.plain": "Plain Bush",
+  "bush.description.berry": "A bush that grows salmonberries and blackberries.",
+  "bush.description.plain": "A plain bush that doesn't grow anything.",
+  "bush.next-harvest": "Next harvest",
+
+  // bush lookup values
+  // TODO
+  "bush.schedule.berry": "20% chance of salmonberries in spring 15-18 and blackberries in fall 8-11.",
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "Beschwerden",

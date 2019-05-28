@@ -31,6 +31,7 @@
 
   // types
   "type.building": "Постройка",
+  "type.bush": "Bush", // TODO
   "type.fruit-tree": "Фруктовое дерево",
   "type.map-tile": "Тайл",
   "type.monster": "Монстр",
@@ -210,6 +211,18 @@
   "building.upgrades.coop.1": "до 8 животных; добавляться: инкубатор, динозавры и утки",
   "building.upgrades.coop.2": "до 12 животных; добавляться: система подачи корма and кролики",
   "building.water-trough.summary": "{{filled}} из {{max}} корыт заполнено",
+
+  // bush lookup labels
+  // TODO
+  "bush.name.berry": "Berry Bush",
+  "bush.name.plain": "Plain Bush",
+  "bush.description.berry": "A bush that grows salmonberries and blackberries.",
+  "bush.description.plain": "A plain bush that doesn't grow anything.",
+  "bush.next-harvest": "Next harvest",
+
+  // bush lookup values
+  // TODO
+  "bush.schedule.berry": "20% chance of salmonberries in spring 15-18 and blackberries in fall 8-11.",
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "Жалобы",

@@ -55,6 +55,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         TerrainFeature,
 
         /****
+        ** Terrain features
+        ****/
+        /// <summary>A bush.</summary>
+        Bush,
+
+        /****
         ** Other
         ****/
         /// <summary>A constructed building.</summary>

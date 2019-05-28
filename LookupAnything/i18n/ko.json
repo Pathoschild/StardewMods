@@ -31,6 +31,7 @@
 
   // types 유형
   "type.building": "건물",
+  "type.bush": "Bush", // TODO
   "type.fruit-tree": "과일 나무",
   "type.map-tile": "맵 타일",
   "type.monster": "몬스터",
@@ -210,6 +211,18 @@
   "building.upgrades.coop.1": "최대 8마리의 동물 수용; 알 부화기 추가, 공룡 및 오리 추가",
   "building.upgrades.coop.2": "최대 12마리의 동물 수용; 먹이통 자동화가 가능해지며 토끼를 추가",
   "building.water-trough.summary": "최대 {{max}}칸 중 {{filled}}칸의 물통을 채움",
+
+  // bush lookup labels
+  // TODO
+  "bush.name.berry": "Berry Bush",
+  "bush.name.plain": "Plain Bush",
+  "bush.description.berry": "A bush that grows salmonberries and blackberries.",
+  "bush.description.plain": "A plain bush that doesn't grow anything.",
+  "bush.next-harvest": "Next harvest",
+
+  // bush lookup values
+  // TODO
+  "bush.schedule.berry": "20% chance of salmonberries in spring 15-18 and blackberries in fall 8-11.",
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "불만",

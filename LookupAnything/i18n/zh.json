@@ -31,6 +31,7 @@
 
   // types
   "type.building": "建筑",
+  "type.bush": "Bush", // TODO
   "type.fruit-tree": "果树",
   "type.map-tile": "地格",
   "type.monster": "怪物",
@@ -210,6 +211,18 @@
   "building.upgrades.coop.1": "上升至 8 只动物，解锁孵化器,恐龙和鸭",
   "building.upgrades.coop.2": "上升至 12 只动物，解锁自动喂食和兔子",
   "building.water-trough.summary": "{{filled}} 之 {{max}} 水槽已填充",
+
+  // bush lookup labels
+  // TODO
+  "bush.name.berry": "Berry Bush",
+  "bush.name.plain": "Plain Bush",
+  "bush.description.berry": "A bush that grows salmonberries and blackberries.",
+  "bush.description.plain": "A plain bush that doesn't grow anything.",
+  "bush.next-harvest": "Next harvest",
+
+  // bush lookup values
+  // TODO
+  "bush.schedule.berry": "20% chance of salmonberries in spring 15-18 and blackberries in fall 8-11.",
 
   // fruit tree lookup labels
   "fruit-tree.complaints": "问题",

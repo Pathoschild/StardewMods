@@ -112,6 +112,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Building</c>.</summary>
             public static Translation Building() => L10n.Helper.Get("type.building");
 
+            /// <summary>A value like <c>Bush</c>.</summary>
+            public static Translation Bush() => L10n.Helper.Get("type.bush");
+
             /// <summary>A value like <c>{{fruitName}} Tree</c>.</summary>
             public static Translation FruitTree() => L10n.Helper.Get("type.fruit-tree");
 
@@ -319,6 +322,34 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>{{filled}} of {{max}} water troughs filled</c>.</summary>
             public static Translation WaterTroughSummary(int filled, int max) => L10n.Helper.Get("building.water-trough.summary", new { filled, max });
+        }
+
+        /// <summary>Bush lookup translations.</summary>
+        public static class Bush
+        {
+            /****
+            ** Labels
+            ****/
+            /// <summary>A value like <c>Berry Bush</c>.</summary>
+            public static Translation BerryName() => L10n.Helper.Get("bush.name.berry");
+
+            /// <summary>A value like <c>A bush that grows salmonberries and blackberries.</c></summary>
+            public static Translation BerryDescription() => L10n.Helper.Get("bush.description.berry");
+
+            /// <summary>A value like <c>Plain Bush</c>.</summary>
+            public static Translation PlainName() => L10n.Helper.Get("bush.name.plain");
+
+            /// <summary>A value like <c>A plain bush that doesn't grow anything.</c></summary>
+            public static Translation PlainDescription() => L10n.Helper.Get("bush.description.plain");
+
+            /// <summary>A value like <c>Next harvest</c>.</summary>
+            public static Translation NextHarvest() => L10n.Helper.Get("bush.next-harvest");
+
+            /****
+            ** Values
+            ****/
+            /// <summary>A value like <c>Provides salmonberries in spring 15 to 18, and blackberries in fall 8 to 11.</c>.</summary>
+            public static Translation ScheduleBerry() => L10n.Helper.Get("bush.schedule.berry");
         }
 
         /// <summary>Fruit tree lookup translations.</summary>
