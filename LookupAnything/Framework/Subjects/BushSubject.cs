@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Netcode;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
@@ -21,6 +22,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>The underlying target.</summary>
         private readonly Bush Target;
 
+        /// <summary>Simplifies access to private game code.</summary>
+        private readonly IReflectionHelper Reflection;
+
+        /// <summary>The bush texture.</summary>
+        private readonly Lazy<Texture2D> Texture;
+
 
         /*********
         ** Public methods
@@ -29,10 +36,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="bush">The lookup target.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public BushSubject(GameHelper gameHelper, Bush bush, ITranslationHelper translations)
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        public BushSubject(GameHelper gameHelper, Bush bush, ITranslationHelper translations, IReflectionHelper reflection)
             : base(gameHelper, translations)
         {
             this.Target = bush;
+            this.Reflection = reflection;
+            this.Texture = this.Reflection.GetField<Lazy<Texture2D>>(typeof(Bush), "texture").GetValue();
+
             if (this.IsBerryBush(bush))
                 this.Initialise(L10n.Bush.BerryName(), L10n.Bush.BerryDescription(), L10n.Types.Bush());
             else
@@ -83,7 +94,29 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <returns>Returns <c>true</c> if a portrait was drawn, else <c>false</c>.</returns>
         public override bool DrawPortrait(SpriteBatch spriteBatch, Vector2 position, Vector2 size)
         {
-            this.Target.drawInMenu(spriteBatch, position, Vector2.Zero, 1, 1);
+            Bush bush = this.Target;
+
+            // get source info
+            Rectangle sourceArea = this.Reflection.GetField<NetRectangle>(bush, "sourceRect").GetValue().Value;
+            Point spriteSize = new Point(sourceArea.Width * Game1.pixelZoom, sourceArea.Height * Game1.pixelZoom);
+            SpriteEffects spriteEffects = bush.flipped.Value ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+
+            // calculate target area
+            float scale = Math.Min(size.X / spriteSize.X, size.Y / spriteSize.Y);
+            Point targetSize = new Point((int)(spriteSize.X * scale), (int)(spriteSize.Y * scale));
+            Vector2 offset = new Vector2(size.X - targetSize.X, size.Y - targetSize.Y) / 2;
+
+            // draw portrait
+            spriteBatch.Draw(
+                texture: this.Texture.Value,
+                destinationRectangle: new Rectangle((int)(position.X + offset.X), (int)(position.Y + offset.Y), targetSize.X, targetSize.Y),
+                sourceRectangle: sourceArea,
+                color: Color.White,
+                rotation: 0,
+                origin: Vector2.Zero,
+                effects: spriteEffects,
+                layerDepth: 0
+            );
             return true;
         }
 
