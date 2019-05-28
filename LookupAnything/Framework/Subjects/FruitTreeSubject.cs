@@ -72,11 +72,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 SDate dayOfMaturity = SDate.Now().AddDays(tree.daysUntilMature.Value);
                 string grownOnDateText = L10n.FruitTree.GrowthSummary(date: this.Stringify(dayOfMaturity));
-                string daysUntilGrownText = this.Text.GetPlural(tree.daysUntilMature.Value, L10n.Generic.Tomorrow(), L10n.Generic.InXDays(count: tree.daysUntilMature.Value));
-                string growthText = $"{grownOnDateText} ({daysUntilGrownText})";
 
                 yield return new GenericField(this.GameHelper, L10n.FruitTree.NextFruit(), L10n.FruitTree.NextFruitTooYoung());
-                yield return new GenericField(this.GameHelper, L10n.FruitTree.Growth(), growthText);
+                yield return new GenericField(this.GameHelper, L10n.FruitTree.Growth(), $"{grownOnDateText} ({this.GetRelativeDateStr(dayOfMaturity)})");
                 if (this.HasAdjacentObjects(this.Tile))
                     yield return new GenericField(this.GameHelper, L10n.FruitTree.Complaints(), L10n.FruitTree.ComplaintsAdjacentObjects());
             }
@@ -110,7 +108,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                             else
                                 line = $"-{L10n.FruitTree.QualityOnDate(quality: quality, date: this.Text.Stringify(date, withYear: true))}";
 
-                            line += $" ({this.Text.GetPlural(daysLeft, L10n.Generic.Tomorrow(), L10n.Generic.InXDays(count: daysLeft))})";
+                            line += $" ({this.GetRelativeDateStr(daysLeft)})";
 
                             return line;
                         })

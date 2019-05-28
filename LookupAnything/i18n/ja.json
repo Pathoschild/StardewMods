@@ -6,6 +6,11 @@
   "generic.date": "{{seasonName}} {{dayNumber}}日",
   "generic.date-with-year": "{{year}}年目 {{seasonName}} {{dayNumber}}日",
 
+  // date names
+  "generic.now": "今",
+  "generic.tomorrow": "明日",
+  "generic.yesterday": "yesterday", // TODO
+
   // generic field values
   "generic.percent": "{{percent}}%",
   "generic.percent-chance-of": "{{percent}}% のチャンス: {{label}}",
@@ -19,7 +24,7 @@
   "generic.hours": "{{count}}時間",
   "generic.days": "{{count}}日",
   "generic.in-x-days": "{{count}}日後",
-  "generic.tomorrow": "明日",
+  "generic.x-days-ago": "{{count}} days ago", // TODO
   "generic.price": "{{price}}G",
   "generic.price-for-quality": "{{price}}G ({{quality}})",
   "generic.price-for-stack": "{{price}}g (スタック:{{count}})",
@@ -240,7 +245,6 @@
   "crop.summary.harvest-multi": "{{daysToFirstHarvest}}後ののち{{daysToNextHarvests}}日毎に収穫可能",
   "crop.summary.seasons": "{{seasons}}に成長",
   "crop.summary.sells-for": "{{price}}Gで売れる",
-  "crop.harvest.now": "今",
   "crop.harvest.too-late": "次の収穫には遅すぎる ({{date}}になる)",
 
   // item lookup labels

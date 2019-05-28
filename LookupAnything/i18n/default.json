@@ -6,6 +6,11 @@
   "generic.date": "{{seasonName}} {{dayNumber}}",
   "generic.date-with-year": "{{seasonName}} {{dayNumber}} in year {{year}}",
 
+  // date names
+  "generic.now": "now",
+  "generic.tomorrow": "tomorrow",
+  "generic.yesterday": "yesterday",
+
   // generic field values
   "generic.percent": "{{percent}}%",
   "generic.percent-chance-of": "{{percent}}% chance of {{label}}",
@@ -19,7 +24,7 @@
   "generic.hours": "{{count}} hours",
   "generic.days": "{{count}} days",
   "generic.in-x-days": "in {{count}} days",
-  "generic.tomorrow": "tomorrow",
+  "generic.x-days-ago": "{{count}} days ago",
   "generic.price": "{{price}}g",
   "generic.price-for-quality": "{{price}}g ({{quality}})",
   "generic.price-for-stack": "{{price}}g for stack of {{count}}",
@@ -238,7 +243,6 @@
   "crop.summary.harvest-multi": "harvest after {{daysToFirstHarvest}} days, then every {{daysToNextHarvests}} days",
   "crop.summary.seasons": "grows in {{seasons}}",
   "crop.summary.sells-for": "sells for {{price}}",
-  "crop.harvest.now": "now",
   "crop.harvest.too-late": "too late in the season for the next harvest (would be on {{date}})",
 
   // item lookup labels

@@ -55,7 +55,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 : L10n.Tree.StagePartial(stageName: L10n.For(stage), step: (int)stage, max: (int)WildTreeGrowthStage.Tree)
             );
 
-            // get growth scheduler
+            // get growth schedule
             if (!isFullyGrown)
             {
                 string label = L10n.Tree.NextGrowth();

@@ -6,6 +6,11 @@
   "generic.date": "{{seasonName}} {{dayNumber}}일",
   "generic.date-with-year": "{{year}}년, {{seasonName}} {{dayNumber}}일",
 
+  // date names
+  "generic.now": "지금 수확 가능",
+  "generic.tomorrow": "내일",
+  "generic.yesterday": "yesterday", // TODO
+
   // generic field values 기본적 필드 값들
   "generic.percent": "{{percent}}%",
   "generic.percent-chance-of": "{{percent}}%의 확률로 {{label}}",
@@ -19,7 +24,7 @@
   "generic.hours": "{{count}} 시간",
   "generic.days": "{{count}} 일",
   "generic.in-x-days": "{{count}}일 남음",
-  "generic.tomorrow": "내일",
+  "generic.x-days-ago": "{{count}} days ago", // TODO
   "generic.price": "{{price}}g",
   "generic.price-for-quality": "{{price}}g ({{quality}})",
   "generic.price-for-stack": "{{count}}개를 묶음 판매 시 {{price}}G",
@@ -238,7 +243,6 @@
   "crop.summary.harvest-multi": "{{daysToFirstHarvest}}일 후에 수확 가능, 그 후 매 {{daysToNextHarvests}}일마다 주기적 수확 가능.",
   "crop.summary.seasons": "{{seasons}}에 자람",
   "crop.summary.sells-for": "판매가격: {{price}}",
-  "crop.harvest.now": "지금 수확 가능",
   "crop.harvest.too-late": "작물을 수확하기엔 너무 늦은 계절이다 (다음 수확까지 {{date}}일 걸림)",
 
   // item lookup labels

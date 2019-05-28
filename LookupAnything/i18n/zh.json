@@ -6,6 +6,11 @@
   "generic.date": "{{seasonName}}{{dayNumber}}日",
   "generic.date-with-year": "第{{year}}年{{seasonName}}{{dayNumber}}日",
 
+  // date names
+  "generic.now": "现在",
+  "generic.tomorrow": "明天",
+  "generic.yesterday": "yesterday", // TODO
+
   // generic field values
   "generic.percent": "{{percent}}%",
   "generic.percent-chance-of": "{{percent}}%几率{{label}}",
@@ -19,7 +24,7 @@
   "generic.hours": "{{count}}小时",
   "generic.days": "{{count}}天",
   "generic.in-x-days": "在{{count}}天内",
-  "generic.tomorrow": "明天",
+  "generic.x-days-ago": "{{count}} days ago", // TODO
   "generic.price": "{{price}}g",
   "generic.price-for-quality": "{{price}}g({{quality}})",
   "generic.price-for-stack": "{{count}}个，总共价值{{price}}g",
@@ -238,7 +243,6 @@
   "crop.summary.harvest-multi": "{{daysToFirstHarvest}}天后收获，之后每隔{{daysToNextHarvests}}天收获一次",
   "crop.summary.seasons": "在{{seasons}}生长",
   "crop.summary.sells-for": "以{{price}}出售",
-  "crop.harvest.now": "现在",
   "crop.harvest.too-late": "下次收获超出本季(下次收获将在{{date}})",
 
   // item lookup labels

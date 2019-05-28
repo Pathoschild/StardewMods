@@ -362,16 +362,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 // get next harvest
                 SDate nextHarvest = data.GetNextHarvest();
-                int daysToNextHarvest = nextHarvest.DaysSinceStart - SDate.Now().DaysSinceStart;
 
                 // generate field
                 string summary;
                 if (data.CanHarvestNow)
-                    summary = L10n.Crop.HarvestNow();
+                    summary = L10n.Generic.Now();
                 else if (!Game1.currentLocation.IsGreenhouse && !data.Seasons.Contains(nextHarvest.Season))
                     summary = L10n.Crop.HarvestTooLate(date: this.Stringify(nextHarvest));
                 else
-                    summary = $"{this.Stringify(nextHarvest)} ({this.Text.GetPlural(daysToNextHarvest, L10n.Generic.Tomorrow(), L10n.Generic.InXDays(count: daysToNextHarvest))})";
+                    summary = $"{this.Stringify(nextHarvest)} ({this.GetRelativeDateStr(nextHarvest)})";
 
                 yield return new GenericField(this.GameHelper, L10n.Crop.Harvest(), summary);
             }

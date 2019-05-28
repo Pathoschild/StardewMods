@@ -6,6 +6,11 @@
   "generic.date": "{{seasonName}} {{dayNumber}}",
   "generic.date-with-year": "{{seasonName}} {{dayNumber}} в году {{year}}",
 
+  // date names
+  "generic.now": "сейчас",
+  "generic.tomorrow": "завтра",
+  "generic.yesterday": "yesterday", // TODO
+
   // generic field values
   "generic.percent": "{{percent}}%",
   "generic.percent-chance-of": "{{percent}}% шанс для {{label}}",
@@ -19,7 +24,7 @@
   "generic.hours": "{{count}} ч.",
   "generic.days": "{{count}} дн.",
   "generic.in-x-days": "через {{count}} дн.",
-  "generic.tomorrow": "завтра",
+  "generic.x-days-ago": "{{count}} days ago", // TODO
   "generic.price": "{{price}}з.",
   "generic.price-for-quality": "{{price}}з. ({{quality}})",
   "generic.price-for-stack": "{{price}}з. за пачку из {{count}} шт.",
@@ -238,7 +243,6 @@
   "crop.summary.harvest-multi": "урожай через {{daysToFirstHarvest}} дн., затем каждые {{daysToNextHarvests}} дн.",
   "crop.summary.seasons": "сезон роста - {{seasons}}",
   "crop.summary.sells-for": "продается за {{price}}",
-  "crop.harvest.now": "сейчас",
   "crop.harvest.too-late": "слишком поздно в этом сезоне для следующего сбора (урожай {{date}})",
 
   // item lookup labels

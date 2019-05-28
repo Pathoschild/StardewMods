@@ -38,6 +38,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <param name="year">The year.</param>
             public static Translation DateWithYear(string seasonName, int seasonNumber, int dayNumber, int year) => L10n.Helper.Get("generic.date-with-year", new { seasonName, seasonNumber, dayNumber, year });
 
+            /// <summary>A value like <c>now</c>.</summary>
+            public static Translation Now() => L10n.Helper.Get("generic.now");
+
+            /// <summary>A value like <c>tomorrow</c>.</summary>
+            public static Translation Tomorrow() => L10n.Helper.Get("generic.tomorrow");
+
+            /// <summary>A value like <c>yesterday</c>.</summary>
+            public static Translation Yesterday() => L10n.Helper.Get("generic.yesterday");
+
             /// <summary>A value like <c>{{percent}}%</c>.</summary>
             /// <param name="percent">The percentage chance.</param>
             public static Translation Percent(int percent) => L10n.Helper.Get("generic.percent", new { percent });
@@ -84,8 +93,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>in {{count}} days</c>.</summary>
             public static Translation InXDays(int count) => L10n.Helper.Get("generic.in-x-days", new { count });
 
-            /// <summary>A value like <c>tomorrow</c>.</summary>
-            public static Translation Tomorrow() => L10n.Helper.Get("generic.tomorrow");
+            /// <summary>A value like <c>{{count}} days ago</c>.</summary>
+            public static Translation XDaysAgo(int count) => L10n.Helper.Get("generic.x-days-ago", new { count });
 
             /// <summary>A value like <c>{{price}}g</c>.</summary>
             public static Translation Price(int price) => L10n.Helper.Get("generic.price", new { price });
@@ -405,9 +414,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>sells for {{price}}</c>.</summary>
             public static Translation SummarySellsFor(string price) => L10n.Helper.Get("crop.summary.sells-for", new { price });
-
-            /// <summary>A value like <c>now</c>.</summary>
-            public static Translation HarvestNow() => L10n.Helper.Get("crop.harvest.now");
 
             /// <summary>A value like <c>too late in the season for the next harvest (would be on {{date}})</c>.</summary>
             public static Translation HarvestTooLate(string date) => L10n.Helper.Get("crop.harvest.too-late", new { date });

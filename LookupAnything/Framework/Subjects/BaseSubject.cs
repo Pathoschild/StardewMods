@@ -4,9 +4,11 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 {
@@ -133,6 +135,35 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         protected string Stringify(object value)
         {
             return this.Text.Stringify(value);
+        }
+
+        /// <summary>Get a relative date value like 'tomorrow' or 'in 5 days'.</summary>
+        /// <param name="date">The date to represent.</param>
+        protected string GetRelativeDateStr(SDate date)
+        {
+            return this.GetRelativeDateStr(date.DaysSinceStart - SDate.Now().DaysSinceStart);
+        }
+
+        /// <summary>Get a relative date value like 'tomorrow' or 'in 5 days'.</summary>
+        /// <param name="days">The day offset.</param>
+        protected string GetRelativeDateStr(int days)
+        {
+            switch (days)
+            {
+                case -1:
+                    return L10n.Generic.Yesterday();
+
+                case 0:
+                    return L10n.Generic.Now();
+
+                case 1:
+                    return L10n.Generic.Tomorrow();
+
+                default:
+                    if (days > 0)
+                        return L10n.Generic.InXDays(count: days);
+                    return L10n.Generic.XDaysAgo(count: -days);
+            }
         }
 
         /// <summary>Get a human-readable value for a debug value.</summary>
