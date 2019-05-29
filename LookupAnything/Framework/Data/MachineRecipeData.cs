@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         public int MachineID { get; set; }
 
         /// <summary>The items needed to craft the recipe (item ID => number needed).</summary>
-        public IDictionary<int, int> Ingredients { get; set; }
+        public MachineRecipeIngredientData[] Ingredients { get; set; }
 
         /// <summary>The ingredients which can't be used in this recipe (typically exceptions for a category ingredient).</summary>
         public int[] ExceptIngredients { get; set; }

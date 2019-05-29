@@ -99,20 +99,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         *********/
         /// <summary>Get the recipe entries.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-        /// <param name="ingredient">The ingredient item.</param>
+        /// <param name="inputItem">The input ingredient item.</param>
         /// <param name="recipes">The recipe to list.</param>
-        private IEnumerable<Entry> GetRecipeEntries(GameHelper gameHelper, Item ingredient, IEnumerable<RecipeModel> recipes)
+        private IEnumerable<Entry> GetRecipeEntries(GameHelper gameHelper, Item inputItem, IEnumerable<RecipeModel> recipes)
         {
             foreach (RecipeModel recipe in recipes)
             {
-                Item output = recipe.CreateItem(ingredient);
+                Item output = recipe.CreateItem(inputItem);
                 SpriteInfo customSprite = gameHelper.GetSprite(output);
+                RecipeIngredientModel ingredient =
+                    recipe.Ingredients.FirstOrDefault(p => p.ID == inputItem.ParentSheetIndex)
+                    ?? recipe.Ingredients.FirstOrDefault(p => p.ID == inputItem.Category);
+
                 yield return new Entry
                 {
                     Name = output.DisplayName,
                     Type = recipe.DisplayType,
                     IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
-                    NumberRequired = recipe.Ingredients.ContainsKey(ingredient.ParentSheetIndex) ? recipe.Ingredients[ingredient.ParentSheetIndex] : recipe.Ingredients[ingredient.Category],
+                    NumberRequired = ingredient?.Count ?? 1,
                     Sprite = customSprite
                 };
             }

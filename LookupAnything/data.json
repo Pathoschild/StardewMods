@@ -173,135 +173,135 @@ You shouldn't change this file unless you know what you're doing.
         /* charcoal kiln */
         {
             "MachineID": 114,
-            "Ingredients": {
-                "388": 10 // wood
-            },
+            "Ingredients": [
+                { "ID": 388, "Count": 10 } // wood
+            ],
             "Output": 382 // coal
         },
 
         /* cheese press */
         {
             "MachineID": 16,
-            "Ingredients": {
-                "184": 1 // milk
-            },
+            "Ingredients": [
+                { "ID": 184 } // milk
+            ],
             "Output": 424 // cheese
         },
         {
             "MachineID": 16,
-            "Ingredients": {
-                "186": 1 // large milk
-            },
+            "Ingredients": [
+                { "ID": 186 } // large milk
+            ],
             "Output": 424 // cheese
         },
         {
             "MachineID": 16,
-            "Ingredients": {
-                "436": 1 // goat milk
-            },
+            "Ingredients": [
+                { "ID": 436 } // goat milk
+            ],
             "Output": 426 // goat cheese
         },
         {
             "MachineID": 16,
-            "Ingredients": {
-                "438": 1 // large goat milk
-            },
+            "Ingredients": [
+                { "ID": 438 } // large goat milk
+            ],
             "Output": 426 // goat cheese
         },
 
         /* furnace */
         {
             "MachineID": 13,
-            "Ingredients": {
-                "382": 1, // coal
-                "378": 5 // copper ore
-            },
+            "Ingredients": [
+                { "ID": 382 },            // coal
+                { "ID": 378, "Count": 5 } // copper ore
+            ],
             "Output": 334 // copper bar
         },
         {
             "MachineID": 13,
-            "Ingredients": {
-                "382": 1, // coal
-                "380": 5 // iron ore
-            },
+            "Ingredients": [
+                { "ID": 382 },            // coal
+                { "ID": 380, "Count": 5 } // iron ore
+            ],
             "Output": 335 // iron bar
         },
         {
             "MachineID": 13,
-            "Ingredients": {
-                "382": 1, // coal
-                "384": 5 // gold ore
-            },
+            "Ingredients": [
+                { "ID": 382 },            // coal
+                { "ID": 384, "Count": 5 } // gold ore
+            ],
             "Output": 336 // gold bar
         },
         {
             "MachineID": 13,
-            "Ingredients": {
-                "382": 1, // coal
-                "386": 5 // gold ore
-            },
+            "Ingredients": [
+                { "ID": 382 },            // coal
+                { "ID": 386, "Count": 5 } // gold ore
+            ],
             "Output": 337 // iridium bar
         },
         {
             "MachineID": 13,
-            "Ingredients": {
-                "382": 1, // coal
-                "82": 1 // fire quartz
-            },
+            "Ingredients": [
+                { "ID": 382 }, // coal
+                { "ID": 82 }   // fire quartz
+            ],
             "Output": 338, // refined quartz
             "MaxOutput": 3
         },
         {
             "MachineID": 13,
-            "Ingredients": {
-                "382": 1, // coal
-                "80": 1 // quartz
-            },
+            "Ingredients": [
+                { "ID": 382 }, // coal
+                { "ID": 80 }   // quartz
+            ],
             "Output": 338 // refined quartz
         },
 
         /* keg */
         {
             "MachineID": 12,
-            "Ingredients": {
-                "262": 1 // wheat
-            },
+            "Ingredients": [
+                { "ID": 262 } // wheat
+            ],
             "Output": 346 // beer
         },
         {
             "MachineID": 12,
-            "Ingredients": {
-                "433": 5 // coffee bean
-            },
+            "Ingredients": [
+                { "ID": 433, "Count": 5 } // coffee bean
+            ],
             "Output": 395 // coffee
         },
         {
             "MachineID": 12,
-            "Ingredients": {
-                "340": 1 // honey
-            },
+            "Ingredients": [
+                { "ID": 340 } // honey
+            ],
             "Output": 459 // mead
         },
         {
             "MachineID": 12,
-            "Ingredients": {
-                "304": 1 // hops
-            },
+            "Ingredients": [
+                { "ID": 304 } // hops
+            ],
             "Output": 303 // pale ale
         },
         {
             "MachineID": 12,
-            "Ingredients": {
-                "-79": 1 // any fruit
-            },
+            "Ingredients": [
+                { "ID": -79 } // any fruit
+            ],
             "ExceptIngredients": [ 262, 304 ],
             "Output": 348 // wine
         },
         {
             "MachineID": 12,
-            "Ingredients": {
-                "-75": 1 // any vegetable
-            },
+            "Ingredients": [
+                { "ID": -75 } // any vegetable
+            ],
             "ExceptIngredients": [ 262, 304 ],
             "Output": 350 // juice
         },
@@ -309,115 +309,115 @@ You shouldn't change this file unless you know what you're doing.
         /* loom */
         {
             "MachineID": 17,
-            "Ingredients": {
-                "440": 1 // wool
-            },
+            "Ingredients": [
+                { "ID": 440 } // wool
+            ],
             "Output": 428 // cloth
         },
 
         /* mayonnaise machine */
         {
             "MachineID": 24,
-            "Ingredients": {
-                "174": 1 // large white egg
-            },
+            "Ingredients": [
+                { "ID": 174 } // large white egg
+            ],
             "Output": 306 // mayonnaise
         },
         {
             "MachineID": 24,
-            "Ingredients": {
-                "176": 1 // white egg
-            },
+            "Ingredients": [
+                { "ID": 176 } // white egg
+            ],
             "Output": 306 // mayonnaise
         },
         {
             "MachineID": 24,
-            "Ingredients": {
-                "180": 1 // brown egg
-            },
+            "Ingredients": [
+                { "ID": 180 } // brown egg
+            ],
             "Output": 306 // mayonnaise
         },
         {
             "MachineID": 24,
-            "Ingredients": {
-                "182": 1 // large brown egg
-            },
+            "Ingredients": [
+                { "ID": 182 } // large brown egg
+            ],
             "Output": 306 // mayonnaise
         },
         {
             "MachineID": 24,
-            "Ingredients": {
-                "107": 1 // dinosaur egg
-            },
+            "Ingredients": [
+                { "ID": 107 } // dinosaur egg
+            ],
             "Output": 306 // mayonnaise
         },
         {
             "MachineID": 24,
-            "Ingredients": {
-                "442": 1 // duck egg
-            },
+            "Ingredients": [
+                { "ID": 442 } // duck egg
+            ],
             "Output": 307 // duck mayonnaise
         },
         {
             "MachineID": 24,
-            "Ingredients": {
-                "305": 1 // void egg
-            },
+            "Ingredients": [
+                { "ID": 305 } // void egg
+            ],
             "Output": 308 // void mayonnaise
         },
 
         /* oil maker */
         {
             "MachineID": 19,
-            "Ingredients": {
-                "430": 1 // truffle
-            },
+            "Ingredients": [
+                { "ID": 430 } // truffle
+            ],
             "Output": 432 // truffle oil
         },
         {
             "MachineID": 19,
-            "Ingredients": {
-                "270": 1 // corn
-            },
+            "Ingredients": [
+                { "ID": 270 } // corn
+            ],
             "Output": 247 // oil
         },
         {
             "MachineID": 19,
-            "Ingredients": {
-                "421": 1 // sunflower
-            },
+            "Ingredients": [
+                { "ID": 421 } // sunflower
+            ],
             "Output": 247 // oil
         },
         {
             "MachineID": 19,
-            "Ingredients": {
-                "431": 1 // sunflower seeds
-            },
+            "Ingredients": [
+                { "ID": 431 } // sunflower seeds
+            ],
             "Output": 247 // oil
         },
 
         /* preserves jar */
         {
             "MachineID": 15,
-            "Ingredients": {
-                "-79": 1 // any fruit
-            },
+            "Ingredients": [
+                { "ID": -79 } // any fruit
+            ],
             "Output": 344 // jelly
         },
         {
             "MachineID": 15,
-            "Ingredients": {
-                "-75": 1 // any vegetable
-            },
+            "Ingredients": [
+                { "ID": -75 } // any vegetable
+            ],
             "Output": 342 // pickled
         },
 
         /* recycling machine */
         {
             "MachineID": 20,
-            "Ingredients": {
-                "168": 1 // trash
-            },
+            "Ingredients": [
+                { "ID": 168 } // trash
+            ],
             "Output": 382, // coal
             "MinOutput": 1,
             "MaxOutput": 3,
@@ -425,9 +425,9 @@ You shouldn't change this file unless you know what you're doing.
         },
         {
             "MachineID": 20,
-            "Ingredients": {
-                "168": 1 // trash
-            },
+            "Ingredients": [
+                { "ID": 168 } // trash
+            ],
             "Output": 380, // iron ore
             "MinOutput": 1,
             "MaxOutput": 3,
@@ -435,9 +435,9 @@ You shouldn't change this file unless you know what you're doing.
         },
         {
             "MachineID": 20,
-            "Ingredients": {
-                "168": 1 // trash
-            },
+            "Ingredients": [
+                { "ID": 168 } // trash
+            ],
             "Output": 390, // stone
             "MinOutput": 1,
             "MaxOutput": 3,
@@ -446,9 +446,9 @@ You shouldn't change this file unless you know what you're doing.
 
         {
             "MachineID": 20,
-            "Ingredients": {
-                "169": 1 // driftwood
-            },
+            "Ingredients": [
+                { "ID": 169 } // driftwood
+            ],
             "Output": 382, // coal
             "MinOutput": 1,
             "MaxOutput": 3,
@@ -456,9 +456,9 @@ You shouldn't change this file unless you know what you're doing.
         },
         {
             "MachineID": 20,
-            "Ingredients": {
-                "169": 1 // driftwood
-            },
+            "Ingredients": [
+                { "ID": 169 } // driftwood
+            ],
             "Output": 388, // wood
             "MinOutput": 1,
             "MaxOutput": 3,
@@ -467,34 +467,34 @@ You shouldn't change this file unless you know what you're doing.
 
         {
             "MachineID": 20,
-            "Ingredients": {
-                "170": 1 // broken glasses
-            },
+            "Ingredients": [
+                { "ID": 170 } // broken glasses
+            ],
             "Output": 338 // refined quartz
         },
 
         {
             "MachineID": 20,
-            "Ingredients": {
-                "171": 1 // broken CD
-            },
+            "Ingredients": [
+                { "ID": 171 } // broken CD
+            ],
             "Output": 338 // refined quartz
         },
 
         {
             "MachineID": 20,
-            "Ingredients": {
-                "172": 1 // soggy newspaper
-            },
+            "Ingredients": [
+                { "ID": 172 } // soggy newspaper
+            ],
             "Output": 428, // cloth
             "OutputChance": 10
         },
 
         {
             "MachineID": 20,
-            "Ingredients": {
-                "172": 1 // soggy newspaper
-            },
+            "Ingredients": [
+                { "ID": 172 } // soggy newspaper
+            ],
             "Output": 93, // torch
             "MinOutput": 3,
             "OutputChance": 90
@@ -503,33 +503,33 @@ You shouldn't change this file unless you know what you're doing.
         /* slime egg-press */
         {
             "MachineID": 158,
-            "Ingredients": {
-                "766": 100 // slime
-            },
+            "Ingredients": [
+                { "ID": 766, "Count": 100 } // slime
+            ],
             "Output": 680, // green slime egg
             "OutputChance": 64
         },
         {
             "MachineID": 158,
-            "Ingredients": {
-                "766": 100 // slime
-            },
+            "Ingredients": [
+                { "ID": 766, "Count": 100 } // slime
+            ],
             "Output": 439, // purple slime egg
             "OutputChance": 5
         },
         {
             "MachineID": 158,
-            "Ingredients": {
-                "766": 100 // slime
-            },
+            "Ingredients": [
+                { "ID": 766, "Count": 100 } // slime
+            ],
             "Output": 437, // red slime egg
             "OutputChance": 10
         },
         {
             "MachineID": 158,
-            "Ingredients": {
-                "766": 100 // slime
-            },
+            "Ingredients": [
+                { "ID": 766, "Count": 100 } // slime
+            ],
             "Output": 413, // blue slime egg
             "OutputChance": 21
         }

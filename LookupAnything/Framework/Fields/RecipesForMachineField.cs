@@ -176,15 +176,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             {
                 // get inputs
                 List<EntryItem> inputs = new List<EntryItem>();
-                foreach (var inputPair in recipe.Ingredients)
+                foreach (var ingredient in recipe.Ingredients)
                 {
-                    int id = inputPair.Key;
-                    int count = inputPair.Value;
+                    int count = ingredient.Count;
 
                     // category
-                    if (id < 0)
+                    if (ingredient.ID < 0)
                     {
-                        Item sampleInput = gameHelper.GetObjectsByCategory(id).FirstOrDefault();
+                        Item sampleInput = gameHelper.GetObjectsByCategory(ingredient.ID).FirstOrDefault();
                         if (sampleInput == null)
                             continue;
 
@@ -200,7 +199,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     // item
                     else
                     {
-                        Item input = gameHelper.GetObjectBySpriteIndex(inputPair.Key);
+                        Item input = gameHelper.GetObjectBySpriteIndex(ingredient.ID);
+
                         string displayText = this.GetItemDisplayText(name: input.DisplayName, minCount: count, maxCount: count, chance: 100);
                         inputs.Add(new EntryItem
                         {

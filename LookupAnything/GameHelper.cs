@@ -327,7 +327,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // from cached recipes
             foreach (var recipe in this.GetRecipes())
             {
-                if (!recipe.Ingredients.ContainsKey(item.ParentSheetIndex) && !recipe.Ingredients.ContainsKey(item.Category))
+                if (!recipe.Ingredients.Any(p => p.ID == item.ParentSheetIndex || p.ID == item.Category))
                     continue;
                 if (recipe.ExceptIngredients?.Contains(item.ParentSheetIndex) == true)
                     continue;

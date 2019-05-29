@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewModdingAPI;
 using StardewValley;
@@ -32,7 +33,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         public string DisplayType { get; }
 
         /// <summary>The items needed to craft the recipe (item ID => number needed).</summary>
-        public IDictionary<int, int> Ingredients { get; }
+        public RecipeIngredientModel[] Ingredients { get; }
 
         /// <summary>The item ID produced by this recipe, if applicable.</summary>
         public int? OutputItemIndex { get; }
@@ -69,7 +70,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="minOutput">The minimum number of items output by the recipe.</param>
         /// <param name="maxOutput">The maximum number of items output by the recipe.</param>
         /// <param name="outputChance">The percentage chance of this recipe being produced (or <c>null</c> if the recipe is always used).</param>
-        public RecipeModel(string key, RecipeType type, string displayType, IDictionary<int, int> ingredients, Func<Item, Item> item, bool mustBeLearned, Func<object, bool> isForMachine, int[] exceptIngredients = null, int? outputItemIndex = null, int? minOutput = null, int? maxOutput = null, int? outputChance = null)
+        public RecipeModel(string key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item, Item> item, bool mustBeLearned, Func<object, bool> isForMachine, int[] exceptIngredients = null, int? outputItemIndex = null, int? minOutput = null, int? maxOutput = null, int? outputChance = null)
         {
             // normalise values
             if (minOutput == null && maxOutput == null)
@@ -86,7 +87,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             this.Key = key;
             this.Type = type;
             this.DisplayType = displayType;
-            this.Ingredients = ingredients;
+            this.Ingredients = ingredients.ToArray();
             this.IsForMachine = isForMachine;
             this.ExceptIngredients = exceptIngredients ?? new int[0];
             this.Item = item;
@@ -105,7 +106,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 key: recipe.name,
                 type: recipe.isCookingRecipe ? RecipeType.Cooking : RecipeType.Crafting,
                 displayType: recipe.isCookingRecipe ? L10n.RecipeTypes.Cooking() : L10n.RecipeTypes.Crafting(),
-                ingredients: reflectionHelper.GetField<Dictionary<int, int>>(recipe, "recipeList").GetValue(),
+                ingredients: reflectionHelper
+                    .GetField<Dictionary<int, int>>(recipe, "recipeList").GetValue()
+                    .Select(p => new RecipeIngredientModel(p.Key, p.Value)),
                 item: item => recipe.createItem(),
                 mustBeLearned: true,
                 outputItemIndex: reflectionHelper.GetField<List<int>>(recipe, "itemToProduce").GetValue()[0],
@@ -121,7 +124,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 key: other.Key,
                 type: other.Type,
                 displayType: other.DisplayType,
-                ingredients: new Dictionary<int, int>(other.Ingredients),
+                ingredients: other.Ingredients,
                 item: other.Item,
                 mustBeLearned: other.MustBeLearned,
                 exceptIngredients: other.ExceptIngredients,
