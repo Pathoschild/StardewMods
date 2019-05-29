@@ -13,6 +13,7 @@ using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Monsters;
+using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 {
@@ -162,9 +163,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 case TargetType.Monster:
                     // basic info
                     Monster monster = (Monster)npc;
+                    bool canRerollDrops = Game1.player.isWearingRing(Ring.burglarsRing);
+
                     yield return new GenericField(this.GameHelper, L10n.Monster.Invincible(), L10n.Generic.Seconds(count: this.Reflection.GetField<int>(monster, "invincibleCountdown").GetValue()), hasValue: monster.isInvincible());
                     yield return new PercentageBarField(this.GameHelper, L10n.Monster.Health(), monster.Health, monster.MaxHealth, Color.Green, Color.Gray, L10n.Generic.PercentRatio(percent: (int)Math.Round((monster.Health / (monster.MaxHealth * 1f) * 100)), value: monster.Health, max: monster.MaxHealth));
-                    yield return new ItemDropListField(this.GameHelper, L10n.Monster.Drops(), this.GetMonsterDrops(monster), this.Text, defaultText: L10n.Monster.DropsNothing());
+                    yield return new ItemDropListField(this.GameHelper, L10n.Monster.Drops(), this.GetMonsterDrops(monster), fadeNonGuaranteed: true, crossOutNonGuaranteed: !canRerollDrops, defaultText: L10n.Monster.DropsNothing());
                     yield return new GenericField(this.GameHelper, L10n.Monster.Experience(), this.Stringify(monster.ExperienceGained));
                     yield return new GenericField(this.GameHelper, L10n.Monster.Defence(), this.Stringify(monster.resilience.Value));
                     yield return new GenericField(this.GameHelper, L10n.Monster.Attack(), this.Stringify(monster.DamageToFarmer));
@@ -213,7 +216,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             return (
                 from possibleDrop in possibleDrops
                 let isGuaranteed = drops.Contains(possibleDrop.ItemID)
-                select new ItemDropData(possibleDrop.ItemID, possibleDrop.MaxDrop, isGuaranteed ? 1 : possibleDrop.Probability)
+                select new ItemDropData(
+                    itemID: possibleDrop.ItemID,
+                    minDrop: 1,
+                    maxDrop: possibleDrop.MaxDrop,
+                    probability: isGuaranteed ? 1 : possibleDrop.Probability
+                )
             );
         }
 

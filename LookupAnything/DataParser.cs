@@ -223,12 +223,12 @@ namespace Pathoschild.Stardew.LookupAnything
                         itemID = SObject.stone;
 
                     // add drop
-                    drops.Add(new ItemDropData(itemID, maxDrops, chance));
+                    drops.Add(new ItemDropData(itemID, 1, maxDrops, chance));
                 }
                 if (isMineMonster && Game1.player.timesReachedMineBottom >= 1)
                 {
-                    drops.Add(new ItemDropData(SObject.diamondIndex, 1, 0.008f));
-                    drops.Add(new ItemDropData(SObject.prismaticShardIndex, 1, 0.008f));
+                    drops.Add(new ItemDropData(SObject.diamondIndex, 1, 1, 0.008f));
+                    drops.Add(new ItemDropData(SObject.prismaticShardIndex, 1, 1, 0.008f));
                 }
 
                 // yield data
