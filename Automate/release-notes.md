@@ -5,7 +5,7 @@
 Released 26 November 2019.
 
 * Updated for Stardew Valley 1.4, including...
-  * new wood chipper;
+  * new machines (fish pond and wood chipper);
   * new recipes (dinosaur mayonnaise and green tea);
   * chance of double output with higher quality items for Cheese Press and Loom.
 * Fixed auto-grabbers not showing empty sprite when emptied automatically.

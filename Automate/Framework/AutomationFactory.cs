@@ -173,6 +173,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         public IAutomatable GetFor(Building building, BuildableGameLocation location, in Vector2 tile)
         {
             // machine
+            if (building is FishPond pond)
+                return new FishPondMachine(pond, location);
             if (building is JunimoHut hut)
                 return new JunimoHutMachine(hut, location, ignoreSeedOutput: this.BetterJunimosCompat, ignoreFertilizerOutput: this.BetterJunimosCompat);
             if (building is Mill mill)
