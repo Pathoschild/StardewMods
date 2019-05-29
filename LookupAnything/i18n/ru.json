@@ -190,6 +190,10 @@
     "building.upgrades": "Улучшения",
     "building.water-trough": "Корыто",
 
+    "building.fish-pond.population": "Population", // TODO
+    "building.fish-pond.drops": "Drops", // TODO
+    "building.fish-pond.quests": "Quests", // TODO
+
     // building lookup values
     "building.animals.summary": "{{count}} из {{max}} животных внутри",
     "building.construction.summary": "будет готово {{date}}",
@@ -213,6 +217,13 @@
     "building.upgrades.coop.1": "до 8-ми животных; разблокируются: инкубатор, динозавры и утки",
     "building.upgrades.coop.2": "до 12-ти животных; разблокируются: система подачи корма и кролики",
     "building.water-trough.summary": "{{filled}} из {{max}} корыт заполнено",
+
+    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}", // TODO
+    "building.fish-pond.drops.preface": "Will produce the first match each day (if any):", // TODO
+    "building.fish-pond.quests.done": "{{count}} fish", // TODO
+    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}", // TODO
+    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}", // TODO
+    "building.fish-pond.quests.available": "available {{relativeDate}}", // TODO
 
     // bush lookup labels
     "bush.name.berry": "Ягодный куст",

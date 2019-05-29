@@ -266,6 +266,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Water trough</c>.</summary>
             public static Translation WaterTrough() => L10n.Helper.Get("building.water-trough");
 
+            /// <summary>A value like <c>Population</c>.</summary>
+            public static Translation FishPondPopulation() => L10n.Helper.Get("building.fish-pond.population");
+
+            /// <summary>A value like <c>Quests</c>.</summary>
+            public static Translation FishPondQuests() => L10n.Helper.Get("building.fish-pond.quests");
+
+            /// <summary>A value like <c>Drops</c>.</summary>
+            public static Translation FishPondDrops() => L10n.Helper.Get("building.fish-pond.drops");
+
             /****
             ** Values
             ****/
@@ -325,6 +334,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>{{filled}} of {{max}} water troughs filled</c>.</summary>
             public static Translation WaterTroughSummary(int filled, int max) => L10n.Helper.Get("building.water-trough.summary", new { filled, max });
+
+            /// <summary>A value like <c>New fish will spawn {{relativeDate}}</c>.</summary>
+            public static Translation FishPondPopulationNextSpawn(string relativeDate) => L10n.Helper.Get("building.fish-pond.population.next-spawn", new { relativeDate });
+
+            /// <summary>A value like <c>{{count}} fish</c>.</summary>
+            public static Translation FishPondQuestsDone(int count) => L10n.Helper.Get("building.fish-pond.quests.done", new { count });
+
+            /// <summary>A value like <c>{{count}} fish: will need {{itemName}}</c>.</summary>
+            public static Translation FishPondQuestsIncompleteOne(int count, string itemName) => L10n.Helper.Get("building.fish-pond.quests.incomplete-one", new { count, itemName });
+
+            /// <summary>A value like <c>{{count}} fish: will need one of {{itemList}}</c>.</summary>
+            public static Translation FishPondQuestsIncompleteRandom(int count, string itemList) => L10n.Helper.Get("building.fish-pond.quests.incomplete-random", new { count, itemList });
+
+            /// <summary>A value like <c>available {{relativeDate}}</c>.</summary>
+            public static Translation FishPondQuestsAvailable(string relativeDate) => L10n.Helper.Get("building.fish-pond.quests.available", new { relativeDate });
+
+            /// <summary>A value like <c>Will produce the first match each day (if any):</c>.</summary>
+            public static Translation FishPondDropsPreface() => L10n.Helper.Get("building.fish-pond.drops.preface");
         }
 
         /// <summary>Bush lookup translations.</summary>

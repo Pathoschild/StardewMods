@@ -9,7 +9,7 @@ Released 26 November 2019.
   * movie theater;
   * new mechanics (clothing, dyeing, and tailoring);
   * new recipes (dinosaur mayonnaise and green tea);
-  * new tea bushes;
+  * new content (fish ponds and tea bushes);
   * new farm map;
   * new 14-heart spouse events;
   * new social NPC profiles;

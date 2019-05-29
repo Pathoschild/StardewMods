@@ -85,8 +85,9 @@ The screenshots below are without progression mode, and may show spoilers.
   > ![](screenshots/crafting.png)
   > ![](screenshots/cask.png)
 
-* See useful info about your buildings (different for each building type).
+* See useful info about your buildings (different for each building type). For example:
   > ![](screenshots/barn.png)
+  > ![](screenshots/fish-pond.png)
 
 * See when a tree will bear fruit, how long until its fruit quality increases, and any
   problems preventing it from growing.

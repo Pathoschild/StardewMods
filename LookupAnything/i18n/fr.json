@@ -190,6 +190,10 @@
     "building.upgrades": "Améliorations",
     "building.water-trough": "Abreuvoir",
 
+    "building.fish-pond.population": "Population", // TODO
+    "building.fish-pond.drops": "Drops", // TODO
+    "building.fish-pond.quests": "Quests", // TODO
+
     // building lookup values
     "building.animals.summary": "{{count}} sur {{max}} animaux",
     "building.construction.summary": "prêt le {{date}}",
@@ -213,6 +217,13 @@
     "building.upgrades.coop.1": "jusqu'à 8 animaux, ajoute l'incubateur, permet les dinosaures et les canards",
     "building.upgrades.coop.2": "jusqu'à 12 animaux, ajoute le nourrissage automatique, permet les lapins",
     "building.water-trough.summary": "{{filled}} de {{max}} capacité d'eau",
+
+    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}", // TODO
+    "building.fish-pond.drops.preface": "Will produce the first match each day (if any):", // TODO
+    "building.fish-pond.quests.done": "{{count}} fish", // TODO
+    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}", // TODO
+    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}", // TODO
+    "building.fish-pond.quests.available": "available {{relativeDate}}", // TODO
 
     // bush lookup labels
     // TODO

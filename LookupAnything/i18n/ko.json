@@ -190,6 +190,10 @@
     "building.upgrades": "업그레이드",
     "building.water-trough": "물통",
 
+    "building.fish-pond.population": "Population", // TODO
+    "building.fish-pond.drops": "Drops", // TODO
+    "building.fish-pond.quests": "Quests", // TODO
+
     // building lookup values
     "building.animals.summary": "최대 {{max}}마리까지의 동물 중 {{count}}마리 수용 중.",
     "building.construction.summary": "{{date}}에 건설 완료",
@@ -213,6 +217,13 @@
     "building.upgrades.coop.1": "최대 8마리의 동물 수용; 알 부화기 추가, 공룡 및 오리 추가",
     "building.upgrades.coop.2": "최대 12마리의 동물 수용; 먹이통 자동화가 가능해지며 토끼를 추가",
     "building.water-trough.summary": "최대 {{max}}칸 중 {{filled}}칸의 물통을 채움",
+
+    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}", // TODO
+    "building.fish-pond.drops.preface": "Will produce the first match each day (if any):", // TODO
+    "building.fish-pond.quests.done": "{{count}} fish", // TODO
+    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}", // TODO
+    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}", // TODO
+    "building.fish-pond.quests.available": "available {{relativeDate}}", // TODO
 
     // bush lookup labels
     // TODO

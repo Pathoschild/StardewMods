@@ -190,6 +190,10 @@
     "building.upgrades": "アップグレード",
     "building.water-trough": "給水樋",
 
+    "building.fish-pond.population": "Population",
+    "building.fish-pond.drops": "Drops",
+    "building.fish-pond.quests": "Quests",
+
     // building lookup values
     "building.animals.summary": "{{count}}匹 (最大{{max}}匹)",
     "building.construction.summary": "{{date}}に完了する",
@@ -213,6 +217,13 @@
     "building.upgrades.coop.1": "8羽まで飼育でき、ふ卵器が付き、恐竜とアヒルの飼育ができる",
     "building.upgrades.coop.2": "12羽まで飼育でき、自動給餌とウサギの飼育ができる",
     "building.water-trough.summary": "最大{{max}}中{{filled}}の給水樋が充たされている",
+
+    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}",
+    "building.fish-pond.drops.preface": "Will produce the first match each day (if any):",
+    "building.fish-pond.quests.done": "{{count}} fish",
+    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}",
+    "building.fish-pond.quests.available": "available {{relativeDate}}",
 
     // bush lookup labels
     "bush.name.berry": "ベリーの茂み",

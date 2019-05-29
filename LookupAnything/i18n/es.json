@@ -191,6 +191,10 @@
     "building.upgrades": "Upgrades",
     "building.water-trough": "Water trough",
 
+    "building.fish-pond.population": "Population",
+    "building.fish-pond.drops": "Drops",
+    "building.fish-pond.quests": "Quests",
+
     // building lookup values
     // TODO
     "building.animals.summary": "{{count}} of max {{max}} animals",
@@ -215,6 +219,13 @@
     "building.upgrades.coop.1": "up to 8 animals; add incubator, dinosaurs, and ducks",
     "building.upgrades.coop.2": "up to 12 animals; add autofeed and rabbits",
     "building.water-trough.summary": "{{filled}} of {{max}} water troughs filled",
+
+    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}",
+    "building.fish-pond.drops.preface": "Will produce the first match each day (if any):",
+    "building.fish-pond.quests.done": "{{count}} fish",
+    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}",
+    "building.fish-pond.quests.available": "available {{relativeDate}}",
 
     // bush lookup labels
     // TODO

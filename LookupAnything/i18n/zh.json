@@ -190,6 +190,10 @@
     "building.upgrades": "升级",
     "building.water-trough": "水槽",
 
+    "building.fish-pond.population": "Population", // TODO
+    "building.fish-pond.drops": "Drops", // TODO
+    "building.fish-pond.quests": "Quests", // TODO
+
     // building lookup values
     "building.animals.summary": "{{count}} 之 {{max}} 只动物",
     "building.construction.summary": "完成至 {{date}}",
@@ -213,6 +217,13 @@
     "building.upgrades.coop.1": "上升至 8 只动物，解锁孵化器,恐龙和鸭",
     "building.upgrades.coop.2": "上升至 12 只动物，解锁自动喂食和兔子",
     "building.water-trough.summary": "{{filled}} 之 {{max}} 水槽已填充",
+
+    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}", // TODO
+    "building.fish-pond.drops.preface": "Will produce the first match each day (if any):", // TODO
+    "building.fish-pond.quests.done": "{{count}} fish", // TODO
+    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}", // TODO
+    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}", // TODO
+    "building.fish-pond.quests.available": "available {{relativeDate}}", // TODO
 
     // bush lookup labels
     // TODO
