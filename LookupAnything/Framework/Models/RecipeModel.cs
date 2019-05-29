@@ -48,7 +48,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         public int OutputChance { get; set; }
 
         /// <summary>The ingredients which can't be used in this recipe (typically exceptions for a category ingredient).</summary>
-        public int[] ExceptIngredients { get; }
+        public RecipeIngredientModel[] ExceptIngredients { get; }
 
         /// <summary>Whether the recipe must be learned before it can be used.</summary>
         public bool MustBeLearned { get; }
@@ -70,7 +70,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="minOutput">The minimum number of items output by the recipe.</param>
         /// <param name="maxOutput">The maximum number of items output by the recipe.</param>
         /// <param name="outputChance">The percentage chance of this recipe being produced (or <c>null</c> if the recipe is always used).</param>
-        public RecipeModel(string key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item, Item> item, bool mustBeLearned, Func<object, bool> isForMachine, int[] exceptIngredients = null, int? outputItemIndex = null, int? minOutput = null, int? maxOutput = null, int? outputChance = null)
+        public RecipeModel(string key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item, Item> item, bool mustBeLearned, Func<object, bool> isForMachine, IEnumerable<RecipeIngredientModel> exceptIngredients = null, int? outputItemIndex = null, int? minOutput = null, int? maxOutput = null, int? outputChance = null)
         {
             // normalise values
             if (minOutput == null && maxOutput == null)
@@ -89,7 +89,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             this.DisplayType = displayType;
             this.Ingredients = ingredients.ToArray();
             this.IsForMachine = isForMachine;
-            this.ExceptIngredients = exceptIngredients ?? new int[0];
+            this.ExceptIngredients = exceptIngredients?.ToArray() ?? new RecipeIngredientModel[0];
             this.Item = item;
             this.MustBeLearned = mustBeLearned;
             this.OutputItemIndex = outputItemIndex;

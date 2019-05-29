@@ -294,7 +294,6 @@ You shouldn't change this file unless you know what you're doing.
             "Ingredients": [
                 { "ID": -79 } // any fruit
             ],
-            "ExceptIngredients": [ 262, 304 ],
             "Output": 348 // wine
         },
         {
@@ -302,7 +301,10 @@ You shouldn't change this file unless you know what you're doing.
             "Ingredients": [
                 { "ID": -75 } // any vegetable
             ],
-            "ExceptIngredients": [ 262, 304 ],
+            "ExceptIngredients": [
+                { "ID": 262 }, // wheat
+                { "ID": 304 } // hops
+            ],
             "Output": 350 // juice
         },
 

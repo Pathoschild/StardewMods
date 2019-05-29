@@ -339,7 +339,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     ingredients: entry.Ingredients.Select(p => new RecipeIngredientModel(p)),
                     item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, entry.Output),
                     mustBeLearned: false,
-                    exceptIngredients: entry.ExceptIngredients,
+                    exceptIngredients: entry.ExceptIngredients?.Select(p => new RecipeIngredientModel(p)),
                     outputItemIndex: entry.Output,
                     minOutput: entry.MinOutput,
                     maxOutput: entry.MaxOutput,
@@ -361,7 +361,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     mustBeLearned: false,
                     outputItemIndex: entry.Output,
                     minOutput: entry.OutputCount ?? 1,
-                    exceptIngredients: entry.ExceptIngredients,
+                    exceptIngredients: entry.ExceptIngredients?.Select(p => new RecipeIngredientModel(p, 1)),
                     isForMachine: p => p is Building target && target.buildingType.Value == entry.BuildingKey
                 )
             );

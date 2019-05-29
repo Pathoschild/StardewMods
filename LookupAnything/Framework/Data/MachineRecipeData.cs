@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         public MachineRecipeIngredientData[] Ingredients { get; set; }
 
         /// <summary>The ingredients which can't be used in this recipe (typically exceptions for a category ingredient).</summary>
-        public int[] ExceptIngredients { get; set; }
+        public MachineRecipeIngredientData[] ExceptIngredients { get; set; }
 
         /// <summary>The item created by the recipe.</summary>
         public int Output { get; set; }

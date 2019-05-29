@@ -1,4 +1,5 @@
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
@@ -35,5 +36,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 count: ingredient.Count ?? 1
             )
         { }
+
+        /// <summary>Get whether the ingredient matches a given item.</summary>
+        /// <param name="item">The item to check.</param>
+        public bool Matches(Item item)
+        {
+            if (item == null)
+                return false;
+            if (item.ParentSheetIndex != this.ID && item.Category != this.ID)
+                return false;
+
+            return true;
+        }
     }
 }
