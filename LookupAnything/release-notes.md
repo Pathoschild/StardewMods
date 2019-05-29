@@ -8,7 +8,7 @@ Released 26 November 2019.
   * per-player shipping bins;
   * movie theater;
   * new mechanics (clothing, dyeing, and tailoring);
-  * new recipes (dinosaur mayonnaise and green tea);
+  * new recipes (aged roe, caviar, dinosaur mayonnaise, and green tea);
   * new content (fish ponds and tea bushes);
   * new farm map;
   * new 14-heart spouse events;

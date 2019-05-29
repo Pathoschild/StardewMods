@@ -7,6 +7,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
@@ -200,6 +201,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     else
                     {
                         Item input = gameHelper.GetObjectBySpriteIndex(ingredient.ID);
+                        if (input is SObject obj)
+                        {
+                            if (ingredient.PreservedParentSheetIndex != null)
+                                obj.preservedParentSheetIndex.Value = ingredient.PreservedParentSheetIndex.Value;
+                            if (ingredient.PreserveType != null)
+                                obj.preserve.Value = ingredient.PreserveType.Value;
+                        }
 
                         string displayText = this.GetItemDisplayText(name: input.DisplayName, minCount: count, maxCount: count, chance: 100);
                         inputs.Add(new EntryItem
