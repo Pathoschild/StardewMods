@@ -369,8 +369,9 @@ asset | field used
 ----- | ----------
 _default_ | `ID` if it exists.
 `Data/ConcessionTastes` | `Name`
+`Data/FishPondData` | The `RequiredTags` field with comma-separated tags (like `fish_ocean,fish_crab_pot`). The key is space-sensitive.
 `Data/MoviesReactions` | `NPCName`
-`Data/TailoringRecipes` | `FirstItemTags` and `SecondItemTags`, with comma-separated tags and a pipe between them (like `item_cloth|category_fish,fish_semi_rare`).
+`Data/TailoringRecipes` | `FirstItemTags` and `SecondItemTags`, with comma-separated tags and a pipe between them (like `item_cloth|category_fish,fish_semi_rare`).  The key is space-sensitive.
 
 List assets also have an order which can affect game logic (e.g. the first entry in
 `Data\MoviesReactions` matching the NPC is used). You can move an entry within that order using the

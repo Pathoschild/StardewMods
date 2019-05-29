@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using StardewValley.GameData.Crafting;
+using StardewValley.GameData.FishPond;
 using StardewValley.GameData.Movies;
 
 namespace ContentPatcher.Framework
@@ -33,18 +34,21 @@ namespace ContentPatcher.Framework
         {
             switch (entity)
             {
-                case ConcessionTaste taste:
-                    return taste.Name;
+                case ConcessionTaste entry:
+                    return entry.Name;
 
-                case MovieCharacterReaction reaction:
-                    return reaction.NPCName;
+                case FishPondData entry:
+                    return string.Join(",", entry.RequiredTags);
 
-                case TailorItemRecipe recipe:
+                case MovieCharacterReaction entry:
+                    return entry.NPCName;
+
+                case TailorItemRecipe entry:
                     IList<string> keyParts = new List<string>();
-                    if (recipe.FirstItemTags.Any())
-                        keyParts.Add($"L:{string.Join(",", recipe.FirstItemTags)}");
-                    if (recipe.SecondItemTags.Any())
-                        keyParts.Add($"R:{string.Join(",", recipe.SecondItemTags)}");
+                    if (entry.FirstItemTags.Any())
+                        keyParts.Add($"L:{string.Join(",", entry.FirstItemTags)}");
+                    if (entry.SecondItemTags.Any())
+                        keyParts.Add($"R:{string.Join(",", entry.SecondItemTags)}");
                     return string.Join("|", keyParts);
 
                 default:
