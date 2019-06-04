@@ -38,11 +38,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The tile area on the farm matching the shipping bin.</summary>
         private readonly Rectangle ShippingBinArea = new Rectangle(71, 14, 2, 1);
 
-        /// <summary>Whether the Better Junimos mod is installed.</summary>
-        private readonly bool HasBetterJunimos;
+        /// <summary>Whether to enable compatibility with the Better Junimos mod.</summary>
+        private readonly bool BetterJunimosCompat;
 
-        /// <summary>Whether the Auto-Grabber Mod is installed.</summary>
-        private readonly bool HasAutoGrabberMod;
+        /// <summary>Whether to enable compatibility with Auto-Grabber Mod.</summary>
+        private readonly bool AutoGrabberModCompat;
 
 
         /*********
@@ -53,9 +53,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="automateShippingBin">Whether to treat the shipping bin as a machine that can be automated.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        /// <param name="hasBetterJunimos">Whether the Better Junimos mod is installed.</param>
-        /// <param name="hasAutoGrabberMod">Whether the Auto-Grabber Mod is installed.</param>
-        public AutomationFactory(ModConfigObject[] connectors, bool automateShippingBin, IMonitor monitor, IReflectionHelper reflection, bool hasBetterJunimos, bool hasAutoGrabberMod)
+        /// <param name="betterJunimosCompat">Whether to enable compatibility with the Better Junimos mod.</param>
+        /// <param name="autoGrabberModCompat">Whether to enable compatibility with Auto-Grabber Mod.</param>
+        public AutomationFactory(ModConfigObject[] connectors, bool automateShippingBin, IMonitor monitor, IReflectionHelper reflection, bool betterJunimosCompat, bool autoGrabberModCompat)
         {
             this.Connectors = connectors
                 .GroupBy(connector => connector.Type)
@@ -63,8 +63,8 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.AutomateShippingBin = automateShippingBin;
             this.Monitor = monitor;
             this.Reflection = reflection;
-            this.HasBetterJunimos = hasBetterJunimos;
-            this.HasAutoGrabberMod = hasAutoGrabberMod;
+            this.BetterJunimosCompat = betterJunimosCompat;
+            this.AutoGrabberModCompat = autoGrabberModCompat;
         }
 
         /// <summary>Get a machine, container, or connector instance for a given object.</summary>
@@ -80,7 +80,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             // machine
             if (obj.ParentSheetIndex == 165)
-                return new AutoGrabberMachine(obj, location, tile, ignoreSeedOutput: this.HasAutoGrabberMod, ignoreFertilizerOutput: this.HasAutoGrabberMod);
+                return new AutoGrabberMachine(obj, location, tile, ignoreSeedOutput: this.AutoGrabberModCompat, ignoreFertilizerOutput: this.AutoGrabberModCompat);
             if (obj.name == "Bee House")
                 return new BeeHouseMachine(obj, location, tile);
             if (obj is Cask cask)
@@ -169,7 +169,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             // machine
             if (building is JunimoHut hut)
-                return new JunimoHutMachine(hut, location, ignoreSeedOutput: this.HasBetterJunimos, ignoreFertilizerOutput: this.HasBetterJunimos);
+                return new JunimoHutMachine(hut, location, ignoreSeedOutput: this.BetterJunimosCompat, ignoreFertilizerOutput: this.BetterJunimosCompat);
             if (building is Mill mill)
                 return new MillMachine(mill, location);
             if (this.AutomateShippingBin && building is ShippingBin bin)

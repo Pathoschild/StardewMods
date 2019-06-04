@@ -17,5 +17,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
 
         /// <summary>The in-game objects through which machines can connect.</summary>
         public ModConfigObject[] Connectors { get; set; } = new ModConfigObject[0];
+
+        /// <summary>Options affecting compatibility with other mods.</summary>
+        public ModCompatibilityConfig ModCompatibility { get; set; } = new ModCompatibilityConfig();
     }
 }

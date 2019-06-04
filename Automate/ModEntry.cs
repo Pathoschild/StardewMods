@@ -52,15 +52,18 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            // toggle mod compatibility
-            bool hasBetterJunimos = helper.ModRegistry.IsLoaded("hawkfalcon.BetterJunimos");
-            bool hasAutoGrabberMod = helper.ModRegistry.IsLoaded("Jotser.AutoGrabberMod");
-
             // init
             this.Config = helper.ReadConfig<ModConfig>();
             this.Keys = this.Config.Controls.ParseControls(this.Monitor);
             this.Factory = new MachineGroupFactory();
-            this.Factory.Add(new AutomationFactory(this.Config.Connectors, this.Config.AutomateShippingBin, this.Monitor, helper.Reflection, hasBetterJunimos, hasAutoGrabberMod));
+            this.Factory.Add(new AutomationFactory(
+                connectors: this.Config.Connectors,
+                automateShippingBin: this.Config.AutomateShippingBin,
+                monitor: this.Monitor,
+                reflection: helper.Reflection,
+                betterJunimosCompat: this.Config.ModCompatibility.BetterJunimos && helper.ModRegistry.IsLoaded("hawkfalcon.BetterJunimos"),
+                autoGrabberModCompat: this.Config.ModCompatibility.AutoGrabberMod && helper.ModRegistry.IsLoaded("Jotser.AutoGrabberMod")
+            ));
 
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;

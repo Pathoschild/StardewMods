@@ -167,6 +167,19 @@ Valid IDs:
 
   </td>
 </tr>
+<tr>
+  <td><code>ModCompatibility</code></td>
+  <td>
+
+Enables compatibility with other mods. All values are enabled by default.
+
+field | result
+----- | ------
+`AutoGrabberMod` | If [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) is installed, auto-grabbers won't output fertiliser and seeds.
+`BetterJunimos` | If [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) is installed, Junimo huts won't output fertiliser and seeds.
+
+  </td>
+</tr>
 </table>
 
 ### In-game settings
