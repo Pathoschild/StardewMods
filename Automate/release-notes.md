@@ -3,8 +3,12 @@
 # Release notes
 ## Upcoming release
 * Added compatibility with Auto-Grabber Mod and Better Junimos. If they're installed, seeds/fertiliser in their respective machines will be ignored.
+* Simplified connector configuration.
 * Improved `config.json` keybind parsing.
 * Fixed items with different item qualities being combined into one input stack.
+
+**Breaking change:** previously-enabled connectors in `config.json` will be removed next time you
+launch the game; See the readme for the new format.
 
 ## 1.12
 Released 06 April 2019.

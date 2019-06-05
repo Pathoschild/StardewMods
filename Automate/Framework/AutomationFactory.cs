@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework.Machines.Buildings;
 using Pathoschild.Stardew.Automate.Framework.Machines.Objects;
@@ -29,14 +29,17 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
 
-        /// <summary>The object IDs through which machines can connect, but which have no other automation properties.</summary>
-        private readonly IDictionary<ObjectType, HashSet<int>> Connectors;
+        /// <summary>The object names through which machines can connect, but which have no other automation properties.</summary>
+        private readonly HashSet<string> Connectors;
 
         /// <summary>Whether to treat the shipping bin as a machine that can be automated.</summary>
         private readonly bool AutomateShippingBin;
 
         /// <summary>The tile area on the farm matching the shipping bin.</summary>
         private readonly Rectangle ShippingBinArea = new Rectangle(71, 14, 2, 1);
+
+        /// <summary>The internal Automate data that can't be derived automatically.</summary>
+        private readonly DataModel Data;
 
         /// <summary>Whether to enable compatibility with the Better Junimos mod.</summary>
         private readonly bool BetterJunimosCompat;
@@ -53,16 +56,16 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="automateShippingBin">Whether to treat the shipping bin as a machine that can be automated.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
+        /// <param name="data">The internal Automate data that can't be derived automatically.</param>
         /// <param name="betterJunimosCompat">Whether to enable compatibility with the Better Junimos mod.</param>
         /// <param name="autoGrabberModCompat">Whether to enable compatibility with Auto-Grabber Mod.</param>
-        public AutomationFactory(ModConfigObject[] connectors, bool automateShippingBin, IMonitor monitor, IReflectionHelper reflection, bool betterJunimosCompat, bool autoGrabberModCompat)
+        public AutomationFactory(string[] connectors, bool automateShippingBin, IMonitor monitor, IReflectionHelper reflection, DataModel data, bool betterJunimosCompat, bool autoGrabberModCompat)
         {
-            this.Connectors = connectors
-                .GroupBy(connector => connector.Type)
-                .ToDictionary(group => group.Key, group => new HashSet<int>(group.Select(p => p.ID)));
+            this.Connectors = new HashSet<string>(connectors, StringComparer.InvariantCultureIgnoreCase);
             this.AutomateShippingBin = automateShippingBin;
             this.Monitor = monitor;
             this.Reflection = reflection;
+            this.Data = data;
             this.BetterJunimosCompat = betterJunimosCompat;
             this.AutoGrabberModCompat = autoGrabberModCompat;
         }
@@ -136,7 +139,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 return new WormBinMachine(obj, location, tile);
 
             // connector
-            if (this.IsConnector(obj.bigCraftable.Value ? ObjectType.BigCraftable : ObjectType.Object, this.GetItemID(obj)))
+            if (this.IsConnector(obj))
                 return new Connector(location, tile);
 
             return null;
@@ -154,7 +157,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 return new FruitTreeMachine(fruitTree, location, tile);
 
             // connector
-            if (feature is Flooring floor && this.IsConnector(ObjectType.Floor, floor.whichFloor.Value))
+            if (this.IsConnector(feature))
                 return new Connector(location, tile);
 
             return null;
@@ -207,41 +210,23 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Private methods
         *********/
-        /// <summary>Get whether a given object should be treated as a connector.</summary>
-        /// <param name="type">The object type.</param>
-        /// <param name="id">The object iD.</param>
-        private bool IsConnector(ObjectType type, int id)
+        /// <summary>Get whether a given in-game entity should be treated as a connector.</summary>
+        /// <param name="entity">The in-game entity.</param>
+        private bool IsConnector(object entity)
         {
-            return
-                this.Connectors.Count != 0
-                && this.Connectors.TryGetValue(type, out HashSet<int> ids)
-                && ids.Contains(id);
-        }
-
-        /// <summary>Get the object ID for a given object.</summary>
-        /// <param name="obj">The object instance.</param>
-        private int GetItemID(SObject obj)
-        {
-            // get object ID from fence ID
-            if (obj is Fence fence)
+            switch (entity)
             {
-                if (fence.isGate.Value)
-                    return 325;
-                switch (fence.whichType.Value)
-                {
-                    case Fence.wood:
-                        return 322;
-                    case Fence.stone:
-                        return 323;
-                    case Fence.steel:
-                        return 324;
-                    case Fence.gold:
-                        return 298;
-                }
-            }
+                case Item item:
+                    return this.Connectors.Contains(item.Name);
 
-            // else obj ID
-            return obj.ParentSheetIndex;
+                case Flooring floor:
+                    return
+                        this.Data.FloorNames.TryGetValue(floor.whichFloor.Value, out string name)
+                        && this.Connectors.Contains(name);
+
+                default:
+                    return false;
+            }
         }
     }
 }

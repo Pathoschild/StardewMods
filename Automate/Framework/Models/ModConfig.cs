@@ -15,8 +15,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /// <summary>The key bindings.</summary>
         public ModConfigRawKeys Controls { get; set; } = new ModConfigRawKeys();
 
-        /// <summary>The in-game objects through which machines can connect.</summary>
-        public ModConfigObject[] Connectors { get; set; } = new ModConfigObject[0];
+        /// <summary>The in-game object names through which machines can connect.</summary>
+        public string[] ConnectorNames { get; set; } = new string[0];
 
         /// <summary>Options affecting compatibility with other mods.</summary>
         public ModCompatibilityConfig ModCompatibility { get; set; } = new ModCompatibilityConfig();

@@ -57,10 +57,11 @@ namespace Pathoschild.Stardew.Automate
             this.Keys = this.Config.Controls.ParseControls(this.Monitor);
             this.Factory = new MachineGroupFactory();
             this.Factory.Add(new AutomationFactory(
-                connectors: this.Config.Connectors,
+                connectors: this.Config.ConnectorNames,
                 automateShippingBin: this.Config.AutomateShippingBin,
                 monitor: this.Monitor,
                 reflection: helper.Reflection,
+                data: this.Helper.Data.ReadJsonFile<DataModel>("data.json"),
                 betterJunimosCompat: this.Config.ModCompatibility.BetterJunimos && helper.ModRegistry.IsLoaded("hawkfalcon.BetterJunimos"),
                 autoGrabberModCompat: this.Config.ModCompatibility.AutoGrabberMod && helper.ModRegistry.IsLoaded("Jotser.AutoGrabberMod")
             ));
@@ -70,11 +71,9 @@ namespace Pathoschild.Stardew.Automate
             helper.Events.Player.Warped += this.OnWarped;
             helper.Events.World.LocationListChanged += this.World_LocationListChanged;
             helper.Events.World.ObjectListChanged += this.World_ObjectListChanged;
+            helper.Events.World.TerrainFeatureListChanged += this.World_TerrainFeatureListChanged;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
-
-            if (this.Config.Connectors.Any(p => p.Type == ObjectType.Floor))
-                helper.Events.World.TerrainFeatureListChanged += this.World_TerrainFeatureListChanged;
 
             // log info
             this.Monitor.VerboseLog($"Initialised with automation every {this.Config.AutomationInterval} ticks.");

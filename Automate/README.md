@@ -142,28 +142,19 @@ Default `60`. The number of update ticks between each automation cycle (one seco
   </td>
 </tr>
 <tr>
-  <td><code>Connectors</code></td>
+  <td><code>ConnectorNames</code></td>
   <td>
 
-Default empty. A list of world object to treat as [connectors](#connectors), which connect adjacent
-machines together. Automate has no connectors by default, but you can edit this field to configure
-any object, craftable, or floor as a connector. Each one should be specified with a type (one of
-`Floor`, `BigCraftable`, or `Object`) and ID.
+Default empty. A list of placed item names to treat as [connectors](#connectors) which connect
+adjacent machines together. You must specify the exact _English_ names for any in-game items to
+use. For example:
 
-For example, this adds the Wood and Crystal Paths as connectors:
 ```js
-"Connectors": [
-   { "Type": "Floor", "ID": 6 },
-   { "Type": "Floor", "ID": 7 }
+"ConnectorNames": [
+   "Wood Path",
+   "Crystal Path"
 ]
 ```
-
-Valid IDs:
-* [list of object IDs](https://stardewvalleywiki.com/Modding:Object_data#Raw_data);
-* [list of craftable IDs](https://stardewvalleywiki.com/Modding:Big_Craftables_data#Raw_data);
-* floor IDs: 0 (Wood Floor), 1 (Stone Floor), 2 (Weathered Floor), 3 (Crystal Floor), 4 (Straw
-  Floor), 5 (Gravel Path), 6 (Wood Path), 7 (Crystal Path), 8 (Cobblestone Path), and 9 (Stepping
-  Stone Path).
 
   </td>
 </tr>

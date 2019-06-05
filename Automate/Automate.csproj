@@ -11,6 +11,12 @@
     <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="2.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="data.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="$(SolutionDir)\common.targets" />
 
