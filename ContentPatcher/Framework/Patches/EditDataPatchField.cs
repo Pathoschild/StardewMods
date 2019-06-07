@@ -57,7 +57,7 @@ namespace ContentPatcher.Framework.Patches
         {
             yield return this.EntryKey;
             yield return this.FieldKey;
-            foreach (ITokenString str in this.Value.GetTokenStrings())
+            foreach (IParsedTokenString str in this.Value.GetTokenStrings())
                 yield return str;
         }
 

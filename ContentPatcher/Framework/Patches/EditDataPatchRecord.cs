@@ -52,7 +52,7 @@ namespace ContentPatcher.Framework.Patches
             yield return this.Key;
             if (this.Value != null)
             {
-                foreach (ITokenString str in this.Value.GetTokenStrings())
+                foreach (IParsedTokenString str in this.Value.GetTokenStrings())
                     yield return str;
             }
         }

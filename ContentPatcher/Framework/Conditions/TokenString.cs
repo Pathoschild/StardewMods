@@ -10,7 +10,7 @@ using Pathoschild.Stardew.Common.Utilities;
 namespace ContentPatcher.Framework.Conditions
 {
     /// <summary>A string value optionally containing tokens.</summary>
-    internal class TokenString : ITokenString
+    internal class TokenString : IParsedTokenString
     {
         /*********
         ** Fields

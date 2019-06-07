@@ -62,9 +62,9 @@ namespace ContentPatcher.Framework.Tokens.Json
         }
 
         /// <summary>Get the token strings contained in the JSON structure.</summary>
-        public IEnumerable<ITokenString> GetTokenStrings()
+        public IEnumerable<IParsedTokenString> GetTokenStrings()
         {
-            return this.Contextuals.Values.OfType<ITokenString>();
+            return this.Contextuals.Values.OfType<IParsedTokenString>();
         }
 
 
