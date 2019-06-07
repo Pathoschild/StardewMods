@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added optional version with islands, for players who need more space.
+
 ## 1.2
 Released 12 April 2019.
 

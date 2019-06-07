@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Harmony;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.SmallBeachFarm.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -34,6 +35,9 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <summary>The relative path to the folder containing tilesheet variants.</summary>
         private readonly string TilesheetsPath = Path.Combine("assets", "tilesheets");
 
+        /// <summary>The mod configuration.</summary>
+        private ModConfig Config;
+
 
         /*********
         ** Public methods
@@ -42,6 +46,9 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            // read config
+            this.Config = helper.ReadConfig<ModConfig>();
+
             // hook events
             helper.Events.Player.Warped += this.OnWarped;
             helper.Events.GameLoop.DayEnding += this.DayEnding;
@@ -69,7 +76,10 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             if (asset.AssetNameEquals("Maps/Farm_Fishing"))
             {
                 // load map
-                Map map = this.Helper.Content.Load<Map>("assets/SmallBeachFarm.tbin");
+                Map map = this.Helper.Content.Load<Map>(this.Config.EnableIslands
+                    ? "assets/SmallBeachFarmWithIslands.tbin"
+                    : "assets/SmallBeachFarm.tbin"
+                );
 
                 // apply tilesheet recolors
                 DirectoryInfo compatFolder = this.GetCustomTilesheetFolder();
