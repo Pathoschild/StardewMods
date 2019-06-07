@@ -177,7 +177,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                             yield return new ItemIconField(this.GameHelper, L10n.Building.OutputReady(), pond.output.Value);
 
                             // drops
-                            yield return new ItemDropListField(this.GameHelper, L10n.Building.FishPondDrops(), this.GetPossibleDrops(pond, pondData), sort: false, preface: L10n.Building.FishPondDropsPreface());
+                            int chanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, pond.currentOccupants.Value / 10f) * 100);
+                            yield return new ItemDropListField(this.GameHelper, L10n.Building.FishPondDrops(), this.GetPossibleDrops(pond, pondData), sort: false, preface: L10n.Building.FishPondDropsPreface(chance: chanceOfAnyDrop));
 
                             // quests
                             if (pondData.PopulationGates?.Any(gate => gate.Key > pond.lastUnlockedPopulationGate.Value) == true)
@@ -450,6 +451,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Get a fish pond's possible drops.</summary>
         /// <param name="pond">The fish pond.</param>
         /// <param name="data">The fish pond data.</param>
+        /// <remarks>Derived from <see cref="FishPond.dayUpdate"/> and <see cref="FishPond.GetFishProduce"/>.</remarks>
         private IEnumerable<ItemDropData> GetPossibleDrops(FishPond pond, FishPondData data)
         {
             foreach (FishPondReward drop in data.ProducedItems)
