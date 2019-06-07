@@ -218,6 +218,7 @@
     "building.upgrades.coop.2": "até 12 animais; adiciona auto alimentação e coelhos",
     "building.water-trough.summary": "{{filled}} de {{max}} cochas de água preenchidas",
 
+    "building.fish-pond.population.empty": "Add a fish to start this pond", // TODO
     "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}", // TODO
     "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing one of these:", // TODO
     "building.fish-pond.quests.done": "{{count}} fish", // TODO

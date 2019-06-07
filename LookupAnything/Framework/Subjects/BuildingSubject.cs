@@ -155,6 +155,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 {
                     // fish pond
                     case FishPond pond:
+                        if (pond.fishType.Value <= -1)
+                            yield return new GenericField(this.GameHelper, L10n.Building.FishPondPopulation(), L10n.Building.FishPondPopulationEmpty());
+                        else
                         {
                             // get fish population
                             SObject fish = pond.GetFishObject();

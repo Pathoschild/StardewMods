@@ -218,6 +218,7 @@
     "building.upgrades.coop.2": "до 12-ти животных; разблокируются: система подачи корма и кролики",
     "building.water-trough.summary": "{{filled}} из {{max}} корыт заполнено",
 
+    "building.fish-pond.population.empty": "Add a fish to start this pond", // TODO
     "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}", // TODO
     "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing one of these:", // TODO
     "building.fish-pond.quests.done": "{{count}} fish", // TODO

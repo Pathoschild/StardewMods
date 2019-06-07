@@ -335,6 +335,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>{{filled}} of {{max}} water troughs filled</c>.</summary>
             public static Translation WaterTroughSummary(int filled, int max) => L10n.Helper.Get("building.water-trough.summary", new { filled, max });
 
+            /// <summary>A value like <c>Add a fish to start this pond</c>.</summary>
+            public static Translation FishPondPopulationEmpty() => L10n.Helper.Get("building.fish-pond.population.empty");
+
             /// <summary>A value like <c>New fish will spawn {{relativeDate}}</c>.</summary>
             public static Translation FishPondPopulationNextSpawn(string relativeDate) => L10n.Helper.Get("building.fish-pond.population.next-spawn", new { relativeDate });
 

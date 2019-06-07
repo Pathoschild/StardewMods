@@ -218,6 +218,7 @@
     "building.upgrades.coop.2": "12羽まで飼育でき、自動給餌とウサギの飼育ができる",
     "building.water-trough.summary": "最大{{max}}中{{filled}}の給水樋が充たされている",
 
+    "building.fish-pond.population.empty": "Add a fish to start this pond",
     "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}",
     "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing one of these:",
     "building.fish-pond.quests.done": "{{count}} fish",

@@ -218,6 +218,7 @@
     "building.upgrades.coop.2": "bis zu 12 Tiere, fügt automatische Fütterung und Hasen hinzu",
     "building.water-trough.summary": "{{filled}} von {{max}} Wassertrögen gefüllt",
 
+    "building.fish-pond.population.empty": "Add a fish to start this pond", // TODO
     "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}", // TODO
     "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing one of these:", // TODO
     "building.fish-pond.quests.done": "{{count}} fish", // TODO

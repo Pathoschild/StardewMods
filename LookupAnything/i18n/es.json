@@ -220,6 +220,7 @@
     "building.upgrades.coop.2": "up to 12 animals; add autofeed and rabbits",
     "building.water-trough.summary": "{{filled}} of {{max}} water troughs filled",
 
+    "building.fish-pond.population.empty": "Add a fish to start this pond",
     "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}",
     "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing one of these:",
     "building.fish-pond.quests.done": "{{count}} fish",
