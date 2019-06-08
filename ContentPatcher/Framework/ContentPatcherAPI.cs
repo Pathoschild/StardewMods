@@ -1,53 +1,65 @@
 using System;
+using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.ValueProviders;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework
 {
+    /// <summary>The Content Patcher API which other mods can access.</summary>
     internal class ContentPatcherAPI : IContentPatcherAPI
     {
         /*********
         ** Fields
         *********/
+        /// <summary>The unique mod ID for Content Patcher.</summary>
+        private readonly string ContentPatcherID;
+
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
         /// <summary>The action to add a mod token.</summary>
-        private readonly Action<IToken> AddModToken;
+        private readonly Action<ModProvidedToken> AddModToken;
 
-        /// <summary>The action to add a token for pending partial context update.</summary>
-        private readonly Action<string> AddPendingTokenUpdate;
+        /// <summary>A regex pattern matching a valid token name.</summary>
+        private readonly Regex ValidNameFormat = new Regex("^[a-z]+$", RegexOptions.IgnoreCase);
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="contentPatcherID">The unique mod ID for Content Patcher.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        internal ContentPatcherAPI(IMonitor monitor, Action<IToken> addModToken, Action<string> addPendingTokenUpdate)
+        /// <param name="addModToken">The action to add a mod token.</param>
+        internal ContentPatcherAPI(string contentPatcherID, IMonitor monitor, Action<ModProvidedToken> addModToken)
         {
+            this.ContentPatcherID = contentPatcherID;
             this.Monitor = monitor;
             this.AddModToken = addModToken;
-            this.AddPendingTokenUpdate = addPendingTokenUpdate;
         }
 
         /// <summary>Register a token.</summary>
         /// <param name="mod">The mod this token comes from.</param>
-        /// <param name="name">The name of the token.</param>
-        /// <param name="valueFunc">The function providing values.</param>
-        public void RegisterToken(IManifest mod, string name, Func<ITokenString, string[]> valueFunc)
+        /// <param name="valueProvider">The token value provider.</param>
+        public void RegisterToken(IManifest mod, IValueProvider valueProvider)
         {
-            string tokenScope = mod.UniqueID;
-            this.Monitor.Log($"Registering token through API: {mod.UniqueID}/{name}");
+            // validate mod
+            if (!mod.HasDependency(this.ContentPatcherID))
+                throw new InvalidOperationException($"{mod.Name} can't register a Content Patcher token because it doesn't list Content Patcher as a dependency.");
 
-            IToken token = new GenericToken(new ModValueProvider(name, valueFunc), tokenScope);
+            // validate name format
+            string name = valueProvider.Name?.Trim();
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Can't register a token with no name.", nameof(valueProvider));
+            if (!this.ValidNameFormat.IsMatch(name))
+                throw new ArgumentException("Can't register a token with an invalid name. Token names can only contain alphabetical characters.", nameof(valueProvider));
+
+            // format name
+            name = $"{mod.UniqueID}{InternalConstants.ModTokenSeparator}{name}";
+            this.Monitor.Log($"{mod.Name} added a token: {name}", LogLevel.Trace);
+            ModProvidedToken token = new ModProvidedToken(name, mod, valueProvider);
             this.AddModToken(token);
-        }
-
-        public void UpdateToken(IManifest mod, string name)
-        {
-            string tokenScope = mod.UniqueID;
-            this.AddPendingTokenUpdate(tokenScope + InternalConstants.TokenScopeSeparator + name);
         }
     }
 }

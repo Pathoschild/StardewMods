@@ -132,6 +132,16 @@ namespace ContentPatcher.Framework.Tokens
         /*********
         ** Protected methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="name">The token name.</param>
+        /// <param name="provider">The underlying value provider.</param>
+        /// <param name="scope">The mod namespace in which the token is accessible, or <c>null</c> for any namespace.</param>
+        protected GenericToken(string name, IValueProvider provider, string scope = null)
+            : this(provider, scope)
+        {
+            this.Name = name;
+        }
+
         /// <summary>Assert that an input argument is valid.</summary>
         /// <param name="input">The input to check, if any.</param>
         /// <exception cref="InvalidOperationException">The input does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
@@ -143,22 +153,6 @@ namespace ContentPatcher.Framework.Tokens
                 throw new InvalidOperationException($"The '{this.Name}' token does not allow input arguments ({InternalConstants.InputArgSeparator}).");
             if (this.RequiresInput && !hasInput)
                 throw new InvalidOperationException($"The '{this.Name}' token requires an input argument.");
-        }
-
-        /// <summary>Try to parse a raw case-insensitive string into an enum value.</summary>
-        /// <typeparam name="TEnum">The enum type.</typeparam>
-        /// <param name="raw">The raw string to parse.</param>
-        /// <param name="result">The resulting enum value.</param>
-        /// <param name="mustBeNamed">When parsing a numeric value, whether it must match one of the named enum values.</param>
-        protected bool TryParseEnum<TEnum>(string raw, out TEnum result, bool mustBeNamed = true) where TEnum : struct
-        {
-            if (!Enum.TryParse(raw, true, out result))
-                return false;
-
-            if (mustBeNamed && !Enum.IsDefined(typeof(TEnum), result))
-                return false;
-
-            return true;
         }
     }
 }

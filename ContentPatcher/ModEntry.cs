@@ -76,14 +76,11 @@ namespace ContentPatcher
         /// <summary>The debug overlay (if enabled).</summary>
         private DebugOverlay DebugOverlay;
 
-        /// <summary>The list of added mod tokens</summary>
-        private List<IToken> ModTokens = new List<IToken>();
+        /// <summary>The mod tokens queued for addition. This is null after the first update tick, when new tokens can no longer be added.</summary>
+        private List<ModProvidedToken> QueuedModTokens = new List<ModProvidedToken>();
 
-        /// <summary>If we passed the first tick, which is used for initialization.</summary>
-        private bool PastFirstTick = false;
-
-        /// <summary>Tokens pending for a partial context update.</summary>
-        private InvariantHashSet PendingTokenUpdates = new InvariantHashSet();
+        /// <summary>Whether the next tick is the first one.</summary>
+        private bool IsFirstTick = true;
 
 
         /*********
@@ -102,7 +99,7 @@ namespace ContentPatcher
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry"/>.</summary>
         public override object GetApi()
         {
-            return new ContentPatcherAPI(this.Monitor, this.AddModToken, this.AddPendingUpdateToken);
+            return new ContentPatcherAPI(this.ModManifest.UniqueID, this.Monitor, this.AddModToken);
         }
 
 
@@ -117,18 +114,11 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
-            // Initialization is delayed to the first game tick so that other mods can register their tokens in Events.GameLoop.GameLaunched.
-            if (!this.PastFirstTick)
+            // initialise after first tick so other mods can register their tokens in SMAPI's GameLoop.GameLaunched event
+            if (this.IsFirstTick)
             {
+                this.IsFirstTick = false;
                 this.Initialize();
-                this.PastFirstTick = true;
-            }
-
-            if (this.PendingTokenUpdates.Count > 0)
-            {
-                this.TokenManager.UpdateContext(this.PendingTokenUpdates);
-                this.PatchManager.UpdateContext(this.Helper.Content, this.PendingTokenUpdates);
-                this.PendingTokenUpdates.Clear();
             }
         }
 
@@ -230,7 +220,7 @@ namespace ContentPatcher
                 .ToArray();
 
             // load content packs and context
-            this.TokenManager = new TokenManager(helper.Content, installedMods, this.ModTokens);
+            this.TokenManager = new TokenManager(helper.Content, installedMods, this.QueuedModTokens);
             this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.AssetValidators());
             this.LoadContentPacks(contentPacks);
 
@@ -252,23 +242,19 @@ namespace ContentPatcher
             // set up commands
             this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, () => this.UpdateContext());
             helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (name, args) => this.CommandHandler.Handle(args));
+
+            // can no longer queue tokens
+            this.QueuedModTokens = null;
         }
 
-        /// <summary>Adds a mod token</summary>
-        /// <param name="token"></param>
-        private void AddModToken(IToken token)
+        /// <summary>Add a mod-provided token.</summary>
+        /// <param name="token">The token to add.</param>
+        private void AddModToken(ModProvidedToken token)
         {
-            if (this.PastFirstTick)
-                throw new NotSupportedException("The point where mod tokens can be registered has passed.");
+            if (!this.IsFirstTick)
+                throw new InvalidOperationException($"{token.Mod.Name} tried to add a custom token after the first update tick. Tokens can only be added during SMAPI's {nameof(this.Helper.Events.GameLoop)}.{nameof(this.Helper.Events.GameLoop.GameLaunched)} event.");
 
-            this.ModTokens.Add(token);
-        }
-
-        /// <summary>Adds a token for pending partial context update.</summary>
-        /// <param name="token">The token to add as pending.</param>
-        private void AddPendingUpdateToken(string token)
-        {
-            this.PendingTokenUpdates.Add(token);
+            this.QueuedModTokens.Add(token);
         }
 
         /// <summary>Update the current context.</summary>
@@ -393,7 +379,7 @@ namespace ContentPatcher
                             IParsedTokenString values;
                             if (!string.IsNullOrWhiteSpace(entry.Value))
                             {
-                                if (!this.TryParseStringTokens(entry.Value, modContext, current.Migrator, out string valueError, out values))
+                                if (!this.TryParseStringTokens(entry.Value, modContext, current.Manifest, current.Migrator, out string valueError, out values))
                                 {
                                     LogSkip($"the token value is invalid: {valueError}");
                                     continue;
@@ -405,7 +391,7 @@ namespace ContentPatcher
                             // parse conditions
                             IList<Condition> conditions;
                             {
-                                if (!this.TryParseConditions(entry.When, modContext, current.Migrator, out conditions, out string conditionError))
+                                if (!this.TryParseConditions(entry.When, modContext, current.Manifest, current.Migrator, out conditions, out string conditionError))
                                 {
                                     this.Monitor.Log($"Ignored {current.Manifest.Name} > '{entry.Name}' token: its {nameof(DynamicTokenConfig.When)} field is invalid: {conditionError}.", LogLevel.Warn);
                                     continue;
@@ -507,6 +493,8 @@ namespace ContentPatcher
 
             try
             {
+                IManifest forMod = pack.Manifest;
+
                 // normalise patch fields
                 if (entry.When == null)
                     entry.When = new InvariantDictionary<string>();
@@ -525,21 +513,21 @@ namespace ContentPatcher
                 {
                     if (string.IsNullOrWhiteSpace(entry.Target))
                         return TrackSkip($"must set the {nameof(PatchConfig.Target)} field");
-                    if (!this.TryParseStringTokens(entry.Target, tokenContext, migrator, out string error, out assetName))
+                    if (!this.TryParseStringTokens(entry.Target, tokenContext, forMod, migrator, out string error, out assetName))
                         return TrackSkip($"the {nameof(PatchConfig.Target)} is invalid: {error}");
                 }
 
                 // parse 'enabled'
                 bool enabled = true;
                 {
-                    if (entry.Enabled != null && !this.TryParseEnabled(entry.Enabled, tokenContext, migrator, out string error, out enabled))
+                    if (entry.Enabled != null && !this.TryParseEnabled(entry.Enabled, tokenContext, forMod, migrator, out string error, out enabled))
                         return TrackSkip($"invalid {nameof(PatchConfig.Enabled)} value '{entry.Enabled}': {error}");
                 }
 
                 // parse conditions
                 IList<Condition> conditions;
                 {
-                    if (!this.TryParseConditions(entry.When, tokenContext, migrator, out conditions, out string error))
+                    if (!this.TryParseConditions(entry.When, tokenContext, forMod, migrator, out conditions, out string error))
                         return TrackSkip($"the {nameof(PatchConfig.When)} field is invalid: {error}");
                 }
 
@@ -551,7 +539,7 @@ namespace ContentPatcher
                     case PatchType.Load:
                         {
                             // init patch
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, migrator, out string error, out IParsedTokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, forMod, migrator, out string error, out IParsedTokenString fromAsset))
                                 return TrackSkip(error);
                             patch = new LoadPatch(entry.LogName, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
                         }
@@ -570,7 +558,7 @@ namespace ContentPatcher
                             {
                                 foreach (KeyValuePair<string, JToken> pair in entry.Entries)
                                 {
-                                    if (!this.TryParseStringTokens(pair.Key, tokenContext, migrator, out string keyError, out IParsedTokenString key))
+                                    if (!this.TryParseStringTokens(pair.Key, tokenContext, forMod, migrator, out string keyError, out IParsedTokenString key))
                                         return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key}' key is invalid: {keyError}");
                                     if (!this.TryParseJsonTokens(pair.Value, tokenContext, migrator, out string error, out TokenisableJToken value))
                                         return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key}' value is invalid: {error}");
@@ -586,14 +574,14 @@ namespace ContentPatcher
                                 foreach (KeyValuePair<string, IDictionary<string, JToken>> recordPair in entry.Fields)
                                 {
                                     // parse entry key
-                                    if (!this.TryParseStringTokens(recordPair.Key, tokenContext, migrator, out string keyError, out IParsedTokenString key))
+                                    if (!this.TryParseStringTokens(recordPair.Key, tokenContext, forMod, migrator, out string keyError, out IParsedTokenString key))
                                         return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} is invalid: {keyError}");
 
                                     // parse fields
                                     foreach (var fieldPair in recordPair.Value)
                                     {
                                         // parse field key
-                                        if (!this.TryParseStringTokens(fieldPair.Key, tokenContext, migrator, out string fieldError, out IParsedTokenString fieldKey))
+                                        if (!this.TryParseStringTokens(fieldPair.Key, tokenContext, forMod, migrator, out string fieldError, out IParsedTokenString fieldKey))
                                             return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldPair.Key} key is invalid: {fieldError}");
 
                                         // parse value
@@ -623,11 +611,11 @@ namespace ContentPatcher
                                         return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify only one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, and {nameof(PatchMoveEntryConfig.AfterID)}");
 
                                     // parse IDs
-                                    if (!this.TryParseStringTokens(moveEntry.ID, tokenContext, migrator, out string idError, out IParsedTokenString moveId))
+                                    if (!this.TryParseStringTokens(moveEntry.ID, tokenContext, forMod, migrator, out string idError, out IParsedTokenString moveId))
                                         return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.ID)} is invalid: {idError}");
-                                    if (!this.TryParseStringTokens(moveEntry.BeforeID, tokenContext, migrator, out string beforeIdError, out IParsedTokenString beforeId))
+                                    if (!this.TryParseStringTokens(moveEntry.BeforeID, tokenContext, forMod, migrator, out string beforeIdError, out IParsedTokenString beforeId))
                                         return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.BeforeID)} is invalid: {beforeIdError}");
-                                    if (!this.TryParseStringTokens(moveEntry.AfterID, tokenContext, migrator, out string afterIdError, out IParsedTokenString afterId))
+                                    if (!this.TryParseStringTokens(moveEntry.AfterID, tokenContext, forMod, migrator, out string afterIdError, out IParsedTokenString afterId))
                                         return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.AfterID)} is invalid: {afterIdError}");
 
                                     // parse position
@@ -654,7 +642,7 @@ namespace ContentPatcher
                                 return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}]");
 
                             // save
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, migrator, out string error, out IParsedTokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, forMod, migrator, out string error, out IParsedTokenString fromAsset))
                                 return TrackSkip(error);
                             patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
@@ -664,7 +652,7 @@ namespace ContentPatcher
                     case PatchType.EditMap:
                         {
                             // read map asset
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, migrator, out string error, out IParsedTokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, forMod, migrator, out string error, out IParsedTokenString fromAsset))
                                 return TrackSkip(error);
 
                             // validate
@@ -698,10 +686,11 @@ namespace ContentPatcher
         /// <summary>Normalise and parse the given condition values.</summary>
         /// <param name="raw">The raw condition values to normalise.</param>
         /// <param name="tokenContext">The tokens available for this content pack.</param>
+        /// <param name="forMod">The manifest for the content pack being parsed.</param>
         /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
         /// <param name="conditions">The normalised conditions.</param>
         /// <param name="error">An error message indicating why normalisation failed.</param>
-        private bool TryParseConditions(InvariantDictionary<string> raw, IContext tokenContext, IMigration migrator, out IList<Condition> conditions, out string error)
+        private bool TryParseConditions(InvariantDictionary<string> raw, IContext tokenContext, IManifest forMod, IMigration migrator, out IList<Condition> conditions, out string error)
         {
             conditions = new List<Condition>();
 
@@ -759,7 +748,7 @@ namespace ContentPatcher
                     conditions = null;
                     return false;
                 }
-                if (!this.TryParseStringTokens(pair.Value, tokenContext, migrator, out error, out IParsedTokenString values))
+                if (!this.TryParseStringTokens(pair.Value, tokenContext, forMod, migrator, out error, out IParsedTokenString values))
                 {
                     error = $"can't parse condition {pair.Key}: {error}";
                     return false;
@@ -800,15 +789,16 @@ namespace ContentPatcher
         /// <summary>Parse a boolean <see cref="PatchConfig.Enabled"/> value from a string which can contain tokens, and validate that it's valid.</summary>
         /// <param name="rawValue">The raw string which may contain tokens.</param>
         /// <param name="tokenContext">The tokens available for this content pack.</param>
+        /// <param name="forMod">The manifest for the content pack being parsed.</param>
         /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseEnabled(string rawValue, IContext tokenContext, IMigration migrator, out string error, out bool parsed)
+        private bool TryParseEnabled(string rawValue, IContext tokenContext, IManifest forMod, IMigration migrator, out string error, out bool parsed)
         {
             parsed = false;
 
             // analyse string
-            if (!this.TryParseStringTokens(rawValue, tokenContext, migrator, out error, out IParsedTokenString tokenString))
+            if (!this.TryParseStringTokens(rawValue, tokenContext, forMod, migrator, out error, out IParsedTokenString tokenString))
                 return false;
 
             // validate & extract tokens
@@ -913,10 +903,11 @@ namespace ContentPatcher
         /// <summary>Parse a string which can contain tokens, and validate that it's valid.</summary>
         /// <param name="rawValue">The raw string which may contain tokens.</param>
         /// <param name="tokenContext">The tokens available for this content pack.</param>
+        /// <param name="forMod">The manifest for the content pack being parsed.</param>
         /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseStringTokens(string rawValue, IContext tokenContext, IMigration migrator, out string error, out IParsedTokenString parsed)
+        private bool TryParseStringTokens(string rawValue, IContext tokenContext, IManifest forMod, IMigration migrator, out string error, out IParsedTokenString parsed)
         {
             // parse
             parsed = new TokenString(rawValue, tokenContext);
@@ -942,6 +933,12 @@ namespace ContentPatcher
                     parsed = null;
                     return false;
                 }
+                if (token is ModProvidedToken modToken && !forMod.HasDependency(modToken.Mod.UniqueID, canBeOptional: false))
+                {
+                    error = $"'{lexToken}' can't be used because it's provided by {modToken.Mod.Name} (ID: {modToken.Mod.UniqueID}), but {forMod.Name} doesn't list it as a dependency.";
+                    parsed = null;
+                    return false;
+                }
             }
 
             // looks OK
@@ -953,11 +950,12 @@ namespace ContentPatcher
         /// <param name="pack">The content pack being loaded.</param>
         /// <param name="path">The asset path in the content patch.</param>
         /// <param name="tokenContext">The tokens available for this content pack.</param>
+        /// <param name="forMod">The manifest for the content pack being parsed.</param>
         /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
         /// <param name="error">The error reason if preparing the asset fails.</param>
         /// <param name="tokenedPath">The parsed value.</param>
         /// <returns>Returns whether the local asset was successfully prepared.</returns>
-        private bool TryPrepareLocalAsset(ManagedContentPack pack, string path, IContext tokenContext, IMigration migrator, out string error, out IParsedTokenString tokenedPath)
+        private bool TryPrepareLocalAsset(ManagedContentPack pack, string path, IContext tokenContext, IManifest forMod, IMigration migrator, out string error, out IParsedTokenString tokenedPath)
         {
             // normalise raw value
             path = this.NormaliseLocalAssetPath(pack, path);
@@ -969,7 +967,7 @@ namespace ContentPatcher
             }
 
             // tokenise
-            if (!this.TryParseStringTokens(path, tokenContext, migrator, out string tokenError, out tokenedPath))
+            if (!this.TryParseStringTokens(path, tokenContext, forMod, migrator, out string tokenError, out tokenedPath))
             {
                 error = $"the {nameof(PatchConfig.FromFile)} is invalid: {tokenError}";
                 tokenedPath = null;

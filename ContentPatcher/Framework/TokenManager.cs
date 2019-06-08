@@ -39,10 +39,11 @@ namespace ContentPatcher.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
         /// <param name="installedMods">The installed mod IDs.</param>
+        /// <param name="modTokens">The custom tokens provided by mods.</param>
         public TokenManager(IContentHelper contentHelper, IEnumerable<string> installedMods, IEnumerable<IToken> modTokens)
         {
-            foreach (var modToken in modTokens)
-                this.GlobalContext.Tokens[modToken.Scope + InternalConstants.TokenScopeSeparator + modToken.Name] = modToken;
+            foreach (IToken modToken in modTokens)
+                this.GlobalContext.Tokens[modToken.Name] = modToken;
             foreach (IValueProvider valueProvider in this.GetGlobalValueProviders(contentHelper, installedMods))
                 this.GlobalContext.Tokens[valueProvider.Name] = new GenericToken(valueProvider);
         }
