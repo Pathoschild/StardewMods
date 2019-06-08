@@ -371,7 +371,7 @@ namespace ContentPatcher.Framework.Commands
             {
                 string[] failedConditions = (
                     from condition in patch.ParsedConditions
-                    let displayText = !condition.Name.Equals("HasFile", StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrWhiteSpace(condition.Input?.Raw)
+                    let displayText = !condition.Name.EqualsIgnoreCase("HasFile") && !string.IsNullOrWhiteSpace(condition.Input?.Raw)
                         ? $"{condition.Name}:{condition.Input.Raw}"
                         : condition.Name
                     orderby displayText

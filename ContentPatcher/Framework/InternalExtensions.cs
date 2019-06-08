@@ -14,6 +14,16 @@ namespace ContentPatcher.Framework
         /****
         ** Case-insensitive extensions
         ****/
+        /// <summary>Get whether a value is equal to another, using the invariant culture and ignoring case.</summary>
+        /// <param name="value">The first value to compare.</param>
+        /// <param name="other">The second value to compare.</param>
+        public static bool EqualsIgnoreCase(this string value, string other)
+        {
+            return
+                value?.Equals(other, StringComparison.InvariantCultureIgnoreCase)
+                ?? other == null;
+        }
+
         /// <summary>Get the set difference of two sequences, using the invariant culture and ignoring case.</summary>
         /// <param name="source">The first sequence to compare.</param>
         /// <param name="other">The second sequence to compare.</param>
