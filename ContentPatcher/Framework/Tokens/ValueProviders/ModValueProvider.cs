@@ -15,8 +15,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Update the token if needed, and return <c>true</c> if the token changed (so any tokens using it should be rechecked).</summary>
         private readonly Func<bool> UpdateContextImpl;
 
-        /// <summary>Get the current token value when invoked. If this returns <c>null</c> (not an empty string), the token will be marked unavailable in the current context.</summary>
-        private readonly Func<ITokenString, IEnumerable<string>> GetValueImpl;
+        /// <summary>Get the current token value for a given input argument. If this returns <c>null</c> (not an empty string), the token will be marked unavailable in the current context.</summary>
+        private readonly Func<string, IEnumerable<string>> GetValueImpl;
 
 
         /*********
@@ -26,10 +26,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="name"> The value provider name.</param>
         /// <param name="isReady">Get whether the token is valid in the current context.</param>
         /// <param name="updateContext">Update the token if needed, and return <c>true</c> if the token changed (so any tokens using it should be rechecked).</param>
-        /// <param name="getValue">Get the current token value when invoked. If this returns <c>null</c> (not an empty string), the token will be marked unavailable in the current context.</param>
+        /// <param name="getValue">Get the current token value for a given input argument. If this returns <c>null</c> (not an empty string), the token will be marked unavailable in the current context.</param>
         /// <param name="allowsInput">Whether the value provider allows an input argument.</param>
         /// <param name="requiresInput">Whether an input argument is required when using this value provider.</param>
-        public ModValueProvider(string name, Func<bool> isReady, Func<bool> updateContext, Func<ITokenString, IEnumerable<string>> getValue, bool allowsInput, bool requiresInput)
+        public ModValueProvider(string name, Func<bool> isReady, Func<bool> updateContext, Func<string, IEnumerable<string>> getValue, bool allowsInput, bool requiresInput)
             : base(name, canHaveMultipleValuesForRoot: true)
         {
             this.IsReadyImpl = isReady;
@@ -48,7 +48,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             if (this.IsReady)
             {
-                foreach (string value in this.GetValueImpl(input))
+                foreach (string value in this.GetValueImpl(input.Value))
                     yield return value;
             }
         }

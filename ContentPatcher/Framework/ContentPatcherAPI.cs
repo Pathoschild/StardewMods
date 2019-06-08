@@ -33,7 +33,7 @@ namespace ContentPatcher.Framework
         /// <param name="contentPatcherID">The unique mod ID for Content Patcher.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="addModToken">The action to add a mod token.</param>
-        internal ContentPatcherAPI(string contentPatcherID, IMonitor monitor, Action<ModProvidedToken> addModToken)
+        public ContentPatcherAPI(string contentPatcherID, IMonitor monitor, Action<ModProvidedToken> addModToken)
         {
             this.ContentPatcherID = contentPatcherID;
             this.Monitor = monitor;
@@ -45,10 +45,10 @@ namespace ContentPatcher.Framework
         /// <param name="name">The token name.</param>
         /// <param name="isReady">Get whether the token is valid in the current context.</param>
         /// <param name="updateContext">Update the token if needed, and return <c>true</c> if the token changed (so any tokens using it should be rechecked).</param>
-        /// <param name="getValue">Get the current token value when invoked. If this returns <c>null</c> (not an empty string), the token will be marked unavailable in the current context.</param>
+        /// <param name="getValue">Get the current token value for a given input argument. If this returns <c>null</c> (not an empty string), the token will be marked unavailable in the current context.</param>
         /// <param name="allowsInput">Whether the value provider allows an input argument (like {{tokenName : inputArgument}}).</param>
         /// <param name="requiresInput">Whether an input argument is required when using this value provider.</param>
-        public void RegisterToken(IManifest mod, string name, Func<bool> isReady, Func<bool> updateContext, Func<ITokenString, IEnumerable<string>> getValue, bool allowsInput, bool requiresInput)
+        public void RegisterToken(IManifest mod, string name, Func<bool> isReady, Func<bool> updateContext, Func<string, IEnumerable<string>> getValue, bool allowsInput, bool requiresInput)
         {
             this.RegisterToken(mod, new ModValueProvider(name, isReady, updateContext, getValue, allowsInput, requiresInput));
         }
