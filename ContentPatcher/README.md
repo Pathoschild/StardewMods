@@ -27,6 +27,7 @@ that change the game's images and data without replacing XNB files.
   * [Multiplayer](#multiplayer)
   * [How multiple patches interact](#how-multiple-patches-interact)
   * [Known limitations](#known-limitations)
+* [Extensibility for modders](#extensibility-for-modders)
 * [See also](#see-also)
 
 ## Install
@@ -1273,6 +1274,143 @@ need to explicitly patch after another content pack, see [manifest dependencies]
   `Characters/Farmer/accessories` | The number of accessories is hardcoded, so custom accessories need to replace an existing one.
   `Characters/Farmer/skinColors` | The number of skin colors is hardcoded, so custom colors need to replace an existing one.
   `Maps/*` | See [Modding:Maps#Potential issues](https://stardewvalleywiki.com/Modding:Maps#Potential_issues) on the wiki.
+
+## Extensibility for modders
+Content Patcher has a [mod-provided API](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Mod-provided_APIs)
+you can use to add custom tokens. Custom tokens are always prefixed by the ID of the mod that
+created them, like `Pathoschild.ExampleMod/SomeTokenName`.
+
+
+<big><strong>The Content Patcher API is experimental and may change at any time.</strong></big>
+
+
+### Access the API
+To access the API:
+
+1. Add Content Patcher as [a dependency in your mod's `manifest.json`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies):
+
+   ```js
+   "Dependencies": [
+      { "UniqueID": "Pathoschild.ContentPatcher", "IsRequired": false }
+   ]
+   ```
+
+2. Copy [`IContentPatcherAPI`](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/IContentPatcherAPI.cs)
+   into your mod code, and delete any methods you won't need for best future compatibility.
+3. Hook into [SMAPI's `GameLoop.GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched)
+   and get a copy of the API:
+   ```c#
+   IContentPatcherAPI contentPatcher = this.Helper.Registry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
+   ```
+4. Use the API to extend Content Patcher (see below).
+
+### Add custom token
+You can add a token by calling the `RegisterToken` API method from SMAPI's `GameLaunched` event.
+(The arguments are explained more below the code block.)
+
+For example, let's define some basic logic for a token containing the player's initials:
+```c#
+/// <summary>An arbitrary class to handle token logic.</summary>
+internal class PlayerInitialsToken
+{
+    /*********
+    ** Fields
+    *********/
+    /// <summary>The token value as of the last context update.</summary>
+    private string Value;
+
+
+    /*********
+    ** Public methods
+    *********/
+    /// <summary>Get whether the token is ready to use.</summary>
+    public bool IsReady()
+    {
+        return this.Value != null;
+    }
+
+    /// <summary>Update the token value.</summary>
+    /// <returns>Returns whether the value changed, which may trigger patch updates.</returns>
+    public bool UpdateContext()
+    {
+        string oldValue = this.Value;
+        this.Value = this.GetPlayerInitials();
+        return this.Value != oldValue;
+    }
+
+    /// <summary>Get the token value.</summary>
+    /// <param name="input">The input argument passed to the token, if any.</param>
+    public IEnumerable<string> GetValue(string input)
+    {
+        if (this.Value != null)
+            yield return this.Value;
+    }
+
+
+    /*********
+    ** Private methods
+    *********/
+    /// <summary>Recalculate the current token value.</summary>
+    private string GetPlayerInitials()
+    {
+        string playerName = null;
+        if (Context.IsWorldReady)
+            playerName = Game1.player.Name;
+        else if (SaveGame.loaded?.player != null)
+            playerName = SaveGame.loaded.player.Name;
+
+        return playerName != null
+            ? string.Join("", playerName.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Select(p => p[0]))
+            : null;
+    }
+}
+```
+
+Next let's register it with Content Patcher in the `GameLaunched` event (see _Access the API_ above).
+Note that we're not passing the actual `PlayerInitialsToken` instance to Content Patcher, that's
+just a class we created to contain our token logic.
+
+```c#
+PlayerInitialsToken token = new PlayerInitialsToken();
+api.RegisterToken(
+    mod: this.ModManifest,
+    name: "PlayerInitials",
+    updateContext: token.UpdateContext,
+    isReady: token.IsReady,
+    getValue: token.GetValue,
+    allowsInput: false,
+    requiresInput: false
+);
+```
+
+Content Patcher tokens are flexible, so there's a lot to unpack in that method call. Here's a
+description of each field:
+
+field | type | purpose
+----- | ---- | -------
+`mod` | `IManifest` | The manifest of the mod defining the token. You can just pass in `this.ModManifest` from your entry class.
+`name` | `string` | The token name. This only needs to be unique for your mod; Content Patcher will prefix it with your mod ID automatically, like `Pathoschild.ExampleMod/SomeTokenName`.
+`updateContext` | `Func<bool>` | A function which updates the token value (if needed), and returns whether the token value changed. It's important to report value changes correctly here, since Content Patcher will decide whether to update patches accordingly.
+`isReady` | `Func<bool>` | A function which returns whether the token is available for use. This is always called after `updateContext`. If this returns false, any patches or dynamic tokens using this token will be disabled. (A token may returns true and still return no value, in which case the token value is simply blank.)
+`getValue` | `Func<string, IEnumerable<string>>` | A function which returns the current value for a given input argument (if any). For example, `{{PlayerInitials}}` would result in a null input argument; `{{your-mod-id/PlayerInitials:{{PlayerName}}}}` would pass in the parsed string after token substitution, like `"John Smith"`. If the token doesn't use input arguments, you can simply ignore the input.
+`allowsInput` | `bool` | Whether the player can provide an input argument (see `getValue`).
+`requiresInput` | `bool` | Whether the token can _only_ be used with an input argument (see `getValue`).
+
+That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
+```js
+{
+   "Format": "1.8",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Characters/Dialogue/Abigail",
+         "Entries": {
+            "Mon": "Oh hey {{your-mod-id/PlayerInitials}}! Taking a break from work?"
+         }
+      }
+   ]
+}
+```
 
 ## See also
 * [Release notes](release-notes.md)

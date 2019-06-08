@@ -252,7 +252,10 @@ namespace ContentPatcher
         private void AddModToken(ModProvidedToken token)
         {
             if (!this.IsFirstTick)
-                throw new InvalidOperationException($"{token.Mod.Name} tried to add a custom token after the first update tick. Tokens can only be added during SMAPI's {nameof(this.Helper.Events.GameLoop)}.{nameof(this.Helper.Events.GameLoop.GameLaunched)} event.");
+            {
+                this.Monitor.Log($"Rejected token added by {token.Mod.Name} because tokens can't be added after SMAPI's {nameof(this.Helper.Events.GameLoop)}.{nameof(this.Helper.Events.GameLoop.GameLaunched)} event.", LogLevel.Error);
+                return;
+            }
 
             this.QueuedModTokens.Add(token);
         }

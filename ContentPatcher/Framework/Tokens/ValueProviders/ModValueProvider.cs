@@ -9,13 +9,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /*********
         ** Fields
         *********/
-        /// <summary>Get whether the token is valid in the current context.</summary>
-        private readonly Func<bool> IsReadyImpl;
-
-        /// <summary>Update the token if needed, and return <c>true</c> if the token changed (so any tokens using it should be rechecked).</summary>
+        /// <summary>A function which updates the token value (if needed), and returns whether the token value changed.</summary>
         private readonly Func<bool> UpdateContextImpl;
 
-        /// <summary>Get the current token value for a given input argument. If this returns <c>null</c> (not an empty string), the token will be marked unavailable in the current context.</summary>
+        /// <summary>A function which returns whether the token is available for use. This should always be called after <see cref="UpdateContextImpl"/>.</summary>
+        private readonly Func<bool> IsReadyImpl;
+
+        /// <summary>A function which returns the current value for a given input argument (if any).</summary>
         private readonly Func<string, IEnumerable<string>> GetValueImpl;
 
 
@@ -23,17 +23,17 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="name"> The value provider name.</param>
-        /// <param name="isReady">Get whether the token is valid in the current context.</param>
-        /// <param name="updateContext">Update the token if needed, and return <c>true</c> if the token changed (so any tokens using it should be rechecked).</param>
-        /// <param name="getValue">Get the current token value for a given input argument. If this returns <c>null</c> (not an empty string), the token will be marked unavailable in the current context.</param>
-        /// <param name="allowsInput">Whether the value provider allows an input argument.</param>
-        /// <param name="requiresInput">Whether an input argument is required when using this value provider.</param>
+        /// <param name="name">The token name. This only needs to be unique for your mod; Content Patcher will prefix it with your mod ID automatically, like <c>Pathoschild.ExampleMod/SomeTokenName</c>.</param>
+        /// <param name="updateContext">A function which updates the token value (if needed), and returns whether the token value changed.</param>
+        /// <param name="isReady">A function which returns whether the token is available for use. This is always called after <paramref name="updateContext"/>.</param>
+        /// <param name="getValue">A function which returns the current value for a given input argument (if any).</param>
+        /// <param name="allowsInput">Whether the player can provide an input argument (see <paramref name="getValue"/>).</param>
+        /// <param name="requiresInput">Whether the token can *only* be used with an input argument (see <paramref name="getValue"/>).</param>
         public ModValueProvider(string name, Func<bool> isReady, Func<bool> updateContext, Func<string, IEnumerable<string>> getValue, bool allowsInput, bool requiresInput)
             : base(name, canHaveMultipleValuesForRoot: true)
         {
-            this.IsReadyImpl = isReady;
             this.UpdateContextImpl = updateContext;
+            this.IsReadyImpl = isReady;
             this.GetValueImpl = getValue;
             if (allowsInput)
                 this.EnableInputArguments(requiresInput, true);
@@ -48,7 +48,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             if (this.IsReady)
             {
-                foreach (string value in this.GetValueImpl(input.Value))
+                IEnumerable<string> values = this.GetValueImpl(input?.Value);
+                if (values == null)
+                    yield break;
+
+                foreach (string value in values)
                     yield return value;
             }
         }
