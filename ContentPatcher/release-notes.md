@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added experimental API to let other mods create custom tokens and conditions.
 * Improved `config.json` keybind parsing.
 
 ## 1.8.2

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
-    /// <summary>A value provider defined by a mod.</summary>
-    internal class ModValueProvider : BaseValueProvider
+    /// <summary>A value provider defined by a mod which specifies custom logic for readiness, context updates, and change tracking.</summary>
+    internal class ModComplexValueProvider : BaseValueProvider
     {
         /*********
         ** Fields
@@ -29,7 +29,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="getValue">A function which returns the current value for a given input argument (if any).</param>
         /// <param name="allowsInput">Whether the player can provide an input argument (see <paramref name="getValue"/>).</param>
         /// <param name="requiresInput">Whether the token can *only* be used with an input argument (see <paramref name="getValue"/>).</param>
-        public ModValueProvider(string name, Func<bool> isReady, Func<bool> updateContext, Func<string, IEnumerable<string>> getValue, bool allowsInput, bool requiresInput)
+        public ModComplexValueProvider(string name, Func<bool> isReady, Func<bool> updateContext, Func<string, IEnumerable<string>> getValue, bool allowsInput, bool requiresInput)
             : base(name, canHaveMultipleValuesForRoot: true)
         {
             this.UpdateContextImpl = updateContext;

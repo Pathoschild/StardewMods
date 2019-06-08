@@ -1277,8 +1277,8 @@ need to explicitly patch after another content pack, see [manifest dependencies]
 
 ## Extensibility for modders
 Content Patcher has a [mod-provided API](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Mod-provided_APIs)
-you can use to add custom tokens. Custom tokens are always prefixed by the ID of the mod that
-created them, like `Pathoschild.ExampleMod/SomeTokenName`.
+you can use to add custom tokens. Custom tokens are always prefixed with the ID of the mod that
+created them, like `your-mod-id/SomeTokenName`.
 
 
 <big><strong>The Content Patcher API is experimental and may change at any time.</strong></big>
@@ -1300,24 +1300,73 @@ To access the API:
 3. Hook into [SMAPI's `GameLoop.GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched)
    and get a copy of the API:
    ```c#
-   IContentPatcherAPI contentPatcher = this.Helper.Registry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
+   var api = this.Helper.Registry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
    ```
 4. Use the API to extend Content Patcher (see below).
 
-### Add custom token
-You can add a token by calling the `RegisterToken` API method from SMAPI's `GameLaunched` event.
-(The arguments are explained more below the code block.)
+### Add a simple custom token
+You can add a simple token by calling `RegisterToken` from SMAPI's `GameLaunched` event (see
+_Access the API_ above). For example, this creates a `{{your-mod-id/PlayerName}}` token for the
+current player's name:
+```c#
+api.RegisterToken(this.ModManifest, "PlayerName", () =>
+{
+    if (Context.IsWorldReady)
+        return new[] { Game1.player.Name };
+    if (SaveGame.loaded?.player != null)
+        return new[] { SaveGame.loaded.player.Name }; // lets token be used before save is fully loaded
+    return null;
+});
+```
 
-For example, let's define some basic logic for a token containing the player's initials:
+`RegisterToken` in this case has three arguments:
+
+argument   | type | purpose
+---------- | ---- | -------
+`mod`      | `IManifest` | The manifest of the mod defining the token. You can just pass in `this.ModManifest` from your entry class.
+`name`     | `string` | The token name. This only needs to be unique for your mod; Content Patcher will prefix it with your mod ID automatically, so `PlayerName` in the above example will become `your-mod-id/PlayerName`.
+`getValue` | `Func<IEnumerable<string>>` | A function which returns the current token value. If this returns a null or empty list, the token is considered unavailable in the current context and any patches or dynamic tokens using it are disabled.
+
+That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
+```js
+{
+   "Format": "1.8",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Characters/Dialogue/Abigail",
+         "Entries": {
+            "Mon": "Oh hey {{your-mod-id/PlayerName}}! Taking a break from work?"
+         }
+      }
+   ]
+}
+```
+
+
+### Add a complex custom token
+The previous section is recommended for most tokens, since Content Patcher will handle details like
+context updates and change tracking for you. With a bit more work though, you can add more complex
+tokens with features like input arguments.
+
+Let's say we want an 'initials' token with this behavior:
+
+* If called with no input, it returns the player's initials (like `JS` if the player is John Smith).
+* If called with an input argument, it returns the initials of that input (like `A` if the player
+  is married to Abigail and you pass in `{{spouse}}`).
+
+First, let's define our token logic. You don't actually need a class here, that's just a convenient
+way to encapsulate the functions we'll be sending to Content Patcher below. For example:
+
 ```c#
 /// <summary>An arbitrary class to handle token logic.</summary>
-internal class PlayerInitialsToken
+internal class InitialsToken
 {
     /*********
     ** Fields
     *********/
-    /// <summary>The token value as of the last context update.</summary>
-    private string Value;
+    /// <summary>The player name as of the last context update.</summary>
+    private string PlayerName;
 
 
     /*********
@@ -1326,55 +1375,64 @@ internal class PlayerInitialsToken
     /// <summary>Get whether the token is ready to use.</summary>
     public bool IsReady()
     {
-        return this.Value != null;
+        return this.PlayerName != null;
     }
 
     /// <summary>Update the token value.</summary>
     /// <returns>Returns whether the value changed, which may trigger patch updates.</returns>
     public bool UpdateContext()
     {
-        string oldValue = this.Value;
-        this.Value = this.GetPlayerInitials();
-        return this.Value != oldValue;
+        string oldName = this.PlayerName;
+        this.PlayerName = this.GetPlayerName();
+        return this.PlayerName != oldName;
     }
 
     /// <summary>Get the token value.</summary>
     /// <param name="input">The input argument passed to the token, if any.</param>
     public IEnumerable<string> GetValue(string input)
     {
-        if (this.Value != null)
-            yield return this.Value;
+        // get initials of input argument (if any), else initials of player name
+        yield return this.GetInitials(input ?? this.PlayerName);
     }
 
 
     /*********
     ** Private methods
     *********/
-    /// <summary>Recalculate the current token value.</summary>
-    private string GetPlayerInitials()
+    /// <summary>Get the current player name.</summary>
+    private string GetPlayerName()
     {
-        string playerName = null;
+        // Tokens may update while the save is still being loaded; we can make our token available
+        // by checking SaveGame.loaded here.
         if (Context.IsWorldReady)
-            playerName = Game1.player.Name;
-        else if (SaveGame.loaded?.player != null)
-            playerName = SaveGame.loaded.player.Name;
+            return Game1.player.Name;
 
-        return playerName != null
-            ? string.Join("", playerName.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Select(p => p[0]))
-            : null;
+        if (SaveGame.loaded?.player != null)
+            return SaveGame.loaded.player.Name;
+
+        return null;
+    }
+
+    /// <summary>Recalculate the current token value.</summary>
+    /// <param name="name">The name for which to get initials.</param>
+    private string GetInitials(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return null;
+        return string.Join("", name.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Select(p => p[0]));
     }
 }
 ```
 
 Next let's register it with Content Patcher in the `GameLaunched` event (see _Access the API_ above).
-Note that we're not passing the actual `PlayerInitialsToken` instance to Content Patcher, that's
+Note that we're not passing the actual `InitialsToken` instance to Content Patcher, that's
 just a class we created to contain our token logic.
 
 ```c#
-PlayerInitialsToken token = new PlayerInitialsToken();
+InitialsToken token = new InitialsToken();
 api.RegisterToken(
     mod: this.ModManifest,
-    name: "PlayerInitials",
+    name: "Initials",
     updateContext: token.UpdateContext,
     isReady: token.IsReady,
     getValue: token.GetValue,
@@ -1384,15 +1442,15 @@ api.RegisterToken(
 ```
 
 Content Patcher tokens are flexible, so there's a lot to unpack in that method call. Here's a
-description of each field:
+summary of each field:
 
 field | type | purpose
 ----- | ---- | -------
 `mod` | `IManifest` | The manifest of the mod defining the token. You can just pass in `this.ModManifest` from your entry class.
-`name` | `string` | The token name. This only needs to be unique for your mod; Content Patcher will prefix it with your mod ID automatically, like `Pathoschild.ExampleMod/SomeTokenName`.
+`name` | `string` | The token name. This only needs to be unique for your mod; Content Patcher will prefix it with your mod ID automatically, so `Initials` in the above example will become `your-mod-id/Initials`.
 `updateContext` | `Func<bool>` | A function which updates the token value (if needed), and returns whether the token value changed. It's important to report value changes correctly here, since Content Patcher will decide whether to update patches accordingly.
-`isReady` | `Func<bool>` | A function which returns whether the token is available for use. This is always called after `updateContext`. If this returns false, any patches or dynamic tokens using this token will be disabled. (A token may returns true and still return no value, in which case the token value is simply blank.)
-`getValue` | `Func<string, IEnumerable<string>>` | A function which returns the current value for a given input argument (if any). For example, `{{PlayerInitials}}` would result in a null input argument; `{{your-mod-id/PlayerInitials:{{PlayerName}}}}` would pass in the parsed string after token substitution, like `"John Smith"`. If the token doesn't use input arguments, you can simply ignore the input.
+`isReady` | `Func<bool>` | A function which returns whether the token is available for use. This is always called after `updateContext`. If this returns false, any patches or dynamic tokens using this token will be disabled. (A token may return true and still have no value, in which case the token value is simply blank.)
+`getValue` | `Func<string, IEnumerable<string>>` | A function which returns the current value for a given input argument (if any). For example, `{{your-mod-id/Initials}}` would result in a null input argument; `{{your-mod-id/Initials:{{spouse}}}}` would pass in the parsed string after token substitution, like `"Abigail"`. If the token doesn't use input arguments, you can simply ignore the input.
 `allowsInput` | `bool` | Whether the player can provide an input argument (see `getValue`).
 `requiresInput` | `bool` | Whether the token can _only_ be used with an input argument (see `getValue`).
 
@@ -1405,7 +1463,7 @@ That's it! Now any content pack which lists your mod as a dependency can use the
          "Action": "EditData",
          "Target": "Characters/Dialogue/Abigail",
          "Entries": {
-            "Mon": "Oh hey {{your-mod-id/PlayerInitials}}! Taking a break from work?"
+            "Mon": "Oh hey {{your-mod-id/Initials}}! Taking a break from work?"
          }
       }
    ]
