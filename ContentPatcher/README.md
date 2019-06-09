@@ -1343,7 +1343,6 @@ That's it! Now any content pack which lists your mod as a dependency can use the
 }
 ```
 
-
 ### Add a complex custom token
 The previous section is recommended for most tokens, since Content Patcher will handle details like
 context updates and change tracking for you. With a bit more work though, you can add more complex
@@ -1448,7 +1447,7 @@ field | type | purpose
 ----- | ---- | -------
 `mod` | `IManifest` | The manifest of the mod defining the token. You can just pass in `this.ModManifest` from your entry class.
 `name` | `string` | The token name. This only needs to be unique for your mod; Content Patcher will prefix it with your mod ID automatically, so `Initials` in the above example will become `your-mod-id/Initials`.
-`updateContext` | `Func<bool>` | A function which updates the token value (if needed), and returns whether the token value changed. It's important to report value changes correctly here, since Content Patcher will decide whether to update patches accordingly.
+`updateContext` | `Func<bool>` | A function which updates the token value (if needed), and returns whether the token changed. Content Patcher will call this method once when it's updating the context (e.g. when a new day starts). The token is 'changed' if it may return a different value _for the same inputs_ than before; it's important to report a change correctly, since Content Patcher will use this to decide whether patches need to be rechecked.
 `isReady` | `Func<bool>` | A function which returns whether the token is available for use. This is always called after `updateContext`. If this returns false, any patches or dynamic tokens using this token will be disabled. (A token may return true and still have no value, in which case the token value is simply blank.)
 `getValue` | `Func<string, IEnumerable<string>>` | A function which returns the current value for a given input argument (if any). For example, `{{your-mod-id/Initials}}` would result in a null input argument; `{{your-mod-id/Initials:{{spouse}}}}` would pass in the parsed string after token substitution, like `"Abigail"`. If the token doesn't use input arguments, you can simply ignore the input.
 `allowsInput` | `bool` | Whether the player can provide an input argument (see `getValue`).

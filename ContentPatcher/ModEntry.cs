@@ -563,7 +563,7 @@ namespace ContentPatcher
                                 {
                                     if (!this.TryParseStringTokens(pair.Key, tokenContext, forMod, migrator, out string keyError, out IParsedTokenString key))
                                         return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key}' key is invalid: {keyError}");
-                                    if (!this.TryParseJsonTokens(pair.Value, tokenContext, migrator, out string error, out TokenisableJToken value))
+                                    if (!this.TryParseJsonTokens(pair.Value, tokenContext, forMod, migrator, out string error, out TokenisableJToken value))
                                         return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key}' value is invalid: {error}");
 
                                     entries.Add(new EditDataPatchRecord(key, value));
@@ -588,7 +588,7 @@ namespace ContentPatcher
                                             return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldPair.Key} key is invalid: {fieldError}");
 
                                         // parse value
-                                        if (!this.TryParseJsonTokens(fieldPair.Value, tokenContext, migrator, out string valueError, out TokenisableJToken value))
+                                        if (!this.TryParseJsonTokens(fieldPair.Value, tokenContext, forMod, migrator, out string valueError, out TokenisableJToken value))
                                             return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: {valueError}");
                                         if (value?.Value is JValue jValue && jValue.Value<string>()?.Contains("/") == true)
                                             return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: value can't contain field delimiter character '/'");
@@ -736,6 +736,11 @@ namespace ContentPatcher
                     conditions = null;
                     return false;
                 }
+                if (!this.TryValidateToken(lexToken, tokenContext, forMod, out error))
+                {
+                    conditions = null;
+                    return false;
+                }
 
                 // validate input
                 if (!token.TryValidateInput(input, out error))
@@ -853,10 +858,11 @@ namespace ContentPatcher
         /// <summary>Parse a JSON structure which can contain tokens, and validate that it's valid.</summary>
         /// <param name="rawJson">The raw JSON structure which may contain tokens.</param>
         /// <param name="tokenContext">The tokens available for this content pack.</param>
+        /// <param name="forMod">The manifest for the content pack being parsed.</param>
         /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value, which may be legitimately <c>null</c> even if successful.</param>
-        private bool TryParseJsonTokens(JToken rawJson, IContext tokenContext, IMigration migrator, out string error, out TokenisableJToken parsed)
+        private bool TryParseJsonTokens(JToken rawJson, IContext tokenContext, IManifest forMod, IMigration migrator, out string error, out TokenisableJToken parsed)
         {
             if (rawJson == null || rawJson.Type == JTokenType.Null)
             {
@@ -871,29 +877,10 @@ namespace ContentPatcher
                 return false;
 
             // validate tokens
-            IParsedTokenString[] tokenStrings = parsed.GetTokenStrings().ToArray();
-            if (tokenStrings.Any())
+            foreach (LexTokenToken lexToken in parsed.GetTokenStrings().SelectMany(p => p.GetTokenPlaceholders(recursive: false)))
             {
-                // validate unknown tokens
-                string[] unknownTokens = tokenStrings.SelectMany(p => p.GetDiagnosticState().InvalidTokens).OrderBy(p => p).ToArray();
-                if (unknownTokens.Any())
-                {
-                    error = $"found unknown tokens ({string.Join(", ", unknownTokens)})";
-                    parsed = null;
+                if (!this.TryValidateToken(lexToken, tokenContext, forMod, out error))
                     return false;
-                }
-
-                // validate tokens
-                foreach (LexTokenToken lexToken in tokenStrings.SelectMany(p => p.GetTokenPlaceholders(recursive: false)).Distinct())
-                {
-                    IToken token = tokenContext.GetToken(lexToken.Name, enforceContext: false);
-                    if (token == null)
-                    {
-                        error = $"'{lexToken}' can't be used as a token because that token could not be found."; // should never happen
-                        parsed = null;
-                        return false;
-                    }
-                }
             }
 
             // looks OK
@@ -929,22 +916,38 @@ namespace ContentPatcher
             // validate tokens
             foreach (LexTokenToken lexToken in parsed.GetTokenPlaceholders(recursive: false))
             {
-                IToken token = tokenContext.GetToken(lexToken.Name, enforceContext: false);
-                if (token == null)
-                {
-                    error = $"'{lexToken}' can't be used as a token because that token could not be found."; // should never happen
-                    parsed = null;
+                if (!this.TryValidateToken(lexToken, tokenContext, forMod, out error))
                     return false;
-                }
-                if (token is ModProvidedToken modToken && !forMod.HasDependency(modToken.Mod.UniqueID, canBeOptional: false))
-                {
-                    error = $"'{lexToken}' can't be used because it's provided by {modToken.Mod.Name} (ID: {modToken.Mod.UniqueID}), but {forMod.Name} doesn't list it as a dependency.";
-                    parsed = null;
-                    return false;
-                }
             }
 
             // looks OK
+            error = null;
+            return true;
+        }
+
+        /// <summary>Validate whether a token referenced in a content pack field is valid.</summary>
+        /// <param name="lexToken">The lexical token reference to check.</param>
+        /// <param name="tokenContext">The tokens available for this content pack.</param>
+        /// <param name="forMod">The manifest for the content pack being parsed.</param>
+        /// <param name="error">An error phrase indicating why validation failed (if applicable).</param>
+        private bool TryValidateToken(LexTokenToken lexToken, IContext tokenContext, IManifest forMod, out string error)
+        {
+            // token doesn't exist
+            IToken token = tokenContext.GetToken(lexToken.Name, enforceContext: false);
+            if (token == null)
+            {
+                error = $"'{lexToken}' can't be used as a token because that token could not be found.";
+                return false;
+            }
+
+            // token requires dependency
+            if (token is ModProvidedToken modToken && !forMod.HasDependency(modToken.Mod.UniqueID, canBeOptional: false))
+            {
+                error = $"'{lexToken}' can't be used because it's provided by {modToken.Mod.Name} (ID: {modToken.Mod.UniqueID}), but {forMod.Name} doesn't list it as a dependency.";
+                return false;
+            }
+
+            // no error found
             error = null;
             return true;
         }
