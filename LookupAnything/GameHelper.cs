@@ -321,8 +321,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="item">The item.</param>
         public IEnumerable<RecipeModel> GetRecipesForIngredient(Item item)
         {
-            if (item is SObject obj && obj.bigCraftable.Value)
-                yield break; // bigcraftables never valid as an ingredient
+            // ignore invalid ingredients
+            if (item is Furniture || item is Ring || item is Boots || item is MeleeWeapon || item is Hat || (item as SObject)?.bigCraftable.Value == true)
+                yield break;
 
             // from cached recipes
             foreach (var recipe in this.GetRecipes())

@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Added recipes to machine lookups (but not custom machines currently).
+* Added recipes to machine lookups (except for custom machines).
 * Added bush lookups.
 * Added 'kissed today' to spouse lookups.
 * Added farm type description to player lookup.
@@ -12,6 +12,7 @@
 * Fixed seed growth time predictions not accounting for Agriculturist profession.
 * Fixed "you made -1 of these" field for some crafted items.
 * Fixed some missing/incorrect recipes.
+* Fixed incorrect 'needed for' entries when looking up some furniture/craftable items.
 * Fixed incorrect subject image when looking up a bigcraftable item in your inventory.
 * Fixed date years not shown when needed.
 * Fixed unable to lookup inventory items from kitchen cooking menu.
