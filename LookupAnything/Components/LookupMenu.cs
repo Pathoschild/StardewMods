@@ -64,6 +64,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Click areas for link fields that open a new subject.</summary>
         private readonly IDictionary<ILinkField, Rectangle> LinkFieldAreas = new Dictionary<ILinkField, Rectangle>();
 
+        /// <summary>Whether the game HUD was enabled when the menu was opened.</summary>
+        private readonly bool WasHudEnabled;
+
 
         /*********
         ** Public methods
@@ -89,6 +92,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             this.Reflection = reflectionHelper;
             this.ScrollAmount = scroll;
             this.ShowNewPage = showNewPage;
+            this.WasHudEnabled = Game1.displayHUD;
 
             // save debug fields
             if (showDebugFields)
@@ -109,6 +113,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
             // update layout
             this.UpdateLayout();
+
+            // hide game HUD
+            Game1.displayHUD = false;
         }
 
         /****
@@ -384,7 +391,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         private void UpdateLayout()
         {
             // update size
-            this.width = Math.Min(Game1.tileSize * 18, Game1.viewport.Width);
+            this.width = Math.Min(Game1.tileSize * 20, Game1.viewport.Width);
             this.height = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * this.width), Game1.viewport.Height);
 
             // update position
@@ -406,6 +413,12 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         private void OnDrawError(Exception ex)
         {
             this.Monitor.InterceptErrors("handling an error in the lookup code", () => this.exitThisMenu());
+        }
+
+        /// <summary>Perform any cleanup needed when the menu exits.</summary>
+        protected override void cleanupBeforeExit()
+        {
+            Game1.displayHUD = this.WasHudEnabled;
         }
     }
 }
