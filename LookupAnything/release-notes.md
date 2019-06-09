@@ -14,6 +14,7 @@
 * Fixed some missing/incorrect recipes.
 * Fixed incorrect subject image when looking up a bigcraftable item in your inventory.
 * Fixed date years not shown when needed.
+* Fixed unable to lookup inventory items from kitchen cooking menu.
 
 ## 1.21.2
 Released 06 April 2019.
