@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace ContentPatcher.Framework
@@ -11,8 +9,11 @@ namespace ContentPatcher.Framework
         /*********
         ** Fields
         *********/
-        /// <summary>The character uses as an input argument separator.</summary>
+        /// <summary>The character used as an input argument separator.</summary>
         public const string InputArgSeparator = ":";
+
+        /// <summary>The character used as a separator between the mod ID and token name for a mod-provided token.</summary>
+        public const string ModTokenSeparator = "/";
 
 
         /*********

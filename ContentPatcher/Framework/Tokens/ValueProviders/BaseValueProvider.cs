@@ -273,7 +273,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 action();
                 return
                     values.Count != oldValues.Count
-                    || oldValues.Any(entry => !values.TryGetValue(entry.Key, out string newValue) || entry.Value?.Equals(newValue, StringComparison.InvariantCultureIgnoreCase) != true);
+                    || oldValues.Any(entry => !values.TryGetValue(entry.Key, out string newValue) || entry.Value?.EqualsIgnoreCase(newValue) != true);
             });
         }
 
