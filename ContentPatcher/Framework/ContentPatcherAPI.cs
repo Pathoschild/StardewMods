@@ -95,6 +95,8 @@ namespace ContentPatcher.Framework
             name = $"{mod.UniqueID}{InternalConstants.ModTokenSeparator}{name}";
             this.Monitor.Log($"{mod.Name} added a token: {name}", LogLevel.Trace);
             ModProvidedToken token = new ModProvidedToken(name, mod, valueProvider);
+
+            // add token
             this.AddModToken(token);
         }
     }

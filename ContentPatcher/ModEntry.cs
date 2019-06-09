@@ -257,6 +257,7 @@ namespace ContentPatcher
                 return;
             }
 
+            this.Monitor.Log($"{token.Mod.Name} added custom token: {token.Name}", LogLevel.Trace);
             this.QueuedModTokens.Add(token);
         }
 
