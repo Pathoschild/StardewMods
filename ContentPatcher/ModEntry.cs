@@ -76,6 +76,15 @@ namespace ContentPatcher
         /// <summary>The debug overlay (if enabled).</summary>
         private DebugOverlay DebugOverlay;
 
+        /// <summary>The list of added mod tokens</summary>
+        private List<IToken> ModTokens = new List<IToken>();
+
+        /// <summary>If we passed the first tick, which is used for initialization.</summary>
+        private bool PastFirstTick = false;
+
+        /// <summary>Tokens pending for a partial context update.</summary>
+        private InvariantHashSet PendingTokenUpdates = new InvariantHashSet();
+
 
         /*********
         ** Public methods
@@ -87,40 +96,13 @@ namespace ContentPatcher
             this.Config = helper.ReadConfig<ModConfig>();
             this.Keys = this.Config.Controls.ParseControls(this.Monitor);
 
-            // init migrations
-            IMigration[] migrations = this.Migrations();
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+        }
 
-            // fetch content packs
-            RawContentPack[] contentPacks = this.GetContentPacks(migrations).ToArray();
-            string[] installedMods =
-                (contentPacks.Select(p => p.Manifest.UniqueID))
-                .Concat(helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
-                .OrderByIgnoreCase(p => p)
-                .ToArray();
-
-            // load content packs
-            this.TokenManager = new TokenManager(helper.Content, installedMods);
-            this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.AssetValidators());
-            this.LoadContentPacks(contentPacks);
-
-            // set initial context once patches & dynamic tokens are loaded
-            this.UpdateContext();
-
-            // register patcher
-            helper.Content.AssetLoaders.Add(this.PatchManager);
-            helper.Content.AssetEditors.Add(this.PatchManager);
-
-            // set up events
-            if (this.Config.EnableDebugFeatures)
-                helper.Events.Input.ButtonPressed += this.OnButtonPressed;
-            helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
-            helper.Events.GameLoop.DayStarted += this.OnDayStarted;
-            helper.Events.Player.Warped += this.OnWarped;
-            helper.Events.Specialised.LoadStageChanged += this.OnLoadStageChanged;
-
-            // set up commands
-            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, () => this.UpdateContext());
-            helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (name, args) => this.CommandHandler.Handle(args));
+        /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry"/>.</summary>
+        public override object GetApi()
+        {
+            return new ContentPatcherAPI(this.Monitor, this.AddModToken, this.AddPendingUpdateToken);
         }
 
 
@@ -130,6 +112,26 @@ namespace ContentPatcher
         /****
         ** Event handlers
         ****/
+        /// <summary>Raised after the game performs its overall update tick (≈60 times per second).</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
+        {
+            // Initialization is delayed to the first game tick so that other mods can register their tokens in Events.GameLoop.GameLaunched.
+            if (!this.PastFirstTick)
+            {
+                this.Initialize();
+                this.PastFirstTick = true;
+            }
+
+            if (this.PendingTokenUpdates.Count > 0)
+            {
+                this.TokenManager.UpdateContext(this.PendingTokenUpdates);
+                this.PatchManager.UpdateContext(this.Helper.Content, this.PendingTokenUpdates);
+                this.PendingTokenUpdates.Clear();
+            }
+        }
+
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
@@ -211,6 +213,64 @@ namespace ContentPatcher
         /****
         ** Methods
         ****/
+        /// <summary>Initialize the mod and content packs.</summary>
+        private void Initialize()
+        {
+            var helper = this.Helper;
+
+            // init migrations
+            IMigration[] migrations = this.Migrations();
+
+            // fetch content packs
+            RawContentPack[] contentPacks = this.GetContentPacks(migrations).ToArray();
+            string[] installedMods =
+                (contentPacks.Select(p => p.Manifest.UniqueID))
+                .Concat(helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
+                .OrderByIgnoreCase(p => p)
+                .ToArray();
+
+            // load content packs and context
+            this.TokenManager = new TokenManager(helper.Content, installedMods, this.ModTokens);
+            this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.AssetValidators());
+            this.LoadContentPacks(contentPacks);
+
+            // set initial context once patches & dynamic tokens are loaded
+            this.UpdateContext();
+
+            // register patcher
+            helper.Content.AssetLoaders.Add(this.PatchManager);
+            helper.Content.AssetEditors.Add(this.PatchManager);
+
+            // set up events
+            if (this.Config.EnableDebugFeatures)
+                helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+            helper.Events.GameLoop.DayStarted += this.OnDayStarted;
+            helper.Events.Player.Warped += this.OnWarped;
+            helper.Events.Specialised.LoadStageChanged += this.OnLoadStageChanged;
+
+            // set up commands
+            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, () => this.UpdateContext());
+            helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (name, args) => this.CommandHandler.Handle(args));
+        }
+
+        /// <summary>Adds a mod token</summary>
+        /// <param name="token"></param>
+        private void AddModToken(IToken token)
+        {
+            if (this.PastFirstTick)
+                throw new NotSupportedException("The point where mod tokens can be registered has passed.");
+
+            this.ModTokens.Add(token);
+        }
+
+        /// <summary>Adds a token for pending partial context update.</summary>
+        /// <param name="token">The token to add as pending.</param>
+        private void AddPendingUpdateToken(string token)
+        {
+            this.PendingTokenUpdates.Add(token);
+        }
+
         /// <summary>Update the current context.</summary>
         /// <param name="affectedTokens">The specific tokens for which to update context, or <c>null</c> to affect all tokens</param>
         private void UpdateContext(ConditionType[] affectedTokens = null)
