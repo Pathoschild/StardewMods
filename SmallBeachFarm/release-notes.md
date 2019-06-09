@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Added optional version with islands, for players who need more space.
+* Added optional version with islands, for players who need more space. Thanks to [Opalie](https://www.nexusmods.com/stardewvalley/users/38947035) for the new map!
 
 ## 1.2
 Released 12 April 2019.
