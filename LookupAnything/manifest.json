@@ -1,10 +1,10 @@
 {
-  "Name": "Lookup Anything",
-  "Author": "Pathoschild",
-  "Version": "1.21.2",
-  "MinimumApiVersion": "2.11.0",
-  "Description": "View metadata about anything by pressing a button.",
-  "UniqueID": "Pathoschild.LookupAnything",
-  "EntryDll": "LookupAnything.dll",
-  "UpdateKeys": [ "Nexus:541" ]
+    "Name": "Lookup Anything",
+    "Author": "Pathoschild",
+    "Version": "1.21.2",
+    "MinimumApiVersion": "2.11.0",
+    "Description": "View metadata about anything by pressing a button.",
+    "UniqueID": "Pathoschild.LookupAnything",
+    "EntryDll": "LookupAnything.dll",
+    "UpdateKeys": [ "Nexus:541" ]
 }

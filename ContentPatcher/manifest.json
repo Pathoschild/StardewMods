@@ -1,10 +1,10 @@
 {
-  "Name": "Content Patcher",
-  "Author": "Pathoschild",
-  "Version": "1.8.2",
-  "MinimumApiVersion": "2.11.1",
-  "Description": "Loads content packs which edit game data, images, and maps without changing the game files.",
-  "UniqueID": "Pathoschild.ContentPatcher",
-  "EntryDll": "ContentPatcher.dll",
-  "UpdateKeys": [ "Nexus:1915" ]
+    "Name": "Content Patcher",
+    "Author": "Pathoschild",
+    "Version": "1.8.2",
+    "MinimumApiVersion": "2.11.1",
+    "Description": "Loads content packs which edit game data, images, and maps without changing the game files.",
+    "UniqueID": "Pathoschild.ContentPatcher",
+    "EntryDll": "ContentPatcher.dll",
+    "UpdateKeys": [ "Nexus:1915" ]
 }

@@ -1,414 +1,414 @@
 {
-  /*********
-  ** Generic translations
-  *********/
-  // dates (possible tokens: {{seasonName}}, {{seasonNumber}}, {{dayNumber}}, {{year}})
-  "generic.date": "{{seasonName}} {{dayNumber}}",
-  "generic.date-with-year": "{{seasonName}} {{dayNumber}} no ano {{year}}",
+    /*********
+    ** Generic translations
+    *********/
+    // dates (possible tokens: {{seasonName}}, {{seasonNumber}}, {{dayNumber}}, {{year}})
+    "generic.date": "{{seasonName}} {{dayNumber}}",
+    "generic.date-with-year": "{{seasonName}} {{dayNumber}} no ano {{year}}",
 
-  // date names
-  "generic.now": "agora",
-  "generic.tomorrow": "amanhã",
-  "generic.yesterday": "yesterday", // TODO
+    // date names
+    "generic.now": "agora",
+    "generic.tomorrow": "amanhã",
+    "generic.yesterday": "yesterday", // TODO
 
-  // generic field values
-  "generic.percent": "{{percent}}%",
-  "generic.percent-chance-of": "{{percent}}% de chance de {{label}}",
-  "generic.percent-ratio": "{{percent}}% ({{value}} de {{max}})",
-  "generic.ratio": "{{value}} de {{max}}",
-  "generic.range": "{{min}} para {{max}}",
-  "generic.yes": "sim",
-  "generic.no": "não",
-  "generic.seconds": "{{count}} segundos",
-  "generic.minutes": "{{count}} minutos",
-  "generic.hours": "{{count}} horas",
-  "generic.days": "{{count}} dias",
-  "generic.in-x-days": "em {{count}} dias",
-  "generic.x-days-ago": "{{count}} days ago", // TODO
-  "generic.price": "{{price}}ouros",
-  "generic.price-for-quality": "{{price}}ouros ({{quality}})",
-  "generic.price-for-stack": "{{price}}ouros por um acúmulo de {{count}}",
+    // generic field values
+    "generic.percent": "{{percent}}%",
+    "generic.percent-chance-of": "{{percent}}% de chance de {{label}}",
+    "generic.percent-ratio": "{{percent}}% ({{value}} de {{max}})",
+    "generic.ratio": "{{value}} de {{max}}",
+    "generic.range": "{{min}} para {{max}}",
+    "generic.yes": "sim",
+    "generic.no": "não",
+    "generic.seconds": "{{count}} segundos",
+    "generic.minutes": "{{count}} minutos",
+    "generic.hours": "{{count}} horas",
+    "generic.days": "{{count}} dias",
+    "generic.in-x-days": "em {{count}} dias",
+    "generic.x-days-ago": "{{count}} days ago", // TODO
+    "generic.price": "{{price}}ouros",
+    "generic.price-for-quality": "{{price}}ouros ({{quality}})",
+    "generic.price-for-stack": "{{price}}ouros por um acúmulo de {{count}}",
 
-  // types
-  "type.building": "Construção",
-  "type.bush": "Bush", // TODO
-  "type.fruit-tree": "Arvore Frutífera",
-  "type.map-tile": "Azulejo de mapa",
-  "type.monster": "Monstro",
-  "type.player": "Jogador",
-  "type.tree": "Árvore",
-  "type.villager": "Cidadão",
-  "type.other": "Outros", // default type
+    // types
+    "type.building": "Construção",
+    "type.bush": "Bush", // TODO
+    "type.fruit-tree": "Arvore Frutífera",
+    "type.map-tile": "Azulejo de mapa",
+    "type.monster": "Monstro",
+    "type.player": "Jogador",
+    "type.tree": "Árvore",
+    "type.villager": "Cidadão",
+    "type.other": "Outros", // default type
 
-  // item qualities
-  "quality.normal": "normal",
-  "quality.silver": "prata",
-  "quality.gold": "ouro",
-  "quality.iridium": "irídio",
+    // item qualities
+    "quality.normal": "normal",
+    "quality.silver": "prata",
+    "quality.gold": "ouro",
+    "quality.iridium": "irídio",
 
-  // NPC friendship
-  "friendship-status.friendly": "Amigável",
-  "friendship-status.dating": "Namorando",
-  "friendship-status.engaged": "Noivos",
-  "friendship-status.married": "Casados",
-  "friendship-status.divorced": "Divorciados",
+    // NPC friendship
+    "friendship-status.friendly": "Amigável",
+    "friendship-status.dating": "Namorando",
+    "friendship-status.engaged": "Noivos",
+    "friendship-status.married": "Casados",
+    "friendship-status.divorced": "Divorciados",
 
-  /*********
-  ** Data translations
-  *********/
-  // Community Center bundle areas
-  "bundle-area.pantry": "Copa",
-  "bundle-area.crafts-room": "Sala de Artesanato",
-  "bundle-area.fish-tank": "Aquário",
-  "bundle-area.boiler-room": "Sala da Caldeira",
-  "bundle-area.vault": "Cofre",
-  "bundle-area.bulletin-board": "Mural de Recados",
+    /*********
+    ** Data translations
+    *********/
+    // Community Center bundle areas
+    "bundle-area.pantry": "Copa",
+    "bundle-area.crafts-room": "Sala de Artesanato",
+    "bundle-area.fish-tank": "Aquário",
+    "bundle-area.boiler-room": "Sala da Caldeira",
+    "bundle-area.vault": "Cofre",
+    "bundle-area.bulletin-board": "Mural de Recados",
 
-  // shop names
-  "shop.adventure-guild": "Guilda dos Aventureiros",
-  "shop.clint": "Clint",
-  "shop.marnie": "Marnie",
-  "shop.pierre": "Pierre",
-  "shop.robin": "Robin",
-  "shop.willy": "Willy",
+    // shop names
+    "shop.adventure-guild": "Guilda dos Aventureiros",
+    "shop.clint": "Clint",
+    "shop.marnie": "Marnie",
+    "shop.pierre": "Pierre",
+    "shop.robin": "Robin",
+    "shop.willy": "Willy",
 
-  // recipe types
-  "recipe-type.cooking": "Cozinhar",
-  "recipe-type.crafting": "Construir",
+    // recipe types
+    "recipe-type.cooking": "Cozinhar",
+    "recipe-type.crafting": "Construir",
 
-  /*********
-  ** NPC overrides
-  *********/
-  "data.npc.pet.description": "Seu animal de estimação leal.",
-  "data.npc.horse.description": "Seu cavalo leal.",
-  "data.npc.junimo.description": "Um espírito da floresta do mundo espiritual. Sabe-se muito pouco sobre eles.",
+    /*********
+    ** NPC overrides
+    *********/
+    "data.npc.pet.description": "Seu animal de estimação leal.",
+    "data.npc.horse.description": "Seu cavalo leal.",
+    "data.npc.junimo.description": "Um espírito da floresta do mundo espiritual. Sabe-se muito pouco sobre eles.",
 
-  /*********
-  ** Item overrides
-  *********/
-  // item types
-  "data.type.debris": "Detritos",
-  "data.type.stone": "Pedra",
-  "data.type.container": "Contêiner",
+    /*********
+    ** Item overrides
+    *********/
+    // item types
+    "data.type.debris": "Detritos",
+    "data.type.stone": "Pedra",
+    "data.type.container": "Contêiner",
 
-  // farm
-  "data.item.egg-incubator.description": "Chocam ovos que depois viram pintinhos ou patinhos.",
-  "data.item.broken-branch.name": "Galho Quebrado",
-  "data.item.broken-branch.description": "Um galho quebrado. Corte-o com um machado para obter madeira.",
-  "data.item.stone.name": "Pedra",
-  "data.item.stone.description": "Uma pedra cinza indefinível. Quebre-a para obter pedras.",
-  "data.item.geode.name": "Pedra de Geodo",
-  "data.item.geode.description": "Quebre-a para obter Geodos.",
-  "data.item.frozen-geode.name": "Pedra de Geodo Congelado",
-  "data.item.frozen-geode.description": "Quebre-a para obter geodos congelados.",
-  "data.item.magma-geode.name": "Pedra de geodo de magma",
-  "data.item.magma-geode.description": "Quebre-a para obter Geodos de magma.",
+    // farm
+    "data.item.egg-incubator.description": "Chocam ovos que depois viram pintinhos ou patinhos.",
+    "data.item.broken-branch.name": "Galho Quebrado",
+    "data.item.broken-branch.description": "Um galho quebrado. Corte-o com um machado para obter madeira.",
+    "data.item.stone.name": "Pedra",
+    "data.item.stone.description": "Uma pedra cinza indefinível. Quebre-a para obter pedras.",
+    "data.item.geode.name": "Pedra de Geodo",
+    "data.item.geode.description": "Quebre-a para obter Geodos.",
+    "data.item.frozen-geode.name": "Pedra de Geodo Congelado",
+    "data.item.frozen-geode.description": "Quebre-a para obter geodos congelados.",
+    "data.item.magma-geode.name": "Pedra de geodo de magma",
+    "data.item.magma-geode.description": "Quebre-a para obter Geodos de magma.",
 
-  // weeds & crystals
-  "data.item.weed.name": "Erva",
-  "data.item.weed.description": "Uma erva sem descrição. Pode conter fibras ou sementes mistas.",
-  "data.item.fertile-weed.name": "Erva fértil",
-  "data.item.fertile-weed.description": "É garantido conter sementes mistas.",
-  "data.item.ice-crystal.name": "Cristal de Gelo",
-  "data.item.ice-crystal.description": "Um cristal de gelo sem descrição. Tem uma chance bem pequena de colher Quartzo Refinado.",
+    // weeds & crystals
+    "data.item.weed.name": "Erva",
+    "data.item.weed.description": "Uma erva sem descrição. Pode conter fibras ou sementes mistas.",
+    "data.item.fertile-weed.name": "Erva fértil",
+    "data.item.fertile-weed.description": "É garantido conter sementes mistas.",
+    "data.item.ice-crystal.name": "Cristal de Gelo",
+    "data.item.ice-crystal.description": "Um cristal de gelo sem descrição. Tem uma chance bem pequena de colher Quartzo Refinado.",
 
-  // mine gems
-  "data.item.amethyst-node.name": "Ametistas aglomeradas",
-  "data.item.amethyst-node.description": "Quebre-a para obter ametista.",
-  "data.item.aquamarine-node.name": "Aglomerado de Água-Marinha",
-  "data.item.aquamarine-node.description": "Quebre-a para obter água-marinha.",
-  "data.item.diamond-node.name": "Aglomerado de Diamantes",
-  "data.item.diamond-node.description": "Quebre-a para obter diamante",
-  "data.item.emerald-node.name": "Aglomerado de Esmeralda",
-  "data.item.emerald-node.description": "Quebre-a para obter esmeralda.",
-  "data.item.gem-node.name": "Aglomerado de Gemas",
-  "data.item.gem-node.description": "Quebre-a para receber esmeraldas, água-marinhas, rubís, ametistas, topaz, jade, ou diamantes.",
-  "data.item.jade-node.name": "Aglomerado de Jade",
-  "data.item.jade-node.description": "Quebre-a para receber Jade.",
-  "data.item.mystic-stone.name": "Rocha Mística",
-  "data.item.mystic-stone.description": "Quebre-a para receber gemas raras ou minérios, incluindo o fragmentos prismáticos.",
-  "data.item.prismatic-node.name": "Aglomerado Prismático",
-  "data.item.prismatic-node.description": "Quebre-a para obter fragmentos prismáticos.",
-  "data.item.ruby-node.name": "Aglomerado de Rubís",
-  "data.item.ruby-node.description": "Quebre-a para receber rubís.",
-  "data.item.topaz-node.name": "Aglomerado de topaz",
-  "data.item.topaz-node.description": "Quebre-a para coletar topaz.",
+    // mine gems
+    "data.item.amethyst-node.name": "Ametistas aglomeradas",
+    "data.item.amethyst-node.description": "Quebre-a para obter ametista.",
+    "data.item.aquamarine-node.name": "Aglomerado de Água-Marinha",
+    "data.item.aquamarine-node.description": "Quebre-a para obter água-marinha.",
+    "data.item.diamond-node.name": "Aglomerado de Diamantes",
+    "data.item.diamond-node.description": "Quebre-a para obter diamante",
+    "data.item.emerald-node.name": "Aglomerado de Esmeralda",
+    "data.item.emerald-node.description": "Quebre-a para obter esmeralda.",
+    "data.item.gem-node.name": "Aglomerado de Gemas",
+    "data.item.gem-node.description": "Quebre-a para receber esmeraldas, água-marinhas, rubís, ametistas, topaz, jade, ou diamantes.",
+    "data.item.jade-node.name": "Aglomerado de Jade",
+    "data.item.jade-node.description": "Quebre-a para receber Jade.",
+    "data.item.mystic-stone.name": "Rocha Mística",
+    "data.item.mystic-stone.description": "Quebre-a para receber gemas raras ou minérios, incluindo o fragmentos prismáticos.",
+    "data.item.prismatic-node.name": "Aglomerado Prismático",
+    "data.item.prismatic-node.description": "Quebre-a para obter fragmentos prismáticos.",
+    "data.item.ruby-node.name": "Aglomerado de Rubís",
+    "data.item.ruby-node.description": "Quebre-a para receber rubís.",
+    "data.item.topaz-node.name": "Aglomerado de topaz",
+    "data.item.topaz-node.description": "Quebre-a para coletar topaz.",
 
-  // mine ores
-  "data.item.copper-node.name": "Aglomerado de Cobre",
-  "data.item.copper-node.description": "Quebre-a para coletar minérios de cobre.",
-  "data.item.gold-node.name": "Aglomerado de Ouro",
-  "data.item.gold-node.description": "Quebre para receber minérios de ouro.",
-  "data.item.iridum-node.name": "Aglomerado de Irídio",
-  "data.item.iridum-node.description": "Quebre-a para receber minérios de irídio.",
-  "data.item.iron-node.name": "Aglomerado de Ferro",
-  "data.item.iron-node.description": "Quebre-a pra receber minérios de ferro.",
+    // mine ores
+    "data.item.copper-node.name": "Aglomerado de Cobre",
+    "data.item.copper-node.description": "Quebre-a para coletar minérios de cobre.",
+    "data.item.gold-node.name": "Aglomerado de Ouro",
+    "data.item.gold-node.description": "Quebre para receber minérios de ouro.",
+    "data.item.iridum-node.name": "Aglomerado de Irídio",
+    "data.item.iridum-node.description": "Quebre-a para receber minérios de irídio.",
+    "data.item.iron-node.name": "Aglomerado de Ferro",
+    "data.item.iron-node.description": "Quebre-a pra receber minérios de ferro.",
 
-  // mine stones
-  "data.item.colored-stone.name": "Rocha Colorida",
-  "data.item.colored-stone.description": "Uma rocha indescritível. Talvez possa conter pedras, minérios, ou geodos.",
-  "data.item.mine-stone.name": "Pedra",
-  "data.item.mine-stone.description": "Quebre para obter preda.",
+    // mine stones
+    "data.item.colored-stone.name": "Rocha Colorida",
+    "data.item.colored-stone.description": "Uma rocha indescritível. Talvez possa conter pedras, minérios, ou geodos.",
+    "data.item.mine-stone.name": "Pedra",
+    "data.item.mine-stone.description": "Quebre para obter preda.",
 
-  // mine containers
-  "data.item.barrel.name": "Barríl",
-  "data.item.barrel.description": "Quebre pra receber bens diversos.",
-  "data.item.box.name": "Caixa",
-  "data.item.box.description": "Quebre para receber bens diversos.",
+    // mine containers
+    "data.item.barrel.name": "Barríl",
+    "data.item.barrel.description": "Quebre pra receber bens diversos.",
+    "data.item.box.name": "Caixa",
+    "data.item.box.description": "Quebre para receber bens diversos.",
 
-  /*********
-  ** Specific lookups
-  *********/
-  // animal lookup labels
-  "animal.love": "Amor",
-  "animal.happiness": "Felicidade",
-  "animal.mood": "Humor de hoje",
-  "animal.complaints": "Reclamações",
-  "animal.produce-ready": "Produto pronto",
-  "animal.growth": "Crescimento",
-  "animal.sells-for": "Vende por",
+    /*********
+    ** Specific lookups
+    *********/
+    // animal lookup labels
+    "animal.love": "Amor",
+    "animal.happiness": "Felicidade",
+    "animal.mood": "Humor de hoje",
+    "animal.complaints": "Reclamações",
+    "animal.produce-ready": "Produto pronto",
+    "animal.growth": "Crescimento",
+    "animal.sells-for": "Vende por",
 
-  // animal lookup values
-  "animal.complaints.hungry": "Não foi alimentado ontem",
-  "animal.complaints.left-out": "Foi deixado para fora na ultima noite",
-  "animal.complaints.new-home": "Se mudou para uma nova casa",
-  "animal.complaints.no-heater": "Sem aquecedor no inverno",
-  "animal.complaints.not-petted": "Não recebeu carinho hoje",
-  "animal.complaints.wild-animal-attack": "Foi atacado por animais selvagens durante a noite",
+    // animal lookup values
+    "animal.complaints.hungry": "Não foi alimentado ontem",
+    "animal.complaints.left-out": "Foi deixado para fora na ultima noite",
+    "animal.complaints.new-home": "Se mudou para uma nova casa",
+    "animal.complaints.no-heater": "Sem aquecedor no inverno",
+    "animal.complaints.not-petted": "Não recebeu carinho hoje",
+    "animal.complaints.wild-animal-attack": "Foi atacado por animais selvagens durante a noite",
 
-  // building lookup labels
-  "building.animals": "Animais",
-  "building.construction": "Construção",
-  "building.feed-trough": "Calha de Alimentação",
-  "building.horse": "Cavalo",
-  "building.horse-location": "Localização do Cavalo",
-  "building.owner": "Proprietário",
-  "building.slimes": "Slimes",
-  "building.stored-hay": "Feno Armazenado",
-  "building.upgrades": "Melhorias",
-  "building.water-trough": "Cocho de Água",
+    // building lookup labels
+    "building.animals": "Animais",
+    "building.construction": "Construção",
+    "building.feed-trough": "Calha de Alimentação",
+    "building.horse": "Cavalo",
+    "building.horse-location": "Localização do Cavalo",
+    "building.owner": "Proprietário",
+    "building.slimes": "Slimes",
+    "building.stored-hay": "Feno Armazenado",
+    "building.upgrades": "Melhorias",
+    "building.water-trough": "Cocho de Água",
 
-  // building lookup values
-  "building.animals.summary": "{{count}} de no máximo {{max}} animais",
-  "building.construction.summary": "pronto em {{date}}",
-  "building.feed-trough.automated": "automatizado",
-  "building.feed-trough.summary": "{{filled}} de {{max}} calhas de alimentação preenchidas",
-  "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
-  "building.junimo-harvesting-enabled": "Colheita habilitada",
-  "building.owner.none": "nenhum proprietário",
-  "building.output-processing": "Processamento de saída",
-  "building.output-ready": "Processamento pronto",
-  "building.slimes.summary": "{{count}} de no máximo {{max}} slimes",
-  "building.stored-hay.summary-one-silo": "{{hayCount}} feno (capacidade máxima: {{maxHay}})",
-  "building.stored-hay.summary-multiple-silos": "{{hayCount}} feno em {{siloCount}} silos (capacidade máxima: {{maxHay}})",
-  "building.upgrades.barn.0": "até 4 animais, adiciona vacas",
-  "building.upgrades.barn.1": "até 8 animais, adiciona gravidez e bodes",
-  "building.upgrades.barn.2": "até 12 animais, adiciona auto alimentação, porcos e ovelhas",
-  "building.upgrades.cabin.0": "cabine inicial",
-  "building.upgrades.cabin.1": "adiciona galinhas, habilita casamento",
-  "building.upgrades.cabin.2": "habilita crianças",
-  "building.upgrades.coop.0": "até 4 animais; adiciona galinhas",
-  "building.upgrades.coop.1": "até 8 animais; adiciona incubadora, dinossauros e patos",
-  "building.upgrades.coop.2": "até 12 animais; adiciona auto alimentação e coelhos",
-  "building.water-trough.summary": "{{filled}} de {{max}} cochas de água preenchidas",
+    // building lookup values
+    "building.animals.summary": "{{count}} de no máximo {{max}} animais",
+    "building.construction.summary": "pronto em {{date}}",
+    "building.feed-trough.automated": "automatizado",
+    "building.feed-trough.summary": "{{filled}} de {{max}} calhas de alimentação preenchidas",
+    "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
+    "building.junimo-harvesting-enabled": "Colheita habilitada",
+    "building.owner.none": "nenhum proprietário",
+    "building.output-processing": "Processamento de saída",
+    "building.output-ready": "Processamento pronto",
+    "building.slimes.summary": "{{count}} de no máximo {{max}} slimes",
+    "building.stored-hay.summary-one-silo": "{{hayCount}} feno (capacidade máxima: {{maxHay}})",
+    "building.stored-hay.summary-multiple-silos": "{{hayCount}} feno em {{siloCount}} silos (capacidade máxima: {{maxHay}})",
+    "building.upgrades.barn.0": "até 4 animais, adiciona vacas",
+    "building.upgrades.barn.1": "até 8 animais, adiciona gravidez e bodes",
+    "building.upgrades.barn.2": "até 12 animais, adiciona auto alimentação, porcos e ovelhas",
+    "building.upgrades.cabin.0": "cabine inicial",
+    "building.upgrades.cabin.1": "adiciona galinhas, habilita casamento",
+    "building.upgrades.cabin.2": "habilita crianças",
+    "building.upgrades.coop.0": "até 4 animais; adiciona galinhas",
+    "building.upgrades.coop.1": "até 8 animais; adiciona incubadora, dinossauros e patos",
+    "building.upgrades.coop.2": "até 12 animais; adiciona auto alimentação e coelhos",
+    "building.water-trough.summary": "{{filled}} de {{max}} cochas de água preenchidas",
 
-  // bush lookup labels
-  // TODO
-  "bush.name.berry": "Berry Bush",
-  "bush.name.plain": "Plain Bush",
-  "bush.description.berry": "A bush that grows salmonberries and blackberries.",
-  "bush.description.plain": "A plain bush that doesn't grow anything.",
-  "bush.next-harvest": "Next harvest",
+    // bush lookup labels
+    // TODO
+    "bush.name.berry": "Berry Bush",
+    "bush.name.plain": "Plain Bush",
+    "bush.description.berry": "A bush that grows salmonberries and blackberries.",
+    "bush.description.plain": "A plain bush that doesn't grow anything.",
+    "bush.next-harvest": "Next harvest",
 
-  // bush lookup values
-  // TODO
-  "bush.schedule.berry": "20% chance of salmonberries in spring 15-18 and blackberries in fall 8-11.",
+    // bush lookup values
+    // TODO
+    "bush.schedule.berry": "20% chance of salmonberries in spring 15-18 and blackberries in fall 8-11.",
 
-  // fruit tree lookup labels
-  "fruit-tree.complaints": "Reclamações",
-  "fruit-tree.name": "árvore de {{fruitName}}",
-  "fruit-tree.growth": "Crescismento",
-  "fruit-tree.next-fruit": "Próxima fruta",
-  "fruit-tree.season": "Estação",
-  "fruit-tree.quality": "Qualidade",
+    // fruit tree lookup labels
+    "fruit-tree.complaints": "Reclamações",
+    "fruit-tree.name": "árvore de {{fruitName}}",
+    "fruit-tree.growth": "Crescismento",
+    "fruit-tree.next-fruit": "Próxima fruta",
+    "fruit-tree.season": "Estação",
+    "fruit-tree.quality": "Qualidade",
 
-  // fruit tree lookup values
-  "fruit-tree.complaints.adjacent-objects": "não pode crescer pois ha objetos ao lado",
-  "fruit-tree.growth.summary": "fica madura em {{date}}",
-  "fruit-tree.next-fruit.struck-by-lighting": "atingida por um raio! Ira se recuperar em {{count}} dias.",
-  "fruit-tree.next-fruit.out-of-season": "fora da estação",
-  "fruit-tree.next-fruit.max-fruit": "não irá crescer nenhuma fruta até você colher as que ja estão ali.",
-  "fruit-tree.next-fruit.too-young": "muito cedo pra produzir frutos",
-  "fruit-tree.quality.now": "{{quality}} agora",
-  "fruit-tree.quality.on-date": "{{quality}} em {{date}}",
-  "fruit-tree.quality.on-date-next-year": "{{quality}} no {{date}} próximo ano",
-  "fruit-tree.season.summary": "{{season}} (ou qualquer hora na estufa)",
+    // fruit tree lookup values
+    "fruit-tree.complaints.adjacent-objects": "não pode crescer pois ha objetos ao lado",
+    "fruit-tree.growth.summary": "fica madura em {{date}}",
+    "fruit-tree.next-fruit.struck-by-lighting": "atingida por um raio! Ira se recuperar em {{count}} dias.",
+    "fruit-tree.next-fruit.out-of-season": "fora da estação",
+    "fruit-tree.next-fruit.max-fruit": "não irá crescer nenhuma fruta até você colher as que ja estão ali.",
+    "fruit-tree.next-fruit.too-young": "muito cedo pra produzir frutos",
+    "fruit-tree.quality.now": "{{quality}} agora",
+    "fruit-tree.quality.on-date": "{{quality}} em {{date}}",
+    "fruit-tree.quality.on-date-next-year": "{{quality}} no {{date}} próximo ano",
+    "fruit-tree.season.summary": "{{season}} (ou qualquer hora na estufa)",
 
-  // crop lookup labels
-  "crop.summary": "Planta",
-  "crop.harvest": "Colheita",
+    // crop lookup labels
+    "crop.summary": "Planta",
+    "crop.harvest": "Colheita",
 
-  // crop lookup values
-  "crop.summary.dead": "Esta planta está morta.",
-  "crop.summary.drops-X": "derruba {{count}}",
-  "crop.summary.drops-X-to-Y": "solta de {{min}} pra no máximo {{max}} ({{percent}}% chance de colher a mais)",
-  "crop.summary.harvest-once": "Colher após {{daysToFirstHarvest}} dias",
-  "crop.summary.harvest-multi": "colhe depois de  {{daysToFirstHarvest}} dias, depois a cada {{daysToNextHarvests}} dias",
-  "crop.summary.seasons": "cresce no(a) {{seasons}}",
-  "crop.summary.sells-for": "vende por {{price}}",
-  "crop.harvest.too-late": "muito tarde para colher nessa estação (deveria ser no {{date}})",
+    // crop lookup values
+    "crop.summary.dead": "Esta planta está morta.",
+    "crop.summary.drops-X": "derruba {{count}}",
+    "crop.summary.drops-X-to-Y": "solta de {{min}} pra no máximo {{max}} ({{percent}}% chance de colher a mais)",
+    "crop.summary.harvest-once": "Colher após {{daysToFirstHarvest}} dias",
+    "crop.summary.harvest-multi": "colhe depois de  {{daysToFirstHarvest}} dias, depois a cada {{daysToNextHarvests}} dias",
+    "crop.summary.seasons": "cresce no(a) {{seasons}}",
+    "crop.summary.sells-for": "vende por {{price}}",
+    "crop.harvest.too-late": "muito tarde para colher nessa estação (deveria ser no {{date}})",
 
-  // item lookup labels
-  "item.cask-contents": "Conteúdos",
-  "item.cask-schedule": "Envelhecimento",
+    // item lookup labels
+    "item.cask-contents": "Conteúdos",
+    "item.cask-schedule": "Envelhecimento",
 
-  "item.crabpot-bait": "Isca",
-  "item.crabpot-bait-needed": "Requer isca!",
-  "item.crabpot-bait-not-needed": "Não é necessaria devido a habilidade Mestre da isca",
+    "item.crabpot-bait": "Isca",
+    "item.crabpot-bait-needed": "Requer isca!",
+    "item.crabpot-bait-not-needed": "Não é necessaria devido a habilidade Mestre da isca",
 
-  "item.fence-health": "Saúde",
+    "item.fence-health": "Saúde",
 
-  "item.contents": "Conteúdos",
-  "item.likes-this": "Gosta disso",
-  "item.loves-this": "Ama isso",
-  "item.needed-for": "Preciso para",
-  "item.number-owned": "Possui",
-  "item.number-cooked": "Cozinhado",
-  "item.number-crafted": "Criados",
-  "item.recipes": "Receitas",
-  "item.see-also": "Veja também",
-  "item.sells-for": "vende por",
-  "item.sells-to": "Vende por",
+    "item.contents": "Conteúdos",
+    "item.likes-this": "Gosta disso",
+    "item.loves-this": "Ama isso",
+    "item.needed-for": "Preciso para",
+    "item.number-owned": "Possui",
+    "item.number-cooked": "Cozinhado",
+    "item.number-crafted": "Criados",
+    "item.recipes": "Receitas",
+    "item.see-also": "Veja também",
+    "item.sells-for": "vende por",
+    "item.sells-to": "Vende por",
 
-  // item lookup values
-  "item.cask-schedule.now": "{{quality}} está pronto agora",
-  "item.cask-schedule.now-partial": "{{quality}} por agora (use a picareta para parar de envelhecer)",
-  "item.cask-schedule.tomorrow": "{{quality}} amanhã",
-  "item.cask-schedule.in-x-days": "{{quality}} em {{count}} dias ({{date}})",
+    // item lookup values
+    "item.cask-schedule.now": "{{quality}} está pronto agora",
+    "item.cask-schedule.now-partial": "{{quality}} por agora (use a picareta para parar de envelhecer)",
+    "item.cask-schedule.tomorrow": "{{quality}} amanhã",
+    "item.cask-schedule.in-x-days": "{{quality}} em {{count}} dias ({{date}})",
 
-  "item.fence-health.gold-clock": "Não decai com o Relógio de Ouro",
-  "item.fence-health.summary": "{{percent}}% (aproximadamente{{count}} dias restantes)",
+    "item.fence-health.gold-clock": "Não decai com o Relógio de Ouro",
+    "item.fence-health.summary": "{{percent}}% (aproximadamente{{count}} dias restantes)",
 
-  "item.contents.placed": "{{name}} colocado",
-  "item.contents.ready": "{{name}} pronto",
-  "item.contents.partial": "{{name}} em {{time}}",
-  "item.needed-for.community-center": "Centro Comunitário ({{bundles}})",
-  "item.needed-for.full-shipment": "conquista da embarcação cheia (embarque um)",
-  "item.needed-for.polyculture": "conquista da policultura (embarque  mais {{count}} )",
-  "item.needed-for.full-collection": "conquista do envio completo (doe um para o museu)",
-  "item.needed-for.gourmet-chef": "conquista de chefe gourmet (cozinhe {{recipes}})",
-  "item.needed-for.craft-master": "conquista de criador mestre (crie {{recipes}})",
-  "item.sells-to.shipping-box": "caixa de embarcação",
-  "item.recipes-for-ingredient.entry": "{{name}} (precisa {{count}})",
-  "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}", // TODO
-  "item.number-owned.summary": "seu próprio {{count}} desses",
-  "item.number-crafted.summary": "você fez {{count}} desses",
+    "item.contents.placed": "{{name}} colocado",
+    "item.contents.ready": "{{name}} pronto",
+    "item.contents.partial": "{{name}} em {{time}}",
+    "item.needed-for.community-center": "Centro Comunitário ({{bundles}})",
+    "item.needed-for.full-shipment": "conquista da embarcação cheia (embarque um)",
+    "item.needed-for.polyculture": "conquista da policultura (embarque  mais {{count}} )",
+    "item.needed-for.full-collection": "conquista do envio completo (doe um para o museu)",
+    "item.needed-for.gourmet-chef": "conquista de chefe gourmet (cozinhe {{recipes}})",
+    "item.needed-for.craft-master": "conquista de criador mestre (crie {{recipes}})",
+    "item.sells-to.shipping-box": "caixa de embarcação",
+    "item.recipes-for-ingredient.entry": "{{name}} (precisa {{count}})",
+    "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}", // TODO
+    "item.number-owned.summary": "seu próprio {{count}} desses",
+    "item.number-crafted.summary": "você fez {{count}} desses",
 
-  // monster lookup labels
-  "monster.invincible": "Invencível",
-  "monster.health": "Saúde",
-  "monster.drops": "Derruba",
-  "monster.experience": "XP",
-  "monster.defence": "Defesa",
-  "monster.attack": "Ataque",
-  "monster.adventure-guild": "Guilda dos Aventureiros",
+    // monster lookup labels
+    "monster.invincible": "Invencível",
+    "monster.health": "Saúde",
+    "monster.drops": "Derruba",
+    "monster.experience": "XP",
+    "monster.defence": "Defesa",
+    "monster.attack": "Ataque",
+    "monster.adventure-guild": "Guilda dos Aventureiros",
 
-  // monster lookup values
-  "monster.drops.nothing": "nada",
-  "monster.adventure-guild.complete": "completo",
-  "monster.adventure-guild.incomplete": "em andamento",
-  "monster.adventure-guild.progress": "matou {{count}} de {{requiredCount}}",
+    // monster lookup values
+    "monster.drops.nothing": "nada",
+    "monster.adventure-guild.complete": "completo",
+    "monster.adventure-guild.incomplete": "em andamento",
+    "monster.adventure-guild.progress": "matou {{count}} de {{requiredCount}}",
 
-  // NPC lookup labels
-  "npc.birthday": "Aniversário",
-  "npc.can-romance": "É casavel",
-  "npc.friendship": "Amizade",
-  "npc.talked-today": "Conversou hoje",
-  "npc.gifted-today": "Já presentiou hoje",
-  "npc.gifted-this-week": "Presenteou essa semana",
-  "npc.kissed-today": "Kissed today", // TODO
-  "npc.loves-gifts": "Presentes que ama",
-  "npc.likes-gifts": "Presentes que gosta",
-  "npc.neutral-gifts": "Presentes neutros",
+    // NPC lookup labels
+    "npc.birthday": "Aniversário",
+    "npc.can-romance": "É casavel",
+    "npc.friendship": "Amizade",
+    "npc.talked-today": "Conversou hoje",
+    "npc.gifted-today": "Já presentiou hoje",
+    "npc.gifted-this-week": "Presenteou essa semana",
+    "npc.kissed-today": "Kissed today", // TODO
+    "npc.loves-gifts": "Presentes que ama",
+    "npc.likes-gifts": "Presentes que gosta",
+    "npc.neutral-gifts": "Presentes neutros",
 
-  // NPC lookup values
-  "npc.can-romance.married": "Você é casado! <", // < turns into a heart
-  "npc.friendship.not-met": "Você não os conheceu ainda.",
-  "npc.friendship.need-bouquet": "Precisa de um buquê pra prosseguir",
-  "npc.friendship.need-points": "precisa de {{count}} pontos para prosseguir",
+    // NPC lookup values
+    "npc.can-romance.married": "Você é casado! <", // < turns into a heart
+    "npc.friendship.not-met": "Você não os conheceu ainda.",
+    "npc.friendship.need-bouquet": "Precisa de um buquê pra prosseguir",
+    "npc.friendship.need-points": "precisa de {{count}} pontos para prosseguir",
 
-  // NPC child lookup labels
-  "npc.child.age": "Idade",
+    // NPC child lookup labels
+    "npc.child.age": "Idade",
 
-  // NPC child lookup values
-  "npc.child.age.description-partial": "{{label}} ({{count}} dias para {{nextLabel}})",
-  "npc.child.age.description-grown": "{{label}}",
-  "npc.child.age.newborn": "recém nascido",
-  "npc.child.age.baby": "bebê",
-  "npc.child.age.crawler": "bebê que está aprendendo a andar",
-  "npc.child.age.toddler": "criancinha",
+    // NPC child lookup values
+    "npc.child.age.description-partial": "{{label}} ({{count}} dias para {{nextLabel}})",
+    "npc.child.age.description-grown": "{{label}}",
+    "npc.child.age.newborn": "recém nascido",
+    "npc.child.age.baby": "bebê",
+    "npc.child.age.crawler": "bebê que está aprendendo a andar",
+    "npc.child.age.toddler": "criancinha",
 
-  // pet lookup labels
-  "pet.love": "Amor",
-  "pet.petted-today": "Recebeu carinho hoje",
+    // pet lookup labels
+    "pet.love": "Amor",
+    "pet.petted-today": "Recebeu carinho hoje",
 
-  // player lookup labels
-  "player.farm-name": "Nome da fazenda",
-  "player.farm-map": "Mapa da fazenda",
-  "player.favorite-thing": "Coisa Favorida",
-  "player.gender": "Genero",
-  "player.spouse": "Esposa(o)",
-  "player.combat-skill": "Combate",
-  "player.farming-skill": "Cultivo",
-  "player.fishing-skill": "Pescaria",
-  "player.foraging-skill": "Colheita",
-  "player.mining-skill": "Mineiração",
-  "player.luck": "Sorte",
+    // player lookup labels
+    "player.farm-name": "Nome da fazenda",
+    "player.farm-map": "Mapa da fazenda",
+    "player.favorite-thing": "Coisa Favorida",
+    "player.gender": "Genero",
+    "player.spouse": "Esposa(o)",
+    "player.combat-skill": "Combate",
+    "player.farming-skill": "Cultivo",
+    "player.fishing-skill": "Pescaria",
+    "player.foraging-skill": "Colheita",
+    "player.mining-skill": "Mineiração",
+    "player.luck": "Sorte",
 
-  // player lookup values
-  "player.farm-map.custom": "Personalizado",
-  "player.gender.male": "masculino",
-  "player.gender.female": "feminino",
-  "player.luck.summary": "{{percent}}% muitas verificações aleatórias",
-  "player.skill.progress": "nível {{level}} ({{expNeeded}} XP para upar)",
-  "player.skill.progress-last": "nível {{level}}",
+    // player lookup values
+    "player.farm-map.custom": "Personalizado",
+    "player.gender.male": "masculino",
+    "player.gender.female": "feminino",
+    "player.luck.summary": "{{percent}}% muitas verificações aleatórias",
+    "player.skill.progress": "nível {{level}} ({{expNeeded}} XP para upar)",
+    "player.skill.progress-last": "nível {{level}}",
 
-  // tile lookup labels
-  "tile.description": "Um azulejo posicionado no mapa. Isto está aparecendo pois você habilitou nas configurações.",
-  "tile.map-name": "Nome do mapa",
-  "tile.tile": "Azulejo",
-  "tile.tile-index": "{{layerName}}: índice do azulejo",
-  "tile.tilesheet": "{{layerName}}: planilha",
-  "tile.blend-mode": "{{layerName}}: modo de mistura",
-  "tile.index-property": "{{layerName}}: índice da propriedade: {{propertyName}}",
-  "tile.tile-property": "{{layerName}}: propriedade: {{propertyName}}",
+    // tile lookup labels
+    "tile.description": "Um azulejo posicionado no mapa. Isto está aparecendo pois você habilitou nas configurações.",
+    "tile.map-name": "Nome do mapa",
+    "tile.tile": "Azulejo",
+    "tile.tile-index": "{{layerName}}: índice do azulejo",
+    "tile.tilesheet": "{{layerName}}: planilha",
+    "tile.blend-mode": "{{layerName}}: modo de mistura",
+    "tile.index-property": "{{layerName}}: índice da propriedade: {{propertyName}}",
+    "tile.tile-property": "{{layerName}}: propriedade: {{propertyName}}",
 
-  // tile lookup values
-  "tile.tile.none-here": "sem azulejos aqui",
+    // tile lookup values
+    "tile.tile.none-here": "sem azulejos aqui",
 
-  // tree lookup labels
-  "tree.stage": "Estágio do crescimento",
-  "tree.next-growth": "Próximo cultivo",
-  "tree.has-seed": "Tem sementes",
+    // tree lookup labels
+    "tree.stage": "Estágio do crescimento",
+    "tree.next-growth": "Próximo cultivo",
+    "tree.has-seed": "Tem sementes",
 
-  // non-fruit tree lookup values
-  "tree.name.maple": "Árvode de Ácer",
-  "tree.name.oak": "Carvalho",
-  "tree.name.pine": "Pinheiro",
-  "tree.name.palm": "Palmeira",
-  "tree.name.big-mushroom": "Cogumelo gigante",
-  "tree.name.unknown": "Árvore desconhecida",
-  "tree.stage.done": "Totalmente crescido",
-  "tree.stage.partial": "{{stageName}} ({{step}} de {{max}})",
-  "tree.next-growth.winter": "Não pode crescer no inverno fora da estufa",
-  "tree.next-growth.adjacent-trees": "Não pode crescer pois as outras árvores estão muito perto",
-  "tree.next-growth.random": "20% Chance de crescer {{stage}} amanhã",
+    // non-fruit tree lookup values
+    "tree.name.maple": "Árvode de Ácer",
+    "tree.name.oak": "Carvalho",
+    "tree.name.pine": "Pinheiro",
+    "tree.name.palm": "Palmeira",
+    "tree.name.big-mushroom": "Cogumelo gigante",
+    "tree.name.unknown": "Árvore desconhecida",
+    "tree.stage.done": "Totalmente crescido",
+    "tree.stage.partial": "{{stageName}} ({{step}} de {{max}})",
+    "tree.next-growth.winter": "Não pode crescer no inverno fora da estufa",
+    "tree.next-growth.adjacent-trees": "Não pode crescer pois as outras árvores estão muito perto",
+    "tree.next-growth.random": "20% Chance de crescer {{stage}} amanhã",
 
-  // tree stages
-  "tree.stages.seed": "semente",
-  "tree.stages.sprout": "broto",
-  "tree.stages.sapling": "muda",
-  "tree.stages.bush": "matinho",
-  "tree.stages.smallTree": "árvore pequena",
-  "tree.stages.tree": "árvore"
+    // tree stages
+    "tree.stages.seed": "semente",
+    "tree.stages.sprout": "broto",
+    "tree.stages.sapling": "muda",
+    "tree.stages.bush": "matinho",
+    "tree.stages.smallTree": "árvore pequena",
+    "tree.stages.tree": "árvore"
 }

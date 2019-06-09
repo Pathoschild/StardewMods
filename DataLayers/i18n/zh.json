@@ -1,62 +1,62 @@
 {
-  // accessible
-  "accessible.name": "能否抵达",
-  "accessible.clear": "可通过",
-  "accessible.occupied": "被占用",
-  "accessible.impassable": "不可通过",
-  "accessible.warp": "传送点",
+    // accessible
+    "accessible.name": "能否抵达",
+    "accessible.clear": "可通过",
+    "accessible.occupied": "被占用",
+    "accessible.impassable": "不可通过",
+    "accessible.warp": "传送点",
 
-  // buildable
-  "buildable.name": "能否兴建建筑",
-  "buildable.buildable": "可兴建在这",
-  "buildable.occupied": "被占用",
-  "buildable.not-buildable": "不可兴建在这",
+    // buildable
+    "buildable.name": "能否兴建建筑",
+    "buildable.buildable": "可兴建在这",
+    "buildable.occupied": "被占用",
+    "buildable.not-buildable": "不可兴建在这",
 
-  // coverage: bee houses
-  "bee-houses.name": "覆盖范围：蜂房",
-  "bee-houses.range": "鲜花范围",
+    // coverage: bee houses
+    "bee-houses.name": "覆盖范围：蜂房",
+    "bee-houses.range": "鲜花范围",
 
-  // coverage: Junimo huts
-  "junimo-huts.name": "覆盖范围：祝尼魔小屋",
-  "junimo-huts.can-harvest": "可自动收获",
-  "junimo-huts.cannot-harvest": "无法自动收获",
+    // coverage: Junimo huts
+    "junimo-huts.name": "覆盖范围：祝尼魔小屋",
+    "junimo-huts.can-harvest": "可自动收获",
+    "junimo-huts.cannot-harvest": "无法自动收获",
 
-  // coverage: scarecrows
-  "scarecrows.name": "覆盖范围：稻草人",
-  "scarecrows.protected": "受保护",
-  "scarecrows.exposed": "未受保护",
+    // coverage: scarecrows
+    "scarecrows.name": "覆盖范围：稻草人",
+    "scarecrows.protected": "受保护",
+    "scarecrows.exposed": "未受保护",
 
-  // coverage: sprinklers
-  "sprinklers.name": "覆盖范围：洒水器",
-  "sprinklers.covered": "已覆盖",
-  "sprinklers.dry-crops": "作物干燥",
+    // coverage: sprinklers
+    "sprinklers.name": "覆盖范围：洒水器",
+    "sprinklers.covered": "已覆盖",
+    "sprinklers.dry-crops": "作物干燥",
 
-  // crops: harvest
-  "crop-harvest.name": "作物：收获",
-  "crop-harvest.ready": "可收获",
-  "crop-harvest.not-ready": "不可收获",
-  "crop-harvest.not-enough-time": "时间不足",
+    // crops: harvest
+    "crop-harvest.name": "作物：收获",
+    "crop-harvest.ready": "可收获",
+    "crop-harvest.not-ready": "不可收获",
+    "crop-harvest.not-enough-time": "时间不足",
 
-  // crops: watered
-  "crop-water.name": "作物：浇水",
-  "crop-water.watered": "已浇水",
-  "crop-water.dry": "未浇水",
+    // crops: watered
+    "crop-water.name": "作物：浇水",
+    "crop-water.watered": "已浇水",
+    "crop-water.dry": "未浇水",
 
-  // crops: fertilized
-  "crop-fertilizer.name": "作物：施肥",
-  "crop-fertilizer.fertilizer": "肥料",
-  "crop-fertilizer.retaining-soil": "保湿土壤",
-  "crop-fertilizer.speed-gro": "生长激素",
+    // crops: fertilized
+    "crop-fertilizer.name": "作物：施肥",
+    "crop-fertilizer.fertilizer": "肥料",
+    "crop-fertilizer.retaining-soil": "保湿土壤",
+    "crop-fertilizer.speed-gro": "生长激素",
 
-  // machine processing
-  "machines.name": "机器运转",
-  "machines.empty": "空的",
-  "machines.processing": "运转中",
-  "machines.finished": "已完成",
+    // machine processing
+    "machines.name": "机器运转",
+    "machines.empty": "空的",
+    "machines.processing": "运转中",
+    "machines.finished": "已完成",
 
-  // tillable
-  "tillable.name": "能否耕地",
-  "tillable.tillable": "可耕地",
-  "tillable.occupied": "被占用",
-  "tillable.not-tillable": "不可耕地"
+    // tillable
+    "tillable.name": "能否耕地",
+    "tillable.tillable": "可耕地",
+    "tillable.occupied": "被占用",
+    "tillable.not-tillable": "不可耕地"
 }

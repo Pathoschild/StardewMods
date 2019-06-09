@@ -1,10 +1,10 @@
 {
-  // labels shown on the debug screen
-  "label.tile": "case",
-  "label.map": "carte",
-  "label.menu": "menu",
-  "label.submenu": "sous-menu",
-  "label.festival-name": "festival",
-  "label.event-id": "ID évènement",
-  "label.event-script": "script évènement"
+    // labels shown on the debug screen
+    "label.tile": "case",
+    "label.map": "carte",
+    "label.menu": "menu",
+    "label.submenu": "sous-menu",
+    "label.festival-name": "festival",
+    "label.event-id": "ID évènement",
+    "label.event-script": "script évènement"
 }

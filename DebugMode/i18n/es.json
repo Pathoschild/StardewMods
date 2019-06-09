@@ -1,10 +1,10 @@
 {
-  // labels shown on the debug screen
-  "label.tile": "casilla",
-  "label.map": "mapa",
-  "label.menu": "menu",
-  "label.submenu": "submenu",
-  "label.festival-name": "festival",
-  "label.event-id": "evento ID",
-  "label.event-script": "evento script"
+    // labels shown on the debug screen
+    "label.tile": "casilla",
+    "label.map": "mapa",
+    "label.menu": "menu",
+    "label.submenu": "submenu",
+    "label.festival-name": "festival",
+    "label.event-id": "evento ID",
+    "label.event-script": "evento script"
 }
