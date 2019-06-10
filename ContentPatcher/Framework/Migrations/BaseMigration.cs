@@ -75,7 +75,10 @@ namespace ContentPatcher.Framework.Migrations
         {
             // tokens which need a higher version
             for (int i = 0; i < tokenStr.LexTokens.Length; i++)
-                this.TryMigrate(ref tokenStr.LexTokens[i], out error);
+            {
+                if (!this.TryMigrate(ref tokenStr.LexTokens[i], out error))
+                    return false;
+            }
 
             // no issue found
             error = null;
