@@ -38,7 +38,7 @@ namespace ContentPatcher
         private readonly string ConfigFileName = "config.json";
 
         /// <summary>The supported format versions.</summary>
-        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8" };
+        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9" };
 
         /// <summary>The format version migrations to apply.</summary>
         private readonly Func<IMigration[]> Migrations = () => new IMigration[]
@@ -48,7 +48,8 @@ namespace ContentPatcher
             new Migration_1_5(),
             new Migration_1_6(),
             new Migration_1_7(),
-            new Migration_1_8()
+            new Migration_1_8(),
+            new Migration_1_9()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>

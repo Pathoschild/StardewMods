@@ -84,7 +84,7 @@ The `content.json` file has three main fields:
 
 field          | purpose
 -------------- | -------
-`Format`       | The format version. You should always use the latest version (currently `1.8`) to use the latest features and avoid obsolete behavior.
+`Format`       | The format version. You should always use the latest version (currently `1.9`) to use the latest features and avoid obsolete behavior.
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
 `ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-config).
 
@@ -92,7 +92,7 @@ You can list any number of patches (surrounded by `{` and `}` in the `Changes` f
 few sections for more info about the format. For example:
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
       {
          "Action": "Load",
@@ -136,7 +136,7 @@ field      | purpose
 For example, this replaces the dinosaur sprite with your own image:
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
       {
          "Action": "Load",
@@ -166,7 +166,7 @@ field      | purpose
 For example, this changes one object sprite:
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
       {
          "Action": "EditImage",
@@ -215,7 +215,7 @@ description fields for an existing entry (item #70):
 
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
        {
           "Action": "EditData",
@@ -238,7 +238,7 @@ You can also delete entries entirely by setting their value to `null`. For examp
 used to change event conditions:
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
        {
           "Action": "EditData",
@@ -268,7 +268,7 @@ structures instead of strings.
 For example, this ██████████ and adds ██████████:
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
       {
          "Action": "EditData",
@@ -327,7 +327,7 @@ Here's an example showing all possible reorder options. (If you specify a `Befor
 that doesn't match any entry, a warning will be shown.)
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
       {
          "Action": "EditData",
@@ -414,7 +414,7 @@ _(optional)_ The part of the source map to copy. Defaults to the whole source ma
 For example, this replaces the town square with the one in another map:
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
       {
          "Action": "EditMap",
@@ -1078,7 +1078,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-    "Format": "1.8",
+    "Format": "1.9",
     "DynamicTokens": [
         {
             "Name": "Style",
@@ -1123,7 +1123,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-    "Format": "1.8",
+    "Format": "1.9",
     "ConfigSchema": {
         "Material": {
             "AllowValues": "Wood, Metal",
@@ -1330,7 +1330,7 @@ argument   | type | purpose
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
       {
          "Action": "EditData",
@@ -1456,7 +1456,7 @@ field | type | purpose
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
       {
          "Action": "EditData",
