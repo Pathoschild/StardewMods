@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed HUD left hidden if you close lookup menu by pressing lookup button again.
+
 ## 1.22
 Released 09 June 2019.
 
