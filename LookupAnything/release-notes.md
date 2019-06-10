@@ -1,14 +1,16 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.22
+Released 09 June 2019.
+
 * Added recipes to machine lookups (except for custom machines).
 * Added bush lookups.
 * Added 'kissed today' to spouse lookups.
 * Added farm type description to player lookup.
-* Improved `config.json` keybind parsing.
 * Increased size of lookup UI.
 * Fixed HUD being drawn over lookup UI in small resolutions.
+* Fixed config parsing errors for some players.
 * Fixed planted coffee beans showing seed fields instead of crop fields.
 * Fixed seed growth time predictions not accounting for Agriculturist profession.
 * Fixed "you made -1 of these" field for some crafted items.

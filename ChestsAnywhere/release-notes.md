@@ -1,8 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Improved `config.json` keybind parsing.
+## 1.16.1
+Released 09 June 2019.
+
+* Fixed config parsing errors for some players.
 * Improved translations. Thanks to binxhlin (updated Chinese), Firevulture (updated German), Yllelder (updated Spanish), and YSRyeol (updated Korean)!
 
 ## 1.16

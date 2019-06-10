@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>TractorMod</AssemblyName>
-    <Version>4.8.2</Version>
+    <Version>4.8.3</Version>
     <RootNamespace>Pathoschild.Stardew.TractorMod</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>

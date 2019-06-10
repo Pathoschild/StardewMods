@@ -1,8 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Improved `config.json` keybind parsing.
+## 1.9.5
+Released 09 June 2019.
+
+* Fixed config parsing errors for some players.
 
 ## 1.9.4
 Released 06 April 2019.

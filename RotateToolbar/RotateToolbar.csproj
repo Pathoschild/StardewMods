@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>RotateToolbar</AssemblyName>
-    <Version>1.3.2</Version>
+    <Version>1.3.3</Version>
     <RootNamespace>Pathoschild.Stardew.RotateToolbar</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
