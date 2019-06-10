@@ -87,4 +87,3 @@ command.
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/679)
-* [Discussion thread](http://www.nexusmods.com/stardewvalley/mods/679)

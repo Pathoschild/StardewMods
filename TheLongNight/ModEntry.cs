@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -24,7 +23,7 @@ namespace Pathoschild.Stardew.TheLongNight
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            GameEvents.UpdateTick += this.GameEvents_UpdateTick;
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
         }
 
         /// <summary>Get whether this instance can edit the given asset.</summary>
@@ -39,17 +38,16 @@ namespace Pathoschild.Stardew.TheLongNight
         public void Edit<T>(IAssetData asset)
         {
             // unlock any in-season fish after 2am
-            asset
-                .AsDictionary<int, string>()
-                .Set((key, value) =>
-                {
-                    string[] fields = value.Split('/');
-                    if (fields[1] == "trap")
-                        return value; // ignore non-fish entries
+            var data = asset.AsDictionary<int, string>().Data;
+            foreach (var entry in data.ToArray())
+            {
+                string[] fields = entry.Value.Split('/');
+                if (fields[1] == "trap")
+                    continue; // ignore non-fish entries
 
-                    fields[5] = $"{fields[5]} 2600 {int.MaxValue}".Trim();
-                    return string.Join("/", fields);
-                });
+                fields[5] = $"{fields[5]} 2600 {int.MaxValue}".Trim();
+                data[entry.Key] = string.Join("/", fields);
+            }
         }
 
 
@@ -70,7 +68,7 @@ namespace Pathoschild.Stardew.TheLongNight
         ///     to initiate a player collapse (animation #293).
         ///   - time = 2800: initiates a player collapse.
         /// </remarks>
-        private void GameEvents_UpdateTick(object sender, EventArgs e)
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             if (!Context.IsWorldReady || Game1.timeOfDay < 2550)
                 return;

@@ -299,11 +299,8 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             this.Monitor.InterceptErrors("closing the menu", () =>
             {
-                if (Game1.activeClickableMenu is LookupMenu)
-                {
-                    Game1.playSound("bigDeSelect"); // match default behaviour when closing a menu
-                    Game1.activeClickableMenu = null;
-                }
+                if (Game1.activeClickableMenu is LookupMenu menu)
+                    menu.exitThisMenu();
             });
         }
 
