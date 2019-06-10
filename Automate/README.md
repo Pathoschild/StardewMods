@@ -293,7 +293,7 @@ To access the API:
 2. Hook into [SMAPI's `GameLoop.GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched)
    and get a copy of the API:
    ```c#
-   IAutomateAPI automate = this.Helper.Registry.GetApi<IAutomateAPI>("Pathoschild.Automate");
+   IAutomateAPI automate = this.Helper.ModRegistry.GetApi<IAutomateAPI>("Pathoschild.Automate");
    ```
 3. Use the API to extend Automate (see below).
 

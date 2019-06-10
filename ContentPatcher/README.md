@@ -1300,7 +1300,7 @@ To access the API:
 3. Hook into [SMAPI's `GameLoop.GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched)
    and get a copy of the API:
    ```c#
-   var api = this.Helper.Registry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
+   var api = this.Helper.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
    ```
 4. Use the API to extend Content Patcher (see below).
 
