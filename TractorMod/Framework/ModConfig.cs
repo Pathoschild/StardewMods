@@ -36,8 +36,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The standard attachment features to enable.</summary>
         public StandardAttachmentsConfig StandardAttachments { get; set; } = new StandardAttachmentsConfig();
 
-        /// <summary>The control bindings.</summary>
-        public ModConfigControls Controls { get; set; } = new ModConfigControls();
+        /// <summary>The key bindings.</summary>
+        public ModConfigRawKeys Controls { get; set; } = new ModConfigRawKeys();
 
         /// <summary>The custom tools or items to allow. These must match the exact internal tool/item names (not the display names).</summary>
         public string[] CustomAttachments { get; set; } = new string[0];

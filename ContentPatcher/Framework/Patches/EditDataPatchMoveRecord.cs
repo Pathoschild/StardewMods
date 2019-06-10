@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using ContentPatcher.Framework.Tokens;
 
 namespace ContentPatcher.Framework.Patches
@@ -56,12 +55,6 @@ namespace ContentPatcher.Framework.Patches
                 .Add(id)
                 .Add(beforeID)
                 .Add(afterID);
-        }
-
-        /// <summary>Get all token strings used in the record.</summary>
-        public IEnumerable<ITokenString> GetTokenStrings()
-        {
-            return this.Contextuals.Values.OfType<ITokenString>();
         }
 
         /// <summary>Update the instance when the context changes.</summary>

@@ -1,10 +1,10 @@
 {
-  "Name": "Data Layers",
-  "Author": "Pathoschild",
-  "Version": "1.6.1",
-  "MinimumApiVersion": "2.11.0",
-  "Description": "Overlays the world with visual data like accessibility, bee/Junimo/scarecrow/sprinkler coverage, etc.",
-  "UniqueID": "Pathoschild.DataLayers",
-  "EntryDll": "DataLayers.dll",
-  "UpdateKeys": [ "Nexus:1691" ]
+    "Name": "Data Layers",
+    "Author": "Pathoschild",
+    "Version": "1.6.2",
+    "MinimumApiVersion": "2.11.1",
+    "Description": "Overlays the world with visual data like accessibility, bee/Junimo/scarecrow/sprinkler coverage, etc.",
+    "UniqueID": "Pathoschild.DataLayers",
+    "EntryDll": "DataLayers.dll",
+    "UpdateKeys": [ "Nexus:1691" ]
 }

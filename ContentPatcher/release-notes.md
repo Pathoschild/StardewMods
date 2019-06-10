@@ -1,6 +1,14 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.9
+Released 09 June 2019.
+
+* Added API to let other mods create custom tokens and conditions.
+* Fixed config parsing errors for some players.
+* Fixed tokens not being validated consistently in some cases.
+* Fixed a broken warning message.
+
 ## 1.8.2
 Released 27 May 2019.
 

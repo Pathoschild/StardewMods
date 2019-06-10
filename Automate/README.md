@@ -142,28 +142,32 @@ Default `60`. The number of update ticks between each automation cycle (one seco
   </td>
 </tr>
 <tr>
-  <td><code>Connectors</code></td>
+  <td><code>ConnectorNames</code></td>
   <td>
 
-Default empty. A list of world object to treat as [connectors](#connectors), which connect adjacent
-machines together. Automate has no connectors by default, but you can edit this field to configure
-any object, craftable, or floor as a connector. Each one should be specified with a type (one of
-`Floor`, `BigCraftable`, or `Object`) and ID.
+Default empty. A list of placed item names to treat as [connectors](#connectors) which connect
+adjacent machines together. You must specify the exact _English_ names for any in-game items to
+use. For example:
 
-For example, this adds the Wood and Crystal Paths as connectors:
 ```js
-"Connectors": [
-   { "Type": "Floor", "ID": 6 },
-   { "Type": "Floor", "ID": 7 }
+"ConnectorNames": [
+   "Wood Path",
+   "Crystal Path"
 ]
 ```
 
-Valid IDs:
-* [list of object IDs](https://stardewvalleywiki.com/Modding:Object_data#Raw_data);
-* [list of craftable IDs](https://stardewvalleywiki.com/Modding:Big_Craftables_data#Raw_data);
-* floor IDs: 0 (Wood Floor), 1 (Stone Floor), 2 (Weathered Floor), 3 (Crystal Floor), 4 (Straw
-  Floor), 5 (Gravel Path), 6 (Wood Path), 7 (Crystal Path), 8 (Cobblestone Path), and 9 (Stepping
-  Stone Path).
+  </td>
+</tr>
+<tr>
+  <td><code>ModCompatibility</code></td>
+  <td>
+
+Enables compatibility with other mods. All values are enabled by default.
+
+field | result
+----- | ------
+`AutoGrabberMod` | If [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) is installed, auto-grabbers won't output fertiliser and seeds.
+`BetterJunimos` | If [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) is installed, Junimo huts won't output fertiliser and seeds.
 
   </td>
 </tr>
@@ -193,8 +197,8 @@ keep it installed and use the overlay, their mod just won't automate anything.
 
 Automate is compatible with...
 
-* [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) (seeds in auto-grabbers will be ignored so you can use its auto-plant feature).
-* [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) (seeds in Junimo huts will be ignored so you can use its auto-plant feature).
+* [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) (seeds/fertiliser in auto-grabbers will be ignored).
+* [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) (seeds/fertiliser in Junimo huts will be ignored).
 * [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) (see its optional 'CFAutomate' download to enable automation).
 
 ## FAQs
@@ -289,7 +293,7 @@ To access the API:
 2. Hook into [SMAPI's `GameLoop.GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched)
    and get a copy of the API:
    ```c#
-   IAutomateAPI automate = this.Helper.Registry.GetApi<IAutomateAPI>("Pathoschild.Automate");
+   IAutomateAPI automate = this.Helper.ModRegistry.GetApi<IAutomateAPI>("Pathoschild.Automate");
    ```
 3. Use the API to extend Automate (see below).
 

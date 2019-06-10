@@ -62,7 +62,8 @@ These are the available settings:
 * See when a crop will be ready to harvest.
   > ![](screenshots/crop.png)
 
-* See when a crafting station will be ready.
+* See when a crafting station will be ready, and what recipes it can produce. This works with
+  custom machines too (except recipes currently).
   > ![](screenshots/crafting.png)
   > ![](screenshots/cask.png)
 

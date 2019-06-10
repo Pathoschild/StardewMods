@@ -52,15 +52,6 @@ namespace ContentPatcher.Framework.Patches
                 .Add(value);
         }
 
-        /// <summary>Get all token strings used in the record.</summary>
-        public IEnumerable<ITokenString> GetTokenStrings()
-        {
-            yield return this.EntryKey;
-            yield return this.FieldKey;
-            foreach (ITokenString str in this.Value.GetTokenStrings())
-                yield return str;
-        }
-
         /// <summary>Update the instance when the context changes.</summary>
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <returns>Returns whether the instance changed.</returns>

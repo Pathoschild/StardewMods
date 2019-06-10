@@ -27,6 +27,7 @@ that change the game's images and data without replacing XNB files.
   * [Multiplayer](#multiplayer)
   * [How multiple patches interact](#how-multiple-patches-interact)
   * [Known limitations](#known-limitations)
+* [Extensibility for modders](#extensibility-for-modders)
 * [See also](#see-also)
 
 ## Install
@@ -83,7 +84,7 @@ The `content.json` file has three main fields:
 
 field          | purpose
 -------------- | -------
-`Format`       | The format version. You should always use the latest version (currently `1.8`) to use the latest features and avoid obsolete behavior.
+`Format`       | The format version. You should always use the latest version (currently `1.9`) to use the latest features and avoid obsolete behavior.
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
 `ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-config).
 
@@ -91,7 +92,7 @@ You can list any number of patches (surrounded by `{` and `}` in the `Changes` f
 few sections for more info about the format. For example:
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
       {
          "Action": "Load",
@@ -135,7 +136,7 @@ field      | purpose
 For example, this replaces the dinosaur sprite with your own image:
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
       {
          "Action": "Load",
@@ -165,7 +166,7 @@ field      | purpose
 For example, this changes one object sprite:
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
       {
          "Action": "EditImage",
@@ -214,7 +215,7 @@ description fields for an existing entry (item #70):
 
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
        {
           "Action": "EditData",
@@ -237,7 +238,7 @@ You can also delete entries entirely by setting their value to `null`. For examp
 used to change event conditions:
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
        {
           "Action": "EditData",
@@ -267,7 +268,7 @@ structures instead of strings.
 For example, this ██████████ and adds ██████████:
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
       {
          "Action": "EditData",
@@ -326,7 +327,7 @@ Here's an example showing all possible reorder options. (If you specify a `Befor
 that doesn't match any entry, a warning will be shown.)
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
       {
          "Action": "EditData",
@@ -413,7 +414,7 @@ _(optional)_ The part of the source map to copy. Defaults to the whole source ma
 For example, this replaces the town square with the one in another map:
 ```js
 {
-   "Format": "1.8",
+   "Format": "1.9",
    "Changes": [
       {
          "Action": "EditMap",
@@ -1077,7 +1078,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-    "Format": "1.8",
+    "Format": "1.9",
     "DynamicTokens": [
         {
             "Name": "Style",
@@ -1122,7 +1123,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-    "Format": "1.8",
+    "Format": "1.9",
     "ConfigSchema": {
         "Material": {
             "AllowValues": "Wood, Metal",
@@ -1273,6 +1274,200 @@ need to explicitly patch after another content pack, see [manifest dependencies]
   `Characters/Farmer/accessories` | The number of accessories is hardcoded, so custom accessories need to replace an existing one.
   `Characters/Farmer/skinColors` | The number of skin colors is hardcoded, so custom colors need to replace an existing one.
   `Maps/*` | See [Modding:Maps#Potential issues](https://stardewvalleywiki.com/Modding:Maps#Potential_issues) on the wiki.
+
+## Extensibility for modders
+Content Patcher has a [mod-provided API](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Mod-provided_APIs)
+you can use to add custom tokens. Custom tokens are always prefixed with the ID of the mod that
+created them, like `your-mod-id/SomeTokenName`.
+
+
+<big><strong>The Content Patcher API is experimental and may change at any time.</strong></big>
+
+
+### Access the API
+To access the API:
+
+1. Add Content Patcher as [a dependency in your mod's `manifest.json`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies):
+
+   ```js
+   "Dependencies": [
+      { "UniqueID": "Pathoschild.ContentPatcher", "IsRequired": false }
+   ]
+   ```
+
+2. Copy [`IContentPatcherAPI`](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/IContentPatcherAPI.cs)
+   into your mod code, and delete any methods you won't need for best future compatibility.
+3. Hook into [SMAPI's `GameLoop.GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched)
+   and get a copy of the API:
+   ```c#
+   var api = this.Helper.ModRegistry.GetApi<IContentPatcherAPI>("Pathoschild.ContentPatcher");
+   ```
+4. Use the API to extend Content Patcher (see below).
+
+### Add a simple custom token
+You can add a simple token by calling `RegisterToken` from SMAPI's `GameLaunched` event (see
+_Access the API_ above). For example, this creates a `{{your-mod-id/PlayerName}}` token for the
+current player's name:
+```c#
+api.RegisterToken(this.ModManifest, "PlayerName", () =>
+{
+    if (Context.IsWorldReady)
+        return new[] { Game1.player.Name };
+    if (SaveGame.loaded?.player != null)
+        return new[] { SaveGame.loaded.player.Name }; // lets token be used before save is fully loaded
+    return null;
+});
+```
+
+`RegisterToken` in this case has three arguments:
+
+argument   | type | purpose
+---------- | ---- | -------
+`mod`      | `IManifest` | The manifest of the mod defining the token. You can just pass in `this.ModManifest` from your entry class.
+`name`     | `string` | The token name. This only needs to be unique for your mod; Content Patcher will prefix it with your mod ID automatically, so `PlayerName` in the above example will become `your-mod-id/PlayerName`.
+`getValue` | `Func<IEnumerable<string>>` | A function which returns the current token value. If this returns a null or empty list, the token is considered unavailable in the current context and any patches or dynamic tokens using it are disabled.
+
+That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
+```js
+{
+   "Format": "1.9",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Characters/Dialogue/Abigail",
+         "Entries": {
+            "Mon": "Oh hey {{your-mod-id/PlayerName}}! Taking a break from work?"
+         }
+      }
+   ]
+}
+```
+
+### Add a complex custom token
+The previous section is recommended for most tokens, since Content Patcher will handle details like
+context updates and change tracking for you. With a bit more work though, you can add more complex
+tokens with features like input arguments.
+
+Let's say we want an 'initials' token with this behavior:
+
+* If called with no input, it returns the player's initials (like `JS` if the player is John Smith).
+* If called with an input argument, it returns the initials of that input (like `A` if the player
+  is married to Abigail and you pass in `{{spouse}}`).
+
+First, let's define our token logic. You don't actually need a class here, that's just a convenient
+way to encapsulate the functions we'll be sending to Content Patcher below. For example:
+
+```c#
+/// <summary>An arbitrary class to handle token logic.</summary>
+internal class InitialsToken
+{
+    /*********
+    ** Fields
+    *********/
+    /// <summary>The player name as of the last context update.</summary>
+    private string PlayerName;
+
+
+    /*********
+    ** Public methods
+    *********/
+    /// <summary>Get whether the token is ready to use.</summary>
+    public bool IsReady()
+    {
+        return this.PlayerName != null;
+    }
+
+    /// <summary>Update the token value.</summary>
+    /// <returns>Returns whether the value changed, which may trigger patch updates.</returns>
+    public bool UpdateContext()
+    {
+        string oldName = this.PlayerName;
+        this.PlayerName = this.GetPlayerName();
+        return this.PlayerName != oldName;
+    }
+
+    /// <summary>Get the token value.</summary>
+    /// <param name="input">The input argument passed to the token, if any.</param>
+    public IEnumerable<string> GetValue(string input)
+    {
+        // get initials of input argument (if any), else initials of player name
+        yield return this.GetInitials(input ?? this.PlayerName);
+    }
+
+
+    /*********
+    ** Private methods
+    *********/
+    /// <summary>Get the current player name.</summary>
+    private string GetPlayerName()
+    {
+        // Tokens may update while the save is still being loaded; we can make our token available
+        // by checking SaveGame.loaded here.
+        if (Context.IsWorldReady)
+            return Game1.player.Name;
+
+        if (SaveGame.loaded?.player != null)
+            return SaveGame.loaded.player.Name;
+
+        return null;
+    }
+
+    /// <summary>Recalculate the current token value.</summary>
+    /// <param name="name">The name for which to get initials.</param>
+    private string GetInitials(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return null;
+        return string.Join("", name.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Select(p => p[0]));
+    }
+}
+```
+
+Next let's register it with Content Patcher in the `GameLaunched` event (see _Access the API_ above).
+Note that we're not passing the actual `InitialsToken` instance to Content Patcher, that's
+just a class we created to contain our token logic.
+
+```c#
+InitialsToken token = new InitialsToken();
+api.RegisterToken(
+    mod: this.ModManifest,
+    name: "Initials",
+    updateContext: token.UpdateContext,
+    isReady: token.IsReady,
+    getValue: token.GetValue,
+    allowsInput: false,
+    requiresInput: false
+);
+```
+
+Content Patcher tokens are flexible, so there's a lot to unpack in that method call. Here's a
+summary of each field:
+
+field | type | purpose
+----- | ---- | -------
+`mod` | `IManifest` | The manifest of the mod defining the token. You can just pass in `this.ModManifest` from your entry class.
+`name` | `string` | The token name. This only needs to be unique for your mod; Content Patcher will prefix it with your mod ID automatically, so `Initials` in the above example will become `your-mod-id/Initials`.
+`updateContext` | `Func<bool>` | A function which updates the token value (if needed), and returns whether the token changed. Content Patcher will call this method once when it's updating the context (e.g. when a new day starts). The token is 'changed' if it may return a different value _for the same inputs_ than before; it's important to report a change correctly, since Content Patcher will use this to decide whether patches need to be rechecked.
+`isReady` | `Func<bool>` | A function which returns whether the token is available for use. This is always called after `updateContext`. If this returns false, any patches or dynamic tokens using this token will be disabled. (A token may return true and still have no value, in which case the token value is simply blank.)
+`getValue` | `Func<string, IEnumerable<string>>` | A function which returns the current value for a given input argument (if any). For example, `{{your-mod-id/Initials}}` would result in a null input argument; `{{your-mod-id/Initials:{{spouse}}}}` would pass in the parsed string after token substitution, like `"Abigail"`. If the token doesn't use input arguments, you can simply ignore the input.
+`allowsInput` | `bool` | Whether the player can provide an input argument (see `getValue`).
+`requiresInput` | `bool` | Whether the token can _only_ be used with an input argument (see `getValue`).
+
+That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
+```js
+{
+   "Format": "1.9",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Characters/Dialogue/Abigail",
+         "Entries": {
+            "Mon": "Oh hey {{your-mod-id/Initials}}! Taking a break from work?"
+         }
+      }
+   ]
+}
+```
 
 ## See also
 * [Release notes](release-notes.md)

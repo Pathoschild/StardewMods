@@ -25,6 +25,20 @@ A few highlights:
   to crab pots all along the beach:
   > ![](docs/automate-crabpots.png)
 
+If you need more space, the alternate _Small Beach With Islands_ adds ocean islands for extra land
+area:
+> ![](docs/farm-islands.png)
+
+## Configure
+The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
+file in a text editor to configure the mod.
+
+Here's what you can change:
+
+setting         | default | what it affects
+:-------------- | :------ | :------------------
+`EnableIslands` | `true`  | Whether to add ocean islands with extra land area.
+
 ## FAQs
 ### Compatibility
 This is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
@@ -52,6 +66,6 @@ Special instructions for Small Beach Farm:
 3. Compile as usual. See [Modding:Maps](https://stardewvalleywiki.com/Modding:Maps) for help editing the map file.
 
 ## See also
-* Farm map commissioned from [Opalie](https://www.nexusmods.com/stardewvalley/users/38947035)!
+* Initial farm maps commissioned from [Opalie](https://www.nexusmods.com/stardewvalley/users/38947035)!
 * [release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/3750)

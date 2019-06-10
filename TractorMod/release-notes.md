@@ -1,4 +1,11 @@
 # Release notes
+## 4.8.3
+Released 09 June 2019.
+
+* Fixed config parsing errors for some players.
+* Fixed tractor not working in Deep Woods after the first screen.
+* Fixed issue where pressing the dismiss-tractor key while riding a horse caused the horse to disappear.
+
 ## 4.8.2
 Released 07 March 2019.
 

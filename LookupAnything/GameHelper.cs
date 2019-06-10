@@ -62,7 +62,7 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             this.Objects = new Lazy<ObjectModel[]>(() => this.DataParser.GetObjects(monitor).ToArray());
             this.GiftTastes = new Lazy<GiftTasteModel[]>(() => this.DataParser.GetGiftTastes(this.Objects.Value).ToArray());
-            this.Recipes = new Lazy<RecipeModel[]>(() => this.DataParser.GetRecipes(metadata, reflectionHelper, translations).ToArray());
+            this.Recipes = new Lazy<RecipeModel[]>(() => this.DataParser.GetRecipes(metadata, reflectionHelper).ToArray());
         }
 
         /****
@@ -321,16 +321,35 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="item">The item.</param>
         public IEnumerable<RecipeModel> GetRecipesForIngredient(Item item)
         {
-            if (item is SObject obj && obj.bigCraftable.Value)
-                return new RecipeModel[0]; // bigcraftables never valid as an ingredient
+            // ignore invalid ingredients
+            if (item is Furniture || item is Ring || item is Boots || item is MeleeWeapon || item is Hat || (item as SObject)?.bigCraftable.Value == true)
+                yield break;
 
-            return (
-                from recipe in this.GetRecipes()
-                where
-                    (recipe.Ingredients.ContainsKey(item.ParentSheetIndex) || recipe.Ingredients.ContainsKey(item.Category))
-                    && recipe.ExceptIngredients?.Contains(item.ParentSheetIndex) != true
-                select recipe
-            );
+            // from cached recipes
+            foreach (var recipe in this.GetRecipes())
+            {
+                if (!recipe.Ingredients.Any(p => p.Matches(item)))
+                    continue;
+                if (recipe.ExceptIngredients.Any(p => p.Matches(item)))
+                    continue;
+
+                yield return recipe;
+            }
+        }
+
+        /// <summary>Get the recipes for a given machine.</summary>
+        /// <param name="machine">The machine.</param>
+        public IEnumerable<RecipeModel> GetRecipesForMachine(SObject machine)
+        {
+            if (machine == null)
+                yield break;
+
+            // from cached recipes
+            foreach (var recipe in this.GetRecipes())
+            {
+                if (recipe.IsForMachine(machine))
+                    yield return recipe;
+            }
         }
 
         /// <summary>Get an object by its parent sprite index.</summary>
@@ -339,6 +358,14 @@ namespace Pathoschild.Stardew.LookupAnything
         public SObject GetObjectBySpriteIndex(int index, int stack = 1)
         {
             return new SObject(index, stack);
+        }
+
+        /// <summary>Get an object by its parent sprite index.</summary>
+        /// <param name="category">The category number.</param>
+        public IEnumerable<SObject> GetObjectsByCategory(int category)
+        {
+            foreach (ObjectModel model in this.Objects.Value.Where(obj => obj.Category == category))
+                yield return this.GetObjectBySpriteIndex(model.ParentSpriteIndex);
         }
 
         /// <summary>Get whether an item can have a quality (which increases its sale price).</summary>

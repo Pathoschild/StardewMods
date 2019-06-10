@@ -1,13 +1,24 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.13
+Released 09 June 2019.
+
+* Added compatibility with Auto-Grabber Mod and Better Junimos. If installed, seeds/fertiliser in their machines will be ignored (configurable).
+* Simplified configuring connectors.
+* Fixed config parsing errors for some players.
+* Fixed items with different item qualities being combined into one input stack.
+
+**Breaking change:** connectors previously enabled in `config.json` will be removed next time you
+launch the game; See the readme for the new format.
+
 ## 1.12
 Released 06 April 2019.
 
 * Significantly improved performance for large machine groups.
 * Added support for disabling input/output for a chest (thanks to kice!).
 * Machines can now output and input in the same automation cycle.
-* Fixed compatibility with Auto-Grabber Mod and Better Junimos. If they're installed, seeds in auto-grabbers (Auto-Grabber Mod) or Junimo huts (Better Junimos) will be ignored.
+* ~~Added compatibility with Auto-Grabber Mod and Better Junimos.~~
 * Fixed "don't use this chest for automation" option not taking effect immediately.
 
 ## 1.11.1

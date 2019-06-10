@@ -123,22 +123,48 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 if (!this.GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
                     continue;
 
-                if (feature is HoeDirt dirt && dirt.crop != null)
-                    yield return new CropTarget(this.GameHelper, dirt, spriteTile, this.Reflection);
-                else if (feature is FruitTree fruitTree)
+                switch (feature)
                 {
-                    if (this.Reflection.GetField<float>(feature, "alpha").GetValue() < 0.8f)
-                        continue; // ignore when tree is faded out (so player can lookup things behind it)
-                    yield return new FruitTreeTarget(this.GameHelper, fruitTree, spriteTile);
+                    case Bush bush: // planted bush
+                        yield return new BushTarget(this.GameHelper, bush, this.Reflection);
+                        break;
+
+                    case HoeDirt dirt when dirt.crop != null:
+                        yield return new CropTarget(this.GameHelper, dirt, spriteTile, this.Reflection);
+                        break;
+
+                    case FruitTree fruitTree:
+                        if (this.Reflection.GetField<float>(fruitTree, "alpha").GetValue() < 0.8f)
+                            continue; // ignore when tree is faded out (so player can lookup things behind it)
+                        yield return new FruitTreeTarget(this.GameHelper, fruitTree, spriteTile);
+                        break;
+
+                    case Tree wildTree:
+                        if (this.Reflection.GetField<float>(feature, "alpha").GetValue() < 0.8f)
+                            continue; // ignore when tree is faded out (so player can lookup things behind it)
+                        yield return new TreeTarget(this.GameHelper, wildTree, spriteTile, this.Reflection);
+                        break;
+
+                    default:
+                        yield return new UnknownTarget(this.GameHelper, feature, spriteTile);
+                        break;
                 }
-                else if (feature is Tree wildTree)
+            }
+
+            // large terrain features
+            foreach (LargeTerrainFeature feature in location.largeTerrainFeatures)
+            {
+                Vector2 spriteTile = feature.tilePosition.Value;
+
+                if (!this.GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
+                    continue;
+
+                switch (feature)
                 {
-                    if (this.Reflection.GetField<float>(feature, "alpha").GetValue() < 0.8f)
-                        continue; // ignore when tree is faded out (so player can lookup things behind it)
-                    yield return new TreeTarget(this.GameHelper, wildTree, spriteTile, this.Reflection);
+                    case Bush bush: // wild bush
+                        yield return new BushTarget(this.GameHelper, bush, this.Reflection);
+                        break;
                 }
-                else
-                    yield return new UnknownTarget(this.GameHelper, feature, spriteTile);
             }
 
             // players
@@ -290,6 +316,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case TargetType.Building:
                     return new BuildingSubject(this.GameHelper, this.Metadata, target.GetValue<Building>(), target.GetSpritesheetArea(), this.Translations, this.Reflection);
 
+                case TargetType.Bush:
+                    return new BushSubject(this.GameHelper, target.GetValue<Bush>(), this.Translations, this.Reflection);
+
                 // tile
                 case TargetType.Tile:
                     return new TileSubject(this.GameHelper, Game1.currentLocation, target.GetValue<Vector2>(), this.Translations);
@@ -303,7 +332,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="cursorPos">The cursor's viewport-relative coordinates.</param>
         public ISubject GetSubjectFrom(IClickableMenu menu, Vector2 cursorPos)
         {
-            switch (menu)
+            // get target menu
+            IClickableMenu targetMenu = menu;
+            {
+                if (menu is GameMenu gameMenu)
+                {
+                    List<IClickableMenu> tabs = this.Reflection.GetField<List<IClickableMenu>>(gameMenu, "pages").GetValue();
+                    targetMenu = tabs[gameMenu.currentTab];
+                }
+            }
+
+            // get target
+            switch (targetMenu)
             {
                 // calendar
                 case Billboard billboard:
@@ -338,89 +378,79 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     break;
 
                 // inventory
-                case GameMenu gameMenu:
+                case InventoryPage inventory:
                     {
-                        List<IClickableMenu> tabs = this.Reflection.GetField<List<IClickableMenu>>(gameMenu, "pages").GetValue();
-                        IClickableMenu curTab = tabs[gameMenu.currentTab];
-                        switch (curTab)
+                        Item item = this.Reflection.GetField<Item>(inventory, "hoveredItem").GetValue();
+                        if (item != null)
+                            return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                    }
+                    break;
+
+                // collections menu
+                // derived from CollectionsPage::performHoverAction
+                case CollectionsPage collectionsTab:
+                    {
+                        int currentTab = this.Reflection.GetField<int>(collectionsTab, "currentTab").GetValue();
+                        if (currentTab == CollectionsPage.achievementsTab || currentTab == CollectionsPage.secretNotesTab)
+                            break;
+
+                        int currentPage = this.Reflection.GetField<int>(collectionsTab, "currentPage").GetValue();
+
+                        foreach (ClickableTextureComponent component in collectionsTab.collections[currentTab][currentPage])
                         {
-                            // inventory
-                            case InventoryPage _:
-                                {
-                                    Item item = this.Reflection.GetField<Item>(curTab, "hoveredItem").GetValue();
-                                    if (item != null)
-                                        return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
-                                }
-                                break;
+                            if (component.containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                            {
+                                int itemID = Convert.ToInt32(component.name.Split(' ')[0]);
+                                SObject obj = new SObject(itemID, 1);
+                                return new ItemSubject(this.GameHelper, this.Translations, obj, ObjectContext.Inventory, knownQuality: false);
+                            }
+                        }
+                    }
+                    break;
 
-                            // collections menu
-                            // derived from CollectionsPage::performHoverAction
-                            case CollectionsPage collectionsTab:
-                                {
-                                    int currentTab = this.Reflection.GetField<int>(curTab, "currentTab").GetValue();
-                                    if (currentTab == CollectionsPage.achievementsTab || currentTab == CollectionsPage.secretNotesTab)
-                                        break;
+                // cooking or crafting menu
+                case CraftingPage crafting:
+                    {
+                        // player inventory item
+                        Item item = this.Reflection.GetField<Item>(crafting, "hoverItem").GetValue();
+                        if (item != null)
+                            return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
 
-                                    int currentPage = this.Reflection.GetField<int>(curTab, "currentPage").GetValue();
+                        // crafting recipe
+                        CraftingRecipe recipe = this.Reflection.GetField<CraftingRecipe>(crafting, "hoverRecipe").GetValue();
+                        if (recipe != null)
+                            return new ItemSubject(this.GameHelper, this.Translations, recipe.createItem(), ObjectContext.Inventory, knownQuality: true);
+                    }
+                    break;
 
-                                    foreach (ClickableTextureComponent component in collectionsTab.collections[currentTab][currentPage])
-                                    {
-                                        if (component.containsPoint((int)cursorPos.X, (int)cursorPos.Y))
-                                        {
-                                            int itemID = Convert.ToInt32(component.name.Split(' ')[0]);
-                                            SObject obj = new SObject(itemID, 1);
-                                            return new ItemSubject(this.GameHelper, this.Translations, obj, ObjectContext.Inventory, knownQuality: false);
-                                        }
-                                    }
-                                }
-                                break;
+                // social tab
+                case SocialPage socialPage:
+                    {
+                        // get villagers on current page
+                        int scrollOffset = this.Reflection.GetField<int>(socialPage, "slotPosition").GetValue();
+                        ClickableTextureComponent[] entries = this.Reflection
+                            .GetField<List<ClickableTextureComponent>>(socialPage, "sprites")
+                            .GetValue()
+                            .Skip(scrollOffset)
+                            .ToArray();
 
-                            // cooking or crafting menu
-                            case CraftingPage _:
-                                {
-                                    // player inventory item
-                                    Item item = this.Reflection.GetField<Item>(curTab, "hoverItem").GetValue();
-                                    if (item != null)
-                                        return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
-
-                                    // crafting recipe
-                                    CraftingRecipe recipe = this.Reflection.GetField<CraftingRecipe>(curTab, "hoverRecipe").GetValue();
-                                    if (recipe != null)
-                                        return new ItemSubject(this.GameHelper, this.Translations, recipe.createItem(), ObjectContext.Inventory, knownQuality: true);
-                                }
-                                break;
-
-                            // social tab
-                            case SocialPage _:
-                                {
-                                    // get villagers on current page
-                                    int scrollOffset = this.Reflection.GetField<int>(curTab, "slotPosition").GetValue();
-                                    ClickableTextureComponent[] entries = this.Reflection
-                                        .GetField<List<ClickableTextureComponent>>(curTab, "sprites")
-                                        .GetValue()
-                                        .Skip(scrollOffset)
-                                        .ToArray();
-
-                                    // find hovered villager
-                                    ClickableTextureComponent entry = entries.FirstOrDefault(p => p.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
-                                    if (entry != null)
-                                    {
-                                        int index = Array.IndexOf(entries, entry) + scrollOffset;
-                                        object socialID = this.Reflection.GetField<List<object>>(curTab, "names").GetValue()[index];
-                                        if (socialID is long playerID)
-                                        {
-                                            Farmer player = Game1.getFarmer(playerID);
-                                            return new FarmerSubject(this.GameHelper, player, this.Translations, this.Reflection);
-                                        }
-                                        else if (socialID is string villagerName)
-                                        {
-                                            NPC npc = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.isVillager() && p.Name == villagerName);
-                                            if (npc != null)
-                                                return new CharacterSubject(this.GameHelper, npc, TargetType.Villager, this.Metadata, this.Translations, this.Reflection);
-                                        }
-                                    }
-                                }
-                                break;
+                        // find hovered villager
+                        ClickableTextureComponent entry = entries.FirstOrDefault(p => p.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
+                        if (entry != null)
+                        {
+                            int index = Array.IndexOf(entries, entry) + scrollOffset;
+                            object socialID = this.Reflection.GetField<List<object>>(socialPage, "names").GetValue()[index];
+                            if (socialID is long playerID)
+                            {
+                                Farmer player = Game1.getFarmer(playerID);
+                                return new FarmerSubject(this.GameHelper, player, this.Translations, this.Reflection);
+                            }
+                            else if (socialID is string villagerName)
+                            {
+                                NPC npc = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.isVillager() && p.Name == villagerName);
+                                if (npc != null)
+                                    return new CharacterSubject(this.GameHelper, npc, TargetType.Villager, this.Metadata, this.Translations, this.Reflection);
+                            }
                         }
                     }
                     break;
@@ -454,15 +484,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             if (slot.item != null && slot.containsPoint((int)cursorPos.X, (int)cursorPos.Y))
                                 return new ItemSubject(this.GameHelper, this.Translations, slot.item, ObjectContext.Inventory, knownQuality: true);
                         }
-                    }
-                    break;
-
-                // kitchen
-                case CraftingPage _:
-                    {
-                        CraftingRecipe recipe = this.Reflection.GetField<CraftingRecipe>(menu, "hoverRecipe").GetValue();
-                        if (recipe != null)
-                            return new ItemSubject(this.GameHelper, this.Translations, recipe.createItem(), ObjectContext.Inventory, knownQuality: true);
                     }
                     break;
 

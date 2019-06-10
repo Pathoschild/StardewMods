@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using Newtonsoft.Json.Linq;
 
@@ -62,9 +61,15 @@ namespace ContentPatcher.Framework.Tokens.Json
         }
 
         /// <summary>Get the token strings contained in the JSON structure.</summary>
-        public IEnumerable<ITokenString> GetTokenStrings()
+        public IEnumerable<IParsedTokenString> GetTokenStrings()
         {
-            return this.Contextuals.Values.OfType<ITokenString>();
+            foreach (IContextual contextual in this.Contextuals.Values)
+            {
+                if (contextual is IParsedTokenString tokenStr)
+                    yield return tokenStr;
+                if (contextual is TokenisableProxy proxy)
+                    yield return proxy.TokenString;
+            }
         }
 
 
@@ -129,7 +134,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         /// <param name="setValue">Update the source with a new value.</param>
         private TokenisableProxy TryResolveTokenisableFields(string str, IContext context, Action<string> setValue)
         {
-            ITokenString tokenStr = new TokenString(str, context);
+            IParsedTokenString tokenStr = new TokenString(str, context);
 
             // handle mutable token
             if (tokenStr.IsMutable)

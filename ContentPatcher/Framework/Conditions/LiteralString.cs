@@ -6,7 +6,7 @@ using ContentPatcher.Framework.Tokens;
 namespace ContentPatcher.Framework.Conditions
 {
     /// <summary>A literal string value.</summary>
-    internal class LiteralString : ITokenString
+    internal class LiteralString : IParsedTokenString
     {
         /*********
         ** Accessors

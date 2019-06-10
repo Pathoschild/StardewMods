@@ -85,7 +85,7 @@ namespace ContentPatcher.Framework
         {
             foreach (IToken token in this.CustomTokens)
             {
-                if (string.Equals(name, token.Name, StringComparison.InvariantCultureIgnoreCase))
+                if (token.Name.EqualsIgnoreCase(name))
                     return token;
             }
 

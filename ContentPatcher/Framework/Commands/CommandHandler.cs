@@ -147,7 +147,7 @@ namespace ContentPatcher.Framework.Commands
             output.AppendLine("=====================");
             {
                 // get data
-                IToken[] tokens =
+                var tokensByProvider =
                     (
                         from token in this.TokenManager.GetTokens(enforceContext: false)
                         let inputArgs = token.GetAllowedInputArguments().ToArray()
@@ -159,40 +159,51 @@ namespace ContentPatcher.Framework.Commands
                         orderby isMultiValue, token.Name // single-value tokens first, then alphabetically
                         select token
                     )
+                    .GroupBy(p => (p as ModProvidedToken)?.Mod.Name.Trim())
+                    .OrderBy(p => p.Key) // default tokens (key is null), then tokens added by other mods
                     .ToArray();
-                int labelWidth = Math.Max(tokens.Max(p => p.Name.Length), "token name".Length);
+                int labelWidth = Math.Max(tokensByProvider.Max(group => group.Max(p => p.Name.Length)), "token name".Length);
 
-                // print table header
-                output.AppendLine($"   {"token name".PadRight(labelWidth)} | value");
-                output.AppendLine($"   {"".PadRight(labelWidth, '-')} | -----");
-
-                // print tokens
-                foreach (IToken token in tokens)
+                // group by provider mod (if any)
+                foreach (var tokenGroup in tokensByProvider)
                 {
-                    output.Append($"   {token.Name.PadRight(labelWidth)} | ");
+                    // print mod name
+                    output.AppendLine($"   {tokenGroup.Key ?? "Content Patcher"}:");
+                    output.AppendLine();
 
-                    if (!token.IsReady)
-                        output.AppendLine("[ ] n/a");
-                    else if (token.RequiresInput)
+                    // print table header
+                    output.AppendLine($"      {"token name".PadRight(labelWidth)} | value");
+                    output.AppendLine($"      {"".PadRight(labelWidth, '-')} | -----");
+
+                    // print tokens
+                    foreach (IToken token in tokenGroup)
                     {
-                        bool isFirst = true;
-                        foreach (string input in token.GetAllowedInputArguments().OrderByIgnoreCase(input => input))
+                        output.Append($"      {token.Name.PadRight(labelWidth)} | ");
+
+                        if (!token.IsReady)
+                            output.AppendLine("[ ] n/a");
+                        else if (token.RequiresInput)
                         {
-                            if (isFirst)
+                            bool isFirst = true;
+                            foreach (string input in token.GetAllowedInputArguments().OrderByIgnoreCase(input => input))
                             {
-                                output.Append("[X] ");
-                                isFirst = false;
+                                if (isFirst)
+                                {
+                                    output.Append("[X] ");
+                                    isFirst = false;
+                                }
+                                else
+                                    output.Append($"      {"".PadRight(labelWidth, ' ')} |     ");
+                                output.AppendLine($":{input}: {string.Join(", ", token.GetValues(new LiteralString(input)))}");
                             }
-                            else
-                                output.Append($"   {"".PadRight(labelWidth, ' ')} |     ");
-                            output.AppendLine($":{input}: {string.Join(", ", token.GetValues(new LiteralString(input)))}");
                         }
+                        else
+                            output.AppendLine("[X] " + string.Join(", ", token.GetValues(null).OrderByIgnoreCase(p => p)));
                     }
-                    else
-                        output.AppendLine("[X] " + string.Join(", ", token.GetValues(null).OrderByIgnoreCase(p => p)));
+
+                    output.AppendLine();
                 }
             }
-            output.AppendLine();
 
             // add patch summary
             var patches = this.GetAllPatches()
@@ -371,7 +382,7 @@ namespace ContentPatcher.Framework.Commands
             {
                 string[] failedConditions = (
                     from condition in patch.ParsedConditions
-                    let displayText = !condition.Name.Equals("HasFile", StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrWhiteSpace(condition.Input?.Raw)
+                    let displayText = !condition.Name.EqualsIgnoreCase("HasFile") && !string.IsNullOrWhiteSpace(condition.Input?.Raw)
                         ? $"{condition.Name}:{condition.Input.Raw}"
                         : condition.Name
                     orderby displayText

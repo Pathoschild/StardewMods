@@ -1,10 +1,10 @@
 {
-  "Name": "Debug Mode",
-  "Author": "Pathoschild",
-  "Version": "1.9.4",
-  "MinimumApiVersion": "2.11.0",
-  "Description": "Enables an overlay which provides debug information and unlocks the game's debug hotkeys.",
-  "UniqueID": "Pathoschild.DebugMode",
-  "EntryDll": "DebugMode.dll",
-  "UpdateKeys": [ "Nexus:679" ]
+    "Name": "Debug Mode",
+    "Author": "Pathoschild",
+    "Version": "1.9.5",
+    "MinimumApiVersion": "2.11.1",
+    "Description": "Enables an overlay which provides debug information and unlocks the game's debug hotkeys.",
+    "UniqueID": "Pathoschild.DebugMode",
+    "EntryDll": "DebugMode.dll",
+    "UpdateKeys": [ "Nexus:679" ]
 }

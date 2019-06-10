@@ -2,13 +2,12 @@
 
   <PropertyGroup>
     <AssemblyName>RotateToolbar</AssemblyName>
-    <Version>1.3.2</Version>
+    <Version>1.3.3</Version>
     <RootNamespace>Pathoschild.Stardew.RotateToolbar</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="2.2.0" />
   </ItemGroup>
 

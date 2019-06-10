@@ -1,62 +1,62 @@
 {
-  // accessible
-  "accessible.name": "Accessible",
-  "accessible.clear": "Clear",
-  "accessible.occupied": "Occupied",
-  "accessible.impassable": "Impassable",
-  "accessible.warp": "Warp",
+    // accessible
+    "accessible.name": "Accessible",
+    "accessible.clear": "Clear",
+    "accessible.occupied": "Occupied",
+    "accessible.impassable": "Impassable",
+    "accessible.warp": "Warp",
 
-  // buildable
-  "buildable.name": "Buildable",
-  "buildable.buildable": "Can Build here",
-  "buildable.occupied": "Occupied",
-  "buildable.not-buildable": "Can't Build Here",
+    // buildable
+    "buildable.name": "Buildable",
+    "buildable.buildable": "Can Build here",
+    "buildable.occupied": "Occupied",
+    "buildable.not-buildable": "Can't Build Here",
 
-  // coverage: bee houses
-  "bee-houses.name": "Coverage: Bee Houses",
-  "bee-houses.range": "Flower Range",
+    // coverage: bee houses
+    "bee-houses.name": "Coverage: Bee Houses",
+    "bee-houses.range": "Flower Range",
 
-  // coverage: Junimo huts
-  "junimo-huts.name": "Coverage: Junimo Huts",
-  "junimo-huts.can-harvest": "Can Harvest",
-  "junimo-huts.cannot-harvest": "Can't Harvest",
+    // coverage: Junimo huts
+    "junimo-huts.name": "Coverage: Junimo Huts",
+    "junimo-huts.can-harvest": "Can Harvest",
+    "junimo-huts.cannot-harvest": "Can't Harvest",
 
-  // coverage: scarecrows
-  "scarecrows.name": "Coverage: Scarecrows",
-  "scarecrows.protected": "Protected",
-  "scarecrows.exposed": "Exposed",
+    // coverage: scarecrows
+    "scarecrows.name": "Coverage: Scarecrows",
+    "scarecrows.protected": "Protected",
+    "scarecrows.exposed": "Exposed",
 
-  // coverage: sprinklers
-  "sprinklers.name": "Coverage: Sprinklers",
-  "sprinklers.covered": "Covered",
-  "sprinklers.dry-crops": "Dry Crops",
+    // coverage: sprinklers
+    "sprinklers.name": "Coverage: Sprinklers",
+    "sprinklers.covered": "Covered",
+    "sprinklers.dry-crops": "Dry Crops",
 
-  // crops: harvest
-  "crop-harvest.name": "Crops: Ready to Harvest",
-  "crop-harvest.ready": "Ready",
-  "crop-harvest.not-ready": "Not Ready",
-  "crop-harvest.not-enough-time": "Not Enough Time",
+    // crops: harvest
+    "crop-harvest.name": "Crops: Ready to Harvest",
+    "crop-harvest.ready": "Ready",
+    "crop-harvest.not-ready": "Not Ready",
+    "crop-harvest.not-enough-time": "Not Enough Time",
 
-  // crops: watered
-  "crop-water.name": "Crops: Watered",
-  "crop-water.watered": "Watered Crop",
-  "crop-water.dry": "Dry Crop",
+    // crops: watered
+    "crop-water.name": "Crops: Watered",
+    "crop-water.watered": "Watered Crop",
+    "crop-water.dry": "Dry Crop",
 
-  // crops: fertilized
-  "crop-fertilizer.name": "Crops: Fertilized",
-  "crop-fertilizer.fertilizer": "Fertilizer",
-  "crop-fertilizer.retaining-soil": "Retaining Soil",
-  "crop-fertilizer.speed-gro": "Speed-Gro",
+    // crops: fertilized
+    "crop-fertilizer.name": "Crops: Fertilized",
+    "crop-fertilizer.fertilizer": "Fertilizer",
+    "crop-fertilizer.retaining-soil": "Retaining Soil",
+    "crop-fertilizer.speed-gro": "Speed-Gro",
 
-  // machine processing
-  "machines.name": "Machine Processing",
-  "machines.empty": "Empty",
-  "machines.processing": "Processing",
-  "machines.finished": "Finished",
+    // machine processing
+    "machines.name": "Machine Processing",
+    "machines.empty": "Empty",
+    "machines.processing": "Processing",
+    "machines.finished": "Finished",
 
-  // tillable
-  "tillable.name": "Tillable",
-  "tillable.tillable": "Tillable",
-  "tillable.occupied": "Occupied",
-  "tillable.not-tillable": "Not Tillable"
+    // tillable
+    "tillable.name": "Tillable",
+    "tillable.tillable": "Tillable",
+    "tillable.occupied": "Occupied",
+    "tillable.not-tillable": "Not Tillable"
 }

@@ -1,64 +1,62 @@
 {
-  // accessible
-  "accessible.name": "진입가능 여부",
-  "accessible.clear": "공간이 빔",
-  "accessible.occupied": "공간 차지중",
-  "accessible.impassable": "통행불가",
-  "accessible.warp": "순간이동",
+    // accessible
+    "accessible.name": "진입가능 여부",
+    "accessible.clear": "공간이 빔",
+    "accessible.occupied": "공간 차지중",
+    "accessible.impassable": "통행불가",
+    "accessible.warp": "순간이동",
 
-  // buildable
-  // TODO
-  "buildable.name": "Buildable",
-  "buildable.buildable": "Can Build here",
-  "buildable.occupied": "Occupied",
-  "buildable.not-buildable": "Can't Build Here",
+    // buildable
+    "buildable.name": "건설가능 여부",
+    "buildable.buildable": "건설 가능",
+    "buildable.occupied": "공간 차지중",
+    "buildable.not-buildable": "건설 불가능",
 
-  // coverage: bee houses
-  "bee-houses.name": "적용범위: 양봉장",
-  "bee-houses.range": "꽃의 범위",
+    // coverage: bee houses
+    "bee-houses.name": "적용범위: 양봉장",
+    "bee-houses.range": "꽃의 범위",
 
-  // coverage: Junimo huts
-  "junimo-huts.name": "적용범위: 주니모 오두막",
-  "junimo-huts.can-harvest": "수확 가능",
-  "junimo-huts.cannot-harvest": "수확 불가",
+    // coverage: Junimo huts
+    "junimo-huts.name": "적용범위: 주니모 오두막",
+    "junimo-huts.can-harvest": "수확 가능",
+    "junimo-huts.cannot-harvest": "수확 불가",
 
-  // coverage: scarecrows
-  "scarecrows.name": "적용범위: 허수아비",
-  "scarecrows.protected": "보호됨",
-  "scarecrows.exposed": "노출됨",
+    // coverage: scarecrows
+    "scarecrows.name": "적용범위: 허수아비",
+    "scarecrows.protected": "보호됨",
+    "scarecrows.exposed": "노출됨",
 
-  // coverage: sprinklers
-  "sprinklers.name": "적용범위: 스프링클러",
-  "sprinklers.covered": "수분 공급됨",
-  "sprinklers.dry-crops": "물 주지않은 작물",
+    // coverage: sprinklers
+    "sprinklers.name": "적용범위: 스프링클러",
+    "sprinklers.covered": "수분 공급됨",
+    "sprinklers.dry-crops": "물 주지않은 작물",
 
-  // crops: harvest
-  "crop-harvest.name": "작물: 수확 준비 완료",
-  "crop-harvest.ready": "준비됨",
-  "crop-harvest.not-ready": "준비되지 않음",
-  "crop-harvest.not-enough-time": "남은 시간 부족",
+    // crops: harvest
+    "crop-harvest.name": "작물: 수확 준비 완료",
+    "crop-harvest.ready": "준비됨",
+    "crop-harvest.not-ready": "준비되지 않음",
+    "crop-harvest.not-enough-time": "남은 시간 부족",
 
-  // crops: watered
-  "crop-water.name": "작물: 물주기 여부",
-  "crop-water.watered": "물 준 작물",
-  "crop-water.dry": "물 주지않은 작물",
+    // crops: watered
+    "crop-water.name": "작물: 물주기 여부",
+    "crop-water.watered": "물 준 작물",
+    "crop-water.dry": "물 주지않은 작물",
 
-  // crops: fertilized
-  "crop-fertilizer.name": "작물: 비료줌 여부",
-  "crop-fertilizer.fertilizer": "비료",
-  "crop-fertilizer.retaining-soil": "보습 토양",
-  "crop-fertilizer.speed-gro": "성장 촉진제",
+    // crops: fertilized
+    "crop-fertilizer.name": "작물: 비료줌 여부",
+    "crop-fertilizer.fertilizer": "비료",
+    "crop-fertilizer.retaining-soil": "보습 토양",
+    "crop-fertilizer.speed-gro": "성장 촉진제",
 
-  // machine processing
-  "machines.name": "기계 동작 여부",
-  "machines.empty": "빔",
-  "machines.processing": "처리중",
-  "machines.finished": "완료됨",
+    // machine processing
+    "machines.name": "기계 동작 여부",
+    "machines.empty": "빔",
+    "machines.processing": "처리중",
+    "machines.finished": "완료됨",
 
-  // tillable
-  // TODO
-  "tillable.name": "Tillable",
-  "tillable.tillable": "Tillable",
-  "tillable.occupied": "Occupied",
-  "tillable.not-tillable": "Not Tillable"
+    // tillable
+    "tillable.name": "경작 가능 여부",
+    "tillable.tillable": "경작 가능",
+    "tillable.occupied": "공간 차지중",
+    "tillable.not-tillable": "경작 불가능"
 }

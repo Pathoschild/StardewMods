@@ -61,6 +61,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The mod configuration.</summary>
         private readonly ModConfig Config;
 
+        /// <summary>The configured key bindings.</summary>
+        private readonly ModConfigKeys Keys;
+
         /// <summary>Whether to show the category dropdown.</summary>
         private bool ShowCategoryDropdown => this.Categories.Length > 1;
 
@@ -161,11 +164,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="chest">The selected chest.</param>
         /// <param name="chests">The available chests.</param>
         /// <param name="config">The mod configuration.</param>
+        /// <param name="keys">The configured key bindings.</param>
         /// <param name="events">The SMAPI events available for mods.</param>
         /// <param name="input">An API for checking and changing input state.</param>
         /// <param name="translations">Provides translations stored in the mod's folder.</param>
         /// <param name="showAutomateOptions">Whether to show Automate options.</param>
-        public ManageChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, IModEvents events, IInputHelper input, ITranslationHelper translations, bool showAutomateOptions)
+        public ManageChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, ITranslationHelper translations, bool showAutomateOptions)
             : base(events, input, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
         {
             this.ForMenuInstance = menu;
@@ -185,6 +189,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.Chests = chests;
             this.Categories = chests.Select(p => p.DisplayCategory).Distinct().OrderBy(p => p).ToArray();
             this.Config = config;
+            this.Keys = keys;
 
             // components
             this.ReinitialiseComponents();
@@ -337,26 +342,26 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 return false;
 
             bool canNavigate = this.CanCloseChest;
-            var controls = this.Config.Controls;
+            ModConfigKeys keys = this.Keys;
             switch (this.ActiveElement)
             {
                 case Element.Menu:
-                    if (controls.Toggle.Contains(input) || input == SButton.Escape || input == SButton.ControllerB)
+                    if (keys.Toggle.Contains(input) || input == SButton.Escape || input == SButton.ControllerB)
                     {
                         if (canNavigate)
                             this.Exit();
                     }
-                    else if (controls.PrevChest.Contains(input) && canNavigate)
+                    else if (keys.PrevChest.Contains(input) && canNavigate)
                         this.SelectPreviousChest();
-                    else if (controls.NextChest.Contains(input) && canNavigate)
+                    else if (keys.NextChest.Contains(input) && canNavigate)
                         this.SelectNextChest();
-                    else if (controls.PrevCategory.Contains(input) && canNavigate)
+                    else if (keys.PrevCategory.Contains(input) && canNavigate)
                         this.SelectPreviousCategory();
-                    else if (controls.NextCategory.Contains(input) && canNavigate)
+                    else if (keys.NextCategory.Contains(input) && canNavigate)
                         this.SelectNextCategory();
-                    else if (this.Chest.CanEdit && controls.EditChest.Contains(input) && canNavigate)
+                    else if (this.Chest.CanEdit && keys.EditChest.Contains(input) && canNavigate)
                         this.OpenEdit();
-                    else if (controls.SortItems.Contains(input))
+                    else if (keys.SortItems.Contains(input))
                         this.SortInventory();
                     else
                         return false;
@@ -385,7 +390,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     bool scrollNext = amount > 0;
 
                     // scroll dropdowns
-                    if (this.Config.Controls.HoldToMouseWheelScrollCategories.Any(p => this.InputHelper.IsDown(p)))
+                    if (this.Keys.HoldToMouseWheelScrollCategories.Any(p => this.InputHelper.IsDown(p)))
                     {
                         if (scrollNext)
                             this.SelectNextCategory();
@@ -393,7 +398,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                             this.SelectPreviousCategory();
                         return true;
                     }
-                    if (this.Config.Controls.HoldToMouseWheelScrollChests.Any(p => this.InputHelper.IsDown(p)))
+                    if (this.Keys.HoldToMouseWheelScrollChests.Any(p => this.InputHelper.IsDown(p)))
                     {
                         if (scrollNext)
                             this.SelectNextChest();

@@ -20,6 +20,9 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
+        /// <summary>The configured key bindings.</summary>
+        private ModConfigKeys Keys;
+
         /// <summary>Constructs machine groups.</summary>
         private MachineGroupFactory Factory;
 
@@ -49,25 +52,28 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            // toggle mod compatibility
-            bool hasBetterJunimos = helper.ModRegistry.IsLoaded("hawkfalcon.BetterJunimos");
-            bool hasDeluxeAutoGrabber = helper.ModRegistry.IsLoaded("stokastic.DeluxeGrabber");
-
             // init
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
             this.Factory = new MachineGroupFactory();
-            this.Factory.Add(new AutomationFactory(this.Config.Connectors, this.Config.AutomateShippingBin, this.Monitor, helper.Reflection, hasBetterJunimos, hasDeluxeAutoGrabber));
+            this.Factory.Add(new AutomationFactory(
+                connectors: this.Config.ConnectorNames,
+                automateShippingBin: this.Config.AutomateShippingBin,
+                monitor: this.Monitor,
+                reflection: helper.Reflection,
+                data: this.Helper.Data.ReadJsonFile<DataModel>("data.json"),
+                betterJunimosCompat: this.Config.ModCompatibility.BetterJunimos && helper.ModRegistry.IsLoaded("hawkfalcon.BetterJunimos"),
+                autoGrabberModCompat: this.Config.ModCompatibility.AutoGrabberMod && helper.ModRegistry.IsLoaded("Jotser.AutoGrabberMod")
+            ));
 
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             helper.Events.Player.Warped += this.OnWarped;
             helper.Events.World.LocationListChanged += this.World_LocationListChanged;
             helper.Events.World.ObjectListChanged += this.World_ObjectListChanged;
+            helper.Events.World.TerrainFeatureListChanged += this.World_TerrainFeatureListChanged;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
-
-            if (this.Config.Connectors.Any(p => p.Type == ObjectType.Floor))
-                helper.Events.World.TerrainFeatureListChanged += this.World_TerrainFeatureListChanged;
 
             // log info
             this.Monitor.VerboseLog($"Initialised with automation every {this.Config.AutomationInterval} ticks.");
@@ -204,7 +210,7 @@ namespace Pathoschild.Stardew.Automate
             try
             {
                 // toggle overlay
-                if (Context.IsPlayerFree && this.Config.Controls.ToggleOverlay.Contains(e.Button))
+                if (Context.IsPlayerFree && this.Keys.ToggleOverlay.Contains(e.Button))
                 {
                     if (this.CurrentOverlay != null)
                         this.DisableOverlay();

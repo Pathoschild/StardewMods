@@ -23,6 +23,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
+        /// <summary>The configured key bindings.</summary>
+        private ModConfigKeys Keys;
+
         /// <summary>The internal mod settings.</summary>
         private ModData Data;
 
@@ -49,6 +52,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             // initialise
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
             this.Data = helper.Data.ReadJsonFile<ModData>("data.json") ?? new ModData();
             this.ChestFactory = new ChestFactory(helper.Translation, helper.Data, this.Config.EnableShippingBin);
 
@@ -126,10 +130,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             try
             {
-                var controls = this.Config.Controls;
+                ModConfigKeys keys = this.Keys;
 
                 // open menu
-                if (controls.Toggle.Contains(e.Button))
+                if (keys.Toggle.Contains(e.Button))
                 {
                     // open if no conflict
                     if (Game1.activeClickableMenu == null)
@@ -187,7 +191,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 RangeHandler range = this.GetCurrentRange();
                 ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true, alwaysIncludeContainer: chest.Container).ToArray();
                 bool isAutomateInstalled = this.Helper.ModRegistry.IsLoaded("Pathoschild.Automate");
-                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Helper.Events, this.Helper.Input, this.Helper.Translation, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
+                this.ManageChestOverlay = new ManageChestOverlay(chestMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Translation, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
                 this.ManageChestOverlay.OnChestSelected += selected =>
                 {
                     this.SelectedInventory = selected.Container.Inventory;

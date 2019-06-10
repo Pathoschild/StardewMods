@@ -1,6 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.3
+Released 09 June 2019.
+
+* Added optional version for players who want more space. Thanks to [Opalie](https://www.nexusmods.com/stardewvalley/users/38947035) for the new map!
+
 ## 1.2
 Released 12 April 2019.
 

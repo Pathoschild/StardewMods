@@ -1,37 +1,38 @@
 {
-  // default chest names
-  "default-name.auto-grabber": "Automatischer Greifer #{{number}}",
-  "default-name.chest": "Kiste #{{number}}",
-  "default-name.fridge": "Kühlschrank",
-  "default-name.junimo-hut": "Junimo-Hütte #{{number}}",
-  "default-name.shipping-bin": "Versandbox",
+    // default chest names
+    "default-name.auto-grabber": "Automatischer Greifer #{{number}}",
+    "default-name.chest": "Kiste #{{number}}",
+    "default-name.fridge": "Kühlschrank",
+    "default-name.junimo-hut": "Junimo-Hütte #{{number}}",
+    "default-name.shipping-bin": "Versandbox",
 
-  // default category names
-  "default-category.owned-cabin": "Cabin ({{owner}})", // TODO
-  "default-category.unowned-cabin": "Cabin (empty)", // TODO
-  "default-category.duplicate": "{{locationName}} #{{number}}",
+    // default category names
+    "default-category.owned-cabin": "Hütte ({{owner}})",
+    "default-category.unowned-cabin": "Hütte (Leer)",
+    "default-category.duplicate": "{{locationName}} #{{number}}",
 
-  // edit-chest labels
-  "label.location": "Ort",
-  "label.location.tile": "Feld {{x}}, {{y}}",
-  "label.name": "Name",
-  "label.category": "Kategorie",
-  "label.order": "Reihenfolge",
-  "label.hide-chest": "Kiste ausblenden",
-  "label.hide-chest-hidden": "Kiste ausblenden (Du musst die Kiste wieder finden um dies rückgängig zu machen!)",
-  "label.automate-prefer-output": "(Automatisieren) Lege zuerst Gegenstände in diese Kiste",
-  "label.automate-no-input": "(Automatisieren) Don't put items in this chest", // TODO
-  "label.automate-no-output": "(Automatisieren) Don't get items from this chest", // TODO
-  "label.automate-ignore": "(Automatisieren) Diese Kiste ist nicht für die Automatisierung geeignet",
+    // edit-chest labels
+    "label.location": "Ort",
+    "label.location.tile": "Feld {{x}}, {{y}}",
+    "label.name": "Name",
+    "label.category": "Kategorie",
+    "label.order": "Reihenfolge",
+    "label.hide-chest": "Kiste ausblenden",
+    "label.hide-chest-hidden": "Kiste ausblenden (Du musst die Kiste wieder finden um dies rückgängig zu machen!)",
+    "label.automate-prefer-output": "(Automatisieren) Lege zuerst Gegenstände in diese Kiste",
+    "label.automate-no-input": "(Automatisieren) Lege keine Gegenstände in diese Kiste",
+    "label.automate-no-output": "(Automatisieren) Nimm keine Gegenstände von dieser Kiste",
+    "label.automate-ignore": "(Automatisieren) Diese Kiste ist nicht für die Automatisierung geeignet",
 
-  // button labels
-  "button.edit-chest": "Bearbeite Kiste",
-  "button.sort-inventory": "sortiere Inventar",
-  "button.save": "Speichern",
-  "button.reset": "Zurücksetzen",
-  // errors
-  "errors.disabled-from-here": "Du kannst von hier auf keine Kisten zugreifen.",
-  "errors.no-chests": "Du hast noch keine Kisten.",
-  "errors.no-chests-in-location": "Du hast in diesem Bereich keine Kisten.",
-  "errors.no-chests-in-range": "Du hast keine Kisten in Reichweite."
+    // button labels
+    "button.edit-chest": "Bearbeite Kiste",
+    "button.sort-inventory": "sortiere Inventar",
+    "button.save": "Speichern",
+    "button.reset": "Zurücksetzen",
+
+    // errors
+    "errors.disabled-from-here": "Du kannst von hier auf keine Kisten zugreifen.",
+    "errors.no-chests": "Du hast noch keine Kisten.",
+    "errors.no-chests-in-location": "Du hast in diesem Bereich keine Kisten.",
+    "errors.no-chests-in-range": "Du hast keine Kisten in Reichweite."
 }

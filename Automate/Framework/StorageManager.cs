@@ -53,20 +53,19 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <returns>Returns whether the requirement is met.</returns>
         public bool TryGetIngredient(Func<ITrackedStack, bool> predicate, int count, out IConsumable consumable)
         {
-            int countMissing = count;
-            ITrackedStack[] consumables = this.GetItems().Where(predicate)
-                .TakeWhile(chestItem =>
+            StackAccumulator stacks = new StackAccumulator();
+            foreach (ITrackedStack input in this.GetItems().Where(predicate))
+            {
+                TrackedItemCollection stack = stacks.Add(input);
+                if (stack.Count >= count)
                 {
-                    if (countMissing <= 0)
-                        return false;
+                    consumable = new Consumable(stack, count);
+                    return consumable.IsMet;
+                }
+            }
 
-                    countMissing -= chestItem.Count;
-                    return true;
-                })
-                .ToArray();
-
-            consumable = new Consumable(new TrackedItemCollection(consumables), count);
-            return consumable.IsMet;
+            consumable = null;
+            return false;
         }
 
         /// <summary>Get an ingredient needed for a recipe.</summary>
@@ -86,21 +85,21 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <returns>Returns whether the requirement is met.</returns>
         public bool TryGetIngredient(IRecipe[] recipes, out IConsumable consumable, out IRecipe recipe)
         {
-            IDictionary<IRecipe, List<ITrackedStack>> accumulator = recipes.ToDictionary(req => req, req => new List<ITrackedStack>());
+            IDictionary<IRecipe, StackAccumulator> accumulator = recipes.ToDictionary(req => req, req => new StackAccumulator());
 
-            foreach (ITrackedStack stack in this.GetItems())
+            foreach (ITrackedStack input in this.GetItems())
             {
                 foreach (var entry in accumulator)
                 {
                     recipe = entry.Key;
-                    List<ITrackedStack> found = entry.Value;
+                    StackAccumulator stacks = entry.Value;
 
-                    if (recipe.AcceptsInput(stack))
+                    if (recipe.AcceptsInput(input))
                     {
-                        found.Add(stack);
-                        if (found.Sum(p => p.Count) >= recipe.InputCount)
+                        ITrackedStack stack = stacks.Add(input);
+                        if (stack.Count >= recipe.InputCount)
                         {
-                            consumable = new Consumable(new TrackedItemCollection(found), entry.Key.InputCount);
+                            consumable = new Consumable(stack, entry.Key.InputCount);
                             return true;
                         }
                     }

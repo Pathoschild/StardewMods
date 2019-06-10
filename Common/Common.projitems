@@ -35,7 +35,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\SimpleSprinkler\ISimplerSprinklerApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\SimpleSprinkler\SimpleSprinklerIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SpriteInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)StringEnumArrayConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TileHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\CommonSprites.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\ConstraintSet.cs" />

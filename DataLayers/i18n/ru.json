@@ -1,62 +1,62 @@
 {
-  // accessible
-  "accessible.name": "Доступность",
-  "accessible.clear": "Доступно",
-  "accessible.occupied": "Занято",
-  "accessible.impassable": "Недоступно",
-  "accessible.warp": "Смена локации",
+    // accessible
+    "accessible.name": "Доступность",
+    "accessible.clear": "Доступно",
+    "accessible.occupied": "Занято",
+    "accessible.impassable": "Недоступно",
+    "accessible.warp": "Смена локации",
 
-  // buildable
-  "buildable.name": "Покрытие: Строительство",
-  "buildable.buildable": "Возможно",
-  "buildable.occupied": "Есть преграда",
-  "buildable.not-buildable": "Не возможно",
+    // buildable
+    "buildable.name": "Покрытие: Строительство",
+    "buildable.buildable": "Возможно",
+    "buildable.occupied": "Есть преграда",
+    "buildable.not-buildable": "Не возможно",
 
-  // coverage: bee houses
-  "bee-houses.name": "Покрытие: Ульи",
-  "bee-houses.range": "Цветочный радиус",
+    // coverage: bee houses
+    "bee-houses.name": "Покрытие: Ульи",
+    "bee-houses.range": "Цветочный радиус",
 
-  // coverage: Junimo huts
-  "junimo-huts.name": "Покрытие: Домик Джунимо",
-  "junimo-huts.can-harvest": "Могут собрать",
-  "junimo-huts.cannot-harvest": "Не могут собрать",
+    // coverage: Junimo huts
+    "junimo-huts.name": "Покрытие: Домик Джунимо",
+    "junimo-huts.can-harvest": "Могут собрать",
+    "junimo-huts.cannot-harvest": "Не могут собрать",
 
-  // coverage: scarecrows
-  "scarecrows.name": "Покрытие: Пугало",
-  "scarecrows.protected": "Защищено",
-  "scarecrows.exposed": "Уязвимо",
+    // coverage: scarecrows
+    "scarecrows.name": "Покрытие: Пугало",
+    "scarecrows.protected": "Защищено",
+    "scarecrows.exposed": "Уязвимо",
 
-  // coverage: sprinklers
-  "sprinklers.name": "Покрытие: Спринклеры",
-  "sprinklers.covered": "Покрыто",
-  "sprinklers.dry-crops": "Не поливается",
+    // coverage: sprinklers
+    "sprinklers.name": "Покрытие: Спринклеры",
+    "sprinklers.covered": "Покрыто",
+    "sprinklers.dry-crops": "Не поливается",
 
-  // crops: harvest
-  "crop-harvest.name": "Покрытие: Готовность к сбору",
-  "crop-harvest.ready": "Готово",
-  "crop-harvest.not-ready": "Не готово",
-  "crop-harvest.not-enough-time": "Не хватит времени",
+    // crops: harvest
+    "crop-harvest.name": "Покрытие: Готовность к сбору",
+    "crop-harvest.ready": "Готово",
+    "crop-harvest.not-ready": "Не готово",
+    "crop-harvest.not-enough-time": "Не хватит времени",
 
-  // crops: watered
-  "crop-water.name": "Покрытие: Увлажнение",
-  "crop-water.watered": "Увлажнено",
-  "crop-water.dry": "Сухо",
+    // crops: watered
+    "crop-water.name": "Покрытие: Увлажнение",
+    "crop-water.watered": "Увлажнено",
+    "crop-water.dry": "Сухо",
 
-  // crops: fertilized
-  "crop-fertilizer.name": "Покрытие: Удобрения",
-  "crop-fertilizer.fertilizer": "Удобрения",
-  "crop-fertilizer.retaining-soil": "Увлажненнная почва",
-  "crop-fertilizer.speed-gro": "СкороРост",
+    // crops: fertilized
+    "crop-fertilizer.name": "Покрытие: Удобрения",
+    "crop-fertilizer.fertilizer": "Удобрения",
+    "crop-fertilizer.retaining-soil": "Увлажненнная почва",
+    "crop-fertilizer.speed-gro": "СкороРост",
 
-  // machine processing
-  "machines.name": "Покрытие: Состояние машин",
-  "machines.empty": "Пусто",
-  "machines.processing": "В процесе",
-  "machines.finished": "Готово",
+    // machine processing
+    "machines.name": "Покрытие: Состояние машин",
+    "machines.empty": "Пусто",
+    "machines.processing": "В процесе",
+    "machines.finished": "Готово",
 
-  // tillable
-  "tillable.name": "Покрытие: Вспахивание",
-  "tillable.tillable": "Возможно",
-  "tillable.occupied": "Есть преграда",
-  "tillable.not-tillable": "Не возможно"
+    // tillable
+    "tillable.name": "Покрытие: Вспахивание",
+    "tillable.tillable": "Возможно",
+    "tillable.occupied": "Есть преграда",
+    "tillable.not-tillable": "Не возможно"
 }

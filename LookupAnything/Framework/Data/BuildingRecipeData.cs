@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
@@ -19,5 +19,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 
         /// <summary>The item created by the recipe.</summary>
         public int Output { get; set; }
+
+        /// <summary>The number of items produced by the recipe (or <c>null</c> for the default).</summary>
+        public int? OutputCount { get; set; }
     }
 }

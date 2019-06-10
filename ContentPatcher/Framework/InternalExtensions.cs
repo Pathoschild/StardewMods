@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common.Utilities;
+using StardewModdingAPI;
 
 namespace ContentPatcher.Framework
 {
@@ -14,6 +15,16 @@ namespace ContentPatcher.Framework
         /****
         ** Case-insensitive extensions
         ****/
+        /// <summary>Get whether a value is equal to another, using the invariant culture and ignoring case.</summary>
+        /// <param name="value">The first value to compare.</param>
+        /// <param name="other">The second value to compare.</param>
+        public static bool EqualsIgnoreCase(this string value, string other)
+        {
+            return
+                value?.Equals(other, StringComparison.InvariantCultureIgnoreCase)
+                ?? other == null;
+        }
+
         /// <summary>Get the set difference of two sequences, using the invariant culture and ignoring case.</summary>
         /// <param name="source">The first sequence to compare.</param>
         /// <param name="other">The second sequence to compare.</param>
@@ -78,6 +89,29 @@ namespace ContentPatcher.Framework
                     .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(p => p.Trim())
             );
+        }
+
+        /****
+        ** Mod manifest
+        ****/
+        /// <summary>Get whether the manifest lists a given mod ID as a dependency.</summary>
+        /// <param name="manifest">The manifest.</param>
+        /// <param name="modID">The mod ID.</param>
+        /// <param name="canBeOptional">Whether the dependency can be optional.</param>
+        public static bool HasDependency(this IManifest manifest, string modID, bool canBeOptional = true)
+        {
+            if (manifest == null)
+                return false;
+
+            // check content pack for
+            if (manifest.ContentPackFor?.UniqueID?.EqualsIgnoreCase(modID) == true)
+                return true;
+
+            // check dependencies
+            IManifestDependency dependency = manifest.Dependencies?.FirstOrDefault(p => p.UniqueID.EqualsIgnoreCase(modID));
+            return
+                dependency != null
+                && (canBeOptional || dependency.IsRequired);
         }
     }
 }
