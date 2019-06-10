@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using ContentPatcher.Framework;
@@ -543,7 +542,7 @@ namespace ContentPatcher
                     case PatchType.Load:
                         {
                             // init patch
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, forMod, migrator, out string error, out IParsedTokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(entry.FromFile, tokenContext, forMod, migrator, out string error, out IParsedTokenString fromAsset))
                                 return TrackSkip(error);
                             patch = new LoadPatch(entry.LogName, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
                         }
@@ -646,7 +645,7 @@ namespace ContentPatcher
                                 return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}]");
 
                             // save
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, forMod, migrator, out string error, out IParsedTokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(entry.FromFile, tokenContext, forMod, migrator, out string error, out IParsedTokenString fromAsset))
                                 return TrackSkip(error);
                             patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormaliseAssetName);
                         }
@@ -656,7 +655,7 @@ namespace ContentPatcher
                     case PatchType.EditMap:
                         {
                             // read map asset
-                            if (!this.TryPrepareLocalAsset(pack, entry.FromFile, tokenContext, forMod, migrator, out string error, out IParsedTokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(entry.FromFile, tokenContext, forMod, migrator, out string error, out IParsedTokenString fromAsset))
                                 return TrackSkip(error);
 
                             // validate
@@ -954,7 +953,6 @@ namespace ContentPatcher
         }
 
         /// <summary>Prepare a local asset file for a patch to use.</summary>
-        /// <param name="pack">The content pack being loaded.</param>
         /// <param name="path">The asset path in the content patch.</param>
         /// <param name="tokenContext">The tokens available for this content pack.</param>
         /// <param name="forMod">The manifest for the content pack being parsed.</param>
@@ -962,11 +960,11 @@ namespace ContentPatcher
         /// <param name="error">The error reason if preparing the asset fails.</param>
         /// <param name="tokenedPath">The parsed value.</param>
         /// <returns>Returns whether the local asset was successfully prepared.</returns>
-        private bool TryPrepareLocalAsset(ManagedContentPack pack, string path, IContext tokenContext, IManifest forMod, IMigration migrator, out string error, out IParsedTokenString tokenedPath)
+        private bool TryPrepareLocalAsset(string path, IContext tokenContext, IManifest forMod, IMigration migrator, out string error, out IParsedTokenString tokenedPath)
         {
             // normalise raw value
-            path = this.NormaliseLocalAssetPath(pack, path);
-            if (path == null)
+            path = path?.Trim();
+            if (string.IsNullOrWhiteSpace(path))
             {
                 error = $"must set the {nameof(PatchConfig.FromFile)} field for this action type.";
                 tokenedPath = null;
@@ -984,27 +982,6 @@ namespace ContentPatcher
             // looks OK
             error = null;
             return true;
-        }
-
-        /// <summary>Get a normalised file path relative to the content pack folder.</summary>
-        /// <param name="contentPack">The content pack.</param>
-        /// <param name="path">The relative asset path.</param>
-        private string NormaliseLocalAssetPath(ManagedContentPack contentPack, string path)
-        {
-            // normalise asset name
-            if (string.IsNullOrWhiteSpace(path))
-                return null;
-            string newPath = this.Helper.Content.NormaliseAssetName(path);
-
-            // add .xnb extension if needed (it's stripped from asset names)
-            string fullPath = contentPack.GetFullPath(newPath);
-            if (!File.Exists(fullPath))
-            {
-                if (File.Exists($"{fullPath}.xnb") || Path.GetExtension(path) == ".xnb")
-                    newPath += ".xnb";
-            }
-
-            return newPath;
         }
     }
 }

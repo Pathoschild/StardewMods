@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
@@ -15,7 +16,7 @@ namespace ContentPatcher.Framework.Patches
         ** Fields
         *********/
         /// <summary>Normalise an asset name.</summary>
-        private readonly Func<string, string> NormaliseAssetName;
+        private readonly Func<string, string> NormaliseAssetNameImpl;
 
         /// <summary>The underlying contextual values.</summary>
         protected readonly AggregateContextual Contextuals = new AggregateContextual();
@@ -79,7 +80,7 @@ namespace ContentPatcher.Framework.Patches
 
             // update patch context
             changed = this.RawTargetAsset.UpdateContext(context);
-            this.TargetAsset = this.RawTargetAsset.IsReady ? this.NormaliseAssetName(this.RawTargetAsset.Value) : "";
+            this.TargetAsset = this.RawTargetAsset.IsReady ? this.NormaliseLocalAssetPath(this.RawTargetAsset.Value) : "";
             this.PrivateContext.Update(context, this.RawTargetAsset);
 
             // update contextual values
@@ -165,7 +166,7 @@ namespace ContentPatcher.Framework.Patches
             this.ContentPack = contentPack;
             this.RawTargetAsset = assetName;
             this.Conditions = conditions.ToArray();
-            this.NormaliseAssetName = normaliseAssetName;
+            this.NormaliseAssetNameImpl = normaliseAssetName;
             this.PrivateContext = new SinglePatchContext(scope: this.ContentPack.Manifest.UniqueID);
             this.FromLocalAsset = fromLocalAsset;
 
@@ -173,6 +174,26 @@ namespace ContentPatcher.Framework.Patches
                 .Add(this.Conditions)
                 .Add(this.RawTargetAsset)
                 .Add(this.FromLocalAsset);
+        }
+
+        /// <summary>Get a normalised file path relative to the content pack folder.</summary>
+        /// <param name="path">The relative asset path.</param>
+        protected string NormaliseLocalAssetPath(string path)
+        {
+            // normalise asset name
+            if (string.IsNullOrWhiteSpace(path))
+                return null;
+            string newPath = this.NormaliseAssetNameImpl(path);
+
+            // add .xnb extension if needed (it's stripped from asset names)
+            string fullPath = this.ContentPack.GetFullPath(newPath);
+            if (!File.Exists(fullPath))
+            {
+                if (File.Exists($"{fullPath}.xnb") || Path.GetExtension(path) == ".xnb")
+                    newPath += ".xnb";
+            }
+
+            return newPath;
         }
     }
 }
