@@ -563,9 +563,9 @@ namespace ContentPatcher
                                 foreach (KeyValuePair<string, JToken> pair in entry.Entries)
                                 {
                                     if (!this.TryParseStringTokens(pair.Key, tokenContext, forMod, migrator, out string keyError, out IParsedTokenString key))
-                                        return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key}' key is invalid: {keyError}");
+                                        return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key.Raw}' key is invalid: {keyError}");
                                     if (!this.TryParseJsonTokens(pair.Value, tokenContext, forMod, migrator, out string error, out TokenisableJToken value))
-                                        return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key}' value is invalid: {error}");
+                                        return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key.Raw}' value is invalid: {error}");
 
                                     entries.Add(new EditDataPatchRecord(key, value));
                                 }

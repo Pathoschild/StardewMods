@@ -5,6 +5,7 @@
 * Added experimental API to let other mods create custom tokens and conditions.
 * Improved `config.json` keybind parsing.
 * Fixed tokens not being validated consistently in some cases.
+* Fixed a broken warning message.
 
 ## 1.8.2
 Released 27 May 2019.
