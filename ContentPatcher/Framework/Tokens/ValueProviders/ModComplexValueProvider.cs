@@ -37,6 +37,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.GetValueImpl = getValue;
             if (allowsInput)
                 this.EnableInputArguments(requiresInput, true);
+
+            this.MarkReady(this.IsReadyImpl());
         }
 
         /// <summary>Get the current values.</summary>

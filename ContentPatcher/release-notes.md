@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed error loading local XNB files in some cases with Content Patcher 1.9.
+* Fixed mod-provided tokens being asked for values when they're marked non-ready.
 
 ## 1.9
 Released 09 June 2019.
