@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed error loading local XNB files in some cases with Content Patcher 1.9.
+
 ## 1.9
 Released 09 June 2019.
 

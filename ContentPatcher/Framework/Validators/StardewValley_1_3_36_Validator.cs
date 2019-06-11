@@ -17,7 +17,7 @@ namespace ContentPatcher.Framework.Validators
         ** Fields
         *********/
         /// <summary>A map of tilesheets removed in Stardew Valley 1.3.36 and the new tilesheets that should be referenced instead.</summary>
-        private IDictionary<string, string> ObsoleteTilesheets = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
+        private readonly IDictionary<string, string> ObsoleteTilesheets = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
         {
             ["mine"] = "Mines/mine",
             ["mine_dark"] = "Mines/mine_dark",
@@ -39,7 +39,7 @@ namespace ContentPatcher.Framework.Validators
             // detect vanilla tilesheets removed in SDV 1.3.36
             if (data is Map map)
             {
-                string mapFolderPath = Path.GetDirectoryName(patch.FromLocalAsset.Value);
+                string mapFolderPath = Path.GetDirectoryName(patch.FromAsset);
                 foreach (TileSheet tilesheet in map.TileSheets)
                 {
                     string curKey = tilesheet.ImageSource;

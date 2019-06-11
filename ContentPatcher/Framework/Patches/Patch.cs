@@ -27,8 +27,8 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The context which provides tokens for this patch, including patch-specific tokens like <see cref="ConditionType.Target"/>.</summary>
         protected SinglePatchContext PrivateContext { get; }
 
-        /// <summary>Whether the <see cref="FromLocalAsset"/> file exists.</summary>
-        private bool FromLocalAssetExistsImpl;
+        /// <summary>Whether the <see cref="FromAsset"/> file exists.</summary>
+        private bool FromAssetExistsImpl;
 
 
         /*********
@@ -49,8 +49,11 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Whether the instance is valid for the current context.</summary>
         public bool IsReady { get; private set; }
 
-        /// <summary>The raw asset key to intercept (if applicable), including tokens.</summary>
-        public ITokenString FromLocalAsset { get; }
+        /// <summary>The normalised asset key from which to load the local asset (if applicable).</summary>
+        public string FromAsset { get; private set; }
+
+        /// <summary>The raw asset key from which to load the local asset (if applicable), including tokens.</summary>
+        public ITokenString RawFromAsset { get; }
 
         /// <summary>The normalised asset name to intercept.</summary>
         public string TargetAsset { get; private set; }
@@ -80,19 +83,22 @@ namespace ContentPatcher.Framework.Patches
 
             // update patch context
             changed = this.RawTargetAsset.UpdateContext(context);
-            this.TargetAsset = this.RawTargetAsset.IsReady ? this.NormaliseLocalAssetPath(this.RawTargetAsset.Value) : "";
+            this.TargetAsset = this.RawTargetAsset.IsReady ? this.NormaliseAssetNameImpl(this.RawTargetAsset.Value) : "";
             this.PrivateContext.Update(context, this.RawTargetAsset);
 
             // update contextual values
             changed = this.Contextuals.UpdateContext(this.PrivateContext) || changed;
-            this.FromLocalAssetExistsImpl = false;
+            this.FromAssetExistsImpl = false;
 
-            // check whether file exists
-            if (this.Contextuals.IsReady && this.FromLocalAsset != null)
+            // update from asset
+            this.FromAsset = this.RawFromAsset?.IsReady == true
+                ? this.NormaliseLocalAssetPath(this.RawFromAsset.Value)
+                : null;
+            if (this.Contextuals.IsReady && this.FromAsset != null)
             {
-                this.FromLocalAssetExistsImpl = this.ContentPack.HasFile(this.FromLocalAsset.Value);
-                if (!this.FromLocalAssetExistsImpl && this.Conditions.All(p => p.IsMatch(context)))
-                    this.State.AddErrors($"{nameof(PatchConfig.FromFile)} '{this.FromLocalAsset.Value}' does not exist");
+                this.FromAssetExistsImpl = this.ContentPack.HasFile(this.FromAsset);
+                if (!this.FromAssetExistsImpl && this.Conditions.All(p => p.IsMatch(context)))
+                    this.State.AddErrors($"{nameof(PatchConfig.FromFile)} '{this.FromAsset}' does not exist");
             }
 
             // update ready flag
@@ -104,10 +110,10 @@ namespace ContentPatcher.Framework.Patches
             return changed || this.IsReady != wasReady;
         }
 
-        /// <summary>Get whether the <see cref="FromLocalAsset"/> file exists.</summary>
-        public bool FromLocalAssetExists()
+        /// <summary>Get whether the <see cref="FromAsset"/> file exists.</summary>
+        public bool FromAssetExists()
         {
-            return this.FromLocalAssetExistsImpl;
+            return this.FromAssetExistsImpl;
         }
 
         /// <summary>Load the initial version of the asset.</summary>
@@ -158,8 +164,8 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        /// <param name="fromLocalAsset">The raw asset key to intercept (if applicable), including tokens.</param>
-        protected Patch(string logName, PatchType type, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normaliseAssetName, ITokenString fromLocalAsset = null)
+        /// <param name="fromAsset">The raw asset key to intercept (if applicable), including tokens.</param>
+        protected Patch(string logName, PatchType type, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normaliseAssetName, ITokenString fromAsset = null)
         {
             this.LogName = logName;
             this.Type = type;
@@ -168,12 +174,12 @@ namespace ContentPatcher.Framework.Patches
             this.Conditions = conditions.ToArray();
             this.NormaliseAssetNameImpl = normaliseAssetName;
             this.PrivateContext = new SinglePatchContext(scope: this.ContentPack.Manifest.UniqueID);
-            this.FromLocalAsset = fromLocalAsset;
+            this.RawFromAsset = fromAsset;
 
             this.Contextuals
                 .Add(this.Conditions)
                 .Add(this.RawTargetAsset)
-                .Add(this.FromLocalAsset);
+                .Add(this.RawFromAsset);
         }
 
         /// <summary>Get a normalised file path relative to the content pack folder.</summary>

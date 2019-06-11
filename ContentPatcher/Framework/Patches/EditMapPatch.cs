@@ -36,13 +36,13 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
-        /// <param name="fromLocalAsset">The asset key to load from the content pack instead.</param>
+        /// <param name="fromAsset">The asset key to load from the content pack instead.</param>
         /// <param name="fromArea">The map area from which to read tiles.</param>
         /// <param name="toArea">The map area to overwrite.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditMapPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString fromLocalAsset, Rectangle fromArea, Rectangle toArea, IMonitor monitor, Func<string, string> normaliseAssetName)
-            : base(logName, PatchType.EditMap, contentPack, assetName, conditions, normaliseAssetName, fromLocalAsset: fromLocalAsset)
+        public EditMapPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString fromAsset, Rectangle fromArea, Rectangle toArea, IMonitor monitor, Func<string, string> normaliseAssetName)
+            : base(logName, PatchType.EditMap, contentPack, assetName, conditions, normaliseAssetName, fromAsset: fromAsset)
         {
             this.FromArea = fromArea != Rectangle.Empty ? fromArea : null as Rectangle?;
             this.ToArea = toArea != Rectangle.Empty ? toArea : null as Rectangle?;
@@ -60,14 +60,14 @@ namespace ContentPatcher.Framework.Patches
                 this.Monitor.Log($"Can't apply map patch \"{this.LogName}\" to {this.TargetAsset}: this file isn't a map file (found {typeof(T)}).", LogLevel.Warn);
                 return;
             }
-            if (!this.FromLocalAssetExists())
+            if (!this.FromAssetExists())
             {
-                this.Monitor.Log($"Can't apply map patch \"{this.LogName}\" to {this.TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{this.FromLocalAsset.Value}' doesn't exist.", LogLevel.Warn);
+                this.Monitor.Log($"Can't apply map patch \"{this.LogName}\" to {this.TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{this.FromAsset}' doesn't exist.", LogLevel.Warn);
                 return;
             }
 
             // fetch data
-            Map source = this.ContentPack.Load<Map>(this.FromLocalAsset.Value);
+            Map source = this.ContentPack.Load<Map>(this.FromAsset);
             Rectangle sourceArea = this.FromArea ?? this.GetMapArea(source);
             Rectangle targetArea = this.ToArea ?? new Rectangle(0, 0, sourceArea.Width, sourceArea.Height);
             Map target = asset.GetData<Map>();
