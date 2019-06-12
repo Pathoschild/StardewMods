@@ -151,14 +151,14 @@ namespace ContentPatcher.Framework.Conditions
             this.State.Reset();
 
             // reapply
-            if (this.TryGetApplied(context, out string value, out InvariantHashSet unknownTokens))
+            if (this.TryGetApplied(context, out string value, out InvariantHashSet unavailableTokens))
                 this.Value = value;
             else
             {
                 this.Value = null;
-                if (!unknownTokens.Any())
+                if (!unavailableTokens.Any())
                     throw new InvalidOperationException($"Could not apply tokens to string '{this.Raw}', but no invalid tokens were reported."); // sanity check, should never happen
-                this.State.AddUnavailableTokens(unknownTokens.ToArray());
+                this.State.AddUnavailableTokens(unavailableTokens.ToArray());
             }
 
             return
@@ -181,16 +181,16 @@ namespace ContentPatcher.Framework.Conditions
                 {
                     case LexTokenToken lexTokenToken:
                         IToken token = context.GetToken(lexTokenToken.Name, enforceContext: true);
-                        ITokenString input = new TokenString(lexTokenToken.InputArg?.Parts, context);
-                        if (token != null)
-                        {
-                            string[] values = token.GetValues(input).ToArray();
-                            str.Append(string.Join(", ", values));
-                        }
-                        else
+                        if (token == null || !token.IsReady)
                         {
                             unavailableTokens.Add(lexTokenToken.Name);
                             str.Append(lexToken.Text);
+                        }
+                        else
+                        {
+                            ITokenString input = new TokenString(lexTokenToken.InputArg?.Parts, context);
+                            string[] values = token.GetValues(input).ToArray();
+                            str.Append(string.Join(", ", values));
                         }
                         break;
 

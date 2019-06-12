@@ -37,11 +37,11 @@ namespace ContentPatcher.Framework
         /// <summary>The patches to apply.</summary>
         private readonly HashSet<IPatch> Patches = new HashSet<IPatch>();
 
+        /// <summary>The patches to apply, indexed by token.</summary>
+        private readonly InvariantDictionary<HashSet<IPatch>> PatchesAffectedByToken = new InvariantDictionary<HashSet<IPatch>>();
+
         /// <summary>The patches to apply, indexed by asset name.</summary>
         private InvariantDictionary<HashSet<IPatch>> PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>();
-
-        /// <summary>The patches to apply, indexed by token.</summary>
-        private InvariantDictionary<HashSet<IPatch>> PatchesAffectedByToken = new InvariantDictionary<HashSet<IPatch>>();
 
 
         /*********
@@ -74,9 +74,9 @@ namespace ContentPatcher.Framework
                 this.Monitor.Log($"Multiple patches want to load {asset.AssetName} ({string.Join(", ", from entry in patches orderby entry.LogName select entry.LogName)}). None will be applied.", LogLevel.Error);
                 return false;
             }
-            if (patches.Length == 1 && !patches[0].FromLocalAssetExists())
+            if (patches.Length == 1 && !patches[0].FromAssetExists())
             {
-                this.Monitor.Log($"Can't apply load \"{patches[0].LogName}\" to {patches[0].TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{patches[0].FromLocalAsset.Value}' doesn't exist.", LogLevel.Warn);
+                this.Monitor.Log($"Can't apply load \"{patches[0].LogName}\" to {patches[0].TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{patches[0].FromAsset}' doesn't exist.", LogLevel.Warn);
                 return false;
             }
 
@@ -227,8 +227,9 @@ namespace ContentPatcher.Framework
                 }
 
                 // warn for invalid load patch
-                if (patch is LoadPatch loadPatch && patch.IsReady && !patch.ContentPack.HasFile(loadPatch.FromLocalAsset.Value))
-                    this.Monitor.Log($"Patch error: {patch.LogName} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.FromLocalAsset.Value}'.", LogLevel.Error);
+                // (Other patch types show an error when applied, but that's not possible for a load patch since we can't cleanly abort a load.)
+                if (patch is LoadPatch loadPatch && patch.IsReady && !patch.FromAssetExists())
+                    this.Monitor.Log($"Patch error: {patch.LogName} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.FromAsset}'.", LogLevel.Error);
             }
 
             // rebuild asset name lookup

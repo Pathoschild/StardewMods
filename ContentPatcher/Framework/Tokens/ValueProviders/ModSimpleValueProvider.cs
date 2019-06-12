@@ -28,6 +28,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(name, canHaveMultipleValuesForRoot: true)
         {
             this.GetValueImpl = getValue;
+
+            this.MarkReady(false);
         }
 
         /// <summary>Get the current values.</summary>

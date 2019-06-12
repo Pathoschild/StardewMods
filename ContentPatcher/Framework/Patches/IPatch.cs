@@ -19,8 +19,11 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The content pack which requested the patch.</summary>
         ManagedContentPack ContentPack { get; }
 
-        /// <summary>The asset key to load from the content pack instead.</summary>
-        ITokenString FromLocalAsset { get; }
+        /// <summary>The normalised asset key from which to load the local asset (if applicable).</summary>
+        string FromAsset { get; }
+
+        /// <summary>The raw asset key from which to load the local asset (if applicable), including tokens.</summary>
+        ITokenString RawFromAsset { get; }
 
         /// <summary>The normalised asset name to intercept.</summary>
         string TargetAsset { get; }
@@ -38,8 +41,8 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Public methods
         *********/
-        /// <summary>Get whether the <see cref="FromLocalAsset"/> file exists.</summary>
-        bool FromLocalAssetExists();
+        /// <summary>Get whether the <see cref="FromAsset"/> file exists.</summary>
+        bool FromAssetExists();
 
         /// <summary>Load the initial version of the asset.</summary>
         /// <typeparam name="T">The asset type.</typeparam>

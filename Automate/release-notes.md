@@ -1,6 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.13.1
+Released 12 June 2019.
+
+* Fixed stepping stone path not being usable as a connector.
+
 ## 1.13
 Released 09 June 2019.
 

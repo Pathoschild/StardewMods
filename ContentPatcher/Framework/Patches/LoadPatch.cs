@@ -20,13 +20,13 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="localAsset">The asset key to load from the content pack instead.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
         public LoadPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString localAsset, Func<string, string> normaliseAssetName)
-            : base(logName, PatchType.Load, contentPack, assetName, conditions, normaliseAssetName, fromLocalAsset: localAsset) { }
+            : base(logName, PatchType.Load, contentPack, assetName, conditions, normaliseAssetName, fromAsset: localAsset) { }
 
         /// <summary>Load the initial version of the asset.</summary>
         /// <param name="asset">The asset to load.</param>
         public override T Load<T>(IAssetInfo asset)
         {
-            T data = this.ContentPack.Load<T>(this.FromLocalAsset.Value);
+            T data = this.ContentPack.Load<T>(this.FromAsset);
             return (data as object) is Texture2D texture
                 ? (T)(object)this.CloneTexture(texture)
                 : data;
