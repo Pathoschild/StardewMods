@@ -8,7 +8,7 @@
 
     // default category names
     "default-category.owned-cabin": "小屋 ({{owner}})",
-    "default-category.unowned-cabin": "小屋 (empty)",
+    "default-category.unowned-cabin": "小屋 (空き)",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels
