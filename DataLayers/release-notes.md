@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to shirutan (updated Japanese)!
+
 ## 1.6.2
 Released 09 June 2019.
 
