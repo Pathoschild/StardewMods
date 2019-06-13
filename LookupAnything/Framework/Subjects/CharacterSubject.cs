@@ -137,7 +137,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                             // kissed today
                             if (friendship.IsSpouse)
-                                yield return new GenericField(this.GameHelper, L10n.Npc.KissedToday(), this.Stringify(this.Reflection.GetField<bool>(npc, "hasBeenKissedToday").GetValue()));
+                                yield return new GenericField(this.GameHelper, L10n.Npc.KissedToday(), this.Stringify(npc.hasBeenKissedToday.Value));
 
                             // gifted this week
                             if (!friendship.IsSpouse)

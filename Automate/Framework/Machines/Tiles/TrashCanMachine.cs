@@ -88,7 +88,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         private int? GetRandomTrash(int index)
         {
             Random random = new Random((int)Game1.uniqueIDForThisGame / 2 + (int)Game1.stats.DaysPlayed + 777 + index);
-            if (random.NextDouble() < 0.2 + Game1.dailyLuck)
+            double dailyLuck = Game1.MasterPlayer.DailyLuck;
+            if (random.NextDouble() < 0.2 + dailyLuck)
             {
                 int parentSheetIndex = 168;
                 switch (random.Next(10))
@@ -124,20 +125,20 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
                         parentSheetIndex = 153;
                         break;
                 }
-                if (index == 3 && random.NextDouble() < 0.2 + Game1.dailyLuck)
+                if (index == 3 && random.NextDouble() < 0.2 + dailyLuck)
                 {
                     parentSheetIndex = 535;
                     if (random.NextDouble() < 0.05)
                         parentSheetIndex = 749;
                 }
-                if (index == 4 && random.NextDouble() < 0.2 + Game1.dailyLuck)
+                if (index == 4 && random.NextDouble() < 0.2 + dailyLuck)
                 {
                     parentSheetIndex = 378 + random.Next(3) * 2;
                     random.Next(1, 5);
                 }
-                if (index == 5 && random.NextDouble() < 0.2 + Game1.dailyLuck && Game1.dishOfTheDay != null)
+                if (index == 5 && random.NextDouble() < 0.2 + dailyLuck && Game1.dishOfTheDay != null)
                     parentSheetIndex = Game1.dishOfTheDay.ParentSheetIndex != 217 ? Game1.dishOfTheDay.ParentSheetIndex : 216;
-                if (index == 6 && random.NextDouble() < 0.2 + Game1.dailyLuck)
+                if (index == 6 && random.NextDouble() < 0.2 + dailyLuck)
                     parentSheetIndex = 223;
 
                 return parentSheetIndex;

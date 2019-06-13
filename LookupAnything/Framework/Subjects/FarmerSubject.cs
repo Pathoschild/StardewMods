@@ -76,7 +76,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new SkillBarField(this.GameHelper, L10n.Player.CombatSkill(), target.experiencePoints[SFarmer.combatSkill], maxSkillPoints, skillPointsPerLevel);
 
             // luck
-            string luckSummary = L10n.Player.LuckSummary(percent: (Game1.dailyLuck >= 0 ? "+" : "") + Math.Round(Game1.dailyLuck * 100, 2));
+            string luckSummary = L10n.Player.LuckSummary(percent: (Game1.player.DailyLuck >= 0 ? "+" : "") + Math.Round(Game1.player.DailyLuck * 100, 2));
             yield return new GenericField(this.GameHelper, L10n.Player.Luck(), $"{this.GetSpiritLuckMessage()}{Environment.NewLine}({luckSummary})");
         }
 
@@ -131,7 +131,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 if (rawDailyLuck == null)
                     return null;
 
-                Game1.dailyLuck = double.Parse(rawDailyLuck);
+                Game1.player.team.sharedDailyLuck.Value = double.Parse(rawDailyLuck);
             }
 
             // get daily luck message
