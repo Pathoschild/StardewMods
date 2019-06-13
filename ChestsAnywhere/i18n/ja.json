@@ -7,8 +7,8 @@
     "default-name.shipping-bin": "出荷箱",
 
     // default category names
-    "default-category.owned-cabin": "Cabin ({{owner}})", // TODO
-    "default-category.unowned-cabin": "Cabin (empty)", // TODO
+    "default-category.owned-cabin": "小屋 ({{owner}})",
+    "default-category.unowned-cabin": "小屋 (empty)",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels
@@ -20,15 +20,15 @@
     "label.hide-chest": "このチェストを非表示にする",
     "label.hide-chest-hidden": "このチェストを非表示にする (再び表示するにはチェストを探して下さい!)",
     "label.automate-prefer-output": "(Automate) このチェストに優先的にアイテムを入れる",
-    "label.automate-no-input": "(Automate) Don't put items in this chest", // TODO
-    "label.automate-no-output": "(Automate) Don't get items from this chest", // TODO
+    "label.automate-no-input": "(Automate) このチェストにはアイテムを入れない",
+    "label.automate-no-output": "(Automate) このチェストからはアイテムを取り出さない",
     "label.automate-ignore": "(Automate) このチェストを自動化に使わない",
 
     // button labels
     "button.edit-chest": "チェストの編集",
     "button.sort-inventory": "インベントリの整頓",
-    "button.save": "save", // TODO
-    "button.reset": "reset", // TODO
+    "button.save": "セーブ",
+    "button.reset": "リセット",
 
     // errors
     "errors.disabled-from-here": "ここからチェストにアクセスできません.",
