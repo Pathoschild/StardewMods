@@ -1,17 +1,16 @@
 {
     // accessible
-    "accessible.name": "アクセシビリティ",
-    "accessible.clear": "クリア",
+    "accessible.name": "移動可能",
+    "accessible.clear": "通れる",
     "accessible.occupied": "占有",
     "accessible.impassable": "通れない",
     "accessible.warp": "ワープ",
 
     // buildable
-    // TODO
-    "buildable.name": "Buildable",
-    "buildable.buildable": "Can Build here",
-    "buildable.occupied": "Occupied",
-    "buildable.not-buildable": "Can't Build Here",
+    "buildable.name": "建築可能",
+    "buildable.buildable": "建築できる",
+    "buildable.occupied": "占有",
+    "buildable.not-buildable": "建築できない",
 
     // coverage: bee houses
     "bee-houses.name": "範囲: 蜂の巣",
@@ -50,16 +49,14 @@
     "crop-fertilizer.speed-gro": "グングンノビール",
 
     // machine processing
-    // TODO
-    "machines.name": "Machine Processing",
-    "machines.empty": "Empty",
-    "machines.processing": "Processing",
-    "machines.finished": "Finished",
+    "machines.name": "加工設備",
+    "machines.empty": "空",
+    "machines.processing": "処理中",
+    "machines.finished": "処理終了",
 
     // tillable
-    // TODO
-    "tillable.name": "Tillable",
-    "tillable.tillable": "Tillable",
-    "tillable.occupied": "Occupied",
-    "tillable.not-tillable": "Not Tillable"
+    "tillable.name": "耕作可能",
+    "tillable.tillable": "耕作可能",
+    "tillable.occupied": "占有",
+    "tillable.not-tillable": "耕作不可能"
 }
