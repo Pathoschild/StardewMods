@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed `Day` token not allowing zero values.
+
 ## 1.9.1
 Released 12 June 2019.
 
