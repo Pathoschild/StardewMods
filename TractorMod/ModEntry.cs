@@ -570,7 +570,7 @@ namespace Pathoschild.Stardew.TractorMod
             foreach (LegacySaveDataBuilding garageData in saveData.Buildings)
             {
                 // get location
-                BuildableGameLocation location = locations.FirstOrDefault(p => (p.uniqueName.Value ?? p.Name) == (garageData.Map ?? "Farm"));
+                BuildableGameLocation location = locations.FirstOrDefault(p => p.NameOrUniqueName == (garageData.Map ?? "Farm"));
                 if (location == null)
                 {
                     this.Monitor.Log($"Ignored legacy tractor garage in unknown location '{garageData.Map}'.", LogLevel.Warn);

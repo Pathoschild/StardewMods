@@ -107,7 +107,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case NetInt net:
                     return translations.Stringify(net.Value);
                 case NetLocationRef net:
-                    return translations.Stringify(net.Value?.uniqueName ?? net.Value?.Name);
+                    return translations.Stringify(net.Value?.NameOrUniqueName);
                 case NetLong net:
                     return translations.Stringify(net.Value);
                 case NetPoint net:
