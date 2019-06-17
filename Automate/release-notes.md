@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Reduced performance impact when a location's objects or terrain features change.
+* Fixed machines not updated when an automatable building is added or removed.
 
 ## 1.13.1
 Released 12 June 2019.

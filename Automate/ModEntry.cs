@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
@@ -8,6 +9,7 @@ using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Locations;
 
 namespace Pathoschild.Stardew.Automate
 {
@@ -69,9 +71,10 @@ namespace Pathoschild.Stardew.Automate
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             helper.Events.Player.Warped += this.OnWarped;
-            helper.Events.World.LocationListChanged += this.World_LocationListChanged;
-            helper.Events.World.ObjectListChanged += this.World_ObjectListChanged;
-            helper.Events.World.TerrainFeatureListChanged += this.World_TerrainFeatureListChanged;
+            helper.Events.World.BuildingListChanged += this.OnBuildingListChanged;
+            helper.Events.World.LocationListChanged += this.OnLocationListChanged;
+            helper.Events.World.ObjectListChanged += this.OnObjectListChanged;
+            helper.Events.World.TerrainFeatureListChanged += this.OnTerrainFeatureListChanged;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
@@ -122,7 +125,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when a location is added or removed.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void World_LocationListChanged(object sender, LocationListChangedEventArgs e)
+        private void OnLocationListChanged(object sender, LocationListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
                 return;
@@ -148,17 +151,32 @@ namespace Pathoschild.Stardew.Automate
             }
         }
 
+        /// <summary>The method raised after buildings are added or removed in a location.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnBuildingListChanged(object sender, BuildingListChangedEventArgs e)
+        {
+            if (!this.EnableAutomation)
+                return;
+
+            if (e.Location is BuildableGameLocation buildableLocation && e.Added.Concat(e.Removed).Any(building => this.Factory.IsAutomatable(buildableLocation, new Vector2(building.tileX.Value, building.tileY.Value), building)))
+            {
+                this.Monitor.VerboseLog($"Building list changed in {e.Location.Name}, reloading its machines.");
+                this.ReloadQueue.Add(e.Location);
+            }
+        }
+
         /// <summary>The method invoked when an object is added or removed to a location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void World_ObjectListChanged(object sender, ObjectListChangedEventArgs e)
+        private void OnObjectListChanged(object sender, ObjectListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
                 return;
 
             if (e.Added.Concat(e.Removed).Any(obj => this.Factory.IsAutomatable(e.Location, obj.Key, obj.Value)))
             {
-                this.Monitor.VerboseLog($"Object list changed in {e.Location.Name}, reloading machines in current location.");
+                this.Monitor.VerboseLog($"Object list changed in {e.Location.Name}, reloading its machines.");
                 this.ReloadQueue.Add(e.Location);
             }
         }
@@ -166,14 +184,14 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The method invoked when a terrain feature is added or removed to a location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void World_TerrainFeatureListChanged(object sender, TerrainFeatureListChangedEventArgs e)
+        private void OnTerrainFeatureListChanged(object sender, TerrainFeatureListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
                 return;
 
             if (e.Added.Concat(e.Removed).Any(obj => this.Factory.IsAutomatable(e.Location, obj.Key, obj.Value)))
             {
-                this.Monitor.VerboseLog($"Terrain feature list changed in {e.Location.Name}, reloading machines in current location.");
+                this.Monitor.VerboseLog($"Terrain feature list changed in {e.Location.Name}, reloading its machines.");
                 this.ReloadQueue.Add(e.Location);
             }
         }

@@ -48,7 +48,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
         }
 
-        /// <summary>Get whether a given object is automatable.</summary>
+        /// <summary>Get whether an object is automatable.</summary>
         /// <param name="location">The location to check.</param>
         /// <param name="tile">The tile to check.</param>
         /// <param name="obj">The object to check.</param>
@@ -57,13 +57,22 @@ namespace Pathoschild.Stardew.Automate.Framework
             return this.GetEntityFor(location, tile, obj) != null;
         }
 
-        /// <summary>Get whether a given object is automatable.</summary>
+        /// <summary>Get whether a terrain feature is automatable.</summary>
         /// <param name="location">The location to check.</param>
         /// <param name="tile">The tile to check.</param>
         /// <param name="terrainFeature">The terrain feature to check.</param>
         public bool IsAutomatable(GameLocation location, Vector2 tile, TerrainFeature terrainFeature)
         {
             return this.GetEntityFor(location, tile, terrainFeature) != null;
+        }
+
+        /// <summary>Get whether a building is automatable.</summary>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile to check.</param>
+        /// <param name="building">The building to check.</param>
+        public bool IsAutomatable(BuildableGameLocation location, Vector2 tile, Building building)
+        {
+            return this.GetEntityFor(location, tile, building) != null;
         }
 
 
