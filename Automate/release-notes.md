@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Reduced performance impact when a location's objects or terrain features change.
+
 ## 1.13.1
 Released 12 June 2019.
 

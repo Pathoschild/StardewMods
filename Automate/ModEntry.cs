@@ -127,13 +127,19 @@ namespace Pathoschild.Stardew.Automate
             if (!this.EnableAutomation)
                 return;
 
-            this.Monitor.VerboseLog("Location list changed, reloading all machines.");
+            this.Monitor.VerboseLog("Location list changed, reloading machines in affected locations.");
 
             try
             {
-                this.ActiveMachineGroups.Clear();
-                this.DisabledMachineGroups.Clear();
-                foreach (GameLocation location in CommonHelper.GetLocations())
+                // remove locations
+                foreach (GameLocation location in e.Removed)
+                {
+                    this.ActiveMachineGroups.Remove(location);
+                    this.DisabledMachineGroups.Remove(location);
+                }
+
+                // add locations
+                foreach (GameLocation location in e.Added)
                     this.ReloadQueue.Add(location);
             }
             catch (Exception ex)
@@ -150,8 +156,11 @@ namespace Pathoschild.Stardew.Automate
             if (!this.EnableAutomation)
                 return;
 
-            this.Monitor.VerboseLog($"Object list changed in {e.Location.Name}, reloading machines in current location.");
-            this.ReloadQueue.Add(e.Location);
+            if (e.Added.Concat(e.Removed).Any(obj => this.Factory.IsAutomatable(e.Location, obj.Key, obj.Value)))
+            {
+                this.Monitor.VerboseLog($"Object list changed in {e.Location.Name}, reloading machines in current location.");
+                this.ReloadQueue.Add(e.Location);
+            }
         }
 
         /// <summary>The method invoked when a terrain feature is added or removed to a location.</summary>
@@ -162,8 +171,11 @@ namespace Pathoschild.Stardew.Automate
             if (!this.EnableAutomation)
                 return;
 
-            this.Monitor.VerboseLog($"Terrain feature list changed in {e.Location.Name}, reloading machines in current location.");
-            this.ReloadQueue.Add(e.Location);
+            if (e.Added.Concat(e.Removed).Any(obj => this.Factory.IsAutomatable(e.Location, obj.Key, obj.Value)))
+            {
+                this.Monitor.VerboseLog($"Terrain feature list changed in {e.Location.Name}, reloading machines in current location.");
+                this.ReloadQueue.Add(e.Location);
+            }
         }
 
         /// <summary>The method invoked when the in-game clock time changes.</summary>
