@@ -6,18 +6,12 @@
     <RootNamespace>Pathoschild.Stardew.SmallBeachFarm</RootNamespace>
     <TargetFramework>net452</TargetFramework>
 
+    <EnableHarmony>true</EnableHarmony>
     <IgnoreModFilePatterns>assets[/\\]paths.png, assets[/\\]spring_(?:beach|outdoorsTileSheet|town).png</IgnoreModFilePatterns>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0-beta.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>$(GamePath)\smapi-internal\0Harmony.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0-beta.4" />
   </ItemGroup>
 
   <Import Project="$(SolutionDir)\common.targets" />

@@ -3,7 +3,7 @@ root: true
 
 ##########
 ## General formatting
-## documentation: http://editorconfig.org
+## documentation: https://editorconfig.org
 ##########
 [*]
 indent_style = space
