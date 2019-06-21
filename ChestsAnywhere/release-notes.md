@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to shirutan (updated Japanese) and SolidJade (updated Portuguese)!
+* Improved translations. Thanks to cilekli-link (added Turkish), shirutan (updated Japanese), and SolidJade (updated Portuguese)!
 
 ## 1.16.1
 Released 09 June 2019.

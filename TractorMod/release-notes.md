@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to cilekli-link (added Turkish)!
+
 ## 4.8.3
 Released 09 June 2019.
 
