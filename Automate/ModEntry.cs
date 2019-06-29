@@ -54,6 +54,19 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
+            // read data file
+            DataModel data = null;
+            try
+            {
+                data = this.Helper.Data.ReadJsonFile<DataModel>("data.json");
+                if (data?.FloorNames == null)
+                    this.Monitor.Log("The data.json file seems to be missing or invalid. Floor connectors will be disabled.", LogLevel.Error);
+            }
+            catch (Exception ex)
+            {
+                this.Monitor.Log($"The data.json file seems to be invalid. Floor connectors will be disabled.\n{ex}", LogLevel.Error);
+            }
+
             // init
             this.Config = helper.ReadConfig<ModConfig>();
             this.Keys = this.Config.Controls.ParseControls(this.Monitor);
@@ -63,7 +76,7 @@ namespace Pathoschild.Stardew.Automate
                 automateShippingBin: this.Config.AutomateShippingBin,
                 monitor: this.Monitor,
                 reflection: helper.Reflection,
-                data: this.Helper.Data.ReadJsonFile<DataModel>("data.json"),
+                data: data,
                 betterJunimosCompat: this.Config.ModCompatibility.BetterJunimos && helper.ModRegistry.IsLoaded("hawkfalcon.BetterJunimos"),
                 autoGrabberModCompat: this.Config.ModCompatibility.AutoGrabberMod && helper.ModRegistry.IsLoaded("Jotser.AutoGrabberMod")
             ));
