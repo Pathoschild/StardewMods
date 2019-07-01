@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to jahangmar (updated German)!
+
 ## 1.22.1
 Released 10 June 2019.
 
