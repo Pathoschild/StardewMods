@@ -5,6 +5,7 @@
 * Reduced performance impact when a location's objects or terrain features change.
 * Improved error if `data.json` file is missing or invalid.
 * Fixed machines not updated when an automatable building is added or removed.
+* Fixed negative 'times crafted' value shown for some uncraftable items.
 
 ## 1.13.1
 Released 12 June 2019.
