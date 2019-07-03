@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to jahangmar (updated German)!
+* Improved translations. Thanks to FixThisPlz (updated Russian) and jahangmar (updated German)!
 
 ## 1.22.1
 Released 10 June 2019.
