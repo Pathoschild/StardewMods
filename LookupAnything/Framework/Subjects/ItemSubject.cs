@@ -207,7 +207,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 {
                     string label = recipes.First().Type == RecipeType.Cooking ? L10n.Item.Cooked() : L10n.Item.Crafted();
                     int timesCrafted = recipes.Sum(recipe => recipe.GetTimesCrafted(Game1.player));
-                    if (timesCrafted != -1) // -1 == times crafted not available for this recipe type
+                    if (timesCrafted >= 0) // negative value means not available for this recipe type
                         yield return new GenericField(this.GameHelper, label, L10n.Item.CraftedSummary(count: timesCrafted));
                 }
             }
