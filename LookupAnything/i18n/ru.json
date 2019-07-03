@@ -3,17 +3,17 @@
     ** Generic translations
     *********/
     // dates (possible tokens: {{seasonName}}, {{seasonNumber}}, {{dayNumber}}, {{year}})
-    "generic.date": "{{seasonName}} {{dayNumber}}",
-    "generic.date-with-year": "{{seasonName}} {{dayNumber}} в году {{year}}",
+    "generic.date": "{{seasonName}}, {{dayNumber}}-е число",
+    "generic.date-with-year": "{{seasonName}}, {{dayNumber}}-е число, {{year}}-й год",
 
     // date names
     "generic.now": "сейчас",
     "generic.tomorrow": "завтра",
-    "generic.yesterday": "yesterday", // TODO
+    "generic.yesterday": "вчера",
 
     // generic field values
     "generic.percent": "{{percent}}%",
-    "generic.percent-chance-of": "{{percent}}% шанс для {{label}}",
+    "generic.percent-chance-of": "{{percent}}% шанса для {{label}}",
     "generic.percent-ratio": "{{percent}}% ({{value}} из {{max}})",
     "generic.ratio": "{{value}} из {{max}}",
     "generic.range": "С {{min}} по {{max}}",
@@ -24,16 +24,16 @@
     "generic.hours": "{{count}} ч.",
     "generic.days": "{{count}} дн.",
     "generic.in-x-days": "через {{count}} дн.",
-    "generic.x-days-ago": "{{count}} days ago", // TODO
+    "generic.x-days-ago": "{{count}} дн. назад",
     "generic.price": "{{price}}з.",
     "generic.price-for-quality": "{{price}}з. ({{quality}})",
-    "generic.price-for-stack": "{{price}}з. за пачку из {{count}} шт.",
+    "generic.price-for-stack": "{{price}}з. за набор из {{count}} шт.",
 
     // types
     "type.building": "Постройка",
-    "type.bush": "Bush", // TODO
+    "type.bush": "Куст",
     "type.fruit-tree": "Фруктовое дерево",
-    "type.map-tile": "Тайл",
+    "type.map-tile": "Объект",
     "type.monster": "Монстр",
     "type.player": "Игрок",
     "type.tree": "Дерево",
@@ -41,10 +41,10 @@
     "type.other": "Разное", // default type
 
     // item qualities
-    "quality.normal": "обычный",
-    "quality.silver": "серебро",
-    "quality.gold": "золото",
-    "quality.iridium": "иридиум",
+    "quality.normal": "обычное",
+    "quality.silver": "серебрянный",
+    "quality.gold": "золотой",
+    "quality.iridium": "иридиумовый",
 
     // NPC friendship
     "friendship-status.friendly": "Друг",
@@ -87,7 +87,7 @@
     ** Item overrides
     *********/
     // item types
-    "data.type.debris": "Мусор",
+    "data.type.debris": "Строительный мусор",
     "data.type.stone": "Камень",
     "data.type.container": "Контейнер",
 
@@ -162,7 +162,7 @@
     // animal lookup labels
     "animal.love": "Привязанность",
     "animal.happiness": "Счастье",
-    "animal.mood": "Забота сегодня",
+    "animal.mood": "Забота за сегодня",
     "animal.complaints": "Жалобы",
     "animal.produce-ready": "Продукция готова",
     "animal.growth": "Рост",
@@ -171,7 +171,7 @@
     // animal lookup values
     "animal.complaints.hungry": "Не был накормлен вчера",
     "animal.complaints.left-out": "Прошлой ночью остался снаружи",
-    "animal.complaints.new-home": "Переезд в новый дом",
+    "animal.complaints.new-home": "Переехал в новый дом",
     "animal.complaints.no-heater": "Нет отопления зимой",
     "animal.complaints.not-petted": "Не проявлена забота сегодня",
     "animal.complaints.wild-animal-attack": "Атакован диким животным этой ночью",
@@ -180,7 +180,7 @@
     "building.animals": "Животные",
     "building.construction": "Строительство",
     "building.feed-trough": "Кормушка",
-    "building.horse": "Лощадь",
+    "building.horse": "Лошадь",
     "building.horse-location": "Расположение лошади",
     "building.owner": "Владелец",
     "building.slimes": "Слаймов",
@@ -195,34 +195,32 @@
     "building.feed-trough.summary": "{{filled}} из {{max}} заполненных слотов",
     "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
     "building.junimo-harvesting-enabled": "Сбор урожая включен",
-    "building.owner.none": "нету",
+    "building.owner.none": "отсутствует",
     "building.output-processing": "В очереди",
     "building.output-ready": "Готово",
     "building.slimes.summary": "{{count}} из {{max}}",
     "building.stored-hay.summary-one-silo": "{{hayCount}} сена (максимум: {{maxHay}})",
     "building.stored-hay.summary-multiple-silos": "{{hayCount}} сена в {{siloCount}} силосных башнях (максимум: {{maxHay}})",
-    "building.upgrades.barn.0": "до 4 животных; добавляться: коровы",
-    "building.upgrades.barn.1": "до 8 животных; добавляться: беременость животных и козлы",
-    "building.upgrades.barn.2": "до 12 животных; добавляться: система подачи корма, свиньи и овцы",
-    "building.upgrades.cabin.0": "начальный домик",
-    "building.upgrades.cabin.1": "добавляться: кухня, возможность провести свадьбу",
-    "building.upgrades.cabin.2": "добавляться: возможность завести ребенка",
-    "building.upgrades.coop.0": "до 4 животных; добавляться: курицы",
-    "building.upgrades.coop.1": "до 8 животных; добавляться: инкубатор, динозавры и утки",
-    "building.upgrades.coop.2": "до 12 животных; добавляться: система подачи корма and кролики",
+    "building.upgrades.barn.0": "до 4 животных, разблокируются: коровы.",
+    "building.upgrades.barn.1": "до 8 животных; разблокируются: козлы и беременность животных.",
+    "building.upgrades.barn.2": "до 12 животных; разблокируются: система подачи корма, свиньи и овцы.",
+    "building.upgrades.cabin.0": "Первоначальный дом",
+    "building.upgrades.cabin.1": "разблокируются: кухня, возможность провести свадьбу",
+    "building.upgrades.cabin.2": "разблокируются: возможность завести ребенка",
+    "building.upgrades.coop.0": "до 4 животных; разблокируются: курицы",
+    "building.upgrades.coop.1": "до 8 животных; разблокируются: инкубатор, динозавры и утки",
+    "building.upgrades.coop.2": "до 12 животных; разблокируются: система подачи корма and кролики",
     "building.water-trough.summary": "{{filled}} из {{max}} корыт заполнено",
 
     // bush lookup labels
-    // TODO
-    "bush.name.berry": "Berry Bush",
-    "bush.name.plain": "Plain Bush",
-    "bush.description.berry": "A bush that grows salmonberries and blackberries.",
-    "bush.description.plain": "A plain bush that doesn't grow anything.",
-    "bush.next-harvest": "Next harvest",
+    "bush.name.berry": "Ягодный куст",
+    "bush.name.plain": "Обычный куст",
+    "bush.description.berry": "Куст, на котором растёт морошка или ежевика.",
+    "bush.description.plain": "Куст, на котором ничего не растёт.",
+    "bush.next-harvest": "Следующий сбор",
 
     // bush lookup values
-    // TODO
-    "bush.schedule.berry": "20% chance of salmonberries in spring 15-18 and blackberries in fall 8-11.",
+    "bush.schedule.berry": "20% шанса на сбор морошки, с 15-го по 18-ое число весны, а также на сбор ежевики, с 8-го по 11-ое число осени.",
 
     // fruit tree lookup labels
     "fruit-tree.complaints": "Жалобы",
@@ -249,9 +247,9 @@
     "crop.harvest": "Урожай",
 
     // crop lookup values
-    "crop.summary.dead": "Этот урожай погиб.",
+    "crop.summary.dead": "Этот урожай завял.",
     "crop.summary.drops-X": "сбор {{count}}",
-    "crop.summary.drops-X-to-Y": "сбор от {{min}} до {{max}} ({{percent}}% шанс на доп. сбор)",
+    "crop.summary.drops-X-to-Y": "сбор от {{min}} до {{max}} ({{percent}}% шанс на дополнительный сбор)",
     "crop.summary.harvest-once": "урожай через {{daysToFirstHarvest}} дн.",
     "crop.summary.harvest-multi": "урожай через {{daysToFirstHarvest}} дн., затем каждые {{daysToNextHarvests}} дн.",
     "crop.summary.seasons": "сезон роста - {{seasons}}",
@@ -260,49 +258,49 @@
 
     // item lookup labels
     "item.cask-contents": "Содержит",
-    "item.cask-schedule": "Старение",
+    "item.cask-schedule": "Изнашивается",
 
     "item.crabpot-bait": "Наживка",
     "item.crabpot-bait-needed": "Нужна наживка!",
-    "item.crabpot-bait-not-needed": "Не требуется в связи с профессией Мастер по наживке.",
+    "item.crabpot-bait-not-needed": "Не требуется, в связи с профессией 'Мастер по наживке'.",
 
     "item.fence-health": "Здоровье",
 
     "item.contents": "Содержит",
-    "item.likes-this": "Это нравится",
-    "item.loves-this": "Это любят",
-    "item.needed-for": "Нужно для",
-    "item.number-owned": "Принадлежит",
+    "item.likes-this": "Нравится",
+    "item.loves-this": "Любят",
+    "item.needed-for": "Используется",
+    "item.number-owned": "Наличие",
     "item.number-cooked": "Приготовлено",
-    "item.number-crafted": "Скрафчено",
+    "item.number-crafted": "Создано",
     "item.recipes": "Рецепты",
     "item.see-also": "Также смотрите",
-    "item.sells-for": "Продать за",
+    "item.sells-for": "Продаётся за",
     "item.sells-to": "Место продажи",
 
     // item lookup values
-    "item.cask-schedule.now": "{{quality}} готово сейчас",
+    "item.cask-schedule.now": "{{quality}} уже готово.",
     "item.cask-schedule.now-partial": "{{quality}} сейчас (используйте кирку для остановки старения)",
     "item.cask-schedule.tomorrow": "{{quality}} завтра",
     "item.cask-schedule.in-x-days": "{{quality}} через {{count}} дн. ({{date}})",
 
-    "item.fence-health.gold-clock": "не разрушается (Золотые часы)",
+    "item.fence-health.gold-clock": "не разрушается благодаря золотым часам",
     "item.fence-health.summary": "{{percent}}% (сломается через {{count}} дн.)",
 
     "item.contents.placed": "содержит {{name}}",
     "item.contents.ready": "{{name}} готов",
     "item.contents.partial": "{{name}} через {{time}}",
     "item.needed-for.community-center": "Общественный центр ({{bundles}})",
-    "item.needed-for.full-shipment": "достижение Мастер-груз (1 шт.)",
-    "item.needed-for.polyculture": "достижение Севооборот ({{count}} шт. или больше)",
-    "item.needed-for.full-collection": "достижение Полная коллекция (пожертвовать музею)",
-    "item.needed-for.gourmet-chef": "достижение Шеф-повар  (приготовить по {{recipes}} рецептам)",
-    "item.needed-for.craft-master": "достижение Мастер (скрафтить по {{recipes}} рецептам)",
-    "item.sells-to.shipping-box": "Ящик отгрузки",
+    "item.needed-for.full-shipment": "достижение 'Мастер-груз' (Отгрузите 1 шт.)",
+    "item.needed-for.polyculture": "достижение 'Севооборот' (Отгрузите {{count}} шт. или больше)",
+    "item.needed-for.full-collection": "достижение 'Полная коллекция' (Пожертвуйте музею)",
+    "item.needed-for.gourmet-chef": "достижение 'Шеф-повар' (приготовьте рецепт: {{recipes}})",
+    "item.needed-for.craft-master": "достижение 'Мастер' (создайте предмет: {{recipes}})",
+    "item.sells-to.shipping-box": "Отгрузочный ящик",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}} шт.)",
-    "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}", // TODO
-    "item.number-owned.summary": "вам принадлежит {{count}} шт.",
-    "item.number-crafted.summary": "вы сделали {{count}} из них",
+    "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
+    "item.number-owned.summary": "у вас есть {{count}} шт.",
+    "item.number-crafted.summary": "вы создали {{count}} шт.",
 
     // monster lookup labels
     "monster.invincible": "Неузявимый",
@@ -321,19 +319,19 @@
 
     // NPC lookup labels
     "npc.birthday": "День Рождения",
-    "npc.can-romance": "Возм. отношений",
+    "npc.can-romance": "Возможны отношения",
     "npc.friendship": "Привязанность",
-    "npc.talked-today": "Разговор сегодня",
-    "npc.gifted-today": "Подарок сегодня",
-    "npc.gifted-this-week": "Подарки за эту нед. ",
-    "npc.kissed-today": "Kissed today", // TODO
+    "npc.talked-today": "Разговор за сегодня",
+    "npc.gifted-today": "Подарок за сегодня",
+    "npc.gifted-this-week": "Подарки за эту неделю",
+    "npc.kissed-today": "Поцелуй за сегодня",
     "npc.loves-gifts": "Любит",
     "npc.likes-gifts": "Нравится",
-    "npc.neutral-gifts": "Равнодушен",
+    "npc.neutral-gifts": "Равнодушно",
 
     // NPC lookup values
     "npc.can-romance.married": "Вы женаты! <", // < turns into a heart
-    "npc.friendship.not-met": "Вы еще не встретили их.",
+    "npc.friendship.not-met": "Вы ещё не встречались.",
     "npc.friendship.need-bouquet": "нужен букет для след.",
     "npc.friendship.need-points": "след. через {{count}}",
 
@@ -350,7 +348,7 @@
 
     // pet lookup labels
     "pet.love": "Привязанность",
-    "pet.petted-today": "Забота сегодня",
+    "pet.petted-today": "Забота за сегодня",
 
     // player lookup labels
     "player.farm-name": "Название фермы",
@@ -369,12 +367,12 @@
     "player.farm-map.custom": "Пользовательская",
     "player.gender.male": "мужской",
     "player.gender.female": "женский",
-    "player.luck.summary": "{{percent}}% к разным случайным проверкам",
+    "player.luck.summary": "{{percent}}% к общему показателю удачи.",
     "player.skill.progress": "ур. {{level}} ({{expNeeded}} XP до след.)",
     "player.skill.progress-last": "ур. {{level}}",
 
     // tile lookup labels
-    "tile.description": "Позиция тайла на карте. Это отображается, потому что вы включили просмотр тайлов в настройках.",
+    "tile.description": "Позиция тайла на карте. Включается в конфигурационном файле мода.",
     "tile.map-name": "Название локации",
     "tile.tile": "Тайл",
     "tile.tile-index": "{{layerName}}: индекс тайла",
@@ -389,7 +387,7 @@
     // tree lookup labels
     "tree.stage": "Стадия роста",
     "tree.next-growth": "След. стадия",
-    "tree.has-seed": "Имеет семена",
+    "tree.has-seed": "Содержит семена",
 
     // non-fruit tree lookup values
     "tree.name.maple": "Клён",
@@ -398,11 +396,11 @@
     "tree.name.palm": "Пальма",
     "tree.name.big-mushroom": "Большой гриб",
     "tree.name.unknown": "Неизвестное дерево",
-    "tree.stage.done": "Полностью выросло",
+    "tree.stage.done": "полностью выросло",
     "tree.stage.partial": "{{stageName}} ({{step}} из {{max}})",
     "tree.next-growth.winter": "не может расти зимой вне теплицы",
-    "tree.next-growth.adjacent-trees": "не может расти, мешают рядом стоящие деревья",
-    "tree.next-growth.random": "20% шанс вырасти в {{stage}} завтра",
+    "tree.next-growth.adjacent-trees": "не может расти, так как рядом нет места.",
+    "tree.next-growth.random": "20% шанс завтра превратиться в {{stage}}",
 
     // tree stages
     "tree.stages.seed": "семя",
