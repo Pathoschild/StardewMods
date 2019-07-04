@@ -28,9 +28,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <summary>The pixel position at which to place the player after they arrive from Marnie's ranch.</summary>
         private readonly Vector2 MarnieWarpArrivalPixelPos = new Vector2(76, 21) * Game1.tileSize;
 
-        /// <summary>The maximum pixel Y coordinate for incoming warps. If they arrive beyond this value, the player is moved to <see cref="MarnieWarpArrivalPixelPos"/>.</summary>
-        private readonly int MaxWarpPixelY = 29 * Game1.tileSize;
-
         /// <summary>The relative path to the folder containing tilesheet variants.</summary>
         private readonly string TilesheetsPath = Path.Combine("assets", "tilesheets");
 
@@ -111,10 +108,14 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
         {
-            // move player if they warp from Marnie's ranch into ocean
+            // move player if they warp into the ocean (e.g. from Marnie's ranch)
             // note: getTileLocation() seems to be unreliable when mounted.
-            if (e.IsLocalPlayer && ModEntry.IsSmallBeachFarm(e.NewLocation) && Game1.player.Position.Y > this.MaxWarpPixelY)
-                Game1.player.Position = this.MarnieWarpArrivalPixelPos;
+            if (e.IsLocalPlayer && ModEntry.IsSmallBeachFarm(e.NewLocation, out Farm farm))
+            {
+                Vector2 tile = e.Player.Position / Game1.tileSize;
+                if (this.IsInvalidPosition(farm, (int)tile.X, (int)tile.Y))
+                    Game1.player.Position = this.MarnieWarpArrivalPixelPos;
+            }
         }
 
         /// <summary>Raised before the game ends the current day.</summary>
@@ -122,8 +123,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <param name="e">The event data.</param>
         private void DayEnding(object sender, DayEndingEventArgs e)
         {
-            Farm farm = Game1.getFarm();
-            if (!ModEntry.IsSmallBeachFarm(farm))
+            if (!ModEntry.IsSmallBeachFarm(Game1.getFarm(), out Farm farm))
                 return;
 
             // update ocean crabpots before the game does
@@ -166,7 +166,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
         private static bool GetFishPrefix(Farm __instance, float millisecondsAfterNibble, int bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile, ref SObject __result)
         {
-            if (ModEntry.IsInPatch || !ModEntry.IsSmallBeachFarm(who?.currentLocation))
+            if (ModEntry.IsInPatch || !ModEntry.IsSmallBeachFarm(who?.currentLocation, out _))
                 return false;
 
             try
@@ -193,9 +193,17 @@ namespace Pathoschild.Stardew.SmallBeachFarm
 
         /// <summary>Get whether the given location is the Small Beach Farm.</summary>
         /// <param name="location">The location to check.</param>
-        private static bool IsSmallBeachFarm(GameLocation location)
+        /// <param name="farm">The farm instance.</param>
+        private static bool IsSmallBeachFarm(GameLocation location, out Farm farm)
         {
-            return Game1.whichFarm == Farm.riverlands_layout && location?.Name == "Farm";
+            if (Game1.whichFarm == Farm.riverlands_layout && location is Farm farmInstance && farmInstance.Name == "Farm")
+            {
+                farm = farmInstance;
+                return true;
+            }
+
+            farm = null;
+            return false;
         }
 
         /// <summary>Get whether a given position is ocean water.</summary>
@@ -215,6 +223,20 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                 ?.TileSheet
                 ?.Id;
             return tilesheetId == "zbeach" || tilesheetId == "zbeach_farm";
+        }
+
+        /// <summary>Get whether the player shouldn't be able to access a given position.</summary>
+        /// <param name="farm">The farm instance to check.</param>
+        /// <param name="x">The tile X position.</param>
+        /// <param name="y">The tile Y position.</param>
+        private bool IsInvalidPosition(Farm farm, int x, int y)
+        {
+            return
+                farm.doesTileHaveProperty(x, y, "Water", "Back") != null
+                || (
+                    !farm.isTilePassable(new Location(x, y), Game1.viewport)
+                    && farm.doesTileHaveProperty(x, y, "Passable", "Buildings") != null
+                );
         }
     }
 }

@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed island building exits leading to the farm exit area.
+
 ## 1.3
 Released 09 June 2019.
 
