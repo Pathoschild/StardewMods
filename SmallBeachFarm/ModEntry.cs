@@ -47,7 +47,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
 
             // hook Harmony patch
             HarmonyInstance harmony = HarmonyInstance.Create(this.ModManifest.UniqueID);
-            FarmPatcher.Hook(harmony, this.Monitor, isSmallBeachFarm: location => this.IsSmallBeachFarm(location, out _), isOceanTile: this.IsOceanTile);
+            FarmPatcher.Hook(harmony, this.Monitor, this.Config.UseBeachMusic, isSmallBeachFarm: location => this.IsSmallBeachFarm(location, out _), isOceanTile: this.IsOceanTile);
         }
 
         /// <summary>Get whether this instance can load the initial version of the given asset.</summary>
