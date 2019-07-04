@@ -1,5 +1,6 @@
 # Release notes
 ## Upcoming release
+* Updated for Stardew Valley 1.4.
 * Improved translations. Thanks to cilekli-link (added Turkish)!
 
 ## 4.8.3

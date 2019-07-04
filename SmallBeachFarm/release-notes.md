@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated for Stardew Valley 1.4.
 * Added optional beach sounds on the farm (disabled by default).
 * Fixed island building exits leading to the farm exit area.
 
