@@ -231,6 +231,10 @@ namespace Pathoschild.Stardew.DebugMode
                         yield return $"{this.Helper.Translation.Get("label.event-script")}: {@event.eventCommands[@event.CurrentCommand]} ({(int)(progress * 100)}%)";
                 }
             }
+
+            // music
+            if (Game1.currentSong?.Name != null && Game1.currentSong.IsPlaying)
+                yield return $"{this.Helper.Translation.Get("label.song")}: {Game1.currentSong.Name}";
         }
 
         /// <summary>Get the submenu for the current menu, if any.</summary>
