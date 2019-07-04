@@ -6,5 +6,6 @@
     "label.submenu": "하위메뉴",
     "label.festival-name": "축제",
     "label.event-id": "이벤트 ID",
-    "label.event-script": "이벤트 스크립트"
+    "label.event-script": "이벤트 스크립트",
+    "label.song": "song" // TODO
 }
