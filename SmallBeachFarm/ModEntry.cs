@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Harmony;
@@ -12,7 +11,6 @@ using StardewValley.Objects;
 using xTile;
 using xTile.Dimensions;
 using xTile.Tiles;
-using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.SmallBeachFarm
 {
@@ -22,9 +20,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /*********
         ** Fields
         *********/
-        /// <summary>Encapsulates logging for the Harmony patch.</summary>
-        private static IMonitor StaticMonitor;
-
         /// <summary>The pixel position at which to place the player after they arrive from Marnie's ranch.</summary>
         private readonly Vector2 MarnieWarpArrivalPixelPos = new Vector2(76, 21) * Game1.tileSize;
 
@@ -33,9 +28,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
 
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
-
-        /// <summary>Whether the mod is currently applying patch changes (to avoid infinite recursion),</summary>
-        private static bool IsInPatch = false;
 
 
         /*********
@@ -53,12 +45,8 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             helper.Events.GameLoop.DayEnding += this.DayEnding;
 
             // hook Harmony patch
-            ModEntry.StaticMonitor = this.Monitor;
             HarmonyInstance harmony = HarmonyInstance.Create(this.ModManifest.UniqueID);
-            harmony.Patch(
-                original: AccessTools.Method(typeof(Farm), nameof(Farm.getFish)),
-                prefix: new HarmonyMethod(this.GetType(), nameof(ModEntry.GetFishPrefix))
-            );
+            FarmPatcher.Hook(harmony, this.Monitor, isSmallBeachFarm: location => this.IsSmallBeachFarm(location, out _), isOceanTile: this.IsOceanTile);
         }
 
         /// <summary>Get whether this instance can load the initial version of the given asset.</summary>
@@ -110,7 +98,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         {
             // move player if they warp into the ocean (e.g. from Marnie's ranch)
             // note: getTileLocation() seems to be unreliable when mounted.
-            if (e.IsLocalPlayer && ModEntry.IsSmallBeachFarm(e.NewLocation, out Farm farm))
+            if (e.IsLocalPlayer && this.IsSmallBeachFarm(e.NewLocation, out Farm farm))
             {
                 Vector2 tile = e.Player.Position / Game1.tileSize;
                 if (this.IsInvalidPosition(farm, (int)tile.X, (int)tile.Y))
@@ -123,14 +111,14 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <param name="e">The event data.</param>
         private void DayEnding(object sender, DayEndingEventArgs e)
         {
-            if (!ModEntry.IsSmallBeachFarm(Game1.getFarm(), out Farm farm))
+            if (!this.IsSmallBeachFarm(Game1.getFarm(), out Farm farm))
                 return;
 
             // update ocean crabpots before the game does
             GameLocation beach = Game1.getLocationFromName("Beach");
             foreach (CrabPot pot in farm.objects.Values.OfType<CrabPot>())
             {
-                if (ModEntry.IsOceanTile(farm, (int)pot.TileLocation.X, (int)pot.TileLocation.Y))
+                if (this.IsOceanTile(farm, (int)pot.TileLocation.X, (int)pot.TileLocation.Y))
                     pot.DayUpdate(beach);
             }
         }
@@ -153,48 +141,10 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             return null;
         }
 
-        /// <summary>A method called via Harmony before <see cref="Farm.getFish(float, int, int, Farmer, double)"/>, which gets ocean fish from the beach properties if fishing the ocean water.</summary>
-        /// <param name="__instance">The farm instance.</param>
-        /// <param name="millisecondsAfterNibble">An argument passed through to the underlying method.</param>
-        /// <param name="bait">An argument passed through to the underlying method.</param>
-        /// <param name="waterDepth">An argument passed through to the underlying method.</param>
-        /// <param name="who">An argument passed through to the underlying method.</param>
-        /// <param name="baitPotency">An argument passed through to the underlying method.</param>
-        /// <param name="bobberTile">The tile containing the bobber.</param>
-        /// <param name="__result">The return value to use for the method.</param>
-        /// <returns>Returns <c>true</c> if the original logic should run, or <c>false</c> to use <paramref name="__result"/> as the return value.</returns>
-        [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
-        private static bool GetFishPrefix(Farm __instance, float millisecondsAfterNibble, int bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile, ref SObject __result)
-        {
-            if (ModEntry.IsInPatch || !ModEntry.IsSmallBeachFarm(who?.currentLocation, out _))
-                return false;
-
-            try
-            {
-                ModEntry.IsInPatch = true;
-
-                // get ocean fish
-                if (ModEntry.IsOceanTile(__instance, (int)bobberTile.X, (int)bobberTile.Y))
-                {
-                    __result = __instance.getFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, "Beach");
-                    ModEntry.StaticMonitor.VerboseLog($"Fishing ocean tile at ({bobberTile.X / Game1.tileSize}, {bobberTile.Y / Game1.tileSize}).");
-                    return false;
-                }
-
-                // get default riverlands fish
-                ModEntry.StaticMonitor.VerboseLog($"Fishing river tile at ({bobberTile.X / Game1.tileSize}, {bobberTile.Y / Game1.tileSize}).");
-                return true;
-            }
-            finally
-            {
-                ModEntry.IsInPatch = false;
-            }
-        }
-
         /// <summary>Get whether the given location is the Small Beach Farm.</summary>
         /// <param name="location">The location to check.</param>
         /// <param name="farm">The farm instance.</param>
-        private static bool IsSmallBeachFarm(GameLocation location, out Farm farm)
+        private bool IsSmallBeachFarm(GameLocation location, out Farm farm)
         {
             if (Game1.whichFarm == Farm.riverlands_layout && location is Farm farmInstance && farmInstance.Name == "Farm")
             {
@@ -210,7 +160,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <param name="farm">The farm instance.</param>
         /// <param name="x">The tile X position.</param>
         /// <param name="y">The tile Y position.</param>
-        private static bool IsOceanTile(Farm farm, int x, int y)
+        private bool IsOceanTile(Farm farm, int x, int y)
         {
             // check water property
             if (farm.doesTileHaveProperty(x, y, "Water", "Back") == null)
