@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added optional beach sounds on the farm (disabled by default).
 * Fixed island building exits leading to the farm exit area.
 
 ## 1.3

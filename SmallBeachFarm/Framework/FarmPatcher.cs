@@ -17,6 +17,9 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         /// <summary>Encapsulates logging for the Harmony patch.</summary>
         private static IMonitor Monitor;
 
+        /// <summary>Use the beach's background music (i.e. wave sounds) on the beach farm.</summary>
+        private static bool UseBeachMusic;
+
         /// <summary>Whether the mod is currently applying patch changes (to avoid infinite recursion).</summary>
         private static bool IsInPatch = false;
 
@@ -33,17 +36,27 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         /// <summary>Initialise the Harmony patches.</summary>
         /// <param name="harmony">The Harmony patching API.</param>
         /// <param name="monitor">Encapsulates logging for the Harmony patch.</param>
+        /// <param name="useBeachMusic">Use the beach's background music (i.e. wave sounds) on the beach farm.</param>
         /// <param name="isSmallBeachFarm">Get whether the given location is the Small Beach Farm.</param>
         /// <param name="isOceanTile">Get whether a given position is ocean water.</param>
-        public static void Hook(HarmonyInstance harmony, IMonitor monitor, Func<GameLocation, bool> isSmallBeachFarm, Func<Farm, int, int, bool> isOceanTile)
+        public static void Hook(HarmonyInstance harmony, IMonitor monitor, bool useBeachMusic, Func<GameLocation, bool> isSmallBeachFarm, Func<Farm, int, int, bool> isOceanTile)
         {
             FarmPatcher.Monitor = monitor;
+            FarmPatcher.UseBeachMusic = useBeachMusic;
             FarmPatcher.IsSmallBeachFarm = isSmallBeachFarm;
             FarmPatcher.IsOceanTile = isOceanTile;
 
             harmony.Patch(
                 original: AccessTools.Method(typeof(Farm), nameof(Farm.getFish)),
-                prefix: new HarmonyMethod(typeof(FarmPatcher), nameof(FarmPatcher.GetFishPrefix))
+                prefix: new HarmonyMethod(typeof(FarmPatcher), nameof(FarmPatcher.Before_GetFish))
+            );
+            harmony.Patch(
+                original: AccessTools.Method(typeof(Farm), "resetLocalState"),
+                prefix: new HarmonyMethod(typeof(FarmPatcher), nameof(FarmPatcher.After_ResetLocalState))
+            );
+            harmony.Patch(
+                original: AccessTools.Method(typeof(Farm), nameof(Farm.cleanupBeforePlayerExit)),
+                prefix: new HarmonyMethod(typeof(FarmPatcher), nameof(FarmPatcher.After_CleanupBeforePlayerExit))
             );
         }
 
@@ -62,7 +75,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         /// <param name="__result">The return value to use for the method.</param>
         /// <returns>Returns <c>true</c> if the original logic should run, or <c>false</c> to use <paramref name="__result"/> as the return value.</returns>
         [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
-        private static bool GetFishPrefix(Farm __instance, float millisecondsAfterNibble, int bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile, ref Object __result)
+        private static bool Before_GetFish(Farm __instance, float millisecondsAfterNibble, int bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile, ref Object __result)
         {
             if (FarmPatcher.IsInPatch || !FarmPatcher.IsSmallBeachFarm(who?.currentLocation))
                 return false;
@@ -87,6 +100,34 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
             {
                 FarmPatcher.IsInPatch = false;
             }
+        }
+
+        /// <summary>A method called via Harmony after <see cref="Farm.resetLocalState"/>, which changes the background soundtrack.</summary>
+        /// <param name="__instance">The farm instance.</param>
+        [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
+        private static void After_ResetLocalState(GameLocation __instance)
+        {
+            if (FarmPatcher.ShouldUseBeachMusic(__instance))
+                Game1.changeMusicTrack("ocean", music_context: Game1.MusicContext.SubLocation);
+        }
+
+        /// <summary>A method called via Harmony after <see cref="Farm.cleanupBeforePlayerExit"/>, which resets the background soundtrack.</summary>
+        /// <param name="__instance">The farm instance.</param>
+        [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
+        private static void After_CleanupBeforePlayerExit(GameLocation __instance)
+        {
+            if (FarmPatcher.ShouldUseBeachMusic(__instance))
+                Game1.changeMusicTrack("none", music_context: Game1.MusicContext.SubLocation);
+        }
+
+        /// <summary>Get whether the location's music should be overridden with the beach sounds.</summary>
+        /// <param name="location">The location to check.</param>
+        private static bool ShouldUseBeachMusic(GameLocation location)
+        {
+            return
+                FarmPatcher.UseBeachMusic
+                && !Game1.isRaining
+                && FarmPatcher.IsSmallBeachFarm(location);
         }
     }
 }
