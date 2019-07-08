@@ -222,10 +222,11 @@ namespace ContentPatcher
             // load content packs and context
             this.TokenManager = new TokenManager(helper.Content, installedMods, this.QueuedModTokens);
             this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.AssetValidators());
-            this.LoadContentPacks(contentPacks);
+            this.UpdateContext(); // set initial context before loading any custom mod tokens
 
-            // set initial context once patches & dynamic tokens are loaded
-            this.UpdateContext();
+            // load context
+            this.LoadContentPacks(contentPacks);
+            this.UpdateContext(); // set initial context once patches + dynamic tokens + custom tokens are loaded
 
             // register patcher
             helper.Content.AssetLoaders.Add(this.PatchManager);

@@ -180,18 +180,10 @@ namespace ContentPatcher.Framework.Conditions
                 switch (lexToken)
                 {
                     case LexTokenToken lexTokenToken:
-                        IToken token = context.GetToken(lexTokenToken.Name, enforceContext: true);
-                        if (token == null || !token.IsReady)
-                        {
-                            unavailableTokens.Add(lexTokenToken.Name);
-                            str.Append(lexToken.Text);
-                        }
-                        else
-                        {
-                            ITokenString input = new TokenString(lexTokenToken.InputArg?.Parts, context);
-                            string[] values = token.GetValues(input).ToArray();
-                            str.Append(string.Join(", ", values));
-                        }
+                        str.Append(this.TryGetTokenText(context, lexTokenToken, unavailableTokens, out string text)
+                            ? text
+                            : lexToken.Text
+                        );
                         break;
 
                     default:
@@ -229,6 +221,43 @@ namespace ContentPatcher.Framework.Conditions
                     }
                 }
             }
+        }
+
+        /// <summary>Get the text representation of a token's values.</summary>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <param name="lexToken">The lexical token whose value to fetch.</param>
+        /// <param name="unavailableTokens">A list of unavailable or unready token names to update if needed.</param>
+        /// <param name="text">The text representation, if available.</param>
+        /// <returns>Returns true if the token is ready and <paramref name="text"/> was set, else false.</returns>
+        private bool TryGetTokenText(IContext context, LexTokenToken lexToken, InvariantHashSet unavailableTokens, out string text)
+        {
+            // get token
+            IToken token = context.GetToken(lexToken.Name, enforceContext: true);
+            if (token == null || !token.IsReady)
+            {
+                unavailableTokens.Add(lexToken.Name);
+                text = null;
+                return false;
+            }
+
+            // get token input
+            TokenString input = new TokenString(lexToken.InputArg?.Parts, context);
+            string[] unavailableInputTokens = input
+                .GetTokensUsed()
+                .Where(name => context.GetToken(name, enforceContext: true)?.IsReady != true)
+                .ToArray();
+            if (unavailableInputTokens.Any())
+            {
+                foreach (string tokenName in unavailableInputTokens)
+                    unavailableTokens.Add(tokenName);
+                text = null;
+                return false;
+            }
+
+            // get text representation
+            string[] values = token.GetValues(input).ToArray();
+            text = string.Join(", ", values);
+            return true;
         }
     }
 }
