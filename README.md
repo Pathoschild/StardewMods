@@ -73,7 +73,7 @@ use the right translations.
 &nbsp;     | Chests Anywhere                          | Data Layers                          | Debug Mode                          | Lookup Anything                          | Noclip Mode | Tractor Mod
 ---------- | :--------------------------------------- | :----------------------------------- | :---------------------------------- | :--------------------------------------- | :---------- | :----------------------------
 Chinese    | [✓](ChestsAnywhere/i18n/zh.json)        | [✓](DataLayers/i18n/zh.json)        | [↻ partial](DebugMode/i18n/zh.json) | [↻ partial](LookupAnything/i18n/zh.json) | ❑          | [✓](TractorMod/i18n/zh.json)
-French     | [↻ partial](ChestsAnywhere/i18n/fr.json) | [↻ partial](DataLayers/i18n/fr.json) | [✓](DebugMode/i18n/fr.json)        | [↻ partial](LookupAnything/i18n/fr.json) | ❑          | [✓](TractorMod/i18n/fr.json)
+French     | [↻ partial](ChestsAnywhere/i18n/fr.json) | [✓](DataLayers/i18n/fr.json)        | [✓](DebugMode/i18n/fr.json)        | [↻ partial](LookupAnything/i18n/fr.json) | ❑          | [✓](TractorMod/i18n/fr.json)
 German     | [✓](ChestsAnywhere/i18n/de.json)        | [✓](DataLayers/i18n/de.json)        | [↻ partial](DebugMode/i18n/de.json) | [✓](LookupAnything/i18n/de.json)        | ❑          | [✓](TractorMod/i18n/de.json)
 Hungarian  | ❑                                       | ❑                                   | ❑                                  | ❑                                       | ❑          | ❑
 Italian    | ❑                                       | ❑                                   | ❑                                  | ❑                                       | ❑          | ❑
