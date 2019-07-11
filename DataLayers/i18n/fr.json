@@ -7,11 +7,10 @@
     "accessible.warp": "Passage",
 
     // buildable
-    // TODO
-    "buildable.name": "Buildable",
-    "buildable.buildable": "Can Build here",
-    "buildable.occupied": "Occupied",
-    "buildable.not-buildable": "Can't Build Here",
+    "buildable.name": "Constructible",
+    "buildable.buildable": "Non constructible",
+    "buildable.occupied": "Occupé",
+    "buildable.not-buildable": "Non constructible",
 
     // coverage: bee houses
     "bee-houses.name": "Couverture : Ruche",
@@ -56,9 +55,8 @@
     "machines.finished": "Terminé",
 
     // tillable
-    // TODO
-    "tillable.name": "Tillable",
-    "tillable.tillable": "Tillable",
-    "tillable.occupied": "Occupied",
-    "tillable.not-tillable": "Not Tillable"
+    "tillable.name": "Labourable",
+    "tillable.tillable": "Labourable",
+    "tillable.occupied": "Occupé",
+    "tillable.not-tillable": "Non Labourable"
 }
