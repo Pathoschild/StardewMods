@@ -852,6 +852,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>{{days}} days ago</c>.</summary>
             public static Translation LastPettedDaysAgo(int days) => L10n.Helper.Get("pet.last-petted.days-ago", new { days });
 
+            /// <summary>A value like <c>never</c>.</summary>
+            public static Translation LastPettedNever() => L10n.Helper.Get("pet.last-petted.never");
+
             /// <summary>A value like <c>Water bowl</c>.</summary>
             public static Translation WaterBowl() => L10n.Helper.Get("pet.water-bowl");
 

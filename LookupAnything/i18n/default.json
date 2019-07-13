@@ -401,6 +401,7 @@
     // pet lookup values
     "pet.last-petted.yes": "yes (+12 love)",
     "pet.last-petted.days-ago": "{{days}} days ago",
+    "pet.last-petted.never": "never",
     "pet.water-bowl.empty": "empty",
     "pet.water-bowl.filled": "filled (+6 love)",
 

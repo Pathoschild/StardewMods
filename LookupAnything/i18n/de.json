@@ -402,6 +402,7 @@
     // TODO
     "pet.last-petted.yes": "yes (+12 love)",
     "pet.last-petted.days-ago": "{{days}} days ago",
+    "pet.last-petted.never": "never",
     "pet.water-bowl.empty": "Empty",
     "pet.water-bowl.filled": "Filled (+6 love)",
 

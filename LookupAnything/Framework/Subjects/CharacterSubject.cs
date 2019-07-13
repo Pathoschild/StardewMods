@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Netcode;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
@@ -13,6 +14,7 @@ using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Monsters;
+using StardewValley.Network;
 using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
@@ -217,11 +219,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new CharacterFriendshipField(this.GameHelper, L10n.Pet.Love(), this.GameHelper.GetFriendshipForPet(Game1.player, pet), this.Text);
 
             // petted today / last petted
-            int lastPettedDay = this.Reflection.GetField<int>(pet, "lastPetDay").GetValue();
-            int daysSincePetted = Game1.Date.TotalDays - lastPettedDay;
-            yield return new GenericField(this.GameHelper, L10n.Pet.PettedToday(), daysSincePetted == 0 ? L10n.Pet.LastPettedYes() : this.Stringify(false));
-            if (daysSincePetted != 0)
+            int? lastDayPetted = this.GetLastDayPetted(pet, Game1.player.UniqueMultiplayerID);
+            yield return new GenericField(this.GameHelper, L10n.Pet.PettedToday(), lastDayPetted == Game1.Date.TotalDays ? L10n.Pet.LastPettedYes() : this.Stringify(false));
+            if (!lastDayPetted.HasValue)
+                yield return new GenericField(this.GameHelper, L10n.Pet.LastPetted(), L10n.Pet.LastPettedNever());
+            else if (lastDayPetted != Game1.Date.TotalDays)
+            {
+                int daysSincePetted = Game1.Date.TotalDays - lastDayPetted.Value;
                 yield return new GenericField(this.GameHelper, L10n.Pet.LastPetted(), daysSincePetted == 1 ? L10n.Generic.Yesterday() : L10n.Pet.LastPettedDaysAgo(daysSincePetted));
+            }
 
             // water bowl
             yield return new GenericField(this.GameHelper, L10n.Pet.WaterBowl(), farm.petBowlWatered.Value ? L10n.Pet.WaterBowlFilled() : L10n.Pet.WaterBowlEmpty());
@@ -311,6 +317,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 default:
                     return -1;
             }
+        }
+
+        /// <summary>Get the last day when the given player petted the pet.</summary>
+        /// <param name="pet">The pet to check.</param>
+        /// <param name="playerID">The unique multiplayer ID for the player to check.</param>
+        private int? GetLastDayPetted(Pet pet, long playerID)
+        {
+            NetLongDictionary<int, NetInt> lastPettedDays = this.Reflection.GetField<NetLongDictionary<int, NetInt>>(pet, "lastPetDay").GetValue();
+            return lastPettedDays.TryGetValue(playerID, out int lastDay)
+                ? lastDay
+                : null as int?;
         }
 
         /// <summary>Get a monster's possible drops.</summary>
