@@ -22,7 +22,8 @@ Released 09 June 2019.
 * Fixed items with different item qualities being combined into one input stack.
 
 **Breaking change:** connectors previously enabled in `config.json` will be removed next time you
-launch the game; See the readme for the new format.
+launch the game; See [the readme](https://github.com/Pathoschild/StardewMods/tree/develop/Automate#connectors)
+for the new format, or [download the example config file on Nexus](https://www.nexusmods.com/stardewvalley/mods/1063/?tab=files).
 
 ## 1.12
 Released 06 April 2019.
