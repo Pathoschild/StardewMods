@@ -89,6 +89,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             {
                 foreach (Building building in buildableLocation.buildings)
                 {
+                    if (building.indoors.Value == null || (building.humanDoor.X < 0 && building.humanDoor.Y < 0))
+                        continue;
+
                     buildingDoors.Add(new Vector2(building.humanDoor.X + building.tileX.Value, building.humanDoor.Y + building.tileY.Value));
                     buildingDoors.Add(new Vector2(building.humanDoor.X + building.tileX.Value, building.humanDoor.Y + building.tileY.Value - 1));
                 }
@@ -138,6 +141,11 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             // check tile touch actions
             Tile backTile = location.map.GetLayer("Back").PickTile(new Location(tilePixels.X, tilePixels.Y), Game1.viewport.Size);
             if (backTile != null && backTile.Properties.TryGetValue("TouchAction", out PropertyValue touchAction) && this.TouchWarpActions.Contains(touchAction.ToString().Split(' ')[0]))
+                return true;
+
+            // check mine ladders/shafts
+            const int ladderID = 173, shaftID = 174;
+            if (location is MineShaft && buildingTile != null && (buildingTile.TileIndex == ladderID || buildingTile.TileIndex == shaftID) && buildingTile.TileSheet.Id == "mine")
                 return true;
 
             return false;

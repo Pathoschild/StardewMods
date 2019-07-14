@@ -1,5 +1,7 @@
 # Release notes
 ## Upcoming release
+* The accessibility layer now shows mine ladders/shafts as warp tiles.
+* Fixed accessibility layer showing incorrect warp tiles near some buildings.
 * Improved translations. Thanks to Shirutan (updated Japanese) and Skirmsiher (updated French)!
 
 ## 1.6.2
