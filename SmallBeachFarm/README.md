@@ -24,6 +24,9 @@ A few highlights:
 * If you use [Automate](https://www.nexusmods.com/stardewvalley/mods/1063), you can connect chests
   to crab pots all along the beach:
   > ![](docs/automate-crabpots.png)
+* The beach includes a functional campfire you can light or extinguish (pairs well with the
+  [Campfire Cooking](https://mods.smapi.io/#Campfire_Cooking) mod):  
+  > ![](docs/campfire.gif)
 
 If you need more space, the alternate _Small Beach With Islands_ adds ocean islands for extra land
 area:

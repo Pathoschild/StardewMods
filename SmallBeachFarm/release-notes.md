@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added optional beach sounds on the farm (disabled by default).
+* Added functional campfire (replaces previous decorative one).
 * Fixed island building exits leading to the farm exit area.
 
 ## 1.3
