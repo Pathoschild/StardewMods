@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added current song to hoverbox.
+* Updated translations. Thanks to xLPMG (added Italian)!
 
 ## 1.9.5
 Released 09 June 2019.
