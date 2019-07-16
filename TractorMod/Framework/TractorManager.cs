@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -319,6 +320,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>Temporarily dismount and set up the player to interact with a tile, then return it to the previous state afterwards.</summary>
         /// <param name="action">The action to perform.</param>
+        [SuppressMessage("SMAPI", "AvoidImplicitNetFieldCast", Justification = "Deliberately accesses net field instance.")]
         private void TemporarilyFakeInteraction(Action action)
         {
             // get references

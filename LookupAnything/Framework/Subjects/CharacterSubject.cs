@@ -86,13 +86,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     else if (npc is Child child)
                     {
                         // birthday
-                        SDate birthday = SDate.Now().AddDays(-child.daysOld);
+                        SDate birthday = SDate.Now().AddDays(-child.daysOld.Value);
                         yield return new GenericField(this.GameHelper, L10n.Npc.Birthday(), this.Text.Stringify(birthday, withYear: true));
 
                         // age
                         {
                             ChildAge stage = (ChildAge)child.Age;
-                            int daysOld = child.daysOld;
+                            int daysOld = child.daysOld.Value;
                             int daysToNext = this.GetDaysToNextChildGrowth(stage, daysOld);
                             bool isGrown = daysToNext == -1;
                             int daysAtNext = daysOld + (isGrown ? 0 : daysToNext);
@@ -101,7 +101,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                                 ? L10n.NpcChild.AgeDescriptionGrown(label: stage)
                                 : L10n.NpcChild.AgeDescriptionPartial(label: stage, count: daysToNext, nextLabel: stage + 1);
 
-                            yield return new PercentageBarField(this.GameHelper, L10n.NpcChild.Age(), child.daysOld, daysAtNext, Color.Green, Color.Gray, ageDesc);
+                            yield return new PercentageBarField(this.GameHelper, L10n.NpcChild.Age(), child.daysOld.Value, daysAtNext, Color.Green, Color.Gray, ageDesc);
                         }
 
                         // friendship

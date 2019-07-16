@@ -88,7 +88,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="pet">The pet.</param>
         public FriendshipModel GetFriendshipForPet(SFarmer player, Pet pet)
         {
-            return new FriendshipModel(pet.friendshipTowardFarmer, Pet.maxFriendship / 10, Pet.maxFriendship);
+            return new FriendshipModel(pet.friendshipTowardFarmer.Value, Pet.maxFriendship / 10, Pet.maxFriendship);
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
