@@ -143,6 +143,18 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             if (backTile != null && backTile.Properties.TryGetValue("TouchAction", out PropertyValue touchAction) && this.TouchWarpActions.Contains(touchAction.ToString().Split(' ')[0]))
                 return true;
 
+            // check map warps
+            try
+            {
+                if (location.isCollidingWithWarpOrDoor(tilePixels) != null)
+                    return true;
+            }
+            catch
+            {
+                // This fails in some cases like TMX Loader's custom tile properties. It's safe to
+                // ignore the error here, since that means it's not a valid warp.
+            }
+
             // check mine ladders/shafts
             const int ladderID = 173, shaftID = 174;
             if (location is MineShaft && buildingTile != null && (buildingTile.TileIndex == ladderID || buildingTile.TileIndex == shaftID) && buildingTile.TileSheet.Id == "mine")
