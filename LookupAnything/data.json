@@ -299,23 +299,6 @@ You shouldn't change this file unless you know what you're doing.
         {
             "MachineID": 12,
             "Ingredients": [
-                { "ID": 812, "PreserveType": "Roe", "PreservedParentSheetIndex": 698 } // sturgeon roe
-            ],
-            "Output": 445 // caviar
-        },
-        {
-            "MachineID": 12,
-            "Ingredients": [
-                { "ID": 812 } // roe (non-sturgeon)
-            ],
-            "ExceptIngredients": [
-                { "ID": 812, "PreserveType": "Roe", "PreservedParentSheetIndex": 698 } // sturgeon roe
-            ],
-            "Output": 447 // aged roe
-        },
-        {
-            "MachineID": 12,
-            "Ingredients": [
                 { "ID": -79 } // any fruit
             ],
             "Output": 348 // wine
@@ -436,6 +419,23 @@ You shouldn't change this file unless you know what you're doing.
                 { "ID": -75 } // any vegetable
             ],
             "Output": 342 // pickled
+        },
+        {
+            "MachineID": 15,
+            "Ingredients": [
+                { "ID": 812, "PreserveType": "Roe", "PreservedParentSheetIndex": 698 } // sturgeon roe
+            ],
+            "Output": 445 // caviar
+        },
+        {
+            "MachineID": 15,
+            "Ingredients": [
+                { "ID": 812 } // roe (non-sturgeon)
+            ],
+            "ExceptIngredients": [
+                { "ID": 812, "PreserveType": "Roe", "PreservedParentSheetIndex": 698 } // sturgeon roe
+            ],
+            "Output": 447 // aged roe
         },
 
         /* recycling machine */
