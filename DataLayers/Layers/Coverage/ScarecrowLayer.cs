@@ -25,8 +25,11 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <summary>The border color for the scarecrow under the cursor.</summary>
         private readonly Color SelectedColor = Color.Blue;
 
-        /// <summary>The maximum number of tiles from the center a scarecrow can protect.</summary>
-        private readonly int MaxRadius = 8;
+        /// <summary>The maximum number of tiles from the center a normal scarecrow can protect.</summary>
+        private readonly int MaxDefaultRadius = 8;
+
+        /// <summary>The maximum number of tiles from the center a normal scarecrow can protect.</summary>
+        private readonly int MaxDeluxeRadius = 16;
 
         /// <summary>Object IDs for custom mod scarecrows not covered by the default logic.</summary>
         private readonly int[] ModObjectIds;
@@ -59,7 +62,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
             Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
 
             // get scarecrows
-            Vector2[] searchTiles = visibleArea.Expand(this.MaxRadius).GetTiles().ToArray();
+            Vector2[] searchTiles = visibleArea.Expand(this.MaxDeluxeRadius).GetTiles().ToArray();
             SObject[] scarecrows =
                 (
                     from Vector2 tile in searchTiles
@@ -74,7 +77,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
             HashSet<Vector2> covered = new HashSet<Vector2>();
             foreach (SObject scarecrow in scarecrows)
             {
-                TileData[] tiles = this.GetCoverage(scarecrow.TileLocation).Select(pos => new TileData(pos, this.Covered)).ToArray();
+                TileData[] tiles = this.GetCoverage(scarecrow).Select(pos => new TileData(pos, this.Covered)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
                 yield return new TileGroup(tiles, outerBorderColor: scarecrow.TileLocation == cursorTile ? this.SelectedColor : this.Covered.Color);
@@ -88,7 +91,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
             SObject heldObj = Game1.player.ActiveObject;
             if (this.IsScarecrow(heldObj))
             {
-                TileData[] tiles = this.GetCoverage(cursorTile).Select(pos => new TileData(pos, this.Covered, this.Covered.Color * 0.75f)).ToArray();
+                TileData[] tiles = this.GetCoverage(heldObj, cursorTile).Select(pos => new TileData(pos, this.Covered, this.Covered.Color * 0.75f)).ToArray();
                 yield return new TileGroup(tiles, outerBorderColor: this.SelectedColor, shouldExport: false);
             }
         }
@@ -132,16 +135,22 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         }
 
         /// <summary>Get a scarecrow tile radius.</summary>
-        /// <param name="origin">The scarecrow's tile.</param>
+        /// <param name="scarecrow">The scarecrow to check.</param>
+        /// <param name="overrideOrigin">The tile position to check from, if different from <see cref="Object.TileLocation"/>.</param>
         /// <remarks>Derived from <see cref="Farm.addCrows"/>.</remarks>
-        private IEnumerable<Vector2> GetCoverage(Vector2 origin)
+        private IEnumerable<Vector2> GetCoverage(Object scarecrow, Vector2? overrideOrigin = null)
         {
-            for (int x = (int)origin.X - this.MaxRadius; x <= origin.X + this.MaxRadius; x++)
+            Vector2 origin = overrideOrigin ?? scarecrow.TileLocation;
+            int radius = scarecrow.Name.Contains("Deluxe")
+                ? this.MaxDeluxeRadius
+                : this.MaxDefaultRadius;
+
+            for (int x = (int)origin.X - radius; x <= origin.X + radius; x++)
             {
-                for (int y = (int)origin.Y - this.MaxRadius; y <= origin.Y + this.MaxRadius; y++)
+                for (int y = (int)origin.Y - radius; y <= origin.Y + radius; y++)
                 {
                     Vector2 tile = new Vector2(x, y);
-                    if (Vector2.Distance(tile, origin) < this.MaxRadius + 1)
+                    if (Vector2.Distance(tile, origin) < radius + 1)
                         yield return tile;
                 }
             }
