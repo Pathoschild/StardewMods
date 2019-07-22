@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
 using Pathoschild.Stardew.DataLayers.Layers;
@@ -66,70 +64,6 @@ namespace Pathoschild.Stardew.DataLayers
             // init
             this.Mods = new ModIntegrations(this.Monitor, this.Helper.ModRegistry, this.Helper.Reflection);
             this.Layers = this.GetLayers(this.Config, this.Helper.Translation, this.Mods).ToArray();
-
-            // disable Data Maps if present
-            this.TryDisableLegacyMod();
-        }
-
-        /// <summary>Disable the legacy Data Maps mod, if present.</summary>
-        private bool TryDisableLegacyMod()
-        {
-            // check if installed
-            if (!this.Helper.ModRegistry.IsLoaded("Pathoschild.DataMaps"))
-                return false;
-            this.Monitor.Log("You also have Data Maps installed, but that's been renamed to Data Layers. You should remove the old mod to avoid issues. Data Maps will be disabled now.", LogLevel.Warn);
-
-            // set error logic
-            bool LogError(string reason)
-            {
-                this.Monitor.Log($"Couldn't disable Data Maps because {reason}.", LogLevel.Error);
-                return false;
-            }
-
-            // get SMAPI's internal mod registry
-            object registry = this.Helper.ModRegistry.GetType().GetField("Registry", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(this.Helper.ModRegistry);
-            if (registry == null)
-                return LogError("SMAPI's internal mod registry couldn't be accessed");
-
-            // get Get(modID) method
-            MethodInfo getByID = registry.GetType().GetMethod("Get");
-            if (getByID == null)
-                return LogError("SMAPI's registry get method couldn't be accessed");
-
-            // get mod metadata
-            object modMetadata;
-            try
-            {
-                modMetadata = getByID.Invoke(registry, new object[] { "Pathoschild.DataMaps" });
-            }
-            catch (Exception ex)
-            {
-                return LogError($"SMAPI's registry get method returned an error: {ex.Message}");
-            }
-
-            // get mod entry class
-            object modEntry = modMetadata.GetType().GetProperty("Mod", BindingFlags.Instance | BindingFlags.Public)?.GetValue(modMetadata);
-            if (modEntry == null)
-                return LogError("its entry class couldn't be loaded");
-
-            // get config instance
-            object config = modEntry.GetType().GetField("Config", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(modEntry);
-            if (config == null)
-                return LogError("its config instance couldn't be loaded");
-
-            // get controls instance
-            object controls = config.GetType().GetProperty("Controls", BindingFlags.Instance | BindingFlags.Public)?.GetValue(config);
-            if (controls == null)
-                return LogError("its control settings couldn't be loaded");
-
-            // get key binding field
-            PropertyInfo bindingProperty = controls.GetType().GetProperty("ToggleMap", BindingFlags.Instance | BindingFlags.Public);
-            if (bindingProperty == null)
-                return LogError("its key binding property couldn't be loaded");
-
-            // clear key bindings
-            bindingProperty.SetValue(controls, new SButton[0]);
-            return true;
         }
 
         /// <summary>Get the enabled data layers.</summary>
