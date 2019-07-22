@@ -242,7 +242,7 @@ namespace Pathoschild.Stardew.DebugMode
         private IClickableMenu GetSubmenu(IClickableMenu menu)
         {
             if (menu is GameMenu gameMenu)
-                return this.Helper.Reflection.GetField<List<IClickableMenu>>(menu, "pages").GetValue()[gameMenu.currentTab];
+                return gameMenu.pages[gameMenu.currentTab];
             if (menu is TitleMenu)
                 return TitleMenu.subMenu;
 

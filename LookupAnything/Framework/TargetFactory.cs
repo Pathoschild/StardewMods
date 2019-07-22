@@ -496,9 +496,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     break;
 
                 // shop
-                case ShopMenu _:
+                case ShopMenu shopMenu:
                     {
-                        ISalable entry = this.Reflection.GetField<ISalable>(menu, "hoveredItem").GetValue();
+                        ISalable entry = shopMenu.hoveredItem;
                         if (entry is Item item)
                             return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
                     }
