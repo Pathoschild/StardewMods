@@ -1011,7 +1011,7 @@ may add upgrade levels beyond that.
 <td>
 
 The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). Possible values: `Standard`,
-`Riverland`, `Forest`, `Hilltop`, `Wilderness`, `Custom`.
+`FourCorners`, `Forest`, `Hilltop`, `Riverland`, `Wilderness`, `Custom`.
 
 </td>
 </tr>

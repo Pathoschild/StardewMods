@@ -6,19 +6,22 @@ namespace ContentPatcher.Framework.Constants
     internal enum FarmType
     {
         /// <summary>The standard farm type.</summary>
-        Standard = 0,
+        Standard = Farm.default_layout,
 
         /// <summary>The riverland farm type.</summary>
-        Riverland = 1,
+        Riverland = Farm.riverlands_layout,
 
         /// <summary>The forest farm type.</summary>
-        Forest = 2,
+        Forest = Farm.forest_layout,
 
         /// <summary>The hill-top farm type.</summary>
-        Hilltop = 3,
+        Hilltop = Farm.mountains_layout,
 
         /// <summary>The wilderness farm type.</summary>
-        Wilderness = 4,
+        Wilderness = Farm.combat_layout,
+
+        /// <summary>The Four Corners farm type.</summary>
+        FourCorners = Farm.fourCorners_layout,
 
         /// <summary>A custom farm type.</summary>
         Custom = 100
