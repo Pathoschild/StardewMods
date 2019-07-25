@@ -324,8 +324,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="playerID">The unique multiplayer ID for the player to check.</param>
         private int? GetLastDayPetted(Pet pet, long playerID)
         {
-            NetLongDictionary<int, NetInt> lastPettedDays = this.Reflection.GetField<NetLongDictionary<int, NetInt>>(pet, "lastPetDay").GetValue();
-            return lastPettedDays.TryGetValue(playerID, out int lastDay)
+            return pet.lastPetDay.TryGetValue(playerID, out int lastDay)
                 ? lastDay
                 : null as int?;
         }
