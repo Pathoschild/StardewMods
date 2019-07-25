@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
 
         /// <summary>The action tile property values which trigger a warp.</summary>
         /// <remarks>See remarks on <see cref="IsWarp"/>.</remarks>
-        private readonly HashSet<string> WarpActions = new HashSet<string> { "EnterSewer", "LockedDoorWarp", "Warp", "WarpCommunityCenter", "WarpGreenhouse", "WarpMensLocker", "WarpWomensLocker", "WizardHatch" };
+        private readonly HashSet<string> WarpActions = new HashSet<string> { "EnterSewer", "LockedDoorWarp", "Mine", "Warp", "WarpCommunityCenter", "WarpGreenhouse", "WarpMensLocker", "WarpWomensLocker", "WizardHatch" };
 
         /// <summary>The touch action tile property values which trigger a warp.</summary>
         private readonly HashSet<string> TouchWarpActions = new HashSet<string> { "Door", "MagicWarp" };
