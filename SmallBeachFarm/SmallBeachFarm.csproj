@@ -2,82 +2,16 @@
 
   <PropertyGroup>
     <AssemblyName>SmallBeachFarm</AssemblyName>
-    <Version>1.3.0</Version>
+    <Version>1.4.0</Version>
     <RootNamespace>Pathoschild.Stardew.SmallBeachFarm</RootNamespace>
     <TargetFramework>net452</TargetFramework>
 
+    <EnableHarmony>true</EnableHarmony>
     <IgnoreModFilePatterns>assets[/\\]paths.png, assets[/\\]spring_(?:beach|outdoorsTileSheet|town).png</IgnoreModFilePatterns>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="2.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>$(GamePath)\smapi-internal\0Harmony.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="assets\SmallBeachFarm.tbin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\SmallBeachFarmWithIslands.tbin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\acerbicon.recolor\fall_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\acerbicon.recolor\spring_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\acerbicon.recolor\summer_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\acerbicon.recolor\winter_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\lita.starblueValley\fall_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\lita.starblueValley\spring_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\lita.starblueValley\summer_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\lita.starblueValley\winter_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\minervamaga.cp.eemieMapRecolour\fall_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\minervamaga.cp.eemieMapRecolour\fall_smallBeachFarm_orange.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\minervamaga.cp.eemieMapRecolour\spring_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\minervamaga.cp.eemieMapRecolour\summer_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\minervamaga.cp.eemieMapRecolour\winter_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\_default\fall_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\_default\spring_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\_default\summer_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tilesheets\_default\winter_smallBeachFarm.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0-beta.8" />
   </ItemGroup>
 
   <Import Project="$(SolutionDir)\common.targets" />

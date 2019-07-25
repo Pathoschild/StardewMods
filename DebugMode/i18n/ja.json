@@ -6,5 +6,6 @@
     "label.submenu": "サブメニュー",
     "label.festival-name": "祭り",
     "label.event-id": "イベントID",
-    "label.event-script": "イベントスクリプト"
+    "label.event-script": "イベントスクリプト",
+    "label.song": "song" // TODO
 }

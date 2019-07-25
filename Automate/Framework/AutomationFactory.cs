@@ -221,7 +221,8 @@ namespace Pathoschild.Stardew.Automate.Framework
 
                 case Flooring floor:
                     return
-                        this.Data.FloorNames.TryGetValue(floor.whichFloor.Value, out string name)
+                        this.Data?.FloorNames != null
+                        && this.Data.FloorNames.TryGetValue(floor.whichFloor.Value, out string name)
                         && this.Connectors.Contains(name);
 
                 default:

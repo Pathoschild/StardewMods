@@ -6,5 +6,6 @@
     "label.submenu": "submenu",
     "label.festival-name": "festival",
     "label.event-id": "event ID",
-    "label.event-script": "event script"
+    "label.event-script": "event script",
+    "label.song": "song"
 }

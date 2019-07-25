@@ -1,6 +1,14 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.13.2
+Released 25 July 2019.
+
+* Reduced performance impact when a location's objects or terrain features change.
+* Improved error if `data.json` file is missing or invalid.
+* Fixed machines not updated when an automatable building is added or removed.
+* Fixed negative 'times crafted' value shown for some uncraftable items.
+
 ## 1.13.1
 Released 12 June 2019.
 
@@ -15,7 +23,8 @@ Released 09 June 2019.
 * Fixed items with different item qualities being combined into one input stack.
 
 **Breaking change:** connectors previously enabled in `config.json` will be removed next time you
-launch the game; See the readme for the new format.
+launch the game; See [the readme](https://github.com/Pathoschild/StardewMods/tree/develop/Automate#connectors)
+for the new format, or [download the example config file on Nexus](https://www.nexusmods.com/stardewvalley/mods/1063/?tab=files).
 
 ## 1.12
 Released 06 April 2019.

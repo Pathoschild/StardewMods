@@ -27,6 +27,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AllowedRootValues = new InvariantHashSet();
             this.EnableInputArguments(required: false, canHaveMultipleValues: false);
+            this.SetReady(false); // not ready until initialised
         }
 
         /// <summary>Add a set of possible values.</summary>

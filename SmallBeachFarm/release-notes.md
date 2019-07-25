@@ -1,6 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.4
+Released 25 July 2019.
+
+* Added optional beach sounds on the farm (disabled by default).
+* Added functional campfire (replaces previous decorative one).
+* Fixed island building exits leading to the farm exit area.
+
 ## 1.3
 Released 09 June 2019.
 

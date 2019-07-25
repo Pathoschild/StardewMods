@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Harmony;
@@ -13,7 +12,6 @@ using StardewValley.Tools;
 using xTile;
 using xTile.Dimensions;
 using xTile.Tiles;
-using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.SmallBeachFarm
 {
@@ -23,14 +21,8 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /*********
         ** Fields
         *********/
-        /// <summary>Encapsulates logging for the Harmony patch.</summary>
-        private static IMonitor StaticMonitor;
-
         /// <summary>The pixel position at which to place the player after they arrive from Marnie's ranch.</summary>
         private readonly Vector2 MarnieWarpArrivalPixelPos = new Vector2(76, 21) * Game1.tileSize;
-
-        /// <summary>The maximum pixel Y coordinate for incoming warps. If they arrive beyond this value, the player is moved to <see cref="MarnieWarpArrivalPixelPos"/>.</summary>
-        private readonly int MaxWarpPixelY = 29 * Game1.tileSize;
 
         /// <summary>The relative path to the folder containing tilesheet variants.</summary>
         private readonly string TilesheetsPath = Path.Combine("assets", "tilesheets");
@@ -54,12 +46,8 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             helper.Events.GameLoop.DayEnding += this.DayEnding;
 
             // hook Harmony patch
-            ModEntry.StaticMonitor = this.Monitor;
             HarmonyInstance harmony = HarmonyInstance.Create(this.ModManifest.UniqueID);
-            harmony.Patch(
-                original: AccessTools.Method(typeof(Farm), nameof(Farm.getFish), new[] { typeof(float), typeof(int), typeof(int), typeof(Farmer), typeof(double) }),
-                prefix: new HarmonyMethod(this.GetType(), nameof(ModEntry.GetFishPrefix))
-            );
+            FarmPatcher.Hook(harmony, this.Monitor, this.Config.UseBeachMusic, isSmallBeachFarm: location => this.IsSmallBeachFarm(location, out _), isOceanTile: this.IsOceanTile);
         }
 
         /// <summary>Get whether this instance can load the initial version of the given asset.</summary>
@@ -109,10 +97,14 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
         {
-            // move player if they warp from Marnie's ranch into ocean
+            // move player if they warp into the ocean (e.g. from Marnie's ranch)
             // note: getTileLocation() seems to be unreliable when mounted.
-            if (e.IsLocalPlayer && ModEntry.IsSmallBeachFarm(e.NewLocation) && Game1.player.Position.Y > this.MaxWarpPixelY)
-                Game1.player.Position = this.MarnieWarpArrivalPixelPos;
+            if (e.IsLocalPlayer && this.IsSmallBeachFarm(e.NewLocation, out Farm farm))
+            {
+                Vector2 tile = e.Player.Position / Game1.tileSize;
+                if (this.IsInvalidPosition(farm, (int)tile.X, (int)tile.Y))
+                    Game1.player.Position = this.MarnieWarpArrivalPixelPos;
+            }
         }
 
         /// <summary>Raised before the game ends the current day.</summary>
@@ -120,15 +112,14 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <param name="e">The event data.</param>
         private void DayEnding(object sender, DayEndingEventArgs e)
         {
-            Farm farm = Game1.getFarm();
-            if (!ModEntry.IsSmallBeachFarm(farm))
+            if (!this.IsSmallBeachFarm(Game1.getFarm(), out Farm farm))
                 return;
 
             // update ocean crabpots before the game does
             GameLocation beach = Game1.getLocationFromName("Beach");
             foreach (CrabPot pot in farm.objects.Values.OfType<CrabPot>())
             {
-                if (ModEntry.IsOceanTile(farm, (int)pot.TileLocation.X, (int)pot.TileLocation.Y))
+                if (this.IsOceanTile(farm, (int)pot.TileLocation.X, (int)pot.TileLocation.Y))
                     pot.DayUpdate(beach);
             }
         }
@@ -151,52 +142,26 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             return null;
         }
 
-        /// <summary>A method called via Harmony before <see cref="Farm.getFish(float, int, int, Farmer, double)"/>, which gets ocean fish from the beach properties if fishing the ocean water.</summary>
-        /// <param name="__instance">The farm instance.</param>
-        /// <param name="millisecondsAfterNibble">An argument passed through to the underlying method.</param>
-        /// <param name="bait">An argument passed through to the underlying method.</param>
-        /// <param name="waterDepth">An argument passed through to the underlying method.</param>
-        /// <param name="who">An argument passed through to the underlying method.</param>
-        /// <param name="baitPotency">An argument passed through to the underlying method.</param>
-        /// <param name="__result">The return value to use for the method.</param>
-        /// <returns>Returns <c>true</c> if the original logic should run, or <c>false</c> to use <paramref name="__result"/> as the return value.</returns>
-        [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
-        private static bool GetFishPrefix(Farm __instance, float millisecondsAfterNibble, int bait, int waterDepth, Farmer who, double baitPotency, ref SObject __result)
-        {
-            if (!ModEntry.IsSmallBeachFarm(who?.currentLocation))
-                return false;
-
-            // get tile being fished
-            FishingRod rod = who.CurrentTool as FishingRod;
-            if (rod == null)
-                return false;
-            Point tile = new Point((int)(rod.bobber.X / Game1.tileSize), (int)(rod.bobber.Y / Game1.tileSize));
-
-            // get ocean fish
-            if (ModEntry.IsOceanTile(__instance, tile.X, tile.Y))
-            {
-                __result = __instance.getFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, "Beach");
-                ModEntry.StaticMonitor.VerboseLog($"Fishing ocean tile at ({rod.bobber.X / Game1.tileSize}, {rod.bobber.Y / Game1.tileSize}).");
-                return false;
-            }
-
-            // get default riverlands fish
-            ModEntry.StaticMonitor.VerboseLog($"Fishing river tile at ({rod.bobber.X / Game1.tileSize}, {rod.bobber.Y / Game1.tileSize}).");
-            return true;
-        }
-
         /// <summary>Get whether the given location is the Small Beach Farm.</summary>
         /// <param name="location">The location to check.</param>
-        private static bool IsSmallBeachFarm(GameLocation location)
+        /// <param name="farm">The farm instance.</param>
+        private bool IsSmallBeachFarm(GameLocation location, out Farm farm)
         {
-            return Game1.whichFarm == Farm.riverlands_layout && location?.Name == "Farm";
+            if (Game1.whichFarm == Farm.riverlands_layout && location is Farm farmInstance && farmInstance.Name == "Farm")
+            {
+                farm = farmInstance;
+                return true;
+            }
+
+            farm = null;
+            return false;
         }
 
         /// <summary>Get whether a given position is ocean water.</summary>
         /// <param name="farm">The farm instance.</param>
         /// <param name="x">The tile X position.</param>
         /// <param name="y">The tile Y position.</param>
-        private static bool IsOceanTile(Farm farm, int x, int y)
+        private bool IsOceanTile(Farm farm, int x, int y)
         {
             // check water property
             if (farm.doesTileHaveProperty(x, y, "Water", "Back") == null)
@@ -209,6 +174,20 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                 ?.TileSheet
                 ?.Id;
             return tilesheetId == "zbeach" || tilesheetId == "zbeach_farm";
+        }
+
+        /// <summary>Get whether the player shouldn't be able to access a given position.</summary>
+        /// <param name="farm">The farm instance to check.</param>
+        /// <param name="x">The tile X position.</param>
+        /// <param name="y">The tile Y position.</param>
+        private bool IsInvalidPosition(Farm farm, int x, int y)
+        {
+            return
+                farm.doesTileHaveProperty(x, y, "Water", "Back") != null
+                || (
+                    !farm.isTilePassable(new Location(x, y), Game1.viewport)
+                    && farm.doesTileHaveProperty(x, y, "Passable", "Buildings") != null
+                );
         }
     }
 }

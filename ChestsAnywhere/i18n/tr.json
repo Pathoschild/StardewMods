@@ -1,0 +1,38 @@
+{
+    // default chest names
+    "default-name.auto-grabber": "Otomatik toplayıcı #{{number}}",
+    "default-name.chest": "Kutu #{{number}}",
+    "default-name.fridge": "Buzdolabı",
+    "default-name.junimo-hut": "Junimo barakası #{{number}}",
+    "default-name.shipping-bin": "Nakliye kutusu",
+
+    // default category names
+    "default-category.owned-cabin": "Baraka ({{owner}})",
+    "default-category.unowned-cabin": "Baraka (boş)",
+    "default-category.duplicate": "{{locationName}} #{{number}}",
+
+    // edit-chest labels
+    "label.location": "Konum",
+    "label.location.tile": "karo {{x}}, {{y}}",
+    "label.name": "İsim",
+    "label.category": "Kategori",
+    "label.order": "Sıra",
+    "label.hide-chest": "Bu kutuyu gizle",
+    "label.hide-chest-hidden": "Bu kutuyu gizle (bunu geri almak için kutuyu bulmanız gerekecek!)",
+    "label.automate-prefer-output": "(Automate) Nesneleri ilk önce bu kutuya koy",
+    "label.automate-no-input": "(Automate) Bu kutuya nesne koyma",
+    "label.automate-no-output": "(Automate) Bu kutudan nesne alma",
+    "label.automate-ignore": "(Automate) Bu kutuyu otomasyon için kullanma",
+
+    // button labels
+    "button.edit-chest": "kutuyu düzenle",
+    "button.sort-inventory": "envanteri sırala",
+    "button.save": "kaydet",
+    "button.reset": "sıfırla",
+
+    // errors
+    "errors.disabled-from-here": "Kutulara buradan ulaşamazsınız.",
+    "errors.no-chests": "Henüz bir kutuya sahip değilsiniz.",
+    "errors.no-chests-in-location": "Bu bölgede hiçbir kutunuz yok.",
+    "errors.no-chests-in-range": "Menzilde hiçbir kutunuz yok."
+}

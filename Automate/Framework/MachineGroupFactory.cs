@@ -48,6 +48,33 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
         }
 
+        /// <summary>Get whether an object is automatable.</summary>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile to check.</param>
+        /// <param name="obj">The object to check.</param>
+        public bool IsAutomatable(GameLocation location, Vector2 tile, SObject obj)
+        {
+            return this.GetEntityFor(location, tile, obj) != null;
+        }
+
+        /// <summary>Get whether a terrain feature is automatable.</summary>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile to check.</param>
+        /// <param name="terrainFeature">The terrain feature to check.</param>
+        public bool IsAutomatable(GameLocation location, Vector2 tile, TerrainFeature terrainFeature)
+        {
+            return this.GetEntityFor(location, tile, terrainFeature) != null;
+        }
+
+        /// <summary>Get whether a building is automatable.</summary>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile to check.</param>
+        /// <param name="building">The building to check.</param>
+        public bool IsAutomatable(BuildableGameLocation location, Vector2 tile, Building building)
+        {
+            return this.GetEntityFor(location, tile, building) != null;
+        }
+
 
         /*********
         ** Private methods
@@ -128,48 +155,94 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="tile">The tile to search.</param>
         private IAutomatable GetEntity(GameLocation location, Vector2 tile)
         {
-            foreach (IAutomationFactory factory in this.AutomationFactories)
+            // from object
+            if (location.objects.TryGetValue(tile, out SObject obj))
             {
-                // from object
-                if (location.objects.TryGetValue(tile, out SObject obj))
-                {
-                    IAutomatable entity = factory.GetFor(obj, location, tile);
-                    if (entity != null)
-                        return entity;
-                }
+                IAutomatable entity = this.GetEntityFor(location, tile, obj);
+                if (entity != null)
+                    return entity;
+            }
 
-                // from terrain feature
-                if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature feature))
-                {
-                    IAutomatable entity = factory.GetFor(feature, location, tile);
-                    if (entity != null)
-                        return entity;
-                }
+            // from terrain feature
+            if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature feature))
+            {
+                IAutomatable entity = this.GetEntityFor(location, tile, feature);
+                if (entity != null)
+                    return entity;
+            }
 
-                // building machine
-                if (location is BuildableGameLocation buildableLocation)
+            // building machine
+            if (location is BuildableGameLocation buildableLocation)
+            {
+                foreach (Building building in buildableLocation.buildings)
                 {
-                    foreach (Building building in buildableLocation.buildings)
+                    Rectangle tileArea = new Rectangle(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
+                    if (tileArea.Contains((int)tile.X, (int)tile.Y))
                     {
-                        Rectangle tileArea = new Rectangle(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
-                        if (tileArea.Contains((int)tile.X, (int)tile.Y))
-                        {
-                            IAutomatable entity = factory.GetFor(building, buildableLocation, tile);
-                            if (entity != null)
-                                return entity;
-                        }
+                        IAutomatable entity = this.GetEntityFor(buildableLocation, tile, building);
+                        if (entity != null)
+                            return entity;
                     }
-                }
-
-                // from tile position
-                {
-                    IAutomatable entity = factory.GetForTile(location, tile);
-                    if (entity != null)
-                        return entity;
                 }
             }
 
+            // from tile position
+            foreach (IAutomationFactory factory in this.AutomationFactories)
+            {
+                IAutomatable entity = factory.GetForTile(location, tile);
+                if (entity != null)
+                    return entity;
+            }
+
             // none found
+            return null;
+        }
+
+        /// <summary>Get a machine, container, or connector from the given object, if any.</summary>
+        /// <param name="location">The location to search.</param>
+        /// <param name="tile">The tile to search.</param>
+        /// <param name="obj">The object to check.</param>
+        private IAutomatable GetEntityFor(GameLocation location, Vector2 tile, SObject obj)
+        {
+            foreach (IAutomationFactory factory in this.AutomationFactories)
+            {
+                IAutomatable entity = factory.GetFor(obj, location, tile);
+                if (entity != null)
+                    return entity;
+            }
+
+            return null;
+        }
+
+        /// <summary>Get a machine, container, or connector from the given terrain feature, if any.</summary>
+        /// <param name="location">The location to search.</param>
+        /// <param name="tile">The tile to search.</param>
+        /// <param name="feature">The terrain feature to check.</param>
+        private IAutomatable GetEntityFor(GameLocation location, Vector2 tile, TerrainFeature feature)
+        {
+            foreach (IAutomationFactory factory in this.AutomationFactories)
+            {
+                IAutomatable entity = factory.GetFor(feature, location, tile);
+                if (entity != null)
+                    return entity;
+            }
+
+            return null;
+        }
+
+        /// <summary>Get a machine, container, or connector from the given building, if any.</summary>
+        /// <param name="location">The location to search.</param>
+        /// <param name="tile">The tile to search.</param>
+        /// <param name="building">The building to check.</param>
+        private IAutomatable GetEntityFor(BuildableGameLocation location, Vector2 tile, Building building)
+        {
+            foreach (IAutomationFactory factory in this.AutomationFactories)
+            {
+                IAutomatable entity = factory.GetFor(building, location, tile);
+                if (entity != null)
+                    return entity;
+            }
+
             return null;
         }
     }

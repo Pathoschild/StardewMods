@@ -6,5 +6,6 @@
     "label.submenu": "подменю",
     "label.festival-name": "фестиваль",
     "label.event-id": "ID события",
-    "label.event-script": "сценарий события"
+    "label.event-script": "сценарий события",
+    "label.song": "song" // TODO
 }

@@ -9,7 +9,7 @@
     // date names
     "generic.now": "jetzt",
     "generic.tomorrow": "morgen",
-    "generic.yesterday": "yesterday", // TODO
+    "generic.yesterday": "gestern",
 
     // generic field values
     "generic.percent": "{{percent}}%",
@@ -24,14 +24,14 @@
     "generic.hours": "{{count}} Stunden",
     "generic.days": "{{count}} Tage",
     "generic.in-x-days": "in {{count}} Tagen",
-    "generic.x-days-ago": "{{count}} days ago", // TODO
+    "generic.x-days-ago": "vor {{count}} Tagen",
     "generic.price": "{{price}}g",
     "generic.price-for-quality": "{{price}}g ({{quality}})",
     "generic.price-for-stack": "{{price}}g für einen Stapel von {{count}}",
 
     // types
     "type.building": "Gebäude",
-    "type.bush": "Bush", // TODO
+    "type.bush": "Busch",
     "type.fruit-tree": "Fruchtbaum",
     "type.map-tile": "Kartenkachel",
     "type.monster": "Monster",
@@ -96,7 +96,7 @@
     "data.item.broken-branch.name": "Zerbrochener Ast",
     "data.item.broken-branch.description": "Ein Zerbrochener Ast. Zerschlage ihn mit deiner Axt um Holz zu bekommen.",
     "data.item.stone.name": "Stein",
-    "data.item.stone.description": "Ein unscheinbarer grauer Stein. Zerbrech ihn um Steine zu bekommen.",
+    "data.item.stone.description": "Ein unscheinbarer grauer Stein. Zerbreche ihn um Steine zu bekommen.",
     "data.item.geode.name": "Geodenader",
     "data.item.geode.description": "Baue sie ab, um eine Geode zu bekommen.",
     "data.item.frozen-geode.name": "Gefrorene Geodenader",
@@ -153,7 +153,7 @@
     // mine containers
     "data.item.barrel.name": "Fass",
     "data.item.barrel.description": "Zerschlage es um verschiedenes Gut zu erhalten.",
-    "data.item.box.name": "Box",
+    "data.item.box.name": "Kiste",
     "data.item.box.description": "Zerschlage sie um verschiedenes Gut zu erhalten.",
 
     /*********
@@ -213,16 +213,14 @@
     "building.water-trough.summary": "{{filled}} von {{max}} Wassertrögen gefüllt",
 
     // bush lookup labels
-    // TODO
-    "bush.name.berry": "Berry Bush",
-    "bush.name.plain": "Plain Bush",
-    "bush.description.berry": "A bush that grows salmonberries and blackberries.",
-    "bush.description.plain": "A plain bush that doesn't grow anything.",
-    "bush.next-harvest": "Next harvest",
+    "bush.name.berry": "Beerenbusch",
+    "bush.name.plain": "Einfacher Busch",
+    "bush.description.berry": "Ein Busch an dem Lachsbeeren und Brombeeren wachsen.",
+    "bush.description.plain": "Ein einfacher Busch an dem nichts wächst.",
+    "bush.next-harvest": "Nächste Ernte",
 
     // bush lookup values
-    // TODO
-    "bush.schedule.berry": "20% chance of salmonberries in spring 15-18 and blackberries in fall 8-11.",
+    "bush.schedule.berry": "20% Chance auf Lachsbeeren im Frühling 15-18 und Brombeeren im Herbst 8-11.",
 
     // fruit tree lookup labels
     "fruit-tree.complaints": "Beschwerden",
@@ -236,7 +234,7 @@
     "fruit-tree.complaints.adjacent-objects": "Kann nicht wachsen weil angrenzende Objekte zu nahe sind",
     "fruit-tree.growth.summary": "Ausgewachsen am {{date}}",
     "fruit-tree.next-fruit.struck-by-lighting": "Wurde von einem Blitz getroffen! Erhohlt sich in {{count}} Tagen.",
-    "fruit-tree.next-fruit.out-of-season": "Ausserhalb der Jahreszeit",
+    "fruit-tree.next-fruit.out-of-season": "Außerhalb der Jahreszeit",
     "fruit-tree.next-fruit.max-fruit": "Wird keine neuen Früchte tragen, bis die aktuellen geerntet wurden.",
     "fruit-tree.next-fruit.too-young": "Zu jung um Früchte zu tragen",
     "fruit-tree.quality.now": "{{quality}} jetzt",
@@ -301,7 +299,7 @@
     "item.needed-for.craft-master": "\"Handwerksmeister\" Errungenschaft (stelle {{recipes}} her)",
     "item.sells-to.shipping-box": "Versandkiste",
     "item.recipes-for-ingredient.entry": "{{name}} (braucht {{count}})",
-    "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}", // TODO
+    "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.number-owned.summary": "Du besitzt {{count}} davon",
     "item.number-crafted.summary": "Du hast bereits {{count}} davon hergestellt",
 
@@ -327,9 +325,9 @@
     "npc.talked-today": "Heute geredet",
     "npc.gifted-today": "Heute beschenkt",
     "npc.gifted-this-week": "Diese Woche beschenkt",
-    "npc.kissed-today": "Kissed today", // TODO
+    "npc.kissed-today": "Heute geküsst",
     "npc.loves-gifts": "Geliebte Geschenke",
-    "npc.likes-gifts": "Mögende Geschenke",
+    "npc.likes-gifts": "Gemochte Geschenke",
     "npc.neutral-gifts": "Neutrale Geschenke",
 
     // NPC lookup values
@@ -370,7 +368,7 @@
     "player.farm-map.custom": "Eigene",
     "player.gender.male": "Männlich",
     "player.gender.female": "Weiblich",
-    "player.luck.summary": "{{percent}}% zufälliger Ereignisse",
+    "player.luck.summary": "{{percent}}% auf viele zufällige Ereignisse",
     "player.skill.progress": "Level {{level}} ({{expNeeded}} XP erforderlich)",
     "player.skill.progress-last": "Level {{level}}",
 
@@ -385,7 +383,7 @@
     "tile.tile-property": "{{layerName}}: Eigenschaften: {{propertyName}}",
 
     // tile lookup values
-    "tile.tile.none-here": "Kein Kachel hier.",
+    "tile.tile.none-here": "Keine Kachel hier.",
 
     // tree lookup labels
     "tree.stage": "Wachstumsstadium",
@@ -401,8 +399,8 @@
     "tree.name.unknown": "unbekannter Baum",
     "tree.stage.done": "Voll ausgewachsen",
     "tree.stage.partial": "{{stageName}} ({{step}} von {{max}})",
-    "tree.next-growth.winter": "Kann nicht im Winter ausserhalb des Gewächshaus wachsen.",
-    "tree.next-growth.adjacent-trees": "Kann nicht Wachsen, weil andere Bäume zu nah sind.",
+    "tree.next-growth.winter": "Kann nicht im Winter außerhalb des Gewächshauses wachsen.",
+    "tree.next-growth.adjacent-trees": "Kann nicht wachsen, weil andere Bäume zu nah sind.",
     "tree.next-growth.random": "20% Chance in das nächste Stadium zu kommen. Im nächstem Stadium wird es ein {{stage}} sein.",
 
     // tree stages

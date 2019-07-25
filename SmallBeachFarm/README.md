@@ -1,6 +1,6 @@
 **Small Beach Farm** is a [Stardew Valley](http://stardewvalley.net/) mod which replaces the
 riverlands farm with a fertile pocket beach suitable for slower/challenge runs, and lets you
-catch both river and ocean fish.
+catch both river and ocean fish. You can optionally enable islands and beach sounds.
 
 > ![](docs/farm.png)
 
@@ -24,6 +24,9 @@ A few highlights:
 * If you use [Automate](https://www.nexusmods.com/stardewvalley/mods/1063), you can connect chests
   to crab pots all along the beach:
   > ![](docs/automate-crabpots.png)
+* The beach includes a functional campfire you can light or extinguish (pairs well with the
+  [Campfire Cooking](https://mods.smapi.io/#Campfire_Cooking) mod):  
+  > ![](docs/campfire.gif)
 
 If you need more space, the alternate _Small Beach With Islands_ adds ocean islands for extra land
 area:
@@ -37,7 +40,8 @@ Here's what you can change:
 
 setting         | default | what it affects
 :-------------- | :------ | :------------------
-`EnableIslands` | `true`  | Whether to add ocean islands with extra land area.
+`EnableIslands` | `false` | Whether to add ocean islands with extra land area.
+`UseBeachMusic` | `false` | Use the beach's background music (i.e. wave sounds) on the beach farm.
 
 ## FAQs
 ### Compatibility

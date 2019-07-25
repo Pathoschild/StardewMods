@@ -2,22 +2,13 @@
 
   <PropertyGroup>
     <AssemblyName>TractorMod</AssemblyName>
-    <Version>4.8.3</Version>
+    <Version>4.8.4</Version>
     <RootNamespace>Pathoschild.Stardew.TractorMod</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="2.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="assets\garage.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="assets\tractor.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0-beta.8" />
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
