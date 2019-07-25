@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.10
+Released 25 July 2019.
+
 * Added current song to hoverbox.
 * Updated translations. Thanks to xLPMG (added Italian)!
 
