@@ -95,6 +95,7 @@ Data Layers will automatically integrate with these mods if you they're installe
 mod installed     | effects
 ----------------- | ----------
 Automate          | Shows whether your machines are empty, processing, or ready to harvest.
+Bee House Flower Range Fix | Adjusts the bee house range to match.
 Better Junimos    | Shows custom Junimo hut coverage.
 Better Sprinklers | Shows custom sprinkler coverage.
 Cobalt            | Shows cobalt sprinkler coverage.

@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* The bee house range now accounts for the Bee House Flower Range Fix mod, if installed.
+
 ## 1.7
 Released 25 July 2019.
 
