@@ -16,7 +16,7 @@ Released 26 November 2019.
   * new Krobus relationship;
   * new Adventurer's Guild goals;
   * pet water bowl and petting changes;
-  * chance of double output with higher-quality inputs for Cheese Press, Loom, and Mayonnaise Machine.
+  * chance of double Loom output with higher-quality input.
 * Added optional progression mode (only shows gift tastes for gifts you've already given).
 * Added save format version to save slot lookups.
 * Updated for compatibility with Json Assets 1.3.8.

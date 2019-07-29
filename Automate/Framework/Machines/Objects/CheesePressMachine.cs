@@ -67,43 +67,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             {
                 // get output
                 var inputStack = consumable.Take();
-                SObject output = recipe.Output(inputStack);
-                if (consumable.Sample is SObject sampleInput)
-                {
-                    if (Game1.random.NextDouble() <= this.GetProbabilityOfDoubleOutput(sampleInput.Quality))
-                        output.Stack = 2;
-                }
-
-                this.Machine.heldObject.Value = output;
+                this.Machine.heldObject.Value = recipe.Output(inputStack);
                 this.Machine.MinutesUntilReady = recipe.Minutes(inputStack);
                 return true;
             }
 
             return false;
-        }
-
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Get the probability that the cheese press outputs two items for a given input quality.</summary>
-        /// <param name="quality">The input quality.</param>
-        private float GetProbabilityOfDoubleOutput(int quality)
-        {
-            switch (quality)
-            {
-                case SObject.lowQuality:
-                    return 0;
-
-                case SObject.highQuality:
-                    return 0.25f;
-
-                case SObject.bestQuality:
-                    return 0.5f;
-
-                default:
-                    return 0.1f;
-            }
         }
     }
 }
