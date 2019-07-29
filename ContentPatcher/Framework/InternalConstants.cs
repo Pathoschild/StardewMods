@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using StardewValley.GameData.Crafting;
 using StardewValley.GameData.FishPond;
@@ -44,12 +42,7 @@ namespace ContentPatcher.Framework
                     return entry.NPCName;
 
                 case TailorItemRecipe entry:
-                    IList<string> keyParts = new List<string>();
-                    if (entry.FirstItemTags.Any())
-                        keyParts.Add($"L:{string.Join(",", entry.FirstItemTags)}");
-                    if (entry.SecondItemTags.Any())
-                        keyParts.Add($"R:{string.Join(",", entry.SecondItemTags)}");
-                    return string.Join("|", keyParts);
+                    return string.Join(",", entry.FirstItemTags) + "|" + string.Join(",", entry.SecondItemTags);
 
                 default:
                     PropertyInfo property = entity.GetType().GetProperty("ID");
