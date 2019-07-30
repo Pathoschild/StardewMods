@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -34,8 +35,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
-        /// <param name="hasBeeHouseFlowerRangeFix">Whether the player has the Bee House Flower Range Fix mod.</param>
-        public BeeHouseLayer(ITranslationHelper translations, LayerConfig config, bool hasBeeHouseFlowerRangeFix)
+        public BeeHouseLayer(ITranslationHelper translations, LayerConfig config)
             : base(translations.Get("bee-houses.name"), config)
         {
             this.Legend = new[]
@@ -44,7 +44,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
             };
 
             this.RelativeRange = BeeHouseLayer
-                .GetRelativeCoverage(maxLoops: hasBeeHouseFlowerRangeFix ? 166 : 150)
+                .GetRelativeCoverage()
                 .ToArray();
         }
 
@@ -99,7 +99,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <summary>Get a bee house tile radius.</summary>
         /// <param name="location">The bee house's location.</param>
         /// <param name="origin">The bee house's tile.</param>
-        /// <remarks>Derived from <see cref="SObject.checkForAction"/> and <see cref="Utility.findCloseFlower"/>.</remarks>
+        /// <remarks>Derived from <see cref="SObject.checkForAction"/> and <see cref="Utility.findCloseFlower(GameLocation, Vector2, int)"/>.</remarks>
         private IEnumerable<Vector2> GetCoverage(GameLocation location, Vector2 origin)
         {
             if (!(location is Farm))
@@ -110,20 +110,21 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         }
 
         /// <summary>Get the relative tiles covered by a bee house.</summary>
-        /// <param name="maxLoops">The maximum number of flood fill loops to run, which affects the range. The game uses 150 by default.</param>
-        /// <remarks>Derived from <see cref="Utility.findCloseFlower"/>.</remarks>
-        private static IEnumerable<Vector2> GetRelativeCoverage(int maxLoops = 150)
+        /// <remarks>Derived from <see cref="Utility.findCloseFlower(GameLocation, Vector2)"/>.</remarks>
+        private static IEnumerable<Vector2> GetRelativeCoverage()
         {
+            const int range = 5;
+
             Queue<Vector2> queue = new Queue<Vector2>();
             HashSet<Vector2> visited = new HashSet<Vector2>();
             queue.Enqueue(Vector2.Zero);
-            for (int i = 0; i <= maxLoops && queue.Count > 0; ++i)
+            for (int i = 0; queue.Count > 0; i++)
             {
                 Vector2 tile = queue.Dequeue();
                 yield return tile;
                 foreach (Vector2 adjacentTile in Utility.getAdjacentTileLocations(tile))
                 {
-                    if (!visited.Contains(adjacentTile))
+                    if (!visited.Contains(adjacentTile) && (Math.Abs(adjacentTile.X) + (double)Math.Abs(adjacentTile.Y)) <= range)
                         queue.Enqueue(adjacentTile);
                 }
                 visited.Add(tile);

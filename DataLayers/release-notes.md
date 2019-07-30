@@ -4,9 +4,9 @@ Released 26 November 2019.
 
 * Updated for Stardew Valley 1.4, including...
   * Deluxe Scarecrow;
-  * new areas and warps.
+  * new areas and warps;
+  * new bee house flower range.
 * Added `data-layers export` console command to export the current data layer to a JSON file.
-* The bee house range now accounts for the Bee House Flower Range Fix mod, if installed.
 * Updated for compatibility with the latest version of Pelican Fiber.
 * Improved translations. Thanks to shiro2579 (updated Portuguese)!
 
