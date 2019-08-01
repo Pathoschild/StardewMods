@@ -746,6 +746,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Luck</c>.</summary>
             public static Translation Luck() => L10n.Helper.Get("player.luck");
 
+            /// <summary>A value like <c>Save format</c>.</summary>
+            public static Translation SaveFormat() => L10n.Helper.Get("player.save-format");
+
             /****
             ** Values
             ****/

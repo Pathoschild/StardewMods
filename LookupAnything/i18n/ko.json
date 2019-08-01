@@ -364,6 +364,7 @@
     "player.foraging-skill": "채집",
     "player.mining-skill": "채광",
     "player.luck": "행운",
+    "player.save-format": "Save format", // TODO
 
     // player lookup values
     "player.farm-map.custom": "사용자 지정",

@@ -364,6 +364,7 @@
     "player.foraging-skill": "Cueillette",
     "player.mining-skill": "Ext. minière",
     "player.luck": "Chance",
+    "player.save-format": "Save format", // TODO
 
     // player lookup values
     "player.farm-map.custom": "Personnalisée",

@@ -362,6 +362,7 @@
     "player.foraging-skill": "Foraging",
     "player.mining-skill": "Mining",
     "player.luck": "Luck",
+    "player.save-format": "Save format",
 
     // player lookup values
     "player.farm-map.custom": "Custom",

@@ -362,6 +362,7 @@
     "player.foraging-skill": "Colheita",
     "player.mining-skill": "Mineiração",
     "player.luck": "Sorte",
+    "player.save-format": "Save format", // TODO
 
     // player lookup values
     "player.farm-map.custom": "Personalizado",

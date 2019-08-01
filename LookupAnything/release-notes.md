@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Updated for Stardew Valley 1.4, including new content.
+* Added save format version to save slot lookups.
 * Updated for compatibility with Json Assets 1.3.8.
 * Fixed player luck in multiplayer showing your own luck instead of theirs.
 * Fixed 'scissor rectangle is invalid' error in rare cases.

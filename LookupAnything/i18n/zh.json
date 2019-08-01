@@ -364,6 +364,7 @@
     "player.foraging-skill": "觅食",
     "player.mining-skill": "采矿",
     "player.luck": "运气",
+    "player.save-format": "Save format", // TODO
 
     // player lookup values
     "player.farm-map.custom": "自定义",

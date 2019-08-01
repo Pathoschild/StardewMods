@@ -73,6 +73,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // luck
             string luckSummary = L10n.Player.LuckSummary(percent: (Game1.player.DailyLuck >= 0 ? "+" : "") + Math.Round(Game1.player.DailyLuck * 100, 2));
             yield return new GenericField(this.GameHelper, L10n.Player.Luck(), $"{this.GetSpiritLuckMessage()}{Environment.NewLine}({luckSummary})");
+
+            // save version
+            if (this.IsLoadMenu)
+                yield return new GenericField(this.GameHelper, L10n.Player.SaveFormat(), this.GetSaveFormat(this.RawSaveData.Value));
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
@@ -194,6 +198,31 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // read contents
             string text = File.ReadAllText(file.FullName);
             return XElement.Parse(text);
+        }
+
+        /// <summary>Get the last game version which wrote to a save file.</summary>
+        /// <param name="saveData">The save data to check.</param>
+        private string GetSaveFormat(XElement saveData)
+        {
+            // >=1.4
+            string version = saveData.Element("gameVersion")?.Value;
+            if (!string.IsNullOrWhiteSpace(version))
+                return version;
+
+            // 1.4
+            if (saveData.Element("hasApplied1_4_UpdateChanges") != null)
+                return "1.4";
+
+            // 1.3
+            if (saveData.Element("hasApplied1_3_UpdateChanges") != null)
+                return "1.3";
+
+            // 1.1/1.2
+            if (saveData.Element("whichFarm") != null)
+                return "1.1 - 1.2";
+
+            // 1.0
+            return "1.0";
         }
     }
 }

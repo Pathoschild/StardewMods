@@ -362,6 +362,7 @@
     "player.foraging-skill": "採集",
     "player.mining-skill": "採掘",
     "player.luck": "運勢",
+    "player.save-format": "Save format", // TODO
 
     // player lookup values
     "player.farm-map.custom": "カスタム",

@@ -362,6 +362,7 @@
     "player.foraging-skill": "Собирательство",
     "player.mining-skill": "Горное дело",
     "player.luck": "Удача",
+    "player.save-format": "Save format", // TODO
 
     // player lookup values
     "player.farm-map.custom": "Пользовательская",
