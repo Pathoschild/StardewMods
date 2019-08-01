@@ -1018,6 +1018,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Has seed</c>.</summary>
             public static Translation HasSeed() => L10n.Helper.Get("tree.has-seed");
 
+            /// <summary>A value like <c>Is fertilized</c>.</summary>
+            public static Translation IsFertilized() => L10n.Helper.Get("tree.is-fertilized");
+
             /****
             ** Values
             ****/
@@ -1033,8 +1036,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>can't grow because other trees are too close</c>.</summary>
             public static Translation NextGrowthAdjacentTrees() => L10n.Helper.Get("tree.next-growth.adjacent-trees");
 
-            /// <summary>A value like <c>20% chance to grow into {{stage}} tomorrow</c>.</summary>
-            public static Translation NextGrowthRandom(string stage) => L10n.Helper.Get("tree.next-growth.random", new { stage });
+            /// <summary>A value like <c>{{chance}}% chance to grow into {{stage}} tomorrow</c>.</summary>
+            public static Translation NextGrowthChance(string stage, int chance) => L10n.Helper.Get("tree.next-growth.chance", new { stage, chance });
+
+            /// <summary>A value like <c>tree grows in winter and grows twice as fast</c>.</summary>
+            public static Translation IsFertilizedEffects() => L10n.Helper.Get("tree.is-fertilized.effects");
         }
 
         /*********

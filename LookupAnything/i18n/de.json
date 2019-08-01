@@ -452,6 +452,7 @@
     "tree.stage": "Wachstumsstadium",
     "tree.next-growth": "Nächstes Wachstum",
     "tree.has-seed": "Trägt Samen",
+    "tree.is-fertilized": "Is fertilized", // TODO
 
     // non-fruit tree lookup values
     "tree.name.maple": "Ahornbaum",
@@ -464,7 +465,8 @@
     "tree.stage.partial": "{{stageName}} ({{step}} von {{max}})",
     "tree.next-growth.winter": "Kann nicht im Winter außerhalb des Gewächshauses wachsen.",
     "tree.next-growth.adjacent-trees": "Kann nicht wachsen, weil andere Bäume zu nah sind.",
-    "tree.next-growth.random": "20% Chance in das nächste Stadium zu kommen. Im nächstem Stadium wird es ein {{stage}} sein.",
+    "tree.next-growth.random": "{{chance}}% Chance in das nächste Stadium zu kommen. Im nächstem Stadium wird es ein {{stage}} sein.",
+    "tree.is-fertilized.effects": "guarantees daily growth, even in winter", // TODO
 
     // tree stages
     "tree.stages.seed": "Samen",

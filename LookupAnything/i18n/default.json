@@ -55,8 +55,8 @@
     "friendship-status.kicked-out": "Kicked out",
 
     /*********
-  ** Data translations
-  *********/
+    ** Data translations
+    *********/
     // Community Center bundle areas
     "bundle-area.pantry": "Pantry",
     "bundle-area.crafts-room": "Crafts Room",
@@ -449,8 +449,9 @@
 
     // tree lookup labels
     "tree.stage": "Growth stage",
-    "tree.next-growth": "Next Growth",
+    "tree.next-growth": "Next growth",
     "tree.has-seed": "Has seed",
+    "tree.is-fertilized": "Is fertilized",
 
     // non-fruit tree lookup values
     "tree.name.maple": "Maple Tree",
@@ -463,7 +464,8 @@
     "tree.stage.partial": "{{stageName}} ({{step}} of {{max}})",
     "tree.next-growth.winter": "can't grow in winter outside greenhouse",
     "tree.next-growth.adjacent-trees": "can't grow because other trees are too close",
-    "tree.next-growth.random": "20% chance to grow into {{stage}} tomorrow",
+    "tree.next-growth.chance": "{{chance}}% chance to grow into {{stage}} tomorrow",
+    "tree.is-fertilized.effects": "guarantees daily growth, even in winter",
 
     // tree stages
     "tree.stages.seed": "seed",

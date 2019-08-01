@@ -452,6 +452,7 @@
     "tree.stage": "Estágio do crescimento",
     "tree.next-growth": "Próximo cultivo",
     "tree.has-seed": "Tem sementes",
+    "tree.is-fertilized": "Is fertilized", // TODO
 
     // non-fruit tree lookup values
     "tree.name.maple": "Árvode de Ácer",
@@ -464,7 +465,8 @@
     "tree.stage.partial": "{{stageName}} ({{step}} de {{max}})",
     "tree.next-growth.winter": "Não pode crescer no inverno fora da estufa",
     "tree.next-growth.adjacent-trees": "Não pode crescer pois as outras árvores estão muito perto",
-    "tree.next-growth.random": "20% Chance de crescer {{stage}} amanhã",
+    "tree.next-growth.random": "{{chance}}% Chance de crescer {{stage}} amanhã",
+    "tree.is-fertilized.effects": "guarantees daily growth, even in winter", // TODO
 
     // tree stages
     "tree.stages.seed": "Semente",

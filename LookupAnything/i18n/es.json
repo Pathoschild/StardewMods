@@ -457,6 +457,7 @@
     "tree.stage": "Etapa de crecimiento",
     "tree.next-growth": "Evolución",
     "tree.has-seed": "Tiene semilla",
+    "tree.is-fertilized": "Is fertilized", // TODO
 
     // non-fruit tree lookup values
     "tree.name.maple": "Arce",
@@ -469,7 +470,8 @@
     "tree.stage.partial": "{{stageName}} ({{step}} de {{max}})",
     "tree.next-growth.winter": "no puede crecer en invierno fuera del invernadero",
     "tree.next-growth.adjacent-trees": "no puede crecer porque otros árboles estan muy cerca",
-    "tree.next-growth.random": "20% de probabilidad de evolucionar a «{{stage}}» mañana",
+    "tree.next-growth.random": "{{chance}}% de probabilidad de evolucionar a «{{stage}}» mañana",
+    "tree.is-fertilized.effects": "guarantees daily growth, even in winter", // TODO
 
     // tree stages
     "tree.stages.seed": "Semilla",

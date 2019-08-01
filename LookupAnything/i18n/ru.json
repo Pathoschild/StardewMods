@@ -453,6 +453,7 @@
     "tree.stage": "Стадия роста",
     "tree.next-growth": "След. стадия",
     "tree.has-seed": "Содержит семена",
+    "tree.is-fertilized": "Is fertilized", // TODO
 
     // non-fruit tree lookup values
     "tree.name.maple": "Клён",
@@ -466,6 +467,7 @@
     "tree.next-growth.winter": "не может расти зимой вне теплицы",
     "tree.next-growth.adjacent-trees": "не может расти, т.к рядом нет места.",
     "tree.next-growth.random": "20% шанс, что завтра вырастит в {{stage}}",
+    "tree.is-fertilized.effects": "guarantees daily growth, even in winter", // TODO
 
     // tree stages
     "tree.stages.seed": "семя",

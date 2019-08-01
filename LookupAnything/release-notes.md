@@ -7,7 +7,7 @@ Released 26 November 2019.
 * Updated for Stardew Valley 1.4, including...
   * per-player shipping bins;
   * movie theater;
-  * new mechanics (clothing, dyeing, and tailoring);
+  * new mechanics (clothing, dyeing, tailoring, and tree fertilizer);
   * new recipes (aged roe, caviar, dinosaur mayonnaise, and green tea);
   * new content (fish ponds, tea bushes, and trash bear);
   * new farm map;

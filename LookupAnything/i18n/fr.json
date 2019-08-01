@@ -454,6 +454,7 @@
     "tree.stage": "Niveau de croissance",
     "tree.next-growth": "Prochaine croissance",
     "tree.has-seed": "A des graines",
+    "tree.is-fertilized": "Is fertilized", // TODO
 
     // non-fruit tree lookup values
     "tree.name.maple": "Erable",
@@ -466,7 +467,8 @@
     "tree.stage.partial": "{{stageName}} ({{step}} sur {{max}})",
     "tree.next-growth.winter": "ne peut pousser en hiver en dehors de la serre",
     "tree.next-growth.adjacent-trees": "ne peut pousser car d'autres arbres sont trop près",
-    "tree.next-growth.random": "20% de chance de grandir en {{stage}} demain",
+    "tree.next-growth.random": "{{chance}}% de chance de grandir en {{stage}} demain",
+    "tree.is-fertilized.effects": "guarantees daily growth, even in winter", // TODO
 
     // tree stages
     "tree.stages.seed": "graine",

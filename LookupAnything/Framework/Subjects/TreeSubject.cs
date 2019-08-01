@@ -64,12 +64,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 else if (stage == WildTreeGrowthStage.SmallTree && this.HasAdjacentTrees(this.Tile))
                     yield return new GenericField(this.GameHelper, label, L10n.Tree.NextGrowthAdjacentTrees());
                 else
-                    yield return new GenericField(this.GameHelper, label, L10n.Tree.NextGrowthRandom(stage: L10n.For(stage + 1)));
+                    yield return new GenericField(this.GameHelper, label, L10n.Tree.NextGrowthChance(stage: L10n.For(stage + 1), chance: tree.fertilized.Value ? 100 : 20));
             }
+
+            // get fertilizer
+            if (!isFullyGrown)
+                yield return new GenericField(this.GameHelper, L10n.Tree.IsFertilized(), this.Stringify(tree.fertilized.Value) + (tree.fertilized.Value ? $" ({L10n.Tree.IsFertilizedEffects()})" : ""));
 
             // get seed
             if (isFullyGrown)
                 yield return new GenericField(this.GameHelper, L10n.Tree.HasSeed(), this.Stringify(tree.hasSeed.Value));
+
         }
 
         /// <summary>Get the data to display for this subject.</summary>
