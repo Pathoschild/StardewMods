@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Netcode;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
@@ -242,23 +241,27 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         private IEnumerable<ICustomField> GetDataForTrashBear(TrashBear trashBear)
         {
             // get number of quests completed
+            const int maxQuests = 4;
             int questsDone = 0;
             if (NetWorldState.checkAnywhereForWorldStateID("trashBear1"))
                 questsDone = 1;
             if (NetWorldState.checkAnywhereForWorldStateID("trashBear2"))
                 questsDone = 2;
-            if (NetWorldState.checkAnywhereForWorldStateID("trashBearDone"))
+            if (NetWorldState.checkAnywhereForWorldStateID("trashBear3"))
                 questsDone = 3;
+            if (NetWorldState.checkAnywhereForWorldStateID("trashBearDone"))
+                questsDone = 4;
 
-            // get item wanted
-            // This is recalculated when the player interacts with the trash bear, and
-            // may not be set when the player first looks it up. Since it's based on a
-            // fixed-seed RNG, we can recalculate the value here.
-            int itemWantedIndex = Utility.getRandomPureSeasonalItem(Game1.currentSeason, 777111 + questsDone);
+            // show item wanted
+            if (questsDone < maxQuests)
+            {
+                this.Reflection.GetMethod(trashBear, "updateItemWanted").Invoke();
+                int itemWantedIndex = this.Reflection.GetField<int>(trashBear, "itemWantedIndex").GetValue();
+                yield return new ItemIconField(this.GameHelper, L10n.TrashBear.ItemWanted(), new SObject(itemWantedIndex, 1));
+            }
 
-            // show data
-            yield return new ItemIconField(this.GameHelper, L10n.TrashBear.ItemWanted(), new SObject(itemWantedIndex, 1));
-            yield return new GenericField(this.GameHelper, L10n.TrashBear.QuestProgress(), L10n.Generic.Ratio(questsDone, 3));
+            // show progress
+            yield return new GenericField(this.GameHelper, L10n.TrashBear.QuestProgress(), L10n.Generic.Ratio(questsDone, maxQuests));
         }
 
         /// <summary>Get the fields to display for a villager NPC.</summary>
