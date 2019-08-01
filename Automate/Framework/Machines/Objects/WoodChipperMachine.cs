@@ -38,7 +38,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                         KeyValuePair<int, int> result = this.Machine.GetResultItem(input as SObject);
                         return new SObject(result.Key, result.Value);
                     },
-                    minutes: WoodChipper.CHIP_TIME
+                    minutes: 180
                 ),
 
                 // driftwood => wood
@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                         KeyValuePair<int, int> result = this.Machine.GetResultItem(input as SObject);
                         return new SObject(result.Key, result.Value);
                     },
-                    minutes: WoodChipper.CHIP_TIME
+                    minutes: 180
                 )
             };
         }
