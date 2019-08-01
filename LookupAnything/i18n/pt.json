@@ -84,6 +84,7 @@
     "data.npc.pet.description": "Seu animal de estimação leal.",
     "data.npc.horse.description": "Seu cavalo leal.",
     "data.npc.junimo.description": "Um espírito da floresta do mundo espiritual. Sabe-se muito pouco sobre eles.",
+    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.", // TODO
 
     /*********
     ** Item overrides
@@ -442,6 +443,10 @@
 
     // tile lookup values
     "tile.tile.none-here": "Sem azulejos aqui",
+
+    // trash bear lookup labels
+    "trash-bear.item-wanted": "Item wanted", // TODO
+    "trash-bear.quest-progress": "Quest progress", // TODO
 
     // tree lookup labels
     "tree.stage": "Estágio do crescimento",

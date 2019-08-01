@@ -84,6 +84,7 @@
     "data.npc.pet.description": "Ваш преданный питомец.",
     "data.npc.horse.description": "Ваш верный конь.",
     "data.npc.junimo.description": "Дух леса из мира духов. Мало что известно о них.",
+    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.", // TODO
 
     /*********
     ** Item overrides
@@ -443,6 +444,10 @@
 
     // tile lookup values
     "tile.tile.none-here": "здесь нет тайла",
+
+    // trash bear lookup labels
+    "trash-bear.item-wanted": "Item wanted", // TODO
+    "trash-bear.quest-progress": "Quest progress", // TODO
 
     // tree lookup labels
     "tree.stage": "Стадия роста",

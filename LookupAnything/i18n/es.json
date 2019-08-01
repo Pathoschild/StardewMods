@@ -84,6 +84,7 @@
     "data.npc.pet.description": "Tu fiel mascota.",
     "data.npc.horse.description": "Tu fiel corcel.",
     "data.npc.junimo.description": "Un espíritu forestal del mundo de los espíritus. Se sabe muy poco sobre ellos.",
+    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.", // TODO
 
     /*********
     ** Item overrides
@@ -447,6 +448,10 @@
 
     // tile lookup values
     "tile.tile.none-here": "Sin título aquí",
+
+    // trash bear lookup labels
+    "trash-bear.item-wanted": "Item wanted", // TODO
+    "trash-bear.quest-progress": "Quest progress", // TODO
 
     // tree lookup labels
     "tree.stage": "Etapa de crecimiento",

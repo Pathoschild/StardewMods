@@ -84,6 +84,7 @@
     "data.npc.pet.description": "Your loyal pet.",
     "data.npc.horse.description": "Your loyal steed.",
     "data.npc.junimo.description": "A forest spirit from the spirit world. Very little is known about them.",
+    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.",
 
     /*********
     ** Item overrides
@@ -441,6 +442,10 @@
 
     // tile lookup values
     "tile.tile.none-here": "no tile here",
+
+    // trash bear lookup labels
+    "trash-bear.item-wanted": "Item wanted",
+    "trash-bear.quest-progress": "Quest progress",
 
     // tree lookup labels
     "tree.stage": "Growth stage",

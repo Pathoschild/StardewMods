@@ -84,6 +84,7 @@
     "data.npc.pet.description": "あなたの忠実なペット.",
     "data.npc.horse.description": "あなたの忠実な馬",
     "data.npc.junimo.description": "妖精界から来た森の精。 彼らについてほとんど分かっていない。",
+    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.", // TODO
 
     /*********
     ** Item overrides
@@ -442,6 +443,10 @@
 
     // tile lookup values
     "tile.tile.none-here": "タイルがありません",
+
+    // trash bear lookup labels
+    "trash-bear.item-wanted": "Item wanted", // TODO
+    "trash-bear.quest-progress": "Quest progress", // TODO
 
     // tree lookup labels
     "tree.stage": "成長段階",

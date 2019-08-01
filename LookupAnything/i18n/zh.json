@@ -84,6 +84,7 @@
     "data.npc.pet.description": "对你忠心耿耿的宠物。",
     "data.npc.horse.description": "对你忠心耿耿的坐骑。",
     "data.npc.junimo.description": "来自精神世界的森林精灵。人类对它们知之甚少。",
+    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.", // TODO
 
     /*********
     ** Item overrides
@@ -444,6 +445,10 @@
 
     // tile lookup values
     "tile.tile.none-here": "此处无地格",
+
+    // trash bear lookup labels
+    "trash-bear.item-wanted": "Item wanted", // TODO
+    "trash-bear.quest-progress": "Quest progress", // TODO
 
     // tree lookup labels
     "tree.stage": "生长阶段",

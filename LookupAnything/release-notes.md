@@ -9,7 +9,7 @@ Released 26 November 2019.
   * movie theater;
   * new mechanics (clothing, dyeing, and tailoring);
   * new recipes (aged roe, caviar, dinosaur mayonnaise, and green tea);
-  * new content (fish ponds and tea bushes);
+  * new content (fish ponds, tea bushes, and trash bear);
   * new farm map;
   * new 14-heart spouse events;
   * new social NPC profiles;

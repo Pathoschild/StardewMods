@@ -84,6 +84,7 @@
     "data.npc.pet.description": "Dein treues Haustier.",
     "data.npc.horse.description": "Dein treues Ross.",
     "data.npc.junimo.description": "Ein Waldgeist aus der Geisterwelt. Es ist nur wenig über sie bekannt.",
+    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.", // TODO
 
     /*********
     ** Item overrides
@@ -442,6 +443,10 @@
 
     // tile lookup values
     "tile.tile.none-here": "Keine Kachel hier.",
+
+    // trash bear lookup labels
+    "trash-bear.item-wanted": "Item wanted", // TODO
+    "trash-bear.quest-progress": "Quest progress", // TODO
 
     // tree lookup labels
     "tree.stage": "Wachstumsstadium",

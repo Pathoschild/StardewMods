@@ -632,6 +632,10 @@ You shouldn't change this file unless you know what you're doing.
         {
             "ID": "Junimo",
             "DescriptionKey": "data.npc.junimo.description"
+        },
+        {
+            "ID": "Villager::TrashBear",
+            "DescriptionKey": "data.npc.trashbear.description"
         }
     ],
 

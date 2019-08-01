@@ -972,6 +972,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public static Translation TileFieldNoneFound() => L10n.Helper.Get("tile.tile.none-here");
         }
 
+        /// <summary>Trash bear lookup translations.</summary>
+        public static class TrashBear
+        {
+            /****
+            ** Labels
+            ****/
+            /// <summary>A value like <c>Item wanted</c>.</summary>
+            public static Translation ItemWanted() => L10n.Helper.Get("trash-bear.item-wanted");
+
+            /// <summary>A value like <c>Quest progress</c>.</summary>
+            public static Translation QuestProgress() => L10n.Helper.Get("trash-bear.quest-progress");
+        }
+
         /// <summary>Wild tree lookup translations.</summary>
         public static class Tree
         {
