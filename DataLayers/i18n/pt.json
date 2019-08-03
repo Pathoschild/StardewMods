@@ -4,61 +4,59 @@
     "accessible.clear": "Limpo",
     "accessible.occupied": "Ocupado",
     "accessible.impassable": "Intransitável",
-    "accessible.warp": "Passagem",
+    "accessible.warp": "Troca de mapa",
 
     // buildable
-    // TODO
-    "buildable.name": "Buildable",
-    "buildable.buildable": "Can Build here",
-    "buildable.occupied": "Occupied",
-    "buildable.not-buildable": "Can't Build Here",
+    "buildable.name": "Construções",
+    "buildable.buildable": "Pode construir",
+    "buildable.occupied": "Lugar ocupado",
+    "buildable.not-buildable": "Não pode construir",
 
     // coverage: bee houses
-    "bee-houses.name": "Cobertura: Casas de Abelhas",
-    "bee-houses.range": "Alcance das Flores",
+    "bee-houses.name": "Cobertura: Apiários",
+    "bee-houses.range": "Alcance das flores",
 
     // coverage: Junimo huts
     "junimo-huts.name": "Cobertura: Cabana dos Junimos",
-    "junimo-huts.can-harvest": "Pode Colher",
-    "junimo-huts.cannot-harvest": "Não pode Colher",
+    "junimo-huts.can-harvest": "Conseguem colher",
+    "junimo-huts.cannot-harvest": "Não conseguem colher",
 
     // coverage: scarecrows
     "scarecrows.name": "Cobertura: Espantalhos",
-    "scarecrows.protected": "Protegido",
-    "scarecrows.exposed": "Exposto",
+    "scarecrows.protected": "Plantação protegida",
+    "scarecrows.exposed": "Plantação exposta",
 
     // coverage: sprinklers
     "sprinklers.name": "Cobertura: Aspersores",
-    "sprinklers.covered": "Coberto",
-    "sprinklers.dry-crops": "Plantas Secas",
+    "sprinklers.covered": "Plantação coberta",
+    "sprinklers.dry-crops": "Aspersores não cobrem",
 
     // crops: harvest
-    "crop-harvest.name": "Plantas: Pronto para colher",
-    "crop-harvest.ready": "Pronto",
-    "crop-harvest.not-ready": "Não está pronto",
-    "crop-harvest.not-enough-time": "Sem tempo suficiente",
+    "crop-harvest.name": "Plantações: Colheita",
+    "crop-harvest.ready": "Pode colher",
+    "crop-harvest.not-ready": "Ainda não cresceu totalmente",
+    "crop-harvest.not-enough-time": "Plantação morta/não cresce à tempo",
 
     // crops: watered
-    "crop-water.name": "Plantas: Irrigado",
-    "crop-water.watered": "Planta Irrigada",
-    "crop-water.dry": "Planta Seca",
+    "crop-water.name": "Plantações: Irrigação",
+    "crop-water.watered": "Plantação irrigada",
+    "crop-water.dry": "Plantação seca",
 
     // crops: fertilized
-    "crop-fertilizer.name": "Plantas: Fertilizadas",
+    "crop-fertilizer.name": "Plantações: Fertilizante Utilizado",
     "crop-fertilizer.fertilizer": "Fertilizante",
-    "crop-fertilizer.retaining-soil": "Solo Retentor",
-    "crop-fertilizer.speed-gro": "Solo Foliar",
+    "crop-fertilizer.retaining-soil": "Retentor de água",
+    "crop-fertilizer.speed-gro": "Acelerador de crescimento",
 
     // machine processing
     "machines.name": "Processamento de Máquina",
-    "machines.empty": "Vazio",
-    "machines.processing": "Processando",
-    "machines.finished": "Concluído",
+    "machines.empty": "Máquina vazia",
+    "machines.processing": "Máquina processando",
+    "machines.finished": "Processo concluído",
 
     // tillable
-    // TODO
-    "tillable.name": "Tillable",
-    "tillable.tillable": "Tillable",
-    "tillable.occupied": "Occupied",
-    "tillable.not-tillable": "Not Tillable"
+    "tillable.name": "Arabilidade",
+    "tillable.tillable": "Arável",
+    "tillable.occupied": "Ocupado",
+    "tillable.not-tillable": "Não Arável"
 }
