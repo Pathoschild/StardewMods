@@ -5,6 +5,7 @@
 Released 26 November 2019.
 
 * Updated for Stardew Valley 1.4.
+* Added support for dressers.
 * Fixed auto-grabber sprite not updated when emptied/filled through Chests Anywhere.
 * Improved translations. Thanks to Hesperusrus (updated Russian)!
 

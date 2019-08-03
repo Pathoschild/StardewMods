@@ -68,7 +68,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         private readonly ModConfigKeys Keys;
 
         /// <summary>Whether to show the category dropdown.</summary>
-        private bool ShowCategoryDropdown => this.Categories.Length > 1;
+        protected bool ShowCategoryDropdown => this.Categories.Length > 1;
 
         /****
         ** Menu management
@@ -86,19 +86,19 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         private readonly SpriteFont Font = Game1.smallFont;
 
         /// <summary>The chest selector tab.</summary>
-        private Tab ChestTab;
+        protected Tab ChestTab;
 
         /// <summary>The category selector tab.</summary>
-        private Tab CategoryTab;
+        protected Tab CategoryTab;
 
         /// <summary>The chest selector dropdown.</summary>
-        private DropList<ManagedChest> ChestSelector;
+        protected DropList<ManagedChest> ChestSelector;
 
         /// <summary>The category selector dropdown.</summary>
-        private DropList<string> CategorySelector;
+        protected DropList<string> CategorySelector;
 
         /// <summary>The edit button.</summary>
-        private ClickableTextureComponent EditButton;
+        protected ClickableTextureComponent EditButton;
 
         /// <summary>The Y offset to apply relative to <see cref="IClickableMenu.yPositionOnScreen"/> when drawing the top UI elements.</summary>
         private readonly int TopOffset;
