@@ -63,26 +63,30 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveLeftClick(int x, int y)
         {
-            switch (this.ActiveElement)
+            if (this.IsInitialised)
             {
-                case Element.EditForm:
-                case Element.ChestList:
-                case Element.CategoryList:
-                    break;
 
-                default:
-                    bool canNavigate = this.CanCloseChest;
-                    if (canNavigate && this.Menu.okButton.containsPoint(x, y))
-                    {
-                        this.Exit(); // in some cases the game won't handle this correctly (e.g. Stardew Valley Fair fishing minigame)
-                        return false;
-                    }
-                    else if (this.SortInventoryButton?.containsPoint(x, y) == true)
-                    {
-                        this.SortInventory();
-                        return false;
-                    }
-                    break;
+                switch (this.ActiveElement)
+                {
+                    case Element.EditForm:
+                    case Element.ChestList:
+                    case Element.CategoryList:
+                        break;
+
+                    default:
+                        bool canNavigate = this.CanCloseChest;
+                        if (canNavigate && this.Menu.okButton.containsPoint(x, y))
+                        {
+                            this.Exit(); // in some cases the game won't handle this correctly (e.g. Stardew Valley Fair fishing minigame)
+                            return false;
+                        }
+                        else if (this.SortInventoryButton?.containsPoint(x, y) == true)
+                        {
+                            this.SortInventory();
+                            return false;
+                        }
+                        break;
+                }
             }
 
             return base.ReceiveLeftClick(x, y);
@@ -94,8 +98,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveCursorHover(int x, int y)
         {
-            if (this.ActiveElement == Element.Menu)
-                this.SortInventoryButton?.tryHover(x, y);
+            if (this.IsInitialised)
+            {
+                if (this.ActiveElement == Element.Menu)
+                    this.SortInventoryButton?.tryHover(x, y);
+            }
 
             return base.ReceiveCursorHover(x, y);
         }

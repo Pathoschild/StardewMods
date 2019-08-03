@@ -38,6 +38,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The number of draw cycles since the menu was initialised.</summary>
         private int DrawCount;
 
+        /// <summary>Get whether the menu and its components have been initialised.</summary>
+        protected bool IsInitialised => this.DrawCount > 1;
+
         /// <summary>The backing field for <see cref="ActiveElement"/>; shouldn't be edited directly.</summary>
         private Element _activeElement;
 
@@ -150,40 +153,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /*********
         ** Public methods
         *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="menu">The underlying chest menu.</param>
-        /// <param name="chest">The selected chest.</param>
-        /// <param name="chests">The available chests.</param>
-        /// <param name="config">The mod configuration.</param>
-        /// <param name="keys">The configured key bindings.</param>
-        /// <param name="events">The SMAPI events available for mods.</param>
-        /// <param name="input">An API for checking and changing input state.</param>
-        /// <param name="translations">Provides translations stored in the mod's folder.</param>
-        /// <param name="showAutomateOptions">Whether to show Automate options.</param>
-        /// <param name="keepAlive">Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</param>
-        /// <param name="topOffset">The Y offset to apply relative to <see cref="IClickableMenu.yPositionOnScreen"/> when drawing the top UI elements.</param>
-        public BaseChestOverlay(IClickableMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, ITranslationHelper translations, bool showAutomateOptions, Func<bool> keepAlive, int topOffset = 0)
-            : base(events, input, keepAlive)
-        {
-            // data
-            this.ForMenuInstance = menu;
-            this.ShowAutomateOptions = showAutomateOptions;
-            this.TopOffset = topOffset;
-
-            // helpers
-            this.Translations = translations;
-
-            // menu
-            this.Menu = menu;
-
-            // chests & config
-            this.Chest = chest;
-            this.Chests = chests;
-            this.Categories = chests.Select(p => p.DisplayCategory).Distinct().OrderBy(p => p).ToArray();
-            this.Config = config;
-            this.Keys = keys;
-        }
-
         /// <summary>Sort the player's inventory.</summary>
         public void SortInventory()
         {
@@ -209,6 +178,40 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /*********
         ** Protected methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="menu">The underlying chest menu.</param>
+        /// <param name="chest">The selected chest.</param>
+        /// <param name="chests">The available chests.</param>
+        /// <param name="config">The mod configuration.</param>
+        /// <param name="keys">The configured key bindings.</param>
+        /// <param name="events">The SMAPI events available for mods.</param>
+        /// <param name="input">An API for checking and changing input state.</param>
+        /// <param name="translations">Provides translations stored in the mod's folder.</param>
+        /// <param name="showAutomateOptions">Whether to show Automate options.</param>
+        /// <param name="keepAlive">Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</param>
+        /// <param name="topOffset">The Y offset to apply relative to <see cref="IClickableMenu.yPositionOnScreen"/> when drawing the top UI elements.</param>
+        protected BaseChestOverlay(IClickableMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, ITranslationHelper translations, bool showAutomateOptions, Func<bool> keepAlive, int topOffset = 0)
+            : base(events, input, keepAlive)
+        {
+            // data
+            this.ForMenuInstance = menu;
+            this.ShowAutomateOptions = showAutomateOptions;
+            this.TopOffset = topOffset;
+
+            // helpers
+            this.Translations = translations;
+
+            // menu
+            this.Menu = menu;
+
+            // chests & config
+            this.Chest = chest;
+            this.Chests = chests;
+            this.Categories = chests.Select(p => p.DisplayCategory).Distinct().OrderBy(p => p).ToArray();
+            this.Config = config;
+            this.Keys = keys;
+        }
+
         /// <summary>Draw the overlay to the screen.</summary>
         /// <param name="batch">The sprite batch being drawn.</param>
         protected override void Draw(SpriteBatch batch)
@@ -317,8 +320,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="newBounds">The new game window bounds.</param>
         protected override void ReceiveGameWindowResized(xTile.Dimensions.Rectangle oldBounds, xTile.Dimensions.Rectangle newBounds)
         {
-            this.ChestSelector.ReceiveGameWindowResized();
-            this.CategorySelector?.ReceiveGameWindowResized();
             this.ReinitialiseComponents();
         }
 
@@ -327,7 +328,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveButtonPress(SButton input)
         {
-            if (this.IsInitialising())
+            if (!this.IsInitialised)
                 return false;
 
             bool canNavigate = this.CanCloseChest;
@@ -373,6 +374,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveScrollWheelAction(int amount)
         {
+            if (!this.IsInitialised)
+                return false;
+
             switch (this.ActiveElement)
             {
                 case Element.Menu:
@@ -418,6 +422,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveLeftClick(int x, int y)
         {
+            if (!this.IsInitialised)
+                return false;
+
             switch (this.ActiveElement)
             {
                 // edit form
@@ -518,6 +525,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveCursorHover(int x, int y)
         {
+            if (!this.IsInitialised)
+                return false;
+
             switch (this.ActiveElement)
             {
                 case Element.Menu:
@@ -711,12 +721,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         private ManagedChest[] GetChestsFromCategory(string category)
         {
             return this.Chests.Where(chest => chest.DisplayCategory == category).ToArray();
-        }
-
-        /// <summary>Get whether the menu is initialising itself.</summary>
-        private bool IsInitialising()
-        {
-            return this.DrawCount < 10;
         }
 
         /// <summary>Set whether the chest or inventory items should be clickable.</summary>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -96,12 +96,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         public void ReceiveScrollWheelAction(int direction)
         {
             this.Scroll(direction > 0 ? -1 : 1); // scrolling down moves first item up
-        }
-
-        /// <summary>The method invoked when the game window is resized.</summary>
-        public void ReceiveGameWindowResized()
-        {
-            this.ReinitialiseComponents();
         }
 
         /// <summary>Select an item in the list.</summary>
