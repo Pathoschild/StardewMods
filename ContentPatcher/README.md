@@ -17,6 +17,7 @@ that change the game's images and data without replacing XNB files.
   * [Global tokens](#global-tokens)
   * [Dynamic tokens](#dynamic-tokens)
   * [Player config](#player-config)
+* [Validate `content.json`](#validate-content-json)
 * [Release a content pack](#release-a-content-pack)
 * [Troubleshoot](#troubleshoot)
   * [Patch commands](#patch-commands)
@@ -1161,6 +1162,34 @@ When you run the game, a `config.json` file will appear automatically with text 
 
 Players can edit it to configure your content pack.
 
+## Validate `content.json`
+You can validate your `content.json` automatically to detect some common issues. (You should
+still test your content pack in-game before releasing it, since the validator won't detect all
+issues.)
+
+### How to validate
+Online:
+1. Go to [jsonschemavalidator.net](https://www.jsonschemavalidator.net/).
+2. Copy [the full schema text](https://raw.githubusercontent.com/Pathoschild/StardewMods/develop/ContentPatcher/docs/content.schema.json)
+   into the left box. (You don't need to do this every time, the page will remember your last schema.)
+3. Copy your `manifest.json` into the right box.
+4. See below the boxes for the results.
+
+Visual Studio:
+1. Add this field to your `content.json`, right under the opening `{` character:
+   ```js
+   "$schema": "https://raw.githubusercontent.com/Pathoschild/StardewMods/develop/ContentPatcher/docs/content.schema.json",
+   ```
+2. Check for warnings inline (might be shown on the opening `{` character) or in the errors list.
+
+### Tips
+* You should update your content pack to the latest format version whenever you update it, for best
+  futureproofing.
+* If you get an error like `Unexpected character`, your JSON syntax is invalid. Try checking the
+  line mentioned (or the one above it) for a missing comma, bracket, etc.
+* If you need help figuring out an error, see [_see also_](#see-also) for some links to places you
+  can ask.
+
 ## Release a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general
 info. Suggestions:
@@ -1473,3 +1502,4 @@ That's it! Now any content pack which lists your mod as a dependency can use the
 * [Release notes](release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1915)
 * [Discussion thread](https://community.playstarbound.com/threads/content-patcher.141420/)
+* [Ask for help in #modding on Discord](https://stardewvalleywiki.com/Modding:Community#Discord)

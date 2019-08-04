@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added `content.json` schema for validation (thanks to TehPers!).
+
 ## 1.9.2
 Released 25 July 2019.
 
