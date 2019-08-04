@@ -213,7 +213,6 @@
     "building.water-trough.summary": "{{filled}} de {{max}} cochas de água preenchidas",
 
     // bush lookup labels
-    // TODO
     "bush.name.berry": "Arbusto de bagas",
     "bush.name.plain": "Arbusto simples",
     "bush.description.berry": "Um arbusto que cresce amoras e amoras-silvestres.",
@@ -222,8 +221,8 @@
 
     // bush lookup values
     "bush.schedule.berry": "20% de chance de dar: 
-	  amora-silvestre, na primavera, entre os dias 15 e 18; 
-	  amoras no outono, entre os dias 8 a 11.",
+	"  amora-silvestre, na primavera, entre os dias 15 e 18; 
+	"  amoras no outono, entre os dias 8 a 11.",
 
     // fruit tree lookup labels
     "fruit-tree.complaints": "Reclamações  ",
