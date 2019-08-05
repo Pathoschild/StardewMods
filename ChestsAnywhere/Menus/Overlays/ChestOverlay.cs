@@ -111,13 +111,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="batch">The sprite batch being drawn.</param>
         protected override void Draw(SpriteBatch batch)
         {
-            base.Draw(batch);
-
             if (!this.ActiveElement.HasFlag(Element.EditForm))
             {
                 float navOpacity = this.CanCloseChest ? 1f : 0.5f;
                 this.SortInventoryButton?.draw(batch, Color.White * navOpacity, 1f);
             }
+
+            base.Draw(batch); // run base logic last, to draw cursor over everything else
         }
 
         /// <summary>Initialise the edit-chest overlay for rendering.</summary>
