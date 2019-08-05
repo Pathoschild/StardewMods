@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Updated for Stardew Valley 1.4, including new content.
+* Improved translations. Thanks to shiro2579 (updated Portuguese)!
 
 ## 1.22.2
 Released 25 July 2019.
