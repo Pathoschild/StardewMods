@@ -17,7 +17,7 @@ that change the game's images and data without replacing XNB files.
   * [Global tokens](#global-tokens)
   * [Dynamic tokens](#dynamic-tokens)
   * [Player config](#player-config)
-* [Validate `content.json`](#validate-content-json)
+* [Validate JSON files](#validate-json-files)
 * [Release a content pack](#release-a-content-pack)
 * [Troubleshoot](#troubleshoot)
   * [Patch commands](#patch-commands)
@@ -1162,25 +1162,21 @@ When you run the game, a `config.json` file will appear automatically with text 
 
 Players can edit it to configure your content pack.
 
-## Validate `content.json`
-You can validate your `content.json` automatically to detect some common issues. (You should
-still test your content pack in-game before releasing it, since the validator won't detect all
-issues.)
+## Validate JSON files
+You can validate your `content.json` and `manifest.json` automatically to detect some common issues.
+(You should still test your content pack in-game before releasing it, since the validator won't
+detect all issues.)
 
-### How to validate
-Online:
-1. Go to [jsonschemavalidator.net](https://www.jsonschemavalidator.net/).
-2. Copy [the full schema text](https://raw.githubusercontent.com/Pathoschild/StardewMods/develop/ContentPatcher/docs/content.schema.json)
-   into the left box. (You don't need to do this every time, the page will remember your last schema.)
-3. Copy your `manifest.json` into the right box.
-4. See below the boxes for the results.
+To validate online:
+1. Go to [json.smapi.io](https://json.smapi.io/).
+2. Set the format to 'Manifest' (for `manifest.json`) or 'Content Patcher' (for `content.json`).
+3. Drag & drop the JSON file onto the textbox, or paste in the text.
+4. Click the button to view the validation summary. You can optionally share the URL to let someone
+   else see the result.
 
-Visual Studio:
-1. Add this field to your `content.json`, right under the opening `{` character:
-   ```js
-   "$schema": "https://raw.githubusercontent.com/Pathoschild/StardewMods/develop/ContentPatcher/docs/content.schema.json",
-   ```
-2. Check for warnings inline (might be shown on the opening `{` character) or in the errors list.
+To validate in a text editor that supports JSON Schema, see
+[_Using a schema file directly_](https://github.com/Pathoschild/SMAPI/blob/develop/docs/technical/web.md#using-a-schema-file-directly)
+in the JSON validator documentation.
 
 ### Tips
 * You should update your content pack to the latest format version whenever you update it, for best

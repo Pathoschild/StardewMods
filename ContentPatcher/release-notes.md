@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Added `content.json` schema for validation (thanks to TehPers!).
+* Content pack creators can now [validate `manifest.json` and `content.json`](https://github.com/Pathoschild/StardewMods/tree/develop/ContentPatcher#validate-contentjson) for common issues.
 
 ## 1.9.2
 Released 25 July 2019.
