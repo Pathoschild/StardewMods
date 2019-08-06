@@ -1,3 +1,4 @@
+using System;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -15,11 +16,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The underlying chest menu.</summary>
         private readonly ShopMenu Menu;
 
-        /// <summary>The default highlight function for the chest items.</summary>
-        private readonly InventoryMenu.highlightThisItem DefaultChestHighlighter;
+        /// <summary>The default purchase filter for the shop menu items.</summary>
+        private readonly Func<int, bool> DefaultPurchaseFilter;
 
-        ///// <summary>The default highlight function for the player inventory items.</summary>
-        //private readonly InventoryMenu.highlightThisItem DefaultInventoryHighlighter;
+        /// <summary>The default highlight function for the player inventory items.</summary>
+        private readonly InventoryMenu.highlightThisItem DefaultInventoryHighlighter;
 
 
         /*********
@@ -39,8 +40,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             : base(menu, chest, chests, config, keys, events, input, translations, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ShopMenu, topOffset: Game1.pixelZoom * 6)
         {
             this.Menu = menu;
-            this.DefaultChestHighlighter = menu.inventory.highlightMethod;
-            //this.DefaultInventoryHighlighter = chest.Container.CanAcceptItem;
+            this.DefaultPurchaseFilter = menu.canPurchaseCheck;
+            this.DefaultInventoryHighlighter = menu.inventory.highlightMethod;
         }
 
 
@@ -53,13 +54,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         {
             if (clickable)
             {
-                this.Menu.inventory.highlightMethod = this.DefaultChestHighlighter;
-                //this.MenuInventoryMenu.highlightMethod = this.DefaultInventoryHighlighter;
+                this.Menu.canPurchaseCheck = this.DefaultPurchaseFilter;
+                this.Menu.inventory.highlightMethod = this.DefaultInventoryHighlighter;
             }
             else
             {
+                this.Menu.canPurchaseCheck = item => false;
                 this.Menu.inventory.highlightMethod = item => false;
-                //this.MenuInventoryMenu.highlightMethod = item => false;
             }
         }
     }
