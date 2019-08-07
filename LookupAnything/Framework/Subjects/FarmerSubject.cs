@@ -20,9 +20,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /*********
         ** Fields
         *********/
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
-
         /// <summary>The lookup target.</summary>
         private readonly SFarmer Target;
 
@@ -40,12 +37,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="farmer">The lookup target.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="isLoadMenu">Whether this is being displayed on the load menu, before the save data is fully initialised.</param>
-        public FarmerSubject(GameHelper gameHelper, SFarmer farmer, ITranslationHelper translations, IReflectionHelper reflectionHelper, bool isLoadMenu = false)
+        public FarmerSubject(GameHelper gameHelper, SFarmer farmer, ITranslationHelper translations, bool isLoadMenu = false)
             : base(gameHelper, farmer.Name, null, L10n.Types.Player(), translations)
         {
-            this.Reflection = reflectionHelper;
             this.Target = farmer;
             this.IsLoadMenu = isLoadMenu;
             this.RawSaveData = isLoadMenu
@@ -135,8 +130,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // get daily luck message
-            TV tv = new TV();
-            return this.Reflection.GetMethod(tv, "getFortuneForecast").Invoke<string>();
+            return new TV().getFortuneForecast(this.Target);
         }
 
         /// <summary>Get the human-readable farm type selected by the player.</summary>

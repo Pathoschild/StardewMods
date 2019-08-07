@@ -289,7 +289,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                 // player
                 case TargetType.Farmer:
-                    return new FarmerSubject(this.GameHelper, target.GetValue<Farmer>(), this.Translations, this.Reflection);
+                    return new FarmerSubject(this.GameHelper, target.GetValue<Farmer>(), this.Translations);
 
                 // animal
                 case TargetType.FarmAnimal:
@@ -436,7 +436,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             if (socialID is long playerID)
                             {
                                 Farmer player = Game1.getFarmer(playerID);
-                                return new FarmerSubject(this.GameHelper, player, this.Translations, this.Reflection);
+                                return new FarmerSubject(this.GameHelper, player, this.Translations);
                             }
                             else if (socialID is string villagerName)
                             {
@@ -490,7 +490,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             var slots = this.Reflection.GetProperty<List<LoadGameMenu.MenuSlot>>(loadMenu, "MenuSlots").GetValue();
                             LoadGameMenu.SaveFileSlot slot = slots[index] as LoadGameMenu.SaveFileSlot;
                             if (slot?.Farmer != null)
-                                return new FarmerSubject(this.GameHelper, slot.Farmer, this.Translations, this.Reflection, isLoadMenu: true);
+                                return new FarmerSubject(this.GameHelper, slot.Farmer, this.Translations, isLoadMenu: true);
                         }
                     }
                     break;

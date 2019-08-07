@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Updated for Stardew Valley 1.4, including new content.
+* Fixed player luck in multiplayer showing your own luck instead of theirs.
 * Fixed 'scissor rectangle is invalid' error in rare cases.
 * Improved translations. Thanks to shiro2579 (updated Portuguese)!
 

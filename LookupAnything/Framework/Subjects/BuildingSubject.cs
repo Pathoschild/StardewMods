@@ -91,7 +91,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // owner
             Farmer owner = this.GetOwner();
             if (owner != null)
-                yield return new LinkField(this.GameHelper, L10n.Building.Owner(), owner.Name, () => new FarmerSubject(this.GameHelper, owner, text, this.Reflection));
+                yield return new LinkField(this.GameHelper, L10n.Building.Owner(), owner.Name, () => new FarmerSubject(this.GameHelper, owner, text));
             else if (building.indoors.Value is Cabin)
                 yield return new GenericField(this.GameHelper, L10n.Building.Owner(), L10n.Building.OwnerNone());
 
