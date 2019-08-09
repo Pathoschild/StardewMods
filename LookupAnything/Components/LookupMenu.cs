@@ -67,6 +67,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Whether the game HUD was enabled when the menu was opened.</summary>
         private readonly bool WasHudEnabled;
 
+        /// <summary>Whether to exit the menu on the next update tick.</summary>
+        private bool ExitOnNextTick;
+
 
         /*********
         ** Public methods
@@ -183,9 +186,26 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             }
         }
 
+        /// <summary>Update the menu state if needed.</summary>
+        /// <param name="time">The elapsed game time.</param>
+        public override void update(GameTime time)
+        {
+            if (this.ExitOnNextTick && this.readyToClose())
+                this.exitThisMenu();
+            else
+                base.update(time);
+        }
+
         /****
         ** Methods
         ****/
+        /// <summary>Exit the menu at the next safe opportunity.</summary>
+        /// <remarks>This circumvents an issue where the game may freeze in some cases like the load selection screen when the menu is exited at an arbitrary time.</remarks>
+        public void QueueExit()
+        {
+            this.ExitOnNextTick = true;
+        }
+
         /// <summary>Scroll up the menu content by the specified amount (if possible).</summary>
         public void ScrollUp()
         {
@@ -428,6 +448,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         protected override void cleanupBeforeExit()
         {
             Game1.displayHUD = this.WasHudEnabled;
+            base.cleanupBeforeExit();
         }
 
         /// <summary>Get the maximum width and height for the given viewport size.</summary>
@@ -435,9 +456,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="viewportHeight">The viewport height.</param>
         private Point GetMenuSize(int viewportWidth, int viewportHeight)
         {
-            int width = Math.Min(Game1.tileSize * 20, viewportWidth);
-            int height = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * width), viewportHeight);
-            return new Point(width, height);
+            int maxWidth = Math.Min(Game1.tileSize * 20, viewportWidth);
+            int maxHeight = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * maxWidth), viewportHeight);
+            return new Point(maxWidth, maxHeight);
         }
     }
 }

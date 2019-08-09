@@ -300,7 +300,7 @@ namespace Pathoschild.Stardew.LookupAnything
             this.Monitor.InterceptErrors("closing the menu", () =>
             {
                 if (Game1.activeClickableMenu is LookupMenu menu)
-                    menu.exitThisMenu();
+                    menu.QueueExit();
             });
         }
 
