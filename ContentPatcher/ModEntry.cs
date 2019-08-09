@@ -238,7 +238,7 @@ namespace ContentPatcher
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             helper.Events.Player.Warped += this.OnWarped;
-            helper.Events.Specialised.LoadStageChanged += this.OnLoadStageChanged;
+            helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
 
             // set up commands
             this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, () => this.UpdateContext());
@@ -546,7 +546,7 @@ namespace ContentPatcher
                             // init patch
                             if (!this.TryPrepareLocalAsset(entry.FromFile, tokenContext, forMod, migrator, out string error, out IParsedTokenString fromAsset))
                                 return TrackSkip(error);
-                            patch = new LoadPatch(entry.LogName, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
+                            patch = new LoadPatch(entry.LogName, pack, assetName, conditions, fromAsset, this.Helper.Content.NormalizeAssetName);
                         }
                         break;
 
@@ -634,7 +634,7 @@ namespace ContentPatcher
                             }
 
                             // save
-                            patch = new EditDataPatch(entry.LogName, pack, assetName, conditions, entries, fields, moveEntries, this.Monitor, this.Helper.Content.NormaliseAssetName);
+                            patch = new EditDataPatch(entry.LogName, pack, assetName, conditions, entries, fields, moveEntries, this.Monitor, this.Helper.Content.NormalizeAssetName);
                         }
                         break;
 
@@ -649,7 +649,7 @@ namespace ContentPatcher
                             // save
                             if (!this.TryPrepareLocalAsset(entry.FromFile, tokenContext, forMod, migrator, out string error, out IParsedTokenString fromAsset))
                                 return TrackSkip(error);
-                            patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormaliseAssetName);
+                            patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormalizeAssetName);
                         }
                         break;
 
@@ -665,7 +665,7 @@ namespace ContentPatcher
                                 return TrackSkip($"must specify {nameof(entry.ToArea)} (use \"Action\": \"Load\" if you want to replace the whole map file)");
 
                             // save
-                            patch = new EditMapPatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, this.Monitor, this.Helper.Content.NormaliseAssetName);
+                            patch = new EditMapPatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, this.Monitor, this.Helper.Content.NormalizeAssetName);
                         }
                         break;
 
