@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common.Integrations.JsonAssets;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
@@ -10,14 +11,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
     internal class FruitTreeTarget : GenericTarget<FruitTree>
     {
         /*********
+        ** Fields
+        *********/
+        /// <summary>The underlying tree texture.</summary>
+        private readonly Texture2D Texture;
+
+        /// <summary>The source rectangle containing the tree sprites in the <see cref="Texture"/>.</summary>
+        private readonly Rectangle SourceRect;
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="value">The underlying in-game entity.</param>
+        /// <param name="jsonAssets">The Json Assets API.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        public FruitTreeTarget(GameHelper gameHelper, FruitTree value, Vector2? tilePosition = null)
-            : base(gameHelper, TargetType.FruitTree, value, tilePosition) { }
+        public FruitTreeTarget(GameHelper gameHelper, FruitTree value, JsonAssetsIntegration jsonAssets, Vector2? tilePosition = null)
+            : base(gameHelper, TargetType.FruitTree, value, tilePosition)
+        {
+            this.GetSpriteSheet(value, jsonAssets, out this.Texture, out this.SourceRect);
+        }
 
         /// <summary>Get the sprite's source rectangle within its texture.</summary>
         public override Rectangle GetSpritesheetArea()
@@ -26,7 +41,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 
             // stump
             if (tree.stump.Value)
-                return new Rectangle(384, tree.treeType.Value * 5 * 16 + 48, 48, 32);
+                return new Rectangle(this.SourceRect.X + 384, this.SourceRect.Y + 48, 48, 32);
 
             // growing tree
             if (tree.growthStage.Value < 4)
@@ -36,15 +51,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
                     case 0:
                     case 1:
                     case 2:
-                        return new Rectangle(tree.growthStage.Value * 48, tree.treeType.Value * 5 * 16, 48, 80);
+                        return new Rectangle(this.SourceRect.X + (tree.growthStage.Value * 48), this.SourceRect.Y, 48, 80);
 
                     default:
-                        return new Rectangle(144, tree.treeType.Value * 5 * 16, 48, 80);
+                        return new Rectangle(this.SourceRect.X + 144, this.SourceRect.Y, 48, 80);
                 }
             }
 
             // grown tree
-            return new Rectangle((12 + (tree.GreenHouseTree ? 1 : Utility.getSeasonNumber(Game1.currentSeason)) * 3) * 16, tree.treeType.Value * 5 * 16, 48, 16 + 64);
+            return new Rectangle(this.SourceRect.X + ((12 + (tree.GreenHouseTree ? 1 : Utility.getSeasonNumber(Game1.currentSeason)) * 3) * 16), this.SourceRect.Y, 48, 16 + 64);
         }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
@@ -84,10 +99,29 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <remarks>Reverse engineered from <see cref="FruitTree.draw"/>.</remarks>
         public override bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea)
         {
-            Texture2D spriteSheet = FruitTree.texture;
-            Rectangle sourceRectangle = this.GetSpritesheetArea();
             SpriteEffects spriteEffects = this.Value.flipped.Value ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            return this.SpriteIntersectsPixel(tile, position, spriteArea, spriteSheet, sourceRectangle, spriteEffects);
+            return this.SpriteIntersectsPixel(tile, position, spriteArea, this.Texture, this.GetSpritesheetArea(), spriteEffects);
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get the in-world sprite sheet for a target.</summary>
+        /// <param name="target">The target whose texture to get.</param>
+        /// <param name="jsonAssets">The Json Assets API.</param>
+        /// <param name="texture">The custom sprite texture.</param>
+        /// <param name="sourceRect">The custom area within the texture. </param>
+        /// <returns>Returns true if the entity has a custom sprite, else false.</returns>
+        public void GetSpriteSheet(FruitTree target, JsonAssetsIntegration jsonAssets, out Texture2D texture, out Rectangle sourceRect)
+        {
+            // get from Json Assets
+            if (jsonAssets.IsLoaded && jsonAssets.TryGetCustomSpriteSheet(target, out texture, out sourceRect))
+                return;
+
+            // use vanilla logic
+            texture = FruitTree.texture;
+            sourceRect = new Rectangle(x: 0, y: target.treeType.Value * 5 * 16, width: 432, height: 80);
         }
     }
 }

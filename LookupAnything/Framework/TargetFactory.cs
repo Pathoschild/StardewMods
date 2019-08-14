@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common.Integrations.JsonAssets;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
@@ -18,7 +19,7 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
-    /// <summary>Finds and analyses lookup targets in the world.</summary>
+    /// <summary>Finds and analyzes lookup targets in the world.</summary>
     internal class TargetFactory
     {
         /*********
@@ -36,6 +37,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         private readonly GameHelper GameHelper;
 
+        /// <summary>The Json Assets API.</summary>
+        private readonly JsonAssetsIntegration JsonAssets;
+
 
         /*********
         ** Public methods
@@ -48,12 +52,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-        public TargetFactory(Metadata metadata, ITranslationHelper translations, IReflectionHelper reflection, GameHelper gameHelper)
+        /// <param name="jsonAssets">The Json Assets API.</param>
+        public TargetFactory(Metadata metadata, ITranslationHelper translations, IReflectionHelper reflection, GameHelper gameHelper, JsonAssetsIntegration jsonAssets)
         {
             this.Metadata = metadata;
             this.Translations = translations;
             this.Reflection = reflection;
             this.GameHelper = gameHelper;
+            this.JsonAssets = jsonAssets;
         }
 
         /****
@@ -130,13 +136,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         break;
 
                     case HoeDirt dirt when dirt.crop != null:
-                        yield return new CropTarget(this.GameHelper, dirt, spriteTile, this.Reflection);
+                        yield return new CropTarget(this.GameHelper, dirt, spriteTile, this.Reflection, this.JsonAssets);
                         break;
 
                     case FruitTree fruitTree:
                         if (this.Reflection.GetField<float>(fruitTree, "alpha").GetValue() < 0.8f)
                             continue; // ignore when tree is faded out (so player can lookup things behind it)
-                        yield return new FruitTreeTarget(this.GameHelper, fruitTree, spriteTile);
+                        yield return new FruitTreeTarget(this.GameHelper, fruitTree, this.JsonAssets, spriteTile);
                         break;
 
                     case Tree wildTree:
