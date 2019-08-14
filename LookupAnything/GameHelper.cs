@@ -176,9 +176,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get all NPCs currently in the world.</summary>
         public IEnumerable<NPC> GetAllCharacters()
         {
-            List<NPC> characters = new List<NPC>();
-            Utility.getAllCharacters(characters);
-            return characters.Distinct(); // fix rare issue where the game duplicates an NPC (seems to happen when the player's child is born)
+            return Utility
+                .getAllCharacters(new List<NPC>())
+                .Distinct(); // fix rare issue where the game duplicates an NPC (seems to happen when the player's child is born)
         }
 
         /// <summary>Count how many of an item the player owns.</summary>
