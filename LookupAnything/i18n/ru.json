@@ -42,12 +42,12 @@
 
     // item qualities
     "quality.normal": "обычное",
-    "quality.silver": "серебрянный",
-    "quality.gold": "золотой",
-    "quality.iridium": "иридиумовый",
+    "quality.silver": "серебрянное",
+    "quality.gold": "золотое",
+    "quality.iridium": "иридиевое",
 
     // NPC friendship
-    "friendship-status.friendly": "Друг",
+    "friendship-status.friendly": "Дружный",
     "friendship-status.dating": "Пара",
     "friendship-status.engaged": "Помолвлены",
     "friendship-status.married": "В браке",
@@ -81,22 +81,22 @@
     *********/
     "data.npc.pet.description": "Ваш преданный питомец.",
     "data.npc.horse.description": "Ваш верный конь.",
-    "data.npc.junimo.description": "Дух леса из мира духов. О них известно очень мало.",
+    "data.npc.junimo.description": "Дух леса из мира духов. Мало что известно о них.",
 
     /*********
     ** Item overrides
     *********/
     // item types
-    "data.type.debris": "Строительный мусор",
+    "data.type.debris": "Мусор",
     "data.type.stone": "Камень",
     "data.type.container": "Контейнер",
 
     // farm
-    "data.item.egg-incubator.description": "Вылупляет циплят и утят.",
+    "data.item.egg-incubator.description": "Вылупляет цыплят и утят.",
     "data.item.broken-branch.name": "Сломанная ветка",
     "data.item.broken-branch.description": "Сломанная ветка. Разрубите топором, чтобы получить дерево.",
     "data.item.stone.name": "Камень",
-    "data.item.stone.description": "Серый булыжник. Разбейте, чтобы получить камень.",
+    "data.item.stone.description": "Невзрачный серый камень. Разбейте, чтобы получить камень.",
     "data.item.geode.name": "Жеодовая жила",
     "data.item.geode.description": "Разбейте, чтобы получить жеоды.",
     "data.item.frozen-geode.name": "Морозная жеодовая жила",
@@ -106,11 +106,11 @@
 
     // weeds & crystals
     "data.item.weed.name": "Сорняк",
-    "data.item.weed.description": "Сорняк. Может содержать волокно или смешанные семена.",
+    "data.item.weed.description": "Невзрачный сорняк. Может содержать волокно или смешанные семена.",
     "data.item.fertile-weed.name": "Плодородный сорняк",
     "data.item.fertile-weed.description": "Гарантированно выпадают смешанные семена.",
     "data.item.ice-crystal.name": "Ледяной кристалл",
-    "data.item.ice-crystal.description": "Обычный ледяной кристалл. Очень малый шанс выпадения очищенного кварца.",
+    "data.item.ice-crystal.description": "Невзрачный ледяной кристалл. Очень малый шанс выпадения очищенного кварца.",
 
     // mine gems
     "data.item.amethyst-node.name": "Аметистовая жила",
@@ -139,15 +139,15 @@
     "data.item.copper-node.description": "Разбейте для получения медной руды.",
     "data.item.gold-node.name": "Золотая жила",
     "data.item.gold-node.description": "Разбейте для получения золотой руды.",
-    "data.item.iridum-node.name": "Иридиумная жила",
-    "data.item.iridum-node.description": "Разбейте для получения иридиумной руды.",
+    "data.item.iridum-node.name": "Иридиевая жила",
+    "data.item.iridum-node.description": "Разбейте для получения иридиевой руды.",
     "data.item.iron-node.name": "Железная жила",
     "data.item.iron-node.description": "Разбейте для получения железной руды.",
 
     // mine stones
-    "data.item.colored-stone.name": "Цветной булыжник",
-    "data.item.colored-stone.description": "Цветной булыжник. Может содержать камни, руду или жеоды.",
-    "data.item.mine-stone.name": "Булыжник",
+    "data.item.colored-stone.name": "Цветной камень",
+    "data.item.colored-stone.description": "Невзрачный камень. Может содержать камни, руду или жеоды.",
+    "data.item.mine-stone.name": "Камень",
     "data.item.mine-stone.description": "Разбейте, чтобы получить камень.",
 
     // mine containers
@@ -162,17 +162,17 @@
     // animal lookup labels
     "animal.love": "Привязанность",
     "animal.happiness": "Счастье",
-    "animal.mood": "Забота за сегодня",
+    "animal.mood": "На сегодня в настроении",
     "animal.complaints": "Жалобы",
     "animal.produce-ready": "Продукция готова",
     "animal.growth": "Рост",
-    "animal.sells-for": "Продажа за",
+    "animal.sells-for": "Продаётся за",
 
     // animal lookup values
-    "animal.complaints.hungry": "Не был накормлен вчера",
-    "animal.complaints.left-out": "Прошлой ночью остался снаружи",
+    "animal.complaints.hungry": "Кушал вчера",
+    "animal.complaints.left-out": "Остался снаружи прошлой ночью",
     "animal.complaints.new-home": "Переехал в новый дом",
-    "animal.complaints.no-heater": "Нет отопления зимой",
+    "animal.complaints.no-heater": "Не обогревался зимой",
     "animal.complaints.not-petted": "Не проявлена забота сегодня",
     "animal.complaints.wild-animal-attack": "Атакован диким животным этой ночью",
 
@@ -181,10 +181,10 @@
     "building.construction": "Строительство",
     "building.feed-trough": "Кормушка",
     "building.horse": "Лошадь",
-    "building.horse-location": "Расположение лошади",
+    "building.horse-location": "Местоположение лошади",
     "building.owner": "Владелец",
-    "building.slimes": "Слаймов",
-    "building.stored-hay": "Сена",
+    "building.slimes": "Слизни",
+    "building.stored-hay": "Запасённое сено",
     "building.upgrades": "Улучшения",
     "building.water-trough": "Корыто",
 
@@ -195,21 +195,21 @@
     "building.feed-trough.summary": "{{filled}} из {{max}} заполненных слотов",
     "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
     "building.junimo-harvesting-enabled": "Сбор урожая включен",
-    "building.owner.none": "отсутствует",
+    "building.owner.none": "без владельца",
     "building.output-processing": "В очереди",
     "building.output-ready": "Готово",
-    "building.slimes.summary": "{{count}} из {{max}}",
+    "building.slimes.summary": "{{count}} из {{max}} слизней",
     "building.stored-hay.summary-one-silo": "{{hayCount}} сена (максимум: {{maxHay}})",
     "building.stored-hay.summary-multiple-silos": "{{hayCount}} сена в {{siloCount}} силосных башнях (максимум: {{maxHay}})",
-    "building.upgrades.barn.0": "до 4 животных, разблокируются: коровы.",
-    "building.upgrades.barn.1": "до 8 животных; разблокируются: козлы и беременность животных.",
-    "building.upgrades.barn.2": "до 12 животных; разблокируются: система подачи корма, свиньи и овцы.",
+    "building.upgrades.barn.0": "до 4-ёх животных, разблокируется: коровы.",
+    "building.upgrades.barn.1": "до 8-ми животных; разблокируются: козлы и беременность животных.",
+    "building.upgrades.barn.2": "до 12-ти животных; разблокируются: система подачи корма, свиньи и овцы.",
     "building.upgrades.cabin.0": "Первоначальный дом",
     "building.upgrades.cabin.1": "разблокируются: кухня, возможность провести свадьбу",
-    "building.upgrades.cabin.2": "разблокируются: возможность завести ребенка",
-    "building.upgrades.coop.0": "до 4 животных; разблокируются: курицы",
-    "building.upgrades.coop.1": "до 8 животных; разблокируются: инкубатор, динозавры и утки",
-    "building.upgrades.coop.2": "до 12 животных; разблокируются: система подачи корма and кролики",
+    "building.upgrades.cabin.2": "разблокируется: возможность завести ребенка",
+    "building.upgrades.coop.0": "до 4-ёх животных; разблокируются: курицы",
+    "building.upgrades.coop.1": "до 8-ми животных; разблокируются: инкубатор, динозавры и утки",
+    "building.upgrades.coop.2": "до 12-ти животных; разблокируются: система подачи корма и кролики",
     "building.water-trough.summary": "{{filled}} из {{max}} корыт заполнено",
 
     // bush lookup labels
@@ -224,7 +224,7 @@
 
     // fruit tree lookup labels
     "fruit-tree.complaints": "Жалобы",
-    "fruit-tree.name": "{{fruitName}}",
+    "fruit-tree.name": "{{fruitName}} Дерево",
     "fruit-tree.growth": "Рост",
     "fruit-tree.next-fruit": "След. урожай",
     "fruit-tree.season": "Сезон",
@@ -232,7 +232,7 @@
 
     // fruit tree lookup values
     "fruit-tree.complaints.adjacent-objects": "не может расти из-за соседних объектов",
-    "fruit-tree.growth.summary": "вырастет {{date}}",
+    "fruit-tree.growth.summary": "созреет через {{date}}",
     "fruit-tree.next-fruit.struck-by-lighting": "Поражено молнией! Восстановится через {{count}} дн.",
     "fruit-tree.next-fruit.out-of-season": "Вне сезона",
     "fruit-tree.next-fruit.max-fruit": "больше нет места, соберите то что уже есть.",
@@ -253,7 +253,7 @@
     "crop.summary.harvest-once": "урожай через {{daysToFirstHarvest}} дн.",
     "crop.summary.harvest-multi": "урожай через {{daysToFirstHarvest}} дн., затем каждые {{daysToNextHarvests}} дн.",
     "crop.summary.seasons": "сезон роста - {{seasons}}",
-    "crop.summary.sells-for": "продается за {{price}}",
+    "crop.summary.sells-for": "продаётся за {{price}}",
     "crop.harvest.too-late": "слишком поздно в этом сезоне для следующего сбора (урожай {{date}})",
 
     // item lookup labels
@@ -262,24 +262,24 @@
 
     "item.crabpot-bait": "Наживка",
     "item.crabpot-bait-needed": "Нужна наживка!",
-    "item.crabpot-bait-not-needed": "Не требуется, в связи с профессией 'Мастер по наживке'.",
+    "item.crabpot-bait-not-needed": "Не требуется, из-за профессии 'Мастер по наживке'.",
 
     "item.fence-health": "Здоровье",
 
     "item.contents": "Содержит",
     "item.likes-this": "Нравится",
     "item.loves-this": "Любят",
-    "item.needed-for": "Используется",
+    "item.needed-for": "Необходим для",
     "item.number-owned": "Наличие",
     "item.number-cooked": "Приготовлено",
     "item.number-crafted": "Создано",
     "item.recipes": "Рецепты",
-    "item.see-also": "Также смотрите",
+    "item.see-also": "Также смотри",
     "item.sells-for": "Продаётся за",
     "item.sells-to": "Место продажи",
 
     // item lookup values
-    "item.cask-schedule.now": "{{quality}} уже готово.",
+    "item.cask-schedule.now": "{{quality}} теперь готово.",
     "item.cask-schedule.now-partial": "{{quality}} сейчас (используйте кирку для остановки старения)",
     "item.cask-schedule.tomorrow": "{{quality}} завтра",
     "item.cask-schedule.in-x-days": "{{quality}} через {{count}} дн. ({{date}})",
@@ -318,16 +318,16 @@
     "monster.adventure-guild.progress": "убито {{count}} из {{requiredCount}}",
 
     // NPC lookup labels
-    "npc.birthday": "День Рождения",
+    "npc.birthday": "День рождения",
     "npc.can-romance": "Возможны отношения",
     "npc.friendship": "Привязанность",
     "npc.talked-today": "Разговор за сегодня",
     "npc.gifted-today": "Подарок за сегодня",
     "npc.gifted-this-week": "Подарки за эту неделю",
     "npc.kissed-today": "Поцелуй за сегодня",
-    "npc.loves-gifts": "Любит",
-    "npc.likes-gifts": "Нравится",
-    "npc.neutral-gifts": "Равнодушно",
+    "npc.loves-gifts": "Любит подарки:",
+    "npc.likes-gifts": "Нравятся подарки:",
+    "npc.neutral-gifts": "Равнодушен к подаркам:",
 
     // NPC lookup values
     "npc.can-romance.married": "Вы женаты! <", // < turns into a heart
@@ -341,14 +341,14 @@
     // NPC child lookup values
     "npc.child.age.description-partial": "{{label}} ({{count}} дн. до {{nextLabel}})",
     "npc.child.age.description-grown": "{{label}}",
-    "npc.child.age.newborn": "новорожденный",
+    "npc.child.age.newborn": "новорождённый",
     "npc.child.age.baby": "младенец",
-    "npc.child.age.crawler": "ползунок",
-    "npc.child.age.toddler": "ходунок",
+    "npc.child.age.crawler": "ползун",
+    "npc.child.age.toddler": "ходун",
 
     // pet lookup labels
     "pet.love": "Привязанность",
-    "pet.petted-today": "Забота за сегодня",
+    "pet.petted-today": "За сегодня в настроении",
 
     // player lookup labels
     "player.farm-name": "Название фермы",
@@ -372,11 +372,11 @@
     "player.skill.progress-last": "ур. {{level}}",
 
     // tile lookup labels
-    "tile.description": "Позиция тайла на карте. Включается в конфигурационном файле мода.",
+    "tile.description": "Позиция тайла на карте. Это отображается, потому что вы включили просмотр тайлов в конфигурационном файле мода.",
     "tile.map-name": "Название локации",
     "tile.tile": "Тайл",
     "tile.tile-index": "{{layerName}}: индекс тайла",
-    "tile.tilesheet": "{{layerName}}: тайлсет",
+    "tile.tilesheet": "{{layerName}}: таблица тайла",
     "tile.blend-mode": "{{layerName}}: режим перекрытия",
     "tile.index-property": "{{layerName}}: ix свойства: {{propertyName}}",
     "tile.tile-property": "{{layerName}}: свойства: {{propertyName}}",
@@ -399,14 +399,14 @@
     "tree.stage.done": "полностью выросло",
     "tree.stage.partial": "{{stageName}} ({{step}} из {{max}})",
     "tree.next-growth.winter": "не может расти зимой вне теплицы",
-    "tree.next-growth.adjacent-trees": "не может расти, так как рядом нет места.",
-    "tree.next-growth.random": "20% шанс завтра превратиться в {{stage}}",
+    "tree.next-growth.adjacent-trees": "не может расти, т.к рядом нет места.",
+    "tree.next-growth.random": "20% шанс, что завтра вырастит в {{stage}}",
 
     // tree stages
     "tree.stages.seed": "семя",
     "tree.stages.sprout": "росток",
-    "tree.stages.sapling": "побег",
+    "tree.stages.sapling": "саженец",
     "tree.stages.bush": "куст",
-    "tree.stages.smallTree": "деревце",
+    "tree.stages.smallTree": "малое дерево",
     "tree.stages.tree": "дерево"
 }
