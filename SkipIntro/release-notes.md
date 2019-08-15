@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Updated for Stardew Valley 1.4.
+
 ## 1.8.2
 Released 07 December 2018.
 
