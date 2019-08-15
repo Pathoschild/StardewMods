@@ -51,24 +51,363 @@ consume fertiliser or seeds when you sow those, though.
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
 file in a text editor to configure the mod.
 
-These are the available settings:
+### Global settings
+<table>
+<tr>
+<th>setting</th>
+<th>effect</th>
+</tr>
 
-setting | effect
-:------ | :-----
-`Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `Backspace` to summon a tractor. Available inputs:<ul><li>`SummonTractor`: warp an available tractor to your position.</li><li>`DismissTractor`: return the tractor you're riding to its home.</li><li>`HoldToActivate`: if specified, the tractor will only do something while you're holding this button. If nothing is specified, tractor will work automatically.</li></ul>
-`StandardAttachments` | Toggle features for all built-in attachments.
-`BuildPrice` | The gold price to buy a tractor garage. Default 150,000g.
-`BuildMaterials` | The materials needed to build a tractor garage (see [object IDs](https://stardewvalleywiki.com/Modding:Object_data)). Default 20 iron bars, 5 iridium bars, and 5 battery packs.
+<tr>
+<td>
 
-And set some advanced options:
+`Controls`
 
-setting | effect
-:------ | :-----
-`Distance` | The number of tiles on each side of the tractor to affect (in addition to the tile under it). Default 1, which is a 3 by 3 grid.
-`TractorSpeed` | The speed modifier when riding a tractor. Default -2.
-`MagneticRadius` | The item magnetism amount (higher values attract items from father away). Default 384.
-`HighlightRadius` | Whether to highlight the tractor radius when riding one. Default `false`.
-`CustomAttachments` | The custom items or tools to apply. If you specify something that's already supported (like the axe), this will override all limitations on its use. These must match the exact internal item/tool names (not the translated display names). For example: `"CustomAttachments": ["Axe"]`
+</td>
+<td>
+
+The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)).
+You can separate multiple buttons with commas. The default keyboard bindings are `Backspace` to
+summon a tractor. Available inputs:
+* `SummonTractor`: warp an available tractor to your position.
+* `DismissTractor`: return the tractor you're riding to its home.
+* `HoldToActivate`: if specified, the tractor will only do something while you're holding this
+  button. If nothing is specified, the tractor will work automatically while you're riding it.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`BuildPrice`
+
+</td>
+<td>
+
+The gold price to buy a tractor garage. Default 150,000g.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`BuildMaterials`
+
+</td>
+<td>
+
+The materials needed to build a tractor garage (see [object IDs](https://stardewvalleywiki.com/Modding:Object_data)).
+Default 20 iron bars, 5 iridium bars, and 5 battery packs.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`Distance`
+
+</td>
+<td>
+
+The number of tiles on each side of the tractor to affect (in addition to the tile under it).
+Default 1, which is a 3 by 3 grid.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`TractorSpeed`
+
+</td>
+<td>
+
+The speed modifier when riding a tractor. Default -2.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`MagneticRadius`
+
+</td>
+<td>
+
+The item magnetism amount (higher values attract items from father away). Default 384.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`HighlightRadius`
+
+</td>
+<td>
+
+Whether to highlight the tractor radius when riding one. Default `false`.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`InvincibleOnTractor`
+
+</td>
+<td>
+
+Whether you should be immune to damage from any source when riding the tractor. Default `true`.
+
+</td>
+</tr>
+</table>
+
+### Standard tool features
+The `StandardAttachments` section lets you configure the tractor effects when holding a specific tool or item:
+
+<table>
+<tr>
+<th>field</th>
+<th>effect</th>
+</tr>
+<tr>
+<td>
+
+`Axe`
+
+</td>
+<td>
+
+Configure the tractor effects when holding an axe:
+
+field                    | default | effect
+------------------------ | ------- | ------
+`ClearFruitTreeSeed`     | false   | Whether to clear fruit tree seeds.
+`ClearFruitTreeSaplings` | false   | Whether to clear fruit trees that aren't fully grown.
+`CutGrownFruitTrees`     | false   | Whether to clear fully-grown fruit trees.
+`ClearTreeSeeds`         | false   | Whether to clear non-fruit trees that aren't fully grown.
+`CutGrownTrees`          | false   | Whether to clear full-grown non-fruit trees.
+`CutTappedTrees`         | false   | Whether to cut non-fruit trees that have a tapper.
+`ClearLiveCrops`         | false   | Whether to clear live crops.
+`ClearDeadCrops`         | true    | Whether to clear dead crops.
+`ClearDebris`            | true    | Whether to clear debris like weeds and twigs.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`Fertilizer`
+
+</td>
+<td>
+
+Configure the tractor effects when holding a fertilizer item:
+
+field    | default | effect
+-------- | ------- | ------
+`Enable` | true    | Whether to apply the fertilizer to tilled dirt.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`GrassStarter`
+
+</td>
+<td>
+
+Configure the tractor effects when holding a grass starter item:
+
+field    | default | effect
+-------- | ------- | ------
+`Enable` | true    | Whether to plant grass starters.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`Hoe`
+
+</td>
+<td>
+
+Configure the tractor effects when holding a hoe:
+
+field              | default | effect
+------------------ | ------- | ------
+`TillDirt`         | true    | Whether to till empty dirt.
+`ClearWeeds`       | true    | Whether to clear weeds.
+`DigArtifactSpots` | true    | Whether to dig artifact spots.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`MeleeWeapon`
+
+</td>
+<td>
+
+Configure the tractor effects when holding a sword, hammer, or other melee weapon:
+
+field                 | default | effect
+--------------------- | ------- | ------
+`AttackMonsters`      | false   | Whether to damage nearby monsters. (This is massively overpowered due to the tractor tool speed.)
+`ClearDeadCrops`      | true    | Whether to clear dead crops.
+`BreakMineContainers` | true    | Whether to break containers in the mine.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`PickAxe`
+
+</td>
+<td>
+
+Configure the tractor effects when holding a pickaxe:
+
+field                        | default | effect
+---------------------------- | ------- | ------
+`ClearDebris`                | true    | Whether to clear debris.
+`ClearDeadCrops`             | true    | Whether to clear dead crops.
+`ClearDirt`                  | true    | Whether to clear tilled dirt.
+`ClearFlooring`              | false   | Whether to clear placed flooring.
+`ClearBouldersAndMeteorites` | true    | Whether to clear boulders and meteorites.
+`ClearObjects`               | false   | Whether to clear placed objects.
+`BreakMineContainers`        | true    | Whether to break containers in the mine.
+`ClearWeeds`                 | true    | Whether to clear weeds.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`Scythe`
+
+</td>
+<td>
+
+Configure the tractor effects when holding a scythe:
+
+field               | default | effect
+------------------- | ------- | ------
+`HarvestCrops`      | true    | Whether to harvest crops.
+`HarvestFlowers`    | true    | Whether to harvest flowers.
+`HarvestForage`     | true    | Whether to harvest forage.
+`HarvestFruitTrees` | true    | Whether to harvest fruits on fruit trees.
+`HarvestMachines`   | false   | Whether to collect machine output.
+`HarvestGrass`      | true    | Whether to cut down grass. If you have free silo space, this gives you hay as usual.
+`ClearDeadCrops`    | true    | Whether to clear dead crops.
+`ClearWeeds`        | true    | Whether to clear weeds.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`Seeds`
+
+</td>
+<td>
+
+Configure the tractor effects when holding seeds or saplings:
+
+field    | default | effect
+-------- | ------- | ------
+`Enable` | true    | Whether to plant the seeds in tilled dirt.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`Slingshot`
+
+</td>
+<td>
+
+Configure the tractor effects when holding a slingshot:
+
+field    | default | effect
+-------- | ------- | ------
+`Enable` | false   | Whether to fire the slingshot towards the cursor. (This is massively overpowered and will consume ammo voraciously due to the tractor tool speed.)
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`WateringCan`
+
+</td>
+<td>
+
+Configure the tractor effects when holding a watering can:
+
+field    | default | effect
+-------- | ------- | ------
+`Enable` | true    | Whether to water nearby tiles. This doesn't consume water in the watering can.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`SeedBagMod`
+
+</td>
+<td>
+
+Configure the tractor effects when holding a seed bag from the [Seed Bag mod](https://www.nexusmods.com/stardewvalley/mods/1133):
+
+field    | default | effect
+-------- | ------- | ------
+`Enable` | true    | Whether to plant seeds in nearby tiles.
+
+</td>
+</tr>
+</table>
+
+### Custom tools
+The `CustomAttachments` enables custom items/tools while riding the tractor. Tools will be used on
+each surrounding tile, while items will be put down. If you specify something that's already
+supported (like the axe), this overrides all limitations on its use.
+
+To add an item/tool, specify its exact internal name (not the translated display name). For
+example:
+
+```js
+"CustomAttachments": ["Axe", "Mega Bomb"]
+```
+
+</td>
+</tr>
+
 
 ## Custom textures
 You can drop new PNGs into the `assets` folder to change the appearance of tractors or garages.

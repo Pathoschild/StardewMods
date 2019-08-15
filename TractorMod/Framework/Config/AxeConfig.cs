@@ -30,7 +30,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         /// <summary>Whether to clear dead crops.</summary>
         public bool ClearDeadCrops { get; set; } = true;
 
-        /// <summary>Whether to clear debris.</summary>
+        /// <summary>Whether to clear debris like weeds and twigs.</summary>
         public bool ClearDebris { get; set; } = true;
     }
 }
