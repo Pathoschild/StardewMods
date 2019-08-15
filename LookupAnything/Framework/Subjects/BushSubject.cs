@@ -169,7 +169,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         {
             SDate date = this.GetDatePlanted(bush);
             if (this.IsTeaBush(bush))
-                date = date.AddDays(20);
+                date = date.AddDays(Bush.daysToMatureGreenTeaBush);
             return date;
         }
 
