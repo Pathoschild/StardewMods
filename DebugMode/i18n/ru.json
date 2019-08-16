@@ -1,11 +1,11 @@
 {
     // labels shown on the debug screen
     "label.tile": "тайл",
-    "label.map": "локация",
+    "label.map": "карта",
     "label.menu": "меню",
     "label.submenu": "подменю",
     "label.festival-name": "фестиваль",
     "label.event-id": "ID события",
     "label.event-script": "сценарий события",
-    "label.song": "song" // TODO
+    "label.song": "композиция" // TODO
 }
