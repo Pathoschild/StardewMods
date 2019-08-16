@@ -1,6 +1,7 @@
 # Release notes
 ## Upcoming release
 * Updated for Stardew Valley 1.4.
+* Improved translations. Thanks to Hesperusrus (updated Russian)!
 
 ## 4.8.4
 Released 25 July 2019.
