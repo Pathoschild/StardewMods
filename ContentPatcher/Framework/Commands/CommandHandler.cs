@@ -1,13 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
+using StardewValley;
 
 namespace ContentPatcher.Framework.Commands
 {
@@ -82,6 +88,9 @@ namespace ContentPatcher.Framework.Commands
                 case "update":
                     return this.HandleUpdate();
 
+                case "export":
+                    return this.HandleExport(subcommandArgs);
+
                 default:
                     this.Monitor.Log($"The '{this.CommandName} {args[0]}' command isn't valid. Type '{this.CommandName} help' for a list of valid commands.");
                     return false;
@@ -105,7 +114,8 @@ namespace ContentPatcher.Framework.Commands
             {
                 ["help"] = $"{this.CommandName} help\n   Usage: {this.CommandName} help\n   Lists all available {this.CommandName} commands.\n\n   Usage: {this.CommandName} help <cmd>\n   Provides information for a specific {this.CommandName} command.\n   - cmd: The {this.CommandName} command name.",
                 ["summary"] = $"{this.CommandName} summary\n   Usage: {this.CommandName} summary\n   Shows a summary of the current conditions and loaded patches.",
-                ["update"] = $"{this.CommandName} update\n   Usage: {this.CommandName} update\n   Imediately refreshes the condition context and rechecks all patches."
+                ["update"] = $"{this.CommandName} update\n   Usage: {this.CommandName} update\n   Imediately refreshes the condition context and rechecks all patches.",
+                ["export"] = $"{this.CommandName} export\n   Usage: {this.CommandName} export \"<asset name>\"\n   Saves a copy of an asset (including any changes from mods like Content Patcher) to the game folder. The asset name should be the target without the locale or extension, like \"Characters/Abigail\" if you want to export the value of 'Content/Characters/Abigail.xnb'."
             };
 
             // build output
@@ -346,6 +356,60 @@ namespace ContentPatcher.Framework.Commands
             return true;
         }
 
+        /// <summary>Handle the 'patch export' command.</summary>
+        /// <param name="args">The subcommand arguments.</param>
+        /// <returns>Returns whether the command was handled.</returns>
+        private bool HandleExport(string[] args)
+        {
+            // get asset name
+            if (args.Length != 1)
+            {
+                this.Monitor.Log("The 'patch export' command expects a single argument containing the target asset name. See 'patch help' for more info.", LogLevel.Error);
+                return true;
+            }
+            string assetName = args[0];
+
+            // load asset
+            object asset;
+            try
+            {
+                asset = Game1.content.Load<object>(assetName);
+            }
+            catch (ContentLoadException ex) when (ex.InnerException is FileNotFoundException)
+            {
+                this.Monitor.Log($"Can't export asset '{assetName}', that asset doesn't exist in the game.", LogLevel.Error);
+                return true;
+            }
+
+            // init export path
+            string fullTargetPath = Path.Combine(StardewModdingAPI.Constants.ExecutionPath, "patch export", string.Join("_", assetName.Split(Path.GetInvalidFileNameChars())));
+            Directory.CreateDirectory(Path.GetDirectoryName(fullTargetPath));
+
+            // export
+            if (asset is Texture2D texture)
+            {
+                fullTargetPath += ".png";
+
+                texture = this.UnpremultiplyTransparency(texture);
+                using (Stream stream = File.Create(fullTargetPath))
+                    texture.SaveAsPng(stream, texture.Width, texture.Height);
+
+                this.Monitor.Log($"Exported asset '{assetName}' to '{fullTargetPath}'.", LogLevel.Info);
+            }
+            else if (this.IsDataAsset(asset))
+            {
+                fullTargetPath += ".json";
+
+                File.WriteAllText(fullTargetPath, JsonConvert.SerializeObject(asset, Formatting.Indented));
+
+                this.Monitor.Log($"Exported asset '{assetName}' to '{fullTargetPath}'.", LogLevel.Info);
+            }
+            else
+                this.Monitor.Log($"Can't export asset '{assetName}' of type {asset?.GetType().FullName ?? "null"}, expected image or data.", LogLevel.Error);
+
+            return true;
+        }
+
 
         /****
         ** Helpers
@@ -400,6 +464,45 @@ namespace ContentPatcher.Framework.Commands
 
             // seems fine, just not applied yet
             return null;
+        }
+
+        /// <summary>Reverse premultiplication applied to an image asset by the XNA content pipeline.</summary>
+        /// <param name="texture">The texture to adjust.</param>
+        private Texture2D UnpremultiplyTransparency(Texture2D texture)
+        {
+            Color[] data = new Color[texture.Width * texture.Height];
+            texture.GetData(data);
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                Color pixel = data[i];
+                if (pixel.A == 0)
+                    continue;
+
+                data[i] = new Color(
+                    r: (byte)((pixel.R * 255) / pixel.A),
+                    g: (byte)((pixel.G * 255) / pixel.A),
+                    b: (byte)((pixel.B * 255) / pixel.A),
+                    a: pixel.A
+                );
+            }
+
+            Texture2D result = new Texture2D(texture.GraphicsDevice, texture.Width, texture.Height);
+            result.SetData(data);
+            return result;
+        }
+
+        /// <summary>Get whether an asset can be saved to JSON.</summary>
+        /// <param name="asset">The asset to check.</param>
+        private bool IsDataAsset(object asset)
+        {
+            if (asset == null)
+                return false;
+
+            Type type = asset.GetType();
+            type = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
+
+            return type == typeof(Dictionary<,>) || type == typeof(List<>);
         }
     }
 }

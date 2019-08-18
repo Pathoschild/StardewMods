@@ -1234,6 +1234,8 @@ Content Patcher adds two patch commands for testing and troubleshooting.
 * `patch update` immediately updates Content Patcher's condition context and rechecks all patches.
   This is mainly useful if you change conditions through the console (like the date), and want to
   update patches without going to bed.
+* `patch export` saves a copy of an asset to your game folder, which lets you see what it looks like
+  with all changes applied. This currently works for image and data assets.
 
 ### Debug mode
 Content Patcher has a 'debug mode' which lets you view loaded textures directly in-game with any
