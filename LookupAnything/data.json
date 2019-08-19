@@ -310,7 +310,8 @@ You shouldn't change this file unless you know what you're doing.
             ],
             "ExceptIngredients": [
                 { "ID": 262 }, // wheat
-                { "ID": 304 } // hops
+                { "ID": 304 }, // hops
+                { "ID": 815 } // tea leaves
             ],
             "Output": 350 // juice
         },
