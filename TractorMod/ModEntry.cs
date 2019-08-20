@@ -505,25 +505,31 @@ namespace Pathoschild.Stardew.TractorMod
             GameLocation location = player.currentLocation;
             Vector2 tile = player.getTileLocation();
 
-            // find nearest horse in player's current location (if available)
-            Horse horse = this
+            // find nearest tractor in player's current location (if available), else any location
+            Horse tractor = this
                 .GetTractorsIn(location, includeMounted: false)
                 .OrderBy(match => Utility.distance(tile.X, tile.Y, match.getTileX(), match.getTileY()))
                 .FirstOrDefault();
-
-            // else get horse from any location
-            if (horse == null)
+            if (tractor == null)
             {
-                horse = this
+                tractor = this
                     .GetLocations()
                     .SelectMany(loc => this.GetTractorsIn(loc, includeMounted: false))
                     .FirstOrDefault();
             }
 
-            // warp to player
-            if (horse != null)
+            // create a tractor if needed
+            if (tractor == null && this.Config.CanSummonWithoutGarage && Context.IsMainPlayer)
             {
-                TractorManager.SetLocation(horse, location, tile);
+                Guid id = Guid.NewGuid();
+                tractor = new Horse(id, 0, 0) { Name = TractorManager.GetTractorName(id) };
+                this.ApplyTextures(tractor);
+            }
+
+            // warp to player
+            if (tractor != null)
+            {
+                TractorManager.SetLocation(tractor, location, tile);
                 return true;
             }
             return false;

@@ -169,6 +169,20 @@ Whether you should be immune to damage from any source when riding the tractor. 
 
 </td>
 </tr>
+
+<tr>
+<td>
+
+`CanSummonWithoutGarage`
+
+</td>
+<td>
+
+Whether you can summon a temporary tractor without building a garage first. Default `false`.
+
+</td>
+</tr>
+
 </table>
 
 ### Standard tool features

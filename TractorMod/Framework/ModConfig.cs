@@ -30,6 +30,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             [787/* battery pack */] = 5
         };
 
+        /// <summary>Whether the player can summon a temporary tractor without building a garage first.</summary>
+        public bool CanSummonWithoutGarage { get; set; }
+
         /// <summary>Whether to highlight the tractor radius when riding it.</summary>
         public bool HighlightRadius { get; set; }
 
