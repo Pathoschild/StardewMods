@@ -78,12 +78,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         if (canNavigate && this.Menu.okButton.containsPoint(x, y))
                         {
                             this.Exit(); // in some cases the game won't handle this correctly (e.g. Stardew Valley Fair fishing minigame)
-                            return false;
+                            return true;
                         }
                         else if (this.SortInventoryButton?.containsPoint(x, y) == true)
                         {
                             this.SortInventory();
-                            return false;
+                            return true;
                         }
                         break;
                 }
