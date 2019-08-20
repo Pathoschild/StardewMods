@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewModdingAPI;
@@ -59,7 +60,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
-            // clear twigs & weeds
             if (this.Config.ClearDebris && (this.IsTwig(tileObj) || this.IsWeed(tileObj)))
                 return this.UseToolOnTile(tool, tile);
 
@@ -73,6 +73,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 // cut fruit tree
                 case FruitTree tree:
                     return this.ShouldCut(tree) && this.UseToolOnTile(tool, tile);
+
+                // cut bushes
+                case Bush bush:
+                    return this.ShouldCut(bush) && this.UseToolOnTile(tool, tile);
 
                 // clear crops
                 case HoeDirt dirt when dirt.crop != null:
@@ -91,6 +95,16 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile);
                 if (clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex.Value) && tool.UpgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex.Value])
                     this.UseToolOnTile(tool, tile);
+            }
+
+            // cut bushes in large terrain features
+            if (this.Config.CutBushes)
+            {
+                foreach (Bush bush in location.largeTerrainFeatures.OfType<Bush>().Where(p => p.tilePosition.Value == tile))
+                {
+                    if (this.ShouldCut(bush) && this.UseToolOnTile(tool, tile))
+                        return true;
+                }
             }
 
             return false;
@@ -134,6 +148,15 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
             // full-grown
             return config.CutGrownFruitTrees;
+        }
+
+        /// <summary>Get whether a given bush should be chopped.</summary>
+        /// <param name="bush">The bush to check.</param>
+        private bool ShouldCut(Bush bush)
+        {
+            var config = this.Config;
+
+            return config.CutBushes;
         }
     }
 }

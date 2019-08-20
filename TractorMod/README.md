@@ -211,6 +211,7 @@ field                    | default | effect
 `ClearTreeSeeds`         | false   | Whether to clear non-fruit trees that aren't fully grown.
 `CutGrownTrees`          | false   | Whether to clear full-grown non-fruit trees.
 `CutTappedTrees`         | false   | Whether to cut non-fruit trees that have a tapper.
+`CutBushes`              | false   | Whether to cut choppable bushes.
 `ClearLiveCrops`         | false   | Whether to clear live crops.
 `ClearDeadCrops`         | true    | Whether to clear dead crops.
 `ClearDebris`            | true    | Whether to clear debris like weeds and twigs.

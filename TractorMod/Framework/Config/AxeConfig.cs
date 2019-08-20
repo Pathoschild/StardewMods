@@ -24,6 +24,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         /// <summary>Whether to cut non-fruit trees that have a tapper.</summary>
         public bool CutTappedTrees { get; set; }
 
+        /// <summary>Whether to cut choppable bushes.</summary>
+        public bool CutBushes { get; set; }
+
         /// <summary>Whether to clear live crops.</summary>
         public bool ClearLiveCrops { get; set; }
 

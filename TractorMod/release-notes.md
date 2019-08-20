@@ -1,6 +1,8 @@
 # Release notes
 ## Upcoming release
 * Updated for Stardew Valley 1.4.
+* Added attachment features:
+  * axe: cut choppable bushes (disabled by default).
 * Added option to allow summoning a temporary tractor without building a garage first.
 * Improved translations. Thanks to Hesperusrus (updated Russian)!
 
