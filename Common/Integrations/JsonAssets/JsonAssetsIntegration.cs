@@ -21,7 +21,7 @@ namespace Pathoschild.Stardew.Common.Integrations.JsonAssets
         /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         public JsonAssetsIntegration(IModRegistry modRegistry, IMonitor monitor)
-            : base("Json Assets", "spacechase0.JsonAssets", "1.3.8", modRegistry, monitor)
+            : base("Json Assets", "spacechase0.JsonAssets", "1.3.8-beta", modRegistry, monitor)
         {
             if (!this.IsLoaded)
                 return;
