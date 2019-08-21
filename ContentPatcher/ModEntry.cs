@@ -557,86 +557,26 @@ namespace ContentPatcher
                             // validate
                             if (entry.Entries == null && entry.Fields == null && entry.MoveEntries == null && entry.FromFile == null)
                                 return TrackSkip($"one of {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, {nameof(PatchConfig.MoveEntries)}, or {nameof(PatchConfig.FromFile)} must be specified for an '{action}' change");
+                            if (entry.FromFile != null && (entry.Entries != null || entry.Fields != null || entry.MoveEntries != null))
+                                return TrackSkip($"{nameof(PatchConfig.FromFile)} is mutually exclusive with {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, and {nameof(PatchConfig.MoveEntries)}");
 
-                            // parse from file
+                            // parse 'from file' field
                             IParsedTokenString fromAsset = null;
                             if (entry.FromFile != null && !this.TryPrepareLocalAsset(entry.FromFile, tokenContext, forMod, migrator, out string fromFileError, out fromAsset))
                                 return TrackSkip(fromFileError);
 
-                            // parse entries
-                            List<EditDataPatchRecord> entries = new List<EditDataPatchRecord>();
-                            if (entry.Entries != null)
+                            // parse data changes
+                            bool TryParseFields(IContext context, PatchConfig rawFields, out List<EditDataPatchRecord> parsedEntries, out List<EditDataPatchField> parsedFields, out List<EditDataPatchMoveRecord> parsedMoveEntries, out string error)
                             {
-                                foreach (KeyValuePair<string, JToken> pair in entry.Entries)
-                                {
-                                    if (!this.TryParseStringTokens(pair.Key, tokenContext, forMod, migrator, out string keyError, out IParsedTokenString key))
-                                        return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key.Raw}' key is invalid: {keyError}");
-                                    if (!this.TryParseJsonTokens(pair.Value, tokenContext, forMod, migrator, out string error, out TokenisableJToken value))
-                                        return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key.Raw}' value is invalid: {error}");
-
-                                    entries.Add(new EditDataPatchRecord(key, value));
-                                }
+                                return this.TryParseEditDataFields(forMod, rawFields, context, migrator, out parsedEntries, out parsedFields, out parsedMoveEntries, out error);
                             }
-
-                            // parse fields
-                            List<EditDataPatchField> fields = new List<EditDataPatchField>();
-                            if (entry.Fields != null)
+                            List<EditDataPatchRecord> entries = null;
+                            List<EditDataPatchField> fields = null;
+                            List<EditDataPatchMoveRecord> moveEntries = null;
+                            if (entry.FromFile == null)
                             {
-                                foreach (KeyValuePair<string, IDictionary<string, JToken>> recordPair in entry.Fields)
-                                {
-                                    // parse entry key
-                                    if (!this.TryParseStringTokens(recordPair.Key, tokenContext, forMod, migrator, out string keyError, out IParsedTokenString key))
-                                        return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} is invalid: {keyError}");
-
-                                    // parse fields
-                                    foreach (var fieldPair in recordPair.Value)
-                                    {
-                                        // parse field key
-                                        if (!this.TryParseStringTokens(fieldPair.Key, tokenContext, forMod, migrator, out string fieldError, out IParsedTokenString fieldKey))
-                                            return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldPair.Key} key is invalid: {fieldError}");
-
-                                        // parse value
-                                        if (!this.TryParseJsonTokens(fieldPair.Value, tokenContext, forMod, migrator, out string valueError, out TokenisableJToken value))
-                                            return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: {valueError}");
-                                        if (value?.Value is JValue jValue && jValue.Value<string>()?.Contains("/") == true)
-                                            return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: value can't contain field delimiter character '/'");
-
-                                        fields.Add(new EditDataPatchField(key, fieldKey, value));
-                                    }
-                                }
-                            }
-
-                            // parse move entries
-                            List<EditDataPatchMoveRecord> moveEntries = new List<EditDataPatchMoveRecord>();
-                            if (entry.MoveEntries != null)
-                            {
-                                foreach (PatchMoveEntryConfig moveEntry in entry.MoveEntries)
-                                {
-                                    // validate
-                                    string[] targets = new[] { moveEntry.BeforeID, moveEntry.AfterID, moveEntry.ToPosition };
-                                    if (string.IsNullOrWhiteSpace(moveEntry.ID))
-                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > move entry is invalid: must specify an {nameof(PatchMoveEntryConfig.ID)} value");
-                                    if (targets.All(string.IsNullOrWhiteSpace))
-                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, or {nameof(PatchMoveEntryConfig.AfterID)}");
-                                    if (targets.Count(p => !string.IsNullOrWhiteSpace(p)) > 1)
-                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify only one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, and {nameof(PatchMoveEntryConfig.AfterID)}");
-
-                                    // parse IDs
-                                    if (!this.TryParseStringTokens(moveEntry.ID, tokenContext, forMod, migrator, out string idError, out IParsedTokenString moveId))
-                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.ID)} is invalid: {idError}");
-                                    if (!this.TryParseStringTokens(moveEntry.BeforeID, tokenContext, forMod, migrator, out string beforeIdError, out IParsedTokenString beforeId))
-                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.BeforeID)} is invalid: {beforeIdError}");
-                                    if (!this.TryParseStringTokens(moveEntry.AfterID, tokenContext, forMod, migrator, out string afterIdError, out IParsedTokenString afterId))
-                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.AfterID)} is invalid: {afterIdError}");
-
-                                    // parse position
-                                    MoveEntryPosition toPosition = MoveEntryPosition.None;
-                                    if (!string.IsNullOrWhiteSpace(moveEntry.ToPosition) && (!Enum.TryParse(moveEntry.ToPosition, true, out toPosition) || toPosition == MoveEntryPosition.None))
-                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.ToPosition)} is invalid: must be one of {nameof(MoveEntryPosition.Bottom)} or {nameof(MoveEntryPosition.Top)}");
-
-                                    // create move entry
-                                    moveEntries.Add(new EditDataPatchMoveRecord(moveId, beforeId, afterId, toPosition));
-                                }
+                                if (!TryParseFields(tokenContext, entry, out entries, out fields, out moveEntries, out string parseError))
+                                    return TrackSkip(parseError);
                             }
 
                             // save
@@ -651,8 +591,7 @@ namespace ContentPatcher
                                 moveRecords: moveEntries,
                                 monitor: this.Monitor,
                                 normaliseAssetName: this.Helper.Content.NormalizeAssetName,
-                                tryParseJsonTokens: (JToken rawJson, IContext context, out string error, out TokenisableJToken parsed) => this.TryParseJsonTokens(rawJson, context, forMod, migrator, out error, out parsed),
-                                tryParseStringTokens: (string rawValue, IContext context, out string error, out IParsedTokenString parsed) => this.TryParseStringTokens(rawValue, context, forMod, migrator, out error, out parsed)
+                                tryParseFields: TryParseFields
                             );
                         }
                         break;
@@ -705,6 +644,106 @@ namespace ContentPatcher
             {
                 return TrackSkip($"error reading info. Technical details:\n{ex}");
             }
+        }
+
+        /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>
+        /// <param name="forMod">The manifest for the content pack being parsed.</param>
+        /// <param name="entry">The change to load.</param>
+        /// <param name="tokenContext">The tokens available for this content pack.</param>
+        /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
+        /// <param name="entries">The parsed data entry changes.</param>
+        /// <param name="fields">The parsed data field changes.</param>
+        /// <param name="moveEntries">The parsed move entry records.</param>
+        /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
+        /// <returns>Returns whether parsing succeeded.</returns>
+        bool TryParseEditDataFields(IManifest forMod, PatchConfig entry, IContext tokenContext, IMigration migrator, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error)
+        {
+            entries = new List<EditDataPatchRecord>();
+            fields = new List<EditDataPatchField>();
+            moveEntries = new List<EditDataPatchMoveRecord>();
+
+            bool Fail(string reason, out string outReason)
+            {
+                outReason = reason;
+                return false;
+            }
+
+            // parse entries
+            if (entry.Entries != null)
+            {
+                foreach (KeyValuePair<string, JToken> pair in entry.Entries)
+                {
+                    if (!this.TryParseStringTokens(pair.Key, tokenContext, forMod, migrator, out string keyError, out IParsedTokenString key))
+                        return Fail($"{nameof(PatchConfig.Entries)} > '{key.Raw}' key is invalid: {keyError}", out error);
+                    if (!this.TryParseJsonTokens(pair.Value, tokenContext, forMod, migrator, out string valueError,
+                        out TokenisableJToken value))
+                        return Fail($"{nameof(PatchConfig.Entries)} > '{key.Raw}' value is invalid: {valueError}", out error);
+
+                    entries.Add(new EditDataPatchRecord(key, value));
+                }
+            }
+
+            // parse fields
+            if (entry.Fields != null)
+            {
+                foreach (KeyValuePair<string, IDictionary<string, JToken>> recordPair in entry.Fields)
+                {
+                    // parse entry key
+                    if (!this.TryParseStringTokens(recordPair.Key, tokenContext, forMod, migrator, out string keyError, out IParsedTokenString key))
+                        return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} is invalid: {keyError}", out error);
+
+                    // parse fields
+                    foreach (var fieldPair in recordPair.Value)
+                    {
+                        // parse field key
+                        if (!this.TryParseStringTokens(fieldPair.Key, tokenContext, forMod, migrator, out string fieldError, out IParsedTokenString fieldKey))
+                            return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldPair.Key} key is invalid: {fieldError}", out error);
+
+                        // parse value
+                        if (!this.TryParseJsonTokens(fieldPair.Value, tokenContext, forMod, migrator, out string valueError, out TokenisableJToken value))
+                            return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: {valueError}", out error);
+                        if (value?.Value is JValue jValue && jValue.Value<string>()?.Contains("/") == true)
+                            return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: value can't contain field delimiter character '/'", out error);
+
+                        fields.Add(new EditDataPatchField(key, fieldKey, value));
+                    }
+                }
+            }
+
+            // parse move entries
+            if (entry.MoveEntries != null)
+            {
+                foreach (PatchMoveEntryConfig moveEntry in entry.MoveEntries)
+                {
+                    // validate
+                    string[] targets = new[] { moveEntry.BeforeID, moveEntry.AfterID, moveEntry.ToPosition };
+                    if (string.IsNullOrWhiteSpace(moveEntry.ID))
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > move entry is invalid: must specify an {nameof(PatchMoveEntryConfig.ID)} value", out error);
+                    if (targets.All(string.IsNullOrWhiteSpace))
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, or {nameof(PatchMoveEntryConfig.AfterID)}", out error);
+                    if (targets.Count(p => !string.IsNullOrWhiteSpace(p)) > 1)
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify only one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, and {nameof(PatchMoveEntryConfig.AfterID)}", out error);
+
+                    // parse IDs
+                    if (!this.TryParseStringTokens(moveEntry.ID, tokenContext, forMod, migrator, out string idError, out IParsedTokenString moveId))
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.ID)} is invalid: {idError}", out error);
+                    if (!this.TryParseStringTokens(moveEntry.BeforeID, tokenContext, forMod, migrator, out string beforeIdError, out IParsedTokenString beforeId))
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.BeforeID)} is invalid: {beforeIdError}", out error);
+                    if (!this.TryParseStringTokens(moveEntry.AfterID, tokenContext, forMod, migrator, out string afterIdError, out IParsedTokenString afterId))
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.AfterID)} is invalid: {afterIdError}", out error);
+
+                    // parse position
+                    MoveEntryPosition toPosition = MoveEntryPosition.None;
+                    if (!string.IsNullOrWhiteSpace(moveEntry.ToPosition) && (!Enum.TryParse(moveEntry.ToPosition, true, out toPosition) || toPosition == MoveEntryPosition.None))
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.ToPosition)} is invalid: must be one of {nameof(MoveEntryPosition.Bottom)} or {nameof(MoveEntryPosition.Top)}", out error);
+
+                    // create move entry
+                    moveEntries.Add(new EditDataPatchMoveRecord(moveId, beforeId, afterId, toPosition));
+                }
+            }
+
+            error = null;
+            return true;
         }
 
         /// <summary>Normalise and parse the given condition values.</summary>

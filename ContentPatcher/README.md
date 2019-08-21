@@ -189,7 +189,7 @@ field      | purpose
 `Fields`   | _(optional)_ The individual fields you want to change for existing entries. This field supports [tokens](#advanced-tokens--conditions) in field keys and values. The key for each field is the field index (starting at zero) for a slash-delimited string, or the field name for an object.
 `Entries`  | _(optional)_ The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. To add an entry, just specify a key that doesn't exist; to delete an entry, set the value to `null` (like `"some key": null`). This field supports [tokens](#advanced-tokens--conditions) in entry keys and values.<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra fields to avoid errors for non-English players.
 `MoveEntries` | _(optional)_ Change the entry order in a list asset like `██████████`. (Using this with a non-list asset will cause an error, since those have no order.)
-`FromFile` | The relative path to a JSON file in your content pack folder containing entries to add. The file format is identical to the `Entries` field (starting from `{` and ending with `}`), and supports [tokens](#advanced-tokens--conditions).
+`FromFile` | The relative path to a JSON file in your content pack folder containing the `Fields`, `Entries`, and `MoveEntries`. The field and file contents can contain [tokens](#advanced-tokens--conditions). Mutually exclusive with `Fields`, `Entries`, and `MoveEntries`. See _load changes from a file_ below for an example.
 
 You can have any combination of those fields within one patch. They'll be applied in this order:
 `Entries`, `FromFile`, `Fields`, `MoveEntries`.
@@ -219,18 +219,18 @@ description fields for an existing entry (item #70):
 {
    "Format": "1.10",
    "Changes": [
-       {
-          "Action": "EditData",
-          "Target": "Data/ObjectInformation",
-          "Entries": {
-             "900": "Crimson Jade/400/-300/Minerals -2/Crimson Jade/A pale green ornamental stone with a strange crimson sheen."
-          },
-          "Fields": {
-             "70": {
-                4: "Normal Jade",
-                5: "A pale green ornamental stone with no sheen."
-             }
-          }
+      {
+         "Action": "EditData",
+         "Target": "Data/ObjectInformation",
+         "Entries": {
+            "900": "Crimson Jade/400/-300/Minerals -2/Crimson Jade/A pale green ornamental stone with a strange crimson sheen."
+         },
+         "Fields": {
+            "70": {
+               4: "Normal Jade",
+               5: "A pale green ornamental stone with no sheen."
+            }
+         }
        }
    ]
 }
@@ -242,14 +242,67 @@ used to change event conditions:
 {
    "Format": "1.10",
    "Changes": [
-       {
-          "Action": "EditData",
-          "Target": "Data/Events/Beach",
-          "Entries": {
-             "733330/f Sam 750/w sunny/t 700 1500/z winter/y 1": null,
-             "733330/f Sam 750/w sunny/t 700 1500/z winter": "[snipped: long event script here]"
-          }
-       }
+      {
+         "Action": "EditData",
+         "Target": "Data/Events/Beach",
+         "Entries": {
+            "733330/f Sam 750/w sunny/t 700 1500/z winter/y 1": null,
+            "733330/f Sam 750/w sunny/t 700 1500/z winter": "[snipped: long event script here]"
+         }
+      }
+   ]
+}
+```
+
+</dd>
+
+<dt>Load changes from a file</dt>
+<dd>
+
+You can optionally load changes from a separate JSON file in your content pack. The file can contain
+`Entries`, `Fields`, and `MoveEntries`. It can use any tokens that would work if used directly in
+the patch.
+
+For example, this patch in `content.json`:
+```js
+{
+   "Format": "1.10",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Data/ObjectInformation",
+         "FromFile": "assets/jade.json"
+      }
+   ]
+}
+```
+
+Loads changes from this `assets/jade.json` file:
+```js
+{
+   "Entries": {
+      "900": "Crimson Jade/400/-300/Minerals -2/Crimson Jade/A pale green ornamental stone with a strange crimson sheen."
+   },
+   "Fields": {
+      "70": {
+         4: "Normal Jade",
+         5: "A pale green ornamental stone with no sheen."
+      }
+   }
+}
+```
+
+The `FromFile` field can contain tokens, so you can dynamically load a different file. For example,
+this single patch loads a dialogue file for multiple NPCs:
+```js
+{
+   "Format": "1.10",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Characters/Dialogue/Abigail, Characters/Dialogue/Alex, Characters/Dialogue/Caroline",
+         "FromFile": "assets/dialogue/{{TargetWithoutPath}}.json"
+      }
    ]
 }
 ```
@@ -1080,27 +1133,27 @@ crop sprites depending on the weather:
 
 ```js
 {
-    "Format": "1.10",
-    "DynamicTokens": [
-        {
-            "Name": "Style",
-            "Value": "dry"
-        },
-        {
-            "Name": "Style",
-            "Value": "wet",
-            "When": {
-                "Weather": "rain, storm"
-            }
-        }
-    ],
-    "Changes": [
-        {
-            "Action": "Load",
-            "Target": "TileSheets/crops",
-            "FromFile": "assets/crop-{{style}}.png"
-        }
-    ]
+   "Format": "1.10",
+   "DynamicTokens": [
+      {
+         "Name": "Style",
+         "Value": "dry"
+      },
+      {
+         "Name": "Style",
+         "Value": "wet",
+         "When": {
+            "Weather": "rain, storm"
+         }
+      }
+   ],
+   "Changes": [
+      {
+         "Action": "Load",
+         "Target": "TileSheets/crops",
+         "FromFile": "assets/crop-{{style}}.png"
+      }
+   ]
 }
 ```
 
@@ -1125,31 +1178,31 @@ patch is applied. See below for more details.
 
 ```js
 {
-    "Format": "1.10",
-    "ConfigSchema": {
-        "Material": {
-            "AllowValues": "Wood, Metal",
-            "Default": "Wood"
-        }
-    },
-    "Changes": [
-        // as a token
-        {
-            "Action": "Load",
-            "Target": "LooseSprites/Billboard",
-            "FromFile": "assets/material_{{material}}.png"
-        },
+   "Format": "1.10",
+   "ConfigSchema": {
+      "Material": {
+         "AllowValues": "Wood, Metal",
+         "Default": "Wood"
+      }
+   },
+   "Changes": [
+      // as a token
+      {
+         "Action": "Load",
+         "Target": "LooseSprites/Billboard",
+         "FromFile": "assets/material_{{material}}.png"
+      },
 
-        // as a condition
-        {
-            "Action": "Load",
-            "Target": "LooseSprites/Billboard",
-            "FromFile": "assets/material_wood.png",
-            "When": {
-                "Material": "Wood"
-            }
-        }
-    ]
+      // as a condition
+      {
+         "Action": "Load",
+         "Target": "LooseSprites/Billboard",
+         "FromFile": "assets/material_wood.png",
+         "When": {
+            "Material": "Wood"
+         }
+      }
+   ]
 }
 ```
 

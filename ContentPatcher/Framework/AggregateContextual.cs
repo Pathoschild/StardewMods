@@ -48,8 +48,11 @@ namespace ContentPatcher.Framework
         /// <param name="values">The context values to track. Null values are ignored.</param>
         public AggregateContextual Add(IEnumerable<IContextual> values)
         {
-            foreach (IContextual value in values)
-                this.Add(value);
+            if (values != null)
+            {
+                foreach (IContextual value in values)
+                    this.Add(value);
+            }
 
             return this;
         }
@@ -71,8 +74,11 @@ namespace ContentPatcher.Framework
         /// <param name="values">The context values to stop tracking. Null values are ignored.</param>
         public AggregateContextual Remove(IEnumerable<IContextual> values)
         {
-            foreach (IContextual value in values)
-                this.Remove(value);
+            if (values != null)
+            {
+                foreach (IContextual value in values)
+                    this.Remove(value);
+            }
 
             return this;
         }
