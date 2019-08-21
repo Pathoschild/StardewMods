@@ -85,7 +85,7 @@ The `content.json` file has three main fields:
 
 field          | purpose
 -------------- | -------
-`Format`       | The format version. You should always use the latest version (currently `1.9`) to use the latest features and avoid obsolete behavior.
+`Format`       | The format version. You should always use the latest version (currently `1.10`) to use the latest features and avoid obsolete behavior.
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
 `ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-config).
 
@@ -93,7 +93,7 @@ You can list any number of patches (surrounded by `{` and `}` in the `Changes` f
 few sections for more info about the format. For example:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10",
    "Changes": [
       {
          "Action": "Load",
@@ -137,7 +137,7 @@ field      | purpose
 For example, this replaces the dinosaur sprite with your own image:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10",
    "Changes": [
       {
          "Action": "Load",
@@ -167,7 +167,7 @@ field      | purpose
 For example, this changes one object sprite:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10",
    "Changes": [
       {
          "Action": "EditImage",
@@ -189,9 +189,10 @@ field      | purpose
 `Fields`   | _(optional)_ The individual fields you want to change for existing entries. This field supports [tokens](#advanced-tokens--conditions) in field keys and values. The key for each field is the field index (starting at zero) for a slash-delimited string, or the field name for an object.
 `Entries`  | _(optional)_ The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. To add an entry, just specify a key that doesn't exist; to delete an entry, set the value to `null` (like `"some key": null`). This field supports [tokens](#advanced-tokens--conditions) in entry keys and values.<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra fields to avoid errors for non-English players.
 `MoveEntries` | _(optional)_ Change the entry order in a list asset like `██████████`. (Using this with a non-list asset will cause an error, since those have no order.)
+`FromFile` | The relative path to a JSON file in your content pack folder containing entries to add. The file format is identical to the `Entries` field (starting from `{` and ending with `}`), and supports [tokens](#advanced-tokens--conditions).
 
 You can have any combination of those fields within one patch. They'll be applied in this order:
-`Entries`, `Fields`, `MoveEntries`.
+`Entries`, `FromFile`, `Fields`, `MoveEntries`.
 
 <dl>
 <dt>Definitions</dt>
@@ -216,7 +217,7 @@ description fields for an existing entry (item #70):
 
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10",
    "Changes": [
        {
           "Action": "EditData",
@@ -239,7 +240,7 @@ You can also delete entries entirely by setting their value to `null`. For examp
 used to change event conditions:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10",
    "Changes": [
        {
           "Action": "EditData",
@@ -269,7 +270,7 @@ structures instead of strings.
 For example, this ██████████ and adds ██████████:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10",
    "Changes": [
       {
          "Action": "EditData",
@@ -328,7 +329,7 @@ Here's an example showing all possible reorder options. (If you specify a `Befor
 that doesn't match any entry, a warning will be shown.)
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10",
    "Changes": [
       {
          "Action": "EditData",
@@ -415,7 +416,7 @@ _(optional)_ The part of the source map to copy. Defaults to the whole source ma
 For example, this replaces the town square with the one in another map:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10",
    "Changes": [
       {
          "Action": "EditMap",
@@ -1079,7 +1080,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-    "Format": "1.9",
+    "Format": "1.10",
     "DynamicTokens": [
         {
             "Name": "Style",
@@ -1124,7 +1125,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-    "Format": "1.9",
+    "Format": "1.10",
     "ConfigSchema": {
         "Material": {
             "AllowValues": "Wood, Metal",
@@ -1357,7 +1358,7 @@ argument   | type | purpose
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10",
    "Changes": [
       {
          "Action": "EditData",
@@ -1483,7 +1484,7 @@ field | type | purpose
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10",
    "Changes": [
       {
          "Action": "EditData",

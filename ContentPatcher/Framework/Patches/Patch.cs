@@ -164,7 +164,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        /// <param name="fromAsset">The raw asset key to intercept (if applicable), including tokens.</param>
+        /// <param name="fromAsset">The normalised asset key from which to load the local asset (if applicable), including tokens.</param>
         protected Patch(string logName, PatchType type, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normaliseAssetName, ITokenString fromAsset = null)
         {
             this.LogName = logName;

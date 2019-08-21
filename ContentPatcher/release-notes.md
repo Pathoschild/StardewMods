@@ -2,8 +2,9 @@
 
 # Release notes
 ## Upcoming release
-* Content pack creators can now [validate `manifest.json` and `content.json`](https://github.com/Pathoschild/StardewMods/tree/develop/ContentPatcher#validate-json-files) for common issues.
+* Added support for using `FromFile` with `Action: EditData` patches.
 * Added `patch export` console command, which lets you see what an asset looks like with all changes applied.
+* Added [`manifest.json` and `content.json` validator](https://github.com/Pathoschild/StardewMods/tree/develop/ContentPatcher#validate-json-files) for content pack authors.
 
 ## 1.9.2
 Released 25 July 2019.

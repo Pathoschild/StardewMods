@@ -38,7 +38,7 @@ namespace ContentPatcher
         private readonly string ConfigFileName = "config.json";
 
         /// <summary>The supported format versions.</summary>
-        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9" };
+        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "1.10" };
 
         /// <summary>The format version migrations to apply.</summary>
         private readonly Func<IMigration[]> Migrations = () => new IMigration[]
@@ -49,7 +49,8 @@ namespace ContentPatcher
             new Migration_1_6(),
             new Migration_1_7(),
             new Migration_1_8(),
-            new Migration_1_9()
+            new Migration_1_9(),
+            new Migration_1_10()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -554,8 +555,13 @@ namespace ContentPatcher
                     case PatchType.EditData:
                         {
                             // validate
-                            if (entry.Entries == null && entry.Fields == null && entry.MoveEntries == null)
-                                return TrackSkip($"one of {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, or {nameof(PatchConfig.MoveEntries)} must be specified for an '{action}' change");
+                            if (entry.Entries == null && entry.Fields == null && entry.MoveEntries == null && entry.FromFile == null)
+                                return TrackSkip($"one of {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, {nameof(PatchConfig.MoveEntries)}, or {nameof(PatchConfig.FromFile)} must be specified for an '{action}' change");
+
+                            // parse from file
+                            IParsedTokenString fromAsset = null;
+                            if (entry.FromFile != null && !this.TryPrepareLocalAsset(entry.FromFile, tokenContext, forMod, migrator, out string fromFileError, out fromAsset))
+                                return TrackSkip(fromFileError);
 
                             // parse entries
                             List<EditDataPatchRecord> entries = new List<EditDataPatchRecord>();
@@ -634,7 +640,20 @@ namespace ContentPatcher
                             }
 
                             // save
-                            patch = new EditDataPatch(entry.LogName, pack, assetName, conditions, entries, fields, moveEntries, this.Monitor, this.Helper.Content.NormalizeAssetName);
+                            patch = new EditDataPatch(
+                                logName: entry.LogName,
+                                contentPack: pack,
+                                assetName: assetName,
+                                conditions: conditions,
+                                fromFile: fromAsset,
+                                records: entries,
+                                fields: fields,
+                                moveRecords: moveEntries,
+                                monitor: this.Monitor,
+                                normaliseAssetName: this.Helper.Content.NormalizeAssetName,
+                                tryParseJsonTokens: (JToken rawJson, IContext context, out string error, out TokenisableJToken parsed) => this.TryParseJsonTokens(rawJson, context, forMod, migrator, out error, out parsed),
+                                tryParseStringTokens: (string rawValue, IContext context, out string error, out IParsedTokenString parsed) => this.TryParseStringTokens(rawValue, context, forMod, migrator, out error, out parsed)
+                            );
                         }
                         break;
 

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Tokens;
+using ContentPatcher.Framework.Tokens.Json;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -21,8 +23,11 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
-        /// <summary>The data records to edit.</summary>
-        private readonly EditDataPatchRecord[] Records;
+        /// <summary>The data records to edit specified in the patch entry.</summary>
+        private readonly EditDataPatchRecord[] RecordsFromEntry;
+
+        /// <summary>The data records to edit loaded via <see cref="Patch.FromAsset"/>.</summary>
+        private EditDataPatchRecord[] RecordsFromFile;
 
         /// <summary>The data fields to edit.</summary>
         private readonly EditDataPatchField[] Fields;
@@ -33,6 +38,30 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>A list of warning messages which have been previously logged.</summary>
         private readonly HashSet<string> LoggedWarnings = new HashSet<string>();
 
+        /// <summary>Parse a string which can contain tokens, and validate that it's valid.</summary>
+        private readonly TryParseStringTokensDelegate TryParseStringTokens;
+
+        /// <summary>Parse a JSON structure which can contain tokens, and validate that it's valid.</summary>
+        private readonly TryParseJsonTokensDelegate TryParseJsonTokens;
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>Parse a string which can contain tokens, and validate that it's valid.</summary>
+        /// <param name="rawValue">The raw string which may contain tokens.</param>
+        /// <param name="tokenContext">The tokens available for this content pack.</param>
+        /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
+        /// <param name="parsed">The parsed value.</param>
+        public delegate bool TryParseStringTokensDelegate(string rawValue, IContext tokenContext, out string error, out IParsedTokenString parsed);
+
+        /// <summary>Parse a JSON structure which can contain tokens, and validate that it's valid.</summary>
+        /// <param name="rawJson">The raw JSON structure which may contain tokens.</param>
+        /// <param name="tokenContext">The tokens available for this content pack.</param>
+        /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
+        /// <param name="parsed">The parsed value, which may be legitimately <c>null</c> even if successful.</param>
+        public delegate bool TryParseJsonTokensDelegate(JToken rawJson, IContext tokenContext, out string error, out TokenisableJToken parsed);
+
 
         /*********
         ** Public methods
@@ -42,26 +71,62 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalised asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
+        /// <param name="fromFile">The normalised asset key from which to load entries (if applicable), including tokens.</param>
         /// <param name="records">The data records to edit.</param>
         /// <param name="fields">The data fields to edit.</param>
         /// <param name="moveRecords">The records to reorder, if the target is a list asset.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditDataPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IMonitor monitor, Func<string, string> normaliseAssetName)
-            : base(logName, PatchType.EditData, contentPack, assetName, conditions, normaliseAssetName)
+        /// <param name="tryParseStringTokens">Parse a string which can contain tokens, and validate that it's valid.</param>
+        /// <param name="tryParseJsonTokens">Parse a JSON structure which can contain tokens, and validate that it's valid.</param>
+        public EditDataPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, IParsedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IMonitor monitor, Func<string, string> normaliseAssetName, TryParseStringTokensDelegate tryParseStringTokens, TryParseJsonTokensDelegate tryParseJsonTokens)
+            : base(logName, PatchType.EditData, contentPack, assetName, conditions, normaliseAssetName, fromAsset: fromFile)
         {
             // set fields
-            this.Records = records.ToArray();
+            this.RecordsFromEntry = records.ToArray();
             this.Fields = fields.ToArray();
             this.MoveRecords = moveRecords.ToArray();
             this.Monitor = monitor;
+            this.TryParseJsonTokens = tryParseJsonTokens;
+            this.TryParseStringTokens = tryParseStringTokens;
 
             // track contextuals
             this.Contextuals
-                .Add(this.Records)
+                .Add(this.RecordsFromEntry)
                 .Add(this.Fields)
                 .Add(this.MoveRecords)
                 .Add(this.Conditions);
+        }
+
+        /// <summary>Update the patch data when the context changes.</summary>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <returns>Returns whether the patch data changed.</returns>
+        public override bool UpdateContext(IContext context)
+        {
+            // update loaded entries
+            bool fromFileChanged = false;
+            if (this.RawFromAsset != null)
+            {
+                fromFileChanged = this.RawFromAsset.UpdateContext(context) || this.RecordsFromFile == null;
+
+                if (fromFileChanged)
+                {
+                    if (this.RecordsFromFile != null)
+                        this.Contextuals.Remove(this.RecordsFromFile);
+
+                    if (this.TryLoadEntries(this.RawFromAsset, context, out IEnumerable<EditDataPatchRecord> records, out string error))
+                        this.RecordsFromFile = records.ToArray();
+                    else
+                    {
+                        this.Monitor.Log($"Can't load entries for data patch \"{this.LogName}\" from {this.RawFromAsset.Value}: {error}.", LogLevel.Warn);
+                        this.RecordsFromFile = new EditDataPatchRecord[0];
+                    }
+
+                    this.Contextuals.Add(this.RecordsFromFile);
+                }
+            }
+
+            return base.UpdateContext(context) || fromFileChanged;
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>
@@ -130,6 +195,60 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Private methods
         *********/
+        /// <summary>Try to read entries from a target path.</summary>
+        /// <param name="fromFile">The normalised asset key from which to load entries (if applicable), including tokens.</param>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <param name="entries">The loaded entries.</param>
+        /// <param name="error">The reason entries could not be loaded, if any.</param>
+        private bool TryLoadEntries(ITokenString fromFile, IContext context, out IEnumerable<EditDataPatchRecord> entries, out string error)
+        {
+            // validate path
+            if (!this.ContentPack.HasFile(fromFile.Value))
+            {
+                error = "that file doesn't exist in the content pack";
+                entries = null;
+                return false;
+            }
+
+            // load JSON file
+            IDictionary<string, JToken> rawEntries;
+            try
+            {
+                rawEntries = this.ContentPack.ReadJsonFile<IDictionary<string, JToken>>(fromFile.Value);
+            }
+            catch (JsonException ex)
+            {
+                error = $"could not parse that file: {ex}";
+                entries = null;
+                return false;
+            }
+
+            // load entries
+            List<EditDataPatchRecord> parsed = new List<EditDataPatchRecord>();
+            foreach (KeyValuePair<string, JToken> pair in rawEntries)
+            {
+                if (!this.TryParseStringTokens(pair.Key, context, out string keyError, out IParsedTokenString key))
+                {
+                    error = $"{nameof(PatchConfig.FromFile)} file > '{key.Raw}' key is invalid: {keyError}";
+                    entries = null;
+                    return false;
+                }
+
+                if (!this.TryParseJsonTokens(pair.Value, context, out string valueError, out TokenisableJToken value))
+                {
+                    error = $"{nameof(PatchConfig.FromFile)} file > '{key.Raw}' value is invalid: {valueError}";
+                    entries = null;
+                    return false;
+                }
+
+                parsed.Add(new EditDataPatchRecord(key, value));
+            }
+
+            error = null;
+            entries = parsed;
+            return true;
+        }
+
         /// <summary>Apply the patch to a dictionary asset.</summary>
         /// <typeparam name="TKey">The dictionary key type.</typeparam>
         /// <typeparam name="TValue">The dictionary value type.</typeparam>
@@ -253,10 +372,16 @@ namespace ContentPatcher.Framework.Patches
         private void ApplyCollection<TKey, TValue>(Func<TKey, bool> hasEntry, Func<TKey, TValue> getEntry, Action<TKey> removeEntry, Action<TKey, TValue> setEntry)
         {
             // apply records
-            if (this.Records != null)
+            if (this.RecordsFromEntry != null || this.RecordsFromFile != null)
             {
+                var entries = Enumerable.Empty<EditDataPatchRecord>();
+                if (this.RecordsFromEntry != null)
+                    entries = entries.Concat(this.RecordsFromEntry);
+                if (this.RecordsFromFile != null)
+                    entries = entries.Concat(this.RecordsFromFile);
+
                 int i = 0;
-                foreach (EditDataPatchRecord record in this.Records)
+                foreach (EditDataPatchRecord record in entries)
                 {
                     i++;
 
