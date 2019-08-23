@@ -194,18 +194,24 @@ namespace ContentPatcher.Framework.Commands
                             output.AppendLine("[ ] n/a");
                         else if (token.RequiresInput)
                         {
-                            bool isFirst = true;
-                            foreach (string input in token.GetAllowedInputArguments().OrderByIgnoreCase(input => input))
+                            InvariantHashSet allowedInputs = token.GetAllowedInputArguments();
+                            if (allowedInputs.Any())
                             {
-                                if (isFirst)
+                                bool isFirst = true;
+                                foreach (string input in allowedInputs.OrderByIgnoreCase(input => input))
                                 {
-                                    output.Append("[X] ");
-                                    isFirst = false;
+                                    if (isFirst)
+                                    {
+                                        output.Append("[X] ");
+                                        isFirst = false;
+                                    }
+                                    else
+                                        output.Append($"      {"".PadRight(labelWidth, ' ')} |     ");
+                                    output.AppendLine($":{input}: {string.Join(", ", token.GetValues(new LiteralString(input)))}");
                                 }
-                                else
-                                    output.Append($"      {"".PadRight(labelWidth, ' ')} |     ");
-                                output.AppendLine($":{input}: {string.Join(", ", token.GetValues(new LiteralString(input)))}");
                             }
+                            else
+                                output.AppendLine("[X] (token returns a dynamic value)");
                         }
                         else
                             output.AppendLine("[X] " + string.Join(", ", token.GetValues(null).OrderByIgnoreCase(p => p)));
