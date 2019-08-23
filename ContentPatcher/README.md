@@ -18,9 +18,9 @@ that change the game's images and data without replacing XNB files.
   * [Global tokens](#global-tokens)
   * [Dynamic tokens](#dynamic-tokens)
   * [Player config](#player-config)
-* [Validate JSON files](#validate-json-files)
 * [Release a content pack](#release-a-content-pack)
 * [Troubleshoot](#troubleshoot)
+  * [Schema validator](#schema-validator)
   * [Patch commands](#patch-commands)
   * [Debug mode](#debug-mode)
   * [Verbose log](#verbose-log)
@@ -1216,30 +1216,6 @@ When you run the game, a `config.json` file will appear automatically with text 
 
 Players can edit it to configure your content pack.
 
-## Validate JSON files
-You can validate your `content.json` and `manifest.json` automatically to detect some common issues.
-(You should still test your content pack in-game before releasing it, since the validator won't
-detect all issues.)
-
-To validate online:
-1. Go to [json.smapi.io](https://json.smapi.io/).
-2. Set the format to 'Manifest' (for `manifest.json`) or 'Content Patcher' (for `content.json`).
-3. Drag & drop the JSON file onto the textbox, or paste in the text.
-4. Click the button to view the validation summary. You can optionally share the URL to let someone
-   else see the result.
-
-To validate in a text editor that supports JSON Schema, see
-[_Using a schema file directly_](https://github.com/Pathoschild/SMAPI/blob/develop/docs/technical/web.md#using-a-schema-file-directly)
-in the JSON validator documentation.
-
-### Tips
-* You should update your content pack to the latest format version whenever you update it, for best
-  futureproofing.
-* If you get an error like `Unexpected character`, your JSON syntax is invalid. Try checking the
-  line mentioned (or the one above it) for a missing comma, bracket, etc.
-* If you need help figuring out an error, see [_see also_](#see-also) for some links to places you
-  can ask.
-
 ## Release a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general
 info. Suggestions:
@@ -1261,6 +1237,30 @@ info. Suggestions:
    generate when the game is launched, just like a SMAPI mod's `content.json`.
 
 ## Troubleshoot
+### Schema validator
+You can validate your `content.json` and `manifest.json` automatically to detect some common issues.
+(You should still test your content pack in-game before releasing it, since the validator won't
+detect all issues.)
+
+To validate online:
+1. Go to [json.smapi.io](https://json.smapi.io/).
+2. Set the format to 'Manifest' (for `manifest.json`) or 'Content Patcher' (for `content.json`).
+3. Drag & drop the JSON file onto the textbox, or paste in the text.
+4. Click the button to view the validation summary. You can optionally share the URL to let someone
+   else see the result.
+
+To validate in a text editor that supports JSON Schema, see
+[_Using a schema file directly_](https://github.com/Pathoschild/SMAPI/blob/develop/docs/technical/web.md#using-a-schema-file-directly)
+in the JSON validator documentation.
+
+Tips:
+* You should update your content pack to the latest format version whenever you update it, for best
+  futureproofing.
+* If you get an error like `Unexpected character`, your JSON syntax is invalid. Try checking the
+  line mentioned (or the one above it) for a missing comma, bracket, etc.
+* If you need help figuring out an error, see [_see also_](#see-also) for some links to places you
+  can ask.
+
 ### Patch commands
 Content Patcher adds two patch commands for testing and troubleshooting.
 
