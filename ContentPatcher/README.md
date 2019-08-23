@@ -12,6 +12,7 @@ that change the game's images and data without replacing XNB files.
   * [Replace an entire file](#replace-an-entire-file)
   * [Edit part of an image](#edit-part-of-an-image)
   * [Edit part of a data file](#edit-part-of-a-data-file)
+  * [Edit part of a map](#edit-part-of-a-map)
 * [Advanced: tokens & conditions](#advanced-tokens--conditions)
   * [Overview](#overview-1)
   * [Global tokens](#global-tokens)
@@ -67,12 +68,11 @@ Content Patcher supports all game assets with some very powerful features, but i
 framework. More specialised frameworks might be better for specific things. You should consider
 whether one of these would work for you:
 
-  * [Advanced Location Loader](https://community.playstarbound.com/resources/smapi-advanced-location-loader.3619/) to add and edit maps.
+  * [Advanced Location Loader](https://community.playstarbound.com/resources/smapi-advanced-location-loader.3619/) for complex changes to maps. (For simple changes, see _[edit part of a map](#edit-part-of-a-map)_ below.)
   * [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) to add machines.
   * [Custom Furniture](https://www.nexusmods.com/stardewvalley/mods/1254) to add furniture.
-  * [CustomNPC](https://www.nexusmods.com/stardewvalley/mods/1607) to add NPCs.
   * [Custom Shirts](https://www.nexusmods.com/stardewvalley/mods/2416) to add shirts.
-  * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add items and fruit trees.
+  * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add items, crafting recipes, crops, fruit trees, hats, and weapons.
 
 ## Create a content pack
 ### Overview
@@ -403,7 +403,7 @@ New entries are added at the bottom of the list by default.
 </dd>
 </dl>
 
-## Edit part of a map
+### Edit part of a map
 `"Action": "EditMap"` changes part of an in-game map by copying tiles, properties, and tilesheets
 from a source map. This is essentially a copy & paste from one map into another, replacing whatever
 was in the target area before.
