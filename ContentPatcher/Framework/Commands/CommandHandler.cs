@@ -442,8 +442,8 @@ namespace ContentPatcher.Framework.Commands
             // state error
             if (state.InvalidTokens.Any())
                 return $"invalid tokens: {string.Join(", ", state.InvalidTokens.OrderByIgnoreCase(p => p))}";
-            if (state.UnavailableTokens.Any())
-                return $"tokens not ready: {string.Join(", ", state.UnavailableTokens.OrderByIgnoreCase(p => p))}";
+            if (state.UnreadyTokens.Any())
+                return $"tokens not ready: {string.Join(", ", state.UnreadyTokens.OrderByIgnoreCase(p => p))}";
             if (state.Errors.Any())
                 return string.Join("; ", state.Errors);
 
@@ -452,7 +452,7 @@ namespace ContentPatcher.Framework.Commands
             {
                 string[] failedConditions = (
                     from condition in patch.ParsedConditions
-                    let displayText = !condition.Name.EqualsIgnoreCase("HasFile") && !string.IsNullOrWhiteSpace(condition.Input?.Raw)
+                    let displayText = !condition.Is(ConditionType.HasFile) && condition.HasInput()
                         ? $"{condition.Name}:{condition.Input.Raw}"
                         : condition.Name
                     orderby displayText
@@ -463,6 +463,10 @@ namespace ContentPatcher.Framework.Commands
                 if (failedConditions.Any())
                     return $"conditions don't match: {string.Join(", ", failedConditions)}";
             }
+
+            // fallback to unavailable tokens (should never happen due to HasMod check)
+            if (state.UnavailableModTokens.Any())
+                return $"tokens provided by an unavailable mod: {string.Join(", ", state.UnavailableModTokens.OrderByIgnoreCase(p => p))}";
 
             // non-matching for an unknown reason
             if (!patch.MatchesContext)

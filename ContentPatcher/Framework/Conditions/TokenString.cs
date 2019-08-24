@@ -93,7 +93,13 @@ namespace ContentPatcher.Framework.Conditions
                     isMutable = isMutable || token.IsMutable;
                 }
                 else
-                    this.State.AddInvalidTokens(lexToken.Name);
+                {
+                    string requiredModId = lexToken.GetProviderModId();
+                    if (!string.IsNullOrWhiteSpace(requiredModId) && !context.IsModInstalled(requiredModId))
+                        this.State.AddUnavailableModTokens(requiredModId);
+                    else
+                        this.State.AddInvalidTokens(lexToken.Name);
+                }
             }
 
             // set metadata
@@ -111,7 +117,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <returns>Returns whether the value changed.</returns>
         public bool UpdateContext(IContext context)
         {
-            if (!this.IsMutable || this.State.InvalidTokens.Any())
+            if (!this.IsMutable || this.State.InvalidTokens.Any() || this.State.UnavailableModTokens.Any())
                 return false;
 
             return this.ForceUpdate(context);
@@ -158,7 +164,7 @@ namespace ContentPatcher.Framework.Conditions
                 this.Value = null;
                 if (!unavailableTokens.Any())
                     throw new InvalidOperationException($"Could not apply tokens to string '{this.Raw}', but no invalid tokens were reported."); // sanity check, should never happen
-                this.State.AddUnavailableTokens(unavailableTokens.ToArray());
+                this.State.AddUnreadyTokens(unavailableTokens.ToArray());
             }
 
             return

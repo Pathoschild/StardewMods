@@ -20,10 +20,13 @@ namespace ContentPatcher.Framework
         ** Fields
         *********/
         /// <summary>The available global tokens.</summary>
-        private readonly GenericTokenContext GlobalContext = new GenericTokenContext();
+        private readonly GenericTokenContext GlobalContext;
 
         /// <summary>The available tokens defined within the context of each content pack.</summary>
         private readonly Dictionary<IContentPack, ModTokenContext> LocalTokens = new Dictionary<IContentPack, ModTokenContext>();
+
+        /// <summary>The installed mod IDs.</summary>
+        private readonly InvariantHashSet InstalledMods;
 
 
         /*********
@@ -40,8 +43,11 @@ namespace ContentPatcher.Framework
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
         /// <param name="installedMods">The installed mod IDs.</param>
         /// <param name="modTokens">The custom tokens provided by mods.</param>
-        public TokenManager(IContentHelper contentHelper, IEnumerable<string> installedMods, IEnumerable<IToken> modTokens)
+        public TokenManager(IContentHelper contentHelper, InvariantHashSet installedMods, IEnumerable<IToken> modTokens)
         {
+            this.InstalledMods = installedMods;
+            this.GlobalContext = new GenericTokenContext(this.IsModInstalled);
+
             foreach (IToken modToken in modTokens)
                 this.GlobalContext.Tokens[modToken.Name] = modToken;
             foreach (IValueProvider valueProvider in this.GetGlobalValueProviders(contentHelper, installedMods))
@@ -83,6 +89,13 @@ namespace ContentPatcher.Framework
         /****
         ** IContext
         ****/
+        /// <summary>Get whether a mod is installed.</summary>
+        /// <param name="id">The mod ID.</param>
+        public bool IsModInstalled(string id)
+        {
+            return this.InstalledMods.Contains(id);
+        }
+
         /// <summary>Get whether the context contains the given token.</summary>
         /// <param name="name">The token name.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
@@ -125,7 +138,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get the global value providers with which to initialise the token manager.</summary>
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
         /// <param name="installedMods">The installed mod IDs.</param>
-        private IEnumerable<IValueProvider> GetGlobalValueProviders(IContentHelper contentHelper, IEnumerable<string> installedMods)
+        private IEnumerable<IValueProvider> GetGlobalValueProviders(IContentHelper contentHelper, InvariantHashSet installedMods)
         {
             bool NeedsBasicInfo() => this.IsBasicInfoLoaded;
 
@@ -165,7 +178,7 @@ namespace ContentPatcher.Framework
             yield return new ConditionTypeValueProvider(ConditionType.IsCommunityCenterComplete, () => this.GetIsCommunityCenterComplete().ToString(), NeedsBasicInfo);
 
             // other
-            yield return new ImmutableValueProvider(ConditionType.HasMod.ToString(), new InvariantHashSet(installedMods), canHaveMultipleValues: true);
+            yield return new ImmutableValueProvider(ConditionType.HasMod.ToString(), installedMods, canHaveMultipleValues: true);
             yield return new HasValueValueProvider();
             yield return new ConditionTypeValueProvider(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()));
         }

@@ -10,6 +10,13 @@ namespace ContentPatcher.Framework
     internal class GenericTokenContext<TToken> : IContext where TToken : class, IToken
     {
         /*********
+        ** Fields
+        *********/
+        /// <summary>Get whether a mod is installed.</summary>
+        private readonly Func<string, bool> IsModInstalledImpl;
+
+
+        /*********
         ** Accessors
         *********/
         /// <summary>The available tokens.</summary>
@@ -19,6 +26,20 @@ namespace ContentPatcher.Framework
         /*********
         ** Accessors
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="isModInstalled">Get whether a mod is installed.</param>
+        public GenericTokenContext(Func<string, bool> isModInstalled)
+        {
+            this.IsModInstalledImpl = isModInstalled;
+        }
+
+        /// <summary>Get whether a mod is installed.</summary>
+        /// <param name="id">The mod ID.</param>
+        public bool IsModInstalled(string id)
+        {
+            return this.IsModInstalledImpl(id);
+        }
+
         /// <summary>Save the given token to the context.</summary>
         /// <param name="token">The token to save.</param>
         public void Save(TToken token)
@@ -82,5 +103,14 @@ namespace ContentPatcher.Framework
     }
 
     /// <summary>A generic token context.</summary>
-    internal class GenericTokenContext : GenericTokenContext<IToken> { }
+    internal class GenericTokenContext : GenericTokenContext<IToken>
+    {
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="isModInstalled">Get whether a mod is installed.</param>
+        public GenericTokenContext(Func<string, bool> isModInstalled)
+            : base(isModInstalled) { }
+    }
 }

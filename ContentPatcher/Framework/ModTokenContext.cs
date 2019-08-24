@@ -19,10 +19,10 @@ namespace ContentPatcher.Framework
         private readonly IContext GlobalContext;
 
         /// <summary>The available local standard tokens.</summary>
-        private readonly GenericTokenContext LocalContext = new GenericTokenContext();
+        private readonly GenericTokenContext LocalContext;
 
         /// <summary>The dynamic tokens whose value depends on <see cref="DynamicTokenValues"/>.</summary>
-        private readonly GenericTokenContext<DynamicToken> DynamicContext = new GenericTokenContext<DynamicToken>();
+        private readonly GenericTokenContext<DynamicToken> DynamicContext;
 
         /// <summary>The conditional values used to set the values of <see cref="DynamicContext"/> tokens.</summary>
         private readonly IList<DynamicTokenValue> DynamicTokenValues = new List<DynamicTokenValue>();
@@ -47,6 +47,8 @@ namespace ContentPatcher.Framework
         {
             this.Scope = scope;
             this.GlobalContext = tokenManager;
+            this.LocalContext = new GenericTokenContext(this.IsModInstalled);
+            this.DynamicContext = new GenericTokenContext<DynamicToken>(this.IsModInstalled);
             this.Contexts = new[] { this.GlobalContext, this.LocalContext, this.DynamicContext };
         }
 
@@ -169,6 +171,13 @@ namespace ContentPatcher.Framework
         /****
         ** IContext
         ****/
+        /// <summary>Get whether a mod is installed.</summary>
+        /// <param name="id">The mod ID.</param>
+        public bool IsModInstalled(string id)
+        {
+            return this.GlobalContext.IsModInstalled(id);
+        }
+
         /// <summary>Get whether the context contains the given token.</summary>
         /// <param name="name">The token name.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>

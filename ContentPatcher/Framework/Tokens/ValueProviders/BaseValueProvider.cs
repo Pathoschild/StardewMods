@@ -243,7 +243,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (ready)
                 this.State.Reset();
             else
-                this.State.AddUnavailableTokens(this.Name);
+                this.State.AddUnreadyTokens(this.Name);
 
             return ready;
         }

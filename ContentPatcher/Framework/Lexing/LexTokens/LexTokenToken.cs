@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 
 namespace ContentPatcher.Framework.Lexing.LexTokens
@@ -38,6 +39,15 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
             this.Name = name;
             this.InputArg = inputArg;
             this.ImpliedBraces = impliedBraces;
+        }
+
+        /// <summary>Get the unique ID of the mod which provides this token, if applicable.</summary>
+        public string GetProviderModId()
+        {
+            string[] nameParts = this.Name.Split(new[] { InternalConstants.ModTokenSeparator }, 2, StringSplitOptions.None);
+            return nameParts.Length == 2
+                ? nameParts[0].Trim()
+                : null;
         }
 
 

@@ -21,7 +21,10 @@ namespace ContentPatcher.Framework
         InvariantHashSet InvalidTokens { get; }
 
         /// <summary>The valid tokens required by the instance which aren't available in the current context, if any.</summary>
-        InvariantHashSet UnavailableTokens { get; }
+        InvariantHashSet UnreadyTokens { get; }
+
+        /// <summary>The tokens which are provided by a mod which isn't installed, if any.</summary>
+        InvariantHashSet UnavailableModTokens { get; }
 
         /// <summary>Error phrases indicating why the instance is not ready to use, if any.</summary>
         InvariantHashSet Errors { get; }

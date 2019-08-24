@@ -69,6 +69,13 @@ namespace ContentPatcher.Framework
             }
         }
 
+        /// <summary>Get whether a mod is installed.</summary>
+        /// <param name="id">The mod ID.</param>
+        public bool IsModInstalled(string id)
+        {
+            return this.LastParentContext?.IsModInstalled(id) ?? false;
+        }
+
         /// <summary>Get whether the context contains the given token.</summary>
         /// <param name="name">The token name.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>

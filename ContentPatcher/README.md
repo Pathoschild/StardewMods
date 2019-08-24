@@ -18,6 +18,7 @@ that change the game's images and data without replacing XNB files.
   * [Global tokens](#global-tokens)
   * [Dynamic tokens](#dynamic-tokens)
   * [Player config](#player-config)
+  * [Mod-provided tokens](#mod-provided-tokens)
 * [Release a content pack](#release-a-content-pack)
 * [Troubleshoot](#troubleshoot)
   * [Schema validator](#schema-validator)
@@ -1215,6 +1216,47 @@ When you run the game, a `config.json` file will appear automatically with text 
 ```
 
 Players can edit it to configure your content pack.
+
+### Mod-provided tokens
+SMAPI mods can add new tokens for content packs to use (see [_extensibility for modders_](#extensibility-for-modders)),
+which work just like normal Content Patcher tokens. For example, this patch uses a token from Json
+Assets:
+```js
+{
+   "Format": "1.10",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Data/NpcGiftTastes",
+         "Entries": {
+            "Universal_Love": "74 446 797 373 {{spacechase0.jsonAssets/ObjectId:item name}}",
+         }
+      }
+   ]
+}
+```
+
+To use a mod-provided token, at least one of these must be true:
+* The mod which provides the token is a [required dependency](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies)
+  of your content pack.
+* Or the patch using the token has an immutable (i.e. not using any tokens) `HasMod` condition which lists the mod:
+  ```js
+  {
+     "Format": "1.10",
+     "Changes": [
+        {
+           "Action": "EditData",
+           "Target": "Data/NpcGiftTastes",
+           "Entries": {
+              "Universal_Love": "74 446 797 373 {{spacechase0.jsonAssets/ObjectId:item name}}",
+           },
+           "When": {
+              "HasMod": "spacechase0.jsonAssets"
+           }
+        }
+     ]
+  }
+  ```
 
 ## Release a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general

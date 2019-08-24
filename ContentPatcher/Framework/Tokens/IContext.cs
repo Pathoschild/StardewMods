@@ -6,6 +6,10 @@ namespace ContentPatcher.Framework.Tokens
     /// <summary>Provides access to contextual tokens.</summary>
     internal interface IContext
     {
+        /// <summary>Get whether a mod is installed.</summary>
+        /// <param name="id">The mod ID.</param>
+        bool IsModInstalled(string id);
+
         /// <summary>Get whether the context contains the given token.</summary>
         /// <param name="name">The token name.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>

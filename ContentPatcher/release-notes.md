@@ -2,9 +2,10 @@
 
 # Release notes
 ## Upcoming release
-* Added support for using `FromFile` with `Action: EditData` patches.
+* Added support for using `FromFile` with `EditData` patches.
 * Added `patch export` console command, which lets you see what an asset looks like with all changes applied.
 * Added [`manifest.json` and `content.json` validator](https://github.com/Pathoschild/StardewMods/tree/develop/ContentPatcher#schema-validator) for content pack authors.
+* Content packs can now use mod-provided tokens without a dependency if the patch has an appropriate `HasMod` condition.
 * Fixed `patch summary` display for mod-provided tokens which require an unbounded input.
 
 ## 1.9.2
@@ -12,7 +13,7 @@ Released 25 July 2019.
 
 * Fixed `Day` token not allowing zero values.
 * Fixed dynamic tokens validated before they're ready.
-* Fixed custom tokens called with non-ready inputs in some cases.
+* Fixed mod-provided tokens called with non-ready inputs in some cases.
 * Fixed Linux/Mac players getting `HasFile`-related errors in some cases.
 
 ## 1.9.1

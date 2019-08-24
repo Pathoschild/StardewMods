@@ -62,6 +62,20 @@ namespace ContentPatcher.Framework.Conditions
                 this.CurrentValues = this.Values.SplitValues();
         }
 
+        /// <summary>Get whether the condition has a non-empty input argument.</summary>
+        public bool HasInput()
+        {
+            return this.Input != null && this.Input.IsMeaningful();
+        }
+
+
+        /// <summary>Get whether the condition is for a given condition type.</summary>
+        /// <param name="type">The condition type.</param>
+        public bool Is(ConditionType type)
+        {
+            return this.Name.EqualsIgnoreCase(type.ToString());
+        }
+
         /// <summary>Whether the condition matches.</summary>
         /// <param name="context">The condition context.</param>
         public bool IsMatch(IContext context)
@@ -88,7 +102,7 @@ namespace ContentPatcher.Framework.Conditions
 
             // check token name
             if (!context.Contains(this.Name, enforceContext: true))
-                this.State.AddUnavailableTokens(this.Name);
+                this.State.AddUnreadyTokens(this.Name);
 
             // update values
             if (changed || wasReady != this.IsReady)
