@@ -248,13 +248,15 @@ namespace ContentPatcher.Framework.Commands
                         (
                             // get non-global tokens
                             from IToken token in tokenContext.GetTokens(enforceContext: false)
-                            where token.Scope != null && token.Name != ConditionType.HasFile.ToString()
+                            where token.Scope != null
 
                             // get input arguments
                             let validInputs = token.IsReady && token.RequiresInput
                                 ? token.GetAllowedInputArguments().Select(p => new LiteralString(p)).AsEnumerable<ITokenString>()
                                 : new ITokenString[] { null }
                             from ITokenString input in validInputs
+
+                            where !token.RequiresInput || validInputs.Any() // don't show tokens which can't be represented
 
                             // select display data
                             let result = new

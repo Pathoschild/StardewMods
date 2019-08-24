@@ -59,7 +59,7 @@ namespace ContentPatcher.Framework.Conditions
 
             // init values
             if (this.IsReady)
-                this.CurrentValues = this.Values.SplitValues();
+                this.CurrentValues = this.Values.SplitValuesUnique();
         }
 
         /// <summary>Get whether the condition has a non-empty input argument.</summary>
@@ -108,7 +108,7 @@ namespace ContentPatcher.Framework.Conditions
             if (changed || wasReady != this.IsReady)
             {
                 this.CurrentValues = this.IsReady
-                    ? this.Values.SplitValues()
+                    ? this.Values.SplitValuesUnique()
                     : new InvariantHashSet();
                 return true;
             }

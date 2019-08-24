@@ -43,7 +43,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             }
 
             // get possible values from literal token
-            InvariantHashSet splitValues = possibleValues.SplitValues();
+            InvariantHashSet splitValues = possibleValues.SplitValuesUnique();
             foreach (string value in splitValues)
                 this.AllowedRootValues.Add(value.Trim());
             this.CanHaveMultipleValuesForRoot = this.CanHaveMultipleValuesForRoot || splitValues.Count > 1;
@@ -53,7 +53,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="values">The values to set.</param>
         public void SetValue(ITokenString values)
         {
-            this.Values = values.SplitValues();
+            this.Values = values.SplitValuesUnique();
         }
 
         /// <summary>Set whether the token is valid for the current context.</summary>

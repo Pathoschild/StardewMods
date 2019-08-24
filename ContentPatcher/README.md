@@ -1049,6 +1049,36 @@ code | meaning
 </td>
 </tr>
 
+<tr>
+<td>Random</td>
+<td>
+
+A random value from the options you specify:
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail",
+   "FromFile": "assets/abigail-{{Random:hood, jacket, raincoat}}.png"
+}
+```
+
+The selection is based on the save ID and in-game date, so reloading a save with the same patches
+won't change the selection. Calling the token twice may return different values (you can use a
+[dynamic token](#dynamic-token) to reuse the same selection).
+
+For weighted random, you can specify a value multiple times. For example, 'red' is twice as likely
+as 'blue' in this patch:
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail",
+   "FromFile": "assets/abigail-{{Random:red, red, blue}}.png"
+}
+```
+
+</td>
+</tr>
+
 </table>
 </dd>
 

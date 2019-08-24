@@ -836,7 +836,7 @@ namespace ContentPatcher
                 return Fail($"can't parse condition {name}: {error}", out error, out condition, out immutableRequiredModIDs);
 
             // validate token keys & values
-            if (!values.IsMutable && !token.TryValidateValues(input, values.SplitValues(), tokenParser.Context, out string customError))
+            if (!values.IsMutable && !token.TryValidateValues(input, values.SplitValuesUnique(), tokenParser.Context, out string customError))
                 return Fail($"invalid {lexToken.Name} condition: {customError}", out error, out condition, out immutableRequiredModIDs);
 
             // create condition

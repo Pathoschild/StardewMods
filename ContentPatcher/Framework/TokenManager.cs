@@ -188,6 +188,7 @@ namespace ContentPatcher.Framework
         private IEnumerable<IValueProvider> GetLocalValueProviders(IContentPack contentPack)
         {
             yield return new HasFileValueProvider(contentPack.DirectoryPath);
+            yield return new RandomValueProvider(); // per-pack for more reproducible selection when troubleshooting
         }
 
         /// <summary>Get a constant for a given value.</summary>
