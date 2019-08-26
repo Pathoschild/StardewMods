@@ -83,7 +83,7 @@ namespace ContentPatcher.Framework
 
             // update mod contexts
             foreach (ModTokenContext localContext in this.LocalTokens.Values)
-                localContext.UpdateContext(this, globalChangedTokens);
+                localContext.UpdateContext(globalChangedTokens);
         }
 
         /****

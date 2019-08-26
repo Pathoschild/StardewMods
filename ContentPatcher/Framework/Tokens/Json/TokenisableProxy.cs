@@ -7,7 +7,7 @@ namespace ContentPatcher.Framework.Tokens.Json
     internal class TokenisableProxy : IContextual
     {
         /*********
-        ** Access
+        ** Accessors
         *********/
         /// <summary>The token string which provides the field value.</summary>
         public IParsedTokenString TokenString { get; }

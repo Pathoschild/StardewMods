@@ -433,11 +433,18 @@ See _common fields_ above.
 </td>
 <td>
 
-The relative path to the map in your content pack folder from which to copy (like `assets/town.tbin`). This can be a `.tbin` or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter.
+The relative path to the map in your content pack folder from which to copy (like
+`assets/town.tbin`). This can be a `.tbin` or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions)
+and capitalisation doesn't matter.
 
-Content Patcher will handle tilesheets referenced by the `FromFile` map for you if it's a `.tbin` file:
-* If a tilesheet isn't referenced by the target map, Content Patcher will add it for you (with a `z_` ID prefix to avoid conflicts with hardcoded game logic). If the source map has a custom version of a tilesheet that's already referenced, it'll be added as a separate tilesheet only used by your tiles.
-* If you include the tilesheet file in your mod folder, Content Patcher will use that one automatically; otherwise it will be loaded from the game's `Content/Maps` folder.
+Content Patcher will handle tilesheets referenced by the `FromFile` map for you if it's a `.tbin`
+file:
+* If a tilesheet isn't referenced by the target map, Content Patcher will add it for you (with a
+  `z_` ID prefix to avoid conflicts with hardcoded game logic). If the source map has a custom
+  version of a tilesheet that's already referenced, it'll be added as a separate tilesheet only
+  used by your tiles.
+* If you include the tilesheet file in your mod folder, Content Patcher will use that one
+  automatically; otherwise it will be loaded from the game's `Content/Maps` folder.
 
 </td>
 </tr>
@@ -449,7 +456,9 @@ Content Patcher will handle tilesheets referenced by the `FromFile` map for you 
 </td>
 <td>
 
-_(optional)_ The part of the source map to copy. Defaults to the whole source map. This is specified as an object with the X and Y tile coordinates of the top-left corner, and the tile width and height of the area.
+_(optional)_ The part of the source map to copy. Defaults to the whole source map. This is
+specified as an object with the X and Y tile coordinates of the top-left corner, and the tile width
+and height of the area.
 
 </td>
 </tr>
@@ -1078,7 +1087,6 @@ as 'blue' in this patch:
 
 </td>
 </tr>
-
 </table>
 </dd>
 
@@ -1128,7 +1136,6 @@ Equivalent to `Target`, but only the part after the last path separator:
 
 </td>
 </tr>
-
 </table>
 </dd>
 </dl>

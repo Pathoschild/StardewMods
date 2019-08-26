@@ -412,13 +412,15 @@ namespace ContentPatcher
                         }
                     }
 
-                    // load patches
-                    IContext patchTokenContext = new SinglePatchContext(current.Manifest.UniqueID, parentContext: modContext); // make patch tokens available to patches
-                    tokenParser = new TokenParser(modContext, current.Manifest, current.Migrator, installedMods);
+                    // get fake patch context (so patch tokens are available in patch validation)
+                    LocalContext fakePatchContext = new LocalContext(current.Manifest.UniqueID, parentContext: modContext);
+                    fakePatchContext.SetLocalValue(ConditionType.Target.ToString(), "");
+                    fakePatchContext.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), "");
+                    tokenParser = new TokenParser(fakePatchContext, current.Manifest, current.Migrator, installedMods);
 
+                    // load patches
                     content.Changes = this.SplitPatches(content.Changes).ToArray();
                     this.NamePatches(current.ManagedPack, content.Changes);
-
                     foreach (PatchConfig patch in content.Changes)
                     {
                         this.Monitor.VerboseLog($"   loading {patch.LogName}...");

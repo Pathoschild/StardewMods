@@ -5,6 +5,7 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Patches
@@ -24,8 +25,8 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Diagnostic info about the instance.</summary>
         protected readonly ContextualState State = new ContextualState();
 
-        /// <summary>The context which provides tokens for this patch, including patch-specific tokens like <see cref="ConditionType.Target"/>.</summary>
-        protected SinglePatchContext PrivateContext { get; }
+        /// <summary>The context which provides tokens specific to this patch like <see cref="ConditionType.Target"/>.</summary>
+        protected LocalContext PrivateContext { get; }
 
         /// <summary>Whether the <see cref="FromAsset"/> file exists.</summary>
         private bool FromAssetExistsImpl;
@@ -81,12 +82,21 @@ namespace ContentPatcher.Framework.Patches
             this.State.Reset();
             bool changed;
 
-            // update patch context
+            // update target asset
             changed = this.RawTargetAsset.UpdateContext(context);
             this.TargetAsset = this.RawTargetAsset.IsReady ? this.NormaliseAssetNameImpl(this.RawTargetAsset.Value) : "";
-            this.PrivateContext.Update(context, this.RawTargetAsset);
 
-            // update contextual values
+            // update local tokens
+            this.PrivateContext.Update(context);
+            if (this.RawTargetAsset.IsReady)
+            {
+                string path = PathUtilities.NormalisePathSeparators(this.RawTargetAsset.Value);
+
+                this.PrivateContext.SetLocalValue(ConditionType.Target.ToString(), path);
+                this.PrivateContext.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), Path.GetFileName(path));
+            }
+
+            // update contextuals
             changed = this.Contextuals.UpdateContext(this.PrivateContext) || changed;
             this.FromAssetExistsImpl = false;
 
@@ -173,7 +183,7 @@ namespace ContentPatcher.Framework.Patches
             this.RawTargetAsset = assetName;
             this.Conditions = conditions.ToArray();
             this.NormaliseAssetNameImpl = normaliseAssetName;
-            this.PrivateContext = new SinglePatchContext(scope: this.ContentPack.Manifest.UniqueID);
+            this.PrivateContext = new LocalContext(scope: this.ContentPack.Manifest.UniqueID);
             this.RawFromAsset = fromAsset;
 
             this.Contextuals

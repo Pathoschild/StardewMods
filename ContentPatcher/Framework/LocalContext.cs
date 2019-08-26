@@ -1,29 +1,25 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
-using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework
 {
-    /// <summary>A context which provides tokens specific to a single patch.</summary>
-    internal class SinglePatchContext : IContext
+    /// <summary>A context which provides temporary tokens specific to the current patch or field.</summary>
+    internal class LocalContext : IContext
     {
         /*********
         ** Fields
         *********/
+        /// <summary>The mod namespace in which the token is accessible.</summary>
+        private readonly string Scope;
+
         /// <summary>The parent context that provides non-patch-specific tokens.</summary>
         private IContext LastParentContext;
 
-        /// <summary>The token instance for the <see cref="ConditionType.Target"/> token.</summary>
-        private readonly DynamicToken TargetToken;
-
-        /// <summary>The token instance for the <see cref="ConditionType.TargetWithoutPath"/> token.</summary>
-        private readonly DynamicToken TargetWithoutPathToken;
-
-        /// <summary>The custom tokens provided by this instance.</summary>
-        private readonly IToken[] CustomTokens;
+        /// <summary>The local token values.</summary>
+        private readonly InvariantDictionary<DynamicToken> LocalTokens = new InvariantDictionary<DynamicToken>();
 
 
         /*********
@@ -32,14 +28,10 @@ namespace ContentPatcher.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="scope">The mod namespace in which the token is accessible.</param>
         /// <param name="parentContext">The initial parent context that provides non-patch-specific tokens, if any.</param>
-        public SinglePatchContext(string scope, IContext parentContext = null)
+        public LocalContext(string scope, IContext parentContext = null)
         {
+            this.Scope = scope;
             this.LastParentContext = parentContext;
-            this.CustomTokens = new IToken[]
-            {
-                this.TargetToken = new DynamicToken(ConditionType.Target.ToString(), scope),
-                this.TargetWithoutPathToken = new DynamicToken(ConditionType.TargetWithoutPath.ToString(), scope)
-            };
         }
 
         /****
@@ -47,26 +39,12 @@ namespace ContentPatcher.Framework
         ****/
         /// <summary>Update the patch context.</summary>
         /// <param name="parentContext">The parent context that provides non-patch-specific tokens.</param>
-        /// <param name="targetName">The asset name intercepted by the patch.</param>
-        public void Update(IContext parentContext, ITokenString targetName)
+        public void Update(IContext parentContext)
         {
             this.LastParentContext = parentContext;
 
-            if (targetName.IsReady)
-            {
-                string path = PathUtilities.NormalisePathSeparators(targetName.Value);
-
-                this.TargetToken.SetReady(true);
-                this.TargetToken.SetValue(new LiteralString(path));
-
-                this.TargetWithoutPathToken.SetReady(true);
-                this.TargetWithoutPathToken.SetValue(new LiteralString(Path.GetFileName(path)));
-            }
-            else
-            {
-                this.TargetToken.SetReady(false);
-                this.TargetWithoutPathToken.SetReady(false);
-            }
+            foreach (DynamicToken token in this.LocalTokens.Values)
+                token.SetReady(false);
         }
 
         /// <summary>Get whether a mod is installed.</summary>
@@ -90,20 +68,16 @@ namespace ContentPatcher.Framework
         /// <returns>Returns the matching token, or <c>null</c> if none was found.</returns>
         public IToken GetToken(string name, bool enforceContext)
         {
-            foreach (IToken token in this.CustomTokens)
-            {
-                if (token.Name.EqualsIgnoreCase(name))
-                    return token;
-            }
-
-            return this.LastParentContext?.GetToken(name, enforceContext);
+            return this.LocalTokens.TryGetValue(name, out DynamicToken token)
+                ? token
+                : this.LastParentContext?.GetToken(name, enforceContext);
         }
 
         /// <summary>Get the underlying tokens.</summary>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
         public IEnumerable<IToken> GetTokens(bool enforceContext)
         {
-            foreach (IToken token in this.CustomTokens)
+            foreach (DynamicToken token in this.LocalTokens.Values)
                 yield return token;
 
             if (this.LastParentContext != null)
@@ -123,6 +97,26 @@ namespace ContentPatcher.Framework
         {
             IToken token = this.GetToken(name, enforceContext);
             return token?.GetValues(input) ?? new string[0];
+        }
+
+        /// <summary>Set a dynamic token value.</summary>
+        /// <param name="name">The token name.</param>
+        /// <param name="value">The token value.</param>
+        public void SetLocalValue(string name, string value)
+        {
+            this.SetLocalValue(name, new LiteralString(value));
+        }
+
+        /// <summary>Set a dynamic token value.</summary>
+        /// <param name="name">The token name.</param>
+        /// <param name="value">The token value.</param>
+        public void SetLocalValue(string name, ITokenString value)
+        {
+            if (!this.LocalTokens.TryGetValue(name, out DynamicToken token))
+                this.LocalTokens[name] = token = new DynamicToken(name, this.Scope);
+
+            token.SetValue(value);
+            token.SetReady(true);
         }
     }
 }
