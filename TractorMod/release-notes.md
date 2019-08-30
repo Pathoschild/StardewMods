@@ -4,7 +4,8 @@
 * Added attachment features:
   * axe: cut choppable bushes (disabled by default).
 * Added option to allow summoning a temporary tractor without building a garage first.
-* Fixed scythe sometimes interacting with incorrect targets (e.g. shipping bin).
+* Fixed scythe sometimes interacting with incorrect targets (e.g. shipping bin or farm animals).
+* Fixed incorrect speed changes when a different speed buff expires while riding the tractor (via Stardew Valley 1.4 change).
 * Improved translations. Thanks to Hesperusrus (updated Russian)!
 
 ## 4.8.4
