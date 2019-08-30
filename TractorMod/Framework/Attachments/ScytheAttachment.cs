@@ -78,10 +78,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                     : this.Config.HarvestCrops;
                 if (shouldHarvest)
                 {
-                    if (dirt.crop.harvestMethod.Value == Crop.sickleHarvest)
-                        return dirt.performToolAction(tool, 0, tile, location);
-                    else
-                        this.CheckTileAction(location, tile, player);
+                    return dirt.crop.harvestMethod.Value == Crop.sickleHarvest
+                        ? dirt.performToolAction(tool, 0, tile, location)
+                        : dirt.performUseAction(tile, location);
                 }
 
                 return true;

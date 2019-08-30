@@ -4,6 +4,7 @@
 * Added attachment features:
   * axe: cut choppable bushes (disabled by default).
 * Added option to allow summoning a temporary tractor without building a garage first.
+* Fixed scythe sometimes interacting with incorrect targets (e.g. shipping bin).
 * Improved translations. Thanks to Hesperusrus (updated Russian)!
 
 ## 4.8.4
