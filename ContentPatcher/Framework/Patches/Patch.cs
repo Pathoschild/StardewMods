@@ -102,7 +102,7 @@ namespace ContentPatcher.Framework.Patches
 
             // update from asset
             this.FromAsset = this.RawFromAsset?.IsReady == true
-                ? this.NormaliseLocalAssetPath(this.RawFromAsset.Value)
+                ? this.NormaliseLocalAssetPath(this.RawFromAsset.Value, logName: $"{nameof(PatchConfig.FromFile)} field")
                 : null;
             if (this.Contextuals.IsReady && this.FromAsset != null)
             {
@@ -194,22 +194,30 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>Get a normalised file path relative to the content pack folder.</summary>
         /// <param name="path">The relative asset path.</param>
-        protected string NormaliseLocalAssetPath(string path)
+        /// <param name="logName">A descriptive name for the field being normalised shown in error messages.</param>
+        protected string NormaliseLocalAssetPath(string path, string logName)
         {
-            // normalise asset name
-            if (string.IsNullOrWhiteSpace(path))
-                return null;
-            string newPath = this.NormaliseAssetNameImpl(path);
-
-            // add .xnb extension if needed (it's stripped from asset names)
-            string fullPath = this.ContentPack.GetFullPath(newPath);
-            if (!File.Exists(fullPath))
+            try
             {
-                if (File.Exists($"{fullPath}.xnb") || Path.GetExtension(path) == ".xnb")
-                    newPath += ".xnb";
-            }
+                // normalise asset name
+                if (string.IsNullOrWhiteSpace(path))
+                    return null;
+                string newPath = this.NormaliseAssetNameImpl(path);
 
-            return newPath;
+                // add .xnb extension if needed (it's stripped from asset names)
+                string fullPath = this.ContentPack.GetFullPath(newPath);
+                if (!File.Exists(fullPath))
+                {
+                    if (File.Exists($"{fullPath}.xnb") || Path.GetExtension(path) == ".xnb")
+                        newPath += ".xnb";
+                }
+
+                return newPath;
+            }
+            catch (Exception ex)
+            {
+                throw new FormatException($"The {logName} for patch '{this.LogName}' isn't a valid asset path (current value: '{path}').", ex);
+            }
         }
     }
 }
