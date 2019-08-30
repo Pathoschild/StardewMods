@@ -54,6 +54,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Whether the player was riding the tractor during the last tick.</summary>
         private bool WasRiding;
 
+        /// <summary>Whether the tractor effects were enabled during the last tick.</summary>
+        private bool WasEnabled;
+
+        /// <summary>The tractor location during the last tick.</summary>
+        private GameLocation WasLocation;
+
         /// <summary>The rider health to maintain if they're invincible.</summary>
         private int RiderHealth;
 
@@ -137,6 +143,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 Game1.player.toolPower = 0;
             }
 
+            // detect activation or location change
+            bool enabled = this.IsEnabled();
+            if (enabled && (!this.WasEnabled || !object.ReferenceEquals(this.WasLocation, Game1.currentLocation)))
+                this.OnActivated(Game1.currentLocation);
+            this.WasEnabled = enabled;
+            this.WasLocation = Game1.currentLocation;
+
             // apply riding effects
             if (this.IsCurrentPlayerRiding && Game1.activeClickableMenu == null)
             {
@@ -152,9 +165,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 // apply tractor buff
                 this.UpdateBuff();
 
-                // apply tools
-                if (this.UpdateCooldown() && this.IsEnabled())
-                    this.UpdateAttachmentEffects();
+                // apply tool effects
+                if (this.UpdateCooldown())
+                {
+                    if (enabled)
+                        this.UpdateAttachmentEffects();
+                }
             }
         }
 
@@ -227,6 +243,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
             this.SkippedActionTicks = 0;
             return true;
+        }
+
+        /// <summary>Notify attachments that effects have been enabled for a location.</summary>
+        /// <param name="location">The current tractor location.</param>
+        private void OnActivated(GameLocation location)
+        {
+            foreach (IAttachment attachment in this.Attachments)
+                attachment.OnActivated(location);
         }
 
         /// <summary>Apply any effects for the current tractor attachment.</summary>

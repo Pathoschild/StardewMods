@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
@@ -20,6 +21,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         *********/
         /// <summary>Simplifies access to private code.</summary>
         protected IReflectionHelper Reflection { get; }
+
+        /// <summary>The millisecond game times elapsed when requested cooldowns started.</summary>
+        private readonly IDictionary<string, long> CooldownStartTimes = new Dictionary<string, long>(StringComparer.InvariantCultureIgnoreCase);
 
 
         /*********
@@ -49,6 +53,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="location">The current location.</param>
         public abstract bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location);
 
+        /// <summary>Method called when the tractor attachments have been activated for a location.</summary>
+        /// <param name="location">The current tractor location.</param>
+        public virtual void OnActivated(GameLocation location)
+        {
+            this.CooldownStartTimes.Clear();
+        }
+
 
         /*********
         ** Protected methods
@@ -60,6 +71,22 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             this.Reflection = reflection;
             this.RateLimit = rateLimit;
+        }
+
+        /// <summary>Start a cooldown if it's not already started.</summary>
+        /// <param name="key">An arbitrary cooldown ID to check.</param>
+        /// <param name="delay">The cooldown time.</param>
+        /// <returns>Returns true if the cooldown was successfully started, or false if it was already in progress.</returns>
+        protected bool TryStartCooldown(string key, TimeSpan delay)
+        {
+            long currentTime = (long)Game1.currentGameTime.TotalGameTime.TotalMilliseconds;
+            if (!this.CooldownStartTimes.TryGetValue(key, out long startTime) || (currentTime - startTime) >= delay.TotalMilliseconds)
+            {
+                this.CooldownStartTimes[key] = currentTime;
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>Use a tool on a tile.</summary>
