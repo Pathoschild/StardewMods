@@ -7,6 +7,7 @@
 * Fixed scythe sometimes interacting with incorrect targets (e.g. shipping bin or farm animals).
 * Fixed incorrect speed changes when a different speed buff expires while riding the tractor (via Stardew Valley 1.4 change).
 * Fixed performance when using the hoe attachment when surrounded by untillable tiles.
+* Fixed issue where a dismissed tractor would return to the previous garage position if the garage was moved that day.
 * Improved translations. Thanks to Hesperusrus (updated Russian)!
 
 ## 4.8.4
