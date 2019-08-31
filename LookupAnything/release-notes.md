@@ -7,6 +7,7 @@
 * Fixed player luck in multiplayer showing your own luck instead of theirs.
 * Fixed 'scissor rectangle is invalid' error in rare cases.
 * Fixed game freeze if you open a lookup on the load screen and then close it by pressing `F1` again.
+* Fixed invalid crafting recipe data causing lookups to fail.
 * Improved translations. Thanks to Hesperusrus (updated Russian) and shiro2579 (updated Portuguese)!
 
 ## 1.22.2
