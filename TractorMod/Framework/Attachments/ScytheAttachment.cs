@@ -57,7 +57,21 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // spawned forage
             if (this.Config.HarvestForage && tileObj?.IsSpawnedObject == true)
             {
-                this.CheckTileAction(location, tile, player);
+                // pick up forage & cancel animation
+                if (this.CheckTileAction(location, tile, player))
+                {
+                    IReflectedField<int> animationID = this.Reflection.GetField<int>(player.FarmerSprite, "currentSingleAnimation");
+                    switch (animationID.GetValue())
+                    {
+                        case FarmerSprite.harvestItemDown:
+                        case FarmerSprite.harvestItemLeft:
+                        case FarmerSprite.harvestItemRight:
+                        case FarmerSprite.harvestItemUp:
+                            player.completelyStopAnimatingOrDoingAction();
+                            player.forceCanMove();
+                            break;
+                    }
+                }
                 return true;
             }
 
