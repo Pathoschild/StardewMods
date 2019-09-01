@@ -14,7 +14,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         ** Fields
         *********/
         /// <summary>The attachment settings.</summary>
-        private readonly GrassStarterConfig Config;
+        private readonly GenericAttachmentConfig Config;
 
 
         /*********
@@ -23,7 +23,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        public GrassStarterAttachment(GrassStarterConfig config, IReflectionHelper reflection)
+        public GrassStarterAttachment(GenericAttachmentConfig config, IReflectionHelper reflection)
             : base(reflection)
         {
             this.Config = config;
