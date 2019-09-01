@@ -41,6 +41,7 @@ melee weapon | clear dead crops; break mine containers. | attack monsters.
 pickaxe    | break rocks; clear tilled dirt; clear dead crops. | break paths/flooring; break placed objects.
 scythe     | harvest crops, flowers, bushes, fruit trees, forage; clear weeds and dead crops. | collect machine output.
 seeds      | plant seeds in dirt. | —
+shears     | shear wool from farm animals. | —
 slingshot  | — | shoot one projectile/tile/second in the aimed direction.
 watering can | water crops. | —
 
@@ -352,6 +353,23 @@ Configure the tractor effects when holding seeds or saplings:
 field    | default | effect
 -------- | ------- | ------
 `Enable` | true    | Whether to plant the seeds in tilled dirt.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`Shears`
+
+</td>
+<td>
+
+Configure the tractor effects when holding shears:
+
+field    | default | effect
+-------- | ------- | ------
+`Enable` | true    | Whether to shear wool from farm animals.
 
 </td>
 </tr>

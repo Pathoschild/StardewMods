@@ -67,7 +67,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return this.UseToolOnTile(tool, tile, player, location);
 
             // till plain dirt
-            if (this.Config.TillDirt && tileFeature == null && tileObj == null && this.TryStartCooldown($"{tile.X},{tile.Y}", this.TillDirtDelay))
+            if (this.Config.TillDirt && tileFeature == null && tileObj == null && this.TryStartCooldown(tile.ToString(), this.TillDirtDelay))
                 return this.UseToolOnTile(tool, tile, player, location);
 
             return false;
