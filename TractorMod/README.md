@@ -38,6 +38,7 @@ axe        | clear twigs; clear dead crops. | chop down trees; clear live crops.
 fertiliser | fertilise dirt. | —
 hoe        | till dirt; dig artifact spots. | —
 melee weapon | clear dead crops; break mine containers. | attack monsters.
+milk pail  | collect milk from farm animals. | —
 pickaxe    | break rocks; clear tilled dirt; clear dead crops. | break paths/flooring; break placed objects.
 scythe     | harvest crops, flowers, bushes, fruit trees, forage; clear weeds and dead crops. | collect machine output.
 seeds      | plant seeds in dirt. | —
@@ -288,6 +289,23 @@ field                 | default | effect
 `AttackMonsters`      | false   | Whether to damage nearby monsters. (This is massively overpowered due to the tractor tool speed.)
 `ClearDeadCrops`      | true    | Whether to clear dead crops.
 `BreakMineContainers` | true    | Whether to break containers in the mine.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`MilkPail`
+
+</td>
+<td>
+
+Configure the tractor effects when holding a milk pail:
+
+field    | default | effect
+-------- | ------- | ------
+`Enable` | true    | Whether to collect milk from farm animals.
 
 </td>
 </tr>

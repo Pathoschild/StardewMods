@@ -3,6 +3,7 @@
 * Updated for Stardew Valley 1.4.
 * Added attachment features:
   * axe: cut choppable bushes (disabled by default).
+  * milk pail: collect milk from animals.
   * shears: shear wool from animals.
 * Added option to allow summoning a temporary tractor without building a garage first.
 * Tractor effects are now applied radially from the tractor. (For example, trees now fall away from the tractor if cut from the side.)

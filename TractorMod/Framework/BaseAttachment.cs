@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
 using StardewModdingAPI;
@@ -220,6 +221,44 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             }
 
             return null;
+        }
+
+        /// <summary>Get the best target farm animal for a tool.</summary>
+        /// <param name="tool">The tool to check.</param>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile to check.</param>
+        /// <remarks>Derived from <see cref="Shears.beginUsing"/> and <see cref="Utility.GetBestHarvestableFarmAnimal"/>.</remarks>
+        protected FarmAnimal GetBestHarvestableFarmAnimal(Tool tool, GameLocation location, Vector2 tile)
+        {
+            // get animals in the location
+            IEnumerable<FarmAnimal> animals;
+            switch (location)
+            {
+                case Farm farm:
+                    animals = farm.animals.Values;
+                    break;
+
+                case AnimalHouse house:
+                    animals = house.animals.Values;
+                    break;
+
+                default:
+                    animals = location.characters.OfType<FarmAnimal>();
+                    break;
+            }
+
+            // get best harvestable animal
+            Vector2 useAt = this.GetToolPixelPosition(tile);
+            FarmAnimal animal = Utility.GetBestHarvestableFarmAnimal(
+                animals: animals,
+                tool: tool,
+                toolRect: new Rectangle((int)useAt.X, (int)useAt.Y, Game1.tileSize, Game1.tileSize)
+            );
+            if (animal == null || animal.toolUsedForHarvest.Value != tool.BaseName || animal.currentProduce.Value <= 0 || animal.age.Value < animal.ageWhenMature.Value)
+                return null;
+
+            return animal;
+
         }
 
         /// <summary>Get the tilled dirt for a tile, if any.</summary>

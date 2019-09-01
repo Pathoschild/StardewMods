@@ -101,6 +101,7 @@ namespace Pathoschild.Stardew.TractorMod
                     new GrassStarterAttachment(toolConfig.GrassStarter, reflection),
                     new HoeAttachment(toolConfig.Hoe, reflection),
                     new MeleeWeaponAttachment(toolConfig.MeleeWeapon, reflection),
+                    new MilkPailAttachment(toolConfig.MilkPail, reflection),
                     new PickaxeAttachment(toolConfig.PickAxe, reflection),
                     new ScytheAttachment(toolConfig.Scythe, reflection),
                     new SeedAttachment(toolConfig.Seeds, reflection),

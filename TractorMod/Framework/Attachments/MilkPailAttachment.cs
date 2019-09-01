@@ -9,8 +9,8 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 {
-    /// <summary>An attachment for the shears.</summary>
-    internal class ShearsAttachment : BaseAttachment
+    /// <summary>An attachment for the milk pail.</summary>
+    internal class MilkPailAttachment : BaseAttachment
     {
         /*********
         ** Fields
@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        public ShearsAttachment(GenericAttachmentConfig config, IReflectionHelper reflection)
+        public MilkPailAttachment(GenericAttachmentConfig config, IReflectionHelper reflection)
             : base(reflection)
         {
             this.Config = config;
@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
         {
-            return this.Config.Enable && tool is Shears;
+            return this.Config.Enable && tool is MilkPail;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>

@@ -15,6 +15,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         /// <summary>Configuration for the hoe attachment.</summary>
         public HoeConfig Hoe = new HoeConfig();
 
+        /// <summary>Configuration for the milk pail attachment.</summary>
+        public GenericAttachmentConfig MilkPail = new GenericAttachmentConfig();
+
         /// <summary>Configuration for the melee weapon attachment.</summary>
         public MeleeWeaponConfig MeleeWeapon = new MeleeWeaponConfig();
 
