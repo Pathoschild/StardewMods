@@ -3,6 +3,7 @@ using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
@@ -51,6 +52,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
+            // apply melee weapon
+            if (tool is MeleeWeapon weapon)
+                return this.UseWeaponOnTile(weapon, tile, player, location);
+
             // apply tool
             if (tool != null && this.CustomNames.Contains(tool.Name))
                 return this.UseToolOnTile(tool, tile, player, location);

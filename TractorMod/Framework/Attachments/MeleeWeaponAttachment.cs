@@ -64,41 +64,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
             // attack monsters
             if (this.Config.AttackMonsters)
-            {
-                MeleeWeapon weapon = (MeleeWeapon)tool;
-                return this.UseWeaponOnTile(weapon, tile, player, location);
-            }
+                return this.UseWeaponOnTile((MeleeWeapon)tool, tile, player, location);
 
             return false;
-        }
-
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Use a weapon on the given tile.</summary>
-        /// <param name="weapon">The weapon to use.</param>
-        /// <param name="tile">The tile to attack.</param>
-        /// <param name="player">The current player.</param>
-        /// <param name="location">The current location.</param>
-        /// <remarks>This is a simplified version of <see cref="MeleeWeapon.DoDamage"/>. This doesn't account for player bonuses (since it's hugely overpowered anyway), doesn't cause particle effects, doesn't trigger animation timers, etc.</remarks>
-        private bool UseWeaponOnTile(MeleeWeapon weapon, Vector2 tile, Farmer player, GameLocation location)
-        {
-            bool attacked = location.damageMonster(
-                areaOfEffect: this.GetAbsoluteTileArea(tile),
-                minDamage: weapon.minDamage.Value,
-                maxDamage: weapon.maxDamage.Value,
-                isBomb: false,
-                knockBackModifier: weapon.knockback.Value,
-                addedPrecision: weapon.addedPrecision.Value,
-                critChance: weapon.critChance.Value,
-                critMultiplier: weapon.critMultiplier.Value,
-                triggerMonsterInvincibleTimer: weapon.type.Value != MeleeWeapon.dagger,
-                who: player
-            );
-            if (attacked)
-                location.playSound(weapon.type.Value == MeleeWeapon.club ? "clubhit" : "daggerswipe");
-            return attacked;
         }
     }
 }

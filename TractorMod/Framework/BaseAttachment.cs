@@ -7,6 +7,7 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
 using xTile.Dimensions;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using SObject = StardewValley.Object;
@@ -102,6 +103,32 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             player.lastClick = useAt;
             tool.DoFunction(location, (int)useAt.X, (int)useAt.Y, 0, player);
             return true;
+        }
+
+        /// <summary>Use a weapon on the given tile.</summary>
+        /// <param name="weapon">The weapon to use.</param>
+        /// <param name="tile">The tile to attack.</param>
+        /// <param name="player">The current player.</param>
+        /// <param name="location">The current location.</param>
+        /// <returns>Returns whether a monster was attacked.</returns>
+        /// <remarks>This is a simplified version of <see cref="MeleeWeapon.DoDamage"/>. This doesn't account for player bonuses (since it's hugely overpowered anyway), doesn't cause particle effects, doesn't trigger animation timers, etc.</remarks>
+        protected bool UseWeaponOnTile(MeleeWeapon weapon, Vector2 tile, Farmer player, GameLocation location)
+        {
+            bool attacked = location.damageMonster(
+                areaOfEffect: this.GetAbsoluteTileArea(tile),
+                minDamage: weapon.minDamage.Value,
+                maxDamage: weapon.maxDamage.Value,
+                isBomb: false,
+                knockBackModifier: weapon.knockback.Value,
+                addedPrecision: weapon.addedPrecision.Value,
+                critChance: weapon.critChance.Value,
+                critMultiplier: weapon.critMultiplier.Value,
+                triggerMonsterInvincibleTimer: weapon.type.Value != MeleeWeapon.dagger,
+                who: player
+            );
+            if (attacked)
+                location.playSound(weapon.type.Value == MeleeWeapon.club ? "clubhit" : "daggerswipe");
+            return attacked;
         }
 
         /// <summary>Trigger the player action on the given tile.</summary>
