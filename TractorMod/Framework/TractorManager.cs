@@ -270,7 +270,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             // get tile grid to affect
             // This must be done outside the temporary interaction block below, since that dismounts
             // the player which changes their position from what the player may expect.
-            Vector2[] grid = this.GetTileGrid(Game1.player.getTileLocation(), this.Config.Distance).ToArray();
+            Vector2 origin = Game1.player.getTileLocation();
+            Vector2[] grid = this.GetTileGrid(origin, this.Config.Distance).ToArray();
 
             // apply tools
             this.TemporarilyFakeInteraction(() =>
@@ -278,8 +279,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 foreach (Vector2 tile in grid)
                 {
                     // face tile to avoid game skipping interaction
-                    player.Position = new Vector2(tile.X - 1, tile.Y) * Game1.tileSize;
-                    player.FacingDirection = 1;
+                    this.GetRadialAdjacentTile(origin, tile, out Vector2 adjacentTile, out int facingDirection);
+                    player.Position = adjacentTile * Game1.tileSize;
+                    player.FacingDirection = facingDirection;
 
                     // apply attachment effects
                     location.objects.TryGetValue(tile, out SObject tileObj);
@@ -339,6 +341,38 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             {
                 for (int y = -distance; y <= distance; y++)
                     yield return new Vector2(origin.X + x, origin.Y + y);
+            }
+        }
+
+        /// <summary>Get the tile coordinate which is adjacent to the given <paramref name="tile"/> along a radial line from the tractor position.</summary>
+        /// <param name="origin">The tile containing the tractor.</param>
+        /// <param name="tile">The tile to face.</param>
+        /// <param name="adjacent">The tile radially adjacent to the <paramref name="tile"/>.</param>
+        /// <param name="facingDirection">The direction to face.</param>
+        private void GetRadialAdjacentTile(Vector2 origin, Vector2 tile, out Vector2 adjacent, out int facingDirection)
+        {
+            facingDirection = Utility.getDirectionFromChange(tile, origin);
+            switch (facingDirection)
+            {
+                case Game1.up:
+                    adjacent = new Vector2(tile.X, tile.Y + 1);
+                    break;
+
+                case Game1.down:
+                    adjacent = new Vector2(tile.X, tile.Y - 1);
+                    break;
+
+                case Game1.left:
+                    adjacent = new Vector2(tile.X + 1, tile.Y);
+                    break;
+
+                case Game1.right:
+                    adjacent = new Vector2(tile.X - 1, tile.Y);
+                    break;
+
+                default:
+                    adjacent = tile;
+                    break;
             }
         }
 
