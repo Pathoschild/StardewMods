@@ -92,13 +92,15 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Use a tool on a tile.</summary>
         /// <param name="tool">The tool to use.</param>
         /// <param name="tile">The tile to affect.</param>
+        /// <param name="player">The current player.</param>
+        /// <param name="location">The current location.</param>
         /// <returns>Returns <c>true</c> for convenience when implementing tools.</returns>
-        protected bool UseToolOnTile(Tool tool, Vector2 tile)
+        protected bool UseToolOnTile(Tool tool, Vector2 tile, Farmer player, GameLocation location)
         {
             // use tool on center of tile
             Vector2 useAt = (tile * Game1.tileSize) + new Vector2(Game1.tileSize / 2f);
-            Game1.player.lastClick = useAt;
-            tool.DoFunction(Game1.currentLocation, (int)useAt.X, (int)useAt.Y, 0, Game1.player);
+            player.lastClick = useAt;
+            tool.DoFunction(location, (int)useAt.X, (int)useAt.Y, 0, player);
             return true;
         }
 

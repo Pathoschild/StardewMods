@@ -61,29 +61,29 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
             if (this.Config.ClearDebris && (this.IsTwig(tileObj) || this.IsWeed(tileObj)))
-                return this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile, player, location);
 
             // check terrain feature
             switch (tileFeature)
             {
                 // cut non-fruit tree
                 case Tree tree:
-                    return this.ShouldCut(tree) && this.UseToolOnTile(tool, tile);
+                    return this.ShouldCut(tree) && this.UseToolOnTile(tool, tile, player, location);
 
                 // cut fruit tree
                 case FruitTree tree:
-                    return this.ShouldCut(tree) && this.UseToolOnTile(tool, tile);
+                    return this.ShouldCut(tree) && this.UseToolOnTile(tool, tile, player, location);
 
                 // cut bushes
                 case Bush bush:
-                    return this.ShouldCut(bush) && this.UseToolOnTile(tool, tile);
+                    return this.ShouldCut(bush) && this.UseToolOnTile(tool, tile, player, location);
 
                 // clear crops
                 case HoeDirt dirt when dirt.crop != null:
                     if (this.Config.ClearDeadCrops && dirt.crop.dead.Value)
-                        return this.UseToolOnTile(tool, tile);
+                        return this.UseToolOnTile(tool, tile, player, location);
                     if (this.Config.ClearLiveCrops && !dirt.crop.dead.Value)
-                        return this.UseToolOnTile(tool, tile);
+                        return this.UseToolOnTile(tool, tile, player, location);
                     break;
             }
 
@@ -94,7 +94,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             {
                 ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile);
                 if (clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex.Value) && tool.UpgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex.Value])
-                    this.UseToolOnTile(tool, tile);
+                    this.UseToolOnTile(tool, tile, player, location);
             }
 
             // cut bushes in large terrain features
@@ -102,7 +102,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             {
                 foreach (Bush bush in location.largeTerrainFeatures.OfType<Bush>().Where(p => p.tilePosition.Value == tile))
                 {
-                    if (this.ShouldCut(bush) && this.UseToolOnTile(tool, tile))
+                    if (this.ShouldCut(bush) && this.UseToolOnTile(tool, tile, player, location))
                         return true;
                 }
             }

@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         {
             // apply to plain dirt
             if (tileFeature is HoeDirt)
-                return this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile, player, location);
 
             return false;
         }

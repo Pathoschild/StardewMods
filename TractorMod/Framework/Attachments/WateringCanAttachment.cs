@@ -57,7 +57,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             WateringCan can = (WateringCan)tool;
             int prevWater = can.WaterLeft;
             can.WaterLeft = 100;
-            this.UseToolOnTile(tool, tile);
+            this.UseToolOnTile(tool, tile, player, location);
             can.WaterLeft = prevWater;
 
             return true;

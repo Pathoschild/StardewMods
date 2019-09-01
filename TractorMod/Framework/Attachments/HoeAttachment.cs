@@ -60,15 +60,15 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         {
             // clear weeds
             if (this.Config.ClearWeeds && this.IsWeed(tileObj))
-                return this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile, player, location);
 
             // collect artifact spots
             if (this.Config.DigArtifactSpots && tileObj?.ParentSheetIndex == HoeAttachment.ArtifactSpotItemID)
-                return this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile, player, location);
 
             // till plain dirt
             if (this.Config.TillDirt && tileFeature == null && tileObj == null && this.TryStartCooldown($"{tile.X},{tile.Y}", this.TillDirtDelay))
-                return this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile, player, location);
 
             return false;
         }

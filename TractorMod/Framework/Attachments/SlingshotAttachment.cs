@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
             this.Reflection.GetField<bool>(tool, "canPlaySound").SetValue(false);
-            return this.UseToolOnTile(tool, tile);
+            return this.UseToolOnTile(tool, tile, player, location);
         }
     }
 }

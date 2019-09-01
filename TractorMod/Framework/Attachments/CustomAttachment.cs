@@ -53,7 +53,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         {
             // apply tool
             if (tool != null && this.CustomNames.Contains(tool.Name))
-                return this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile, player, location);
 
             // apply item
             if (item != null && item.Stack > 0 && this.CustomNames.Contains(item.Name))

@@ -56,7 +56,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         {
             // clear dead crops
             if (this.Config.ClearDeadCrops && tileFeature is HoeDirt dirt && dirt.crop != null && dirt.crop.dead.Value)
-                return this.UseToolOnTile(this.FakePickaxe, tile);
+                return this.UseToolOnTile(this.FakePickaxe, tile, player, location);
 
             // break mine containers
             if (this.Config.BreakMineContainers && tileObj is BreakableContainer container)

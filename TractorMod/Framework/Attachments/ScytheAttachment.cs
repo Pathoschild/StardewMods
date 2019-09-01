@@ -83,7 +83,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
                 if (this.Config.ClearDeadCrops && dirt.crop.dead.Value)
                 {
-                    this.UseToolOnTile(this.FakePickaxe, tile); // clear dead crop
+                    this.UseToolOnTile(this.FakePickaxe, tile, player, location); // clear dead crop
                     return true;
                 }
 
@@ -126,7 +126,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // weeds
             if (this.Config.ClearWeeds && this.IsWeed(tileObj))
             {
-                this.UseToolOnTile(tool, tile); // doesn't do anything to the weed, but sets up for the tool action (e.g. sets last user)
+                this.UseToolOnTile(tool, tile, player, location); // doesn't do anything to the weed, but sets up for the tool action (e.g. sets last user)
                 tileObj.performToolAction(tool, location); // triggers weed drops, but doesn't remove weed
                 location.removeObject(tile, false);
                 return true;
