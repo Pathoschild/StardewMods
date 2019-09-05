@@ -60,10 +60,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
+            // clear debris
             if (this.Config.ClearDebris && (this.IsTwig(tileObj) || this.IsWeed(tileObj)))
                 return this.UseToolOnTile(tool, tile, player, location);
 
-            // check terrain feature
+            // cut terrain features
             switch (tileFeature)
             {
                 // cut non-fruit tree
@@ -87,13 +88,19 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                     break;
             }
 
-            // clear stumps
-            // This needs to check if the axe upgrade level is high enough first, to avoid spamming
-            // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
-            if (this.Config.ClearDebris)
+            // cut resource stumps
+            if (this.Config.ClearDebris || this.Config.CutGiantCrops)
             {
                 ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile);
-                if (clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex.Value) && tool.UpgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex.Value])
+
+                // giant crops
+                if (this.Config.CutGiantCrops && clump is GiantCrop)
+                    this.UseToolOnTile(tool, tile, player, location);
+
+                // big stumps and fallen logs
+                // This needs to check if the axe upgrade level is high enough first, to avoid spamming
+                // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
+                if (this.Config.ClearDebris && clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex.Value) && tool.UpgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex.Value])
                     this.UseToolOnTile(tool, tile, player, location);
             }
 

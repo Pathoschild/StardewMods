@@ -34,7 +34,7 @@ You can do these by default:
 
 hold item  | default effects | optional effects (disabled by default)
 ---------- | --------------- | --------------------------------------
-axe        | clear twigs; clear dead crops. | chop down trees; clear live crops.
+axe        | clear debris; clear dead crops; cut giant crops. | chop down trees; clear live crops.
 fertiliser | fertilise dirt. | —
 hoe        | till dirt; dig artifact spots. | —
 melee weapon | clear dead crops; break mine containers. | attack monsters.
@@ -214,9 +214,10 @@ field                    | default | effect
 `CutGrownTrees`          | false   | Whether to clear full-grown non-fruit trees.
 `CutTappedTrees`         | false   | Whether to cut non-fruit trees that have a tapper.
 `CutBushes`              | false   | Whether to cut choppable bushes.
+`CutGiantCrops`          | true    | Whether to cut giant crops.
 `ClearLiveCrops`         | false   | Whether to clear live crops.
 `ClearDeadCrops`         | true    | Whether to clear dead crops.
-`ClearDebris`            | true    | Whether to clear debris like weeds and twigs.
+`ClearDebris`            | true    | Whether to clear debris like weeds, twigs, giant stumps, and fallen logs.
 
 </td>
 </tr>
