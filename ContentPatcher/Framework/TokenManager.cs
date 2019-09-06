@@ -176,6 +176,7 @@ namespace ContentPatcher.Framework
             yield return new ConditionTypeValueProvider(ConditionType.FarmName, () => Game1.player.farmName.Value, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.FarmType, () => this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.IsCommunityCenterComplete, () => this.GetIsCommunityCenterComplete().ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.IsJojaMartComplete, () => this.GetIsJojaMartComplete().ToString(), NeedsBasicInfo);
 
             // other
             yield return new ImmutableValueProvider(ConditionType.HasMod.ToString(), installedMods, canHaveMultipleValues: true);
@@ -258,6 +259,13 @@ namespace ContentPatcher.Framework
         private bool GetIsCommunityCenterComplete()
         {
             return Game1.MasterPlayer.mailReceived.Contains("ccIsComplete") || Game1.MasterPlayer.hasCompletedCommunityCenter();
+        }
+
+        /// <summary>Get whether the JojaMart is complete.</summary>
+        /// <remarks>See game logic in <see cref="StardewValley.Locations.Town.resetLocalState"/>.</remarks>
+        private bool GetIsJojaMartComplete()
+        {
+            return Game1.MasterPlayer.mailReceived.Contains("JojaMember") && this.GetIsCommunityCenterComplete();
         }
 
         /// <summary>Get the name for today's day event (e.g. wedding or festival) from the game data.</summary>

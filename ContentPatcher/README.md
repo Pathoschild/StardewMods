@@ -718,7 +718,7 @@ flag | meaning
 `Beat_PK` | The player has beaten the Prairie King arcade game.
 `beenToWoods` | The player has entered the Secret Woods at least once.
 `canReadJunimoText` | The player can read the language of Junimos (i.e. the plaques in the Community Center).
-`ccIsComplete` | The player has completed the Community Center. Note that this isn't set reliably; see the `IsCommunityCenterComplete` token instead.  See also flags for specific sections: `ccBoilerRoom`, `ccBulletin`, `ccCraftsRoom`, `ccFishTank`, `ccPantry`, and `ccVault`. The equivalent section flags for the Joja warehouse are `jojaBoilerRoom`, `jojaCraftsRoom`, `jojaFishTank`, `jojaPantry`, and `jojaVault`.
+`ccIsComplete` | The player has completed the Community Center. Note that this isn't set reliably; see the `IsCommunityCenterComplete` and `IsJojaMartComplete` tokens instead.  See also flags for specific sections: `ccBoilerRoom`, `ccBulletin`, `ccCraftsRoom`, `ccFishTank`, `ccPantry`, and `ccVault`. The equivalent section flags for the Joja warehouse are `jojaBoilerRoom`, `jojaCraftsRoom`, `jojaFishTank`, `jojaPantry`, and `jojaVault`.
 `doorUnlockAbigail` | The player has unlocked access to Abigail's room. See also flags for other NPCs: `doorUnlockAlex`, `doorUnlockCaroline`, `doorUnlockEmily`, `doorUnlockHaley`, `doorUnlockHarvey`, `doorUnlockJas`, `doorUnlockJodi`, `doorUnlockMarnie`, `doorUnlockMaru`, `doorUnlockPenny`, `doorUnlockPierre`, `doorUnlockRobin`, `doorUnlockSam`, `doorUnlockSebastian`, `doorUnlockVincent`.
 `galaxySword` | The player has acquired the Galaxy Sword.
 `geodeFound` | The player has found at least one geode.
@@ -969,6 +969,15 @@ The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). Possible valu
 <td>
 
 Whether all bundles in the community center are completed. Possible values: `true`, `false`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>IsJojaMartComplete</td>
+<td>
+
+Whether the player bought a Joja membership and completed all Joja bundles. Possible values: `true`, `false`.
 
 </td>
 </tr>

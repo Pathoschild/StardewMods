@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added new tokens:
+  * `IsJojaMartComplete`: whether the player bought a Joja membership and completed all Joja bundles.
   * `Random`: choose a random value from a given list.
 * Added support for using `FromFile` with `EditData` patches.
 * Added `patch export` console command, which lets you see what an asset looks like with all changes applied.

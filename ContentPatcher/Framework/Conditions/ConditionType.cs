@@ -96,6 +96,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Whether all bundles in the community center are completed.</summary>
         IsCommunityCenterComplete,
 
+        /// <summary>Whether all bundles in the JojaMart are completed.</summary>
+        IsJojaMartComplete,
+
         /****
         ** Other
         ****/
