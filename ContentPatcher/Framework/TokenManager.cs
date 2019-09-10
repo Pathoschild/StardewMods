@@ -70,6 +70,20 @@ namespace ContentPatcher.Framework
             return localTokens;
         }
 
+        /// <summary>Get the token context for a given mod ID.</summary>
+        /// <param name="contentPackID">The content pack ID to search for.</param>
+        /// <exception cref="KeyNotFoundException">There's no content pack registered with the given <paramref name="contentPackID"/>.</exception>
+        public IContext GetContextFor(string contentPackID)
+        {
+            foreach (var pair in this.LocalTokens)
+            {
+                if (pair.Key.Manifest.UniqueID.Equals(contentPackID, StringComparison.InvariantCultureIgnoreCase))
+                    return pair.Value;
+            }
+
+            throw new KeyNotFoundException($"There's no content pack registered for ID '{contentPackID}'.");
+        }
+
         /// <summary>Update the current context.</summary>
         /// <param name="globalChangedTokens">The global token values which changed, or <c>null</c> to update all tokens.</param>
         public void UpdateContext(InvariantHashSet globalChangedTokens = null)

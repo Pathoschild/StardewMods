@@ -242,7 +242,7 @@ namespace ContentPatcher
             helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
 
             // set up commands
-            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, () => this.UpdateContext());
+            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, modID => modID == null ? this.TokenManager : this.TokenManager.GetContextFor(modID), () => this.UpdateContext());
             helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (name, args) => this.CommandHandler.Handle(args));
 
             // can no longer queue tokens

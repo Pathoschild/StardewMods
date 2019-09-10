@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
@@ -31,6 +32,9 @@ namespace ContentPatcher.Framework.Commands
 
         /// <summary>Manages loaded patches.</summary>
         private readonly PatchManager PatchManager;
+
+        /// <summary>Get the current token context for a given mod ID, or the global context if given a null mod ID.</summary>
+        private readonly Func<string, IContext> GetContext;
 
         /// <summary>A callback which immediately updates the current condition context.</summary>
         private readonly Action UpdateContext;
@@ -59,12 +63,14 @@ namespace ContentPatcher.Framework.Commands
         /// <param name="tokenManager">Manages loaded tokens.</param>
         /// <param name="patchManager">Manages loaded patches.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
+        /// <param name="getContext">Get the current token context.</param>
         /// <param name="updateContext">A callback which immediately updates the current condition context.</param>
-        public CommandHandler(TokenManager tokenManager, PatchManager patchManager, IMonitor monitor, Action updateContext)
+        public CommandHandler(TokenManager tokenManager, PatchManager patchManager, IMonitor monitor, Func<string, IContext> getContext, Action updateContext)
         {
             this.TokenManager = tokenManager;
             this.PatchManager = patchManager;
             this.Monitor = monitor;
+            this.GetContext = getContext;
             this.UpdateContext = updateContext;
         }
 
@@ -88,11 +94,14 @@ namespace ContentPatcher.Framework.Commands
                 case "update":
                     return this.HandleUpdate();
 
+                case "parse":
+                    return this.HandleParse(subcommandArgs);
+
                 case "export":
                     return this.HandleExport(subcommandArgs);
 
                 default:
-                    this.Monitor.Log($"The '{this.CommandName} {args[0]}' command isn't valid. Type '{this.CommandName} help' for a list of valid commands.");
+                    this.Monitor.Log($"The '{this.CommandName} {args[0]}' command isn't valid. Type '{this.CommandName} help' for a list of valid commands.", LogLevel.Debug);
                     return false;
             }
         }
@@ -115,6 +124,7 @@ namespace ContentPatcher.Framework.Commands
                 ["help"] = $"{this.CommandName} help\n   Usage: {this.CommandName} help\n   Lists all available {this.CommandName} commands.\n\n   Usage: {this.CommandName} help <cmd>\n   Provides information for a specific {this.CommandName} command.\n   - cmd: The {this.CommandName} command name.",
                 ["summary"] = $"{this.CommandName} summary\n   Usage: {this.CommandName} summary\n   Shows a summary of the current conditions and loaded patches.",
                 ["update"] = $"{this.CommandName} update\n   Usage: {this.CommandName} update\n   Imediately refreshes the condition context and rechecks all patches.",
+                ["parse"] = $"{this.CommandName} parse\n   usage: {this.CommandName} parse \"value\"\n   Parses the given token string and shows the result. For example, `{this.CommandName} parse \"assets/{{{{Season}}}}.png\" will show a value like \"assets/Spring.png\".\n\n{this.CommandName} parse \"value\" \"content-pack.id\"\n   Parses the given token string and shows the result, using tokens available to the specified content pack (using the ID from the content pack's manifest.json). For example, `{this.CommandName} parse \"assets/{{{{CustomToken}}}}.png\" \"Pathoschild.ExampleContentPack\".",
                 ["export"] = $"{this.CommandName} export\n   Usage: {this.CommandName} export \"<asset name>\"\n   Saves a copy of an asset (including any changes from mods like Content Patcher) to the game folder. The asset name should be the target without the locale or extension, like \"Characters/Abigail\" if you want to export the value of 'Content/Characters/Abigail.xnb'."
             };
 
@@ -139,7 +149,7 @@ namespace ContentPatcher.Framework.Commands
                 help.AppendLine($"Unknown command '{this.CommandName} {args[0]}'. Type '{this.CommandName} help' for available commands.");
 
             // write output
-            this.Monitor.Log(help.ToString());
+            this.Monitor.Log(help.ToString(), LogLevel.Debug);
 
             return true;
         }
@@ -352,7 +362,7 @@ namespace ContentPatcher.Framework.Commands
                 output.AppendLine(); // blank line between groups
             }
 
-            this.Monitor.Log(output.ToString());
+            this.Monitor.Log(output.ToString(), LogLevel.Debug);
             return true;
         }
 
@@ -361,6 +371,98 @@ namespace ContentPatcher.Framework.Commands
         private bool HandleUpdate()
         {
             this.UpdateContext();
+            return true;
+        }
+
+        /// <summary>Handle the 'patch parse' command.</summary>
+        /// <returns>Returns whether the command was handled.</returns>
+        private bool HandleParse(string[] args)
+        {
+            // get token string
+            if (args.Length < 1 || args.Length > 2)
+            {
+                this.Monitor.Log("The 'patch parse' command expects one to two arguments. See 'patch help parse' for more info.", LogLevel.Error);
+                return true;
+            }
+            string raw = args[0];
+            string modID = args.Length >= 2 ? args[1] : null;
+
+            // get context
+            IContext context;
+            try
+            {
+                context = this.GetContext(modID);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                this.Monitor.Log(ex.Message, LogLevel.Error);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                this.Monitor.Log(ex.ToString(), LogLevel.Error);
+                return true;
+            }
+
+            // parse value
+            TokenString tokenStr;
+            try
+            {
+                tokenStr = new TokenString(raw, context);
+            }
+            catch (LexFormatException ex)
+            {
+                this.Monitor.Log($"Can't parse that token value: {ex.Message}", LogLevel.Error);
+                return true;
+            }
+            catch (InvalidOperationException outerEx) when (outerEx.InnerException is LexFormatException ex)
+            {
+                this.Monitor.Log($"Can't parse that token value: {ex.Message}", LogLevel.Error);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                this.Monitor.Log($"Can't parse that token value: {ex}", LogLevel.Error);
+                return true;
+            }
+            IContextualState state = tokenStr.GetDiagnosticState();
+
+            // show result
+            StringBuilder output = new StringBuilder();
+            output.AppendLine();
+            output.AppendLine("Metadata");
+            output.AppendLine("----------------");
+            output.AppendLine($"   raw value:   {raw}");
+            output.AppendLine($"   ready:       {tokenStr.IsReady}");
+            output.AppendLine($"   mutable:     {tokenStr.IsMutable}");
+            output.AppendLine($"   has tokens:  {tokenStr.HasAnyTokens}");
+            if (tokenStr.HasAnyTokens)
+                output.AppendLine($"   tokens used: {string.Join(", ", tokenStr.GetTokensUsed().Distinct().OrderBy(p => p, StringComparer.InvariantCultureIgnoreCase))}");
+            output.AppendLine();
+
+            output.AppendLine("Diagnostic state");
+            output.AppendLine("----------------");
+            output.AppendLine($"   valid:    {state.IsValid}");
+            output.AppendLine($"   in scope: {state.IsValid}");
+            output.AppendLine($"   ready:    {state.IsReady}");
+            if (state.Errors.Any())
+                output.AppendLine($"   errors:         {string.Join(", ", state.Errors)}");
+            if (state.InvalidTokens.Any())
+                output.AppendLine($"   invalid tokens: {string.Join(", ", state.InvalidTokens)}");
+            if (state.UnreadyTokens.Any())
+                output.AppendLine($"   unready tokens: {string.Join(", ", state.UnreadyTokens)}");
+            if (state.UnavailableModTokens.Any())
+                output.AppendLine($"   unavailable mod tokens: {string.Join(", ", state.UnavailableModTokens)}");
+            output.AppendLine();
+
+            output.AppendLine("Result");
+            output.AppendLine("----------------");
+            output.AppendLine(!tokenStr.IsReady
+                ? "The token string is invalid or unready."
+                : $"   The token string is valid and ready. Parsed value: \"{tokenStr.Value}\""
+            );
+
+            this.Monitor.Log(output.ToString(), LogLevel.Debug);
             return true;
         }
 

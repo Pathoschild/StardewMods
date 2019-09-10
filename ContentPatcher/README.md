@@ -1382,34 +1382,112 @@ Tips:
   can ask.
 
 ### Patch commands
-Content Patcher adds two patch commands for testing and troubleshooting.
+Content Patcher adds several console commands for testing and troubleshooting. Enter `patch help`
+directly into the SMAPI console for more info.
 
-* `patch summary` lists all the loaded patches, their current values, and (if applicable) the
-  reasons they weren't applied.
+#### patch summary
+`patch summary` lists all the loaded patches, their current values, and (if applicable) the reasons
+they weren't applied.
 
-  Example output:
+For example:
 
-  ```
-  Current conditions:
-     Day: 5
-     DayOfWeek: friday
-     Language: en
-     Season: spring
-     Weather: sun
+```
+=====================
+==  Global tokens  ==
+=====================
+   Content Patcher:
 
-  Patches by content pack ([X] means applied):
-     Sample Content Pack:
-        [X] Palm Trees | Load TerrainFeatures/tree_palm
-        [X] Bushes | Load TileSheets/bushes
-        [ ] Maple Trees | Load TerrainFeatures/tree2_{{season}} | failed conditions: Season (summer, fall, winter)
-        [ ] Oak Trees | Load TerrainFeatures/tree1_{{season}} | failed conditions: Season (summer, fall, winter)
-        [X] World Map | EditImage LooseSprites/map
-  ```
-* `patch update` immediately updates Content Patcher's condition context and rechecks all patches.
-  This is mainly useful if you change conditions through the console (like the date), and want to
-  update patches without going to bed.
-* `patch export` saves a copy of an asset to your game folder, which lets you see what it looks like
-  with all changes applied. This currently works for image and data assets.
+      token name       | value
+      ---------------- | -----
+      Day              | [X] 5
+      DayEvent         | [X]
+      DayOfWeek        | [X] Friday
+      DaysPlayed       | [X] 305
+      FarmCave         | [X] Mushrooms
+      FarmhouseUpgrade | [X] 1
+      FarmName         | [X] River Coop
+      FarmType         | [X] Riverland
+
+      [snipped for simplicity]
+
+=====================
+== Content patches ==
+=====================
+The following patches were loaded. For each patch:
+  - 'loaded' shows whether the patch is loaded and enabled (see details for the reason if not).
+  - 'conditions' shows whether the patch matches with the current conditions (see details for the reason if not). If this is unexpectedly false, check (a) the conditions above and (b) your Where field.
+  - 'applied' shows whether the target asset was loaded and patched. If you expected it to be loaded by this point but it's false, double-check (a) that the game has actually loaded the asset yet, and (b) your Targets field is correct.
+
+
+Example Content Pack:
+------------------------------
+
+   Local tokens:
+      token name        | value
+      ----------------- | -----
+      WeatherVariant    | [X] Wet
+
+   loaded  | conditions | applied | name + details
+   ------- | ---------- | ------- | --------------
+   [X]     | [ ]        | [ ]     | Dry Palm Trees // conditions don't match: WeatherVariant
+   [X]     | [X]        | [X]     | Wet Palm Trees
+```
+
+#### patch update
+`patch update` immediately updates Content Patcher's condition context and rechecks all patches.
+This is mainly useful if you change conditions through the console (like the date), and want to
+update patches without going to bed.
+
+#### patch export
+`patch export` saves a copy of a given asset to your game folder, which lets you see what it looks
+like with all changes applied. This currently works for image and data assets.
+
+For example:
+
+```
+> patch export "Maps/springobjects"
+Exported asset 'Maps/springobjects' to 'C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\patch export\Maps_springobjects.png'.
+```
+
+#### patch parse
+`patch parse` parses a tokenisable string and shows the resulting metadata, using the current
+Content Patcher context (the same values used when applying patches).
+
+This recognises global tokens by default. You can use tokens for a specific content pack (including
+dynamic tokens and config values) by giving the content pack ID from its `manifest.json` in the
+optional second argument.
+
+For example:
+
+```
+> patch parse "assets/{{Variant}}.{{Language}}.png" "Pathoschild.ExampleContentPack"
+
+Metadata
+----------------
+   raw value:   assets/{{Variant}}.{{Language}}.png
+   ready:       True
+   mutable:     True
+   has tokens:  True
+   tokens used: Language, Variant
+
+Diagnostic state
+----------------
+   valid:    True
+   in scope: True
+   ready:    True
+
+Result
+----------------
+   The token string is valid and ready. Parsed value: "assets/wood.en.png"
+```
+
+This can also be used to troubleshoot token syntax:
+
+```
+> patch parse "assets/{{Season}.png"
+[ERROR] Can't parse that token value: Reached end of input, expected end of token ('}}').
+
+```
 
 ### Debug mode
 Content Patcher has a 'debug mode' which lets you view loaded textures directly in-game with any

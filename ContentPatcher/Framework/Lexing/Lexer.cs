@@ -106,7 +106,7 @@ namespace ContentPatcher.Framework.Lexing
 
                         // throw error if there's content after the token ends
                         var next = input.Peek();
-                        throw new InvalidOperationException($"Unexpected {next.Type}, expected {LexBitType.Literal}");
+                        throw new LexFormatException($"Unexpected {next.Type}, expected {LexBitType.Literal}");
                     }
                     yield break;
                 }
@@ -131,7 +131,7 @@ namespace ContentPatcher.Framework.Lexing
 
                         // anything else is invalid
                         default:
-                            throw new InvalidOperationException($"Unexpected {next.Type}, expected {LexBitType.StartToken} or {LexBitType.Literal}");
+                            throw new LexFormatException($"Unexpected {next.Type}, expected {LexBitType.StartToken} or {LexBitType.Literal}");
                     }
                 }
             }
@@ -201,25 +201,25 @@ namespace ContentPatcher.Framework.Lexing
         /// <returns>Returns the token.</returns>
         public LexTokenToken ExtractToken(Queue<LexBit> input, bool impliedBraces)
         {
-            LexBit GetNextAndAssert()
+            LexBit GetNextAndAssert(string expectedPhrase)
             {
                 if (!input.Any())
-                    throw new InvalidOperationException();
+                    throw new LexFormatException($"Reached end of input, expected {expectedPhrase}.");
                 return input.Dequeue();
             }
 
             // start token
             if (!impliedBraces)
             {
-                LexBit startToken = GetNextAndAssert();
+                LexBit startToken = GetNextAndAssert("start of token ('{{')");
                 if (startToken.Type != LexBitType.StartToken)
-                    throw new InvalidOperationException($"Unexpected {startToken.Type} at start of token.");
+                    throw new LexFormatException($"Unexpected {startToken.Type} at start of token.");
             }
 
             // extract token name
-            LexBit name = GetNextAndAssert();
+            LexBit name = GetNextAndAssert("token name");
             if (name.Type != LexBitType.Literal)
-                throw new InvalidOperationException($"Unexpected {name.Type} where token name should be.");
+                throw new LexFormatException($"Unexpected {name.Type} where token name should be.");
 
             // extract input argument if present
             LexTokenInputArg? inputArg = null;
@@ -232,9 +232,9 @@ namespace ContentPatcher.Framework.Lexing
             // end token
             if (!impliedBraces)
             {
-                LexBit endToken = GetNextAndAssert();
+                LexBit endToken = GetNextAndAssert("end of token ('}}')");
                 if (endToken.Type != LexBitType.EndToken)
-                    throw new InvalidOperationException($"Unexpected {endToken.Type} before end of token.");
+                    throw new LexFormatException($"Unexpected {endToken.Type} before end of token.");
             }
 
             return new LexTokenToken(name.Text.Trim(), inputArg, impliedBraces);
