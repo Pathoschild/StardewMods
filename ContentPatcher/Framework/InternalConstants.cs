@@ -15,6 +15,9 @@ namespace ContentPatcher.Framework
         /// <summary>The character used as a separator between the mod ID and token name for a mod-provided token.</summary>
         public const string ModTokenSeparator = "/";
 
+        /// <summary>A prefix for player names when specified as an input argument.</summary>
+        public const string PlayerNamePrefix = "@";
+
 
         /*********
         ** Methods

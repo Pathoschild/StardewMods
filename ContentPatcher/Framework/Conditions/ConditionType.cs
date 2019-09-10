@@ -99,6 +99,12 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Whether all bundles in the JojaMart are completed.</summary>
         IsJojaMartComplete,
 
+        /// <summary>NPCs and players whose relationships have an active adoption or pregnancy.</summary>
+        HavingChild,
+
+        /// <summary>NPCs and players who are currently pregnant.</summary>
+        Pregnant,
+
         /****
         ** Other
         ****/

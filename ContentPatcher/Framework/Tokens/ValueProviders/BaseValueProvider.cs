@@ -77,7 +77,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="input">The input argument, if applicable.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidateInput(ITokenString input, out string error)
+        public virtual bool TryValidateInput(ITokenString input, out string error)
         {
             // validate input
             if (input.IsMeaningful())

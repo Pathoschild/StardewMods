@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added new tokens:
+  * `HavingChild` and `Pregnant`: check if an NPC/player is having a child.
   * `IsJojaMartComplete`: whether the player bought a Joja membership and completed all Joja bundles.
   * `Random`: choose a random value from a given list.
 * Added support for using `FromFile` with `EditData` patches.

@@ -982,6 +982,38 @@ Whether the player bought a Joja membership and completed all Joja bundles. Poss
 </td>
 </tr>
 
+<tr valign="top">
+<td>HavingChild</td>
+<td>
+
+The names of players and NPCs whose relationship has an active pregnancy or adoption. Player names
+are prefixed with `@` to avoid ambiguity with NPC names. For example, to check if the current
+player is having a child:
+
+```js
+"When": {
+    "HavingChild": "{{spouse}}"
+}
+```
+
+Usage notes:
+* `HavingChild:@{{playerName}}` and `HavingChild:{{spouse}}` are equivalent for this token.
+* See also the `Pregnant` token.
+
+</td>
+</td>
+</tr>
+
+<tr valign="top">
+<td>Pregnant</td>
+<td>
+
+The players or NPCs who are currently pregnant. This is a subset of `HavingChild` that only applies
+to the female partner in heterosexual relationships. (Same-sex partners adopt a child instead.)
+
+</td>
+</tr>
+
 </table>
 </dd>
 
