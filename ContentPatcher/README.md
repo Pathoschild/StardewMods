@@ -708,9 +708,7 @@ The year number (like `1` or `2`).
 <td>HasFlag</td>
 <td>
 
-The letter IDs received by the player.
-
-The game also uses this to store some useful flags. For example:
+The flags set for the current player, including letters received and world state IDs. Some useful flags:
 
 flag | meaning
 ---- | -------

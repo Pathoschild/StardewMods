@@ -166,7 +166,7 @@ namespace ContentPatcher.Framework
             yield return new ConditionTypeValueProvider(ConditionType.Weather, this.GetCurrentWeather, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(Weather)));
 
             // player
-            yield return new ConditionTypeValueProvider(ConditionType.HasFlag, this.GetMailFlags, NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.HasFlag, this.GetFlags, NeedsBasicInfo);
             yield return new HasProfessionValueProvider(NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.HasReadLetter, this.GetReadLetters, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
@@ -256,18 +256,20 @@ namespace ContentPatcher.Framework
             return Game1.player.mailReceived;
         }
 
-        /// <summary>Get the letter IDs and mail flags set for the player.</summary>
-        /// <remarks>See game logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
-        private IEnumerable<string> GetMailFlags()
+        /// <summary>Get the letter IDs, mail flags, and world state IDs set for the player.</summary>
+        /// <remarks>See mail logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
+        private IEnumerable<string> GetFlags()
         {
-            Farmer player = Game1.player;
-            if (player == null)
-                return new string[0];
+            // mail flags
+            if (Game1.player != null)
+            {
+                foreach (string flag in Game1.player.mailReceived.Union(Game1.player.mailForTomorrow).Union(Game1.player.mailbox))
+                    yield return flag;
+            }
 
-            return player
-                .mailReceived
-                .Union(player.mailForTomorrow)
-                .Union(player.mailbox);
+            // world state flags
+            foreach (string flag in Game1.worldStateIDs)
+                yield return flag;
         }
 
         /// <summary>Get whether the community center is complete.</summary>

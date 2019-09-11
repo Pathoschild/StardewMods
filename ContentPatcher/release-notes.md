@@ -10,6 +10,7 @@
 * Added `patch export` console command, which lets you see what an asset looks like with all changes applied.
 * Added `patch parse` console command, which parses an arbitrary tokenisable string and shows the result.
 * Added [`manifest.json` and `content.json` validator](https://github.com/Pathoschild/StardewMods/tree/develop/ContentPatcher#schema-validator) for content pack authors.
+* Added world state IDs to the `HasFlag` token.
 * Content packs can now use mod-provided tokens without a dependency if the patch has an appropriate `HasMod` condition.
 * Improved error if a content pack sets a `FromFile` path with invalid characters.
 * Fixed `patch summary` display for mod-provided tokens which require an unbounded input.
