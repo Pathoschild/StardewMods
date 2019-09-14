@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens.ValueProviders;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -38,6 +39,14 @@ namespace ContentPatcher.Framework.Tokens
 
             this.DynamicValues.AddAllowedValues(possibleValues);
             this.CanHaveMultipleRootValues = this.DynamicValues.CanHaveMultipleValues();
+        }
+
+        /// <summary>Track conditions as tokens that are possibly used.</summary>
+        /// <param name="conditions">The conditions to add.</param>
+        public void AddAllowedConditions(Condition[] conditions)
+        {
+            foreach (var condition in conditions)
+                this.PossibleTokensUsed.Add(condition.Name);
         }
 
         /// <summary>Set the current values.</summary>

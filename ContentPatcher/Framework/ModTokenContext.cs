@@ -82,6 +82,7 @@ namespace ContentPatcher.Framework
 
             // add token value
             token.AddAllowedValues(tokenValue.Value);
+            token.AddAllowedConditions(tokenValue.Conditions);
             this.DynamicTokenValues.Add(tokenValue);
 
             // track tokens which should trigger an update to this token
