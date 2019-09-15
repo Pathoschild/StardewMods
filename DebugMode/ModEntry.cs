@@ -170,17 +170,22 @@ namespace Pathoschild.Stardew.DebugMode
         {
             // draw debug info at cursor position
             {
-                // get cursor position
-                Vector2 position = new Vector2(Game1.getOldMouseX(), Game1.getOldMouseY());
-
                 // generate debug text
                 string[] lines = this.GetDebugInfo().ToArray();
 
-                // draw text
+                // get text
                 string text = string.Join(Environment.NewLine, lines.Where(p => p != null));
                 Vector2 textSize = font.MeasureString(text);
                 const int scrollPadding = 5;
-                CommonHelper.DrawScroll(batch, new Vector2(position.X - textSize.X - (scrollPadding * 2) - (CommonHelper.ScrollEdgeSize.X * 2), position.Y), textSize, out Vector2 contentPos, out Rectangle _, padding: scrollPadding);
+
+                // calculate scroll position
+                int width = (int)(textSize.X + (scrollPadding * 2) + (CommonHelper.ScrollEdgeSize.X * 2));
+                int height = (int)(textSize.Y + (scrollPadding * 2) + (CommonHelper.ScrollEdgeSize.Y * 2));
+                int x = (int)MathHelper.Clamp(Game1.getMouseX() - width, 0, Game1.viewport.Width - width);
+                int y = (int)MathHelper.Clamp(Game1.getMouseY(), 0, Game1.viewport.Height - height);
+
+                // draw
+                CommonHelper.DrawScroll(batch, new Vector2(x, y), textSize, out Vector2 contentPos, out Rectangle bounds, padding: scrollPadding);
                 batch.DrawString(font, text, new Vector2(contentPos.X, contentPos.Y), Color.Black);
             }
 

@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Updated for Stardew Valley 1.4.
+* The cursor scroll now stays within the visible area if the cursor is near the edges of the screen.
 * Improved translations. Thanks to Hesperusrus (updated Russian)!
 
 ## 1.10
