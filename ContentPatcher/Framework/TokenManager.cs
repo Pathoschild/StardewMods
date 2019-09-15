@@ -28,6 +28,9 @@ namespace ContentPatcher.Framework
         /// <summary>The installed mod IDs.</summary>
         private readonly InvariantHashSet InstalledMods;
 
+        /// <summary>Simplifies access to private code.</summary>
+        private readonly IReflectionHelper Reflection;
+
 
         /*********
         ** Accessors
@@ -43,10 +46,12 @@ namespace ContentPatcher.Framework
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
         /// <param name="installedMods">The installed mod IDs.</param>
         /// <param name="modTokens">The custom tokens provided by mods.</param>
-        public TokenManager(IContentHelper contentHelper, InvariantHashSet installedMods, IEnumerable<IToken> modTokens)
+        /// <param name="reflection">Simplifies access to private code.</param>
+        public TokenManager(IContentHelper contentHelper, InvariantHashSet installedMods, IEnumerable<IToken> modTokens, IReflectionHelper reflection)
         {
             this.InstalledMods = installedMods;
             this.GlobalContext = new GenericTokenContext(this.IsModInstalled);
+            this.Reflection = reflection;
 
             foreach (IToken modToken in modTokens)
                 this.GlobalContext.Tokens[modToken.Name] = modToken;
@@ -280,10 +285,15 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Get whether the JojaMart is complete.</summary>
-        /// <remarks>See game logic in <see cref="StardewValley.Locations.Town.resetLocalState"/>.</remarks>
+        /// <remarks>See game logic in <see cref="GameLocation"/> for the 'C' precondition.</remarks>
         private bool GetIsJojaMartComplete()
         {
-            return Game1.MasterPlayer.mailReceived.Contains("JojaMember") && this.GetIsCommunityCenterComplete();
+            if (!Game1.MasterPlayer.mailReceived.Contains("JojaMember"))
+                return false;
+
+            GameLocation town = Game1.getLocationFromName("Town");
+            return this.Reflection.GetMethod(town, "checkJojaCompletePrerequisite").Invoke<bool>();
+
         }
 
         /// <summary>Get the name for today's day event (e.g. wedding or festival) from the game data.</summary>
