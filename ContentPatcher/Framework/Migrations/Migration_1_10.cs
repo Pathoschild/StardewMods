@@ -47,6 +47,13 @@ namespace ContentPatcher.Framework.Migrations
                         error = this.GetNounPhraseError($"using {nameof(PatchConfig.FromFile)} with action {nameof(PatchType.EditData)}");
                         return false;
                     }
+
+                    // 1.10 adds MapProperties
+                    if (patch.MapProperties != null)
+                    {
+                        error = this.GetNounPhraseError($"using {nameof(PatchConfig.MapProperties)}");
+                        return false;
+                    }
                 }
             }
 

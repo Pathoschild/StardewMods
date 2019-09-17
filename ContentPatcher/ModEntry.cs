@@ -619,15 +619,34 @@ namespace ContentPatcher
                     case PatchType.EditMap:
                         {
                             // read map asset
-                            if (!this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out string error, out IParsedTokenString fromAsset))
+                            IParsedTokenString fromAsset = null;
+                            if (entry.FromFile != null && !this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out string error, out fromAsset))
                                 return TrackSkip(error);
 
+                            // read map properties
+                            List<EditMapPatchProperty> mapProperties = null;
+                            if (entry.MapProperties?.Any() == true)
+                            {
+                                mapProperties = new List<EditMapPatchProperty>();
+                                foreach (var pair in entry.MapProperties)
+                                {
+                                    if (!tokenParser.TryParseStringTokens(pair.Key, immutableRequiredModIDs, out string keyError, out IParsedTokenString key))
+                                        return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{key.Raw}' key is invalid: {keyError}");
+                                    if (!tokenParser.TryParseStringTokens(pair.Value, immutableRequiredModIDs, out string valueError, out IParsedTokenString value))
+                                        return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{key.Raw}' value '{value.Raw}' is invalid: {keyError}");
+
+                                    mapProperties.Add(new EditMapPatchProperty(key, value));
+                                }
+                            }
+
                             // validate
-                            if (entry.ToArea == Rectangle.Empty)
-                                return TrackSkip($"must specify {nameof(entry.ToArea)} (use \"Action\": \"Load\" if you want to replace the whole map file)");
+                            if (fromAsset == null && mapProperties == null)
+                                return TrackSkip($"must specify at least one of {nameof(entry.FromFile)} or {entry.MapProperties}");
+                            if (fromAsset != null && entry.ToArea == Rectangle.Empty)
+                                return TrackSkip($"must specify {nameof(entry.ToArea)} when using {nameof(entry.FromFile)} (use \"Action\": \"Load\" if you want to replace the whole map file)");
 
                             // save
-                            patch = new EditMapPatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, this.Monitor, this.Helper.Content.NormalizeAssetName);
+                            patch = new EditMapPatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, mapProperties, this.Monitor, this.Helper.Content.NormalizeAssetName);
                         }
                         break;
 

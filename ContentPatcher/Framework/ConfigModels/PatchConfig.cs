@@ -58,6 +58,12 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>The records to reorder, if the target is a list asset.</summary>
         public PatchMoveEntryConfig[] MoveEntries { get; set; }
 
+        /****
+        ** EditMap
+        ****/
+        /// <summary>The map properties to edit.</summary>
+        public IDictionary<string, string> MapProperties { get; set; }
+
 
         /*********
         ** Public methods

@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using ContentPatcher.Framework.Tokens;
-using ContentPatcher.Framework.Tokens.Json;
 
 namespace ContentPatcher.Framework.Patches
 {
-    /// <summary>An entry in a data file to change.</summary>
-    internal class EditDataPatchRecord : IContextual
+    /// <summary>A map property to change when editing a map.</summary>
+    internal class EditMapPatchProperty : IContextual
     {
         /*********
         ** Fields
@@ -17,11 +16,11 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Accessors
         *********/
-        /// <summary>The unique key for the entry in the data file.</summary>
+        /// <summary>The map property name.</summary>
         public ITokenString Key { get; }
 
-        /// <summary>The entry value to set.</summary>
-        public TokenisableJToken Value { get; }
+        /// <summary>The map property value.</summary>
+        public ITokenString Value { get; }
 
         /// <summary>Whether the instance may change depending on the context.</summary>
         public bool IsMutable => this.Contextuals.IsMutable;
@@ -34,9 +33,9 @@ namespace ContentPatcher.Framework.Patches
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="key">The unique key for the entry in the data file.</param>
-        /// <param name="value">The entry value to set.</param>
-        public EditDataPatchRecord(ITokenString key, TokenisableJToken value)
+        /// <param name="key">The map property name.</param>
+        /// <param name="value">The map property value.</param>
+        public EditMapPatchProperty(ITokenString key, ITokenString value)
         {
             this.Key = key;
             this.Value = value;

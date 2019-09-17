@@ -480,9 +480,26 @@ coordinates of the top-left corner, and the tile width and height of the area.
 
 </td>
 </tr>
+
+<tr>
+<td>
+
+`MapProperties`
+
+</td>
+<td>
+
+The map properties (not tile properties) to add, replace, or delete. To add an property, just
+specify a key that doesn't exist; to delete an entry, set the value to `null` (like
+`"some key": null`). This field supports [tokens](#advanced-tokens--conditions) in property keys
+and values.
+
+</td>
+</tr>
+
 </table>
 
-Required fields: `FromFile`, `ToArea` (if `FromArea` is specified).
+Required fields: at least one of (`FromFile` and `ToArea`) or (`MapProperties`).
 
 For example, this replaces the town square with the one in another map:
 ```js
@@ -499,6 +516,24 @@ For example, this replaces the town square with the one in another map:
    ]
 }
 ```
+
+This changes the warp map property for the farm cave:
+```js
+{
+   "Format": "1.10",
+   "Changes": [
+      {
+         "Action": "EditMap",
+         "Target": "Maps/FarmCave",
+         "MapProperties": {
+            "Warp": "8 12 Farm 34 6"
+         }
+      },
+   ]
+}
+```
+
+(You can patch a map area and change map properties in the same patch.)
 
 Known limitations:
 * Patching non-farmhouse-floor tiles into the farmhouse's `Back` layer may cause strange effects,

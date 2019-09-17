@@ -6,6 +6,7 @@
   * `HavingChild` and `Pregnant`: check if an NPC/player is having a child.
   * `IsJojaMartComplete`: whether the player bought a Joja membership and completed all Joja bundles.
   * `Random`: choose a random value from a given list.
+* Added support for editing map properties with `EditMap` patches.
 * Added support for using `FromFile` with `EditData` patches.
 * Added `patch export` console command, which lets you see what an asset looks like with all changes applied.
 * Added `patch parse` console command, which parses an arbitrary tokenisable string and shows the result.
