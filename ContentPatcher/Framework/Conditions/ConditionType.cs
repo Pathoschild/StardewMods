@@ -120,9 +120,14 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The <see cref="StardewValley.LocalizedContentManager.LanguageCode"/> name.</summary>
         Language,
 
+        /****
+        ** String manipulation
+        ****/
         /// <summary>A random value selected from the given input.</summary>
         Random,
 
+        /// <summary>A list of numeric values based on the specified min/max values.</summary>
+        Range,
 
         /****
         ** Patch-specific

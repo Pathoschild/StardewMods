@@ -1147,7 +1147,15 @@ code | meaning
 
 </td>
 </tr>
+</table>
+</dd>
 
+<dt>String manipulation tokens:</dt>
+<dd>
+<table>
+<tr>
+<th>condition</th>
+<th>purpose</th>
 <tr>
 <td>Random</td>
 <td>
@@ -1174,6 +1182,28 @@ as 'blue' in this patch:
    "FromFile": "assets/abigail-{{Random:red, red, blue}}.png"
 }
 ```
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>Range</td>
+<td>
+
+A list of integers between the specified min/max integers (inclusive). This is mainly meant for
+comparing values; for example:
+
+```js
+"When": {
+   "Hearts:Abigail": "{{Range: 6, 14}}" // equivalent to "6, 7, 8, 9, 10, 11, 12, 13, 14"
+}
+```
+
+You can use tokens for the individual numbers (like `{{Range:6, {{MaxHearts}}}}`) or both (like
+`{{Range:{{FriendshipRange}}}})`, as long as the final parsed input has the form `min, max`.
+
+To minimise the possible performance impact, the range can't exceed 5000 numbers and should be much
+smaller if possible.
 
 </td>
 </tr>

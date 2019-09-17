@@ -199,6 +199,9 @@ namespace ContentPatcher.Framework
             yield return new HavingChildValueProvider(ConditionType.Pregnant, NeedsBasicInfo);
             yield return new HavingChildValueProvider(ConditionType.HavingChild, NeedsBasicInfo);
 
+            // string manipulation
+            yield return new RangeValueProvider();
+
             // other
             yield return new ImmutableValueProvider(ConditionType.HasMod.ToString(), installedMods, canHaveMultipleValues: true);
             yield return new HasValueValueProvider();
