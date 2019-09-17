@@ -17,6 +17,7 @@
 * Content packs can now use mod-provided tokens without a dependency if the patch has an appropriate `HasMod` condition.
 * Improved error if a content pack sets a `FromFile` path with invalid characters.
 * Fixed `patch summary` display for mod-provided tokens which require an unbounded input.
+* Fixed `patch summary` not showing token input validation errors in some cases.
 
 ## 1.9.2
 Released 25 July 2019.

@@ -157,14 +157,17 @@ namespace ContentPatcher.Framework.Conditions
             this.State.Reset();
 
             // reapply
-            if (this.TryGetApplied(context, out string value, out InvariantHashSet unavailableTokens))
+            if (this.TryGetApplied(context, out string value, out InvariantHashSet unavailableTokens, out InvariantHashSet errors))
                 this.Value = value;
             else
             {
                 this.Value = null;
-                if (!unavailableTokens.Any())
-                    throw new InvalidOperationException($"Could not apply tokens to string '{this.Raw}', but no invalid tokens were reported."); // sanity check, should never happen
+
+                if (!unavailableTokens.Any() && !errors.Any())
+                    throw new InvalidOperationException($"Could not apply tokens to string '{this.Raw}', but no invalid tokens or errors were reported."); // sanity check, should never happen
+
                 this.State.AddUnreadyTokens(unavailableTokens.ToArray());
+                this.State.AddErrors(errors.ToArray());
             }
 
             return
@@ -176,17 +179,19 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <param name="result">The input string with tokens substituted.</param>
         /// <param name="unavailableTokens">The tokens which could not be replaced (if any).</param>
+        /// <param name="errors">The error which occurred (if any).</param>
         /// <returns>Returns whether all tokens in the <paramref name="result"/> were successfully replaced.</returns>
-        private bool TryGetApplied(IContext context, out string result, out InvariantHashSet unavailableTokens)
+        private bool TryGetApplied(IContext context, out string result, out InvariantHashSet unavailableTokens, out InvariantHashSet errors)
         {
             StringBuilder str = new StringBuilder();
             unavailableTokens = new InvariantHashSet();
+            errors = new InvariantHashSet();
             foreach (ILexToken lexToken in this.LexTokens)
             {
                 switch (lexToken)
                 {
                     case LexTokenToken lexTokenToken:
-                        str.Append(this.TryGetTokenText(context, lexTokenToken, unavailableTokens, out string text)
+                        str.Append(this.TryGetTokenText(context, lexTokenToken, unavailableTokens, errors, out string text)
                             ? text
                             : lexToken.Text
                         );
@@ -199,7 +204,7 @@ namespace ContentPatcher.Framework.Conditions
             }
 
             result = str.ToString().Trim();
-            return !unavailableTokens.Any();
+            return !unavailableTokens.Any() && !errors.Any();
         }
 
         /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>
@@ -233,9 +238,10 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <param name="lexToken">The lexical token whose value to fetch.</param>
         /// <param name="unavailableTokens">A list of unavailable or unready token names to update if needed.</param>
+        /// <param name="errors">The errors which occurred (if any).</param>
         /// <param name="text">The text representation, if available.</param>
         /// <returns>Returns true if the token is ready and <paramref name="text"/> was set, else false.</returns>
-        private bool TryGetTokenText(IContext context, LexTokenToken lexToken, InvariantHashSet unavailableTokens, out string text)
+        private bool TryGetTokenText(IContext context, LexTokenToken lexToken, InvariantHashSet unavailableTokens, InvariantHashSet errors, out string text)
         {
             // get token
             IToken token = context.GetToken(lexToken.Name, enforceContext: true);
@@ -256,6 +262,14 @@ namespace ContentPatcher.Framework.Conditions
             {
                 foreach (string tokenName in unavailableInputTokens)
                     unavailableTokens.Add(tokenName);
+                text = null;
+                return false;
+            }
+
+            // validate input
+            if (!token.TryValidateInput(input, out string error))
+            {
+                errors.Add(error);
                 text = null;
                 return false;
             }
