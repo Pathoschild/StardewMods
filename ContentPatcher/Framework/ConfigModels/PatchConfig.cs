@@ -24,18 +24,15 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>The asset key to change.</summary>
         public string Target { get; set; }
 
+        /// <summary>The local file to load.</summary>
+        public string FromFile { get; set; }
+
         /// <summary>Whether to apply this patch.</summary>
         /// <remarks>This must be a string to support config tokens.</remarks>
         public string Enabled { get; set; } = "true";
 
         /// <summary>The criteria to apply. See readme for valid values.</summary>
         public InvariantDictionary<string> When { get; set; }
-
-        /****
-        ** Some actions
-        ****/
-        /// <summary>The local file to load.</summary>
-        public string FromFile { get; set; }
 
         /****
         ** EditImage

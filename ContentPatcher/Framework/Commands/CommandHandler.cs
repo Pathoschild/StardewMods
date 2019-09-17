@@ -296,12 +296,13 @@ namespace ContentPatcher.Framework.Commands
 
                 // print patches
                 output.AppendLine();
-                output.AppendLine("   loaded  | conditions | applied | name + details");
-                output.AppendLine("   ------- | ---------- | ------- | --------------");
+                output.AppendLine("   Patches:");
+                output.AppendLine("      loaded  | conditions | applied | name + details");
+                output.AppendLine("      ------- | ---------- | ------- | --------------");
                 foreach (PatchInfo patch in patchGroup.OrderByIgnoreCase(p => p.ShortName))
                 {
                     // log checkbox and patch name
-                    output.Append($"   [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {patch.ShortName}");
+                    output.Append($"      [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {patch.ShortName}");
 
                     // log target value if different from name
                     {
@@ -359,7 +360,44 @@ namespace ContentPatcher.Framework.Commands
                     // end line
                     output.AppendLine();
                 }
-                output.AppendLine(); // blank line between groups
+
+                // print patch effects
+                {
+                    IDictionary<string, InvariantHashSet> effectsByPatch = new Dictionary<string, InvariantHashSet>(StringComparer.InvariantCultureIgnoreCase);
+                    foreach (PatchInfo patch in patchGroup)
+                    {
+                        if (!patch.IsApplied || patch.Patch == null)
+                            continue;
+
+                        string[] changeLabels = patch.GetChangeLabels().ToArray();
+                        if (!changeLabels.Any())
+                            continue;
+
+                        if (!effectsByPatch.TryGetValue(patch.ParsedTargetAsset.Value, out InvariantHashSet effects))
+                            effectsByPatch[patch.ParsedTargetAsset.Value] = effects = new InvariantHashSet();
+
+                        foreach (string effect in patch.GetChangeLabels())
+                            effects.Add(effect);
+                    }
+
+                    output.AppendLine();
+                    if (effectsByPatch.Any())
+                    {
+                        int maxAssetNameWidth = effectsByPatch.Max(p => p.Key.Length);
+
+                        output.AppendLine("   Current changes:");
+                        output.AppendLine($"      asset name{"".PadRight(maxAssetNameWidth - "asset name".Length)} | changes");
+                        output.AppendLine($"      ----------{"".PadRight(maxAssetNameWidth - "----------".Length)} | -------");
+
+                        foreach (var pair in effectsByPatch.OrderBy(p => p.Key, StringComparer.InvariantCultureIgnoreCase))
+                            output.AppendLine($"      {pair.Key}{"".PadRight(maxAssetNameWidth - pair.Key.Length)} | {string.Join("; ", pair.Value.OrderBy(p => p, StringComparer.InvariantCultureIgnoreCase))}");
+                    }
+                    else
+                        output.AppendLine("   No current changes.");
+                }
+
+                // add blank line between groups
+                output.AppendLine();
             }
 
             this.Monitor.Log(output.ToString(), LogLevel.Debug);

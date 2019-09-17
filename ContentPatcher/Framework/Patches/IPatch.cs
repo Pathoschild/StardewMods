@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
 using StardewModdingAPI;
@@ -58,5 +59,8 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>Get the context which provides tokens for this patch, including patch-specific tokens like <see cref="ConditionType.Target"/>.</summary>
         IContext GetPatchContext();
+
+        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        IEnumerable<string> GetChangeLabels();
     }
 }

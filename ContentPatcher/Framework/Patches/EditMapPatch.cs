@@ -114,6 +114,12 @@ namespace ContentPatcher.Framework.Patches
             this.ApplyMapOverride(source, sourceArea, target, targetArea);
         }
 
+        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        public override IEnumerable<string> GetChangeLabels()
+        {
+            yield return "patched map tiles";
+        }
+
 
         /*********
         ** Private methods

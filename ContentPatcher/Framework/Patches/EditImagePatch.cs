@@ -27,6 +27,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Indicates how the image should be patched.</summary>
         private readonly PatchMode PatchMode;
 
+        /// <summary>Whether the patch extended the last image asset it was applied to.</summary>
+        private bool ResizedLastImage;
+
 
         /*********
         ** Public methods
@@ -105,10 +108,22 @@ namespace ContentPatcher.Framework.Patches
                 Texture2D texture = new Texture2D(Game1.graphics.GraphicsDevice, original.Width, targetArea.Bottom);
                 editor.ReplaceWith(texture);
                 editor.PatchImage(original);
+                this.ResizedLastImage = true;
             }
+            else
+                this.ResizedLastImage = false;
 
             // apply source image
             editor.PatchImage(source, sourceArea, this.ToArea, this.PatchMode);
+        }
+
+        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        public override IEnumerable<string> GetChangeLabels()
+        {
+            if (this.ResizedLastImage)
+                yield return "resized image";
+
+            yield return "edited image";
         }
     }
 }

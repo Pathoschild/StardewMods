@@ -163,6 +163,9 @@ namespace ContentPatcher.Framework.Patches
             return this.PrivateContext;
         }
 
+        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        public abstract IEnumerable<string> GetChangeLabels();
+
 
         /*********
         ** Protected methods

@@ -189,6 +189,19 @@ namespace ContentPatcher.Framework.Patches
                 throw new NotSupportedException($"Unknown data asset type {typeof(T).FullName}, expected dictionary or list.");
         }
 
+        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        public override IEnumerable<string> GetChangeLabels()
+        {
+            if (this.Records.Any(p => p.Value.Value == null))
+                yield return "deleted entries";
+
+            if (this.Fields.Any() || this.Records.Any(p => p.Value.Value != null))
+                yield return "changed entries";
+
+            if (this.MoveRecords?.Any() == true)
+                yield return "reordered entries";
+        }
+
 
         /*********
         ** Private methods
@@ -201,7 +214,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="moveEntries">The parsed move entry records.</param>
         /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
         /// <returns>Returns whether parsing succeeded.</returns>
-        public bool TryLoadFile(ITokenString fromFile, IContext context, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error)
+        private bool TryLoadFile(ITokenString fromFile, IContext context, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error)
         {
             // validate path
             if (!this.ContentPack.HasFile(fromFile.Value))

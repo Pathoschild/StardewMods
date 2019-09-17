@@ -1401,8 +1401,8 @@ Content Patcher adds several console commands for testing and troubleshooting. E
 directly into the SMAPI console for more info.
 
 #### patch summary
-`patch summary` lists all the loaded patches, their current values, and (if applicable) the reasons
-they weren't applied.
+`patch summary` lists all the loaded patches, their current values, what they changed, and (if
+applicable) the reasons they weren't applied.
 
 For example:
 
@@ -1442,10 +1442,16 @@ Example Content Pack:
       ----------------- | -----
       WeatherVariant    | [X] Wet
 
-   loaded  | conditions | applied | name + details
-   ------- | ---------- | ------- | --------------
-   [X]     | [ ]        | [ ]     | Dry Palm Trees // conditions don't match: WeatherVariant
-   [X]     | [X]        | [X]     | Wet Palm Trees
+   Patches:
+      loaded  | conditions | applied | name + details
+      ------- | ---------- | ------- | --------------
+      [X]     | [ ]        | [ ]     | Dry Palm Trees // conditions don't match: WeatherVariant
+      [X]     | [X]        | [X]     | Wet Palm Trees
+
+   Current changes:
+      asset name                | changes
+      ------------------------- | -------
+      TerrainFeatures/tree_palm | edited image
 ```
 
 #### patch update

@@ -32,6 +32,12 @@ namespace ContentPatcher.Framework.Patches
                 : data;
         }
 
+        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        public override IEnumerable<string> GetChangeLabels()
+        {
+            yield return "replaced asset";
+        }
+
 
         /*********
         ** Private methods
