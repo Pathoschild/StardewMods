@@ -83,6 +83,7 @@ namespace ContentPatcher.Framework
                 this.DynamicContext.Save(token = new DynamicToken(tokenValue.Name, this.Scope));
 
             // add token value
+            token.AddTokensUsed(tokenValue.GetTokensUsed());
             token.AddAllowedValues(tokenValue.Value);
             this.DynamicTokenValues.Add(tokenValue);
 
