@@ -81,8 +81,8 @@ namespace ContentPatcher.Framework
                 this.DynamicContext.Save(token = new DynamicToken(tokenValue.Name, this.Scope));
 
             // add token value
+            token.AddTokensUsed(tokenValue.GetTokensUsed());
             token.AddAllowedValues(tokenValue.Value);
-            token.AddAllowedConditions(tokenValue.Conditions);
             this.DynamicTokenValues.Add(tokenValue);
 
             // track tokens which should trigger an update to this token
