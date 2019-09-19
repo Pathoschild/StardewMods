@@ -7,6 +7,7 @@
   * shears: shear wool from animals.
 * Added option to allow summoning a temporary tractor without building a garage first.
 * Tractor effects are now applied radially from the tractor. (For example, trees now fall away from the tractor if cut from the side.)
+* Updated for compatibility with the latest version of Pelican Fiber.
 * Fixed scythe sometimes interacting with incorrect targets (e.g. shipping bin or farm animals).
 * Fixed scythe showing item pickup animation when collecting forage items.
 * Fixed incorrect speed changes when a different speed buff expires while riding the tractor (via Stardew Valley 1.4 change).

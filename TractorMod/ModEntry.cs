@@ -419,7 +419,7 @@ namespace Pathoschild.Stardew.TractorMod
             {
                 // get field
                 IList<BluePrint> blueprints = this.Helper.Reflection
-                    .GetField<List<BluePrint>>(e.NewMenu, e.NewMenu is CarpenterMenu ? "blueprints" : "Blueprints")
+                    .GetField<List<BluePrint>>(e.NewMenu, "blueprints")
                     .GetValue();
 
                 // add garage blueprint
@@ -754,10 +754,10 @@ namespace Pathoschild.Stardew.TractorMod
             bool isPelicanFiber = !isFarmExpansion && menu.GetType().FullName == this.PelicanFiberMenuFullName;
             if (isFarmExpansion || isPelicanFiber)
             {
-                BluePrint currentBlueprint = this.Helper.Reflection.GetProperty<BluePrint>(menu, "CurrentBlueprint").GetValue();
+                BluePrint currentBlueprint = this.Helper.Reflection.GetProperty<BluePrint>(menu, isFarmExpansion ? "CurrentBlueprint" : "currentBlueprint").GetValue();
                 if (currentBlueprint.maxOccupants == this.MaxOccupantsID)
                 {
-                    Building building = this.Helper.Reflection.GetField<Building>(menu, isFarmExpansion ? "currentBuilding" : "CurrentBuilding").GetValue();
+                    Building building = this.Helper.Reflection.GetField<Building>(menu, "currentBuilding").GetValue();
                     if (building.texture.Value != this.GarageTexture)
                         building.texture = new Lazy<Texture2D>(() => this.GarageTexture);
                 }

@@ -1,6 +1,7 @@
 # Release notes
 ## Upcoming release
 * The bee house range now accounts for the Bee House Flower Range Fix mod, if installed.
+* Updated for compatibility with the latest version of Pelican Fiber.
 * Improved translations. Thanks to shiro2579 (updated Portuguese)!
 
 ## 1.7
