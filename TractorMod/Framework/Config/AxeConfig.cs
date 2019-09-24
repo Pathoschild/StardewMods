@@ -13,16 +13,16 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         public bool CutGrownFruitTrees { get; set; }
 
         /// <summary>Whether to clear non-fruit tree seeds.</summary>
-        public bool ClearTreeSeeds { get; set; }
+        public bool ClearTreeSeeds { get; set; } = true;
 
         /// <summary>Whether to clear non-fruit trees that aren't fully grown.</summary>
-        public bool ClearTreeSaplings { get; set; }
+        public bool ClearTreeSaplings { get; set; } = true;
 
         /// <summary>Whether to clear full-grown non-fruit trees.</summary>
-        public bool CutGrownTrees { get; set; }
+        public bool CutGrownTrees { get; set; } = true;
 
         /// <summary>Whether to cut non-fruit trees that have a tapper.</summary>
-        public bool CutTappedTrees { get; set; }
+        public bool CutTappedTrees { get; set; } = true;
 
         /// <summary>Whether to clear live crops.</summary>
         public bool ClearLiveCrops { get; set; }
