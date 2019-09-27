@@ -9,7 +9,7 @@
     // date names
     "generic.now": "今",
     "generic.tomorrow": "明日",
-    "generic.yesterday": "昨日"
+    "generic.yesterday": "昨日",
 
     // generic field values
     "generic.percent": "{{percent}}%",
