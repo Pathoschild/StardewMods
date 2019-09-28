@@ -75,6 +75,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             Chest output = this.GetOutputChest();
             output.clearNulls();
             output.items.Remove(item);
+            this.Machine.showNextIndex.Value = !output.isEmpty();
         }
 
         /// <summary>Get the next output item.</summary>
