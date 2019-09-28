@@ -9,7 +9,7 @@
     // date names
     "generic.now": "今",
     "generic.tomorrow": "明日",
-    "generic.yesterday": "昨日"
+    "generic.yesterday": "昨日",
 
     // generic field values
     "generic.percent": "{{percent}}%",
@@ -208,7 +208,7 @@
     "building.upgrades.cabin.1": "台所が追加され、結婚できる",
     "building.upgrades.cabin.2": "子作りできる",
     "building.upgrades.coop.0": "4羽まで飼育でき、鶏が飼える",
-    "building.upgrades.coop.1": "8羽まで飼育でき、孵卵器が付き、恐竜とアヒルの飼育ができる",
+    "building.upgrades.coop.1": "8羽まで飼育でき、ふ卵器が付き、恐竜とアヒルの飼育ができる",
     "building.upgrades.coop.2": "12羽まで飼育でき、自動給餌とウサギの飼育ができる",
     "building.water-trough.summary": "最大{{max}}中{{filled}}の給水樋が充たされている",
 
