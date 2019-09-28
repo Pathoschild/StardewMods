@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
@@ -15,16 +16,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         private readonly string DefaultName = "Chest";
 
         /// <summary>The in-game chest.</summary>
-        private readonly Chest Chest;
+        protected readonly Chest Chest;
 
         /// <summary>The <see cref="ItemGrabMenu.context"/> value which indicates what opened the menu.</summary>
         private readonly object Context;
 
-        /// <summary>The callback to invoke when an item is selected in the player inventory.</summary>
-        private ItemGrabMenu.behaviorOnItemSelect GrabItemFromInventory => this.Chest.grabItemFromInventory;
-
-        /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
-        private ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer => this.Chest.grabItemFromChest;
+        /// <summary>Simplifies access to private code.</summary>
+        private readonly IReflectionHelper Reflection;
 
 
         /*********
@@ -49,10 +47,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Construct an instance.</summary>
         /// <param name="chest">The in-game chest.</param>
         /// <param name="context">The <see cref="ItemGrabMenu.context"/> value which indicates what opened the menu.</param>
-        public ChestContainer(Chest chest, object context)
+        /// <param name="reflection">Simplifies access to private code.</param>
+        public ChestContainer(Chest chest, object context, IReflectionHelper reflection)
         {
             this.Chest = chest;
             this.Context = context;
+            this.Reflection = reflection;
             this.Data = ContainerData.ParseName(chest.Name, this.DefaultName);
         }
 
@@ -86,7 +86,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 reverseGrab: false,
                 showReceivingMenu: true,
                 highlightFunction: this.CanAcceptItem,
-                behaviorOnItemSelectFunction: this.GrabItemFromInventory,
+                behaviorOnItemSelectFunction: this.GrabItemFromPlayer,
                 message: null,
                 behaviorOnItemGrab: this.GrabItemFromContainer,
                 canBeExitedWithKey: true,
@@ -102,6 +102,38 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.Chest.name = this.Data.HasData()
                 ? this.Data.ToName()
                 : this.DefaultName;
+        }
+
+
+        /*********
+        ** Protected methods
+        *********/
+        /// <summary>Transfer an item from a player to the container.</summary>
+        /// <param name="item">The item to transfer.</param>
+        /// <param name="player">The player transferring the item.</param>
+        private void GrabItemFromPlayer(Item item, Farmer player)
+        {
+            this.Chest.grabItemFromInventory(item, player);
+            this.OnChanged();
+        }
+
+        /// <summary>Transfer an item from the container to a player.</summary>
+        /// <param name="item">The item to transfer.</param>
+        /// <param name="player">The player transferring the item.</param>
+        private void GrabItemFromContainer(Item item, Farmer player)
+        {
+            this.Chest.grabItemFromChest(item, player);
+            this.OnChanged();
+        }
+
+        /// <summary>Update when an item is added/removed to the container.</summary>
+        protected virtual void OnChanged()
+        {
+            if (Game1.activeClickableMenu is ItemGrabMenu itemGrabMenu)
+            {
+                itemGrabMenu.behaviorOnItemGrab = this.GrabItemFromContainer;
+                this.Reflection.GetField<ItemGrabMenu.behaviorOnItemSelect>(itemGrabMenu, "behaviorFunction").SetValue(this.GrabItemFromPlayer);
+            }
         }
     }
 }

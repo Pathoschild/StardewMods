@@ -98,7 +98,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                             if (obj is Chest chest && chest.playerChest.Value)
                             {
                                 yield return new ManagedChest(
-                                    container: new ChestContainer(chest, context: chest),
+                                    container: new ChestContainer(chest, context: chest, this.Reflection),
                                     location: location,
                                     tile: tile,
                                     defaultDisplayName: this.Translations.Get("default-name.chest", new { number = ++namelessChests }),
@@ -110,7 +110,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                             else if (obj.ParentSheetIndex == this.AutoGrabberID && obj.heldObject.Value is Chest grabberChest)
                             {
                                 yield return new ManagedChest(
-                                    container: new ChestContainer(grabberChest, context: obj),
+                                    container: new AutoGrabberContainer(obj, grabberChest, context: obj, this.Reflection), 
                                     location: location,
                                     tile: tile,
                                     defaultDisplayName: this.Translations.Get("default-name.auto-grabber", new { number = ++namelessGrabbers }),
@@ -127,7 +127,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         if (fridge != null)
                         {
                             yield return new ManagedChest(
-                                container: new ChestContainer(fridge, context: fridge),
+                                container: new ChestContainer(fridge, context: fridge, this.Reflection),
                                 location: location,
                                 tile: Vector2.Zero,
                                 defaultDisplayName: this.Translations.Get("default-name.fridge"),
@@ -145,7 +145,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                             if (building is JunimoHut hut)
                             {
                                 yield return new ManagedChest(
-                                    container: new JunimoHutContainer(hut),
+                                    container: new JunimoHutContainer(hut, this.Reflection),
                                     location: location,
                                     tile: new Vector2(hut.tileX.Value, hut.tileY.Value),
                                     defaultDisplayName: this.Translations.Get("default-name.junimo-hut", new { number = ++namelessHuts }),
