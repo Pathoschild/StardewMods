@@ -23,11 +23,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>The item ID for auto-grabbers.</summary>
         private readonly int AutoGrabberID = 165;
 
-        /// <summary>Provides translations stored in the mod's folder.</summary>
-        private readonly ITranslationHelper Translations;
-
         /// <summary>An API for reading and storing local mod data.</summary>
         private readonly IDataHelper DataHelper;
+
+        /// <summary>Simplifies access to private code.</summary>
+        private readonly IReflectionHelper Reflection;
+
+        /// <summary>Provides translations stored in the mod's folder.</summary>
+        private readonly ITranslationHelper Translations;
 
         /// <summary>Whether to support access to the shipping bin.</summary>
         private readonly bool EnableShippingBin;
@@ -37,14 +40,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="translations">Provides translations stored in the mod's folder.</param>
         /// <param name="dataHelper">An API for reading and storing local mod data.</param>
+        /// <param name="reflection">Simplifies access to private code.</param>
+        /// <param name="translations">Provides translations stored in the mod's folder.</param>
         /// <param name="enableShippingBin">Whether to support access to the shipping bin.</param>
-        public ChestFactory(ITranslationHelper translations, IDataHelper dataHelper, bool enableShippingBin)
+        public ChestFactory(IDataHelper dataHelper, IReflectionHelper reflection, ITranslationHelper translations, bool enableShippingBin)
         {
+            this.DataHelper = dataHelper;
+            this.Reflection = reflection;
             this.Translations = translations;
             this.EnableShippingBin = enableShippingBin;
-            this.DataHelper = dataHelper;
         }
 
         /// <summary>Get all player chests.</summary>
@@ -181,7 +186,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="tile">The tile to check.</param>
         public ManagedChest GetChestFromTile(Vector2 tile)
         {
-            if (!Game1.currentLocation.Objects.TryGetValue(tile, out Object obj) || !(obj is Chest chest))
+            if (!Game1.currentLocation.Objects.TryGetValue(tile, out SObject obj) || !(obj is Chest chest))
                 return null;
 
             return this
@@ -189,11 +194,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 .FirstOrDefault(p => p.Container.IsSameAs(chest.items));
         }
 
-        /// <summary>Get the player chest from the specified menu (if any).</summary>
+        /// <summary>Get the player chest from the given menu, if any.</summary>
         /// <param name="menu">The menu to check.</param>
-        public ManagedChest GetChestFromMenu(ItemGrabMenu menu)
+        public ManagedChest GetChestFromMenu(IClickableMenu menu)
         {
-            IList<Item> inventory = this.GetInventoryFromContext(menu.context);
+            // get inventory from menu
+            IList<Item> inventory = null;
+            switch (menu)
+            {
+                case ItemGrabMenu itemGrabMenu:
+                    inventory = this.GetInventoryFromContext(itemGrabMenu.context);
+                    break;
+            }
+            if (inventory == null)
+                return null;
+
+            // get chest from inventory
             return this
                 .GetChests(RangeHandler.Unlimited())
                 .FirstOrDefault(p => p.Container.IsSameAs(inventory));
@@ -253,7 +269,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             if (location is Cabin cabin)
             {
                 return !string.IsNullOrWhiteSpace(cabin.owner?.Name)
-                    ? this.Translations.Get("default-category.owned-cabin", new {owner = cabin.owner?.Name})
+                    ? this.Translations.Get("default-category.owned-cabin", new { owner = cabin.owner?.Name })
                     : this.Translations.Get("default-category.unowned-cabin");
             }
 
