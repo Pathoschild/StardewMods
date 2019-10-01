@@ -148,7 +148,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             return location.checkAction(new Location((int)tile.X, (int)tile.Y), Game1.viewport, player);
         }
 
-        /// <summary>Get whether a given object is a weed.</summary>
+        /// <summary>Get whether a given object is a twig.</summary>
         /// <param name="obj">The world object.</param>
         protected bool IsTwig(SObject obj)
         {
