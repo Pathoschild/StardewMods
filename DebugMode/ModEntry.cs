@@ -9,6 +9,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
+using StardewValley.Minigames;
 using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.DebugMode
@@ -216,6 +217,15 @@ namespace Pathoschild.Stardew.DebugMode
                 yield return $"{this.Helper.Translation.Get("label.menu")}: {(menuType.Namespace == vanillaNamespace ? menuType.Name : menuType.FullName)}";
                 if (submenuType != null)
                     yield return $"{this.Helper.Translation.Get("label.submenu")}: {(submenuType.Namespace == vanillaNamespace ? submenuType.Name : submenuType.FullName)}";
+            }
+
+            // minigame
+            if (Game1.currentMinigame != null)
+            {
+                Type minigameType = Game1.currentMinigame.GetType();
+                string vanillaNamespace = typeof(AbigailGame).Namespace;
+
+                yield return $"{this.Helper.Translation.Get("label.minigame")}: {(minigameType.Namespace == vanillaNamespace ? minigameType.Name : minigameType.FullName)}";
             }
 
             // event

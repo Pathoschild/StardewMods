@@ -33,7 +33,11 @@ Press the `~` key (configurable) to enable or disable debug mode. This will...
 
    ![screenshot](screenshots/festival.png)
 
-5. Unlock the game's built-in debug commands:
+5. When playing a minigame, it'll show the minigame name:
+
+   ![screenshot](screenshots/minigame.png)
+
+6. Unlock the game's built-in debug commands:
 
    hotkey | action | multiplayer notes
    :----- | :----- | -------------------
@@ -54,7 +58,7 @@ Press the `~` key (configurable) to enable or disable debug mode. This will...
    `B`    | Shift the toolbar to show the next higher inventory row. | Affects current player.
    `N`    | Shift the toolbar to show the next lower inventory row. | Affects current player.
 
-6. If you set `AllowDangerousCommands: true` in the [configuration](#configuration) (disabled by
+7. If you set `AllowDangerousCommands: true` in the [configuration](#configuration) (disabled by
    default), also unlock these debug commands:
 
    hotkey | action | multiplayer notes
