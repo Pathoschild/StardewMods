@@ -26,11 +26,21 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>The configured key bindings.</summary>
         private ModConfigKeys Keys;
 
+        /// <summary>Whether to show the debug info overlay.</summary>
+        private bool ShowOverlay;
+
         /// <summary>Whether the built-in debug mode is enabled.</summary>
-        private bool DebugMode
+        private bool GameDebugMode
         {
-            get => Game1.debugMode;
-            set => Game1.debugMode = value;
+            get
+            {
+                return Game1.debugMode;
+            }
+            set
+            {
+                Game1.debugMode = value;
+                Program.releaseBuild = !value;
+            }
         }
 
         /// <summary>A pixel texture that can be stretched and colourised for display.</summary>
@@ -59,12 +69,14 @@ namespace Pathoschild.Stardew.DebugMode
         {
             // initialise
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Config.AllowDangerousCommands = this.Config.AllowGameDebug && this.Config.AllowDangerousCommands; // normalize for convenience
             this.Keys = this.Config.Controls.ParseControls(this.Monitor);
 
             // hook events
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
-            helper.Events.Player.Warped += this.OnWarped;
             helper.Events.Display.Rendered += this.OnRendered;
+            if (this.Config.AllowGameDebug)
+                helper.Events.Player.Warped += this.OnWarped;
 
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
@@ -86,12 +98,13 @@ namespace Pathoschild.Stardew.DebugMode
             // toggle debug menu
             if (this.Keys.ToggleDebug.Contains(e.Button))
             {
-                Program.releaseBuild = !Program.releaseBuild;
-                this.DebugMode = !this.DebugMode;
+                this.ShowOverlay = !this.ShowOverlay;
+                if (this.Config.AllowGameDebug)
+                    this.GameDebugMode = !this.GameDebugMode;
             }
 
             // suppress dangerous actions
-            if (this.DebugMode && !this.Config.AllowDangerousCommands && this.DestructiveKeys.Contains(e.Button))
+            if (this.GameDebugMode && !this.Config.AllowDangerousCommands && this.DestructiveKeys.Contains(e.Button))
                 this.Helper.Input.Suppress(e.Button);
         }
 
@@ -100,7 +113,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
         {
-            if (this.DebugMode && e.IsLocalPlayer)
+            if (this.GameDebugMode && e.IsLocalPlayer)
                 this.CorrectEntryPosition(e.NewLocation, Game1.player);
         }
 
@@ -109,7 +122,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <param name="e">The event arguments.</param>
         public void OnRendered(object sender, RenderedEventArgs e)
         {
-            if (this.DebugMode)
+            if (this.ShowOverlay)
                 this.DrawOverlay(Game1.spriteBatch, Game1.smallFont, this.Pixel.Value);
         }
 
