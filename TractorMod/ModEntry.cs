@@ -270,20 +270,6 @@ namespace Pathoschild.Stardew.TractorMod
             if (!this.IsEnabled)
                 return;
 
-            // workaround for mines not spawning a ladder on monster levels
-            if (e.Location is MineShaft mine && e.IsCurrentLocation)
-            {
-                if (mine.mustKillAllMonstersToAdvance() && mine.characters.All(p => p is Horse))
-                {
-                    IReflectedField<bool> hasLadder = this.Helper.Reflection.GetField<bool>(mine, "ladderHasSpawned");
-                    if (!hasLadder.GetValue())
-                    {
-                        mine.createLadderAt(mine.mineEntrancePosition(Game1.player));
-                        hasLadder.SetValue(true);
-                    }
-                }
-            }
-
             // workaround for instantly-built tractors spawning a horse
             if (Context.IsMainPlayer && e.Location is BuildableGameLocation buildableLocation)
             {
