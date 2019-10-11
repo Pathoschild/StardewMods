@@ -19,6 +19,7 @@
 * Fixed issue where dynamic tokens weren't correctly updated in some cases if they depend on another dynamic token whose conditions changed. (Thanks to kfahy!)
 * Fixed `patch summary` display for mod-provided tokens which require an unbounded input.
 * Fixed `patch summary` not showing token input validation errors in some cases.
+* Fixed `NullReferenceException` in some cases with invalid `Entries` keys.
 
 ## 1.9.2
 Released 25 July 2019.

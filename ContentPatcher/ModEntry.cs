@@ -631,9 +631,9 @@ namespace ContentPatcher
                                 foreach (var pair in entry.MapProperties)
                                 {
                                     if (!tokenParser.TryParseStringTokens(pair.Key, immutableRequiredModIDs, out string keyError, out IParsedTokenString key))
-                                        return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{key.Raw}' key is invalid: {keyError}");
+                                        return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' key is invalid: {keyError}");
                                     if (!tokenParser.TryParseStringTokens(pair.Value, immutableRequiredModIDs, out string valueError, out IParsedTokenString value))
-                                        return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{key.Raw}' value '{value.Raw}' is invalid: {keyError}");
+                                        return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' value '{pair.Value}' is invalid: {keyError}");
 
                                     mapProperties.Add(new EditMapPatchProperty(key, value));
                                 }
@@ -696,9 +696,9 @@ namespace ContentPatcher
                 foreach (KeyValuePair<string, JToken> pair in entry.Entries)
                 {
                     if (!tokenParser.TryParseStringTokens(pair.Key, assumeModIds, out string keyError, out IParsedTokenString key))
-                        return Fail($"{nameof(PatchConfig.Entries)} > '{key.Raw}' key is invalid: {keyError}", out error);
+                        return Fail($"{nameof(PatchConfig.Entries)} > '{pair.Key}' key is invalid: {keyError}", out error);
                     if (!tokenParser.TryParseJsonTokens(pair.Value, assumeModIds, out string valueError, out TokenisableJToken value))
-                        return Fail($"{nameof(PatchConfig.Entries)} > '{key.Raw}' value is invalid: {valueError}", out error);
+                        return Fail($"{nameof(PatchConfig.Entries)} > '{pair.Key}' value is invalid: {valueError}", out error);
 
                     entries.Add(new EditDataPatchRecord(key, value));
                 }
