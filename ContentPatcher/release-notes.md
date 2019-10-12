@@ -16,6 +16,7 @@
 * Added [`manifest.json` and `content.json` validator](https://github.com/Pathoschild/StardewMods/tree/develop/ContentPatcher#schema-validator) for content pack authors.
 * Content packs can now use mod-provided tokens without a dependency if the patch has an appropriate `HasMod` condition.
 * Improved error if a content pack sets a `FromFile` path with invalid characters.
+* Fixed `Hearts` and `Relationship` tokens not working for unmet NPCs. They now return `0` and `Unmet` respectively.
 * Fixed issue where dynamic tokens weren't correctly updated in some cases if they depend on another dynamic token whose conditions changed. (Thanks to kfahy!)
 * Fixed `patch summary` display for mod-provided tokens which require an unbounded input.
 * Fixed `patch summary` not showing token input validation errors in some cases.

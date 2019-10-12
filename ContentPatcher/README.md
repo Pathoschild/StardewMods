@@ -946,7 +946,8 @@ The valid relationship types are...
 
 value    | meaning
 -------- | -------
-Friendly | The default if no other applies.
+Unmet    | The player hasn't talked to the NPC yet.
+Friendly | The player talked to the NPC at least once, but hasn't reached one of the other stages yet.
 Dating   | The player gave them a bouquet.
 Engaged  | The player gave them a mermaid's pendant, but the marriage hasn't happened yet.
 Married  | The player married them.
