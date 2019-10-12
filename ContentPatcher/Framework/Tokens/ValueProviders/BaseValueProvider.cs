@@ -95,7 +95,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 {
                     if (!validInputs.Contains(input.Value))
                     {
-                        error = $"invalid input argument ({(input.Raw != input.Value ? $"{input.Raw} => {input.Value}" : input.Value)}) for {this.Name} token, expected any of {string.Join(", ", validInputs)}";
+                        error = $"invalid input argument ({(input.Raw != input.Value ? $"{input.Raw} => {input.Value}" : input.Value)}) for {this.Name} token, expected any of {string.Join(", ", validInputs.OrderByIgnoreCase(p => p))}";
                         return false;
                     }
                 }
