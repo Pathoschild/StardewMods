@@ -13,7 +13,7 @@ through anything (even map boundaries).
 
 ## Install
 1. [Install the latest version of SMAPI](https://smapi.io/).
-2. ~~Install this mod from Nexus mods~~.
+2. [Install this mod from Nexus mods](https://www.nexusmods.com/stardewvalley/mods/3900).
 3. Run the game using SMAPI.
 
 ## Use
@@ -35,4 +35,4 @@ multiplayer (even if other players don't have it). No known mod incompatibilitie
 
 ## See also
 * [Release notes](release-notes.md)
-* ~~Nexus mod~~
+* [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/3900)
