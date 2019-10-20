@@ -383,11 +383,11 @@ namespace ContentPatcher.Framework.Commands
                     output.AppendLine();
                     if (effectsByPatch.Any())
                     {
-                        int maxAssetNameWidth = effectsByPatch.Max(p => p.Key.Length);
+                        int maxAssetNameWidth = Math.Max("asset name".Length, effectsByPatch.Max(p => p.Key.Length));
 
                         output.AppendLine("   Current changes:");
                         output.AppendLine($"      asset name{"".PadRight(maxAssetNameWidth - "asset name".Length)} | changes");
-                        output.AppendLine($"      ----------{"".PadRight(maxAssetNameWidth - "----------".Length)} | -------");
+                        output.AppendLine($"      ----------{"".PadRight(maxAssetNameWidth - "----------".Length, '-')} | -------");
 
                         foreach (var pair in effectsByPatch.OrderBy(p => p.Key, StringComparer.InvariantCultureIgnoreCase))
                             output.AppendLine($"      {pair.Key}{"".PadRight(maxAssetNameWidth - pair.Key.Length)} | {string.Join("; ", pair.Value.OrderBy(p => p, StringComparer.InvariantCultureIgnoreCase))}");

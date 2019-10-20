@@ -192,10 +192,10 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
         public override IEnumerable<string> GetChangeLabels()
         {
-            if (this.Records.Any(p => p.Value.Value == null))
+            if (this.Records?.Any(p => p.Value.Value == null) == true)
                 yield return "deleted entries";
 
-            if (this.Fields.Any() || this.Records.Any(p => p.Value.Value != null))
+            if (this.Fields?.Any() == true || this.Records?.Any(p => p.Value.Value != null) == true)
                 yield return "changed entries";
 
             if (this.MoveRecords?.Any() == true)
