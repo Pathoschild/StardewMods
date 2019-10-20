@@ -39,4 +39,3 @@ it).
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/3000)
-* [Discussion thread](https://community.playstarbound.com/threads/crops-anytime-anywhere.150585/)

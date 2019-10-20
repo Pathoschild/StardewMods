@@ -107,4 +107,3 @@ Simple Sprinkler  | Shows custom sprinkler coverage.
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1691)
-* [Discussion thread](https://community.playstarbound.com/threads/data-layers.139625/)
