@@ -691,6 +691,11 @@ Custom professions added by a mod are represented by their integer profession ID
 </tr>
 
 <tr valign="top">
+<td>HasDialogueQuestionAnswered</td>
+<td>The response IDs of dialogue answers given by the player.</td>
+</tr>
+
+<tr valign="top">
 <td>HasSeenEvent</td>
 <td>
 
