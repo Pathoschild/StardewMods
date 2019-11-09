@@ -21,8 +21,9 @@ namespace ContentPatcher.Framework.Migrations
         {
             this.AddedTokens = new InvariantHashSet
             {
-                ConditionType.IsJojaMartComplete.ToString(),
+                ConditionType.HasDialogueQuestionAnswered.ToString(),
                 ConditionType.HavingChild.ToString(),
+                ConditionType.IsJojaMartComplete.ToString(),
                 ConditionType.Pregnant.ToString(),
                 ConditionType.Random.ToString()
             };

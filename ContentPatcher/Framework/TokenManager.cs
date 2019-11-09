@@ -175,6 +175,7 @@ namespace ContentPatcher.Framework
             yield return new HasProfessionValueProvider(NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.HasReadLetter, this.GetReadLetters, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.HasDialogueQuestionAnswered, this.GetDialogueQuestionsAnswered, NeedsBasicInfo);
             yield return new HasWalletItemValueProvider(NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.IsMainPlayer, () => Context.IsMainPlayer.ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.IsOutdoors, () => Game1.currentLocation?.IsOutdoors.ToString(), NeedsBasicInfo);
@@ -313,6 +314,16 @@ namespace ContentPatcher.Framework
                 return festivalName;
 
             return null;
+        }
+
+        /// <summary>Get the response IDs of answers given by the player.</summary>
+        private IEnumerable<string> GetDialogueQuestionsAnswered()
+        {
+            if (Game1.player == null)
+                return new string[0];
+            return Game1.player.dialogueQuestionsAnswered
+                .OrderBy(p => p)
+                .Select(p => p.ToString(CultureInfo.InvariantCulture));
         }
     }
 }
