@@ -175,7 +175,7 @@ namespace ContentPatcher.Framework
             yield return new HasProfessionValueProvider(NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.HasReadLetter, this.GetReadLetters, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.HasDialogueQuestionAnswered, this.GetDialogueQuestionsAnswered, NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.HasDialogueAnswer, this.GetDialogueAnswers, NeedsBasicInfo);
             yield return new HasWalletItemValueProvider(NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.IsMainPlayer, () => Context.IsMainPlayer.ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.IsOutdoors, () => Game1.currentLocation?.IsOutdoors.ToString(), NeedsBasicInfo);
@@ -316,8 +316,8 @@ namespace ContentPatcher.Framework
             return null;
         }
 
-        /// <summary>Get the response IDs of answers given by the player.</summary>
-        private IEnumerable<string> GetDialogueQuestionsAnswered()
+        /// <summary>Get the response IDs of dialogue answers given by the player.</summary>
+        private IEnumerable<string> GetDialogueAnswers()
         {
             if (Game1.player == null)
                 return new string[0];

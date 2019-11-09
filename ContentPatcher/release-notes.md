@@ -4,6 +4,7 @@
 ## Upcoming release
 * Added new tokens:
   * `HavingChild` and `Pregnant`: check if an NPC/player is having a child.
+  * `HasDialogueAnswer`: the response IDs for the player's answers to question dialogues (thanks to mus-candidus!).
   * `IsJojaMartComplete`: whether the player bought a Joja membership and completed all Joja bundles.
   * `Random`: choose a random value from a given list.
   * `Range`: a list of integers between the specified min/max values.

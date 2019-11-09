@@ -749,6 +749,16 @@ The year number (like `1` or `2`).
 </tr>
 
 <tr valign="top">
+<td>HasDialogueAnswer</td>
+<td>
+
+The [response IDs](https://stardewvalleywiki.com/Modding:Dialogue#Response_IDs) for the player's
+answers to question dialogues.
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>HasFlag</td>
 <td>
 
@@ -796,11 +806,6 @@ Custom professions added by a mod are represented by their integer profession ID
 <tr valign="top">
 <td>HasReadLetter</td>
 <td>The letter IDs opened by the player (i.e. a letter UI was displayed).</td>
-</tr>
-
-<tr valign="top">
-<td>HasDialogueQuestionAnswered</td>
-<td>The response IDs of dialogue answers given by the player.</td>
 </tr>
 
 <tr valign="top">
