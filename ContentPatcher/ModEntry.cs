@@ -16,6 +16,7 @@ using ContentPatcher.Framework.Tokens.Json;
 using ContentPatcher.Framework.Validators;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Linq;
+using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Enums;
@@ -93,7 +94,7 @@ namespace ContentPatcher
         {
             this.Config = helper.ReadConfig<ModConfig>();
             this.Keys = this.Config.Controls.ParseControls(this.Monitor);
-
+            
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
         }
 
@@ -234,8 +235,7 @@ namespace ContentPatcher
             helper.Content.AssetEditors.Add(this.PatchManager);
 
             // set up events
-            if (this.Config.EnableDebugFeatures)
-                helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             helper.Events.Player.Warped += this.OnWarped;
@@ -247,6 +247,41 @@ namespace ContentPatcher
 
             // can no longer queue tokens
             this.QueuedModTokens = null;
+
+            // register with GMCM
+            this.InitializeGenericModConfigMenuIntegration();
+        }
+
+        /// <summary>Initialize integration with the Generic Mod Config Menu mod.</summary>
+        private void InitializeGenericModConfigMenuIntegration()
+        {
+            GenericModConfigMenuIntegration configMenuIntegration = new GenericModConfigMenuIntegration(this.ModManifest, this.Helper.ModRegistry, this.Monitor);
+            if (!configMenuIntegration.IsLoaded)
+                return;
+
+            Action revertToDefault = () => this.Config = new ModConfig();
+            Action save = () => this.Helper.WriteConfig(this.Config);
+            configMenuIntegration.RegisterConfig(revertToDefault, save);
+            
+            configMenuIntegration.RegisterSimpleOption("Debug Features", "Whether to enable debug features.", () => this.Config.EnableDebugFeatures, (bool val) => this.Config.EnableDebugFeatures = val);
+            Action<SButton> setToggleDebug = (SButton newButton) =>
+            {
+                this.Keys.ToggleDebug[0] = newButton;
+                this.Config.Controls.ToggleDebug = string.Join(", ", this.Keys.ToggleDebug.Select((SButton btn) => btn.ToString()));
+            };
+            configMenuIntegration.RegisterSimpleOption("Toggle Debug", "The key which toggles the display of debug information.", () => this.Keys.ToggleDebug[0], setToggleDebug);
+            Action<SButton> setPrevTexture = (SButton newButton) =>
+            {
+                this.Keys.DebugPrevTexture[0] = newButton;
+                this.Config.Controls.DebugPrevTexture = string.Join(", ", this.Keys.DebugPrevTexture.Select((SButton btn) => btn.ToString()));
+            };
+            configMenuIntegration.RegisterSimpleOption("Debug Previous Texture", "The key which switches to the previous texture.", () => this.Keys.DebugPrevTexture[0], setPrevTexture);
+            Action<SButton> setNextTexture = (SButton newButton) =>
+            {
+                this.Keys.DebugNextTexture[0] = newButton;
+                this.Config.Controls.DebugNextTexture = string.Join(", ", this.Keys.DebugNextTexture.Select((SButton btn) => btn.ToString()));
+            };
+            configMenuIntegration.RegisterSimpleOption("Debug Next Texture", "The key which switches to the next texture.", () => this.Keys.DebugNextTexture[0], setNextTexture);
         }
 
         /// <summary>Add a mod-provided token.</summary>
@@ -343,17 +378,44 @@ namespace ContentPatcher
                     ModTokenContext modContext = this.TokenManager.TrackLocalTokens(current.ManagedPack.Pack);
                     TokenParser tokenParser = new TokenParser(modContext, current.Manifest, current.Migrator, installedMods);
                     {
+                        GenericModConfigMenuIntegration configMenuIntegration = new GenericModConfigMenuIntegration(current.Manifest, this.Helper.ModRegistry, this.Monitor);
+
                         // load config.json
                         InvariantDictionary<ConfigField> config = configFileHandler.Read(current.ManagedPack, content.ConfigSchema, current.Content.Format);
                         configFileHandler.Save(current.ManagedPack, config, this.Helper);
                         if (config.Any())
+                        {
                             this.Monitor.VerboseLog($"   found config.json with {config.Count} fields...");
+
+                            // register content pack with GMCM
+                            if (configMenuIntegration.IsLoaded)
+                            {
+                                // initial registration - field registration comes later
+                                Action revertToDefault = () =>
+                                {
+                                    foreach (KeyValuePair<string, ConfigField> pair in config)
+                                        pair.Value.Value = pair.Value.DefaultValues;
+                                };
+                                Action save = () =>
+                                {
+                                    configFileHandler.Save(current.ManagedPack, config, this.Helper);
+                                    this.UpdateContext();
+                                };
+                                configMenuIntegration.RegisterConfig(revertToDefault, save);
+                            }
+                        }
 
                         // load config tokens
                         foreach (KeyValuePair<string, ConfigField> pair in config)
                         {
+                            // register token with mod context
                             ConfigField field = pair.Value;
-                            modContext.Add(new ImmutableToken(pair.Key, field.Value, scope: current.Manifest.UniqueID, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple));
+                            ManualToken token = new ManualToken(pair.Key, field.Value, scope: current.Manifest.UniqueID, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple);
+                            modContext.Add(token);
+
+                            // register token with GMCM
+                            if (configMenuIntegration.IsLoaded)
+                                this.RegisterConfigMenuField(configMenuIntegration, pair.Key, field, token);
                         }
 
                         // load dynamic tokens
@@ -432,6 +494,70 @@ namespace ContentPatcher
                     this.Monitor.Log($"Error loading content pack '{current.Manifest.Name}'. Technical details:\n{ex}", LogLevel.Error);
                     continue;
                 }
+            }
+        }
+
+        /// <summary>Register a config field with Generic Mod Config Menu.</summary>
+        /// <param name="configMenuIntegration">The integration for generic mod config menu.</param>
+        /// <param name="fieldName">The name of the config field.</param>
+        /// <param name="field">The config field.</param>
+        /// <param name="token">The corresponding token.</param>
+        private void RegisterConfigMenuField(GenericModConfigMenuIntegration configMenuIntegration, string fieldName, ConfigField field, ManualToken token)
+        {
+            if (field.AllowValues.Any())
+            {
+                if (field.AllowMultiple)
+                {
+                    // Whitelist + multiple options = fake with multiple checkboxes
+                    foreach (string allowedValue in field.AllowValues)
+                    {
+                        Func<bool> get = () => field.Value.Contains(allowedValue);
+                        Action<bool> set = (bool val) =>
+                        {
+                            InvariantHashSet values = new InvariantHashSet(field.Value);
+                            if (val && !values.Contains(allowedValue))
+                                values.Add(allowedValue);
+                            if (!val && values.Contains(allowedValue))
+                                values.Remove(allowedValue);
+
+                            if (values.Count == 0 && !field.AllowBlank)
+                                values = field.DefaultValues;
+
+                            field.Value = values;
+                            token.UpdateValues(values);
+                        };
+                        configMenuIntegration.RegisterSimpleOption(fieldName + "." + allowedValue, null, get, set);
+                    }
+                }
+                else
+                {
+                    // Whitelist + single value = drop down
+                    // Need an extra option when blank is allowed
+                    List<string> choices = new List<string>(field.AllowValues);
+                    if (field.AllowBlank)
+                        choices.Insert(0, "");
+
+                    Func<string> get = () => field.Value.Count > 0 ? field.Value.First() : "";
+                    Action<string> set = (string val) =>
+                    {
+                        InvariantHashSet values = new InvariantHashSet(val);
+                        field.Value = values;
+                        token.UpdateValues(values);
+                    };
+                    configMenuIntegration.RegisterChoiceOption(fieldName, null, get, set, choices.ToArray());
+                }
+            }
+            else
+            {
+                // No whitelist = text field
+                Func<string> get = () => string.Join(", ", field.Value.ToArray());
+                Action<string> set = (string val) =>
+                {
+                    InvariantHashSet values = field.AllowMultiple ? this.ParseCommaDelimitedField(val) : new InvariantHashSet(val);
+                    field.Value = values;
+                    token.UpdateValues(values);
+                };
+                configMenuIntegration.RegisterSimpleOption(fieldName, null, get, set);
             }
         }
 
