@@ -542,8 +542,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 neededFor.Add(L10n.Item.NeededForFullShipment());
 
             // full collection achievement (donate every artifact)
-            LibraryMuseum museum = Game1.locations.OfType<LibraryMuseum>().FirstOrDefault();
-            if (museum != null && museum.isItemSuitableForDonation(obj))
+            if (obj.needsToBeDonated())
                 neededFor.Add(L10n.Item.NeededForFullCollection());
 
             // gourmet chef achievement (cook every recipe)
