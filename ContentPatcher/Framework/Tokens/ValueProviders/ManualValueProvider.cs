@@ -17,8 +17,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>The current token values.</summary>
         private InvariantHashSet Values;
 
-        /// <summary>Whether the value has changed</summary>
-        private bool Changed = false;
+        /// <summary>The changed token values. Moved to Values when the context is updated.</summary>
+        private InvariantHashSet ChangedValues = null;
 
 
         /*********
@@ -66,9 +66,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <returns>Returns whether the instance changed.</returns>
         public override bool UpdateContext(IContext context)
         {
-            if (this.Changed)
+            if (this.ChangedValues != null)
             {
-                this.Changed = false;
+                this.Values = this.ChangedValues;
+                this.ChangedValues = null;
                 return true;
             }
             else
@@ -81,9 +82,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             if (!this.TryValidateValues(null, values, out string error))
                 throw new InvalidOperationException($"Invalid updated value: {error}");
-
-            this.Values = values;
-            this.Changed = true;
+            
+            this.ChangedValues = values;
         }
     }
 }
