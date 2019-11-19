@@ -16,11 +16,11 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         /*********
         ** Fields
         *********/
-        /// <summary>The color for a dry crop.</summary>
-        private readonly Color DryColor = Color.Red;
+        /// <summary>The legend entry for dry crops.</summary>
+        private readonly LegendEntry Dry;
 
-        /// <summary>The color for a watered crop.</summary>
-        private readonly Color WateredColor = Color.Green;
+        /// <summary>The legend entry for watered crops.</summary>
+        private readonly LegendEntry Watered;
 
 
         /*********
@@ -34,8 +34,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         {
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("crop-water.watered"), this.WateredColor),
-                new LegendEntry(translations.Get("crop-water.dry"), this.DryColor)
+               this.Dry = new LegendEntry(translations, "crop-water.watered", Color.Green),
+               this.Watered = new LegendEntry(translations, "crop-water.dry", Color.Red)
             };
         }
 
@@ -47,8 +47,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         {
             Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
 
-            yield return this.GetGroup(location, visibleTiles, HoeDirt.watered, this.WateredColor);
-            yield return this.GetGroup(location, visibleTiles, HoeDirt.dry, this.DryColor);
+            yield return this.GetGroup(location, visibleTiles, HoeDirt.watered, this.Watered);
+            yield return this.GetGroup(location, visibleTiles, HoeDirt.dry, this.Dry);
         }
 
 
@@ -59,11 +59,11 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         /// <param name="location">The current location.</param>
         /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
         /// <param name="state">The watered state to match.</param>
-        /// <param name="color">The overlay color.</param>
-        private TileGroup GetGroup(GameLocation location, Vector2[] visibleTiles, int state, Color color)
+        /// <param name="type">The legend entry for the group.</param>
+        private TileGroup GetGroup(GameLocation location, Vector2[] visibleTiles, int state, LegendEntry type)
         {
-            TileData[] crops = this.GetCropsByStatus(location, visibleTiles, state).Select(pos => new TileData(pos, color)).ToArray();
-            return new TileGroup(crops, outerBorderColor: color);
+            TileData[] crops = this.GetCropsByStatus(location, visibleTiles, state).Select(pos => new TileData(pos, type)).ToArray();
+            return new TileGroup(crops, outerBorderColor: type.Color);
         }
 
         /// <summary>Get tiles containing crops not covered by a sprinkler.</summary>

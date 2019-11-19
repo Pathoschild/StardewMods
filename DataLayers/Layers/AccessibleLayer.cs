@@ -20,17 +20,17 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /*********
         ** Fields
         *********/
-        /// <summary>The color for a passable tile.</summary>
-        private readonly Color ClearColor = Color.Green;
+        /// <summary>The legend entry for passable tiles.</summary>
+        private readonly LegendEntry Clear;
 
-        /// <summary>The color for a passable but occupied tile.</summary>
-        private readonly Color OccupiedColor = Color.Orange;
+        /// <summary>The legend entry for passable but occupied tiles.</summary>
+        private readonly LegendEntry Occupied;
 
-        /// <summary>The color for an impassable tile.</summary>
-        private readonly Color ImpassableColor = Color.Red;
+        /// <summary>The legend entry for impassable tiles.</summary>
+        private readonly LegendEntry Impassable;
 
-        /// <summary>The color for a warp tile.</summary>
-        private readonly Color WarpColor = Color.Blue;
+        /// <summary>The legend entry for warp tiles.</summary>
+        private readonly LegendEntry Warp;
 
         /// <summary>The action tile property values which trigger a warp.</summary>
         /// <remarks>See remarks on <see cref="IsWarp"/>.</remarks>
@@ -51,10 +51,10 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         {
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("accessible.clear"), this.ClearColor),
-                new LegendEntry(translations.Get("accessible.occupied"), this.OccupiedColor),
-                new LegendEntry(translations.Get("accessible.impassable"), this.ImpassableColor),
-                new LegendEntry(translations.Get("accessible.warp"), this.WarpColor)
+                this.Clear = new LegendEntry(translations, "accessible.clear", Color.Green),
+                this.Occupied = new LegendEntry(translations, "accessible.occupied", Color.Orange),
+                this.Impassable = new LegendEntry(translations, "accessible.impassable", Color.Red),
+                this.Warp = new LegendEntry(translations, "accessible.warp", Color.Blue)
             };
         }
 
@@ -67,8 +67,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             TileData[] tiles = this.GetTiles(location, visibleArea.GetTiles()).ToArray();
 
             // passable tiles
-            TileData[] passableTiles = tiles.Where(p => p.Color == this.ClearColor).ToArray();
-            yield return new TileGroup(passableTiles, outerBorderColor: this.ClearColor);
+            TileData[] passableTiles = tiles.Where(p => p.Type.Id == this.Clear.Id).ToArray();
+            yield return new TileGroup(passableTiles, outerBorderColor: this.Clear.Color);
 
             // other tiles
             yield return new TileGroup(tiles.Except(passableTiles).ToArray());
@@ -104,16 +104,16 @@ namespace Pathoschild.Stardew.DataLayers.Layers
                 Rectangle tilePixels = new Rectangle((int)(tile.X * Game1.tileSize), (int)(tile.Y * Game1.tileSize), Game1.tileSize, Game1.tileSize);
 
                 // get color
-                Color color;
+                LegendEntry type;
                 if (this.IsWarp(location, tile, tilePixels, buildingDoors))
-                    color = this.WarpColor;
+                    type = this.Warp;
                 else if (this.IsPassable(location, tile, tilePixels))
-                    color = this.IsOccupied(location, tile, tilePixels) ? this.OccupiedColor : this.ClearColor;
+                    type = this.IsOccupied(location, tile, tilePixels) ? this.Occupied : this.Clear;
                 else
-                    color = this.ImpassableColor;
+                    type = this.Impassable;
 
                 // yield
-                yield return new TileData(tile, color);
+                yield return new TileData(tile, type);
             }
         }
 

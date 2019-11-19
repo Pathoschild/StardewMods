@@ -6,7 +6,7 @@ using Pathoschild.Stardew.DataLayers.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
-using Object = StardewValley.Object;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 {
@@ -16,11 +16,11 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /*********
         ** Fields
         *********/
-        /// <summary>The color for tiles protected by a scarecrow.</summary>
-        private readonly Color CoveredColor = Color.Green;
+        /// <summary>The legend entry for tiles protected by a scarecrow.</summary>
+        private readonly LegendEntry Covered;
 
-        /// <summary>The color for tiles not protected by a scarecrow.</summary>
-        private readonly Color ExposedColor = Color.Red;
+        /// <summary>The legend entry for tiles not protected by a scarecrow.</summary>
+        private readonly LegendEntry Exposed;
 
         /// <summary>The border color for the scarecrow under the cursor.</summary>
         private readonly Color SelectedColor = Color.Blue;
@@ -44,8 +44,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         {
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("scarecrows.protected"), this.CoveredColor),
-                new LegendEntry(translations.Get("scarecrows.exposed"), this.ExposedColor)
+                this.Covered = new LegendEntry(translations, "scarecrows.protected", Color.Green),
+                this.Exposed = new LegendEntry(translations, "scarecrows.exposed", Color.Red)
             };
             this.ModObjectIds = this.GetModScarecrowIDs(mods).ToArray();
         }
@@ -60,7 +60,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 
             // get scarecrows
             Vector2[] searchTiles = visibleArea.Expand(this.MaxRadius).GetTiles().ToArray();
-            Object[] scarecrows =
+            SObject[] scarecrows =
                 (
                     from Vector2 tile in searchTiles
                     where location.objects.ContainsKey(tile)
@@ -72,24 +72,24 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 
             // yield scarecrow coverage
             HashSet<Vector2> covered = new HashSet<Vector2>();
-            foreach (Object scarecrow in scarecrows)
+            foreach (SObject scarecrow in scarecrows)
             {
-                TileData[] tiles = this.GetCoverage(scarecrow.TileLocation).Select(pos => new TileData(pos, this.CoveredColor)).ToArray();
+                TileData[] tiles = this.GetCoverage(scarecrow.TileLocation).Select(pos => new TileData(pos, this.Covered)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
-                yield return new TileGroup(tiles, outerBorderColor: scarecrow.TileLocation == cursorTile ? this.SelectedColor : this.CoveredColor);
+                yield return new TileGroup(tiles, outerBorderColor: scarecrow.TileLocation == cursorTile ? this.SelectedColor : this.Covered.Color);
             }
 
             // yield exposed crops
-            TileData[] exposedCrops = this.GetExposedCrops(location, visibleTiles, covered).Select(pos => new TileData(pos, this.ExposedColor)).ToArray();
-            yield return new TileGroup(exposedCrops, outerBorderColor: this.ExposedColor);
+            TileData[] exposedCrops = this.GetExposedCrops(location, visibleTiles, covered).Select(pos => new TileData(pos, this.Exposed)).ToArray();
+            yield return new TileGroup(exposedCrops, outerBorderColor: this.Exposed.Color);
 
             // yield scarecrow being placed
-            Object heldObj = Game1.player.ActiveObject;
+            SObject heldObj = Game1.player.ActiveObject;
             if (this.IsScarecrow(heldObj))
             {
-                TileData[] tiles = this.GetCoverage(cursorTile).Select(pos => new TileData(pos, this.CoveredColor * 0.75f)).ToArray();
-                yield return new TileGroup(tiles, outerBorderColor: this.SelectedColor);
+                TileData[] tiles = this.GetCoverage(cursorTile).Select(pos => new TileData(pos, this.Covered, this.Covered.Color * 0.75f)).ToArray();
+                yield return new TileGroup(tiles, outerBorderColor: this.SelectedColor, shouldExport: false);
             }
         }
 
@@ -108,7 +108,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <summary>Get whether a map object is a scarecrow.</summary>
         /// <param name="obj">The map object.</param>
         /// <remarks>Derived from <see cref="Farm.addCrows"/>.</remarks>
-        private bool IsScarecrow(Object obj)
+        private bool IsScarecrow(SObject obj)
         {
             if (obj == null)
                 return false;

@@ -5,7 +5,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewModdingAPI;
 using StardewValley;
-using Object = StardewValley.Object;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 {
@@ -15,8 +15,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /*********
         ** Fields
         *********/
-        /// <summary>The color for tiles covered by a bee house.</summary>
-        private readonly Color CoveredColor = Color.Green;
+        /// <summary>The legend entry for tiles covered by a bee house.</summary>
+        private readonly LegendEntry Covered;
 
         /// <summary>The border color for the bee house under the cursor.</summary>
         private readonly Color SelectedColor = Color.Blue;
@@ -40,7 +40,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         {
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("bee-houses.range"), this.CoveredColor)
+                this.Covered = new LegendEntry(translations, "bee-houses.range", Color.Green)
             };
 
             this.RelativeRange = BeeHouseLayer
@@ -56,7 +56,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         {
             // get bee houses
             Vector2[] searchTiles = visibleArea.Expand(this.MaxRadius).GetTiles().ToArray();
-            Object[] beeHouses =
+            SObject[] beeHouses =
                 (
                     from Vector2 tile in searchTiles
                     where location.objects.ContainsKey(tile)
@@ -68,20 +68,20 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 
             // yield coverage
             HashSet<Vector2> covered = new HashSet<Vector2>();
-            foreach (Object beeHouse in beeHouses)
+            foreach (SObject beeHouse in beeHouses)
             {
-                TileData[] tiles = this.GetCoverage(location, beeHouse.TileLocation).Select(pos => new TileData(pos, this.CoveredColor)).ToArray();
+                TileData[] tiles = this.GetCoverage(location, beeHouse.TileLocation).Select(pos => new TileData(pos, this.Covered)).ToArray();
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
-                yield return new TileGroup(tiles, outerBorderColor: beeHouse.TileLocation == cursorTile ? this.SelectedColor : this.CoveredColor);
+                yield return new TileGroup(tiles, outerBorderColor: beeHouse.TileLocation == cursorTile ? this.SelectedColor : this.Covered.Color);
             }
 
             // yield bee house being placed
-            Object heldObj = Game1.player.ActiveObject;
+            SObject heldObj = Game1.player.ActiveObject;
             if (this.IsBeeHouse(heldObj))
             {
-                TileData[] tiles = this.GetCoverage(location, cursorTile).Select(pos => new TileData(pos, this.CoveredColor * 0.75f)).ToArray();
-                yield return new TileGroup(tiles, outerBorderColor: this.SelectedColor);
+                TileData[] tiles = this.GetCoverage(location, cursorTile).Select(pos => new TileData(pos, this.Covered, color: this.Covered.Color * 0.75f)).ToArray();
+                yield return new TileGroup(tiles, outerBorderColor: this.SelectedColor, shouldExport: false);
             }
         }
 
@@ -91,7 +91,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         *********/
         /// <summary>Get whether a map object is a bee house.</summary>
         /// <param name="obj">The map object.</param>
-        private bool IsBeeHouse(Object obj)
+        private bool IsBeeHouse(SObject obj)
         {
             return obj != null && obj.bigCraftable.Value && obj.Name == "Bee House";
         }
@@ -99,7 +99,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <summary>Get a bee house tile radius.</summary>
         /// <param name="location">The bee house's location.</param>
         /// <param name="origin">The bee house's tile.</param>
-        /// <remarks>Derived from <see cref="Object.checkForAction"/> and <see cref="Utility.findCloseFlower"/>.</remarks>
+        /// <remarks>Derived from <see cref="SObject.checkForAction"/> and <see cref="Utility.findCloseFlower"/>.</remarks>
         private IEnumerable<Vector2> GetCoverage(GameLocation location, Vector2 origin)
         {
             if (!(location is Farm))

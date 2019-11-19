@@ -16,14 +16,14 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         /*********
         ** Fields
         *********/
-        /// <summary>The color when a crop is ready.</summary>
-        private readonly Color ReadyColor = Color.Green;
+        /// <summary>The legend entry for crops which are ready.</summary>
+        private readonly LegendEntry Ready;
 
-        /// <summary>The color when a crop is not ready.</summary>
-        private readonly Color NotReadyColor = Color.Black;
+        /// <summary>The legend entry for crops which are not ready.</summary>
+        private readonly LegendEntry NotReady;
 
-        /// <summary>The color when a crop will not be ready in time for the season change.</summary>
-        public Color NotEnoughTimeColor { get; } = Color.Red;
+        /// <summary>The legend entry for crops which won't be ready to harvest before the season change.</summary>
+        private readonly LegendEntry NotEnoughTime;
 
 
         /*********
@@ -37,9 +37,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         {
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("crop-harvest.ready"), this.ReadyColor),
-                new LegendEntry(translations.Get("crop-harvest.not-ready"), this.NotReadyColor),
-                new LegendEntry(translations.Get("crop-harvest.not-enough-time"), this.NotEnoughTimeColor)
+                this.Ready = new LegendEntry(translations, "crop-harvest.ready", Color.Green),
+                this.NotReady = new LegendEntry(translations, "crop-harvest.not-ready", Color.Black),
+                this.NotEnoughTime = new LegendEntry(translations, "crop-harvest.not-enough-time", Color.Red)
             };
         }
 
@@ -51,9 +51,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         {
             TileData[] tiles = this.GetTiles(location, visibleArea.GetTiles().ToArray()).ToArray();
 
-            yield return new TileGroup(tiles.Where(p => p.Color == this.ReadyColor), outerBorderColor: this.ReadyColor);
-            yield return new TileGroup(tiles.Where(p => p.Color == this.NotReadyColor));
-            yield return new TileGroup(tiles.Where(p => p.Color == this.NotEnoughTimeColor), outerBorderColor: this.NotEnoughTimeColor);
+            yield return new TileGroup(tiles.Where(p => p.Type.Id == this.Ready.Id), outerBorderColor: this.Ready.Color);
+            yield return new TileGroup(tiles.Where(p => p.Type.Id == this.NotReady.Id));
+            yield return new TileGroup(tiles.Where(p => p.Type.Id == this.NotEnoughTime.Id), outerBorderColor: this.NotEnoughTime.Color);
         }
 
 
@@ -75,11 +75,11 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
 
                 // yield tile
                 if (data.CanHarvestNow)
-                    yield return new TileData(tile, this.ReadyColor);
+                    yield return new TileData(tile, this.Ready);
                 else if (!location.IsGreenhouse && !data.Seasons.Contains(data.GetNextHarvest().Season))
-                    yield return new TileData(tile, this.NotEnoughTimeColor);
+                    yield return new TileData(tile, this.NotEnoughTime);
                 else
-                    yield return new TileData(tile, this.NotReadyColor);
+                    yield return new TileData(tile, this.NotReady);
             }
         }
     }

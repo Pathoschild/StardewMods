@@ -7,6 +7,7 @@ includes data from other mods if applicable.
 * [Use](#use)
 * [Configure](#configure)
 * [Compatibility](#compatibility)
+* [Advanced](#advanced)
 * [See also](#see-also)
 
 ## Install
@@ -103,6 +104,13 @@ Line Sprinklers   | Shows line sprinkler coverage.
 Pelican Fiber     | Shows coverage when building a Junimo hut or sprinkler through Pelican Fiber's menu.
 Prismatic Tools   | Shows prismatic sprinkler coverage.
 Simple Sprinkler  | Shows custom sprinkler coverage.
+
+
+## Advanced
+### Export to JSON
+You can export a data layer to a JSON file (e.g. to use in another tool). Just go to the location
+in-game you want to export, open a data layer, and enter `data-layers export` in the SMAPI console.
+The layer data will be exported for the entire current location (not just the visible area).
 
 ## See also
 * [Release notes](release-notes.md)

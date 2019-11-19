@@ -16,14 +16,14 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         /*********
         ** Fields
         *********/
-        /// <summary>The color for fertilizer.</summary>
-        private readonly Color FertilizerColor = Color.Green;
+        /// <summary>The legend entry for fertilizer.</summary>
+        private readonly LegendEntry Fertilizer;
 
-        /// <summary>The color for retaining soil.</summary>
-        private readonly Color RetainingSoilColor = Color.Blue;
+        /// <summary>The legend entry for retaining soil.</summary>
+        private readonly LegendEntry RetainingSoil;
 
-        /// <summary>The color for speed-gro.</summary>
-        private readonly Color SpeedGroColor = Color.Magenta;
+        /// <summary>The legend entry for speed-gro.</summary>
+        private readonly LegendEntry SpeedGro;
 
 
         /*********
@@ -37,9 +37,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         {
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("crop-fertilizer.fertilizer"), this.FertilizerColor),
-                new LegendEntry(translations.Get("crop-fertilizer.retaining-soil"), this.RetainingSoilColor),
-                new LegendEntry(translations.Get("crop-fertilizer.speed-gro"), this.SpeedGroColor)
+                this.Fertilizer = new LegendEntry(translations, "crop-fertilizer.fertilizer", Color.Green),
+                this.RetainingSoil = new LegendEntry(translations, "crop-fertilizer.retaining-soil", Color.Blue),
+                this.SpeedGro = new LegendEntry(translations, "crop-fertilizer.speed-gro", Color.Magenta)
             };
         }
 
@@ -51,9 +51,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         {
             Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
 
-            yield return this.GetGroup(location, visibleTiles, this.FertilizerColor, HoeDirt.fertilizerLowQuality, HoeDirt.fertilizerHighQuality);
-            yield return this.GetGroup(location, visibleTiles, this.SpeedGroColor, HoeDirt.speedGro, HoeDirt.superSpeedGro);
-            yield return this.GetGroup(location, visibleTiles, this.RetainingSoilColor, HoeDirt.waterRetentionSoil, HoeDirt.waterRetentionSoilQUality);
+            yield return this.GetGroup(location, visibleTiles, this.Fertilizer, HoeDirt.fertilizerLowQuality, HoeDirt.fertilizerHighQuality);
+            yield return this.GetGroup(location, visibleTiles, this.SpeedGro, HoeDirt.speedGro, HoeDirt.superSpeedGro);
+            yield return this.GetGroup(location, visibleTiles, this.RetainingSoil, HoeDirt.waterRetentionSoil, HoeDirt.waterRetentionSoilQUality);
         }
 
 
@@ -63,12 +63,12 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         /// <summary>Get a tile group.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
-        /// <param name="color">The overlay color.</param>
+        /// <param name="type">The legend entry for the group.</param>
         /// <param name="states">The fertilizer states to match.</param>
-        private TileGroup GetGroup(GameLocation location, Vector2[] visibleTiles, Color color, params int[] states)
+        private TileGroup GetGroup(GameLocation location, Vector2[] visibleTiles, LegendEntry type, params int[] states)
         {
-            TileData[] crops = this.GetSoilByState(location, visibleTiles, states).Select(pos => new TileData(pos, color)).ToArray();
-            return new TileGroup(crops, outerBorderColor: color);
+            TileData[] crops = this.GetSoilByState(location, visibleTiles, states).Select(pos => new TileData(pos, type)).ToArray();
+            return new TileGroup(crops, outerBorderColor: type.Color);
         }
 
         /// <summary>Get tiles with the given fertilizer states.</summary>

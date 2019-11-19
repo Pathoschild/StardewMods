@@ -51,9 +51,6 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>An empty set of tile groups.</summary>
         private readonly TileGroup[] EmptyTileGroups = new TileGroup[0];
 
-        /// <summary>The current layer to render.</summary>
-        private ILayer CurrentLayer;
-
         /// <summary>The legend entries to show.</summary>
         private LegendEntry[] Legend;
 
@@ -65,6 +62,13 @@ namespace Pathoschild.Stardew.DataLayers.Framework
 
         /// <summary>The last visible area.</summary>
         private Rectangle LastVisibleArea;
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The current layer being rendered.</summary>
+        public ILayer CurrentLayer { get; private set; }
 
 
         /*********

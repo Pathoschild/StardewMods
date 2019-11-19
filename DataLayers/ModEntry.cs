@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
@@ -50,6 +51,10 @@ namespace Pathoschild.Stardew.DataLayers
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+
+            // hook up commands
+            var commandHandler = new CommandHandler(this.Monitor, () => this.CurrentOverlay?.CurrentLayer);
+            helper.ConsoleCommands.Add(commandHandler.CommandName, $"Starts a Data Layers command. Type '{commandHandler.CommandName} help' for details.", (name, args) => commandHandler.Handle(args));
         }
 
 
