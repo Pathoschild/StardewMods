@@ -72,8 +72,7 @@ whether one of these would work for you:
   * [Advanced Location Loader](https://community.playstarbound.com/resources/smapi-advanced-location-loader.3619/) for complex changes to maps. (For simple changes, see _[edit part of a map](#edit-part-of-a-map)_ below.)
   * [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) to add machines.
   * [Custom Furniture](https://www.nexusmods.com/stardewvalley/mods/1254) to add furniture.
-  * [Custom Shirts](https://www.nexusmods.com/stardewvalley/mods/2416) to add shirts.
-  * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add items, crafting recipes, crops, fruit trees, hats, and weapons.
+  * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add many things like items, crafting recipes, crops, fruit trees, hats, and weapons.
 
 ## Create a content pack
 ### Overview
