@@ -67,14 +67,13 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                         return new SObject(445, 1);
 
                     // roe => aged roe
-                    return new ColoredObject(447, 1, (input as ColoredObject)?.color.Value ?? Color.White)
-                    {
-                        name = $"Aged {input.Name}",
-                        preserve = { Value = SObject.PreserveType.AgedRoe },
-                        preservedParentSheetIndex = { Value = inputObj.preservedParentSheetIndex.Value },
-                        Category = -26,
-                        Price = inputObj.Price * 2
-                    };
+                    var result = (input is ColoredObject coloredInput) ? new ColoredObject(447, 1, coloredInput.color.Value) : new SObject(447, 1);
+                    result.name = $"Aged {input.Name}";
+                    result.preserve.Value = SObject.PreserveType.AgedRoe;
+                    result.preservedParentSheetIndex.Value = inputObj.preservedParentSheetIndex.Value;
+                    result.Category = -26;
+                    result.Price = inputObj.Price * 2;
+                    return result;
                 },
                 minutes: input => input is SObject obj && obj.preservedParentSheetIndex.Value == 698
                     ? 6000 // caviar
