@@ -136,6 +136,14 @@ Default `true`. Whether the shipping bin should automatically pull items out of 
   </td>
 </tr>
 <tr>
+  <td><code>PullGemstonesFromJunimoHuts</code></td>
+  <td>
+
+Default `false`. Whether to pull gemstones out of Junimo huts. If true, you won't be able to change Junimo colors by placing gemstones in their hut.
+
+  </td>
+</tr>
+<tr>
   <td><code>AutomationInterval</code></td>
   <td>
 
