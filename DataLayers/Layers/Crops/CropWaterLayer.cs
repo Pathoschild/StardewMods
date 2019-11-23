@@ -34,8 +34,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         {
             this.Legend = new[]
             {
-               this.Dry = new LegendEntry(translations, "crop-water.watered", Color.Green),
-               this.Watered = new LegendEntry(translations, "crop-water.dry", Color.Red)
+               this.Watered = new LegendEntry(translations, "crop-water.watered", Color.Green),
+               this.Dry = new LegendEntry(translations, "crop-water.dry", Color.Red)
             };
         }
 
