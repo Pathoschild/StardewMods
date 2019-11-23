@@ -134,9 +134,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
             // bush
             Rectangle tileArea = this.GetAbsoluteTileArea(tile);
-            if (this.Config.HarvestForage && location.largeTerrainFeatures.FirstOrDefault(p => p.getBoundingBox(p.tilePosition.Value).Intersects(tileArea)) is Bush bush)
+            if (this.Config.HarvestForage)
             {
-                if (!bush.townBush.Value && bush.tileSheetOffset.Value == 1 && bush.inBloom(Game1.currentSeason, Game1.dayOfMonth))
+                Bush bush = tileFeature as Bush ?? location.largeTerrainFeatures.FirstOrDefault(p => p.getBoundingBox(p.tilePosition.Value).Intersects(tileArea)) as Bush;
+                if (bush?.tileSheetOffset.Value == 1 && (bush.size.Value == Bush.greenTeaBush || (bush.size.Value == Bush.mediumBush && !bush.townBush.Value)))
                 {
                     bush.performUseAction(bush.tilePosition.Value, location);
                     return true;
