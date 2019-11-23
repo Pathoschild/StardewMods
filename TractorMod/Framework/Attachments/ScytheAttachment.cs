@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
@@ -115,11 +116,21 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             }
 
             // grass
+            // (see Grass.performToolAction)
             if (this.Config.HarvestGrass && tileFeature is Grass)
             {
                 location.terrainFeatures.Remove(tile);
-                if (Game1.getFarm().tryToAddHay(1) == 0) // returns number left
-                    Game1.addHUDMessage(new HUDMessage("Hay", HUDMessage.achievement_type, true, Color.LightGoldenrodYellow, new SObject(178, 1)));
+
+                Random random = Game1.IsMultiplayer
+                    ? Game1.recentMultiplayerRandom
+                    : new Random((int)(Game1.uniqueIDForThisGame + tile.X * 1000.0 + tile.Y * 11.0));
+
+                if (random.NextDouble() < (tool.InitialParentTileIndex == MeleeWeapon.goldenScythe ? 0.75 : 0.5))
+                {
+                    if (Game1.getFarm().tryToAddHay(1) == 0) // returns number left
+                        Game1.addHUDMessage(new HUDMessage("Hay", HUDMessage.achievement_type, true, Color.LightGoldenrodYellow, new SObject(178, 1)));
+                }
+
                 return true;
             }
 
