@@ -22,7 +22,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
             return
                 Game1.player.UsingTool
                 && Game1.player.CurrentTool is MeleeWeapon weapon
-                && weapon.InitialParentTileIndex != MeleeWeapon.scythe;
+                && !weapon.isScythe();
         }
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>

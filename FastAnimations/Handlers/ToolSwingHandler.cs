@@ -23,7 +23,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
                 Game1.player.UsingTool
                 && Game1.player.CurrentTool is Tool tool
                 && (
-                    tool.InitialParentTileIndex == MeleeWeapon.scythe
+                    (tool as MeleeWeapon)?.isScythe() == true
                     || !(tool is FishingRod || tool is MeleeWeapon)
                 );
         }
