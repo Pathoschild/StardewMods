@@ -4,6 +4,7 @@ Released 26 November 2019.
 
 * Updated for Stardew Valley 1.4, including...
   * Deluxe Scarecrow;
+  * paddy crops (which have a new layer to show tiles eligible for their growth bonus);
   * new areas and warps;
   * new bee house flower range.
 * Added `data-layers export` console command to export the current data layer to a JSON file.

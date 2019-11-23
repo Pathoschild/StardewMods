@@ -93,6 +93,8 @@ namespace Pathoschild.Stardew.DataLayers
                 yield return new JunimoHutLayer(translation, layers.CoverageForJunimoHuts, mods);
             if (layers.CropWater.IsEnabled())
                 yield return new CropWaterLayer(translation, layers.CropWater);
+            if (layers.CropPaddyWater.IsEnabled())
+                yield return new CropPaddyWaterLayer(translation, layers.CropPaddyWater);
             if (layers.CropFertilizer.IsEnabled())
                 yield return new CropFertilizerLayer(translation, layers.CropFertilizer);
             if (layers.CropHarvest.IsEnabled())

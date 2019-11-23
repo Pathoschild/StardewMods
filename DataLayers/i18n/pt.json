@@ -42,6 +42,12 @@
     "crop-water.watered": "Plantação irrigada",
     "crop-water.dry": "Plantação seca",
 
+    // crops: water for paddy crops
+    // TODO
+    "crop-paddy-water.name": "Crops: Water for Paddy Crops",
+    "crop-paddy-water.in-range": "Near Water",
+    "crop-paddy-water.not-in-range": "Dry Land",
+
     // crops: fertilized
     "crop-fertilizer.name": "Plantações: Fertilizante Utilizado",
     "crop-fertilizer.fertilizer": "Fertilizante",
